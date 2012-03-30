@@ -542,11 +542,11 @@ if (!isset($_POST['submit2'])) {
 
                 // create forum tables
                 db_query("CREATE TABLE categories (
-                                       `id` INT(10) NOT NULL auto_increment,
-                                       `title` VARCHAR(100),
-                                       `order` MEDIUMINT(10),
+                                       `cat_id` INT(10) NOT NULL auto_increment,
+                                       `cat_title` VARCHAR(100),
+                                       `cat_order` MEDIUMINT(10),
                                        `course_id` INT(11),
-                                       PRIMARY KEY (id))");
+                                       PRIMARY KEY (cat_id))");
 
                 db_query("CREATE TABLE forums (
                      forum_id int(10) NOT NULL auto_increment,
