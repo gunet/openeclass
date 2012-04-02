@@ -40,12 +40,10 @@ if ($is_editor) {
 	
 	while ($row = mysql_fetch_array($result)) 
 	{
-		$sid         = $row['uid'];
-		$studentName = db_query("select nom, prenom from user where user_id = '$sid'");
-		$theStudent  = mysql_fetch_array($studentName);	
-		$nom         = $theStudent["nom"];
-		$prenom      = $theStudent["prenom"];	
-
+		$sid = $row['uid'];		
+                $surname = uid_to_surname($sid);
+                $name = uid_to_name($sid);	
+				
 		$sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, 
 			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration, 
 			total_score, total_weighting 
@@ -54,8 +52,8 @@ if ($is_editor) {
 		
 		while ($row2 = mysql_fetch_array($result2)) 
 		{
-			$output .= csv_escape($nom) ."\t";
-			$output .= csv_escape($prenom) ."\t";
+			$output .= csv_escape($surname) ."\t";
+			$output .= csv_escape($name) ."\t";
 			$recordStartDate = $row2['record_start_date'];
 			$output .= csv_escape($recordStartDate) ."\t";
 			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 

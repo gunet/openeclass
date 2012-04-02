@@ -541,15 +541,15 @@ if (!isset($_POST['submit2'])) {
                 }
 
                 // create forum tables
-                db_query("CREATE TABLE categories (
-                                       `cat_id` INT(10) NOT NULL auto_increment,
+                db_query("CREATE TABLE categories (                                       
+                                       `cat_id` INT(10),
                                        `cat_title` VARCHAR(100),
-                                       `cat_order` MEDIUMINT(10),
+                                       `cat_order` VARCHAR(10),
                                        `course_id` INT(11),
-                                       PRIMARY KEY (cat_id))");
+                                       KEY (cat_id, course_id))");
 
-                db_query("CREATE TABLE forums (
-                     forum_id int(10) NOT NULL auto_increment,
+                db_query("CREATE TABLE forums (                     
+                     forum_id int(10),
                      forum_name varchar(150),
                      forum_desc text,
                      forum_access int(10) DEFAULT 1,
@@ -559,27 +559,11 @@ if (!isset($_POST['submit2'])) {
                      forum_last_post_id int(10) DEFAULT 0 NOT NULL,
                      cat_id int(10),
                      forum_type int(10) DEFAULT '0',
-                     course_id int(11),
-                     PRIMARY KEY (forum_id),
-                     KEY forum_last_post_id (forum_last_post_id))");
-
-                db_query("CREATE TABLE posts (
-                      post_id int(10) NOT NULL auto_increment,
-                      topic_id int(10) DEFAULT 0 NOT NULL,
-                      forum_id int(10) DEFAULT 0 NOT NULL,
-                      post_text mediumtext,
-                      poster_id int(10) DEFAULT 0 NOT NULL,
-                      post_time varchar(20),
-                      poster_ip varchar(16),
-                      course_id int(11),
-                      PRIMARY KEY (post_id),
-                      KEY post_id (post_id),
-                      KEY forum_id (forum_id),
-                      KEY topic_id (topic_id),
-                      KEY poster_id (poster_id))");
-
+                     course_id int(11),                     
+                     KEY (forum_id, course_id))");
+                
                 db_query("CREATE TABLE topics (
-                       topic_id int(10) NOT NULL auto_increment,
+                       topic_id int(10),
                        topic_title varchar(100),
                        topic_poster_id int(10),
                        topic_time varchar(20),
@@ -588,12 +572,20 @@ if (!isset($_POST['submit2'])) {
                        topic_last_post_id int(10) DEFAULT '0' NOT NULL,
                        forum_id int(10) DEFAULT '0' NOT NULL,
                        topic_status int(10) DEFAULT '0' NOT NULL,
-                       course_id int(11),
-                       PRIMARY KEY (topic_id),
-                       KEY topic_id (topic_id),
-                       KEY forum_id (forum_id),
-                       KEY topic_last_post_id (topic_last_post_id))");
+                       course_id int(11),                       
+                       KEY (forum_id, topic_id, course_id))");
 
+                db_query("CREATE TABLE posts (
+                      post_id int(10),
+                      topic_id int(10) DEFAULT 0 NOT NULL,
+                      forum_id int(10) DEFAULT 0 NOT NULL,
+                      post_text mediumtext,
+                      poster_id int(10) DEFAULT 0 NOT NULL,
+                      post_time varchar(20),
+                      poster_ip varchar(16),
+                      course_id int(11),                                            
+                      KEY (post_id, topic_id, forum_id, course_id))");
+                
                 db_query("ALTER TABLE `posts` ADD FULLTEXT `posts` (`post_text`)");
                 db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 

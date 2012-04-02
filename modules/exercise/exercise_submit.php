@@ -58,7 +58,7 @@ if (isset($exerciseId)) {
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE` 
 		WHERE course_id = $cours_id AND id = '$exerciseId'", $mysqlMainDb));
 	if (($active['active'] == 0) and (!$is_editor)) {
-		header('Location: exercice.php?course='.$code_cours);
+		header('Location: exercise.php?course='.$code_cours);
 		exit();
 	} 
 }
@@ -70,7 +70,7 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: exercice.php?course='.$code_cours);
+	header('Location: exercise.php?course='.$code_cours);
 	exit();
 }
 	
@@ -137,7 +137,7 @@ if (isset($_POST['formSent'])) {
 } // end of submit
 
 if (!add_units_navigation()) {
-	$navigation[] = array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
+	$navigation[] = array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -196,7 +196,8 @@ if (!$is_editor) {
                       <td class='alert1'>$message</td>
                     </tr>
                     <tr>
-                      <td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
+                      <td><br/><br/><br/><div align='center'>
+                        <a href='exercise.php?course=$code_cours'>$langBack</a></div></td>
                     </tr>
                     </table>";
                 draw($tool_content, 2);
@@ -233,10 +234,10 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <th colspan=\"2\">$exerciseTitle</th>
+    <th colspan='2'>$exerciseTitle</th>
   </tr>
   <tr class='even'>
-    <td colspan=\"2\">$exerciseDescription_temp</td>
+    <td colspan='2'>$exerciseDescription_temp</td>
   </tr>
   </table>
 
@@ -332,12 +333,12 @@ if (!$questionList) {
 			$tool_content .= $langNext." &gt;"."\" />";
 		}
 	$tool_content .= "<input type='submit' name='buttonCancel' value='$langCancel' /></div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  </table>";
+        </td>
+        </tr>
+        <tr>
+        <td colspan=\"2\">&nbsp;</td>
+        </tr>
+        </table>";
 }	
 $tool_content .= "</form>";
 draw($tool_content, 2, null, $head_content);

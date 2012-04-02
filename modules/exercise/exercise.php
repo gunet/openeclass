@@ -118,7 +118,7 @@ if($is_editor) {
 	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
 		"FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1");
+	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1", $mysqlMainDb);
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
@@ -208,7 +208,7 @@ if(!$nbrExercises) {
 				<td><a href=\"exercise_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-				WHERE eid = '$eid'", $mysqlMainDb));
+                                                WHERE eid = '$eid'", $mysqlMainDb));
 	
 			if ($NumOfResults[0]) {
 				$tool_content .= "<td align='center'><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
@@ -255,10 +255,10 @@ if(!$nbrExercises) {
                         $currentDate    = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5,2),       substr($currentDate, 8,2),       substr($currentDate, 0,4));
                         if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td><a href=\"exercise_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".$row['title']."</a>";
-                        } elseif ($CurrentDate <= $temp_StartDate) { // exercise has not yet started
+                                        <td><a href='exercise_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."'>".$row['title']."</a>";
+                        } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td class='invisible'>".$row['titre']."&nbsp;&nbsp;";
+                                        <td class='invisible'>".$row['title']."&nbsp;&nbsp;";
                         } else { // exercise has expired
                                 $tool_content .= "<td width='16'>
                                 <img src='$themeimg/arrow.png' alt='' />
@@ -282,14 +282,14 @@ if(!$nbrExercises) {
                                 $tool_content .= "<td align='center'> - </td>";
                         }
                         // user last exercise score
-                        $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
-                                FROM exercise_user_record WHERE uid=$uid 
-                                AND eid=$row[id] 
-                                ORDER BY eurid DESC LIMIT 1", $currentCourseID));
-                        if (empty($r['TotalScore'])) {
+                        $r = mysql_fetch_array(db_query("SELECT total_score, total_weighting 
+                                        FROM exercise_user_record WHERE uid=$uid 
+                                        AND eid=$row[id] 
+                                        ORDER BY eurid DESC LIMIT 1", $mysqlMainDb));
+                        if (empty($r['total_score'])) {
                                 $tool_content .= "<td align='center'>&dash;</td>";
                         } else {
-                                $tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
+                                $tool_content .= "<td align='center'>$r[total_score]/$r[total_weighting]</td>";
                         }
                         $tool_content .= "</tr>";
 		}
