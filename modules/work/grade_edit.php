@@ -92,6 +92,10 @@ function show_edit_form($id, $sid, $assign)
 			  <th class='left'>$m[gradecomments]:</th>
 			  <td><textarea cols='60' rows='3' name='comments'>$sub[grade_comments]</textarea></td>
 			</tr>
+                        <tr>
+                          <th><label for='email_button'>$m[email_users]:</label></th>
+                          <td><input type='checkbox' value='1' id='email_button' name='email'></td>
+                        </tr>
 			<tr>
 			  <th class='left'>&nbsp;</th>
 			  <td><input type='submit' name='grade_comments' value='$langGradeOk'></td>

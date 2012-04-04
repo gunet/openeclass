@@ -176,13 +176,14 @@ function submission_grade($subid)
 
 	$res = mysql_fetch_row(db_query("SELECT grade, grade_comments
                                                 FROM `$currentCourseID`.assignment_submit
-                                                WHERE id = '$subid'"));
+                                                WHERE id = $subid"));
 	if ($res) {
-		$grade = trim($res[0]);
+                $grade = trim($res[0]);
+                $comments = empty($res[1])? '': " ($m[comments_exist])";
 		if (!empty($grade)) {
-			return $grade;
-		} elseif (!empty($res[1])) {
-			return $m['yes'];
+			return q($grade . $comments);
+		} elseif ($comments) {
+			return " - " . $comments;
 		} else {
 			return FALSE;
 		}
