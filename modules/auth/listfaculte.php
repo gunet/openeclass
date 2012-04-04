@@ -22,6 +22,8 @@ include '../../include/baseTheme.php';
 
 $TBL_HIERARCHY = 'hierarchy';
 
+require_once '../../include/lib/hierarchy.class.php';
+
 $nameTools = $langSelectFac;
 
 $query = "SELECT node.id, node.lft AS lft, node.code as code, node.name,
@@ -59,7 +61,7 @@ if (isset($result))  {
                     $tool_content .= "<td width='5'>&nbsp;</td>";
                 $colspan = $maxdepth[0] - $fac['depth'] + 1;
                 
-		$tool_content .= "<td colspan='$colspan'><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
+		$tool_content .= "<td colspan='$colspan'><a href='opencourses.php?fc=$fac[id]'>". hierarchy::unserializeLangField($fac['name']) ."</a>&nbsp;&nbsp;<small>
 		($fac[code])";
 		$n = db_query("SELECT COUNT(*) FROM cours, course_department 
                         WHERE cours.cours_id = course_department.course AND course_department.department = $fac[id]");

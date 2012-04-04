@@ -39,6 +39,7 @@ require_once('../../include/lib/hierarchy.class.php');
 
 $tree = new hierarchy();
 
+$langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
 
 $nameTools = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -115,7 +116,7 @@ if (!isset($_GET['action'])) {
             $tool_content .= "<td width='5'>&nbsp;</td>";
         $colspan = $maxdepth[0] - $nodes['depth'] + 1;
         
-        $tool_content .= "\n<td colspan='$colspan'>".htmlspecialchars($nodes['name'])."</td>";
+        $tool_content .= "\n<td colspan='$colspan'>".htmlspecialchars(hierarchy::unserializeLangField($nodes['name']))."</td>";
         $tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($nodes['code'])."</td>";
         // link to delete or edit a node
         $tool_content .= "\n<td width='50' align='center' nowrap>
@@ -134,11 +135,21 @@ if (!isset($_GET['action'])) {
 elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
     if (isset($_POST['add'])) {
         $code = $_POST['code'];
-        $name = $_POST['name'];
+        
+        $names = array();
+        foreach ($language_codes as $langcode => $langname) {
+            $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
+            if (in_array($langname, $langdirs) && !empty($n)) {
+                $names[$langcode] = $n;
+            }
+        }
+        
+        $name = serialize($names);
+        
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         // Check for empty fields
-        if (empty($name)) {
+        if (empty($names)) {
             $tool_content .= "<p class='caution'>".$langEmptyNodeName."<br />";
             $tool_content .= "
             <a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
@@ -169,9 +180,18 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         <td><input type='text' name='code' /> <i>".$langCodeFaculte2."</i></td>
       </tr>
       <tr>
-        <th class='left'>".$langNodeName.":</th>
-        <td><input type='text' name='name' /> <i>".$langFaculte2."</i></td>
-      </tr>
+        <th class='left'>".$langNodeName.":</th>";
+        
+        $i = 0;
+	foreach ($language_codes as $langcode => $langname) {
+            if (in_array($langname, $langdirs)) {
+                $tdpre = ($i > 0) ? "<tr><td></td>" : '';
+                $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' /> <i>".$langFaculte2." (".$langNameOfLang[$langname].")</i></td></tr>";
+                $i++;
+            }
+	}
+        
+        $tool_content .= "
       <tr>
         <th class='left'>".$langNodeParent.":</th>
         <td>". $tree->buildHtmlSelect('name="nodelft"') ." <i>".$langNodeParent2."</i></td>
@@ -215,7 +235,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $id = intval($_REQUEST['id']);
     if (isset($_POST['edit'])) {
         // Check for empty fields
-        $name = $_POST['name'];
+        
+        $names = array();
+        foreach ($language_codes as $langcode => $langname) {
+            $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
+            if (in_array($langname, $langdirs) && !empty($n)) {
+                $names[$langcode] = $n;
+            }
+        }
+        
+        $name = serialize($names);
+        
         $code = $_POST['code'];
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
@@ -254,10 +284,27 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
            <td><input type='text' name='code' value='".$myrow['code']."' />&nbsp;<i>".$langCodeFaculte2."</i></td>
        </tr>
        <tr>
-           <th class='left'>".$langNodeName.":</th>
-           <td><input type='text' name='name' value='".htmlspecialchars($myrow['name'], ENT_QUOTES)."' />&nbsp;<i>".$langFaculte2."</i></td>
-       </tr>
-       <tr>
+           <th class='left'>".$langNodeName.":</th>";
+        
+        $is_serialized = false;
+        $names = @unserialize($myrow['name']);
+        if ($names !== false)
+            $is_serialized = true;
+        
+        $i = 0;
+	foreach ($language_codes as $langcode => $langname) {
+            $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
+            if (!$is_serialized && $langcode == 'el')
+                $n = $myrow['name'];
+            
+            if (in_array($langname, $langdirs)) {
+                $tdpre = ($i > 0) ? "<tr><td></td>" : '';
+                $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' value='".htmlspecialchars($n, ENT_QUOTES)."' /> <i>".$langFaculte2." (".$langNameOfLang[$langname].")</i></td></tr>";
+                $i++;
+            }
+	}
+        
+       $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
            <td>". $tree->buildHtmlSelect('name="nodelft"', $parentLft['lft'], $id) ." <i>".$langNodeParent2."</i></td>
        </tr>
@@ -286,3 +333,18 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
 }
 
 draw($tool_content, 3);
+
+
+// Return a list of all subdirectories of $base which contain a file named $filename
+function active_subdirs($base, $filename)
+{
+	$dir = opendir($base);
+	$out = array();
+	while (($f = readdir($dir)) !== false) {
+		if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and file_exists($base . '/' . $f . '/' . $filename)) {
+			$out[] = $f;
+		}
+	}
+	closedir($dir);
+	return $out;
+}

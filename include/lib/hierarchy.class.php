@@ -300,8 +300,7 @@ class hierarchy {
             $result = db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude");
             $row = mysql_fetch_assoc($result);
             
-            $query = "SELECT node.id, node.lft AS lft, 
-                CONCAT( REPEAT( '&nbsp;-&nbsp;', (COUNT(parent.name) - 1) ), node.name) AS name 
+            $query = "SELECT node.id, node.lft AS lft, node.name AS name, COUNT(parent.id) - 1 AS depth
                 FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt 
                     AND (node.lft < ". $row['lft'] ." OR node.lft > ". $row['rgt'] .")
@@ -311,8 +310,7 @@ class hierarchy {
         }
         else
         {
-            $query = "SELECT node.id, node.lft AS lft, 
-                CONCAT( REPEAT( '&nbsp;-&nbsp;', (COUNT(parent.name) - 1) ), node.name) AS name 
+            $query = "SELECT node.id, node.lft AS lft, node.name AS name, COUNT(parent.id) - 1 AS depth
                 FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt 
                     $where
@@ -324,13 +322,17 @@ class hierarchy {
               
         while($row = mysql_fetch_assoc($result))
         {
+            $prefix = '';
+            for ($i = 0; $i < $row['depth']; $i++)
+                $prefix .= '&nbsp;-&nbsp;';
+            
             switch($useKey)
             {
                 case 'lft':
-                    $tree_array[$row['lft']] = $row['name'];
+                    $tree_array[$row['lft']] = $prefix . self::unserializeLangField($row['name']);
                     break;
                 case 'id':
-                    $tree_array[$row['id']] = $row['name'];
+                    $tree_array[$row['id']] = $prefix . self::unserializeLangField($row['name']);
                     break;
             }
         }  
@@ -350,7 +352,7 @@ class hierarchy {
         $html = '<ul ' . $params . '>' . "\n";
         $current_depth = 0;
         
-        $query = "SELECT node.name AS name, (COUNT(parent.name) - 1) AS depth FROM ". $this->dbtable ." AS node,  ". $this->dbtable ." AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt GROUP BY node.id ORDER BY node.lft";
+        $query = "SELECT node.name AS name, (COUNT(parent.id) - 1) AS depth FROM ". $this->dbtable ." AS node,  ". $this->dbtable ." AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt GROUP BY node.id ORDER BY node.lft";
         $result = db_query($query);
         
         while($row = mysql_fetch_assoc($result))
@@ -373,7 +375,7 @@ class hierarchy {
                 $current_depth = $row['depth'];
             }
         
-            $html .= '<li>' . $row['name'] . '</li>' . "\n";
+            $html .= '<li>' . self::unserializeLangField($row['name']) . '</li>' . "\n";
         }
         
         $html .= '</ul>';
@@ -432,7 +434,7 @@ class hierarchy {
         
         while($row = mysql_fetch_assoc($result))
         {
-            $nodes[$row['id']] = $row['name'];
+            $nodes[$row['id']] = self::unserializeLangField($row['name']);
         }  
         
         return $nodes;  
@@ -470,14 +472,31 @@ class hierarchy {
             }
             
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= $parent['name'] .' ';
+            $ret .= self::unserializeLangField($parent['name']) .' ';
             $c++;
         }
         
         $ret .= ($c == 0) ? '' : '» ';
-        $ret .= $node['name'] .' ';
+        $ret .= self::unserializeLangField($node['name']) .' ';
         
         return $ret;
+    }
+    
+    public static function unserializeLangField($value)
+    {
+        global $language;
+        
+        $values = @unserialize($value);
+        
+        if ($values !== false)
+        {
+            if (isset($values[langname_to_code($language)]) && !empty($values[langname_to_code($language)]))
+                return $values[langname_to_code($language)];
+            else
+                return array_shift($values);
+        } else {
+            return $value;
+        }
     }
     
     /**

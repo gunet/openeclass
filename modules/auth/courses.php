@@ -136,7 +136,7 @@ if (isset($_POST["submit"])) {
                                 $colspan = $maxdepth[0] - $fac['depth'] + 1;
                                 
 				$tool_content .= "<td colspan='$colspan'>
-				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
+				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars(hierarchy::unserializeLangField($fac['name'])) . "</a>&nbsp;
 				<span class='smaller'>($fac[code])</span>";
 				$n = db_query("SELECT COUNT(*) FROM cours, course_department
 					WHERE cours.cours_id = course_department.course

@@ -878,7 +878,7 @@ if (!isset($_POST['submit2'])) {
             db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                             `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                             `code` varchar(10) NOT NULL,
-                            `name` varchar(100) NOT NULL,
+                            `name` text NOT NULL,
                             `number` int(11) NOT NULL default 1000,
                             `generator` int(11) NOT NULL default 100,
                             `lft` int(11) NOT NULL,
