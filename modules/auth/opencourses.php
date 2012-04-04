@@ -71,6 +71,8 @@ $tool_content .= "<table width=100% class='tbl_border'>
                     </tr>
                   </table><br/>\n\n";
 
+$tool_content .= departmentChildren($fc);
+
 $result = db_query("SELECT cours.code k,
                            cours.fake_code c,
                            cours.intitule i,
@@ -133,6 +135,44 @@ if ($k > 0)
 draw($tool_content, (isset($uid) and $uid)? 1: 0);
 
 
+
+function departmentChildren($depid) {
+    global $langAvCours, $langAvCourses;
+    
+    $ret = '';
+    $res = db_query("SELECT node.id, node.code, node.name FROM hierarchy AS node
+            LEFT OUTER JOIN hierarchy AS parent ON parent.lft = 
+                            (SELECT MAX(S.lft) 
+                            FROM hierarchy AS S WHERE node.lft > S.lft
+                                AND node.lft < S.rgt)
+                      WHERE parent.id = ". $depid ."
+                        AND node.allow_course = true");
+    
+    
+    if (mysql_num_rows($res) > 0)
+    {
+        $ret .= "<table width='100%' class='tbl_border'>";
+        
+        while ($node = mysql_fetch_array($res))
+        {
+            $ret .= "<tr><td><a href='opencourses.php?fc=". $node['id'] ."'>". 
+                    hierarchy::unserializeLangField($node['name']) .
+                    "</a>&nbsp;&nbsp;<small>(". $node['code'] .")";
+            
+            $n = db_query("SELECT COUNT(*) 
+                             FROM cours, course_department 
+                            WHERE cours.cours_id = course_department.course 
+                              AND course_department.department = ". $node['id']);
+            $r = mysql_fetch_array($n);
+
+            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". $r[0] ."&nbsp;". ($r[0] == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+        }
+        
+        $ret .= "</table><br />";
+    }
+
+    return $ret;
+}
 
 
 //////////////////////////////////////////////////////////////
