@@ -21,6 +21,7 @@
 
 $require_login = TRUE;
 include '../../include/baseTheme.php';
+require_once 'hierarchy.inc.php';
 
 $TBL_HIERARCHY = 'hierarchy';
 
@@ -170,7 +171,7 @@ if (isset($_POST["submit"])) {
 				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc) ."</th>
 				</tr></table><br />";
                                 
-                                $tool_content .= departmentChildren($fc);
+                                $tool_content .= departmentChildren($fc, 'courses');
                                 
 				$tool_content .= "<br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
@@ -208,44 +209,6 @@ function getdepnumcourses($fac) {
 	return $res[0];
 }
 
-function departmentChildren($depid) {
-    global $langAvCours, $langAvCourses;
-    
-    $ret = '';
-    $res = db_query("SELECT node.id, node.code, node.name FROM hierarchy AS node
-            LEFT OUTER JOIN hierarchy AS parent ON parent.lft = 
-                            (SELECT MAX(S.lft) 
-                            FROM hierarchy AS S WHERE node.lft > S.lft
-                                AND node.lft < S.rgt)
-                      WHERE parent.id = ". $depid ."
-                        AND node.allow_course = true");
-    
-    
-    if (mysql_num_rows($res) > 0)
-    {
-        $ret .= "<table width='100%' class='tbl_border'>";
-        
-        while ($node = mysql_fetch_array($res))
-        {
-            $ret .= "<tr><td><a href='courses.php?fc=". $node['id'] ."'>". 
-                    hierarchy::unserializeLangField($node['name']) .
-                    "</a>&nbsp;&nbsp;<small>(". $node['code'] .")";
-            
-            $n = db_query("SELECT COUNT(*) 
-                             FROM cours, course_department 
-                            WHERE cours.cours_id = course_department.course 
-                              AND course_department.department = ". $node['id']);
-            $r = mysql_fetch_array($n);
-
-            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". $r[0] ."&nbsp;". ($r[0] == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
-        }
-        
-        $ret .= "</table><br />";
-    }
-
-    return $ret;
-}
-
 function expanded_faculte($fac_name, $facid, $uid) {
     global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
            $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
@@ -268,7 +231,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                    <tr>
                    <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid) ."</b></th></tr></table><br/>";
     
-    $retString .= departmentChildren($facid);
+    $retString .= departmentChildren($facid, 'courses');
 
 
     $result = db_query("SELECT
