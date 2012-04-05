@@ -252,18 +252,27 @@ function show_submission_details($id)
                         "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
                         "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>";
         }
-	
+
+
+        if ($sub['grade_comments'] or $sub['grade'] != '') {
+                $date_line = "<tr><th>$m[grade_comment_date]:</th><td>" .
+                             nice_format($sub['grade_submission_date']) .
+                             "</td></th>";
+        } else {
+                $date_line = '';
+        }
 	$tool_content .= "
         <fieldset>
         <legend>$m[SubmissionWorkInfo]</legend>
-        <table width=\"99%\" class=\"tbl\">
+        <table width='99%' class='tbl'>
 	<tr>
 	  <th width='150'>$m[SubmissionStatusWorkInfo]:</th>
 	  <td valign='top'>$notice</td>
 	</tr>
+        $date_line
         <tr>
           <th>".$m['grade'].":</th>
-          <td>".$sub['grade']."</td>
+          <td>".($sub['grade'] == ''? ' - ': $sub['grade'])."</td>
         </tr>
         <tr>
           <th valign='top'>".$m['gradecomments'].":</th>
