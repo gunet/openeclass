@@ -137,3 +137,102 @@ function showcategoryadmintools($categoryid)
 	$catcounter++;
 }
 
+function link_form_defaults($id)
+{
+	global $cours_id, $form_url, $form_title, $form_description, $category;
+
+        $result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND id = $id");
+        if ($myrow = mysql_fetch_array($result)) {
+                $form_url = ' value="' . q($myrow['url']) . '"';
+                $form_title = ' value="' . q($myrow['title']) . '"';
+                $form_description = q(purify($myrow['description']));
+                $category = $myrow['category'];
+        } else {
+                $form_url = $form_title = $form_description = '';
+        }
+}
+
+// Enter the modified info submitted from the link form into the database
+function submit_link()
+{
+        global $cours_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
+               $urllink, $title, $description, $selectcategory;
+
+        register_posted_variables(array('urllink' => true,
+                                        'title' => true,
+                                        'description' => true,
+                                        'selectcategory' => true), 'all', 'trim');
+	$urllink = canonicalize_url($urllink);
+        $set_sql = "SET url = " . autoquote($urllink) . ",
+                        title = " . autoquote($title) . ",
+                        description = " . autoquote(purify($description)) . ",
+                        category = " . intval($selectcategory);
+
+        if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                db_query("UPDATE `link` $set_sql WHERE course_id = $cours_id AND id = $id");
+                $catlinkstatus = $langLinkMod;
+        } else {
+                $q = db_query("SELECT MAX(`order`) FROM `link`
+                                      WHERE course_id = $cours_id AND category = $selectcategory");
+                list($order) = mysql_fetch_row($q);
+                $order++;
+                db_query("INSERT INTO `link` $set_sql, course_id = $cours_id, `order` = $order");
+                $catlinkstatus = $langLinkAdded;
+        }
+}
+
+function category_form_defaults($id)
+{
+	global $cours_id, $form_name, $form_description;
+
+        $result = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $id");
+        if ($myrow = mysql_fetch_array($result)) {
+                $form_name = ' value="' . q($myrow['name']) . '"';
+                $form_description = q($myrow['description']);
+        } else {
+                $form_name = $form_description = '';
+        }
+}
+
+// Enter the modified info submitted from the category form into the database
+function submit_category()
+{
+        global $cours_id, $langCategoryAdded, $langCategoryModded,
+               $categoryname, $description;
+
+        register_posted_variables(array('categoryname' => true,
+                                        'description' => true), 'all', 'trim');
+        $set_sql = "SET name = " . autoquote($categoryname) . ",
+                        description = " . autoquote(purify($description));
+
+        if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                db_query("UPDATE `link_category` $set_sql WHERE course_id = $cours_id AND id = $id");
+                $catlinkstatus = $langCategoryModded;
+        } else {
+                $q = db_query("SELECT MAX(`order`) FROM `link_category`
+                                      WHERE course_id = $cours_id");
+                list($order) = mysql_fetch_row($q);
+                $order++;
+                db_query("INSERT INTO `link_category` $set_sql, course_id = $cours_id, `order` = $order");
+                $catlinkstatus = $langCategoryAdded;
+        }
+}
+
+function delete_link($id)
+{
+	global $cours_id, $catlinkstatus, $langLinkDeleted;
+
+	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND id = $id");
+        $catlinkstatus = $langLinkDeleted;
+}
+
+function delete_category($id)
+{
+	global $cours_id, $catlinkstatus, $langCategoryDeleted;
+
+	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND category = $id");
+	db_query("DELETE FROM `link_category` WHERE course_id = $cours_id AND id = $id");
+        $catlinkstatus = $langCategoryDeleted;
+}

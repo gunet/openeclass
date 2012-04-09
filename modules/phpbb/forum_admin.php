@@ -172,7 +172,7 @@ hContent;
 		$nameTools = $langDelete;
 		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
                 db_query("UPDATE forums SET forum_name = " . autoquote($_POST['forum_name']) . ",
-                                            forum_desc = " . autoquote($_POST['forum_desc']) . ",
+                                            forum_desc = " . autoquote(purify($_POST['forum_desc'])) . ",
                                             forum_access = 2,
                                             forum_moderator = 1,
                                             cat_id = $cat_id

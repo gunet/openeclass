@@ -770,7 +770,10 @@ function is_first_post($topic_id, $post_id) {
 
 
 
-function sync($thedb, $id, $type) {
+function sync($id, $type) {
+        
+   global $cours_id;
+   
    switch($type) {
    	case 'forum':
    		$sql = "SELECT MAX(post_id) AS last_post FROM posts 

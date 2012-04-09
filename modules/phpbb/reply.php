@@ -101,11 +101,7 @@ if (isset($_POST['submit'])) {
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
-
-	//to prevent [addsig] from getting in the way, let's put the sig insert down here.
-	if (isset($sig) && $sig) {
-		$message .= "\n[addsig]";
-	}
+	
 	$sql = "INSERT INTO posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
 			VALUES ($topic, $forum, ".autoquote($message) ." , $uid, '$time', '$poster_ip', $cours_id)";
 	$result = db_query($sql);

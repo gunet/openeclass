@@ -66,7 +66,7 @@ if (isset($_GET['vis'])) {
 	} else {
 		$vis = 'V';
 	}
-	db_query("UPDATE admin_announcements SET visible = '$vis' WHERE id = '$id'", $mysqlMainDb);
+	db_query("UPDATE admin_announcements SET visible = '$vis' WHERE id = $id", $mysqlMainDb);
 }
 
 if (isset($_GET['delete'])) {
@@ -90,6 +90,7 @@ if (isset($_GET['delete'])) {
         // submit announcement command
         $start_sql = 'begin = ' . (isset($_POST['start_date_active'])? autoquote($_POST['start_date']): 'NULL');
         $end_sql = 'end = ' . (isset($_POST['end_date_active'])? autoquote($_POST['end_date']): 'NULL');
+        $newContent = purify($newContent);
         if (isset($_POST['id'])) {
                 // modify announcement
                 $id = intval($_POST['id']);

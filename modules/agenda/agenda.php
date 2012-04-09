@@ -50,12 +50,9 @@ $datetoday = date("Y-n-j H:i",time());
 
 $nameTools = $langAgenda;
 
-mysql_select_db($mysqlMainDb);
-
 if (isset($_GET['id'])) {
 	$id = intval($_GET['id']);
 }
-
 		
 if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_jscalendar = langname_to_code($language);
@@ -109,8 +106,8 @@ if ($is_editor) {
 	}
 	if (isset($_POST['submit'])) {
                 register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
-                $title = autoquote($title);
-                $content = autoquote($content);
+                $title = autoquote($title);                
+                $content = autoquote(purify($content));                
                 $lasting = autoquote($lasting);        
                 $datetime = explode(' ', $date);
                 $date = autoquote($datetime[0]);      
@@ -158,21 +155,21 @@ if ($is_editor) {
 	}
 	</script>';
 
-    $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
+    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
     if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-        $tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;addEvent=1'>".$langAddEvent."</a></li>";
+        $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;addEvent=1'>".$langAddEvent."</a></li>";
     }
     $sens =" ASC";
     $result = db_query("SELECT id FROM agenda WHERE course_id = $cours_id");
     if (mysql_num_rows($result) > 1) {
         if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-            $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
+            $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
             $sens=" DESC ";
         } else {
-            $tool_content .= "\n      <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
+            $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
         }
     }
-    $tool_content .= "\n    </ul>\n  </div>\n";
+    $tool_content .= "</ul></div>";
 
 	if (isset($id) && $id) {
 		$sql = "SELECT id, title, content, day, hour, lasting FROM agenda WHERE course_id = $cours_id AND id = $id";
@@ -314,7 +311,7 @@ if (mysql_num_rows($result) > 0) {
                                $classvis = 'class="odd"';
                              }
 			}
-			$tool_content .= "\n        <tr $classvis>\n          <td valign='top'>";
+			$tool_content .= "<tr $classvis><td valign='top'>";
                 } else {
                         if ($numLine%2 == 0) {
                                 $tool_content .= "<tr class='even'>";

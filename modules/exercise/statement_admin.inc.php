@@ -23,7 +23,7 @@
 // the question form has been submitted
 if(isset($_POST['submitQuestion'])) {
 	$questionName = trim($questionName);
-	$questionDescription = trim($questionDescription);
+	$questionDescription = purify($questionDescription);
 	// no name given
 	if(empty($questionName))
 	{
@@ -108,7 +108,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	  <table class='tbl'>
 	  <tr>
 	    <th>".$langQuestion." :</th>
-	    <td><input type='text' name=\"questionName\"" ."size='50' value=\"".htmlspecialchars($questionName)."\"></td>
+	    <td><input type='text' name='questionName'" ."size='50' value='".htmlspecialchars($questionName)."'></td>
 	  </tr>
 	  <tr>
 	    <th valign='top'>$langQuestionDescription:</th>
@@ -135,7 +135,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	if ($okPicture) {
 		$tool_content .= "<tr>
 		<th>$langDeletePicture :</th>
-		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
+		<td><input type='checkbox' name='deletePicture' value='1' ";
 		if(isset($_POST['deletePicture'])) {
 			$tool_content .= 'checked="checked"'; 
 		}

@@ -18,7 +18,7 @@ function process_actions()
                 $res_id = intval($_REQUEST['resource_id']);	
                 if ($id = check_admin_unit_resource($res_id)) {
                         @$restitle = autoquote(trim($_REQUEST['restitle']));
-                        $rescomments = autoquote(trim($_REQUEST['rescomments']));
+                        $rescomments = autoquote(purify($_REQUEST['rescomments']));
                         $result = db_query("UPDATE unit_resources SET
                                         title = $restitle,
                                         comments = $rescomments

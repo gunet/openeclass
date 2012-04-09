@@ -233,7 +233,7 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 	db_query("INSERT INTO assignments
 		(course_id, title, description, comments, deadline, submission_date, secret_directory,
 			group_submissions) VALUES
-		($cours_id, ".autoquote(trim($title)).", ".autoquote(trim($desc)).", ' ', ".autoquote($deadline).", NOW(), '$secret',
+		($cours_id, ".autoquote(trim($title)).", ".autoquote(purify($desc)).", ' ', ".autoquote($deadline).", NOW(), '$secret',
 			".autoquote($group_submissions).")");
 	mkdir("$workPath/$secret",0777);
 }
@@ -466,7 +466,7 @@ function edit_assignment($id)
                 $comments = autoquote(trim($_POST['comments']));
         }
 	if (db_query("UPDATE assignments SET title=".autoquote(trim($_POST['title'])).",
-		description=".autoquote(trim($_POST['desc'])).", group_submissions=".autoquote($_POST['group_submissions']).",
+		description=".autoquote(purify($_POST['desc'])).", group_submissions=".autoquote($_POST['group_submissions']).",
 		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE course_id = $cours_id AND id='$id'")) {
 
         $title = autounquote($_POST['title']);

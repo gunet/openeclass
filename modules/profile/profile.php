@@ -153,10 +153,7 @@ if (isset($_POST['submit'])) {
 		}
 	}
 
-  	// TODO: Allow admin to configure allowed username format
-	// if (strstr($username_form, "'") or strstr($username_form, '"') or strstr($username_form, '\\')){
-	//	redirect_to_message(10);
-	// }
+  	// TODO: Allow admin to configure allowed username format	
 	if (!empty($email_form) && ($email_form != $_SESSION['email']) 
                 && get_config('email_verification_required')) {
 		$verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;                	                
@@ -172,7 +169,7 @@ if (isset($_POST['submit'])) {
 						email = " . autoquote($email_form) . ",
 						am = " . autoquote($am_form) . ",
 						phone = " . autoquote($phone_form) . ",
-						description = " . autoquote($desc_form) . ",
+						description = " . autoquote(purify($desc_form)) . ",
 						email_public = $email_public,
 						phone_public = $phone_public,
                                                 receive_mail = $subscribe,

@@ -125,7 +125,7 @@ if ($is_editor) {
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
-        $newContent = autoquote($_POST['newContent']);
+        $newContent = autoquote(purify($_POST['newContent']));
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             db_query("UPDATE announcements SET content = $newContent,

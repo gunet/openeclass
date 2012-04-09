@@ -94,13 +94,10 @@ if (isset($_POST['submit'])) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	$message = format_message($message);
+	$message = purify($message);        
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
-
-	if (isset($sig) && $sig) {
-		$message .= "\n[addsig]";
-	}
+	
 	$sql = "INSERT INTO topics (topic_title, topic_poster_id, forum_id, topic_time, course_id)
 			VALUES (" . autoquote($subject) . ", $uid, $forum, '$time', $cours_id)";
 	$result = db_query($sql);

@@ -1458,8 +1458,7 @@ function delete_course($cid)
 {
         global $mysqlMainDb, $webDir;
 
-	$course_code = course_id_to_code($cid);
-	db_query("DROP DATABASE `$course_code`");
+	$course_code = course_id_to_code($cid);	
 
         mysql_select_db($mysqlMainDb);
 	db_query("DELETE FROM announcements WHERE course_id = $cid");
@@ -1681,9 +1680,9 @@ function openDocsPicker(field_name, url, type, win) {
 }
 </script>";
 	
-	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
+	/*$text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),
-			                      $text));
+			                      $text); */
 
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
 	       str_replace('{','&#123;', $text) .

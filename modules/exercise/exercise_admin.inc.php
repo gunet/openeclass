@@ -23,7 +23,7 @@
 // the exercise form has been submitted
 if(isset($_POST['submitExercise'])) {
 	$exerciseTitle       = trim($exerciseTitle);
-	$exerciseDescription = trim($exerciseDescription);
+	$exerciseDescription = purify($exerciseDescription);
 	$randomQuestions     = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
 
 	// no title given
@@ -79,17 +79,17 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 		</tr>";
 	}
 	$tool_content .= "
-	<tr>
-          <th width='180'>".$langExerciseName.":</th>
-	  <td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td>
-	</tr>
-	<tr>
-          <th>".$langExerciseDescription.":</th>
-	  <td>". rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") ."</td>
-	</tr>
-	<tr>
-          <th>".$langExerciseType.":</th>
-	  <td>"."<input type='radio' name='exerciseType' value='1'";
+        <tr>
+        <th width='180'>".$langExerciseName.":</th>
+        <td><input type='text' name='exerciseTitle' "."size='50' maxlength='200' value='".htmlspecialchars($exerciseTitle)."' style='width:400px;'></td>
+        </tr>
+        <tr>
+        <th>".$langExerciseDescription.":</th>
+        <td>". rich_text_editor('exerciseDescription', 4, 50, $exerciseDescription, "style='width:400px;' class='FormData_InputText'") ."</td>
+        </tr>
+        <tr>
+        <th>".$langExerciseType.":</th>
+        <td>"."<input type='radio' name='exerciseType' value='1'";
 	
 	if ($exerciseType <= 1) {
 		$tool_content .= " checked='checked'";
