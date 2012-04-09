@@ -92,41 +92,34 @@ if (!isset($_GET['action'])) {
     <th>".$langActions."</th>
     </tr>";
     
-    $query = "SELECT node.id, node.lft AS lft, node.code as code, node.name,
-                COUNT(parent.id) - 1 AS depth
-                FROM ". $TBL_HIERARCHY ." AS node, ". $TBL_HIERARCHY ." AS parent 
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt 
-                    GROUP BY node.id 
-                    ORDER BY node.lft";
-    $sql = db_query($query);
+    list($tree_array, $idmap, $depthmap, $codemap) = $tree->buildOrdered(array(), 'id', null, '', false);
     $k = 0;
     
     // For all nodes display some info
-    for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-        $nodes = mysql_fetch_assoc($sql);
-        if ($k%2==0) {
-            $tool_content .= "\n<tr>";
-        } else {
-            $tool_content .= "\n<tr class='odd'>";
-        }
-        $tool_content .= "\n<td width='1'>
-        <img src='$themeimg/arrow.png' alt='bullet' /></td>";
+    foreach ($tree_array as $key => $value)
+    {
+        $trclass = ($k%2 == 0) ? 'even' : 'odd';
+        $colspan = $maxdepth[0] - $depthmap[$key] + 1;
         
-        for ($i = 1; $i <= $nodes['depth']; $i++)
+        $tool_content .= "\n<tr class='$trclass'>";
+        $tool_content .= "\n<td width='1'><img src='$themeimg/arrow.png' alt='bullet' /></td>";
+        
+        for ($i = 1; $i <= $depthmap[$key]; $i++)
             $tool_content .= "<td width='5'>&nbsp;</td>";
-        $colspan = $maxdepth[0] - $nodes['depth'] + 1;
         
-        $tool_content .= "\n<td colspan='$colspan'>".htmlspecialchars(hierarchy::unserializeLangField($nodes['name']))."</td>";
-        $tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($nodes['code'])."</td>";
+        $tool_content .= "\n<td colspan='$colspan'>". $value ."</td>";
+        $tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($codemap[$key])."</td>";
         // link to delete or edit a node
         $tool_content .= "\n<td width='50' align='center' nowrap>
-        <a href='$_SERVER[PHP_SELF]?action=edit&amp;id=".$nodes['id']."'>
-        <img src='$themeimg/edit.png' title='$langEdit' /></a>&nbsp;&nbsp;
-        <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=".$nodes['id']."' onClick=\"return confirm('Confirm delete?')\">
-        <img src='$themeimg/delete.png' title='$langDelete' /></a></td>
-        </tr>\n";
+            <a href='$_SERVER[PHP_SELF]?action=edit&amp;id=". $key ."'>
+            <img src='$themeimg/edit.png' title='$langEdit' /></a>&nbsp;&nbsp;
+            <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=". $key ."' onClick=\"return confirm('Confirm delete?')\">
+            <img src='$themeimg/delete.png' title='$langDelete' /></a></td>
+            </tr>\n";
+        
         $k++;
     }
+
     // Close table correctly
     $tool_content .= "</table>\n";
     $tool_content .= "<br /><p class='right'><a href=\"index.php\">".$langBack."</a></p>";

@@ -104,54 +104,44 @@ if (isset($_POST["submit"])) {
 	if (!$fac) { // if user does not belong to department
 		$tool_content .= "<p align='justify'>$langAddHereSomeCourses</p>";
 		
-                $query = "SELECT node.id, node.lft AS lft, node.code as code, node.name,
-                                 COUNT(parent.id) - 1 AS depth
-                            FROM ". $TBL_HIERARCHY ." AS node, ". $TBL_HIERARCHY ." AS parent 
-                           WHERE node.lft BETWEEN parent.lft AND parent.rgt 
-                             AND node.allow_course = true
-                        GROUP BY node.id 
-                        ORDER BY node.lft";
-                $result = db_query($query);
-                
                 $query = "SELECT max(depth) FROM (SELECT COUNT(parent.id) - 1 AS depth
                             FROM $TBL_HIERARCHY AS node, $TBL_HIERARCHY AS parent 
                            WHERE node.lft BETWEEN parent.lft AND parent.rgt 
                         GROUP BY node.id 
                         ORDER BY node.lft) AS hierarchydepth";
                 $maxdepth = mysql_fetch_array(db_query($query));
+                
+                list($tree_array, $idmap, $depthmap, $codemap) = $tree->buildOrdered(array(), 'id', null, 'AND node.allow_course = true', false);
+                
+                
+                $tool_content .= "<table width='100%' class='tbl_alt' id='t1'>";
+		$k = 0;
+                
+                foreach ($tree_array as $key => $value)
+                {
+                    $trclass = ($k%2 == 0) ? 'even' : 'odd';
+                    $colspan = $maxdepth[0] - $depthmap[$key] + 1;
+                    $n = db_query("SELECT COUNT(*) 
+                                     FROM cours, course_department 
+                                    WHERE cours.cours_id = course_department.course 
+                                      AND course_department.department = $key
+                                      AND (cours.visible = '1' OR cours.visible = '2')");
+                    $r = mysql_fetch_array($n);
 
-		if (isset($result))  {
-			$tool_content .= "<table width='100%' class='tbl_alt' id='t1'>";
-			$k = 0;
-			while ($fac = mysql_fetch_array($result)) {
-				if ($k%2==0) {
-					$tool_content .= "<tr class='even'>";
-				} else {
-					$tool_content .= "<tr class='odd'>";
-				}
-                                
-                                $tool_content .= "<th width='16'><img src='$themeimg/arrow.png' /></th>";
-                                
-                                for ($i = 1; $i <= $fac['depth']-1; $i++) // extra -1 because we do not display root
-                                    $tool_content .= "<td width='5'>&nbsp;</td>";
-                                $colspan = $maxdepth[0] - $fac['depth'] + 1;
-                                
-				$tool_content .= "<td colspan='$colspan'>
-				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars(hierarchy::unserializeLangField($fac['name'])) . "</a>&nbsp;
-				<span class='smaller'>($fac[code])</span>";
-				$n = db_query("SELECT COUNT(*) FROM cours, course_department
-					WHERE cours.cours_id = course_department.course
-                                          AND course_department.department = $fac[id] 
-                                          AND (cours.visible = '1' OR cours.visible = '2')");
-				$r = mysql_fetch_array($n);
-				$tool_content .= " 
-                                <span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ") </span>
-                                </td>
-                                </tr>";
-                                $k++;
-			}
-			$tool_content .= "</table>";
-		}
+
+                    $tool_content .= "<tr class='$trclass'>";
+                    $tool_content .= "<th width='16'><img src='$themeimg/arrow.png' alt='arrow' /></th>";
+
+                    for ($i = 1; $i <= $depthmap[$key]-1; $i++) // extra -1 because we do not display root
+                        $tool_content .= "<td width='5'>&nbsp;</td>";
+
+                    $tool_content .= "<td colspan='$colspan'><a href='$_SERVER[PHP_SELF]?fc=$key'>". $value ."</a>&nbsp;<span class='smaller'>(". $codemap[$key] .")</span>";
+                    $tool_content .= "<span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1 ? $langAvCours : $langAvCourses) .") </span></td></tr>";
+
+                    $k++;
+                }
+
+                $tool_content .= "</table>";
 		$tool_content .= "<br /><br />\n";
 	} else {
 		// department exists

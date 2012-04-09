@@ -21,6 +21,7 @@
 class hierarchy {
 
     public $dbtable;
+    public $dbdepth;
     
     /**
      * Constructor
@@ -30,6 +31,7 @@ class hierarchy {
     public function hierarchy($dbtable = 'hierarchy')
     {
         $this->dbtable = $dbtable;
+        $this->dbdepth = $dbtable .'_depth';
     }
     
     /**
@@ -293,7 +295,7 @@ class hierarchy {
      * @param string $useKey - key for return array, can be 'left' node or 'id'
      * @param int $exclude - the id of the subtree parent node we want to exclude from the dropdown select
      */       
-    public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = "")
+    public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '')
     {
         if ($exclude != null)
         {
@@ -326,18 +328,109 @@ class hierarchy {
             for ($i = 0; $i < $row['depth']; $i++)
                 $prefix .= '&nbsp;-&nbsp;';
             
-            switch($useKey)
-            {
-                case 'lft':
-                    $tree_array[$row['lft']] = $prefix . self::unserializeLangField($row['name']);
-                    break;
-                case 'id':
-                    $tree_array[$row['id']] = $prefix . self::unserializeLangField($row['name']);
-                    break;
-            }
+            $tree_array[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
         }  
         
         return $tree_array;  
+    }
+    
+    public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
+    {
+        $view = " (SELECT node.*, COUNT(parent.id) - 1 AS depth
+                     FROM ". $this->dbtable ." AS node,
+                          ". $this->dbtable ." AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    GROUP BY node.id
+                    ORDER BY node.lft) AS tmp ";
+        
+        $res = null;
+        $swhere = '';
+        $excwhere = '';
+        $excnwhere = '';
+        $idmap = array();
+        $depthmap = array();
+        $codemap = array();
+        $level = array();
+        $mindepth = array();
+        
+        if (strstr($where, 'allow_course') !== false)
+            $swhere = ' WHERE allow_course = true ';
+        else if (strstr($where, 'allow_user') !== false)
+            $swhere = ' WHERE allow_user  = true ';
+        
+        if ($exclude != null)
+        {
+            $excnode = mysql_fetch_array(db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude"));
+            $excwhere = ' AND (lft < '. $excnode['lft'] .' OR lft > '. $excnode['rgt'] .') ';
+            $excnwhere = ' AND (node.lft < '. $excnode['lft'] .' OR node.lft > '. $excnode['rgt'] .') ';
+        }
+        
+        if ($this->useProcedures())
+        {
+            $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->dbdepth . $swhere));
+            $res = db_query("SELECT id, lft, name, depth, code FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
+        }
+        else
+        {
+            $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $view . $swhere));
+            $res = db_query("SELECT id, lft, name, depth, code FROM ". $view ." WHERE depth = ". $mindepth[0] . $excwhere);
+        }
+        
+        while ($row = mysql_fetch_assoc($res))
+        {
+            $prefix = '';
+            if ($dashprefix)
+                for ($i = 0; $i < $mindepth[0]; $i++)
+                    $prefix .= '&nbsp;-&nbsp;';
+            
+            $level[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
+            $idmap[$row[$useKey]] = $row['id'];
+            $depthmap[$row[$useKey]] = $row['depth'];
+            $codemap[$row[$useKey]] = $row['code'];
+        }
+        asort($level);
+
+        $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
+        
+        return array($tree_array, $idmap, $depthmap, $codemap);
+    }
+    
+    public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
+    {
+        foreach ($level as $key => $value)
+        {
+            $final[$key] = $value;
+
+            $res = db_query("SELECT node.* FROM ". $this->dbtable ." AS node
+                    LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft = 
+                                    (SELECT MAX(S.lft) 
+                                       FROM ". $this->dbtable ." AS S 
+                                      WHERE node.lft > S.lft
+                                        AND node.lft < S.rgt)
+                              WHERE parent.id = ". $idmap[$key] ." ". $where . $excwhere);
+
+            if (mysql_num_rows($res) > 0)
+            {
+                $tmp = array();
+
+                while($row = mysql_fetch_assoc($res))
+                {
+                    $prefix = '';
+                    if ($dashprefix)
+                        for ($i = 0; $i < $depth; $i++)
+                            $prefix .= '&nbsp;-&nbsp;';
+            
+                    $tmp[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
+                    $idmap[$row[$useKey]] = $row['id'];
+                    $depthmap[$row[$useKey]] = $depth;
+                    $codemap[$row[$useKey]] = $row['code'];
+                }
+                asort($tmp);
+
+                $this->appendOrdered($final, $tmp, $idmap, $depthmap, $codemap, $depth+1, $useKey, $where, $excwhere, $dashprefix);
+            } else
+                continue;
+        }
     }
     
     /**
@@ -400,7 +493,7 @@ class hierarchy {
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
         $multi = ($multiple) ? ' multiple = "multiple"' : '';
         $html = '<select '. $params . $multi .'>'. "\n";
-        $tree_array = $this->build($tree_array, $useKey, $exclude, $where);
+        list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
         
         foreach($tree_array as $key => $value)
         {
