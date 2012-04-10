@@ -191,8 +191,8 @@ if ($all_set) {
 		// User Message
 		$tool_content .= "<div class='success'>" .
 			($prof? $langDearProf: $langDearUser) .
-			"!<br />$langMailVerificationSuccess: <strong>$usermail</strong></div>
-			<p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
+			"<br />$langMailVerificationSuccess
+			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
 	}
 
 		draw($tool_content, 0);

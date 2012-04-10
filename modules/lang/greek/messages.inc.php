@@ -2382,7 +2382,7 @@ $reguserldap="Εγγραφή Χρήστη μέσω LDAP";
 $langByLdap="Μέσω LDAP";
 $langNewProf="Εισαγωγή στοιχείων νέου λογαριασμού $langsOfTeacher";
 $profsuccess="Η δημιουργία νέου λογαριασμού $langsOfTeacher πραγματοποιήθηκε με επιτυχία!";
-$langDearProf="Αγαπητέ διδάσκοντα!";
+$langDearProf="Αγαπητέ χρήστη!";
 $success="Η καταγραφή των στοιχείων σας έγινε με επιτυχία!";
 $click="Κάντε κλίκ";
 $langBackPage="για να επιστρέψετε στην αρχική σελίδα.";
@@ -2525,8 +2525,10 @@ $langHere = "εδώ";
 $langMailVerificationClick = "Παρακαλούμε πατήστε στη παρακάτω διεύθυνση:";
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
-$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας";
-$langMailVerificationSuccess2="Σύντομα θα σας σταλεί στην παραπάνω διεύθυνση ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις οδηγίες για την ολοκλήρωση της εγγραφής σας";
+$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την email διεύθυνση σας.";
+$langMailVerificationSuccess2="Για το σκοπό αυτό, ελέγξτε άμεσα το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. 
+                                <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, 
+                        με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationError = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος προς τη διεύθυνση %s.<br/><br/>Παρακαλούμε <a href='%s'>δοκιμάστε ξανά</a> ή επικοινωνήστε με το διαχειριστή στη διεύθυνση: %s";
