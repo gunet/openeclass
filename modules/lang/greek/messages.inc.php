@@ -3121,6 +3121,10 @@ $langAssignmentDeactivated = "Η εργασία απενεργοποιήθηκε
 $langSaved = "Τα στοιχεία της εργασίας αποθηκεύτηκαν";
 $langExerciseNotPermit="Η υποβολή της εργασίας δεν επιτρέπεται!";
 $langGraphResults="Κατανομή βαθμολογιών εργασίας";
+$langAddGrade = 'Προσθήκη βαθμολογίας/υποβολής';
+$langOnBehalfOf = 'Εκ μέρους του';
+$langOnBehalfOfUserComment = 'Υποβλήθηκε από: %s, εκ μέρους του χρήστη: %s';
+$langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρους της ομάδας: %s';
 
 /*************************************************************
 * listerqusers.php

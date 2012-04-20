@@ -80,15 +80,25 @@ function group_tutors($group_id)
 
 
 // fills an array with user groups (group_id => group_name)
+// if $uid is null, returns all groups
+// else, just this user's groups
 function user_group_info($uid, $cours_id)
 {
 	global $mysqlMainDb;
 	$gids = array();
 	
-	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
-			WHERE group_members.user_id = $uid
-			AND group_members.group_id = `group`.id
-			AND `group`.course_id = $cours_id", $mysqlMainDb);
+        if ($uid === null) {
+                $q = db_query("SELECT id AS grp_id , name AS grp_name
+                                      FROM `$mysqlMainDb`.`group`
+                                      WHERE `group`.course_id = $cours_id");
+        } else {
+                $q = db_query("SELECT group_members.group_id AS grp_id,
+                                      `group`.name AS grp_name
+                                      FROM group_members, `group`
+                                      WHERE group_members.user_id = $uid AND
+                                            group_members.group_id = `group`.id AND
+                                            `group`.course_id = $cours_id", $mysqlMainDb);
+        }
 	
 	while ($r = mysql_fetch_array($q)) {
 		$gids[$r['grp_id']] = $r['grp_name'];

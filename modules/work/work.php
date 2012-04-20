@@ -78,13 +78,13 @@ require_once '../video/video_functions.php';
 load_modal_box();
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+include '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_ASSIGN');
 /**************************************/
 
-include('work_functions.php');
-include('../group/group_functions.php');
+include 'work_functions.php';
+include '../group/group_functions.php';
 
 $workPath = $webDir."courses/".$currentCourseID."/work";
 
@@ -115,16 +115,18 @@ include '../../include/libchart/libchart.php';
 // main program
 //-------------------------------------------
 
+$works_url = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
 	if (isset($_POST['grade_comments'])) {
 		$nameTools = $m['WorkView'];
-		$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+		$navigation[] = $works_url;
                 submit_grade_comments($_POST['assignment'], $_POST['submission'],
                                       $_POST['grade'], $_POST['comments'], $email_notify);
 	} elseif (isset($_GET['add'])) {
 		$nameTools = $langNewAssign;
-		$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+		$navigation[] = $works_url;
 		new_assignment();
 	} elseif (isset($_POST['sid'])) {
 		show_submission(intval($_POST['sid']));
@@ -133,11 +135,25 @@ if ($is_editor) {
 		show_assignments();
 	} elseif (isset($_POST['grades'])) {
 		$nameTools = $m['WorkView'];
-		$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+		$navigation[] = $works_url;
                 submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
         } elseif (isset($_REQUEST['id'])) {
                 $id = intval($_REQUEST['id']);
-                if (isset($_REQUEST['choice'])) {
+                $work_title = db_query_get_single_value("SELECT title FROM assignments
+                                                                WHERE id = $id");
+                $work_id_url = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours&id=$id",
+                                     'name' => $work_title);
+                if (isset($_POST['on_behalf_of'])) {
+                        if (isset($_POST['user_id'])) {
+                                $user_id = intval($_POST['user_id']);
+                        } else {
+                                $user_id = $uid;
+                        }
+                        $nameTools = $langAddGrade;
+                        $navigation[] = $works_url;
+                        $navigation[] = $work_id_url;
+                        submit_work($id, $user_id);
+                } elseif (isset($_REQUEST['choice'])) {
                         $choice = $_REQUEST['choice'];
                         if ($choice == 'disable') {
                                 db_query("UPDATE assignments SET active = 0 WHERE id = $id");
@@ -147,24 +163,31 @@ if ($is_editor) {
                                 show_assignments($langAssignmentActivated);
                         } elseif ($choice == 'delete') {
                                 die("invalid option");
-                        } elseif ($choice == "do_delete") {
+                        } elseif ($choice == 'do_delete') {
                                 $nameTools = $m['WorkDelete'];
-                                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                                $navigation[] = $works_url;
                                 delete_assignment($id);
                         } elseif ($choice == 'edit') {
                                 $nameTools = $m['WorkEdit'];
-                                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                                $navigation[] = $works_url;
+                                $navigation[] = $work_id_url;
                                 show_edit_assignment($id);
                         } elseif ($choice == 'do_edit') {
                                 $nameTools = $m['WorkView'];
-                                $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                                $navigation[] = $works_url;
+                                $navigation[] = $work_id_url;
                                 edit_assignment($id);
+                        } elseif ($choice = 'add') {
+                                $nameTools = $langAddGrade;
+                                $navigation[] = $works_url;
+                                $navigation[] = $work_id_url;
+                                show_submission_form($id, groups_with_no_submissions($id), true);
                         } elseif ($choice = 'plain') {
                                 show_plain_view($id);
                         }
                 } else {
-                        $nameTools = $m['WorkView'];
-                        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                        $nameTools = $work_title;
+                        $navigation[] = $works_url;
                         if (isset($_GET['disp_results'])) {
                                 show_assignment($id, false, true);
                         } else {
@@ -173,7 +196,6 @@ if ($is_editor) {
                 }
 	} else {
 		$nameTools = $m['WorkView'];
-		$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
 		show_assignments();
 	}
 } else {
@@ -181,12 +203,12 @@ if ($is_editor) {
                 $id = intval($_REQUEST['id']);
                 if (isset($_POST['work_submit'])) {
                         $nameTools = $m['SubmissionStatusWorkInfo'];
-                        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                        $navigation[] = $works_url;
                         $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id", 'name' => $m['WorkView']);
                         submit_work($id);
                 } else {
                         $nameTools = $m['WorkView'];
-                        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+                        $navigation[] = $works_url;
                         show_student_assignment($id);
                 }
         } else {
@@ -204,10 +226,10 @@ draw($tool_content, 2, null, $head_content.$local_head);
 // Show details of a student's submission to professor
 function show_submission($sid)
 {
-        global $tool_content, $langWorks, $langSubmissionDescr, $langNotice3, $code_cours;
+        global $tool_content, $works_url, $langSubmissionDescr, $langNotice3, $code_cours;
 
         $nameTools = $langWorks;
-        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$code_cours", 'name' => $langWorks);
+        $navigation[] = $works_url;
 
         if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 
@@ -240,28 +262,32 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
         mkdir("$workPath/$secret",0777);
 }
 
-
-
-function submit_work($id)
+function submit_work($id, $on_behalf_of)
 {
-        global $tool_content, $workPath, $uid, $cours_id,
-               $langUploadSuccess, $langBack, $langWorks, $langUploadError, $currentCourseID,
-               $langExerciseNotPermit, $langUnwantedFiletype, $code_cours;
+        global $tool_content, $workPath, $uid, $cours_id, $works_url,
+               $langUploadSuccess, $langBack, $langUploadError, $currentCourseID,
+               $langExerciseNotPermit, $langUnwantedFiletype, $code_cours,
+               $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment;
 
-        $submit_ok = FALSE; //Default do not allow submission
-        if (isset($uid) && $uid) { //check if logged-in
-                if ($GLOBALS['statut'] == 10) { //user is guest
+        if (isset($on_behalf_of)) {
+                $user_id = $on_behalf_of;
+        } else {
+                $user_id = $uid;
+        }
+        $submit_ok = FALSE; // Default do not allow submission
+        if (isset($uid) && $uid) { // check if logged-in
+                if ($GLOBALS['statut'] == 10) { // user is guest
                         $submit_ok = FALSE;
-                } else { //user NOT guest
-                        if(isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION["dbname"]])) {
-                                //user is registered to this lesson
+                } else { // user NOT guest
+                        if (isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION['dbname']])) {
+                                // user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                         FROM assignments WHERE id = $id");
                                 $row = mysql_fetch_array($res);
-                                if ($row['time'] < 0) {
-                                        $submit_ok = FALSE; //after assignment deadline
+                                if ($row['time'] < 0 and !$on_behalf_of) {
+                                        $submit_ok = FALSE; // after assignment deadline
                                 } else {
-                                        $submit_ok = TRUE; //before deadline
+                                        $submit_ok = TRUE; // before deadline
                                 }
                         } else {
                                 //user NOT registered to this lesson
@@ -270,25 +296,37 @@ function submit_work($id)
                 }
         } //checks for submission validity end here
 
-        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = '$id'");
+        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = $id");
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
-        $nav[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langWorks);
+        $nav[] = $works_url;
         $nav[] = array('url' => "$_SERVER[PHP_SELF]?id=$id", 'name' => $row['title']);
 
-        if ($submit_ok) { // if passed the above validity checks...
+        if ($submit_ok) {
                 if ($group_sub) {
-                    $group_id = isset($_POST['group_id'])? intval($_POST['group_id']): -1;
-                    $gids = user_group_info($uid, $cours_id);
-                    $local_name = isset($gids[$group_id])? greek_to_latin($gids[$group_id]): '';
+                        $group_id = isset($_POST['group_id'])? intval($_POST['group_id']): -1;
+                        $gids = user_group_info($on_behalf_of? null: $user_id,
+                                                $cours_id);
+                        $local_name = isset($gids[$group_id])? greek_to_latin($gids[$group_id]): '';
                 } else {
-                    $local_name = greek_to_latin(uid_to_name($uid));
-                    $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
-                    if (!empty($am[0])) {
-                            $local_name = "$local_name $am[0]";
-                    }
+                        $group_id = 0;
+                        $local_name = uid_to_name($user_id);
+                        $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = $user_id"));
+                        if (!empty($am[0])) {
+                                $local_name .= $am[0];
+                        }
+                        $local_name = greek_to_latin($local_name);
                 }
                 $local_name = replace_dangerous_char($local_name);
+                if (isset($on_behalf_of) and
+                    (!isset($_FILES) or !$_FILES['userfile']['size'])) {
+                        $_FILES['userfile']['name'] = '';
+                        $_FILES['userfile']['tmp_name'] = '';
+                        $no_files = true;
+                } else {
+                        $no_files = false;
+                }
+
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
                         $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
                         $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id\">$langBack</a></p><br />";
@@ -297,33 +335,60 @@ function submit_work($id)
                 $secret = work_secret($id);
                 $ext = get_file_extension($_FILES['userfile']['name']);
                 $filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
-                $msg1 = delete_submissions_by_uid($uid, -1, $id);
-                if ($group_sub) {
-                        if (array_key_exists($group_id, $gids)) {
-                                $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
-                        }
-                }
-                if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
-                        @chmod("$workPath/$filename", 0644);
-                        $msg2 = $langUploadSuccess;
+                if (!isset($on_behalf_of)) {
+                        $msg1 = delete_submissions_by_uid($user_id, -1, $id);
                         if ($group_sub) {
-                            if (array_key_exists($group_id, $gids)) {
-                                    db_query("INSERT INTO assignment_submit
-                                        (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments, grade_comments, group_id)
-                                        VALUES
-                                        ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
-                                        " . quote($filename) . ", ". autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($_POST['stud_comments']) . ", '', $group_id)", $currentCourseID);
-                            }
-                        } else {
-                                db_query("INSERT INTO assignment_submit
-                                        (uid, assignment_id, submission_date, submission_ip, file_path,
-                                        file_name, comments, grade_comments) VALUES ($uid, $id, NOW(), " . quote($_SERVER['REMOTE_ADDR']) . ",
-                                        " . quote($filename) . ", " . autoquote($_FILES['userfile']['name']) . ",
-                                        " . autoquote($_POST['stud_comments']) . ", '')", $currentCourseID);
+                                if (array_key_exists($group_id, $gids)) {
+                                        $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
+                                }
                         }
-                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p><br />";
+                } else {
+                        $msg1 = '';
+                }
+                if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+                        if ($no_files) {
+                                $filename = '';
+                        } else {
+                                @chmod("$workPath/$filename", 0644);
+                        }
+                        $msg2 = $langUploadSuccess;
+                        $submit_ip = quote($_SERVER['REMOTE_ADDR']);
+                        if (isset($on_behalf_of)) {
+                                if ($group_sub) {
+                                        $auto_comments = sprintf($langOnBehalfOfGroupComment,
+                                                                 uid_to_name($uid),
+                                                                 $gids[$group_id]);
+                                } else {
+                                        $auto_comments = sprintf($langOnBehalfOfUserComment,
+                                                                 uid_to_name($uid),
+                                                                 uid_to_name($user_id));
+                                }
+                                $stud_comments = quote($auto_comments);
+                                $grade_comments = autoquote($_POST['stud_comments']);
+                                $grade = autoquote($_POST['grade']);
+                                $grade_ip = $submit_ip;
+                        } else {
+                                $stud_comments = autoquote($_POST['stud_comments']);
+                                $grade_comments = $grade = $grade_ip = "''";
+                        }
+                        if (!$group_sub or array_key_exists($group_id, $gids)) {
+                                db_query("INSERT INTO assignment_submit
+                                                 (uid, assignment_id, submission_date, submission_ip, file_path,
+                                                  file_name, comments, grade, grade_comments, grade_submission_ip,
+                                                  grade_submission_date, group_id)
+                                          VALUES ($user_id, $id, NOW(), $submit_ip, " .  quote($filename) . ', ' .
+                                                  autoquote($_FILES['userfile']['name']) .
+                                                  ", $stud_comments, $grade, $grade_comments, $grade_ip, NOW(), $group_id)",
+                                         $currentCourseID);
+                                $sid = mysql_insert_id();
+                                if ($on_behalf_of and isset($_POST['email'])) {
+                                        $email_grade = autounquote($_POST['grade']);
+                                        $email_comments = "\n$auto_comments\n\n" .
+                                                          autounquote($_POST['stud_comments']);
+                                        grade_email_notify($id, $sid, $email_grade, $email_comments);
+                                }
+                        }
+                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id'>$langBack</a></p><br />";
                 } else {
                         $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langBack</a></p><br />";
                 }
@@ -383,15 +448,11 @@ function new_assignment()
 //form for editing
 function show_edit_assignment($id)
 {
-	global $tool_content, $m, $langEdit, $langWorks, $langBack, $code_cours;
-	global $urlAppend;
-	global $end_cal_Work_db;
+	global $tool_content, $m, $langEdit, $langBack, $code_cours,
+	       $urlAppend, $works_url, $end_cal_Work_db;
 
-	$res = db_query("SELECT * FROM assignments WHERE id = '$id'");
+	$res = db_query("SELECT * FROM assignments WHERE id = $id");
 	$row = mysql_fetch_array($res);
-
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $row['title']);
 
 	$deadline = $row['deadline'];
 
@@ -456,9 +517,9 @@ cData;
 function edit_assignment($id)
 {
 
-	global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langWorks, $langEdit, $code_cours;
+	global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langEdit, $code_cours, $works_url;
 
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
+	$nav[] = $works_url;
 	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $_POST['title']);
 
         if (!isset($_POST['comments'])) {
@@ -497,7 +558,7 @@ function delete_assignment($id) {
 function show_student_assignment($id)
 {
 	global $tool_content, $m, $uid, $langSubmitted, $langSubmittedAndGraded, $langNotice3,
-               $langWorks, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
+               $works_url, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
                $currentCourseID, $cours_id, $code_cours;
 
         $user_group_info = user_group_info($uid, $cours_id);
@@ -507,7 +568,7 @@ function show_student_assignment($id)
         	
 	$row = mysql_fetch_array($res);
 
-	$nav[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langWorks);
+	$nav[] = $works_url;
 
 	assignment_details($id, $row);
 
@@ -536,15 +597,15 @@ function show_student_assignment($id)
 }
 
 
-function show_submission_form($id, $user_group_info)
+function show_submission_form($id, $user_group_info, $on_behalf_of=false)
 {
         global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
-               $urlAppend, $langGroupSpaceLink, $code_cours;
+               $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $code_cours;
 
         $group_select_hidden_input = $group_select_form = '';
         $is_group_assignment = is_group_assignment($id);
         if ($is_group_assignment) {
-                if (count($user_group_info) == 1) {
+                if (!$on_behalf_of and count($user_group_info) == 1) {
                         $gids = array_keys($user_group_info);
                         $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
                         $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
@@ -553,12 +614,25 @@ function show_submission_form($id, $user_group_info)
                         $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                                              selection($user_group_info, 'group_id') . "</td></tr>";
                 }
+                if (!$on_behalf_of) {
                         $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
                                 sprintf(count($user_group_info)?
                                         $m['group_assignment_publish']:
                                         $m['group_assignment_no_groups'], $group_link) .
                                 "</p>\n";
-	}
+                }
+        } elseif ($on_behalf_of) {
+                $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
+                        selection(users_with_no_submissions($id), 'user_id') .
+                        "</td></tr>";
+
+        }
+        $notice = $on_behalf_of? '': "<br />$langNotice3";
+        $extra = $on_behalf_of? "<tr><th class='left'>$m[grade]</th>
+                                     <td><input type='text' name='grade' maxlength='3' size='3'>
+                                         <input type='hidden' name='on_behalf_of' value='1'></td></tr>
+                                 <tr><th><label for='email_button'>$m[email_users]:</label></th>
+                                     <td><input type='checkbox' value='1' id='email_button' name='email'></td></tr>": '';
         if (!$is_group_assignment or count($user_group_info)) {
                 $tool_content .= "
                      <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
@@ -575,9 +649,10 @@ function show_submission_form($id, $user_group_info)
                           <th class='left'>$m[comments]:</th>
                           <td><textarea name='stud_comments' rows='5' cols='55'></textarea></td>
                         </tr>
+                        $extra
                         <tr>
                           <th>&nbsp;</th>
-                          <td align='right'><input type='submit' value='$langSubmit' name='work_submit' /><br />$langNotice3</td>
+                          <td align='right'><input type='submit' value='$langSubmit' name='work_submit' />$notice</td>
                         </tr>
                         </table>
                         </fieldset>
@@ -591,8 +666,10 @@ function show_submission_form($id, $user_group_info)
 // Print a box with the details of an assignment
 function assignment_details($id, $row, $message = null)
 {
-	global $tool_content, $m, $langDaysLeft, $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline, $langEndDeadline;
-	global $langDelAssign, $is_editor, $langZipDownload, $langSaved, $code_cours, $langGraphResults, $themeimg;
+        global $tool_content, $is_editor, $code_cours, $themeimg, $m, $langDaysLeft, 
+               $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
+               $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
+               $langSaved, $langGraphResults;
 
 	if ($is_editor) {
             $tool_content .= "
@@ -602,6 +679,7 @@ function assignment_details($id, $row, $message = null)
                 js_escape($row['title']) . "\");'>$langDelAssign</a></li>
                 <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;download=$id'>$langZipDownload</a></li>
 		<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
+		<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
               </ul>
             </div>";
 	}
@@ -699,16 +777,16 @@ function sort_link($title, $opt, $attrib = '')
 function show_assignment($id, $message = false, $display_graph_results = false)
 {
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
-               $mysqlMainDb, $langWorks, $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
+               $mysqlMainDb, $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
-               $nameTools, $langGraphResults, $m, $code_cours, $themeimg;
+               $nameTools, $langGraphResults, $m, $code_cours, $themeimg, $works_url;
 
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignments	
                                  WHERE id = $id");
 	$row = mysql_fetch_array($res);
 
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]", "name"=> $langWorks);
+	$nav[] = $works_url;
 	if ($message) {
 		assignment_details($id, $row, $message);
 	} else {
@@ -808,13 +886,15 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 } else {
                                         $row_color = "class='odd'";
                                 }
-
+                                $filelink = empty($row['file_name'])? '&nbsp;':
+                                        ("<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$row[id]'>" .
+                                         q($row['file_name']) . "</a>");
                                 $tool_content .= "
 		  <tr $row_color>
 		    <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
 		    <td>${uid_2_name}</td>
 		    <td width='85'>" . q($stud_am[0]) . "</td>
-		    <td width='180'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$row[id]'>" . q($row['file_name']) . "</a></td>
+		    <td width='180'>$filelink</a></td>
 		    <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
 		    <td width='5'>
 		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
@@ -1172,6 +1252,12 @@ function create_zip_index($path, $id, $online = FALSE)
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
+                <style type="text/css">
+                .sep td, th { border: 1px solid; }
+                td { border: none; }
+                table { border-collapse: collapse; border: 2px solid; }
+                .sep { border-top: 2px solid black; }
+                </style>
 	</head>
 	<body>
 		<table width="95%" class="tbl">
@@ -1189,12 +1275,13 @@ function create_zip_index($path, $id, $online = FALSE)
 
 	while ($row = mysql_fetch_array($result)) {
 		$filename = basename($row['file_path']);
+                $filelink = empty($filename)? '&nbsp;':
+                        ("<a href='$filename'>".htmlspecialchars($filename).'</a>');
 		fputs($fp, '
-			<tr>
+			<tr class="sep">
 				<td>'.uid_to_name($row['uid']).'</td>
 				<td>'.uid_to_am($row['uid']).'</td>
-				<td align="center"><a href="'.$filename.'">'.
-		htmlspecialchars($filename).'</a></td>
+				<td align="center">'.$filelink.'</td>
 				<td align="center">'.$row['submission_date'].'</td>
 				<td align="center">'.$row['grade'].'</td>
 			</tr>');
@@ -1281,4 +1368,39 @@ function send_mail_to_user_id($uid, $subject, $body)
         list($nom, $prenom, $email) = mysql_fetch_row(db_query("SELECT nom, prenom, email
                 FROM `$mysqlMainDb`.user WHERE user_id = $uid"));
         send_mail('', '', "$prenom $nom", $email, $subject, $body, $charset);
+}
+
+// Return a list of users with no submissions for assignment $id
+function users_with_no_submissions($id)
+{
+        global $mysqlMainDb, $cours_id;
+
+        $q = db_query("SELECT user.user_id, nom, prenom
+                              FROM `$mysqlMainDb`.user,
+                                   `$mysqlMainDb`.cours_user
+                              WHERE user.user_id = cours_user.user_id AND
+                                    cours_user.cours_id = $cours_id AND
+                                    cours_user.statut = 5 AND
+                                    user.user_id NOT IN (SELECT uid
+                                                                FROM assignment_submit
+                                                                WHERE id = $id)");
+        $users = array();
+        while ($row = mysql_fetch_row($q)) {
+                $users[$row[0]] = "$row[1] $row[2]";
+        }
+        return $users;
+}
+
+// Return a list of groups with no submissions for assignment $id
+function groups_with_no_submissions($id)
+{
+        global $currentCourseID, $cours_id;
+
+        $groups = user_group_info(null, $cours_id);
+        $q = db_query("SELECT group_id FROM `$currentCourseID`.assignment_submit
+                              WHERE assignment_id = $id");
+        while ($row = mysql_fetch_row($q)) {
+                unset($groups[$row[0]]);
+        }
+        return $groups;
 }
