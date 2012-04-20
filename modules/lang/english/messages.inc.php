@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-12-14 17:17:43
+// Generated 2012-04-20 17:56:44
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -162,7 +162,7 @@ $langQuotaSuccess = "Quota modified";
 $langQuotaFail = "Quota not modified!";
 $langMaxQuota = "has maximum quota";
 $langLegend = "For the module";
-$langVideo = "Video";
+$langVideo = "Multimedia";
 $langReturnToSearch = "Return to search results";
 $langReturnSearch = "Return to search";
 $langNoChangeHappened = "No change performed!";
@@ -1628,83 +1628,9 @@ $langSurveyTotalAnswers = "Total number of answers";
 $langSurveyNone = "There are no Surveys for the current course.";
 $langSurveyInactive = "Survey has expired or has not started yet.";
 $langSurveyCharts = "Survey results";
-$langQPref = "What type of questionnaire do you prefer?";
-$langQPrefSurvey = "Learning Profile Survey";
-$langNamesSurvey = "Learning Profile Surveys";
 $langHasParticipated = "Already participated";
-$langSurveyInfo = "You may choose from a the list of the following COLLES/ATTL questions or add your own questions in the blank fields.";
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
-$langQuestion1 = array('In this unit, my effort was focused in subjects that interested me.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion2 = array('In this unit, what I learn have they make with my profession.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion3 = array('In this unit, I practise critical thought.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion4 = array('In this unit, I collaborate with my colleagues'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion5 = array('In this unit, the teaching is judged satisfactory.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion6 = array('In this unit, exists right communication with the ".$langTeacher.".'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion7 = array('Try to find errors in  my interlocutor thoughts'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion8 = array('When I discuss I enter in the place of my interlocutor.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion9 = array('I remain objective at the analysis of situations.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
-$langQuestion10 = array('I like  taking  the role of advocate of devil.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
 $langPollsActive = "Active Questionnaires";
 $langPollsInactive = "Inactive Questionnaires";
 $langPollStart = "Start Date";
@@ -2779,7 +2705,7 @@ $langConfig = 'Config settings';
 $langGlossaryToCsv = "Terms in csv form";
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';
-$langJQNoneSelected = 'Choose recipients';
+$langJQNoneSelected = 'Choose';
 $langJQCheckAll = 'Select all';
 $langJQUncheckAll = 'Unselect All';
 $langcas_logout = "CAS logout page";
@@ -2919,8 +2845,8 @@ $langGiveRight = "Add Right";
 $langMailVerificationClick = "Please click in the link below:";
 $langMailVerificationSubject = "Confirmation of request registration account $siteName";
 $langMailChangeVerificationSubject = "Verification of email address $siteName";
-$langMailVerificationSuccess = "In order to complete your registration email address must be verified";
-$langMailVerificationSuccess2 = "Soon an email will be sent to you by $siteName with instructions for completing your registration";
+$langMailVerificationSuccess = "In order to complete your registration, your email address must be verified.";
+$langMailVerificationSuccess2 = "For this reason, please check your email, where you should have received a message with verification instructions sent to you by $siteName.<br />After verifying your email address, you will receive a second message about completing your registration.<br /><br /><small>(Note: In case the message doesn't arrive, please check your junk/spam mail folder.</small>.";
 $langMailVerificationBody1 = "Thank you for your registration in $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationChangeBody = "In order to activate your account, email address must be verified.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationError = "An error occured during sending email to address %s.<br/><br/>Please <a href='%s'>try again</a> or contact with administrator at: %s";
@@ -3010,3 +2936,25 @@ $langExerciseMaxAttemptsReached = "Maximum exercise attempts have been reached."
 $lang_max_glossary_terms = 'The display of term definitions in course pages for a large number of terms in glossary is not allowed';
 $langGlossaryOverLimit = 'The number of glossary terms has exceeded the limit (%s) for displaying definitions in course pages.';
 $langVideoDirectory = "Multimedia files";
+$langUserNotLogin = 'Users never having logged-in';
+$langExternalLinks = 'External Links';
+$langScormEmptyDocsList = "Please upload a SCORM package to the course documents in order to import it";
+$langStudentCannotRegister = "To register as a user with $langsStudent rights, please contact the platform administrators.";
+$langTeacherCannotRegister = "To register as a user with $langsTeacher rights, please contact the platform administrators.";
+$langCannotRegister = "To register as a new user, please contact the platform administrators.";
+$langInactiveModule = 'inactive module';
+$langPopUp = 'Image pop-up';
+$langPopUpFrame = 'Multimedia pop-up ';
+$lang_enable_mobileapi = "Enable communications API for mobile devices (smartphones/tables)";
+$m['subm'] = 'Subm.';
+$m['nogr'] = 'Ungraded';
+$m['comments_exist'] = 'Comments exist';
+$m['email_users'] = 'Notify via email';
+$m['work_email_message'] = 'The following message refers to your submission to assignment "%s" from course "%s":';
+$m['work_email_subject'] = 'Assignment notification: %s';
+$m['link_follows'] = 'Follow this link for details:';
+$m['grade_comment_date'] = 'Comments/grade date';
+$langAddGrade = 'Add grade/submission';
+$langOnBehalfOf = 'On behalf of';
+$langOnBehalfOfUserComment = 'Submitted by %s, on behalf of: %s';
+$langOnBehalfOfGroupComment = 'Submitted by %s, on behalf of group "%s"';
