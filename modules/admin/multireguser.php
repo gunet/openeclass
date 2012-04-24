@@ -38,6 +38,12 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
+        register_posted_variables(array('perso' => true,
+                                        'email_public' => true,
+                                        'am_public' => true,
+                                        'phone_public' => true),
+                                  'all', 'intval');
+        $perso = $perso? 'no': 'yes';
         $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
         $unparsed_lines = '';
         $new_users_info = array();
@@ -97,7 +103,8 @@ if (isset($_POST['submit'])) {
                                                    @$info['id'],
                                                    @$info['phone'],
                                                    $_POST['lang'],
-                                                   $send_mail);
+                                                   $send_mail,
+                                                   $email_public, $phone_public, $am_public, $perso);
                                 if ($new === false) {
                                         $unparsed_lines .= $line . "\n" . $error . "\n";
                                 } else {
@@ -132,6 +139,11 @@ if (isset($_POST['submit'])) {
         while ($n = mysql_fetch_array($req)) {
                 $facs[$n['id']] = $n['name'];
         }
+        $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
+                                ACCESS_PROFS => $langProfileInfoProfs,
+                                ACCESS_USERS => $langProfileInfoUsers);
+        $profile_options = array(0 => $langModern,
+                                 1 => $langClassic);
         $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
             <form method='post' action='$_SERVER[PHP_SELF]'>
             <fieldset>
@@ -161,6 +173,14 @@ if (isset($_POST['submit'])) {
 <tr><th>$langLanguage:</th>
     <td>" . lang_select_options('lang') . "</td>
 </tr>
+<tr><th>$langEmail</th>
+    <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
+<tr><th>$langAm</th>
+    <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
+<tr><th>$langPhone</th>
+    <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
+<tr><th>$langUserBriefcase</th>
+    <td>" . selection($profile_options, 'perso', 0) . "</td></tr>
 <tr><th>$langInfoMail:</th>
     <td><input name='send_mail' type='checkbox' />
         $langMultiRegSendMail</td>
@@ -176,7 +196,8 @@ if (isset($_POST['submit'])) {
 draw($tool_content,3,'admin');
 
 
-function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail)
+function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail,
+                     $email_public, $phone_public, $am_public, $perso)
 {
         global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
@@ -206,7 +227,8 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
         $password_encrypted = md5($password);
 
         $req = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, registered_at, expires_at, lang, am, phone)
+                               (nom, prenom, username, password, email, statut, registered_at, expires_at, lang, am, phone,
+                                email_public, phone_public, am_public, perso)
                         VALUES (" .
 				autoquote($nom) . ', ' .
 				autoquote($prenom) . ', ' .
@@ -215,7 +237,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
 				", $statut, " .
                                 "$registered_at, $expires_at, '$lang', " .
                                 autoquote($am) . ', ' .
-                                autoquote($phone) . ')');
+                                autoquote($phone) . ", $email_public, $phone_public, $am_public, '$perso')");
         $id = mysql_insert_id();
         $userObj->refresh($id, $departments);
 
