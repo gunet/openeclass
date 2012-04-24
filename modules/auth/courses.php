@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -158,7 +158,7 @@ if (isset($_POST["submit"])) {
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
 				<tr>
-				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc) ."</th>
+				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc, true, $_SERVER['PHP_SELF'].'?fc=') ."</th>
 				</tr></table><br />";
                                 
                                 $tool_content .= departmentChildren($fc, 'courses');
@@ -219,7 +219,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
     $retString .= "<table width='100%' class='tbl_border'>
                    <tr>
-                   <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid) ."</b></th></tr></table><br/>";
+                   <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th></tr></table><br/>";
     
     $retString .= departmentChildren($facid, 'courses');
 
@@ -343,7 +343,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 	$retString .= "
            <table width='100%' class='tbl_border'>
            <tr>
-             <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid) ."</b></th>";
+             <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th>";
 
 	// get the different course types available for this faculte
         $typessql = "SELECT DISTINCT course_type.name as type 

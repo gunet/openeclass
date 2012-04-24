@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -68,7 +68,7 @@ $icons = array(
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>
-                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc) ."</b></th>
+                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th>
                     </tr>
                   </table><br/>\n\n";
 
@@ -147,7 +147,7 @@ draw($tool_content, (isset($uid) and $uid)? 1: 0);
 /*$tool_content .= "
   <table width=100% class='tbl_border'>
   <tr>
-    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc) ."</b></th>
+    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th>
     <th><div align='right'>";
 // get the different course types available for this faculte
 $typessql = "SELECT DISTINCT course_type.name as types 

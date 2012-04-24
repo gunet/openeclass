@@ -541,7 +541,7 @@ class hierarchy {
      * 
      * @return string 
      */
-    public function getFullPath($nodeid, $skipfirst = true)
+    public function getFullPath($nodeid, $skipfirst = true, $href = '')
     {
         $ret = "";
         
@@ -565,7 +565,7 @@ class hierarchy {
             }
             
             $ret .= ($c == 0) ? '' : '» ';
-            $ret .= self::unserializeLangField($parent['name']) .' ';
+            $ret .= (empty($href)) ? self::unserializeLangField($parent['name']) .' ' : "<a href='". $href . $parent['id'] ."'>". self::unserializeLangField($parent['name']) ."</a> ";
             $c++;
         }
         
