@@ -32,6 +32,10 @@ require_once('../../include/lib/hierarchy.class.php');
 $treeObj = new hierarchy();
 $courseObj = new course();
 
+load_js('jquery');
+list($js, $html) = $treeObj->buildCourseHtmlSelect('name="department[]"');
+$head_content .= $js;
+
 $nameTools = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 
@@ -531,7 +535,7 @@ elseif (isset($_POST['do_restore'])) {
         <br />";
 }
 mysql_select_db($mysqlMainDb);
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 
 // Functions restoring
 function course_details($code, $lang, $title, $desc, $vis, $prof) {
@@ -1031,6 +1035,8 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                         $languages[$entry] = $entry;
                 }
 	}
+        
+        list($js, $html) = $treeObj->buildCourseHtmlSelect('name="department[]"');
 
         return "<p>$langInfo1</p>
                 <p>$langInfo2</p>
@@ -1046,7 +1052,7 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                    <tr><th>$langCourseDescription:</th>
                        <td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>
                    <tr><th>$langFaculty:</th><td>". 
-                   $treeObj->buildCourseHtmlSelect('name="department[]"') ."
+                   $html ."
                    </td></tr>
                    <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
                    <tr><th>$langTeacher:</th>

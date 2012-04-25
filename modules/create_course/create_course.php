@@ -46,6 +46,7 @@ $user = new user();
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 $lang_editor = langname_to_code($language);
 
+load_js('jquery');
 $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry, entry2) {
@@ -138,7 +139,9 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	  <th>$langFaculty:</th>
 	  <td>";
-        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $user->getDepartmentIds($uid));
+        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $user->getDepartmentIds($uid));
+        $head_content .= $js;
+        $tool_content .= $html;
 	$tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>";

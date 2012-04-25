@@ -35,6 +35,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $course = new course();
 $tree = new hierarchy();
 
+load_js('jquery');
+
 $nameTools = $langModifInfo;
 
 $lang_editor = langname_to_code($language);
@@ -132,7 +134,9 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($c['cours_id']));
+        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($c['cours_id']));
+        $head_content .= $js;
+        $tool_content .= $html;
 	$tool_content .= "
                 </td>
             </tr>
@@ -198,4 +202,4 @@ if (isset($_POST['submit'])) {
 	</form>";
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);

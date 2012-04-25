@@ -53,6 +53,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $course = new course();
 $tree = new hierarchy();
 
+load_js('jquery');
+
 // Define $nameTools
 $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -84,7 +86,9 @@ else {
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-        $tool_content .= $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($row['cours_id']));
+        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($row['cours_id']));
+        $head_content .= $js;
+        $tool_content .= $html;
 	$tool_content .= "</td></tr>
 	<tr>
 	  <th width='150'>".$langCourseCode.":</th>
@@ -114,4 +118,4 @@ if (isset($_GET['c'])) {
 else {
 	$tool_content .= "<p align='right'><a href=\"index.php\">".$langBackAdmin."</a></p>";
 }
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

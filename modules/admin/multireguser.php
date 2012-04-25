@@ -31,6 +31,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
@@ -163,9 +165,11 @@ if (isset($_POST['submit'])) {
     <td><input type='text' name='prefix' size='10' value='user' /></td>
 </tr>
 <tr><th>$langFaculty:</th>
-    <td>" . 
-          $tree->buildUserHtmlSelect('name="facid[]"')
-          ."</td>
+    <td>"; 
+        list($js, $html) = $tree->buildUserHtmlSelect('name="facid[]"');
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= "</td>
 </tr>
 <tr><th>$langAm:</th>
     <td><input type='text' name='am' size='10' /></td>
@@ -193,7 +197,7 @@ if (isset($_POST['submit'])) {
 </form>";
 }
 
-draw($tool_content,3,'admin');
+draw($tool_content,3,'admin', $head_content);
 
 
 function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail,

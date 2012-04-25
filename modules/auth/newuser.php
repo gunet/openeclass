@@ -42,6 +42,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
@@ -108,7 +110,9 @@ if (!isset($_POST['submit'])) {
 	<tr>
 	<th class='left'>$langFaculty:</th>
 		<td colspan='2'>";
-        $tool_content .= $tree->buildUserHtmlSelect('name="department[]"');
+        list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"');
+        $head_content .= $js;
+        $tool_content .= $html;
 	$tool_content .= "\n</td></tr>
 	<tr>
 	<th class='left'>$langLanguage:</th>
@@ -298,4 +302,4 @@ if (!isset($_POST['submit'])) {
 	}
 } // end of registration
 
-draw($tool_content,0);
+draw($tool_content,0, null, $head_content);

@@ -28,6 +28,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+
 $nameTools = $langNewUser;
 $navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
 
@@ -159,7 +161,9 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  <tr>
 	  <th class='left'>$langFaculty &nbsp;
 		</span></th><td>";
-        $tool_content .= $tree->buildUserHtmlSelect('name="department[]"');
+        list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"');
+        $head_content .= $js;
+        $tool_content .= $html;
         $tool_content .= "</td>";
 	$tool_content .= "<tr><th class='left'>$langLanguage</th><td>";
 	$tool_content .= lang_select_options('localize');
@@ -175,7 +179,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 
 } // end of if 
 
-draw($tool_content,3, 'auth');
+draw($tool_content,3, 'auth', $head_content);
 
 // -----------------
 // functions

@@ -32,6 +32,8 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+
 check_uid();
 $nameTools = $langModifyProfile;
 check_guest();
@@ -378,7 +380,10 @@ $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
           <td>";
-$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
+//$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
+list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
+$head_content .= $js;
+$tool_content .= $html;
 $tool_content .= "</td>
         </tr>";
 

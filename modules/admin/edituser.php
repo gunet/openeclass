@@ -58,6 +58,7 @@ $verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_ma
 
 $lang_editor = $lang_jscalendar = langname_to_code($language);
 
+load_js('jquery');
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
@@ -203,8 +204,10 @@ $tool_content .= "
    <tr>
      <th class='left'>$langFaculty:</th>
    <td>";
-	$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($u))."</td></tr>";
-	$tool_content .= "
+        list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($u));
+        $head_content .= $js;
+        $tool_content .= $html;
+	$tool_content .= "</td></tr>
     <tr>
       <th class='left'>$langProperty:</th>
       <td>";

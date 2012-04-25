@@ -476,6 +476,42 @@ class hierarchy {
         return $html;
     }
     
+    public function buildJSSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $offset = 0)
+    {
+        global $themeimg;
+        
+        if ($offset > 0)
+            $offset -=1 ;
+        
+        $js = <<<jContent
+<script type="text/javascript">
+var countnd = $offset;
+$(function(){
+    $('#ndAdd').click(function(){
+        countnd += 1;
+        $('#ndContainer').append('<p id="nd_' + countnd + '">
+jContent;
+        $js .= $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, false);
+        $js .= '&nbsp;<a href="#ndContainer" onclick="$(\\\'#nd_\' + countnd + \'\\\').remove();"><img src="'.$themeimg.'/delete.png"/></a>';
+        $js .= <<<jContent
+</p>' );
+
+    });
+});
+</script>
+jContent;
+        
+        // Generic del button, just keep it in comments for reference
+//        $('#ndDel').click(function(){
+//            if (countnd > 0) {
+//                $('#nd_' + countnd).remove();
+//                countnd -= 1;
+//            }
+//        });
+        
+        return $js;
+    }
+    
     /**
      * Build tree using <select> html tags
      *
@@ -490,28 +526,79 @@ class hierarchy {
      */
     public function buildHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array('0' => 'Top'), $useKey = 'lft', $where = '', $multiple = false)
     {
+        global $themeimg;
+        $html = '';
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
-        $multi = ($multiple) ? ' multiple = "multiple"' : '';
-        $html = '<select '. $params . $multi .'>'. "\n";
-        list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
         
-        foreach($tree_array as $key => $value)
+        if ($multiple)
+            $html .= '<div id="ndContainer">';
+        
+        if ($multiple && is_array($defaults) && count($defaults) > 0)
         {
-            $html .= '<option value="'. $key .'" '. (in_array($key, $defs) ? 'selected' : '') .'>'. $value .'</option>';
+            $i = 0;
+            list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
+            
+            foreach($defaults as $def)
+            {
+                $html .= '<p id="nd_'. $i .'"><select '. $params .'>';
+
+                foreach($tree_array as $key => $value)
+                {
+                    $html .= '<option value="'. $key .'" '. (($key == $def) ? 'selected' : '') .'>'. $value .'</option>';
+                }
+
+                $html .= '</select>&nbsp;<a href="#ndContainer" onclick="$(\'#nd_'. $i .'\').remove();"><img src="'.$themeimg.'/delete.png"/></a></p>';
+                $i++;
+            }
+        }
+        else
+        {
+            $html .= '<select '. $params .'>';
+            list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
+
+            foreach($tree_array as $key => $value)
+            {
+                $html .= '<option value="'. $key .'" '. (in_array($key, $defs) ? 'selected' : '') .'>'. $value .'</option>';
+            }
+
+            $html .= '</select>';
         }
         
-        $html .= '</select>'. "\n";
+        if ($multiple)
+        {
+            $html .= '</div>';
+            $html .= '<div><p><a id="ndAdd" href="#ndContainer"><img src="'.$themeimg.'/add.png"/></a>';
+            
+            // Generic del button, just keep it in comments for reference
+            //&nbsp;<a id="ndDel" href="#ndContainer"><img src="'.$themeimg.'/delete.png"/></a></p></div>
+        }
+        
         return $html;
+    }
+    
+    public function decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi)
+    {
+        $js = '';
+        
+        if ($multi)
+        {
+            $c = (is_array($defaults)) ? count($defaults) : 0;
+            $js = $this->buildJSSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $c);
+        }
+        
+        $html = $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi);
+        
+        return array($js, $html);
     }
     
     public function buildCourseHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_course = true')
     {
-        return $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('course_multidep'));
+        return $this->decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('course_multidep'));
     }
     
     public function buildUserHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_user = true')
     {
-        return $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('user_multidep'));
+        return $this->decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('user_multidep'));
     }
     
     /**
