@@ -380,7 +380,6 @@ $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
           <td>";
-//$tool_content .= $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
 list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($uid));
 $head_content .= $js;
 $tool_content .= $html;
