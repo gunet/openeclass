@@ -43,11 +43,11 @@ Design & Developement: main template file, engine and css,
 Also Special Credits to:
  Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
  Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
+ Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
 
 Also Credits to:
  Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
  Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
- Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
  Artemios Vogiatzis <bogart@upatras.gr (University of Patras)
  Vangelis Chaniotakis <haniotak@ucnet.uoc.gr> (University of Crete)
  Stratos Karatzidis <kstratos@uom.gr> (University of Macedonia)
@@ -64,7 +64,8 @@ Also Credits to:
  Emmanuela Patiniotaki <aporoemm@hotmail.com> (University of Athens)
  George Doukas <geodoukas@upatras.gr> (University of Patras)
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
- Evaggelos Matiatos <ematiat@noc.uoa.gr>
+ Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
+ Apostolos Kechagias <apkech@gmail.com>
 
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
@@ -74,7 +75,9 @@ George Nikolaidis <nikolage@noc.uoa.gr>
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
-PclZip: Vincent Blavet <vincent@phpconcept.net>
+PclZip 2.8.2 : Vincent Blavet <vincent@phpconcept.net>
+	Distributed under the GNU Lesser General Public License.
+	http://www.phpconcept.net
 
 phpBB Copyright (c) 2001 The phpBB Group
 
@@ -91,7 +94,7 @@ JSCalendar: Copyright Mihai Bazon, 2002-2005
 POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
 Libchart - PHP chart library: Copyright 2005-2010 Jean Marc Tr?meaux <jm.tremeaux@gmail.com>
-http://naku.dohcrew.com/libchart/pages/introduction/
+	http://naku.dohcrew.com/libchart/pages/introduction/
 
 Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
@@ -130,7 +133,7 @@ jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
 
-HTML Purify: (include/htmlpurifier-4.1.1-standalone)
+HTML Purify: (include/htmlpurifier-4.3.0-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
  Distributed under the GNU Lesser General Public (LGPL)
  version 2.1 or later.
@@ -140,7 +143,7 @@ Tiny MCE Editor
   Copyright © 2003-2011 Moxiecode Systems AB. All rights Reserved.
   Licensed under LGPL
   http:/tinymce.moxiecode.com
-  version 3.4.2
+  version 3.4.9
 
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
