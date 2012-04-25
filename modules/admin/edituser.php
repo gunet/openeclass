@@ -269,43 +269,44 @@ $tool_content .= "
      </fieldset>
      </form>";
 
-	$sql = db_query("SELECT a.code, a.intitule, b.reg_date, b.statut, a.cours_id
+	$sql = db_query("SELECT a.code, a.intitule, a.cours_id, a.visible, b.reg_date, b.statut
                                 FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
                                      LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
                                 WHERE b.user_id = $u ORDER BY b.statut, faculte.name");
 
-		// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+		// user is registered to courses
 		if (mysql_num_rows($sql) > 0) {
 			$tool_content .= "
                         <p class='title1'>$langStudentParticipation</p>
 			<table class='tbl_alt' width='100%'>
-			<tr>
-                        
+			<tr>                        
 			<th colspan='2'><div align='left'>$langCode</div></th>
 			<th><div align='left'>$langLessonName</div></th>
 			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
 			</tr>";
-
                         $k=0;
-			for ($j = 0; $j < mysql_num_rows($sql); $j++)
-			{
+			for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 				$logs = mysql_fetch_array($sql);
-                                 if ($k%2 == 0) {
-                                        $tool_content .= "\n      <tr class='even'>";
+                                if ($logs['visible'] == COURSE_INACTIVE) {
+                                        $tool_content .= "<tr class='invisible'>";
                                 } else {
-                                        $tool_content .= "\n      <tr class='odd'>";
+                                        if ($k%2 == 0) {
+                                                $tool_content .= "<tr class='even'>";
+                                        } else {
+                                                $tool_content .= "<tr class='odd'>";
+                                        }
                                 }
-
 				$tool_content .= "
                                         <td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
-					<td><a href='{$urlServer}courses/$logs[0]/'>".q($logs[0])."</a></td>
-					<td>".q($logs[1])."</td><td align='center'>";
-				if ($logs[2] == '0000-00-00')
+					<td><a href='{$urlServer}courses/$logs[code]/'>".q($logs['code'])."</a></td>
+					<td>".q($logs['intitule'])."</td><td align='center'>";
+				if ($logs['reg_date'] == '0000-00-00') {
 					 $tool_content .= $langUnknownDate;
-				else
-					$tool_content .= " ".nice_format($logs[2])." ";
+                                } else {
+					$tool_content .= " ".nice_format($logs['reg_date'])." ";
+                                }
 				$tool_content .= "</td><td align='center'>";
-				switch ($logs[3])
+				switch ($logs['statut'])
 				{
 					case 1:
 						$tool_content .= $langTeacher;
@@ -325,26 +326,15 @@ $tool_content .= "
 						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
-                        $k++;
-			}
-                           
-			$tool_content .= "</table>\n";
-		}
-		else
-		{
+                                $k++;
+			}                          
+			$tool_content .= "</table>";
+		} else {
 			$tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";
-			if ($u > 1)
-			{
-				if (isset($logs))
-					$tool_content .= "<p class='eclass_button'>
-					<a href='unreguser.php?u=$u&amp;c=$logs[0]'>$langDelete</a></p>";
-				else
-					$tool_content .= "<p class='eclass_button'>
-					<a href='unreguser.php?u=$u'>$langDelete</a></p>";
-			}
-			else
-			{
-				$tool_content .= $langCannotDeleteAdmin;
+			if ($u > 1) {
+                                $tool_content .= "<p class='eclass_button'><a href='unreguser.php?u=$u'>$langDelete</a></p>";
+			} else {
+				$tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
 			}
 		}
 	} else { // if the form was submitted then update user
