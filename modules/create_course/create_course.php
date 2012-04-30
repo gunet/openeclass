@@ -126,8 +126,6 @@ $tool_content .= $intitule_html .
 if (isset($_POST['back1']) or !isset($_POST['visit'])) {
    // display form
     $tool_content .= "
-
-
   <fieldset>
       <legend>$langCreateCourseStep1Title</legend>
         <table class='tbl' width='100%'>
@@ -204,10 +202,10 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
-	@$tool_content .= "
-    <fieldset>
+	$tool_content .= "
+        <fieldset>
       <legend>$langCreateCourseStep3Title</legend>
-		      <table class='tbl' width='100%'>
+        <table class='tbl' width='100%'>
       <tr>
       <td class='sub_title1'>$langAvailableTypes<br></td>
       </tr>
@@ -247,86 +245,41 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <tr>
 	<td>
  	  <table class='tbl smaller' width='100%'>
-	  <tr>
-	    <td width='10' ><img src='$themeimg/calendar_on.png' alt='' height='16' width='16' /></td>
-	    <td width='150'>$langAgenda</td>
-	    <td width='30' ><input name='subsystems[]' type='checkbox' value='1' checked='checked' /></td>
-	    <th width='2' >&nbsp;</th>
-	    <td width='10' >&nbsp;<img src='$themeimg/dropbox_on.png' alt='' height='16' width='16' /></td>
-	    <td width='150'>$langDropBox</td>
- 	    <td width='30' ><input type='checkbox' name='subsystems[]' value='16' /></td>
-	  </tr>
-	  <tr  class='even'>
-	    <td><img src='$themeimg/links_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langLinks</td>
-	    <td><input name='subsystems[]' type='checkbox' value='2' checked='checked' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/groups_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langGroups</td>
-	    <td><input type='checkbox' name='subsystems[]' value='15' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/docs_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langDoc</td>
-	    <td><input name='subsystems[]' type='checkbox' value='3' checked='checked' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/conference_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langConference</td>
-	    <td><input type='checkbox' name='subsystems[]' value='19' /></td>
-	  </tr>
-	  <tr class='even'>
-	    <td><img src='$themeimg/videos_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langVideo</td>
-	    <td><input name='subsystems[]' type='checkbox' value='4'  /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/description_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langCourseDescription</td>
-	    <td><input type='checkbox' name='subsystems[]' value='20' checked='checked' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/assignments_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langWorks</td>
-	    <td><input type='checkbox' name='subsystems[]' value='5' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/questionnaire_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langQuestionnaire</td>
-	    <td><input type='checkbox' name='subsystems[]' value='21' /></td>
-	  </tr>
-	  <tr  class='even'>
-	    <td><img src='$themeimg/announcements_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langAnnouncements</td>
-	    <td><input type='checkbox' name='subsystems[]' value='7' checked='checked'/></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/lp_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langLearnPath</td>
-	    <td><input type='checkbox' name='subsystems[]'  value='23' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/forum_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langForums</td>
-	    <td><input type='checkbox' name='subsystems[]' value='9' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/wiki_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langWiki</td>
-	    <td><input type='checkbox' name='subsystems[]' value='26' /></td>
-	  </tr>
-	  <tr class='even'>
-	    <td><img src='$themeimg/exercise_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langExercices</td>
-	    <td><input type='checkbox' name='subsystems[]' value='10' /></td>
-	    <th>&nbsp;</th>
-            <td>&nbsp;<img src='$themeimg/glossary_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langGlossary</td>
-	    <td><input type='checkbox' name='subsystems[]' value='17' checked='checked' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/ebook_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langEBook</td>
-	    <td><input type='checkbox' name='subsystems[]' value='18' /></td>
-	    <th>&nbsp;</th>
-            <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
+	  <tr>";
+        $tool_content .= create_td($modules[MODULE_ID_AGENDA], MODULE_ID_AGENDA, 1);	    
+        $tool_content .= "<th width='2' >&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_DROPBOX], MODULE_ID_DROPBOX, 0);
+        $tool_content .= "</tr><tr class='even'>";
+        $tool_content .= create_td($modules[MODULE_ID_LINKS], MODULE_ID_LINKS, 1);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_GROUPS], MODULE_ID_GROUPS, 0);
+        $tool_content .= "</tr><tr>";
+        $tool_content .= create_td($modules[MODULE_ID_DOCS], MODULE_ID_DOCS, 1);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_CHAT], MODULE_ID_CHAT, 0);
+        $tool_content .= "</tr><tr class='even'>";
+        $tool_content .= create_td($modules[MODULE_ID_VIDEO], MODULE_ID_VIDEO, 0);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_DESCRIPTION], MODULE_ID_DESCRIPTION, 1);
+        $tool_content .= "</tr><tr>";
+        $tool_content .= create_td($modules[MODULE_ID_ASSIGN], MODULE_ID_ASSIGN, 0);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_QUESTIONNAIRE], MODULE_ID_QUESTIONNAIRE, 0);
+        $tool_content .= "</tr><tr class='even'>";
+        $tool_content .= create_td($modules[MODULE_ID_ANNOUNCE], MODULE_ID_ANNOUNCE, 1);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_LP], MODULE_ID_LP, 0);
+        $tool_content .= "</tr><tr>";
+        $tool_content .= create_td($modules[MODULE_ID_FORUM], MODULE_ID_FORUM, 0);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_WIKI], MODULE_ID_WIKI, 0);
+        $tool_content .= "</tr><tr class='even'>";
+        $tool_content .= create_td($modules[MODULE_ID_EXERCISE], MODULE_ID_EXERCISE, 0);
+        $tool_content .= "<th>&nbsp;</th>";
+        $tool_content .= create_td($modules[MODULE_ID_GLOSSARY], MODULE_ID_GLOSSARY, 1);
+        $tool_content .= "</tr><tr>";
+        $tool_content .= create_td($modules[MODULE_ID_EBOOK], MODULE_ID_EBOOK, 0);
+        $tool_content .= "<th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 	  </tr>
 	  </table>
         <br />
@@ -475,7 +428,6 @@ draw($tool_content, 1, null, $head_content);
 // ---------------------------------------------
 // create entries in table `module`
 // ---------------------------------------------
-
 function create_modules($cid, $sbsystems) {
 
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", ".$sbsystems[MODULE_ID_AGENDA].", $cid)");
@@ -495,4 +447,22 @@ function create_modules($cid, $sbsystems) {
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.", ".$sbsystems[MODULE_ID_QUESTIONNAIRE].", $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LP.", ".$sbsystems[MODULE_ID_LP].", $cid)");
         db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");        
+}
+
+// ----------------------------------------
+// create <td>....</td> for each module
+// ----------------------------------------
+function create_td($m, $value, $selected) {
+        
+        global $themeimg;
+        
+        $checkbox = '';
+        if ($selected) {
+                $checkbox = "checked='checked'";
+        }
+        $td = "<td width='10' ><img src='$themeimg/$m[image]_on.png' alt='' height='16' width='16' /></td>
+        <td width='150'>$m[title]</td>
+        <td width='30' ><input name='subsystems[]' type='checkbox' value='$value' $checkbox /></td>";        
+            
+        return $td;
 }
