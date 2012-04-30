@@ -541,14 +541,14 @@ if (!isset($_POST['submit2'])) {
                 }
 
                 // create forum tables
-                db_query("CREATE TABLE categories (                                       
+                db_query("CREATE TABLE forum_categories (                                       
                                        `cat_id` INT(10),
                                        `cat_title` VARCHAR(100),
                                        `cat_order` VARCHAR(10),
                                        `course_id` INT(11),
                                        KEY (cat_id, course_id))");
 
-                db_query("CREATE TABLE forums (                     
+                db_query("CREATE TABLE forum (                     
                      forum_id int(10),
                      forum_name varchar(150),
                      forum_desc text,
@@ -562,7 +562,7 @@ if (!isset($_POST['submit2'])) {
                      course_id int(11),                     
                      KEY (forum_id, course_id))");
                 
-                db_query("CREATE TABLE topics (
+                db_query("CREATE TABLE forum_topics (
                        topic_id int(10),
                        topic_title varchar(100),
                        topic_poster_id int(10),
@@ -575,7 +575,7 @@ if (!isset($_POST['submit2'])) {
                        course_id int(11),                       
                        KEY (forum_id, topic_id, course_id))");
 
-                db_query("CREATE TABLE posts (
+                db_query("CREATE TABLE forum_posts (
                       post_id int(10),
                       topic_id int(10) DEFAULT 0 NOT NULL,
                       forum_id int(10) DEFAULT 0 NOT NULL,
@@ -586,8 +586,8 @@ if (!isset($_POST['submit2'])) {
                       course_id int(11),                                            
                       KEY (post_id, topic_id, forum_id, course_id))");
                 
-                db_query("ALTER TABLE `posts` ADD FULLTEXT `posts` (`post_text`)");
-                db_query("ALTER TABLE `forums` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+                db_query("ALTER TABLE `forum_posts` ADD FULLTEXT `posts` (`post_text`)");
+                db_query("ALTER TABLE `forum` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
 
                 // create video tables
                 db_query('CREATE TABLE IF NOT EXISTS video (

@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 /*
- * Open eClass 2.x standard stuff
+ * Open eClass 3.x standard stuff
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
@@ -40,7 +40,7 @@ if (isset($_GET['topic'])) {
 	$topic = '';
 }
 
-$sql = "SELECT forum_name, forum_access, forum_type FROM forums
+$sql = "SELECT forum_name, forum_access, forum_type FROM forum
             WHERE forum_id = $forum AND course_id = $cours_id";
 if (!$result = db_query($sql)) {
 	$tool_content .= $langErrorDataForum;
@@ -98,12 +98,12 @@ if (isset($_POST['submit'])) {
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
 	
-	$sql = "INSERT INTO topics (topic_title, topic_poster_id, forum_id, topic_time, course_id)
+	$sql = "INSERT INTO forum_topics (topic_title, topic_poster_id, forum_id, topic_time, course_id)
 			VALUES (" . autoquote($subject) . ", $uid, $forum, '$time', $cours_id)";
 	$result = db_query($sql);
 
 	$topic_id = mysql_insert_id();
-	$sql = "INSERT INTO posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
+	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
 			VALUES ($topic_id, $forum, ".autoquote($message).", $uid, '$time', '$poster_ip', $cours_id)";
 	if (!$result = db_query($sql)) {
 		$tool_content .= $langErrorEnterPost;
@@ -111,12 +111,12 @@ if (isset($_POST['submit'])) {
 		exit();
 	}        
         $post_id = mysql_insert_id();
-        db_query("UPDATE topics
+        db_query("UPDATE forum_topics
                     SET topic_last_post_id = $post_id
                 WHERE topic_id = $topic_id 
                     AND course_id = $cours_id");
                         
-	db_query("UPDATE forums
+	db_query("UPDATE forum
                     SET forum_posts = forum_posts+1, 
                     forum_topics = forum_topics+1, 
                     forum_last_post_id = $post_id

@@ -322,7 +322,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     
     // move forums to central db and drop table
     if (mysql_table_exists($code, 'catagories')) {
-            $ok = db_query("INSERT INTO `$mysqlMainDb`.`categories`
+            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_categories`
                     (`cat_id`, `cat_title`, `cat_order`, `course_id`)
                     SELECT `cat_id`, `cat_title`,
                     `cat_order`, $course_id FROM catagories");
@@ -332,7 +332,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     }      
 
     if (mysql_table_exists($code, 'forums')) {
-            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forums`
+            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum`
                         (`forum_id`, `forum_name`, `forum_desc`, `forum_access`,
                         `forum_moderator`, `forum_topics`, `forum_posts`, `forum_last_post_id`, 
                         `cat_id`, `forum_type`, `course_id`)
@@ -345,7 +345,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
    }
    
    if (mysql_table_exists($code, 'posts')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`posts`
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_posts`
                         (`post_id`, `topic_id`, `forum_id`, `post_text`,
                         `poster_id`, `post_time`, `poster_ip`, `course_id`)
                         SELECT p.`post_id`, p.`topic_id`, p.`forum_id`, pt.post_text AS post_text, 
@@ -358,7 +358,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
    }
    
    if (mysql_table_exists($code, 'topics')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`topics`
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_topics`
                         (`topic_id`, `topic_title`, `topic_poster_id`, `topic_time`,
                         `topic_views`, `topic_replies`, `topic_last_post_id`, `forum_id`, 
                         `topic_status`, `course_id`)

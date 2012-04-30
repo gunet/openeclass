@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -73,7 +73,7 @@ if ($can_post) {
 * Retrieve and present data from course's forum
 */
 
-$sql = "SELECT f.forum_type, f.forum_name FROM forums f
+$sql = "SELECT f.forum_type, f.forum_name FROM forum f
             WHERE forum_id = $forum_id 
             AND course_id = $cours_id";
 
@@ -83,7 +83,7 @@ $myrow = mysql_fetch_array($result);
 $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
-$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM topics
+$topic_count = mysql_fetch_row(db_query("SELECT COUNT(*) FROM forum_topics
                 WHERE forum_id = $forum_id
                 AND course_id = $cours_id"));
 $total_topics = $topic_count[0];
@@ -138,21 +138,21 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
 	
-	$sql = db_query("SELECT post_id FROM posts
+	$sql = db_query("SELECT post_id FROM forum_posts
                     WHERE topic_id = $topic_id 
                     AND forum_id = $forum_id
                     AND course_id = $cours_id");
         
 	while ($r = mysql_fetch_array($sql)) {
-		db_query("DELETE FROM posts WHERE post_id = $r[post_id]");
+		db_query("DELETE FROM forum_posts WHERE post_id = $r[post_id]");
 	}
-	db_query("DELETE FROM topics 
+	db_query("DELETE FROM forum_topics 
                     WHERE topic_id = $topic_id 
                     AND forum_id = $forum_id 
                     AND course_id = $cours_id");
         
         $number_of_posts = get_total_posts($topic_id, "topic");
-	db_query("UPDATE forums SET forum_topics = forum_topics-1,
+	db_query("UPDATE forum SET forum_topics = forum_topics-1,
                                 forum_posts = forum_posts-$number_of_posts        
                             WHERE forum_id = $forum_id 
                                 AND course_id = $cours_id");
@@ -176,8 +176,8 @@ if(isset($_GET['topicnotify'])) {
 }
 
 $sql = "SELECT t.*, p.post_time, p.poster_id AS poster_id
-        FROM topics t
-        LEFT JOIN posts p ON t.topic_last_post_id = p.post_id
+        FROM forum_topics t
+        LEFT JOIN forum_posts p ON t.topic_last_post_id = p.post_id
         WHERE t.forum_id = $forum_id AND t.course_id = $cours_id
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -53,7 +53,7 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
-$sql = "SELECT f.forum_type, f.forum_name FROM forums f, topics t 
+$sql = "SELECT f.forum_type, f.forum_name FROM forum f, forum_topics t 
             WHERE f.forum_id = $forum
             AND t.topic_id = $topic 
             AND t.forum_id = f.forum_id
@@ -72,7 +72,7 @@ if (isset($_GET['delete'])) {
 	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic, "time_fix");
 	
-	$result = db_query("SELECT post_time FROM posts 
+	$result = db_query("SELECT post_time FROM forum_posts 
                             WHERE post_id = $post_id
                             AND course_id = $cours_id");
      
@@ -80,12 +80,12 @@ if (isset($_GET['delete'])) {
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = explode(' ', $this_post_time);
 		
-	db_query("DELETE FROM posts WHERE post_id = $post_id AND course_id = $cours_id");
-	db_query("UPDATE forums SET forum_posts = forum_posts-1 
+	db_query("DELETE FROM forum_posts WHERE post_id = $post_id AND course_id = $cours_id");
+	db_query("UPDATE forum SET forum_posts = forum_posts-1 
                     WHERE forum_id = $forum AND course_id = $cours_id");
 	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
-		$sql = "UPDATE topics
+		$sql = "UPDATE forum_topics
 			SET topic_time = '$topic_time_fixed'
 			WHERE topic_id = $topic
                         AND course_id = $cours_id";
@@ -97,8 +97,8 @@ if (isset($_GET['delete'])) {
 	}
 	$total = get_total_posts($topic, "topic");
 	if ($total == 0) {
-		db_query("DELETE FROM topics WHERE topic_id = $topic AND course_id = $cours_id");
-		db_query("UPDATE forums SET forum_topics = forum_topics-1 
+		db_query("DELETE FROM forum_topics WHERE topic_id = $topic AND course_id = $cours_id");
+		db_query("UPDATE forum SET forum_topics = forum_topics-1 
                             WHERE forum_id = $forum 
                             AND course_id = $cours_id");
 		header("Location: viewforum.php?course=$code_cours&forum=$forum");
@@ -118,7 +118,7 @@ if ($paging and $total > $posts_per_page) {
 	$pages = $times;
 }
 
-$sql = "SELECT topic_title FROM topics 
+$sql = "SELECT topic_title FROM forum_topics 
             WHERE topic_id = $topic 
             AND course_id = $cours_id";
 $result = db_query($sql);
@@ -161,7 +161,7 @@ if ($paging and $total > $posts_per_page ) {
 
 	for($x = 0; $x < $total; $x += $posts_per_page) {
 		if($times != 1) {
-			$tool_content .= "\n<span class=\"page-sep\">,</span>";
+			$tool_content .= "<span class='page-sep'>,</span>";
 		}
 		if($start && ($start == $x)) {
 			$tool_content .= "" .  $times;
@@ -177,21 +177,20 @@ if ($paging and $total > $posts_per_page ) {
 	<td align=\"right\">
 	<span class='pages'>";
 	if (isset($start) && $start > 0 ) {
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page\">$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "\n<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
+		$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page\">$langNextPage</a>&nbsp;|";
 	}
 	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
 	</td>
 	</tr>
 	</table>";
 } else {
-	$tool_content .= "
-        <table width='100%' class='tbl'>
+	$tool_content .= "<table width='100%' class='tbl'>
 	<tr>
 	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
@@ -214,19 +213,19 @@ if ($is_editor) {
     $tool_content .= "</tr>";
 
 if (isset($_GET['all'])) {
-    $sql = "SELECT * FROM posts 
+    $sql = "SELECT * FROM forum_posts
                 WHERE topic_id = $topic 
 		AND course_id = $cours_id
 		ORDER BY post_id";
 } elseif (isset($_GET['start'])) {
 	$start = intval($_GET['start']);
-	$sql = "SELECT * FROM posts
+	$sql = "SELECT * FROM forum_posts
 		WHERE topic_id = $topic 
 		AND course_id = $cours_id
 		ORDER BY post_id 
                 LIMIT $start, $posts_per_page";
 } else {
-	$sql = "SELECT * FROM posts
+	$sql = "SELECT * FROM forum_posts
 		WHERE topic_id = '$topic'
 		AND course_id = $cours_id
 		ORDER BY post_id 
@@ -255,7 +254,7 @@ do {
 		$postTitle = "";
 	}
 
-	$tool_content .= "\n<td>
+	$tool_content .= "<td>
 	  <div>
 	    <b>$langSent: </b>" . $myrow["post_time"] . "<br>$postTitle
 	  </div>
@@ -272,7 +271,7 @@ do {
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
-$sql = "UPDATE topics SET topic_views = topic_views + 1 
+$sql = "UPDATE forum_topics SET topic_views = topic_views + 1 
             WHERE topic_id = $topic AND course_id = $cours_id";
 db_query($sql);
 

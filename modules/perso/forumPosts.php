@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -141,28 +141,25 @@ function createForumQueries($dateVar, $code) {
 
         $course_id = course_code_to_id($code);
         
-        $forum_query = 'SELECT forums.forum_id,
-                               forums.forum_name,
-                               topics.topic_id,
-                               topics.topic_title,
-                               topics.topic_replies,
-                               posts.post_time,
-                               posts.poster_id,
-                               posts.post_text
-                        FROM   forums,
-                               topics,
-                               posts,
-                               modules
-                        WHERE CONCAT(topics.topic_title, posts.post_text) != \'\'
-                               AND forums.forum_id = topics.forum_id
-                               AND posts.forum_id = forums.forum_id
-                               AND posts.topic_id = topics.topic_id
-                               AND forums.course_id = '.$course_id.'
-                               AND DATE_FORMAT(posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
+        $forum_query = 'SELECT forum.forum_id,
+                               forum.forum_name,
+                               forum_topics.topic_id,
+                               forum_topics.topic_title,
+                               forum_topics.topic_replies,
+                               forum_posts.post_time,
+                               forum_posts.poster_id,
+                               forum_posts.post_text
+                        FROM forum, forum_topics, forum_posts, modules
+                        WHERE CONCAT(forum_topics.topic_title, forum_posts.post_text) != \'\'
+                               AND forum.forum_id = forum_topics.forum_id
+                               AND forum_posts.forum_id = forum.forum_id
+                               AND forum_posts.topic_id = forum_topics.topic_id
+                               AND forum.course_id = '.$course_id.'
+                               AND DATE_FORMAT(forum_posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
                                AND modules.visible = 1
-                               AND modules.module_id = '.MODULE_ID_ASSIGN.'
+                               AND modules.module_id = '.MODULE_ID_FORUM.'
                                AND modules.course_id = '.$course_id.'     
-                        ORDER BY posts.post_time LIMIT 15';
+                        ORDER BY forum_posts.post_time LIMIT 15';
 
 	return $forum_query;
 }

@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 /*
- * Open eClass 2.x standard stuff
+ * Open eClass 3.x standard stuff
  */
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -38,7 +38,7 @@ if (isset($_GET['topic'])) {
 }
 
 $sql = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title 
-            FROM forums f, topics t 
+            FROM forum f, forum_topics t 
             WHERE f.forum_id = $forum
             AND t.topic_id = $topic 
             AND t.forum_id = f.forum_id
@@ -102,17 +102,17 @@ if (isset($_POST['submit'])) {
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
 	
-	$sql = "INSERT INTO posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
+	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
 			VALUES ($topic, $forum, ".autoquote($message) ." , $uid, '$time', '$poster_ip', $cours_id)";
 	$result = db_query($sql);
 	$this_post = mysql_insert_id();
-	$sql = "UPDATE topics SET topic_replies = topic_replies+1, 
+	$sql = "UPDATE forum_topics SET topic_replies = topic_replies+1, 
                     topic_last_post_id = $this_post, 
                     topic_time = '$time' 
 		WHERE topic_id = $topic
                     AND course_id = $cours_id";
 	$result = db_query($sql);
-	$sql = "UPDATE forums SET forum_posts = forum_posts+1, 
+	$sql = "UPDATE forum SET forum_posts = forum_posts+1, 
                     forum_last_post_id = $this_post 
 		WHERE forum_id = $forum
                     AND course_id = $cours_id";
@@ -202,7 +202,7 @@ if (isset($_POST['submit'])) {
         <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
 		$sql = "SELECT post_text, post_time
-                            FROM posts 
+                            FROM forum_posts 
 			WHERE post_id = '$post' 
                             AND course_id = $cours_id";
 		if ($r = db_query($sql)) {

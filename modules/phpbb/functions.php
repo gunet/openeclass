@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,9 +23,9 @@
 function get_total_topics($forum_id) {
 	global $langError, $cours_id;
         
-	$sql = "SELECT count(*) AS total FROM topics 
-                WHERE forum_id = $forum_id
-                    AND course_id = $cours_id";
+	$sql = "SELECT COUNT(*) AS total FROM forum_topics
+                        WHERE forum_id = $forum_id
+                        AND course_id = $cours_id";
 	if(!$result = db_query($sql))
 		return($langError);
 	if(!$myrow = mysql_fetch_array($result))
@@ -44,11 +44,11 @@ function get_total_posts($id, $type) {
    
     switch($type) {
         case 'forum':
-          $sql = "SELECT count(*) AS total FROM posts 
+          $sql = "SELECT COUNT(*) AS total FROM forum_posts 
                     WHERE forum_id = $id AND course_id = $cours_id";
           break;
         case 'topic':
-          $sql = "SELECT count(*) AS total FROM posts 
+          $sql = "SELECT COUNT(*) AS total FROM forum_posts
                     WHERE topic_id = $id AND course_id = $cours_id";
           break;
     }
@@ -70,25 +70,25 @@ function get_last_post($id, $type) {
 
     switch($type) {
         case 'time_fix':
-          $sql = "SELECT post_time FROM posts 
+          $sql = "SELECT post_time FROM forum_posts
                         WHERE topic_id = '$id' 
                         AND course_id = $cours_id 
                             ORDER BY post_time DESC LIMIT 1";   
           break;
         case 'forum':
-          $sql = "SELECT post_time, poster_id FROM posts 
+          $sql = "SELECT post_time, poster_id FROM forum_posts
                         WHERE forum_id = $id
                         AND course_id = $cours_id 
                             ORDER BY post_time DESC LIMIT 1";
           break;
         case 'topic':
-          $sql = "SELECT post_time FROM posts 
+          $sql = "SELECT post_time FROM forum_posts
                         WHERE topic_id = $id 
                         AND course_id = $cours_id     
                             ORDER BY post_time DESC LIMIT 1";
           break;
         case 'user':
-          $sql = "SELECT post_time FROM posts 
+          $sql = "SELECT post_time FROM forum_posts
                         WHERE poster_id = $id 
                         AND course_id = $cours_id 
                             LIMIT 1";
@@ -118,12 +118,12 @@ function does_exists($id, $type) {
         global $cours_id;
 	switch($type) {
 		case 'forum':
-			$sql = "SELECT forum_id FROM forums 
+			$sql = "SELECT forum_id FROM forum
                                 WHERE forum_id = $id 
                                 AND course_id = $cours_id";
 		break;
 		case 'topic':
-			$sql = "SELECT topic_id FROM topics 
+			$sql = "SELECT topic_id FROM forum_topics 
                                 WHERE topic_id = $id 
                                 AND course_id = $cours_id";
 		break;
@@ -751,7 +751,7 @@ function is_first_post($topic_id, $post_id) {
     
     global $cours_id;
     
-    $sql = "SELECT post_id FROM posts 
+    $sql = "SELECT post_id FROM forum_posts
                 WHERE topic_id = $topic_id 
                     AND course_id = $cours_id 
                     ORDER BY post_id LIMIT 1";
@@ -776,28 +776,28 @@ function sync($id, $type) {
    
    switch($type) {
    	case 'forum':
-   		$sql = "SELECT MAX(post_id) AS last_post FROM posts 
+   		$sql = "SELECT MAX(post_id) AS last_post FROM forum_posts
                             WHERE forum_id = $id
                             AND course_id = $cours_id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT COUNT(post_id) AS total FROM posts 
+   		$sql = "SELECT COUNT(post_id) AS total FROM forum_posts
                                 WHERE forum_id = $id
                                 AND course_id = $cours_id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
-   		$sql = "SELECT COUNT(topic_id) AS total FROM topics 
+   		$sql = "SELECT COUNT(topic_id) AS total FROM forum_topics
                             WHERE forum_id = $id
                             AND course_id = $cours_id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_topics = $row["total"];
    		}
-   		$sql = "UPDATE forums
+   		$sql = "UPDATE forum
 			SET forum_last_post_id = $last_post, 
                             forum_posts = $total_posts, 
                             forum_topics = $total_topics
@@ -807,14 +807,14 @@ function sync($id, $type) {
    	break;
 
    	case 'topic':
-   		$sql = "SELECT MAX(post_id) AS last_post FROM posts 
+   		$sql = "SELECT MAX(post_id) AS last_post FROM forum_posts
                             WHERE topic_id = $id
                             AND course_id = $cours_id";
 		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT COUNT(post_id) AS total FROM posts 
+   		$sql = "SELECT COUNT(post_id) AS total FROM forum_posts
                             WHERE topic_id = $id
                             AND course_id = $cours_id";
    		$result = db_query($sql);
@@ -822,7 +822,7 @@ function sync($id, $type) {
    			$total_posts = $row["total"];
    		}
    		$total_posts -= 1;
-   		$sql = "UPDATE topics SET topic_replies = $total_posts, 
+   		$sql = "UPDATE forum_topics SET topic_replies = $total_posts,
                             topic_last_post_id = $last_post
 			WHERE topic_id = $id
                         AND course_id = $cours_id";
@@ -878,7 +878,7 @@ function forum_category($id) {
 	
 	global $cours_id;
 	
-	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forums 
+	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forum
                     WHERE forum_id = $id 
                     AND course_id = $cours_id"))) {
 		return $r[0];
@@ -892,7 +892,7 @@ function category_name($id) {
 	
 	global $cours_id;
 	
-	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM categories 
+	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_categories
                     WHERE cat_id = $id
                     AND course_id = $cours_id"))) {
 		return $r[0];

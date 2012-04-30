@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,9 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
-* Open eClass 2.x standard stuff
-*/
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -66,7 +63,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 	if (isset($_GET['cat_id'])) {
 		$cat_id = intval($_GET['cat_id']);
 	}
-	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
+	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
 		WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumcatnotify']) . "
@@ -93,7 +90,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT cat_id, cat_title FROM categories WHERE course_id = $cours_id ORDER BY cat_id ";
+$sql = "SELECT cat_id, cat_title FROM forum_categories WHERE course_id = $cours_id ORDER BY cat_id ";
 
 $result = db_query($sql, $mysqlMainDb); 
 $total_categories = mysql_num_rows($result);
@@ -103,7 +100,7 @@ if ($total_categories) {
 		$categories[] = $cat_row;
 	}
 	$sql = "SELECT f.*, p.post_time, p.topic_id, p.poster_id
-		FROM forums f LEFT JOIN posts p ON p.post_id = f.forum_last_post_id
+		FROM forum f LEFT JOIN forum_posts p ON p.post_id = f.forum_last_post_id
                 AND f.course_id = $cours_id
 		ORDER BY f.cat_id, f.forum_id";
 		
@@ -152,7 +149,7 @@ if ($total_categories) {
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
 			$cat_id = $categories[$i]['cat_id'];
-			$sql = db_query("SELECT * FROM forums WHERE cat_id = $cat_id AND course_id = $cours_id");
+			$sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $cours_id");
 			if (mysql_num_rows($sql) > 0) { // if category forum topics are found 
 				if ($forum_row[$x]['cat_id'] == $cat_id) { 
 					if ($forum_row[$x]["post_time"]) {

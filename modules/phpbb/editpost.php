@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,9 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Open eClass 2.x standard stuff
- */
+
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = FALSE;
@@ -43,7 +41,7 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['subject'])) {
                 $subject = $_POST['subject'];	
         }
-        $sql = "SELECT * FROM posts WHERE post_id = $post_id AND course_id = $cours_id";
+        $sql = "SELECT * FROM forum_posts WHERE post_id = $post_id AND course_id = $cours_id";
         if (!$result = db_query($sql)) {
                 $tool_content .= $langErrorDataOne;
                 draw($tool_content, 2, null, $head_content);
@@ -61,12 +59,12 @@ if (isset($_POST['submit'])) {
         list($day, $time) = explode(' ', $myrow["post_time"]);
         $date = date("Y-m-d H:i");
 
-        $row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forums 
-                                WHERE forum_id=$forum_id 
-                                AND course_id = $cours_id"));
+        $row1 = mysql_fetch_row(db_query("SELECT forum_name FROM forum 
+                                        WHERE forum_id=$forum_id
+                                        AND course_id = $cours_id"));
         $forum_name = $row1[0];
-        $row2 = mysql_fetch_row(db_query("SELECT topic_title FROM topics 
-                                WHERE topic_id=$topic_id
+        $row2 = mysql_fetch_row(db_query("SELECT topic_title FROM forum_topics 
+                                        WHERE topic_id=$topic_id
                                         AND course_id = $cours_id"));
         $topic_title = $row2[0];
 
@@ -87,7 +85,7 @@ if (isset($_POST['submit'])) {
         $forward = 1;
         $topic = $topic_id;
         $forum = $forum_id;
-        $sql = "UPDATE posts SET post_text = " . autoquote(purify($message)) . "
+        $sql = "UPDATE forum_posts SET post_text = " . autoquote(purify($message)) . "
                         WHERE post_id = $post_id 
                         AND course_id = $cours_id";
         if (!$result = db_query($sql)) {
@@ -99,7 +97,7 @@ if (isset($_POST['submit'])) {
                 $subject = strip_tags($subject);
         }
         if (isset($subject) && (trim($subject) != '')) {			
-                $sql = "UPDATE topics
+                $sql = "UPDATE forum_topics
                         SET topic_title = " . autoquote($subject) . " 
                         WHERE topic_id = $topic_id
                                 AND course_id = $cours_id";
@@ -116,7 +114,7 @@ if (isset($_POST['submit'])) {
         exit;
 } else {
         $sql = "SELECT f.forum_type, f.forum_name, t.topic_title
-                        FROM forums f, topics t
+                        FROM forum f, forum_topics t
                         WHERE f.forum_id = $forum
                                 AND t.topic_id = $topic
                                 AND t.forum_id = f.forum_id
@@ -165,7 +163,7 @@ if (isset($_POST['submit'])) {
                 exit();
         } 			
         $sql = "SELECT p.post_text, p.post_time, t.topic_title 
-                        FROM posts p, topics t
+                        FROM forum_posts p, forum_topics t
                         WHERE p.post_id = $post_id 
                         AND p.topic_id = t.topic_id
                         AND p.course_id = $cours_id";

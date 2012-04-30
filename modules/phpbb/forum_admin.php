@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -93,7 +93,7 @@ hContent;
 	// forum go edit
 	elseif (isset($_GET['forumgoedit'])) {
 		$result = db_query("SELECT forum_id, forum_name, forum_desc, forum_access, cat_id, forum_type
-                                           FROM forums 
+                                           FROM forum
                                             WHERE forum_id = $forum_id
                                             AND course_id = $cours_id");
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $cat_id_1, $forum_type) = mysql_fetch_row($result);
@@ -115,7 +115,7 @@ hContent;
 		    <th>$langChangeCat</th>
 		  <td>
                   <select name='cat_id'>";
-		$result = db_query("SELECT cat_id, cat_title FROM categories WHERE course_id = $cours_id");
+		$result = db_query("SELECT cat_id, cat_title FROM forum_categories WHERE course_id = $cours_id");
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 		if ($cat_id == $cat_id_1) {
 				$tool_content .= "\n<option value='$cat_id' selected>$cat_title</option>"; 
@@ -123,21 +123,21 @@ hContent;
 				$tool_content .= "\n<option value='$cat_id'>$cat_title</option>";
 			}
 		}
-		$tool_content .= "\n</select>
-		</td>
-		</tr>
-		  <tr>
-		    <th>&nbsp;</th>
-		    <td class='right'><input type='submit' value='$langModify'></td>
-		  </tr>
-		  </table>
-		</fieldset>
-		</form>";
+		$tool_content .= "</select>
+                        </td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'><input type='submit' value='$langModify'></td>
+                        </tr>
+                        </table>
+                        </fieldset>
+                        </form>";
 	}
 
 	// edit forum category
 	elseif (isset($_GET['forumcatedit'])) {
-		$result = db_query("SELECT cat_id, cat_title FROM categories 
+		$result = db_query("SELECT cat_id, cat_title FROM forum_categories
                                     WHERE cat_id = $cat_id 
                                     AND course_id = $cours_id");
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
@@ -162,7 +162,7 @@ hContent;
 
 	// save forum category
 	elseif (isset($_GET['forumcatsave'])) {
-                db_query("UPDATE categories SET cat_title = " . autoquote($_POST['cat_title']) . "
+                db_query("UPDATE forum_categories SET cat_title = " . autoquote($_POST['cat_title']) . "
                                             WHERE cat_id = $cat_id AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langNameCatMod</p>
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
@@ -171,11 +171,11 @@ hContent;
 	elseif (isset($_GET['forumgosave'])) {
 		$nameTools = $langDelete;
 		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
-                db_query("UPDATE forums SET forum_name = " . autoquote($_POST['forum_name']) . ",
-                                            forum_desc = " . autoquote(purify($_POST['forum_desc'])) . ",
-                                            forum_access = 2,
-                                            forum_moderator = 1,
-                                            cat_id = $cat_id
+                db_query("UPDATE forum SET forum_name = " . autoquote($_POST['forum_name']) . ",
+                                           forum_desc = " . autoquote(purify($_POST['forum_desc'])) . ",
+                                           forum_access = 2,
+                                           forum_moderator = 1,
+                                           cat_id = $cat_id
                                         WHERE forum_id = $forum_id 
                                         AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langForumDataChanged</p>
@@ -184,7 +184,7 @@ hContent;
 
 	// forum add category
 	elseif (isset($_GET['forumcatadd'])) {
-                db_query("INSERT INTO categories 
+                db_query("INSERT INTO forum_categories 
                             SET cat_title = " . autoquote($_POST['categories']) .",
                             course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langCatAdded</p>
@@ -197,7 +197,7 @@ hContent;
                 $navigation[] = array('url' => "../forum_admin/forum_admin.php?course=$code_cours",
                                       'name' => $langCatForumAdmin);
 		$ctg = category_name($cat_id);
-		db_query("INSERT INTO forums (forum_name, forum_desc, forum_access, forum_moderator, cat_id, course_id)
+		db_query("INSERT INTO forum (forum_name, forum_desc, forum_access, forum_moderator, cat_id, course_id)
                                  VALUES (" . autoquote($_POST['forum_name']) . ",
                                          " . autoquote($_POST['forum_desc']) . ",
                                          2, 1, $cat_id, $cours_id)");
@@ -228,18 +228,18 @@ hContent;
 
 	// forum delete category
 	elseif (isset($_GET['forumcatdel'])) {
-		$result = db_query("SELECT forum_id FROM forums 
+		$result = db_query("SELECT forum_id FROM forum
                                 WHERE cat_id=$cat_id
                                 AND course_id = $cours_id");
 		while(list($forum_id) = mysql_fetch_row($result)) {
-			db_query("DELETE from topics 
+			db_query("DELETE from forum_topics 
                                     WHERE forum_id = $forum_id
                                     AND course_id = $cours_id");
 		}
-		db_query("DELETE FROM forums 
+		db_query("DELETE FROM forum
                             WHERE cat_id = $cat_id
                             AND course_id = $cours_id");
-		db_query("DELETE FROM categories 
+		db_query("DELETE FROM forum_categories
                             WHERE cat_id = $cat_id
                             AND course_id = $cours_id");
 		$tool_content .= "<p class='success'>$langCatForumDelete</p>
@@ -250,8 +250,8 @@ hContent;
 	elseif (isset($_GET['forumgodel'])) {
 		$nameTools = $langDelete;
 		$navigation[]= array ("url"=>"../forum_admin/forum_admin.php?course=$code_cours", "name"=> $langCatForumAdmin);
-		db_query("DELETE FROM topics WHERE forum_id = $forum_id AND course_id = $cours_id");
-		db_query("DELETE FROM forums WHERE forum_id = $forum_id AND course_id = $cours_id");
+		db_query("DELETE FROM forum_topics WHERE forum_id = $forum_id AND course_id = $cours_id");
+		db_query("DELETE FROM forum WHERE forum_id = $forum_id AND course_id = $cours_id");
 		db_query("UPDATE `group` SET forum_id = 0 
                                 WHERE forum_id = $forum_id
                                 AND course_id = $cours_id");

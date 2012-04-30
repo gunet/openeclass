@@ -341,7 +341,7 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
                 `title` TEXT) $charset_spec");
 
 
-db_query("CREATE TABLE IF NOT EXISTS `forums` (
+db_query("CREATE TABLE IF NOT EXISTS `forum` (
   `forum_id` int(10) NOT NULL auto_increment,
   `forum_name` varchar(150) default NULL,
   `forum_desc` mediumtext,
@@ -354,9 +354,9 @@ db_query("CREATE TABLE IF NOT EXISTS `forums` (
   `forum_type` int(10) default '0',
   `course_id` int(11) NOT NULL,
   PRIMARY KEY  (`forum_id`),
-  FULLTEXT KEY `forums` (`forum_name`,`forum_desc`))");
+  FULLTEXT KEY `forum` (`forum_name`,`forum_desc`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `posts` (
+db_query("CREATE TABLE IF NOT EXISTS `forum_posts` (
   `post_id` int(10) NOT NULL auto_increment,
   `topic_id` int(10) NOT NULL default '0',
   `forum_id` int(10) NOT NULL default '0',
@@ -368,7 +368,7 @@ db_query("CREATE TABLE IF NOT EXISTS `posts` (
   PRIMARY KEY  (`post_id`),
   FULLTEXT KEY `posts_text` (`post_text`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `topics` (
+db_query("CREATE TABLE IF NOT EXISTS `forum_topics` (
   `topic_id` int(10) NOT NULL auto_increment,
   `topic_title` varchar(100) default NULL,
   `topic_poster_id` int(10) default NULL,
@@ -381,7 +381,7 @@ db_query("CREATE TABLE IF NOT EXISTS `topics` (
   `course_id` int(11) NOT NULL,
   PRIMARY KEY  (`topic_id`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `categories` (
+db_query("CREATE TABLE IF NOT EXISTS `forum_categories` (
   `cat_id` int(10) NOT NULL auto_increment,
   `cat_title` varchar(100) default NULL,
   `cat_order` varchar(10) default NULL,
