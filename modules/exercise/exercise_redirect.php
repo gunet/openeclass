@@ -1,9 +1,9 @@
 <?php 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,9 +36,9 @@ include('../../include/lib/textLib.inc.php');
 
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
-$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE ='exercise';
-$TBL_QUESTION ='question';
+$TBL_QUESTION ='exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
 $navigation[]=array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
@@ -88,4 +88,3 @@ $tool_content .= "<br/><table width='99%' class='Question'>
 </thead></table>"; 
 
 draw($tool_content, 2);
-?>

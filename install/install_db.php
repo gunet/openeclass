@@ -604,7 +604,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                 `weight` FLOAT(5,2),
                 `r_position` INT(11) DEFAULT NULL,
                 PRIMARY KEY (id, question_id) ) $charset_spec");
-db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
                 `question_id` INT(11) NOT NULL DEFAULT '0',
                 `exercise_id` INT(11) NOT NULL DEFAULT '0',
                 PRIMARY KEY (question_id, exercise_id) ) $charset_spec");

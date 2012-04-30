@@ -56,9 +56,9 @@ if (isset($_SESSION['objAnswer']))      { unset($_SESSION['objAnswer']); }
 if (isset($_SESSION['questionList']))   { unset($_SESSION['questionList']); }
 if (isset($_SESSION['exerciseResult'])) { unset($_SESSION['exerciseResult']); }
 
-$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'question';
+$TBL_QUESTION = 'exercise_question';
 
 // maximum number of exercises on a same page
 $limitExPage = 15;
@@ -112,13 +112,13 @@ if($is_editor) {
 	}
 	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $cours_id ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id");
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id");
 } else {
     // only for students
 	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
 		"FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1", $mysqlMainDb);
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1", $mysqlMainDb);
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
@@ -303,4 +303,3 @@ if(!$nbrExercises) {
 }
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
-

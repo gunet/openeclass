@@ -25,9 +25,9 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 
-$TBL_EXERCISE_QUESTION = 'exercise_question';
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'question';
+$TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
 include('exercise.class.php');

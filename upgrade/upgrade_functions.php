@@ -938,7 +938,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                    SELECT old.id AS old_id, old.id + $questionid_offset AS new_id
                      FROM questions AS old ORDER by id");
         
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.question
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
                          (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
                          SELECT `id` + $questionid_offset, $course_id, `question`, `description`, `ponderation`,
                                 `q_position`, `type`
@@ -957,7 +957,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                           WHERE reponses.question_id = question_map.old_id
                           ORDER BY reponses.id") && $ok;
         
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_with_questions
                          (`question_id`, `exercise_id`)
                          SELECT DISTINCT question_map.new_id, exercise_map.new_id
                            FROM exercice_question, exercise_map, question_map

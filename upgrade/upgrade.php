@@ -803,7 +803,7 @@ if (!isset($_POST['submit2'])) {
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0' )");
-                db_query("CREATE TABLE IF NOT EXISTS `question` (
+                db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `question` TEXT,
@@ -820,7 +820,7 @@ if (!isset($_POST['submit2'])) {
                             `weight` FLOAT(5,2),
                             `r_position` INT(11) DEFAULT NULL,
                             PRIMARY KEY (id, question_id) )");
-                db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
+                db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `exercise_id` INT(11) NOT NULL DEFAULT '0',
                             PRIMARY KEY (question_id, exercise_id) )");
