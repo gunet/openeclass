@@ -22,8 +22,7 @@
 $TBL_EXERCISE_QUESTION = 'exercise_question';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'question';
-$TBL_ANSWER = 'answer'; 
-
+$TBL_ANSWER = 'exercise_answer'; 
 
 $require_current_course = TRUE;
 $require_help = TRUE;

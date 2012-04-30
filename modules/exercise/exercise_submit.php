@@ -28,7 +28,7 @@ define('TRUE_FALSE',      5);
 $TBL_EXERCISE_QUESTION = 'exercise_question';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'question';
-$TBL_ANSWER  = 'answer';
+$TBL_ANSWER  = 'exercise_answer';
 
 include('exercise.class.php');
 include('question.class.php');

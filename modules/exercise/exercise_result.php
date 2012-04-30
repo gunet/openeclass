@@ -28,7 +28,7 @@ define('TRUE_FALSE', 5);
 $TBL_EXERCISE_QUESTION = 'exercise_question';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'question';
-$TBL_ANSWER = 'answer';
+$TBL_ANSWER = 'exercise_answer';
 
 include('exercise.class.php');
 include('question.class.php');
@@ -68,16 +68,15 @@ $displayResults           = $objExercise->selectResults();
 $displayScore             = $objExercise->selectScore(); 
 
 $tool_content .= "
-  <table class=\"tbl_border\" width=\"99%\">
+  <table class='tbl_border' width='99%'>
   <tr class='odd'>
-    <td colspan=\"2\"><b>".stripslashes($exerciseTitle)."</b>
+    <td colspan='2'><b>".stripslashes($exerciseTitle)."</b>
     <br/>".stripslashes($exerciseDescription_temp)."
     </td>
   </tr>
   </table>";
 
-$tool_content .= "
-  <form method='GET' action='exercise.php'><input type='hidden' name='course' value='$code_cours'/>";
+$tool_content .= "<form method='GET' action='exercise.php'><input type='hidden' name='course' value='$code_cours'/>";
 
 $i=$totalScore=$totalWeighting=0;
 

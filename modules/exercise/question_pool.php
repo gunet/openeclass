@@ -31,7 +31,7 @@ include '../../include/baseTheme.php';
 $TBL_EXERCISE_QUESTION = 'exercise_question';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'question';
-$TBL_ANSWER = 'answer';
+$TBL_ANSWER = 'exercise_answer';
 
 $nameTools = $langQuestionPool;
 $navigation[]=array("url" => "exercise.php?course=$code_cours","name" => $langExercices);

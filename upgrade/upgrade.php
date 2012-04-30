@@ -811,7 +811,7 @@ if (!isset($_POST['submit2'])) {
                             `weight` FLOAT(11,2) DEFAULT NULL,
                             `q_position` INT(11) DEFAULT 1,
                             `type` INT(11) DEFAULT 1 )");
-                db_query("CREATE TABLE IF NOT EXISTS `answer` (
+                db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                             `id` INT(11) NOT NULL DEFAULT '0',
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `answer` TEXT,

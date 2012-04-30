@@ -948,7 +948,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         list($answerid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
         $answerid_offset = (!$answerid_offset) ? 0 : intval($answerid_offset);
         
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.answer
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_answer
                          (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
                          SELECT DISTINCT reponses.id + $answerid_offset, question_map.new_id,
                                 reponses.reponse, reponses.correct, reponses.comment, reponses.ponderation,

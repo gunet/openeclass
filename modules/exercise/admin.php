@@ -60,7 +60,7 @@ $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMat
 $TBL_EXERCISE_QUESTION = 'exercise_question';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'question';
-$TBL_ANSWER = 'answer';
+$TBL_ANSWER = 'exercise_answer';
 
 if(!$is_editor) {
 	$tool_content .= $langNotAllowed;

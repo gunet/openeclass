@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -587,7 +587,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `total_score` INT(11) NOT NULL DEFAULT '0',
                 `total_weighting` INT(11) DEFAULT '0',
                 `attempt` INT(11) NOT NULL DEFAULT '0' ) $charset_spec");
-db_query("CREATE TABLE IF NOT EXISTS `question` (
+db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
                 `question` TEXT,
@@ -595,7 +595,7 @@ db_query("CREATE TABLE IF NOT EXISTS `question` (
                 `weight` FLOAT(11,2) DEFAULT NULL,
                 `q_position` INT(11) DEFAULT 1,
                 `type` INT(11) DEFAULT 1 ) $charset_spec");
-db_query("CREATE TABLE IF NOT EXISTS `answer` (
+db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                 `id` INT(11) NOT NULL DEFAULT '0',
                 `question_id` INT(11) NOT NULL DEFAULT '0',
                 `answer` TEXT,

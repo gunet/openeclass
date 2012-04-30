@@ -518,6 +518,4 @@ class Question
 		return $id;
 	}
 }
-
 endif;
-?>
