@@ -59,6 +59,9 @@ $verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_ma
 $lang_editor = $lang_jscalendar = langname_to_code($language);
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 

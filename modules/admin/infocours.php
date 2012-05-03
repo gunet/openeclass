@@ -54,6 +54,8 @@ $course = new course();
 $tree = new hierarchy();
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
 
 // Define $nameTools
 $nameTools = $langCourseInfo;

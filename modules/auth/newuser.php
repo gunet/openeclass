@@ -43,6 +43,8 @@ $tree = new hierarchy();
 $userObj = new user();
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
 
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);

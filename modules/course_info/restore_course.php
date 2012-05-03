@@ -33,6 +33,9 @@ $treeObj = new hierarchy();
 $courseObj = new course();
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 list($js, $html) = $treeObj->buildCourseHtmlSelect('name="department[]"');
 $head_content .= $js;
 

@@ -47,6 +47,9 @@ $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreat
 $lang_editor = langname_to_code($language);
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry, entry2) {

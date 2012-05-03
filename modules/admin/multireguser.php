@@ -32,6 +32,8 @@ $tree = new hierarchy();
 $userObj = new user();
 
 load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
 
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);

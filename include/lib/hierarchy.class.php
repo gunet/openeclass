@@ -436,41 +436,48 @@ class hierarchy {
     /**
      * Build tree using <ul><li> html tags
      *
-     * @param string $params - for any html params for tag <ul>
+     * 
      * 
      * @return string $html - html output
      */
-    public function buildHtmlUl($params = "")
+    public function buildHtmlUl($tree_array = array(), $useKey = 'id', $exclude = null, $where = '', $dashprefix = false)
     {
-        $html = '<ul ' . $params . '>' . "\n";
-        $current_depth = 0;
+        $html = '<ul>' . "\n";
         
-        $query = "SELECT node.name AS name, (COUNT(parent.id) - 1) AS depth FROM ". $this->dbtable ." AS node,  ". $this->dbtable ." AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt GROUP BY node.id ORDER BY node.lft";
-        $result = db_query($query);
-        
-        while($row = mysql_fetch_assoc($result))
+        list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, $dashprefix);
+        $i = 0;
+        $current_depth = null;
+
+        foreach($tree_array as $key => $value)
         {
-            if($row['depth'] > $current_depth)
+            if ($i == 0)
+                $current_depth = $depthmap[$key];
+            else
             {
-                $html = substr($html,0,-6);
-                $html .= '<ul>' . "\n";
-
-                $current_depth = $row['depth'];
-            }
-          
-            if($row['depth'] < $current_depth)
-            {
-                for($i=$current_depth; $i>$row['depth']; $i--)
+                if ($depthmap[$key] > $current_depth)
                 {
-                    $html .= '</ul></li>' . "\n";
-                }
+                    $html = substr($html,0,-6);
+                    $html .= '<ul>' . "\n";
 
-                $current_depth = $row['depth'];
+                    $current_depth = $depthmap[$key];
+                }
+                
+                if ($depthmap[$key] < $current_depth)
+                {
+                    for($i = $current_depth; $i > $depthmap[$key]; $i--)
+                    {
+                        $html .= '</ul></li>' . "\n";
+                    }
+
+                    $current_depth = $depthmap[$key];
+                }
             }
-        
-            $html .= '<li>' . self::unserializeLangField($row['name']) . '</li>' . "\n";
+            
+            $html .= '<li id="'. $key .'"><a href="#">'. $value .'</a></li>' . "\n";
+            
+            $i++;
         }
-        
+
         $html .= '</ul>';
         
         return $html;
@@ -478,36 +485,68 @@ class hierarchy {
     
     public function buildJSSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $offset = 0)
     {
-        global $themeimg;
+        global $themeimg, $langCancel, $langAdd, $langEmptyNodeSelect;
         
         if ($offset > 0)
             $offset -=1 ;
         
         $js = <<<jContent
 <script type="text/javascript">
-var countnd = $offset;
-$(function(){
-    $('#ndAdd').click(function(){
-        countnd += 1;
-        $('#ndContainer').append('<p id="nd_' + countnd + '">
-jContent;
-        $js .= $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, false);
-        $js .= '&nbsp;<a href="#ndContainer" onclick="$(\\\'#nd_\' + countnd + \'\\\').remove();"><img src="'.$themeimg.'/delete.png"/></a>';
-        $js .= <<<jContent
-</p>' );
 
+var countnd = $offset;
+
+$(function() {
+        
+    $( "#ndAdd" ).click(function() {
+        $( "#dialog-form" ).dialog( "open" );
+    });
+    
+    $( "#dialog-form" ).dialog({
+        autoOpen: false,
+        height: 600,
+        width: 600,
+        modal: true,
+        buttons: {
+            "$langAdd": function() {
+            
+                var newnode = $( "#js-tree" ).jstree("get_selected");
+        
+                if (!newnode.length)
+                    alert("$langEmptyNodeSelect");
+                else
+                {
+                    countnd += 1;
+                    $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
+                                         + '<input type="hidden" $params value="' + newnode.attr("id") + '" />'
+                                         + newnode.children("a").text()
+                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove();"><img src="$themeimg/delete.png"/></a>'
+                                         + '</p>');
+                    $( this ).dialog( "close" );
+                }
+            },
+            "$langCancel": function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+    
+    $( "#js-tree" ).jstree({
+        "plugins" : ["html_data", "themes", "ui", "cookies"],
+        "core" : {
+            "animation": 300
+        },
+        "themes" : {
+            "theme" : "default",
+            "dots" : true,
+            "icons" : false
+        },
+        "ui" : {
+            "select_limit" : 1
+        }
     });
 });
 </script>
 jContent;
-        
-        // Generic del button, just keep it in comments for reference
-//        $('#ndDel').click(function(){
-//            if (countnd > 0) {
-//                $('#nd_' + countnd).remove();
-//                countnd -= 1;
-//            }
-//        });
         
         return $js;
     }
@@ -526,30 +565,33 @@ jContent;
      */
     public function buildHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array('0' => 'Top'), $useKey = 'lft', $where = '', $multiple = false)
     {
-        global $themeimg;
+        global $themeimg, $langNodeAdd;
         $html = '';
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
         
         if ($multiple)
-            $html .= '<div id="ndContainer">';
-        
-        if ($multiple && is_array($defaults) && count($defaults) > 0)
         {
-            $i = 0;
-            list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
+            $html .= '<div id="nodCnt">';
             
-            foreach($defaults as $def)
+            if (is_array($defaults))
             {
-                $html .= '<p id="nd_'. $i .'"><select '. $params .'>';
-
-                foreach($tree_array as $key => $value)
+                $i = 0;
+                foreach($defaults as $def)
                 {
-                    $html .= '<option value="'. $key .'" '. (($key == $def) ? 'selected' : '') .'>'. $value .'</option>';
+                    $html .= '<p id="nd_'. $i .'">';
+                    $html .= '<input type="hidden" '. $params .' value="'. $def .'" />';
+                    $html .= $this->getFullPath($def);
+                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_'. $i .'\').remove();"><img src="'.$themeimg.'/delete.png"/></a></p>';
+                    $html .= '</p>';
+                    $i++;
                 }
-
-                $html .= '</select>&nbsp;<a href="#ndContainer" onclick="$(\'#nd_'. $i .'\').remove();"><img src="'.$themeimg.'/delete.png"/></a></p>';
-                $i++;
             }
+            
+            $html .= '</div>';
+            $html .= '<div><p><a id="ndAdd" href="#add"><img src="'.$themeimg.'/add.png"/></a></p></div>';
+            $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
+            $html .= $this->buildHtmlUl($tree_array, $useKey, $exclude, $where, false);
+            $html .= '</div></fieldset></div>';
         }
         else
         {
@@ -562,15 +604,6 @@ jContent;
             }
 
             $html .= '</select>';
-        }
-        
-        if ($multiple)
-        {
-            $html .= '</div>';
-            $html .= '<div><p><a id="ndAdd" href="#ndContainer"><img src="'.$themeimg.'/add.png"/></a>';
-            
-            // Generic del button, just keep it in comments for reference
-            //&nbsp;<a id="ndDel" href="#ndContainer"><img src="'.$themeimg.'/delete.png"/></a></p></div>
         }
         
         return $html;
