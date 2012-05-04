@@ -238,6 +238,14 @@ class hierarchy {
         return intval($res['lft']);
     }
     
+    public function getNodeName($key, $useKey = 'id')
+    {
+        $query = "SELECT name FROM ". $this->dbtable ." WHERE ". $useKey ." = ". $key;
+        $res = mysql_fetch_assoc(db_query($query));
+        
+        return self::unserializeLangField($res['name']);
+    }
+    
     /**
      * Delete nodes
      * 
@@ -451,7 +459,7 @@ class hierarchy {
         foreach($tree_array as $key => $value)
         {
             if ($i == 0)
-                $current_depth = $depthmap[$key];
+                $current_depth = ($key != 0) ? $depthmap[$key] : 0;
             else
             {
                 if ($depthmap[$key] > $current_depth)
@@ -483,9 +491,9 @@ class hierarchy {
         return $html;
     }
     
-    public function buildJSSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $offset = 0)
+    private function buildJSNodePicker($params, $offset = 0)
     {
-        global $themeimg, $langCancel, $langAdd, $langEmptyNodeSelect;
+        global $themeimg, $langCancel, $langAdd, $langEmptyNodeSelect, $langEmptyAddNode;
         
         if ($offset > 0)
             $offset -=1 ;
@@ -519,8 +527,13 @@ $(function() {
                     $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                          + '<input type="hidden" $params value="' + newnode.attr("id") + '" />'
                                          + newnode.children("a").text()
-                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove();"><img src="$themeimg/delete.png"/></a>'
+                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png"/></a>'
                                          + '</p>');
+                    
+                    $( "#dialog-set-value" ).val( newnode.children("a").text() );
+                    $( "#dialog-set-key" ).val(newnode.attr("id"));
+                    document.getElementById('dialog-set-key').onchange();
+        
                     $( this ).dialog( "close" );
                 }
             },
@@ -544,7 +557,22 @@ $(function() {
             "select_limit" : 1
         }
     });
+    
 });
+
+function validateNodePickerForm() {
+    
+    var nodeContainer = $( "#nodCnt" ).text();
+    var inputKey = $( "#dialog-set-key" ).val();
+    var inputVal = $( "#dialog-set-value" ).val();
+
+    if (nodeContainer.length > 0 || (inputKey.length > 0 && inputVal.length > 0) )
+        return true;
+    else {
+        alert('$langEmptyAddNode');
+        return false;
+    }
+}
 </script>
 jContent;
         
@@ -563,7 +591,7 @@ jContent;
      * 
      * @return string $html - html output
      */
-    public function buildHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array('0' => 'Top'), $useKey = 'lft', $where = '', $multiple = false)
+    private function buildHtmlNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array('0' => 'Top'), $useKey = 'lft', $where = '', $multiple = false)
     {
         global $themeimg, $langNodeAdd;
         $html = '';
@@ -581,7 +609,7 @@ jContent;
                     $html .= '<p id="nd_'. $i .'">';
                     $html .= '<input type="hidden" '. $params .' value="'. $def .'" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_'. $i .'\').remove();"><img src="'.$themeimg.'/delete.png"/></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_'. $i .'\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="'.$themeimg.'/delete.png"/></a></p>';
                     $html .= '</p>';
                     $i++;
                 }
@@ -589,49 +617,59 @@ jContent;
             
             $html .= '</div>';
             $html .= '<div><p><a id="ndAdd" href="#add"><img src="'.$themeimg.'/add.png"/></a></p></div>';
-            $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
-            $html .= $this->buildHtmlUl($tree_array, $useKey, $exclude, $where, false);
-            $html .= '</div></fieldset></div>';
+            
+            // Unused for multi usecase, however present to use a unique generic JS event function
+            $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';
+            $html .= '<input id="dialog-set-value" type="hidden" />';
         }
         else
         {
-            $html .= '<select '. $params .'>';
-            list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, true);
-
-            foreach($tree_array as $key => $value)
+            if (isset($defs[0]))
             {
-                $html .= '<option value="'. $key .'" '. (in_array($key, $defs) ? 'selected' : '') .'>'. $value .'</option>';
+                if (isset($tree_array[$defs[0]]))
+                    $def = $tree_array[$defs[0]];
+                else
+                    $def = $this->getNodeName($defs[0], $useKey);
+            } 
+            else
+            {
+                $defs[0] = '';
+                $def = '';
             }
-
-            $html .= '</select>';
+            
+            // satisfy JS code: getElementById().onchange()
+            if (stristr($params, 'onchange') === false)
+                $params .= ' onchange="" ';
+            
+            $html .= '<input id="dialog-set-key" type="hidden" '. $params .' value="'. $defs[0] .'" />';
+            $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#'. $defs[0] .'\', true, null);' : '';
+            $html .= '<input id="dialog-set-value" type="text" onclick="'. $onclick .' $( \'#dialog-form\' ).dialog( \'open\' );" value="'. $def .'" />&nbsp;';
         }
+        
+        $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
+        $html .= $this->buildHtmlUl($tree_array, $useKey, $exclude, $where, false);
+        $html .= '</div></fieldset></div>';
         
         return $html;
     }
     
-    public function decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi)
+    public function buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi)
     {
-        $js = '';
-        
-        if ($multi)
-        {
-            $c = (is_array($defaults)) ? count($defaults) : 0;
-            $js = $this->buildJSSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $c);
-        }
-        
-        $html = $this->buildHtmlSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi);
+        $c = (is_array($defaults)) ? count($defaults) : 0;
+        $js = $this->buildJSNodePicker($params, $c);
+        $html = $this->buildHtmlNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi);
         
         return array($js, $html);
     }
     
-    public function buildCourseHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_course = true')
+    public function buildCourseNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_course = true')
     {
-        return $this->decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('course_multidep'));
+        return $this->buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('course_multidep'));
     }
     
-    public function buildUserHtmlSelect($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_user = true')
+    public function buildUserNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_user = true')
     {
-        return $this->decideMultiSelect($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('user_multidep'));
+        return $this->buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('user_multidep'));
     }
     
     /**

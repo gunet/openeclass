@@ -41,6 +41,11 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
+
 $auth = isset($_REQUEST['auth'])?$_REQUEST['auth']:'';
 
 $msg = "$langProfReg (".(get_auth_info($auth)).")";
@@ -202,7 +207,9 @@ if ($submit)  {
 	<tr>
 	<th class='left'>$langFaculty</th>
 	<td>";
-        $tool_content .= $tree->buildHtmlSelect('name="department"', $pt, null, array(), "id", "AND node.allow_user = true");
+        list($js, $html) = $tree->buildNodePicker('name="department"', $pt, null, null, "id", "AND node.allow_user = true", false);
+        $head_content .= $js;
+        $tool_content .= $html;
         $tool_content .= "</td></tr>";
 	$tool_content .= "<tr>
 	<th class='left'>$langLanguage</th>
@@ -229,4 +236,4 @@ if ($submit)  {
       </form>";
 	$tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
  }
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

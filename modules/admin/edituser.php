@@ -135,7 +135,7 @@ if ($u)	{
               <li><a href='./listusers.php'>$langBack</a></li>";
                 $tool_content .= "</ul></div>";
                    $tool_content .= "
-                    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
+                    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validateNodePickerForm();'>
                     <fieldset>
                     <legend>$langEditUser: ".q($info['username'])."</legend>
                     <table class='tbl' width='100%'>
@@ -207,7 +207,7 @@ $tool_content .= "
    <tr>
      <th class='left'>$langFaculty:</th>
    <td>";
-        list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"', $userObj->getDepartmentIds($u));
+        list($js, $html) = $tree->buildUserNodePicker('name="department[]"', $userObj->getDepartmentIds($u));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>

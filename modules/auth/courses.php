@@ -29,6 +29,10 @@ require_once('../../include/lib/hierarchy.class.php');
 
 $tree = new hierarchy();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $nameTools = $langChoiceLesson;
 $navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
 
@@ -170,7 +174,7 @@ if (isset($_POST["submit"])) {
 	} // end of else (department exists)
 }
 
-draw($tool_content, 1);
+draw($tool_content, 1, null, $head_content);
 
 
 function getfacfromfc($dep_id) {
@@ -519,12 +523,14 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 
 function collapsed_facultes_horiz($fc) {
 
-	global $langSelectFac, $tree;
+	global $langSelectFac, $tree, $head_content;
         
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
-        $retString .= $tree->buildHtmlSelect('name="fc" onChange="document.depform.submit();"', $fc, null, array(), "id", "AND node.allow_course = true");
+        list($js, $html) = $tree->buildNodePicker('name="fc" onChange="document.depform.submit();"', $fc, null, null, 'id', 'AND node.allow_course = true', false);
+        $head_content .= $js;
+        $retString .= $html;
 	$retString .=  "\n    </li>";
 	$retString .= "\n    </ul>\n  </div>\n";
   	$retString .= "\n    </form>";

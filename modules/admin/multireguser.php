@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
         $profile_options = array(0 => $langModern,
                                  1 => $langClassic);
         $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
-            <form method='post' action='$_SERVER[PHP_SELF]'>
+            <form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validateNodePickerForm();' >
             <fieldset>
   <legend>$langMultiRegUserData</legend>
 <table class='tbl' width='100%'>
@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
 </tr>
 <tr><th>$langFaculty:</th>
     <td>"; 
-        list($js, $html) = $tree->buildUserHtmlSelect('name="facid[]"');
+        list($js, $html) = $tree->buildUserNodePicker('name="facid[]"');
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td>

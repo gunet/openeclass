@@ -25,6 +25,10 @@ require_once('../../include/lib/hierarchy.class.php');
 
 $tree = new hierarchy();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $lang = langname_to_code($language);
 
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
@@ -244,7 +248,9 @@ if ($all_set) {
           <tr>
             <th>$langFaculty&nbsp;</th>
             <td>";
-        $tool_content .= $tree->buildHtmlSelect('name="department"', $department, null, array(), "id", "AND node.allow_user = true");
+        list($js, $html) = $tree->buildNodePicker('name="department"', $department, null, null, 'id', "AND node.allow_user = true", false);
+        $head_content .= $js;
+        $tool_content .= $html;
         $tool_content .= "\n</td>
         </tr>
         <tr>
@@ -270,4 +276,4 @@ if ($all_set) {
      <div class='right smaller'>$langRequiredFields</div>";
 }
 
-draw($tool_content, 0);
+draw($tool_content, 0, null, $head_content);

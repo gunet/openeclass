@@ -53,7 +53,7 @@ class course {
         if ($types != null)
         {
             db_query("DELETE FROM $this->istypetable WHERE course = '$id'");
-            foreach ($types as $key => $type)
+            foreach (array_unique($types) as $key => $type)
             {
                 if ($type > 0)
                     db_query("INSERT INTO $this->istypetable (course, course_type) VALUES ($id, $type)");
@@ -63,7 +63,7 @@ class course {
         if ($departments != null)
         {
             db_query("DELETE FROM $this->departmenttable WHERE course = '$id'");
-            foreach ($departments as $key => $department)
+            foreach (array_unique($departments) as $key => $department)
             {
                 db_query("INSERT INTO $this->departmenttable (course, department) VALUES ($id, $department)");
             }

@@ -49,6 +49,10 @@ require_once('../../include/lib/hierarchy.class.php');
 
 $tree = new hierarchy();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 // Define $nameTools
 $nameTools = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -117,7 +121,9 @@ $tool_content .= "
       </tr>";
 
 $tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th><td>";
-$tool_content .= $tree->buildHtmlSelect('name="formsearchfaculte"', null, null, array('0' => $langAllFacultes), "id", "AND node.allow_course = true");
+list($js, $html) = $tree->buildNodePicker('name="formsearchfaculte"', null, null, array('0' => $langAllFacultes), "id", "AND node.allow_course = true", false);
+$head_content .= $js;
+$tool_content .= $html;
 $tool_content .= "</td></tr>";
 
 $tool_content .= "
@@ -133,4 +139,4 @@ $tool_content .= "
 // Display link to go back to index.php
 $tool_content .= "\n    <p align=\"right\"><a href=\"index.php\">".$langBack."</a></p>";
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

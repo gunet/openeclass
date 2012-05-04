@@ -39,6 +39,10 @@ require_once('../../include/lib/hierarchy.class.php');
 
 $tree = new hierarchy();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
 
 $nameTools = $langHierarchyActions;
@@ -113,7 +117,7 @@ if (!isset($_GET['action'])) {
         $tool_content .= "\n<td width='50' align='center' nowrap>
             <a href='$_SERVER[PHP_SELF]?action=edit&amp;id=". $key ."'>
             <img src='$themeimg/edit.png' title='$langEdit' /></a>&nbsp;&nbsp;
-            <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=". $key ."' onClick=\"return confirm('Confirm delete?')\">
+            <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=". $key ."' onClick=\"return confirm('". $langConfirmDelete ."')\">
             <img src='$themeimg/delete.png' title='$langDelete' /></a></td>
             </tr>\n";
         
@@ -164,7 +168,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
     } else {
         // Display form for new node information
         $tool_content .= "
-    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=add\">
+    <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?action=add\" onsubmit=\"return validateNodePickerForm();\">
     <fieldset>
       <legend>$langNodeAdd</legend>
       <table width='100%' class='tbl'>
@@ -187,7 +191,11 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         $tool_content .= "
       <tr>
         <th class='left'>".$langNodeParent.":</th>
-        <td>". $tree->buildHtmlSelect('name="nodelft"') ." <i>".$langNodeParent2."</i></td>
+        <td>";
+        list($js, $html) = $tree->buildNodePicker('name="nodelft"', null, null, array('0' => 'Top'), 'lft', null, false);
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= " <i>".$langNodeParent2."</i></td>
       </tr>
       <tr>
         <th class='left'>".$langNodeAllowCourse.":</th>
@@ -268,7 +276,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
         $check_user = ($myrow['allow_user'] == 1) ? " checked=1 " : '';
         // Display form for edit node information
         $tool_content .= "
-       <form method='post' action='$_SERVER[PHP_SELF]?action=edit'>
+       <form method='post' action='$_SERVER[PHP_SELF]?action=edit' onsubmit='return validateNodePickerForm();'>
        <fieldset>
        <legend>$langNodeEdit</legend>
        <table width='100%' class='tbl'>
@@ -299,7 +307,11 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
         
        $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
-           <td>". $tree->buildHtmlSelect('name="nodelft"', $parentLft['lft'], $id) ." <i>".$langNodeParent2."</i></td>
+           <td>";
+       list($js, $html) = $tree->buildNodePicker('name="nodelft"', $parentLft['lft'], $id, array('0' => 'Top'), 'lft', null, false);
+       $head_content .= $js;
+       $tool_content .= $html;
+       $tool_content .= " <i>".$langNodeParent2."</i></td>
        </tr>
        <tr>
            <th class='left'>".$langNodeAllowCourse.":</th>
@@ -325,7 +337,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 
 
 // Return a list of all subdirectories of $base which contain a file named $filename

@@ -133,7 +133,7 @@ if (isset($_GET['lang'])) {
 $tool_content .= "<table width=\"99%\"><tbody>
    <tr>
     <td>
-    <form action='$_SERVER[PHP_SELF]' method='post'>
+    <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();'>
     <table border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
 	<thead>
     <tr>
@@ -163,7 +163,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  <tr>
 	  <th class='left'>$langFaculty &nbsp;
 		</span></th><td>";
-        list($js, $html) = $tree->buildUserHtmlSelect('name="department[]"');
+        list($js, $html) = $tree->buildUserNodePicker('name="department[]"');
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td>";

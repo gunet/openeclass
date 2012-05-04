@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
 	$password = q($c['password']);
 
 	$tool_content .="
-	<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+	<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
 	<table class='tbl' width='100%'>
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($c['cours_id']));
+        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($c['cours_id']));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "

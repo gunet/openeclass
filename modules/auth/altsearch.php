@@ -40,6 +40,10 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 if (isset($_POST['auth'])) {
 	$auth = intval($_POST['auth']);
 	$_SESSION['u_tmp'] = $auth;
@@ -179,7 +183,7 @@ if ($is_valid) {
  
         if (!$ok) {
                 user_info_form();
-                draw($tool_content, 0);
+                draw($tool_content, 0, null, $head_content);
                 exit();
         }
         if ($auth != 1) {
@@ -220,7 +224,7 @@ if ($is_valid) {
         if (!empty($email) and !email_seems_valid($email)) {
                 $tool_content .= "<p class='caution'>$langEmailWrong</p>";
                 user_info_form();
-                draw($tool_content, 0);
+                draw($tool_content, 0, null, $head_content);
                 exit();
         }
         else {
@@ -319,7 +323,7 @@ if ($is_valid) {
                                  if (!empty($email) and !email_seems_valid($email)) {
                                         $tool_content .= "<p class='caution'>$langEmailWrong</p>";
                                         user_info_form();
-                                        draw($tool_content, 0);
+                                        draw($tool_content, 0, null, $head_content);
                                         exit();
                                  }
                                  else {
@@ -416,7 +420,7 @@ function user_info_form()
                $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
                $langUserData, $langRequiredFields, $langAm, $langUserFree, $profreason,
                $auth_user_info, $auth, $prof, $usercomment, $depid, $init_auth, $email_required,
-               $phone_required, $am_required, $comment_required, $langEmailNotice, $tree;
+               $phone_required, $am_required, $comment_required, $langEmailNotice, $tree, $head_content;
 
         if (!isset($usercomment)) {
                 $usercomment = '';
@@ -482,7 +486,9 @@ function user_info_form()
           <tr>
              <th class='left'>$langFaculty:</th>
              <td colspan='2'>";
-        $tool_content .= $tree->buildHtmlSelect('name="department"', $depid, null, array(), "id", "AND node.allow_user = true");
+        list($js, $html) = $tree->buildNodePicker('name="department"', $depid, null, null, "id", "AND node.allow_user = true", false);
+        $head_content .= $js;
+        $tool_content .= $html;
         $tool_content .= "</td>
            </tr>
            <tr>

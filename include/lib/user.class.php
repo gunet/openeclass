@@ -48,7 +48,7 @@ class user {
         if ($departments != null)
         {
             db_query("DELETE FROM $this->departmenttable WHERE user = '$id'");
-            foreach ($departments as $key => $department)
+            foreach (array_unique($departments) as $key => $department)
             {
                 db_query("INSERT INTO $this->departmenttable (user, department) VALUES ($id, $department)");
             }

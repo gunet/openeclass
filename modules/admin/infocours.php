@@ -84,11 +84,11 @@ else {
 		 WHERE cours.code = '".mysql_real_escape_string($_GET['c'])."'";
         $row = mysql_fetch_array(db_query($sql));
 	$tool_content .= "
-	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post'>
+	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $course->getDepartmentIds($row['cours_id']));
+        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($row['cours_id']));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>

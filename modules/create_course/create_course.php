@@ -52,6 +52,7 @@ load_js('jstree');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
+
 function checkrequired(which, entry, entry2) {
 	var pass=true;
 	if (document.images) {
@@ -78,7 +79,7 @@ hContent;
 
 $titulaire_probable = "$_SESSION[prenom] $_SESSION[nom]";
 
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return checkrequired(this, 'intitule', 'titulaires');\">";
+$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'intitule', 'titulaires');\">";
 
 if (get_config("betacms")) { // added support for betacms
 	// Import from BetaCMS Bridge
@@ -140,7 +141,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	  <th>$langFaculty:</th>
 	  <td>";
-        list($js, $html) = $tree->buildCourseHtmlSelect('name="department[]"', $user->getDepartmentIds($uid));
+        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $user->getDepartmentIds($uid));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td>
@@ -167,7 +168,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
           <th>&nbsp;</th>
 	  <td class='right'>&nbsp;</td>
 	  <td class='right'>
-	    <input type='submit' name='create2' value='$langNextStep &raquo;' />
+            <input type='submit' name='create2' value='$langNextStep &raquo;' />
 	    <input type='hidden' name='visit' value='true' />
 	  </td>
         </tr>

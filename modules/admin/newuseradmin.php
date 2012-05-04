@@ -29,6 +29,10 @@ require_once('../../include/lib/hierarchy.class.php');
 $tree = new hierarchy();
 $userObj = new user();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 $reqtype = '';
@@ -175,7 +179,7 @@ $langEmail : $emailhelpdesk
         }
 
         $tool_content .= "
-      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();'>
       <fieldset>
       <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>
@@ -207,7 +211,9 @@ $langEmail : $emailhelpdesk
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
         $depid = (isset($pt)) ? $pt : null;
-        $tool_content .= $tree->buildHtmlSelect('name="department"', $depid, null, array(), "id", "AND node.allow_user = true");
+        list($js, $html) = $tree->buildNodePicker('name="department"', $depid, null, null, 'id', "AND node.allow_user = true", false);
+        $head_content .= $js;
+        $tool_content .= $html;
         $tool_content .= "</td></tr>
         <tr><th class='left'><b>$langAm:</b></th>
             <td><input class='FormData_InputText' type='text' name='am' value='".q($pam)."' />&nbsp;</td></tr>
@@ -242,4 +248,4 @@ $langEmail : $emailhelpdesk
         $tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

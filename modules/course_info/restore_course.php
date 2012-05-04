@@ -36,7 +36,7 @@ load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
 
-list($js, $html) = $treeObj->buildCourseHtmlSelect('name="department[]"');
+list($js, $html) = $treeObj->buildCourseNodePicker('name="department[]"');
 $head_content .= $js;
 
 $nameTools = $langRestoreCourse;
@@ -1039,11 +1039,11 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                 }
 	}
         
-        list($js, $html) = $treeObj->buildCourseHtmlSelect('name="department[]"');
+        list($js, $html) = $treeObj->buildCourseNodePicker('name="department[]"');
 
         return "<p>$langInfo1</p>
                 <p>$langInfo2</p>
-                <form action='$_SERVER[PHP_SELF]' method='post'>
+                <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();' >
                 <table width='99%' class='tbl'><tbody>
                    <tr><td>&nbsp;</td></tr>
                    <tr><th>$langCourseCode:</th>
