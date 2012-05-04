@@ -18,6 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * Eclass Course Coordinating Object.
+ * 
+ * This class does not represent a course entity, but a core logic coordinating object
+ * responsible for handling course and hierarchy-to-course related tasks.
+ */
 class course {
 
     private $ctable;
@@ -26,12 +32,12 @@ class course {
     private $departmenttable;
     
     /**
-     * Constructor
+     * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
      *
-     * @param string $ctable - Name of courses table
+     * @param string $ctable    - Name of courses table
      * @param string $typetable - Name of courses types table
-     * @param string $istype - Name of course <-> course_type lookup table
-     * @param string $deptable - Name of course <-> department lookup table
+     * @param string $istype    - Name of course <-> course_type lookup table
+     * @param string $deptable  - Name of course <-> department lookup table
      */    
     public function course($ctable = 'cours', $typetable = 'course_type', $istype = 'course_is_type', $deptable = 'course_department')
     {
@@ -42,11 +48,12 @@ class course {
     }
     
     /**
-     * Refresh types and departments of a course
+     * Refresh the types and the hierarchy nodes (departments) that a course belongs to. All previous belonging
+     * nodes get deleted and then refreshed with the ones given as array arguments.
      * 
-     * @param int $id
-     * @param array $types
-     * @param array $departments
+     * @param int   $id          - Id for a given course
+     * @param array $types       - Array containing the type ids that the given course should belong to
+     * @param array $departments - Array containing the node ids that the given course should belong to
      */
     public function refresh($id, $types, $departments)
     {
@@ -71,7 +78,7 @@ class course {
     }
     
     /**
-     * Delete course
+     * Delete course and all its hierarchy nodes and types dependencies.
      * 
      * @param int $id - The id of the course to delete
      */
@@ -83,9 +90,9 @@ class course {
     }
     
     /**
-     * Build array with all course types
+     * Build an array with all course types.
      * 
-     * @return array 
+     * @return array $types - An array containing all course types
      */
     public function buildTypes()
     {
@@ -111,11 +118,10 @@ class course {
     }
     
     /**
-     * Build CheckMap with the types a specific course belongs to
+     * Build ArrayMap with the types a given course belongs to.
      * 
-     * @param int $id
-     * 
-     * @return array
+     * @param  int   $id          - Id for a given course
+     * @return array $coursetypes - ArrayMap containing the given course's types, in the form of <type id, boolean true>
      */
     private function buildTypesMap($id)
     {
@@ -131,6 +137,13 @@ class course {
         return $coursetypes;
     }
     
+    /**
+     * Build an HTML section containing checkboxes for a given course's belonging types, in order to be used in html forms.
+     * 
+     * @param  int    $id   - Id for a given course
+     * @param  string $name - The name of the input checkbox form field
+     * @return string $html - The returned html output
+     */
     public function buildTypesSelection($id = null, $name = "coursetypes")
     {
         $html = "";
@@ -148,51 +161,11 @@ class course {
     }
     
     /**
-     * Build CheckMap with the nodes a specific course belongs to
+     * Get an array with a given course's hierarchy nodes that it belongs to.
      * 
-     * @param int $id
-     * 
-     * @return array
+     * @param  int   $id  - Id for a given course
+     * @return array $ret - Array containing the given course's nodes
      */
-    private function buildDepartmentsMap($id)
-    {
-        $result = db_query("SELECT department FROM $this->departmenttable WHERE course = '$id'");
-        
-        $nodes = array();
-        
-        while($row = mysql_fetch_array($result, MYSQL_ASSOC))
-        {
-            $nodes[$row['department']] = true;
-        }
-        
-        return $nodes;
-    }
-    
-    public function buildDepartmentSelect($nodes, $id = null, $name = "departments")
-    {
-        $html = ($this->allowmultidep) ? "<br/>" : "<select name='$name'>";
-        
-        $checkMap = ($id != null) ? $this->buildDepartmentsMap($id) : null ;
-        
-        foreach($nodes as $key => $value)
-        {
-            if ($this->allowmultidep)
-            {
-                $check = (isset($checkMap[$key])) ? " checked='1' " : '';
-                $html .= "<input type='checkbox' name='".$name."[]' value='$key' $check />$value <br />";
-            }
-            else
-            {
-                $select = (isset($checkMap[$key])) ? " selected " : '';
-                $html .= "<option value='$key' $select>$value</option>";
-            }
-        }
-        
-        $html .= ($this->allowmultidep) ? "" : "</select>";
-        
-        return $html;
-    }
-    
     public function getDepartmentIds($id)
     {
         $ret = array();

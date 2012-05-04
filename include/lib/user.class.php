@@ -18,17 +18,22 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * Eclass User Coordinating Object.
+ * 
+ * This class does not represent a user entity, but a core logic coordinating object
+ * responsible for handling user and hierarchy-to-user related tasks.
+ */
 class user {
 
     private $utable;
     private $departmenttable;
     
     /**
-     * Constructor
+     * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
      *
-     * @param string $utable - Name of users table
-     * @param string $deptable - Name of user <-> department lookup table
-     * @param boolean $allowmultidep - control flag for multiple relation between users and departments
+     * @param string  $utable   - Name of users table
+     * @param string  $deptable - Name of user <-> department lookup table
      */    
     public function user($utable = 'user', $deptable = 'user_department')
     {
@@ -37,11 +42,11 @@ class user {
     }
     
     /**
-     * Refresh departments of a course
+     * Refresh the hierarchy nodes (departments) that a user belongs to. All previous belonging
+     * nodes get deleted and then refreshed with the ones given as array argument.
      * 
-     * @param int $id
-     * @param array $types
-     * @param array $departments
+     * @param int   $id          - Id for a given user
+     * @param array $departments - Array containing the node ids that the given user should belong to
      */
     public function refresh($id, $departments)
     {
@@ -56,7 +61,7 @@ class user {
     }
     
     /**
-     * Delete user
+     * Delete user and all its hierarchy nodes dependencies.
      * 
      * @param int $id - The id of the user to delete
      */
@@ -66,6 +71,12 @@ class user {
         db_query("DELETE FROM $this->utable WHERE user_id = '$id'");
     }
     
+    /**
+     * Get an array with a given user's hierarchy nodes that he belongs to.
+     * 
+     * @param  int   $id  - The id of a given user
+     * @return array $ret - Array containing the given user's nodes
+     */
     public function getDepartmentIds($id)
     {
         $ret = array();
