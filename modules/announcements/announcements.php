@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -57,7 +57,7 @@ if ($is_editor) {
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
 	
-	$result = db_query("SELECT count(*) FROM announcements WHERE course_id = $cours_id", $mysqlMainDb);
+	$result = db_query("SELECT COUNT(*) FROM announcement WHERE course_id = $cours_id", $mysqlMainDb);
 	
 	list($announcementNumber) = mysql_fetch_row($result);
 	mysql_free_result($result);
@@ -74,14 +74,14 @@ if ($is_editor) {
 	}
 
 	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-	    $result = db_query("SELECT id, `order` FROM announcements WHERE course_id = $cours_id
-                        ORDER BY `order` $sortDirection", $mysqlMainDb);
+	    $result = db_query("SELECT id, `order` FROM announcement WHERE course_id = $cours_id
+                        ORDER BY `order` $sortDirection");
 		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
 			if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
 			    $nextAnnouncementId = $announcementId;
 			    $nextAnnouncementOrder = $announcementOrder;
-			    db_query("UPDATE announcements SET `order` = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
-			    db_query("UPDATE announcements SET `order` = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
+			    db_query("UPDATE announcement SET `order` = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'");
+			    db_query("UPDATE announcement SET `order` = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'");
 			    break;
 			}
 			// find the order
@@ -96,23 +96,23 @@ if ($is_editor) {
     if (isset($_GET['mkvis'])) {
 	$mkvis = intval($_GET['mkvis']);
 	if ($_GET['vis'] == 1) {
-	    $result = db_query("UPDATE announcements SET visibility = 'v' WHERE id = '$mkvis'", $mysqlMainDb);
+	    $result = db_query("UPDATE announcement SET visibility = 'v' WHERE id = '$mkvis'");
 	}
 	if ($_GET['vis'] == 0) {
-	    $result = db_query("UPDATE announcements SET visibility = 'i' WHERE id = '$mkvis'", $mysqlMainDb);
+	    $result = db_query("UPDATE announcement SET visibility = 'i' WHERE id = '$mkvis'");
 	}
     }
     /* delete */
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
-        $result = db_query("DELETE FROM announcements WHERE id='$delete'", $mysqlMainDb);
+        $result = db_query("DELETE FROM announcement WHERE id='$delete'");
         $message = "<p class='success'>$langAnnDel</p>";
     }
 
     /* modify */
     if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
-        $result = db_query("SELECT * FROM announcements WHERE id='$modify'", $mysqlMainDb);
+        $result = db_query("SELECT * FROM announcement WHERE id='$modify'", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
         if ($myrow) {
             $AnnouncementToModify = $myrow['id'];
@@ -128,17 +128,17 @@ if ($is_editor) {
         $newContent = autoquote(purify($_POST['newContent']));
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            db_query("UPDATE announcements SET content = $newContent,
+            db_query("UPDATE announcement SET content = $newContent,
 			title = $antitle, `date` = NOW()
-			WHERE id = $id", $mysqlMainDb);
+			WHERE id = $id");
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
-            $result = db_query("SELECT MAX(`order`) FROM announcements
-				WHERE course_id = $cours_id", $mysqlMainDb);
+            $result = db_query("SELECT MAX(`order`) FROM announcement
+				WHERE course_id = $cours_id");
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // insert
-            db_query("INSERT INTO announcements SET content = $newContent,
+            db_query("INSERT INTO announcement SET content = $newContent,
                             title = $antitle, `date` = NOW(),
                             course_id = $cours_id, `order` = $order,
                             visibility = 'v'");
@@ -155,7 +155,7 @@ if ($is_editor) {
             $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
                                 WHERE cours_id = $cours_id 
                                 AND cours_user.user_id = user.user_id";
-            $result = db_query($sqlUserOfCourse, $mysqlMainDb);            
+            $result = db_query($sqlUserOfCourse);            
 
             $countEmail = mysql_num_rows($result); // number of mail recipients
             
@@ -260,25 +260,25 @@ if ($is_editor) {
     /* display announcements */
 	if ($is_editor) {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM announcements 
+			$result = db_query("SELECT * FROM announcement 
                                                 WHERE course_id = $cours_id AND 
-                                                id = $_GET[an_id]", $mysqlMainDb);
+                                                id = $_GET[an_id]");
 		} else {
-			$result = db_query("SELECT * FROM announcements 
+			$result = db_query("SELECT * FROM announcement 
                                                 WHERE course_id = $cours_id 
-                                                ORDER BY `order` DESC", $mysqlMainDb);
+                                                ORDER BY `order` DESC");
 		}
 	} else {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM announcements 
+			$result = db_query("SELECT * FROM announcement 
                                                 WHERE course_id = $cours_id AND 
                                                 id = $_GET[an_id] 
-                                                AND visibility = 'v'", $mysqlMainDb);
+                                                AND visibility = 'v'");
 		} else {
-			$result = db_query("SELECT * FROM announcements 
+			$result = db_query("SELECT * FROM announcement
                                                 WHERE course_id = $cours_id AND 
                                                 visibility = 'v' 
-                                                ORDER BY `order` DESC", $mysqlMainDb);
+                                                ORDER BY `order` DESC");
 		}
 	}
         $iterator = 1;

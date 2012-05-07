@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -66,18 +66,18 @@ if (isset($_GET['vis'])) {
 	} else {
 		$vis = 'V';
 	}
-	db_query("UPDATE admin_announcements SET visible = '$vis' WHERE id = $id", $mysqlMainDb);
+	db_query("UPDATE admin_announcement SET visible = '$vis' WHERE id = $id", $mysqlMainDb);
 }
 
 if (isset($_GET['delete'])) {
         // delete announcement command
         $id = intval($_GET['delete']);
-        $result =  db_query("DELETE FROM admin_announcements WHERE id = $id", $mysqlMainDb);
+        $result =  db_query("DELETE FROM admin_announcement WHERE id = $id", $mysqlMainDb);
         $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
         // modify announcement command
         $id = intval($_GET['modify']);
-        $result = db_query("SELECT * FROM admin_announcements WHERE id = $id", $mysqlMainDb);
+        $result = db_query("SELECT * FROM admin_announcement WHERE id = $id", $mysqlMainDb);
         $myrow = mysql_fetch_array($result);
         if ($myrow) {
                 $titleToModify = q($myrow['title']);
@@ -94,7 +94,7 @@ if (isset($_GET['delete'])) {
         if (isset($_POST['id'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
-                db_query("UPDATE admin_announcements
+                db_query("UPDATE admin_announcement
                         SET title = $title, body = $newContent,
 			lang = $lang_admin_ann, 
 			`date` = NOW(), $start_sql, $end_sql
@@ -103,10 +103,10 @@ if (isset($_GET['delete'])) {
         } else {
                 // add new announcement
                 // order
-                $result = db_query("SELECT MAX(ordre) FROM admin_announcements", $mysqlMainDb);
+                $result = db_query("SELECT MAX(ordre) FROM admin_announcement", $mysqlMainDb);
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
-                db_query("INSERT INTO admin_announcements
+                db_query("INSERT INTO admin_announcement
                         SET title = $title, body = $newContent,
                         visible = 'V', lang = $lang_admin_ann,
                         `date` = NOW(), ordre = $order, $start_sql, $end_sql");
@@ -211,21 +211,21 @@ if (isset($_GET['up'])) {
 }
 
 // if there are announcements without ordering -> order by id, latest is first
-$result = db_query("SELECT id, ordre FROM admin_announcements WHERE ordre=0");
+$result = db_query("SELECT id, ordre FROM admin_announcement WHERE ordre=0");
 $no_order = mysql_fetch_row($result);
 if (!empty($no_order)) {
-	db_query("UPDATE admin_announcements SET `ordre`=`id`+1");
+	db_query("UPDATE admin_announcement SET `ordre`=`id`+1");
 }
 
 if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-	$result = db_query("SELECT id, ordre FROM admin_announcements ORDER BY ordre $sortDirection", $mysqlMainDb);
+	$result = db_query("SELECT id, ordre FROM admin_announcement ORDER BY ordre $sortDirection", $mysqlMainDb);
 
 	while (list($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
 		if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
 			$nextAnnouncementId = $announcementId;
 			$nextAnnouncementOrder = $announcementOrder;
-			db_query("UPDATE admin_announcements SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
-			db_query("UPDATE admin_announcements SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
+			db_query("UPDATE admin_announcement SET ordre = '$nextAnnouncementOrder' WHERE id = '$thisAnnouncementId'", $mysqlMainDb);
+			db_query("UPDATE admin_announcement SET ordre = '$thisAnnouncementOrder' WHERE id = '$nextAnnouncementId'", $mysqlMainDb);
 			break;
 		}
 		// find the order
@@ -238,7 +238,7 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 
 // display admin announcements
 if ($displayAnnouncementList == true) {
-        $result = db_query("SELECT * FROM admin_announcements ORDER BY ordre DESC", $mysqlMainDb);
+        $result = db_query("SELECT * FROM admin_announcement ORDER BY ordre DESC", $mysqlMainDb);
 		  // announcement order taken from announcements.php
 		  $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);

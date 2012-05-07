@@ -533,8 +533,8 @@ if (!isset($_POST['submit2'])) {
 
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
-                        db_query("RENAME TABLE annonces TO announcements");
-                        db_query("ALTER TABLE announcements CHANGE `contenu` `content` MEDIUMTEXT,
+                        db_query("RENAME TABLE annonces TO announcement");
+                        db_query("ALTER TABLE announcement CHANGE `contenu` `content` MEDIUMTEXT,
                                                             CHANGE `temps` `date` DATETIME,
                                                             CHANGE `cours_id` `course_id` INT(11),
                                                             CHANGE `ordre` `order` MEDIUMINT(11)");

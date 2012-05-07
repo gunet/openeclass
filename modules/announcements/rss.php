@@ -46,8 +46,8 @@ list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE code = '
 $title = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM announcements WHERE course_id = $cours_id 
-                ORDER BY `order` DESC", $mysqlMainDb);
+		FROM announcement WHERE course_id = $cours_id 
+                ORDER BY `order` DESC");
 list($lastbuilddate) = mysql_fetch_row($result);
 
 header ("Content-Type: application/xml;");
@@ -62,7 +62,7 @@ echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
 $sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM announcement WHERE course_id = $cours_id ORDER BY `order` DESC", $mysqlMainDb);
+		FROM announcement WHERE course_id = $cours_id ORDER BY `order` DESC");
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
