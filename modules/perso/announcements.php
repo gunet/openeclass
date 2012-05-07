@@ -159,15 +159,15 @@ function createQueries($queryParam){
 			$dateVar = $date;
 		}
 
-		$announce_query[$i] = "SELECT title, content, `date`, announcements.id
-                        FROM announcements, modules
-                        WHERE announcements.course_id = $lesson_id[$i]
-				AND announcements.visibility = 'v'
+		$announce_query[$i] = "SELECT title, content, `date`, announcement.id
+                        FROM announcement, course_module
+                        WHERE announcement.course_id = $lesson_id[$i]
+				AND announcement.visibility = 'v'
                                 AND DATE_FORMAT(`date`,'%Y %m %d') >='$dateVar'
-                                AND modules.module_id = ".MODULE_ID_ANNOUNCE."
-                                AND modules.visible = 1
-                                AND modules.course_id = $lesson_id[$i]                                
-                        ORDER BY announcements.`date` DESC";
+                                AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
+                                AND course_module.visible = 1
+                                AND course_module.course_id = $lesson_id[$i]                                
+                        ORDER BY announcement.`date` DESC";
 	}
 	return $announce_query;
 }

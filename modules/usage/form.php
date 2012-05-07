@@ -42,7 +42,7 @@ $end_cal = $jscalendar->make_input_field(
                  'value' => $u_date_end));
 
 
-$qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
+$qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
 $mod_opts = '<option value="-1">'.$langAllModules."</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {

@@ -150,7 +150,7 @@ if ($is_editor) {
                             autounquote($_POST['antitle']) .
                             "<br>\n<br>\n" .
                             autounquote($_POST['newContent']);
-            $emailSubject = "$professorMessage ($fake_code - $intitule)";
+            $emailSubject = "$professorMessage ($fake_code - $title)";
             // select students email list
             $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
                                 WHERE cours_id = $cours_id 
@@ -163,7 +163,7 @@ if ($is_editor) {
 	    $recipients = array();
             $emailBody = html2text($emailContent);            
             $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
             $emailContent .= $unsubscribe.$linkhere;            
             $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {

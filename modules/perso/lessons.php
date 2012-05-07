@@ -46,40 +46,40 @@ function getUserLessonInfo($uid, $type)
 	global $mysqlMainDb;
 	//	TODO: add the new fields for memory in the db
         if ($_SESSION['statut'] == 5) {
-                $user_courses = "SELECT cours.cours_id cours_id,
-                                        cours.code code,
-                                        cours.fake_code fake_code,
-                                        cours.intitule title,
-                                        cours.titulaires professor,
-                                        cours.languageCourse,
+                $user_courses = "SELECT course.id cours_id,
+                                        course.code code,
+                                        course.public_code fake_code,
+                                        course.title title,
+                                        course.prof_names professor,
+                                        course.lang,
                                         cours_user.statut statut,
                                         user.perso,
                                         user.announce_flag,
                                         user.doc_flag,
                                         user.forum_flag
-                                 FROM cours, cours_user, user
-                                 WHERE cours.cours_id = cours_user.cours_id AND
+                                 FROM course, cours_user, user
+                                 WHERE course.id = cours_user.cours_id AND
                                        cours_user.user_id = $uid AND
                                        user.user_id = $uid
-                                       AND cours.visible != ".COURSE_INACTIVE."
-                                 ORDER BY cours.intitule, cours.titulaires";
+                                       AND course.visible != ".COURSE_INACTIVE."
+                                 ORDER BY course.title, course.prof_names";
         } elseif ($_SESSION['statut'] == 1)  {
-                $user_courses = "SELECT cours.cours_id cours_id,
-                                cours.code code,
-                                cours.fake_code fake_code,
-	                        cours.intitule title,
-                                cours.titulaires professor,
-	                        cours.languageCourse,
+                $user_courses = "SELECT course.id cours_id,
+                                course.code code,
+                                course.public_code fake_code,
+	                        course.title title,
+                                course.prof_names professor,
+	                        course.lang,
 	                        cours_user.statut statut,
 	                        user.perso,
 	                        user.announce_flag,
 	                        user.doc_flag,
 	                        user.forum_flag
-	                 FROM cours, cours_user, user
-	                 WHERE cours.cours_id = cours_user.cours_id AND
+	                 FROM course, cours_user, user
+	                 WHERE course.id = cours_user.cours_id AND
 	                       cours_user.user_id = $uid AND
 	                       user.user_id = $uid
-                         ORDER BY cours.intitule, cours.titulaires";
+                         ORDER BY course.title, course.prof_names";
         }
 
 	$lesson_titles = $lesson_fakeCode = $lesson_id = $lesson_code = 

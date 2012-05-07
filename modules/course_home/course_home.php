@@ -67,19 +67,19 @@ if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course_keywords, course_type.name AS type, visible, titulaires, fake_code
-                  FROM cours
-             LEFT JOIN course_is_type on course_is_type.course = cours.cours_id
+$res = db_query("SELECT course.keywords, course_type.name AS type, course.visible, course.prof_names, course.public_code
+                  FROM course
+             LEFT JOIN course_is_type ON course_is_type.course = course.id
              LEFT JOIN course_type on course_type.id = course_is_type.course_type
-                 WHERE cours_id = $cours_id", $mysqlMainDb);
+                 WHERE course.id = $cours_id");
 $result = mysql_fetch_array($res);
 
-$keywords = q(trim($result['course_keywords']));
+$keywords = q(trim($result['keywords']));
 $type = $result['type'];
 $containslang = (substr($type, 0, strlen("lang")) === "lang") ? true : false;
 $visible = $result['visible'];
-$professor = $result['titulaires'];
-$fake_code = $result['fake_code'];
+$professor = $result['prof_names'];
+$fake_code = $result['public_code'];
 $main_extra = $description = $addon = '';
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
@@ -335,7 +335,7 @@ $tool_content .= "
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
              <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
-             <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
+             <a href='$_SERVER[PHP_SELF]' title='" . q($title) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
             </td>                     
         </tr>        

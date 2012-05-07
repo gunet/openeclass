@@ -76,7 +76,7 @@ if (isset($_POST["submit"])) {
 	$errorExists = false;
         foreach ($selectCourse as $key => $value) {
                 $cid = intval($value);
-                $course_info = db_query("SELECT fake_code, password, visible FROM cours WHERE cours_id = $cid");
+                $course_info = db_query("SELECT fake_code, password, visible FROM course WHERE id = $cid");
                 if ($course_info) {
                         $row = mysql_fetch_array($course_info);
                         if ($row['visible'] == 1 and !empty($row['password']) and
@@ -126,10 +126,10 @@ if (isset($_POST["submit"])) {
                     $trclass = ($k%2 == 0) ? 'even' : 'odd';
                     $colspan = $maxdepth[0] - $depthmap[$key] + 1;
                     $n = db_query("SELECT COUNT(*) 
-                                     FROM cours, course_department 
-                                    WHERE cours.cours_id = course_department.course 
+                                     FROM course, course_department 
+                                    WHERE course.id = course_department.course 
                                       AND course_department.department = $key
-                                      AND (cours.visible = '1' OR cours.visible = '2')");
+                                      AND (course.visible = '1' OR course.visible = '2')");
                     $r = mysql_fetch_array($n);
 
 
@@ -198,8 +198,8 @@ function getfcfromuid($uid) {
 }
 
 function getdepnumcourses($fac) {
-	$res = mysql_fetch_row(db_query("SELECT count(code) FROM cours, course_department 
-                WHERE cours.cours_id = course_department.course AND course_department.department = $fac"));
+	$res = mysql_fetch_row(db_query("SELECT COUNT(code) FROM course, course_department 
+                WHERE course.id = course_department.course AND course_department.department = $fac"));
 	return $res[0];
 }
 
@@ -211,10 +211,10 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString = "";
 
     // build a list of course followed by user.
-    $usercourses = db_query("SELECT cours.code code_cours, cours.fake_code fake_code,
-                                    cours.cours_id cours_id, statut
-                                FROM cours_user, cours
-                                WHERE cours_user.cours_id = cours.cours_id                                  
+    $usercourses = db_query("SELECT course.code code_cours, course.public_code fake_code,
+                                    course.id cours_id, statut
+                                FROM cours_user, course
+                                WHERE cours_user.cours_id = course.id                                  
                                 AND user_id = ".$uid);
 
     while ($row = mysql_fetch_array($usercourses)) {
@@ -229,18 +229,18 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
 
     $result = db_query("SELECT
-                            cours.cours_id cid,
-                            cours.code k,
-                            cours.fake_code fake_code,
-                            cours.intitule i,
-                            cours.visible visible,
-                            cours.titulaires t,
-                            cours.password password
-                       FROM cours, course_department
-                      WHERE cours.cours_id = course_department.course
+                            course.id cid,
+                            course.code k,
+                            course.public_code fake_code,
+                            course.title i,
+                            course.visible visible,
+                            course.prof_names t,
+                            course.password password
+                       FROM course, course_department
+                      WHERE course.id = course_department.course
                         AND course_department.department = $facid 
-                        AND cours.visible != ".COURSE_INACTIVE."
-                   ORDER BY cours.intitule, cours.titulaires");
+                        AND course.visible != ".COURSE_INACTIVE."
+                   ORDER BY course.title, course.prof_names");
 
     $retString .= "\n    <table class='tbl_alt' width='100%'>";
     $retString .= "\n    <tr>";
@@ -335,10 +335,10 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 	$retString = "";
 
 	// build a list of course followed by user.
-	$usercourses = db_query("SELECT cours.code code_cours, cours.fake_code fake_code,
-                                        cours.cours_id cours_id, statut
-                                 FROM cours_user, cours
-                                 WHERE cours_user.cours_id = cours.cours_id                                  
+	$usercourses = db_query("SELECT course.code code_cours, course.fake_code fake_code,
+                                        course.id cours_id, statut
+                                 FROM cours_user, course
+                                 WHERE cours_user.cours_id = course.id                                  
                                  AND user_id = ".$uid);
 	while ($row = mysql_fetch_array($usercourses)) {
 	 	$myCourses[$row['cours_id']] = $row;
@@ -351,9 +351,9 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 
 	// get the different course types available for this faculte
         $typessql = "SELECT DISTINCT course_type.name as type 
-                        FROM cours, course_department, course_is_type, course_type
-                        WHERE cours.cours_id = course_department.course
-                          AND cours.cours_id = course_is_type.course
+                        FROM course, course_department, course_is_type, course_type
+                        WHERE course.id = course_department.course
+                          AND course.id = course_is_type.course
                           AND course_type.id = course_is_type.course_type
                           AND course_department.department = $facid 
                         ORDER BY course_type.id";
@@ -402,21 +402,21 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                     $t = substr($t, strlen("lang"), strlen($t));
                 }
                 $result = db_query("SELECT
-                                        cours.cours_id cid,
-                                        cours.code k,
-                                        cours.fake_code fake_code,
-                                        cours.intitule i,
-                                        cours.visible visible,
-                                        cours.titulaires t,
-                                        cours.password password
-                                  FROM cours, course_department, course_is_type, course_type
-                                  WHERE cours.cours_id = course_department.course
-                                    AND cours.cours_id = course_is_type.course
+                                        course.id cid,
+                                        course.code k,
+                                        course.public_code fake_code,
+                                        course.title i,
+                                        course.visible visible,
+                                        course.prof_names t,
+                                        course.password password
+                                  FROM course, course_department, course_is_type, course_type
+                                  WHERE course.id = course_department.course
+                                    AND coures.id = course_is_type.course
                                     AND course_type.id = course_is_type.course_type
                                     AND course_department.department = $facid 
                                     AND course_type.name = '".$typesArray['type']."'
-                                    AND cours.visible != ".COURSE_INACTIVE."
-                                  ORDER BY cours.intitule, cours.titulaires");
+                                    AND course.visible != ".COURSE_INACTIVE."
+                                  ORDER BY course.title, course.prof_names");
 
                 if ($numoftypes > 1) {
                         $retString .= "\n    <table width='100%' class='tbl_course_type'>";
@@ -541,7 +541,7 @@ function collapsed_facultes_horiz($fc) {
 // check if a course is restricted
 function is_restricted($cours_id)
 {
-	$res = mysql_fetch_row(db_query("SELECT visible FROM cours WHERE cours_id = $cours_id"));
+	$res = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = $cours_id"));
 	if ($res[0] == 0) {
 		return true;
 	} else {

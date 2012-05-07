@@ -39,7 +39,7 @@ class course {
      * @param string $istype    - Name of course <-> course_type lookup table
      * @param string $deptable  - Name of course <-> department lookup table
      */    
-    public function course($ctable = 'cours', $typetable = 'course_type', $istype = 'course_is_type', $deptable = 'course_department')
+    public function course($ctable = 'course', $typetable = 'course_type', $istype = 'course_is_type', $deptable = 'course_department')
     {
         $this->ctable = $ctable;
         $this->typetable = $typetable;
@@ -171,8 +171,8 @@ class course {
         $ret = array();
         $result = db_query("SELECT cd.department AS id
                               FROM $this->ctable c, $this->departmenttable cd
-                             WHERE c.cours_id = ". intval($id) ." 
-                               AND c.cours_id = cd.course");
+                             WHERE c.id = ". intval($id) ." 
+                               AND c.id = cd.course");
         
         while($row = mysql_fetch_assoc($result))
             $ret[] = $row['id'];
@@ -180,4 +180,3 @@ class course {
         return $ret;
     }
 }
-?>

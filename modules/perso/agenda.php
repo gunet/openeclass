@@ -56,9 +56,9 @@ function getUserAgenda($param, $type)
 	
 	// exclude courses with disabled agenda modules
 	for($i=0; $i < $max_repeat_val; $i++) {               
-	    $row = mysql_fetch_array(db_query("SELECT visible FROM modules WHERE 
-                                                module_id = ".MODULE_ID_AGENDA." AND
-                                                course_id = ".$course_id[$i], $mysqlMainDb));
+	    $row = mysql_fetch_array(db_query("SELECT visible FROM course_module WHERE 
+                                                      module_id = ".MODULE_ID_AGENDA." AND
+                                                      course_id = ".$course_id[$i]));
 	    if ($row['visible'] == 1) {
 		    array_push($tbl_course_ids, $course_id[$i]);
             }
@@ -67,9 +67,9 @@ function getUserAgenda($param, $type)
 	$tbl_course_ids = implode(",", $tbl_course_ids);
 
 	//mysql version 4.x query
-	$sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, cours.code, cours.intitule
-		FROM agenda, cours WHERE agenda.course_id IN ($tbl_course_ids)
-		AND agenda.course_id = cours.cours_id
+	$sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, course.code, course.title
+		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids)
+		AND agenda.course_id = course.id
 		AND agenda.visibility = 'v'
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC
@@ -77,9 +77,9 @@ function getUserAgenda($param, $type)
 
 	//mysql version 5.x query
 	$sql_5 = "SELECT agenda.title, agenda.content, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'), 
-		agenda.lasting, cours.code, cours.intitule
-		FROM agenda, cours WHERE agenda.course_id IN ($tbl_course_ids) 
-		AND agenda.course_id = cours.cours_id
+		agenda.lasting, course.code, course.title
+		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids) 
+		AND agenda.course_id = course.id
 		AND agenda.visibility = 'v'
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC

@@ -42,8 +42,8 @@ if ($cours_id === false) {
 	exit;
 }
 
-list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'"));
-$intitule = htmlspecialchars($intitule, ENT_NOQUOTES); 
+list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE code = '$code'"));
+$title = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
 		FROM announcements WHERE course_id = $cours_id 
@@ -55,14 +55,14 @@ echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
 echo "<atom:link href='".$urlServer."modules/announcements/rss.php?c=".$code."' rel='self' type='application/rss+xml' />";
-echo "<title>$langCourseAnnouncements $intitule</title>";
+echo "<title>$langCourseAnnouncements $title</title>";
 echo "<link>".$urlServer."courses/".$code."</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
 $sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM announcements WHERE course_id = $cours_id ORDER BY `order` DESC", $mysqlMainDb);
+		FROM announcement WHERE course_id = $cours_id ORDER BY `order` DESC", $mysqlMainDb);
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";

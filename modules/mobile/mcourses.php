@@ -26,31 +26,31 @@ require_once('minit.php');
 
 $courses = array();
 
-$sql = "SELECT cours.code,
-               cours.languageCourse, 
-               cours.intitule,
-               cours.description,
-               cours.course_keywords,
-               cours.visible,
-               cours.titulaires,
-               cours.fake_code, 
+$sql = "SELECT course.code,
+               course.lang, 
+               course.title,
+               course.description,
+               course.keywords,
+               course.visible,
+               course.prof_names,
+               course.public_code, 
                cours_user.statut as statut
-          FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+          FROM course JOIN cours_user ON course.id = cours_user.cours_id
          WHERE cours_user.user_id = $uid        
-      ORDER BY statut, cours.intitule, cours.titulaires";
-$sql2 = "SELECT cours.code,
-                cours.languageCourse, 
-                cours.intitule,
-                cours.description,
-                cours.course_keywords,
-                cours.visible,
-                cours.titulaires,
-                cours.fake_code, 
+      ORDER BY statut, course.title, course.prof_names";
+$sql2 = "SELECT course.code,
+                course.lang, 
+                course.title,
+                course.description,
+                course.keywords,
+                course.visible,
+                course.prof_names,
+                course.public_code, 
                 cours_user.statut as statut
-           FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+           FROM course JOIN cours_user ON course.id = cours_user.cours_id
           WHERE cours_user.user_id = $uid
-            AND cours.visible != ".COURSE_INACTIVE."
-       ORDER BY statut, cours.intitule, cours.titulaires";
+            AND course.visible != ".COURSE_INACTIVE."
+       ORDER BY statut, course.title, course.prof_names";
 
 if ($_SESSION['statut'] == 1) {
         $result = db_query($sql);

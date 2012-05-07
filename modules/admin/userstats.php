@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -47,11 +47,11 @@ if(!empty($u))
 	$info = mysql_fetch_array($sql);
     	$tool_content .= "<p class='title1'>$langUserStats: <b>$info[2]</b></p>
 		<p><b>$langStudentParticipation</b></p>";
-        $sql = db_query("SELECT DISTINCT a.code, a.intitule, b.statut, a.cours_id
-                           FROM cours AS a 
-                           JOIN course_department ON a.cours_id = course_department.course
+        $sql = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+                           FROM course AS a 
+                           JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
-                      LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                      LEFT JOIN cours_user AS b ON a.id = b.cours_id
                           WHERE b.user_id = $u
                        ORDER BY b.statut, hierarchy.name");
 
@@ -97,18 +97,18 @@ if(!empty($u))
 		$tool_content .= "$langGDRequired";
 	} else {
 		$totalHits = 0;
-                $result = db_query("SELECT DISTINCT a.code, a.intitule, b.statut, a.cours_id
-                                      FROM cours AS a 
-                                      JOIN course_department ON a.cours_id = course_department.course
+                $result = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+                                      FROM course AS a 
+                                      JOIN course_department ON a.id = course_department.course
                                       JOIN hierarchy ON course_department.department = hierarchy.id
-                                 LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                 LEFT JOIN cours_user AS b ON a.id = b.cours_id
                                      WHERE b.user_id = $u
                                   ORDER BY b.statut, hierarchy.name");
 		$hits = array();
 		if (mysql_num_rows($result) > 0) {
 			while ($row = mysql_fetch_assoc($result)) {
 				$course_codes[] = $row['code'];
-				$course_names[$row['code']]=$row['intitule'];
+				$course_names[$row['code']]=$row['title'];
 			}
 			mysql_free_result($result);
 			foreach ($course_codes as $course_code) {
@@ -175,4 +175,3 @@ if(!empty($u))
 
 $tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";
 draw($tool_content,3);
-?>

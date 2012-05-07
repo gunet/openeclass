@@ -62,14 +62,14 @@ function getUserDocuments($param)
  */
 function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist, $uid, $cours_id;
-	global $mysqlMainDb, $maxValue, $group_sql;
+	global $langNoDocsExist, $uid;
+	global $mysqlMainDb, $group_sql;
 
-	$q = db_query("SELECT path, course_id, code, filename, title, date_modified, intitule
-                   FROM document, cours_user, cours
+	$q = db_query("SELECT document.path, document.course_id, document.filename, document.title, document.date_modified, course.title, course.code
+                   FROM document, cours_user, course
                    WHERE document.course_id = cours_user.cours_id AND
                              cours_user.user_id = $uid AND
-                             cours.cours_id = cours_user.cours_id AND
+                             course.id = cours_user.cours_id AND
 			     subsystem = ".MAIN." AND
 			     visibility = 'v' AND
                              date_modified >= '$date' AND
@@ -90,7 +90,7 @@ function docsHtmlInterface($date)
 			$first_check = 0;
 			foreach($group_courses_member as $course_file) {
 				if($first_check == 0){
-					$content.= "<tr><td class='sub_title1'>" . q($course_file['intitule']) . "</td></tr>";                                        
+					$content.= "<tr><td class='sub_title1'>" . q($course_file['title']) . "</td></tr>";                                        
 					$first_check = 1;
 				}                               
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              

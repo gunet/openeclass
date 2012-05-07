@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -78,14 +78,15 @@ if (isset($c)) {
 		$searchurl = '&search=yes';
 	}
 	// Get information about selected course
-        $sql = "SELECT cours.code, cours.intitule, cours.titulaires, cours.visible
-		  FROM cours
-		 WHERE cours.code = '".mysql_real_escape_string($_GET['c'])."'";
+        $sql = "SELECT course.code, course.title, course.prof_names, course.visible
+		  FROM course
+		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
 	$result = db_query($sql);
 	$row = mysql_fetch_array($result);
 	// Display course information and link to edit
 	$tool_content .= "<fieldset>
-	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
+                <legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">
+                <img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
         
         $departments = $course->getDepartmentIds(course_code_to_id($_GET['c']));
@@ -107,11 +108,11 @@ if (isset($c)) {
 	</tr>
 	<tr>
 	  <th><b>$langTitle:</b></th>
-	  <td>".q($row['intitule'])."</td>
+	  <td>".q($row['title'])."</td>
 	</tr>
 	<tr>
 	  <th><b>".$langTutor.":</b></th>
-	  <td>".q($row['titulaires'])."</td>
+	  <td>".q($row['prof_names'])."</td>
 	</tr>
 	</table>
 	</fieldset>";
@@ -120,11 +121,11 @@ if (isset($c)) {
 	<legend>".$langQuota." <a href=\"quotacours.php?c=".q($c).$searchurl."\"><img src='$themeimg/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
 <table width='100%' class='tbl'>
 	<tr>
-	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['intitule']) . " $langMaxQuota</div></td>
+	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['title']) . " $langMaxQuota</div></td>
 	  </tr>";
 	// Get information about course quota
-	$q = mysql_fetch_array(db_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM cours WHERE code='".mysql_real_escape_string($c)."'"));
+	$q = mysql_fetch_array(db_query("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM course WHERE code='".mysql_real_escape_string($c)."'"));
 	$dq = format_file_size($q['doc_quota']);
 	$vq = format_file_size($q['video_quota']);
 	$gq = format_file_size($q['group_quota']);

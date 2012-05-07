@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -30,9 +30,9 @@ $qlang = ($language == 'greek')? 'el': 'en';
 
 if (isset($_GET['aid'])) {
 	$aid = intval($_GET['aid']);
-	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcements` WHERE id = '$aid'";
+	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = '$aid'";
 } else {
-	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcements`
+	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement`
 	        WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";
 }
 $result = db_query($sql, $mysqlMainDb);

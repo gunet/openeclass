@@ -95,10 +95,10 @@ if (!register_posted_variables(array('search_terms' => false,
         $terms = array();
 
         $search_keys = array(
-                       'search_terms_title' => 'intitule',
-                       'search_terms_instructor' => 'titulaires',
-                       'search_terms_keywords' => 'course_keywords',
-                       'search_terms_coursecode' => array('code', 'fake_code'));
+                       'search_terms_title' => 'title',
+                       'search_terms_instructor' => 'prof_names',
+                       'search_terms_keywords' => 'keywords',
+                       'search_terms_coursecode' => array('code', 'public_code'));
 
         foreach ($search_keys as $key => $subject) {
                 if (isset($GLOBALS[$key]) and !empty($GLOBALS[$key])) {
@@ -126,18 +126,18 @@ if (!register_posted_variables(array('search_terms' => false,
                 $terms[] = "course_units.id IN (SELECT DISTINCT unit_id FROM desc_search_tmp)";
         }
 
-        $course_restriction = 'cours.visible IN (2, 1)';
+        $course_restriction = 'course.visible IN (2, 1)';
         $course_user_join = '';
         if (isset($uid) and $uid) {
                 $course_restriction = "($course_restriction OR cours_user.statut IS NOT NULL)";
-                $course_user_join = 'LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id AND cours_user.user_id = ' . $uid;
+                $course_user_join = 'LEFT JOIN cours_user ON course.id = cours_user.cours_id AND cours_user.user_id = ' . $uid;
         }
 
         
 	// visible = 2 or 1 for Public and Open courses
-        $search = 'SELECT code, fake_code, intitule, titulaires, course_keywords
-                          FROM cours ' . $course_user_join . '
-                                     LEFT JOIN course_units ON cours.cours_id = course_units.course_id
+        $search = 'SELECT course.code, course.public_code, course.title, course.prof_names, course.keywords
+                          FROM course ' . $course_user_join . '
+                                     LEFT JOIN course_units ON course.id = course_units.course_id
                           WHERE ' . $course_restriction . ' AND
                                 (course_units.visibility = "v" OR
                                  course_units.visibility IS NULL OR
@@ -178,15 +178,15 @@ if (!register_posted_variables(array('search_terms' => false,
                         $tool_content .= "<td><img src='$themeimg/arrow.png' alt=''  /></td><td>";
 			// search inside course. If at least one result is found then display link for searching inside the course
 			if (search_in_course($search_terms, $cours_id, $mycours['code'])) {
-				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['intitule']) .
+				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['title']) .
                                 "</a> (" . q($mycours['fake_code']) . ")";
 			} else {
-				$tool_content .= "<a href='../../courses/$mycours[code]/'>" . q($mycours['intitule']) .
+				$tool_content .= "<a href='../../courses/$mycours[code]/'>" . q($mycours['title']) .
                                 "</a> (" . q($mycours['fake_code']) . ")";
 			}
 			$tool_content .= "</td>" .
-                                "<td>" . q($mycours['titulaires']) . "</td>" .
-                                "<td>" . q($mycours['course_keywords']) . "</td>
+                                "<td>" . q($mycours['prof_names']) . "</td>" .
+                                "<td>" . q($mycours['keywords']) . "</td>
 			</tr>";
                         $k++;
                 }
@@ -210,7 +210,7 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	$query = " AGAINST ('".$search_terms."";
 	$query .= "' IN BOOLEAN MODE)";
 	
-	$sql = db_query("SELECT title, content, `date` FROM announcements
+	$sql = db_query("SELECT title, content, `date` FROM announcement
 				WHERE course_id = $cours_id
 				AND visibility = 'v'
 				AND MATCH (title, content)".$query, $mysqlMainDb);

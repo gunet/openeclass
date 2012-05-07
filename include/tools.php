@@ -90,12 +90,12 @@ function getToolsArray($cat) {
 		case 'Public':
 			if (!check_guest()) {
 				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-					$result = db_query("SELECT * FROM modules
+					$result = db_query("SELECT * FROM course_module
                                                         WHERE visible = 1 AND
                                                         course_id = $cid
                                                         ORDER BY module_id");
 				} else {
-					$result = db_query("SELECT * FROM modules
+					$result = db_query("SELECT * FROM course_module
                                                     WHERE visible = 1 AND
                                                     course_id = $cid AND
                                                     module_id NOT IN (".MODULE_ID_CHAT.",
@@ -107,7 +107,7 @@ function getToolsArray($cat) {
                                                     ORDER BY module_id");                 
 				}
 			} else {
-				$result = db_query("SELECT * FROM modules
+				$result = db_query("SELECT * FROM course_module
                                                 WHERE `visible` = 1 AND
                                                 course_id = $cid AND
                                                 module_id IN (".MODULE_ID_AGENDA.",
@@ -121,7 +121,7 @@ function getToolsArray($cat) {
 			}
 			break;
 		case 'PublicButHide':
-			$result = db_query("SELECT * FROM modules
+			$result = db_query("SELECT * FROM course_module
                                          WHERE visible = 0 AND
                                          course_id = $cid
                                          ORDER BY module_id");                    

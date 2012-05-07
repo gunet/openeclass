@@ -52,8 +52,8 @@ function departmentChildren($depid, $url = '') {
                     "</a>&nbsp;&nbsp;<small>(". $nodecodes[$key] .")";
             
             $n = db_query("SELECT COUNT(*) 
-                             FROM cours, course_department 
-                            WHERE cours.cours_id = course_department.course 
+                             FROM course, course_department 
+                            WHERE course.id = course_department.course 
                               AND course_department.department = ". $key);
             $r = mysql_fetch_array($n);
 

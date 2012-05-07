@@ -83,7 +83,7 @@ include ('tools.php');
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
         global $courseHome, $currentCourseID, $extraMessage, $helpTopic, 
-               $homePage, $intitule, $is_editor, $langActivate,
+               $homePage, $title, $is_editor, $langActivate,
                $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang, 
                $langChooseLang, $langCopyrightFooter, $langDeactivate, 
                $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp, 
@@ -229,7 +229,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 		// set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
-			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$currentCourseID/'>" . q($intitule) . '</a>' );
+			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$currentCourseID/'>" . q($title) . '</a>' );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
@@ -326,27 +326,27 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		if (isset ( $currentCourseID ) && ! $courseHome) {
 			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $currentCourseID . '/index.php' );
-			$t->set_var ( 'BREAD_TEXT', q(ellipsize($intitule, 64)) );
+			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );
 			if ($statut == 10)
 				$t->set_var ( 'BREAD_ARROW', '' );
 			$t->set_var ( 'BREAD_HREF_END', '</a>' );
 			$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );
 			$breadIterator ++;
 			if (isset ( $pageTitle )) {
-				$pageTitle .= " | " . q($intitule);
+				$pageTitle .= " | " . q($title);
 			} else {
-				$pageTitle = q($intitule);
+				$pageTitle = q($title);
 			}
 
 		} elseif (isset ( $currentCourseID ) && $courseHome) {
 			$t->set_var ( 'BREAD_HREF_FRONT', '' );
 			$t->set_var ( 'BREAD_LINK', '' );
-			$t->set_var ( 'BREAD_TEXT', q(ellipsize($intitule, 64)) );
+			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );
 			$t->set_var ( 'BREAD_ARROW', '&#187;' );
 			$t->set_var ( 'BREAD_HREF_END', '' );
 			$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );
 			$breadIterator ++;
-			$pageTitle .= " | " . q($intitule);
+			$pageTitle .= " | " . q($title);
 
 		}
 

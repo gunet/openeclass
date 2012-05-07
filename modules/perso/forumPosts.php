@@ -149,16 +149,16 @@ function createForumQueries($dateVar, $code) {
                                forum_posts.post_time,
                                forum_posts.poster_id,
                                forum_posts.post_text
-                        FROM forum, forum_topics, forum_posts, modules
+                        FROM forum, forum_topics, forum_posts, course_module
                         WHERE CONCAT(forum_topics.topic_title, forum_posts.post_text) != \'\'
                                AND forum.forum_id = forum_topics.forum_id
                                AND forum_posts.forum_id = forum.forum_id
                                AND forum_posts.topic_id = forum_topics.topic_id
                                AND forum.course_id = '.$course_id.'
                                AND DATE_FORMAT(forum_posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
-                               AND modules.visible = 1
-                               AND modules.module_id = '.MODULE_ID_FORUM.'
-                               AND modules.course_id = '.$course_id.'     
+                               AND course_module.visible = 1
+                               AND course_module.module_id = '.MODULE_ID_FORUM.'
+                               AND course_module.course_id = '.$course_id.'     
                         ORDER BY forum_posts.post_time LIMIT 15';
 
 	return $forum_query;

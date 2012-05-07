@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -73,15 +73,15 @@ if (isset($_POST['submit'])) {
 
                 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 		
-                db_query("UPDATE `$mysqlMainDb`.cours
-                          SET intitule = " . autoquote($_POST['title']) .",
-                              fake_code = " . autoquote($_POST['fcode']) .",
-                              course_keywords = ".autoquote($_POST['course_keywords']) . ",
+                db_query("UPDATE course
+                          SET title = " . autoquote($_POST['title']) .",
+                              public_code = " . autoquote($_POST['fcode']) .",
+                              keywords = ".autoquote($_POST['course_keywords']) . ",
                               visible = " . intval($_POST['formvisible']) . ",
-                              titulaires = " . autoquote($_POST['titulary']) . ",
-                              languageCourse = '$newlang',
+                              prof_names = " . autoquote($_POST['titulary']) . ",
+                              lang = '$newlang',
                               password = " . autoquote($_POST['password']) . "
-                          WHERE cours_id = $cours_id");
+                          WHERE id = $cours_id");
                 $course->refresh($cours_id, array($_POST['type']), $departments);
                 
                 $tool_content .= "<p class='success'>$langModifDone</p>
@@ -98,22 +98,22 @@ if (isset($_POST['submit'])) {
 	  </ul>
 	</div>";
 
-	$sql = "SELECT cours.intitule, cours.course_keywords, cours.visible,
-		       cours.fake_code, cours.titulaires, cours.languageCourse, course_is_type.course_type AS type,
-		       cours.password, cours.cours_id
-		FROM `$mysqlMainDb`.cours 
-           LEFT JOIN `$mysqlMainDb`.course_is_type on cours.cours_id = course_is_type.course
-		WHERE cours.code = '$currentCourseID'";
+	$sql = "SELECT course.title, course.keywords, course.visible,
+		       course.public_code, course.prof_names, course.lang, course_is_type.course_type AS type,
+		       course.password, course.id
+		FROM course
+           LEFT JOIN course_is_type on course.id = course_is_type.course
+		WHERE course.code = '$currentCourseID'";
 	$result = db_query($sql);
 	$c = mysql_fetch_array($result);
-	$title = q($c['intitule']);
+	$title = q($c['title']);
 	$type = $c['type'];
 	$visible = $c['visible'];
 	$visibleChecked[$visible] = " checked='1'";
-	$fake_code = q($c['fake_code']);
-	$titulary = q($c['titulaires']);
-	$languageCourse	= $c['languageCourse'];
-	$course_keywords = q($c['course_keywords']);
+	$fake_code = q($c['public_code']);
+	$titulary = q($c['prof_names']);
+	$languageCourse	= $c['lang'];
+	$course_keywords = q($c['keywords']);
 	$password = q($c['password']);
 
 	$tool_content .="
@@ -192,7 +192,7 @@ if (isset($_POST['submit'])) {
 	    <tr>
 		<th width='170'>$langOptions:</th>
 		<td width='1'>";
-	$language = $c['languageCourse'];
+	$language = $c['lang'];
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "
 	        </td>

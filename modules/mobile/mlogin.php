@@ -104,17 +104,17 @@ function set_session_mvars()
 {
     $status = array();
     
-    $sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                   cours.intitule title, cours.titulaires profs, cours_user.statut statut
-              FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+    $sql = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
+                   course.title title, course.prof_names profs, cours_user.statut statut
+              FROM course JOIN cours_user ON course.id = cours_user.cours_id
              WHERE cours_user.user_id = ". $_SESSION['uid'] ."
-          ORDER BY statut, cours.intitule, cours.titulaires";
-    $sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                    cours.intitule title, cours.titulaires profs, cours_user.statut statut
-               FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+          ORDER BY statut, course.title, course.prof_names";
+    $sql2 = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
+                    course.title title, course.prof_names profs, cours_user.statut statut
+               FROM course JOIN cours_user ON course.id = cours_user.cours_id
               WHERE cours_user.user_id = ". $_SESSION['uid'] ."
-                AND cours.visible != ".COURSE_INACTIVE."
-           ORDER BY statut, cours.intitule, cours.titulaires";
+                AND course.visible != ".COURSE_INACTIVE."
+           ORDER BY statut, course.title, course.prof_names";
 
     if ($_SESSION['statut'] == 1)
         $result = db_query($sql);

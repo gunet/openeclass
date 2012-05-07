@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -120,7 +120,7 @@ if (!extension_loaded('gd')) {
 
     if ($u_course_id == -1) {
      //show chart for all courses
-           $qry1 = "SELECT cours_id FROM cours";
+           $qry1 = "SELECT id FROM course";
            $res1 = db_query($qry1, $mysqlMainDb);
 
            $point = array();
@@ -304,7 +304,7 @@ $tool_content .= '<br />';
                  'value'       => $u_date_end));
 
     //possible courses
-    $qry = "SELECT LEFT(intitule, 1) AS first_letter FROM cours
+    $qry = "SELECT LEFT(title, 1) AS first_letter FROM course
             GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
     $letterlinks='';
@@ -315,10 +315,10 @@ $tool_content .= '<br />';
 
     if (isset($_GET['first'])) {
         $firstletter = $_GET['first'];
-        $qry = "SELECT code, intitule
-                FROM cours WHERE LEFT(intitule,1) = '".mysql_real_escape_string($firstletter)."'";
+        $qry = "SELECT code, title FROM course 
+                WHERE LEFT(title,1) = '".mysql_real_escape_string($firstletter)."'";
     } else {
-        $qry = "SELECT code, intitule FROM cours";
+        $qry = "SELECT code, title FROM course";
     }
 
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
@@ -329,7 +329,7 @@ $tool_content .= '<br />';
         } else { 
                 $selected = ''; 
         }
-        $cours_opts .= '<option '.$selected.' value="'.$row["code"].'">'.$row['intitule']."</option>\n";
+        $cours_opts .= '<option '.$selected.' value="'.$row["code"].'">'.$row['title']."</option>\n";
     }
 
     //possible time intervals
@@ -373,5 +373,4 @@ $tool_content .= '<br />';
     </table>
     </form>';
 }
-
 draw($tool_content, 3, null, $local_head);

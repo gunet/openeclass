@@ -291,7 +291,7 @@ function create_username($statut, $departments, $nom, $prenom, $prefix)
 function register($uid, $course_code)
 {
         $code = autoquote($course_code);
-        $req = db_query("SELECT code, cours_id FROM cours WHERE code=$code OR fake_code=$code");
+        $req = db_query("SELECT code, id FROM course WHERE code=$code OR public_code=$code");
         if ($req and mysql_num_rows($req) > 0) {
                 list($code, $cid) = mysql_fetch_row($req);
                 db_query("INSERT INTO cours_user SET cours_id = $cid, user_id = $uid, statut = 5,
@@ -300,4 +300,3 @@ function register($uid, $course_code)
         }
         return false;
 }
-

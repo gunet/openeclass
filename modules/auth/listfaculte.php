@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -45,13 +45,12 @@ foreach ($tree_array as $key => $value)
     $trclass = ($k%2 == 0) ? 'even' : 'odd';
     $colspan = $maxdepth[0] - $depthmap[$key] + 1;
     $n = db_query("SELECT COUNT(*) 
-                     FROM cours, course_department 
-                    WHERE cours.cours_id = course_department.course 
+                     FROM course, course_department 
+                    WHERE course.id = course_department.course 
                       AND course_department.department = $key");
     $r = mysql_fetch_array($n);
-    
-    
-    $tool_content .= "\n  <tr class='$trclass'>";
+        
+    $tool_content .= "<tr class='$trclass'>";
     $tool_content .= "<th width='16'><img src='$themeimg/arrow.png' alt='arrow' /></th>";
 
     for ($i = 1; $i <= $depthmap[$key]-1; $i++) // extra -1 because we do not display root
@@ -64,6 +63,5 @@ foreach ($tree_array as $key => $value)
 }
 
 $tool_content .= "</table>";
-
 
 draw($tool_content, (isset($uid) and $uid)? 1: 0);

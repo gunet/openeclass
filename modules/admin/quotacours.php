@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -63,7 +63,7 @@ if (isset($_POST['submit']))  {
         $gq = $_POST['gq'] * MB;
         $drq = $_POST['drq'] * MB;
   // Update query
-	$sql = db_query("UPDATE cours SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
+	$sql = db_query("UPDATE course SET doc_quota='$dq', video_quota='$vq', group_quota='$gq', dropbox_quota='$drq'
 			WHERE code = ".autoquote($_GET['c']));
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
@@ -77,9 +77,9 @@ if (isset($_POST['submit']))  {
 }
 // Display edit form for course quota
 else {
-	$q = mysql_fetch_array(db_query("SELECT code, intitule, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM cours WHERE code = ".autoquote($_GET['c'])));
-	$quota_info .= $langTheCourse." <b>".q($q['intitule'])."</b> ".$langMaxQuota;
+	$q = mysql_fetch_array(db_query("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM course WHERE code = ".autoquote($_GET['c'])));
+	$quota_info .= $langTheCourse." <b>".q($q['title'])."</b> ".$langMaxQuota;
 	$dq = $q['doc_quota'] / MB;
 	$vq = $q['video_quota'] / MB;
 	$gq = $q['group_quota'] / MB;

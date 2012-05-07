@@ -74,11 +74,13 @@ if (isset($_REQUEST['toolStatus']) ) {
         }
 
         //reset all tools
-        db_query("UPDATE modules SET `visible` = 0 WHERE course_id = ". course_code_to_id($currentCourseID));
+        db_query("UPDATE course_module SET `visible` = 0
+                         WHERE course_id = ". course_code_to_id($currentCourseID));
         //and activate the ones the professor wants active, if any
         if ($loopCount > 0) {
-                db_query("UPDATE modules SET visible = 1 WHERE $tool_id AND
-                                course_id = ". course_code_to_id($currentCourseID));
+                db_query("UPDATE course_module SET visible = 1
+                                 WHERE $tool_id AND
+                                       course_id = ". course_code_to_id($currentCourseID));
         }        
 }
 

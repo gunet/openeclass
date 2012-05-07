@@ -41,10 +41,10 @@ $tool_content .= "<table class='tbl_1' width='100%'>
 
   mysql_select_db($mysqlMainDb);
 
-  $a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible != ".COURSE_INACTIVE));
-  $a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible = ".COURSE_OPEN));
-  $a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible = ".COURSE_REGISTRATION));
-  $a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM cours WHERE visible = ".COURSE_CLOSED));
+  $a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible != ".COURSE_INACTIVE));
+  $a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_OPEN));
+  $a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_REGISTRATION));
+  $a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_CLOSED));
 
   $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
   <ul>

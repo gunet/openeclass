@@ -36,7 +36,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 if (isset($from_reg)) {
-	$intitule = course_id_to_title($cours_id);
+	$title = course_id_to_title($cours_id);
 }
 $nameTools = $langContactProf;
 
@@ -112,8 +112,8 @@ function email_profs($cours_id, $content, $from_name, $from_address)
 {
         global $themeimg, $langSendingMessage, $langHeaderMessage, $langContactIntro;
 
-        $q = db_query("SELECT fake_code FROM cours WHERE cours_id = $cours_id");
-        list($fake_code) = mysql_fetch_row($q);
+        $q = db_query("SELECT public_code FROM course WHERE id = $cours_id");
+        list($public_code) = mysql_fetch_row($q);
 
 	$ret = "<p>$langSendingMessage</p><br />";
 
@@ -124,7 +124,7 @@ function email_profs($cours_id, $content, $from_name, $from_address)
 
 	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
-	$subject = "$langHeaderMessage ($fake_code - $GLOBALS[intitule])";
+	$subject = "$langHeaderMessage ($fake_code - $GLOBALS[title])";
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];

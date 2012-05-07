@@ -74,16 +74,16 @@ $tool_content .= "<table width=100% class='tbl_border'>
 
 $tool_content .= departmentChildren($fc, 'opencourses');
 
-$result = db_query("SELECT cours.code k,
-                           cours.fake_code c,
-                           cours.intitule i,
-                           cours.visible visible,
-                           cours.titulaires t
-                      FROM cours, course_department
-                     WHERE cours.cours_id = course_department.course
+$result = db_query("SELECT course.code k,
+                           course.public_code c,
+                           course.title i,
+                           course.visible visible,
+                           course.prof_names t
+                      FROM course, course_department
+                     WHERE course.id = course_department.course
                        AND course_department.department = $fc 
-                       AND cours.visible != ".COURSE_INACTIVE."
-                  ORDER BY cours.intitule, cours.titulaires");
+                       AND course.visible != ".COURSE_INACTIVE."
+                  ORDER BY course.title, course.prof_names");
 
 if (mysql_num_rows($result) > 0) {
     $tool_content .= "
@@ -151,9 +151,9 @@ draw($tool_content, (isset($uid) and $uid)? 1: 0);
     <th><div align='right'>";
 // get the different course types available for this faculte
 $typessql = "SELECT DISTINCT course_type.name as types 
-                        FROM cours, course_department, course_is_type, course_type
-                        WHERE cours.cours_id = course_department.course
-                          AND cours.cours_id = course_is_type.course
+                        FROM course, course_department, course_is_type, course_type
+                        WHERE course.id = course_department.course
+                          AND course.id = course_is_type.course
                           AND course_type.id = course_is_type.course_type
                           AND course_department.department = $fc 
                         ORDER BY course_type.id";
@@ -199,19 +199,19 @@ if ($numoftypes > 0) {
             $ts = $t . "s";
             $t = substr($t, strlen("lang"), strlen($t));
         }
-        $result = db_query("SELECT cours.code k,
-                                   cours.fake_code c,
-                                   cours.intitule i,
-                                   cours.visible visible,
-                                   cours.titulaires t
-                            FROM cours, course_department, course_is_type, course_type
-                            WHERE cours.cours_id = course_department.course
-                              AND cours.cours_id = course_is_type.course
+        $result = db_query("SELECT course.code k,
+                                   course.public_code c,
+                                   course.title i,
+                                   course.visible visible,
+                                   course.prof_names t
+                            FROM course, course_department, course_is_type, course_type
+                            WHERE course.id = course_department.course
+                              AND course.id = course_is_type.course
                               AND course_type.id = course_is_type.course_type
                               AND course_department.department = $fc 
                               AND course_type.name = '".$typesArray['types']."'
-                              AND cours.visible != ".COURSE_INACTIVE."
-                            ORDER BY cours.intitule, cours.titulaires");
+                              AND course.visible != ".COURSE_INACTIVE."
+                            ORDER BY course.title, course.prof_names");
     
         $tool_content .= "\n\n\n
            <table width=100% class='tbl_course_type'>

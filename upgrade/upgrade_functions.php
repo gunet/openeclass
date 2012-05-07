@@ -1014,7 +1014,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 SELECT $course_id, lien, rubrique, -1 FROM accueil
                         WHERE define_var = 'HTML_PAGE'", $code);
         
-        $q2 = db_query("INSERT INTO `$mysqlMainDb`.modules
+        $q2 = db_query("INSERT INTO `$mysqlMainDb`.course_module
                         (module_id, visible, course_id) 
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -60,7 +60,7 @@ $langPleaseWait</div>
         $stud_sum = 0;
         $vis_sum = 0;
 
-        $sql = "SELECT count(idLog) as sum_id FROM loginout WHERE `when` >= '$prev_month' AND `when`< '$current_month' AND action='LOGIN'";
+        $sql = "SELECT COUNT(idLog) as sum_id FROM loginout WHERE `when` >= '$prev_month' AND `when`< '$current_month' AND action='LOGIN'";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $login_sum = $row['sum_id'];
@@ -69,7 +69,7 @@ $langPleaseWait</div>
         mysql_free_result($result);
         if (!isset($cours_sum)) {$cours_sum = 0;}
 
-        $sql = "SELECT count(cours_id) as cours_sum FROM cours";
+        $sql = "SELECT COUNT(id) as cours_sum FROM course";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $cours_sum = $row['cours_sum'];
@@ -77,7 +77,7 @@ $langPleaseWait</div>
         mysql_free_result($result);
         if (!isset($cours_sum)) {$cours_sum = 0;}
 
-        $sql = "SELECT count(user_id) as prof_sum FROM user WHERE statut=1";
+        $sql = "SELECT COUNT(user_id) as prof_sum FROM user WHERE statut=1";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $prof_sum = $row['prof_sum'];
@@ -85,7 +85,7 @@ $langPleaseWait</div>
         mysql_free_result($result);
         if (!isset($prof_sum)) {$prof_sum = 0;}
 
-        $sql = "SELECT count(user_id) as stud_sum FROM user WHERE statut=5";
+        $sql = "SELECT COUNT(user_id) as stud_sum FROM user WHERE statut=5";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $stud_sum = $row['stud_sum'];
@@ -93,7 +93,7 @@ $langPleaseWait</div>
         mysql_free_result($result);
         if (!isset($stud_sum)) {$stud_sum = 0;}
 
-        $sql = "SELECT count(user_id) as vis_sum FROM user WHERE statut=10";
+        $sql = "SELECT COUNT(user_id) as vis_sum FROM user WHERE statut=10";
         $result = db_query($sql, $mysqlMainDb);
         while ($row = mysql_fetch_assoc($result)) {
             $vis_sum = $row['vis_sum'];
@@ -109,25 +109,17 @@ $langPleaseWait</div>
 		<th>".$langTeacher."</th>
 		<th>".$langNbUsers."</th></tr>";
 
-        $sql = "SELECT cours.intitule AS name,
-                       cours.visible AS visible,
-                       cours.type AS type,
+        $sql = "SELECT course.title AS name,
+                       course.visible AS visible,                       
                        hierarchy.name AS dept,
-                       cours.titulaires AS proff,
-                       count(user_id) AS cnt
-                FROM cours JOIN course_department ON cours.cours_id = course_department.course
+                       course.prof_names AS proff,
+                       COUNT(user_id) AS cnt
+                FROM course JOIN course_department ON course.id = course_department.course
                            JOIN hierarchy ON hierarchy.id = course_department.department
-                           LEFT JOIN cours_user ON cours.cours_id = cours_user.cours_id
-                GROUP BY cours.cours_id ";
-        $result = db_query($sql, $mysqlMainDb);
-        while ($row = mysql_fetch_assoc($result)) {
-            // declare course type
-            if ($row['type'] == 'pre') {
-              $ctype = $langpre;
-            }
-            else {
-              $ctype = $langpost;
-            }
+                           LEFT JOIN cours_user ON course.id = cours_user.cours_id
+                GROUP BY course.id ";
+        $result = db_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {            
             //declare visibility
             if ($row['visible'] == 0) {
               $cvisible = $langTypeClosed;

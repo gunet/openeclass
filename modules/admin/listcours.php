@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,7 +61,7 @@ $caption = "";
 // Initialize some variables
 $searchurl = "";
 // Manage list limits
-$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM cours"));
+$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course"));
 $fulllistsize = $countcourses['cnt'];
 
 define ('COURSES_PER_PAGE', 15);
@@ -97,10 +97,10 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	// Search for courses
 	$searchcours=array();
 	if(!empty($searchtitle)) {
-		$searchcours[] = "intitule LIKE " . quote('%' . $searchtitle . '%');
+		$searchcours[] = "title LIKE " . quote('%' . $searchtitle . '%');
 	}
 	if(!empty($searchcode)) {
-		$searchcours[] = "cours.code LIKE " . quote('%' . $searchcode . '%');
+		$searchcours[] = "course.code LIKE " . quote('%' . $searchcode . '%');
 	}
 	if ($searchtype != "-1") {
 		$searchcours[] = "visible = $searchtype";
@@ -110,27 +110,27 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
-                $sql = db_query("SELECT DISTINCT cours.code, intitule, titulaires, visible, cours_id
-                                   FROM cours, course_department, hierarchy
-                                  WHERE cours.cours_id = course_department.course
+                $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+                                   FROM course, course_department, hierarchy
+                                  WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department AND $query
-                               ORDER BY code");
+                               ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
-                $sql = db_query("SELECT DISTINCT cours.code, intitule, titulaires, visible, cours_id
-                                   FROM cours, course_department, hierarchy
-                                  WHERE cours.cours_id = course_department.course
+                $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+                                   FROM course, course_department, hierarchy
+                                  WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department
-                               ORDER BY code");
+                               ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
 // Normal list, no search, select all courses
 else {
-	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM cours"));
+	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM course"));
 	$caption .= $langManyExist.": <b>".$a[0]." $langCourses</b>";
-        $sql = db_query("SELECT cours.code, intitule, titulaires, visible, cours_id
-                           FROM cours
+        $sql = db_query("SELECT code, title, prof_names, visible, id
+                           FROM course
                        ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
         
         //$tool_content .= "<p class='success'>".$caption."</p>";
@@ -165,20 +165,18 @@ $k = 0;
 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	$logs = mysql_fetch_array($sql);
 	if ($k%2 == 0) {
-		$tool_content .= "
-    <tr class=\"even\">";
+		$tool_content .= "<tr class='even'>";
 	} else {
-		$tool_content .= "
-    <tr class=\"odd\">";
+		$tool_content .= "<tr class='odd'>";
 	}
 
 	$tool_content .= "
-      <td width='1'>
-	<img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
-      <td><a href='{$urlServer}courses/".$logs['code']."/'><b>".q($logs['intitule'])."</b>
-	</a> (".q($logs['code']).")<br /><i>".q($logs['titulaires'])."</i>
-      </td>
-      <td align='center'>";
+        <td width='1'>
+                <img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
+        <td><a href='{$urlServer}courses/".$logs['code']."/'><b>".q($logs['title'])."</b>
+                </a> (".q($logs['code']).")<br /><i>".q($logs['prof_names'])."</i>
+        </td>
+        <td align='center'>";
 	// Define course type
 	switch ($logs['visible']) {
                 case COURSE_CLOSED:
@@ -198,7 +196,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
       </td>
       <td class='smaller'>";
         
-        $departments = $course->getDepartmentIds($logs['cours_id']);
+        $departments = $course->getDepartmentIds($logs['id']);
         $i = 1;
         foreach ($departments as $dep) {
             $br = ($i < count($departments)) ? '<br/>' : '';
@@ -210,9 +208,9 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center' width='40'>
-        <a href='listusers.php?c=".$logs['cours_id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
+        <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
         <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
-        <a href='delcours.php?c=".$logs['cours_id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
+        <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
       </td>";
 	$k++;
 }

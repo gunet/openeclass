@@ -43,15 +43,15 @@ $nameTools = $langMyAgenda;
 if (isset($uid)) {
         $year = '';
         $month = '';
- 	$query = db_query("SELECT cours.code k, cours.fake_code fc,
-                             cours.intitule i, cours.titulaires t, cours.cours_id id
-	                        FROM cours, cours_user, modules
-	                        WHERE cours.cours_id = cours_user.cours_id
-                                AND cours.visible != ".COURSE_INACTIVE."
+ 	$query = db_query("SELECT course.code k, course.public_code fc,
+                             course.title i, course.prof_names t, course.id id
+	                        FROM course, cours_user, course_module
+	                        WHERE course.id = cours_user.cours_id
+                                AND course.visible != ".COURSE_INACTIVE."
 	                        AND cours_user.user_id = $uid
-                                AND modules.module_id  = ".MODULE_ID_AGENDA."
-                                AND modules.visible = 1
-                                AND modules.course_id = cours.cours_id");
+                                AND course_module.module_id  = ".MODULE_ID_AGENDA."
+                                AND course_module.visible = 1
+                                AND course_module.course_id = course.id");
         $today = getdate();
         if (isset($_GET['year'])) {
                 $year = intval($_GET['year']);

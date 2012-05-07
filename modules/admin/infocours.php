@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,15 +62,13 @@ $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 $navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
-// Initialise $tool_content
-$tool_content = "";
 
 // Update cours basic information
 if (isset($_POST['submit']))  {
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
 	// Update query
-	db_query("UPDATE cours SET titulaires = ".autoquote($_POST['titulaires']).",
-                                   intitule = ".autoquote($_POST['intitule'])."
+	db_query("UPDATE course SET title = ".autoquote($_POST['title']).",
+                                   prof_names = ".autoquote($_POST['prof_names'])."
                                WHERE code = ".autoquote($_GET['c']));
         $course->refresh(course_code_to_id($_GET['c']), null, $departments);
 	
@@ -79,9 +77,9 @@ if (isset($_POST['submit']))  {
 }
 // Display edit form for course basic information
 else {
-        $sql = "SELECT cours.code, cours.intitule, cours.titulaires, cours.cours_id
-		  FROM cours
-		 WHERE cours.code = '".mysql_real_escape_string($_GET['c'])."'";
+        $sql = "SELECT course.code, course.title, course.prof_names, course.id
+		  FROM course
+		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
         $row = mysql_fetch_array(db_query($sql));
 	$tool_content .= "
 	<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method='post' onsubmit='return validateNodePickerForm();'>
@@ -98,11 +96,11 @@ else {
 	</tr>
 	<tr>
 	  <th>".$langTitle.":</b></th>
-	  <td><input type='text' name='intitule' value='".$row['intitule']."' size='60'></td>
+	  <td><input type='text' name='title' value='".$row['title']."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>".$langTeacher.":</th>
-	  <td><input type='text' name='titulaires' value='".$row['titulaires']."' size='60'></td>
+	  <td><input type='text' name='prof_names' value='".$row['prof_names']."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
@@ -118,6 +116,6 @@ if (isset($_GET['c'])) {
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<p align='right'><a href=\"index.php\">".$langBackAdmin."</a></p>";
+	$tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
 }
 draw($tool_content, 3, null, $head_content);

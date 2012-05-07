@@ -137,7 +137,7 @@ function delete_users($date = '') {
 function delete_announcements() {
 	global $cours_id, $langAnnDeleted;
 
-	db_query("DELETE FROM announcements WHERE course_id = $cours_id");
+	db_query("DELETE FROM announcement WHERE course_id = $cours_id");
 	return "<p>$langAnnDeleted</p>";
 }
 
@@ -158,7 +158,7 @@ function hide_doc()  {
 function hide_work()  {
 	global $langWorksDeleted, $cours_id;
 
-	db_query("UPDATE assignments SET active=0 WHERE course_id = $cours_id");
+	db_query("UPDATE assignment SET active=0 WHERE course_id = $cours_id");
 	return "<p>$langWorksDeleted</p>";
 }
 

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -25,8 +25,6 @@ include '../../include/baseTheme.php';
 $nameTools = $langUnregCourse;
 
 $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
-
-$tool_content = "";
 
 if (isset($_GET['cid'])) {
   $cid = $_GET['cid'];
@@ -77,4 +75,3 @@ if (isset($_SESSION['uid'])) {
 } else {
         draw($tool_content, 0);
 }
-?>

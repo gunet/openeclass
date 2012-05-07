@@ -67,17 +67,17 @@ function cours_table_end()
 }
 
 $status = array();
-$sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
-                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+$sql = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
+                        course.title title, course.prof_names profs, cours_user.statut statut
+                FROM course JOIN cours_user ON course.id = cours_user.cours_id
                 WHERE cours_user.user_id = $uid        
-                ORDER BY statut, cours.intitule, cours.titulaires";
-$sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
-                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
+                ORDER BY statut, course.title, course.prof_names";
+$sql2 = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
+                        course.title title, course.prof_names profs, cours_user.statut statut
+                FROM course JOIN cours_user ON course.id = cours_user.cours_id
                 WHERE cours_user.user_id = $uid
-                AND cours.visible != ".COURSE_INACTIVE."
-                ORDER BY statut, cours.intitule, cours.titulaires";
+                AND course.visible != ".COURSE_INACTIVE."
+                ORDER BY statut, course.title, course.prof_names";
 
 if ($_SESSION['statut'] == 1) {
         $result2 = db_query($sql);
@@ -146,15 +146,15 @@ if (count($status) > 0) {
         $table_begin = true;
         foreach ($status as $code => $code_statut) {
                 $cid = $cours_id_map[$code];
-                $result = db_query("SELECT announcements.id, content, `date`, title
-                                FROM announcements, modules
-                                WHERE announcements.course_id = $cid
-				AND announcements.visibility = 'v'
-                                AND announcements.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
-                                AND modules.module_id = ".MODULE_ID_ANNOUNCE."
-                                AND modules.visible = 1
-                                AND modules.course_id = $cid
-                                ORDER BY announcements.`date` DESC");
+                $result = db_query("SELECT announcement.id, content, `date`, title
+                                FROM announcement, course_module
+                                WHERE announcement.course_id = $cid
+				AND announcement.visibility = 'v'
+                                AND announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
+                                AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
+                                AND course_module.visible = 1
+                                AND course_module.course_id = $cid
+                                ORDER BY announcement.`date` DESC");
 
                 if ($result and mysql_num_rows($result) > 0) {
                         if ($table_begin) {

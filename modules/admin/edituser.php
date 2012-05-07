@@ -273,11 +273,11 @@ $tool_content .= "
      </fieldset>
      </form>";
 
-	$sql = db_query("SELECT a.code, a.intitule, a.cours_id, a.visible, b.reg_date, b.statut
-                                FROM cours AS a 
-                                JOIN course_department ON a.cours_id = course_department.course
+	$sql = db_query("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.statut
+                                FROM course AS a 
+                                JOIN course_department ON a.id = course_department.course
                                 JOIN hierarchy ON course_department.department = hierarchy.id
-                                LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                LEFT JOIN cours_user AS b ON a.id = b.cours_id
                                 WHERE b.user_id = $u ORDER BY b.statut, hierarchy.name");
 
 		// user is registered to courses
@@ -400,7 +400,7 @@ $tool_content .= "
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ." 
-													WHERE user_id = ".intval($u);
+                                       WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
                         $userObj->refresh(intval($u), $departments);
                         if (!$qry) {

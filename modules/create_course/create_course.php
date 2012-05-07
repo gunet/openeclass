@@ -96,7 +96,7 @@ function escape_if_exists($name) {
                 $GLOBALS[$name . '_html'] = $GLOBALS[$name] = '';
         }
 }
-escape_if_exists('intitule');
+escape_if_exists('title');
 escape_if_exists('titulaires');
 escape_if_exists('type');
 escape_if_exists('languageCourse');
@@ -117,7 +117,7 @@ if (empty($titulaires)) {
         $titulaires = $titulaire_probable;
 }
 
-$tool_content .= $intitule_html .
+$tool_content .= $title_html .
                  $faculte_html .
                  $titulaires_html .
                  $type_html .
@@ -135,7 +135,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         <table class='tbl' width='100%'>
 	<tr>
 	  <th>$langTitle:</th>
-	  <td><input type='text' name='intitule' size='60' value='".@$intitule."' /></td>
+	  <td><input type='text' name='title' size='60' value='".@$title."' /></td>
 	  <td class='smaller'>$langEx</td>
 	</tr>
 	<tr>
@@ -350,20 +350,20 @@ if (isset($_POST['create_course'])) {
         $video_quota = get_config('video_quota');
         $dropbox_quota = get_config('dropbox_quota');
         
-        db_query("INSERT INTO cours SET
+        db_query("INSERT INTO course SET
                         code = ".quote($code) . ",
-                        languageCourse =" . quote($language) . ",
-                        intitule = " . quote($intitule) . ",
-                        course_keywords = " . quote($course_keywords) . ",
+                        lang =" . quote($language) . ",
+                        title = " . quote($title) . ",
+                        keywords = " . quote($course_keywords) . ",
                         visible = " . quote($formvisible) . ",
-                        titulaires = " . quote($titulaires) . ",
-                        fake_code = " . quote($code) . ",
+                        prof_names = " . quote($titulaires) . ",
+                        public_code = " . quote($code) . ",
                         doc_quota = $doc_quota*1024*1024,
                         video_quota = $video_quota*1024*1024,
                         group_quota = $group_quota*1024*1024,
                         dropbox_quota = $dropbox_quota*1024*1024,
                         password = " . quote($password) . ",
-                        first_create = NOW()");
+                        created = NOW()");
         $new_course_id = mysql_insert_id();
         
         
@@ -420,7 +420,7 @@ if (isset($_POST['create_course'])) {
 	}
         // --------------------------------------------------
         $tool_content .= "
-                <p class='success'><b>$langJustCreated:</b> $intitule<br>
+                <p class='success'><b>$langJustCreated:</b> $title<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
                 <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
 } // end of submit
@@ -434,23 +434,23 @@ draw($tool_content, 1, null, $head_content);
 // ---------------------------------------------
 function create_modules($cid, $sbsystems) {
 
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", ".$sbsystems[MODULE_ID_AGENDA].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.", ".$sbsystems[MODULE_ID_LINKS].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DOCS.", ".$sbsystems[MODULE_ID_DOCS].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_VIDEO.", ".$sbsystems[MODULE_ID_VIDEO].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_ASSIGN.", ".$sbsystems[MODULE_ID_ASSIGN].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_ANNOUNCE.", ".$sbsystems[MODULE_ID_ANNOUNCE].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_FORUM.", ".$sbsystems[MODULE_ID_FORUM].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_EXERCISE.", ".$sbsystems[MODULE_ID_EXERCISE].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_GROUPS.", ".$sbsystems[MODULE_ID_GROUPS].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DROPBOX.", ".$sbsystems[MODULE_ID_DROPBOX].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_GLOSSARY.", ".$sbsystems[MODULE_ID_GLOSSARY].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_EBOOK.", ".$sbsystems[MODULE_ID_EBOOK].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_CHAT.", ".$sbsystems[MODULE_ID_CHAT].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_DESCRIPTION.", ".$sbsystems[MODULE_ID_DESCRIPTION].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.", ".$sbsystems[MODULE_ID_QUESTIONNAIRE].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_LP.", ".$sbsystems[MODULE_ID_LP].", $cid)");
-        db_query("INSERT INTO modules (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");        
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", ".$sbsystems[MODULE_ID_AGENDA].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_LINKS.", ".$sbsystems[MODULE_ID_LINKS].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_DOCS.", ".$sbsystems[MODULE_ID_DOCS].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_VIDEO.", ".$sbsystems[MODULE_ID_VIDEO].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_ASSIGN.", ".$sbsystems[MODULE_ID_ASSIGN].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_ANNOUNCE.", ".$sbsystems[MODULE_ID_ANNOUNCE].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_FORUM.", ".$sbsystems[MODULE_ID_FORUM].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_EXERCISE.", ".$sbsystems[MODULE_ID_EXERCISE].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_GROUPS.", ".$sbsystems[MODULE_ID_GROUPS].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_DROPBOX.", ".$sbsystems[MODULE_ID_DROPBOX].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_GLOSSARY.", ".$sbsystems[MODULE_ID_GLOSSARY].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_EBOOK.", ".$sbsystems[MODULE_ID_EBOOK].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_CHAT.", ".$sbsystems[MODULE_ID_CHAT].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_DESCRIPTION.", ".$sbsystems[MODULE_ID_DESCRIPTION].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.", ".$sbsystems[MODULE_ID_QUESTIONNAIRE].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_LP.", ".$sbsystems[MODULE_ID_LP].", $cid)");
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");        
 }
 
 // ----------------------------------------

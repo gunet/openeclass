@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -57,7 +57,7 @@ $navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), 
 // Update course status
 if (isset($_POST['submit']))  {
   // Update query
-	$sql = db_query("UPDATE cours SET visible='$_POST[formvisible]'
+	$sql = db_query("UPDATE course SET visible='$_POST[formvisible]'
 			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {
@@ -72,7 +72,7 @@ if (isset($_POST['submit']))  {
 // Display edit form for course status
 else {
 	// Get course information
-	$row = mysql_fetch_array(db_query("SELECT * FROM cours
+	$row = mysql_fetch_array(db_query("SELECT * FROM course
 		WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";

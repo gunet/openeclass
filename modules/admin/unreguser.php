@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -87,11 +87,11 @@ if (!$doit) {
                                         if ($s > 0) {
                                                 //display list
                                                 $tool_content .= "$langUnregFirst <br/ ><br />";
-                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a 
-                                                                        JOIN course_department ON a.cours_id = course_department.course
+                                                $sql = db_query("SELECT a.code, a.title, b.statut, a.id
+                                                                        FROM course AS a 
+                                                                        JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                        LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                        LEFT JOIN cours_user AS b ON a.id = b.cours_id
                                                                         WHERE b.user_id = $u AND b.tutor = 0
                                                                         ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -102,7 +102,7 @@ if (!$doit) {
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
                                                                 $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
-                                                                        htmlspecialchars($logs['intitule'])."</td><td align='center'>";
+                                                                        htmlspecialchars($logs['title'])."</td><td align='center'>";
                                                                 switch ($logs[4])
                                                                 {
                                                                         case '1':
@@ -123,11 +123,11 @@ if (!$doit) {
                                                 }
                                         } else {
                                                 $tool_content .= "$langUnregTeacher<br />";
-                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a 
-                                                                        JOIN course_department ON a.cours_id = course_department.course
+                                                $sql = db_query("SELECT a.code, a.title, b.statut, a.id
+                                                                        FROM course AS a 
+                                                                        JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                        LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                        LEFT JOIN cours_user AS b ON a.id = b.cours_id
                                                                         WHERE b.user_id = $u AND b.statut = 1
                                                                         ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -149,11 +149,11 @@ if (!$doit) {
                                 } else {
                                         // display list
                                         $tool_content .= "$langUnregFirst <br /><br />";
-                                        $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                FROM cours AS a 
-                                                                JOIN course_department ON a.cours_id = course_department.course
+                                        $sql = db_query("SELECT a.code, a.title, b.statut, a.id
+                                                                FROM course AS a 
+                                                                JOIN course_department ON a.id = course_department.course
                                                                 JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
+                                                                LEFT JOIN cours_user AS b ON a.id = b.cours_id
                                                                 WHERE b.user_id = $u
                                                                 ORDER BY b.statut, hierarchy.name");
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -164,7 +164,7 @@ if (!$doit) {
                                                 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                         $logs = mysql_fetch_array($sql);
                                                         $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
-                                                                htmlspecialchars($logs['intitule'])."</td><td align=\"center\">";
+                                                                htmlspecialchars($logs['title'])."</td><td align=\"center\">";
                                                         switch ($logs['statut']) {
                                                                 case 1:
                                                                         $tool_content .= $langTeacher;

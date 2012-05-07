@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -45,7 +45,7 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 if ($u_module_id != -1) {
-    $mod_where = " (modules.module_id = '$u_module_id') ";
+    $mod_where = " (course_module.module_id = '$u_module_id') ";
 } else {
     $mod_where = " (1) ";
 }
@@ -139,7 +139,7 @@ switch ($u_stats_value) {
     break;
     case "duration":        
             $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur
-                FROM actions, modules WHERE actions.module_id = modules.module_id
+                FROM actions, course_module WHERE actions.module_id = course_module.module_id
                 AND $date_where 
                 AND $mod_where
                 AND actions.course_id = $cours_id

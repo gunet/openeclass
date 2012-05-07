@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,7 +40,6 @@ include '../../include/baseTheme.php';
 $nameTools = $langUsersCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-$tool_content = '';
 $tool_content .= "
   <div id=\"operations_container\">
     <ul id=\"opslist\">
@@ -68,10 +67,10 @@ if ($language == 'greek') {
 
         //make chart
         require_once '../../include/libchart/libchart.php';
-        $query = "SELECT cours.intitule AS name, count(user_id) AS cnt FROM cours_user LEFT JOIN cours ON ".
-            " cours.cours_id = cours_user.cours_id GROUP BY cours.cours_id";
+        $query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM cours_user LEFT JOIN course ON ".
+            " course.id = cours_user.cours_id GROUP BY course.id";
 
-        $result = db_query($query, $mysqlMainDb);
+        $result = db_query($query);
         $chart = new VerticalBarChart(200, 300);
         while ($row = mysql_fetch_assoc($result)) {
               $chart->addPoint(new Point($row['name'], $row['cnt']));
@@ -89,15 +88,3 @@ if ($language == 'greek') {
     }
 
 draw($tool_content, 3, 'admin');
-/*
-if ($made_chart) {
-		while (ob_get_level() > 0) {
-  	   ob_end_flush();
-  	}
-    ob_flush();
-    flush();
-    sleep(5);
-    unlink ($webDir.$chart_path);
-}
-*/
-?>

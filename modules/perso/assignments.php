@@ -53,17 +53,17 @@ function getUserAssignments($param, $type)
 	$lesson_professor	= $param['lesson_professor'];
 
 	for ($i=0;$i<$max_repeat_val;$i++) {
-		$assignments_query[$i] = "SELECT DISTINCT assignments.id, assignments.title,
-                        assignments.description, assignments.deadline,
-                        cours.intitule,(TO_DAYS(assignments.deadline) - TO_DAYS(NOW())) AS days_left
-                        FROM assignments, cours, modules
+		$assignments_query[$i] = "SELECT DISTINCT assignment.id, assignment.title,
+                        assignment.description, assignment.deadline,
+                        course.title,(TO_DAYS(assignment.deadline) - TO_DAYS(NOW())) AS days_left
+                        FROM assignment, course, course_module
                         WHERE (TO_DAYS(deadline) - TO_DAYS(NOW())) >= '0'
-                        AND assignments.active = 1
-                        AND assignments.course_id = $lesson_id[$i]
-                        AND cours.cours_id = $lesson_id[$i]
-                        AND modules.course_id = cours.cours_id
-                        AND modules.visible = 1 AND modules.module_id = ".MODULE_ID_ASSIGN."                        
-                        ORDER BY assignments.deadline";
+                        AND assignment.active = 1
+                        AND assignment.course_id = $lesson_id[$i]
+                        AND course.id = $lesson_id[$i]
+                        AND course_module.course_id = course.id
+                        AND course_module.visible = 1 AND course_module.module_id = ".MODULE_ID_ASSIGN."
+                        ORDER BY assignment.deadline";
 	}
 
 	//initialise array to store all assignments from all lessons

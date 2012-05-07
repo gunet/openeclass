@@ -592,8 +592,8 @@ function get_learnPath_progress($lpid, $lpUid)
         }
         // find number of visible modules in this path
         $sqlnum = "SELECT COUNT(M.`module_id`)
-                    FROM `$mysqlMainDb`.`lp_rel_learnPath_module` AS LPM,
-                         `$mysqlMainDb`.`lp_module` AS M
+                    FROM `lp_rel_learnPath_module` AS LPM,
+                         `lp_module` AS M
                     WHERE LPM.`learnPath_id` = " . (int) $lpid . "
                     AND LPM.`visibility` = 'SHOW'
                     AND M.`contentType` != '" . CTLABEL_ . "'

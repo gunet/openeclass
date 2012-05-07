@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,17 +37,17 @@ if (!extension_loaded('gd')) {
 	$totalHits = 0;
         $totalDuration = 0;
 	require_once '../../include/libchart/libchart.php';
-        $sql = "SELECT a.code code, a.intitule intitule
-                FROM cours AS a LEFT JOIN cours_user AS b
-                     ON a.cours_id = b.cours_id
+        $sql = "SELECT a.code code, a.title title
+                FROM course AS a LEFT JOIN cours_user AS b
+                     ON a.id = b.cours_id
                 WHERE b.user_id = $uid 
                 AND a.visible != ".COURSE_INACTIVE."
-                ORDER BY a.intitule";
+                ORDER BY a.title";
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {  // found courses ?
 		while ($row = mysql_fetch_assoc($result)) {
 			$course_codes[] = $row['code'];
-			$course_names[$row['code']]=$row['intitule'];
+			$course_names[$row['code']]=$row['title'];
 		}
 		mysql_free_result($result);
 		foreach ($course_codes as $course_code) {

@@ -1066,7 +1066,7 @@ function visible_module($module_id) {
         
         $cid = course_code_to_id($currentCourseID);
 	
-	$v = mysql_fetch_array(db_query("SELECT visible FROM modules
+	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
                                 WHERE module_id = $module_id AND 
                                 course_id = $cid"));        
 
@@ -1397,7 +1397,7 @@ function ellipsize($string, $maxlen, $postfix = '...')
 function course_code_to_title($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT intitule FROM cours WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT title FROM course WHERE code='$code'", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1411,7 +1411,7 @@ function course_code_to_title($code)
 function course_code_to_id($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT cours_id FROM cours WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT id FROM course WHERE code='$code'", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1424,7 +1424,7 @@ function course_code_to_id($code)
 function course_id_to_title($cid)
 {
 	global $mysqlMainDb;
-        $r = db_query("SELECT intitule FROM cours WHERE cours_id = $cid", $mysqlMainDb);
+        $r = db_query("SELECT title FROM course WHERE id = $cid", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1437,7 +1437,7 @@ function course_id_to_title($cid)
 function course_id_to_code($cid)
 {
 	global $mysqlMainDb;
-        $r = db_query("SELECT code FROM cours WHERE cours_id = $cid ", $mysqlMainDb);
+        $r = db_query("SELECT code FROM course WHERE id = $cid ", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1450,7 +1450,7 @@ function course_id_to_code($cid)
 function course_id_to_fake_code($cid)
 {
 	global $mysqlMainDb;
-        $r = db_query("SELECT fake_code FROM cours WHERE cours_id = $cid ", $mysqlMainDb);
+        $r = db_query("SELECT public_code FROM course WHERE id = $cid ", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1467,7 +1467,7 @@ function delete_course($cid)
 	$course_code = course_id_to_code($cid);	
 
         mysql_select_db($mysqlMainDb);
-	db_query("DELETE FROM announcements WHERE course_id = $cid");
+	db_query("DELETE FROM announcement WHERE course_id = $cid");
 	db_query("DELETE FROM document WHERE course_id = $cid");
         db_query("DELETE FROM ebook_subsection WHERE section_id IN
                          (SELECT ebook_section.id FROM ebook_section, ebook
@@ -1491,7 +1491,7 @@ function delete_course($cid)
 	db_query("DELETE FROM cours_user WHERE cours_id = $cid");
         db_query("DELETE FROM course_is_type WHERE course = $cid");
         db_query("DELETE FROM course_department WHERE course = $cid");
-	db_query("DELETE FROM cours WHERE cours_id = $cid");
+	db_query("DELETE FROM course WHERE id = $cid");
 	db_query("DELETE FROM video WHERE course_id = $cid");
 	db_query("DELETE FROM videolinks WHERE course_id = $cid");
 	db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
@@ -1518,7 +1518,7 @@ function delete_course($cid)
 	db_query("DELETE FROM question WHERE course_id = $cid");
 	db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
 	db_query("DELETE FROM exercise WHERE course_id = $cid");
-        db_query("DELETE FROM modules WHERE course_id = $cid");
+        db_query("DELETE FROM course_module WHERE course_id = $cid");
 
         $garbage = "${webDir}courses/garbage";
         if (!is_dir($garbage)) {
@@ -1915,8 +1915,8 @@ function get_glossary_terms($cours_id)
 {
 	global $mysqlMainDb;
 
-        list($expand) = mysql_fetch_row(db_query("SELECT expand_glossary FROM `$mysqlMainDb`.cours
-                                                         WHERE cours_id = $cours_id"));
+        list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM `$mysqlMainDb`.course
+                                                         WHERE id = $cours_id"));
         if (!$expand) {
                 return false;
         }
@@ -2161,7 +2161,7 @@ function check_inactive_course($course_id)
 {
         global $mysqlMainDb;
         
-        $res = db_query("SELECT visible FROM cours WHERE cours_id = $course_id", $mysqlMainDb);
+        $res = db_query("SELECT visible FROM course WHERE id = $course_id", $mysqlMainDb);
         $g = mysql_fetch_row($res);
         if ($g[0] == COURSE_INACTIVE) {
                 return TRUE;

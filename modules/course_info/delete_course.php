@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -26,7 +26,7 @@ $nameTools = $langDelCourse;
 
 if(isset($_POST['delete'])) {
     delete_course($cours_id);
-    $tool_content .= "<p class='success_small'>$langTheCourse <b>($intitule $currentCourseID)</b> $langHasDel</p>
+    $tool_content .= "<p class='success_small'>$langTheCourse <b>($title $currentCourseID)</b> $langHasDel</p>
                       <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
     unset($currentCourseID);
     unset($_SESSION['dbname']);
@@ -37,7 +37,7 @@ if(isset($_POST['delete'])) {
     <table class='tbl'>
     <tr>
     <td class='caution_NoBorder' height='60' colspan='3'>
-            <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
+            <p>$langByDel_A <b>$title ($currentCourseID) </b>&nbsp;?  </p>
     </td>
     </tr>
     <tr>

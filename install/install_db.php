@@ -59,9 +59,9 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // create tables
 
 #
-# table `modules`
+# table `course_module`
 #
-db_query("CREATE TABLE IF NOT EXISTS `modules` (
+db_query("CREATE TABLE IF NOT EXISTS `course_module` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL,
   `visible` tinyint(4) NOT NULL,
@@ -73,7 +73,7 @@ db_query("CREATE TABLE IF NOT EXISTS `modules` (
 #
 # table `announcements`
 #
-db_query("CREATE TABLE announcements (
+db_query("CREATE TABLE announcement (
 	`id` MEDIUMINT(11) NOT NULL auto_increment,
 	`title` VARCHAR(255) DEFAULT NULL,
 	`content` TEXT,
@@ -86,7 +86,7 @@ db_query("CREATE TABLE announcements (
 #
 # table admin_announcements
 #
-db_query("CREATE TABLE admin_announcements (
+db_query("CREATE TABLE admin_announcement (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`title` VARCHAR(255) NOT NULL,
 	`body` TEXT,
@@ -129,31 +129,25 @@ db_query("CREATE TABLE `forum_notify` (
 # table `cours`
 #
 
-db_query("CREATE TABLE `cours` (
-  `cours_id` int(11) NOT NULL auto_increment,
+db_query("CREATE TABLE `course` (
+  `id` int(11) NOT NULL auto_increment,
   `code` varchar(20) NOT NULL,
-  `languageCourse` VARCHAR(16) NOT NULL DEFAULT 'el',
-  `intitule` varchar(250) NOT NULL DEFAULT '',
+  `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+  `title` varchar(250) NOT NULL DEFAULT '',
   `description` TEXT,
-  `course_keywords` TEXT,
-  `course_addon` TEXT,
+  `keywords` TEXT,
   `visible` tinyint(4) NOT NULL,
-  `titulaires` varchar(200) NOT NULL DEFAULT '',
-  `fake_code` varchar(20) NOT NULL DEFAULT '',
-  `departmentUrlName` varchar(30) default NULL,
-  `departmentUrl` varchar(180) default NULL,
-  `lastVisit` date NOT NULL default '0000-00-00',
-  `lastEdit` datetime NOT NULL default '0000-00-00 00:00:00',
-  `expirationDate` datetime NOT NULL default '0000-00-00 00:00:00',
-  `first_create` datetime NOT NULL default '0000-00-00 00:00:00',
+  `prof_names` varchar(200) NOT NULL DEFAULT '',
+  `public_code` varchar(20) NOT NULL DEFAULT '',  
+  `created` datetime NOT NULL default '0000-00-00 00:00:00',
   `doc_quota` float NOT NULL default '104857600',
   `video_quota` float NOT NULL default '104857600',
   `group_quota` float NOT NULL default '104857600',
   `dropbox_quota` float NOT NULL default '104857600',
   `password` varchar(50) DEFAULT NULL,
-  `expand_glossary` BOOL NOT NULL DEFAULT 0,
+  `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
-  PRIMARY KEY  (`cours_id`)) $charset_spec");
+  PRIMARY KEY  (`id`)) $charset_spec");
 
 
 #
@@ -342,9 +336,9 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
 
 
 db_query("CREATE TABLE IF NOT EXISTS `forum` (
-  `forum_id` int(10) NOT NULL auto_increment,
-  `forum_name` varchar(150) default NULL,
-  `forum_desc` mediumtext,
+  `id` int(10) NOT NULL auto_increment,
+  `name` varchar(150) default NULL,
+  `description` mediumtext,
   `forum_access` int(10) default '1',
   `forum_moderator` int(10) default NULL,
   `forum_topics` int(10) NOT NULL default '0',
@@ -356,7 +350,7 @@ db_query("CREATE TABLE IF NOT EXISTS `forum` (
   PRIMARY KEY  (`forum_id`),
   FULLTEXT KEY `forum` (`forum_name`,`forum_desc`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `forum_posts` (
+db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
   `post_id` int(10) NOT NULL auto_increment,
   `topic_id` int(10) NOT NULL default '0',
   `forum_id` int(10) NOT NULL default '0',
@@ -1043,8 +1037,8 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
           PRIMARY KEY  (`id`))");
  
 // Create full text indexes
-db_query("ALTER TABLE `announcements` ADD FULLTEXT `announcements` (`content`, `title`)");
-db_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code` ,`description` ,`intitule` ,`course_keywords`, `course_addon`)");
+db_query("ALTER TABLE `announcement` ADD FULLTEXT `announcement` (`content`, `title`)");
+db_query("ALTER TABLE `course` ADD FULLTEXT `course` (`code` ,`description` ,`title` ,`keywords`)");
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			

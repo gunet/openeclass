@@ -145,32 +145,32 @@ if ($extra_messages) {
 // user modules
 // ----------------------------------------
 $modules = array(
-    MODULE_ID_AGENDA => array("title" => $langAgenda, "link" => "agenda/agenda.php", "image" => "calendar"),   
-    MODULE_ID_LINKS => array("title" => $langLinks, "link" => "link/link.php", "image" => "links"),
-    MODULE_ID_DOCS => array("title" => $langDoc, "link" => "document/document.php", "image" => "docs"),
-    MODULE_ID_VIDEO => array("title" => $langVideo, "link" => "video/video.php", "image" => "videos"),
-    MODULE_ID_ASSIGN => array("title" => $langWorks, "link" => "work/work.php", "image" => "assignments"),
-    MODULE_ID_ANNOUNCE => array("title" => $langAnnouncements, "link" => "announcements/announcements.php", "image" => "announcements"),
-    MODULE_ID_FORUM => array("title" => $langForums, "link" => "phpbb/index.php", "image" => "forum"),
-    MODULE_ID_EXERCISE => array("title" => $langExercises, "link" => "exercise/exercise.php", "image" => "exercise"),    
-    MODULE_ID_GROUPS => array("title" => $langGroups, "link" => "group/group.php", "image" => "groups"),
-    MODULE_ID_DROPBOX => array("title" => $langDropBox, "link" => "dropbox/index.php", "image" => "dropbox"),
-    MODULE_ID_GLOSSARY => array("title" => $langGlossary, "link" => "glossary/glossary.php", "image" => "glossary"),
-    MODULE_ID_EBOOK => array("title" => $langEBook, "link" => "ebook/index.php", "image" => "ebook"),
-    MODULE_ID_CHAT => array("title" => $langChat, "link" => "conference/conference.php", "image" => "conference"),
-    MODULE_ID_DESCRIPTION => array("title" => $langDescription, "link" => "course_description/index.php", "image" => "description"),
-    MODULE_ID_QUESTIONNAIRE => array("title" => $langQuestionnaire, "link" => "questionnaire/questionnaire.php", "image" => "questionnaire"),
-    MODULE_ID_LP => array("title" => $langLearnPath, "link" => "learnPath/learningPathList.php", "image" => "lp"),    
-    MODULE_ID_WIKI => array("title" => $langWiki, "link" => "wiki/wiki.php", "image" => "wiki"),    
+    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda/agenda.php', 'image' => 'calendar'),   
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link/link.php', 'image' => 'links'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document/document.php', 'image' => 'docs'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video/video.php', 'image' => 'videos'),
+    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work/work.php', 'image' => 'assignments'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements/announcements.php', 'image' => 'announcements'),
+    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'phpbb/index.php', 'image' => 'forum'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise/exercise.php', 'image' => 'exercise'),    
+    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group/group.php', 'image' => 'groups'),
+    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox/index.php', 'image' => 'dropbox'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary/glossary.php', 'image' => 'glossary'),
+    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook/index.php', 'image' => 'ebook'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference/conference.php', 'image' => 'conference'),
+    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description/index.php', 'image' => 'description'),
+    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire/questionnaire.php', 'image' => 'questionnaire'),
+    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath/learningPathList.php', 'image' => 'lp'),    
+    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki/wiki.php', 'image' => 'wiki'),    
 );
 // ----------------------------------------
 // course admin modules
 // ----------------------------------------
 $admin_modules = array(    
-    MODULE_ID_COURSEINFO => array("title" => $langCourseInfo, "link" => "course_info/infocours.php", "image" => "course_info"),
-    MODULE_ID_USERS => array("title" => $langUsers, "link" => "user/user.php", "image" => "users"),
-    MODULE_ID_USAGE => array("title" => $langUsage, "link" => "usage/usage.php", "image" => "usage"),
-    MODULE_ID_TOOLADMIN => array("title" => $langToolManagement, "link" => "course_tools/course_tools.php", "image" => "tooladmin"),
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info/infocours.php', 'image' => 'course_info'),
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user/user.php', 'image' => 'users'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage/usage.php', 'image' => 'usage'),
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools/course_tools.php', 'image' => 'tooladmin'),
 );
 
 // Make sure personalized profile setting is set (true or false)
@@ -278,15 +278,15 @@ if (isset($require_current_course) and $require_current_course) {
 	if (!isset($_SESSION['dbname'])) {
 		$toolContent_ErrorExists = caution($langSessionIsLost);
 		$errorMessagePath = "../../";
-	} else {
+	} else {        
 		$currentCourse = $dbname = $_SESSION['dbname'];
-		$result = db_query("SELECT cours_id, cours.code, 
-                                        fake_code, intitule, hierarchy.name AS faculte,
-                                        titulaires, languageCourse, departmentUrlName, departmentUrl, visible
-                                        FROM cours, course_department, hierarchy
-                                        WHERE cours.cours_id = course_department.course AND
+		$result = db_query("SELECT course.id, course.code, 
+                                        course.public_code, course.title, hierarchy.name AS faculte,
+                                        course.prof_names, course.lang, course.visible
+                                        FROM course, course_department, hierarchy
+                                        WHERE course.id = course_department.course AND
                                         hierarchy.id = course_department.department AND
-                                        cours.code=" . autoquote($dbname));
+                                        course.code=" . autoquote($dbname));
 
 		if (!$result or mysql_num_rows($result) == 0) {
                     if (defined('M_INIT')) {
@@ -298,27 +298,23 @@ if (isset($require_current_course) and $require_current_course) {
                         exit();
                     }
 		}
-
+                
 		while ($theCourse = mysql_fetch_array($result)) {
- 			$cours_id = $theCourse['cours_id'];
-			$fake_code = $theCourse['fake_code'];
+ 			$cours_id = $theCourse['id'];
+			$fake_code = $theCourse['public_code'];
 			$code_cours = $theCourse['code'];
-			$intitule = $theCourse['intitule'];
+			$title = $theCourse['title'];
 			$fac = $theCourse['faculte'];
-			$titulaires = $theCourse['titulaires'];
-			$languageInterface = $theCourse['languageCourse'];
-			$departmentUrl= $theCourse['departmentUrl'];
-			$departmentUrlName= $theCourse['departmentUrlName'];
+			$titulaires = $theCourse['prof_names'];
+			$languageInterface = $theCourse['lang'];
 			$visible = $theCourse['visible'];
 			// New variables
 			$currentCourseCode = $fake_code ;
 			$currentCourseID = $code_cours;
-			$currentCourseName = $intitule;
+			$currentCourseName = $title;
 			$currentCourseDepartment = $fac;
 			$currentCourseTitular = $titulaires;
 			$currentCourseLanguage = $languageInterface;
-			$currentCourseDepartmentUrl = $departmentUrl;
-			$currentCourseDepartmentUrlName = $departmentUrlName;
 		}
 
 		if (!isset($code_cours) or empty($code_cours)) {
@@ -438,21 +434,21 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 
 	if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {                        
-			$result = db_query("SELECT `module_id` FROM modules 
-                                        WHERE visible=1 AND 
-                                        course_id = $cid");
+			$result = db_query("SELECT module_id FROM course_module 
+                                        WHERE visible = 1 AND 
+                                              course_id = $cid");
 		}
 	} else {
-		$result = db_query("SELECT * FROM modules
-                                        WHERE `visible` = 1 AND
-                                        course_id = $cid AND
-                                        module_id IN (".MODULE_ID_AGENDA.",
-                                                ".MODULE_ID_LINKS.",
-                                                ".MODULE_ID_DOCS.",
-                                                ".MODULE_ID_VIDEO.",
-                                                ".MODULE_ID_ANNOUNCE.",
-                                                ".MODULE_ID_EXERCISE.",
-                                                ".MODULE_ID_DESCRIPTION.")");
+		$result = db_query("SELECT * FROM course_module
+                                        WHERE visible = 1 AND
+                                              course_id = $cid AND
+                                              module_id IN (".MODULE_ID_AGENDA.",
+                                                            ".MODULE_ID_LINKS.",
+                                                            ".MODULE_ID_DOCS.",
+                                                            ".MODULE_ID_VIDEO.",
+                                                            ".MODULE_ID_ANNOUNCE.",
+                                                            ".MODULE_ID_EXERCISE.",
+                                                            ".MODULE_ID_DESCRIPTION.")");
 	}
 
 	$publicModules = array();

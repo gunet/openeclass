@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -85,7 +85,7 @@ if (isset($_GET['stats'])) {
 	switch ($_GET['stats']) {
 		case 'login':
 			mysql_select_db($mysqlMainDb);
-			$result = db_query("SELECT code FROM cours");
+			$result = db_query("SELECT code FROM course");
 			$course_codes = array();
 			while ($row = mysql_fetch_assoc($result)) {
 				$course_codes[] = $row['code'];
@@ -187,38 +187,39 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td class='left'>$langNumCourses</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM cours")."</b></td>
+			<td class='right'><b>".list_1Result("SELECT COUNT(*) FROM course")."</b></td>
 			</tr>
 			<tr>
 			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT visible, count(*) 
-				FROM cours GROUP BY visible "))."
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*) 
+				FROM course GROUP BY visible "))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, count(*) 
-				FROM cours, course_department, hierarchy 
-                                WHERE cours.cours_id = course_department.course
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*) 
+				FROM course, course_department, hierarchy 
+                                WHERE course.id = course_department.course
                                   AND hierarchy.id = course_department.department GROUP BY hierarchy.id"))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT languageCourse, count(*) FROM cours 
-					GROUP BY languageCourse DESC"))."
-			<tr>
-			<th class='left' colspan='2'><b>$langNumEachCat</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT type, count(*) FROM cours 
-					GROUP BY type"))."
-			<tr>
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course 
+					GROUP BY lang DESC"))."			
 			<th class='left' colspan='2'><b>$langAnnouncements</b></th>
 			</tr>
 			<tr>
 			<td class='left'>$langNbAnnoucement</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM announcements;")."</b></td>
+			<td class='right'><b>".list_1Result("SELECT COUNT(*) FROM announcement;")."</b></td>
 			</tr>
 			</table>";
+                        /* // list courses per type -- TODO query must be updated
+                         <tr>
+			<th class='left' colspan='2'><b>$langNumEachCat</b></th>
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT type, COUNT(*) FROM course
+					GROUP BY type"))."
+			<tr> */
 		break;
 		case 'musers':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>";
-			$loginDouble = list_ManyResult("SELECT DISTINCT username, count(*) AS nb
+			$loginDouble = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
 				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC");
 			$tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
@@ -234,10 +235,10 @@ if (isset($_GET['stats'])) {
 		case 'percourse':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
-			$result = db_query("SELECT cours_id, code, intitule, titulaires FROM cours ORDER BY intitule");
+			$result = db_query("SELECT id, code, title, prof_names FROM course ORDER BY title");
 			while ($row = mysql_fetch_array($result)) {
-				$result_numb = db_query("SELECT user.user_id, cours_user.statut FROM cours_user, user
-					WHERE cours_id = $row[cours_id] AND cours_user.user_id = user.user_id", $mysqlMainDb);
+				$result_numb = db_query("SELECT user.user_id, cours_user.statut FROM cours_user, user, course
+					WHERE course.id = $row[id] AND cours_user.user_id = user.user_id");
 				$teachers = $students = $visitors = 0;
 				while ($numrows = mysql_fetch_array($result_numb)) {
 					switch ($numrows['statut']) {
@@ -246,7 +247,7 @@ if (isset($_GET['stats'])) {
 						case 10: $visitors++; break;
 						default: break;
 					}
-					$cu_key = q("$row[intitule] ($row[code]) -- $row[titulaires]");
+					$cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");
 					$cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
 				}
 			}
@@ -299,19 +300,19 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE verified_mail = 1;") .
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 1;") .
                                         "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE verified_mail = 2;") .
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 2;") .
                                         "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE verified_mail = 0;") .
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 0;") .
                                         "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user;") .
+                                        list_1Result("SELECT COUNT(*) FROM user;") .
                                         "</b></td></tr>
                             </table>";
 		break;
@@ -367,18 +368,17 @@ function error_message() {
 
 
 function list_1Result($sql) {
-	global $mysqlMainDb;
 
-	$res = db_query($sql, $mysqlMainDb);
+	$res = db_query($sql);
 	$res = mysql_fetch_array($res);
 	return $res[0];
 }
 
 function list_ManyResult($sql) {
-	global $mysqlMainDb;
+
 	$resu=array();
 
-	$res = db_query($sql, $mysqlMainDb);
+	$res = db_query($sql);
 	while ($resA = mysql_fetch_array($res))
 	{
 		$resu[$resA[0]]=$resA[1];

@@ -202,7 +202,7 @@ if (!extension_loaded('gd')) {
 		'name'   => 'u_date_end',
 		'value' => $u_date_end));
    
-   $qry = "SELECT module_id FROM modules WHERE visible = 1 AND course_id = $cours_id";
+   $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = $cours_id";
 
    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
    $result = db_query($qry);

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,9 +33,9 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 		draw($tool_content, 1);
 		exit;
 	} else {
-		$q = db_query ("SELECT code, visible FROM cours, cours_user
-			WHERE cours.cours_id = cours_user.cours_id
-                        AND cours.visible != ".COURSE_INACTIVE."
+		$q = db_query ("SELECT code, visible FROM course, cours_user
+			WHERE course.id = cours_user.cours_id
+                        AND course.visible != ".COURSE_INACTIVE."
 			AND user_id = '$uid' LIMIT 1") ;
 		if (mysql_num_rows($q) == 0) {
 			$tool_content .=  "<p><b>$langConfirm</b></p>\n";
