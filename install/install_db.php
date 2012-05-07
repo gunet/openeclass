@@ -347,8 +347,8 @@ db_query("CREATE TABLE IF NOT EXISTS `forum` (
   `cat_id` int(10) default NULL,
   `forum_type` int(10) default '0',
   `course_id` int(11) NOT NULL,
-  PRIMARY KEY  (`forum_id`),
-  FULLTEXT KEY `forum` (`forum_name`,`forum_desc`))");
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `forum` (`name`,`description`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
   `post_id` int(10) NOT NULL auto_increment,
