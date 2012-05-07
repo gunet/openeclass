@@ -165,7 +165,7 @@ if (isset($_POST["submitWork"]))
 				foreach($newWorkRecipients as $userid) {
                                         if (get_user_email_notification($userid, $cours_id)) {  
                                                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-                                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+                                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);            
                                                 $body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
                                                 $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
                                                 $emailaddr = uid_to_email($userid);

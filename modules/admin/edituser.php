@@ -305,7 +305,7 @@ $tool_content .= "
 				$tool_content .= "
                                         <td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
 					<td><a href='{$urlServer}courses/$logs[code]/'>".q($logs['code'])."</a></td>
-					<td>".q($logs['intitule'])."</td><td align='center'>";
+					<td>".q($logs['title'])."</td><td align='center'>";
 				if ($logs['reg_date'] == '0000-00-00') {
 					 $tool_content .= $langUnknownDate;
                                 } else {

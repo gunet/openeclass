@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($c['cours_id']));
+        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($c['id']));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "

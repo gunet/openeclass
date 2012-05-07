@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -55,7 +55,7 @@ if ($is_editor or $is_tutor)  {
 						WHERE user_id = $uid", $mysqlMainDb));
                 $sender_name = $sender['prenom'] . ' ' . $sender['nom'];
                 $sender_email = $sender['email'];
-                $emailsubject = $intitule." - ".$_POST['subject'];
+                $emailsubject = $title." - ".$_POST['subject'];
                 $emailbody = "$_POST[body_mail]\n\n$langSender: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
 		$req = db_query("SELECT user_id FROM group_members WHERE group_id = '$group_id'", $mysqlMainDb);
 		while ($userid = mysql_fetch_array($req)) {
@@ -63,7 +63,7 @@ if ($is_editor or $is_tutor)  {
 			list($email) = mysql_fetch_array($r);
                         if (get_user_email_notification($userid[user_id], $cours_id)) {
                                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
+                                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
                                 $emailbody .= $unsubscribe.$linkhere;
                                 if (email_seems_valid($email) and
                                     !send_mail($sender_name, $sender_email,
