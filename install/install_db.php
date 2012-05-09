@@ -613,7 +613,8 @@ db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 `lft` int(11) NOT NULL,
                 `rgt` int(11) NOT NULL,
                 `allow_course` boolean not null default false,
-                `allow_user` boolean NOT NULL default false )");
+                `allow_user` boolean NOT NULL default false,
+                `order_priority` int(11) default null )");
 
 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
     VALUES ('', '". $institutionForm ."', '1', '68')");
@@ -713,7 +714,7 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
     db_query("DROP VIEW IF EXISTS `hierarchy_depth`");
     db_query("CREATE VIEW `hierarchy_depth` AS
                     SELECT node.id, node.code, node.name, node.number, node.generator, 
-                           node.lft, node.rgt, node.allow_course, node.allow_user, 
+                           node.lft, node.rgt, node.allow_course, node.allow_user, node.order_priority, 
                            COUNT(parent.id) - 1 AS depth
                     FROM hierarchy AS node,
                          hierarchy AS parent
@@ -723,7 +724,7 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 
     db_query("DROP PROCEDURE IF EXISTS `add_node`");
     db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11), 
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE lft, rgt INT(11);
@@ -733,13 +734,13 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 
                         CALL shift_right(parentlft, 2, 0);
 
-                        INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user);
+                        INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
                     END");
     
     db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
     db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11), 
                         IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11), 
-                        IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                        IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE lft, rgt INT(11);
@@ -749,17 +750,18 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 
                         CALL shift_right(parentlft, 2, 0);
 
-                        INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user);
+                        INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
                     END");
 
     db_query("DROP PROCEDURE IF EXISTS `update_node`");
     db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255), 
                         IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11), 
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL  
                     BEGIN
                         UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt, 
-                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user WHERE id = p_id;
+                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                            order_priority = p_order_priority WHERE id = p_id;
 
                         IF nodelft <> parentlft THEN
                             CALL move_nodes(nodelft, p_lft, p_rgt);

@@ -28,6 +28,8 @@ class hierarchy {
 
     private $dbtable;
     private $dbdepth;
+    private $ordering_copy;
+    private $ordermap;
     
     /**
      * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
@@ -43,20 +45,21 @@ class hierarchy {
     /**
      * Add a node to the tree.
      * 
-     * @param  string $name         - The new node name
-     * @param  int    $parentlft    - The new node's parent lft
-     * @param  string $code         - The new node code
-     * @param  int    $allow_course - Flag controlling if courses are allowed to belong to this new node
-     * @param  int    $allow_user   - Flag controllinf if users are allowed to belong to this new node
-     * @return int    $ret          - The new node id
+     * @param  string $name           - The new node name
+     * @param  int    $parentlft      - The new node's parent lft
+     * @param  string $code           - The new node code
+     * @param  int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
+     * @param  int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
+     * @param  int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
+     * @return int    $ret            - The new node id
      */
-    public function addNode($name, $parentlft, $code, $allow_course, $allow_user)
+    public function addNode($name, $parentlft, $code, $allow_course, $allow_user, $order_priority)
     {
         $ret = null;
         
         if ($this->useProcedures())
         {
-            db_query("CALL add_node(".autoquote($name).", $parentlft, ".autoquote($code).", $allow_course, $allow_user)");
+            db_query("CALL add_node(".autoquote($name).", $parentlft, ".autoquote($code).", $allow_course, $allow_user, $order_priority)");
             $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
             $ret = $r[0];
         }
@@ -66,8 +69,8 @@ class hierarchy {
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, allow_course, allow_user) "
-                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $allow_course, $allow_user)";
+            $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, allow_course, allow_user, order_priority) "
+                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $allow_course, $allow_user, $order_priority)";
             db_query($query);
             $ret = mysql_insert_id();
         }
@@ -78,22 +81,23 @@ class hierarchy {
     /**
      * Add a node to the tree requiring extra arguments (number and generator).
      * 
-     * @param  string $name         - The new node name
-     * @param  int    $parentlft    - The new node's parent lft
-     * @param  string $code         - The new node code
-     * @param  int    $number       - The new node number
-     * @param  int    $generator    - The new node generator
-     * @param  int    $allow_course - Flag controlling if courses are allowed to belong to this new node
-     * @param  int    $allow_user   - Flag controllinf if users are allowed to belong to this new node
-     * @return int    $ret          - The new node id
+     * @param  string $name           - The new node name
+     * @param  int    $parentlft      - The new node's parent lft
+     * @param  string $code           - The new node code
+     * @param  int    $number         - The new node number
+     * @param  int    $generator      - The new node generator
+     * @param  int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
+     * @param  int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
+     * @param  int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
+     * @return int    $ret            - The new node id
      */
-    public function addNodeExt($name, $parentlft, $code, $number, $generator, $allow_course, $allow_user)
+    public function addNodeExt($name, $parentlft, $code, $number, $generator, $allow_course, $allow_user, $order_priority)
     {
         $ret = null;
         
         if ($this->useProcedures())
         {
-            db_query("CALL add_node_ext(".autoquote($name).", $parentlft, ".autoquote($code).", $number, $generator, $allow_course, $allow_user)");
+            db_query("CALL add_node_ext(".autoquote($name).", $parentlft, ".autoquote($code).", $number, $generator, $allow_course, $allow_user, $order_priority)");
             $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
             $ret = $r[0];
         }
@@ -103,8 +107,8 @@ class hierarchy {
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, number, generator, allow_course, allow_user) "
-                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $number, $generator, $allow_course, $allow_user)";
+            $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
+                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $number, $generator, $allow_course, $allow_user, $order_priority)";
             db_query($query);
             $ret = mysql_insert_id();
         }
@@ -115,26 +119,28 @@ class hierarchy {
     /**
      * Update a tree node.
      * 
-     * @param int    $id           - The id of the node to update
-     * @param string $name         - The new name for the node
-     * @param int    $nodelft      - The new parent lft value
-     * @param int    $lft          - The node's current lft value
-     * @param int    $rgt          - The node's current rgt value
-     * @param int    $parentlft    - The old parent lft value
-     * @param string $code         - The new code for the node
-     * @param int    $allow_course - Flag controlling if courses are allowed to belong to this new node
-     * @param int    $allow_user   - Flag controllinf if users are allowed to belong to this new node
+     * @param int    $id             - The id of the node to update
+     * @param string $name           - The new name for the node
+     * @param int    $nodelft        - The new parent lft value
+     * @param int    $lft            - The node's current lft value
+     * @param int    $rgt            - The node's current rgt value
+     * @param int    $parentlft      - The old parent lft value
+     * @param string $code           - The new code for the node
+     * @param int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
+     * @param int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
+     * @param int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
      */
-    public function updateNode($id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user)
+    public function updateNode($id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority)
     {
         if ($this->useProcedures())
         {
-            db_query("CALL update_node($id, ".autoquote($name).", $nodelft, $lft, $rgt, $parentlft, ".autoquote($code).", $allow_course, $allow_user)");
+            db_query("CALL update_node($id, ".autoquote($name).", $nodelft, $lft, $rgt, $parentlft, ".autoquote($code).", $allow_course, $allow_user, $order_priority)");
         }
         else
         {
             $query = "UPDATE ". $this->dbtable ." SET name = ".autoquote($name).",  lft = $lft, rgt = $rgt,
-                    code = ".autoquote($code).", allow_course = $allow_course, allow_user = $allow_user WHERE id = $id";
+                    code = ".autoquote($code).", allow_course = $allow_course, allow_user = $allow_user
+                    order_priority = $order_priority WHERE id = $id";
             db_query($query);
 
             if($nodelft != $parentlft)
@@ -387,7 +393,7 @@ class hierarchy {
     }
     
     /**
-     * Build an ArrayMap containing the tree nodes (alphabetically ordered per depth level). 
+     * Build an ArrayMap containing the tree nodes (customly ordered per depth level). 
      * 
      * This is the entry-point method for building ordered ArrayMaps using recursion (each depth level is a different recursion step). 
      * See also the utilized recursive method appendOrdered(). For each recursion step, the nodes are ordered and appended to the 
@@ -418,6 +424,7 @@ class hierarchy {
         $idmap = array();
         $depthmap = array();
         $codemap = array();
+        $this->ordermap = array();
         $level = array();
         $mindepth = array();
         
@@ -436,12 +443,12 @@ class hierarchy {
         if ($this->useProcedures())
         {
             $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->dbdepth . $swhere));
-            $res = db_query("SELECT id, lft, name, depth, code FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
+            $res = db_query("SELECT id, lft, name, depth, code, order_priority FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
         }
         else
         {
             $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $view . $swhere));
-            $res = db_query("SELECT id, lft, name, depth, code FROM ". $view ." WHERE depth = ". $mindepth[0] . $excwhere);
+            $res = db_query("SELECT id, lft, name, depth, code, order_priority FROM ". $view ." WHERE depth = ". $mindepth[0] . $excwhere);
         }
         
         while ($row = mysql_fetch_assoc($res))
@@ -455,8 +462,10 @@ class hierarchy {
             $idmap[$row[$useKey]] = $row['id'];
             $depthmap[$row[$useKey]] = $row['depth'];
             $codemap[$row[$useKey]] = $row['code'];
+            $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
         }
-        asort($level);
+        $this->ordering_copy = $level; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
+        uksort($level, array($this, 'orderCmp'));
 
         $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
         
@@ -464,7 +473,7 @@ class hierarchy {
     }
     
     /**
-     * Recursively append alphabetically ordered entries to an existing tree ArrayMap. 
+     * Recursively append customly ordered entries to an existing tree ArrayMap. 
      * 
      * Designed to be used in combination with special entry-point methods such as buildOrdered().
      * 
@@ -488,6 +497,7 @@ class hierarchy {
             if (mysql_num_rows($res) > 0)
             {
                 $tmp = array();
+                $this->ordermap = array();
 
                 while($row = mysql_fetch_assoc($res))
                 {
@@ -500,12 +510,35 @@ class hierarchy {
                     $idmap[$row[$useKey]] = $row['id'];
                     $depthmap[$row[$useKey]] = $depth;
                     $codemap[$row[$useKey]] = $row['code'];
+                    $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
                 }
-                asort($tmp);
+                $this->ordering_copy = $tmp; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
+                uksort($tmp, array($this, 'orderCmp'));
 
                 $this->appendOrdered($final, $tmp, $idmap, $depthmap, $codemap, $depth+1, $useKey, $where, $excwhere, $dashprefix);
             } else
                 continue;
+        }
+    }
+    
+    /**
+     * Custom comparison function for ordering/sorting the tree nodes primarily according to their order priority
+     * and secondarily alphabetically. To be used in conjustion with uksort()
+     * 
+     * @param  int $a - arraymap key of node a
+     * @param  int $b - arraymap key of node b
+     * @return int    - < 0 if node a is less than node b, > 0 if node a is greater than node b, and 0 if they are equal.
+     */
+    private function orderCmp($a, $b)
+    {
+        if ($this->ordermap[$a] == $this->ordermap[$b])
+        {
+            // alphabetical compare
+            return strcasecmp($this->ordering_copy[$a], $this->ordering_copy[$b]);
+        }
+        else
+        {
+            return ($this->ordering_copy[$a] > $this->ordering_copy[$b]) ? -1 : 1;
         }
     }
     

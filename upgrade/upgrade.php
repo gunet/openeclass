@@ -884,7 +884,8 @@ if (!isset($_POST['submit2'])) {
                             `lft` int(11) NOT NULL,
                             `rgt` int(11) NOT NULL,
                             `allow_course` boolean not null default false,
-                            `allow_user` boolean NOT NULL default false )");
+                            `allow_user` boolean NOT NULL default false,
+                            `order_priority` int(11) default null )");
             
             if ($rebuildHierarchy) {
                 // copy faculties into the tree
@@ -977,7 +978,7 @@ if (!isset($_POST['submit2'])) {
                 db_query("CREATE VIEW `hierarchy_depth` AS
                                 SELECT node.id, node.code, node.name, node.number, node.generator, 
                                        node.lft, node.rgt, node.allow_course, node.allow_user, 
-                                       COUNT(parent.id) - 1 AS depth
+                                       node.order_priority, COUNT(parent.id) - 1 AS depth
                                 FROM hierarchy AS node,
                                      hierarchy AS parent
                                 WHERE node.lft BETWEEN parent.lft AND parent.rgt
@@ -986,7 +987,8 @@ if (!isset($_POST['submit2'])) {
             
                 db_query("DROP PROCEDURE IF EXISTS `add_node`");
                 db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11), 
-                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                                    IN p_order_priority INT(11))
                                 LANGUAGE SQL
                                 BEGIN
                                     DECLARE lft, rgt INT(11);
@@ -996,13 +998,13 @@ if (!isset($_POST['submit2'])) {
 
                                     CALL shift_right(parentlft, 2, 0);
 
-                                    INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user);
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
                                 END");
                 
                 db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
                 db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11), 
                                     IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11), 
-                                    IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                    IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                                 LANGUAGE SQL
                                 BEGIN
                                     DECLARE lft, rgt INT(11);
@@ -1012,17 +1014,18 @@ if (!isset($_POST['submit2'])) {
 
                                     CALL shift_right(parentlft, 2, 0);
 
-                                    INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user);
+                                    INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
                                 END");
 
                 db_query("DROP PROCEDURE IF EXISTS `update_node`");
                 db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255), 
                                     IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11), 
-                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN)
+                                    IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                                 LANGUAGE SQL  
                                 BEGIN
                                     UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt, 
-                                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user WHERE id = p_id;
+                                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                                        order_priority = p_order_priority WHERE id = p_id;
 
                                     IF nodelft <> parentlft THEN
                                         CALL move_nodes(nodelft, p_lft, p_rgt);
@@ -1152,19 +1155,19 @@ if (!isset($_POST['submit2'])) {
                 
                 foreach ($deps as $dep) {
                     $dlft = $tree->getNodeLft($dep['id']);
-                    $ppsid = $tree->addNodeExt('Προπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'PRE', $dep['number'], $dep['generator'], 1, 1);
+                    $ppsid = $tree->addNodeExt('Προπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'PRE', $dep['number'], $dep['generator'], 1, 1, null);
                     $ppslft = $tree->getNodeLft($ppsid);
                     
-                    $tree->addNodeExt('1ο εξάμηνο', $ppslft, $dep['code'].'1', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('2ο εξάμηνο', $ppslft, $dep['code'].'2', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('3ο εξάμηνο', $ppslft, $dep['code'].'3', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('4ο εξάμηνο', $ppslft, $dep['code'].'4', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('5ο εξάμηνο', $ppslft, $dep['code'].'5', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('6ο εξάμηνο', $ppslft, $dep['code'].'6', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('7ο εξάμηνο', $ppslft, $dep['code'].'7', $dep['number'], $dep['generator'], 1, 1);
-                    $tree->addNodeExt('8ο εξάμηνο', $ppslft, $dep['code'].'8', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('1ο εξάμηνο', $ppslft, $dep['code'].'1', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('2ο εξάμηνο', $ppslft, $dep['code'].'2', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('3ο εξάμηνο', $ppslft, $dep['code'].'3', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('4ο εξάμηνο', $ppslft, $dep['code'].'4', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('5ο εξάμηνο', $ppslft, $dep['code'].'5', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('6ο εξάμηνο', $ppslft, $dep['code'].'6', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('7ο εξάμηνο', $ppslft, $dep['code'].'7', $dep['number'], $dep['generator'], 1, 1, null);
+                    $tree->addNodeExt('8ο εξάμηνο', $ppslft, $dep['code'].'8', $dep['number'], $dep['generator'], 1, 1, null);
                     
-                    $tree->addNodeExt('Μεταπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'POST', $dep['number'], $dep['generator'], 1, 1);
+                    $tree->addNodeExt('Μεταπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'POST', $dep['number'], $dep['generator'], 1, 1, null);
                 }
             }
 

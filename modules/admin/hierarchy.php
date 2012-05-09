@@ -145,6 +145,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
+        $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
         // Check for empty fields
         if (empty($names)) {
             $tool_content .= "<p class='caution'>".$langEmptyNodeName."<br />";
@@ -162,7 +163,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
             $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
         } else {
             // OK Create the new node
-            $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user);
+            $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<p class='success'>".$langAddSuccess."</p>";
         }
     } else {
@@ -204,6 +205,10 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
       <tr>
         <th class='left'>".$langNodeAllowUser.":</th>
         <td><input type='checkbox' name='allow_user' value='1' checked=1 /> <i>".$langNodeAllowUser2."</i></td>
+      </tr>
+      <tr>
+        <th class='left'>".$langNodeOrderPriority.":</th>
+        <td><input type='text' name='order_priority' /> <i>".$langNodeOrderPriority2."</i></td>
       </tr>
       <tr>
         <th>&nbsp;</th>
@@ -250,6 +255,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
         $code = $_POST['code'];
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
+        $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
         if (empty($name)) {
             $tool_content .= "<p class='caution'>".$langEmptyNodeName."<br />";
             $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
@@ -262,13 +268,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
             // OK Update the node
             $tree->updateNode($id, $name, intval($_POST['nodelft']), 
                 intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']),
-                $code, $allow_course, $allow_user);
+                $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<p class='success'>$langEditNodeSuccess</p><br />";
         }
     } else {
         // Get node information
         $id = intval($_GET['id']);
-        $sql = "SELECT name, lft, rgt, code, allow_course, allow_user FROM ". $TBL_HIERARCHY ." WHERE id = '$id'";
+        $sql = "SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM ". $TBL_HIERARCHY ." WHERE id = '$id'";
         $result = db_query($sql);
         $myrow = mysql_fetch_assoc($result);
         $parentLft = $tree->getParent($myrow['lft'], $myrow['rgt']);
@@ -320,6 +326,10 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        <tr>
            <th class='left'>".$langNodeAllowUser.":</th>
            <td><input type='checkbox' name='allow_user' value='1' $check_user /> <i>".$langNodeAllowUser2."</i></td>
+       </tr>
+       <tr>
+           <th class='left'>".$langNodeOrderPriority.":</th>
+           <td><input type='text' name='order_priority' value='". $myrow['order_priority'] ."' /> <i>".$langNodeOrderPriority2."</i></td>
        </tr>
        <tr>
            <th>&nbsp;</th>
