@@ -38,7 +38,7 @@ if ($is_editor and isset($currentCourseID) and isset($_GET['hide'])) {
         $eclass_module_id = intval($_GET['eclass_module_id']);
         $cid = course_code_to_id($currentCourseID);
 	$visible = ($_GET['hide'] == 0)? 0: 1;        
-        db_query("UPDATE modules SET visible = $visible 
+        db_query("UPDATE course_module SET visible = $visible 
                         WHERE module_id = $eclass_module_id AND
                         course_id = $cid");
 }

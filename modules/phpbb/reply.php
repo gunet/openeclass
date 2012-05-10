@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,35 +37,26 @@ if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
 
-$sql = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title 
+$sql = "SELECT f.name, t.title
             FROM forum f, forum_topics t 
-            WHERE f.forum_id = $forum
-            AND t.topic_id = $topic 
-            AND t.forum_id = f.forum_id
-            AND f.course_id = $cours_id
-            AND t.course_id = $cours_id";	
+            WHERE f.id = $forum
+            AND t.id = $topic 
+            AND t.forum_id = f.id
+            AND f.course_id = $cours_id";	
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 
-$forum_name = $myrow["forum_name"];
-$forum_access = $myrow["forum_access"];
-$forum_type = $myrow["forum_type"];
-$topic_title = $myrow["topic_title"];
+$forum_name = $myrow["name"];
+$topic_title = $myrow["title"];
 $forum_id = $forum;
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
-if ($private_forum and !$is_member and !$is_editor) {
-	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
-	draw($tool_content, 2);
-	exit;
-}
 
 $nameTools = $langReply;
 $navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum", "name"=> $forum_name);
-$navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum", "name"=> $topic_title);
-
+$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $forum_name);
+$navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum_id", "name"=> $topic_title);
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
@@ -84,37 +75,29 @@ if (isset($_POST['submit'])) {
                 draw($tool_content, 2, null, $head_content);
 		exit();
 	}
-	$is_html_disabled = false;
-	if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
-		$message = htmlspecialchars($message);
-		$is_html_disabled = true;
-		if (isset($quote) && $quote) {
-			// If it's been edited more than once, there might be old "edited by" strings with
-			// escaped HTML code in them. We want to fix this up right here:
-			$message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $langEditedBy(.*?)\ \]&lt;/font&gt;#si", '[ ' . $langEditedBy . '\1 ]', $message);
-		}
-	}
-	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
-		$message = bbencode($message, $is_html_disabled);
-	}
-	$message = format_message($message);
+	
+        if (isset($quote) && $quote) {
+                // If it's been edited more than once, there might be old "edited by" strings with
+                // escaped HTML code in them. We want to fix this up right here:
+                $message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $langEditedBy(.*?)\ \]&lt;/font&gt;#si", '[ ' . $langEditedBy . '\1 ]', $message);
+        }
+			
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
 	
-	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip, course_id)
-			VALUES ($topic, $forum, ".autoquote($message) ." , $uid, '$time', '$poster_ip', $cours_id)";
+	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
+			VALUES ($topic, $forum_id, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 	$this_post = mysql_insert_id();
-	$sql = "UPDATE forum_topics SET topic_replies = topic_replies+1, 
-                    topic_last_post_id = $this_post, 
-                    topic_time = '$time' 
-		WHERE topic_id = $topic
-                    AND course_id = $cours_id";
+        $sql = "UPDATE forum_topics SET topic_time = '$time',
+                    num_replies = num_replies+1,
+                    last_post_id = $this_post
+		WHERE id = $topic AND forum_id = $forum_id";
 	$result = db_query($sql);
-	$sql = "UPDATE forum SET forum_posts = forum_posts+1, 
-                    forum_last_post_id = $this_post 
-		WHERE forum_id = $forum
+	$sql = "UPDATE forum SET num_posts = num_posts+1, 
+                    last_post_id = $this_post 
+		WHERE id = $forum_id
                     AND course_id = $cours_id";
 	$result = db_query($sql);
 	if (!$result) {
@@ -127,10 +110,10 @@ if (isset($_POST['submit'])) {
 	// notify users 
 	// --------------------------------
 	$subject_notify = "$logo - $langSubjectNotify";
-	$category_id = forum_category($forum);
+	$category_id = forum_category($forum_id);
 	$cat_name = category_name($category_id);
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
-			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
+			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
         $name = uid_to_name($uid);
@@ -157,61 +140,32 @@ if (isset($_POST['submit'])) {
 		$page = '';
 	}
 	$_SESSION['message'] = "<p class='success'>$langStored</p>";
-	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic&forum=$forum" . $page);
+	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic&forum=$forum_id" . $page);
 	exit;
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewtopic.php?course=$code_cours&topic=$topic&forum=$forum");	
-} else {
-	// Private forum logic here.
-	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
-		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
-		<fieldset>
-		   <legend></legend>     
-			<table align='left' width='99%'>
-			<tr><td>
-			<table width='100%'><tr><td>$langPrivateNotice</td></tr>
-			<tr><td>&nbsp;</td></tr>
-			<tr>
-			<td>
-			<input type='hidden' name='forum' value='$forum'>
-			<input type='hidden' name='topic' value='$topic'>
-			<input type='hidden' name='post' value='$post'>
-			<input type='hidden' name='quote' value='$quote'>
-			<input type='SUBMIT' name='logging_in' value='$langEnter'>
-			</td></tr></table>
-			</td></tr></table>
-		</fieldset>
-		</form>";
-		draw($tool_content, 2, null, $head_content);
-		exit();
-	} 	
+	header("Location: viewtopic.php?course=$code_cours&topic=$topic&forum=$forum_id");	
+} else {	
 	// Topic review
 	$tool_content .= "
         <div id='operations_container'>
             <ul id='opslist'>
-              <li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum' target='_blank'>$langTopicReview</a></li>
+              <li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
             </ul>
         </div>";
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum_id' method='post'>
 	<fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl' width='100%'>
         <tr>
         <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
-		$sql = "SELECT post_text, post_time
-                            FROM forum_posts 
-			WHERE post_id = '$post' 
-                            AND course_id = $cours_id";
+		$sql = "SELECT post_text, post_time FROM forum_posts WHERE id = $post";
 		if ($r = db_query($sql)) {
 			$m = mysql_fetch_array($r);
 			$text = $m["post_text"];
 			$text = str_replace("<BR>", "\n", $text);
-			$text = stripslashes($text);
-			$text = bbdecode($text);
-			$text = undo_make_clickable($text);
+			$text = stripslashes($text);						
 			$text = str_replace("[addsig]", "", $text);
 			eval("\$reply = \"$langQuoteMsg\";");
 		} else {

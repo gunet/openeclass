@@ -80,7 +80,7 @@ if (isset($_POST['modify'])) {
                                                            max_members = $maxStudent
                                                        WHERE id = $group_id");
 
-        db_query("UPDATE forums SET forum_name = $name WHERE forum_id =
+        db_query("UPDATE forum SET name = $name WHERE id =
                         (SELECT forum_id FROM `group` WHERE id = $group_id)
                             AND course_id = $cours_id");
 

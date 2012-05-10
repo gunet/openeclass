@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -112,18 +112,6 @@ db_query("CREATE TABLE `agenda` (
 	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 	FULLTEXT KEY `agenda` (`title` ,`content`)) $charset_spec");
 
-#
-# table `forum_notify`
-#
-db_query("CREATE TABLE `forum_notify` (
-	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-	`user_id` INT NOT NULL DEFAULT '0',
-	`cat_id` INT NULL ,
-	`forum_id` INT NULL ,
-	`topic_id` INT NULL ,
-	`notify_sent` BOOL NOT NULL DEFAULT '0',
-	`course_id` INT NOT NULL DEFAULT '0'
-	) $charset_spec");
 
 #
 # table `cours`
@@ -338,49 +326,55 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
 db_query("CREATE TABLE IF NOT EXISTS `forum` (
   `id` int(10) NOT NULL auto_increment,
   `name` varchar(150) default NULL,
-  `description` mediumtext,
-  `forum_access` int(10) default '1',
-  `forum_moderator` int(10) default NULL,
-  `forum_topics` int(10) NOT NULL default '0',
-  `forum_posts` int(10) NOT NULL default '0',
-  `forum_last_post_id` int(10) NOT NULL default '0',
-  `cat_id` int(10) default NULL,
-  `forum_type` int(10) default '0',
+  `desc` mediumtext, 
+  `num_topics` int(10) NOT NULL default '0',
+  `num_posts` int(10) NOT NULL default '0',
+  `last_post_id` int(10) NOT NULL default '0',
+  `cat_id` int(10) default NULL,  
   `course_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  FULLTEXT KEY `forum` (`name`,`description`))");
+  FULLTEXT KEY `forum` (`name`,`desc`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
-  `post_id` int(10) NOT NULL auto_increment,
+db_query("CREATE TABLE IF NOT EXISTS `forum_categories` (
+  `id` int(10) NOT NULL auto_increment,
+  `cat_title` varchar(100) default NULL,
+  `cat_order` varchar(10) default NULL,
+  `course_id` int(11) NOT NULL,
+  PRIMARY KEY  (`id`, `course_id`))");
+
+db_query("CREATE TABLE `forum_notify` (
+	`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	`user_id` INT NOT NULL DEFAULT '0',
+	`cat_id` INT NULL ,
+	`forum_id` INT NULL ,
+	`topic_id` INT NULL ,
+	`notify_sent` BOOL NOT NULL DEFAULT '0',
+	`course_id` INT NOT NULL DEFAULT '0'
+	) $charset_spec");
+
+db_query("CREATE TABLE IF NOT EXISTS `forum_posts` (
+  `id` int(10) NOT NULL auto_increment,
   `topic_id` int(10) NOT NULL default '0',
   `forum_id` int(10) NOT NULL default '0',
   `post_text` mediumtext,
   `poster_id` int(10) NOT NULL default '0',
-  `post_time` varchar(20) default NULL,
-  `poster_ip` varchar(16) default NULL,
-  `course_id` int(11) NOT NULL,
-  PRIMARY KEY  (`post_id`),
+  `post_time` datetime,
+  `poster_ip` varchar(16) default NULL,  
+  PRIMARY KEY  (`id`),
   FULLTEXT KEY `posts_text` (`post_text`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_topics` (
-  `topic_id` int(10) NOT NULL auto_increment,
-  `topic_title` varchar(100) default NULL,
-  `topic_poster_id` int(10) default NULL,
-  `topic_time` varchar(20) default NULL,
-  `topic_views` int(10) NOT NULL default '0',
-  `topic_replies` int(10) NOT NULL default '0',
-  `topic_last_post_id` int(10) NOT NULL default '0',
-  `forum_id` int(10) NOT NULL default '0',
-  `topic_status` int(10) NOT NULL default '0',
-  `course_id` int(11) NOT NULL,
+  `id` int(10) NOT NULL auto_increment,
+  `title` varchar(100) default NULL,
+  `poster_id` int(10) default NULL,
+  `topic_time` datetime,
+  `num_views` int(10) NOT NULL default '0',
+  `num_replies` int(10) NOT NULL default '0',
+  `last_post_id` int(10) NOT NULL default '0',
+  `forum_id` int(10) NOT NULL default '0',  
   PRIMARY KEY  (`topic_id`))");
 
-db_query("CREATE TABLE IF NOT EXISTS `forum_categories` (
-  `cat_id` int(10) NOT NULL auto_increment,
-  `cat_title` varchar(100) default NULL,
-  `cat_order` varchar(10) default NULL,
-  `course_id` int(11) NOT NULL,
-  PRIMARY KEY  (`cat_id`, `course_id`))");
+
 
 db_query("CREATE TABLE IF NOT EXISTS video (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -141,19 +141,19 @@ function createForumQueries($dateVar, $code) {
 
         $course_id = course_code_to_id($code);
         
-        $forum_query = 'SELECT forum.forum_id,
-                               forum.forum_name,
-                               forum_topics.topic_id,
-                               forum_topics.topic_title,
-                               forum_topics.topic_replies,
+        $forum_query = 'SELECT forum.id,
+                               forum.name,
+                               forum_topics.id,
+                               forum_topics.title,
+                               forum_topics.num_replies,
                                forum_posts.post_time,
                                forum_posts.poster_id,
                                forum_posts.post_text
                         FROM forum, forum_topics, forum_posts, course_module
-                        WHERE CONCAT(forum_topics.topic_title, forum_posts.post_text) != \'\'
-                               AND forum.forum_id = forum_topics.forum_id
-                               AND forum_posts.forum_id = forum.forum_id
-                               AND forum_posts.topic_id = forum_topics.topic_id
+                        WHERE CONCAT(forum_topics.title, forum_posts.post_text) != \'\'
+                               AND forum.id = forum_topics.forum_id
+                               AND forum_posts.forum_id = forum.id
+                               AND forum_posts.topic_id = forum_topics.id
                                AND forum.course_id = '.$course_id.'
                                AND DATE_FORMAT(forum_posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
                                AND course_module.visible = 1

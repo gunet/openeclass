@@ -90,9 +90,9 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT cat_id, cat_title FROM forum_categories WHERE course_id = $cours_id ORDER BY cat_id ";
+$sql = "SELECT id, cat_title FROM forum_categories WHERE course_id = $cours_id ORDER BY id ";
 
-$result = db_query($sql, $mysqlMainDb); 
+$result = db_query($sql);
 $total_categories = mysql_num_rows($result);
 
 if ($total_categories) {
@@ -100,9 +100,9 @@ if ($total_categories) {
 		$categories[] = $cat_row;
 	}
 	$sql = "SELECT f.*, p.post_time, p.topic_id, p.poster_id
-		FROM forum f LEFT JOIN forum_posts p ON p.post_id = f.forum_last_post_id
+		FROM forum f LEFT JOIN forum_posts p ON p.id = f.last_post_id
                 AND f.course_id = $cours_id
-		ORDER BY f.cat_id, f.forum_id";
+		ORDER BY f.cat_id, f.id";
 		
 	$f_res = db_query($sql);
 	while ($forum_data = mysql_fetch_array($f_res)) {
@@ -110,7 +110,7 @@ if ($total_categories) {
 	}
 	for($i=0; $i < $total_categories; $i++) {
 		$title = stripslashes($categories[$i]["cat_title"]);
-		$catNum = $categories[$i]["cat_id"];
+		$catNum = $categories[$i]["id"];
 		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($action_notify)) {
@@ -148,10 +148,10 @@ if ($total_categories) {
 		// display forum topics
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
-			$cat_id = $categories[$i]['cat_id'];
+			$cat_id = $categories[$i]['id'];
 			$sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $cours_id");
 			if (mysql_num_rows($sql) > 0) { // if category forum topics are found 
-				if ($forum_row[$x]['cat_id'] == $cat_id) { 
+				if ($forum_row[$x]['cat_id'] == $cat_id) {
 					if ($forum_row[$x]["post_time"]) {
 						$last_post = $forum_row[$x]["post_time"];
 						$last_post_datetime = $forum_row[$x]["post_time"];
@@ -164,7 +164,7 @@ if ($total_categories) {
 					if (empty($last_post)) {
 						$last_post = $langNoPosts;
 					}
-					$tool_content .= "<tr class='even'>\n";
+					$tool_content .= "<tr class='even'>";
 					if (!isset($last_visit)) {
 						$last_visit = 0;
 					}
@@ -173,45 +173,47 @@ if ($total_categories) {
 					} else {
 						$tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
 					}
-					$forum_name = q($forum_row[$x]['forum_name']);
+					$forum_name = q($forum_row[$x]['name']);
 					$last_user_post = uid_to_name($forum_row[$x]['poster_id']);
-					$last_post_topic_id = $forum_row[$x]['topic_id'];
-					$total_posts = $forum_row[$x]['forum_posts'];
-					$total_topics = $forum_row[$x]['forum_topics'];
-					$desc = q($forum_row[$x]['forum_desc']);
+					$last_post_topic_id = $forum_row[$x]['topic_id'];                                        
+					$total_posts = $forum_row[$x]['num_posts'];
+					$total_topics = $forum_row[$x]['num_topics'];
+					$desc = q($forum_row[$x]['desc']);
 					$tool_content .= "<td>";
-					$forum_id = $forum_row[$x]['forum_id'];
+					$forum_id = $forum_row[$x]['id'];
 					$is_member = false;
 					$group_id = init_forum_group_info($forum_id);
 					$member = $is_member? "&nbsp;&nbsp;($langMyGroup)": '';
 					// Show link to forum if:
 					//  - user is admin of course
 					//  - forum doesn't belong to group
-					//  - forum belongs to group and group forums are enabled and
-					//     - forum is not private or
+					//  - forum belongs to group and group forums are enabled and					
 					//     - user is member of group
-					if ($is_editor or !$group_id or ($has_forum and (!$private_forum or $is_member))) {
-						$tool_content .= "<a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'><b>$forum_name</b></a><div class='smaller'>" . $member;
+					if ($is_editor or !$group_id or ($has_forum and $is_member)) {
+						$tool_content .= "<a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>
+                                                                <b>$forum_name</b>
+                                                                </a><div class='smaller'>" . $member;
 					} else {
 						$tool_content .= $forum_name;
 					}
 					$tool_content .= "</div><div class='smaller'>$desc</div>";
-					$tool_content .= "</td>\n";
+					$tool_content .= "</td>";
 					$tool_content .= "<td width='65' class='center'>$total_topics</td>\n";
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
-						$tool_content .= "<span class='smaller'>$last_user_post &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
+						$tool_content .= "<span class='smaller'>$last_user_post&nbsp;
+                                                <a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						<img src='$icon_topic_latest' />
 						</a>
-						<br />$human_last_post_time</span></td>\n";
+						<br />$human_last_post_time</span></td>";
 					} else {
 						$tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
 					}
-					list($forum_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
+					list($forum_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
 								WHERE user_id = $uid
 								AND forum_id = $forum_id
-								AND course_id = $cours_id", $mysqlMainDb));
+								AND course_id = $cours_id"));
 					if (!isset($forum_action_notify)) {
 						$forum_link_notify = false;
 						$forum_icon = '_off';

@@ -94,13 +94,13 @@ if ($is_editor) {
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
 
                 // Create a hidden category for group forums
-                $req = db_query("SELECT cat_id FROM categories 
+                $req = db_query("SELECT id FROM forum_categories 
                                 WHERE cat_order = -1
                                 AND course_id = $cours_id");
                 if ($req and mysql_num_rows($req) > 0) {
                         list($cat_id) = mysql_fetch_row($req);
                 } else {
-                        db_query("INSERT INTO categories (cat_title,  cat_order, course_id)
+                        db_query("INSERT INTO forum_categories (cat_title,  cat_order, course_id)
                                          VALUES ('$langCatagoryGroup', -1, $cours_id)");
                         $cat_id = mysql_insert_id();
                 }
@@ -111,10 +111,8 @@ if ($is_editor) {
                                 $res = db_query("SELECT id FROM `group` WHERE name = '$langGroup $group_num'");
                         } while (mysql_num_rows($res) > 0);
 
-                        db_query("INSERT INTO forums (forum_name, forum_desc, forum_access,
-                                                      forum_moderator, forum_topics, forum_posts,
-                                                      forum_last_post_id, cat_id, forum_type, course_id)
-                                  VALUES ('$langForumGroup $group_num', '', 2, 1, 0, 0, 1, $cat_id, 0, $cours_id)");
+                        db_query("INSERT INTO forum (name, `desc`, num_topics, num_posts, last_post_id, cat_id, course_id)
+                                  VALUES ('$langForumGroup $group_num', '', 0, 0, 1, $cat_id, $cours_id)");
                         $forum_id = mysql_insert_id();
 
                         // Create a unique path to group documents to try (!)
@@ -201,8 +199,7 @@ if ($is_editor) {
                         }
                 }
                 // Course members not registered to any group
-                $resUserSansGroupe= db_query("
-                        SELECT u.user_id, u.nom, u.prenom
+                $resUserSansGroupe= db_query("SELECT u.user_id, u.nom, u.prenom
                                 FROM (user u, cours_user cu)
                                 WHERE cu.cours_id = $cours_id AND
                                       cu.user_id = u.user_id AND
@@ -316,11 +313,11 @@ if ($is_editor) {
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
-          <td align='right'><font color='green'>$langYes</font>";
+                <td align='right'><font color='green'>$langYes</font>";
                 $fontColor="black";
         } else {
                 $tool_content .= "$langGroupForum</td>
-          <td align='right'>
+                <td align='right'>
                 <font color='red'>$langNo</font>";$fontColor="silver";
         }
         $tool_content .= "</td>

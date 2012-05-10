@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -235,50 +235,49 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	$sql = db_query("SELECT * FROM exercise
 				WHERE course_id = $cours_id
 				AND active = '1'
-				AND MATCH (title, description)".$query, $mysqlMainDb);
+				AND MATCH (title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM forums WHERE MATCH (forum_name, forum_desc)".$query, $code_cours);
+	$sql = db_query("SELECT * FROM forum WHERE course_id = $cours_id AND MATCH (name, `desc`)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT forum_id, topic_title FROM topics WHERE MATCH (topic_title)".$query, $code_cours);
+	$sql = db_query("SELECT id, title FROM forum_topics WHERE course_id = $cours_id AND MATCH (title)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	while($res = mysql_fetch_array($sql)) {
-		$sql = db_query("SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
-					FROM posts, posts_text
-					WHERE posts.forum_id = $res[forum_id]
-						AND posts.post_id = posts_text.post_id 
-						AND MATCH (posts_text.post_text)".$query, $code_cours);
+		$sql = db_query("SELECT topic_id AS topicid, post_text AS posttext
+					FROM forum_posts
+					WHERE forum_id = $res[forum_id]						
+						AND MATCH (post_text)".$query);
 		if (mysql_num_rows($sql) > 0) {
 			return TRUE;
 		}
 	}
 	$sql = db_query("SELECT * FROM link
 				WHERE course_id = $cours_id
-				AND MATCH (url, title, description)".$query, $mysqlMainDb);
+				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM video 
 				WHERE course_id = $cours_id 
-				AND MATCH (url, title, description)".$query, $mysqlMainDb);
+				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM videolinks 
 				WHERE course_id = $cours_id 
-				AND MATCH (url, title, description)".$query, $mysqlMainDb);
+				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT id, title, comments FROM course_units
 				WHERE course_id = $cours_id
 				AND visibility = 'v' 
-				AND MATCH (title, comments)".$query, $mysqlMainDb);
+				AND MATCH (title, comments)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}

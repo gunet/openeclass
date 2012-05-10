@@ -76,18 +76,18 @@ if (isset($_POST["submit"])) {
 	$errorExists = false;
         foreach ($selectCourse as $key => $value) {
                 $cid = intval($value);
-                $course_info = db_query("SELECT fake_code, password, visible FROM course WHERE id = $cid");
+                $course_info = db_query("SELECT public_code, password, visible FROM course WHERE id = $cid");
                 if ($course_info) {
                         $row = mysql_fetch_array($course_info);
                         if ($row['visible'] == 1 and !empty($row['password']) and
                             $row['password'] != autounquote($_POST['pass' . $cid])) {
                                 $errorExists = true;
-                                $restrictedCourses[] = $row['fake_code'];
+                                $restrictedCourses[] = $row['public_code'];
                                 continue;
                         }
                         if (is_restricted($cid) and !in_array($cid, $selectCourse)) { // do not allow registration to restricted course
                                 $errorExists = true;
-                                $restrictedCourses[] = $row['fake_code'];
+                                $restrictedCourses[] = $row['public_code'];
                         } else {
                                 db_query("INSERT IGNORE INTO `cours_user` (`cours_id`, `user_id`, `statut`, `reg_date`)
                                                  VALUES ($cid, $uid, 5, CURDATE())");
@@ -211,7 +211,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString = "";
 
     // build a list of course followed by user.
-    $usercourses = db_query("SELECT course.code code_cours, course.public_code fake_code,
+    $usercourses = db_query("SELECT course.code code_cours, course.public_code public_code,
                                     course.id cours_id, statut
                                 FROM cours_user, course
                                 WHERE cours_user.cours_id = course.id                                  
@@ -231,7 +231,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $result = db_query("SELECT
                             course.id cid,
                             course.code k,
-                            course.public_code fake_code,
+                            course.public_code public_code,
                             course.title i,
                             course.visible visible,
                             course.prof_names t,
@@ -308,7 +308,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
         
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
         $retString .= "</td>";
-        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .")$requirepassword</td>";
+        $retString .= "\n      <td>$codelink (" . q($mycours['public_code']) .")$requirepassword</td>";
         $retString .= "\n      <td>". q($mycours['t']) ."</td>";
         $retString .= "\n      <td align='center'>";
         
@@ -335,7 +335,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 	$retString = "";
 
 	// build a list of course followed by user.
-	$usercourses = db_query("SELECT course.code code_cours, course.fake_code fake_code,
+	$usercourses = db_query("SELECT course.code code_cours, course.public_code public_code,
                                         course.id cours_id, statut
                                  FROM cours_user, course
                                  WHERE cours_user.cours_id = course.id                                  
@@ -404,7 +404,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                 $result = db_query("SELECT
                                         course.id cid,
                                         course.code k,
-                                        course.public_code fake_code,
+                                        course.public_code public_code,
                                         course.title i,
                                         course.visible visible,
                                         course.prof_names t,
@@ -502,7 +502,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                         }
                         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
                         $retString .= "</td>";
-                        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .
+                        $retString .= "\n      <td>$codelink (" . q($mycours['public_code']) .
                                 ")$requirepassword</td>";
                         $retString .= "\n      <td>" . q($mycours['t']) . "</td>";
                         $retString .= "\n      <td align='center'>";
