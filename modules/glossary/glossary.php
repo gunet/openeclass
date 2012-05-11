@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,8 +61,8 @@ if (isset($_GET['cat'])) {
 }
 
 list($expand_glossary, $glossary_index) =
-        mysql_fetch_row(db_query("SELECT expand_glossary, glossary_index
-                                         FROM `$mysqlMainDb`.cours WHERE cours_id = $cours_id"));
+        mysql_fetch_row(db_query("SELECT glossary_expand, glossary_index
+                                         FROM course WHERE id = $cours_id"));
 if ($glossary_index) {
         $prefixes = array();
         $q = db_query("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
@@ -93,7 +93,7 @@ if ($is_editor) {
 
         if (isset($_POST['submit_config'])) {
                 $expand_glossary = isset($_POST['expand'])? 1: 0;
-                db_query("UPDATE cours SET expand_glossary = $expand_glossary,
+                db_query("UPDATE course SET glossary_expand = $expand_glossary,
                                            glossary_index = " . (isset($_POST['index'])? 1: 0));
                 invalidate_glossary_cache();
                 $tool_content .= "<div class='success'>$langQuotaSuccess</div>";

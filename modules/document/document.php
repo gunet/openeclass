@@ -85,7 +85,7 @@ EOF;
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
-$d = mysql_fetch_row(db_query("SELECT $type FROM cours WHERE cours_id = $cours_id"));
+$d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $cours_id"));
 $diskQuotaDocument = $d[0];
 
 if (isset($_GET['showQuota'])) {
