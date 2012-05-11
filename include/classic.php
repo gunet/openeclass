@@ -149,7 +149,7 @@ if (count($status) > 0) {
                 $result = db_query("SELECT announcement.id, content, `date`, title
                                 FROM announcement, course_module
                                 WHERE announcement.course_id = $cid
-				AND announcement.visibility = 'v'
+				AND announcement.visible = 1
                                 AND announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
                                 AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
                                 AND course_module.visible = 1

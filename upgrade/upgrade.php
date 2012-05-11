@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -534,60 +534,57 @@ if (!isset($_POST['submit2'])) {
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
                         db_query("RENAME TABLE annonces TO announcement");
+                        db_query("UPDATE announcement SET visibility=1 WHERE visibility='v'");
+                        db_query("UPDATE announcement SET visibility=0 WHERE visibility='i'");
                         db_query("ALTER TABLE announcement CHANGE `contenu` `content` MEDIUMTEXT,
                                                             CHANGE `temps` `date` DATETIME,
                                                             CHANGE `cours_id` `course_id` INT(11),
-                                                            CHANGE `ordre` `order` MEDIUMINT(11)");
+                                                            CHANGE `ordre` `order` MEDIUMINT(11),
+                                                            CHANGE `visibility` `visible` TINYINT(4)");
                 }
 
                 // create forum tables
-                db_query("CREATE TABLE forum_categories (                                       
-                                       `cat_id` INT(10),
-                                       `cat_title` VARCHAR(100),
-                                       `cat_order` VARCHAR(10),
-                                       `course_id` INT(11),
-                                       KEY (cat_id, course_id))");
+                db_query("CREATE TABLE forum_categories (
+                        `id` INT(10),
+                        `cat_title` VARCHAR(100),
+                        `cat_order` VARCHAR(10),
+                        `course_id` INT(11),
+                        KEY (id, course_id))");
 
                 db_query("CREATE TABLE forum (                     
-                     forum_id int(10),
-                     forum_name varchar(150),
-                     forum_desc text,
-                     forum_access int(10) DEFAULT 1,
-                     forum_moderator int(10),
-                     forum_topics int(10) DEFAULT 0 NOT NULL,
-                     forum_posts int(10) DEFAULT 0 NOT NULL,
-                     forum_last_post_id int(10) DEFAULT 0 NOT NULL,
-                     cat_id int(10),
-                     forum_type int(10) DEFAULT '0',
+                     id int(10),
+                     name varchar(150),
+                     `desc` text,                                          
+                     num_topics int(10) DEFAULT 0 NOT NULL,
+                     num_posts int(10) DEFAULT 0 NOT NULL,
+                     last_post_id int(10) DEFAULT 0 NOT NULL,
+                     cat_id int(10),                     
                      course_id int(11),                     
-                     KEY (forum_id, course_id))");
+                     KEY (id, course_id))");
                 
-                db_query("CREATE TABLE forum_topics (
-                       topic_id int(10),
-                       topic_title varchar(100),
-                       topic_poster_id int(10),
-                       topic_time varchar(20),
-                       topic_views int(10) DEFAULT '0' NOT NULL,
-                       topic_replies int(10) DEFAULT '0' NOT NULL,
-                       topic_last_post_id int(10) DEFAULT '0' NOT NULL,
-                       forum_id int(10) DEFAULT '0' NOT NULL,
-                       topic_status int(10) DEFAULT '0' NOT NULL,
-                       course_id int(11),                       
-                       KEY (forum_id, topic_id, course_id))");
-
                 db_query("CREATE TABLE forum_posts (
-                      post_id int(10),
+                      id int(10),
                       topic_id int(10) DEFAULT 0 NOT NULL,
                       forum_id int(10) DEFAULT 0 NOT NULL,
                       post_text mediumtext,
                       poster_id int(10) DEFAULT 0 NOT NULL,
-                      post_time varchar(20),
-                      poster_ip varchar(16),
-                      course_id int(11),                                            
-                      KEY (post_id, topic_id, forum_id, course_id))");
+                      post_time DATETIME,
+                      poster_ip VARCHAR(16),                      
+                      KEY (id, topic_id, forum_id))");
                 
-                db_query("ALTER TABLE `forum_posts` ADD FULLTEXT `posts` (`post_text`)");
-                db_query("ALTER TABLE `forum` ADD FULLTEXT `forums` (`forum_name`,`forum_desc`)");
+                db_query("CREATE TABLE forum_topics (
+                       id int(10),
+                       title varchar(100),
+                       poster_id int(10),
+                       topic_time DATETIME,
+                       num_views int(10) DEFAULT '0' NOT NULL,
+                       num_replies int(10) DEFAULT '0' NOT NULL,
+                       last_post_id int(10) DEFAULT '0' NOT NULL,
+                       forum_id int(10) DEFAULT '0' NOT NULL,                       
+                       KEY (forum_id, id))");                
+                
+                db_query("ALTER TABLE `forum_posts` ADD FULLTEXT `post` (`post_text`)");
+                db_query("ALTER TABLE `forum` ADD FULLTEXT `forum` (`name`,`desc`)");
 
                 // create video tables
                 db_query('CREATE TABLE IF NOT EXISTS video (

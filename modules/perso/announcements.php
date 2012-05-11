@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -162,7 +162,7 @@ function createQueries($queryParam){
 		$announce_query[$i] = "SELECT title, content, `date`, announcement.id
                         FROM announcement, course_module
                         WHERE announcement.course_id = $lesson_id[$i]
-				AND announcement.visibility = 'v'
+				AND announcement.visible = 1
                                 AND DATE_FORMAT(`date`,'%Y %m %d') >='$dateVar'
                                 AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
                                 AND course_module.visible = 1

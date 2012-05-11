@@ -96,10 +96,10 @@ if ($is_editor) {
     if (isset($_GET['mkvis'])) {
 	$mkvis = intval($_GET['mkvis']);
 	if ($_GET['vis'] == 1) {
-	    $result = db_query("UPDATE announcement SET visibility = 'v' WHERE id = '$mkvis'");
+	    $result = db_query("UPDATE announcement SET visible = 1 WHERE id = '$mkvis'");
 	}
 	if ($_GET['vis'] == 0) {
-	    $result = db_query("UPDATE announcement SET visibility = 'i' WHERE id = '$mkvis'");
+	    $result = db_query("UPDATE announcement SET visible = 0 WHERE id = '$mkvis'");
 	}
     }
     /* delete */
@@ -141,7 +141,7 @@ if ($is_editor) {
             db_query("INSERT INTO announcement SET content = $newContent,
                             title = $antitle, `date` = NOW(),
                             course_id = $cours_id, `order` = $order,
-                            visibility = 'v'");
+                            visible = 1");
         }
 
         // send email 
@@ -273,11 +273,11 @@ if ($is_editor) {
 			$result = db_query("SELECT * FROM announcement 
                                                 WHERE course_id = $cours_id AND 
                                                 id = $_GET[an_id] 
-                                                AND visibility = 'v'");
+                                                AND visible = 1");
 		} else {
 			$result = db_query("SELECT * FROM announcement
                                                 WHERE course_id = $cours_id AND 
-                                                visibility = 'v' 
+                                                visible = 1 
                                                 ORDER BY `order` DESC");
 		}
 	}
@@ -304,7 +304,7 @@ if ($is_editor) {
 		$content = standard_text_escape($myrow['content']);
 		$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 		if ($is_editor) {
-		    if ($myrow['visibility'] == 'i') {
+		    if ($myrow['visible'] == 0) {
 			$visibility = 1;
 			$vis_icon = 'invisible.png';
 			$tool_content .= "<tr class='invisible'>";

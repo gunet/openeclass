@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -46,7 +46,7 @@ list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE code = '
 $title = htmlspecialchars($title, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM announcement WHERE course_id = $cours_id 
+		FROM announcement WHERE course_id = $cours_id AND visible = 1 
                 ORDER BY `order` DESC");
 list($lastbuilddate) = mysql_fetch_row($result);
 
@@ -62,7 +62,7 @@ echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
 $sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM announcement WHERE course_id = $cours_id ORDER BY `order` DESC");
+		FROM announcement WHERE course_id = $cours_id AND visible = 1 ORDER BY `order` DESC");
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";

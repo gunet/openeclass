@@ -1005,7 +1005,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 
     
     // -------------------------------------------------------
-    // Move table `accueil` to table `modules` in main DB
+    // Move table `accueil` to table `course_module` in main DB
     // -------------------------------------------------------
     
     // external links are moved to table `links` with category = -1
