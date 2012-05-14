@@ -105,7 +105,7 @@ function createCoursesDom($coursesArr) {
 
             $c = $cg->appendChild($dom->createElement('course'));
 
-            $titleStr = ($course->code === $course->fake_code) ? $course->intitule : $course->intitule .' - '. $course->fake_code ;
+            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title .' - '. $course->public_code ;
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
