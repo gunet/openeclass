@@ -52,7 +52,7 @@ list($first_unit_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
 $tool = new stdClass();
 $tool->id = 1;
 $tool->name = $langCourseUnits;
-$tool->link = $urlMobile .'modules/units/index.php?course='. $currentCourse .'&amp;id='. $first_unit_id;
+$tool->link = $urlMobile .'modules/units/index.php?course='. $currentCourse .'&id='. $first_unit_id;
 $tool->img = 'courseunits';
 $tool->type = 'courseunits';
 $tool->active = true;
