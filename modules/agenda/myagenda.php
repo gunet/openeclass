@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -90,7 +90,7 @@ function get_agendaitems($query, $month, $year) {
                 $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ." 
                                         AND MONTH(DAY)='$month' 
                                         AND YEAR(DAY)='$year' 
-                                        AND visibility = 'v'", $mysqlMainDb);
+                                        AND visible = 1");
 
                 while ($item = mysql_fetch_array($result)) {
                         $URL = $urlServer."modules/agenda/agenda.php?course=".$mycours['k'];

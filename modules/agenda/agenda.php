@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -100,9 +100,9 @@ $start_cal = $jscalendar->make_input_field(
 if ($is_editor) {
 	// modify visibility
 	if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
-                db_query("UPDATE agenda SET visibility = 'i' WHERE course_id = $cours_id AND id = $id");
+                db_query("UPDATE agenda SET visible = 0 WHERE course_id = $cours_id AND id = $id");
 	} elseif (isset($_GET['mkVisibl']) and ($_GET['mkVisibl'] == true)) {
-                db_query("UPDATE agenda SET visibility = 'v' WHERE course_id = $cours_id AND id = $id");
+                db_query("UPDATE agenda SET visible = 1 WHERE course_id = $cours_id AND id = $id");
 	}
 	if (isset($_POST['submit'])) {
                 register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
@@ -128,7 +128,8 @@ if ($is_editor) {
                                              content = $content,
                                              day = $date,
                                              hour = $hour,
-                                             lasting = $lasting");
+                                             lasting = $lasting,
+                                             visible = 1");
                         $id = mysql_insert_id();
 		}
                 unset($id);
@@ -247,11 +248,11 @@ if ($is_editor) {
 if (!isset($sens)) $sens =" ASC";
 
 if ($is_editor) { 
-	$result = db_query("SELECT id, title, content, day, hour, lasting, visibility FROM agenda WHERE course_id = $cours_id 
+	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $cours_id 
 		ORDER BY day ".$sens.", hour ".$sens);
 } else {
-	$result = db_query("SELECT id, title, content, day, hour, lasting, visibility FROM agenda WHERE course_id = $cours_id 
-		AND visibility = 'v' ORDER BY day ".$sens.", hour ".$sens);
+	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $cours_id 
+		AND visible = 1 ORDER BY day ".$sens.", hour ".$sens);
 }
 
 if (mysql_num_rows($result) > 0) {
@@ -302,7 +303,7 @@ if (mysql_num_rows($result) > 0) {
 		}
                 $classvis = 'class="visible"';
 		if ($is_editor) {
-			if ($myrow["visibility"] == 'i') {
+			if ($myrow["visible"] == 0) {
 				$classvis = 'class="invisible"';
 			} else {
                              if ($numLine%2 == 0) {
@@ -352,7 +353,7 @@ if (mysql_num_rows($result) > 0) {
                         <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
                         <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
                         <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
-                        if ($myrow["visibility"] == 'v') {
+                        if ($myrow["visible"] == 1) {
                                 $tool_content .= "
                                 <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
                                 <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";

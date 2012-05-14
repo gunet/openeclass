@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -70,7 +70,7 @@ function getUserAgenda($param, $type)
 	$sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, course.code, course.title
 		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids)
 		AND agenda.course_id = course.id
-		AND agenda.visibility = 'v'
+		AND agenda.visible = 1
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC
 		LIMIT $uniqueDates";
@@ -80,7 +80,7 @@ function getUserAgenda($param, $type)
 		agenda.lasting, course.code, course.title
 		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids) 
 		AND agenda.course_id = course.id
-		AND agenda.visibility = 'v'
+		AND agenda.visible = 1
 		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
 		ORDER BY day, hour DESC
 		LIMIT $uniqueDates"; 
@@ -160,10 +160,9 @@ function agendaHtmlInterface($data)
 				else {
 					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
 				}
-        $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-        $data[$i][$j][1] = ellipsize($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
-        $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
-
+                                $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
+                                $data[$i][$j][1] = ellipsize($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
+                                $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
 				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
 			}
 		}

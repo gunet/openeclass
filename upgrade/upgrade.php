@@ -773,7 +773,7 @@ if (!isset($_POST['submit2'])) {
                             `day` DATE NOT NULL DEFAULT '0000-00-00',
                             `hour` TIME NOT NULL DEFAULT '00:00:00',
                             `lasting` VARCHAR(20),
-                            `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                            `visible` TINYINT(4),
                             FULLTEXT KEY `agenda` (`title` ,`content`))");
 
                 db_query("CREATE TABLE IF NOT EXISTS `exercise` (

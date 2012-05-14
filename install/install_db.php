@@ -80,7 +80,7 @@ db_query("CREATE TABLE announcement (
 	`date` DATE DEFAULT NULL,
 	`course_id` INT(11) NOT NULL default '0',
 	`order` MEDIUMINT(11) NOT NULL,
-	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`visible` TINYINT(4)',
 	PRIMARY KEY (id)) $charset_spec");
 
 #
@@ -109,7 +109,7 @@ db_query("CREATE TABLE `agenda` (
 	`day` DATE NOT NULL DEFAULT '0000-00-00',
 	`hour` TIME NOT NULL DEFAULT '00:00:00',
 	`lasting` VARCHAR(20),
-	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`visible` TINYINT(4),
 	FULLTEXT KEY `agenda` (`title` ,`content`)) $charset_spec");
 
 

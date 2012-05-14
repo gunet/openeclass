@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -865,13 +865,16 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     
     // move agenda to central db and drop table
     if (mysql_table_exists($code, 'agenda')) {
-    
-        // ----- agenda DB Table ----- //
+        
+        // ----- agenda DB Table ----- //    
+        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility=1 WHERE visibility='v'");
+        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility=0 WHERE visibility='i'");            
+                    
         list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
         $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);
         
         $ok = db_query("INSERT INTO `$mysqlMainDb`.agenda
-                         (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visibility`)
+                         (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visible`)
                          SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, `day`, `hour`, `lasting`, 
                                 `visibility` FROM agenda ORDER BY id");
     
