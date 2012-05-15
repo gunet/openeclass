@@ -530,7 +530,18 @@ if (!isset($_POST['submit2'])) {
         if ($oldversion < '3.0') {
 		// add index on `loginout`.`id_user` for performace
 		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
-
+                
+                db_query("UPDATE `course_units` SET visibility=1 WHERE visibility='v'");
+                db_query("UPDATE `course_units` SET visibility=0 WHERE visibility='i'");
+                db_query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4)");
+                db_query("UPDATE `unit_resources` SET visibility=1 WHERE visibility='v'");
+                db_query("UPDATE `unit_resources` SET visibility=0 WHERE visibility='i'");
+                db_query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4)");
+                
+                db_query("UPDATE `document` SET visibility=1 WHERE visibility='v'");
+                db_query("UPDATE `document` SET visibility=0 WHERE visibility='i'");
+                db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");
+                
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
                         db_query("RENAME TABLE annonces TO announcement");

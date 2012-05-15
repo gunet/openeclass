@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -422,15 +422,15 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $encoded_filenames = $decoded_filenames = $filename = array();
 
         $hidden_dirs = array();
-        $sql = db_query("SELECT path, filename, visibility, format FROM document
+        $sql = db_query("SELECT path, filename, visible, format FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
                 $GLOBALS['path_visibility'][$files['path']] =
-                        ($include_invisible or $files['visibility'] == 'v');
+                        ($include_invisible or $files['visible'] == 1);
                 array_push($encoded_filenames, $files['path']);
                 array_push($filename, $files['filename']);
-                if (!$include_invisible and $files['format'] == '.dir' and $files['visibility'] != 'v') {
+                if (!$include_invisible and $files['format'] == '.dir' and $files['visible'] != 1) {
                         $parentdir = preg_replace('|/[^/]+$|', '', $files['path']);
                         // Don't need to check lower-level hidden dir if parent is there
                         if (array_search($parentdir, $hidden_dirs) === false) {

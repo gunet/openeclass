@@ -215,7 +215,7 @@ if ($can_upload) {
                                 }
                                 if (!$error) {
                                         // Check if file already exists
-					$result = db_query("SELECT path, visibility FROM document WHERE
+					$result = db_query("SELECT path, visible FROM document WHERE
                                                                    $group_sql AND
                                                                    path REGEXP '^" . escapeSimple($uploadPath) . "/[^/]+$' AND
                                                                    filename = " . autoquote($fileName) ." LIMIT 1");
@@ -240,7 +240,7 @@ if ($can_upload) {
                                                 } else {
                                                         $file_path = $uploadPath . '/' . $safe_fileName;
                                                 }
-                                                $vis = 'v';
+                                                $vis = 1;
                                         }
                                 }
                                 if (!$error) {
@@ -254,7 +254,7 @@ if ($can_upload) {
                                                         subsystem_id = $subsystem_id,
                                                         path = " . quote($file_path) . ",
                                                         filename = " . autoquote($fileName) . ",
-                                                        visibility = '$vis',
+                                                        visible = '$vis',
                                                         comment = " . autoquote($_POST['file_comment']) . ",
                                                         category = " . intval($_POST['file_category']) . ",
                                                         title =	" . autoquote($_POST['file_title']) . ",
@@ -475,7 +475,7 @@ if ($can_upload) {
 				subsystem_id = $subsystem_id,
 				path = " . quote($metadataPath) . ",
 				filename = " . autoquote($oldFilename) . ",
-				visibility = 'i',
+				visible = 0,
 				creator	= " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
 				date = '$xml_date',
 				date_modified =	'$xml_date',
@@ -628,22 +628,21 @@ if ($can_upload) {
 			  </tr>";
 		  
                         $dialogBox .= "
-          <tr>
-            <th>$langCopyrighted : </th>
-            <td><input name='file_copyrighted' type='radio' value='0' ";
+                        <tr>
+                        <th>$langCopyrighted : </th>
+                        <td><input name='file_copyrighted' type='radio' value='0' ";
                         if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
 
                         if ($oldCopyrighted=="1") { 
                                 $dialogBox .= " checked='checked' ";
                         }
-                        $dialogBox .= "/>$langCopyrightedNotFree</td>
-          </tr>";
+                        $dialogBox .= "/>$langCopyrightedNotFree</td></tr>";
 
                         //ektypwsh tou combox gia epilogh glwssas
                         $dialogBox .= "
-          <tr>
-            <th>$langLanguage :</th>
-            <td>" .
+                                <tr>
+                                <th>$langLanguage :</th>
+                                <td>" .
                                 selection(array('en' => $langEnglish,
                                                 'fr' => $langFrench,
                                                 'de' => $langGerman,
@@ -651,22 +650,22 @@ if ($can_upload) {
                                                 'it' => $langItalian,
                                                 'es' => $langSpanish), 'file_language', $oldLanguage) .
                                 "</td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>
-            <td class='right'><input type='submit' value='$langOkComment' /></td>
-          </tr>
-          <tr>
-            <th>&nbsp;</th>
-            <td class='right'>$langNotRequired</td>
-          </tr>
-          </table>
-        <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
-        <input type='hidden' size='80' name='file_date' value='$oldDate' />
-        <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
-        </fieldset>
-        </form>
-        \n\n";
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'><input type='submit' value='$langOkComment' /></td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'>$langNotRequired</td>
+                        </tr>
+                        </table>
+                        <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+                        <input type='hidden' size='80' name='file_date' value='$oldDate' />
+                        <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+                        </fieldset>
+                        </form>
+                        \n\n";
                 } else {
                         $action_message = "<p class='caution'>$langFileNotFound</p>";
                 }
@@ -700,13 +699,13 @@ if ($can_upload) {
 	// Visibility commands
 	if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
 		if (isset($_GET['mkVisibl'])) {
-                        $newVisibilityStatus = "v";
+                        $newVisibilityStatus = 1;
                         $visibilityPath = $_GET['mkVisibl'];
                 } else {
-                        $newVisibilityStatus = "i";
+                        $newVisibilityStatus = 0;
                         $visibilityPath = $_GET['mkInvisibl'];
                 }
-		db_query("UPDATE document SET visibility='$newVisibilityStatus'
+		db_query("UPDATE document SET visible='$newVisibilityStatus'
 					  WHERE $group_sql AND
 					        path = " . autoquote($visibilityPath));
 		$action_message = "<p class='success'>$langViMod</p>";
@@ -827,7 +826,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'filename' => $row['filename'],
                 'format' => $row['format'],
                 'path' => $row['path'],
-                'visible' => ($row['visibility'] == 'v'),
+                'visible' => ($row['visible'] == 1),
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
                 'date' => strtotime($row['date_modified']));
@@ -875,13 +874,12 @@ if($can_upload) {
 
 // check if there are documents
 list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql" .
-				            ($is_editor? '': " AND visibility='v'")));
+				            ($is_editor? '': " AND visible=1")));
 if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
 } else {
 	// Current Directory Line
-	$tool_content .= "
-    <table width='100%' class='tbl'>\n";
+	$tool_content .= "<table width='100%' class='tbl'>";
 
         if ($can_upload) {
                 $cols = 4;
@@ -891,11 +889,10 @@ if ($doc_count == 0) {
 
         $download_path = empty($curDirPath)? '/': $curDirPath;
         $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
-	$tool_content .= "
-    <tr>
-      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-      "&nbsp;$download_dir<br></div></td>
-      <td><div align='right'>";
+	$tool_content .= "<tr>
+        <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+        "&nbsp;$download_dir<br></div></td>
+        <td><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
@@ -931,10 +928,10 @@ if ($doc_count == 0) {
     </table>
     <table width='100%' class='tbl_alt'>
     <tr>";
-        $tool_content .= "\n      <th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>';
-        $tool_content .= "\n      <th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
-        $tool_content .= "\n      <th width='60' class='center'><b>$langSize</b></th>";
-        $tool_content .= "\n      <th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
+        $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>';
+        $tool_content .= "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>';
+        $tool_content .= "<th width='60' class='center'><b>$langSize</b></th>";
+        $tool_content .= "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
         if (!$is_in_tinymce) {
             if($can_upload) {
 		$width = (get_config("insert_xml_metadata")) ? 175 : 135;

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,12 +22,12 @@
 
 function list_assignments()
 {
-        global $id, $tool_content, $mysqlMainDb, $langTitle, $langChoice, $m,
+        global $id, $tool_content, $langTitle, $langChoice, $m,
                $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
                $langVisible, $cours_id, $code_cours, $themeimg;
 
 
-        $result = db_query("SELECT * FROM assignments WHERE course_id = $cours_id ORDER BY active, title", $mysqlMainDb);
+        $result = db_query("SELECT * FROM assignment WHERE course_id = $cours_id ORDER BY active, title");
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoAssign</p>";
         } else {

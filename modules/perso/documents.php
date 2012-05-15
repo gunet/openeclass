@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,13 +65,15 @@ function docsHtmlInterface($date)
 	global $langNoDocsExist, $uid;
 	global $mysqlMainDb, $group_sql;
 
-	$q = db_query("SELECT document.path, document.course_id, document.filename, document.title, document.date_modified, course.title, course.code
+	$q = db_query("SELECT document.path, document.course_id, document.filename, 
+                                document.title, document.date_modified, 
+                                course.title, course.code
                    FROM document, cours_user, course
                    WHERE document.course_id = cours_user.cours_id AND
                              cours_user.user_id = $uid AND
                              course.id = cours_user.cours_id AND
 			     subsystem = ".MAIN." AND
-			     visibility = 'v' AND
+			     document.visible = 1 AND
                              date_modified >= '$date' AND
 			     format <> '.dir'
                        ORDER BY date_modified DESC", $mysqlMainDb);
@@ -94,7 +96,7 @@ function docsHtmlInterface($date)
 					$first_check = 1;
 				}                               
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
-				$url = file_url($course_file['path'], null, $course_file['code']);
+				$url = file_url($course_file['path'], null, $course_file['code']);                                
 				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
 				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .

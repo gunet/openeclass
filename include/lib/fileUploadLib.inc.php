@@ -506,7 +506,7 @@ function process_extracted_file($p_event, &$p_header) {
                 return 0;
         } else {
                 // Check if file already exists
-                $result = db_query("SELECT id, path, visibility FROM document
+                $result = db_query("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
                                                  path REGEXP '^$path/[^/]+$' AND
                                                  filename = " . quote($filename) . " LIMIT 1");
@@ -547,7 +547,7 @@ function process_extracted_file($p_event, &$p_header) {
                                  subsystem_id = $subsystem_id,
                                  path = '$path',
                                  filename = " . quote($filename) .",
-                                 visibility = 'v',
+                                 visible = 1,
                                  comment = " . quote($file_comment) . ",
                                  category = " . intval($file_category) . ",
                                  title = " . quote($file_title) . ",
@@ -578,7 +578,7 @@ function make_path($path, $path_components)
         $path_already_exists = true;
         $depth = 1 + substr_count($path, '/');
         foreach ($path_components as $component) {
-                $q = db_query("SELECT path, visibility, format,
+                $q = db_query("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
@@ -599,7 +599,7 @@ function make_path($path, $path_components)
                                           subsystem_id = $subsystem_id,
                                           path='$path',
                                           filename=" . quote($component) . ",
-                                          visibility='v',
+                                          visible=1,
                                           creator=" . quote($prenom." ".$nom) . ",
                                           date=NOW(),
                                           date_modified=NOW(),

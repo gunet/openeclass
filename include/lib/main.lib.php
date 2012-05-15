@@ -1362,7 +1362,7 @@ function add_units_navigation($entry_page = FALSE)
                 if ($is_editor) {
                         $visibility_check = '';
                 } else {
-                        $visibility_check = "AND visibility='v'";
+                        $visibility_check = "AND visibility=1";
                 }
 		if (isset($_GET['unit'])) {
 			$unit_id = intval($_GET['unit']);
@@ -1726,7 +1726,7 @@ function description_unit_id($cours_id)
         } else {
                 db_query('INSERT INTO course_units SET `order` = -1,
                                 `title` = ' . quote($langCourseDescription) . ',
-                                `visibility` = "i",
+                                `visibility` = 0,
                                 `course_id` = ' . $cours_id);
                 return mysql_insert_id();
         }
@@ -1752,7 +1752,7 @@ function new_description_res_id($unit_id)
 }
 
 
-function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 'i', $date = false)
+function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 0, $date = false)
 {
         if (!$date) {
                 $date = 'NOW()';

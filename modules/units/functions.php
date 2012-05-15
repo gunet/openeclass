@@ -7,7 +7,7 @@
 // Process resource actions
 function process_actions()
 {
-        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted, $langResourceUnitModified;
+        global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified;
 	
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
@@ -28,16 +28,16 @@ function process_actions()
         } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
-                        db_query("DELETE FROM unit_resources WHERE id = $res_id", $mysqlMainDb);
+                        db_query("DELETE FROM unit_resources WHERE id = $res_id");
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
                 $res_id = intval($_REQUEST['vis']);
                 if ($id = check_admin_unit_resource($res_id)) {
-                        $sql = db_query("SELECT `visibility` FROM unit_resources WHERE id=$res_id");
+                        $sql = db_query("SELECT `visible` FROM unit_resources WHERE id=$res_id");
                         list($vis) = mysql_fetch_row($sql);
-                        $newvis = ($vis == 'v')? 'i': 'v';
-                        db_query("UPDATE unit_resources SET visibility = '$newvis' WHERE id = $res_id");
+                        $newvis = ($vis == 1)? 0: 1;
+                        db_query("UPDATE unit_resources SET visible = '$newvis' WHERE id = $res_id");
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
                 $res_id = intval($_REQUEST['down']);
@@ -100,7 +100,7 @@ function show_resource($info)
 {
         global $tool_content, $langUnknownResType, $is_editor;
 	
-        if ($info['visibility'] == 'i' and !$is_editor) {
+        if ($info['visible'] == 0 and !$is_editor) {
                 return;
         }
         switch ($info['type']) {
@@ -108,45 +108,45 @@ function show_resource($info)
                         $tool_content .= show_doc($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
                 case 'text':
-                        $tool_content .= show_text($info['comments'], $info['id'], $info['visibility']);
+                        $tool_content .= show_text($info['comments'], $info['id'], $info['visible']);
                         break;
                 case 'description':
-                        $tool_content .= show_description($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_description($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'lp':
                         $tool_content .= show_lp($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
 		case 'video':
 		case 'videolinks':
-                        $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'exercise':
-                        $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'work':
-                        $tool_content .= show_work($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_work($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'topic':
 		case 'forum':
-                        $tool_content .= show_forum($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_forum($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'wiki':
-                        $tool_content .= show_wiki($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_wiki($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'link':
-                        $tool_content .= show_link($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_link($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'linkcategory':
-                        $tool_content .= show_linkcat($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_linkcat($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'ebook':
-                        $tool_content .= show_ebook($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_ebook($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'section':
-                        $tool_content .= show_ebook_section($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_ebook_section($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'subsection':
-                        $tool_content .= show_ebook_subsection($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visibility']);
+                        $tool_content .= show_ebook_subsection($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
                 default:
                         $tool_content .= $langUnknownResType;
@@ -157,13 +157,12 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $resource_id, $file_id)
 {
-        global $mysqlMainDb, $is_editor, $currentCourseID, $cours_id,
+        global $is_editor, $cours_id,
                $langWasDeleted, $visibility_check, $urlServer, $id,
                $code_cours, $themeimg;
 
         $title = htmlspecialchars($title);
-        $r = db_query("SELECT * FROM `$mysqlMainDb`.document
-	               WHERE course_id = $cours_id AND id =" . intval($file_id) ." $visibility_check");
+        $r = db_query("SELECT * FROM document WHERE course_id = $cours_id AND id =" . intval($file_id) ." $visibility_check");
         if (mysql_num_rows($r) == 0) {
                 if (!$is_editor) {
                         return '';
@@ -173,7 +172,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $link = "<span class='invisible'>".q($title)." ($langWasDeleted)</span>";
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
-                $status = $file['visibility'];
+                $status = $file['visible'];
                 if ($file['format'] == '.dir') {
                         $image = $themeimg.'/folder.png';
                         $link = "<a href='{$urlServer}modules/document/document.php?course=$code_cours&amp;openDir=$file[path]&amp;unit=$id'>";
@@ -183,7 +182,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                         $link = "<a href='" . file_url($file['path'], $file['filename']) . "' target='_blank'>";
                 }
         }
-	$class_vis = ($status == 'i' or $status == 'del')? ' class="invisible"': ' class="even"';
+	$class_vis = ($status == 0 or $status == 'del')? ' class="invisible"': ' class="even"';
         if (!empty($comments)) {
                 $comment = '<br />' . $comments;
         } else {
@@ -203,7 +202,7 @@ function show_text($comments, $resource_id, $visibility)
 {
         global $tool_content;
 
-        $class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
+        $class_vis = ($visibility == 0)? ' class="invisible"': ' class="even"';
 	$comments = mathfilter($comments, 12, "../../courses/mathimg/");
         $tool_content .= "
         <tr$class_vis>
@@ -235,7 +234,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 	global $id, $mysqlMainDb, $urlServer, $cours_id, $is_editor,
                $langWasDeleted, $code_cours, $themeimg, $langInactiveModule;
 
-        $module_visible = visible_module(23); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
         }        
@@ -286,12 +285,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 {
         global $is_editor, $cours_id, $mysqlMainDb, $tool_content, $themeimg, $langInactiveModule;
 
-        $module_visible = visible_module(4); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
         }        
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';        
         
         $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id AND id=$video_id",
@@ -303,11 +302,11 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 {
                     list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
                     
-                    $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
+                    $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
                 }
                 else
                 {
-                    $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                    $videolink = choose_medialink_ahref(q($row['url']), q($row['title']));
                 }
                 if (!$module_visible) {
 			$videolink .= " <i>($langInactiveModule)</i>";
@@ -343,16 +342,16 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 	global $id, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $code_cours, $themeimg, $langInactiveModule;
 
-        $module_visible = visible_module(5); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
         }        
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';        
 	
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM assignments WHERE course_id = $cours_id AND id = $work_id", $mysqlMainDb);
+	$r = db_query("SELECT * FROM assignment WHERE course_id = $cours_id AND id = $work_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';
@@ -393,12 +392,12 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 	global $id, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $code_cours, $themeimg, $langInactiveModule;
 
-        $module_visible = visible_module(10); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
         }        
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';        
 	
         $title = htmlspecialchars($title);
@@ -420,7 +419,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 }
 		$imagelink = $link .
                         "<img src='$themeimg/exercise_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
 	
 
@@ -440,23 +439,20 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 // display resource forum
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
-	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
-               $cours_id, $code_cours, $themeimg;
-    $module_visible = visible_module(9); // checks module visibility
+	global $id, $urlServer, $is_editor, $cours_id, $code_cours, $themeimg;
+        
+    $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
     if (!$module_visible and !$is_editor) {
                return '';
     }
-
 	$comment_box = '';
-	$class_vis = ($visibility == 'i')? ' class="invisible"': ' class="even"';
+	$class_vis = ($visibility == 0)? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	if ($type == 'forum') {
 		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?course=$code_cours&amp;forum=$ft_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	} else {
-		$r = db_query("SELECT forum_id FROM topics 
-                                WHERE topic_id = $ft_id
-                                AND course_id = $cours_id", $mysqlMainDb);
+		$r = db_query("SELECT forum_id FROM forum_topics WHERE id = $ft_id");
 		list($forum_id) = mysql_fetch_array($r);
 		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
@@ -466,7 +462,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 	}
 
 	$imagelink = $link . "<img src='$themeimg/forum_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 
 
         if (!empty($comments)) {
@@ -490,14 +486,14 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 	global $id, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $langInactiveModule, $cours_id, $code_cours, $themeimg;
       
-        $module_visible = visible_module(26); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }        
         
 	$comment_box = $imagelink = $link = $class_vis = '';
-	$class_vis = ($visibility == 'i' or !$module_visible)?
+	$class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM wiki_properties WHERE course_id = $cours_id AND id = $wiki_id", $mysqlMainDb);
@@ -518,7 +514,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
                 }
 		$imagelink = $link .
                         "<img src='$themeimg/wiki_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
 
         if (!empty($comments)) {
@@ -541,13 +537,13 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $cours_id, $currentCourseID, $themeimg, $langInactiveModule;
         
-        $module_visible = visible_module(2); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }        
 	$comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND id = $link_id");
@@ -572,7 +568,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
                 }
 		$imagelink = $link .
                         "<img src='$themeimg/links_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}	
 
         if (!empty($comments)) {
@@ -595,13 +591,13 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
                $langWasDeleted, $cours_id, $currentCourseID, $themeimg, $langInactiveModule;
 	
 	$content = $linkcontent = '';
-        $module_visible = visible_module(2); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }        
 	$comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';	
         $title = htmlspecialchars($title);
 	$sql = db_query("SELECT * FROM `$mysqlMainDb`.link_category WHERE course_id = $cours_id AND id = $linkcat_id");
@@ -649,13 +645,13 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $themeimg, $langInactiveModule;
 	
-        $module_visible = visible_module(18); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }        
 	$comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';	
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM ebook WHERE id = $ebook_id", $mysqlMainDb);
@@ -675,7 +671,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
                 }
 		$imagelink = $link .
                         "<img src='$themeimg/ebook_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
 
         if (!empty($comments)) {
@@ -746,13 +742,13 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $currentCourseID, $cours_id, $themeimg, $langInactiveModule;
 
-        $module_visible = visible_module(18); // checks module visibility
+        $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
         
         if (!$module_visible and !$is_editor) {
                        return '';
         }
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
+        $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';	
 	if ($deleted) {
 		if (!$is_editor) {
@@ -770,7 +766,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
                 }
 		$imagelink = $link .
                         "<img src='$themeimg/ebook_" .
-			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
+			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
 	
 
@@ -801,10 +797,10 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 	}
 
         if ($res_type == 'description') {
-                $icon_vis = ($status == 'v')? 'publish.png': 'unpublish.png';
+                $icon_vis = ($status == 1)? 'publish.png': 'unpublish.png';
                 $edit_link = "edit.php?course=$code_cours&amp;numBloc=$res_id";
         } else {
-                $icon_vis = ($status == 'v')? 'visible.png': 'invisible.png';
+                $icon_vis = ($status == 1)? 'visible.png': 'invisible.png';
                 $edit_link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;edit=$resource_id";
         }
 
@@ -830,22 +826,22 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                                     "title='$langAddToCourseHome'></a></td>";
 		} else {
 			
-			$content .= "\n          <td width='3'>&nbsp;</td>";
+			$content .= "<td width='3'>&nbsp;</td>";
 		}
         } else {
-                $content .= "\n          <td width='3'>&nbsp;</td>";
+                $content .= "<td width='3'>&nbsp;</td>";
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$resource_id'>" .
+                $content .= "<td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$resource_id'>" .
                             "<img src='$themeimg/down.png' title='$langDown'></a></div></td>";
 	} else {
-		$content .= "\n          <td width='12'>&nbsp;</td>";
+		$content .= "<td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$resource_id'>" .
                             "<img src='$themeimg/up.png' title='$langUp'></a></div></td>";
         } else {
-                $content .= "\n          <td width='12'>&nbsp;</td>";
+                $content .= "<td width='12'>&nbsp;</td>";
         }
         $first = false;
         return $content;

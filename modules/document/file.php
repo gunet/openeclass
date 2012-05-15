@@ -119,11 +119,11 @@ if (file_exists($basedir . $file_info['path'])) {
 }
 
 function check_cours_access() {
-	global $mysqlMainDb, $dbname;
+	global $dbname;
 
 	// $dbname is used in filepath so we stick to this instead of $currentCourse
-	$qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
-	$result = db_query($qry, $mysqlMainDb);
+	$qry = "SELECT id, code, visible FROM `course` WHERE code='$dbname'";
+	$result = db_query($qry);
 
 	// invalid lesson code
 	if (mysql_num_rows($result) != 1) {
@@ -138,14 +138,13 @@ function check_cours_access() {
 		case '1': 
 		case '0': 
 		default: 
-			// check if user has access to cours
-			if (isset($_SESSION['status'][$dbname]) && ($_SESSION['status'][$dbname] >= 1)) {
-				return;
-			}
-			else {
-				redirect_to_home_page();
-			}
+                // check if user has access to cours
+                if (isset($_SESSION['status'][$dbname]) && ($_SESSION['status'][$dbname] >= 1)) {
+                        return;
+                }
+                else {
+                        redirect_to_home_page();
+                }
 	}
-
 	exit;
 }

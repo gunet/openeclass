@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -83,7 +83,7 @@ $fake_code = $result['public_code'];
 $main_extra = $description = $addon = '';
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
-                        AND (visibility = 'v' OR res_id < 0)
+                        AND (visible = 1 OR res_id < 0)
                  ORDER BY `order`");
 if ($res and mysql_num_rows($res) > 0) {
         while ($row = mysql_fetch_array($res)) {
@@ -109,18 +109,18 @@ if ($is_editor) {
 }
 $main_content .= "\n      <div class='course_info'>";
 if (!empty($description)) {
-        $main_content .= "\n      <div class='descr_title'>$langDescription$edit_link</div>\n$description";
+        $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";
 
 } else {
-        $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
+        $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
 }
 if (!empty($keywords)) {
-	$main_content .= "\n      <p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
+	$main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
 }
-$main_content .= "\n      </div>\n";
+$main_content .= "</div>";
 
 if (!empty($addon)) {
-	$main_content .= "\n      <div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
 $main_content .= $main_extra;
 
@@ -137,10 +137,10 @@ if ($is_editor) {
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
 		$id = intval($_REQUEST['vis']);
-		$sql = db_query("SELECT `visibility` FROM course_units WHERE id='$id'");
-		list($vis) = mysql_fetch_row($sql);
-		$newvis = ($vis == 'v')? 'i': 'v';
-		db_query("UPDATE course_units SET visibility = '$newvis' WHERE id = $id AND course_id = $cours_id");
+		$sql = db_query("SELECT `visible` FROM course_units WHERE id=$id");
+		list($vis) = mysql_fetch_row($sql);                
+		$newvis = ($vis == 1)? 0: 1;                
+		db_query("UPDATE course_units SET visible = '$newvis' WHERE id = $id AND course_id = $cours_id");
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down
                 move_order('course_units', 'id', $id, 'order', 'down',
@@ -155,22 +155,21 @@ if ($is_editor) {
 
 // add course units
 if ($is_editor) {
-        $cunits_content .= "
-    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+        $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
 
 } else {
-        $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
+        $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
 if ($is_editor) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1"));
-	$query = "SELECT id, title, comments, visibility
+	$query = "SELECT id, title, comments, visible
 		  FROM course_units WHERE course_id = $cours_id AND `order` >= 0
                   ORDER BY `order`";
 } else {
-	$query = "SELECT id, title, comments, visibility
-		  FROM course_units WHERE course_id = $cours_id AND visibility='v' AND `order` >= 0
+	$query = "SELECT id, title, comments, visible
+		  FROM course_units WHERE course_id = $cours_id AND visible=1 AND `order` >= 0
                   ORDER BY `order`";
 }
 $sql = db_query($query);
@@ -178,11 +177,11 @@ $first = true;
 $count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {
         // Visibility icon
-        $vis = $cu['visibility'];
-        $icon_vis = ($vis == 'v')? 'visible.png': 'invisible.png';
-        $class1_vis = ($vis == 'i')? ' class="invisible"': '';
-        $class_vis = ($vis == 'i')? 'invisible': '';
-        $cunits_content .= "\n\n\n      <table ";
+        $vis = $cu['visible'];
+        $icon_vis = ($vis == 1)? 'visible.png': 'invisible.png';
+        $class1_vis = ($vis == 0)? ' class="invisible"': '';
+        $class_vis = ($vis == 0)? 'invisible': '';
+        $cunits_content .= "<table ";
         if ($is_editor) {
             $cunits_content .= "class='tbl'";
         } else {
@@ -190,17 +189,17 @@ while ($cu = mysql_fetch_array($sql)) {
         }
         $cunits_content .= " width='770'>";
         if ($is_editor) {
-                $cunits_content .= "\n      <tr>".
-                           "\n        <th width='25' class='right'>$count_index.</th>" .
-                           "\n        <th width='635'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                $cunits_content .= "<tr>".
+                           "<th width='25' class='right'>$count_index.</th>" .
+                           "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         } else {
-                $cunits_content .= "\n      <tr>".
-                           "\n        <th width='25' class='right'>$count_index.</th>".
-                           "\n        <th width='729'><a class=\"$class_vis\" href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                $cunits_content .= "<tr>".
+                           "<th width='25' class='right'>$count_index.</th>".
+                           "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
 
         if ($is_editor) { // display actions
-                $cunits_content .= "\n        <th width='70' class='center'>".
+                $cunits_content .= "<th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
                         "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
                         "\n        <a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
@@ -211,18 +210,18 @@ while ($cu = mysql_fetch_array($sql)) {
                         "<img src='$themeimg/$icon_vis' " .
                         "title='$langVisibility' /></a></th>";
                 if ($cu['id'] != $last_id) {
-                        $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                        $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
                         "<img src='$themeimg/down.png' title='$langDown' /></a>";
                 } else {
-                        $cunits_content .= "\n        <th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
+                        $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "\n        <a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "<a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
                 } else {
-                        $cunits_content .= "\n        &nbsp;&nbsp;&nbsp;&nbsp;</th>";
+                        $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
         }
-        $cunits_content .= "\n      </tr>\n      <tr>\n        <td ";
+        $cunits_content .= "</tr><tr><td ";
         if ($is_editor) {
             $cunits_content .= "colspan='7' $class1_vis>";
         } else {

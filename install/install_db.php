@@ -226,7 +226,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `subsystem_id` INT(11) DEFAULT NULL,
                 `path` VARCHAR(255) NOT NULL,
                 `filename` VARCHAR(255) NOT NULL,
-                `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                `visible` TINYINT(4),
                 `comment` TEXT,
                 `category` TINYINT(4) NOT NULL DEFAULT 0,
                 `title` TEXT,
@@ -988,7 +988,7 @@ db_query("CREATE TABLE `course_units` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 	`title` VARCHAR(255) NOT NULL DEFAULT '',
 	`comments` MEDIUMTEXT,
-	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`visible` TINYINT(4),
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`course_id` INT(11) NOT NULL) $charset_spec");
 
@@ -999,7 +999,7 @@ db_query("CREATE TABLE `course_units` (
 	`comments` MEDIUMTEXT,
 	`res_id` INT(11) NOT NULL,
 	`type` VARCHAR(255) NOT NULL DEFAULT '',
-	`visibility` CHAR(1) NOT NULL DEFAULT 'v',
+	`visible` TINYINT(4),
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
  

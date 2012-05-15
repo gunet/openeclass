@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,14 +25,14 @@ function list_forums()
         global $id, $tool_content, $urlServer, $cours_id,
                $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $code_cours;
 
-        $result = db_query("SELECT * FROM forums WHERE course_id = $cours_id");
+        $result = db_query("SELECT * FROM forum WHERE course_id = $cours_id");
         $foruminfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $foruminfo[] = array(
-			'id' => $row['forum_id'],
-		        'name' => $row['forum_name'],
-                        'comment' => $row['forum_desc'],
-                        'topics' => $row['forum_topics']);
+			'id' => $row['id'],
+		        'name' => $row['name'],
+                        'comment' => $row['desc'],
+                        'topics' => $row['num_topics']);
         }
         if (count($foruminfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoForums</p>";
@@ -47,21 +47,19 @@ function list_forums()
                                  "\n  </tr>";
 
 		foreach ($foruminfo as $entry) {
-			$tool_content .= "\n  <tr class='odd'>";
-			$tool_content .= "\n    <td>
+			$tool_content .= "<tr class='odd'>";
+			$tool_content .= "<td>
 			<a href='${urlServer}modules/phpbb/viewforum.php?course=$code_cours&amp;forum=$entry[id]'>$entry[name]</a></td>";
-			$tool_content .= "\n    <td>$entry[comment]</td>";
-			$tool_content .= "\n    <td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
-			$tool_content .= "\n  </tr>";
-			$r = db_query("SELECT * FROM topics 
-                                        WHERE forum_id = '$entry[id]' 
-                                        AND course_id = $cours_id");
+			$tool_content .= "<td>$entry[comment]</td>";
+			$tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
+			$tool_content .= "</tr>";
+			$r = db_query("SELECT * FROM forum_topics WHERE forum_id = $entry[id]");
 			if (mysql_num_rows($r) > 0) { // if forum topics found 
 				$topicinfo = array();
 				while($topicrow = mysql_fetch_array($r, MYSQL_ASSOC)) {
 				$topicinfo[] = array(
-					'topic_id' => $topicrow['topic_id'],
-					'topic_title' => $topicrow['topic_title'],
+					'topic_id' => $topicrow['id'],
+					'topic_title' => $topicrow['title'],
 					'topic_time' => $topicrow['topic_time']);
 				}
 				foreach ($topicinfo as $topicentry) {

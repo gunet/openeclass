@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -51,7 +51,7 @@ function list_docs()
                         'name' => htmlspecialchars($row['filename']),
                         'format' => $row['format'],
                         'path' => $row['path'],
-                        'visible' => $row['visibility'],
+                        'visible' => $row['visible'],
                         'comment' => $row['comment'],
                         'copyrighted' => $row['copyrighted'],
                         'date' => strtotime($row['date_modified']));
@@ -73,19 +73,19 @@ function list_docs()
                                       "<img src='$themeimg/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
                         $colspan = 4;
                 }
-		$tool_content .= "\n    <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />" .
-                         "\n    <table class='tbl_alt' width='99%'>" .
-                         "\n    <tr>".
-                         "\n       <th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
+		$tool_content .= "<form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />" .
+                         "<table class='tbl_alt' width='99%'>" .
+                         "<tr>".
+                         "<th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
                                    $parenthtml . 
-                         "\n    </tr>" .
-                         "\n    <tr>" .
-                         "\n      <th>$langType</th>" .
-                         "\n      <th><div align='left'>$langName</div></th>" .
-                         "\n      <th width='100'>$langSize</th>" .
-                         "\n      <th width='80'>$langDate</th>" .
-                         "\n      <th width='80'>$langChoice</th>" .
-                         "\n    </tr>\n";
+                         "</tr>" .
+                         "<tr>" .
+                         "<th>$langType</th>" .
+                         "<th><div align='left'>$langName</div></th>" .
+                         "<th width='100'>$langSize</th>" .
+                         "<th width='80'>$langDate</th>" .
+                         "<th width='80'>$langChoice</th>" .
+                         "</tr>\n";
 		$counter = 0;
 		foreach (array(true, false) as $is_dir) {
 			foreach ($fileinfo as $entry) {

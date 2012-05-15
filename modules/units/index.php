@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,7 +36,6 @@ require_once '../video/video_functions.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 
-mysql_select_db($mysqlMainDb);
 
 if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
@@ -78,7 +77,7 @@ if ($is_editor) {
 if ($is_editor) {
         $visibility_check = '';
 } else {
-        $visibility_check = "AND visibility='v'";
+        $visibility_check = "AND visible=1";
 }
 if (isset($id) and $id !== false) {
 	$q = db_query("SELECT * FROM course_units

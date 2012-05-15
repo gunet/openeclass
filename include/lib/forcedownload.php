@@ -1,9 +1,9 @@
 <?php 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -323,7 +323,7 @@ function public_path_to_disk_path($path_components, $path = '')
         $depth = substr_count($path, '/') + 1;
         foreach ($path_components as $component) {
                 $component = urldecode(str_replace(chr(1), '/', $component));
-                $q = db_query("SELECT path, visibility, format,
+                $q = db_query("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
