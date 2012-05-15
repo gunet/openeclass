@@ -372,7 +372,7 @@ db_query("CREATE TABLE IF NOT EXISTS `forum_topics` (
   `num_replies` int(10) NOT NULL default '0',
   `last_post_id` int(10) NOT NULL default '0',
   `forum_id` int(10) NOT NULL default '0',  
-  PRIMARY KEY  (`topic_id`))");
+  PRIMARY KEY  (`id`))");
 
 
 
