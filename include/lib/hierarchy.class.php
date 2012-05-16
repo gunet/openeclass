@@ -661,7 +661,7 @@ $(function() {
             "animation": 300
         },
         "themes" : {
-            "theme" : "default",
+            "theme" : "eclass",
             "dots" : true,
             "icons" : false
         },
