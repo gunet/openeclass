@@ -44,8 +44,6 @@ load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
 
-$langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
-
 $nameTools = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -135,9 +133,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         $code = $_POST['code'];
         
         $names = array();
-        foreach ($language_codes as $langcode => $langname) {
+        foreach ($active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
-            if (in_array($langname, $langdirs) && !empty($n)) {
+            if (!empty($n)) {
                 $names[$langcode] = $n;
             }
         }
@@ -182,13 +180,11 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         <th class='left'>".$langNodeName.":</th>";
         
         $i = 0;
-	foreach ($language_codes as $langcode => $langname) {
-            if (in_array($langname, $langdirs)) {
-                $tdpre = ($i > 0) ? "<tr><td></td>" : '';
-                $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' /> <i>".$langFaculte2." (".$langNameOfLang[$langname].")</i></td></tr>";
-                $i++;
-            }
-	}
+        foreach ($active_ui_languages as $key => $langcode) {
+            $tdpre = ($i > 0) ? "<tr><td></td>" : '';
+            $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
+            $i++;
+        }
         
         $tool_content .= "
       <tr>
@@ -260,13 +256,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
         // Check for empty fields
         
         $names = array();
-        foreach ($language_codes as $langcode => $langname) {
+        foreach ($active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
-            if (in_array($langname, $langdirs) && !empty($n)) {
+            if (!empty($n)) {
                 $names[$langcode] = $n;
             }
         }
-        
+                
         $name = serialize($names);
         
         $code = $_POST['code'];
@@ -316,17 +312,15 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
             $is_serialized = true;
         
         $i = 0;
-	foreach ($language_codes as $langcode => $langname) {
+        foreach ($active_ui_languages as $key => $langcode) {
             $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
-            if (!$is_serialized && $langcode == 'el')
+            if (!$is_serialized && $key == 0)
                 $n = $myrow['name'];
             
-            if (in_array($langname, $langdirs)) {
-                $tdpre = ($i > 0) ? "<tr><td></td>" : '';
-                $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' value='".htmlspecialchars($n, ENT_QUOTES)."' /> <i>".$langFaculte2." (".$langNameOfLang[$langname].")</i></td></tr>";
-                $i++;
-            }
-	}
+            $tdpre = ($i > 0) ? "<tr><td></td>" : '';
+            $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' value='".htmlspecialchars($n, ENT_QUOTES)."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
+            $i++;
+        }
         
        $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
