@@ -30,6 +30,7 @@ class hierarchy {
     private $dbdepth;
     private $ordering_copy;
     private $ordermap;
+    private $view;
     
     /**
      * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
@@ -40,6 +41,12 @@ class hierarchy {
     {
         $this->dbtable = $dbtable;
         $this->dbdepth = $dbtable .'_depth';
+        $this->view = " (SELECT node.*, COUNT(parent.id) - 1 AS depth
+                     FROM ". $this->dbtable ." AS node,
+                          ". $this->dbtable ." AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    GROUP BY node.id
+                    ORDER BY node.lft) AS tmp ";
     }
     
     /**
@@ -404,19 +411,12 @@ class hierarchy {
      * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
      * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap>. Tree map is in the form 
-     *                               of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, <node key, node depth> 
-     *                               and <node key, node code>.
+     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap>. 
+     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, 
+     *                               <node key, node depth>, <node key, node code>, <node key, allow_course> and <node key, allow_user>.
      */
     public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
     {
-        $view = " (SELECT node.*, COUNT(parent.id) - 1 AS depth
-                     FROM ". $this->dbtable ." AS node,
-                          ". $this->dbtable ." AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    GROUP BY node.id
-                    ORDER BY node.lft) AS tmp ";
-        
         $res = null;
         $swhere = '';
         $excwhere = '';
@@ -424,6 +424,8 @@ class hierarchy {
         $idmap = array();
         $depthmap = array();
         $codemap = array();
+        $allowcoursemap = array();
+        $allowusermap = array();
         $this->ordermap = array();
         $level = array();
         $mindepth = array();
@@ -443,12 +445,12 @@ class hierarchy {
         if ($this->useProcedures())
         {
             $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->dbdepth . $swhere));
-            $res = db_query("SELECT id, lft, name, depth, code, order_priority FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
+            $res = db_query("SELECT id, lft, name, depth, code, allow_course, allow_user, order_priority FROM ". $this->dbdepth ." WHERE depth = ". $mindepth[0] . $excwhere);
         }
         else
         {
-            $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $view . $swhere));
-            $res = db_query("SELECT id, lft, name, depth, code, order_priority FROM ". $view ." WHERE depth = ". $mindepth[0] . $excwhere);
+            $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->view . $swhere));
+            $res = db_query("SELECT id, lft, name, depth, code, allow_course, allow_user, order_priority FROM ". $this->view ." WHERE depth = ". $mindepth[0] . $excwhere);
         }
         
         while ($row = mysql_fetch_assoc($res))
@@ -462,14 +464,16 @@ class hierarchy {
             $idmap[$row[$useKey]] = $row['id'];
             $depthmap[$row[$useKey]] = $row['depth'];
             $codemap[$row[$useKey]] = $row['code'];
+            $allowcoursemap[$row[$useKey]] = $row['allow_course'];
+            $allowusermap[$row[$useKey]] = $row['allow_user'];
             $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
         }
         $this->ordering_copy = $level; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
         uksort($level, array($this, 'orderCmp'));
 
-        $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
+        $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
         
-        return array($tree_array, $idmap, $depthmap, $codemap);
+        return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap);
     }
     
     /**
@@ -480,7 +484,7 @@ class hierarchy {
      * It requires as input the byproducts of buildOrdered(), passed by reference. The extra arguments are mainly for excluding
      * parts of the subtree already excluded at a previous recursion step (or the entry-point itself).
      */
-    public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
+    public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, &$allowcoursemap, &$allowusermap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
     {
         foreach ($level as $key => $value)
         {
@@ -510,12 +514,14 @@ class hierarchy {
                     $idmap[$row[$useKey]] = $row['id'];
                     $depthmap[$row[$useKey]] = $depth;
                     $codemap[$row[$useKey]] = $row['code'];
+                    $allowcoursemap[$row[$useKey]] = $row['allow_course'];
+                    $allowusermap[$row[$useKey]] = $row['allow_user'];
                     $this->ordermap[$row[$useKey]] = intval($row['order_priority']); // the custom orderCmp function needs access to this ordermap
                 }
                 $this->ordering_copy = $tmp; // the custom orderCmp function needs a copy of the array to be ordered in order to read values from
                 uksort($tmp, array($this, 'orderCmp'));
 
-                $this->appendOrdered($final, $tmp, $idmap, $depthmap, $codemap, $depth+1, $useKey, $where, $excwhere, $dashprefix);
+                $this->appendOrdered($final, $tmp, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $depth+1, $useKey, $where, $excwhere, $dashprefix);
             } else
                 continue;
         }
@@ -550,13 +556,15 @@ class hierarchy {
      * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
      * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return string $html        - HTML output
+     * @return string  $html       - HTML output
      */
     public function buildHtmlUl($tree_array = array(), $useKey = 'id', $exclude = null, $where = '', $dashprefix = false)
     {
+        $mark_allow_user = (strstr($where, 'allow_user') !== false) ?  true : false;
+        $mark_allow_course = (strstr($where, 'allow_course') !== false) ? true : false;
         $html = '<ul>' . "\n";
         
-        list($tree_array, $idmap, $depthmap, $codemap) = $this->buildOrdered($tree_array, $useKey, $exclude, $where, $dashprefix);
+        list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap) = $this->buildOrdered($tree_array, $useKey, $exclude, null, $dashprefix);
         $i = 0;
         $current_depth = null;
 
@@ -585,7 +593,18 @@ class hierarchy {
                 }
             }
             
-            $html .= '<li id="'. $key .'"><a href="#">'. $value .'</a></li>' . "\n";
+            $rel = '';
+            $class = '';
+            if ($mark_allow_course && !$allowcoursemap[$key])
+                $rel = 'nosel';
+            if ($mark_allow_user && !$allowusermap[$key])
+                $rel = 'nosel';
+            if (!empty($rel)) {
+                $rel = 'rel="'. $rel .'"';
+                $class = 'class="nosel"';
+            }
+            
+            $html .= '<li id="'. $key .'" '. $rel .'><a href="#" '. $class .'>'. $value .'</a></li>' . "\n";
             
             $i++;
         }
@@ -606,6 +625,13 @@ class hierarchy {
     private function buildJSNodePicker($params, $offset = 0)
     {
         global $themeimg, $langCancel, $langAdd, $langEmptyNodeSelect, $langEmptyAddNode;
+                
+        // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
+        $initopen = '';
+        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0") 
+                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
+        while ($row = mysql_fetch_assoc($res))
+            $initopen .= $row['id'].',';
         
         if ($offset > 0)
             $offset -=1 ;
@@ -656,9 +682,10 @@ $(function() {
     });
     
     $( "#js-tree" ).jstree({
-        "plugins" : ["html_data", "themes", "ui", "cookies"],
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types"],
         "core" : {
-            "animation": 300
+            "animation": 300,
+            "initially_open" : [$initopen]
         },
         "themes" : {
             "theme" : "eclass",
@@ -667,6 +694,14 @@ $(function() {
         },
         "ui" : {
             "select_limit" : 1
+        },
+        "types" : {
+            "types" : {
+                "nosel" : {
+                    "hover_node" : false,
+                    "select_node" : false
+                }
+            }
         }
     });
     

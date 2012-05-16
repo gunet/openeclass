@@ -21,6 +21,8 @@
 /* Comment by Thanos Kyritsis -- it's ugglier with this color */
 /*.jstree-eclass.jstree-focused { background:#ffffee; }*/
 
+.jstree-eclass li a.nosel { font-style:italic; color:grey; }
+
 .jstree-eclass .jstree-no-dots li, 
 .jstree-eclass .jstree-no-dots .jstree-leaf > ins { background:transparent; }
 .jstree-eclass .jstree-no-dots .jstree-open > ins { background-position:-18px 0; }
