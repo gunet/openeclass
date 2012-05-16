@@ -95,7 +95,7 @@ if (!isset($_GET['action'])) {
     <th>".$langActions."</th>
     </tr>";
     
-    list($tree_array, $idmap, $depthmap, $codemap) = $tree->buildOrdered(array(), 'id', null, '', false);
+    list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, '', false);
     $k = 0;
     
     // For all nodes display some info

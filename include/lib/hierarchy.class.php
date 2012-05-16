@@ -28,9 +28,9 @@ class hierarchy {
 
     private $dbtable;
     private $dbdepth;
-    private $ordering_copy;
-    private $ordermap;
     private $view;
+    /*private $ordering_copy;
+    private $ordermap;*/
     
     /**
      * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
@@ -354,21 +354,25 @@ class hierarchy {
     /**
      * Build an ArrayMap containing the tree nodes (ordered by the lft value).
      *
-     * @param  array  $tree_array - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
-     * @param  string $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  int    $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  string $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @return array  $tree_array - The returned ArrayMap in the form of <node key, node name>.
+     * @param  array  $tree_array  - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
+     * @param  string $useKey      - Key for return array, can be 'lft' or 'id'
+     * @param  int    $exclude     - The id of the subtree parent node we want to exclude from the result
+     * @param  string $where       - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
+     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap, orderingMap>. 
+     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, 
+     *                               <node key, node depth>, <node key, node code>, <node key, allow_course>, <node key, allow_user> and <node key, order_priority>.
      */       
-    public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '')
+    public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = false)
     {
         if ($exclude != null)
         {
             $result = db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude");
             $row = mysql_fetch_assoc($result);
             
-            $query = "SELECT node.id, node.lft AS lft, node.name AS name, COUNT(parent.id) - 1 AS depth
-                FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
+            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user, 
+                             node.order_priority, COUNT(parent.id) - 1 AS depth
+                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt 
                     AND (node.lft < ". $row['lft'] ." OR node.lft > ". $row['rgt'] .")
                     $where
@@ -377,8 +381,9 @@ class hierarchy {
         }
         else
         {
-            $query = "SELECT node.id, node.lft AS lft, node.name AS name, COUNT(parent.id) - 1 AS depth
-                FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
+            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user, 
+                             node.order_priority, COUNT(parent.id) - 1 AS depth
+                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt 
                     $where
                     GROUP BY node.id 
@@ -386,20 +391,36 @@ class hierarchy {
         }
         
         $result = db_query($query);
+        
+        $idmap = array();
+        $depthmap = array();
+        $codemap = array();
+        $allowcoursemap = array();
+        $allowusermap = array();
+        $orderingmap = array();
+        $orderingmap[0] = 0; // necessary to avoid php warnings/notices
               
         while($row = mysql_fetch_assoc($result))
         {
             $prefix = '';
-            for ($i = 0; $i < $row['depth']; $i++)
-                $prefix .= '&nbsp;-&nbsp;';
+            if ($dashprefix)
+                for ($i = 0; $i < $row['depth']; $i++)
+                    $prefix .= '&nbsp;-&nbsp;';
             
             $tree_array[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
+            $idmap[$row[$useKey]] = $row['id'];
+            $depthmap[$row[$useKey]] = $row['depth'];
+            $codemap[$row[$useKey]] = $row['code'];
+            $allowcoursemap[$row[$useKey]] = $row['allow_course'];
+            $allowusermap[$row[$useKey]] = $row['allow_user'];
+            $orderingmap[$row[$useKey]] = intval($row['order_priority']);
         }  
         
-        return $tree_array;  
+        return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap);
     }
     
     /**
+     * DEPRECATED due to performance loss, sorting moved to jstree
      * Build an ArrayMap containing the tree nodes (customly ordered per depth level). 
      * 
      * This is the entry-point method for building ordered ArrayMaps using recursion (each depth level is a different recursion step). 
@@ -415,7 +436,7 @@ class hierarchy {
      *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, 
      *                               <node key, node depth>, <node key, node code>, <node key, allow_course> and <node key, allow_user>.
      */
-    public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
+    /*public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
     {
         $res = null;
         $swhere = '';
@@ -474,9 +495,10 @@ class hierarchy {
         $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
         
         return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap);
-    }
+    }*/
     
     /**
+     * DEPRECATED due to performance loss, sorting moved to jstree
      * Recursively append customly ordered entries to an existing tree ArrayMap. 
      * 
      * Designed to be used in combination with special entry-point methods such as buildOrdered().
@@ -484,7 +506,7 @@ class hierarchy {
      * It requires as input the byproducts of buildOrdered(), passed by reference. The extra arguments are mainly for excluding
      * parts of the subtree already excluded at a previous recursion step (or the entry-point itself).
      */
-    public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, &$allowcoursemap, &$allowusermap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
+    /*public function appendOrdered(&$final, &$level, &$idmap, &$depthmap, &$codemap, &$allowcoursemap, &$allowusermap, $depth, $useKey, $where = '', $excwhere = '', $dashprefix = true)
     {
         foreach ($level as $key => $value)
         {
@@ -525,9 +547,10 @@ class hierarchy {
             } else
                 continue;
         }
-    }
+    }*/
     
     /**
+     * DEPRECATED due to performance loss, sorting moved to jstree
      * Custom comparison function for ordering/sorting the tree nodes primarily according to their order priority
      * and secondarily alphabetically. To be used in conjustion with uksort()
      * 
@@ -535,7 +558,7 @@ class hierarchy {
      * @param  int $b - arraymap key of node b
      * @return int    - < 0 if node a is less than node b, > 0 if node a is greater than node b, and 0 if they are equal.
      */
-    private function orderCmp($a, $b)
+    /*private function orderCmp($a, $b)
     {
         if ($this->ordermap[$a] == $this->ordermap[$b])
         {
@@ -546,7 +569,7 @@ class hierarchy {
         {
             return ($this->ordering_copy[$a] > $this->ordering_copy[$b]) ? -1 : 1;
         }
-    }
+    }*/
     
     /**
      * Represent the tree using HTML unordered list tags (<ul> and <li>). Extremely useful for JSTree representation (GUI).
@@ -564,7 +587,7 @@ class hierarchy {
         $mark_allow_course = (strstr($where, 'allow_course') !== false) ? true : false;
         $html = '<ul>' . "\n";
         
-        list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap) = $this->buildOrdered($tree_array, $useKey, $exclude, null, $dashprefix);
+        list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
         $i = 0;
         $current_depth = null;
 
@@ -604,7 +627,7 @@ class hierarchy {
                 $class = 'class="nosel"';
             }
             
-            $html .= '<li id="'. $key .'" '. $rel .'><a href="#" '. $class .'>'. $value .'</a></li>' . "\n";
+            $html .= '<li id="'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value .'</a></li>' . "\n";
             
             $i++;
         }
@@ -624,7 +647,7 @@ class hierarchy {
      */
     private function buildJSNodePicker($params, $offset = 0)
     {
-        global $themeimg, $langCancel, $langAdd, $langEmptyNodeSelect, $langEmptyAddNode;
+        global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode;
                 
         // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
         $initopen = '';
@@ -653,7 +676,7 @@ $(function() {
         width: 600,
         modal: true,
         buttons: {
-            "$langAdd": function() {
+            "$langSelect": function() {
             
                 var newnode = $( "#js-tree" ).jstree("get_selected");
         
@@ -682,7 +705,7 @@ $(function() {
     });
     
     $( "#js-tree" ).jstree({
-        "plugins" : ["html_data", "themes", "ui", "cookies", "types"],
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
         "core" : {
             "animation": 300,
             "initially_open" : [$initopen]
@@ -702,6 +725,15 @@ $(function() {
                     "select_node" : false
                 }
             }
+        },
+        "sort" : function (a, b) { 
+            priorityA = this._get_node(a).attr("tabindex");
+            priorityB = this._get_node(b).attr("tabindex");
+            
+            if (priorityA == priorityB)
+                return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+                return priorityA < priorityB ? 1 : -1;
         }
     });
     

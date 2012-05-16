@@ -34,7 +34,7 @@ $query = "SELECT max(depth) FROM (SELECT  COUNT(parent.id) - 1 AS depth
         ORDER BY node.lft) AS hierarchydepth";
 $maxdepth = mysql_fetch_array(db_query($query));
 
-list($tree_array, $idmap, $depthmap, $codemap) = $tree->buildOrdered(array(), 'id', null, 'AND node.allow_course = true', false);
+list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, 'AND node.allow_course = true', false);
 
 
 $tool_content .= "<table class='tbl_alt' width=\"100%\">";
