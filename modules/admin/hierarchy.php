@@ -33,6 +33,7 @@ $require_power_user = true;
 require_once('../../include/baseTheme.php');
 
 $TBL_HIERARCHY         = 'hierarchy';
+$TBL_USER_DEPARTMENT   = 'user_department';
 $TBL_COURSE_DEPARTMENT = 'course_department';
 
 require_once('../../include/lib/hierarchy.class.php');
@@ -223,17 +224,33 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
     $id = intval($_GET['id']);
-    $s = db_query("SELECT * from $TBL_COURSE_DEPARTMENT WHERE department = $id");
-    // Check for existing courses belonging to a node
-    if (mysql_num_rows($s) > 0)  {
-        // The node cannot be deleted
-        $tool_content .= "<p>".$langNodeProErase."</p><br />";
-        $tool_content .= "<p>".$langNodeNoErase."</p><br />";
-    } else {
-        // The node can be deleted
-        $tree->deleteNode($id);
-        $tool_content .= "<p class='success'>$langNodeErase</p>";
+    
+    // locate the lft and rgt of the node we want to delete
+    $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
+    
+    if ($node !== false) {
+    
+        // locate the subtree of the node we want to delete. the subtree contains the node itself
+        $subres = db_query("SELECT id FROM $TBL_HIERARCHY WHERE lft BETWEEN ". $node['lft'] ." AND ". $node['rgt']);
+        $c = 0;
+
+        // for each subtree node, check if it has belonging children (courses, users)
+        while($subnode = mysql_fetch_assoc($subres)) {
+            $c += mysql_num_rows(db_query("SELECT * FROM $TBL_COURSE_DEPARTMENT WHERE department = ". $subnode['id']));
+            $c += mysql_num_rows(db_query("SELECT * FROM $TBL_USER_DEPARTMENT WHERE department = ". $subnode['id']));
+        }
+        
+        if ($c > 0)  {
+            // The node cannot be deleted
+            $tool_content .= "<p>".$langNodeProErase."</p><br />";
+            $tool_content .= "<p>".$langNodeNoErase."</p><br />";
+        } else {
+            // The node can be deleted
+            $tree->deleteNode($id);
+            $tool_content .= "<p class='success'>$langNodeErase</p>";
+        }
     }
+    
     $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Edit a node
