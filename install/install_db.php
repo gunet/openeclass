@@ -94,8 +94,8 @@ db_query("CREATE TABLE admin_announcement (
 	`begin` DATETIME DEFAULT NULL,
 	`end` DATETIME DEFAULT NULL,
 	`lang` VARCHAR(16) NOT NULL DEFAULT 'el',
-	`ordre` MEDIUMINT(11) NOT NULL DEFAULT 0,
-	`visible` ENUM('V', 'I') NOT NULL) $charset_spec");
+	`order` MEDIUMINT(11) NOT NULL DEFAULT 0,
+	`visible` TINYINT(4)) $charset_spec");
 
 #
 # table `agenda`

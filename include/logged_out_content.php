@@ -50,13 +50,13 @@ $tool_content .= <<<lCont
 lCont;
 
 $qlang = ($language == "greek")? 'el': 'en';
-$sql = "SELECT `id`, `date`, `title`, `body`, `ordre` FROM `admin_announcement`
-        WHERE `visible` = 'V'
+$sql = "SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+        WHERE `visible` = 1
 		AND lang='$qlang'
 		AND (`begin` <= CURDATE() or `begin` IS null)
 		AND (CURDATE() <= `end` or `end` IS null)
-	ORDER BY `ordre` DESC";
-$result = db_query($sql, $mysqlMainDb);
+	ORDER BY `order` DESC";
+$result = db_query($sql);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
 	while ($eclassAnnounce = mysql_fetch_array($result)) {

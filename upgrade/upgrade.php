@@ -530,18 +530,24 @@ if (!isset($_POST['submit2'])) {
         if ($oldversion < '3.0') {
 		// add index on `loginout`.`id_user` for performace
 		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
-                
+                // update table admin_announcement
+                db_query("RENAME TABLE `admin_announcements` TO `admin_announcement`");
+                db_query("ALTER TABLE admin_announcement CHANGE `ordre` `order` MEDIUMINT(11)");
+                db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TEXT");
+                db_query("UPDATE admin_announcement SET visible=1 WHERE visible='V'");
+                db_query("UPDATE admin_announcement SET visible=0 WHERE visible='I'");
+                db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TINYINT(4)");
+                 // update table course_units and unit_resources       
                 db_query("UPDATE `course_units` SET visibility=1 WHERE visibility='v'");
                 db_query("UPDATE `course_units` SET visibility=0 WHERE visibility='i'");
                 db_query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4)");
                 db_query("UPDATE `unit_resources` SET visibility=1 WHERE visibility='v'");
                 db_query("UPDATE `unit_resources` SET visibility=0 WHERE visibility='i'");
                 db_query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4)");
-                
+                // update table document
                 db_query("UPDATE `document` SET visibility=1 WHERE visibility='v'");
                 db_query("UPDATE `document` SET visibility=0 WHERE visibility='i'");
-                db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");
-                
+                db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");                
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
                         db_query("RENAME TABLE annonces TO announcement");
