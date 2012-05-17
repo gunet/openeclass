@@ -398,7 +398,14 @@ class hierarchy {
         $allowcoursemap = array();
         $allowusermap = array();
         $orderingmap = array();
-        $orderingmap[0] = 0; // necessary to avoid php warnings/notices
+        
+        // necessary to avoid php notices for undefined offset
+        $idmap[0] = 0;
+        $depthmap[0] = 0;
+        $codemap[0] = '';
+        $allowcoursemap[0] = 1;
+        $allowusermap[0] = 1;
+        $orderingmap[0] = 999999;
               
         while($row = mysql_fetch_assoc($result))
         {
