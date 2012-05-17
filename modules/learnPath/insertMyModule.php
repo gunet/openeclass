@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -255,11 +255,7 @@ if ( $atleastOne )
 }
 
 $tool_content .= "\n".'    </table>'."\n".'    </form>';
-
-
-	$tool_content .= "
-        <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>
-    ";
+$tool_content .= "<p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
@@ -272,4 +268,3 @@ $tool_content .= "\n".'    </table>'."\n".'    </form>';
 //$tool_content .= display_path_content();
 
 draw($tool_content, 2, null, $head_content);
-?>

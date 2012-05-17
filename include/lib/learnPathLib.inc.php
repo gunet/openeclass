@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -548,11 +548,11 @@ function get_learnPath_progress($lpid, $lpUid)
               AND UMP.`user_id` = " . (int) $lpUid . "
               AND LP.`learnPath_id` = " . (int) $lpid . "
               AND LP.`course_id` = $cours_id
-              AND LPM.`visibility` = 'SHOW'
+              AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
               AND M.`contentType` != '" . CTLABEL_ . "'";
 
-    $result = db_query($sql, $mysqlMainDb);
+    $result = db_query($sql);
 	$modules = array();
 
     while( $row = mysql_fetch_array($result) )
@@ -595,26 +595,24 @@ function get_learnPath_progress($lpid, $lpUid)
                     FROM `lp_rel_learnPath_module` AS LPM,
                          `lp_module` AS M
                     WHERE LPM.`learnPath_id` = " . (int) $lpid . "
-                    AND LPM.`visibility` = 'SHOW'
+                    AND LPM.`visible` = 1
                     AND M.`contentType` != '" . CTLABEL_ . "'
                     AND M.`module_id` = LPM.`module_id`
                     AND M.`course_id` = $cours_id
                     ";
-        $result = db_query($sqlnum, $mysqlMainDb);
+        $result = db_query($sqlnum);
         if($result) {
             list($value) = mysql_fetch_row($result);
             mysql_free_result($result);
             $nbrOfVisibleModules = $value;
-        }
-        else {
+        } else {
             $nbrOfVisibleModules = false;
         }
 
-
-		if( is_numeric($nbrOfVisibleModules) )
-          	$progression = @round($progress/$nbrOfVisibleModules);
-		else
-			$progression = 0;
+        if( is_numeric($nbrOfVisibleModules) )
+                $progression = @round($progress/$nbrOfVisibleModules);
+        else
+                $progression = 0;
 
     }
     return $progression;
@@ -850,7 +848,7 @@ function display_my_documents($dialogBox, $style)
 		$dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
             	$cmdFileName = str_replace("%2F","/",rawurlencode($curDirPath."/".$fileName));
 
-            if ($fileList['visibility'][$fileKey] == "i")
+            if ($fileList['visible'][$fileKey] == 0)
             {
                 if ($is_editor)
                 {
@@ -883,41 +881,38 @@ function display_my_documents($dialogBox, $style)
             }
 
             $output .= '
-    <tr '.$style.'>
-      <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
-      <td align="left">'. $urlFileName .'</td>
-      <td width="80" class="center">' . $size . '</td>
-      <td width="80" class="center">' . $date . '</td>';
+                <tr '.$style.'>
+                <td class="center" width="1"><img src="'.$themeimg.'/'.$image.'" hspace="5" /></td>
+                <td align="left">'. $urlFileName .'</td>
+                <td width="80" class="center">' . $size . '</td>
+                <td width="80" class="center">' . $date . '</td>';
 
             if ($fileList['type'][$fileKey] == A_FILE)
             {
                 $iterator++;
                 $output .= '
-      <td width="10" class="center">
-        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
-        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />
-      </td>';
+                <td width="10" class="center">
+                        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
+                        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' .$dspFileName .'" />
+                </td>';
             }
             else
             {
-                $output .= '
-      <td>&nbsp;</td>';
+                $output .= '<td>&nbsp;</td>';
             }
-            $output .= '
-    </tr>';
+            $output .= '</tr>';
 
             /* COMMENTS */
-
             if ($fileList['comment'][$fileKey] != "" )
             {
                 $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
                 $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
 
                 $output .= '
-    <tr class="even">
-      <td>&nbsp;</td>
-      <td colspan="'.$colspan.'"><span class="comment">'.$fileList['comment'][$fileKey].'</span></td>
-    </tr>';
+                <tr class="even">
+                <td>&nbsp;</td>
+                <td colspan="'.$colspan.'"><span class="comment">'.$fileList['comment'][$fileKey].'</span></td>
+                </tr>';
             }
             $ind++;
         }  // end each ($fileList)
@@ -936,16 +931,10 @@ function display_my_documents($dialogBox, $style)
     } // end if ( $fileList)
 	else
 	{
-		$output .= '
-    <tr>
-      <td colspan="4">&nbsp;</td>
-    </tr>';
+		$output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
 
-	$output .= '
-    </table>
-
-    </form>
+	$output .= '</table></form>
     <!-- end of display_my_documents output -->'."\n";
 
 	return $output;
@@ -1070,12 +1059,12 @@ function set_module_tree_visibility($module_tree, $visibility)
 
     foreach($module_tree as $module)
     {
-        if($module['visibility'] != $visibility)
+        if($module['visible'] != $visibility)
         {
             $sql = "UPDATE `" . $tbl_lp_rel_learnPath_module . "`
-                        SET `visibility` = '" . addslashes($visibility) . "'
+                        SET `visible` = '" . addslashes($visibility) . "'
                         WHERE `learnPath_module_id` = " . (int) $module['learnPath_module_id'] . "
-                          AND `visibility` != '" . addslashes($visibility) . "'";
+                          AND `visible` != '" . addslashes($visibility) . "'";
             db_query($sql);
         }
         if (isset($module['children']) && is_array($module['children']) ) set_module_tree_visibility($module['children'], $visibility);
@@ -1100,7 +1089,7 @@ function delete_module_tree($module_tree)
     {
         switch($module['contentType'])
         {
-        	case CTSCORMASSET_ :
+            case CTSCORMASSET_ :
             case CTSCORM_ :
                 // delete asset if scorm
                 $delAssetSql = "DELETE
@@ -1987,10 +1976,10 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 	}
 	
 	if ($extraQuery) {
-		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id", $mysqlMainDb);
+		$q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id", $mysqlMainDb);
 		$lp = mysql_fetch_array($q);
 		
-		if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
+		if ( !$is_editor && $lp['visible'] == 0 ) {
 			// if the learning path is invisible, don't allow users in it
 			header("Location: ".$depth."learningPathList.php?course=$code_cours");
 			exit();
@@ -2017,9 +2006,9 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		}
 	}
 		
-	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $mysqlMainDb);
+	$q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $mysqlMainDb);
 	$lpm = mysql_fetch_array($q2);
-	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visibility'] == "HIDE")) {
+	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
 		// if the combination path/module is invalid, don't allow users in it
 		header("Location: ".$depth."learningPathList.php?course=$code_cours");
 		exit();
@@ -2045,5 +2034,3 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		}
 	}
 }
-
-?>

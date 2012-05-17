@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -72,8 +72,6 @@ $action = new action();
 $action->record(MODULE_ID_LP);
 /**************************************/
 
-$head_content = "";
-$tool_content = "";
 $style = "";
 
 if (!add_units_navigation(TRUE)) {
@@ -231,11 +229,11 @@ if ($is_editor) {
 			// VISIBILITY COMMAND
 			case "mkVisibl" :
 			case "mkInvisibl" :
-				$_REQUEST['cmd'] == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
+				$_REQUEST['cmd'] == "mkVisibl" ? $visibility = 1 : $visibility = 0;
 				$sql = "UPDATE `".$TABLELEARNPATH."`
-					SET `visibility` = '$visibility'
+					SET `visible` = '$visibility'
 					WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
-					AND `visibility` != '$visibility'
+					AND `visible` != '$visibility'
 					AND `course_id` = $cours_id";
 				$query = db_query ($sql);
 				break;
@@ -409,7 +407,7 @@ if ($is_editor) {
     $visibility = "";
 }
 else {
-    $visibility = " AND LP.`visibility` = 'SHOW' ";
+    $visibility = " AND LP.`visible` = 1 ";
 }
 // check if user is anonymous
 if($uid) {
@@ -450,7 +448,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
          $style = 'class="odd"';
      }
 
-    if ($list['visibility'] == 'HIDE') {
+    if ($list['visible'] == 0) {
         if ($is_editor) {
             $style = " class='invisible'";
             $image_bullet = "arrow.png";
@@ -504,7 +502,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $blocksql = "SELECT `learnPath_module_id`
                      FROM `$TABLELEARNPATHMODULE`
                      WHERE `learnPath_id` = " . intval($list['learnPath_id']) . "
-                     AND `visibility` = 'SHOW'
+                     AND `visible` = 1
                      ORDER BY `rank` DESC
                      LIMIT 1";
         $resultblock = db_query($blocksql);
@@ -586,11 +584,11 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             .'</td>' . "\n";
 
         // statistics links
-        $tool_content .= "      <td class='center' width='1'><a href='details.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
+        $tool_content .= "<td class='center' width='1'><a href='details.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
 
         // VISIBILITY link
-        $tool_content .= "      <td class='center' width='60'>";
-        if ( $list['visibility'] == 'HIDE') {
+        $tool_content .= "<td class='center' width='60'>";
+        if ( $list['visible'] == 0) {
             $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."'>"
                   ."<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' />"
                   ."</a>";

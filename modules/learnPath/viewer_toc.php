@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -94,7 +94,7 @@ $sql = "SELECT LPM.`learnPath_module_id` ,
           ON M.`startAsset_id` = A.`asset_id`
         WHERE LPM.`module_id` = M.`module_id`
           AND LPM.`learnPath_id` = '" . (int)$_SESSION['path_id'] ."'
-          AND LPM.`visibility` = 'SHOW'
+          AND LPM.`visible` = 1
           AND LPM.`module_id` = M.`module_id`
           AND M.`course_id` = $cours_id
      GROUP BY LPM.`module_id`

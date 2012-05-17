@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -81,13 +81,13 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
 
 mysql_select_db($mysqlMainDb);
 
-$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
+$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
 $lp = mysql_fetch_array($q);
 if (!add_units_navigation() && !$is_editor) {
 	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
 }
 
-if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
+if ( !$is_editor && $lp['visible'] == 0 ) {
 	// if the learning path is invisible, don't allow users in it
 	header("Location: ./learningPathList.php?course=$code_cours");
 	exit();

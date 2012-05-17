@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.2
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -60,7 +60,7 @@ $sql = "SELECT `lock`, `raw_to_pass`
        WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
 
-$learningPath_module = db_query_fetch_all($sql, $mysqlMainDb);
+$learningPath_module = db_query_fetch_all($sql);
 
 if( isset($learningPath_module[0]['lock'])
 	&& $learningPath_module[0]['lock'] == 'CLOSE'
@@ -74,5 +74,3 @@ if( isset($learningPath_module[0]['lock'])
 	.    '</form>'."\n\n"
     ;
 }
-
-?>

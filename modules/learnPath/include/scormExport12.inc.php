@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -67,10 +67,11 @@ require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 require_once('../../include/lib/textLib.inc.php');
 
+
 $TBL_EXERCISE           = 'exercise';
-$TBL_EXERCISE_QUESTION  = 'exercise_question';
-$TBL_QUESTION           = 'question';
-$TBL_ANSWER             = 'answer';
+$TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
+$TBL_QUESTION           = 'exercise_question';
+$TBL_ANSWER             = 'exercise_answer';
 
 require_once('../exercise/exercise.class.php');
 require_once('../exercise/question.class.php');
@@ -188,7 +189,7 @@ class ScormExport
         $this->srcDirVideo = $webDir . "video/" . $currentCourseID;
         
         /* Now, get the complete list of modules, etc... */
-        $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visibility`, LPM.`rank`, 
+        $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`, 
                         LPM.`parent`, LPM.`raw_to_pass`, LPM.`specificComment` itemComment,
                         M.`name`, M.`contentType`, M.`comment` resourceComment, A.`path`
                 FROM `'.$TABLELEARNPATHMODULE.'` AS LPM
@@ -224,7 +225,7 @@ class ScormExport
             $this->resourceMap[$id] = $module;
             
             // Build Item tree, only keeping visible modules
-            if ( $module['visibility'] == 'SHOW' ) {
+            if ( $module['visible'] == 1 ) {
                 if ( ! $parent )
                 {
                     // parent is 0, item is at root

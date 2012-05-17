@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -573,8 +573,8 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     list($rankMax) = mysql_fetch_row($result);
 
     $sql = "INSERT INTO `".$TABLELEARNPATH."`
-            (`course_id`, `name`,`visibility`,`rank`,`comment`)
-            VALUES ($cours_id, '". addslashes($lpName) ."','HIDE',".($rankMax+1).",'')";
+            (`course_id`, `name`,`visible`,`rank`,`comment`)
+            VALUES ($cours_id, '". addslashes($lpName) ."', 0, ".($rankMax+1).",'')";
     db_query($sql, $mysqlMainDb);
 
 
@@ -932,17 +932,17 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                     // visibility
                     if ( isset($item['isvisible']) && $item['isvisible'] != '' )
                     {
-                        ( $item['isvisible'] == "true" )? $visibility = "SHOW": $visibility = "HIDE";
+                        ( $item['isvisible'] == "true" )? $visibility = 1: $visibility = 0;
                     }
                     else
                     {
-                        $visibility = 'SHOW'; // IMS consider that the default value of 'isvisible' is true
+                        $visibility = 1; // IMS consider that the default value of 'isvisible' is true
                     }
 
                     // add title module in the learning path
                     // finally : insert in learning path
                     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                            (`learnPath_id`, `module_id`,`rank`, `visibility`, `parent`)
+                            (`learnPath_id`, `module_id`,`rank`, `visible`, `parent`)
                             VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."', ".$rank.", '".$visibility."', ".$parent.")";
                     $query = db_query($sql, $mysqlMainDb);
 
@@ -1080,16 +1080,16 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                 // visibility
                 if ( isset($item['isvisible']) && $item['isvisible'] != '' )
                 {
-                    ( $item['isvisible'] == "true" )? $visibility = "SHOW": $visibility = "HIDE";
+                    ( $item['isvisible'] == "true" )? $visibility = 1: $visibility = 0;
                 }
                 else
                 {
-                    $visibility = 'SHOW'; // IMS consider that the default value of 'isvisible' is true
+                    $visibility = 1; // IMS consider that the default value of 'isvisible' is true
                 }
 
                 // finally : insert in learning path
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visibility`, `lock`, `parent`)
+                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `visible`, `lock`, `parent`)
                         VALUES ('".$tempPathId."', '".$insertedModule_id[$i]."','".addslashes($langDefaultModuleAddedComment)."', ".$rank.", '".$visibility."', 'OPEN', ".$parent.")";
                 $query = db_query($sql, $mysqlMainDb);
 
@@ -1204,7 +1204,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                 SET `rank` = ".($rankMax+1).",
                     `name` = '".addslashes($lpName)."',
                     `comment` = '".addslashes($lpComment)."',
-                    `visibility` = 'SHOW'
+                    `visible` = 1
                 WHERE `learnPath_id` = ". (int)$tempPathId ."
                 AND `course_id` = $cours_id";
         db_query($sql, $mysqlMainDb);

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -107,11 +107,11 @@ echo "<ul><li class='category'>$langContents</li>";
 foreach ($flatElementList as $module)
 {
     //-------------visibility-----------------------------
-    if ($module['visibility'] == 'HIDE' || $is_blocked)
+    if ($module['visible'] == 1 || $is_blocked)
     {
         if ($is_editor)
         {
-            $style = " class=\"invisible\"";
+            $style = " class='invisible'";
             $image_bullet = "off";
         }
         else

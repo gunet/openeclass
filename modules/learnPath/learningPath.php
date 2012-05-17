@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -70,7 +70,7 @@ if (isset($_GET['path_id'])) {
     exit();
 }
 
-$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
+$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
 $lp = mysql_fetch_array($q);
 $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
@@ -86,7 +86,7 @@ if ( $is_editor )
     exit();
 }
 else {
-	if ($lp['visibility'] == "HIDE") {
+	if ($lp['visible'] == 0) {
 		// if the learning path is invisible, don't allow users in it
 		header("Location: ./learningPathList.php?course=$code_cours");
 		exit();
@@ -136,7 +136,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
             ON M.`startAsset_id` = A.`asset_id`
           WHERE LPM.`module_id` = M.`module_id`
             AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-            AND LPM.`visibility` = 'SHOW'
+            AND LPM.`visible` = 1
             AND LPM.`module_id` = M.`module_id`
             AND M.`course_id` = $cours_id
        GROUP BY LPM.`module_id`
@@ -187,19 +187,16 @@ $tool_content .= "
 }
 
 // --------------------------- module table header --------------------------
-$tool_content .= "
-    <table width=\"99%\" class=\"tbl_alt\">";
-$tool_content .= "
-    <tr>
-      <th colspan=\"".($maxDeep+2)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>\n";
+$tool_content .= "<table width='99%' class='tbl_alt'>";
+$tool_content .= "<tr><th colspan=\"".($maxDeep+2)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '      <th colspan="2"><b>'.$langProgress.'</b></th>'."\n";
+    $tool_content .= '<th colspan="2"><b>'.$langProgress.'</b></th>'."\n";
 }
 
-$tool_content .= "    </tr>\n";
+$tool_content .= "</tr>\n";
 
 // ------------------ module table list display -----------------------------------
 if (!isset($globalProg)) $globalProg = 0;
@@ -249,15 +246,15 @@ foreach ($flatElementList as $module)
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
     {
-        $spacingString .= "\n      <td width=\"5\">&nbsp;</td>";
+        $spacingString .= "\n<td width='5'>&nbsp;</td>";
     }
 
     $colspan = $maxDeep - $module['children']+1;
     if ( $module['contentType'] == CTLABEL_ )
         $colspan++;
 
-    $tool_content .= "    <tr $style>".$spacingString."
-      <td colspan=\"".$colspan."\" align=\"left\">";
+    $tool_content .= "<tr $style>".$spacingString."
+      <td colspan=\"".$colspan."\" align='left'>";
 
     //-- if chapter head
     if ( $module['contentType'] == CTLABEL_ )
@@ -367,6 +364,5 @@ if($uid && $moduleNb > 0) {
 		.'</div></th>'."\n"
 		.'    </tr>'."\n\n";
 }
-$tool_content .= '    </table>'."\n\n";
+$tool_content .= '</table>'."\n\n";
 draw($tool_content, 2);
-?>

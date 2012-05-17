@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -129,7 +129,7 @@ switch($cmd)
     // VISIBILITY COMMAND
     case "mkVisibl" :
     case "mkInvisibl" :
-        $cmd == "mkVisibl" ? $visibility = 'SHOW' : $visibility = 'HIDE';
+        $cmd == "mkVisibl" ? $visibility = 1 : $visibility = 0;
         //--- BUILD ARBORESCENCE OF MODULES IN LEARNING PATH
         $sql = "SELECT M.*, LPM.*
                 FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
@@ -557,11 +557,11 @@ $ind=1;
 foreach ($flatElementList as $module)
 {
     //-------------visibility-----------------------------
-    if ( $module['visibility'] == 'HIDE' )
+    if ( $module['visible'] == 0 )
     {
         if ($is_editor)
         {
-            $style=" class=\"invisible\"";
+            $style=" class='invisible'";
             $image_bullet = "off";
         }
         else
@@ -687,7 +687,7 @@ foreach ($flatElementList as $module)
     // VISIBILITY
     $tool_content .= "<td width='10'>";
 
-    if ($module['visibility'] == 'HIDE') {
+    if ($module['visible'] == 0) {
         $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$themeimg."/invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
     }
     else
@@ -700,7 +700,7 @@ foreach ($flatElementList as $module)
         {
             $onclick = "";
         }
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$themeimg."/visible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=0 /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$themeimg."/visible.png\" alt='$langVisible' title='$langVisible' /></a>";
     }
 
     $tool_content .= "</td>";

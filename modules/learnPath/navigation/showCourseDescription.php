@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,7 +41,6 @@ require_once '../../../include/lib/textLib.inc.php' ;
 
 $nameTools = $langCourseProgram;
 
-mysql_select_db($mysqlMainDb);
 
 $unit_id = description_unit_id($cours_id);
 
@@ -56,7 +55,7 @@ $unit_id = description_unit_id($cours_id);
 <div id="content">
 
 <?php
-$q = db_query("SELECT id, title, comments, res_id, visibility FROM unit_resources WHERE
+$q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
                         unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
 
 if ($q and mysql_num_rows($q) > 0) {
@@ -82,7 +81,5 @@ if ($q and mysql_num_rows($q) > 0) {
 else {
 	echo "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
-
-?>
-    </div></body></html>
+?></div></body></html>
 

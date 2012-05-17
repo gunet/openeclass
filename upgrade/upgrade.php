@@ -664,7 +664,7 @@ if (!isset($_POST['submit2'])) {
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
                             `comment` TEXT NOT NULL,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                            `visible` TINYINT(4)',
                             `rank` INT(11) NOT NULL DEFAULT 0)");
                             //COMMENT='List of learning Paths';
                 db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
@@ -672,7 +672,7 @@ if (!isset($_POST['submit2'])) {
                             `learnPath_id` INT(11) NOT NULL DEFAULT 0,
                             `module_id` INT(11) NOT NULL DEFAULT 0,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visibility` enum('HIDE','SHOW') NOT NULL DEFAULT 'SHOW',
+                            `visible` TINYINT(4)',
                             `specificComment` TEXT NOT NULL,
                             `rank` INT(11) NOT NULL DEFAULT '0',
                             `parent` INT(11) NOT NULL DEFAULT '0',

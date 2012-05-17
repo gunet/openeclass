@@ -475,12 +475,23 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
         mysql_table_exists($code, 'lp_user_module_progress') ) {
         
+        // first change `visibility` field name and type to lp_learnPath table
+        db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` TEXT");
+        db_query("UPDATE lp_learnPath SET visibility = 1 WHERE visibility = 'SHOW'");
+        db_query("UPDATE lp_learnPath SET visibility = 0 WHERE visibility = 'HIDE'");
+        db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
+        // first change `visibility` field name and type to lp_rel_learnPath_module table
+        db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` TEXT");
+        db_query("UPDATE lp_rel_learnPath_module SET visibility = 1 WHERE visibility = 'SHOW'");
+        db_query("UPDATE lp_rel_learnPath_module SET visibility = 0 WHERE visibility = 'HIDE'");
+        db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
+            
         $asset_map = array();
         $rel_map = array();
         $rel_map[0] = 0;
         
         // ----- lp_learnPath DB Table ----- // 
-        list($lpid_offset) = mysql_fetch_row(db_query("SELECT max(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
+        list($lpid_offset) = mysql_fetch_row(db_query("SELECT MAX(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
         $lpid_offset = (!$lpid_offset) ? 0 : intval($lpid_offset);
         
         if ($return_mapping) {
@@ -497,7 +508,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                      FROM lp_learnPath AS old ORDER by learnPath_id");
         
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
-                         (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visibility`, `rank`)
+                         (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visible`, `rank`)
                          SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`, 
                          `visibility`, `rank` FROM lp_learnPath ORDER BY learnPath_id");
         
@@ -559,7 +570,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         db_query("INSERT INTO rel_map (old_id, new_id) VALUES (0, 0)");
         
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
-                         (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visibility`, `specificComment`,
+                         (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visible`, `specificComment`,
                           `rank`, `parent`, `raw_to_pass`)
                          SELECT DISTINCT lp_rel_learnPath_module.learnPath_module_id + $relid_offset,
                                 lp_map.new_id, module_map.new_id, lp_rel_learnPath_module.lock,
