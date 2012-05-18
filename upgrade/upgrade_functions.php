@@ -313,63 +313,50 @@ function upgrade_course($code, $lang)
 // ----------------------------------
 function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = false)
 {
-    global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
+    global $langUpgCourse, $mysqlMainDb, $webDir;
     
     $course_id = course_code_to_id($code);
     mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
     flush();
+
     
-    // move forums to central db and drop table
-    if (mysql_table_exists($code, 'catagories')) {
-            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_categories`
-                    (`cat_id`, `cat_title`, `cat_order`, `course_id`)
-                    SELECT `cat_id`, `cat_title`,
-                    `cat_order`, $course_id FROM catagories");
-            if ($ok) {
-                    db_query("DROP TABLE catagories");
-            }
-    }      
+    // move forum tables to central db 
+        if (mysql_table_exists($code, 'catagories')) {
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_categories`
+                        (`id`, `cat_title`, `cat_order`, `course_id`)
+                        SELECT `cat_id`, `cat_title`,
+                        `cat_order`, $course_id FROM catagories"); 
 
-    if (mysql_table_exists($code, 'forums')) {
-            $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum`
-                        (`forum_id`, `forum_name`, `forum_desc`, `forum_access`,
-                        `forum_moderator`, `forum_topics`, `forum_posts`, `forum_last_post_id`, 
-                        `cat_id`, `forum_type`, `course_id`)
-                        SELECT `forum_id`, `forum_name`, `forum_desc`, `forum_access`, 
-                        `forum_moderator`, `forum_topics`, `forum_posts`, `forum_last_post_id`,
-                         `cat_id`, `forum_type`, $course_id FROM forums");
-        if ($ok) {
-                db_query("DROP TABLE forums");
+        }        
+        if (mysql_table_exists($code, 'forums')) {
+                $sql = db_query("SELECT forum_id, forum_name, forum_desc, forum_topics, 
+                                forum_posts, forum_last_post_id, cat_id FROM forums ORDER by forum_id");        
+                while ($row = mysql_fetch_array($sql)) {
+                        db_query("INSERT INTO `$mysqlMainDb`.`forum` (`name`, `desc`, `num_topics`, `num_posts`, `last_post_id`, `cat_id`, `course_id`) 
+                                VALUES ('$row[forum_name]', '$row[forum_desc]', $row[forum_topics], $row[forum_posts], $row[forum_last_post_id], $row[cat_id], $course_id)");
+                        $newforum_id = mysql_insert_id();
+                        $sql2 = db_query("SELECT topic_id, topic_title, topic_poster, topic_time, topic_views,
+                                                topic_replies, topic_last_post_id, forum_id FROM topics
+                                                WHERE forum_id = $row[forum_id]");
+                                while ($row2 = mysql_fetch_array($sql2)) {
+                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_topics` 
+                                                (`title`, `poster_id`, `topic_time`, `num_views`, `num_replies`, `last_post_id`, `forum_id`)
+                                                VALUES ('$row2[topic_title]', $row2[topic_poster], '$row2[topic_time]', $row2[topic_views], $row2[topic_replies],
+                                                $row2[topic_last_post_id], $newforum_id)");
+                                        $newtopic_id = mysql_insert_id();
+                                        $sql3 = db_query("SELECT pt.post_text AS post_text, p.poster_id, p.post_time, p.poster_ip 
+                                                                FROM posts p, posts_text pt WHERE p.post_id = pt.post_id 
+                                                                AND p.forum_id = $row[forum_id]
+                                                                AND p.topic_id = $row2[topic_id]");
+                                while ($row3 = mysql_fetch_array($sql3)) {
+                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_posts` (`topic_id`, `forum_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`) 
+                                                                VALUES ($newtopic_id, $newforum_id, '$row3[post_text]', $row3[poster_id], '$row3[post_time]', '$row3[poster_ip]')");
+                                }
+                        }
+                }
         }
-   }
-   
-   if (mysql_table_exists($code, 'posts')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_posts`
-                        (`post_id`, `topic_id`, `forum_id`, `post_text`,
-                        `poster_id`, `post_time`, `poster_ip`, `course_id`)
-                        SELECT p.`post_id`, p.`topic_id`, p.`forum_id`, pt.post_text AS post_text, 
-                         p.poster_id, p.post_time, p.poster_ip, $course_id 
-                        FROM posts p, posts_text pt WHERE p.post_id = pt.post_id");
-        if ($ok) {
-                db_query("DROP TABLE posts");
-                db_query("DROP TABLE posts_text");
-        }
-   }
-   
-   if (mysql_table_exists($code, 'topics')) {
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_topics`
-                        (`topic_id`, `topic_title`, `topic_poster_id`, `topic_time`,
-                        `topic_views`, `topic_replies`, `topic_last_post_id`, `forum_id`, 
-                        `topic_status`, `course_id`)
-                        SELECT topic_id, topic_title, topic_poster, topic_time, 
-                        topic_views, topic_replies, topic_last_post_id, forum_id, 
-                        topic_status, $course_id FROM topics");
-        if ($ok) {
-                db_query("DROP TABLE topics");                
-        }
-   }
-
+        
     $video_map = array();
     // move video to central db and drop table
     if (mysql_table_exists($code, 'video')) {
