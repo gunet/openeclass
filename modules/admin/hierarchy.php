@@ -90,45 +90,6 @@ if (!isset($_GET['action'])) {
             $langManyExist: <b>$a[0]</b> $langHierarchyNodes
     </td>
     </tr>";
-    /*$tool_content .= "
-    <table width='100%' class='tbl_border'>
-    <tr>	
-    <td colspan='". ($maxdepth[0] + 4) ."' class='right'>
-            $langManyExist: <b>$a[0]</b> $langHierarchyNodes
-    </td>
-    </tr><tr>
-    <th scope='col' colspan='". ($maxdepth[0] + 2) ."'><div align='left'>&nbsp;&nbsp;".$langHierarchyNode."</div></th scope='col'>
-    <th scope='col' class='center'>$langCode</th>
-    <th>".$langActions."</th>
-    </tr>";
-    
-    list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, '', false);
-    $k = 0;
-    
-    // For all nodes display some info
-    foreach ($tree_array as $key => $value)
-    {
-        $trclass = ($k%2 == 0) ? 'even' : 'odd';
-        $colspan = $maxdepth[0] - $depthmap[$key] + 1;
-        
-        $tool_content .= "\n<tr class='$trclass'>";
-        $tool_content .= "\n<td width='1'><img src='$themeimg/arrow.png' alt='bullet' /></td>";
-        
-        for ($i = 1; $i <= $depthmap[$key]; $i++)
-            $tool_content .= "<td width='5'>&nbsp;</td>";
-        
-        $tool_content .= "\n<td colspan='$colspan'>". $value ."</td>";
-        $tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($codemap[$key])."</td>";
-        // link to delete or edit a node
-        $tool_content .= "\n<td width='50' align='center' nowrap>
-            <a href='$_SERVER[PHP_SELF]?action=edit&amp;id=". $key ."'>
-            <img src='$themeimg/edit.png' title='$langEdit' /></a>&nbsp;&nbsp;
-            <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=". $key ."' onClick=\"return confirm('". $langConfirmDelete ."')\">
-            <img src='$themeimg/delete.png' title='$langDelete' /></a></td>
-            </tr>\n";
-        
-        $k++;
-    }*/
     
     $initopen = $tree->buildJSTreeInitOpen();
 
