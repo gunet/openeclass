@@ -586,9 +586,10 @@ class hierarchy {
      * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
      * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
+     * @param  boolean $codesuffix - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
      * @return string  $html       - HTML output
      */
-    public function buildHtmlUl($tree_array = array(), $useKey = 'id', $exclude = null, $where = '', $dashprefix = false)
+    public function buildHtmlUl($tree_array = array(), $useKey = 'id', $exclude = null, $where = '', $dashprefix = false, $codesuffix = false)
     {
         $mark_allow_user = (strstr($where, 'allow_user') !== false) ?  true : false;
         $mark_allow_course = (strstr($where, 'allow_course') !== false) ? true : false;
@@ -634,7 +635,11 @@ class hierarchy {
                 $class = 'class="nosel"';
             }
             
-            $html .= '<li id="'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value .'</a></li>' . "\n";
+            $valcode = '';
+            if ($codesuffix && strlen($codemap[$key]) > 0)
+                $valcode = ' ('. $codemap[$key] .')';
+            
+            $html .= '<li id="'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value . $valcode .'</a></li>' . "\n";
             
             $i++;
         }
@@ -642,6 +647,24 @@ class hierarchy {
         $html .= '</ul>';
         
         return $html;
+    }
+    
+    /**
+     * Compile a comma seperated list with node ids. Used for setting JSTree initially_open core 
+     * configuration option
+     * 
+     * @return string $initopen - The returned comma seperated list
+     */
+    public function buildJSTreeInitOpen()
+    {
+        // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
+        $initopen = '';
+        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0") 
+                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
+        while ($row = mysql_fetch_assoc($res))
+            $initopen .= $row['id'].',';
+        
+        return $initopen;
     }
     
     /**
@@ -656,12 +679,7 @@ class hierarchy {
     {
         global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode;
                 
-        // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
-        $initopen = '';
-        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0") 
-                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
-        while ($row = mysql_fetch_assoc($res))
-            $initopen .= $row['id'].',';
+        $initopen = $this->buildJSTreeInitOpen();
         
         if ($offset > 0)
             $offset -=1 ;

@@ -47,7 +47,7 @@
 #jstree-marker.jstree-eclass { background:url("d.png") -41px -57px no-repeat !important; text-indent:-100px; }
 
 .jstree-eclass a.jstree-search { color:aqua; }
-.jstree-eclass .jstree-locked a { color:silver; cursor:eclass; }
+.jstree-eclass .jstree-locked a { color:silver; cursor:default; }
 
 #vakata-contextmenu.jstree-eclass-context, 
 #vakata-contextmenu.jstree-eclass-context li ul { background:#f0f0f0; border:1px solid #979797; -moz-box-shadow: 1px 1px 2px #999; -webkit-box-shadow: 1px 1px 2px #999; box-shadow: 1px 1px 2px #999; }
