@@ -711,8 +711,9 @@ function process_login()
 Authenticate user via eclass
 ****************************************************************/
 function login($user_info_array, $posted_uname, $pass)
-{
-        if ($posted_uname == $user_info_array['username'] and md5($pass) == $user_info_array['password']) {
+{        
+        if (check_username_sensitivity($posted_uname, $user_info_array['username']) and md5($pass) == $user_info_array['password']) {
+
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);
                 // check for admin privileges
