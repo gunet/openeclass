@@ -84,7 +84,14 @@ if (!isset($_GET['action'])) {
 
     // Construct a table
     $tool_content .= "
-    <table width='100%' class='tbl_alt'>
+    <table width='100%' class='tbl_border'>
+    <tr>	
+    <td colspan='". ($maxdepth[0] + 4) ."' class='right'>
+            $langManyExist: <b>$a[0]</b> $langHierarchyNodes
+    </td>
+    </tr>";
+    /*$tool_content .= "
+    <table width='100%' class='tbl_border'>
     <tr>	
     <td colspan='". ($maxdepth[0] + 4) ."' class='right'>
             $langManyExist: <b>$a[0]</b> $langHierarchyNodes
@@ -121,8 +128,81 @@ if (!isset($_GET['action'])) {
             </tr>\n";
         
         $k++;
-    }
+    }*/
+    
+    $initopen = $tree->buildJSTreeInitOpen();
 
+    $head_content .= <<<hContent
+<script type="text/javascript">
+
+$(function() {
+        
+    $( "#js-tree" ).jstree({
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
+        "core" : {
+            "animation": 300,
+            "initially_open" : [$initopen]
+        },
+        "themes" : {
+            "theme" : "eclass",
+            "dots" : true,
+            "icons" : false
+        },
+        "ui" : {
+            "select_limit" : 1
+        },
+        "cookies" : {
+            "save_selected": false
+        },
+        "types" : {
+            "types" : {
+                "nosel" : {
+                    "hover_node" : false,
+                    "select_node" : false
+                }
+            }
+        },
+        "sort" : function (a, b) { 
+            priorityA = this._get_node(a).attr("tabindex");
+            priorityB = this._get_node(b).attr("tabindex");
+            
+            if (priorityA == priorityB)
+                return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+                return priorityA < priorityB ? 1 : -1;
+        },
+        "contextmenu": {
+            "select_node" : true,
+            "items" : customMenu
+        }
+    })
+    .delegate("a", "click.jstree", function (e) { $("#js-tree").jstree("show_contextmenu", e.currentTarget); });
+    
+});
+
+function customMenu(node) {
+    
+    var items = {
+        editItem: { 
+            label: "$langEdit",
+            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id'); }
+        },
+        deleteItem: {
+            label: "$langDelete",
+            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id'); }
+        }
+    };
+
+    return items;
+}
+
+
+</script>
+hContent;
+    
+    $tool_content .= '';
+    $tool_content .= "<td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td>";
+    
     // Close table correctly
     $tool_content .= "</table>\n";
     $tool_content .= "<br /><p class='right'><a href=\"index.php\">".$langBack."</a></p>";
@@ -359,18 +439,3 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
 }
 
 draw($tool_content, 3, null, $head_content);
-
-
-// Return a list of all subdirectories of $base which contain a file named $filename
-function active_subdirs($base, $filename)
-{
-	$dir = opendir($base);
-	$out = array();
-	while (($f = readdir($dir)) !== false) {
-		if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and file_exists($base . '/' . $f . '/' . $filename)) {
-			$out[] = $f;
-		}
-	}
-	closedir($dir);
-	return $out;
-}
