@@ -443,6 +443,7 @@ $langThemes = "Επιλογή θέματος";
 $langOtherOptions = "Άλλες ρυθμίσεις";
 $langDefaultQuota = "Αποθηκευτικός χώρος νέων μαθημάτων";
 $langCreateBackup = "Δημουργία αντιγράφου ασφαλείας των ρυθμίσεων";
+$langCaseInsensitiveUsername = "Χωρίς διάκριση πεζών/κεφαλαίων στο όνομα χρήστη";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";

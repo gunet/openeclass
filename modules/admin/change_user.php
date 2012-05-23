@@ -33,9 +33,16 @@ $nameTools = $langChangeUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
-	$result = db_query("SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-                                   FROM user LEFT JOIN admin ON user.user_id = admin.iduser
-                                   WHERE username COLLATE utf8_bin = " . autoquote($_REQUEST['username']));
+	$sql = "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
+		FROM user LEFT JOIN admin ON user.user_id = admin.iduser
+		WHERE username ";
+
+	if (get_config('case_insensitive_usernames')) {
+		$sql .= "= " . autoquote($_REQUEST['username']);
+	} else {
+		$sql .= "COLLATE utf8_bin = " . autoquote($_REQUEST['username']);
+	}
+	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {
                 $myrow = mysql_fetch_array($result);
                 $_SESSION['uid'] = $myrow['user_id'];

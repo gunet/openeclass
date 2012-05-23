@@ -286,8 +286,14 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 	case '1':
 	    // Returns true if the username and password work and false if they don't
             $sql = "SELECT user_id FROM user
-                           WHERE username COLLATE utf8_bin = ".quote($test_username)." AND
-                                 password = ".quote(md5($test_password));
+                           WHERE username ";
+		
+	    if (get_config('case_insensitive_usernames')) {
+         	$sql .= "= ".quote($test_username);
+	    } else {
+		$sql .= "COLLATE utf8_bin = ".quote($test_username);
+	    }
+	    $sql .= " AND password = ".quote(md5($test_password));
 	    $result = db_query($sql);
             if (mysql_num_rows($result) == 1) {
                     $testauth = true;
@@ -626,8 +632,12 @@ function process_login()
 		unset($_SESSION['uid']);
 		$_SESSION['user_perso_active'] = false;
 		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-                                    FROM user 
-                                    WHERE username COLLATE utf8_bin = " . quote($posted_uname);
+			FROM user WHERE username ";
+		if (get_config('case_insensitive_usernames')) {
+			$sqlLogin .= "= " . quote($posted_uname);
+		} else {
+			$sqlLogin .= "COLLATE utf8_bin = " . quote($posted_uname);
+		}
 		$result = db_query($sqlLogin);
 		// cas might have alternative authentication defined
 		$auth_allow = 0;
@@ -848,7 +858,12 @@ function shib_cas_login($type)
 	}
 	// user is authenticated, now let's see if he is registered also in db
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-						FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
+						FROM user WHERE username ";
+	if (get_config('case_insensitive_usernames')) {
+		$sqlLogin .= "= " . quote($uname);
+	} else {
+		$sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
+	}
 	$r = db_query($sqlLogin);      
 
 	if (mysql_num_rows($r) > 0) {

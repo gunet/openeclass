@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -159,6 +159,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'alt_auth_student_req' => true,
 		'disable_eclass_stud_reg' => true,
 		'disable_eclass_prof_reg' => true,
+                'case_insensitive_usernames' => true,
 		'course_multidep' => true,
 		'user_multidep' => true);
 
@@ -325,7 +326,16 @@ else {
 	  <th class='left'>alt_auth_student_req</th>
 	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
 	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
-	</tr>
+	</tr>";
+
+        $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames')? 'checked': '';
+	$tool_content .= "<tr>
+	  <th class='left'>case_insensitive_usernames</th>
+	  <td><input type='checkbox' name='case_insensitive_usernames' value='1'
+	    $cbox_case_insensitive_usernames>&nbsp;$langCaseInsensitiveUsername</td>
+	</tr>";
+
+	$tool_content .= "
         <tr>
         <td class='left'><b>\$durationAccount:</b></td>
         <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
