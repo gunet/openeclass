@@ -893,13 +893,7 @@ td.bold {
         border-bottom: none !important;
 }
 
-.invisible_alt {
-    color: #dfdfdf !important;
-    border: 1px solid #dfdfdf !important;
-}
-
-
-.invisible { 
+.invisible {
    background-color: #dfdfdf; 
 }
 
