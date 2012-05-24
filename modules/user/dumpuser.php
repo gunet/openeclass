@@ -36,9 +36,10 @@ header("Content-Disposition: attachment; filename=listusers.csv");
 echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
      $crlf;
 $sql = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, user.username
-                FROM cours_user, user
-                        WHERE `user`.`user_id` = `cours_user`.`user_id`
-                        AND `cours_user`.`cours_id` = $cours_id ORDER BY user.nom,user.prenom", $mysqlMainDb);
+                        FROM course_user, user
+                        WHERE `user`.`user_id` = `course_user`.`user_id` AND
+                              `course_user`.`course_id` = $course_id
+                        ORDER BY user.nom,user.prenom");
 $r=0;
 while ($r < mysql_num_rows($sql)) {
         $a = mysql_fetch_array($sql);
@@ -52,7 +53,7 @@ while ($r < mysql_num_rows($sql)) {
                 $f++;
         }
         echo ';';
-        echo csv_escape(user_groups($cours_id, $a['user_id'], 'txt'));
+        echo csv_escape(user_groups($course_id, $a['user_id'], 'txt'));
         $r++;
 }
 echo "$crlf";

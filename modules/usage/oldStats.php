@@ -45,12 +45,12 @@ include('../../include/action.php');
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='usage.php?course=$code_cours'>".$langUsageVisits."</a></li>
-      <li><a href='favourite.php?course=$code_cours&amp;first='>".$langFavourite."</a></li>
-      <li><a href='userlogins.php?course=$code_cours&amp;first='>".$langUserLogins."</a></li>
+      <li><a href='usage.php?course=$course_code'>".$langUsageVisits."</a></li>
+      <li><a href='favourite.php?course=$course_code&amp;first='>".$langFavourite."</a></li>
+      <li><a href='userlogins.php?course=$course_code&amp;first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
-$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $cours_id";
+$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $course_id";
 $result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
@@ -64,7 +64,7 @@ mysql_free_result($result);
     $action->summarize();     #move data to action_summary
 }
 
-$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $cours_id";
+$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $course_id";
 $result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
@@ -134,7 +134,7 @@ if (!extension_loaded('gd')) {
                         FROM actions_summary 
                         WHERE $date_where
                         AND $mod_where
-                        AND course_id = $cours_id
+                        AND course_id = $course_id
                         GROUP BY MONTH(start_date)";
 	       
 	       $result = db_query($query);
@@ -156,7 +156,7 @@ if (!extension_loaded('gd')) {
                         SUM(duration) AS tot_dur FROM actions_summary
 		    WHERE $date_where 
                     AND $mod_where
-                    AND course_id = $cours_id
+                    AND course_id = $course_id
                     GROUP BY MONTH(start_date)";
 
 	   $result = db_query($query);
@@ -174,7 +174,7 @@ if (!extension_loaded('gd')) {
        break;
    }
    mysql_free_result($result);
-   $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+   $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
 
    if ($chart_content) {
 	$chart->render($webDir.$chart_path);
@@ -202,7 +202,7 @@ if (!extension_loaded('gd')) {
 		'name'   => 'u_date_end',
 		'value' => $u_date_end));
    
-   $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = $cours_id";
+   $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = $course_id";
 
    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
    $result = db_query($qry);
@@ -221,7 +221,7 @@ if (!extension_loaded('gd')) {
        '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
    $tool_content .= '
-       <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+       <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
        <fieldset>
 	 <legend>'.$langOldStats.'</legend>
 	 <table class="tbl">

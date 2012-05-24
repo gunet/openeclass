@@ -21,7 +21,7 @@
 
 if (isset($_REQUEST['from_reg'])) {
 	$from_reg = $_REQUEST['from_reg'];
-	$cours_id = $_REQUEST['cours_id'];
+	$course_id = $_REQUEST['course_id'];
 }
 
 if (isset($from_reg)) {
@@ -36,7 +36,7 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 if (isset($from_reg)) {
-	$title = course_id_to_title($cours_id);
+	$title = course_id_to_title($course_id);
 }
 $nameTools = $langContactProf;
 
@@ -55,7 +55,7 @@ if (empty($userdata['email'])) {
 		$tool_content .= "<p>$langEmptyMessage</p>";
 		$tool_content .= form();
 	} else {
-		$tool_content .= email_profs($cours_id, $content,
+		$tool_content .= email_profs($course_id, $content,
 			"$userdata[prenom] $userdata[nom]",
 			$userdata['email']);
 	}
@@ -73,18 +73,18 @@ if (isset($from_reg)) {
 // display form
 function form()
 {
-	global $from_reg, $cours_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage, $code_cours;
+	global $from_reg, $course_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage, $course_code;
 
 	if (isset($from_reg)) {
 		$message = $langInfoAboutRegistration;
 		$hidden = "<input type='hidden' name='from_reg' value='$from_reg'>
-			<input type='hidden' name='cours_id' value='$cours_id'>";
+			<input type='hidden' name='course_id' value='$course_id'>";
 	} else {
 		$message = $langContactMessage;
 		$hidden = '';
 	}
 	
-	$ret = "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+	$ret = "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>
 	$hidden
@@ -108,23 +108,23 @@ return $ret;
 }
 
 // send email
-function email_profs($cours_id, $content, $from_name, $from_address)
+function email_profs($course_id, $content, $from_name, $from_address)
 {
         global $themeimg, $langSendingMessage, $langHeaderMessage, $langContactIntro;
 
-        $q = db_query("SELECT public_code FROM course WHERE id = $cours_id");
+        $q = db_query("SELECT public_code FROM course WHERE id = $course_id");
         list($public_code) = mysql_fetch_row($q);
 
 	$ret = "<p>$langSendingMessage</p><br />";
 
 	$profs = db_query("SELECT user.email AS email, user.nom AS nom,
 		user.prenom AS prenom
-		FROM cours_user JOIN user ON user.user_id = cours_user.user_id
-		WHERE cours_id = $cours_id AND cours_user.statut=1");
+		FROM course_user JOIN user ON user.user_id = course_user.user_id
+		WHERE course_id = $course_id AND course_user.statut=1");
 
 	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
-	$subject = "$langHeaderMessage ($fake_code - $GLOBALS[title])";
+	$subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";
 
 	while ($prof = mysql_fetch_array($profs)) {
 		$to_name = $prof['prenom'].' '.$prof['nom'];

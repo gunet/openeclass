@@ -76,11 +76,11 @@ EOF;
 
 $pwd = getcwd();
 
-$courseDir   = "courses/".$currentCourseID."/document";
+$courseDir   = "courses/".$course_code."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = '';
-$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name' => $langLearningPath);
-$navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
+$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name' => $langLearningPath);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyDocToolName;
 
 mysql_select_db($mysqlMainDb);
@@ -94,7 +94,7 @@ function buildRequestModules() {
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
- global $cours_id;
+ global $course_id;
 
  $firstSql = "SELECT `module_id` FROM `".$TABLELEARNPATHMODULE."` AS LPM
               WHERE LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
@@ -103,7 +103,7 @@ function buildRequestModules() {
  // 2) We build the request to get the modules we need
  $sql = "SELECT M.*
          FROM `".$TABLEMODULE."` AS M
-         WHERE 1 = 1 AND M.`course_id` = $cours_id ";
+         WHERE 1 = 1 AND M.`course_id` = $course_id ";
 
  while ($list=mysql_fetch_array($firstResult))
  {
@@ -139,7 +139,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     WHERE A.`module_id` = M.`module_id`
                       AND A.`path` LIKE ".autoquote($insertDocument)."
                       AND M.`contentType` = '".CTDOCUMENT_."'
-                      AND M.`course_id` = $cours_id";
+                      AND M.`course_id` = $course_id";
             $query = db_query($sql);
             $num = mysql_numrows($query);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
@@ -149,7 +149,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 // create new module
                 $sql = "INSERT INTO `$TABLEMODULE`
                         (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                        VALUES ($cours_id, ".autoquote($filenameDocument).", '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
+                        VALUES ($course_id, ".autoquote($filenameDocument).", '". addslashes($langDefaultModuleComment) . "', '".CTDOCUMENT_."','')";
                 $query = db_query($sql);
                 $insertedModule_id = mysql_insert_id();
 
@@ -163,7 +163,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = " . (int)$insertedAsset_id . "
                         WHERE `module_id` = " . (int)$insertedModule_id . "
-                        AND `course_id` = $cours_id";
+                        AND `course_id` = $course_id";
                 $query = db_query($sql);
 
                 // determine the default order of this Learning path
@@ -197,7 +197,7 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                           AND M.`startAsset_id` = A.`asset_id`
                           AND A.`path` = '". addslashes($insertDocument)."'
                           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-                          AND M.`course_id` = $cours_id";
+                          AND M.`course_id` = $course_id";
                 $query2 = db_query($sql);
                 $num = mysql_numrows($query2);
                 if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
@@ -372,13 +372,13 @@ unset($attribute);
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style) ;
 $tool_content .= "<br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 
 //################################## MODULES LIST ####################################\\
 
 //$tool_content .= "<br />";
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();

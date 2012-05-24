@@ -43,30 +43,30 @@ if ($is_editor) {
         $tool_content .= "
    <div id='operations_container'>
      <ul id='opslist'>
-       <li><a href='index.php?course=$code_cours&amp;create=1'>$langCreate</a>
+       <li><a href='index.php?course=$course_code&amp;create=1'>$langCreate</a>
      </ul>
    </div>";
 
         if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
                 $id = intval($_POST['id']);
-                $r = db_query("SELECT title FROM ebook WHERE course_id = $cours_id AND id = $id");
+                $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
                 if (mysql_num_rows($r) > 0) {
                         list($title) = mysql_fetch_row($r);
                         db_query("DELETE FROM ebook_subsection WHERE section_id IN
                                          (SELECT id FROM ebook_section WHERE ebook_id = $id)");
                         db_query("DELETE FROM ebook_section WHERE ebook_id = $id");
                         db_query("DELETE FROM ebook WHERE id = $id");
-                        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
+                        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
                         my_delete($basedir);
                         db_query("DELETE FROM document WHERE
                                  subsystem = ".EBOOK." AND
                                  subsystem_id = $id AND
-                                 course_id = $cours_id");
+                                 course_id = $course_id");
                         $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
                 }
         } elseif (isset($_GET['create'])) {
                 $tool_content .= "
-   <form method='post' action='create.php?course=$code_cours' enctype='multipart/form-data'>
+   <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
      <fieldset>
      <legend>$langUpload</legend>
      
@@ -86,12 +86,12 @@ if ($is_editor) {
      </fieldset>
    </form>";
         } elseif (isset($_GET['down'])) {
-                move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $cours_id");
+                move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
         } elseif (isset($_GET['up'])) {
-                move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $cours_id");
+                move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
         } elseif (isset($_GET['vis'])) {
                 db_query("UPDATE ebook SET visible = NOT visible
-                                 WHERE course_id = $cours_id AND
+                                 WHERE course_id = $course_id AND
                                        id = " . intval($_GET['vis']));
         }
 }
@@ -104,7 +104,7 @@ if ($is_editor) {
 $q = db_query("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) AS sid
                       FROM ebook LEFT JOIN ebook_section ON ebook.id = ebook_id
                            LEFT JOIN ebook_subsection ON ebook_section.id = section_id
-                      WHERE course_id = $cours_id
+                      WHERE course_id = $course_id
                             $visibility_check
                       GROUP BY ebook.id
                       ORDER BY `order`");
@@ -129,7 +129,7 @@ if (mysql_num_rows($q) == 0) {
                 if (is_null($r['sid'])) {
                         $title_link = q($r['title']) . ' <i>(' . $langEBookNoSections . ')</i>';
                 } else {
-                        $title_link = "<a href='show.php/$currentCourseID/$r[id]/'>" .
+                        $title_link = "<a href='show.php/$course_code/$r[id]/'>" .
                                       q($r['title']) . "</a>";
                 }
                 $warning = is_null($r['sid'])? " <i>($langInactive)</i>": '';
@@ -151,28 +151,28 @@ draw($tool_content, 2, null, $head_content);
 function tools($id, $title, $k, $num, $vis)
 {
         global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
-               $code_cours, $themeimg, $langVisibility;
+               $course_code, $themeimg, $langVisibility;
 
         if (!$is_editor) {
                 return '';
         } else {
                 $icon_vis = $vis? 'visible.png': 'invisible.png';
                 $num--;
-                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
-                       "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
+                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>\n" .
+                       "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$course_code&amp;id=$id'>" .
                        "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$id'>
+                       "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;vis=$id'>
                            <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
                         </form></td><td class='right' width='40'>" .
-                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
+                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
                                      '') . 
-                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
+                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":
                                   '') . "</td>\n";

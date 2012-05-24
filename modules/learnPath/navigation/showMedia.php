@@ -30,8 +30,8 @@ $nameTools = $langMediaTypeDesc;
 if (isset($_GET['id']))
 {
     $id = $_GET['id'];
-    $videoPath = $urlServer ."video/". $currentCourseID . $id;
-    $videoURL = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=download&amp;id=". $id;
+    $videoPath = $urlServer ."video/". $course_code . $id;
+    $videoURL = $urlServer ."modules/video/video.php?course=$course_code&amp;action=download&amp;id=". $id;
     
     if (strpos($videoPath, '/../') === FALSE)
     {

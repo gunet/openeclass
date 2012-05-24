@@ -66,7 +66,7 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 mysql_select_db($mysqlMainDb);
 
 //  set redirection link
-$returl = "navigation/viewModule.php?course=$currentCourseID&amp;go=" . 
+$returl = "navigation/viewModule.php?course=$course_code&amp;go=" . 
           ($is_editor ? 'learningPathAdmin': 'learningPath');
 
 if ($uid) {
@@ -96,7 +96,7 @@ $sql = "SELECT LPM.`learnPath_module_id` ,
           AND LPM.`learnPath_id` = '" . (int)$_SESSION['path_id'] ."'
           AND LPM.`visible` = 1
           AND LPM.`module_id` = M.`module_id`
-          AND M.`course_id` = $cours_id
+          AND M.`course_id` = $course_id
      GROUP BY LPM.`module_id`
      ORDER BY LPM.`rank`";
 
@@ -114,7 +114,7 @@ $moduleNb = 0;
 $sql = "SELECT `name`
       FROM `".$TABLELEARNPATH."`
       WHERE `learnPath_id` = '". (int)$_SESSION['path_id']."'
-      AND `course_id` = $cours_id";
+      AND `course_id` = $course_id";
 
 $lpName = db_query_get_single_value($sql);
 
@@ -185,13 +185,13 @@ if ( $moduleNb > 1 )
 	$imgNext = '<img src="'.$themeimg.'/lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
 
 	if( $previousModule != '' )
-		$prevNextString .= '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
+		$prevNextString .= '<a href="navigation/viewModule.php?course='.$course_code.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
 	else
 		$prevNextString .=  $imgPrevious;
 	$prevNextString .=  '&nbsp;';
 
 	if( $nextModule != '' )
-		$prevNextString .=  '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
+		$prevNextString .=  '<a href="navigation/viewModule.php?course='.$course_code.'&amp;viewModule_id='.$nextModule.'" target="scoFrame">'.$imgNext.'</a>';
 	else
 		$prevNextString .=  $imgNext;
 }
@@ -208,9 +208,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
         <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
     <div class='lp_left'>
-        <a href='$urlAppend/courses/$currentCourseID' target='_top' title='" .
+        <a href='$urlAppend/courses/$course_code' target='_top' title='" .
                 q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
-        <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$currentCourseID' target='_top'>
+        <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$course_code' target='_top'>
                 $langLearningPaths</a> &#187;
         <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a></div>
     <div class='clear'></div>

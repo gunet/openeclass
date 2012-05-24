@@ -24,18 +24,18 @@ function list_videos()
 {
         global $id, $tool_content, $urlServer,
                $langTitle, $langDescr, $langDate, $langChoice,
-               $langAddModulesButton, $langNoVideo, $code_cours,
-               $themeimg, $cours_id, $mysqlMainDb; 
+               $langAddModulesButton, $langNoVideo, $course_code,
+               $themeimg, $course_id, $mysqlMainDb; 
 
         $table_started = false;
         $count = 0;
         foreach (array('video', 'videolinks') as $table) {
-                $result = db_query("SELECT * FROM $table WHERE course_id = $cours_id", $mysqlMainDb);
+                $result = db_query("SELECT * FROM $table WHERE course_id = $course_id", $mysqlMainDb);
                 $count += mysql_num_rows($result);
                 $numLine=0;
                 while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         if (!$table_started) {
-                                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />";
+                                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
                                 $tool_content .= "\n  <table class='tbl_alt' width='99%'>";
                         	$tool_content .= "\n  <tr>" .
                                                  "\n    <th><div align='left'>&nbsp;$langTitle</div></th>" .

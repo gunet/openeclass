@@ -28,8 +28,8 @@ include '../../include/baseTheme.php';
 require_once '../video/video_functions.php';
 load_modal_box();
 
-$base_url = 'glossary.php?course=' . $code_cours;
-$cat_url = 'categories.php?course=' . $code_cours;
+$base_url = 'glossary.php?course=' . $course_code;
+$cat_url = 'categories.php?course=' . $course_code;
 
 /*
  * *** The following is added for statistics purposes **
@@ -49,7 +49,7 @@ $nameTools = $langGlossary;
 
 $categories = array();
 $q = db_query("SELECT id, name, description, `order`
-                      FROM glossary_category WHERE course_id = $cours_id
+                      FROM glossary_category WHERE course_id = $course_id
                       ORDER BY name");
 while ($cat = mysql_fetch_assoc($q)) {
         $categories[intval($cat['id'])] = $cat['name'];
@@ -62,11 +62,11 @@ if (isset($_GET['cat'])) {
 
 list($expand_glossary, $glossary_index) =
         mysql_fetch_row(db_query("SELECT glossary_expand, glossary_index
-                                         FROM course WHERE id = $cours_id"));
+                                         FROM course WHERE id = $course_id"));
 if ($glossary_index) {
         $prefixes = array();
         $q = db_query("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
-                              FROM glossary WHERE course_id = $cours_id
+                              FROM glossary WHERE course_id = $course_id
                               ORDER BY prefix");
         while ($prefix = mysql_fetch_row($q)) {
                 $prefix = remove_accents($prefix[0]);
@@ -115,7 +115,7 @@ if ($is_editor) {
                                                   notes = " . autoquote(purify($_POST['notes'])) . ",
                                                   category_id = $category_id,
                                                   datestamp = NOW()
-                                              WHERE id = $id AND course_id = $cours_id");
+                                              WHERE id = $id AND course_id = $course_id");
                         $success_message = $langGlossaryUpdated;
                 } else {
                         $q = db_query("INSERT INTO glossary
@@ -125,8 +125,8 @@ if ($is_editor) {
                                                   notes = " . autoquote(purify($_POST['notes'])) . ",
                                                   category_id = $category_id,
                                                   datestamp = NOW(),
-                                                  course_id = $cours_id,
-                                                  `order` = " . findorder($cours_id));
+                                                  course_id = $course_id,
+                                                  `order` = " . findorder($course_id));
                         $success_message = $langGlossaryAdded;
                 } 
                 if ($q and mysql_affected_rows()) {
@@ -136,7 +136,7 @@ if ($is_editor) {
         }
 
         if (isset($_GET['delete'])) {
-                $q = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
+                $q = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $course_id");
                 invalidate_glossary_cache();
                 if ($q and mysql_affected_rows()) {
                         $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
@@ -146,11 +146,11 @@ if ($is_editor) {
         $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>" .
-           ($categories? "<li><a href='categories.php?course=$code_cours'>$langCategories</a></li>": '') . "
+           ($categories? "<li><a href='categories.php?course=$course_code'>$langCategories</a></li>": '') . "
            <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
            <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
-           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$code_cours'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>Windows 1253</a>)</li>  
+           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>  
          </ul>
        </div>";
 
@@ -257,7 +257,7 @@ if ($is_editor) {
         }
         list($total_glossary_terms) =
                 mysql_fetch_row(db_query("SELECT COUNT(*) FROM glossary
-                                                          WHERE course_id = $cours_id"));
+                                                          WHERE course_id = $course_id"));
         if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
                 $tool_content .= sprintf("<p class='alert1'>$langGlossaryOverLimit</p>",
                                          "<b>$max_glossary_terms</b>");
@@ -268,7 +268,7 @@ if ($is_editor) {
                 $tool_content .= "
        <div id='operations_container'>
          <ul id='opslist'>
-           <li><a href='categories.php?course=$code_cours'>$langCategories</a></li>
+           <li><a href='categories.php?course=$course_code'>$langCategories</a></li>
          </ul>
        </div>";
         }
@@ -311,7 +311,7 @@ if ($cat_id) {
         $where .= " AND category_id = $cat_id";
 }
 $sql = db_query("SELECT id, term, definition, url, notes, category_id
-                        FROM glossary WHERE course_id = $cours_id $where
+                        FROM glossary WHERE course_id = $course_id $where
                         GROUP BY term
                         ORDER BY term");
 if (mysql_num_rows($sql) > 0) { 

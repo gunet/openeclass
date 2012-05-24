@@ -73,13 +73,13 @@ $dropbox_cnf["personTbl"] = "dropbox_person";
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; 
+$dropbox_cnf["sysPath"] = $webDir."courses/".$course_code."/dropbox"; 
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
 } 
 	
 // get dropbox quotas from database
-$d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code='$currentCourseID'"));
+$d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code = '$course_code'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
 $dropbox_cnf["allowJustUpload"] = false;
 if (get_config('dropbox_allow_student_to_student') == true) {
@@ -87,7 +87,7 @@ if (get_config('dropbox_allow_student_to_student') == true) {
 } else {
 	$dropbox_cnf["allowStudentToStudent"] = false;	
 }
-$basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
+$basedir = $webDir . 'courses/' . $course_code . '/dropbox';
 $diskUsed = dir_total_space($basedir);
 
 /*
@@ -96,12 +96,12 @@ $diskUsed = dir_total_space($basedir);
 */
 function removeUnusedFiles()
 {
-    global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
+    global $dropbox_cnf, $dropbox_lang, $course_id, $mysqlMainDb;
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM `" . $dropbox_cnf["fileTbl"] . "` f
 			LEFT JOIN `" . $dropbox_cnf["personTbl"] . "` p ON f.id = p.fileId
-			WHERE f.course_id = $cours_id AND p.personId IS NULL";
+			WHERE f.course_id = $course_id AND p.personId IS NULL";
     $result = db_query($sql, $mysqlMainDb);
     while ($res = mysql_fetch_array($result))
     {

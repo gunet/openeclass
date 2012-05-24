@@ -2354,14 +2354,14 @@ function upgrade_video($file, $id, $code)
 
 
 // Convert course description to special course unit with order = -1
-function convert_description_to_units($code, $cours_id)
+function convert_description_to_units($code, $course_id)
 {
         global $mysqlMainDb, $langCourseDescription;
 
         mysql_select_db($mysqlMainDb);
 
         $desc = $addon = '';
-        $qdesc = @mysql_query("SELECT description, course_addon FROM cours WHERE cours_id = $cours_id");
+        $qdesc = @mysql_query("SELECT description, course_addon FROM cours WHERE course_id = $course_id");
         if ($qdesc) {
                 list($desc, $addon) = mysql_fetch_row($qdesc);
                 $desc = trim($desc);
@@ -2376,7 +2376,7 @@ function convert_description_to_units($code, $cours_id)
                 return;
         }
 
-        $id = description_unit_id($cours_id);
+        $id = description_unit_id($course_id);
 
         $error = false;
         if (!empty($desc)) {
@@ -2389,7 +2389,7 @@ function convert_description_to_units($code, $cours_id)
                                            $GLOBALS['langCourseAddon'], $addon, 'v') && $error;
         }
         if (!$error) {
-                db_query("UPDATE cours SET description = '', course_addon = '' WHERE cours_id = $cours_id");
+                db_query("UPDATE cours SET description = '', course_addon = '' WHERE course_id = $course_id");
         }
 
         if ($q and mysql_num_rows($q) > 0) {

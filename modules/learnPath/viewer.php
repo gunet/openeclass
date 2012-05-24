@@ -57,12 +57,12 @@ if (isset($_GET['path_id']) && !empty($_GET['path_id']))
 if (isset($_GET['module_id']) && !empty($_GET['module_id']))
 	$_SESSION['lp_module_id'] = intval($_GET['module_id']);
 
-check_LPM_validity($is_editor, $code_cours, true);
+check_LPM_validity($is_editor, $course_code, true);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
-	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-	$navigation[] = array("url"=>"learningPath.php?course=$code_cours", "name"=> $langAdm);
+	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPath.php?course=$course_code", "name"=> $langAdm);
 }
 
 if (!isset($titlePage)) $titlePage = '';
@@ -90,11 +90,11 @@ else
 
 if ($displayFull == 0)
 {
-	$tool_content .= "<iframe src=\"navigation/startModule.php?course=$code_cours\" name=\"mainFrame\" "
+	$tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" "
 		."width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
 		."<br />"."\n"
-		."      <a href=\"module.php?course=$code_cours\">".$langBack."</a>"."\n"
+		."      <a href=\"module.php?course=$course_code\">".$langBack."</a>"."\n"
 		."      </iframe>"."\n";
 	draw($tool_content, 2, null, $head_content);
 }
@@ -109,13 +109,13 @@ else
 	."<title>".q($titlePage)."</title>"."\n"
 	."</head>"."\n"
 	."<frameset cols=\"*\" border=\"0\">"."\n"
-	."<frame src=\"navigation/startModule.php?course=$code_cours\" name=\"mainFrame\" />"."\n"
+	."<frame src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" />"."\n"
 	."</frameset>"."\n"
 	."<noframes>"."\n"
 	."<body>"."\n"
 	.$langBrowserCannotSeeFrames
 	."<br />"."\n"
-	."<a href=\"module.php?course=$code_cours\">".$langBack."</a>"."\n"
+	."<a href=\"module.php?course=$course_code\">".$langBack."</a>"."\n"
 	."</body>"."\n"
 	."</noframes>"."\n"
 	."</html>"."\n";

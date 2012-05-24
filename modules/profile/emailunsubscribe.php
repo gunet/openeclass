@@ -36,22 +36,22 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['cid'])) {  // change email subscription for one course                
                 $cid = intval($_POST['cid']);
                 if (isset($_POST['c_unsub'])) {
-                        db_query("UPDATE cours_user SET receive_mail = 1
-                                WHERE user_id = $uid AND cours_id = $cid");        
+                        db_query("UPDATE course_user SET receive_mail = 1
+                                WHERE user_id = $uid AND course_id = $cid");        
                 } else {
-                        db_query("UPDATE cours_user SET receive_mail = 0
-                                WHERE user_id = $uid AND cours_id = $cid");        
+                        db_query("UPDATE course_user SET receive_mail = 0
+                                WHERE user_id = $uid AND course_id = $cid");        
                 }                
                 $course_title = course_id_to_title($cid);        
                 $tool_content .= "<div class='success'>".sprintf($course_title, $langEmailUnsubSuccess)."</div>";
         } else { // change email subscription for all courses
                 foreach ($_SESSION['status'] as $course_code => $c_value) {
                         if (@array_key_exists($course_code, $_POST['c_unsub'])) {                        
-                                db_query("UPDATE cours_user SET receive_mail = 1
-                                WHERE user_id = $uid AND cours_id = ". course_code_to_id($course_code));
+                                db_query("UPDATE course_user SET receive_mail = 1
+                                WHERE user_id = $uid AND course_id = ". course_code_to_id($course_code));
                         } else {                        
-                                 db_query("UPDATE cours_user SET receive_mail = 0
-                                WHERE user_id = $uid AND cours_id = ". course_code_to_id($course_code));
+                                 db_query("UPDATE course_user SET receive_mail = 0
+                                WHERE user_id = $uid AND course_id = ". course_code_to_id($course_code));
                         }
                 }
                 $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />

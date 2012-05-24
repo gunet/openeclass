@@ -144,20 +144,20 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename,
  * Construct a proper a href html tag for medialinks
  * 
  * @global string $userServer
- * @global string $code_cours
+ * @global string $course_code
  * @param  string $mediaURL
  * @param  string $title
  * @return string 
  */
 function choose_medialink_ahref($mediaURL, $title)
 {
-    global $urlServer, $code_cours;
+    global $urlServer, $course_code;
     
     $ahref = "<a href='$mediaURL' target='_blank'>". $title ."</a>";
     
     if (is_embeddable_medialink($mediaURL))
     {
-        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
+        $linkPlay = $urlServer ."modules/video/video.php?course=$course_code&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
         
         if (file_exists(get_shadowbox_dir()))
             $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";

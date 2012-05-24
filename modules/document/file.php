@@ -37,8 +37,8 @@ if (isset($_SESSION['FILE_PHP__LIGHT_STYLE'])) {
 }
 
 // save current course
-if (isset($_SESSION['dbname'])) {
-        define('old_dbname', $_SESSION['dbname']);
+if (isset($_SESSION['course_code'])) {
+        define('old_course_code', $_SESSION['course_code']);
 }
 
 $uri = preg_replace('/\?[^?]*$/', '', 
@@ -57,7 +57,7 @@ $path_components = explode('/', $uri);
 // temporary course change
 $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
-$_SESSION['dbname'] = $cinfo_components[0];
+$_SESSION['course_code'] = $cinfo_components[0];
 
 if (isset($cinfo_components[1])) {
         $group_id = intval($cinfo_components[1]);
@@ -90,7 +90,7 @@ if (defined('GROUP_DOCUMENTS')) {
                 error($langNoRead);
         }
 } else {
-        $basedir = "{$webDir}courses/$dbname/document";
+        $basedir = "{$webDir}courses/$course_code/document";
 }
 
 $file_info = public_path_to_disk_path($path_components);
@@ -106,9 +106,9 @@ if (file_exists($basedir . $file_info['path'])) {
         require_once '../../include/lib/fileDisplayLib.inc.php';
         
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer .'modules/document/document.php?course='. $code_cours .'&amp;download='. $file_info['path'];
+        $mediaURL = $urlServer .'modules/document/document.php?course='. $course_code .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer .'modules/group/document.php?course='. $code_cours .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+            $mediaURL = $urlServer .'modules/group/document.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
         
         $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;
@@ -119,10 +119,9 @@ if (file_exists($basedir . $file_info['path'])) {
 }
 
 function check_cours_access() {
-	global $dbname;
+	global $course_code;
 
-	// $dbname is used in filepath so we stick to this instead of $currentCourse
-	$qry = "SELECT id, code, visible FROM `course` WHERE code='$dbname'";
+	$qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
 	$result = db_query($qry);
 
 	// invalid lesson code
@@ -138,8 +137,8 @@ function check_cours_access() {
 		case '1': 
 		case '0': 
 		default: 
-                // check if user has access to cours
-                if (isset($_SESSION['status'][$dbname]) && ($_SESSION['status'][$dbname] >= 1)) {
+                // check if user has access to course
+                if (isset($_SESSION['status'][$course_code]) && ($_SESSION['status'][$course_code] >= 1)) {
                         return;
                 }
                 else {

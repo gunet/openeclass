@@ -49,7 +49,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLECOURSUSER	        = 'cours_user';
+$TABLECOURSUSER	        = 'course_user';
 $TABLEUSER              = 'user';
 $TABLELEARNPATH         = 'lp_learnPath';
 $TABLEMODULE            = 'lp_module';
@@ -59,13 +59,13 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
 
-$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name' => $langLearningPaths);
-$navigation[] = array('url' => "detailsAll.php?course=$code_cours", 'name' => $langTrackAllPathExplanation);
+$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name' => $langLearningPaths);
+$navigation[] = array('url' => "detailsAll.php?course=$course_code", 'name' => $langTrackAllPathExplanation);
 $nameTools = $langTrackUser;
 
 // user info can not be empty, return to the list of details
 if( empty($_REQUEST['uInfo']) ) {
-	header("Location: ./detailsAll.php?course=$code_cours");
+	header("Location: ./detailsAll.php?course=$course_code");
 	exit();
 }
 
@@ -73,14 +73,14 @@ if( empty($_REQUEST['uInfo']) ) {
 $sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
 			FROM `".$TABLECOURSUSER."` as `cu` , `".$TABLEUSER."` as `u`
 			WHERE `cu`.`user_id` = `u`.`user_id`
-			AND `cu`.`cours_id` = $cours_id
+			AND `cu`.`course_id` = $course_id
 			AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
 
 $results = db_query_fetch_all($sql);
 
 if( empty($results) )
 {
-	header("Location: ./detailsAll.php?course=$code_cours");
+	header("Location: ./detailsAll.php?course=$course_code");
 	exit();
 }
 
@@ -105,7 +105,7 @@ mysql_select_db($mysqlMainDb);
 // list available learning paths
 $sql = "SELECT LP.`name`, LP.`learnPath_id`
 			FROM `".$TABLELEARNPATH."` AS LP
-			WHERE LP.`course_id` = $cours_id
+			WHERE LP.`course_id` = $course_id
 			ORDER BY LP.`rank`";
 
 $lpList = db_query_fetch_all($sql);
@@ -137,7 +137,7 @@ else
 		$lpProgress = get_learnPath_progress($lpDetails['learnPath_id'],$_GET['uInfo']);
 		$tool_content .= ''."\n"
 			."        <td width='1'><img src='$themeimg/arrow.png' alt='' /></td>\n"
-			.'        <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$_GET['uInfo'].'&amp;path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
+			.'        <td><a href="detailsUserPath.php?course='.$course_code.'&amp;uInfo='.$_GET['uInfo'].'&amp;path_id='.$lpDetails['learnPath_id'].'">'.htmlspecialchars($lpDetails['name']).'</a></td>'."\n"
 			.'        <td align="right" width="120">'.""
 			.disp_progress_bar($lpProgress, 1)
 			.'</td>'."\n"

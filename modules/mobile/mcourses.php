@@ -33,10 +33,10 @@ $sql = "SELECT course.code,
                course.keywords,
                course.visible,
                course.prof_names,
-               course.public_code, 
-               cours_user.statut as statut
-          FROM course JOIN cours_user ON course.id = cours_user.cours_id
-         WHERE cours_user.user_id = $uid        
+               course.public_code,
+               course_user.statut as statut
+          FROM course JOIN course_user ON course.id = course_user.course_id
+         WHERE course_user.user_id = $uid        
       ORDER BY statut, course.title, course.prof_names";
 $sql2 = "SELECT course.code,
                 course.lang, 
@@ -46,9 +46,9 @@ $sql2 = "SELECT course.code,
                 course.visible,
                 course.prof_names,
                 course.public_code, 
-                cours_user.statut as statut
-           FROM course JOIN cours_user ON course.id = cours_user.cours_id
-          WHERE cours_user.user_id = $uid
+                course_user.statut as statut
+           FROM course JOIN course_user ON course.id = course_user.course_id
+          WHERE course_user.user_id = $uid
             AND course.visible != ".COURSE_INACTIVE."
        ORDER BY statut, course.title, course.prof_names";
 
@@ -105,7 +105,7 @@ function createCoursesDom($coursesArr) {
 
             $c = $cg->appendChild($dom->createElement('course'));
 
-            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title .' - '. $course->public_code ;
+            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title .' - '. $course->public_code;
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));

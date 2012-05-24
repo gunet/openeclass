@@ -43,16 +43,16 @@ if($is_editor) {
 	
 	// display a list of user and their respective progress
 	$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
-		FROM `user` AS U, `cours_user` AS CU
+		FROM `user` AS U, `course_user` AS CU
 		WHERE U.`user_id`= CU.`user_id`
-		AND CU.`cours_id` = $cours_id
+		AND CU.`course_id` = $course_id
 		ORDER BY U.`nom` ASC";
 	$usersList = get_limited_list($sql, 500000);
 	mysql_select_db($mysqlMainDb);
 	foreach ($usersList as $user)
 	{
 		echo "$crlf";
-		$sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP WHERE LP.`course_id` = $cours_id";
+		$sql = "SELECT LP.`learnPath_id` FROM `lp_learnPath` AS LP WHERE LP.`course_id` = $course_id";
 		$learningPathList = db_query_fetch_all($sql);
 		$iterator = 1;
 		$globalprog = 0;
@@ -70,7 +70,7 @@ if($is_editor) {
 		$total = round($globalprog/($iterator-1));
 		echo csv_escape(uid_to_name($user['user_id'])).
 		";".csv_escape(uid_to_am($user['user_id'])).
-		";".csv_escape(user_groups($cours_id, $user['user_id'], 'csv')).
+		";".csv_escape(user_groups($course_id, $user['user_id'], 'csv')).
 		";".$total."%";
 	}
 	echo "$crlf";

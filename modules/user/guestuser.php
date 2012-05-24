@@ -25,21 +25,21 @@ $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array ("url" => "user.php?course=$code_cours", "name" => $langAdminUsers);
+$navigation[] = array ("url" => "user.php?course=$course_code", "name" => $langAdminUsers);
 
-$default_guest_username = $langGuestUserName . $currentCourseID;
+$default_guest_username = $langGuestUserName . $course_code;
 
 if (isset($_POST['submit'])) {
         $password = autounquote($_POST['guestpassword']);
-        createguest($default_guest_username, $cours_id, $password);
+        createguest($default_guest_username, $course_id, $password);
         $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-                         "<a href='user.php?course=$code_cours'>$langBackUser</a>";
+                         "<a href='user.php?course=$course_code'>$langBackUser</a>";
 } else {
-        $guest_info = guestinfo($cours_id);
+        $guest_info = guestinfo($course_id);
         if ($guest_info) {
                 $tool_content .= "
                         <p class='caution'>$langGuestExist<br />
-                        <a href='user.php?course=$code_cours'>$langBackUser</a></p>";
+                        <a href='user.php?course=$course_code'>$langBackUser</a></p>";
                 $submit_label = $langModify;
         } else {
                 $guest_info = array('nom' => $langGuestSurname,
@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
                                     'username' => $default_guest_username);
                 $submit_label = $langAdd;
         }
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
             <fieldset>
             <legend>$langUserData</legend>
         <table width='100%' class='tbl'>
@@ -86,14 +86,14 @@ draw($tool_content, 2);
 
 
 // Create guest account or update password if it already exists
-function createguest($username, $cours_id, $password)
+function createguest($username, $course_id, $password)
 {
 	global $langGuestName, $langGuestSurname, $mysqlMainDb;
 
 	mysql_select_db($mysqlMainDb);
         $password = md5($password);
 
-	$q = db_query("SELECT user_id from cours_user WHERE statut=10 AND cours_id = $cours_id");
+	$q = db_query("SELECT user_id from course_user WHERE statut=10 AND course_id = $course_id");
 	if (mysql_num_rows($q) > 0) {
 		list($guest_id) = mysql_fetch_array($q);
 		db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
@@ -104,19 +104,19 @@ function createguest($username, $cours_id, $password)
                              VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', 10, $regtime, $exptime)");
                 $guest_id = mysql_insert_id();
 	}
-        db_query("INSERT IGNORE INTO cours_user (cours_id, user_id, statut, reg_date)
-                  VALUES ($cours_id, $guest_id, 10, CURDATE())")
+        db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
+                  VALUES ($course_id, $guest_id, 10, CURDATE())")
                 or die ($langGuestFail);
 }
 
 // Check if guest account exists and return account information
-function guestinfo($cours_id) {
+function guestinfo($course_id) {
 	global $mysqlMainDb;
 	mysql_select_db($mysqlMainDb);
-	$q = db_query("SELECT nom, prenom, username FROM user, cours_user
-                       WHERE user.user_id = cours_user.user_id AND
-                             cours_user.statut = 10 AND
-                             cours_user.cours_id = $cours_id");
+	$q = db_query("SELECT nom, prenom, username FROM user, course_user
+                       WHERE user.id = course_user.user_id AND
+                             course_user.statut = 10 AND
+                             course_user.course_id = $course_id");
 	if (mysql_num_rows($q) == 0) {
 		return false;
 	} else {

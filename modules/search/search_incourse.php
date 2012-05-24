@@ -109,7 +109,7 @@ if(empty($search_terms)) {
 	if ($announcements) 
 	{
 		$myquery = "SELECT title, content, `date` FROM announcement
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v'
 				AND MATCH (title, content)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
@@ -148,7 +148,7 @@ if(empty($search_terms)) {
 	// search in agenda
 	if ($agenda) {
 		$myquery = "SELECT title, content, day, hour, lasting FROM agenda
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v'
 				AND MATCH (title, content)".$query;
 		$result = db_query($myquery, $mysqlMainDb);	
@@ -167,10 +167,10 @@ if(empty($search_terms)) {
                              } else {
                                $class_view = 'class="odd"';
                              }
-                                $tool_content .= "
-                                <tr $class_view>
-                                <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td>";
 				$message = $langUnknown;
 				if ($res["lasting"] != "") {
 					if ($res["lasting"] == 1)
@@ -182,9 +182,9 @@ if(empty($search_terms)) {
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
 				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
 				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['content']."
-                                </td>
-                                </tr>";
-                                $numLine++;
+                    </td>
+                  </tr>";
+                        $numLine++;
 			}
 			$tool_content .= "
                   </table>\n\n\n";
@@ -194,7 +194,7 @@ if(empty($search_terms)) {
 	// search in documents
 	if ($documents) {
 		$myquery = "SELECT * FROM document
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND subsystem = 0
 				AND visibility = 'v'
 				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query;
@@ -236,7 +236,7 @@ if(empty($search_terms)) {
 	// search in exercises	
 	if ($exercises) {
 		$myquery = "SELECT * FROM exercise
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND active = '1'
 				AND MATCH (title, description)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
@@ -264,7 +264,7 @@ if(empty($search_terms)) {
                         } else { 
                                 $desc_text = "<br /> <span class='smaller'>$res[description]</span>";
                         }
-                        $link_exercise =" ${urlServer}/modules/exercise/exercise_submit.php?course=$code_cours&amp;exerciseId=$res[id]";
+                        $link_exercise =" ${urlServer}/modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$res[id]";
                         $tool_content .= "<a href='$link_exercise'>".$res['title']."</a>$desc_text
                         </td>
                         </tr>";
@@ -316,37 +316,42 @@ if(empty($search_terms)) {
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t6' align='left'>
-                        <tr>
-                        <th colspan='2' class=\"left\">$langForum ($langSubjects - $langMessages):</th>
-                        </tr>";
-                        $numLine = 0;
-                        while($res = mysql_fetch_array($result)) {
-                                if ($numLine%2 == 0) {
-                                        $class_view = 'class="even"';
-                                } else {
-                                        $class_view = 'class="odd"';
-                                }
-                                $tool_content .= "
-                                <tr $class_view>
-                                <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";
-                                $link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
-                                $tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['title']."</a>";
-                                $myquery2 = "SELECT topic_id AS topicid, post_text AS posttext
-                                                FROM forum_posts
-                                                WHERE forum_id = $res[forum_id]                                                        
-                                                        AND MATCH (post_text)".$query;		
-                                $result2 = db_query($myquery2);
-                                if(mysql_num_rows($result2) > 0) {
-                                while($res2 = mysql_fetch_array($result2)) {
-                                        $link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
-                                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
-                                }
-                        }
-                        $tool_content .= "</td></tr>";
-                        $numLine++;
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t6' align='left'>
+		<tr>
+		  <th colspan='2' class=\"left\">$langForum ($langSubjects - $langMessages):</th>
+                </tr>";
+                $numLine = 0;
+		while($res = mysql_fetch_array($result))
+		{
+                   if ($numLine%2 == 0) {
+                      $class_view = 'class="even"';
+                   } else {
+                      $class_view = 'class="odd"';
+                   }
+                  $tool_content .= "
+                  <tr $class_view>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td>";
+			$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+			$tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['topic_title']."</a>";
+			$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
+					FROM posts, posts_text
+					WHERE posts.forum_id = $res[forum_id]
+						AND posts.post_id = posts_text.post_id 
+						AND MATCH (posts_text.post_text)".$query;		
+			$result2 = db_query($myquery2, $course_code);
+			if(mysql_num_rows($result2) > 0) {
+			while($res2 = mysql_fetch_array($result2))
+			{
+			  $link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
+			  $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
+			}
+	          }
+                  $tool_content .= "
+                    </td>
+                  </tr>";
+                  $numLine++;
 		  }
 		  $tool_content .= "</table>";
 		  $found = true;
@@ -356,7 +361,7 @@ if(empty($search_terms)) {
 	// search in links
 	if ($links) {
 		$myquery = "SELECT * FROM link
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query;
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0)
@@ -384,7 +389,7 @@ if(empty($search_terms)) {
                         } else { 
                                 $desc_text = "<span class='smaller'>$res[description]</span>";
                         }
-                        $link_url = "{$urlServer}modules/link/go.php?c=$currentCourseID&amp;id=$res[id]&amp;link_url=$res[url]"; 
+                        $link_url = "{$urlServer}modules/link/go.php?c=$course_code&amp;id=$res[id]&amp;link_url=$res[url]"; 
                         $tool_content .= "<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
                   </td>
                 </tr>";
@@ -400,7 +405,7 @@ if(empty($search_terms)) {
 	if ($video)
 	{
 		$myquery = "SELECT * FROM video
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0)
@@ -440,7 +445,7 @@ if(empty($search_terms)) {
 			$found = true;
 		}
 		$myquery = "SELECT * FROM videolinks
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query;
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
@@ -481,7 +486,7 @@ if(empty($search_terms)) {
 	if ($course_units)
 	{
 		$myquery = "SELECT id, title, comments FROM course_units
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v' 
 				AND MATCH (title, comments)".$query;
 		$result = db_query($myquery);
@@ -521,7 +526,7 @@ if(empty($search_terms)) {
 				unit_resources.comments AS comments
 			FROM unit_resources, course_units
 				WHERE unit_resources.unit_id = course_units.id
-				AND course_units.course_id = $cours_id
+				AND course_units.course_id = $course_id
 				AND course_units.visibility = 'v'
 			AND MATCH(unit_resources.title, unit_resources.comments)".$query;
 		$result2 = db_query($myquery2);

@@ -35,7 +35,7 @@ if (!defined('INDEX_START')) {
 
 include("./include/lib/textLib.inc.php");
 
-function cours_table_header($statut)
+function course_table_header($statut)
 {
         global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
                $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
@@ -61,21 +61,21 @@ function cours_table_header($statut)
         </tr>\n";
 }
 
-function cours_table_end()
+function course_table_end()
 {
         $GLOBALS['tool_content'] .= "\n</table><br />\n";
 }
 
 $status = array();
-$sql = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
-                        course.title title, course.prof_names profs, cours_user.statut statut
-                FROM course JOIN cours_user ON course.id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid        
+$sql = "SELECT course.id cid, course.code code, course.public_code,
+                        course.title title, course.prof_names profs, course_user.statut statut
+                FROM course JOIN course_user ON course.id = course_user.course_id
+                WHERE course_user.user_id = $uid        
                 ORDER BY statut, course.title, course.prof_names";
-$sql2 = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
-                        course.title title, course.prof_names profs, cours_user.statut statut
-                FROM course JOIN cours_user ON course.id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid
+$sql2 = "SELECT course.id cid, course.code code, course.public_code,
+                        course.title title, course.prof_names profs, course_user.statut statut
+                FROM course JOIN course_user ON course.id = course_user.course_id
+                WHERE course_user.user_id = $uid
                 AND course.visible != ".COURSE_INACTIVE."
                 ORDER BY statut, course.title, course.prof_names";
 
@@ -94,14 +94,14 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 $this_statut = $mycours['statut'];
                 if ($k == 0 or $old_statut <> $this_statut) {
                         if ($k > 0) {
-                                cours_table_end();
+                                course_table_end();
                         }
-                        cours_table_header($this_statut);
+                        course_table_header($this_statut);
                 }
 		$code = $mycours['code'];
                 $title = $mycours['title'];
 		$status[$code] = $this_statut;
-		$cours_id_map[$code] = $mycours['cours_id'];
+		$course_id_map[$code] = $mycours['cid'];
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
@@ -119,13 +119,13 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                         $manage_title = $langUnregCourse;
                 }
 		$tool_content .= "<td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
-		$tool_content .= "<td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['fake_code']).")</span></td>";
+		$tool_content .= "<td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['public_code']).")</span></td>";
 		$tool_content .= "<td class='smaller'>".q($mycours['profs'])."</td>";
 		$tool_content .= "<td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
 		$tool_content .= "</tr>";
 		$k++;
 	}
-        cours_table_end();
+        course_table_end();
 }  elseif ($_SESSION['statut'] == '5') {
         // if are loging in for the first time as student...
 	$tool_content .= "\n        <p class='success'>$langWelcomeStud</p>\n";
@@ -145,7 +145,7 @@ if (count($status) > 0) {
 
         $table_begin = true;
         foreach ($status as $code => $code_statut) {
-                $cid = $cours_id_map[$code];
+                $cid = $course_id_map[$code];
                 $result = db_query("SELECT announcement.id, content, `date`, title
                                 FROM announcement, course_module
                                 WHERE announcement.course_id = $cid

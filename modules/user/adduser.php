@@ -30,18 +30,18 @@ include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 
 $nameTools = $langAddUser;
-$navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
+$navigation[] = array ("url"=>"user.php?course=$course_code", "name"=> $langAdminUsers);
 
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);
 	mysql_select_db($mysqlMainDb);
-	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date) ".
-                           "VALUES ($uid_to_add, $cours_id, 5, CURDATE())");
+	$result = db_query("INSERT INTO course_user (user_id, course_id, statut, reg_date) ".
+                           "VALUES ($uid_to_add, $course_id, 5, CURDATE())");
 		// notify user via email
 		$email = uid_to_email($uid_to_add);
 		if (!empty($email) and email_seems_valid($email)) {
-			$emailsubject = "$langYourReg " . course_id_to_title($cours_id);
-			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($cours_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
+			$emailsubject = "$langYourReg " . course_id_to_title($course_id);
+			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($course_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
 		}	
 		$tool_content .= "";
@@ -51,10 +51,10 @@ if (isset($_GET['add'])) {
 	} else {
 		$tool_content .=  "<p class='alert1'>$langAddError</p>";
 	}
-		$tool_content .= "<br /><a href='adduser.php?course=$code_cours'>$langAddBack</a></p><br />\n";
+		$tool_content .= "<br /><a href='adduser.php?course=$course_code'>$langAddBack</a></p><br />\n";
 
 } else {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>";
+	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>";
         register_posted_variables(array('search_nom' => true,
                                         'search_prenom' => true,
                                         'search_uname' => true), 'any');
@@ -101,7 +101,7 @@ if (isset($_GET['add'])) {
 	$query = join(' AND ', $search);
 	if (!empty($query)) {
                     db_query("CREATE TEMPORARY TABLE lala AS
-                    SELECT user_id FROM cours_user WHERE cours_id = $cours_id");
+                    SELECT user_id FROM course_user WHERE course_id = $course_id");
                     $result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
                         user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
                         c.user_id IS NULL AND $query");
@@ -125,7 +125,7 @@ if (isset($_GET['add'])) {
                                     }
                                     $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
                                                      q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
-                                                     <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                                     <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
                                     $i++;
                             }
                             $tool_content .= "</table>";

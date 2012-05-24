@@ -35,23 +35,23 @@ $require_editor = TRUE;
 
 require_once("../../include/baseTheme.php");
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($course_code);
 
 if (isset($_POST) && isset($_POST['selectedDocument'])) {
 	require_once("./importLearningPathLib.php");
 	
 	$filename = basename($_POST['selectedDocument']);
-	$srcFile = "../../courses/".$currentCourseID."/document/".$_POST['selectedDocument'];
-	$destFile = "../../courses/".$currentCourseID."/temp/".$filename;
+	$srcFile = "../../courses/".$course_code."/document/".$_POST['selectedDocument'];
+	$destFile = "../../courses/".$course_code."/temp/".$filename;
 	
 	copy($srcFile, $destFile);
 	
-	list($messages, $lpid) = doImport($currentCourseID, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
+	list($messages, $lpid) = doImport($course_code, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
 	$tool_content .= $messages;
-	$tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$code_cours\">$langBack</a></p>";
+	$tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$course_code\">$langBack</a></p>";
 	
 	unlink($destFile);
 }

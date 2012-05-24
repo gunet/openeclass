@@ -38,20 +38,20 @@ mysql_select_db($mysqlMainDb);
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
-		$navigation[] = array("url"=>"work.php?course=$code_cours", "name"=>$langWorks);
-		$navigation[] = array("url"=>"work.php?course=$code_cours&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
+		$navigation[] = array("url"=>"work.php?course=$course_code", "name"=>$langWorks);
+		$navigation[] = array("url"=>"work.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
 		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
 		draw($tool_content, 2);
 } else {
-		header('Location: work.php?course='.$code_cours);
+		header('Location: work.php?course='.$course_code);
 		exit;
 }
 
 // Returns an array of the details of assignment $id
 function get_assignment_details($id)
 {
-    global $cours_id;
-	return mysql_fetch_array(db_query("SELECT * FROM assignments WHERE course_id = $cours_id AND id = '$id'"));
+    global $course_id;
+	return mysql_fetch_array(db_query("SELECT * FROM assignments WHERE course_id = $course_id AND id = '$id'"));
 }
 
 
@@ -59,17 +59,17 @@ function get_assignment_details($id)
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign)
 {
-	global $m, $langGradeOk, $tool_content, $langGradeWork, $code_cours;
+	global $m, $langGradeOk, $tool_content, $langGradeWork, $course_code;
 
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {		
 		$uid_2_name = display_user($sub['uid']);
 		if (!empty($sub['group_id'])) {
 				$group_submission = "($m[groupsubmit] ".
-					"<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
+					"<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
 					"$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)";
 		} else $group_submission = "";
 			$tool_content .= "
-			<form method='post' action='work.php?course=$code_cours'>
+			<form method='post' action='work.php?course=$course_code'>
 			<input type='hidden' name='assignment' value='$id'>
 			<input type='hidden' name='submission' value='$sid'>
                         <fieldset>
@@ -83,7 +83,7 @@ function show_edit_form($id, $sid, $assign)
 			  <td>${sub['submission_date']}</td></tr>
 			<tr>
 			  <th class='left'>${m['filename']}:</th>
-			  <td><a href='work.php?course=$code_cours&amp;get=${sub['id']}'>${sub['file_name']}</a></td>
+			  <td><a href='work.php?course=$course_code&amp;get=${sub['id']}'>${sub['file_name']}</a></td>
 			</tr>";
 		        $tool_content .= "<tr>
 			  <th class='left'>$m[grade]:</th>

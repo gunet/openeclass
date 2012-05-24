@@ -66,11 +66,11 @@ class Question
 	 */
 	function read($id)
 	{
-		global $TBL_QUESTION, $TBL_EXERCISE_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_QUESTION, $TBL_EXERCISE_QUESTION, $mysqlMainDb, $course_id;
 		
 		mysql_select_db($mysqlMainDb);
 		$sql = "SELECT question, description, weight, q_position, type 
-                        FROM `$TBL_QUESTION` WHERE course_id = $cours_id AND id = '$id'";
+                        FROM `$TBL_QUESTION` WHERE course_id = $course_id AND id = '$id'";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
 		// if the question has been found
@@ -145,7 +145,7 @@ class Question
         // return the total weighting of an exercise
         function selectTotalWeighting()
         {                               
-                mysql_select_db($currentCourseID);
+                mysql_select_db($course_code);
                 $result = db_query("SELECT SUM(questions.ponderation)
                                 FROM questions, exercise_question
                                 WHERE questions.id = exercise_question.question_id
@@ -365,7 +365,7 @@ class Question
 	 */
 	function save($exerciseId=0)
 	{
-		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_QUESTION, $mysqlMainDb, $course_id;
 		
 		mysql_select_db($mysqlMainDb);
 
@@ -382,14 +382,14 @@ class Question
 			$sql = "UPDATE `$TBL_QUESTION` SET question = '$question', description = '$description',
 					weight = '$weighting', q_position='$position',
 					type='$type'
-					WHERE course_id = $cours_id AND id='$id'";
+					WHERE course_id = $course_id AND id='$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new question
 		else
 		{
 			$sql="INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type)
-				VALUES ($cours_id, '$question', '$description', '$weighting', '$position', '$type')";
+				VALUES ($course_id, '$question', '$description', '$weighting', '$position', '$type')";
 			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 			$this->id = mysql_insert_id();
 		}
@@ -466,7 +466,7 @@ class Question
 	 */
 	function delete($deleteFromEx=0)
 	{
-		global $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $TBL_ANSWER, $cours_id;
+		global $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $TBL_ANSWER, $course_id;
 
 		$id = $this->id;
 		
@@ -476,7 +476,7 @@ class Question
 		{
 			$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id'";
 			db_query($sql); 
-			$sql = "DELETE FROM `$TBL_QUESTION` WHERE course_id = $cours_id AND id = '$id'";
+			$sql = "DELETE FROM `$TBL_QUESTION` WHERE course_id = $course_id AND id = '$id'";
 			db_query($sql); 
 			$sql = "DELETE FROM `$TBL_ANSWER` WHERE question_id = '$id'";
 			db_query($sql);
@@ -499,7 +499,7 @@ class Question
 	 */
 	function duplicate()
 	{
-		global $TBL_QUESTION, $picturePath, $mysqlMainDb, $cours_id;
+		global $TBL_QUESTION, $picturePath, $mysqlMainDb, $course_id;
 
 		$question = addslashes($this->question);
 		$description = addslashes($this->description);
@@ -508,7 +508,7 @@ class Question
 		$type = $this->type;
 
 		$sql = "INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type) 
-						VALUES ($cours_id, '$question', '$description', '$weighting', '$position', '$type')";
+						VALUES ($course_id, '$question', '$description', '$weighting', '$position', '$type')";
 		db_query($sql, $mysqlMainDb);
 
 		$id = mysql_insert_id();

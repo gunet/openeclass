@@ -294,7 +294,7 @@ function register($uid, $course_code)
         $req = db_query("SELECT code, id FROM course WHERE code=$code OR public_code=$code");
         if ($req and mysql_num_rows($req) > 0) {
                 list($code, $cid) = mysql_fetch_row($req);
-                db_query("INSERT INTO cours_user SET cours_id = $cid, user_id = $uid, statut = 5,
+                db_query("INSERT INTO course_user SET course_id = $cid, user_id = $uid, statut = 5,
                                                      team = 0, tutor = 0, reg_date = NOW()");
                 return true;
         }

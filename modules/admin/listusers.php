@@ -298,8 +298,8 @@ if(!empty($ord)) { // if we want to order results
 
 if (!empty($c)) { // users per course        
 	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
-		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-		WHERE b.cours_id = $c";		
+		FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+		WHERE b.course_id = $c";		
 } elseif (!empty($users_active_qry)) { // inactive users
          $qry = "SELECT user_id, nom, prenom, username, email, verified_mail, statut 
                  FROM user WHERE $users_active_qry";         
@@ -351,8 +351,8 @@ if($countUser > 0) {
         } elseif (!empty($c)) { //users per course
                 $header_link = $pagination_link = "&amp;c=$c";
                 $qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
-                FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-                WHERE b.cours_id=$c";
+                FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+                WHERE b.course_id=$c";
         } else { // search with criteria
                 $header_link = $pagination_link = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;auth_type=$auth_type&amp;user_registered_at_flag=$user_registered_at_flag&amp;verified_mail=$verified_mail";
 

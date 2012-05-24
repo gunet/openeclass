@@ -69,7 +69,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
            ".$uidCheckString."
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-          AND M.`course_id` = $cours_id
+          AND M.`course_id` = $course_id
         ORDER BY LPM.`rank` ASC";
 
 $result = db_query($sql);
@@ -173,7 +173,7 @@ foreach ($flatElementList as $module)
 		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
 			echo "<em>".htmlspecialchars($module['name'])."</em>";
 		else        
-			echo "<a href='navigation/viewModule.php?course=$code_cours&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+			echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
 		if(isset($imagePassed))
 			echo "&nbsp;&nbsp;".$imagePassed;
 		echo "</li>";

@@ -34,9 +34,9 @@
  */
 include ('init.php');
 
-if ($is_editor and isset($currentCourseID) and isset($_GET['hide'])) {
+if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
         $eclass_module_id = intval($_GET['eclass_module_id']);
-        $cid = course_code_to_id($currentCourseID);
+        $cid = course_code_to_id($course_code);
 	$visible = ($_GET['hide'] == 0)? 0: 1;        
         db_query("UPDATE course_module SET visible = $visible 
                         WHERE module_id = $eclass_module_id AND
@@ -82,7 +82,7 @@ include ('tools.php');
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-        global $courseHome, $currentCourseID, $extraMessage, $helpTopic, 
+        global $courseHome, $course_code, $extraMessage, $helpTopic, 
                $homePage, $title, $is_editor, $langActivate,
                $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang, 
                $langChooseLang, $langCopyrightFooter, $langDeactivate, 
@@ -229,7 +229,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 		// set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
-			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$currentCourseID/'>" . q($title) . '</a>' );
+			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$course_code/'>" . q($title) . '</a>' );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
@@ -257,17 +257,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$searchAdvancedURL = $searchAction;
 		}
 		$mod_activation = '';
-		if ($is_editor and isset($currentCourseID)) {
+		if ($is_editor and isset($course_code)) {
 			// link for activating / deactivating module
 			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
 				include $module_ini_dir;
 				if (display_activation_link($module_id)) {                                        
 					if (visible_module($module_id)) {                                                
 						$message = $langDeactivate;
-						$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+						$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
 					} else {
 						$message = $langActivate;
-						$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+						$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
 					}
 				}
 			}
@@ -323,9 +323,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$breadIterator = 1;
 		$t->set_block ( 'mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart' );
 
-		if (isset ( $currentCourseID ) && ! $courseHome) {
+		if (isset ( $course_code ) && ! $courseHome) {
 			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
-			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $currentCourseID . '/index.php' );
+			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $course_code . '/index.php' );
 			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );
 			if ($statut == 10)
 				$t->set_var ( 'BREAD_ARROW', '' );
@@ -338,7 +338,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$pageTitle = q($title);
 			}
 
-		} elseif (isset ( $currentCourseID ) && $courseHome) {
+		} elseif (isset ( $course_code ) && $courseHome) {
 			$t->set_var ( 'BREAD_HREF_FRONT', '' );
 			$t->set_var ( 'BREAD_LINK', '' );
 			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );

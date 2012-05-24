@@ -18,10 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 /*
- * Returns the total number of topics in a form
+ * Return the total number of topics in a form
  */
 function get_total_topics($forum_id) {
-	
+
         global $langError;
         
 	$sql = "SELECT COUNT(*) AS total FROM forum_topics
@@ -35,10 +35,10 @@ function get_total_topics($forum_id) {
 }
 
 /*
- * Returns the total number of posts in forum or topic
+ * Return the total number of posts in forum or topic
  */ 
 function get_total_posts($id, $type) {
-      
+
     switch($type) {
         case 'forum':
           $sql = "SELECT COUNT(*) AS total FROM forum_posts 
@@ -59,7 +59,7 @@ function get_total_posts($id, $type) {
 }
 
 /*
- * Returns the most recent post in a forum
+ * Return the most recent post in a forum
  */
 function get_last_post($topic_id, $forum_id) {
    
@@ -88,12 +88,12 @@ function get_last_post($topic_id, $forum_id) {
  */
 function does_exists($id, $type) {
         
-        global $cours_id;
+        global $course_id;
 	switch($type) {
 		case 'forum':
 			$sql = "SELECT id FROM forum
                                 WHERE id = $id 
-                                AND course_id = $cours_id";
+                                AND course_id = $course_id";
 		break;
 		case 'topic':
 			$sql = "SELECT id FROM forum_topics 
@@ -112,7 +112,6 @@ function does_exists($id, $type) {
  */
 
 function is_first_post($topic_id, $post_id) {
-        
     
     $sql = "SELECT id FROM forum_posts 
                 WHERE topic_id = $topic_id
@@ -134,7 +133,7 @@ function is_first_post($topic_id, $post_id) {
 
 function sync($id, $type) {
         
-   global $cours_id;
+   global $course_id;
    
    switch($type) {
    	case 'forum':
@@ -161,7 +160,7 @@ function sync($id, $type) {
                             num_posts = $total_posts,
                             last_post_id = $last_post
                         WHERE id = $id
-                        AND course_id = $cours_id";
+                        AND course_id = $course_id";
    		$result = db_query($sql);
    	break;
 
@@ -211,11 +210,11 @@ function toggle_icon($notify) {
 // returns a category id from a forum id
 function forum_category($id) {
 	
-	global $cours_id;
+	global $course_id;
 	
 	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forum
                     WHERE id = $id 
-                    AND course_id = $cours_id"))) {
+                    AND course_id = $course_id"))) {
 		return $r[0];
 	} else {
 		return FALSE;
@@ -225,11 +224,11 @@ function forum_category($id) {
 // returns a category name from a category id
 function category_name($id) {
 	
-	global $cours_id;
+	global $course_id;
 	
 	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_categories
                     WHERE id = $id
-                    AND course_id = $cours_id"))) {
+                    AND course_id = $course_id"))) {
 		return $r[0];
 	} else {
 		return FALSE;
@@ -239,10 +238,10 @@ function category_name($id) {
 
 function init_forum_group_info($forum_id)
 {
-	global $cours_id, $group_id, $can_post, $is_member, $is_editor;
+	global $course_id, $group_id, $can_post, $is_member, $is_editor;
 
 	$q = db_query("SELECT id FROM `group`
-			WHERE course_id = $cours_id AND forum_id = $forum_id");
+			WHERE course_id = $course_id AND forum_id = $forum_id");
 	if ($q and mysql_num_rows($q) > 0) {
 		list($group_id) = mysql_fetch_row($q);
 		initialize_group_info($group_id);

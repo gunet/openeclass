@@ -277,7 +277,7 @@ $tool_content .= "
                                 FROM course AS a 
                                 JOIN course_department ON a.id = course_department.course
                                 JOIN hierarchy ON course_department.department = hierarchy.id
-                                LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                                LEFT JOIN course_user AS b ON a.id = b.course_id
                                 WHERE b.user_id = $u ORDER BY b.statut, hierarchy.name");
 
 		// user is registered to courses
@@ -321,14 +321,14 @@ $tool_content .= "
 					case 5:
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[course_id]'>
 						<img src='$themeimg/delete.png' title='$langDelete'></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[course_id]'>
 						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}

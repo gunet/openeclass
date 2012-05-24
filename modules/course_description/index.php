@@ -49,14 +49,14 @@ $nameTools = $langCourseDescription;
 
 mysql_select_db($mysqlMainDb);
 
-$unit_id = description_unit_id($cours_id);
+$unit_id = description_unit_id($course_id);
 
 load_modal_box();
 if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-		<li><a href='edit.php?course=$code_cours'>$langEditCourseProgram</a></li>
+		<li><a href='edit.php?course=$course_code'>$langEditCourseProgram</a></li>
 	  </ul>
 	</div>";
 
@@ -81,7 +81,7 @@ hCont;
                                   autounquote($_POST['edTitleBloc']),
                                   autounquote($_POST['edContentBloc']));
                 if ($res_id == -1) {
-                        header("Location: {$urlServer}courses/$currentCourseID");
+                        header("Location: {$urlServer}courses/$course_code");
                         exit;
                 }
         }

@@ -75,12 +75,12 @@ if (isset($_REQUEST['toolStatus']) ) {
 
         //reset all tools
         db_query("UPDATE course_module SET `visible` = 0
-                         WHERE course_id = ". course_code_to_id($currentCourseID));
+                         WHERE course_id = ". course_code_to_id($course_code));
         //and activate the ones the professor wants active, if any
         if ($loopCount > 0) {
                 db_query("UPDATE course_module SET visible = 1
                                  WHERE $tool_id AND
-                                       course_id = ". course_code_to_id($currentCourseID));
+                                       course_id = ". course_code_to_id($course_code));
         }        
 }
 
@@ -106,18 +106,18 @@ if (isset($_POST['submit'])) {
                 $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
                 if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                 or empty($link) or empty($name_link))  {
-                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
+                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                         exit();
                 }
                 $link = autoquote($link);
                 $name_link = autoquote($name_link);                
                 db_query("INSERT INTO link (course_id, url, title, category) 
-                                    VALUES (".course_code_to_id($currentCourseID).", 
+                                    VALUES (".course_code_to_id($course_code).", 
                                                 $link, $name_link, -1)");
                 $tool_content .= "<p class='success'>$langLinkAdded</p>";
         } elseif ($action == 1) { 
-                $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
+                $updir = "$webDir/courses/$course_code/page"; //path to upload directory
                 $size = "20971520"; //file size is 20M (1024x1024x20)
                 if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
                     && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
@@ -131,22 +131,22 @@ if (isset($_POST['submit'])) {
                         $link = quote("../../courses/$currentCourse/page/$file_name");
                         
                         db_query("INSERT INTO link (course_id, url, title, category) 
-                                    VALUES (".course_code_to_id($currentCourseID).", 
+                                    VALUES (".course_code_to_id($course_code).", 
                                                 $link, $link_name, -2)");                                                
                         $tool_content .= "<p class='success'>$langOkSent</p>\n";
                 } else {
                         $tool_content .= "<p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p><br />";
+                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=1'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                 }
         }
 } elseif ($action == 1) { // upload html file
         $nameTools = $langUploadPage;
-        $navigation[]= array ("url"=>"course_tools.php?course=$code_cours", "name"=> $langToolManagement);
+        $navigation[]= array ("url"=>"course_tools.php?course=$course_code", "name"=> $langToolManagement);
         $helpTopic = 'Import';
 
         $tool_content .= "\n 
-            <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
+            <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;submit=yes&action=1' enctype='multipart/form-data'>
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
               <fieldset>
@@ -174,10 +174,10 @@ if (isset($_POST['submit'])) {
         exit();
 } elseif ($action == 2) { // add external link
         $nameTools = $langAddExtLink;
-        $navigation[]= array ('url' => 'course_tools.php?course='.$code_cours, 'name' => $langToolManagement);
+        $navigation[]= array ('url' => 'course_tools.php?course='.$course_code, 'name' => $langToolManagement);
         $helpTopic = 'Module';
         $tool_content .=  "
-          <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>
+          <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -219,13 +219,13 @@ if (is_array($toolArr)) {
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
-    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=1'>$langUploadPage</a></li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>$langAddExtLink</a></li>
   </ul>
 </div>";
 
 $tool_content .= <<<tForm
-<form name="courseTools" action="$_SERVER[PHP_SELF]?course=$code_cours" method="post" enctype="multipart/form-data">
+<form name="courseTools" action="$_SERVER[PHP_SELF]?course=$course_code" method="post" enctype="multipart/form-data">
 <table class="tbl_border" width="100%">
 <tr>
 <th width="45%" class="center">$langInactiveTools</th>
@@ -259,7 +259,7 @@ tForm;
 // ------------------------------------------------
 $sql = db_query("SELECT id, title FROM link 
                         WHERE category IN(-1,-2) AND 
-                        course_id = ".course_code_to_id($currentCourseID));        
+                        course_id = ".course_code_to_id($course_code));        
 $tool_content .= "<br/>
 <table class='tbl_alt' width='100%'>
 <tr>
@@ -281,7 +281,7 @@ while ($externalLinks = mysql_fetch_array($sql)) {
         $tool_content .= "<th width='1'>
         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
         <td class='left'>$externalLinks[title]</td>
-        <td align='center'><form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        <td align='center'><form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks[id]' />
            <input type='image' src='$themeimg/delete.png' name='delete_button' 
                   onClick=\"return confirmation('" .

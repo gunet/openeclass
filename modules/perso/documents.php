@@ -66,12 +66,12 @@ function docsHtmlInterface($date)
 	global $mysqlMainDb, $group_sql;
 
 	$q = db_query("SELECT document.path, document.course_id, document.filename, 
-                                document.title, document.date_modified, 
-                                course.title, course.code
-                   FROM document, cours_user, course
-                   WHERE document.course_id = cours_user.cours_id AND
-                             cours_user.user_id = $uid AND
-                             course.id = cours_user.cours_id AND
+                          document.title, document.date_modified, 
+                          course.title, course.code
+                   FROM document, course_user, course
+                   WHERE document.course_id = course_user.course_id AND
+                             course_user.user_id = $uid AND
+                             course.id = course_user.course_id AND
 			     subsystem = ".MAIN." AND
 			     document.visible = 1 AND
                              date_modified >= '$date' AND
@@ -96,7 +96,7 @@ function docsHtmlInterface($date)
 					$first_check = 1;
 				}                               
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
-				$url = file_url($course_file['path'], null, $course_file['code']);                                
+				$url = file_url($course_file['path'], null, $course_file['code']);
 				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
 				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .

@@ -42,7 +42,7 @@ require_once '../../../include/lib/textLib.inc.php' ;
 $nameTools = $langCourseProgram;
 
 
-$unit_id = description_unit_id($cours_id);
+$unit_id = description_unit_id($course_id);
 
 ?>
 <html>

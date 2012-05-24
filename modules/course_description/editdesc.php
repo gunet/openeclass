@@ -32,17 +32,17 @@ include '../units/functions.php';
 
 $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;
-$navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
+$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langCourseProgram);
 
 mysql_select_db($mysqlMainDb);
 
 if (isset($_POST['submit'])) {
-        $unit_id = description_unit_id($cours_id);
+        $unit_id = description_unit_id($course_id);
         add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
 }
 
 $description = '';
-$unit_id = description_unit_id($cours_id);
+$unit_id = description_unit_id($course_id);
 $q = db_query("SELECT id, res_id, comments FROM unit_resources WHERE unit_id = $unit_id
                       AND (res_id < 0 OR `order` < 0)");
 if ($q and mysql_num_rows($q) > 0) {
@@ -60,7 +60,7 @@ if ($q and mysql_num_rows($q) > 0) {
 }
 
 $tool_content = "
- <form method='post' action='index.php?course=$code_cours'>
+ <form method='post' action='index.php?course=$course_code'>
  <input type='hidden' name='edIdBloc' value='-1' />
  <input type='hidden' name='edTitleBloc' value='$langDescription' />
    <fieldset>

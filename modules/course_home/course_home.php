@@ -57,7 +57,7 @@ load_modal_box();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 //For statistics: record login
-$sql_log = "INSERT INTO logins SET user_id=$uid, course_id = $cours_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
+$sql_log = "INSERT INTO logins SET user_id=$uid, course_id = $course_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
 db_query($sql_log);
 include '../../include/action.php';
 $action = new action();
@@ -71,7 +71,7 @@ $res = db_query("SELECT course.keywords, course_type.name AS type, course.visibl
                   FROM course
              LEFT JOIN course_is_type ON course_is_type.course = course.id
              LEFT JOIN course_type on course_type.id = course_is_type.course_type
-                 WHERE course.id = $cours_id");
+                 WHERE course.id = $course_id");
 $result = mysql_fetch_array($res);
 
 $keywords = q(trim($result['keywords']));
@@ -79,7 +79,7 @@ $type = $result['type'];
 $containslang = (substr($type, 0, strlen("lang")) === "lang") ? true : false;
 $visible = $result['visible'];
 $professor = $result['prof_names'];
-$fake_code = $result['public_code'];
+$public_code = $result['public_code'];
 $main_extra = $description = $addon = '';
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
@@ -103,7 +103,7 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_editor) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$course_code'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
 } else {
         $edit_link = '';
 }
@@ -140,32 +140,32 @@ if ($is_editor) {
 		$sql = db_query("SELECT `visible` FROM course_units WHERE id=$id");
 		list($vis) = mysql_fetch_row($sql);                
 		$newvis = ($vis == 1)? 0: 1;                
-		db_query("UPDATE course_units SET visible = '$newvis' WHERE id = $id AND course_id = $cours_id");
+		db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down
                 move_order('course_units', 'id', $id, 'order', 'down',
-                           "course_id=$cours_id");
+                           "course_id=$course_id");
 
 	} elseif (isset($_REQUEST['up'])) { // change order up
 		$id = intval($_REQUEST['up']);
                 move_order('course_units', 'id', $id, 'order', 'up',
-                           "course_id=$cours_id");
+                           "course_id=$course_id");
 	}
 }
 
 // add course units
 if ($is_editor) {
-        $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+        $cunits_content .= "<p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$course_code'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
 
 } else {
         $cunits_content .= "<p class='descr_title'>$langCourseUnits</p>";
 }
 if ($is_editor) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
-                                                   WHERE course_id = $cours_id AND `order` >= 0
+                                                   WHERE course_id = $course_id AND `order` >= 0
                                                    ORDER BY `order` DESC LIMIT 1"));
 	$query = "SELECT id, title, comments, visible
-		  FROM course_units WHERE course_id = $cours_id AND `order` >= 0
+		  FROM course_units WHERE course_id = $course_id AND `order` >= 0
                   ORDER BY `order`";
 } else {
 	$query = "SELECT id, title, comments, visible
@@ -191,16 +191,16 @@ while ($cu = mysql_fetch_array($sql)) {
         if ($is_editor) {
                 $cunits_content .= "<tr>".
                            "<th width='25' class='right'>$count_index.</th>" .
-                           "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                           "<th width='635'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         } else {
                 $cunits_content .= "<tr>".
                            "<th width='25' class='right'>$count_index.</th>".
-                           "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$code_cours&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
+                           "<th width='729'><a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu[id]'>" . q($cu['title']) . "</a></th>";
         }
 
         if ($is_editor) { // display actions
                 $cunits_content .= "<th width='70' class='center'>".
-                        "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
+                        "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu[id]'>" .
                         "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
                         "\n        <a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
@@ -238,11 +238,11 @@ if ($first and !$is_editor) {
 
 $lessonType = ($containslang) ? $$type : $type;
 
-$bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($fake_code)."</li>".
+$bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($public_code)."</li>".
                 "\n<li><b>".$langTeachers."</b>: ".q($professor)."</li>".
                 "\n<li><b>".$langFaculty."</b>: ";
 
-$departments = $course->getDepartmentIds($cours_id);
+$departments = $course->getDepartmentIds($course_id);
 $i = 1;
 foreach ($departments as $dep) {
     $br = ($i < count($departments)) ? '<br/>' : '';
@@ -257,8 +257,8 @@ $require_help = TRUE;
 $helpTopic = 'course_home';
 
 $sql = "SELECT COUNT(user_id) AS numUsers
-                FROM cours_user
-                WHERE cours_id = $cours_id";
+                FROM course_user
+                WHERE course_id = $course_id";
 $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
         $numUsers = $result[0];
@@ -284,7 +284,7 @@ switch ($visible) {
 }
 $bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
 if ($is_course_admin) {
-    $link = "<a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a>";
+    $link = "<a href='$urlAppend/modules/user/user.php?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
     $link = "$numUsers $langRegistered";
 }
@@ -300,7 +300,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
                 $button_message = $langStudentViewEnable;
                 $button_image = "switch_s";
         }
-        $toggle_student_view = "<form action='{$urlServer}student_view.php?course=$code_cours' method='post'>
+        $toggle_student_view = "<form action='{$urlServer}student_view.php?course=$course_code' method='post'>
                 <input id='view_btn' type='image' src='$themeimg/$button_image.png' name='submit' title='$button_message'/>&nbsp;&nbsp;";
         $toggle_student_view_close = '</form>';
     } else {
@@ -308,9 +308,9 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 }
 
 $emailnotification = '';
-if ($uid and $statut != 10 and !get_user_email_notification($uid, $cours_id)) {
+if ($uid and $statut != 10 and !get_user_email_notification($uid, $course_id)) {
         $emailnotification = "<div class='alert1'>$langNoUserEmailNotification 
-        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langModify</a>)</div>";
+        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 } 
 
 $tool_content .= "
@@ -333,9 +333,9 @@ $tool_content .= "
         <tr class='title1'>
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
-             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
+             <a href='../../modules/contact/index.php?course=$course_code' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
              <a href='$_SERVER[PHP_SELF]' title='" . q($title) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
+            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
             </td>                     
         </tr>        
         </table>

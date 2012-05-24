@@ -46,7 +46,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLECOURSUSER	        = "cours_user";
+$TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
@@ -55,10 +55,10 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
-        $navigation[] = array('url' => '../usage/usage.php?course='.$code_cours, 'name' => $langUsage);
+        $navigation[] = array('url' => '../usage/usage.php?course='.$course_code, 'name' => $langUsage);
         $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
-        $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+        $navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
         $nameTools = $langTrackAllPathExplanation;
 }
 
@@ -66,7 +66,7 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
 $sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
 	FROM `$TABLEUSER` AS U, `$TABLECOURSUSER` AS CU
 	WHERE U.`user_id`= CU.`user_id`
-	AND CU.`cours_id` = $cours_id
+	AND CU.`course_id` = $course_id
 	ORDER BY U.`nom` ASC";
 
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
@@ -76,24 +76,24 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
         $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href='../usage/favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
-            <li><a href='../usage/userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
-            <li><a href='../usage/userduration.php?course=$code_cours'>$langUserDuration</a></li>
-            <li><a href='detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
-            <li><a href='../usage/group.php?course=$code_cours'>$langGroupUsage</a></li>
+            <li><a href='../usage/favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
+            <li><a href='../usage/userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
+            <li><a href='../usage/userduration.php?course=$course_code'>$langUserDuration</a></li>
+            <li><a href='detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
+            <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
         </div>";        
         $tool_content .= "
         <div class='info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a>
-                2. <a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>          
+           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
+                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
           </div>";
 } else {
         $tool_content .= "
           <div id='operations_container'>
             <ul id='opslist'>
-              <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$code_cours'>$langcsvenc2</a></li>
-              <li><a href='dumpuserlearnpathdetails.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a></li>
+              <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a></li>
+              <li><a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a></li>
             </ul>
           </div>";
 }
@@ -117,7 +117,7 @@ $k=0;
 foreach ($usersList as $user)
 {
 	// list available learning paths
-	$sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $cours_id";
+	$sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $course_id";
 
 	$learningPathList = db_query_fetch_all($sql);
 
@@ -146,9 +146,9 @@ foreach ($usersList as $user)
 	{
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
-		.'    <td><a href="detailsUser.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'    <td><a href="detailsUser.php?course='.$course_code.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'    <td class="center">'.uid_to_am($user['user_id']).'</td>'."\n"
-		.'    <td align="center">'.user_groups($cours_id, $user['user_id']).'</td>'."\n"
+		.'    <td align="center">'.user_groups($course_id, $user['user_id']).'</td>'."\n"
 		.'    <td class="right" width=\'120\'>'
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"

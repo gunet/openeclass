@@ -635,12 +635,12 @@ function check_guest() {
 
 function check_editor() {
 	
-        global $mysqlMainDb, $uid, $cours_id;
+        global $mysqlMainDb, $uid, $course_id;
         
 	if (isset($uid)) {
-		$res = db_query("SELECT editor FROM cours_user 
+		$res = db_query("SELECT editor FROM course_user 
                             WHERE user_id = $uid
-                            AND cours_id = $cours_id", $mysqlMainDb);
+                            AND course_id = $course_id");
 		$s = mysql_fetch_array($res);
 		if ($s['editor'] == 1) {
 			return TRUE;
@@ -1062,9 +1062,9 @@ function display_activation_link($module_id) {
 // checks if a module is visible
 function visible_module($module_id) {
         
-        global $currentCourseID;
+        global $course_code;
         
-        $cid = course_code_to_id($currentCourseID);
+        $cid = course_code_to_id($course_code);
 	
 	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
                                 WHERE module_id = $module_id AND 
@@ -1304,11 +1304,11 @@ function format_time_duration($sec)
 // Return the URLs for media files 
 function media_url($path)
 {
-	global $urlServer, $code_cours, $currentCourseID;
+	global $urlServer, $course_code, $course_code;
         
-        $mediaURL  = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=download&amp;id='.$path;
-        $mediaPath = $urlServer ."video/". $currentCourseID . $path;
-        $mediaPlay = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=play&amp;id='.$path;
+        $mediaURL  = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
+        $mediaPath = $urlServer ."video/". $course_code . $path;
+        $mediaPlay = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
         
         return array($mediaURL, $mediaPath, $mediaPlay);
 }
@@ -1354,7 +1354,7 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
 function add_units_navigation($entry_page = FALSE)
 {
-        global $navigation, $cours_id, $is_editor, $mysqlMainDb, $code_cours;
+        global $navigation, $course_id, $is_editor, $mysqlMainDb, $course_code;
         if ($entry_page and !isset($_GET['unit'])) {
 		unset($_SESSION['unit']);
 		return FALSE;
@@ -1370,11 +1370,11 @@ function add_units_navigation($entry_page = FALSE)
 			$unit_id = intval($_SESSION['unit']);
 		}
                 $q = db_query("SELECT title FROM course_units
-                       WHERE id=$unit_id AND course_id=$cours_id " .
+                       WHERE id=$unit_id AND course_id=$course_id " .
                        $visibility_check, $mysqlMainDb);
                 if ($q and mysql_num_rows($q) > 0) {
                         list($unit_name) = mysql_fetch_row($q);
-                        $navigation[] = array("url"=>"../units/index.php?course=$code_cours&amp;id=$unit_id", "name"=> htmlspecialchars($unit_name));
+                        $navigation[] = array("url"=>"../units/index.php?course=$course_code&amp;id=$unit_id", "name"=> htmlspecialchars($unit_name));
                 }
 		return TRUE;
 	} else {
@@ -1446,8 +1446,8 @@ function course_id_to_code($cid)
 	}
 }
 
-// find the fake course code from its id
-function course_id_to_fake_code($cid)
+// find the public course code from its id
+function course_id_to_public_code($cid)
 {
 	global $mysqlMainDb;
         $r = db_query("SELECT public_code FROM course WHERE id = $cid ", $mysqlMainDb);
@@ -1488,7 +1488,7 @@ function delete_course($cid)
         db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
         db_query("DELETE FROM course_units WHERE course_id = $cid");
-	db_query("DELETE FROM cours_user WHERE cours_id = $cid");
+	db_query("DELETE FROM course_user WHERE course_id = $cid");
         db_query("DELETE FROM course_is_type WHERE course = $cid");
         db_query("DELETE FROM course_department WHERE course = $cid");
 	db_query("DELETE FROM course WHERE id = $cid");
@@ -1610,10 +1610,10 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame;
+	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame;
 	
         $filebrowser = '';
-        if (isset($code_cours) && !empty($code_cours))
+        if (isset($course_code) && !empty($course_code))
             $filebrowser = "file_browser_callback : 'openDocsPicker',";
         
 	$lang_editor = langname_to_code($language);
@@ -1670,7 +1670,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '$urlAppend/modules/document/document.php?course=$code_cours&embedtype=tinymce&docsfilter=' + type,
+        file: '$urlAppend/modules/document/document.php?course=$course_code&embedtype=tinymce&docsfilter=' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,
@@ -1714,12 +1714,12 @@ function text_area($name, $rows, $cols, $text, $extra = '')
 
 // Does the special course unit with course descriptions exist?
 // If so, return its id, else create it first
-function description_unit_id($cours_id)
+function description_unit_id($course_id)
 {
         global $langCourseDescription;
 
         $q = db_query("SELECT id FROM course_units
-                       WHERE course_id = $cours_id AND `order` = -1");
+                       WHERE course_id = $course_id AND `order` = -1");
         if ($q and mysql_num_rows($q) > 0) {
                 list($id) = mysql_fetch_row($q);
                 return $id;
@@ -1727,7 +1727,7 @@ function description_unit_id($cours_id)
                 db_query('INSERT INTO course_units SET `order` = -1,
                                 `title` = ' . quote($langCourseDescription) . ',
                                 `visibility` = 0,
-                                `course_id` = ' . $cours_id);
+                                `course_id` = ' . $course_id);
                 return mysql_insert_id();
         }
 }
@@ -1792,8 +1792,8 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
 
 function units_set_maxorder()
 {
-        global $maxorder, $cours_id;
-        $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $cours_id");
+        global $maxorder, $course_id;
+        $result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = $course_id");
         list($maxorder) = mysql_fetch_row($result);
         if ($maxorder <= 0) {
                 $maxorder = null;
@@ -1802,7 +1802,7 @@ function units_set_maxorder()
 
 function handle_unit_info_edit()
 {
-        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $cours_id;
+        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id;
         $title = autoquote($_REQUEST['unittitle']);
         $descr = autoquote($_REQUEST['unitdescr']);
         if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1810,13 +1810,13 @@ function handle_unit_info_edit()
                 $result = db_query("UPDATE course_units SET
                                            title = $title,
                                            comments = $descr
-                                    WHERE id = $unit_id AND course_id = $cours_id");
+                                    WHERE id = $unit_id AND course_id = $course_id");
                 return "<p class='success'>$langCourseUnitModified</p>";
         } else { // add new course unit
                 $order = $maxorder + 1;
                 db_query("INSERT INTO course_units SET
                                  title = $title, comments =  $descr,
-                                 `order` = $order, course_id = $cours_id");
+                                 `order` = $order, course_id = $course_id");
                 return "<p class='success'>$langCourseUnitAdded</p>";
         }
 }
@@ -1911,18 +1911,18 @@ function glossary_expand_callback($matches)
 	}
 }
 
-function get_glossary_terms($cours_id)
+function get_glossary_terms($course_id)
 {
 	global $mysqlMainDb;
 
         list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM `$mysqlMainDb`.course
-                                                         WHERE id = $cours_id"));
+                                                         WHERE id = $course_id"));
         if (!$expand) {
                 return false;
         }
 
         $q = db_query("SELECT term, definition, url FROM `$mysqlMainDb`.glossary
-                              WHERE course_id = $cours_id GROUP BY term");
+                              WHERE course_id = $course_id GROUP BY term");
 
         if (mysql_num_rows($q) > intval(get_config('max_glossary_terms'))) {
                 return false;
@@ -1937,19 +1937,19 @@ function get_glossary_terms($cours_id)
 			$_SESSION['glossary_url'][$term] = $row['url'];
 		}
         }
-        $_SESSION['glossary_course_id'] = $cours_id;
+        $_SESSION['glossary_course_id'] = $course_id;
         return true;
 }
 
 function set_glossary_cache()
 {
-        global $cours_id;
+        global $course_id;
 
-        if (!isset($cours_id)) {
+        if (!isset($course_id)) {
                 unset($_SESSION['glossary_terms_regexp']);
         } elseif (!isset($_SESSION['glossary']) or
-                  $_SESSION['glossary_course_id'] != $cours_id) {
-                if (get_glossary_terms($cours_id) and count($_SESSION['glossary']) > 0) {
+                  $_SESSION['glossary_course_id'] != $course_id) {
+                if (get_glossary_terms($course_id) and count($_SESSION['glossary']) > 0) {
                         // Test whether \b works correctly, workaround if not
                         if (preg_match('/α\b/u', 'α')) {
                                 $spre = $spost = '\b';
@@ -2203,9 +2203,9 @@ function get_user_email_notification($user_id, $course_id=null)
         }
         if (isset($course_id)) {
         // finally checks if user has choosen not to be notified from a specific course
-                $r = db_query("SELECT receive_mail FROM cours_user 
+                $r = db_query("SELECT receive_mail FROM course_user 
                                 WHERE user_id = $user_id
-                                AND cours_id = $course_id", $mysqlMainDb);
+                                AND course_id = $course_id");
                 if ($r and mysql_num_rows($r) > 0) {
                         $row = mysql_fetch_row($r);
                         return $row[0];

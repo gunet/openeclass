@@ -53,18 +53,18 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
+$clarolineRepositoryWeb = $urlServer."courses/".$course_code;
 
 // lib of this tool
 require_once("../../../include/lib/learnPathLib.inc.php");
-mysql_select_db($currentCourseID);
+mysql_select_db($course_code);
 
 $unit_parm = isset($_SESSION['unit'])? ('&unit=' . $_SESSION['unit']): '';
 
 if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
-	$redirect = "../".$_GET['go'].".php?course=$code_cours" . $unit_parm;
+	$redirect = "../".$_GET['go'].".php?course=$course_code" . $unit_parm;
 } else {
-	$redirect="startModule.php?course=$code_cours&viewModule_id=".$_GET['viewModule_id'];
+	$redirect="startModule.php?course=$course_code&viewModule_id=".$_GET['viewModule_id'];
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>

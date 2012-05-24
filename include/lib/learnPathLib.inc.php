@@ -75,8 +75,8 @@ function commentBox($type, $mode)
 {
     global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
            $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
-           $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $code_cours,
-           $mysqlMainDb, $cours_id;
+           $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
+           $mysqlMainDb, $course_id;
 
     $tbl_lp_learnPath            = 'lp_learnPath';
     $tbl_lp_rel_learnPath_module = 'lp_rel_learnPath_module';
@@ -101,13 +101,13 @@ function commentBox($type, $mode)
             {
                 $module_id = $_SESSION['lp_module_id'];
             }
-            $where_cond = "`module_id` = " . (int) $module_id ." AND `course_id` = $cours_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $where_cond = "`module_id` = " . (int) $module_id ." AND `course_id` = $course_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
         case LEARNINGPATH_ :
             $defaultTxt = $langDefaultLearningPathComment;
             $col_name = 'comment';
             $tbl_name = $tbl_lp_learnPath;
-            $where_cond = '`learnPath_id` = '. (int) $_SESSION['path_id'] ." AND `course_id` = $cours_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
+            $where_cond = '`learnPath_id` = '. (int) $_SESSION['path_id'] ." AND `course_id` = $course_id";  // use backticks ( ` ) for col names and simple quote ( ' ) for string
             break;
         case LEARNINGPATHMODULE_ :
             $defaultTxt = $langDefaultModuleAddedComment;
@@ -145,7 +145,7 @@ function commentBox($type, $mode)
             $oldComment = db_query_get_single_value($sql, $mysqlMainDb);
 
             $output .= '
-      <form method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">' . "\n"
+      <form method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">' . "\n"
                 .disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
                 .'        <input type="hidden" name="cmd" value="update' . $col_name . '" />' . "\n"
                 .'        <input type="submit" value="' . $langOk . '" />' . "\n"
@@ -193,7 +193,7 @@ function commentBox($type, $mode)
             if ( $is_editor )
             {
                 $output .= '' . "\n"
-                .    '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
+                .    '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
                 .    $langAdd . '</a>' . "\n"
                 ;
             }
@@ -205,10 +205,10 @@ function commentBox($type, $mode)
             // display edit and delete links if user as the right to see it
             if ( $is_editor )
             {
-                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
+                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
                 .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
                 .    '</a>' . "\n"
-                .    '<a href="' . $_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;cmd=del' . $col_name . '" '
+                .    '<a href="' . $_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
                 .    "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>\n";
             }
@@ -236,8 +236,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
     // globals
     global $is_editor, $themeimg, $urlAppend, $langLearningPath1, 
-           $langModify, $langOk, $langErrorNameAlreadyExists, $code_cours, 
-           $mysqlMainDb, $cours_id;
+           $langModify, $langOk, $langErrorNameAlreadyExists, $course_code, 
+           $mysqlMainDb, $course_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
     $dsp = FALSE;
@@ -268,7 +268,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
             $sql = "SELECT COUNT(`" . $col_name . "`)
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = '" . addslashes($_POST['newName']) . "'
-                                  AND !(" . $where_cond . ") AND `course_id` = $cours_id";
+                                  AND !(" . $where_cond . ") AND `course_id` = $course_id";
             $num = db_query_get_single_value($sql, $mysqlMainDb);
 
             if ($num == 0)  // name doesn't already exists
@@ -276,7 +276,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
                 $sql = "UPDATE `" . $tbl_name . "`
                             SET `" . $col_name . "` = '" . addslashes($_POST['newName']) ."'
-                            WHERE " . $where_cond ." AND `course_id` = $cours_id";
+                            WHERE " . $where_cond ." AND `course_id` = $course_id";
 
                 db_query($sql, $mysqlMainDb);
                 $dsp = TRUE;
@@ -291,12 +291,12 @@ function nameBox($type, $mode, $formlabel = FALSE)
         {
             $sql = "SELECT `name`
                     FROM `" . $tbl_name . "`
-                    WHERE " . $where_cond ." AND `course_id` = $cours_id";
+                    WHERE " . $where_cond ." AND `course_id` = $course_id";
 
             $oldName = db_query_get_single_value($sql, $mysqlMainDb);
 
             $output .= '
-      <form method="POST" action="' . $_SERVER['PHP_SELF'].'?course='.$code_cours.'">' . "\n";
+      <form method="POST" action="' . $_SERVER['PHP_SELF'].'?course='.$course_code.'">' . "\n";
 
              if($formlabel != FALSE)
              	//$output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
@@ -314,7 +314,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
     {
         $sql = "SELECT `name`
                 FROM `" . $tbl_name . "`
-                WHERE " . $where_cond ." AND `course_id` = $cours_id";
+                WHERE " . $where_cond ." AND `course_id` = $course_id";
 
         $result = db_query($sql, $mysqlMainDb);
         if($result)
@@ -332,7 +332,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
         $output .=  $currentName;
 
         if ($is_editor)
-            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmd=updateName">'
+            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=updateName">'
             .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
     }
 
@@ -438,7 +438,7 @@ function display_path_content()
     $tbl_lp_module               = 'lp_module';
     $tbl_lp_asset                = 'lp_asset';
 
-    global $_cid, $langModule, $themeimg, $mysqlMainDb, $cours_id;
+    global $_cid, $langModule, $themeimg, $mysqlMainDb, $course_id;
 
     $style = '';
     $output = '';
@@ -454,7 +454,7 @@ function display_path_content()
             WHERE LP.`learnPath_id` = " .  (int) $_SESSION['path_id'] . "
               AND LP.`learnPath_id` = LPM.`learnPath_id`
               AND LPM.`module_id` = M.`module_id`
-              AND LP.`course_id` = $cours_id
+              AND LP.`course_id` = $course_id
             ORDER BY LPM.`rank`";
     $moduleList = db_query_fetch_all($sql, $mysqlMainDb);
 
@@ -534,7 +534,7 @@ function display_path_content()
  */
 function get_learnPath_progress($lpid, $lpUid)
 {
-    global $mysqlMainDb, $cours_id;
+    global $mysqlMainDb, $course_id;
 
     // find progression for this user in each module of the path
 
@@ -547,7 +547,7 @@ function get_learnPath_progress($lpid, $lpUid)
               AND LPM.`learnPath_module_id` = UMP.`learnPath_module_id`
               AND UMP.`user_id` = " . (int) $lpUid . "
               AND LP.`learnPath_id` = " . (int) $lpid . "
-              AND LP.`course_id` = $cours_id
+              AND LP.`course_id` = $course_id
               AND LPM.`visible` = 1
               AND M.`module_id` = LPM.`module_id`
               AND M.`contentType` != '" . CTLABEL_ . "'";
@@ -598,7 +598,7 @@ function get_learnPath_progress($lpid, $lpUid)
                     AND LPM.`visible` = 1
                     AND M.`contentType` != '" . CTLABEL_ . "'
                     AND M.`module_id` = LPM.`module_id`
-                    AND M.`course_id` = $cours_id
+                    AND M.`course_id` = $course_id
                     ";
         $result = db_query($sqlnum);
         if($result) {
@@ -637,7 +637,7 @@ function display_my_exercises($dialogBox, $style)
     global $langExercise;
     global $langNoEx;
     global $langAddOneModuleButton;
-    global $themeimg, $langComment, $langSelection, $code_cours, $mysqlMainDb, $cours_id;
+    global $themeimg, $langComment, $langSelection, $course_code, $mysqlMainDb, $course_id;
     $output = "";
 
     $output .= '<!-- display_my_exercises output -->' . "\n\n";
@@ -649,7 +649,7 @@ function display_my_exercises($dialogBox, $style)
     {
         $output .= disp_message_box($dialogBox, $style).'<br />'."\n";
     }
-    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;cmdglobal=add">'."\n";
+    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmdglobal=add">'."\n";
     $output .= '    <table width="99%" class="tbl_alt">'."\n"
     .    '    <tr>'."\n"
     .    '      <th><div align="left">'
@@ -665,7 +665,7 @@ function display_my_exercises($dialogBox, $style)
     $atleastOne = FALSE;
     $sql = "SELECT `id`, `title`, `description`
             FROM `" . $tbl_quiz_test . "`
-            WHERE course_id = $cours_id
+            WHERE course_id = $course_id
             AND active = 1
             ORDER BY  `title`, `id`";
     $exercises = db_query_fetch_all($sql, $mysqlMainDb);
@@ -769,7 +769,7 @@ function display_my_documents($dialogBox, $style)
     global $langAddModulesButton;
     global $fileList;
     global $themeimg;
-    global $secureDocumentDownload, $langSelection, $langDirectory, $code_cours;
+    global $secureDocumentDownload, $langSelection, $langDirectory, $course_code;
 
     $output = '';
     /*
@@ -782,7 +782,7 @@ function display_my_documents($dialogBox, $style)
     $cmdParentDir  = rawurlencode($parentDir);
 
     $output .= '
-    <form action="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'" method="POST">';
+    <form action="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'" method="POST">';
 
     /*--------------------------------------
     DIALOG BOX SECTION
@@ -807,7 +807,7 @@ function display_my_documents($dialogBox, $style)
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        $linkup = "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;openDir=$cmdParentDir'>";
+        $linkup = "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;openDir=$cmdParentDir'>";
         $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
                         "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
                    "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
@@ -877,7 +877,7 @@ function display_my_documents($dialogBox, $style)
                 $image       = 'folder.png';
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
-                $urlFileName = '<a href="'. $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
+                $urlFileName = '<a href="'. $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
             }
 
             $output .= '
@@ -1849,7 +1849,7 @@ function prepare_option_tags($elementList, $deepness = 0)
 
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
 {
-	global $code_cours;
+	global $course_code;
 	
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
@@ -1868,7 +1868,7 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 	$prevpage = $currentpage - 1;
 	$nextpage = $currentpage + 1;
 
-	$url = basename($_SERVER['PHP_SELF'])."?course=$code_cours";
+	$url = basename($_SERVER['PHP_SELF'])."?course=$course_code";
 
 	switch($_SERVER['argc']) {
 		case 0:
@@ -1960,40 +1960,40 @@ function get_limited_list($sql, $limiter)
  * accessing stuff they shouldn't by guessing ids.
  * 
  * @param boolean $is_editor contains whether the current user is admin of the current course
- * @param string $code_cours contains the current course id
+ * @param string $course_code contains the current course id
  * @param boolean $extraQuery contains whether the extra check will be made or not
  * @param boolean $extraDepth contains how far we are from the redirected location
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  */
-function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extraDepth = false)
+function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extraDepth = false)
 {
-	global $mysqlMainDb, $cours_id;
+	global $mysqlMainDb, $course_id;
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
 	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
-		header("Location: ".$depth."learningPathList.php?course=$code_cours");
+		header("Location: ".$depth."learningPathList.php?course=$course_code");
 		exit();
 	}
 	
 	if ($extraQuery) {
-		$q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id", $mysqlMainDb);
+		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id", $mysqlMainDb);
 		$lp = mysql_fetch_array($q);
 		
 		if ( !$is_editor && $lp['visible'] == 0 ) {
 			// if the learning path is invisible, don't allow users in it
-			header("Location: ".$depth."learningPathList.php?course=$code_cours");
+			header("Location: ".$depth."learningPathList.php?course=$course_code");
 			exit();
 		}
 		
 		if (!$is_editor) {
-			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $cours_id ORDER BY `rank`", $mysqlMainDb);
+			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`", $mysqlMainDb);
 			if ($lps != false) {
 				$block_met = false;
 				foreach ($lps as $lp) {
 					if ($lp['learnPath_id'] == $_SESSION['path_id']) {
 						if ($block_met) {
 							// if a previous learning path was blocked, don't allow users in it
-							header("Location: ".$depth."learningPathList.php?course=$code_cours");
+							header("Location: ".$depth."learningPathList.php?course=$course_code");
 							exit();
 						}
 						else
@@ -2010,7 +2010,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
 		// if the combination path/module is invalid, don't allow users in it
-		header("Location: ".$depth."learningPathList.php?course=$code_cours");
+		header("Location: ".$depth."learningPathList.php?course=$course_code");
 		exit();
 	}
 	
@@ -2022,7 +2022,7 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 				if ($lpm['module_id'] == $_SESSION['lp_module_id']) {
 					if ($block_met) {
 						// if a previous learning path module was blocked, don't allow users in it
-						header("Location: ".$depth."learningPathList.php?course=$code_cours");
+						header("Location: ".$depth."learningPathList.php?course=$course_code");
 						exit();
 					}
 					else

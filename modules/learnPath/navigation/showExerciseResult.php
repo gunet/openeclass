@@ -112,7 +112,7 @@ echo "<table class='tbl_border' width='99%'>
 
 // probaloume th dikia mas forma me to diko mas action 
 // kai me to katallhlo hidden pedio
-echo "<form method='GET' action='backFromExercise.php'><input type='hidden' name='course' value='$code_cours'>".
+echo "<form method='GET' action='backFromExercise.php'><input type='hidden' name='course' value='$course_code'>".
 	"<input type='hidden' name='op' value='finish'>";
 
 $i = $totalScore = $totalWeighting=0;

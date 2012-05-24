@@ -67,7 +67,7 @@ if (!$doit) {
                         $tool_content .= $langTryDeleteAdmin;
                 } else {
                         // now check if the user has registered courses...
-                        $q1 = db_query("SELECT * FROM cours_user WHERE user_id = $u");
+                        $q1 = db_query("SELECT * FROM course_user WHERE user_id = $u");
                         $total = mysql_num_rows($q1);
                         if ($total>0) {
                                 // user has courses, so not allowed to delete
@@ -91,7 +91,7 @@ if (!$doit) {
                                                                         FROM course AS a 
                                                                         JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                        LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                                                                        LEFT JOIN course_user AS b ON a.id = b.course_id
                                                                         WHERE b.user_id = $u AND b.tutor = 0
                                                                         ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -111,11 +111,11 @@ if (!$doit) {
                                                                                 break;
                                                                         case '0':
                                                                                 $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                         default:
                                                                                 $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                 }
                                                         }
@@ -127,7 +127,7 @@ if (!$doit) {
                                                                         FROM course AS a 
                                                                         JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                        LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                                                                        LEFT JOIN course_user AS b ON a.id = b.course_id
                                                                         WHERE b.user_id = $u AND b.statut = 1
                                                                         ORDER BY b.statut, hierarchy.name");
                                                 // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -153,7 +153,7 @@ if (!$doit) {
                                                                 FROM course AS a 
                                                                 JOIN course_department ON a.id = course_department.course
                                                                 JOIN hierarchy ON course_department.department = hierarchy.id
-                                                                LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                                                                LEFT JOIN course_user AS b ON a.id = b.course_id
                                                                 WHERE b.user_id = $u
                                                                 ORDER BY b.statut, hierarchy.name");
                                         // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
@@ -172,11 +172,11 @@ if (!$doit) {
                                                                         break;
                                                                 case 5:
                                                                         $tool_content .= $langStudent;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                                 default:
                                                                         $tool_content .= $langVisitor;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[cours_id]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[PHP_SELF]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                         }
                                                 }
@@ -209,14 +209,14 @@ if (!$doit) {
                                 $tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasAdmin.</p>\n";
                         }
 
-                        // delete guest user from cours_user
+                        // delete guest user from course_user
                         if ($u_statut == '10') {
-                                $sql = db_query("DELETE from cours_user WHERE user_id = $u");
+                                $sql = db_query("DELETE from course_user WHERE user_id = $u");
                         }
                 }
 
         } elseif ($c and $u) {
-                $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
+                $q = db_query("DELETE from course_user WHERE user_id = $u AND course_id = $c");
                 if (mysql_affected_rows() > 0) {
                         db_query("DELETE FROM group_members
                                          WHERE user_id = $u AND

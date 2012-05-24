@@ -125,7 +125,7 @@ if (!extension_loaded('gd')) {
 
            $point = array();
            while ($row1 = mysql_fetch_assoc($res1)) {
-                $cid = $row1['cours_id'];
+                $cid = $row1['course_id'];
 
                 $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
                         WHERE course_id = $cid AND $date_where $date_group

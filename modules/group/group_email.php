@@ -38,14 +38,14 @@ include '../../include/sendMail.inc.php';
 $group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langEmailGroup;
-$navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroupSpace,
+$navigation[]= array ("url"=>"group.php?course=$course_code", "name"=> $langGroupSpace,
 "url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
 
 list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
 $is_tutor = ($tutor_id == 1)?TRUE:FALSE;
 
 if (!$is_editor and !$is_tutor) {
-        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
+        header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
         exit;
 }
 
@@ -61,8 +61,8 @@ if ($is_editor or $is_tutor)  {
 		while ($userid = mysql_fetch_array($req)) {
                         $r = db_query("SELECT email FROM user where user_id='$userid[user_id]'", $mysqlMainDb);
 			list($email) = mysql_fetch_array($r);
-                        if (get_user_email_notification($userid[user_id], $cours_id)) {
-                                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                        if (get_user_email_notification($userid[user_id], $course_id)) {
+                                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
                                 $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
                                 $emailbody .= $unsubscribe.$linkhere;
                                 if (email_seems_valid($email) and
@@ -76,10 +76,10 @@ if ($is_editor or $is_tutor)  {
 		// aldo send email to professor 
 		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
-		$tool_content .= "<a href='group.php?course=$code_cours'>$langBack</a></p>";
+		$tool_content .= "<a href='group.php?course=$course_code'>$langBack</a></p>";
 	} else {
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+		<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
 		<fieldset>
 		<legend>$langTypeMessage</legend>
 		<input type='hidden' name='group_id' value='$group_id'>

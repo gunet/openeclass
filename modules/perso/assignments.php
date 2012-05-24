@@ -205,7 +205,7 @@ function submitted($uid, $assignment_id, $lesson_id)
     require_once($prefix.'/work/work_functions.php');
 
     $gids = user_group_info($uid, $lesson_id);
-    $GLOBALS['cours_id'] = $lesson_id;
+    $GLOBALS['course_id'] = $lesson_id;
 
     if ($submission = find_submissions(is_group_assignment($assignment_id), $uid, $assignment_id, $gids))
         return true;

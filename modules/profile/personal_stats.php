@@ -38,8 +38,8 @@ if (!extension_loaded('gd')) {
         $totalDuration = 0;
 	require_once '../../include/libchart/libchart.php';
         $sql = "SELECT a.code code, a.title title
-                FROM course AS a LEFT JOIN cours_user AS b
-                     ON a.id = b.cours_id
+                FROM course AS a LEFT JOIN course_user AS b
+                     ON a.id = b.course_id
                 WHERE b.user_id = $uid 
                 AND a.visible != ".COURSE_INACTIVE."
                 ORDER BY a.title";

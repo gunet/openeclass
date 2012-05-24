@@ -81,9 +81,9 @@ function getSideMenu($menuTypeID){
  * @see function lessonToolsMenu
  */
 function getToolsArray($cat) {
-	global $currentCourse, $currentCourseID;
+	global $currentCourse, $course_code;
         
-	$currentCourse = $currentCourseID;
+	$currentCourse = $course_code;
         $cid = course_code_to_id($currentCourse);
         
 	switch ($cat) {
@@ -133,9 +133,9 @@ function getToolsArray($cat) {
 
 function getExternalLinks() {
         
-        global $currentCourseID;
+        global $course_code;
         
-        $cid = course_code_to_id($currentCourseID);
+        $cid = course_code_to_id($course_code);
         $result2 = db_query("SELECT url, title FROM link
                                 WHERE category IN(-1,-2) AND
                                 course_id = $cid");
@@ -497,7 +497,7 @@ function adminMenu(){
  */
 function lessonToolsMenu() {
 	global $is_editor, $uid, $is_course_admin;	
-	global $currentCourseID, $langAdministrationTools, $langExternalLinks;
+	global $course_code, $langAdministrationTools, $langExternalLinks;
         global $modules, $admin_modules, $urlServer;
 
 	$sideMenuGroup = array();
@@ -537,7 +537,7 @@ function lessonToolsMenu() {
                 array_push($sideMenuSubGroup, $arrMenuType);          
                 while ($toolsRow = mysql_fetch_array($result)) {
                         $mid = $toolsRow['module_id'];                                   
-                        $modules[$mid]['link'] .= "?course=".$currentCourseID;
+                        $modules[$mid]['link'] .= "?course=".$course_code;
                         array_push($sideMenuText, q($modules[$mid]['title']));
                         array_push($sideMenuLink, $urlServer."modules/".q($modules[$mid]['link']));
                         array_push($sideMenuImg, $modules[$mid]['image'].$section['iconext']);

@@ -27,7 +27,7 @@ $helpTopic = 'User';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddManyUsers;
-$navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdminUsers);
+$navigation[] = array ("url"=>"user.php?course=$course_code", "name"=> $langAdminUsers);
 
 mysql_select_db($mysqlMainDb);
 
@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
                 if (!$userid) {
                         $not_found[] = $line;
                 } else {
-                        if (adduser($userid, $cours_id)) {
+                        if (adduser($userid, $course_id)) {
                                 $ok[] = $userid;
                         } else {
                                 $existing[] = $userid;
@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
         }
 }
 
-$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
         <fieldset>
            <legend>$langUsersData</legend>
            <table width='100%' class='tbl'> 
@@ -117,12 +117,12 @@ function finduser($user, $field) {
 // returns true (yes everything is ok )
 
 function adduser($userid, $cid) {
-	$result = db_query("SELECT * from cours_user WHERE user_id = $userid AND cours_id = $cid");
+	$result = db_query("SELECT * from course_user WHERE user_id = $userid AND course_id = $cid");
 	if (mysql_num_rows($result) > 0) {
                 return false;
         }
 
-	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date)
-			VALUES ($userid, $cid, 5, CURDATE())");
+	$result = db_query("INSERT INTO course_user (user_id, course_id, statut, reg_date)
+                                   VALUES ($userid, $cid, 5, CURDATE())");
 	return true;
 }

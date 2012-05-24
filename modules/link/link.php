@@ -125,20 +125,20 @@ if ($is_editor) {
 
 	$tool_content .="<div id='operations_container'><ul id='opslist'>";
 	if (isset($category)) {
-		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
+		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
         } else {
-		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=addlink'>$langLinkAdd</a></li>";
+		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
         }
 	if (isset($urlview)) {
-		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
+		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
         } else {
-		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=addcategory'>$langCategoryAdd</a></li>";
+		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
         }
         $tool_content .=  "</ul></div>";
 
 	// Display the correct title and form for adding or modifying a category or link.
         if (in_array($action, array('addlink', 'editlink'))) {
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
                 if ($action == 'editlink') {
                         $tool_content .= "<input type='hidden' name='id' value='$id' />";
                         link_form_defaults($id);
@@ -163,7 +163,7 @@ if ($is_editor) {
                         <tr><th>$langCategory:</th>
                             <td><select name='selectcategory'>
                                 <option value='0'>--</option>";
-                $resultcategories = db_query("SELECT * FROM link_category WHERE course_id = $cours_id ORDER BY `order`");
+                $resultcategories = db_query("SELECT * FROM link_category WHERE course_id = $course_id ORDER BY `order`");
                 while ($myrow = mysql_fetch_array($resultcategories)) {
                         $tool_content .= "<option value='$myrow[id]'";
                         if (isset($category) and $myrow['id'] == $category) {
@@ -183,7 +183,7 @@ if ($is_editor) {
                       </form>";
 
         } elseif (in_array($action, array('addcategory', 'editcategory'))) {
-                $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&urlview=$urlview'>\n";
+                $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&urlview=$urlview'>\n";
                 if ($action == 'editcategory') {
                         $tool_content .= "<input type='hidden' name='id' value='$id' />";
                         category_form_defaults($id);
@@ -205,25 +205,25 @@ if ($is_editor) {
 }
 
 if (isset($_GET['down'])) {
-        move_order('link', 'id', intval($_GET['down']), 'order', 'down', "course_id = $cours_id");
+        move_order('link', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
 } elseif (isset($_GET['up'])) {
-        move_order('link', 'id', intval($_GET['up']), 'order', 'up', "course_id = $cours_id");
+        move_order('link', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
 } elseif (isset($_GET['cdown'])) {
-        move_order('link_category', 'id', intval($_GET['cdown']), 'order', 'down', "course_id = $cours_id");
+        move_order('link_category', 'id', intval($_GET['cdown']), 'order', 'down', "course_id = $course_id");
 } elseif (isset($_GET['cup'])) {
-        move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $cours_id");
+        move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
 }
 
-$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $cours_id ORDER BY `order`");
+$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $course_id ORDER BY `order`");
 
 if (mysql_num_rows($resultcategories) > 0) {
 	// Starting the table which contains the categories
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
-	$result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND (category = 0 OR category IS NULL)");
+	$result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND (category = 0 OR category IS NULL)");
 	$numberofzerocategory = mysql_num_rows($result);
 	// making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 	// number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-	$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $cours_id ORDER BY `order`");
+	$resultcategories = db_query("SELECT * FROM `link_category` WHERE course_id = $course_id ORDER BY `order`");
 	$aantalcategories = mysql_num_rows($resultcategories);
 
 	if ($aantalcategories > 0) {
@@ -232,10 +232,10 @@ if (mysql_num_rows($resultcategories) > 0) {
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
 		  <td width='1'><img src='$themeimg/folder_closed.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=" . str_repeat('0', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) .
 	              "'>$shownone</a></td>
 		  <td width='1'><img src='$themeimg/folder_open.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=" . str_repeat('1', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) .
 		      "'>$showall</a></td>
 		</tr>
                 </table>";
@@ -276,7 +276,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .= "
                 <tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$newurlview'>".q($myrow['name'])."</a>";
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$newurlview'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
                         }
@@ -291,7 +291,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .=  "
 		<tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=";
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
 		        $description = standard_text_escape($myrow['description']);

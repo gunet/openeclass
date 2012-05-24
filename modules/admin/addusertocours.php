@@ -48,19 +48,19 @@ if (isset($_POST['submit']))  {
                                  WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cid)
                                        $reglist");
         }
-        db_query("DELETE FROM cours_user
-                         WHERE cours_id = $cid AND statut <> 10 $reglist");
+        db_query("DELETE FROM course_user
+                         WHERE course_id = $cid AND statut <> 10 $reglist");
 
 
         function regusers($cid, $users, $statut)
         {
                 foreach ($users as $uid) {
-                        db_query("INSERT IGNORE INTO cours_user (cours_id, user_id, statut, reg_date)
+                        db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
                                   VALUES ($cid, $uid, $statut, CURDATE())");
                 }
                 $reglist = implode(', ', $users);
                 if ($reglist) {
-                        db_query("UPDATE cours_user SET statut = $statut WHERE user_id IN ($reglist)");
+                        db_query("UPDATE course_user SET statut = $statut WHERE user_id IN ($reglist)");
                 }
         }
         regusers($cid, $regstuds, 5);
@@ -81,8 +81,8 @@ else {
 
 	// Registered users not registered in the selected course
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
-		LEFT JOIN cours_user cu ON u.user_id = cu.user_id 
-                     AND cu.cours_id = $cid
+		LEFT JOIN course_user cu ON u.user_id = cu.user_id 
+                     AND cu.course_id = $cid
 		WHERE cu.user_id IS NULL ORDER BY nom";
 
 	$resultAll = db_query($sqll);
@@ -117,8 +117,8 @@ else {
 
 	// Students registered in the selected course
 	$resultStud = db_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
-				FROM user u, cours_user cu
-				WHERE cu.cours_id = $cid
+				FROM user u, course_user cu
+				WHERE cu.course_id = $cid
 				AND cu.user_id=u.user_id
 				AND cu.statut=5 ORDER BY nom");
 
@@ -134,8 +134,8 @@ else {
 		<select id='regprofs_box' name='regprofs[]' size='8' multiple class='auth_input'>";
 	// Professors registered in the selected course
 	$resultProf = db_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
-				FROM user u, cours_user cu
-				WHERE cu.cours_id = $cid
+				FROM user u, course_user cu
+				WHERE cu.course_id = $cid
 				AND cu.user_id = u.user_id
 				AND cu.statut = 1
 				ORDER BY nom, prenom");

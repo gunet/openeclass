@@ -45,8 +45,8 @@ function confirmation (name)
 </script>
 ';
 
-$sql = "SELECT user.user_id, cours_user.statut FROM cours_user, user
-	WHERE cours_user.cours_id = $cours_id AND cours_user.user_id = user.user_id";
+$sql = "SELECT user.user_id, course_user.statut FROM course_user, user
+	WHERE course_user.course_id = $course_id AND course_user.user_id = user.user_id";
 $result_numb = db_query($sql, $mysqlMainDb);
 $countUser = mysql_num_rows($result_numb);
 
@@ -65,46 +65,46 @@ $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
         $new_admin_gid = intval($_GET['giveAdmin']);
-        db_query("UPDATE cours_user SET statut = 1
+        db_query("UPDATE course_user SET statut = 1
                         WHERE user_id = $new_admin_gid 
-                        AND cours_id = $cours_id", $mysqlMainDb);
+                        AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['giveTutor'])) {
         $new_tutor_gid = intval($_GET['giveTutor']);
-        db_query("UPDATE cours_user SET tutor = 1
+        db_query("UPDATE course_user SET tutor = 1
                         WHERE user_id = $new_tutor_gid 
-                        AND cours_id = $cours_id", $mysqlMainDb);
+                        AND course_id = $course_id", $mysqlMainDb);
         db_query("UPDATE group_members, `group` SET is_tutor = 0
                         WHERE `group`.id = group_members.group_id AND 
-                              `group`.course_id = $cours_id AND
+                              `group`.course_id = $course_id AND
                               group_members.user_id = $new_tutor_gid");
 } elseif (isset($_GET['giveEditor'])) {
         $new_editor_gid = intval($_GET['giveEditor']);
-        db_query("UPDATE cours_user SET editor = 1
+        db_query("UPDATE course_user SET editor = 1
                         WHERE user_id = $new_editor_gid 
-                        AND cours_id = $cours_id", $mysqlMainDb);            
+                        AND course_id = $course_id", $mysqlMainDb);            
 } elseif (isset($_GET['removeAdmin'])) {
         $removed_admin_gid = intval($_GET['removeAdmin']);
-        db_query("UPDATE cours_user SET statut = 5
+        db_query("UPDATE course_user SET statut = 5
                         WHERE user_id <> $uid AND
                               user_id = $removed_admin_gid AND
-                              cours_id = $cours_id", $mysqlMainDb);
+                              course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['removeTutor'])) {
         $removed_tutor_gid = intval($_GET['removeTutor']);
-        db_query("UPDATE cours_user SET tutor = 0
+        db_query("UPDATE course_user SET tutor = 0
                         WHERE user_id = $removed_tutor_gid 
-                              AND cours_id = $cours_id", $mysqlMainDb);
+                              AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['removeEditor'])) {
         $removed_editor_gid = intval($_GET['removeEditor']);
-        db_query("UPDATE cours_user SET editor = 0
+        db_query("UPDATE course_user SET editor = 0
                         WHERE user_id = $removed_editor_gid 
-                        AND cours_id = $cours_id", $mysqlMainDb);
+                        AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['unregister'])) {
         $unregister_gid = intval($_GET['unregister']);
         $unregister_ok = true;
         // Security: don't remove myself except if there is another prof
         if ($unregister_gid == $uid) {
-                $result = db_query("SELECT user_id FROM cours_user
-                                        WHERE cours_id = $cours_id AND
+                $result = db_query("SELECT user_id FROM course_user
+                                        WHERE course_id = $course_id AND
                                               statut = 1 AND
                                               user_id != $uid
                                         LIMIT 1", $mysqlMainDb);
@@ -113,12 +113,12 @@ if (isset($_GET['giveAdmin'])) {
                 }
         }
         if ($unregister_ok) {
-                db_query("DELETE FROM cours_user
+                db_query("DELETE FROM course_user
                                 WHERE user_id = $unregister_gid AND
-                                      cours_id = $cours_id");
+                                      course_id = $course_id");
                 db_query("DELETE FROM group_members
                                 WHERE user_id = $unregister_gid AND
-                                      group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
+                                      group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)");
         }
 }
 // show help link and link to Add new user, search new user and management page of groups
@@ -126,20 +126,20 @@ $tool_content .= "
 
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><b>$langAdd:</b>&nbsp; <a href='adduser.php?course=$code_cours'>$langOneUser</a></li>
-    <li><a href='muladduser.php?course=$code_cours'>$langManyUsers</a></li>
-    <li><a href='guestuser.php?course=$code_cours'>$langGUser</a>&nbsp;</li>
-    <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>$langSearchUser</a></li>
-    <li><a href='../group/group.php?course=$code_cours'>$langGroupUserManagement</a></li>
-    <li><a href='../course_info/refresh_course.php?course=$code_cours'>$langDelUsers</a></li>
+    <li><b>$langAdd:</b>&nbsp; <a href='adduser.php?course=$course_code'>$langOneUser</a></li>
+    <li><a href='muladduser.php?course=$course_code'>$langManyUsers</a></li>
+    <li><a href='guestuser.php?course=$course_code'>$langGUser</a>&nbsp;</li>
+    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;search=1'>$langSearchUser</a></li>
+    <li><a href='../group/group.php?course=$course_code'>$langGroupUserManagement</a></li>
+    <li><a href='../course_info/refresh_course.php?course=$course_code'>$langDelUsers</a></li>
   </ul>
 </div>";
 
 // display number of users
 $tool_content .= "
 <div class='info'><b>$langTotal</b>: <span class='grey'><b>$countUser </b><em>$langUsers &nbsp;($teachers $langTeachers, $students $langStudents, $visitors $langVisitors)</em></span><br />
-  <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$code_cours'>$langcsvenc2</a>
-       2. <a href='dumpuser.php?course=$code_cours&amp;enc=1253'>$langcsvenc1</a>
+  <b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
+       2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
   </div>";
 
 // display and handle search form if needed
@@ -163,7 +163,7 @@ if (isset($_GET['search'])) {
                 $search_params .= "&amp;search_uname=" . urlencode($_REQUEST['search_uname']);
         }
         
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;search=1'>
+        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;search=1'>
         <fieldset>
         <legend>$langUserData</legend>
         <table width='100%' class='tbl'>
@@ -207,9 +207,9 @@ $tool_content .= "
 <table width='100%' class='tbl_alt custom_list_order'>
 <tr>
   <th width='1'>$langID</th>
-  <th><div align='left'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
+  <th><div align='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
   <th class='center' width='160'>$langGroup</th>
-  <th class='center' width='90'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
+  <th class='center' width='90'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
   <th colspan='3' class='center'>$langAddRole</th>          
 </tr>";
 
@@ -225,17 +225,17 @@ switch ($ord) {
                 break;
         case 'am': $order_sql = 'ORDER BY am';
                 break;
-        case 'rd': $order_sql = 'ORDER BY cours_user.reg_date DESC';
+        case 'rd': $order_sql = 'ORDER BY course_user.reg_date DESC';
                 break;
         default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
                 break;
 }
 $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
-                           user.am, user.has_icon, cours_user.statut,
-                           cours_user.tutor, cours_user.editor, cours_user.reg_date
-                    FROM cours_user, user
-                    WHERE `user`.`user_id` = `cours_user`.`user_id` 
-                    AND `cours_user`.`cours_id` = $cours_id
+                           user.am, user.has_icon, course_user.statut,
+                           course_user.tutor, course_user.editor, course_user.reg_date
+                    FROM course_user, user
+                    WHERE `user`.`user_id` = `course_user`.`user_id` 
+                    AND `course_user`.`course_id` = $course_id
                     $search_sql $order_sql $limit_sql"); 
 
 while ($myrow = mysql_fetch_array($result)) {
@@ -251,7 +251,7 @@ while ($myrow = mysql_fetch_array($result)) {
         <td class='smaller' valign='top' align='right'>$i.</td>\n" .
                 "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
         $tool_content .= "\n" .
-                "<td class='smaller' valign='top' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
+                "<td class='smaller' valign='top' width='150'>" . user_groups($course_id, $myrow['user_id']) . "</td>\n" .
                 "<td align='center' class='smaller'>";
         if ($myrow['reg_date'] == '0000-00-00') {
                 $tool_content .= $langUnknownDate;
@@ -259,7 +259,7 @@ while ($myrow = mysql_fetch_array($result)) {
                 $tool_content .= nice_format($myrow['reg_date']);
         }
         $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
+        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link'
                          onClick=\"return confirmation('" . js_escape($alert_uname) .
                          "');\"><img src='$themeimg/cunregister.png' title='$langUnregCourse' /></a>";
 
@@ -267,31 +267,31 @@ while ($myrow = mysql_fetch_array($result)) {
         // tutor right
         if ($myrow['tutor'] == '0') {
                 $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
+                                <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;giveTutor=$myrow[user_id]$extra_link'>
                                 <img src='$themeimg/group_manager_add.png' title='$langGiveRightTutor' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRightTutor'>
+                                <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRightTutor'>
                                 <img src='$themeimg/group_manager_remove.png' title ='$langRemoveRightTutor' /></a></td>";
         }
         // editor right
         if ($myrow['editor'] == '0') {
             $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
+                                <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;giveEditor=$myrow[user_id]$extra_link'>
                                 <img src='$themeimg/assistant_add.png' title='$langGiveRightΕditor' /></a></td>";
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
+                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
                                 <img src='$themeimg/assistant_remove.png' title ='$langRemoveRightEditor' /></a></td>";
         }
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
                         $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRightAdmin'>
+                                        <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRightAdmin'>
                                         <img src='$themeimg/teacher_remove.png' title ='$langRemoveRightAdmin' /></a></td>";
                 } else {
                         $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+                                <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link'>
                                 <img src='$themeimg/teacher_add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         } else {
@@ -300,7 +300,7 @@ while ($myrow = mysql_fetch_array($result)) {
                                         <img src='$themeimg/teacher.png' title='$langTutor' /></td>";
                 } else {
                         $tool_content .= "<td class='smaller' valign='top' align='center'>
-                                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
+                                        <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link'>
                                         <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
                 }
         }

@@ -52,7 +52,7 @@ if ($is_editor) {
          $tool_content .= " 	        
 	<div id='operations_container'> 	
 	<ul id='opslist'>
-	<li><a href='forum_admin.php?course=$code_cours'>$langAddCategory</a>
+	<li><a href='forum_admin.php?course=$course_code'>$langAddCategory</a>
 	</li>
 	</ul> 	         
 	</div>"; 	         
@@ -64,33 +64,33 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 		$cat_id = intval($_GET['cat_id']);
 	}
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
-		WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
+		WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $course_id", $mysqlMainDb));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumcatnotify']) . "
-			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb);
+			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $course_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
-		cat_id = $cat_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
+		cat_id = $cat_id, notify_sent = 1, course_id = $course_id", $mysqlMainDb);
 	}
 } elseif(isset($_GET['forumnotify'])) { // modify forum notification
 	if (isset($_GET['forum_id'])) {
 		$forum_id = intval($_GET['forum_id']);
 	}
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
+		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $course_id", $mysqlMainDb));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumnotify']) . "
-			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb);
+			WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $course_id", $mysqlMainDb);
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
-		forum_id = $forum_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
+		forum_id = $forum_id, notify_sent = 1, course_id = $course_id", $mysqlMainDb);
 	}
 }
 
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT id, cat_title FROM forum_categories WHERE course_id = $cours_id ORDER BY id ";
+$sql = "SELECT id, cat_title FROM forum_categories WHERE course_id = $course_id ORDER BY id ";
 
 $result = db_query($sql);
 $total_categories = mysql_num_rows($result);
@@ -101,7 +101,7 @@ if ($total_categories) {
 	}
 	$sql = "SELECT f.*, p.post_time, p.topic_id, p.poster_id
 		FROM forum f LEFT JOIN forum_posts p ON p.id = f.last_post_id
-                AND f.course_id = $cours_id
+                AND f.course_id = $course_id
 		ORDER BY f.cat_id, f.id";
 		
 	$f_res = db_query($sql);
@@ -112,7 +112,7 @@ if ($total_categories) {
 		$title = stripslashes($categories[$i]["cat_title"]);
 		$catNum = $categories[$i]["id"];
 		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
-				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $cours_id", $mysqlMainDb));
+				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $course_id", $mysqlMainDb));
 		if (!isset($action_notify)) {
 			$link_notify = FALSE;
 			$icon = '_off';
@@ -125,14 +125,14 @@ if ($total_categories) {
 		<th colspan='5'><b>$title</b></th>
 		<th width='80' class='right'>";
 		if ($is_editor) {
-			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
+			$tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum'>
 			<img src='$themeimg/add.png' title='$langNewForum' alt='$langNewForum' /></a>
-			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
+			<a href='forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum'>
 			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>
-			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
+			<a href='forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
 			<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 		}
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
 		<img src='$themeimg/email$icon.png' title='$langNotify' alt='$langNotify' />
 		</a></th>
 		</tr>\n";
@@ -149,7 +149,7 @@ if ($total_categories) {
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
 			$cat_id = $categories[$i]['id'];
-			$sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $cours_id");
+			$sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
 			if (mysql_num_rows($sql) > 0) { // if category forum topics are found 
 				if ($forum_row[$x]['cat_id'] == $cat_id) {
 					if ($forum_row[$x]["post_time"]) {
@@ -190,7 +190,7 @@ if ($total_categories) {
 					//  - forum belongs to group and group forums are enabled and					
 					//     - user is member of group
 					if ($is_editor or !$group_id or ($has_forum and $is_member)) {
-						$tool_content .= "<a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>
+						$tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member;
 					} else {
@@ -203,7 +203,7 @@ if ($total_categories) {
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
 						$tool_content .= "<span class='smaller'>$last_user_post&nbsp;
-                                                <a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
+                                                <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						<img src='$icon_topic_latest' />
 						</a>
 						<br />$human_last_post_time</span></td>";
@@ -213,7 +213,7 @@ if ($total_categories) {
 					list($forum_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
 								WHERE user_id = $uid
 								AND forum_id = $forum_id
-								AND course_id = $cours_id"));
+								AND course_id = $course_id"));
 					if (!isset($forum_action_notify)) {
 						$forum_link_notify = false;
 						$forum_icon = '_off';
@@ -223,13 +223,13 @@ if ($total_categories) {
 					}
 					$tool_content .= "<td class='right'>";
 					if ($is_editor) { // admin actions
-						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
+						$tool_content .= "<a href='forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
 						<img src='$themeimg/edit.png' title='$langModify' />
 						</a>
-						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
+						<a href='forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
 						 <img src='$themeimg/delete.png' title='$langDelete' /></a>";
 					}
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
 					<img src='$themeimg/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
 					</td></tr>\n";
 				}

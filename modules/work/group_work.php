@@ -41,7 +41,7 @@ define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
 include '../document/doc_init.php';
 
-$coursePath = $webDir.'/courses/'.$currentCourseID;
+$coursePath = $webDir.'/courses/'.$course_code;
 if (!file_exists($coursePath))
 	mkdir($coursePath, 0777);
 
@@ -58,7 +58,7 @@ if (isset($_GET['submit'])) {
 	submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
 	draw($tool_content, 2);
 } else {
-	header("Location: work.php?course=$code_cours");
+	header("Location: work.php?course=$course_code");
 }
 
 
@@ -66,17 +66,17 @@ if (isset($_GET['submit'])) {
 function show_assignments()
 {
         global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
-               $langWorks, $mysqlMainDb, $cours_id, $code_cours, $themeimg;
+               $langWorks, $mysqlMainDb, $course_id, $course_code, $themeimg;
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		 FROM `$mysqlMainDb`.assignments WHERE course_id = $cours_id");
+		 FROM `$mysqlMainDb`.assignments WHERE course_id = $course_id");
         
 	if (mysql_num_rows($res) == 0) {
 		$tool_content .=  $langNoAssign;
 		return;
 	}
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
 		<input type='hidden' name='file' value='$_GET[submit]'>
 		<input type='hidden' name='group_id' value='$group_id'>
 	    <table class='tbl' width='99%'>
@@ -102,7 +102,7 @@ function show_assignments()
 
 		$tool_content .= "<tr><td width=\"1%\">
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
-			<td><div align='left'><a href='work.php?course=$code_cours&amp;id=$row[id]'>".q($row['title'])."</a></td>
+			<td><div align='left'><a href='work.php?course=$course_code&amp;id=$row[id]'>".q($row['title'])."</a></td>
 			<td align='center'>".nice_format($row['deadline']);
 		if ($row['days'] > 1) {
 			$tool_content .=  " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
@@ -150,7 +150,7 @@ function show_assignments()
 function submit_work($uid, $group_id, $id, $file) {
 	global $groupPath, $langUploadError, $langUploadSuccess,
                 $langBack, $m, $tool_content, $workPath,
-                $group_sql, $mysqlMainDb, $webDir, $code_cours;
+                $group_sql, $mysqlMainDb, $webDir, $course_code;
 
         $ext = get_file_extension($file);
 	$local_name = greek_to_latin('Group '. $group_id . (empty($ext)? '': '.' . $ext));
@@ -180,9 +180,9 @@ function submit_work($uid, $group_id, $id, $file) {
 
 		$tool_content .="<p class=\"success\">$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
-			<a href='work.php?course=$code_cours'>$langBack</a></p><br />";
+			<a href='work.php?course=$course_code'>$langBack</a></p><br />";
 	} else {
 		$tool_content .="<p class=\"caution\">$langUploadError<br />
-		<a href='work.php?course=$code_cours'>$langBack</a></p><br />";
+		<a href='work.php?course=$course_code'>$langBack</a></p><br />";
 	}
 }

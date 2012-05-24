@@ -34,19 +34,19 @@ include '../usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-        $navigation[] = array('url' => '../usage/usage.php?course='.$code_cours, 'name'=> $langUsage);
-        $navigation[] = array('url' => '../usage/group.php?course='.$code_cours, 'name'=> $langGroupUsage);
+        $navigation[] = array('url' => '../usage/usage.php?course='.$course_code, 'name'=> $langUsage);
+        $navigation[] = array('url' => '../usage/group.php?course='.$course_code, 'name'=> $langGroupUsage);
         $module = 'module=usage&amp;';
 } else {
-        $navigation[] = array('url' => 'group.php?course='.$code_cours, 'name'=> $langGroupSpace);
-        $navigation[] = array('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => 'group.php?course='.$course_code, 'name'=> $langGroupSpace);
+        $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name'=> $langGroupSpace);
         $module = '';
 }
 
 initialize_group_info($group_id);
 
 if (!$is_editor and !$is_tutor) {
-        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
+        header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
         exit;
 }
 
@@ -59,7 +59,7 @@ if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits',
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 
-$base = $_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
+$base = $_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
 
 function link_current($title, $this_type)
 {
@@ -71,11 +71,11 @@ function link_current($title, $this_type)
         }
 }
 if (isset($_POST['u_date_start']) and isset($_POST['u_date_end'])) {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
+	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
 } else {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$code_cours&amp;group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
+	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id'>$langCodeUTF</a>
+	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
 }
 
 $tool_content .= "<div id='operations_container'><ul id='opslist'>" .
@@ -98,7 +98,7 @@ if ($type == 'duration') {
                                          'calendar-blue2', false);
         $head_content .= $jscalendar->get_load_files_code();
 
-        list($min_date) = mysql_fetch_row(db_query('SELECT MIN(date_time) FROM actions', $currentCourseID));
+        list($min_date) = mysql_fetch_row(db_query('SELECT MIN(date_time) FROM actions', $course_code));
 
         if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
@@ -139,7 +139,7 @@ if ($type == 'duration') {
 } elseif ($type == 'lp') {
         $label = $langProgress;
         // list available learning paths
-        $learningPathList = db_query_fetch_all("SELECT learnPath_id FROM `$currentCourseID`.lp_learnPath");
+        $learningPathList = db_query_fetch_all("SELECT learnPath_id FROM `$course_code`.lp_learnPath");
 } else {
         $label = '?';
 }
@@ -154,7 +154,7 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 
 $i = 0;
 if ($type == 'duration') {
-        $result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $group_id);
+        $result = user_duration_query($course_code, $course_id, $u_date_start, $u_date_end, $group_id);
 } else {
         $result = db_query("SELECT user_id FROM group_members WHERE group_id = $group_id", $mysqlMainDb);
 }
@@ -177,7 +177,7 @@ if ($result) {
                         $am = uid_to_am($user_id);
                         $iterator = 0;
                         $progress = 0;
-                        mysql_select_db($currentCourseID);
+                        mysql_select_db($course_code);
                         foreach ($learningPathList as $learningPath) {
                                 $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
                                 $iterator++;

@@ -85,17 +85,17 @@ EOF;
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
-$d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $cours_id"));
+$d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $course_id"));
 $diskQuotaDocument = $d[0];
 
 if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
         if ($subsystem == GROUP) {
-        	$navigation[] = array ('url' => 'document.php?course='.$code_cours.'&amp;group_id=' . $group_id, 'name' => $langDoc);
+        	$navigation[] = array ('url' => 'document.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => $langDoc);
         } elseif ($subsystem == EBOOK) {
-		$navigation[] = array ('url' => 'document.php?course='.$code_cours.'&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
+		$navigation[] = array ('url' => 'document.php?course='.$course_code.'&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
 	} else {
-        	$navigation[] = array ('url' => 'document.php?course='.$code_cours, 'name' => $langDoc);
+        	$navigation[] = array ('url' => 'document.php?course='.$course_code, 'name' => $langDoc);
         }
 	$tool_content .= showquota($diskQuotaDocument, $diskUsed);
 	draw($tool_content, 2);
@@ -104,8 +104,8 @@ if (isset($_GET['showQuota'])) {
 
 if ($subsystem == EBOOK) {
 	$nameTools = $langFileAdmin;
-	$navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
-        $navigation[] = array('url' => 'edit.php?course='.$code_cours.'&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+	$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);
+        $navigation[] = array('url' => 'edit.php?course='.$course_code.'&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
 // ---------------------------
@@ -115,7 +115,7 @@ if (isset($_GET['download'])) {
         $downloadDir = $_GET['download'];
         if ($downloadDir == '/') {
                 $format = '.dir';
-                $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
+                $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
         } else {
                 $q = db_query("SELECT filename, format FROM document
                                       WHERE $group_sql AND
@@ -249,7 +249,7 @@ if ($can_upload) {
                                         // File date is current date
                                         $file_date = date("Y\-m\-d G\:i\:s");
                                         db_query("INSERT INTO document SET
-                                                        course_id = $cours_id,
+                                                        course_id = $course_id,
 							subsystem = $subsystem,
                                                         subsystem_id = $subsystem_id,
                                                         path = " . quote($file_path) . ",
@@ -366,7 +366,7 @@ if ($can_upload) {
                 $res = mysql_fetch_array($result);
                 $fileName = $res['filename'];
                 $dialogBox .= "
-            <form method='post' action='document.php?course=$code_cours'>
+            <form method='post' action='document.php?course=$course_code'>
             <input type='hidden' name='sourceFile' value='" .
                 q($_GET['rename']) . "' />
 	    $group_hidden_input
@@ -401,7 +401,7 @@ if ($can_upload) {
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
                 $dialogBox .= "
-			<form action='document.php?course=$code_cours' method='post'>
+			<form action='document.php?course=$course_code' method='post'>
             $group_hidden_input
 			<fieldset>
 				<input type='hidden' name='newDirPath' value='$createDir' />
@@ -470,7 +470,7 @@ if ($can_upload) {
 				WHERE $group_sql AND path = ". autoquote($metadataPath) );
 		} else {
 			db_query("INSERT INTO document SET
-				course_id = $cours_id,
+				course_id = $course_id,
 				subsystem = $subsystem,
 				subsystem_id = $subsystem_id,
 				path = " . quote($metadataPath) . ",
@@ -540,7 +540,7 @@ if ($can_upload) {
                         $filename = q($filename);
                         $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
                         $dialogBox = "
-				<form method='post' action='document.php?course=$code_cours' enctype='multipart/form-data'>
+				<form method='post' action='document.php?course=$course_code' enctype='multipart/form-data'>
 				<fieldset>
 				<input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
 				$group_hidden_input
@@ -583,7 +583,7 @@ if ($can_upload) {
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
                         $dialogBox .= "
-			<form method='post' action='document.php?course=$code_cours'>
+			<form method='post' action='document.php?course=$course_code'>
 			<fieldset>
 			  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
 			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
@@ -855,7 +855,7 @@ if($can_upload) {
             gia ta metadata symfwna me Dublin Core)
             ------------------------------------------------------------------*/
             $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-            $tool_content .= "\n  <li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
+            $tool_content .= "\n  <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
             /*----------------------------------------
             Create new folder
             --------------------------------------*/
@@ -1016,7 +1016,7 @@ if ($doc_count == 0) {
                         }
                         if (!$is_in_tinymce) {
                             if ($can_upload) {
-                                $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$code_cours' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$course_code' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />" .
                                                  $download_icon . $padding;
                                 if (!$is_dir && $entry['format'] != ".meta") {
@@ -1061,7 +1061,7 @@ if ($doc_count == 0) {
 	                                }
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
-	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
+	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$course_code" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='$themeimg/book.png' " .
 							 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";			

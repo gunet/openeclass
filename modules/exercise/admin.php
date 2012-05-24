@@ -48,10 +48,10 @@ $head_content = $jscalendar->get_load_files_code();
 load_modal_box();
 
 $nameTools = $langExercices;
-$navigation[] = array ('url' => "exercise.php?course=$code_cours", 'name' => $langExercices);
+$navigation[] = array ('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
-$picturePath='../../courses/'.$currentCourseID.'/image';
+$picturePath='../../courses/'.$course_code.'/image';
 
 // the 4 types of answers
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
@@ -159,7 +159,7 @@ if(isset($_POST['cancelExercise'])) {
 		unset($_GET['modifyExercise']);
 	} else {
 		// goes back to the exercise list
-		header('Location: exercise.php?course='.$code_cours);
+		header('Location: exercise.php?course='.$course_code);
 		exit();
 	}
 }
@@ -169,7 +169,7 @@ if(isset($_POST['cancelQuestion'])) {
 	// if we are creating a new question from the question pool
 	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
-		header('Location: question_pool.php?course='.$code_cours);
+		header('Location: question_pool.php?course='.$course_code);
 		exit();
 	} else {
 		// goes back to the question viewing
@@ -188,18 +188,18 @@ if(isset($_POST['cancelAnswers'])) {
 // modifies the query string that is used in the link of tool name
 if(isset($_GET['editQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 	$nameTools = $langQuestionManagement;
-	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	$navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
 	@$QUERY_STRING = $questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['newQuestion'])) {
 	$nameTools = $langNewQu;
-	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	$navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
 	@$QUERY_STRING = $questionId?'editQuestion='.$questionId.'&fromExercise='.$fromExercise:'newQuestion=yes';
 } elseif(isset($_GET['NewExercise'])) {
 	$nameTools = $langNewEx;
 	$QUERY_STRING = '';
 } elseif(isset($_GET['modifyExercise'])) {
 	$nameTools = $langInfoExercise;
-	$navigation[] = array('url' => "admin.php?course=$code_cours&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+	$navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
 	$QUERY_STRING = '';
 } else {
 	$nameTools = $langExerciseManagement;

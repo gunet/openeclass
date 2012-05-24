@@ -38,8 +38,8 @@ require_once("../video/video_functions.php");
 
 $dialogBox = "";
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
 load_modal_box(true);
@@ -186,13 +186,13 @@ $tool_content .= showmedia();
 
 $tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
 draw($tool_content, 2, null, $head_content);
 
 
 function showmedia()
 {
-    global $langName, $langSelection, $langAddModulesButton, $code_cours, $themeimg;
+    global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
 
     $sqlMedia = "SELECT * FROM video ORDER BY title";
     $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY title";
@@ -200,7 +200,7 @@ function showmedia()
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);
 
-    $output = "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='POST'>
+    $output = "<form action='$_SERVER[PHP_SELF]?course=$course_code' method='POST'>
                <table width='100%' class='tbl_alt'>
                <tr>
                <th colspan='2'>$langName</th>
@@ -249,12 +249,12 @@ function showmedia()
 
 function create_new_module($title, $description, $path, $contentType)
 {
-    global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $cours_id;
+    global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $course_id;
     
     // create new module
     $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ($cours_id, '". addslashes($title) ."' , '"
+                    VALUES ($course_id, '". addslashes($title) ."' , '"
                     .addslashes($description) . "', '".$contentType."','')";
     $query = db_query($sql);
 

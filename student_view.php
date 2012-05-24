@@ -4,7 +4,7 @@ $path2add = 0;
 include 'include/baseTheme.php';
 
 if (!isset($_SESSION['saved_editor'])) {
-    $cours_id = course_code_to_id($_GET['course']);
+    $course_id = course_code_to_id($_GET['course']);
     $is_editor = FALSE;
     if (check_editor()) {
         $is_editor = TRUE;

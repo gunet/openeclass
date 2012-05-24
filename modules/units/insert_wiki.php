@@ -22,12 +22,12 @@
 
 function list_wikis()
 {
-        global $id, $cours_id, $mysqlMainDb, $tool_content, $urlServer,
+        global $id, $course_id, $mysqlMainDb, $tool_content, $urlServer,
                $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki,
-               $langWikiDescriptionForm, $code_cours, $themeimg;
+               $langWikiDescriptionForm, $course_code, $themeimg;
 
 
-        $result = db_query("SELECT * FROM wiki_properties WHERE course_id = $cours_id", $mysqlMainDb);
+        $result = db_query("SELECT * FROM wiki_properties WHERE course_id = $course_id", $mysqlMainDb);
         $wikiinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $wikiinfo[] = array(
@@ -38,7 +38,7 @@ function list_wikis()
         if (count($wikiinfo) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langWikiNoWiki</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>".
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>".
                                  "\n  <input type='hidden' name='id' value='$id'>" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>".
@@ -54,7 +54,7 @@ function list_wikis()
                                 $rowClass = "class='even'";
                         }
 			$tool_content .= "\n  <tr $rowClass>";
-			$tool_content .= "\n    <td>&nbsp;<img src='$themeimg/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$code_cours&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>";
+			$tool_content .= "\n    <td>&nbsp;<img src='$themeimg/wiki_on.png' />&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>";
 			$tool_content .= "\n    <td>$entry[description]</td>";
 			$tool_content .= "\n    <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>";
 			$tool_content .= "\n  </tr>";

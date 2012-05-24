@@ -30,8 +30,8 @@ load_modal_box();
 
 mysql_select_db($mysqlMainDb);
 
-$base_url = 'glossary.php?course=' . $code_cours;
-$cat_url = 'categories.php?course=' . $code_cours;
+$base_url = 'glossary.php?course=' . $course_code;
+$cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
 $nameTools = $langCategories;
@@ -44,15 +44,15 @@ if ($is_editor) {
                         $q = db_query("UPDATE glossary_category
                                               SET name = " . autoquote($_POST['name']) . ",
                                                   description = " . autoquote($_POST['description']) . "
-                                              WHERE id = $category_id AND course_id = $cours_id");
+                                              WHERE id = $category_id AND course_id = $course_id");
                         $success_message = $langCategoryModded;
                 } else {
                         db_query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
-                                         FROM glossary_category WHERE course_id = $cours_id");
+                                         FROM glossary_category WHERE course_id = $course_id");
                         $q = db_query("INSERT INTO glossary_category
                                               SET name = " . autoquote($_POST['name']) . ",
                                                   description = " . autoquote($_POST['description']) . ",
-                                                  course_id = $cours_id,
+                                                  course_id = $course_id,
                                                   `order` = @new_order");
                         $category_id = mysql_insert_id();
                         $success_message = $langCategoryAdded;
@@ -67,10 +67,10 @@ if ($is_editor) {
         if (isset($_GET['delete'])) {
                 $cat_id = intval($_GET['delete']);
                 $q = db_query("DELETE FROM glossary_category
-                                      WHERE id = $cat_id AND course_id = $cours_id");
+                                      WHERE id = $cat_id AND course_id = $course_id");
                 if ($q and mysql_affected_rows()) {
                         db_query("UPDATE glossary SET category_id = NULL
-                                                  WHERE course_id = $cours_id AND
+                                                  WHERE course_id = $course_id AND
                                                         category_id = $cat_id");
                         $tool_content .= "<div class='success'>$langCategoryDeletedGlossary</div><br />";
                 }
@@ -132,7 +132,7 @@ if ($is_editor) {
 }
 
 $q = db_query("SELECT id, name, description
-                      FROM glossary_category WHERE course_id = $cours_id
+                      FROM glossary_category WHERE course_id = $course_id
                       ORDER BY name");
 
 if ($q and mysql_num_rows($q)) {

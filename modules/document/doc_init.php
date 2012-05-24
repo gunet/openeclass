@@ -30,13 +30,13 @@ if (defined('GROUP_DOCUMENTS')) {
         initialize_group_id();
         initialize_group_info($group_id);        
         $subsystem_id = $group_id;
-        $navigation[] = array('url' => $urlAppend . '/modules/group/group.php?course='.$code_cours, 'name' => $langGroups);
-        $navigation[] = array('url' => $urlAppend . '/modules/group/group_space.php?course='.$code_cours.'&amp;group_id=' . $group_id, 'name' => q($group_name));
+        $navigation[] = array('url' => $urlAppend . '/modules/group/group.php?course='.$course_code, 'name' => $langGroups);
+        $navigation[] = array('url' => $urlAppend . '/modules/group/group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
         $groupset = "group_id=$group_id&amp;";
-        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;' . $groupset;
-        $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;' . $groupset;
+        $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/group/' . $secret_directory;
+        $basedir = $webDir . 'courses/' . $course_code . '/group/' . $secret_directory;
 	$can_upload = $can_upload || $is_member;
         $nameTools = $langGroupDocumentsLink;
 } elseif (defined('EBOOK_DOCUMENTS')) {
@@ -46,18 +46,18 @@ if (defined('GROUP_DOCUMENTS')) {
 	$subsystem = EBOOK;
         $subsystem_id = $ebook_id;
         $groupset = "ebook_id=$ebook_id&amp;";
-        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;' . $groupset;
-        $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;' . $groupset;
+        $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
+        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
 } else {
 	$subsystem = MAIN;
-        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$code_cours .'&amp;';
+        $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;';
         $subsystem_id = 'NULL';
         $groupset = '';
-        $group_sql = "course_id = $cours_id AND subsystem = $subsystem";
+        $group_sql = "course_id = $course_id AND subsystem = $subsystem";
         $group_hidden_input = '';
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+        $basedir = $webDir . 'courses/' . $course_code . '/document';
         $nameTools = $langDoc;
 }       
 mysql_select_db($mysqlMainDb);

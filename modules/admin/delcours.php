@@ -46,9 +46,9 @@ $require_power_user = true;
 include '../../include/baseTheme.php';
 
 if(isset($_GET['c'])) {
-	$cours_id = intval($_GET['c']);
+	$course_id = intval($_GET['c']);
 } else {
-	$cours_id = '';
+	$course_id = '';
 }
 
 $nameTools = $langCourseDel;
@@ -56,19 +56,19 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
 // Delete course
-if (isset($_GET['delete']) && $cours_id)  {
-        delete_course($cours_id);
+if (isset($_GET['delete']) && $course_id)  {
+        delete_course($course_id);
         $tool_content .= "<p class='success'>".$langCourseDelSuccess."</p>";
 }
 // Display confirmatiom message for course deletion
 else {
-	$row = mysql_fetch_array(db_query("SELECT * FROM course WHERE id = $cours_id"));
+	$row = mysql_fetch_array(db_query("SELECT * FROM course WHERE id = $course_id"));
 
 	$tool_content .= "<fieldset>
 	<legend>".$langCourseDelConfirm."</legend>
 	<table class='tbl' width='100%'>";
 	$tool_content .= "<tr><td>
-		<div class='caution'>".$langCourseDelConfirm2." <em>".course_id_to_title($cours_id)."</em>;
+		<div class='caution'>".$langCourseDelConfirm2." <em>".course_id_to_title($course_id)."</em>;
 		<br /><br /><i>".$langNoticeDel."</i><br />
 		</div></td></tr>";
 	$tool_content .= "<tr>

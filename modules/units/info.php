@@ -51,9 +51,9 @@ if (isset($_GET['edit'])) { // display form for editing course unit
 }
 
 if (isset($_GET['next'])) {
-        $action = "index.php?course=$code_cours&amp;id=$unit_id";
+        $action = "index.php?course=$course_code&amp;id=$unit_id";
 } else {
-        $action = "${urlServer}courses/$currentCourseID/";
+        $action = "${urlServer}courses/$course_code/";
 }
 
 $tool_content .= "

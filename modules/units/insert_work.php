@@ -24,14 +24,13 @@ function list_assignments()
 {
         global $id, $tool_content, $langTitle, $langChoice, $m,
                $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-               $langVisible, $cours_id, $code_cours, $themeimg;
+               $langVisible, $course_id, $course_code, $themeimg;
 
-
-        $result = db_query("SELECT * FROM assignment WHERE course_id = $cours_id ORDER BY active, title");
+        $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY active, title");
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoAssign</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>" .
                                  "\n  <input type='hidden' name='id' value='$id' />\n" .
                                  "\n    <table width='99%' class='tbl_alt'>" .
                                  "\n    <tr>".

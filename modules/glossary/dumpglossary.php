@@ -38,7 +38,7 @@ if($is_editor) {
 	echo join(';', array_map("csv_escape", array($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl))),
 	     $crlf;
 	$sql = db_query("SELECT term, definition, url FROM glossary
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
                                 ORDER BY `order`", $mysqlMainDb);
 	$r=0;
 	while ($r < mysql_num_rows($sql)) {

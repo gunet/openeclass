@@ -70,8 +70,8 @@ if ($_gid and $is_groupAllowed) {
         // group context
         $groupId = (int) $_gid;
 
-        $navigation[]  = array ('url' => '../group/group.php?course='.$code_cours, 'name' => $langGroups);
-        $navigation[]  = array ('url' => '../group/group_space.php?course='.$code_cours, 'name' => $_group['name']);
+        $navigation[]  = array ('url' => '../group/group.php?course='.$course_code, 'name' => $langGroups);
+        $navigation[]  = array ('url' => '../group/group_space.php?course='.$course_code, 'name' => $_group['name']);
 } elseif ($_gid && ! $is_groupAllowed) {
         die($langNotAllowed);
 } else {
@@ -289,7 +289,7 @@ switch ( $action )
     {
         case "rqEdit":
         {
-            $navigation[] = array ('url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki );
+            $navigation[] = array ('url' => 'wiki.php?course='.$course_code, 'name' => $langWiki );
             $nameTools = $langWikiProperties;
             $noPHP_SELF = true;
             break;
@@ -378,7 +378,7 @@ switch ( $action )
                 $tool_content .= '
               <div id="operations_container">
                 <ul id="opslist">
-                  <li><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;action=rqEdit'
+                  <li><a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;action=rqEdit'
                     . '">'
                     . $langWikiCreateNewWiki
                     . '</a></li>
@@ -446,7 +446,7 @@ switch ( $action )
 
                     $tool_content .= '          <td>';
                     // display direct link to main page
-                    $tool_content .= '<a class="item'.$classItem.'" href="page.php?course='.$code_cours.'&amp;wikiId='
+                    $tool_content .= '<a class="item'.$classItem.'" href="page.php?course='.$course_code.'&amp;wikiId='
                         . $entry['id'].'&amp;action=show'
                         . '">'
                         . $entry['title'] . '</a>'
@@ -464,14 +464,14 @@ switch ( $action )
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '          <td><div align="center">';
-                    $tool_content .= '<a href="page.php?course='.$code_cours.'&amp;wikiId=' . $entry['id'] . '&amp;action=all">';
+                    $tool_content .= '<a href="page.php?course='.$course_code.'&amp;wikiId=' . $entry['id'] . '&amp;action=all">';
                     $tool_content .= $wikiStore->getNumberOfPagesInWiki( $entry['id'] );
                     $tool_content .= '</a>';
                     $tool_content .= '</div></td>' . "\n";
 
                     $tool_content .= '          <td width="5" style="text-align: center;">';
                     // display direct link to main page
-                    $tool_content .= '<a href="page.php?course='.$code_cours.'&amp;wikiId='
+                    $tool_content .= '<a href="page.php?course='.$course_code.'&amp;wikiId='
                         . $entry['id'].'&amp;action=recent'
                         . '">'
                         . '<img src="' . $themeimg . '/history.png" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
@@ -484,7 +484,7 @@ switch ( $action )
                             // edit link
 
                             $tool_content .= '          <td width="5" style="text-align: center;">';
-                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
+                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
                             . '<img src="'.$themeimg.'/edit.png" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
@@ -495,7 +495,7 @@ switch ( $action )
                             // delete link
 
                             $tool_content .= '<td width="5" style="text-align: center;">';
-                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
+                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
                                     . $entry['id'].'&amp;action=exDelete'
                                     . '">'
                                     . '<img src="'.$themeimg.'/delete.png" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'

@@ -95,12 +95,12 @@
          */
         function parseWikiWord( $str, &$tag, &$attr, &$type )
         {
-            global $code_cours;
+            global $course_code;
             $tag = 'a';
             $attr = ' href="'.$str.'"';
             if ( $this->wiki->pageExists( $str ) )
                 {
-                return "<a href=\"".$_SERVER['PHP_SELF']."?course=".$code_cours
+                return "<a href=\"".$_SERVER['PHP_SELF']."?course=".$course_code
                     . "&amp;action=show&amp;title=".rawurlencode($str )
                     . "&amp;wikiId=" . $this->wiki->getWikiId()
                     . "\" class=\"wikiShow\">"
@@ -110,7 +110,7 @@
             }
             else
             {
-                return "<a href=\"".$_SERVER['PHP_SELF']."?course=".$code_cours
+                return "<a href=\"".$_SERVER['PHP_SELF']."?course=".$course_code
                     . "&amp;action=edit&amp;title=" . rawurlencode($str )
                     . "&amp;wikiId=" . $this->wiki->getWikiId()
                     . "\" class=\"wikiEdit\">"
@@ -246,7 +246,7 @@
          */
         function _getWikiPageLink( $pageName )
         {
-	    global $code_cours;
+	    global $course_code;
 	    
             // allow links to use wikiwords for wiki page locations
             if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
@@ -256,7 +256,7 @@
              
             if ($this->wiki->pageExists( $pageName ) )
             {
-                return ' href="' . $_SERVER['PHP_SELF'].'?course='.$code_cours
+                return ' href="' . $_SERVER['PHP_SELF'].'?course='.$course_code
                     . '&amp;action=show&amp;title=' . rawurlencode($pageName )
                     . '&amp;wikiId=' . $this->wiki->getWikiId()
                     . '" class="wikiShow"'
@@ -264,7 +264,7 @@
             }
             else
             {
-                return ' href="' . $_SERVER['PHP_SELF'].'?course='.$code_cours
+                return ' href="' . $_SERVER['PHP_SELF'].'?course='.$course_code
                     . '&amp;action=edit&amp;title=' . rawurlencode($pageName )
                     . '&amp;wikiId=' . $this->wiki->getWikiId()
                     . '" class="wikiEdit"'

@@ -51,7 +51,7 @@ if(!empty($u))
                            FROM course AS a 
                            JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
-                      LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                      LEFT JOIN course_user AS b ON a.id = b.course_id
                           WHERE b.user_id = $u
                        ORDER BY b.statut, hierarchy.name");
 
@@ -101,7 +101,7 @@ if(!empty($u))
                                       FROM course AS a 
                                       JOIN course_department ON a.id = course_department.course
                                       JOIN hierarchy ON course_department.department = hierarchy.id
-                                 LEFT JOIN cours_user AS b ON a.id = b.cours_id
+                                 LEFT JOIN course_user AS b ON a.id = b.course_id
                                      WHERE b.user_id = $u
                                   ORDER BY b.statut, hierarchy.name");
 		$hits = array();

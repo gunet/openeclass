@@ -46,7 +46,7 @@ $tool->active = true;
 $toolsArr[0][] = $tool;
 
 list($first_unit_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
-                                                  WHERE course_id = $cours_id AND `order` >= 0
+                                                  WHERE course_id = $course_id AND `order` >= 0
                                                ORDER BY `order` ASC LIMIT 1", $mysqlMainDb));
 
 $tool = new stdClass();

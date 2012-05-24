@@ -47,18 +47,18 @@ include('../../include/action.php');
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
+    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
+    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
+    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
+    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
 </div>\n";
 
 
 $dateNow = date("d-m-Y / H:i:s",time());
 $nameTools = $langFavourite;
-$navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
+$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
 
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066; padding-left: 15px; padding-right : 15px; }
@@ -113,7 +113,7 @@ $local_head = $jscalendar->get_load_files_code();
         case "visits":
             $query = "SELECT module_id, COUNT(*) AS cnt FROM actions
                         WHERE $date_where
-                        AND course_id = $cours_id
+                        AND course_id = $course_id
                         AND $user_where GROUP BY module_id";
 
             $result = db_query($query);
@@ -137,7 +137,7 @@ $local_head = $jscalendar->get_load_files_code();
         case "duration":
             $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions                     
                         WHERE $date_where
-                        AND course_id = $cours_id
+                        AND course_id = $course_id
                         AND $user_where GROUP BY module_id";
 
             $result = db_query($query);
@@ -162,7 +162,7 @@ $local_head = $jscalendar->get_load_files_code();
         break;
     }
     mysql_free_result($result);
-    $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';    
+    $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';    
     
     if (isset($_POST['btnUsage'])) {        
         if ($chart_content > 0) {
@@ -195,26 +195,26 @@ $local_head = $jscalendar->get_load_files_code();
 
 
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
-        FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-        WHERE b.cours_id = $cours_id
+        FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+        WHERE b.course_id = $course_id
         GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
 
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?course='.$course_code.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
     }
 
     if (isset($_GET['first'])) {
         $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.cours_id = $cours_id AND LEFT(a.nom,1) = '$firstletter'";
+            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+            WHERE b.course_id = $course_id AND LEFT(a.nom,1) = '$firstletter'";
     } else {
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.cours_id = $cours_id";
+            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+            WHERE b.course_id = $course_id";
     }
 
     $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
@@ -229,7 +229,7 @@ $local_head = $jscalendar->get_load_files_code();
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
     $tool_content .= '
-    <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+    <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
     <fieldset>
      <legend>'.$langFavourite.'</legend>
      <table class="tbl">
@@ -259,7 +259,7 @@ $local_head = $jscalendar->get_load_files_code();
      <tr>
        <td>&nbsp;</td>
        <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-           <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
+           <div><br /><a href="oldStats.php?course='.$course_code.'">'.$langOldStats.'</a></div>
        </td>
      </tr>
      </table>

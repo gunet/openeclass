@@ -495,7 +495,7 @@ function utf8_decode_if_is_utf8($str) {
        CLAROLINE MAIN
   ======================================*/
 
-function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
+function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileName, $displayExtraMessages = false) {
 	global $langUnamedPath;
 	global $langFileScormError;
 	global $langNotice;
@@ -532,11 +532,11 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 	global $itemsPile;
 	global $manifestData;
 	global $iterator;
-	global $code_cours;
-	global $cours_id;
+	global $course_code;
+	global $course_id;
 	
 	$pwd = getcwd();
-	mysql_select_db($currentCourseID);
+	mysql_select_db($course_code);
 	
 	$TABLELEARNPATH         = "lp_learnPath";
 	$TABLEMODULE            = "lp_module";
@@ -550,8 +550,8 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 	
 	$maxFilledSpace = 100000000;
 	
-	$courseDir   = "courses/".$currentCourseID."/scormPackages/";
-	$tempDir     = "courses/".$currentCourseID."/temp/";
+	$courseDir   = "courses/".$course_code."/scormPackages/";
+	$tempDir     = "courses/".$course_code."/temp/";
 	$baseWorkDir = $webDir.$courseDir; // path_id
 	$tempWorkDir = $webDir.$tempDir;
 	
@@ -567,7 +567,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     // we need a new path_id for this learning path so we prepare a line in DB
     // this line will be removed if an error occurs
     $sql = "SELECT MAX(`rank`)
-            FROM `".$TABLELEARNPATH."` WHERE `course_id` = $cours_id";
+            FROM `".$TABLELEARNPATH."` WHERE `course_id` = $course_id";
     $result = db_query($sql, $mysqlMainDb);
 
     list($rankMax) = mysql_fetch_row($result);
@@ -917,7 +917,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 
                     $sql = "INSERT INTO `".$TABLEMODULE."`
                             (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                            VALUES ($cours_id, '".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
+                            VALUES ($course_id, '".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
 
                     $query = db_query($sql, $mysqlMainDb);
 
@@ -1009,7 +1009,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
 
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                        VALUES ($cours_id, '".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
+                        VALUES ($course_id, '".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
                 $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
@@ -1067,7 +1067,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = ". (int)$insertedAsset_id[$i]."
                         WHERE `module_id` = ". (int)$insertedModule_id[$i] ."
-                        AND `course_id` = $cours_id";
+                        AND `course_id` = $course_id";
                 $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
@@ -1152,7 +1152,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                           WHERE 1 = 0";
         foreach ( $insertedModule_id as $insertedModule )
         {
-             $sqlDelModules .= " OR ( `module_id` = ". (int)$insertedModule ." AND `course_id` = $cours_id )";
+             $sqlDelModules .= " OR ( `module_id` = ". (int)$insertedModule ." AND `course_id` = $course_id )";
         }
         db_query($sqlDelModules, $mysqlMainDb);
 
@@ -1164,7 +1164,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
         // delete learning path
         $sqlDelLP = "DELETE FROM `".$TABLELEARNPATH."`
                      WHERE `learnPath_id` = ". (int)$tempPathId ."
-                     AND `course_id` = $cours_id";
+                     AND `course_id` = $course_id";
         db_query($sqlDelLP, $mysqlMainDb);
 
         // delete the directory (and files) of this learning path and all its content
@@ -1176,7 +1176,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
         // finalize insertion : update the empty learning path insert that was made to find its id
         $sql = "SELECT MAX(`rank`)
                 FROM `".$TABLELEARNPATH."`
-                WHERE `course_id` = $cours_id";
+                WHERE `course_id` = $course_id";
         $result = db_query($sql, $mysqlMainDb);
 
         list($rankMax) = mysql_fetch_row($result);
@@ -1206,7 +1206,7 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
                     `comment` = '".addslashes($lpComment)."',
                     `visible` = 1
                 WHERE `learnPath_id` = ". (int)$tempPathId ."
-                AND `course_id` = $cours_id";
+                AND `course_id` = $course_id";
         db_query($sql, $mysqlMainDb);
 
     }
@@ -1234,14 +1234,14 @@ function doImport($currentCourseID, $mysqlMainDb, $webDir, $scoFileSize, $scoFil
     {
         $importMessages .= "\n<br /><center><b>".$langInstalled."</b></center>";
         if ($displayExtraMessages == true)
-        	$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
+        	$importMessages .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
         $importMessages .= "\n<br /><br >";
     }
     else
     {
         $importMessages .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    //$importMessages .= "\n<br /><a href=\"learningPathList.php?course=$code_cours\">$langBack</a></p>";
+    //$importMessages .= "\n<br /><a href=\"learningPathList.php?course=$course_code\">$langBack</a></p>";
     $importMessages .= "\n<br /></p>";
     
     mysql_select_db($mysqlMainDb);

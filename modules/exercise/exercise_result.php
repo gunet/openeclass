@@ -39,7 +39,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langExercicesResult;
-$navigation[] = array ("url"=>"exercise.php?course=$code_cours", "name"=> $langExercices);
+$navigation[] = array ("url"=>"exercise.php?course=$course_code", "name"=> $langExercices);
 
 require_once '../video/video_functions.php';
 load_modal_box();
@@ -76,7 +76,7 @@ $tool_content .= "
   </tr>
   </table>";
 
-$tool_content .= "<form method='GET' action='exercise.php'><input type='hidden' name='course' value='$code_cours'/>";
+$tool_content .= "<form method='GET' action='exercise.php'><input type='hidden' name='course' value='$course_code'/>";
 
 $i=$totalScore=$totalWeighting=0;
 

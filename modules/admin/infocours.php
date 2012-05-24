@@ -86,7 +86,7 @@ else {
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($row['cours_id']));
+        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $course->getDepartmentIds($row['course_id']));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>

@@ -64,8 +64,8 @@ EOF;
 
 $dialogBox = "";
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyLinkToolName;
 
 mysql_select_db($mysqlMainDb);
@@ -77,7 +77,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 	if (isset($_POST['submitInsertedLink']) && isset($_POST['insertLink_'.$iterator])) {
 
 		// get from DB everything related to the link
-		$sql = "SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $cours_id AND `id` = \""
+		$sql = "SELECT * FROM `$mysqlMainDb`.link WHERE course_id = $course_id AND `id` = \""
 			. intval($_POST['insertLink_'.$iterator]) ."\"";
 		$row = db_query_get_single_row($sql);
 
@@ -88,7 +88,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
         		AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
         		AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
         		AND M.`contentType` = \"".CTLINK_."\"
-        		AND M.`course_id` = $cours_id";
+        		AND M.`course_id` = $course_id";
 		$query0 = db_query($sql);
         $num = mysql_numrows($query0);
 
@@ -96,7 +96,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 			// create new module
 			$sql = "INSERT INTO `".$TABLEMODULE."`
 					(`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-					VALUES ($cours_id, '". addslashes($row['title']) ."' , '"
+					VALUES ($course_id, '". addslashes($row['title']) ."' , '"
 					.addslashes($row['description']) . "', '".CTLINK_."','')";
 			$query = db_query($sql);
 
@@ -114,7 +114,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 			$sql = "UPDATE `".$TABLEMODULE."`
 				SET `startAsset_id` = " . (int)$insertedAsset_id . "
 				WHERE `module_id` = " . (int)$insertedModule_id . "
-				AND `course_id` = $cours_id";
+				AND `course_id` = $course_id";
 			$query = db_query($sql);
 
 			// determine the default order of this Learning path
@@ -143,7 +143,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				AND M.`startAsset_id` = A.`asset_id`
 				AND A.`path` = '". addslashes($row['url'])."'
 				AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-				AND M.`course_id` = $cours_id";
+				AND M.`course_id` = $course_id";
 			$query2 = db_query($sql);
 			$num = mysql_numrows($query2);
 
@@ -191,29 +191,29 @@ if (isset($dialogBox) && $dialogBox != "") {
 $tool_content .= showlinks();
 //$tool_content .= "<br />";
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
 draw($tool_content, 2, null, $head_content);
 
 
 function showlinks()
 {
 	global $langComment, $langAddModule, $langName, $langSelection,
-               $langAddModulesButton, $cours_id, $mysqlMainDb, $code_cours,
+               $langAddModulesButton, $course_id, $mysqlMainDb, $course_code,
                $themeimg;
 
         $sqlLinks = "SELECT * FROM `$mysqlMainDb`.link
-                              WHERE course_id = $cours_id ORDER BY `order` DESC";
+                              WHERE course_id = $course_id ORDER BY `order` DESC";
 	$result = db_query($sqlLinks);
 	$numberoflinks=mysql_num_rows($result);
 
     $output = "
-<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='POST'>
+<form action='$_SERVER[PHP_SELF]?course=$course_code' method='POST'>
                       <table width='100%' class='tbl_alt'>
                     
                       <tr>
@@ -229,7 +229,7 @@ function showlinks()
 		$output .= 	"
     <tr>
       <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
-      <td align='left' valign='top'><a href='../link/link_goto.php?course=$code_cours&amp;link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
+      <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
       <br />
       <small class='comments'>".q($myrow[3])."</small></td>";
 		$output .= 	"

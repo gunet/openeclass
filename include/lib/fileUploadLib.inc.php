@@ -413,7 +413,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 function showquota($quota, $used) {
 
 	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, 
-               $code_cours, $subsystem, $group_id;
+               $course_code, $subsystem, $group_id;
 	include 'gaugebar.php';
 
 	$retstring = '';
@@ -434,9 +434,9 @@ function showquota($quota, $used) {
 	// telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	// ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
         if ($subsystem == 'GROUP') {
-                $link = "$_SERVER[PHP_SELF]?course=$code_cours&amp;group_id=$group_id";
+                $link = "$_SERVER[PHP_SELF]?course=$course_code&amp;group_id=$group_id";
         } else {
-                $link = "$_SERVER[PHP_SELF]?course=$code_cours";
+                $link = "$_SERVER[PHP_SELF]?course=$course_code";
         }
         $retstring .= "
                <div id='operations_container'>
@@ -483,7 +483,7 @@ function process_extracted_file($p_event, &$p_header) {
 
         global $file_comment, $file_category, $file_creator, $file_date, $file_subject,
                $file_title, $file_description, $file_author, $file_language,
-               $file_copyrighted, $uploadPath, $realFileSize, $basedir, $cours_id,
+               $file_copyrighted, $uploadPath, $realFileSize, $basedir, $course_id,
                $subsystem, $subsystem_id, $uploadPath, $group_sql;
 
         $replace = isset($_POST['replace']);
@@ -542,7 +542,7 @@ function process_extracted_file($p_event, &$p_header) {
 
                 $path .= '/' . safe_filename($format);
                 db_query("INSERT INTO document SET
-                                 course_id = $cours_id,
+                                 course_id = $course_id,
 				 subsystem = $subsystem,
                                  subsystem_id = $subsystem_id,
                                  path = '$path',
@@ -573,7 +573,7 @@ function process_extracted_file($p_event, &$p_header) {
 // Returns the full encoded path created.
 function make_path($path, $path_components)
 {
-        global $basedir, $nom, $prenom, $path_already_exists, $cours_id, $group_sql, $subsystem, $subsystem_id;
+        global $basedir, $nom, $prenom, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
 
         $path_already_exists = true;
         $depth = 1 + substr_count($path, '/');
@@ -594,7 +594,7 @@ function make_path($path, $path_components)
                         $path .= '/' . safe_filename();
                         mkdir($basedir . $path, 0775);
                         db_query("INSERT INTO document SET
-                                          course_id = $cours_id,
+                                          course_id = $course_id,
 					  subsystem = $subsystem,
                                           subsystem_id = $subsystem_id,
                                           path='$path',

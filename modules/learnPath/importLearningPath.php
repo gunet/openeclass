@@ -62,10 +62,10 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
-mysql_select_db($currentCourseID);
+mysql_select_db($course_code);
 
 // error handling
 $errorFound = false;
@@ -514,7 +514,7 @@ $errorMsgs = array();
 
 $maxFilledSpace = 100000000;
 
-$courseDir   = "courses/".$currentCourseID."/scormPackages/";
+$courseDir   = "courses/".$course_code."/scormPackages/";
 $baseWorkDir = $webDir.$courseDir; // path_id
 
 if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
@@ -535,14 +535,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     // we need a new path_id for this learning path so we prepare a line in DB
     // this line will be removed if an error occurs
     $sql = "SELECT MAX(`rank`)
-            FROM `".$TABLELEARNPATH."` WHERE `course_id` = $cours_id";
+            FROM `".$TABLELEARNPATH."` WHERE `course_id` = $course_id";
     $result = db_query($sql, $mysqlMainDb);
 
     list($rankMax) = mysql_fetch_row($result);
 
     $sql = "INSERT INTO `".$TABLELEARNPATH."`
             (`course_id`, `name`,`visible`,`rank`,`comment`)
-            VALUES ($cours_id, '". addslashes($lpName) ."', 0,".($rankMax+1).",'')";
+            VALUES ($course_id, '". addslashes($lpName) ."', 0,".($rankMax+1).",'')";
     db_query($sql, $mysqlMainDb);
 
 
@@ -894,7 +894,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
 
                     $sql = "INSERT INTO `".$TABLEMODULE."`
                             (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                            VALUES ($cours_id, '".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
+                            VALUES ($course_id, '".addslashes($chapterTitle)."' , '', '".CTLABEL_."','')";
 
                     $query = db_query($sql, $mysqlMainDb);
 
@@ -986,7 +986,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
 
                 $sql = "INSERT INTO `".$TABLEMODULE."`
                         (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                        VALUES ($cours_id, '".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
+                        VALUES ($course_id, '".addslashes($moduleName)."' , '".addslashes($description)."', '".$contentType."', '".addslashes($item['datafromlms'])."')";
                 $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
@@ -1044,7 +1044,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                 $sql = "UPDATE `".$TABLEMODULE."`
                         SET `startAsset_id` = ". (int)$insertedAsset_id[$i]."
                         WHERE `module_id` = ". (int)$insertedModule_id[$i] ."
-                        AND `course_id` = $cours_id";
+                        AND `course_id` = $course_id";
                 $query = db_query($sql, $mysqlMainDb);
 
                 if ( mysql_error() )
@@ -1129,7 +1129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                           WHERE 1 = 0";
         foreach ( $insertedModule_id as $insertedModule )
         {
-             $sqlDelModules .= " OR ( `module_id` = ". (int)$insertedModule ." AND `course_id` = $cours_id )";
+             $sqlDelModules .= " OR ( `module_id` = ". (int)$insertedModule ." AND `course_id` = $course_id )";
         }
         db_query($sqlDelModules, $mysqlMainDb);
 
@@ -1141,7 +1141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         // delete learning path
         $sqlDelLP = "DELETE FROM `".$TABLELEARNPATH."`
                      WHERE `learnPath_id` = ". (int)$tempPathId ."
-                     AND `course_id` = $cours_id";
+                     AND `course_id` = $course_id";
         db_query($sqlDelLP, $mysqlMainDb);
 
         // delete the directory (and files) of this learning path and all its content
@@ -1153,7 +1153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
         // finalize insertion : update the empty learning path insert that was made to find its id
         $sql = "SELECT MAX(`rank`)
                 FROM `".$TABLELEARNPATH."`
-                WHERE `course_id` = $cours_id";
+                WHERE `course_id` = $course_id";
         $result = db_query($sql, $mysqlMainDb);
 
         list($rankMax) = mysql_fetch_row($result);
@@ -1183,7 +1183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
                     `comment` = '".addslashes($lpComment)."',
                     `visible` = 1
                 WHERE `learnPath_id` = ". (int)$tempPathId ."
-                AND `course_id` = $cours_id";
+                AND `course_id` = $course_id";
         db_query($sql, $mysqlMainDb);
 
     }
@@ -1208,13 +1208,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if ( !$errorFound )
     {
         $tool_content .= "\n<br /><center><b>".$langInstalled."</b></center>";
-        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
+        $tool_content .= "\n<br /><br ><center><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".$tempPathId."\">".$lpName."</a></center>";
     }
     else
     {
         $tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    $tool_content .= "\n<br /><a href=\"learningPathList.php?course=$code_cours\">$langBack</a></p>";
+    $tool_content .= "\n<br /><a href=\"learningPathList.php?course=$course_code\">$langBack</a></p>";
 }
 else // if method == 'post'
 {
@@ -1223,7 +1223,7 @@ else // if method == 'post'
       UPLOAD FORM
      --------------------------------------*/
     $tool_content .= "
-    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\" method=\"post\">
+    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\" method=\"post\">
     <fieldset>
     <legend>$langImport</legend>
     <table width=\"100%\" class=\"tbl\">
@@ -1253,9 +1253,9 @@ else // if method == 'post'
     /*****************************************
      *  IMPORT SCORM DIRECTLY FROM DOCUMENTS
      *****************************************/
-    $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+    $basedir = $webDir . 'courses/' . $course_code . '/document';
     /*** Retrieve file info for current directory from database and disk ***/
-    $sql = db_query("SELECT * FROM document WHERE format='zip' AND course_id = $cours_id ORDER BY filename", $mysqlMainDb);
+    $sql = db_query("SELECT * FROM document WHERE format='zip' AND course_id = $course_id ORDER BY filename", $mysqlMainDb);
 
     $fileinfo = array();
     while($row = mysql_fetch_array($sql, MYSQL_ASSOC)) {
@@ -1274,7 +1274,7 @@ else // if method == 'post'
     
     
     $tool_content .= "\n<div class=\"fileman\">";
-    $tool_content .= "\n<form action='importFromDocument.php?course=$code_cours' method='post'>";
+    $tool_content .= "\n<form action='importFromDocument.php?course=$course_code' method='post'>";
     $tool_content .= "\n  <fieldset><legend>$langLearningPathImportFromDocuments</legend>";
     $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
     $tool_content .= "\n  <tbody>";

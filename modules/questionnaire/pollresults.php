@@ -26,14 +26,14 @@ include '../../include/baseTheme.php';
 require_once '../../include/libchart/libchart.php';
 
 $nameTools = $langPollCharts;
-$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);
 
 $questions = array();
 $answer_total = 0;
 
 if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$pid = intval($_GET['pid']);
-	$current_poll = db_query("SELECT * FROM poll WHERE course_id = $cours_id AND pid='$pid' ORDER BY pid", $mysqlMainDb);
+	$current_poll = db_query("SELECT * FROM poll WHERE course_id = $course_id AND pid='$pid' ORDER BY pid", $mysqlMainDb);
 	$thePoll = mysql_fetch_array($current_poll);
 
 	$tool_content .= "
@@ -94,7 +94,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                                 $dataSet->addPoint(new Point($label, $percentage));
                         }
                         $chart->setDataSet($dataSet);
-                        $chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+                        $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
                         $chart->render($webDir.$chart_path);
                         $tool_content .= '<img src="'.$urlServer.$chart_path.'" /><br />';
                 } else {

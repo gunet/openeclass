@@ -22,10 +22,10 @@
 
 function display_text_form()
 {
-	global $tool_content, $id, $langContent, $langAdd, $code_cours;
+	global $tool_content, $id, $langContent, $langAdd, $course_code;
 
 	$tool_content .= "
-        <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id'>";
+        <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>";
 	$tool_content .= "
         <fieldset>
         <legend>$langContent:</legend>".  rich_text_editor('comments', 4, 20, '') ."

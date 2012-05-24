@@ -237,8 +237,8 @@ if (isset($_GET['stats'])) {
 			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
 			$result = db_query("SELECT id, code, title, prof_names FROM course ORDER BY title");
 			while ($row = mysql_fetch_array($result)) {
-				$result_numb = db_query("SELECT user.user_id, cours_user.statut FROM cours_user, user, course
-					WHERE course.id = $row[id] AND cours_user.user_id = user.user_id");
+				$result_numb = db_query("SELECT user.user_id, course_user.statut FROM course_user, user, course
+					WHERE course.id = $row[id] AND course_user.user_id = user.user_id");
 				$teachers = $students = $visitors = 0;
 				while ($numrows = mysql_fetch_array($result_numb)) {
 					switch ($numrows['statut']) {

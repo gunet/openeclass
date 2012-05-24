@@ -60,7 +60,7 @@ mysql_select_db($mysqlMainDb);
 // check and set user access level for the tool
 if ( ! isset( $_REQUEST['wikiId'] ) )
 {
-    header( "Location: wiki.php?course=$code_cours" );
+    header( "Location: wiki.php?course=$course_code" );
     exit();
 }
 
@@ -72,8 +72,8 @@ if ( $_gid && $is_groupAllowed )
 {
     // group context
     $grouId = $_gid;
-    $navigation[]  = array ('url' => '../group/group.php?course='.$code_cours, 'name' => $langGroups);
-    $navigation[]= array ('url' => '../group/group_space.php?course='.$code_cours, 'name' => $_group['name']);
+    $navigation[]  = array ('url' => '../group/group.php?course='.$course_code, 'name' => $langGroups);
+    $navigation[]= array ('url' => '../group/group_space.php?course='.$course_code, 'name' => $_group['name']);
 }
 elseif ($_gid && ! $is_groupAllowed )
 {
@@ -114,7 +114,7 @@ if ( isset( $_REQUEST['wikiId'] ) )
     $sql = "SELECT `group_id` "
 	. "FROM `" . $tblList[ "wiki_properties" ] . "` "
 	. "WHERE `id` = " . $wikiId
-	." AND `course_id` = $cours_id"
+	." AND `course_id` = $course_id"
 	;
 
     $result = $con->getRowFromQuery( $sql );
@@ -508,8 +508,8 @@ $head_content .= "<script type=\"text/javascript\">"
     ;
 //navigation bar
     if (!add_units_navigation()) {
-	    $navigation[]= array ( 'url' => 'wiki.php?course='.$code_cours, 'name' => $langWiki);
-	    $navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;wikiId='.$wikiId.'&amp;action=show', 'name' => $wiki->getTitle());
+	    $navigation[]= array ( 'url' => 'wiki.php?course='.$course_code, 'name' => $langWiki);
+	    $navigation[]= array ( 'url' => 'page.php?course='.$course_code.'&amp;wikiId='.$wikiId.'&amp;action=show', 'name' => $wiki->getTitle());
     }
     mysql_select_db($mysqlMainDb);
 
@@ -518,7 +518,7 @@ switch( $action )
     case "edit":
     {
 	$dispTitle = ( $title == "__MainPage__" ) ? $langWikiMainPage : $title;
-	$navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;action=show&amp;wikiId='
+	$navigation[]= array ( 'url' => 'page.php?course='.$course_code.'&amp;action=show&amp;wikiId='
 	    . $wikiId . '&amp;title=' . $title
 	    , 'name' => $dispTitle );
 
@@ -541,7 +541,7 @@ switch( $action )
     case "history":
     {
 	$dispTitle = ( $title == "__MainPage__" ) ? $langWikiMainPage : $title;
-	$navigation[]= array ( 'url' => 'page.php?course='.$code_cours.'&amp;action=show&amp;wikiId='
+	$navigation[]= array ( 'url' => 'page.php?course='.$course_code.'&amp;action=show&amp;wikiId='
 	    . $wikiId . '&amp;title=' . $title
 	    , 'name' => $dispTitle );
 	$nameTools = $langWikiPageHistory;
@@ -619,7 +619,7 @@ $tool_content .= '
   <div id="operations_container">
     <ul id="opslist">' . "\n";
 $tool_content .= '          <li>'
-    . '<img src="'.$themeimg.'/wiki.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/wiki.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=show'
     . '&amp;title=__MainPage__'
@@ -627,7 +627,7 @@ $tool_content .= '          <li>'
     . $langWikiMainPage.'</a></li>' . "\n"
     ;
 $tool_content .= '          <li>'
-    . '<img src="'.$themeimg.'/history.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/history.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=recent'
     . '">'
@@ -635,14 +635,14 @@ $tool_content .= '          <li>'
     ;
 
 $tool_content .= '          <li>'
-    . '<img src="'.$themeimg.'/book.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+    . '<img src="'.$themeimg.'/book.png" align="middle" />&nbsp;<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
     . '&amp;wikiId=' . $wiki->getWikiId()
     . '&amp;action=all">'
     . $langWikiAllPages.'</a></li>' . "\n"
     ;
 
 $tool_content .= '          <li>'
-    . '<img src="'.$themeimg.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$code_cours
+    . '<img src="'.$themeimg.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$course_code
     . '">'
     . $langWikiList .'</a></li>' . "\n"
     ;
@@ -658,7 +658,7 @@ if ( $action == "edit" || $action == "diff" || $action == "history" )
 {
     $tool_content .= ''
 	. '<img src="'.$themeimg.'/back.png" align="middle" />&nbsp;'
-	. '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+	. '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
 	. '&amp;wikiId=' . $wiki->getWikiId()
 	. '&amp;action=show'
 	. '&amp;title=' . rawurlencode($title)
@@ -673,7 +673,7 @@ if ( $is_allowedToEdit || $is_allowedToCreate )
     {
 	$tool_content .= '&nbsp;&nbsp;&nbsp;'
 	    . '<img src="'.$themeimg.'/edit.png" align="middle" />&nbsp;'
-	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
 	    . '&amp;wikiId=' . $wiki->getWikiId()
 	    . '&amp;action=edit'
 	    . '&amp;title=' . rawurlencode( $title )
@@ -689,7 +689,7 @@ if ( $action == "show" || $action == "edit" || $action == "history" || $action =
     // active
     $tool_content .= '&nbsp;&nbsp;&nbsp;'
 	    . '<img src="'.$themeimg.'/version.png" align="middle" />&nbsp;'
-	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+	    . '<a class="claroCmd" href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
 	    . '&amp;wikiId=' . $wiki->getWikiId()
 	    . '&amp;action=history'
 	    . '&amp;title=' . rawurlencode( $title )
@@ -736,7 +736,7 @@ switch( $action )
 	$tool_content .= '</div>' . "\n";
 	$message = $langWikiConflictHowTo;
 	$tool_content .= "<div class='caution'>$message</div></br />";
-	$tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'" method="POST">';
+	$tool_content .= '<form id="editConflict" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'" method="POST">';
 	$tool_content .= '<textarea name="conflictContent" id="wiki_content"'
 	     . ' cols="80" rows="15" wrap="virtual">'
 	     ;
@@ -747,7 +747,7 @@ switch( $action )
 	$tool_content .= '<input type="hidden" name="title" value="'.$title.'" />' . "\n";
 	$tool_content .= '<input type="submit" name="action[edit]" value="'.$langWikiEditLastVersion.'" />' . "\n";
 	$url = $_SERVER['PHP_SELF']
-	    . '?course='.$code_cours
+	    . '?course='.$course_code
 	    . '&amp;wikiId=' . $wikiId
 	    . '&amp;title=' . $title
 	    . '&amp;action=show'
@@ -831,7 +831,7 @@ switch( $action )
 		    : $recentChange['title']
 		    ;
 
-		$entry = '<strong><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
+		$entry = '<strong><a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
 		    . $wikiId . '&amp;title=' . rawurlencode( $recentChange['title'] )
 		    . '&amp;action=show"'
 		    . '>'.$pgtitle.'</a></strong>'
@@ -861,7 +861,7 @@ switch( $action )
     {
 	// handle main page
 
-	$tool_content .= '<ul><li><a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours
+	$tool_content .= '<ul><li><a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code
 	    . '&amp;wikiId=' . $wikiId
 	    . '&amp;title=' . rawurlencode("__MainPage__")
 	    . '&amp;action=show">'
@@ -885,7 +885,7 @@ switch( $action )
 
 		$pgtitle = rawurlencode( $page['title'] );
 
-		$link = '<a href="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;wikiId='
+		$link = '<a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
 		    . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
 		    . '>' . $page['title'] . '</a>'
 		    ;
@@ -909,7 +909,7 @@ switch( $action )
 	}
 	else
 	{
-	    $script = $_SERVER['PHP_SELF']."?course=$code_cours";
+	    $script = $_SERVER['PHP_SELF']."?course=$course_code";
 
 	    $tool_content .= claro_disp_wiki_editor( $wikiId, $title, $versionId, $content, $script
 		, true, false )
@@ -1018,7 +1018,7 @@ switch( $action )
 	    ;
 
 	$tool_content .= '<div>' . "\n"
-	    . '<input type="hidden" name="course" value="'.$code_cours.'" />' . "\n"
+	    . '<input type="hidden" name="course" value="'.$course_code.'" />' . "\n"
 	    . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
 	    . '<input type="hidden" name="title" value="'.$title.'" />' . "\n"
 	    . '<input type="submit" name="action[diff]" value="'.$langWikiShowDifferences.'" />' . "\n"
@@ -1064,7 +1064,7 @@ switch( $action )
 
 		$userUrl = $userStr;
 
-		$versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;wikiId='
+		$versionUrl = '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;wikiId='
 		    . $wikiId . '&amp;title=' . rawurlencode( $title )
 		    . '&amp;action=show&amp;versionId=' . $version['id']
 		    . '">'

@@ -42,7 +42,7 @@ $sql = "SELECT f.name, t.title
             WHERE f.id = $forum
             AND t.id = $topic 
             AND t.forum_id = f.id
-            AND f.course_id = $cours_id";	
+            AND f.course_id = $course_id";	
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 
@@ -54,9 +54,9 @@ $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
 $nameTools = $langReply;
-$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $forum_name);
-$navigation[]= array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum_id", "name"=> $topic_title);
+$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
+$navigation[]= array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $forum_name);
+$navigation[]= array ("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", "name"=> $topic_title);
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 	$tool_content .= $langErrorTopicSelect;
@@ -71,7 +71,7 @@ if (isset($_POST['submit'])) {
 	if (trim($message) == '') {
                 $tool_content .= "
                 <p class='alert1'>$langEmptyMsg</p>
-                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
+                <p class='back'>&laquo; $langClick <a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langHere</a> $langReturnTopic</p>";
                 draw($tool_content, 2, null, $head_content);
 		exit();
 	}
@@ -114,16 +114,16 @@ if (isset($_POST['submit'])) {
 	$cat_name = category_name($category_id);
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id) 
-			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
-	$c = course_code_to_title($currentCourseID);
+			AND notify_sent = 1 AND course_id = $coursε_id AND user_id != $uid", $mysqlMainDb);
+	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
 	$forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
 	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />$forum_message <br /><br />$gunet<br /><a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
-	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
+	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />$forum_message <br /><br />$gunet<br /><a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
+	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
 	while ($r = mysql_fetch_array($sql)) {
-                if (get_user_email_notification($r['user_id'], $cours_id)) {
-                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                if (get_user_email_notification($r['user_id'], $course_id)) {
+                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
                         $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
                         $plain_body_topic_notify .= $unsubscribe.$linkhere;
                         $body_topic_notify .= $unsubscribe.$linkhere;
@@ -140,20 +140,20 @@ if (isset($_POST['submit'])) {
 		$page = '';
 	}
 	$_SESSION['message'] = "<p class='success'>$langStored</p>";
-	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic&forum=$forum_id" . $page);
+	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
 	exit;
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewtopic.php?course=$code_cours&topic=$topic&forum=$forum_id");	
+	header("Location: viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id");	
 } else {	
 	// Topic review
 	$tool_content .= "
         <div id='operations_container'>
             <ul id='opslist'>
-              <li><a href='viewtopic.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
+              <li><a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id' target='_blank'>$langTopicReview</a></li>
             </ul>
         </div>";
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum_id' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
 	<fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl' width='100%'>

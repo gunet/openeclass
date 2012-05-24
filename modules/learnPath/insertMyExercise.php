@@ -68,15 +68,15 @@ $(document).ready(function() {
 </script>
 EOF;
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
 mysql_select_db($mysqlMainDb);
 
 // see checked exercises to add
 
-$sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE course_id = $cours_id AND active = 1";
+$sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE course_id = $course_id AND active = 1";
 $resultex = db_query($sql);
 
 // for each exercise checked, try to add it to the learning path.
@@ -91,7 +91,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 WHERE A.`module_id` = M.`module_id`
                   AND A.`path` LIKE \"". (int)$insertedExercise."\"
                   AND M.`contentType` = \"".CTEXERCISE_."\"
-                  AND M.`course_id` = $cours_id";
+                  AND M.`course_id` = $course_id";
 
         $query = db_query($sql);
         $num = mysql_numrows($query);
@@ -99,7 +99,7 @@ while ($listex = mysql_fetch_array($resultex) )
         if($num == 0)
         {
             // select infos about added exercise
-            $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $cours_id AND `id` = ". (int)$insertedExercise;
+            $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $course_id AND `id` = ". (int)$insertedExercise;
 
             $result = db_query($sql);
             $exercise = mysql_fetch_array($result);
@@ -114,7 +114,7 @@ while ($listex = mysql_fetch_array($resultex) )
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ($cours_id, '".addslashes($exercise['title'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
+                    VALUES ($course_id, '".addslashes($exercise['title'])."' , '".addslashes($comment)."', '".CTEXERCISE_."','')";
             $query = db_query($sql);
             $insertedExercice_id = mysql_insert_id();
 
@@ -127,7 +127,7 @@ while ($listex = mysql_fetch_array($resultex) )
             $sql = "UPDATE `".$TABLEMODULE."`
                        SET `startAsset_id` = ". (int)$insertedAsset_id."
                      WHERE `module_id` = ". (int)$insertedExercice_id ."
-                     AND `course_id` = $cours_id";
+                     AND `course_id` = $course_id";
             $query = db_query($sql);
 
             // determine the default order of this Learning path
@@ -153,7 +153,7 @@ while ($listex = mysql_fetch_array($resultex) )
                        AND M.`startAsset_id` = A.`asset_id`
                        AND A.`path` = ". (int)$insertedExercise."
                        AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-                       AND M.`course_id` = $cours_id";
+                       AND M.`course_id` = $course_id";
 
             $query2 = db_query($sql);
             $num = mysql_numrows($query2);
@@ -174,7 +174,7 @@ while ($listex = mysql_fetch_array($resultex) )
                 $query = db_query($sql);
 
                 // select infos about added exercise
-                $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $cours_id AND `id` = ". (int)$insertedExercise;
+                $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE `course_id` = $course_id AND `id` = ". (int)$insertedExercise;
 
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
@@ -196,13 +196,13 @@ $tool_content .= display_my_exercises("", "");
 
 //STEP TWO : display learning path content
 //$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$code_cours">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
 
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
 	$tool_content .= "
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</p>";
 
 draw($tool_content, 2, null, $head_content);
 

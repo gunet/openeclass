@@ -79,7 +79,7 @@ class Dropbox_Work {
 		/*
 		* private function creating a new work object
 		*/
-		global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
+		global $dropbox_cnf, $dropbox_lang, $course_id, $mysqlMainDb;
 		
 		/*
 		* Do some sanity checks
@@ -106,11 +106,11 @@ class Dropbox_Work {
 		if ($GLOBALS['language'] == 'greek') {
 			$sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE course_id = $cours_id AND filename = '".addslashes($this->filename)."'";
+				WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
 		} else {
 			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
 				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE course_id = $cours_id AND filename = '".addslashes($this->filename)."'";
+				WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
 		}
 		$result = db_query($sql, $mysqlMainDb);
 		$res = mysql_fetch_array($result);
@@ -134,7 +134,7 @@ class Dropbox_Work {
 			$this->uploadDate = $this->lastUploadDate;
 			$sql="INSERT INTO `".$dropbox_cnf["fileTbl"]."` 
 				(course_id, uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate)
-				VALUES ('".addslashes($cours_id)."'
+				VALUES ('".addslashes($course_id)."'
 						, '".addslashes($this->uploaderId)."'
 						, '".addslashes($this->filename)."'
 						, '".addslashes($this->filesize)."'
@@ -339,7 +339,7 @@ class Dropbox_Person {
 		/*
 		* Constructor for recreating the Dropbox_Person object
 		*/
-		global $dropbox_cnf, $dropbox_lang, $cours_id, $mysqlMainDb;
+		global $dropbox_cnf, $dropbox_lang, $course_id, $mysqlMainDb;
 		
 		/*
 		* Fill in properties
@@ -363,7 +363,7 @@ class Dropbox_Person {
 					AND r.recipientId = p.personId
 					AND r.fileId = p.fileId
 					AND r.fileId = f.id
-					AND f.course_id = $cours_id";
+					AND f.course_id = $course_id";
         	$result = db_query($sql, $mysqlMainDb);
 		while ($res = mysql_fetch_array($result)) {
 			$this->receivedWork[] = new Dropbox_Work($res["fileId"]);
@@ -373,7 +373,7 @@ class Dropbox_Person {
 		* find all entries where this person is the sender/uploader
 		*/
 		$sql = "SELECT f.id FROM `".$dropbox_cnf["fileTbl"]."` f, `".$dropbox_cnf["personTbl"]."` p 
-				WHERE f.course_id = $cours_id 
+				WHERE f.course_id = $course_id 
 				AND f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
 				AND f.id = p.fileId";

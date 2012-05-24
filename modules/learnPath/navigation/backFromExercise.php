@@ -25,7 +25,7 @@
 $require_current_course = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
-$TOCurl = "../viewer_toc.php?course=$code_cours";
+$TOCurl = "../viewer_toc.php?course=$course_code";
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>

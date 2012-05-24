@@ -20,7 +20,7 @@
 
 function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	// globals
-	global $code_cours, $group_hidden_input;
+	global $course_code, $group_hidden_input;
 	
 	// lang globals
 	global $langAddMetadata, $langWorkFile, $langTitle, $langTitleHelp,
@@ -73,7 +73,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	$checkMap['meta_level']                = metaBuildCheckMap($metaLevels, "meta_level"); 
 	
 	$output = "
-	<form method='post' action='document.php?course=$code_cours'>
+	<form method='post' action='document.php?course=$course_code'>
 	<fieldset>
 	  <input type='hidden' name='metadataPath' value='". q($metadata) ."' />
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />

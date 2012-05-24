@@ -53,18 +53,18 @@
                 echo delete_field('cours', 'versionClaro');
         if (mysql_field_exists("$mysqlMainDb",'user','inst_id'))
                 echo delete_field('user', 'inst_id');
-	if (mysql_field_exists("$mysqlMainDb",'cours_user','role'))
-                echo delete_field('cours_user', 'role');
+	if (mysql_field_exists("$mysqlMainDb",'course_user','role'))
+                echo delete_field('course_user', 'role');
 
-	// add field to cours_user to keep track course user registration date
-	if (!mysql_field_exists($mysqlMainDb,'cours_user','reg_date')) {
-                echo add_field('cours_user','reg_date',"DATE NOT NULL");
-		db_query("UPDATE cours_user SET reg_date=NOW()");
+	// add field to course_user to keep track course user registration date
+	if (!mysql_field_exists($mysqlMainDb,'course_user','reg_date')) {
+                echo add_field('course_user','reg_date',"DATE NOT NULL");
+		db_query("UPDATE course_user SET reg_date=NOW()");
 	} else {
 		$min_reg_date_res = mysql_fetch_row(db_query("SELECT MIN(reg_date) 
-				FROM cours_user WHERE reg_date <> '0000-00-00'"));
+				FROM course_user WHERE reg_date <> '0000-00-00'"));
 		$min_reg_date = $min_reg_date_res[0]? ("'" . $min_reg_date_res[0] . "'"): 'NOW()';
-		db_query("UPDATE cours_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");
+		db_query("UPDATE course_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");
 	}
 
         // kstratos - UOM

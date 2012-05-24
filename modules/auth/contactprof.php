@@ -29,7 +29,7 @@ $tool_content = "";
 if (isset($_POST["submit"])) {
 //	$tool_content .= "<table width=\"99%\"><tbody><tr><td>";
 
-	$sql=db_query("SELECT * FROM cours_user WHERE cours_id = (SELECT cours_id FROM cours WHERE code = "  . quote($_POST['cc']) . ")");
+	$sql=db_query("SELECT * FROM course_user WHERE course_id = (SELECT course_id FROM cours WHERE code = "  . quote($_POST['cc']) . ")");
 
 	while ($m = mysql_fetch_array($sql)) {
 

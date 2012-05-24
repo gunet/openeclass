@@ -484,7 +484,10 @@ elseif (isset($_POST['do_restore'])) {
                 // New-style backup
                 $data = unserialize(file_get_contents($cours_file));
                 $data = $data[0];
-                $tool_content = course_details_form($data['fake_code'], $data['intitule'],
+                if (isset($data['fake_code'])) {
+                        $data['public_code'] = $data['fake_code'];
+                }
+                $tool_content = course_details_form($data['public_code'], $data['intitule'],
                                                     $data['titulaires'], $data['languageCourse'],
                                                     $data['visible'], $data['description']);
         } else {
@@ -819,7 +822,7 @@ function create_course($code, $lang, $title, $desc, $departments, $vis, $prof, $
 		exit;
         }
 	db_query("INSERT into `$mysqlMainDb`.cours
-		(code, languageCourse, intitule, description, visible, titulaires, fake_code)
+		(code, languageCourse, intitule, description, visible, titulaires, public_code)
 		VALUES (" .
 		join(', ', array(
 			quote($repertoire),
@@ -872,6 +875,13 @@ function visibility_select($current)
 return $ret;
 }
 
+// Callback to rename older backup files during unzip
+function fix_old_backup_names($p_event, &$p_header)
+{
+        die($p_header['filename']);
+        return 1;
+}
+
 // Unzip backup file
 function unpack_zip_show_files($zipfile)
 {
@@ -883,7 +893,7 @@ function unpack_zip_show_files($zipfile)
 	mkpath($destdir);
 	$zip = new pclZip($zipfile);
 	chdir($destdir);	
-	$state = $zip->extract();
+	$state = $zip->extract(PCLZIP_CB_PRE_EXTRACT, 'fix_old_backup_names');
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
                        <form action='$_SERVER[PHP_SELF]' method='post'>
                          <ol>";

@@ -42,7 +42,7 @@ $end_cal = $jscalendar->make_input_field(
                  'value' => $u_date_end));
 
 
-$qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ".course_code_to_id($currentCourseID);        
+$qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ".course_code_to_id($course_code);        
 $mod_opts = '<option value="-1">'.$langAllModules."</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
@@ -66,7 +66,7 @@ $statsIntervalOptions =
     '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
 $tool_content .= '
-<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
 <fieldset>
   <legend>'.$langUsageVisits.'</legend>
   <table class="tbl">
@@ -97,7 +97,7 @@ $tool_content .= '
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$course_code.'">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>

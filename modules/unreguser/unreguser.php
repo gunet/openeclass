@@ -33,8 +33,8 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 		draw($tool_content, 1);
 		exit;
 	} else {
-		$q = db_query ("SELECT code, visible FROM course, cours_user
-			WHERE course.id = cours_user.cours_id
+		$q = db_query ("SELECT code, visible FROM course, course_user
+			WHERE course.id = course_user.course_id
                         AND course.visible != ".COURSE_INACTIVE."
 			AND user_id = '$uid' LIMIT 1") ;
 		if (mysql_num_rows($q) == 0) {
@@ -55,7 +55,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 } else {
 	if (isset($uid)) {
                 // unregister user from inactive courses (if any)
-                 db_query("DELETE from cours_user WHERE user_id = $uid");
+                 db_query("DELETE from course_user WHERE user_id = $uid");
                  db_query("DELETE FROM group_members WHERE user_id = $uid");
                  // finally delete user
 		 db_query("DELETE from user WHERE user_id = $uid");

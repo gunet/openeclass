@@ -44,7 +44,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langExercicesView;
-$picturePath='../../courses/'.$currentCourseID.'/image';
+$picturePath='../../courses/'.$course_code.'/image';
 
 require_once '../video/video_functions.php';
 load_modal_box();
@@ -56,9 +56,9 @@ if (isset($_GET['exerciseId'])) {
 if (isset($exerciseId)) {
 	// security check 
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE` 
-		WHERE course_id = $cours_id AND id = '$exerciseId'", $mysqlMainDb));
+		WHERE course_id = $course_id AND id = '$exerciseId'", $mysqlMainDb));
 	if (($active['active'] == 0) and (!$is_editor)) {
-		header('Location: exercise.php?course='.$code_cours);
+		header('Location: exercise.php?course='.$course_code);
 		exit();
 	} 
 }
@@ -70,7 +70,7 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: exercise.php?course='.$code_cours);
+	header('Location: exercise.php?course='.$course_code);
 	exit();
 }
 	
@@ -98,7 +98,7 @@ if (isset($_POST['formSent'])) {
 		if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-			header('Location: exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+			header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
@@ -131,13 +131,13 @@ if (isset($_POST['formSent'])) {
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header('Location: exercise_result.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+		header('Location: exercise_result.php?course='.$course_code.'&exerciseId='.$exerciseId);
 		exit();
 	}
 } // end of submit
 
 if (!add_units_navigation()) {
-	$navigation[] = array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
+	$navigation[] = array("url" => "exercise.php?course=$course_code","name" => $langExercices);
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -178,7 +178,7 @@ if (!$is_editor) {
         $error = FALSE;
         // check if exercise has expired or is active
         $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-                        WHERE eid = '$eid_temp' AND uid = '$uid'", $currentCourseID));
+                        WHERE eid = '$eid_temp' AND uid = '$uid'", $course_code));
         ++$currentAttempt[0];
         if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
                 $message = $langExerciseMaxAttemptsReached;
@@ -197,7 +197,7 @@ if (!$is_editor) {
                     </tr>
                     <tr>
                       <td><br/><br/><br/><div align='center'>
-                        <a href='exercise.php?course=$code_cours'>$langBack</a></div></td>
+                        <a href='exercise.php?course=$course_code'>$langBack</a></div></td>
                     </tr>
                     </table>";
                 draw($tool_content, 2);
@@ -243,7 +243,7 @@ $tool_content .= "
 
   <br />
 
-  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+  <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	

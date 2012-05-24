@@ -22,16 +22,16 @@
 
 function list_links()
 {
-        global $id, $cours_id, $currentCourseID, $tool_content, $urlServer, $mysqlMainDb,
+        global $id, $course_id, $course_code, $tool_content, $urlServer, $mysqlMainDb,
                $langNoCategory, $langCategorisedLinks, $langComments, $langAddModulesButton,
-               $langChoice, $langNoLinksExist, $langLinks, $code_cours, $themeimg;
+               $langChoice, $langNoLinksExist, $langLinks, $course_code, $themeimg;
 
         mysql_select_db($mysqlMainDb);
-        $result = db_query("SELECT * FROM link WHERE course_id = $cours_id");
+        $result = db_query("SELECT * FROM link WHERE course_id = $course_id");
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langNoLinksExist</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>" .
@@ -39,7 +39,7 @@ function list_links()
                                  "\n    <th align='left'>$langComments</th>" .
                                  "\n    <th width='80'>$langChoice</th>" .
                                  "\n  </tr>";
-		$sql = db_query("SELECT * FROM link_category WHERE course_id = $cours_id");
+		$sql = db_query("SELECT * FROM link_category WHERE course_id = $course_id");
 		if (mysql_num_rows($sql) > 0) {
 			$tool_content .= "\n  <tr class='odd'>" .
                                          "\n    <td colspan='3' class='bold'>&nbsp;$langCategorisedLinks</td>".
@@ -51,7 +51,7 @@ function list_links()
 				$tool_content .= "\n    <td>" . standard_text_escape($catrow['description']) . "</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='catlink[]' value='$catrow[id]' /></td>";
 				$tool_content .= "\n  </tr>";
-				$sql2 = db_query("SELECT * FROM link WHERE course_id = $cours_id AND category = $catrow[id]");
+				$sql2 = db_query("SELECT * FROM link WHERE course_id = $course_id AND category = $catrow[id]");
 				while($linkcatrow = mysql_fetch_array($sql2, MYSQL_ASSOC)) {
 					$tool_content .= "\n  <tr class='even'>";
 					$tool_content .= "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkcatrow['url']) . "' target='_blank'>" .
@@ -62,7 +62,7 @@ function list_links()
 				}
 			}
 		}
-		$result = db_query("SELECT * FROM link WHERE course_id = $cours_id AND category = 0");
+		$result = db_query("SELECT * FROM link WHERE course_id = $course_id AND category = 0");
 		$linkinfo = array();
 	        while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $linkinfo[] = array(

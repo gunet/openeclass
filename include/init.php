@@ -280,13 +280,13 @@ if (isset($require_current_course) and $require_current_course) {
 		$errorMessagePath = "../../";
 	} else {        
 		$currentCourse = $dbname = $_SESSION['dbname'];
-		$result = db_query("SELECT course.id, course.code, 
-                                        course.public_code, course.title, hierarchy.name AS faculte,
-                                        course.prof_names, course.lang, course.visible
-                                        FROM course, course_department, hierarchy
-                                        WHERE course.id = course_department.course AND
-                                        hierarchy.id = course_department.department AND
-                                        course.code=" . autoquote($dbname));
+                $result = db_query("SELECT course.id, course.code, course.public_code, course.title,
+                                           course.prof_names, course.lang, course.visible,
+                                           hierarchy.name AS faculte
+                                           FROM course, course_department, hierarchy
+                                           WHERE course.id = course_department.course AND
+                                                 hierarchy.id = course_department.department AND
+                                                 course.code=" . autoquote($dbname));
 
 		if (!$result or mysql_num_rows($result) == 0) {
                     if (defined('M_INIT')) {
@@ -299,25 +299,23 @@ if (isset($require_current_course) and $require_current_course) {
                     }
 		}
                 
-		while ($theCourse = mysql_fetch_array($result)) {
- 			$cours_id = $theCourse['id'];
-			$fake_code = $theCourse['public_code'];
-			$code_cours = $theCourse['code'];
-			$title = $theCourse['title'];
-			$fac = $theCourse['faculte'];
-			$titulaires = $theCourse['prof_names'];
-			$languageInterface = $theCourse['lang'];
-			$visible = $theCourse['visible'];
+		while ($course_info = mysql_fetch_assoc($result)) {
+ 			$course_id = $course_info['id'];
+			$public_code = $course_info['public_code'];
+			$course_code = $course_info['code'];
+			$title = $course_info['title'];
+			$fac = $course_info['faculte'];
+			$titulaires = $course_info['prof_names'];
+			$languageInterface = $course_info['lang'];
+			$visible = $course_info['visible'];
 			// New variables
-			$currentCourseCode = $fake_code ;
-			$currentCourseID = $code_cours;
 			$currentCourseName = $title;
 			$currentCourseDepartment = $fac;
 			$currentCourseTitular = $titulaires;
 			$currentCourseLanguage = $languageInterface;
 		}
 
-		if (!isset($code_cours) or empty($code_cours)) {
+		if (!isset($course_code) or empty($course_code)) {
 			$toolContent_ErrorExists = caution($langLessonDoesNotExist);
 			$errorMessagePath = "../../";
 		}
@@ -330,9 +328,9 @@ if (isset($require_current_course) and $require_current_course) {
 		if ($is_admin) {
 			$statut = 1;
 		} else {
-			$res2 = db_query("SELECT statut FROM cours_user
-                                                WHERE user_id = $uid AND
-                                                cours_id = $cours_id");
+			$res2 = db_query("SELECT statut FROM course_user
+                                                 WHERE user_id = $uid AND
+                                                       course_id = $course_id");
 			if ($res2 and mysql_num_rows($res2) > 0) {
 				list($statut) = mysql_fetch_row($res2);
 			}

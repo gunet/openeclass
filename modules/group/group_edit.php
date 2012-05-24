@@ -39,8 +39,8 @@ include 'group_functions.php';
 initialize_group_id();
 initialize_group_info($group_id);
 
-$navigation[] = array ('url' => 'group.php?course='.$code_cours, 'name' => $langGroups);
-$navigation[] = array ('url' => "group_space.php?course=$code_cours&amp;group_id=$group_id", 'name' => q($group_name));
+$navigation[] = array ('url' => 'group.php?course='.$course_code, 'name' => $langGroups);
+$navigation[] = array ('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => q($group_name));
 
 load_js('jquery');
 load_js('jquery-ui');
@@ -57,7 +57,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
 if (!($is_editor or $is_tutor)) {
-        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
+        header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
         exit;
 }
 
@@ -82,7 +82,7 @@ if (isset($_POST['modify'])) {
 
         db_query("UPDATE forum SET name = $name WHERE id =
                         (SELECT forum_id FROM `group` WHERE id = $group_id)
-                            AND course_id = $cours_id");
+                            AND course_id = $course_id");
 
         db_query("DELETE FROM group_members WHERE group_id = $group_id AND is_tutor = 1");
         if (isset($_POST['tutor'])) {
@@ -122,10 +122,10 @@ if ($is_editor) {
                                    user.user_id IN (SELECT user_id FROM group_members
                                                                    WHERE group_id = $group_id AND
                                                                          is_tutor = 1) AS is_tutor
-                              FROM cours_user, user
-                              WHERE cours_user.user_id = user.user_id AND
-                                    cours_user.tutor = 1 AND
-                                    cours_user.cours_id = $cours_id
+                              FROM course_user, user
+                              WHERE course_user.user_id = user.user_id AND
+                                    course_user.tutor = 1 AND
+                                    course_user.course_id = $course_id
                               ORDER BY nom, prenom, user_id");
         while ($row = mysql_fetch_array($q)) {
                 $selected = $row['is_tutor']? ' selected="selected"': '';
@@ -145,8 +145,8 @@ $tool_content_group_description = q($group_description);
 if ($multi_reg) {
         // Students registered to the course but not members of this group
         $sqll = "SELECT u.user_id, u.nom, u.prenom
-                        FROM user u, cours_user cu
-                        WHERE cu.cours_id = $cours_id AND
+                        FROM user u, course_user cu
+                        WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
                               u.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
                               cu.statut = 5
@@ -155,13 +155,13 @@ if ($multi_reg) {
 } else {
         // Students registered to the course but members of no group
         $sqll = "SELECT u.user_id, u.nom, u.prenom
-                        FROM (user u, cours_user cu)
-                        WHERE cu.cours_id = $cours_id AND
+                        FROM (user u, course_user cu)
+                        WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
                               cu.statut = 5 AND
                               u.user_id NOT IN (SELECT user_id FROM group_members, `group`
                                                                WHERE `group`.id = group_members.group_id AND
-                                                               `group`.course_id = $cours_id)
+                                                               `group`.course_id = $course_id)
                         GROUP BY u.user_id
                         ORDER BY u.nom, u.prenom";
 }
@@ -193,12 +193,12 @@ if (!empty($message)) {
 $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='group_space.php?course=$code_cours&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
-                ($is_editor? "<li><a href='../user/user.php?course=$code_cours'>$langAddTutors</a></li>": '') . "</ul></div>";
+        <li><a href='group_space.php?course=$course_code&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
+                ($is_editor? "<li><a href='../user/user.php?course=$course_code'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="
-  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
     <fieldset>
     <legend>$langGroupInfo</legend>
     <table width='99%' class='tbl'>

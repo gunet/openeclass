@@ -71,9 +71,9 @@ function table_row($title, $content, $html = false)
 // use the assignment's id instead. Also insures that secret subdir exists
 function work_secret($id)
 {
-	global $mysqlMainDb, $cours_id, $workPath, $coursePath;
+	global $mysqlMainDb, $course_id, $workPath, $coursePath;
 	
-	$res = db_query("SELECT secret_directory FROM `$mysqlMainDb`.assignments WHERE course_id = $cours_id AND id = '$id'", $mysqlMainDb);
+	$res = db_query("SELECT secret_directory FROM `$mysqlMainDb`.assignments WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb);
 	if ($res) {
 		$secret = mysql_fetch_row($res);
 		if (!empty($secret[0])) {
@@ -98,8 +98,8 @@ function work_secret($id)
 // Is this a group assignment?
 function is_group_assignment($id)
 {
-	global $tool_content, $mysqlMainDb, $cours_id;
-	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE course_id = $cours_id AND id = '$id'");
+	global $tool_content, $mysqlMainDb, $course_id;
+	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE course_id = $course_id AND id = '$id'");
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		if ($row[0] == 0) {
@@ -144,7 +144,7 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 // Find submissions by a user (or the user's groups)
 function find_submissions($is_group_assignment, $uid, $id, $gids)
 {
-        global $cours_id, $mysqlMainDb;
+        global $course_id, $mysqlMainDb;
         if ($is_group_assignment AND count($gids)) {
                 $groups_sql = join(', ', array_keys($gids));
                 $res = db_query("SELECT id, uid, group_id, submission_date,
@@ -198,7 +198,7 @@ function submission_grade($subid)
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE)
 {
-        global $tool_content, $cours_id, $mysqlMainDb;
+        global $tool_content, $course_id, $mysqlMainDb;
 
         $res = db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
                                   WHERE assignment_id = '$id'
@@ -207,7 +207,7 @@ function was_graded($uid, $id, $ret_val = FALSE)
                                                                           `$mysqlMainDb`.group_members AS members
                                                             WHERE grp.id = members.group_id AND
                                                                   user_id = $uid AND
-                                                                  course_id = $cours_id))");
+                                                                  course_id = $course_id))");
         if ($res) {
                 while ($row = mysql_fetch_array($res)) {
                         if ($row['grade']) {
@@ -227,7 +227,7 @@ function was_graded($uid, $id, $ret_val = FALSE)
 // Show details of a submission
 function show_submission_details($id)
 {
-	global $uid, $m, $mysqlMainDb, $langSubmittedAndGraded, $tool_content, $code_cours;
+	global $uid, $m, $mysqlMainDb, $langSubmittedAndGraded, $tool_content, $course_code;
 	$sub = mysql_fetch_array(
 		db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
 			           WHERE id = '$id'"));
@@ -244,11 +244,11 @@ function show_submission_details($id)
 	
 	if ($sub['uid'] != $uid) {
 		$notice .= "<br>$m[submitted_by_other_member] " .
-			"<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
+			"<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
 			"$m[your_group] ".gid_to_name($sub['group_id'])."</a> (".display_user($sub['uid']).")";
         } elseif ($sub['group_id']) {
                 $notice .= "<br>$m[groupsubmit] " .
-                        "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$sub[group_id]'>".
+                        "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
                         "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>";
         }
 	
@@ -274,7 +274,7 @@ function show_submission_details($id)
         </tr>
         <tr>
           <th>".$m['filename'].":</th>
-          <td><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;get=$sub[id]'>".q($sub['file_name'])."</a></td>
+          <td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;get=$sub[id]'>".q($sub['file_name'])."</a></td>
         </tr>";
 		    table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "

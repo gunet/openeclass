@@ -22,10 +22,10 @@
 
 function list_forums()
 {
-        global $id, $tool_content, $urlServer, $cours_id,
-               $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $code_cours;
+        global $id, $tool_content, $urlServer, $course_id,
+               $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langForums, $course_code;
 
-        $result = db_query("SELECT * FROM forum WHERE course_id = $cours_id");
+        $result = db_query("SELECT * FROM forum WHERE course_id = $course_id");
         $foruminfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $foruminfo[] = array(
@@ -37,7 +37,7 @@ function list_forums()
         if (count($foruminfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoForums</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>" .
                                  "\n  <input type='hidden' name='id' value='$id' />" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>".
@@ -49,7 +49,7 @@ function list_forums()
 		foreach ($foruminfo as $entry) {
 			$tool_content .= "<tr class='odd'>";
 			$tool_content .= "<td>
-			<a href='${urlServer}modules/phpbb/viewforum.php?course=$code_cours&amp;forum=$entry[id]'>$entry[name]</a></td>";
+			<a href='${urlServer}modules/phpbb/viewforum.php?course=$course_code&amp;forum=$entry[id]'>$entry[name]</a></td>";
 			$tool_content .= "<td>$entry[comment]</td>";
 			$tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
 			$tool_content .= "</tr>";
@@ -64,7 +64,7 @@ function list_forums()
 				}
 				foreach ($topicinfo as $topicentry) {
 					$tool_content .= "\n  <tr class='even'>";
-					$tool_content .= "\n    <td>&nbsp;<img src='../../modules/phpbb/images/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/phpbb/viewtopic.php?course=$code_cours&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
+					$tool_content .= "\n    <td>&nbsp;<img src='../../modules/phpbb/images/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/phpbb/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
 					$tool_content .= "\n    <td>&nbsp;</td>";
 					$tool_content .= "\n    <td class='center'><input type='checkbox' name='forum[]'  value='$entry[id]:$topicentry[topic_id]' /></td>";
 					$tool_content .= "\n  </tr>";

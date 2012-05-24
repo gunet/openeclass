@@ -572,9 +572,9 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 
 		if ($_SESSION[IMPORT_UNITS_SIZE] > 0) {
 			// find course id
-			$result = db_query("SELECT cours_id FROM cours WHERE cours.code='" . $repertoire ."'");
+			$result = db_query("SELECT course_id FROM cours WHERE cours.code='" . $repertoire ."'");
 			$theCourse = mysql_fetch_array($result);
-			$cid = $theCourse["cours_id"];
+			$cid = $theCourse["course_id"];
 			
 			foreach ($_SESSION[IMPORT_UNITS] as $key => $unit) {
 				// find order

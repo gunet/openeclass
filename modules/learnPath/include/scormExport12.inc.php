@@ -152,14 +152,14 @@ class ScormExport
      */
     function fetch()
     {
-        global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $currentCourseID, 
-               $mysqlMainDb, $cours_id, $langLearningPathNotFound, $langLearningPathEmpty;
+        global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $course_code, 
+               $mysqlMainDb, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
     
         /* Get general infos about the learning path */
         $sql = 'SELECT `name`, `comment`
                 FROM `'.$TABLELEARNPATH.'`
                 WHERE `learnPath_id` = '. $this->id .'
-        		AND `course_id` = '. $cours_id;
+        		AND `course_id` = '. $course_id;
                 
         $result = db_query($sql, $mysqlMainDb);
         if ( empty($result) )
@@ -181,12 +181,12 @@ class ScormExport
         /* Build various directories' names */
         
         // Replace ',' too, because pclzip doesn't support it.
-        $this->destDir = $webDir . "courses/" . $currentCourseID . '/temp/' 
+        $this->destDir = $webDir . "courses/" . $course_code . '/temp/' 
             . str_replace(',', '_', replace_dangerous_char($this->name));
-        $this->srcDirDocument = $webDir . "courses/" . $currentCourseID . "/document";
-        $this->srcDirExercise  = $webDir . "courses/" . $currentCourseID . "/exercise";
-        $this->srcDirScorm    = $webDir . "courses/" . $currentCourseID . "/scormPackages/path_".$this->id;
-        $this->srcDirVideo = $webDir . "video/" . $currentCourseID;
+        $this->srcDirDocument = $webDir . "courses/" . $course_code . "/document";
+        $this->srcDirExercise  = $webDir . "courses/" . $course_code . "/exercise";
+        $this->srcDirScorm    = $webDir . "courses/" . $course_code . "/scormPackages/path_".$this->id;
+        $this->srcDirVideo = $webDir . "video/" . $course_code;
         
         /* Now, get the complete list of modules, etc... */
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`, 
@@ -198,7 +198,7 @@ class ScormExport
                 LEFT JOIN `'.$TABLEASSET.'` AS A
                        ON M.`startAsset_id` = A.`asset_id`
                 WHERE LPM.`learnPath_id` = '. $this->id.'
-                AND M.`course_id` = '. $cours_id .'
+                AND M.`course_id` = '. $course_id .'
                 ORDER BY LPM.`parent`, LPM.`rank`
                ';
 
@@ -930,7 +930,7 @@ class ScormExport
             }
             
             $course_description = "";
-            //mysql_select_db("$currentCourseID",$db);
+            //mysql_select_db("$course_code",$db);
 			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 			$res = db_query($sql);
 			if (mysql_num_rows($res) >0 )

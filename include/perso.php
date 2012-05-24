@@ -38,15 +38,15 @@ define('MAIN', 0);
 
 include 'redirector.php';
 $status = array();
-$sql = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
-                        course.title title, course.prof_names profs, cours_user.statut statut
-                FROM course JOIN cours_user ON course.id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid        
+$sql = "SELECT course.id cid, course.code code, course.public_code,
+                        course.title title, course.prof_names profs, course_user.statut statut
+                FROM course JOIN course_user ON course.id = course_user.course_id
+                WHERE course_user.user_id = $uid        
                 ORDER BY statut, course.title, course.prof_names";
-$sql2 = "SELECT course.id cours_id, course.code code, course.public_code fake_code,
-                        course.title title, course.prof_names profs, cours_user.statut statut
-                FROM course JOIN cours_user ON course.id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid
+$sql2 = "SELECT course.id cid, course.code code, course.public_code,
+                        course.title title, course.prof_names profs, course_user.statut statut
+                FROM course JOIN course_user ON course.id = course_user.course_id
+                WHERE course_user.user_id = $uid
                 AND course.visible != ".COURSE_INACTIVE."
                 ORDER BY statut, course.title, course.prof_names";
 

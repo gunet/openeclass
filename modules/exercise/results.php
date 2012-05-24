@@ -36,7 +36,7 @@ require_once '../video/video_functions.php';
 load_modal_box();
 
 $nameTools = $langResults;
-$navigation[]=array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
+$navigation[]=array("url" => "exercise.php?course=$course_code","name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = $_GET['exerciseId'];
@@ -74,7 +74,7 @@ $tool_content .= "
     <br/>";
 
 mysql_select_db($mysqlMainDb);
-$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $cours_id)";
+$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $course_id)";
 $result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];

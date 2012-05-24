@@ -70,7 +70,7 @@ if ($not_found) {
 
 mysql_select_db($mysqlMainDb);
 
-$ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$ebook_id/";
+$ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
     if (!$is_in_playmode)
@@ -82,7 +82,7 @@ if ($show_orphan_file and $file_path) {
         $file_info = public_path_to_disk_path($path_components, '');
         
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer .'modules/ebook/document.php?course='. $code_cours .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
+        $mediaURL = $urlServer .'modules/ebook/document.php?course='. $course_code .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
         
         echo media_html_object($mediaPath, $mediaURL);
         exit();
@@ -95,7 +95,7 @@ if ($unit !== false) {
 	$exit_fullscreen_link = $urlAppend . '/modules/units/?id=' . $unit;
 	$unit_parameter = 'unit=' . $unit;
 } else {
-	$exit_fullscreen_link = $urlAppend . '/courses/' . $currentCourseID . '/';
+	$exit_fullscreen_link = $urlAppend . '/courses/' . $course_code . '/';
 	$unit_parameter = '';
 }
 $q = db_query("SELECT ebook_section.id AS sid,
@@ -108,11 +108,11 @@ $q = db_query("SELECT ebook_section.id AS sid,
                       document.filename
                FROM ebook, ebook_section, ebook_subsection, document
                WHERE ebook.id = $ebook_id AND
-                     ebook.course_id = $cours_id AND
+                     ebook.course_id = $course_id AND
                      ebook_section.ebook_id = ebook.id AND
                      ebook_section.id = ebook_subsection.section_id AND
                      document.id = ebook_subsection.file_id AND
-                     document.course_id = $cours_id AND
+                     document.course_id = $course_id AND
                      document.subsystem = $subsystem
                      ORDER BY CONVERT(psid, UNSIGNED), psid,
                               CONVERT(pssid, UNSIGNED), pssid");
@@ -176,9 +176,9 @@ $t->set_file('page', 'ebook_fullscreen.html');
 $t->set_var('page_title', q($currentCourseName . ': ' . $nameTools));
 $t->set_var('course_title', q($currentCourseName));
 $t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
-$t->set_var('course_home_link', $urlAppend . '/courses/' . $currentCourseID . '/');
+$t->set_var('course_home_link', $urlAppend . '/courses/' . $course_code . '/');
 $t->set_var('course_ebook', $langEBook);
-$t->set_var('course_ebook_link', $urlAppend . '/modules/ebook/index.php?course=' . $currentCourseID);
+$t->set_var('course_ebook_link', $urlAppend . '/modules/ebook/index.php?course=' . $course_code);
 $t->set_var('exit_fullscreen_link', $exit_fullscreen_link);
 $t->set_var('unit_parameter', $unit_parameter);
 $t->set_var('template_base', $urlAppend . '/template/' . $theme . '/');

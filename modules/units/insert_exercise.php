@@ -22,11 +22,11 @@
 
 function list_exercises()
 {
-        global $id, $mysqlMainDb, $cours_id, $tool_content, $urlServer,
-               $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $code_cours;
+        global $id, $mysqlMainDb, $course_id, $tool_content, $urlServer,
+               $langComments, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $course_code;
 
 
-        $result = db_query("SELECT * FROM exercise WHERE course_id = $cours_id", $mysqlMainDb);
+        $result = db_query("SELECT * FROM exercise WHERE course_id = $course_id", $mysqlMainDb);
         $quizinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $quizinfo[] = array(
@@ -38,7 +38,7 @@ function list_exercises()
         if (count($quizinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoExercises</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
                                  "\n    <th><div align='left'>&nbsp;$langExercices</div></th>" .
@@ -57,7 +57,7 @@ function list_exercises()
           }
 			}
 			$tool_content .= "\n  <tr class='$vis'>";
-			$tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$code_cours&amp;exerciseId=$entry[id]'>$entry[name]</a></td>";
+			$tool_content .= "\n    <td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>$entry[name]</a></td>";
 			$tool_content .= "\n    <td><div align='left'>$entry[comment]</div></td>";
 			$tool_content .= "\n    <td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
 			$tool_content .= "\n  </tr>";

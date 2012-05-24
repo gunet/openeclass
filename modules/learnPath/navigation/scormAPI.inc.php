@@ -73,7 +73,7 @@ if($uid)
                AND M.`module_id` = LPM.`module_id`
                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
-               AND M.`course_id` = $cours_id";
+               AND M.`course_id` = $course_id";
     $userProgressionDetails = db_query_get_single_row($sql);
     $userProgressionDetails['nom'] = $userDetails['nom'];
     $userProgressionDetails['prenom'] = $userDetails['prenom'];

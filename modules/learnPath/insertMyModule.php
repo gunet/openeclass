@@ -70,8 +70,8 @@ $(document).ready(function() {
 </script>
 EOF;
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPath);
-$navigation[]= array ("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
+$navigation[]= array ("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyModulesTitle;
 
 
@@ -87,7 +87,7 @@ function buildRequestModules()
 
  global $TABLELEARNPATHMODULE;
  global $TABLEMODULE;
- global $TABLEASSET, $langLearningModule, $langSelection, $langComments, $cours_id;
+ global $TABLEASSET, $langLearningModule, $langSelection, $langComments, $course_id;
 
  $firstSql = "SELECT LPM.`module_id`
               FROM `".$TABLELEARNPATHMODULE."` AS LPM
@@ -103,7 +103,7 @@ function buildRequestModules()
          WHERE M.`contentType` != \"SCORM\"
            AND M.`contentType` != \"SCORM_ASSET\"
            AND M.`contentType` != \"LABEL\"
-           AND M.`course_id` = $cours_id";
+           AND M.`course_id` = $course_id";
 
  while ($list=mysql_fetch_array($firstResult))
  {
@@ -170,7 +170,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;cmdglobal=add">'."\n\n";
+$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;cmdglobal=add">'."\n\n";
 $tool_content .= '    <table width="100%" class="tbl_alt">'."\n"
        .'    <tr>'."\n"
        .'      <th><div align="left">'
@@ -255,7 +255,7 @@ if ( $atleastOne )
 }
 
 $tool_content .= "\n".'    </table>'."\n".'    </form>';
-$tool_content .= "<p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
+$tool_content .= "<p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\

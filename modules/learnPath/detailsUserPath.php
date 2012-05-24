@@ -43,7 +43,7 @@ require_once("../../include/lib/fileDisplayLib.inc.php");
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLECOURSUSER	        = "cours_user";
+$TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -53,13 +53,13 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"details.php?course=$code_cours&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"details.php?course=$course_code&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
 
 if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php?course=$code_cours");
+	header("Location: ./learningPathList.php?course=$course_code");
 	exit();
 }
 
@@ -76,7 +76,7 @@ mysql_select_db($mysqlMainDb);
 $sql = "SELECT `name`
         FROM `".$TABLELEARNPATH."`
        WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'] ."
-       AND `course_id` = $cours_id";
+       AND `course_id` = $course_id";
 $LPresult = mysql_fetch_row(db_query($sql));
 $LPname = $LPresult[0];
 
@@ -97,7 +97,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 		AND LPM.`learnPath_id` = ". (int)$_REQUEST['path_id']."
 		AND LPM.`visible` = 1
 		AND LPM.`module_id` = M.`module_id`
-		AND M.`course_id` = $cours_id
+		AND M.`course_id` = $course_id
 	GROUP BY LPM.`module_id`
 	ORDER BY LPM.`rank`";
 

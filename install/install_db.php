@@ -43,8 +43,8 @@ db_query("DROP TABLE IF EXISTS admin_announcements");
 db_query("DROP TABLE IF EXISTS agenda");
 db_query("DROP TABLE IF EXISTS announcements");
 db_query("DROP TABLE IF EXISTS auth");
-db_query("DROP TABLE IF EXISTS cours");
-db_query("DROP TABLE IF EXISTS cours_user");
+db_query("DROP TABLE IF EXISTS course");
+db_query("DROP TABLE IF EXISTS course_user");
 db_query("DROP TABLE IF EXISTS faculte");
 db_query("DROP TABLE IF EXISTS institution");
 db_query("DROP TABLE IF EXISTS loginout");
@@ -71,16 +71,16 @@ db_query("CREATE TABLE IF NOT EXISTS `course_module` (
 
 
 #
-# table `announcements`
+# table `announcement`
 #
 db_query("CREATE TABLE announcement (
 	`id` MEDIUMINT(11) NOT NULL auto_increment,
-	`title` VARCHAR(255) DEFAULT NULL,
+	`title` VARCHAR(255) NOT NULL DEFAULT '',
 	`content` TEXT,
 	`date` DATE DEFAULT NULL,
-	`course_id` INT(11) NOT NULL default '0',
-	`order` MEDIUMINT(11) NOT NULL,
-	`visible` TINYINT(4)',
+	`course_id` INT(11) NOT NULL DEFAULT 0,
+	`order` MEDIUMINT(11) NOT NULL DEFAULT 0,
+	`visible` TINYINT(4) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id)) $charset_spec");
 
 #
@@ -114,7 +114,7 @@ db_query("CREATE TABLE `agenda` (
 
 
 #
-# table `cours`
+# table `course`
 #
 
 db_query("CREATE TABLE `course` (
@@ -139,11 +139,11 @@ db_query("CREATE TABLE `course` (
 
 
 #
-# Table `cours_user`
+# Table `course_user`
 #
 
-db_query("CREATE TABLE cours_user (
-      `cours_id` INT(11) NOT NULL DEFAULT 0,
+db_query("CREATE TABLE course_user (
+      `course_id` INT(11) NOT NULL DEFAULT 0,
       `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
       `statut` TINYINT(4) NOT NULL DEFAULT 0,
       `team` INT(11) NOT NULL DEFAULT 0,
@@ -151,7 +151,7 @@ db_query("CREATE TABLE cours_user (
       `editor` INT(11) NOT NULL DEFAULT 0,
       `reg_date` DATE NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
-      PRIMARY KEY (cours_id, user_id)) $charset_spec");
+      PRIMARY KEY (course_id, user_id)) $charset_spec");
 
 #
 # Table `user`
@@ -611,7 +611,7 @@ db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 `order_priority` int(11) default null )");
 
 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
-    VALUES ('', '". $institutionForm ."', '1', '68')");
+    VALUES ('', ".quote($institutionForm).", '1', '68')");
 
 db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
     VALUES ('TMA', 'Τμήμα 1', '10', '100', '2', '23', true, true)");

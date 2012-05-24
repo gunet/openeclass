@@ -38,5 +38,5 @@
 ==============================================================================
 */
 
-header( "Location: wiki.php?course=$code_cours" );
+header( "Location: wiki.php?course=$course_code" );
 exit();

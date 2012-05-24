@@ -43,7 +43,7 @@
  */
 function getUserForumPosts($param, $type)
 {
-	global $mysqlMainDb, $uid, $currentCourseID;
+	global $mysqlMainDb, $uid, $course_code;
 
 	$uid				= $param['uid'];
 	$lesson_code		= $param['lesson_code'];

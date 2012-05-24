@@ -67,9 +67,9 @@ if (isset($_POST["submit"])) {
         foreach ($changeCourse as $key => $value) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
-			db_query("DELETE FROM cours_user
+			db_query("DELETE FROM course_user
 					WHERE statut <> 1 AND statut <> 10
-					AND user_id = $uid AND cours_id = $cid");
+					AND user_id = $uid AND course_id = $cid");
                 }
         }
 
@@ -89,7 +89,7 @@ if (isset($_POST["submit"])) {
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['public_code'];
                         } else {
-                                db_query("INSERT IGNORE INTO `cours_user` (`cours_id`, `user_id`, `statut`, `reg_date`)
+                                db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
                                                  VALUES ($cid, $uid, 5, CURDATE())");
                         }
                 }
@@ -211,14 +211,14 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString = "";
 
     // build a list of course followed by user.
-    $usercourses = db_query("SELECT course.code code_cours, course.public_code public_code,
-                                    course.id cours_id, statut
-                                FROM cours_user, course
-                                WHERE cours_user.cours_id = course.id                                  
+    $usercourses = db_query("SELECT course.code course_code, course.public_code public_code,
+                                    course.id course_id, statut
+                                FROM course_user, course
+                                WHERE course_user.course_id = course.id                                  
                                 AND user_id = ".$uid);
 
     while ($row = mysql_fetch_array($usercourses)) {
-        $myCourses[$row['cours_id']] = $row;
+        $myCourses[$row['course_id']] = $row;
     }
 
     $retString .= "<table width='100%' class='tbl_border'>
@@ -231,7 +231,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $result = db_query("SELECT
                             course.id cid,
                             course.code k,
+<<<<<<< local
+                            course.public_code,
+=======
                             course.public_code public_code,
+>>>>>>> other
                             course.title i,
                             course.visible visible,
                             course.prof_names t,
@@ -260,7 +264,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
             $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
-            $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>$course_title</a>";
+            $codelink = "<a href='../contact/index.php?from_reg=true&course_id=$cid'>$course_title</a>";
         } else {
             $codelink = $course_title;
         }
@@ -335,13 +339,12 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
 	$retString = "";
 
 	// build a list of course followed by user.
-	$usercourses = db_query("SELECT course.code code_cours, course.public_code public_code,
-                                        course.id cours_id, statut
+	$usercourses = db_query("SELECT course.code course_code, course.public_code public_code,
+                                        course.id course_id, statut
                                  FROM cours_user, course
-                                 WHERE cours_user.cours_id = course.id                                  
                                  AND user_id = ".$uid);
 	while ($row = mysql_fetch_array($usercourses)) {
-	 	$myCourses[$row['cours_id']] = $row;
+	 	$myCourses[$row['course_id']] = $row;
 	}
 
 	$retString .= "
@@ -404,7 +407,11 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                 $result = db_query("SELECT
                                         course.id cid,
                                         course.code k,
+<<<<<<< local
+                                        course.public_code,
+=======
                                         course.public_code public_code,
+>>>>>>> other
                                         course.title i,
                                         course.visible visible,
                                         course.prof_names t,
@@ -459,7 +466,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
-                                $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>$course_title</a>";
+                                $codelink = "<a href='../contact/index.php?from_reg=true&course_id=$cid'>$course_title</a>";
                         } else {
                                 $codelink = $course_title;
                         }
@@ -539,9 +546,9 @@ function collapsed_facultes_horiz($fc) {
 }
 
 // check if a course is restricted
-function is_restricted($cours_id)
+function is_restricted($course_id)
 {
-	$res = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = $cours_id"));
+	$res = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = $course_id"));
 	if ($res[0] == 0) {
 		return true;
 	} else {

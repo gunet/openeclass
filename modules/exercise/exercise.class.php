@@ -74,12 +74,12 @@ class Exercise
 	 */
 	function read($id)
 	{
-		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $mysqlMainDb, $course_id;
 		
 		mysql_select_db($mysqlMainDb);
 		$sql = "SELECT title, description, type, start_date, end_date, time_constraint, 
 			attempts_allowed, random, active, results, score 
-			FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id = '$id'";
+			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
 		$result = db_query($sql);
 		// if the exercise has been found
 		if($object = mysql_fetch_object($result))
@@ -98,7 +98,7 @@ class Exercise
 			$this->score           = $object->score;
 
 			$sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
-				WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$id' ORDER BY q_position";
+				WHERE course_id = $course_id AND question_id = id AND exercise_id = '$id' ORDER BY q_position";
 			$result = db_query($sql);
 
 			// fills the array with the question ID for this exercise
@@ -415,7 +415,7 @@ class Exercise
 	 */
 	function save()
 	{
-		global $TBL_EXERCISE, $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_EXERCISE, $TBL_QUESTION, $mysqlMainDb, $course_id;
 
 		$id              = $this->id;
 		$exercise        = addslashes($this->exercise);
@@ -439,14 +439,14 @@ class Exercise
 				SET title = '$exercise', description = '$description', type = '$type',".
 				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
 				"attempts_allowed = '$attemptsAllowed', random = '$random',
-				active = '$active', results = '$results', score = '$score' WHERE course_id = $cours_id AND id = '$id'";
+				active = '$active', results = '$results', score = '$score' WHERE course_id = $course_id AND id = '$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
 		else
 		{
 			$sql="INSERT INTO `$TBL_EXERCISE`
-				VALUES (NULL, $cours_id, '$exercise', '$description', $type, '$startDate', '$endDate',
+				VALUES (NULL, $course_id, '$exercise', '$description', $type, '$startDate', '$endDate',
 					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
 			$this->id = mysql_insert_id();
@@ -454,7 +454,7 @@ class Exercise
 		// updates the question position
 		foreach($this->questionList as $position => $questionId)
 		{
-			$sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' WHERE course_id = $cours_id AND id='$questionId'";
+			$sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' WHERE course_id = $course_id AND id='$questionId'";
 			db_query($sql);
 		}
 	}
@@ -488,10 +488,10 @@ class Exercise
 	 */
 	function moveUp($id)
 	{
-		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_QUESTION, $mysqlMainDb, $course_id;
 		
 		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
-							WHERE course_id = $cours_id AND id = '$id'", $mysqlMainDb));
+							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
 	
 		if ($pos > 1) {
 			$temp = $this->questionList[$pos-1];
@@ -509,10 +509,10 @@ class Exercise
 	 */
 	function moveDown($id)
 	{
-		global $TBL_QUESTION, $mysqlMainDb, $cours_id;
+		global $TBL_QUESTION, $mysqlMainDb, $course_id;
 		
 		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
-							WHERE course_id = $cours_id AND id = '$id'", $mysqlMainDb));
+							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
 		
 		if ($pos < count($this->questionList)) {
 			$temp = $this->questionList[$pos+1];
@@ -586,14 +586,14 @@ class Exercise
 	 */
 	function delete()
 	{
-		global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $cours_id;
+		global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $course_id;
 
 		$id = $this->id;
 
 		$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = '$id'";
 		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 
-		$sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id = '$id'";
+		$sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
 		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 	}
 }

@@ -61,9 +61,9 @@ $body_action = '';
 
 $nameTools = $langLearningObject;
 if (!add_units_navigation()) {
-	$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
+	$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPaths);
 	if ($is_editor) {
-                $navigation[] = array('url' => "learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'],
+                $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'],
                                       'name' => $langAdm);
 	}
 }
@@ -81,19 +81,19 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
 
 mysql_select_db($mysqlMainDb);
 
-$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
+$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id");
 $lp = mysql_fetch_array($q);
 if (!add_units_navigation() && !$is_editor) {
-	$navigation[] = array("url" => "learningPath.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
+	$navigation[] = array("url" => "learningPath.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name" => $lp['name']);
 }
 
 if ( !$is_editor && $lp['visible'] == 0 ) {
 	// if the learning path is invisible, don't allow users in it
-	header("Location: ./learningPathList.php?course=$code_cours");
+	header("Location: ./learningPathList.php?course=$course_code");
 	exit();
 }
 
-check_LPM_validity($is_editor, $code_cours);
+check_LPM_validity($is_editor, $course_code);
 
 // main page
 // FIRST WE SEE IF USER MUST SKIP THE PRESENTATION PAGE OR NOT
@@ -109,7 +109,7 @@ check_LPM_validity($is_editor, $code_cours);
 $sql = "SELECT `comment`, `startAsset_id`, `contentType`
         FROM `".$TABLEMODULE."`
         WHERE `module_id` = ". (int)$_SESSION['lp_module_id'] ."
-        AND `course_id` = $cours_id";
+        AND `course_id` = $course_id";
 
 $module = db_query_get_single_row($sql);
 
@@ -166,7 +166,7 @@ $sql = "SELECT `contentType`,
           AND LPM.`learnPath_id` = ".(int)$_SESSION['path_id']."
           AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
           AND LPM.`module_id` = M.`module_id`
-          AND M.`course_id` = $cours_id
+          AND M.`course_id` = $course_id
              ";
 $resultBrowsed = db_query_get_single_row($sql);
 
@@ -192,7 +192,7 @@ if( !$is_editor
 	&& !$noStartAsset
 	)
 {
-    header("Location:./viewer.php?course=$code_cours");
+    header("Location:./viewer.php?course=$course_code");
     exit();
 }
 
@@ -411,7 +411,7 @@ $tool_content .= "
     if( $module['startAsset_id'] != "" && $asset['asset_id'] == $module['startAsset_id'] )
     {
 	$tool_content .= ''."\n"
-		.'        <form action="./viewer.php?course='.$code_cours.'" method="post">'."\n"
+		.'        <form action="./viewer.php?course='.$course_code.'" method="post">'."\n"
 		.'        <input type="submit" value="'.$langStartModule.'" />'."\n"
 		.'        </form>'."\n";
     }
@@ -462,6 +462,6 @@ if ($is_editor) {
 	$pathBack = "./learningPath.php";
 }
 $tool_content .= "
-    <p align=\"right\"><a href=\"".$pathBack."?course=$code_cours\">".$langBackToLPAdmin."</a></p>";
+    <p align=\"right\"><a href=\"".$pathBack."?course=$course_code\">".$langBackToLPAdmin."</a></p>";
 
 draw($tool_content, 2, null, $head_content, $body_action);

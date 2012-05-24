@@ -47,8 +47,8 @@ include('../../include/action.php');
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
 
-define ('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
-$fake_code = course_id_to_fake_code($cours_id);
+define ('RSS', 'modules/announcements/rss.php?c='.$course_code);
+$public_code = course_id_to_public_code($course_id);
 $nameTools = $langAnnouncements;
 
 load_modal_box();
@@ -57,7 +57,7 @@ if ($is_editor) {
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
 	
-	$result = db_query("SELECT COUNT(*) FROM announcement WHERE course_id = $cours_id", $mysqlMainDb);
+	$result = db_query("SELECT COUNT(*) FROM announcement WHERE course_id = $course_id");
 	
 	list($announcementNumber) = mysql_fetch_row($result);
 	mysql_free_result($result);
@@ -74,7 +74,7 @@ if ($is_editor) {
 	}
 
 	if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-	    $result = db_query("SELECT id, `order` FROM announcement WHERE course_id = $cours_id
+	    $result = db_query("SELECT id, `order` FROM announcement WHERE course_id = $course_id
                         ORDER BY `order` $sortDirection");
 		while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
 			if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
@@ -134,13 +134,13 @@ if ($is_editor) {
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
             $result = db_query("SELECT MAX(`order`) FROM announcement
-				WHERE course_id = $cours_id");
+				WHERE course_id = $course_id");
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // insert
             db_query("INSERT INTO announcement SET content = $newContent,
                             title = $antitle, `date` = NOW(),
-                            course_id = $cours_id, `order` = $order,
+                            course_id = $course_id, `order` = $order,
                             visible = 1");
         }
 
@@ -150,11 +150,11 @@ if ($is_editor) {
                             autounquote($_POST['antitle']) .
                             "<br>\n<br>\n" .
                             autounquote($_POST['newContent']);
-            $emailSubject = "$professorMessage ($fake_code - $title)";
+            $emailSubject = "$professorMessage ($public_code - $title)";
             // select students email list
-            $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
-                                WHERE cours_id = $cours_id 
-                                AND cours_user.user_id = user.user_id";
+            $sqlUserOfCourse = "SELECT course_user.user_id, user.email FROM course_user, user
+                                WHERE course_id = $course_id 
+                                AND course_user.user_id = user.user_id";
             $result = db_query($sqlUserOfCourse);            
 
             $countEmail = mysql_num_rows($result); // number of mail recipients
@@ -162,17 +162,17 @@ if ($is_editor) {
             $invalid = 0;
 	    $recipients = array();
             $emailBody = html2text($emailContent);            
-            $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+            $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
             $emailContent .= $unsubscribe.$linkhere;            
-            $general_to = 'Members of course ' . $currentCourseID;
+            $general_to = 'Members of course ' . $course_code;
             while ($myrow = mysql_fetch_array($result)) {
                     $emailTo = $myrow["email"]; 
                     $user_id = $myrow["user_id"];
                     // check email syntax validity
                     if (!email_seems_valid($emailTo)) {
                             $invalid++;
-                    } elseif (get_user_email_notification($user_id, $cours_id)) {                                    
+                    } elseif (get_user_email_notification($user_id, $course_id)) {                                    
                             // checks if user is notified by email
                             array_push($recipients, $emailTo);
                     }                    
@@ -208,7 +208,7 @@ if ($is_editor) {
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]?course=".$code_cours."' onsubmit=\"return checkrequired(this, 'antitle');\">
+        <form method='post' action='$_SERVER[PHP_SELF]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
 	<table class='tbl' width='100%'>";
@@ -217,7 +217,7 @@ if ($is_editor) {
         } else {
 	    $nameTools = $langAddAnn;
         }
-	$navigation[] = array("url" => "announcements.php?course=$code_cours", "name" => $langAnnouncements);
+	$navigation[] = array("url" => "announcements.php?course=$course_code", "name" => $langAnnouncements);
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
         if (!isset($contentToModify)) $contentToModify = "";
         if (!isset($titleToModify)) $titleToModify = "";
@@ -251,7 +251,7 @@ if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='" . $_SERVER['PHP_SELF'] . "?course=" .$code_cours . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>
+	    <li><a href='" . $_SERVER['PHP_SELF'] . "?course=" .$course_code . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>
 	  </ul>
 	</div>";
     }
@@ -261,22 +261,22 @@ if ($is_editor) {
 	if ($is_editor) {
 		if (isset($_GET['an_id'])) {
 			$result = db_query("SELECT * FROM announcement 
-                                                WHERE course_id = $cours_id AND 
+                                                WHERE course_id = $course_id AND 
                                                 id = $_GET[an_id]");
 		} else {
 			$result = db_query("SELECT * FROM announcement 
-                                                WHERE course_id = $cours_id 
+                                                WHERE course_id = $course_id 
                                                 ORDER BY `order` DESC");
 		}
 	} else {
 		if (isset($_GET['an_id'])) {
 			$result = db_query("SELECT * FROM announcement 
-                                                WHERE course_id = $cours_id AND 
+                                                WHERE course_id = $course_id AND 
                                                 id = $_GET[an_id] 
                                                 AND visible = 1");
 		} else {
 			$result = db_query("SELECT * FROM announcement
-                                                WHERE course_id = $cours_id AND 
+                                                WHERE course_id = $course_id AND 
                                                 visible = 1 
                                                 ORDER BY `order` DESC");
 		}
@@ -324,38 +324,38 @@ if ($is_editor) {
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;
 		} else {
-		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
+		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
 		}
 		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["date"]). "</div>";
 		if (isset($_GET['an_id'])) {
-			$navigation[] = array("url" => "announcements.php?course=$code_cours", "name" => $langAnnouncements);
+			$navigation[] = array("url" => "announcements.php?course=$course_code", "name" => $langAnnouncements);
 			$nameTools = q($myrow['title']);
 			$tool_content .= $content;
 		} else {
-			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
+			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
 		}
 		$tool_content .= "</td>";
 		
 		if ($is_editor) {
 			$tool_content .= "
 			<td width='70' class='right'>
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
+			      <a href='$_SERVER[PHP_SELF]?course=".$course_code ."&amp;modify=" . $myrow['id'] . "'>
 			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
+			      <a href='$_SERVER[PHP_SELF]?course=".$course_code ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
 			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
+			      <a href='$_SERVER[PHP_SELF]?course=".$course_code ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
 			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
 			</td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$course_code ."&amp;up=" . $myrow["id"] . "'>
 			    <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
 			    </a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
+			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$course_code ."&amp;down=" . $myrow["id"] . "'>
 			    <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
 			    </a>";
 			}

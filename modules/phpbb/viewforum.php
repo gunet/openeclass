@@ -26,7 +26,7 @@ include '../../include/baseTheme.php';
 include '../group/group_functions.php';
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
+	$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
 }
 
 $paging = true;
@@ -51,7 +51,7 @@ $forum_id = intval($_GET['forum']);
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
-$result = db_query("SELECT id, name FROM forum WHERE id = $forum_id AND course_id = $cours_id");
+$result = db_query("SELECT id, name FROM forum WHERE id = $forum_id AND course_id = $course_id");
 $myrow = mysql_fetch_array($result);
  
 $forum_name = $myrow["name"];
@@ -68,7 +68,7 @@ if ($can_post) {
 	<div id='operations_container'>
 	<ul id='opslist'>
 	<li>
-	<a href='newtopic.php?course=$code_cours&amp;forum=$forum_id'>$langNewTopic</a>
+	<a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langNewTopic</a>
 	</li>
 	</ul> 	         
 	</div>"; 	         
@@ -80,7 +80,7 @@ if ($can_post) {
 
 $topic_count = mysql_fetch_row(db_query("SELECT num_topics FROM forum
                 WHERE id = $forum_id
-                AND course_id = $cours_id"));
+                AND course_id = $course_id"));
 $total_topics = $topic_count[0];
 
 if ($total_topics > $topics_per_page) { 
@@ -94,7 +94,7 @@ if (isset($_GET['start'])) {
 }
 
 if ($total_topics > $topics_per_page) { // navigation
-	$base_url = "$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=";
+	$base_url = "$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;start=";
 	$tool_content .= "<table width='100%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
@@ -145,8 +145,8 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 	db_query("UPDATE forum SET num_topics = num_topics-1,
                                 num_posts = num_posts-$number_of_posts        
                             WHERE id = $forum_id 
-                                AND course_id = $cours_id");
-        db_query("DELETE FROM forum_notify WHERE topic_id = $topic_id AND course_id = $cours_id");
+                                AND course_id = $course_id");
+        db_query("DELETE FROM forum_notify WHERE topic_id = $topic_id AND course_id = $course_id");
 }
 
 // modify topic notification
@@ -155,13 +155,13 @@ if(isset($_GET['topicnotify'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id"));
+		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $course_id"));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['topicnotify']) . " 
-			WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id");
+			WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $course_id");
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
-		topic_id = $topic_id, notify_sent = 1, course_id = $cours_id");
+		topic_id = $topic_id, notify_sent = 1, course_id = $course_id");
 	}
 }
 
@@ -216,7 +216,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td width='1'><img src='$image' /></td>";
 		$topic_title = $myrow["title"];
                 $pagination = '';
-                $topiclink = "viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id";
+                $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
 		if ($replies > $posts_per_page) {
                         $total_reply_pages = ceil($replies / $posts_per_page);
 			$pagination .= "<strong class='pagination'><span>\n<img src='$posticon_more' />";
@@ -235,7 +235,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td class='center'>$myrow[num_views]</td>";
 		$tool_content .= "<td class='center'>".uid_to_name($myrow['poster_id'])."<br />$last_post</td>";
 		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
-			WHERE user_id = $uid AND topic_id = $myrow[id] AND course_id = $cours_id", $mysqlMainDb));
+			WHERE user_id = $uid AND topic_id = $myrow[id] AND course_id = $course_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {
 			$topic_link_notify = FALSE;
 			$topic_icon = '_off';
@@ -246,17 +246,17 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td class='center'>";
 		if ($is_editor) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick='return confirmation()'>
+			<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick='return confirmation()'>
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
 		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
+			<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		}

@@ -45,10 +45,10 @@ if (isset($uid)) {
         $month = '';
  	$query = db_query("SELECT course.code k, course.public_code fc,
                              course.title i, course.prof_names t, course.id id
-	                        FROM course, cours_user, course_module
-	                        WHERE course.id = cours_user.cours_id
+	                        FROM course, course_user, course_module
+	                        WHERE course.id = course_user.course_id
                                 AND course.visible != ".COURSE_INACTIVE."
-	                        AND cours_user.user_id = $uid
+	                        AND course_user.user_id = $uid
                                 AND course_module.module_id  = ".MODULE_ID_AGENDA."
                                 AND course_module.visible = 1
                                 AND course_module.course_id = course.id");

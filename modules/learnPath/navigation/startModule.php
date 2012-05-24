@@ -48,7 +48,7 @@ $TABLELEARNPATHMODULE    = "lp_rel_learnPath_module";
 $TABLEASSET              = "lp_asset";
 $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
-$clarolineRepositoryWeb = $urlServer."courses/".$currentCourseID;
+$clarolineRepositoryWeb = $urlServer."courses/".$course_code;
 
 // lib of this tool
 require_once '../../../include/lib/fileDisplayLib.inc.php';
@@ -75,7 +75,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
 if (isset($_GET['viewModule_id']) and !empty($_GET['viewModule_id']))
 	$_SESSION['lp_module_id'] = intval($_GET['viewModule_id']);
 
-check_LPM_validity($is_editor, $code_cours, true, true);
+check_LPM_validity($is_editor, $course_code, true, true);
 
 // SET USER_MODULE_PROGRESS IF NOT SET
 if($uid) // if not anonymous
@@ -109,7 +109,7 @@ if($uid) // if not anonymous
 $sql = "SELECT `contentType`, `startAsset_id`, `name`
           FROM `".$TABLEMODULE."`
          WHERE `module_id` = ". (int)$_SESSION['lp_module_id'] ."
-         AND `course_id` = $cours_id";
+         AND `course_id` = $course_id";
 
 $module = db_query_get_single_row($sql);
 
@@ -146,7 +146,7 @@ switch ($module['contentType'])
 		unset($_SESSION['exerciseResult']);
 		unset($_SESSION['exeStartTime']);
 
-		$moduleStartAssetPage = "showExercise.php?course=$code_cours&amp;exerciseId=".$assetPath;
+		$moduleStartAssetPage = "showExercise.php?course=$course_code&amp;exerciseId=".$assetPath;
 		break;
 	case CTSCORMASSET_ :
 		if($uid) { // Directly pass this module
@@ -166,7 +166,7 @@ switch ($module['contentType'])
 			directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
 		} // else anonymous : record nothing
 
-		$moduleStartAssetPage = "showCourseDescription.php?course=$code_cours";
+		$moduleStartAssetPage = "showCourseDescription.php?course=$course_code";
 		break;
 	case CTLINK_ :
 		if($uid) { // Directly pass this module
@@ -183,12 +183,12 @@ switch ($module['contentType'])
                 
                 if (is_supported_media($assetPath))
                 {
-                    $moduleStartAssetPage = "showMedia.php?course=$code_cours&amp;id=".$assetPath;
+                    $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=".$assetPath;
                 }
                 else
                 {
                     $moduleStartAssetPage = htmlspecialchars($urlServer 
-                                                            ."modules/video/video.php?course=$code_cours&action=download&id=".$assetPath
+                                                            ."modules/video/video.php?course=$course_code&action=download&id=".$assetPath
                                                             , ENT_QUOTES);
                 }
                 break;
@@ -200,7 +200,7 @@ switch ($module['contentType'])
                 
                 if (is_embeddable_medialink($assetPath))
                 {
-                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".urlencode(make_embeddable_medialink($assetPath));
+                    $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=".urlencode(make_embeddable_medialink($assetPath));
                 }
                 else
                 {
@@ -216,14 +216,14 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
 	require_once("scormAPI.inc.php");
 	echo "<frameset border='0' rows='0,85,*' frameborder='no'>
-		<frame src='updateProgress.php?course=$code_cours' name='upFrame'>";
+		<frame src='updateProgress.php?course=$course_code' name='upFrame'>";
 } else {
 	echo "<frameset border='0' rows='85,*' frameborder='no'>";
 }
 
-echo "<frame src='../viewer_toc.php?course=$code_cours' name='tocFrame' scrolling='no' />";
+echo "<frame src='../viewer_toc.php?course=$course_code' name='tocFrame' scrolling='no' />";
 echo "<frameset border='0' cols='200,*' frameborder='0'>";
-echo "<frame src='../toc.php?course=$code_cours' name='tocleftFrame'>";
+echo "<frame src='../toc.php?course=$course_code' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>"; 
 echo "</frameset>";

@@ -46,54 +46,54 @@ function getUserLessonInfo($uid, $type)
 	global $mysqlMainDb;
 	//	TODO: add the new fields for memory in the db
         if ($_SESSION['statut'] == 5) {
-                $user_courses = "SELECT course.id cours_id,
+                $user_courses = "SELECT course.id course_id,
                                         course.code code,
-                                        course.public_code fake_code,
+                                        course.public_code,
                                         course.title title,
                                         course.prof_names professor,
                                         course.lang,
-                                        cours_user.statut statut,
+                                        course_user.statut statut,
                                         user.perso,
                                         user.announce_flag,
                                         user.doc_flag,
                                         user.forum_flag
-                                 FROM course, cours_user, user
-                                 WHERE course.id = cours_user.cours_id AND
-                                       cours_user.user_id = $uid AND
+                                 FROM course, course_user, user
+                                 WHERE course.id = course_user.course_id AND
+                                       course_user.user_id = $uid AND
                                        user.user_id = $uid
                                        AND course.visible != ".COURSE_INACTIVE."
                                  ORDER BY course.title, course.prof_names";
         } elseif ($_SESSION['statut'] == 1)  {
-                $user_courses = "SELECT course.id cours_id,
+                $user_courses = "SELECT course.id course_id,
                                 course.code code,
-                                course.public_code fake_code,
+                                course.public_code,
 	                        course.title title,
                                 course.prof_names professor,
 	                        course.lang,
-	                        cours_user.statut statut,
+	                        course_user.statut statut,
 	                        user.perso,
 	                        user.announce_flag,
 	                        user.doc_flag,
 	                        user.forum_flag
-	                 FROM course, cours_user, user
-	                 WHERE course.id = cours_user.cours_id AND
-	                       cours_user.user_id = $uid AND
+	                 FROM course, course_user, user
+	                 WHERE course.id = course_user.course_id AND
+	                       course_user.user_id = $uid AND
 	                       user.user_id = $uid
                          ORDER BY course.title, course.prof_names";
         }
 
-	$lesson_titles = $lesson_fakeCode = $lesson_id = $lesson_code = 
+	$lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code = 
                          $lesson_professor = $lesson_statut = array();
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 	$repeat_val = 0;
 	//getting user's lesson info
 	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
-		$lesson_id[$repeat_val] 	= $mycourses['cours_id'];
+		$lesson_id[$repeat_val] 	= $mycourses['course_id'];
 		$lesson_titles[$repeat_val] 	= $mycourses['title'];
 		$lesson_code[$repeat_val]	= $mycourses['code'];
 		$lesson_professor[$repeat_val]	= $mycourses['professor'];
 		$lesson_statut[$repeat_val]	= $mycourses['statut'];
-		$lesson_fakeCode[$repeat_val]	= $mycourses['fake_code'];
+		$lesson_publicCode[$repeat_val]	= $mycourses['public_code'];
 		$repeat_val++;
 	}
 
@@ -118,7 +118,7 @@ function getUserLessonInfo($uid, $type)
 
 	//check what sort of data should be returned
 	if ($type == 'html') {
-		return array($ret_val,htmlInterface($ret_val, $lesson_fakeCode));
+		return array($ret_val,htmlInterface($ret_val, $lesson_publicCode));
 	} elseif ($type == 'data') {
 		return $ret_val;
 	}
@@ -129,10 +129,10 @@ function getUserLessonInfo($uid, $type)
  * Function htmlInterface
  *
  * @param array $data
- * @param string $lesson_fCode (Lesson's fake code)
+ * @param string $lesson_code (lesson's public code)
  * @return string HTML content for the documents block
  */
-function htmlInterface($data, $lesson_fCode)
+function htmlInterface($data, $lesson_code)
 {
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
@@ -144,7 +144,7 @@ function htmlInterface($data, $lesson_fCode)
 		for ($i=0; $i < $data[0]; $i++) {
 			$lesson_content .= "<tr>
 			  <td align='left'><ul class='custom_list'><li>
-			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".q($data[1][$i])."</a> </b><span class='smaller'>(".q($lesson_fCode[$i]).")</span>
+			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".q($data[1][$i])."</a> </b><span class='smaller'>(".q($lesson_code[$i]).")</span>
 			  <div class='smaller'>".q($data[3][$i])."</div></li></ul></td>";
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {

@@ -35,16 +35,16 @@ include '../group/group_functions.php';
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
+    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
+    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
+    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
+    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
 </div>\n";
 
 
-$navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
+$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
@@ -53,7 +53,7 @@ initialize_group_info();
 $i = 0;
 $q = db_query("SELECT id, name, g.description, max_members, COUNT(*) AS registered
 	              FROM `group` AS g, group_members AS gm
-		      WHERE g.course_id = $cours_id AND g.id = gm.group_id
+		      WHERE g.course_id = $course_id AND g.id = gm.group_id
 		      GROUP BY g.id", $mysqlMainDb);
 if (mysql_num_rows($q) > 0) {
         $tool_content .= "
@@ -71,7 +71,7 @@ if (mysql_num_rows($q) > 0) {
 			$tool_content .= "<tr class='odd'>\n";
 		}
 		$tool_content .= "<td class='arrow'>
-			<a href='../group/group_usage.php?course=$code_cours&amp;module=usage&amp;group_id=$group[id]'>".
+			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group[id]'>".
 			q($group['name'])."</a></td>\n";
 		$tool_content .= "<td>".display_user(group_tutors($group['id']))."</td>\n";
       		$tool_content .= "<td class='center'>$group[registered]</td>\n";

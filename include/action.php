@@ -5,7 +5,7 @@ define('DEFAULT_MAX_DURATION', 900);
 class action {
 
     function record($module_id, $action_name = 'access') {
-        global $uid, $cours_id;
+        global $uid, $course_id;
                 
         $action_type = new action_type();
         $action_type_id = $action_type->get_action_type_id($action_name);
@@ -15,7 +15,7 @@ class action {
         $sql = "SELECT id, TIME_TO_SEC(TIMEDIFF(NOW(), date_time)) AS diff, action_type_id
                 FROM actions
                 WHERE user_id = $uid
-                AND course_id = $cours_id
+                AND course_id = $course_id
                 ORDER BY id DESC LIMIT 1";
         $last_id = $diff = $last_action = 0;
         $result = db_query($sql);
@@ -27,7 +27,7 @@ class action {
                         $sql = "UPDATE actions
                                 SET duration = $diff
                                 WHERE id = $last_id
-                                AND course_id = $cours_id";
+                                AND course_id = $course_id";
                         db_query($sql);
                 }
         }
@@ -39,7 +39,7 @@ class action {
         $sql = "INSERT INTO actions SET
                     module_id = $module_id,
                     user_id = $uid,
-                    course_id = $cours_id,
+                    course_id = $course_id,
                     action_type_id = $action_type_id,
                     date_time = NOW(),
                     duration = ".$duration;
@@ -49,7 +49,7 @@ class action {
 
 #ophelia 2006-08-02: per month and per course
     function summarize() {
-        global $cours_id;
+        global $course_id;
                 
         ## edw ftia3e tis hmeromhnies
         $now = date('Y-m-d H:i:s');
@@ -57,10 +57,10 @@ class action {
         
         $sql_0 = "SELECT min(date_time) as min_date 
                 FROM actions 
-                WHERE course_id = $cours_id";   //gia na doume
+                WHERE course_id = $course_id";   //gia na doume
         $sql_1 = "SELECT DISTINCT module_id 
                 FROM actions 
-                WHERE course_id = $cours_id";  //arkei gia twra.
+                WHERE course_id = $course_id";  //arkei gia twra.
 
  
         $result = db_query($sql_0);
@@ -83,7 +83,7 @@ class action {
 
                 $sql_2 = "SELECT COUNT(id) AS visits, sum(duration) AS total_dur FROM actions 
                              WHERE module_id = $module_id AND
-                             course_id = $cours_id AND
+                             course_id = $course_id AND
                              date_time >= '$start_date' AND 
                              date_time < '$end_date' ";
                     
@@ -95,7 +95,7 @@ class action {
 		
                 $sql_3 = "INSERT INTO actions_summary SET ".
                     " module_id = $module_id, ".
-                    " course_id = $cours_id, ".
+                    " course_id = $course_id, ".
                     " visits = $visits, ".
                     " start_date = '$start_date', ".
                     " end_date = '$end_date', ".
@@ -105,7 +105,7 @@ class action {
             
                 $sql_4 = "DELETE FROM actions ".
                     " WHERE module_id = $module_id ".
-                    " AND course_id = $cours_id".
+                    " AND course_id = $course_id".
                     " AND date_time >= '$start_date' AND ".
                     " date_time < '$end_date'";
                 $result_4 = db_query($sql_4);

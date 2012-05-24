@@ -33,10 +33,10 @@ function makedefaultviewcode($locatie)
  * @return int number of links
  */
 function getNumberOfLinks($catid){
-        global $cours_id;
+        global $course_id;
 
         list($count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `link`
-                                                        WHERE course_id = $cours_id AND category = $catid
+                                                        WHERE course_id = $course_id AND category = $catid
                                                         ORDER BY `order`"));
 	return $count;
 }
@@ -44,13 +44,13 @@ function getNumberOfLinks($catid){
 
 function showlinksofcategory($catid)
 {
-        global $is_editor, $cours_id, $urlview, $tool_content, 
-               $urlServer, $currentCourseID, $code_cours, $themeimg,
+        global $is_editor, $course_id, $urlview, $tool_content, 
+               $urlServer, $course_code, $course_code, $themeimg,
                $langLinkDelconfirm, $langDelete, $langUp, $langDown, 
                $langModify, $langLinks, $langCategoryDelconfirm;
 
         $result = db_query("SELECT * FROM `link`
-                                   WHERE course_id = $cours_id AND category = $catid
+                                   WHERE course_id = $course_id AND category = $catid
                                    ORDER BY `order`");
 	$numberoflinks = mysql_num_rows($result);
 
@@ -73,7 +73,7 @@ function showlinksofcategory($catid)
                     $num_merge_cols = 1;
                 }
                 $tool_content .= "
-                  <td valign='top' colspan='$num_merge_cols'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
+                  <td valign='top' colspan='$num_merge_cols'><a href='go.php?c=$course_code&amp;id=$myrow[id]&amp;url=" .
                   urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";
                 if (!empty($myrow['description'])) {
                         $tool_content .= "<br />" . standard_text_escape($myrow['description']);
@@ -84,20 +84,20 @@ function showlinksofcategory($catid)
                         $tool_content .=  "
                   <td width='45' valign='top' align='right'>";
                         if (isset($category)) {
-                                $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview'>";
+                                $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         } else {
-                                $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview'>";
+                                $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         }
 
-                        $tool_content .= "<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a></td>" .
+                        $tool_content .= "<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a></td>" .
                                          "<td width='35' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
-                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;up=$myrow[id]'><img src='$themeimg/up.png' title='$langUp' alt='$langUp' /></a>";
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow[id]'><img src='$themeimg/up.png' title='$langUp' alt='$langUp' /></a>";
                         }
                         // Display move down command only if it is not the bottom link
                         if ($i < $numberoflinks) {
-                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;down=$myrow[id]'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
+                                $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow[id]'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
                         }
                         $tool_content .= "
                   </td>";
@@ -113,24 +113,24 @@ function showcategoryadmintools($categoryid)
 {
         global $urlview, $aantalcategories, $catcounter, $langDelete, 
                $langModify, $langUp, $langDown, $langCatDel, $tool_content,
-               $code_cours, $themeimg;
+               $course_code, $themeimg;
 
 	$tool_content .=  "
                 <th width='45' valign='top'><div align='right'>
-                    <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=editcategory&amp;id=$categoryid&amp;urlview=$urlview'>
+                    <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=editcategory&amp;id=$categoryid&amp;urlview=$urlview'>
                         <img src='$themeimg/edit.png' title='$langModify' /></a>&nbsp;&nbsp;<a
-                            href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=deletecategory&amp;id=$categoryid&amp;urlview=".
+                            href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=deletecategory&amp;id=$categoryid&amp;urlview=".
                             $urlview."' onclick=\"javascript:if(!confirm('$langCatDel')) return false;\">".
                             "<img src='$themeimg/delete.png' title='$langDelete' /></a></div></th>";
 
 	$tool_content .= "<th width='35' valign='top'><div align='right'>";
 	// Display move up command only if it is not the top link
 	if ($catcounter != 1) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;cup=$categoryid'><img src='$themeimg/up.png' title='$langUp' alt='$$langUp' /></a>";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid'><img src='$themeimg/up.png' title='$langUp' alt='$$langUp' /></a>";
 	}
 	// Display move down command only if it is not the bottom link
 	if ($catcounter < $aantalcategories) {
-		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;urlview=$urlview&amp;cdown=$categoryid'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
+		$tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
 	}
         $tool_content .=  "</div>
                   </th>";
@@ -139,9 +139,9 @@ function showcategoryadmintools($categoryid)
 
 function link_form_defaults($id)
 {
-	global $cours_id, $form_url, $form_title, $form_description, $category;
+	global $course_id, $form_url, $form_title, $form_description, $category;
 
-        $result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND id = $id");
+        $result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND id = $id");
         if ($myrow = mysql_fetch_array($result)) {
                 $form_url = ' value="' . q($myrow['url']) . '"';
                 $form_title = ' value="' . q($myrow['title']) . '"';
@@ -155,7 +155,7 @@ function link_form_defaults($id)
 // Enter the modified info submitted from the link form into the database
 function submit_link()
 {
-        global $cours_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
+        global $course_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
                $urllink, $title, $description, $selectcategory;
 
         register_posted_variables(array('urllink' => true,
@@ -170,23 +170,23 @@ function submit_link()
 
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
-                db_query("UPDATE `link` $set_sql WHERE course_id = $cours_id AND id = $id");
+                db_query("UPDATE `link` $set_sql WHERE course_id = $course_id AND id = $id");
                 $catlinkstatus = $langLinkMod;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link`
-                                      WHERE course_id = $cours_id AND category = $selectcategory");
+                                      WHERE course_id = $course_id AND category = $selectcategory");
                 list($order) = mysql_fetch_row($q);
                 $order++;
-                db_query("INSERT INTO `link` $set_sql, course_id = $cours_id, `order` = $order");
+                db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");
                 $catlinkstatus = $langLinkAdded;
         }
 }
 
 function category_form_defaults($id)
 {
-	global $cours_id, $form_name, $form_description;
+	global $course_id, $form_name, $form_description;
 
-        $result = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $id");
+        $result = db_query("SELECT * FROM link_category WHERE course_id = $course_id AND id = $id");
         if ($myrow = mysql_fetch_array($result)) {
                 $form_name = ' value="' . q($myrow['name']) . '"';
                 $form_description = q($myrow['description']);
@@ -198,7 +198,7 @@ function category_form_defaults($id)
 // Enter the modified info submitted from the category form into the database
 function submit_category()
 {
-        global $cours_id, $langCategoryAdded, $langCategoryModded,
+        global $course_id, $langCategoryAdded, $langCategoryModded,
                $categoryname, $description;
 
         register_posted_variables(array('categoryname' => true,
@@ -208,31 +208,31 @@ function submit_category()
 
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
-                db_query("UPDATE `link_category` $set_sql WHERE course_id = $cours_id AND id = $id");
+                db_query("UPDATE `link_category` $set_sql WHERE course_id = $course_id AND id = $id");
                 $catlinkstatus = $langCategoryModded;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link_category`
-                                      WHERE course_id = $cours_id");
+                                      WHERE course_id = $course_id");
                 list($order) = mysql_fetch_row($q);
                 $order++;
-                db_query("INSERT INTO `link_category` $set_sql, course_id = $cours_id, `order` = $order");
+                db_query("INSERT INTO `link_category` $set_sql, course_id = $course_id, `order` = $order");
                 $catlinkstatus = $langCategoryAdded;
         }
 }
 
 function delete_link($id)
 {
-	global $cours_id, $catlinkstatus, $langLinkDeleted;
+	global $course_id, $catlinkstatus, $langLinkDeleted;
 
-	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND id = $id");
+	db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langLinkDeleted;
 }
 
 function delete_category($id)
 {
-	global $cours_id, $catlinkstatus, $langCategoryDeleted;
+	global $course_id, $catlinkstatus, $langCategoryDeleted;
 
-	db_query("DELETE FROM `link` WHERE course_id = $cours_id AND category = $id");
-	db_query("DELETE FROM `link_category` WHERE course_id = $cours_id AND id = $id");
+	db_query("DELETE FROM `link` WHERE course_id = $course_id AND category = $id");
+	db_query("DELETE FROM `link_category` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langCategoryDeleted;
 }

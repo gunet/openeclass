@@ -57,7 +57,7 @@ $sql = "SELECT f.id, f.name FROM forum f, forum_topics t
             WHERE f.id = $forum
             AND t.id = $topic
             AND t.forum_id = f.id
-            AND f.course_id = $cours_id";
+            AND f.course_id = $course_id";
 	
 $result = db_query($sql);
 	
@@ -99,7 +99,7 @@ if (isset($_GET['delete'])) {
 		db_query("UPDATE forum SET num_topics = num_topics-1 
                             WHERE id = $forum 
                             AND course_id = $cours_id");
-		header("Location: viewforum.php?course=$code_cours&forum=$forum");
+		header("Location: viewforum.php?course=$course_code&forum=$forum");
 	}
 	sync($forum, 'forum');
 	sync($topic, 'topic');	
@@ -122,8 +122,8 @@ $myrow = mysql_fetch_array($result);
 $topic_subject = $myrow["title"];
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-	$navigation[]= array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum", "name"=> $forum_name);
+	$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
+	$navigation[]= array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum", "name"=> $forum_name);
 }
 $nameTools = $topic_subject;
 
@@ -133,7 +133,7 @@ if (isset($_SESSION['message'])) {
 }
 $tool_content .= "<div id='operations_container'> 	
 	<ul id='opslist'>
-	<li><a href='reply.php?course=$code_cours&amp;topic=$topic&amp;forum=$forum'>$langReply";
+	<li><a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum'>$langReply";
 
 $tool_content .= "</a></li></ul></div>";
 	
@@ -164,7 +164,7 @@ if ($paging and $total > $posts_per_page ) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
 		}
 		$times++;
 	}
@@ -173,15 +173,15 @@ if ($paging and $total > $posts_per_page ) {
 	<td align='right'>
 	<span class='pages'>";
 	if (isset($start) && $start > 0 ) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
+	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
 	</td>
 	</tr>
 	</table>";
@@ -193,7 +193,7 @@ if ($paging and $total > $posts_per_page ) {
 	<td align='right'>";
 	if ($total > $posts_per_page) {	
 		$tool_content .= "<span class='pages'>
-		&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
+		&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
 		</span>";
 	}
 	$tool_content .= "</td></tr></table>";
@@ -248,9 +248,9 @@ do {
 	</td>";
 	if ($is_editor) { 
 		$tool_content .= "<td width='40' valign='top'>
-                    <a href='editpost.php?course=$code_cours&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>
+                    <a href='editpost.php?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>
                     <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
+		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
                     <img src='$themeimg/delete.png' title='$langDelete' /></a></td>";
 	}
 	$tool_content .= "</tr>";
@@ -282,22 +282,22 @@ if ($paging and $total > $posts_per_page) {
 		} else if($start == 0 && $x == 0) {
 			$tool_content .= "1";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
 		}
 		$times++;
 	}
 	$tool_content .= "</span></strong></span></td>
 	<td><span class='pages'>";
 	if (isset($start) && $start > 0) {
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
 	}	
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
+		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
 	}
-	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
+	$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
 	</span>
 	</td></tr></table>";
 } else {
@@ -309,7 +309,7 @@ if ($paging and $total > $posts_per_page) {
 	<td align='right'>
 	<span class='pages'>";
 	if ($total > $posts_per_page) {	
-		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
+		$tool_content .= "&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
         } else {
                 $tool_content .= '&nbsp;';
         }

@@ -129,8 +129,8 @@ if (!register_posted_variables(array('search_terms' => false,
         $course_restriction = 'course.visible IN (2, 1)';
         $course_user_join = '';
         if (isset($uid) and $uid) {
-                $course_restriction = "($course_restriction OR cours_user.statut IS NOT NULL)";
-                $course_user_join = 'LEFT JOIN cours_user ON course.id = cours_user.cours_id AND cours_user.user_id = ' . $uid;
+                $course_restriction = "($course_restriction OR course_user.statut IS NOT NULL)";
+                $course_user_join = 'LEFT JOIN course_user ON course.id = course_user.course_id AND course_user.user_id = ' . $uid;
         }
 
         
@@ -174,15 +174,15 @@ if (!register_posted_variables(array('search_terms' => false,
                                 $tool_content .= "
                   <tr class='even'>";
                         }
-			$cours_id = course_code_to_id($mycours['code']);
+			$course_id = course_code_to_id($mycours['code']);
                         $tool_content .= "<td><img src='$themeimg/arrow.png' alt=''  /></td><td>";
 			// search inside course. If at least one result is found then display link for searching inside the course
-			if (search_in_course($search_terms, $cours_id, $mycours['code'])) {
+			if (search_in_course($search_terms, $course_id, $mycours['code'])) {
 				$tool_content .= "<a href='../../courses/$mycours[code]/?from_search=".urlencode($search_terms)."'>" . q($mycours['title']) .
-                                "</a> (" . q($mycours['fake_code']) . ")";
+                                "</a> (" . q($mycours['public_code']) . ")";
 			} else {
 				$tool_content .= "<a href='../../courses/$mycours[code]/'>" . q($mycours['title']) .
-                                "</a> (" . q($mycours['fake_code']) . ")";
+                                "</a> (" . q($mycours['public_code']) . ")";
 			}
 			$tool_content .= "</td>" .
                                 "<td>" . q($mycours['prof_names']) . "</td>" .
@@ -202,7 +202,7 @@ if (!empty($search_terms_description)) {
 // -----------------------------
 // search inside course
 // -----------------------------
-function search_in_course($search_terms, $cours_id, $code_cours) {
+function search_in_course($search_terms, $course_id, $course_code) {
 	
 	global $mysqlMainDb;
 	
@@ -211,21 +211,21 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 	$query .= "' IN BOOLEAN MODE)";
 	
 	$sql = db_query("SELECT title, content, `date` FROM announcement
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v'
 				AND MATCH (title, content)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT title, content, day, hour, lasting FROM agenda
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v'
 				AND MATCH (title, content)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM document
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND subsystem = 0
 				AND visibility = 'v'
 				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query, $mysqlMainDb);
@@ -233,17 +233,17 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM exercise
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND active = '1'
 				AND MATCH (title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM forum WHERE course_id = $cours_id AND MATCH (name, `desc`)".$query);
+	$sql = db_query("SELECT * FROM forum WHERE course_id = $course_id AND MATCH (name, `desc`)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT id, title FROM forum_topics WHERE course_id = $cours_id AND MATCH (title)".$query);
+	$sql = db_query("SELECT id, title FROM forum_topics WHERE course_id = $course_id AND MATCH (title)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
@@ -257,25 +257,25 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 		}
 	}
 	$sql = db_query("SELECT * FROM link
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM video 
-				WHERE course_id = $cours_id 
+				WHERE course_id = $course_id 
 				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM videolinks 
-				WHERE course_id = $cours_id 
+				WHERE course_id = $course_id 
 				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT id, title, comments FROM course_units
-				WHERE course_id = $cours_id
+				WHERE course_id = $course_id
 				AND visibility = 'v' 
 				AND MATCH (title, comments)".$query);
 	if (mysql_num_rows($sql) > 0) {
@@ -286,7 +286,7 @@ function search_in_course($search_terms, $cours_id, $code_cours) {
 				unit_resources.comments AS comments
 			FROM unit_resources, course_units
 				WHERE unit_resources.unit_id = course_units.id
-				AND course_units.course_id = $cours_id
+				AND course_units.course_id = $course_id
 				AND course_units.visibility = 'v'
 			AND MATCH(unit_resources.title, unit_resources.comments)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {

@@ -110,15 +110,15 @@ if($is_editor) {
 		// destruction of Exercise
 		unset($objExerciseTmp);
 	}
-	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $cours_id ORDER BY id LIMIT $from, $limitExPage";
+	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id");
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id");
 } else {
     // only for students
 	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
-		"FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
+		"FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND active = 1", $mysqlMainDb);
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = 1", $mysqlMainDb);
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
@@ -128,8 +128,8 @@ if($is_editor) {
 	$tool_content .= "
     <div align=\"left\" id=\"operations_container\">
       <ul id=\"opslist\">
-	<li><a href='admin.php?course=$code_cours&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
-			&nbsp;<a href='question_pool.php?course=$code_cours'>$langQuestionPool</a></li>";
+	<li><a href='admin.php?course=$course_code&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
+			&nbsp;<a href='question_pool.php?course=$course_code'>$langQuestionPool</a></li>";
 	$tool_content .= "
       </ul>
     </div>";
@@ -145,10 +145,10 @@ if(!$nbrExercises) {
 		$prevpage = $page - 1;
 		$nextpage = $page + 1;
 		if ($prevpage >= 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
 		}
 		if ($nextpage < $maxpage) { 
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
+			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
 		}
 	}
 
@@ -205,15 +205,15 @@ if(!$nbrExercises) {
 			}
 			$tool_content .= "<td width='16'>
 				<img src='$themeimg/arrow.png' alt='' /></td>
-				<td><a href=\"exercise_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
+				<td><a href=\"exercise_submit.php?course=$course_code&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
                                                 WHERE eid = '$eid'", $mysqlMainDb));
 	
 			if ($NumOfResults[0]) {
-				$tool_content .= "<td align='center'><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
+				$tool_content .= "<td align='center'><a href=\"results.php?course=$course_code&amp;exerciseId=".$row['id']."\">".
 				$langExerciseScores1."</a> | 
-				<a href=\"csv.php?course=$code_cours&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
+				<a href=\"csv.php?course=$course_code&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
 			} else {
 				$tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 			}
@@ -221,27 +221,27 @@ if(!$nbrExercises) {
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
+			  <a href='admin.php?course=$course_code&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
 			  </a>
-				<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
+				<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
 			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
 			  </a>";
 		
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
-					$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
+					$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$course_code&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
 					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=disable&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			} else { // else if not active
 				if (isset($page)) {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=enable&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			}
@@ -255,7 +255,7 @@ if(!$nbrExercises) {
                         $currentDate    = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5,2),       substr($currentDate, 8,2),       substr($currentDate, 0,4));
                         if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td><a href='exercise_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."'>".$row['title']."</a>";
+                                        <td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=".$row['id']."'>".$row['title']."</a>";
                         } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                                 $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
                                         <td class='invisible'>".$row['title']."&nbsp;&nbsp;";

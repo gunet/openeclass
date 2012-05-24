@@ -66,15 +66,15 @@ if (isset($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 } elseif ((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == '')) {
     // if path id not set, redirect user to the list of learning paths
-    header("Location: ./learningPathList.php?course=$code_cours");
+    header("Location: ./learningPathList.php?course=$course_code");
     exit();
 }
 
-$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $cours_id");
+$q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id");
 $lp = mysql_fetch_array($q);
 $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
-	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 }
 
 
@@ -82,24 +82,24 @@ if (!add_units_navigation(TRUE)) {
 if ( $is_editor )
 {
     // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
-    header("Location: ./learningPathAdmin.php?course=$code_cours&path_id=".$_SESSION['path_id']);
+    header("Location: ./learningPathAdmin.php?course=$course_code&path_id=".$_SESSION['path_id']);
     exit();
 }
 else {
 	if ($lp['visible'] == 0) {
 		// if the learning path is invisible, don't allow users in it
-		header("Location: ./learningPathList.php?course=$code_cours");
+		header("Location: ./learningPathList.php?course=$course_code");
 		exit();
 	}
 	
-	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `course_id` = $cours_id ORDER BY `rank`");
+	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `course_id` = $course_id ORDER BY `rank`");
 	if ($lps != false) {
 		$block_met = false;
 		foreach ($lps as $lp) {
 			if ($lp['learnPath_id'] == $_SESSION['path_id']) {
 				if ($block_met) {
 					// if a previous learning path was blocked, don't allow users in it
-					header("Location: ./learningPathList.php?course=$code_cours");
+					header("Location: ./learningPathList.php?course=$course_code");
 					exit();
 				}
 				else
@@ -138,7 +138,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
             AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
             AND LPM.`visible` = 1
             AND LPM.`module_id` = M.`module_id`
-            AND M.`course_id` = $cours_id
+            AND M.`course_id` = $course_id
        GROUP BY LPM.`module_id`
        ORDER BY LPM.`rank`";
 
@@ -277,7 +277,7 @@ foreach ($flatElementList as $module)
 
         $contentType_alt = selectAlt($module['contentType']);
         $tool_content .= '<span style="vertical-align: middle;"><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>&nbsp;'
-        .'<a href="viewer.php?course='.$code_cours.'&amp;path_id='.(int)$_SESSION['path_id'].'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
+        .'<a href="viewer.php?course='.$course_code.'&amp;path_id='.(int)$_SESSION['path_id'].'&amp;module_id='.$module['module_id'].'">'.htmlspecialchars($module['name']).'</a>'."";
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'
@@ -321,7 +321,7 @@ foreach ($flatElementList as $module)
     {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked ) 
-          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+          $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=".$module['module_id']."\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
         else
           $tool_content .= "<td></td>";
         if ($is_blocked)

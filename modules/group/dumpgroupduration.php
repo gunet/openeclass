@@ -28,7 +28,7 @@ $group_id = intval($_REQUEST['group_id']);
 initialize_group_info($group_id);
 
 if (!$is_editor and !$is_tutor) {
-        header('Location: group_space.php?course='.$code_cours.'&group_id=' . $group_id);
+        header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
         exit;
 }
 
@@ -48,7 +48,7 @@ if($is_editor) {
                 $u_date_end = autounquote($_REQUEST['u_date_end']);
 	} else {
 		list($min_date) = mysql_fetch_row(db_query(
-                                'SELECT MIN(date_time) FROM actions', $currentCourseID));
+                                'SELECT MIN(date_time) FROM actions', $course_code));
 		$u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
 	}
@@ -64,7 +64,7 @@ if($is_editor) {
 	     $crlf;
 	$totalDuration = 0;
 
-	$result = user_duration_query($currentCourseID, $cours_id, $u_date_start, $u_date_end, $group_id);
+	$result = user_duration_query($course_code, $course_id, $u_date_start, $u_date_end, $group_id);
 	
 	while ($row = mysql_fetch_assoc($result)) {
                 echo csv_escape($row['nom']) . ";" .

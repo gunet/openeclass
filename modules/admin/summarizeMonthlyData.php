@@ -116,7 +116,7 @@ $langPleaseWait</div>
                        COUNT(user_id) AS cnt
                 FROM course JOIN course_department ON course.id = course_department.course
                            JOIN hierarchy ON hierarchy.id = course_department.department
-                           LEFT JOIN cours_user ON course.id = cours_user.cours_id
+                           LEFT JOIN course_user ON course.id = course_user.course_id
                 GROUP BY course.id ";
         $result = db_query($sql);
         while ($row = mysql_fetch_assoc($result)) {            

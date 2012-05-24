@@ -47,12 +47,12 @@ load_js('tools.js');
 if (isset($_GET['visibility'])) {
 		switch ($_GET['visibility']) {
 		case 'activate':
-			$sql = "UPDATE poll SET active='1' WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
+			$sql = "UPDATE poll SET active='1' WHERE course_id = $course_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
 			$result = db_query($sql, $mysqlMainDb);
 			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollActivated"]."<br>";
 			break;
 		case 'deactivate':
-			$sql = "UPDATE poll SET active='0' WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
+			$sql = "UPDATE poll SET active='0' WHERE course_id = $course_id AND pid='".mysql_real_escape_string($_GET['pid'])."'";
 			$result = db_query($sql, $mysqlMainDb);
 			$GLOBALS["tool_content"] .= "".$GLOBALS["langPollDeactivated"]."<br>";
 			break;
@@ -65,10 +65,10 @@ if (isset($_GET['delete']) and $_GET['delete'] == 'yes')  {
 	$pid = intval($_GET['pid']);
 	db_query("DELETE FROM poll_question_answer WHERE pqid IN
 		(SELECT pqid FROM poll_question WHERE pid=$pid)", $mysqlMainDb);
-	db_query("DELETE FROM poll WHERE course_id = $cours_id AND pid=$pid", $mysqlMainDb);
+	db_query("DELETE FROM poll WHERE course_id = $course_id AND pid=$pid", $mysqlMainDb);
 	db_query("DELETE FROM poll_question WHERE pid='$pid'", $mysqlMainDb);
 	db_query("DELETE FROM poll_answer_record WHERE pid='$pid'", $mysqlMainDb);
-    $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+    $tool_content .= "<p class='success'>".$langPollDeleted."<br /><a href=\"questionnaire.php?course=$course_code\">".$langBack."</a></p>";
 	draw($tool_content, 2, null, $head_content);
 	exit();
 }
@@ -77,7 +77,7 @@ if ($is_editor) {
 	$tool_content .= "
         <div id=\"operations_container\">
 	  <ul id=\"opslist\">
-	    <li><a href='addpoll.php?course=$code_cours'>$langCreatePoll</a></li>
+	    <li><a href='addpoll.php?course=$course_code'>$langCreatePoll</a></li>
 	  </ul>
 	</div>";
 }
@@ -91,7 +91,7 @@ draw($tool_content, 2, null, $head_content);
  * printPolls()
  ****************************************************************************************************/
 function printPolls() {
-        global $tool_content, $cours_id, $code_cours, $langCreatePoll,
+        global $tool_content, $course_id, $course_code, $langCreatePoll,
                $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
                $langPollStart, $langPollEnd, $langPollNone, $is_editor,
                $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
@@ -100,7 +100,7 @@ function printPolls() {
                $langHasNotParticipated, $uid, $langConfirmDelete;
 
         $poll_check = 0;
-        $result = db_query("SELECT * FROM poll WHERE course_id = $cours_id", $mysqlMainDb);
+        $result = db_query("SELECT * FROM poll WHERE course_id = $course_id", $mysqlMainDb);
         $num_rows = mysql_num_rows($result);
         if ($num_rows > 0)
             ++$poll_check;
@@ -123,7 +123,7 @@ function printPolls() {
                         $tool_content .= "<th class='center'>$langParticipate</th>";
                 }
                 $tool_content .= "</tr>";
-                $active_polls = db_query("SELECT * FROM poll WHERE course_id = $cours_id", $mysqlMainDb);
+                $active_polls = db_query("SELECT * FROM poll WHERE course_id = $course_id", $mysqlMainDb);
                 $index_aa = 1;
                 $k =0;
                 while ($thepoll = mysql_fetch_array($active_polls)) {
@@ -176,13 +176,13 @@ function printPolls() {
                                 if ($is_editor) {
                                         $tool_content .= "
                         <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
-                        <td><a href='pollresults.php?course=$code_cours&amp;pid=$pid'>$thepoll[name]</a>";
+                        <td><a href='pollresults.php?course=$course_code&amp;pid=$pid'>$thepoll[name]</a>";
                                 } else {
                                         $tool_content .= "
                         <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                                         if (($has_participated[0] == 0) and $poll_ended == 0) {
-                                                $tool_content .= "<a href='pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";
+                                                $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";
                                         } else {
                                                 $tool_content .= "$thepoll[name]";
                                         }
@@ -197,7 +197,7 @@ function printPolls() {
                         <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["end_date"])), true)."</td>";
                                 if ($is_editor)  {
                                         $tool_content .= "
-                        <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid'><img src='$themeimg/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"><img src='$themeimg/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}'><img src='$themeimg/".$visibility_gif.".png' border='0' title=\"".$langVisible."\" /></a></td>
+                        <td class='center'><a href='addpoll.php?course=$course_code&amp;edit=yes&amp;pid=$pid'><img src='$themeimg/edit.png' title='$langEdit' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\"><img src='$themeimg/delete.png' title='$langDelete' border='0' /></a>&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}'><img src='$themeimg/".$visibility_gif.".png' border='0' title=\"".$langVisible."\" /></a></td>
                       </tr>";
                                 } else {
                                         $tool_content .= "

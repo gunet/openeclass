@@ -46,8 +46,8 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
 
 mysql_select_db($mysqlMainDb);
@@ -61,7 +61,7 @@ mysql_select_db($mysqlMainDb);
 // check if a module of this course already used the same document
 $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
 	WHERE A.`module_id` = M.`module_id` 
-	AND M.`course_id` = $cours_id
+	AND M.`course_id` = $course_id
 	AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 $query = db_query($sql);
 $num = mysql_numrows($query);
@@ -72,7 +72,7 @@ if ($num == 0)
 	// TODO: name goes from langWhatever
 	$sql = "INSERT INTO `".$TABLEMODULE."`
 		(`course_id`, `name`, `contentType`)
-		VALUES ($cours_id, '".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
+		VALUES ($course_id, '".$langCourseDescription."', '".CTCOURSE_DESCRIPTION_."' )";
 	$query = db_query($sql);
 
 	$insertedModule_id = mysql_insert_id();
@@ -88,7 +88,7 @@ if ($num == 0)
 	$sql = "UPDATE `".$TABLEMODULE."`
 	SET `startAsset_id` = " . (int)$insertedAsset_id . "
 	WHERE `module_id` = " . (int)$insertedModule_id . "
-	AND `course_id` = $cours_id";
+	AND `course_id` = $course_id";
 	$query = db_query($sql);
 
 	// determine the default order of this Learning path
@@ -115,7 +115,7 @@ else
 		`".$TABLEASSET."` AS A
 		WHERE M.`module_id` =  LPM.`module_id`
 		AND M.`startAsset_id` = A.`asset_id`
-		AND M.`course_id` = $cours_id
+		AND M.`course_id` = $course_id
 		AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
 		AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 	$query2 = db_query($sql);
@@ -147,6 +147,6 @@ $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";
 	$tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
 draw($tool_content, 2);
 ?>

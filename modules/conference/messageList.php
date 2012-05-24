@@ -37,8 +37,8 @@ body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 include '../../include/lib/textLib.inc.php';
 
 $coursePath = $webDir."courses";
-$fileChatName = $coursePath.'/'.$currentCourseID.'/chat.txt';
-$tmpArchiveFile = $coursePath.'/'.$currentCourseID.'/tmpChatArchive.txt';
+$fileChatName = $coursePath.'/'.$course_code.'/chat.txt';
+$tmpArchiveFile = $coursePath.'/'.$course_code.'/tmpChatArchive.txt';
 
 $nick = uid_to_name($uid);
 
@@ -80,7 +80,7 @@ if (isset($_GET['store']) && $is_editor) {
 	if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
                 $alert_div = $langSaveMessage;
                 db_query("INSERT INTO $mysqlMainDb.document SET
-                                course_id = $cours_id,
+                                course_id = $course_id,
                                 subsystem = $subsystem,
                                 path = '$chat_filename',
                                 filename = '$saveIn',

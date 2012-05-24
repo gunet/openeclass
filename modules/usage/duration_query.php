@@ -5,7 +5,7 @@
 // duration, nom, prenom, user_id, am
 function user_duration_query($course_code, $course_id, $start = false, $end = false, $group = false)
 { 
-        global $mysqlMainDb, $cours_id;
+        global $mysqlMainDb, $course_id;
 
         mysql_select_db($mysqlMainDb);
         
@@ -13,13 +13,13 @@ function user_duration_query($course_code, $course_id, $start = false, $end = fa
                 $date_where = 'WHERE c.date_time BETWEEN ' .
                               quote($start . ' 00:00:00') . ' AND ' .
                               quote($end . ' 23:59:59') . '
-                              AND course_id = ' . $cours_id;
+                              AND course_id = ' . $course_id;
         } elseif ($start !== false) {
-                $date_where = 'WHERE c.date_time > ' . quote($start . ' 00:00:00') . 'AND course_id = ' . $cours_id;
+                $date_where = 'WHERE c.date_time > ' . quote($start . ' 00:00:00') . 'AND course_id = ' . $course_id;
         } elseif ($end !== false) {
-                $date_where = 'WHERE c.date_time < ' . quote($end . ' 23:59:59') . 'AND course_id = ' . $cours_id;
+                $date_where = 'WHERE c.date_time < ' . quote($end . ' 23:59:59') . 'AND course_id = ' . $course_id;
         } else {
-                $date_where = 'WHERE course_id = ' . $cours_id;
+                $date_where = 'WHERE course_id = ' . $course_id;
         }
 
         db_query("CREATE TEMPORARY TABLE duration AS
@@ -41,9 +41,9 @@ function user_duration_query($course_code, $course_id, $start = false, $end = fa
                                    user.user_id AS user_id,
                                    user.am AS am
                             FROM $from
-                                      LEFT JOIN cours_user ON user.user_id = cours_user.user_id
+                                      LEFT JOIN course_user ON user.user_id = course_user.user_id
                                       LEFT JOIN duration ON user.user_id = duration.user_id
-                            WHERE cours_user.cours_id = $cours_id
+                            WHERE course_user.course_id = $course_id
                                   $and
                             ORDER BY nom, prenom");
 }

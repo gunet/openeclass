@@ -45,17 +45,17 @@ include('../../include/action.php');
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
-    <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
-    <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
-    <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
-    <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+    <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
+    <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
+    <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
+    <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
+    <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
 </div>\n";
 
 
 $nameTools = $langUserLogins;
-$navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
+$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
@@ -99,12 +99,12 @@ if ($u_user_id != -1) {
 $sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
                  WHERE ".$date_where." 
                  AND ".$user_where." 
-                 AND course_id = $cours_id 
+                 AND course_id = $course_id 
                  ORDER BY date_time DESC";
 
 $sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
-                 FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-                 WHERE b.cours_id = $cours_id AND ".$user_where;
+                 FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+                 WHERE b.course_id = $course_id AND ".$user_where;
 
 // Take data from logins
 $result_2= db_query($sql_2, $mysqlMainDb);
@@ -199,26 +199,26 @@ $start_cal = $jscalendar->make_input_field(
 
 
     $qry = "SELECT LEFT(a.nom, 1) AS first_letter
-        FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-        WHERE b.cours_id = $cours_id
+        FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+        WHERE b.course_id = $course_id
         GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
 
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?course='.$code_cours.'&amp;first='.urlencode($first_letter).'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?course='.$course_code.'&amp;first='.urlencode($first_letter).'">'.$first_letter.'</a> ';
     }
 
     if (isset($_GET['first'])) {
         $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.cours_id = $cours_id AND LEFT(a.nom,1) = '$firstletter'";
+            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+            WHERE b.course_id = $course_id AND LEFT(a.nom,1) = '$firstletter'";
     } else {
         $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-            WHERE b.cours_id = $cours_id";
+            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+            WHERE b.course_id = $course_id";
     }
 
 
@@ -230,7 +230,7 @@ $start_cal = $jscalendar->make_input_field(
     }
 
 $tool_content .= '
-<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
 <fieldset>
   <legend>'.$langUserLogins.'</legend>
 
@@ -255,7 +255,7 @@ $tool_content .= '
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$course_code.'">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>

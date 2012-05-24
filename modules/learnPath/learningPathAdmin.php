@@ -69,7 +69,7 @@ $dialogBox = '';
 
 if (!add_units_navigation()) {
 	$nameTools = $langAdm;
-	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 }
 
 // $_SESSION
@@ -83,11 +83,11 @@ if ( !$is_editor )
 {
     if ( isset($_SESSION['path_id']) )
     {
-        header("Location: ./learningPath.php?course=$code_cours&path_id=".$_SESSION['path_id']);
+        header("Location: ./learningPath.php?course=$course_code&path_id=".$_SESSION['path_id']);
     }
     else
     {
-        header("Location: ./learningPathList.php?course=$code_cours");
+        header("Location: ./learningPathList.php?course=$course_code");
     }
     exit();
 }
@@ -107,7 +107,7 @@ switch($cmd)
                 FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-                AND M.`course_id` = $cours_id
+                AND M.`course_id` = $course_id
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
 
@@ -135,7 +135,7 @@ switch($cmd)
                 FROM `".$TABLEMODULE."` AS M, `".$TABLELEARNPATHMODULE."` AS LPM
                 WHERE M.`module_id` = LPM.`module_id`
                 AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'] ."
-                AND M.`course_id` = $cours_id
+                AND M.`course_id` = $course_id
                 ORDER BY LPM.`rank` ASC";
         $result = db_query($sql);
 
@@ -215,7 +215,7 @@ switch($cmd)
                     WHERE M.`module_id` = LPM.`module_id`
                       AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
                       AND M.`contentType` = \"".CTLABEL_."\"
-                      AND M.`course_id` = $cours_id
+                      AND M.`course_id` = $course_id
                     ORDER BY LPM.`rank` ASC";
             $result = db_query($sql);
             $i=0;
@@ -243,7 +243,7 @@ switch($cmd)
                          `".$TABLEMODULE."` AS M
                     WHERE LPM.`module_id` = M.`module_id`
                       AND LPM.`learnPath_module_id` = ". (int)$_REQUEST['cmdid'] ."
-                      AND M.`course_id` = $cours_id";
+                      AND M.`course_id` = $course_id";
             $temp = db_query_fetch_all($sql);
             $moduleInfos = $temp[0];
 
@@ -278,7 +278,7 @@ switch($cmd)
             // create new module
             $sql = "INSERT INTO `".$TABLEMODULE."`
                    (`course_id`, `name`, `comment`, `contentType`, `launch_data`)
-                   VALUES ($cours_id, '". addslashes($_POST['newLabel']) ."','', '".CTLABEL_."','')";
+                   VALUES ($course_id, '". addslashes($_POST['newLabel']) ."','', '".CTLABEL_."','')";
             $query = db_query($sql);
 
             // request ID of the last inserted row (module_id in $TABLEMODULE) to add it in $TABLELEARNPATHMODULE
@@ -314,7 +314,7 @@ if (isset($sortDirection) && $sortDirection)
             WHERE LPM2.`learnPath_module_id` = ". (int)$thisLPMId."
               AND LPM.`learnPath_id` = LP.`learnPath_id`
               AND LP.`learnPath_id` = ". (int)$_SESSION['path_id']."
-              AND LP.`course_id` = $cours_id
+              AND LP.`course_id` = $course_id
             ORDER BY LPM.`rank` $sortDirection";
 
     $listModules  = db_query_fetch_all($sql);
@@ -359,7 +359,7 @@ if (isset($sortDirection) && $sortDirection)
 $sql = "SELECT *
         FROM `".$TABLELEARNPATH."`
         WHERE `learnPath_id` = ". (int)$_SESSION['path_id'] ."
-        AND `course_id` = $cours_id";
+        AND `course_id` = $course_id";
 $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
@@ -422,7 +422,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
     <tr>
       <th width=\"200\">$langLabel:</th>
       <td>
-        <form action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\" method=\"post\">
+        <form action=\"".$_SERVER['PHP_SELF']."?course=$course_code\" method=\"post\">
           <label for=\"newLabel\">".$langNewLabel.": </label>&nbsp;
           <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" / size=\"30\" >
           <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
@@ -443,25 +443,25 @@ if (!isset($displayCreateLabelForm))
     $tool_content .="
     <tr>
       <th width=\"200\">$langLabel:</th>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=createLabel\">".$langCreate."</a></td>
+      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=createLabel\">".$langCreate."</a></td>
     </tr>";
 }
     $tool_content .="
     <tr>
       <th rowspan=\"2\">$langLearningObjects:</th>
       <td>";
-    $tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$code_cours\" title=\"$langDocumentAsModule\">".
-            $langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php?course=$code_cours\" title=\"$langExerciseAsModule\">".
-            $langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php?course=$code_cours\" title=\"$langLinkAsModule\">".
-            $langLinkAsModuleLabel."</a> | <a href=\"insertMyMedia.php?course=$code_cours\" title=\"$langMediaAsModule\">".
-            $langMediaAsModuleLabel."</a> | <a href=\"insertMyDescription.php?course=$code_cours\" title=\"$langCourseDescriptionAsModule\">".
+    $tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$course_code\" title=\"$langDocumentAsModule\">".
+            $langDocumentAsModuleLabel."</a> | <a href=\"insertMyExercise.php?course=$course_code\" title=\"$langExerciseAsModule\">".
+            $langExerciseAsModuleLabel."</a> | <a href=\"insertMyLink.php?course=$course_code\" title=\"$langLinkAsModule\">".
+            $langLinkAsModuleLabel."</a> | <a href=\"insertMyMedia.php?course=$course_code\" title=\"$langMediaAsModule\">".
+            $langMediaAsModuleLabel."</a> | <a href=\"insertMyDescription.php?course=$course_code\" title=\"$langCourseDescriptionAsModule\">".
             $langCourseDescriptionAsModuleLabel."</a>
       </td>
     </tr>";
 
     $tool_content .="
     <tr>
-      <td>$langReuse: <a href=\"insertMyModule.php?course=$code_cours\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourse."</a>
+      <td>$langReuse: <a href=\"insertMyModule.php?course=$course_code\" title=\"$langModuleOfMyCourse\">".$langModuleOfMyCourse."</a>
       </td>
     </tr>";
 
@@ -476,7 +476,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm)
     <tr>
       <th>".$langMove.":</th>
       <td>
-        <form action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\" method=\"post\">\"<b>".$moduleInfos['name']."</b>\" &nbsp;".$langTo.":&nbsp;&nbsp;";
+        <form action=\"".$_SERVER['PHP_SELF']."?course=$course_code\" method=\"post\">\"<b>".$moduleInfos['name']."</b>\" &nbsp;".$langTo.":&nbsp;&nbsp;";
     // build select input - $elementList has been declared in the previous big cmd case
     $dialogBox .= build_nested_select_menu("newPos",$elementList);
     $dialogBox .= "
@@ -511,7 +511,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`
         LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
         WHERE M.`module_id` = LPM.`module_id`
           AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
-          AND M.`course_id` = $cours_id
+          AND M.`course_id` = $course_id
         ORDER BY LPM.`rank` ASC";
 
 $result = db_query($sql);
@@ -612,7 +612,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id']."&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."&amp;module_id=".$module['module_id']."\"".$style.">". htmlspecialchars($module['name']). "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 
@@ -625,12 +625,12 @@ foreach ($flatElementList as $module)
     }
     elseif ( $module['lock'] == 'OPEN')
     {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkBlock&amp;cmdid=".$module['learnPath_module_id']."\">
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=mkBlock&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$themeimg."/bullet_unblock.png\" alt=\"$langBlock\" title=\"$langBlock\" border=0 /></a>";
     }
     elseif( $module['lock'] == 'CLOSE')
     {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkUnblock&amp;cmdid=".$module['learnPath_module_id']."\">
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$themeimg."/bullet_block.png\" alt=\"$langAltMakeNotBlocking\" title=\"$langAltMakeNotBlocking\" border=0 /></a>";
     }
     $tool_content .= "</td>";
@@ -638,14 +638,14 @@ foreach ($flatElementList as $module)
     // ORDER COMMANDS
     // DISPLAY CATEGORY MOVE COMMAND
     	$tool_content .= "<td width='10' class='center'>
-	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=changePos&amp;cmdid=".$module['learnPath_module_id']."\">
+	<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=changePos&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$themeimg."/move.png\" alt=\"$langMove\" title=\"$langMove\" border=0 /></a></td>";
 
     // DISPLAY MOVE UP COMMAND only if it is not the top learning path
     if ($module['up'])
     {
         $tool_content .= "<td width='10' align=\"right\">
-	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=moveUp&amp;cmdid=".$module['learnPath_module_id']."\">
+	<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=moveUp&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$themeimg."/up.png\" alt=\"$langUp\" title=\"$langUp\" border=0 /></a></td>";
     }
     else
@@ -657,7 +657,7 @@ foreach ($flatElementList as $module)
     if ($module['down'])
     {
         $tool_content .= "<td width='10'>
-	<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=moveDown&amp;cmdid=".$module['learnPath_module_id']."\">
+	<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=moveDown&amp;cmdid=".$module['learnPath_module_id']."\">
 	<img src=\"".$themeimg."/down.png\" alt=\"$langDown\" title=\"$langDown\" border=0 /></a></td>";
     }
     else
@@ -667,12 +667,12 @@ foreach ($flatElementList as $module)
 
     // Modify command / go to other page
     $tool_content .= "
-      <td width='10'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src=\"".$themeimg."/edit.png\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
+      <td width='10'><a href=\"module.php?course=$course_code&amp;module_id=".$module['module_id']."\"><img src=\"".$themeimg."/edit.png\" border=0 alt=\"".$langModify."\" title=\"".$langModify."\" /></a></td>";
 
     // DELETE ROW
    //in case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
     $tool_content .= "
-      <td width='10'><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=delModule&amp;cmdid=".$module['learnPath_module_id']."\" ".
+      <td width='10'><a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=delModule&amp;cmdid=".$module['learnPath_module_id']."\" ".
          "onClick=\"return confirmation('".clean_str_for_javascript($langAreYouSureToRemove." ".$module['name'])." ? ";
 
     if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
@@ -688,7 +688,7 @@ foreach ($flatElementList as $module)
     $tool_content .= "<td width='10'>";
 
     if ($module['visible'] == 0) {
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$themeimg."/invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=".$module['module_id']."\"><img src=\"".$themeimg."/invisible.png\" alt=\"$langVisible\" title=\"$langVisible\" border=\"0\" /></a>";
     }
     else
     {
@@ -700,7 +700,7 @@ foreach ($flatElementList as $module)
         {
             $onclick = "";
         }
-        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$themeimg."/visible.png\" alt='$langVisible' title='$langVisible' /></a>";
+        $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=".$module['module_id']."\" ".$onclick. " ><img src=\"".$themeimg."/visible.png\" alt='$langVisible' title='$langVisible' /></a>";
     }
 
     $tool_content .= "</td>";

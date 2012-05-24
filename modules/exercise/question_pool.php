@@ -34,10 +34,10 @@ $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
 $nameTools = $langQuestionPool;
-$navigation[]=array("url" => "exercise.php?course=$code_cours","name" => $langExercices);
+$navigation[]=array("url" => "exercise.php?course=$course_code","name" => $langExercices);
 if (isset($_GET['fromExercise'])) {
 	$fromExercise = $_GET['fromExercise'];
-	$navigation[]= array ("url" => "admin.php?course=$code_cours&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
+	$navigation[]= array ("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);
 }
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = $_GET['exerciseId'];
@@ -90,27 +90,27 @@ if($is_editor) {
 	if (isset($exerciseId) and $exerciseId != 0) {
 		if ($exerciseId > 0) {
 			$sql = "SELECT * FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
-				WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$exerciseId'";
+				WHERE course_id = $course_id AND question_id = id AND exercise_id = '$exerciseId'";
 		} elseif($exerciseId == -1) {
 			$sql = "SELECT * FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
-				ON question_id = id WHERE course_id = $cours_id AND exercise_id IS NULL";
+				ON question_id = id WHERE course_id = $course_id AND exercise_id IS NULL";
 		}
 	} else {
-		$sql = "SELECT * from`$TBL_QUESTION` WHERE course_id = $cours_id";
+		$sql = "SELECT * from`$TBL_QUESTION` WHERE course_id = $course_id";
 	}
 	$result = db_query($sql, $mysqlMainDb);
 	$num_of_questions = mysql_num_rows($result);	
 
 	$tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";
 	if(isset($fromExercise)) {
-		$tool_content .= "<a href=\"admin.php?course=$code_cours\">&lt;&lt; ".$langGoBackToEx."</a>";
+		$tool_content .= "<a href=\"admin.php?course=$course_code\">&lt;&lt; ".$langGoBackToEx."</a>";
 	} else {
-		$tool_content .= "<a href=\"admin.php?course=$code_cours&amp;newQuestion=yes\">".$langNewQu."</a>";
+		$tool_content .= "<a href=\"admin.php?course=$course_code&amp;newQuestion=yes\">".$langNewQu."</a>";
 	}
 	
 	$tool_content .= "</li></ul></div>";
 
-	$tool_content .= "<form name='qfilter' method='get' action='$_SERVER[PHP_SELF]'><input type='hidden' name='course' value='$code_cours'>";
+	$tool_content .= "<form name='qfilter' method='get' action='$_SERVER[PHP_SELF]'><input type='hidden' name='course' value='$course_code'>";
 	if (isset($fromExercise)) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
@@ -133,9 +133,9 @@ if($is_editor) {
 	
 	mysql_select_db($mysqlMainDb);
 	if (isset($fromExercise)) {
-		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $cours_id AND id <> '$fromExercise' ORDER BY id";
+		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id <> '$fromExercise' ORDER BY id";
 	} else {
-		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $cours_id ORDER BY id";
+		$sql = "SELECT id, title FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id";
 	}
 	$result = db_query($sql);
 	
@@ -156,7 +156,7 @@ if($is_editor) {
 	if(isset($exerciseId) && $exerciseId > 0)
 	{
 		$sql = "SELECT id, question, type FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
-			WHERE course_id = $cours_id AND question_id = id AND exercise_id = '$exerciseId' 
+			WHERE course_id = $course_id AND question_id = id AND exercise_id = '$exerciseId' 
 			ORDER BY q_position LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 	}
@@ -164,7 +164,7 @@ if($is_editor) {
 	elseif(isset($exerciseId) && $exerciseId == -1)
 	{
 		$sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
-			ON question_id = id WHERE course_id = $cours_id AND exercise_id IS NULL ORDER BY question 
+			ON question_id = id WHERE course_id = $course_id AND exercise_id IS NULL ORDER BY question 
 			LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 	}
@@ -172,7 +172,7 @@ if($is_editor) {
 	else
 	{		
 		@$sql = "SELECT id, question, type FROM `$TBL_QUESTION` LEFT JOIN `$TBL_EXERCISE_QUESTION` 
-			ON question_id = id WHERE course_id = $cours_id AND (exercise_id IS NULL OR exercise_id <> '$fromExercise')  
+			ON question_id = id WHERE course_id = $course_id AND (exercise_id IS NULL OR exercise_id <> '$fromExercise')  
 			GROUP BY id ORDER BY question LIMIT $from,".(QUESTIONS_PER_PAGE+1);
 		$result = db_query($sql);
 		// forces the value to 0
@@ -217,9 +217,9 @@ if($is_editor) {
 				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
-				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
+				  <a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
 				</td>
-				<td width='3'><div align='center'><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."\">
+				<td width='3'><div align='center'><a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."\">
 				  <img src='$themeimg/edit.png' title='$langModify' /></a></div>
 				</td>";
 			} else {
@@ -227,9 +227,9 @@ if($is_editor) {
 				<td width='1'><div style='padding-top:4px;'>
 				  <img src='$themeimg/arrow.png'></div>
 				</td>
-				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
+				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
-				  <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;recup=".$row['id'].
+				  <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;recup=".$row['id'].
 				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
 				</td>";
 			}
@@ -237,7 +237,7 @@ if($is_editor) {
 			if(!isset($fromExercise)) {
 				$tool_content .= "
 				<td width='3' align='center'>
-				  <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
+				  <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
 				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
 				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' /></a>
 				</td>";
@@ -271,24 +271,24 @@ if($is_editor) {
 		if ($page > 0) {
 			$prevpage = $page-1;
 			if (isset($fromExercise)) {
-				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;exerciseId=".$exerciseId.
+				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId.
 				"&amp;fromExercise=".$fromExercise.
 				"&amp;page=".$prevpage."\">".$langPreviousPage."</a>&nbsp;</small>";
 			} else {
 				$tool_content .= "<small>&lt;&lt; 
-				<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$prevpage'>$langPreviousPage</a></small>";
+				<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$prevpage'>$langPreviousPage</a></small>";
 			}
 		}
 		if ($page < $numpages) {
 			$nextpage = $page+1;
 			if (isset($fromExercise)) {
-				$tool_content .= "<small><a href='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;exerciseId=".$exerciseId.
+				$tool_content .= "<small><a href='".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId.
 				"&amp;fromExercise=".$fromExercise.
 				"&amp;page=".$nextpage."'>".$langNextPage.
 				"</a> &gt;&gt;</small>";
 			} else {
 				$tool_content .= "<small>
-				<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;
+				<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;
 				</small>";
 			}
 		}

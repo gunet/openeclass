@@ -51,7 +51,7 @@ if(isset($_POST['submit'])) {
 		$output[] = delete_announcements();
 	}
 
-	mysql_select_db($currentCourseID);
+	mysql_select_db($course_code);
 	if (isset($_POST['delagenda'])) {
 		$output[] = delete_agenda();
 	}
@@ -67,7 +67,7 @@ if(isset($_POST['submit'])) {
 		}
 		$tool_content .= "\n</ul>\n</p><br />";
 	}
-	$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
 
 } else {
 	$lang_jscalendar = langname_to_code($language);
@@ -75,7 +75,7 @@ if(isset($_POST['submit'])) {
         $head_content .= $jscalendar->get_load_files_code();
         $datetoday = date("Y-n-j",time());
 	
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
 	<table width='100%' class=\"FormData\">
 	<tbody>
 	<tr>
@@ -112,53 +112,54 @@ if(isset($_POST['submit'])) {
 	</tbody>
 	</table>
 	</form>";	
-	$tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
 }
 
 draw($tool_content, 2, null, $head_content);
 
 function delete_users($date = '') {
-	global $cours_id, $langUsersDeleted;
+	global $course_id, $langUsersDeleted;
 
 	if (isset($date)) {
-		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id
-				AND statut <> 1
-				AND statut <> 10
-				AND reg_date < '$date'");	  
+                db_query("DELETE FROM course_user
+                                 WHERE course_id = $course_id AND
+                                       statut <> 1 AND
+                                       statut <> 10 AND
+                                       reg_date < '$date'");	  
 	} else {
-		db_query("DELETE FROM cours_user WHERE cours_id = $cours_id AND statut <> 1 AND statut <> 10");
+		db_query("DELETE FROM course_user WHERE course_id = $course_id AND statut <> 1 AND statut <> 10");
 	}
         db_query("DELETE FROM group_members
-                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id) AND
-                               user_id NOT IN (SELECT user_id FROM cours_user WHERE cours_id = $cours_id)"); 
+                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
+                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)"); 
 	return "<p>$langUsersDeleted</p>";
 }
 
 function delete_announcements() {
-	global $cours_id, $langAnnDeleted;
+	global $course_id, $langAnnDeleted;
 
-	db_query("DELETE FROM announcement WHERE course_id = $cours_id");
+	db_query("DELETE FROM announcement WHERE course_id = $course_id");
 	return "<p>$langAnnDeleted</p>";
 }
 
 function delete_agenda() {
-	global $langAgendaDeleted, $cours_id;
+	global $langAgendaDeleted, $course_id;
 
-	db_query("DELETE FROM agenda WHERE course_id = $cours_id");
+	db_query("DELETE FROM agenda WHERE course_id = $course_id");
 	return "<p>$langAgendaDeleted</p>";
 }
 
 function hide_doc()  {
-	global $langDocsDeleted, $cours_id;
+	global $langDocsDeleted, $course_id;
 
-	db_query("UPDATE document SET visibility='i' WHERE course_id = $cours_id");
+	db_query("UPDATE document SET visibility='i' WHERE course_id = $course_id");
 	return "<p>$langDocsDeleted</p>";
 }
 
 function hide_work()  {
-	global $langWorksDeleted, $cours_id;
+	global $langWorksDeleted, $course_id;
 
-	db_query("UPDATE assignment SET active=0 WHERE course_id = $cours_id");
+	db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
 	return "<p>$langWorksDeleted</p>";
 }
 

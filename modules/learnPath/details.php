@@ -44,7 +44,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLECOURSUSER	        = "cours_user";
+$TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -54,13 +54,13 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
 
-$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
 if( empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php?course=$code_cours");
+	header("Location: ./learningPathList.php?course=$course_code");
 	exit();
 }
 
@@ -68,7 +68,7 @@ mysql_select_db($mysqlMainDb);
 $path_id = intval($_REQUEST['path_id']);
 
 // get infos about the learningPath
-$sql = "SELECT `name` FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$path_id ." AND `course_id` = ". $cours_id;
+$sql = "SELECT `name` FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$path_id ." AND `course_id` = ". $course_id;
 $learnPathName = db_query_get_single_value($sql);
 
 if( $learnPathName )
@@ -82,13 +82,13 @@ if( $learnPathName )
 		FROM `$TABLEUSER` AS U,
 		     `$TABLECOURSUSER` AS CU
 		WHERE U.`user_id` = CU.`user_id`
-		AND CU.`cours_id` = $cours_id
+		AND CU.`course_id` = $course_id
 		ORDER BY U.`nom` ASC";
 
 	@$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 
 	$usersList = get_limited_list($sql, 30);
-	mysql_select_db($currentCourseID);
+	mysql_select_db($course_code);
 
 	// display tab header
 	$tool_content .= ''."\n\n"
@@ -114,7 +114,7 @@ if( $learnPathName )
             }
 		$tool_content .= ''."\n"
 		.'      <td width="1"><img src="'.$themeimg.'/arrow.png" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'      <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'      <td><a href="detailsUserPath.php?course='.$course_code.'&amp;uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'      <td align="right">'
 		.disp_progress_bar($lpProgress, 1)
 		.'</td>'."\n"

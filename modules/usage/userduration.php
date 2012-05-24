@@ -64,24 +64,24 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         $format = 'html';
 
         $nameTools = $langUserDuration;
-        $navigation[] = array('url' => 'usage.php?course='.$code_cours, 'name' => $langUsage);
+        $navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
         
         $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href='favourite.php?course=$code_cours&amp;first='>$langFavourite</a></li>
-            <li><a href='userlogins.php?course=$code_cours&amp;first='>$langUserLogins</a></li>
-            <li><a href='userduration.php?course=$code_cours'>$langUserDuration</a></li>
-            <li><a href='../learnPath/detailsAll.php?course=$code_cours&amp;from_stats=1'>$langLearningPaths</a></li>
-            <li><a href='group.php?course=$code_cours'>$langGroupUsage</a></li>
+            <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
+            <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
+            <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
+            <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
+            <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
         </div>\n";
         
         // display number of users
         $tool_content .= "
         <div class='info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$code_cours&amp;format=csv'>$langcsvenc2</a>
-                2. <a href='userduration.php?course=$code_cours&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>          
+           <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
+                2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>          
           </div>";
 
         $local_style = '
@@ -99,12 +99,12 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         </tr>\n";
 }
 
-$result = user_duration_query($currentCourseID, $cours_id);
+$result = user_duration_query($course_code, $course_id);
 if ($result) {
         $i = 0;
         while ($row = mysql_fetch_assoc($result)) {
                 $i++;
-                $grp_name = user_groups($cours_id, $row['user_id'], $format);
+                $grp_name = user_groups($course_id, $row['user_id'], $format);
                 if ($format == 'html') {
                         if ($i%2 == 0) {
                                 $tool_content .= "\n<tr class='even'>";

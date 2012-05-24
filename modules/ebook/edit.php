@@ -30,7 +30,7 @@ include '../../include/lib/fileDisplayLib.inc.php';
 mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBookEdit;
-$navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);
 
 if (!$is_editor) {
         redirect_to_home_page();
@@ -58,17 +58,17 @@ if (isset($_GET['delete'])) {
                                                         public_id = " . autoquote($_POST['new_section_id']) . ",
                                                         title = " . autoquote($_POST['new_section_title']));
         }
-        header("Location: " . $urlAppend . '/modules/ebook/edit.php?course='.$code_cours.'&id=' . $ebook_id);
+        header("Location: " . $urlAppend . '/modules/ebook/edit.php?course='.$course_code.'&id=' . $ebook_id);
         exit;
 } elseif (isset($_POST['title_submit'])) {
-        $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id"));
+        $info = mysql_fetch_array(db_query("SELECT * FROM `ebook` WHERE course_id = $course_id AND id = $ebook_id"));
         $ebook_title = trim(autounquote($_POST['ebook_title']));
         if (!empty($ebook_title) and $info['title'] != $ebook_title) {
                 db_query("UPDATE `ebook` SET title = " . quote($ebook_title) . " WHERE id = $info[id]");
         }
         $tool_content .= "<p class='success'>$langEBookTitleModified</p>";
 } elseif (isset($_POST['submit'])) {
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
+        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
         list($paths, $files, $file_ids, $id_map) = find_html_files();
         foreach ($_POST['sid'] as $file_id => $sid) {
                 if (!empty($sid)) {
@@ -106,24 +106,24 @@ if (isset($_GET['delete'])) {
         $tool_content .= "<p class='success'>$langEBookSectionsModified</p>";
 } 
 
-$q = db_query("SELECT * FROM `ebook` WHERE course_id = $cours_id AND id = $ebook_id");
+$q = db_query("SELECT * FROM `ebook` WHERE course_id = $course_id AND id = $ebook_id");
 
 if (mysql_num_rows($q) == 0) {
         $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
         $info = mysql_fetch_array($q);
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
+        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
         $k = 0;
         list($paths, $files, $file_ids, $id_map) = find_html_files();
         // Form #1 - edit ebook title
         $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
-        <li><a href='document.php?course=$code_cours&amp;ebook_id=$ebook_id'>$langFileAdmin</a></li>
+        <li><a href='document.php?course=$course_code&amp;ebook_id=$ebook_id'>$langFileAdmin</a></li>
       </ul>
     </div>
     
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+    <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
     <fieldset>
     <legend>$langEBook</legend>
       <table width='100%' class='tbl_alt'>
@@ -143,7 +143,7 @@ if (mysql_num_rows($q) == 0) {
 
         // Form #2 - edit sections
         $tool_content .= "
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+    <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
     <fieldset>
     <legend>$langSections</legend>
     <input type='hidden' name='id' value='$ebook_id' />
@@ -177,7 +177,7 @@ if (mysql_num_rows($q) == 0) {
                 } else {
                         $section_id = $qsid;
                         $section_title = $qstitle;
-                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>";
+                        $section_tools = "<a href='edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>";
                 }
                 $class = odd_even($k);
                 $tool_content .= "
@@ -231,7 +231,7 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "
      <tr$class>
        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-       <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+       <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($r['subsection_title']) . "' /></td>
        <td>" .  selection($sections, "sid[$file_id]", $r['sid']) . "</td>
        <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r[ssid]' />
@@ -248,7 +248,7 @@ if (mysql_num_rows($q) == 0) {
                 $tool_content .= "
      <tr$class>
        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-       <td class='smaller'><a href='show.php/$currentCourseID/$ebook_id/_" . q($file) .  "' target='_blank'>" . q($file) . "</a></td>
+       <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) .  "' target='_blank'>" . q($file) . "</a></td>
        <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
        <td>" . selection($sections, "sid[$file_id]") . "</td>
        <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>

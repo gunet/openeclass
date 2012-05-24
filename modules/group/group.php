@@ -81,7 +81,7 @@ unset($_SESSION['forum_id']);
 
 mysql_select_db($mysqlMainDb);
 initialize_group_info();
-$user_groups = user_group_info($uid, $cours_id);
+$user_groups = user_group_info($uid, $course_id);
 
 if ($is_editor) {
         if (isset($_POST['creation'])) {
@@ -91,17 +91,17 @@ if ($is_editor) {
                 } else {
                         $group_max = 0;
                 }
-                list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $cours_id"));
+                list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $course_id"));
 
                 // Create a hidden category for group forums
                 $req = db_query("SELECT id FROM forum_categories 
                                 WHERE cat_order = -1
-                                AND course_id = $cours_id");
+                                AND course_id = $course_id");
                 if ($req and mysql_num_rows($req) > 0) {
                         list($cat_id) = mysql_fetch_row($req);
                 } else {
                         db_query("INSERT INTO forum_categories (cat_title,  cat_order, course_id)
-                                         VALUES ('$langCatagoryGroup', -1, $cours_id)");
+                                         VALUES ('$langCatagoryGroup', -1, $course_id)");
                         $cat_id = mysql_insert_id();
                 }
 
@@ -112,19 +112,19 @@ if ($is_editor) {
                         } while (mysql_num_rows($res) > 0);
 
                         db_query("INSERT INTO forum (name, `desc`, num_topics, num_posts, last_post_id, cat_id, course_id)
-                                  VALUES ('$langForumGroup $group_num', '', 0, 0, 1, $cat_id, $cours_id)");
+                                  VALUES ('$langForumGroup $group_num', '', 0, 0, 1, $cat_id, $course_id)");
                         $forum_id = mysql_insert_id();
 
                         // Create a unique path to group documents to try (!)
                         // avoiding groups entering other groups area
                         $secretDirectory = uniqid('');
-                        mkdir("../../courses/$code_cours/group/$secretDirectory", 0777, true);
+                        mkdir("../../courses/$course_code/group/$secretDirectory", 0777, true);
 
                         db_query("INSERT INTO `group` (max_members, secret_directory)
                                 VALUES ($group_max, '$secretDirectory')");
 
                         db_query("INSERT INTO `group` SET
-                                         course_id = $cours_id,
+                                         course_id = $course_id,
                                          name = '$langGroup $group_num',
                                          forum_id =  $forum_id,
                                          max_members = $group_max,
@@ -148,21 +148,21 @@ if ($is_editor) {
                                  multiple_registration = $multi_reg,
                                  private_forum = $private_forum,
                                  forum = $has_forum,
-                                 documents = $documents WHERE course_id = $cours_id");
+                                 documents = $documents WHERE course_id = $course_id");
                 $message = $langGroupPropertiesModified;
 
         } elseif (isset($_REQUEST['delete_all'])) {
-                db_query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
-                db_query("DELETE FROM `group` WHERE course_id = $cours_id");
-                db_query("DELETE FROM document WHERE course_id = $cours_id AND subsystem = 1");
+                db_query("DELETE FROM group_members WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)");
+                db_query("DELETE FROM `group` WHERE course_id = $course_id");
+                db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1");
                 // FIXME db_query("DELETE FROM forums WHERE cat_id='1'");
 
                 // Move all groups to garbage collector and re-create an empty work directory
                 $groupGarbage = uniqid(20);
 
                 @mkdir("../../courses/garbage");
-                rename("../../courses/$code_cours/group", "../../courses/garbage/$groupGarbage");
-                mkdir("../../courses/$code_cours/group", 0777);
+                rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
+                mkdir("../../courses/$course_code/group", 0777);
 
                 $message = $langGroupsDeleted;
 
@@ -173,11 +173,11 @@ if ($is_editor) {
                 $groupGarbage = uniqid(20);
                 $sqlDir = db_query("SELECT secret_directory, forum_id FROM `group` WHERE id = $id");
                 $myDir = mysql_fetch_array($sqlDir);
-                rename("../../courses/$code_cours/group/$myDir[secret_directory]",
+                rename("../../courses/$course_code/group/$myDir[secret_directory]",
                        "../../courses/garbage/$groupGarbage");
                 // FIXME db_query("DELETE FROM forums WHERE forum_id = $myDir[forum_id]");
 
-                db_query("DELETE FROM document WHERE course_id = $cours_id AND subsystem = 1 AND subsystem_id = $id");
+                db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1 AND subsystem_id = $id");
                 db_query("DELETE FROM group_members WHERE group_id = $id");
                 db_query("DELETE FROM `group` WHERE id = $id");
                 $message = $langGroupDel;
@@ -185,14 +185,14 @@ if ($is_editor) {
         } elseif (isset($_REQUEST['empty'])) {
                 $result = db_query("DELETE FROM group_members
 				   WHERE group_id IN
-				   (SELECT id FROM `group` WHERE course_id = $cours_id)");
+				   (SELECT id FROM `group` WHERE course_id = $course_id)");
                 $message = $langGroupsEmptied;
 
         } elseif (isset($_REQUEST['fill'])) {
                 $resGroups = db_query("SELECT id, max_members -
                                                       (SELECT count(*) from group_members WHERE group_members.group_id = id)
                                                   AS remaining
-                                              FROM `group` WHERE course_id = $cours_id ORDER BY id");
+                                              FROM `group` WHERE course_id = $course_id ORDER BY id");
                 while (list($idGroup, $places) = mysql_fetch_row($resGroups)) {
                         if ($places > 0) {
                                 $placeAvailableInGroups[$idGroup] = $places;
@@ -200,14 +200,14 @@ if ($is_editor) {
                 }
                 // Course members not registered to any group
                 $resUserSansGroupe= db_query("SELECT u.user_id, u.nom, u.prenom
-                                FROM (user u, cours_user cu)
-                                WHERE cu.cours_id = $cours_id AND
+                                FROM (user u, course_user cu)
+                                WHERE cu.course_id = $course_id AND
                                       cu.user_id = u.user_id AND
                                       cu.statut = 5 AND
                                       cu.tutor = 0 AND
                                       u.user_id NOT IN (SELECT user_id FROM group_members, `group`
                                                                        WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $cours_id)
+                                                                       `group`.course_id = $course_id)
                                 GROUP BY u.user_id
                                 ORDER BY u.nom, u.prenom");
                 while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe)) {
@@ -240,10 +240,10 @@ if ($is_editor) {
           $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href='group_creation.php?course=$code_cours' title='$langNewGroupCreate'>$langCreate</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
+            <li><a href='group_creation.php?course=$course_code' title='$langNewGroupCreate'>$langCreate</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
+            <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
           </ul>
         </div>";
 
@@ -251,26 +251,26 @@ if ($is_editor) {
 	$tool_content .= "
         <table class='tbl_courseid' width='100%'>
 	<tr>
-	  <td class='title1' colspan='2'><a href='group_properties.php?course=$code_cours' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php?course=$code_cours' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+	  <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
+              <a href='group_properties.php?course=$course_code' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'>$langGroupUsersList</td>
 	</tr>";
 
         list($total_students) = mysql_fetch_row(db_query(
-                "SELECT COUNT(*) FROM cours_user
-                 WHERE cours_id = $cours_id AND statut = 5 AND tutor = 0"));
+                "SELECT COUNT(*) FROM course_user
+                 WHERE course_id = $course_id AND statut = 5 AND tutor = 0"));
         list($unregistered_students) = mysql_fetch_row(db_query(
                         "SELECT COUNT(*)
-                                FROM (user u, cours_user cu)
-                                WHERE cu.cours_id = $cours_id AND
+                                FROM (user u, course_user cu)
+                                WHERE cu.course_id = $course_id AND
                                       cu.user_id = u.user_id AND
                                       cu.statut = 5 AND
                                       cu.tutor = 0 AND
                                       u.user_id NOT IN (SELECT user_id FROM group_members, `group`
                                                                        WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $cours_id)"));
+                                                                       `group`.course_id = $course_id)"));
 
         $registered_students = $total_students - $unregistered_students;
 
@@ -313,11 +313,11 @@ if ($is_editor) {
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
-                <td align='right'><font color='green'>$langYes</font>";
+          <td align='right'><font color='green'>$langYes</font>";
                 $fontColor="black";
         } else {
                 $tool_content .= "$langGroupForum</td>
-                <td align='right'>
+          <td align='right'>
                 <font color='red'>$langNo</font>";$fontColor="silver";
         }
         $tool_content .= "</td>
@@ -347,7 +347,7 @@ if ($is_editor) {
 	$tool_content .= "
         </table>";
 
-	$groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $cours_id ORDER BY id");
+	$groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $course_id ORDER BY id");
 	$myIterator = 0;
 	$num_of_groups = mysql_num_rows($groupSelect);
 	// groups list
@@ -374,7 +374,7 @@ if ($is_editor) {
                         $tool_content .= "
                   <td width='16'>
                         <img src='$themeimg/arrow.png' alt='' /></td><td>
-                        <a href='group_space.php?course=$code_cours&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
+                        <a href='group_space.php?course=$course_code&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
                         $tool_content .= "
                   <td>" . display_user($tutors) . "</td>" . "
                   <td class='center'>$member_count</td>";
@@ -387,9 +387,9 @@ if ($is_editor) {
                         }
                         $tool_content .= "
                   <td class='center'>
-                        <a href='group_edit.php?course=$code_cours&amp;group_id=$group[id]'>
+                        <a href='group_edit.php?course=$course_code&amp;group_id=$group[id]'>
                         <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
-                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
+                        <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
                         <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
                 </tr>";
@@ -406,7 +406,7 @@ if ($is_editor) {
 
 } else {
         // Begin student view
-	$q = db_query("SELECT id FROM `group` WHERE course_id = $cours_id");
+	$q = db_query("SELECT id FROM `group` WHERE course_id = $course_id");
         if (mysql_num_rows($q) == 0) {
                 $tool_content .= "<p class='alert1'>$langNoGroup</p>";
         } else {
@@ -433,19 +433,19 @@ if ($is_editor) {
                           <td class='left'>";
                         // Allow student to enter group only if member
                         if ($is_member) {
-                                $tool_content .= "<a href='group_space.php?course=$code_cours&amp;group_id=$row[0]'>" . q($group_name) .
+                                $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$row[0]'>" . q($group_name) .
                                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
 			} else {
 				$tool_content .= q($group_name);
 			}
 			if ($user_group_description) {
 				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
-					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'>
+					<a href='group_description.php?course=$course_code&amp;group_id=$row[0]'>
 						<img src='$themeimg/edit.png' title='$langModify' /></a>
-					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
+					<a href='group_description.php?course=$course_code&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
 						<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 			} elseif ($is_member) {
-				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
+				$tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "<td class='center'>" . display_user($tutors) . "</td>";
@@ -457,7 +457,7 @@ if ($is_editor) {
 			    (!$user_groups or $multi_reg) and
 			    !$is_member and
 			    (!$max_members or $member_count < $max_members)) {
-                                        $tool_content .= "<a href='group_space.php?course=$code_cours&amp;selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
+                                        $tool_content .= "<a href='group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
 			} else {
                                         $tool_content .= "-";
 			}

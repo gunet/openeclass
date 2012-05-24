@@ -51,7 +51,7 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 $nameTools = $langExercice;
-$picturePath='../../'.$currentCourseID.'/image';
+$picturePath='../../'.$course_code.'/image';
 
 
 $TBL_EXERCISE           = 'exercise';
@@ -70,7 +70,7 @@ if (isset($_GET['exerciseId'])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: backFromExercise.php?course='.$code_cours.'&op=cancel');
+	header('Location: backFromExercise.php?course='.$course_code.'&op=cancel');
 	exit();
 }
 
@@ -103,7 +103,7 @@ if (isset($_POST['formSent'])) {
         if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-            header('Location: ../../exercise/exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+            header('Location: ../../exercise/exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
@@ -131,7 +131,7 @@ if (isset($_POST['formSent'])) {
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
 		// goes to the script that will show the result of the exercise
-		header('Location: showExerciseResult.php?course='.$code_cours.'&exerciseId='.$exerciseId);
+		header('Location: showExerciseResult.php?course='.$course_code.'&exerciseId='.$exerciseId);
 		exit();
 	}
 } // end of submit
@@ -174,7 +174,7 @@ if (!$is_editor) {
     $error = FALSE;
     // check if exercise has expired or is active
     $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
-                                                  WHERE eid='$eid_temp' AND uid='$uid'", $currentCourseID));
+                                                  WHERE eid='$eid_temp' AND uid='$uid'", $course_code));
     ++$currentAttempt[0];
     if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
         $message = $langExerciseMaxAttemptsReached;
@@ -241,7 +241,7 @@ echo ("
   </table>
   <br />
 
-  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+  <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	

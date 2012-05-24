@@ -54,8 +54,8 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-$TOCurl = "../viewer_toc.php?course=$code_cours"; 
-$TOCleft = "../toc.php?course=$code_cours";
+$TOCurl = "../viewer_toc.php?course=$course_code"; 
+$TOCleft = "../toc.php?course=$course_code";
 
 /*********************/
 /* HANDLING API FORM */
@@ -146,7 +146,7 @@ if(isset($_POST['ump_id']))
 ?>
 </head>
 <body>
-   <form name="cmiForm" method="POST" action="<?php echo $_SERVER["PHP_SELF"]."?course=$code_cours" ?>"> 
+   <form name="cmiForm" method="POST" action="<?php echo $_SERVER["PHP_SELF"]."?course=$course_code" ?>"> 
 	<input type="hidden" name="ump_id" />
 	<input type="hidden" name="lesson_status" />
 	<input type="hidden" name="lesson_location" />

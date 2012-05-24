@@ -40,14 +40,14 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 
 $nameTools = $langEditCourseProgram ;
-$navigation[] = array ('url' => 'index.php?course='.$code_cours, 'name' => $langCourseProgram);
+$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langCourseProgram);
 
 mysql_select_db($mysqlMainDb);
 
 if (isset($_POST['edIdBloc'])) {
         // Save results from block edit (save action)
         $res_id = intval($_POST['edIdBloc']);
-        $unit_id = description_unit_id($cours_id);
+        $unit_id = description_unit_id($course_id);
         add_unit_resource($unit_id, 'description', $res_id,
                           autounquote($_POST['edTitleBloc']),
                           autounquote($_POST['edContentBloc']));
@@ -64,11 +64,11 @@ if (isset($_POST['edIdBloc'])) {
                $edit_title = false; 
         }
         if (isset($_POST['add']) and @!$titreBlocNotEditable[$numBloc]) {
-                $numBloc = new_description_res_id(description_unit_id($cours_id));
+                $numBloc = new_description_res_id(description_unit_id($course_id));
                 $contentBloc = '';
         } else {
                 $q = db_query("SELECT title, comments FROM unit_resources WHERE unit_id =
-                                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                                        (SELECT id FROM course_units WHERE course_id = $course_id AND `order` = -1)
                                         AND res_id = $numBloc");
                 if ($q and mysql_num_rows($q)) {
                         list($title, $contentBloc) = mysql_fetch_row($q);
@@ -80,7 +80,7 @@ if (isset($_POST['edIdBloc'])) {
                 }
         }
         $tool_content .= "
-      <form method='post' action='index.php?course=$code_cours'>
+      <form method='post' action='index.php?course=$course_code'>
       <input type='hidden' name='edIdBloc' value='$numBloc' />
         <fieldset>
         
@@ -123,9 +123,9 @@ draw($tool_content, 2, null, $head_content);
 // Display form to to add a new block
 function display_add_block_form()
 {
-        global $cours_id, $code_cours, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
+        global $course_id, $course_code, $tool_content, $titreBloc, $langAddCat, $langAdd, $langSelection, $titreBlocNotEditable;
         $q = db_query("SELECT res_id FROM unit_resources WHERE unit_id =
-                                (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                                (SELECT id FROM course_units WHERE course_id = $course_id AND `order` = -1)
                        ORDER BY `order`");
         while ($row = mysql_fetch_row($q)) {
                 if (@$titreBlocNotEditable[$row[0]]) {
@@ -134,7 +134,7 @@ function display_add_block_form()
         }
 
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
         <input type='hidden' name='add' value='1' />
         <fieldset>
           <legend>$langAddCat</legend>

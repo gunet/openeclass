@@ -71,7 +71,7 @@ function confirmation(name) {
 }
 </script>";
 
-$navigation[] = array('url' => "learningPathList.php?course=$code_cours", 'name'=> $langLearningPaths);
+$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPaths);
 $nameTools = $langLearningObjectsInUse;
 mysql_select_db($mysqlMainDb);
 
@@ -89,7 +89,7 @@ switch( $cmd )
 			// used to physically delete the module  from server
 			require_once("../../include/lib/fileManageLib.inc.php");
 
-			$moduleDir   = "courses/".$currentCourseID."/modules";
+			$moduleDir   = "courses/".$course_code."/modules";
 			$moduleWorkDir = $webDir.$moduleDir;
 
 			// delete all assets of this module
@@ -109,7 +109,7 @@ switch( $cmd )
 			// delete the module in modules table
 			$sql = "DELETE FROM `".$TABLEMODULE."`
 				WHERE `module_id` = ". (int)$_GET['cmdid'] ."
-				AND `course_id` = $cours_id";
+				AND `course_id` = $course_id";
 			db_query($sql);
 
 			//delete all user progression concerning this module
@@ -134,12 +134,12 @@ switch( $cmd )
 			//get current name from DB
 			$query= "SELECT `name` FROM `".$TABLEMODULE."`
 				WHERE `module_id` = '". (int)$_GET['module_id']."'
-				AND `course_id` = $cours_id";
+				AND `course_id` = $course_id";
 			$result = db_query($query);
 			$list = mysql_fetch_array($result);
 
 			$tool_content .= disp_message_box("
-   <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\">
+   <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">
    
    <table width=\"100%\" class=\"tbl\">
    <tr>
@@ -168,7 +168,7 @@ switch( $cmd )
                   FROM `".$TABLEMODULE."`
                   WHERE `name` = '". mysql_real_escape_string($_POST['newName'])."'
                     AND `module_id` != '". (int)$_POST['module_id']."'
-                    AND `course_id` = $cours_id";
+                    AND `course_id` = $course_id";
 
             $query = db_query($sql);
             $num = mysql_numrows($query);
@@ -178,7 +178,7 @@ switch( $cmd )
                 $query="UPDATE `".$TABLEMODULE."`
                         SET `name`= '". mysql_real_escape_string($_POST['newName'])."'
                         WHERE `module_id` = '". (int)$_POST['module_id']."'
-                        AND `course_id` = $cours_id";
+                        AND `course_id` = $course_id";
 
                 $result = db_query($query);
             }
@@ -203,14 +203,14 @@ switch( $cmd )
             $query="SELECT `comment`
                     FROM `".$TABLEMODULE."`
                     WHERE `module_id` = '". (int)$_GET['module_id']."'
-                    AND `course_id` = $cours_id";
+                    AND `course_id` = $course_id";
             $result = db_query($query);
             $comment = mysql_fetch_array($result);
 
             if( isset($comment['comment']) )
             {
 
-                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\">\n"
+                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">\n"
                     .'<table width="99%" class="tbl"><tr><th class="left" width="160">'.$langComments.' :</th><td width="100">'."\n"
                     .disp_html_area('comment', $comment['comment'], 2, 40)
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
@@ -225,7 +225,7 @@ switch( $cmd )
             }
             else
             {
-            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\">\n"
+            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">\n"
                     .'<table><tr><td valign="top">'."\n"
                     .disp_html_area('comment', '', 2, 60)
                     ."</td></tr></table>\n"
@@ -249,7 +249,7 @@ switch( $cmd )
             $sql = "UPDATE `".$TABLEMODULE."`
                     SET `comment` = \"". mysql_real_escape_string($_POST['comment']) ."\"
                     WHERE `module_id` = '". (int)$_POST['module_id']."'
-                    AND `course_id` = $cours_id";
+                    AND `course_id` = $course_id";
             db_query($sql);
         }
         break;
@@ -264,7 +264,7 @@ $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
         WHERE M.`contentType` != \"".CTSCORM_."\"
           AND M.`contentType` != \"".CTSCORMASSET_."\"
           AND M.`contentType` != \"".CTLABEL_."\"
-          AND M.`course_id` = $cours_id
+          AND M.`course_id` = $course_id
         GROUP BY M.`module_id`
         ORDER BY M.`name` ASC, M.`contentType`ASC, M.`accessibility` ASC";
 
@@ -310,7 +310,7 @@ while ($list = mysql_fetch_array($result))
     }
 
     $tool_content .= "</td>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;

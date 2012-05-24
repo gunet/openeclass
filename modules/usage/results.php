@@ -91,7 +91,7 @@ switch ($u_stats_value) {
         $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
                          WHERE $date_where 
                          AND $mod_where 
-                         AND course_id = $cours_id
+                         AND course_id = $course_id
                         GROUP BY $date_group ORDER BY `date_time` ASC";
         $result = db_query($query);
 
@@ -142,7 +142,7 @@ switch ($u_stats_value) {
                 FROM actions, course_module WHERE actions.module_id = course_module.module_id
                 AND $date_where 
                 AND $mod_where
-                AND actions.course_id = $cours_id
+                AND actions.course_id = $course_id
                 GROUP BY ".$date_group." ORDER BY date_time ASC";
 
         $result = db_query($query);
@@ -202,7 +202,7 @@ mysql_free_result($result);
 
 
 $chart->setDataSet($dataSet);
-$chart_path = 'courses/'.$currentCourseID.'/temp/chart_'.md5(serialize($chart)).'.png';
+$chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
 $chart->render($webDir.$chart_path);
 
 if ($chart_content) {

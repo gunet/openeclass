@@ -65,7 +65,7 @@ $sql = "SELECT `filename`
 $fileName = db_query_get_single_value($sql, $mysqlMainDb);
 
 $baseServDir = $webDir;
-$courseDir = "courses/".$currentCourseID."/document";
+$courseDir = "courses/".$course_code."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $file = $baseWorkDir.$assetPath;
 $fileSize = format_file_size(filesize($file));

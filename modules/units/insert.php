@@ -35,7 +35,7 @@ $id = intval($_REQUEST['id']);
 
 // Check that the current unit id belongs to the current course
 $q = db_query("SELECT * FROM course_units
-               WHERE id=$id AND course_id=$cours_id");
+               WHERE id=$id AND course_id=$course_id");
 if (!$q or mysql_num_rows($q) == 0) {
         $nameTools = $langUnitUnknown;
         draw('', 2, null, $head_content);
@@ -67,7 +67,7 @@ if (isset($_POST['submit_doc'])) {
 
 
 $info = mysql_fetch_array($q);
-$navigation[] = array("url"=>"index.php?course=$code_cours&amp;id=$id", "name"=> htmlspecialchars($info['title']));
+$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$id", "name"=> htmlspecialchars($info['title']));
 
 switch ($_GET['type']) {
         case 'work': $nameTools = "$langAdd $langInsertWork";
@@ -118,36 +118,34 @@ draw($tool_content, 2, null, $head_content);
 // insert docs in database
 function insert_docs($id)
 {
-	global $cours_id, $code_cours;
+	global $course_id, $course_code;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
 	
 	foreach ($_POST['document'] as $file_id) {
 		$order++;
 		$file = mysql_fetch_array(db_query("SELECT * FROM document
-			WHERE course_id = $cours_id AND id =" . intval($file_id)), MYSQL_ASSOC);
+			WHERE course_id = $course_id AND id =" . intval($file_id)), MYSQL_ASSOC);
 		$title = (empty($file['title']))? $file['filename']: $file['title'];
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
 			 quote($title) . ", comments=" . quote($file['comment']) .
-			 ", visible='$file[visible]', `order`=$order, `date`=NOW(), res_id=$file[id]",
-			 $GLOBALS['mysqlMainDb']); 
+			 ", visible='$file[visible]', `order`=$order, `date`=NOW(), res_id=$file[id]"); 
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert text in database
 function insert_text($id)
 {
-	global $title, $comments, $code_cours;
+	global $title, $comments, $course_code;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	$order++;
 	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='', 
-		comments=" . autoquote(purify($comments)) . ", visible=1, `order`=$order, `date`=NOW(), res_id=0",
-		$GLOBALS['mysqlMainDb']);
+		comments=" . autoquote(purify($comments)) . ", visible=1, `order`=$order, `date`=NOW(), res_id=0");
 			
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
@@ -155,13 +153,13 @@ function insert_text($id)
 // insert lp in database
 function insert_lp($id)
 {
-	global $code_cours, $cours_id;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['lp'] as $lp_id) {
 		$order++;
 		$lp = mysql_fetch_array(db_query("SELECT * FROM lp_learnPath
-			WHERE course_id = $cours_id AND learnPath_id =" . intval($lp_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
+			WHERE course_id = $course_id AND learnPath_id =" . intval($lp_id)), MYSQL_ASSOC);
 		if ($lp['visibility'] == 'HIDE') {
 			 $visibility = 'i';
 		} else {
@@ -169,17 +167,16 @@ function insert_lp($id)
 		}
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='lp', title=" .
 			quote($lp['name']) . ", comments=" . quote($lp['comment']) .
-			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]",
-			$GLOBALS['mysqlMainDb']);
+			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]");
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert video in database
 function insert_video($id)
 {
-	global $code_cours, $cours_id, $mysqlMainDb;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['video'] as $video_id) {
@@ -188,23 +185,23 @@ function insert_video($id)
                 $res_id = intval($res_id);
                 $table = ($table == 'video')? 'video': 'videolinks';
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
-			WHERE course_id = $cours_id AND id = $res_id", $mysqlMainDb), MYSQL_ASSOC);
-                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
+			WHERE course_id = $course_id AND id = $res_id"), MYSQL_ASSOC);
+                db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id");
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert work (assignment) in database
 function insert_work($id)
 {
-	global $code_cours, $cours_id;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['work'] as $work_id) {
 		$order++;
 		$work = mysql_fetch_array(db_query("SELECT * FROM assignment
-			WHERE course_id = $cours_id AND id =" . intval($work_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
+			WHERE course_id = $course_id AND id =" . intval($work_id)), MYSQL_ASSOC);
 		if ($work['active'] == '0') {
 			 $visibility = 0;
 		} else {
@@ -218,10 +215,9 @@ function insert_work($id)
                                 visible = '$visibility',
                                 `order` = $order,
                                 `date` = NOW(),
-                                res_id = $work[id]",
-			 $GLOBALS['mysqlMainDb']); 
+                                res_id = $work[id]"); 
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
@@ -229,13 +225,13 @@ function insert_work($id)
 // insert exercise in database
 function insert_exercise($id)
 {
-	global $code_cours, $cours_id;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['exercise'] as $exercise_id) {
 		$order++;
 		$exercise = mysql_fetch_array(db_query("SELECT * FROM exercise
-			WHERE course_id = $cours_id AND id = ". intval($exercise_id), $GLOBALS['mysqlMainDb']), MYSQL_ASSOC);
+			WHERE course_id = $course_id AND id = ". intval($exercise_id)), MYSQL_ASSOC);
 		if ($exercise['active'] == '0') {
 			 $visibility = 0;
 		} else {
@@ -243,17 +239,16 @@ function insert_exercise($id)
 		}
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='exercise', title=" .
 			quote($exercise['title']) . ", comments=" . quote($exercise['description']) .
-			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]",
-			$GLOBALS['mysqlMainDb']); 
+			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]"); 
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert forum in database
 function insert_forum($id)
 {
-	global $code_cours, $cours_id;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['forum'] as $for_id) {
@@ -263,21 +258,20 @@ function insert_forum($id)
                         list($forum_id, $topic_id) = $ids;
 			$topic = mysql_fetch_array(db_query("SELECT * FROM forum_topics
                                         WHERE id =" . intval($topic_id) ." 
-                                        AND forum_id =" . intval($forum_id)  .""), MYSQL_ASSOC);
+                                        AND forum_id =" . intval($forum_id)), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='topic', title=" .
 				quote($topic['title']) .", visible=1, `order`=$order, `date`=NOW(), res_id=$topic[id]");
 		} else {
                         $forum_id = $ids[0];
 			$forum = mysql_fetch_array(db_query("SELECT * FROM forum
                                         WHERE id =" . intval($forum_id) ." 
-                                        AND course_id = $cours_id"), MYSQL_ASSOC);
+                                        AND course_id = $course_id"), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='forum', title=" .
 				quote($forum['name']) . ", comments=" . quote($forum['desc']) .
-				", visible=1, `order`=$order, `date`=NOW(), res_id=$forum[id]",
-				$GLOBALS['mysqlMainDb']);
+				", visible=1, `order`=$order, `date`=NOW(), res_id=$forum[id]");
 		} 
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
@@ -285,32 +279,31 @@ function insert_forum($id)
 // insert wiki in database
 function insert_wiki($id)
 {
-	global $code_cours, $cours_id, $mysqlMainDb;
+	global $course_code, $course_id;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['wiki'] as $wiki_id) {
 		$order++;
 		$wiki = mysql_fetch_array(db_query("SELECT * FROM wiki_properties
-			WHERE course_id = $cours_id AND id =" . intval($wiki_id), $mysqlMainDb), MYSQL_ASSOC);
+			WHERE course_id = $course_id AND id =" . intval($wiki_id)), MYSQL_ASSOC);
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='wiki', title=" .
 			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
-			", visible=1, `order`=$order, `date`=NOW(), res_id=$wiki[id]",
-			$GLOBALS['mysqlMainDb']); 
+			", visible=1, `order`=$order, `date`=NOW(), res_id=$wiki[id]"); 
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert link in database
 function insert_link($id)
 {
-        global $cours_id, $code_cours;
+        global $course_id, $course_code;
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	// insert link categories 
         if (isset($_POST['catlink']) and count($_POST['catlink'] > 0)) {
                 foreach ($_POST['catlink'] as $catlink_id) {
                         $order++;
-                        $sql = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id =" . intval($catlink_id));
+                        $sql = db_query("SELECT * FROM link_category WHERE course_id = $course_id AND id =" . intval($catlink_id));
                         $linkcat = mysql_fetch_array($sql);
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type='linkcategory', title = " .
                                 quote($linkcat['name']) . ", comments = " . autoquote($linkcat['description']) .
@@ -322,20 +315,20 @@ function insert_link($id)
                 foreach ($_POST['link'] as $link_id) {
                         $order++;
                         $link = mysql_fetch_array(db_query("SELECT * FROM link
-                                WHERE course_id = $cours_id AND id =" . intval($link_id)), MYSQL_ASSOC);
+                                WHERE course_id = $course_id AND id =" . intval($link_id)), MYSQL_ASSOC);
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type = 'link', title = " .
                                 quote($link['title']) . ", comments = " . autoquote($link['description']) .
                                 ", visible=1, `order` = $order, `date` = NOW(), res_id = $link[id]");
                 }
 	}
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
 
 // insert ebook in database
 function insert_ebook($id)
 {
-        global $cours_id, $mysqlMainDb, $code_cours;
+        global $course_id, $course_code;
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
         foreach (array('ebook', 'section', 'subsection') as $type) {
             if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
@@ -348,6 +341,6 @@ function insert_ebook($id)
                     }
             }
         }
-	header('Location: index.php?course='.$code_cours.'&id=' . $id);
+	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }

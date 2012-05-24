@@ -23,12 +23,12 @@ include '../document/doc_init.php';
 
 function list_docs()
 {
-        global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
+        global $id, $webDir, $course_code, $course_id, $tool_content,
                $group_sql, $langDirectory, $langUp, $langName, $langSize,
                $langDate, $langType, $langAddModulesButton, $langChoice,
-               $langNoDocuments, $code_cours, $themeimg;
+               $langNoDocuments, $course_code, $themeimg;
 
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
+        $basedir = $webDir . 'courses/' . $course_code . '/document';
         if (isset($_GET['path'])) {
                 $path = escapeSimple($_GET['path']);
                 if ($path == '/' or $path == '\\') {
@@ -68,12 +68,12 @@ function list_docs()
                                                                    WHERE $group_sql AND path = '$path'"));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
-                        $parentlink = $_SERVER['PHP_SELF'] . "?course=$code_cours&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
+                        $parentlink = $_SERVER['PHP_SELF'] . "?course=$course_code&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
                         $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> <a href='$parentlink'>" .
                                       "<img src='$themeimg/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
                         $colspan = 4;
                 }
-		$tool_content .= "<form action='insert.php?course=$code_cours' method='post'><input type='hidden' name='id' value='$id' />" .
+		$tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
                          "<table class='tbl_alt' width='99%'>" .
                          "<tr>".
                          "<th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
@@ -95,7 +95,7 @@ function list_docs()
 				$dir = $entry['path'];
 				if ($is_dir) {
 					$image = $themeimg.'/folder.png';
-					$file_url = "$_SERVER[PHP_SELF]?course=$code_cours&amp;type=doc&amp;id=$id&amp;path=$dir";
+					$file_url = "$_SERVER[PHP_SELF]?course=$course_code&amp;type=doc&amp;id=$id&amp;path=$dir";
 					$link_extra = '';
 					$link_text = $entry['name'];
 				} else {

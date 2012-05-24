@@ -23,16 +23,16 @@ define('EBOOK', 2);
 
 function list_ebooks()
 {
-        global $id, $cours_id, $currentCourseID, $tool_content, $urlServer,
+        global $id, $course_id, $course_code, $tool_content, $urlServer,
                $mysqlMainDb, $langAddModulesButton, $langChoice, $langNoEbook,
-               $langEBook, $code_cours, $themeimg;
+               $langEBook, $course_code, $themeimg;
 
         mysql_select_db($mysqlMainDb);
-        $result = db_query("SELECT * FROM ebook WHERE course_id = $cours_id ORDER BY `order`");
+        $result = db_query("SELECT * FROM ebook WHERE course_id = $course_id ORDER BY `order`");
         if (mysql_num_rows($result) == 0) {
                 $tool_content .= "\n<p class='alert1'>$langNoEBook</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
                                  "\n  <table class='tbl_alt' width='99%'>" .
                                  "\n  <tr>" .
@@ -59,16 +59,16 @@ function list_ebooks()
                                     document.filename
                                     FROM ebook, ebook_section, ebook_subsection, document
                                     WHERE ebook.id = $catrow[id] AND
-                                        ebook.course_id = $cours_id AND
+                                        ebook.course_id = $course_id AND
                                         ebook_section.ebook_id = ebook.id AND
                                         ebook_section.id = ebook_subsection.section_id AND
                                         document.id = ebook_subsection.file_id AND
-                                        document.course_id = $cours_id AND
+                                        document.course_id = $course_id AND
                                         document.subsystem = ".EBOOK."
                                         ORDER BY CONVERT(psid, UNSIGNED), psid,
                                                  CONVERT(pssid, UNSIGNED), pssid");
                                 
-                                $ebook_url_base = "{$urlServer}modules/ebook/show.php/$currentCourseID/$catrow[id]/";
+                                $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow[id]/";
                                 $old_sid = false;
                                 $class = 'odd';
 				while ($row = mysql_fetch_array($q)) {

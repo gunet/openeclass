@@ -237,8 +237,8 @@ function public_file_path($disk_path, $filename = null)
 
 function file_url($path, $filename = null, $courseCode = null)
 {
-	global $currentCourseID, $urlServer, $group_id, $ebook_id;
-        $courseCode = ($courseCode == null) ? $currentCourseID : $courseCode;
+	global $course_code, $urlServer, $group_id, $ebook_id;
+        $courseCode = ($courseCode == null) ? $course_code : $courseCode;
         
 	if (defined('EBOOK_DOCUMENTS')) {
 		return htmlspecialchars($urlServer .
@@ -258,8 +258,8 @@ function file_url($path, $filename = null, $courseCode = null)
 
 function file_playurl($path, $filename = null, $courseCode = null)
 {
-    global $currentCourseID, $urlServer, $group_id, $ebook_id;
-    $courseCode = ($courseCode == null) ? $currentCourseID : $courseCode;
+    global $course_code, $urlServer, $group_id, $ebook_id;
+    $courseCode = ($courseCode == null) ? $course_code : $courseCode;
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .

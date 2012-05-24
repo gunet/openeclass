@@ -22,12 +22,12 @@
 
 function list_lps()
 {
-        global $id, $cours_id, $mysqlMainDb, $tool_content, $urlServer, $langComments,
+        global $id, $course_id, $mysqlMainDb, $tool_content, $urlServer, $langComments,
                $langAddModulesButton, $langChoice, $langNoLearningPath,
-               $langLearningPaths, $code_cours, $themeimg;
+               $langLearningPaths, $course_code, $themeimg;
 
 
-        $result = db_query("SELECT * FROM lp_learnPath WHERE course_id = $cours_id ORDER BY name", $mysqlMainDb);
+        $result = db_query("SELECT * FROM lp_learnPath WHERE course_id = $course_id ORDER BY name", $mysqlMainDb);
         $lpinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $lpinfo[] = array(
@@ -40,7 +40,7 @@ function list_lps()
         if (count($lpinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoLearningPath</p>";
         } else {
-                $tool_content .= "\n  <form action='insert.php?course=$code_cours' method='post'>" .
+                $tool_content .= "\n  <form action='insert.php?course=$course_code' method='post'>" .
                                  "\n  <input type='hidden' name='id' value='$id'>" .
                                  "\n  <table width='99%' class='tbl_alt'>" .
                                  "\n  <tr>" .
@@ -60,7 +60,7 @@ function list_lps()
 					}
 				}
 				$tool_content .= "\n  <tr class='$vis'>";
-				$tool_content .= "\n    <td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$code_cours&amp;path_id=$entry[id]'>$entry[name]</a></td>";
+				$tool_content .= "\n    <td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>$entry[name]</a></td>";
 				$tool_content .= "\n    <td>$entry[comment]</td>";
 				$tool_content .= "\n    <td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
 				$tool_content .= "\n  </tr>";

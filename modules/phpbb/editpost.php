@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
 
         $row1 = mysql_fetch_row(db_query("SELECT name FROM forum 
                                         WHERE forum_id=$forum_id
-                                        AND course_id = $cours_id"));
+                                        AND course_id = $course_id"));
         $forum_name = $row1[0];
         $row2 = mysql_fetch_row(db_query("SELECT title FROM forum_topics
                                         WHERE topic_id=$topic_id
@@ -65,9 +65,9 @@ if (isset($_POST['submit'])) {
         $topic_title = $row2[0];
 
         $nameTools = $langReply;
-        $navigation[] = array ("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-        $navigation[] = array ("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $name);
-        $navigation[] = array ("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $title);
+        $navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
+        $navigation[] = array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $name);
+        $navigation[] = array ("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $title);
                                 
         $sql = "UPDATE forum_posts SET post_text = " . autoquote(purify($message)) . "
                         WHERE id = $post_id 
@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<table width='99%'>
         <tbody><tr><td class='success'>$langStored</td>
         </tr></tbody></table>";
-        header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$code_cours&topic=$topic_id&forum=$forum_id" . $page);
+        header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id" . $page);
         exit;
 } else {
         $sql = "SELECT f.name, t.title
@@ -111,9 +111,9 @@ if (isset($_POST['submit'])) {
         $myrow = mysql_fetch_array($result);
 
         $nameTools = $langReply;
-        $navigation[] = array("url"=>"index.php?course=$code_cours", "name"=> $langForums);
-        $navigation[] = array("url"=>"viewforum.php?course=$code_cours&amp;forum=$forum_id", "name"=> $myrow['name']);
-        $navigation[] = array("url"=>"viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $myrow['title']);
+        $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langForums);
+        $navigation[] = array("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $myrow['name']);
+        $navigation[] = array("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $myrow['title']);
         
         $sql = "SELECT p.post_text, p.post_time, t.title 
                         FROM forum_posts p, forum_topics t
@@ -122,11 +122,11 @@ if (isset($_POST['submit'])) {
         $result = db_query($sql);
         $myrow = mysql_fetch_array($result);        
         $message = $myrow["post_text"];
-        $message = str_replace('{','&#123;',$message);						                        
+        $message = str_replace('{','&#123;',$message);
         // Special handling for </textarea> tags in the message, which can break the editing form..
         $message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
         list($day, $time) = explode(' ', $myrow["post_time"]);
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum_id' method='post'>
+        $tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code&amp;post_id=$post_id&amp;forum=$forum_id' method='post'>
                 <fieldset>
                 <legend>$langReplyEdit </legend>
                 <table width='100%' class='tbl'>";

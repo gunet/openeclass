@@ -32,7 +32,7 @@ $helpTopic = 'Questionnaire';
 include '../../include/baseTheme.php';
 
 $nameTools = $langParticipate;
-$navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 if(!isset($_REQUEST['pid'])) die();
@@ -51,7 +51,7 @@ default:
 draw($tool_content, 2); 
 
 function printPollForm() {
-	global $mysqlMainDb, $cours_id, $code_cours, $tool_content, $langPollStart, 
+	global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart, 
 	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
 	
 	$pid = intval($_REQUEST['pid']);
@@ -60,7 +60,7 @@ function printPollForm() {
 	//		Get poll data
 	//******************************************************************************/
 
-	$poll = db_query("SELECT * FROM poll WHERE course_id = $cours_id AND pid='".mysql_real_escape_string($pid)."' "
+	$poll = db_query("SELECT * FROM poll WHERE course_id = $course_id AND pid='".mysql_real_escape_string($pid)."' "
 		."ORDER BY pid", $mysqlMainDb);
 	$thePoll = mysql_fetch_array($poll);
 	$temp_CurrentDate = date("Y-m-d H:i");
@@ -72,7 +72,7 @@ function printPollForm() {
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
-	<form action='$_SERVER[PHP_SELF]?course=$code_cours' id='poll' method='post'>
+	<form action='$_SERVER[PHP_SELF]?course=$course_code' id='poll' method='post'>
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 
@@ -116,7 +116,7 @@ function printPollForm() {
 
 
 function submitPoll() {
-	global $tool_content, $code_cours, $user_id, $langPollSubmitted, $langBack;
+	global $tool_content, $course_code, $user_id, $langPollSubmitted, $langBack;
 	
 	// first populate poll_answer
 	$user_id = $GLOBALS['uid'];
@@ -136,5 +136,5 @@ function submitPoll() {
 		db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
 			VALUES ($pid, $pqid, $aid, $answer_text, $user_id , '$CreationDate')");
 	}
-	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$code_cours\">".$langBack."</a></p>";
+	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$course_code\">".$langBack."</a></p>";
 }

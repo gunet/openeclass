@@ -53,7 +53,7 @@ $form = process_actions();
 
 if ($is_editor) {
 	$tool_content .= "&nbsp;<div id='operations_container'>
-		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'><input type='hidden' name='course' value='$code_cours'/>
+		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'><input type='hidden' name='course' value='$course_code'/>
 		<select name='type' onChange='document.resinsert.submit();'>
 			<option>-- $langAdd --</option>
 			<option value='doc'>$langInsertDoc</option>
@@ -68,7 +68,7 @@ if ($is_editor) {
 			<option value='wiki'>$langInsertWiki</option>
 		</select>
 		<input type='hidden' name='id' value='$id'>
-		<input type='hidden' name='course' value='$code_cours'>
+		<input type='hidden' name='course' value='$course_code'>
 		</form>
 		</div>".
 		$form; 
@@ -81,7 +81,7 @@ if ($is_editor) {
 }
 if (isset($id) and $id !== false) {
 	$q = db_query("SELECT * FROM course_units
-		                WHERE id = $id AND course_id=$cours_id " . $visibility_check);
+		                WHERE id = $id AND course_id=$course_id " . $visibility_check);
 } else {
 	$q = false;
 }
@@ -109,7 +109,7 @@ foreach (array('previous', 'next') as $i) {
                 $arrow2 = ' »';
         }
         $q = db_query("SELECT id, title FROM course_units
-                       WHERE course_id = $cours_id
+                       WHERE course_id = $course_id
                              AND id <> $id
                              AND `order` $op $info[order]
                              AND `order` >= 0
@@ -119,14 +119,14 @@ foreach (array('previous', 'next') as $i) {
         if ($q and mysql_num_rows($q) > 0) {
                 list($q_id, $q_title) = mysql_fetch_row($q);
                 $q_title = htmlspecialchars($q_title);
-                $link[$i] = "$arrow1<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$q_id'>$q_title</a>$arrow2";
+                $link[$i] = "$arrow1<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$q_id'>$q_title</a>$arrow2";
         } else {
                 $link[$i] = '&nbsp;';
         }
 }
 
 if ($is_editor) {
-        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?course=$code_cours&amp;edit=$id&amp;next=1'><img src='$themeimg/edit.png' title='' alt='' /></a></td>";
+        $comment_edit_link = "<td valign='top' width='20'><a href='info.php?course=$course_code&amp;edit=$id&amp;next=1'><img src='$themeimg/edit.png' title='' alt='' /></a></td>";
         $units_class = 'tbl';
 } else {
         $units_class = 'tbl';
@@ -162,7 +162,7 @@ if (!empty($comments)) {
 show_resources($id);
 
 $tool_content .= '
-  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get"><input type="hidden" name="course" value="'.$code_cours.'"/>';
+  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get"><input type="hidden" name="course" value="'.$course_code.'"/>';
 $tool_content .="
     <table width='99%' class='tbl'>
      <tr class='odd'>
@@ -170,7 +170,7 @@ $tool_content .="
        <td width='50' class='right'>".
                  "<select name='id' onChange='document.unitselect.submit();'>";
 $q = db_query("SELECT id, title FROM course_units
-               WHERE course_id = $cours_id AND `order` > 0
+               WHERE course_id = $course_id AND `order` > 0
                      $visibility_check
                ORDER BY `order`", $mysqlMainDb);
 while ($info = mysql_fetch_array($q)) {

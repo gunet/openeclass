@@ -313,21 +313,21 @@ if (!isset($_POST['submit2'])) {
                         `notify_sent` BOOL NOT NULL DEFAULT '0',
                         `course_id` INT NOT NULL DEFAULT '0')");
 
-        	if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'cours_id')) {
-	        	db_query('ALTER TABLE cours_user ADD cours_id int(11) DEFAULT 0 NOT NULL FIRST');
-                        db_query('UPDATE cours_user SET cours_id =
-                                        (SELECT cours_id FROM cours WHERE code = cours_user.code_cours)
-                                  WHERE cours_id = 0');
-	        	db_query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (cours_id, user_id)');
-                        db_query('CREATE INDEX cours_user_id ON cours_user (user_id, cours_id)');
-                        db_query('ALTER TABLE cours_user DROP code_cours');
+        	if (!mysql_field_exists($mysqlMainDb, 'course_user', 'course_id')) {
+	        	db_query('ALTER TABLE course_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
+                        db_query('UPDATE course_user SET course_id =
+                                        (SELECT course_id FROM cours WHERE code = course_user.code_cours)
+                                  WHERE course_id = 0');
+	        	db_query('ALTER TABLE course_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
+                        db_query('CREATE INDEX course_user_id ON course_user (user_id, course_id)');
+                        db_query('ALTER TABLE course_user DROP code_cours');
                 }
 
-        	if (!mysql_field_exists($mysqlMainDb, 'annonces', 'cours_id')) {
-	        	db_query('ALTER TABLE annonces ADD cours_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
-                        db_query('UPDATE annonces SET cours_id =
-                                        (SELECT cours_id FROM cours WHERE code = annonces.code_cours)
-                                  WHERE cours_id = 0');
+        	if (!mysql_field_exists($mysqlMainDb, 'annonces', 'course_id')) {
+	        	db_query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+                        db_query('UPDATE annonces SET course_id =
+                                        (SELECT course_id FROM cours WHERE code = annonces.code_cours)
+                                  WHERE course_id = 0');
                         db_query('ALTER TABLE annonces DROP code_cours');
                 }
         }
@@ -366,8 +366,8 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'user', 'verified_mail') or
                         db_query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
-                mysql_field_exists($mysqlMainDb, 'cours_user', 'receive_mail') or
-                        db_query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
+                mysql_field_exists($mysqlMainDb, 'course_user', 'receive_mail') or
+                        db_query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
 		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -939,7 +939,7 @@ if (!isset($_POST['submit2'])) {
                             `course_type` int(11) NOT NULL references course_type(id) )");
             
             if ($rebuildHierarchy) {
-                $n = db_query("SELECT cours_id, type FROM `cours`");
+                $n = db_query("SELECT course_id, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
                     $type = 1;
                     if ($r['type'] == 'post')
@@ -948,7 +948,7 @@ if (!isset($_POST['submit2'])) {
                         $type = 3;
 
                     db_query("INSERT INTO `course_is_type` (course, course_type) 
-                        VALUES ('". $r['cours_id'] ."', '". $type ."')");
+                        VALUES ('". $r['course_id'] ."', '". $type ."')");
                 }
             }
 
@@ -958,10 +958,10 @@ if (!isset($_POST['submit2'])) {
                             `department` int(11) NOT NULL references hierarchy(id) )");
             
             if ($rebuildHierarchy) {
-                $n = db_query("SELECT cours_id, faculteid FROM `cours`");
+                $n = db_query("SELECT course_id, faculteid FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
                     db_query("INSERT INTO `course_department` (course, department) 
-                        VALUES ('". $r['cours_id'] ."', '". $r['faculteid'] ."')");
+                        VALUES ('". $r['course_id'] ."', '". $r['faculteid'] ."')");
                 }
             }
             
@@ -1196,8 +1196,8 @@ if (!isset($_POST['submit2'])) {
                 db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
         mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
                 db_query("ALTER TABLE `admin` ADD `privilege` INT NOT NULL DEFAULT '0'");
-        mysql_field_exists($mysqlMainDb, 'cours_user', 'editor') or
-                db_query("ALTER TABLE `cours_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
+        mysql_field_exists($mysqlMainDb, 'course_user', 'editor') or
+                db_query("ALTER TABLE `course_user` ADD `editor` INT NOT NULL DEFAULT '0' AFTER `tutor`");
         if (!mysql_field_exists($mysqlMainDb, 'glossary', 'category_id')) {
                 db_query("ALTER TABLE glossary ADD category_id INT(11) DEFAULT NULL,
                                                ADD notes TEXT NOT NULL");
@@ -1219,7 +1219,7 @@ if (!isset($_POST['submit2'])) {
         // **********************************************
         // upgrade courses databases
         // **********************************************
-        $res = db_query("SELECT code, languageCourse, cours_id
+        $res = db_query("SELECT code, languageCourse, course_id
                          FROM cours ORDER BY code");
         $total = mysql_num_rows($res);
         $i = 1;

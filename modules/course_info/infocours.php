@@ -46,7 +46,7 @@ $lang_editor = langname_to_code($language);
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
                 $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
-                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$code_cours'>$langAgain</a></p>";
+                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$course_code'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = langcode_to_name($_POST['localize']);
@@ -81,20 +81,20 @@ if (isset($_POST['submit'])) {
                               prof_names = " . autoquote($_POST['titulary']) . ",
                               lang = '$newlang',
                               password = " . autoquote($_POST['password']) . "
-                          WHERE id = $cours_id");
-                $course->refresh($cours_id, array($_POST['type']), $departments);
+                          WHERE id = $course_id");
+                $course->refresh($course_id, array($_POST['type']), $departments);
                 
                 $tool_content .= "<p class='success'>$langModifDone</p>
-                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$code_cours'>$langBack</a></p>
-                        <p>&laquo; <a href='{$urlServer}courses/$currentCourseID/index.php'>$langBackCourse</a></p>";
+                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$course_code'>$langBack</a></p>
+                        <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
 } else {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='archive_course.php?course=$code_cours'>$langBackupCourse</a></li>
-	    <li><a href='delete_course.php?course=$code_cours'>$langDelCourse</a></li>
-	    <li><a href='refresh_course.php?course=$code_cours'>$langRefreshCourse</a></li>
+	    <li><a href='archive_course.php?course=$course_code'>$langBackupCourse</a></li>
+	    <li><a href='delete_course.php?course=$course_code'>$langDelCourse</a></li>
+	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>
 	  </ul>
 	</div>";
 
@@ -103,27 +103,27 @@ if (isset($_POST['submit'])) {
 		       course.password, course.id
 		FROM course
            LEFT JOIN course_is_type on course.id = course_is_type.course
-		WHERE course.code = '$currentCourseID'";
+		WHERE course.code = '$course_code'";
 	$result = db_query($sql);
 	$c = mysql_fetch_array($result);
 	$title = q($c['title']);
 	$type = $c['type'];
 	$visible = $c['visible'];
 	$visibleChecked[$visible] = " checked='1'";
-	$fake_code = q($c['public_code']);
+	$public_code = q($c['public_code']);
 	$titulary = q($c['prof_names']);
 	$languageCourse	= $c['lang'];
 	$course_keywords = q($c['keywords']);
 	$password = q($c['password']);
 
 	$tool_content .="
-	<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours' onsubmit='return validateNodePickerForm();'>
+	<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
 	<table class='tbl' width='100%'>
 	    <tr>
 		<th width='170'>$langCode:</th>
-		<td><input type='text' name='fcode' value='$fake_code' size='60' /></td>
+		<td><input type='text' name='fcode' value='$public_code' size='60' /></td>
 	    </tr>
 	    <tr>
 		<th>$langCourseTitle:</th>

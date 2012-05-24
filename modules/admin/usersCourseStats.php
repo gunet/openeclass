@@ -67,8 +67,8 @@ if ($language == 'greek') {
 
         //make chart
         require_once '../../include/libchart/libchart.php';
-        $query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM cours_user LEFT JOIN course ON ".
-            " course.id = cours_user.cours_id GROUP BY course.id";
+        $query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON ".
+            " course.id = course_user.course_id GROUP BY course.id";
 
         $result = db_query($query);
         $chart = new VerticalBarChart(200, 300);

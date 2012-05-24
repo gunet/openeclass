@@ -27,7 +27,7 @@ require_once '../../include/pclzip/pclzip.lib.php';
 include '../../include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langEBookCreate;
-$navigation[] = array('url' => 'index.php?course='.$code_cours, 'name' => $langEBook);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);
 define('EBOOK_DOCUMENTS', true);
 
 mysql_select_db($mysqlMainDb);
@@ -48,13 +48,13 @@ if (!$is_editor) {
                 exit;
         }
 
-        list($order) = mysql_fetch_row(db_query("SELECT MAX(`order`) FROM ebook WHERE course_id = $cours_id"));
+        list($order) = mysql_fetch_row(db_query("SELECT MAX(`order`) FROM ebook WHERE course_id = $course_id"));
         if (!$order) {
                 $order = 1;
         } else {
                 $order++;
         }
-        db_query("INSERT INTO ebook SET `order` = $order, `course_id` = $cours_id, `title` = " .
+        db_query("INSERT INTO ebook SET `order` = $order, `course_id` = $course_id, `title` = " .
                          autoquote($title));
         $ebook_id = mysql_insert_id();
 
@@ -62,7 +62,7 @@ if (!$is_editor) {
         include '../document/doc_init.php';
 
         if (!mkdir($basedir, 0775, true)) {
-                db_query("DELETE FROM ebook WHERE course_id = $cours_id AND id = $ebook_id");
+                db_query("DELETE FROM ebook WHERE course_id = $course_id AND id = $ebook_id");
                 $tool_content .= "<p class='caution'>$langImpossible</p>";
                 draw($tool_content, 2);
                 exit;
@@ -72,5 +72,5 @@ if (!$is_editor) {
         $zipFile = new pclZip($_FILES['file']['tmp_name']);
         $realFileSize = 0;
         $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-        header("Location: $urlAppend/modules/ebook/edit.php?course=$code_cours&id=$ebook_id");
+        header("Location: $urlAppend/modules/ebook/edit.php?course=$course_code&id=$ebook_id");
 }

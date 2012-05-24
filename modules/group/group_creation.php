@@ -35,11 +35,11 @@ $require_editor = true;
 include '../../include/baseTheme.php';
 
 $nameTools = $langNewGroupCreate;
-$navigation[]= array ("url"=>"group.php?course=$code_cours", "name"=> $langGroups);
+$navigation[]= array ("url"=>"group.php?course=$course_code", "name"=> $langGroups);
 
 $tool_content = <<<tCont
 
-    <form method="post" action="group.php?course=$code_cours">
+    <form method="post" action="group.php?course=$course_code">
     <fieldset>
     <legend>$langNewGroupCreateData</legend>
     <table width="99%" class="tbl">
