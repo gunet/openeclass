@@ -108,42 +108,58 @@ if (isset($_POST["submit"])) {
 	if (!$fac) { // if user does not belong to department
 		$tool_content .= "<p align='justify'>$langAddHereSomeCourses</p>";
 		
-                $query = "SELECT max(depth) FROM (SELECT COUNT(parent.id) - 1 AS depth
-                            FROM $TBL_HIERARCHY AS node, $TBL_HIERARCHY AS parent 
-                           WHERE node.lft BETWEEN parent.lft AND parent.rgt 
-                        GROUP BY node.id 
-                        ORDER BY node.lft) AS hierarchydepth";
-                $maxdepth = mysql_fetch_array(db_query($query));
+                $tool_content .= "<table width='100%' class='tbl_border' id='t1'>";
                 
-                list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, 'AND node.allow_course = true', false);
+                $initopen = $tree->buildJSTreeInitOpen();
                 
-                
-                $tool_content .= "<table width='100%' class='tbl_alt' id='t1'>";
-		$k = 0;
-                
-                foreach ($tree_array as $key => $value)
-                {
-                    $trclass = ($k%2 == 0) ? 'even' : 'odd';
-                    $colspan = $maxdepth[0] - $depthmap[$key] + 1;
-                    $n = db_query("SELECT COUNT(*) 
-                                     FROM course, course_department 
-                                    WHERE course.id = course_department.course 
-                                      AND course_department.department = $key
-                                      AND (course.visible = '1' OR course.visible = '2')");
-                    $r = mysql_fetch_array($n);
+                $head_content .= <<<hContent
+<script type="text/javascript">
 
-
-                    $tool_content .= "<tr class='$trclass'>";
-                    $tool_content .= "<th width='16'><img src='$themeimg/arrow.png' alt='arrow' /></th>";
-
-                    for ($i = 1; $i <= $depthmap[$key]-1; $i++) // extra -1 because we do not display root
-                        $tool_content .= "<td width='5'>&nbsp;</td>";
-
-                    $tool_content .= "<td colspan='$colspan'><a href='$_SERVER[PHP_SELF]?fc=$key'>". $value ."</a>&nbsp;<span class='smaller'>(". $codemap[$key] .")</span>";
-                    $tool_content .= "<span class='smaller'>&nbsp;($r[0]  ". ($r[0] == 1 ? $langAvCours : $langAvCourses) .") </span></td></tr>";
-
-                    $k++;
+$(function() {
+        
+    $( "#js-tree" ).jstree({
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
+        "core" : {
+            "animation": 300,
+            "initially_open" : [$initopen]
+        },
+        "themes" : {
+            "theme" : "eclass",
+            "dots" : true,
+            "icons" : false
+        },
+        "ui" : {
+            "select_limit" : 1
+        },
+        "cookies" : {
+            "save_selected": false
+        },
+        "types" : {
+            "types" : {
+                "nosel" : {
+                    "hover_node" : false,
+                    "select_node" : false
                 }
+            }
+        },
+        "sort" : function (a, b) { 
+            priorityA = this._get_node(a).attr("tabindex");
+            priorityB = this._get_node(b).attr("tabindex");
+            
+            if (priorityA == priorityB)
+                return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+                return priorityA < priorityB ? 1 : -1;
+        }
+    })
+    .bind("select_node.jstree", function (event, data) { document.location.href='?fc=' + data.rslt.obj.attr("id"); });
+    
+});
+
+</script>
+hContent;
+                
+                $tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td></tr>";
 
                 $tool_content .= "</table>";
 		$tool_content .= "<br /><br />\n";

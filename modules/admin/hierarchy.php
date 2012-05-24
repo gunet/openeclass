@@ -161,8 +161,7 @@ function customMenu(node) {
 </script>
 hContent;
     
-    $tool_content .= '';
-    $tool_content .= "<td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td>";
+    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td></tr>";
     
     // Close table correctly
     $tool_content .= "</table>\n";
