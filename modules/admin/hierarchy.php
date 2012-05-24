@@ -84,45 +84,86 @@ if (!isset($_GET['action'])) {
 
     // Construct a table
     $tool_content .= "
-    <table width='100%' class='tbl_alt'>
+    <table width='100%' class='tbl_border'>
     <tr>	
     <td colspan='". ($maxdepth[0] + 4) ."' class='right'>
             $langManyExist: <b>$a[0]</b> $langHierarchyNodes
     </td>
-    </tr><tr>
-    <th scope='col' colspan='". ($maxdepth[0] + 2) ."'><div align='left'>&nbsp;&nbsp;".$langHierarchyNode."</div></th scope='col'>
-    <th scope='col' class='center'>$langCode</th>
-    <th>".$langActions."</th>
     </tr>";
     
-    list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, '', false);
-    $k = 0;
-    
-    // For all nodes display some info
-    foreach ($tree_array as $key => $value)
-    {
-        $trclass = ($k%2 == 0) ? 'even' : 'odd';
-        $colspan = $maxdepth[0] - $depthmap[$key] + 1;
-        
-        $tool_content .= "\n<tr class='$trclass'>";
-        $tool_content .= "\n<td width='1'><img src='$themeimg/arrow.png' alt='bullet' /></td>";
-        
-        for ($i = 1; $i <= $depthmap[$key]; $i++)
-            $tool_content .= "<td width='5'>&nbsp;</td>";
-        
-        $tool_content .= "\n<td colspan='$colspan'>". $value ."</td>";
-        $tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($codemap[$key])."</td>";
-        // link to delete or edit a node
-        $tool_content .= "\n<td width='50' align='center' nowrap>
-            <a href='$_SERVER[PHP_SELF]?action=edit&amp;id=". $key ."'>
-            <img src='$themeimg/edit.png' title='$langEdit' /></a>&nbsp;&nbsp;
-            <a href='$_SERVER[PHP_SELF]?action=delete&amp;id=". $key ."' onClick=\"return confirm('". $langConfirmDelete ."')\">
-            <img src='$themeimg/delete.png' title='$langDelete' /></a></td>
-            </tr>\n";
-        
-        $k++;
-    }
+    $initopen = $tree->buildJSTreeInitOpen();
 
+    $head_content .= <<<hContent
+<script type="text/javascript">
+
+$(function() {
+        
+    $( "#js-tree" ).jstree({
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
+        "core" : {
+            "animation": 300,
+            "initially_open" : [$initopen]
+        },
+        "themes" : {
+            "theme" : "eclass",
+            "dots" : true,
+            "icons" : false
+        },
+        "ui" : {
+            "select_limit" : 1
+        },
+        "cookies" : {
+            "save_selected": false
+        },
+        "types" : {
+            "types" : {
+                "nosel" : {
+                    "hover_node" : false,
+                    "select_node" : false
+                }
+            }
+        },
+        "sort" : function (a, b) { 
+            priorityA = this._get_node(a).attr("tabindex");
+            priorityB = this._get_node(b).attr("tabindex");
+            
+            if (priorityA == priorityB)
+                return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+                return priorityA < priorityB ? 1 : -1;
+        },
+        "contextmenu": {
+            "select_node" : true,
+            "items" : customMenu
+        }
+    })
+    .delegate("a", "click.jstree", function (e) { $("#js-tree").jstree("show_contextmenu", e.currentTarget); });
+    
+});
+
+function customMenu(node) {
+    
+    var items = {
+        editItem: { 
+            label: "$langEdit",
+            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id'); }
+        },
+        deleteItem: {
+            label: "$langDelete",
+            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id'); }
+        }
+    };
+
+    return items;
+}
+
+
+</script>
+hContent;
+    
+    $tool_content .= '';
+    $tool_content .= "<td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td>";
+    
     // Close table correctly
     $tool_content .= "</table>\n";
     $tool_content .= "<br /><p class='right'><a href=\"index.php\">".$langBack."</a></p>";
@@ -359,18 +400,3 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
 }
 
 draw($tool_content, 3, null, $head_content);
-
-
-// Return a list of all subdirectories of $base which contain a file named $filename
-function active_subdirs($base, $filename)
-{
-	$dir = opendir($base);
-	$out = array();
-	while (($f = readdir($dir)) !== false) {
-		if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and file_exists($base . '/' . $f . '/' . $filename)) {
-			$out[] = $f;
-		}
-	}
-	closedir($dir);
-	return $out;
-}

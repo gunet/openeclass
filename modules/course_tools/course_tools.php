@@ -234,7 +234,7 @@ $tool_content .= <<<tForm
 </tr>
 <tr>
 <td class="center">
-<select class='invisible_alt' name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
+<select name="toolStatInactive[]" id='inactive_box' size='17' multiple>\n$toolSelection[1]</select>
 </td>
 <td class="center">
 <input type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br/>

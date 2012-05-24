@@ -678,7 +678,12 @@ function check_uid() {
 function user_exists($login) {
   global $mysqlMainDb;
 
-  $qry = "SELECT user_id FROM `$mysqlMainDb`.user WHERE username COLLATE utf8_bin = ". quote($login);
+  $qry = "SELECT user_id FROM `$mysqlMainDb`.user WHERE username ";
+  if (get_config('case_insensitive_usernames')) {
+	$qry .= "= " . quote($login);
+  } else {
+	$qry .= "COLLATE utf8_bin = ". quote($login);
+  }
   $username_check = db_query($qry);
         
   return ($username_check && mysql_num_rows($username_check) > 0);
@@ -691,7 +696,12 @@ function user_exists($login) {
 function user_app_exists($login) {
   global $mysqlMainDb;
 
-  $qry = "SELECT id FROM `$mysqlMainDb`.user_request WHERE status=1 and uname COLLATE utf8_bin = ". quote($login);
+  $qry = "SELECT id FROM `$mysqlMainDb`.user_request WHERE status=1 and uname ";
+  if (get_config('case_insensitive_usernames')) {
+	$qry .= "= " . quote($login);
+  } else {
+	$qry .= "COLLATE utf8_bin = ". quote($login);
+  }
   $username_check = db_query($qry);
         
   return ($username_check && mysql_num_rows($username_check) > 0);
@@ -2176,6 +2186,25 @@ function get_mail_ver_status($uid) {
         $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
         $g = mysql_fetch_row($res);
         return $g[0];        		
+}
+
+
+// check if username match for both case sensitive/insensitive
+function check_username_sensitivity($posted, $dbuser) {
+        if (get_config('case_insensitive_usernames')) {
+		if (mb_strtolower($posted) == mb_strtolower($dbuser)) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		if ($posted == $dbuser) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	return false;
 }
 
 // checks if user is notified via email from a given course

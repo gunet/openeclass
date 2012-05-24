@@ -336,15 +336,24 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                         db_query("INSERT INTO `$mysqlMainDb`.`forum` (`name`, `desc`, `num_topics`, `num_posts`, `last_post_id`, `cat_id`, `course_id`) 
                                 VALUES ('$row[forum_name]', '$row[forum_desc]', $row[forum_topics], $row[forum_posts], $row[forum_last_post_id], $row[cat_id], $course_id)");
                         $newforum_id = mysql_insert_id();
+                        db_query("UPDATE `$mysqlMainDb`.forum_notify SET forum_id = $newforum_id 
+                                        WHERE forum_id = $row[forum_id]
+                                        AND course_id = $course_id");
+                        db_query("UPDATE `$mysqlMainDb`.group SET forum_id = $newforum_id
+                                        WHERE forum_id = $row[forum_id]
+                                        AND course_id = $course_id");
                         $sql2 = db_query("SELECT topic_id, topic_title, topic_poster, topic_time, topic_views,
                                                 topic_replies, topic_last_post_id, forum_id FROM topics
                                                 WHERE forum_id = $row[forum_id]");
-                                while ($row2 = mysql_fetch_array($sql2)) {
+                        while ($row2 = mysql_fetch_array($sql2)) {
                                         db_query("INSERT INTO `$mysqlMainDb`.`forum_topics` 
                                                 (`title`, `poster_id`, `topic_time`, `num_views`, `num_replies`, `last_post_id`, `forum_id`)
                                                 VALUES ('$row2[topic_title]', $row2[topic_poster], '$row2[topic_time]', $row2[topic_views], $row2[topic_replies],
                                                 $row2[topic_last_post_id], $newforum_id)");
                                         $newtopic_id = mysql_insert_id();
+                                        db_query("UPDATE `$mysqlMainDb`.forum_notify SET topic_id = $newtopic_id 
+                                                        WHERE topic_id = $row2[topic_id]
+                                                        AND course_id = $course_id");
                                         $sql3 = db_query("SELECT pt.post_text AS post_text, p.poster_id, p.post_time, p.poster_ip 
                                                                 FROM posts p, posts_text pt WHERE p.post_id = pt.post_id 
                                                                 AND p.forum_id = $row[forum_id]
