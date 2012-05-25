@@ -1,4 +1,5 @@
 <?php
+define('DEBUG_MYSQL', true);
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
@@ -40,7 +41,7 @@ if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
 // greek is the default language
 if (!isset($lang)) {
-	$_SESSION['lang'] = 'greek';
+	$_SESSION['lang'] = 'el';
 }
 // get installation language
 if (isset($_POST['lang'])) {
@@ -48,7 +49,7 @@ if (isset($_POST['lang'])) {
 }
 
 $lang = $_SESSION['lang'];
-if ($lang == 'english') {
+if ($lang == 'en') {
 	$install_info_file = "install_info_en.php";
 } else {
 	$install_info_file = "install_info.php";
@@ -57,14 +58,14 @@ if ($lang == 'english') {
 include "../include/lib/main.lib.php";
 include "install_functions.php";
 // include_messages
-include("../modules/lang/$lang/common.inc.php");
+include("../lang/$lang/common.inc.php");
 $extra_messages = "../config/$lang.inc.php";
 if (file_exists($extra_messages)) {
         include $extra_messages;
 } else {
         $extra_messages = false;
 }
-include("../modules/lang/$lang/messages.inc.php");
+include("../lang/$lang/messages.inc.php");
 if ($extra_messages) {
         include $extra_messages;
 }

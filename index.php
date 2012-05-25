@@ -114,14 +114,14 @@ if (isset($_GET['logout']) and $uid) {
 // in case he has a different language set in his/her profile
 if (isset($language)) {
         // include_messages
-        include("${webDir}modules/lang/$language/common.inc.php");
+        include("${webDir}lang/$language/common.inc.php");
         $extra_messages = "${webDir}/config/$language.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("${webDir}modules/lang/$language/messages.inc.php");
+        include("${webDir}lang/$language/messages.inc.php");
         if ($extra_messages) {
                 include $extra_messages;
         }

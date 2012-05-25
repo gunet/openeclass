@@ -167,7 +167,7 @@ $langAboutText = "Version is";
 </pre>
 <p>This way, you will preserve custom messages in future upgrades of the platform.</p>
 <p>
- You can modify the names of the basic roles of the users of the platform by redefining in these files the message variables found in (eClass_path)/modules/lang/greek/common.inc.php.
+ You can modify the names of the basic roles of the users of the platform by redefining in these files the message variables found in (eClass_path)/lang/greek/common.inc.php.
 </p>
 <p>
 You can add text (e.g. information, links, etc.) to the left and right sidebars of the platform homepage by assigning the variables <em>$langExtrasLeft</em> and <em>$langExtrasRight</em> respectively.

@@ -444,11 +444,11 @@ db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
                 `learnPath_id` INT(11) NOT NULL DEFAULT 0,
                 `module_id` INT(11) NOT NULL DEFAULT 0,
                 `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4)',
+                `visible` TINYINT(4) NOT NULL DEFAULT 0,
                 `specificComment` TEXT NOT NULL,
-                `rank` INT(11) NOT NULL DEFAULT '0',
-                `parent` INT(11) NOT NULL DEFAULT '0',
-                `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')  $charset_spec");
+                `rank` INT(11) NOT NULL DEFAULT 0,
+                `parent` INT(11) NOT NULL DEFAULT 0,
+                `raw_to_pass` TINYINT(4) NOT NULL DEFAULT 50)  $charset_spec");
                 //COMMENT='This table links module to the learning path using them';
 db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
                 `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1037,7 +1037,7 @@ db_query("ALTER TABLE `announcement` ADD FULLTEXT `announcement` (`content`, `ti
 db_query("ALTER TABLE `course` ADD FULLTEXT `course` (`code` ,`description` ,`title` ,`keywords`)");
 
 // create indexes
-db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');			
-db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');	
-db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');			
+db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');			
+db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');	
+db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)');			
 db_query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");

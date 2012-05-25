@@ -2503,16 +2503,16 @@ function load_global_messages()
         global $global_messages, $native_language_names, $webDir, $siteName, $InstitutionUrl, $Institution;
 
         foreach ($native_language_names as $code => $name) {
-                $templang = langcode_to_name($code);
+                $templang = $code;
                 // include_messages
-                include("${webDir}modules/lang/$templang/common.inc.php");
+                include("${webDir}lang/$templang/common.inc.php");
                 $extra_messages = "${webDir}/config/$templang.inc.php";
                 if (file_exists($extra_messages)) {
                         include $extra_messages;
                 } else {
                         $extra_messages = false;
                 }
-                include("${webDir}modules/lang/$templang/messages.inc.php");
+                include("${webDir}lang/$templang/messages.inc.php");
                 if ($extra_messages) {
                         include $extra_messages;
                 }

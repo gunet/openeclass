@@ -576,7 +576,7 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
 	global $language, $native_language_names;
 
         if ($default_langcode === false) {
-                $default_langcode = langname_to_code($language);
+                $default_langcode = $language;
         }
 	return selection($native_language_names, $name, $default_langcode, $onchange_js);
 }

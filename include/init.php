@@ -70,7 +70,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 // Set user desired language (Author: Evelthon Prodromou)
 if (isset($_REQUEST['localize'])) {
-	$_SESSION['langswitch'] = $language = langcode_to_name($_REQUEST['localize']);
+	$_SESSION['langswitch'] = $language = $_REQUEST['localize'];
 }
 
 $active_ui_languages = array('el', 'en', 'es', 'de');
@@ -129,14 +129,14 @@ if (mysql_version()) db_query('SET NAMES utf8');
 mysql_select_db($mysqlMainDb, $db);
 
 // include_messages
-include("${webDir}modules/lang/$language/common.inc.php");
+include("${webDir}lang/$language/common.inc.php");
 $extra_messages = "${webDir}/config/$language.inc.php";
 if (file_exists($extra_messages)) {
 	include $extra_messages;
 } else {
 	$extra_messages = false;
 }
-include("${webDir}modules/lang/$language/messages.inc.php");
+include("${webDir}lang/$language/messages.inc.php");
 if ($extra_messages) {
 	include $extra_messages;
 }
@@ -357,14 +357,14 @@ if (isset($require_current_course) and $require_current_course) {
 		if ($language != $languageInterface) {
 			$language = $languageInterface;
 			// include_messages
-			include("${webDir}modules/lang/$language/common.inc.php");
+			include("${webDir}lang/$language/common.inc.php");
 			$extra_messages = "${webDir}/config/$language.inc.php";
 			if (file_exists($extra_messages)) {
 				include $extra_messages;
 			} else {
 				$extra_messages = false;
 			}
-			include("${webDir}modules/lang/$language/messages.inc.php");
+			include("${webDir}lang/$language/messages.inc.php");
 			if ($extra_messages) {
 				include $extra_messages;
 			}

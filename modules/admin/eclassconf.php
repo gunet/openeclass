@@ -347,7 +347,7 @@ else {
         $tool_content .= "<fieldset>
         <legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>";              
-	$langdirs = active_subdirs($webDir.'modules/lang', 'messages.inc.php');
+	$langdirs = active_subdirs($webDir.'lang', 'messages.inc.php');
 	$sel = array();
 	foreach ($language_codes as $langcode => $langname) {
 		if (in_array($langname, $langdirs)) {

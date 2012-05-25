@@ -310,16 +310,16 @@ if (isset($_POST['create_course'])) {
         $code = strtoupper(new_code($departments[0]));
         $code = str_replace (' ', '', $code);
 
-        $language = langcode_to_name($_POST['languageCourse']);
+        $language = $_POST['languageCourse'];
         // include_messages
-        include("${webDir}modules/lang/$language/common.inc.php");
+        include("${webDir}lang/$language/common.inc.php");
         $extra_messages = "${webDir}/config/$language.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("${webDir}modules/lang/$language/messages.inc.php");
+        include("${webDir}lang/$language/messages.inc.php");
         if ($extra_messages) {
                 include $extra_messages;
         }

@@ -38,14 +38,14 @@ set_time_limit(0);
 load_global_messages();
 
 // include_messages
-include("${webDir}modules/lang/$language/common.inc.php");
+include("${webDir}lang/$language/common.inc.php");
 $extra_messages = "${webDir}/config/$language.inc.php";
 if (file_exists($extra_messages)) {
         include $extra_messages;
 } else {
         $extra_messages = false;
 }
-include("${webDir}modules/lang/$language/messages.inc.php");
+include("${webDir}lang/$language/messages.inc.php");
 if ($extra_messages) {
         include $extra_messages;
 }

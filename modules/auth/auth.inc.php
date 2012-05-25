@@ -735,7 +735,7 @@ function login($user_info_array, $posted_uname, $pass)
                         $_SESSION['statut'] = $user_info_array['statut'];
                         $_SESSION['email'] = $user_info_array['email'];
                         $GLOBALS['userPerso'] = $user_info_array['perso'];
-                        $GLOBALS['language'] = $_SESSION['langswitch'] = langcode_to_name($user_info_array['lang']);
+                        $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_array['lang'];
                         $auth_allow = 1;
                 } else {
                         $auth_allow = 3;
@@ -810,7 +810,7 @@ function alt_login($user_info_array, $uname, $pass)
                         $_SESSION['statut'] = $user_info_array['statut'];
                         $_SESSION['email'] = $user_info_array['email'];
                         $GLOBALS['userPerso'] = $user_info_array['perso'];
-                        $GLOBALS['language'] = $_SESSION['langswitch'] = langcode_to_name($user_info_array['lang']);
+                        $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_array['lang'];
                 } elseif ($auth_allow == 2) {
                         ;
                 } elseif ($auth_allow == 3) {
@@ -914,7 +914,7 @@ function shib_cas_login($type)
 			if (isset($_SESSION['langswitch'])) {
 				$language = $_SESSION['langswitch'];
 			} else {
-				$language = langcode_to_name($info["lang"]);
+				$language = $info['lang'];
 			}
 		}	
 	} elseif ($autoregister and !get_config('am_required')) {
@@ -941,7 +941,7 @@ function shib_cas_login($type)
 							expires_at = $expires_at");
 			$_SESSION['uid'] = mysql_insert_id();
 			$userPerso = 'yes';
-			$language = $_SESSION['langswitch'] = langcode_to_name('el');
+			$language = $_SESSION['langswitch'] = 'el';
 		} else {
 			// user not registered, automatic registration disabled
 			// redirect to registration screen

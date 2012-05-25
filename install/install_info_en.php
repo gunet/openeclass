@@ -250,10 +250,10 @@ $langAboutText = "Version is";
 With the above way, you preserve custom messages from future upgrades of platform.
 </p>
 <p>
-You can modify the names of the basic roles of the users of the platform by modifying the message file (eClass_path)/modules/lang/english/common.inc.php
+You can modify the names of the basic roles of the users of the platform by modifying the message file (eClass_path)/lang/english/common.inc.php
 </p>
 <p>
-You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/modules/lang/english/common.inc.php</em> 
+You can add a text (e.g. informative) on the left and right of the platform homepage. For that reason, assign the value - message in variables <em>$langExtrasLeft</em> και <em>$langExtrasRight</em>, correspondingly in file <em>(path του eClass)/lang/english/common.inc.php</em> 
 </p>
 <div class='sub_title1'><a name="after_math">Support of math symbols</a></div>
 <p>Open eClass supports mathematical symbols in subsystems "Exercises", "Forums" and "Announcements". In "Exercises" you can add math symbols in fields "Exercise Description" while a new exercise is created (or modified), in field "Comment" when a new question in an exercise is created (or modified). In subsystem "Forums" when you compose a new message or reply to an existing one and in subsystem "Announcements" when a new announcement is created. Math symbols must be enclosed with tags <em>&lt;m&gt;</em> and <em>&lt;/m&gt;</em>.
