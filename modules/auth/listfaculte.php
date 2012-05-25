@@ -24,44 +24,66 @@ $TBL_HIERARCHY = 'hierarchy';
 require_once '../../include/lib/hierarchy.class.php';
 $tree = new hierarchy();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('jstree');
+
 $nameTools = $langSelectFac;
 
 
-$query = "SELECT max(depth) FROM (SELECT  COUNT(parent.id) - 1 AS depth
-            FROM $TBL_HIERARCHY AS node, $TBL_HIERARCHY AS parent 
-           WHERE node.lft BETWEEN parent.lft AND parent.rgt 
-        GROUP BY node.id 
-        ORDER BY node.lft) AS hierarchydepth";
-$maxdepth = mysql_fetch_array(db_query($query));
+$tool_content .= "<table class='tbl_border' width=\"100%\">";
 
-list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $tree->build(array(), 'id', null, 'AND node.allow_course = true', false);
+$initopen = $tree->buildJSTreeInitOpen();
+                
+                $head_content .= <<<hContent
+<script type="text/javascript">
 
-
-$tool_content .= "<table class='tbl_alt' width=\"100%\">";
-$k = 0;
-
-foreach ($tree_array as $key => $value)
-{
-    $trclass = ($k%2 == 0) ? 'even' : 'odd';
-    $colspan = $maxdepth[0] - $depthmap[$key] + 1;
-    $n = db_query("SELECT COUNT(*) 
-                     FROM course, course_department 
-                    WHERE course.id = course_department.course 
-                      AND course_department.department = $key");
-    $r = mysql_fetch_array($n);
+$(function() {
         
-    $tool_content .= "<tr class='$trclass'>";
-    $tool_content .= "<th width='16'><img src='$themeimg/arrow.png' alt='arrow' /></th>";
-
-    for ($i = 1; $i <= $depthmap[$key]-1; $i++) // extra -1 because we do not display root
-        $tool_content .= "<td width='5'>&nbsp;</td>";
-
-    $tool_content .= "<td colspan='$colspan'><a href='opencourses.php?fc=$key'>". $value ."</a>&nbsp;&nbsp;<small>(". $codemap[$key] .")";
-    $tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td></tr>";
+    $( "#js-tree" ).jstree({
+        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
+        "core" : {
+            "animation": 300,
+            "initially_open" : [$initopen]
+        },
+        "themes" : {
+            "theme" : "eclass",
+            "dots" : true,
+            "icons" : false
+        },
+        "ui" : {
+            "select_limit" : 1
+        },
+        "cookies" : {
+            "save_selected": false
+        },
+        "types" : {
+            "types" : {
+                "nosel" : {
+                    "hover_node" : false,
+                    "select_node" : false
+                }
+            }
+        },
+        "sort" : function (a, b) { 
+            priorityA = this._get_node(a).attr("tabindex");
+            priorityB = this._get_node(b).attr("tabindex");
+            
+            if (priorityA == priorityB)
+                return this.get_text(a) > this.get_text(b) ? 1 : -1;
+            else
+                return priorityA < priorityB ? 1 : -1;
+        }
+    })
+    .bind("select_node.jstree", function (event, data) { document.location.href='opencourses.php?fc=' + data.rslt.obj.attr("id"); });
     
-    $k++;
-}
+});
+
+</script>
+hContent;
+                
+$tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, 'AND node.allow_course = true', false, true) ."</div></td></tr>";
 
 $tool_content .= "</table>";
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0);
+draw($tool_content, (isset($uid) and $uid)? 1: 0, null, $head_content);
