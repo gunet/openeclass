@@ -82,7 +82,7 @@ $professor = $result['prof_names'];
 $public_code = $result['public_code'];
 $main_extra = $description = $addon = '';
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
+                        (SELECT id FROM course_units WHERE course_id = $course_id AND `order` = -1)
                         AND (visible = 1 OR res_id < 0)
                  ORDER BY `order`");
 if ($res and mysql_num_rows($res) > 0) {
@@ -169,7 +169,7 @@ if ($is_editor) {
                   ORDER BY `order`";
 } else {
 	$query = "SELECT id, title, comments, visible
-		  FROM course_units WHERE course_id = $cours_id AND visible=1 AND `order` >= 0
+		  FROM course_units WHERE course_id = $course_id AND visible = 1 AND `order` >= 0
                   ORDER BY `order`";
 }
 $sql = db_query($query);

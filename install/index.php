@@ -1,5 +1,4 @@
 <?php
-define('DEBUG_MYSQL', true);
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================

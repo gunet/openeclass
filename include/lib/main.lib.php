@@ -1372,7 +1372,7 @@ function add_units_navigation($entry_page = FALSE)
                 if ($is_editor) {
                         $visibility_check = '';
                 } else {
-                        $visibility_check = "AND visibility=1";
+                        $visibility_check = "AND visible = 1";
                 }
 		if (isset($_GET['unit'])) {
 			$unit_id = intval($_GET['unit']);
@@ -1380,7 +1380,7 @@ function add_units_navigation($entry_page = FALSE)
 			$unit_id = intval($_SESSION['unit']);
 		}
                 $q = db_query("SELECT title FROM course_units
-                       WHERE id=$unit_id AND course_id=$course_id " .
+                       WHERE id = $unit_id AND course_id = $course_id " .
                        $visibility_check, $mysqlMainDb);
                 if ($q and mysql_num_rows($q) > 0) {
                         list($unit_name) = mysql_fetch_row($q);
@@ -1736,7 +1736,7 @@ function description_unit_id($course_id)
         } else {
                 db_query('INSERT INTO course_units SET `order` = -1,
                                 `title` = ' . quote($langCourseDescription) . ',
-                                `visibility` = 0,
+                                `visible` = 0,
                                 `course_id` = ' . $course_id);
                 return mysql_insert_id();
         }
@@ -1795,7 +1795,7 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
                                 `comments` = " . quote($content) . ",
                                 `date` = $date,
                                 `type` = '$type',
-                                `visibility` = '$visibility',
+                                `visible` = $visibility,
                                 `res_id` = $res_id,
                                 `order` = $order");
 }

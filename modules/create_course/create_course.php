@@ -383,9 +383,9 @@ if (isset($_POST['create_course'])) {
         
         db_query("INSERT INTO course_user SET
                         course_id = $new_course_id,
-                        user_id = '$uid',
-                        statut = '1',
-                        tutor='1',
+                        user_id = $uid,
+                        statut = 1,
+                        tutor = 1,
                         reg_date = CURDATE()");
         db_query("INSERT INTO group_properties SET
                         course_id = $new_course_id,
