@@ -18,25 +18,19 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-header('Content-Type: text/html; charset=UTF-8');
-
-$path2add=2;
+define('UPGRADE', true);
+$path2add = 2;
 include '../include/baseTheme.php';
 
 $nameTools = $langUpgrade;
 
-if ($GLOBALS['language'] == 'greek') {
+if ($GLOBALS['language'] == 'el') {
 	$upgrade_info_file = 'upgrade_info.php';
 	$link_changes_file = 'CHANGES_el.txt';
 } else {
  	$upgrade_info_file = 'upgrade_info_en.php';
 	$link_changes_file = 'CHANGES_en.txt';
 }
-
-// Initialise $tool_content
-$tool_content = "";
 
 // Main body
 $tool_content .= "

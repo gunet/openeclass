@@ -29,7 +29,7 @@
  *
  */
 
-if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
+if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 	date_default_timezone_set("Europe/Athens");
 }
 
@@ -82,6 +82,13 @@ unset($webDir);
 if (!isset($webDir)) {
 	include 'not_installed.php';
 	die("Unable to find configuration file, please contact the system administrator");
+}
+
+if (isset($language)) {
+        $language = langname_to_code($language);
+        if (!defined('UPGRADE')) {
+                redirect_to_home_page('upgrade/');
+        }
 }
 
 // HTML Purifier

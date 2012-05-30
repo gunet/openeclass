@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-session_start();
+define('UPGRADE', true);
 
 //Flag for fixing relative path
 //See init.php to undestand its logic
