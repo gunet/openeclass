@@ -108,9 +108,22 @@ escape_if_exists('formvisible');
 
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $faculte_html = "";
+$deps_valid = true;
 
 foreach ($departments as $dep) {
+    if ( get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)) )
+        $deps_valid = false;
     $faculte_html .= '<input type="hidden" name="department[]" value="'. $dep .'" />';
+}
+
+// Check if the teacher is allowed to create in the departments he chose
+if (!$deps_valid) {
+    $nameTools = "";
+    $tool_content .= "
+                <p class='caution'>$langCreateCourseNotAllowedNode</p>
+                <p class='eclass_button'><a href='create_course.php'>$langBack</a></p>";
+    draw($tool_content, 1, null, $head_content);
+    exit();
 }
 
 if (empty($titulaires)) {
@@ -141,7 +154,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<tr>
 	  <th>$langFaculty:</th>
 	  <td>";
-        list($js, $html) = $tree->buildCourseNodePicker('name="department[]"', $user->getDepartmentIds($uid));
+        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td>

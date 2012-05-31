@@ -581,18 +581,36 @@ class hierarchy {
     /**
      * Represent the tree using HTML unordered list tags (<ul> and <li>). Extremely useful for JSTree representation (GUI).
      *
-     * @param  array   $tree_array - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @param  boolean $codesuffix - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
-     * @return string  $html       - HTML output
+     * @param  array $options           - Options array for construction of the HTML unordered tree representation. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'dashprefix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
+     * 'codesuffix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
+     * You can omit all of the above since this method uses default values.
+     * 
+     * @return string  $html - HTML output
      */
-    public function buildHtmlUl($tree_array = array(), $useKey = 'id', $exclude = null, $where = '', $dashprefix = false, $codesuffix = false)
+    public function buildHtmlUl($options = array())
     {
-        $mark_allow_user = (strstr($where, 'allow_user') !== false) ?  true : false;
-        $mark_allow_course = (strstr($where, 'allow_course') !== false) ? true : false;
+        $tree_array          = (array_key_exists('tree'      , $options)) ? $options['tree']       : array();
+        $useKey              = (array_key_exists('useKey'    , $options)) ? $options['useKey']     : 'id';
+        $exclude             = (array_key_exists('exclude'   , $options)) ? $options['exclude']    : null;
+        $where               = (array_key_exists('where'     , $options)) ? $options['where']      : '';
+        $dashprefix          = (array_key_exists('dashprefix', $options)) ? $options['dashprefix'] : false;
+        $codesuffix          = (array_key_exists('codesuffix', $options)) ? $options['codesuffix'] : false;
+        $defaults            = (array_key_exists('defaults'  , $options)) ? $options['defaults']   : '';
+        $allow_only_defaults = (array_key_exists('allow_only_defaults', $options)) ? $options['allow_only_defaults'] : false;
+        $mark_allow_user     = (strstr($where, 'allow_user')   !== false) ? true : false;
+        $mark_allow_course   = (strstr($where, 'allow_course') !== false) ? true : false;
+        
+        $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
+        $subdefs = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
         $html = '<ul>' . "\n";
         
         list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
@@ -626,9 +644,10 @@ class hierarchy {
             
             $rel = '';
             $class = '';
-            if ($mark_allow_course && !$allowcoursemap[$key])
-                $rel = 'nosel';
-            if ($mark_allow_user && !$allowusermap[$key])
+            if ( ($mark_allow_course && !$allowcoursemap[$key]) || 
+                 ($mark_allow_user && !$allowusermap[$key]) ||
+                 ($allow_only_defaults && !in_array($key, $subdefs) )
+               )
                 $rel = 'nosel';
             if (!empty($rel)) {
                 $rel = 'rel="'. $rel .'"';
@@ -787,18 +806,32 @@ jContent;
      * Build the necessary HTML code for the Node Picker UI element. This is a private method
      * utilized by the entry-point buildNodePicker(), buildCourseNodePicker() and buildUserNodePicker() methods.
      *
-     * @param  string  $params     - Extra html tag parameters for the form's input elements (such as name)
-     * @param  array   $defaults   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  array   $tree_array - Include (prepend) extra ArrayMap contents
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @param  boolean $multiple   - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
-     * @return string  $html       - The returned HTML code
+     * @param  array $options           - Options array for construction of the HTML code for the Node picker. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * This method uses default values, but you should at least provide 'params'.
+     * 
+     * @return string  $html - The returned HTML code
      */
-    private function buildHtmlNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array('0' => 'Top'), $useKey = 'lft', $where = '', $multiple = false)
+    private function buildHtmlNodePicker($options)
     {
         global $themeimg, $langNodeAdd;
+        
+        $params     = (array_key_exists('params',   $options)) ? $options['params']   : '';
+        $defaults   = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
+        $exclude    = (array_key_exists('exclude',  $options)) ? $options['exclude']  : null;
+        $tree_array = (array_key_exists('tree',     $options)) ? $options['tree']     : array('0' => 'Top');
+        $useKey     = (array_key_exists('useKey',   $options)) ? $options['useKey']   : 'lft';
+        $where      = (array_key_exists('where',    $options)) ? $options['where']    : '';
+        $multiple   = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
+        
+        
         $html = '';
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
         
@@ -852,7 +885,7 @@ jContent;
         }
         
         $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
-        $html .= $this->buildHtmlUl($tree_array, $useKey, $exclude, $where, false);
+        $html .= $this->buildHtmlUl($options);
         $html .= '</div></fieldset></div>';
         
         return $html;
@@ -864,22 +897,26 @@ jContent;
      * - jquery
      * - jquery-ui
      * - jstree
-     * - (optional) onsubmit='return validateNodePickerForm();' for the forum using the node Picker
+     * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      * 
-     * @param  string  $params     - Extra html tag parameters for the form's input elements (such as name)
-     * @param  array   $defaults   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  array   $tree_array - Include (prepend) extra ArrayMap contents
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @param  boolean $multi      - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
-     * @return array               - Return array containing (<js, html>) all necessary JS and HTML code
+     * @param  array $options           - Options array for construction of the Node picker. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * You must provide at least 'params' because this method does not use any default values.
+     * 
+     * @return array - Return array containing (<js, html>) all necessary JS and HTML code 
      */
-    public function buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi)
+    public function buildNodePicker($options)
     {
-        $c = (is_array($defaults)) ? count($defaults) : 0;
-        $js = $this->buildJSNodePicker($params, $c);
-        $html = $this->buildHtmlNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, $multi);
+        $c = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0;
+        $js = $this->buildJSNodePicker($options['params'], $c);
+        $html = $this->buildHtmlNodePicker($options);
         
         return array($js, $html);
     }
@@ -890,19 +927,30 @@ jContent;
      * - jquery
      * - jquery-ui
      * - jstree
-     * - (optional) onsubmit='return validateNodePickerForm();' for the forum using the node Picker
+     * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      * 
-     * @param  string  $params     - Extra html tag parameters for the form's input elements (such as name)
-     * @param  array   $defaults   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  array   $tree_array - Include (prepend) extra ArrayMap contents
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @return array               - Return array containing (<js, html>) all necessary JS and HTML code 
+     * @param  array $options           - Options array for construction of the Course Node picker. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * You can omit all of the above since this method uses default values.
+     * 
+     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
      */
-    public function buildCourseNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_course = true')
+    public function buildCourseNodePicker($options = array())
     {
-        return $this->buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('course_multidep'));
+        $defaults = array('params' => 'name="department[]"',
+                          'useKey' => 'id',
+                          'where' => 'AND node.allow_course = true',
+                          'multiple' => get_config('course_multidep'));
+        $this->populateOptions($options, $defaults);
+        
+        return $this->buildNodePicker($options);
     }
     
     /**
@@ -911,19 +959,30 @@ jContent;
      * - jquery
      * - jquery-ui
      * - jstree
-     * - (optional) onsubmit='return validateNodePickerForm();' for the forum using the node Picker
+     * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      * 
-     * @param  string  $params     - Extra html tag parameters for the form's input elements (such as name)
-     * @param  array   $defaults   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
-     * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
-     * @param  array   $tree_array - Include (prepend) extra ArrayMap contents
-     * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
-     * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @return array               - Return array containing (<js, html>) all necessary JS and HTML code 
+     * @param  array $options           - Options array for construction of the User Node picker. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * You can omit all of the above since this method uses default values.
+     * 
+     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
      */
-    public function buildUserNodePicker($params = '', $defaults = '', $exclude = null, $tree_array = array(), $useKey = 'id', $where = 'AND node.allow_user = true')
+    public function buildUserNodePicker($options = array())
     {
-        return $this->buildNodePicker($params, $defaults, $exclude, $tree_array, $useKey, $where, get_config('user_multidep'));
+        $defaults = array('params' => 'name="department[]"',
+                          'useKey' => 'id',
+                          'where' => 'AND node.allow_course = true',
+                          'multiple' => get_config('user_multidep'));
+        $this->populateOptions($options, $defaults);
+        
+        return $this->buildNodePicker($options);
     }
     
     /**
@@ -1011,6 +1070,49 @@ jContent;
         } else {
             return $value;
         }
+    }
+    
+    /**
+     * Populate an existing options array with default values.
+     * 
+     * @param array $options  - Array containing options
+     * @param array $defaults - Array containing default values
+     */
+    private function populateOptions(&$options, $defaults)
+    {
+        foreach ($defaults as $key => $value)
+        {
+            if ( !array_key_exists($key, $options) )
+            {
+                $options[$key] = $value;
+            }
+        }
+    }
+    
+    private function buildSubtrees($nodes)
+    {
+        $subs = array();
+        $ids = '';
+        
+        foreach ($nodes as $key => $id)
+        {
+            $ids .= $id .',';
+        }
+        // remove last , from $ids
+        $q = substr($ids , 0, -1);
+        
+        $sql = "SELECT node.id
+                  FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
+                 WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+                   AND parent.id IN ($q)
+                 GROUP BY node.id 
+                 ORDER BY node.lft";
+        
+        $result = db_query($sql);
+        while($row = mysql_fetch_assoc($result))
+            $subs[] = $row['id'];
+        
+        return $subs;
     }
     
     /**

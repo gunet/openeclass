@@ -163,7 +163,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  <tr>
 	  <th class='left'>$langFaculty &nbsp;
 		</span></th><td>";
-        list($js, $html) = $tree->buildUserNodePicker('name="department[]"');
+        list($js, $html) = $tree->buildUserNodePicker();
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td>";

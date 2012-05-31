@@ -486,7 +486,7 @@ function user_info_form()
           <tr>
              <th class='left'>$langFaculty:</th>
              <td colspan='2'>";
-        list($js, $html) = $tree->buildNodePicker('name="department"', $depid, null, null, "id", "AND node.allow_user = true", false);
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td>

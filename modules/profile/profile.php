@@ -382,7 +382,7 @@ $tool_content .= "
         <tr>
           <th>$langFaculty:</th>
           <td>";
-list($js, $html) = $tree->buildUserNodePicker('name="department[]"', $userObj->getDepartmentIds($uid));
+list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
 $head_content .= $js;
 $tool_content .= $html;
 $tool_content .= "</td>

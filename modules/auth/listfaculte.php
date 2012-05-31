@@ -82,7 +82,7 @@ $(function() {
 </script>
 hContent;
                 
-$tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, 'AND node.allow_course = true', false, true) ."</div></td></tr>";
+$tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array('where' => 'AND node.allow_course = true', 'codesuffix' => true)) ."</div></td></tr>";
 
 $tool_content .= "</table>";
 

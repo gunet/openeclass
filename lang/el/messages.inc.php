@@ -831,6 +831,7 @@ $langVideoText="Παράδειγμα ενός αρχείου RealVideo. Μπορ
 $langGoogle="Γρήγορη και Πανίσχυρη μηχανής αναζήτησης";
 $langIntroductionText="Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήτε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated="Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
+$langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
 
  // Groups
 $langCreateCourseGroups="Ομάδες Χρηστών";
@@ -1645,6 +1646,7 @@ $lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας 
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tablets)";
 $lang_course_multidep = "Να επιτρέπεται τα μαθήματα να ανήκουν σε πολλά τμήματα-σχολές";
 $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλά τμήματα-σχολές";
+$lang_restrict_teacher_owndep = "Να περιορίζεται η δυνατότητα δημιουργίας μαθημάτων από τους καθηγητές μόνο στα τμήματα που ανήκουν";
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής';

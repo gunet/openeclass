@@ -158,7 +158,8 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'disable_eclass_prof_reg' => true,
                 'case_insensitive_usernames' => true,
 		'course_multidep' => true,
-		'user_multidep' => true);
+		'user_multidep' => true,
+		'restrict_teacher_owndep' => true);
 
         $lang_var = array('default_language' => true);
         
@@ -383,6 +384,7 @@ else {
         $max_glossary_terms = get_config('max_glossary_terms');
         $cbox_course_multidep = get_config('course_multidep')?'checked':'';
         $cbox_user_multidep = get_config('user_multidep')?'checked':'';
+        $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
@@ -446,6 +448,10 @@ else {
 	  <tr>
 		<th class='left'><b>user_multidep</b></th>
 		<td><input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep />&nbsp;$lang_user_multidep</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>restrict_teacher_owndep</b></th>
+		<td><input type='checkbox' name='restrict_teacher_owndep' value='1' $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
         </table></fieldset>";
         

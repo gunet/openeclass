@@ -960,6 +960,7 @@ $disable_eclass_stud_reg = intval($disable_eclass_stud_reg);
 $disable_eclass_prof_reg = intval($disable_eclass_prof_reg);
 $course_multidep = intval($course_multidep);
 $user_multidep = intval($user_multidep);
+$restrict_teacher_owndep = intval($restrict_teacher_owndep);
 
 db_query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
@@ -989,6 +990,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
 		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
 		('course_multidep', $course_multidep),
 		('user_multidep', $user_multidep),
+		('restrict_teacher_owndep', $restrict_teacher_owndep),
                 ('max_glossary_terms', '250'),
 		('version', '" . ECLASS_VERSION ."')");
 

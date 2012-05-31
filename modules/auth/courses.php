@@ -159,7 +159,7 @@ $(function() {
 </script>
 hContent;
                 
-                $tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, 'AND node.allow_course = true', false, true) ."</div></td></tr>";
+                $tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array('where' => 'AND node.allow_course = true', 'codesuffix' => true)) ."</div></td></tr>";
 
                 $tool_content .= "</table>";
 		$tool_content .= "<br /><br />\n";
@@ -543,7 +543,7 @@ function collapsed_facultes_horiz($fc) {
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
-        list($js, $html) = $tree->buildNodePicker('name="fc" onChange="document.depform.submit();"', $fc, null, null, 'id', 'AND node.allow_course = true', false);
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="fc" onChange="document.depform.submit();"', 'defaults' => $fc, 'useKey' => 'id', 'where' => 'AND node.allow_course = true', 'multiple' => false));
         $head_content .= $js;
         $retString .= $html;
 	$retString .=  "\n    </li>";

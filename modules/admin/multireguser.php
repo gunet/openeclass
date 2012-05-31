@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
 </tr>
 <tr><th>$langFaculty:</th>
     <td>"; 
-        list($js, $html) = $tree->buildUserNodePicker('name="facid[]"');
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td>

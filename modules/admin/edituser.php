@@ -207,7 +207,7 @@ $tool_content .= "
    <tr>
      <th class='left'>$langFaculty:</th>
    <td>";
-        list($js, $html) = $tree->buildUserNodePicker('name="department[]"', $userObj->getDepartmentIds($u));
+        list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($u)));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>

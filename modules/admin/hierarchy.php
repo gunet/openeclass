@@ -161,7 +161,7 @@ function customMenu(node) {
 </script>
 hContent;
     
-    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array(), 'id', null, null, false, true) ."</div></td></tr>";
+    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array('codesuffix' => true)) ."</div></td></tr>";
     
     // Close table correctly
     $tool_content .= "</table>\n";
@@ -230,7 +230,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
       <tr>
         <th class='left'>".$langNodeParent.":</th>
         <td>";
-        list($js, $html) = $tree->buildNodePicker('name="nodelft"', null, null, array('0' => 'Top'), 'lft', null, false);
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= " <i>".$langNodeParent2."</i></td>
@@ -365,7 +365,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
            <td>";
-       list($js, $html) = $tree->buildNodePicker('name="nodelft"', $parentLft['lft'], $id, array('0' => 'Top'), 'lft', null, false);
+       list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
        $head_content .= $js;
        $tool_content .= $html;
        $tool_content .= " <i>".$langNodeParent2."</i></td>

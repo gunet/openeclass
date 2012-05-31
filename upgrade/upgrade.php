@@ -265,7 +265,8 @@ if (!isset($_POST['submit2'])) {
 			('video_quota', '100'),
 			('group_quota', '100'),
 			('course_multidep', '0'),
-			('user_multidep', '0')");
+			('user_multidep', '0'),
+                        ('restrict_teacher_owndep', '0')");
 
         if ($oldversion < '2.1.3') {
         	// delete useless field

@@ -112,7 +112,7 @@ if (!isset($_POST['submit'])) {
 	<tr>
 	<th class='left'>$langFaculty:</th>
 		<td colspan='2'>";
-        list($js, $html) = $tree->buildUserNodePicker('name="department[]"');
+        list($js, $html) = $tree->buildUserNodePicker();
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "\n</td></tr>

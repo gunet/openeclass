@@ -121,7 +121,7 @@ $tool_content .= "
       </tr>";
 
 $tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th><td>";
-list($js, $html) = $tree->buildNodePicker('name="formsearchfaculte"', null, null, array('0' => $langAllFacultes), "id", null, false);
+list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false));
 $head_content .= $js;
 $tool_content .= $html;
 $tool_content .= "</td></tr>";
