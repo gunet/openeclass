@@ -93,7 +93,7 @@ if (isset($_POST['submit']))  {
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
- *   Open eClass 2.4
+ *   Open eClass 3.0
  *   E-learning and Course Management System
  *===========================================================================
 
@@ -121,9 +121,6 @@ $telephone='.autoquote($_POST['formtelephone']).';
 $emailhelpdesk='.autoquote($_POST['formemailhelpdesk']).';
 $Institution='.autoquote($_POST['formInstitution']).';
 $InstitutionUrl='.autoquote($_POST['formInstitutionUrl']).';
-
-// available: greek and english
-$language = "'.$_POST['formlanguage'].'";
 
 $postaddress = '.autoquote($_POST['formpostaddress']).';
 $fax = '.autoquote($_POST['formfax']).';
@@ -159,17 +156,24 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'alt_auth_student_req' => true,
 		'disable_eclass_stud_reg' => true,
 		'disable_eclass_prof_reg' => true,
-        'case_insensitive_usernames' => true,
+                'case_insensitive_usernames' => true,
 		'course_multidep' => true,
 		'user_multidep' => true);
 
+        $lang_var = array('default_language' => true);
+        
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
-
+        register_posted_variables($lang_var);
+        
+        // update table `config`
 	foreach ($config_vars as $varname => $what) {
 		set_config($varname, $GLOBALS[$varname]);
 	}
-		
+        foreach ($lang_var as $varname => $what) {
+		set_config($varname, $GLOBALS[$varname]);
+	}        	
+        
 	// Display result message
 	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
 } // end of else($fd)
@@ -276,22 +280,15 @@ else {
 	<tr>
 	  <th class=\"left\"><b>\$InstitutionUrl:</b></th>
 	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitutionUrl\" size='40' value=\"".$InstitutionUrl."\"></td>
-	</tr>";
-	if ($language=="greek") {
+	</tr>";              
+	if ($language == "el") {
 		$grSel = "selected";
 		$enSel = "";
 	} else {
 		$grSel = "";
 		$enSel = "selected";
 	}
-	$tool_content .= "
-	<tr>
-	  <th class='left'><b>\$language:</b></th>
-	  <td><select name='formlanguage'>
-	    <option value='greek' ".$grSel.">greek</option>
-	    <option value='english' ".$enSel.">english</option>
-	  </select></td>
-	</tr></table></fieldset>";
+	$tool_content .= "</table></fieldset>";
         
         $tool_content .= "<fieldset>
         <legend>$langUserAuthentication</legend>
@@ -344,13 +341,19 @@ else {
 	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
 	  </tr>";
         $tool_content .= "</table></fieldset>";
-        $tool_content .= "<fieldset>
-        <legend>$langEclassThemes</legend>
-        <table class='tbl' width='100%'>";              
-	$langdirs = active_subdirs($webDir.'lang', 'messages.inc.php');
+        $tool_content .= "<fieldset><legend>$langEclassThemes</legend>
+        <table class='tbl' width='100%'>
+        <tr>
+	  <th class='left'><b>$langMainLang</b></th>
+	  <td><select name='default_language'>
+	    <option value='el' ".$grSel.">$langGreek</option>
+	    <option value='en' ".$enSel.">$langEnglish</option>
+	  </select></td>
+	</tr>";
+	$langdirs = active_subdirs($webDir.'lang', 'messages.inc.php');        
 	$sel = array();
 	foreach ($language_codes as $langcode => $langname) {
-		if (in_array($langname, $langdirs)) {
+		if (in_array($langcode, $langdirs)) {
 			$loclangname = $langNameOfLang[$langname];
 			$checked = in_array($langcode, $active_ui_languages)? ' checked': '';
 			$sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";

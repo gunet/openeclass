@@ -192,9 +192,9 @@ if (isset($_POST['submit'])) {
 	    <tr>
 		<th width='170'>$langOptions:</th>
 		<td width='1'>";
-	$language = $c['lang'];
-	$tool_content .= lang_select_options('localize');
-	$tool_content .= "
+                $language = $c['lang'];
+                $tool_content .= lang_select_options('localize');
+                $tool_content .= "
 	        </td>
 	        <td class='smaller'>$langTipLang</td>
 	    </tr>

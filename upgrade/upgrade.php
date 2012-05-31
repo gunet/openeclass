@@ -528,6 +528,18 @@ if (!isset($_POST['submit2'])) {
         }
 
         if ($oldversion < '3.0') {
+                
+                db_query("CREATE TABLE IF NOT EXISTS `log` (
+                        `id` int(11) NOT NULL auto_increment,
+                        `user_id` int(11) NOT NULL default '0',
+                        `course_id` int(11) NOT NULL default '0',
+                        `module_id` int(11) NOT NULL default '0',
+                        `details` text NOT NULL,
+                        `action_type` int(11) NOT NULL default '0',
+                        `ts` datetime NOT NULL,
+                        `ip` varchar(39) NOT NULL default '0',
+                        PRIMARY KEY  (`id`)) DEFAULT CHARSET=utf8");
+                
 		// add index on `loginout`.`id_user` for performace
 		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
                 // update table admin_announcement

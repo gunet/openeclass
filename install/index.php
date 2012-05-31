@@ -2,10 +2,10 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -38,16 +38,16 @@ $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
-// greek is the default language
-if (!isset($lang)) {
-	$_SESSION['lang'] = 'el';
-}
-// get installation language
+
+// get installation language. Greek is the default language.
 if (isset($_POST['lang'])) {
 	$_SESSION['lang'] = $_POST['lang'];
+} else {
+        $_SESSION['lang'] = 'el';
 }
 
 $lang = $_SESSION['lang'];
+
 if ($lang == 'en') {
 	$install_info_file = "install_info_en.php";
 } else {
@@ -71,37 +71,36 @@ if ($extra_messages) {
 
 if (file_exists("../config/config.php")) {
 	$tool_content .= "
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-<html xmlns='http://www.w3.org/1999/xhtml'>
-<head>
-  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-  <title>$langWelcomeWizard</title>
-  <link href='./install.css' rel='stylesheet' type='text/css' />
-</head>
-<body>
+        <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+        <html xmlns='http://www.w3.org/1999/xhtml'>
+        <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+        <title>$langWelcomeWizard</title>
+        <link href='./install.css' rel='stylesheet' type='text/css' />
+        </head>
+        <body>
 
-  <div class='install_container'>
-  <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' /></p>
-  <div class='alert' align='center'>$langWarnConfig3!</div>
-  <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
-    <tr>
-      <th><b>$langPossibleReasons</b></th>
-      <th><b>$langTroubleshooting</b></th>
-    </tr>
-    <tr>
-      <td>$langWarnConfig1</td>
-      <td>$langWarnConfig2</td>
-    </tr>
-  </table>
-</div>
-</body>
-</html>";
+        <div class='install_container'>
+        <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+        <div class='alert' align='center'>$langWarnConfig3!</div>
+        <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
+        <tr>
+        <th><b>$langPossibleReasons</b></th>
+        <th><b>$langTroubleshooting</b></th>
+        </tr>
+        <tr>
+        <td>$langWarnConfig1</td>
+        <td>$langWarnConfig2</td>
+        </tr>
+        </table>
+        </div>
+        </body>
+        </html>";
 	exit($tool_content);
 }
 
 // Input fields that have already been included in the form, either as hidden or as normal inputs
 $input_fields = array();
-
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
 	$dbHostForm = 'localhost';
@@ -132,9 +131,10 @@ if (isset($_POST['welcomeScreen'])) {
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = '';
         $course_multidep = $user_multidep = '';
         $email_from = 1;
-        $close_user_registration = '';
+        $close_user_registration = '';        
 } else {
 	register_posted_variables(array(
+                'lang' => true,
                 'dbHostForm' => true,
                 'dbUsernameForm' => true,
                 'dbNameForm' => true,
@@ -224,7 +224,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required', 
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg', 
-                  'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep');
+                  'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep', 'lang');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -585,7 +585,7 @@ elseif(isset($_REQUEST['install7']))
 	} else {		
 		$stringConfig='<?php
 /* ========================================================
- * OpeneClass 2.5 configuration file
+ * OpeneClass 3.0 configuration file
  * Automatically created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
@@ -607,8 +607,6 @@ $siteName = '.autoquote($campusForm).';
 $telephone = '.autoquote($helpdeskForm).';
 $fax = '.autoquote($faxForm).';
 $emailhelpdesk = '.autoquote($helpdeskmail).';
-
-$language = "greek";
 
 $Institution = '.autoquote($institutionForm).';
 $InstitutionUrl = '.autoquote($institutionUrlForm).';
@@ -701,8 +699,8 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	draw($tool_content);
 } else {
 	$langLanguages = array(
-		'greek' => 'Ελληνικά (el)',
-		'english' => 'English (en)');
+		'el' => 'Ελληνικά (el)',
+		'en' => 'English (en)');
 
 	$tool_content .= "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 	<html>
@@ -730,6 +728,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <tr>
           <td colspan='2' align='right'><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
             <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
+            <input type='hidden' name='lang' value='$lang' />
             <input type='submit' name='install1' value='$langNextStep &raquo;' />
           </form></td>
           </tr>

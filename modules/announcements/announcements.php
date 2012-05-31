@@ -41,8 +41,11 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/sendMail.inc.php';
 require_once '../video/video_functions.php';
+include '../../include/log.php';
 
 // The following is added for statistics purposes
+Log::record(MODULE_ID_ANNOUNCE, 2, 'insert');
+
 include('../../include/action.php');
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);

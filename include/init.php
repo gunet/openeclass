@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,20 +65,13 @@ if (isset($path2add) && $path2add == 0) {
 include $relPathLib . "lib/main.lib.php";
 //if session isn't started, start it. Needed by the language switch
 if (!session_id()) { session_start(); }
-
 header('Content-Type: text/html; charset=UTF-8');
 
-// Set user desired language (Author: Evelthon Prodromou)
-if (isset($_REQUEST['localize'])) {
-	$_SESSION['langswitch'] = $language = $_REQUEST['localize'];
-}
-
 $active_ui_languages = array('el', 'en', 'es', 'de');
-
 // Get configuration variables
 //path for course_home
 unset($webDir);
-@include($relPath . "config/config.php");
+include($relPath . "config/config.php");
 if (!isset($webDir)) {
 	include 'not_installed.php';
 	die("Unable to find configuration file, please contact the system administrator");
@@ -91,6 +84,21 @@ if (isset($language)) {
         }
 }
 
+// Connect to database
+@$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
+if (!$db) {
+	include 'not_installed.php';
+}
+if (mysql_version()) db_query('SET NAMES utf8');
+mysql_select_db($mysqlMainDb, $db);
+
+$language = get_config('default_language');
+
+// Set user desired language (Author: Evelthon Prodromou)
+if (isset($_REQUEST['localize'])) {
+	$_SESSION['langswitch'] = $language = $_REQUEST['localize'];
+}
+
 // HTML Purifier
 require_once $relPathLib . 'htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once $relPathLib . 'HTMLPurifier_Filter_MyIframe.php';
@@ -101,7 +109,6 @@ $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
 $purifier->config->set('Filter.Custom', array( new HTMLPurifier_Filter_MyIframe() ));
-
 // PHP Math Publisher
 include $relPathLib . 'phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
@@ -113,11 +120,9 @@ foreach ($active_ui_languages as $langcode) {
 		$native_language_names[$langcode] = $native_language_names_init[$langcode];
 	}
 }
-
 if (!isset($urlSecure)) {
 	$urlSecure = $urlServer;
 }
-
 if (!isset($urlMobile)) {
     $urlMobile = $urlServer;
 }
@@ -127,13 +132,6 @@ if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
-// Connect to database
-@$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-if (!$db) {
-	include 'not_installed.php';
-}
-if (mysql_version()) db_query('SET NAMES utf8');
-mysql_select_db($mysqlMainDb, $db);
 
 // include_messages
 include("${webDir}lang/$language/common.inc.php");
@@ -356,13 +354,14 @@ if (isset($require_current_course) and $require_current_course) {
                         }
 		}
 	}
+        
 	# force a specific interface language
 	if (!empty($currentCourseLanguage)) {
 		$languageInterface = $currentCourseLanguage;
 		// If course language is different from global language,
 		// include more messages
 		if ($language != $languageInterface) {
-			$language = $languageInterface;
+			$language = $languageInterface;                        
 			// include_messages
 			include("${webDir}lang/$language/common.inc.php");
 			$extra_messages = "${webDir}/config/$language.inc.php";

@@ -23,6 +23,8 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
+define('DEBUG_MYSQL', TRUE);
+
 db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
@@ -69,6 +71,19 @@ db_query("CREATE TABLE IF NOT EXISTS `course_module` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `module_course` (`module_id`,`course_id`)) $charset_spec");
 
+#
+# table `log`
+# 
+db_query("CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL default '0',
+  `course_id` int(11) NOT NULL default '0',
+  `module_id` int(11) NOT NULL default '0',
+  `details` text NOT NULL,
+  `action_type` int(11) NOT NULL default '0',
+  `ts` datetime NOT NULL,
+  `ip` varchar(39) NOT NULL default '0',
+  PRIMARY KEY  (`id`)) $charset_spec");
 
 #
 # table `announcement`
@@ -951,6 +966,7 @@ db_query("CREATE TABLE `config`
                  `value` VARCHAR(255) NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
+                ('default_language', '$lang'),
 		('dont_display_login_form', $dont_display_login_form),
 		('email_required', $email_required),
                 ('email_from', $email_from),

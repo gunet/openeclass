@@ -59,7 +59,7 @@ define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User 
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
 
-// definitions for course modules
+// course modules
 define('MODULE_ID_AGENDA', 1);
 define('MODULE_ID_LINKS', 2);
 define('MODULE_ID_DOCS', 3);
@@ -83,6 +83,11 @@ define('MODULE_ID_TOOLADMIN', 25);
 define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 
+// action logging
+define('LOG_ADD', 1); // action add
+define('LOG_DEL', 2); // action delete
+define('LOG_MOD', 3); // action modify
+//
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -1560,10 +1565,9 @@ function csv_escape($string, $force = false)
 
 // Return the value of a key from the config table, or false if not found
 function get_config($key)
-{
-	global $mysqlMainDb;
+{	
 	
-        $r = db_query("SELECT value FROM `$mysqlMainDb`.config WHERE `key` = '$key'");
+        $r = db_query("SELECT `value` FROM config WHERE `key` = '$key'");
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
