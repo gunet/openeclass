@@ -247,11 +247,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $result = db_query("SELECT
                             course.id cid,
                             course.code k,
-<<<<<<< local
-                            course.public_code,
-=======
                             course.public_code public_code,
->>>>>>> other
                             course.title i,
                             course.visible visible,
                             course.prof_names t,
@@ -423,11 +419,7 @@ function expanded_faculte_old($fac_name, $facid, $uid) {
                 $result = db_query("SELECT
                                         course.id cid,
                                         course.code k,
-<<<<<<< local
-                                        course.public_code,
-=======
                                         course.public_code public_code,
->>>>>>> other
                                         course.title i,
                                         course.visible visible,
                                         course.prof_names t,
