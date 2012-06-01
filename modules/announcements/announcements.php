@@ -44,8 +44,6 @@ require_once '../video/video_functions.php';
 include '../../include/log.php';
 
 // The following is added for statistics purposes
-Log::record(MODULE_ID_ANNOUNCE, 2, 'insert');
-
 include('../../include/action.php');
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
@@ -109,6 +107,8 @@ if ($is_editor) {
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
         $result = db_query("DELETE FROM announcement WHERE id='$delete'");
+        Log::record(MODULE_ID_ANNOUNCE, LOG_DELETE,
+                    array('id' => $delete));
         $message = "<p class='success'>$langAnnDel</p>";
     }
 
@@ -129,11 +129,13 @@ if ($is_editor) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
         $newContent = autoquote(purify($_POST['newContent']));
+        $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             db_query("UPDATE announcement SET content = $newContent,
 			title = $antitle, `date` = NOW()
 			WHERE id = $id");
+            $log_type = LOG_MODIFY;
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
             $result = db_query("SELECT MAX(`order`) FROM announcement
@@ -145,10 +147,19 @@ if ($is_editor) {
                             title = $antitle, `date` = NOW(),
                             course_id = $course_id, `order` = $order,
                             visible = 1");
+            $id = mysql_insert_id();
+            $log_type = LOG_INSERT;
         }
+        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
+        Log::record(MODULE_ID_ANNOUNCE, $log_type,
+                    array('id' => $id,
+                          'email' => $send_mail,
+                          'title' => $_POST['antitle'],
+                          'content' => $txt_content));
+
 
         // send email 
-        if (isset($_POST['emailOption']) and $_POST['emailOption']) {
+        if ($send_mail) {
             $emailContent = "$professorMessage: $_SESSION[prenom] $_SESSION[nom]<br>\n<br>\n".
                             autounquote($_POST['antitle']) .
                             "<br>\n<br>\n" .

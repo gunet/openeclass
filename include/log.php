@@ -19,23 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+define('LOG_INSERT', 1);
+define('LOG_MODIFY', 2);
+define('LOG_DELETE', 3);
 
-class Log {
-        
-        public static function record($module_id, $details, $action_type) {              
+class Log {        
+        public static function record($module_id, $action_type, $details) {
                 
                 global $course_id;
-                
-                echo "Now Loggin....";
-                echo "<br />";                        
-                echo "INSERT INTO log SET 
-                        user_id = $_SESSION[uid],
-                        course_id = $course_id,
-                        module_id = $module_id,
-                        details = '$details',
-                        action_type = '$action_type',
-                        ts = NOW(),
-                        ip = '$_SERVER[SERVER_ADDR]'";                
+                                
+                db_query("INSERT INTO log SET 
+                                user_id = $_SESSION[uid],
+                                course_id = $course_id,
+                                module_id = $module_id,
+                                details = ".quote(serialize($details)).",
+                                action_type = $action_type,
+                                ts = NOW(),
+                                ip = '$_SERVER[SERVER_ADDR]'");
         }
         
         public static function display($module_id, $date_from, $date_now) {
