@@ -37,6 +37,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/action.php';
+include '../../include/log.php';
 include '../../include/jscalendar/calendar.php';
 
 require_once '../video/video_functions.php';
@@ -121,6 +122,7 @@ if ($is_editor) {
                                              hour = $hour,
                                              lasting = $lasting
                                          WHERE course_id = $course_id AND id = $id");
+                        $log_type = LOG_MODIFY;
 		} else {
 			db_query("INSERT INTO agenda
                                          SET course_id = $course_id,
@@ -131,7 +133,16 @@ if ($is_editor) {
                                              lasting = $lasting,
                                              visible = 1");
                         $id = mysql_insert_id();
+                        $log_type = LOG_INSERT;
 		}
+                $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
+                Log::record(MODULE_ID_AGENDA, $log_type,
+                    array('id' => $id,
+                          'day' => $date,
+                          'hour' => $hour,
+                          'lasting' => $lasting,
+                          'title' => $title,
+                          'content' => $txt_content));
                 unset($id);
 		unset($content);
 		unset($title);
@@ -140,6 +151,7 @@ if ($is_editor) {
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
                 db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
+                Log::record(MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id));
 		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
@@ -156,44 +168,43 @@ if ($is_editor) {
 	}
 	</script>';
 
-    $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-    if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-        $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;addEvent=1'>".$langAddEvent."</a></li>";
-    }
-    $sens =" ASC";
-    $result = db_query("SELECT id FROM agenda WHERE course_id = $course_id");
-    if (mysql_num_rows($result) > 1) {
-        if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-            $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sens=' >$langOldToNew</a></li>";
-            $sens=" DESC ";
-        } else {
-            $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sens=d' >$langOldToNew</a></li>";
+        $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+        if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
+                $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;addEvent=1'>".$langAddEvent."</a></li>";
         }
-    }
-    $tool_content .= "</ul></div>";
-
-	if (isset($id) && $id) {
-		$sql = "SELECT id, title, content, day, hour, lasting FROM agenda WHERE course_id = $course_id AND id = $id";
-		$result= db_query($sql);
-		$myrow = mysql_fetch_array($result);
-		$id = $myrow['id'];
-		$title = $myrow['title'];
-		$content = $myrow['content'];
-		$hourAncient = $myrow['hour'];
-		$dayAncient = $myrow['day']. ' '.$hourAncient;
-		$lastingAncient = $myrow['lasting'];
-		$start_cal = $jscalendar->make_input_field(
+        $sens =" ASC";
+        $result = db_query("SELECT id FROM agenda WHERE course_id = $course_id");
+        if (mysql_num_rows($result) > 1) {
+                if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
+                        $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sens=' >$langOldToNew</a></li>";
+                        $sens=" DESC ";
+                } else {
+                        $tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sens=d' >$langOldToNew</a></li>";
+                }
+        }
+        $tool_content .= "</ul></div>";
+        if (isset($id) && $id) {
+                $sql = "SELECT id, title, content, day, hour, lasting FROM agenda WHERE course_id = $course_id AND id = $id";
+                $result= db_query($sql);
+                $myrow = mysql_fetch_array($result);
+                $id = $myrow['id'];
+                $title = $myrow['title'];
+                $content = $myrow['content'];
+                $hourAncient = $myrow['hour'];
+                $dayAncient = $myrow['day']. ' '.$hourAncient;
+                $lastingAncient = $myrow['lasting'];
+                $start_cal = $jscalendar->make_input_field(
                         array('showsTime' => true,                           
-                               'showOthers' => true,
-                               'align' => 'Tl',
-                               'ifFormat' => '%Y-%m-%d %H:%M',
+                                'showOthers' => true,
+                                'align' => 'Tl',
+                                'ifFormat' => '%Y-%m-%d %H:%M',
                                 'timeFormat' => '24'),
                         array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
-                               'name' => 'date',
-                               'value' => $dayAncient));
-	} else {
-		$id = "";
-	}
+                                'name' => 'date',
+                                'value' => $dayAncient));
+        } else {
+                $id = "";
+        }
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 		$nameTools = $langAddEvent;

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -57,16 +57,12 @@ function showlinksofcategory($catid)
 	$i=1;
 	while ($myrow = mysql_fetch_array($result)) {
                 if ($i % 2 == 0) {
-                        $tool_content .= "
-                <tr class='odd'>";
+                        $tool_content .= "<tr class='odd'>";
                 } else {
-                        $tool_content .= "
-                <tr class='even'>";
+                        $tool_content .= "<tr class='even'>";
                 }
                 $title = empty($myrow['title'])? $myrow['url']: $myrow['title'];
-                $tool_content .= "
-                  <td>&nbsp;</td>
-                  <td width='1' valign='top'><img src='$themeimg/arrow.png' alt='' /></td>";
+                $tool_content .= "<td>&nbsp;</td><td width='1' valign='top'><img src='$themeimg/arrow.png' alt='' /></td>";
                 if ($is_editor) {
                     $num_merge_cols = 1;
                 } else {
@@ -81,8 +77,7 @@ function showlinksofcategory($catid)
                 $tool_content .= "</td>";
 
                 if ($is_editor) {
-                        $tool_content .=  "
-                  <td width='45' valign='top' align='right'>";
+                        $tool_content .=  "<td width='45' valign='top' align='right'>";
                         if (isset($category)) {
                                 $tool_content .=  "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=editlink&amp;category=$category&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         } else {
@@ -99,12 +94,9 @@ function showlinksofcategory($catid)
                         if ($i < $numberoflinks) {
                                 $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow[id]'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
                         }
-                        $tool_content .= "
-                  </td>";
+                        $tool_content .= "</td>";
                 }
-
-                $tool_content .= "
-                </tr>";
+                $tool_content .= "</tr>";
                 $i++;
         }
 }
@@ -172,14 +164,24 @@ function submit_link()
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link` $set_sql WHERE course_id = $course_id AND id = $id");
                 $catlinkstatus = $langLinkMod;
+                $log_type = LOG_MODIFY;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link`
                                       WHERE course_id = $course_id AND category = $selectcategory");
                 list($order) = mysql_fetch_row($q);
                 $order++;
                 db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");
+                $id = mysql_insert_id();
                 $catlinkstatus = $langLinkAdded;
+                $log_type = LOG_INSERT;
         }
+        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
+        Log::record(MODULE_ID_LINKS, $log_type,
+                    @array('id' => $id,
+                          'url' => $urllink,
+                          'title' => $title,
+                          'description' => $txt_description,
+                          'category' => $category));
 }
 
 function category_form_defaults($id)
@@ -199,7 +201,7 @@ function category_form_defaults($id)
 function submit_category()
 {
         global $course_id, $langCategoryAdded, $langCategoryModded,
-               $categoryname, $description;
+               $categoryname, $description, $catlinkstatus;
 
         register_posted_variables(array('categoryname' => true,
                                         'description' => true), 'all', 'trim');
@@ -210,29 +212,39 @@ function submit_category()
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link_category` $set_sql WHERE course_id = $course_id AND id = $id");
                 $catlinkstatus = $langCategoryModded;
+                $log_type = LOG_MODIFY;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link_category`
                                       WHERE course_id = $course_id");
                 list($order) = mysql_fetch_row($q);
                 $order++;
                 db_query("INSERT INTO `link_category` $set_sql, course_id = $course_id, `order` = $order");
+                $id = mysql_insert_id();
                 $catlinkstatus = $langCategoryAdded;
+                $log_type = LOG_INSERT;
         }
+        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
+        Log::record(MODULE_ID_LINKS, $log_type,
+                    array('id' => $id,
+                          'categoryname' => $categoryname,
+                          'description' => $txt_description));
 }
 
 function delete_link($id)
 {
-	global $course_id, $catlinkstatus, $langLinkDeleted;
+	global $course_id, $langLinkDeleted, $catlinkstatus;
 
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langLinkDeleted;
+        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('id' => $id));
 }
 
 function delete_category($id)
 {
-	global $course_id, $catlinkstatus, $langCategoryDeleted;
+	global $course_id, $langCategoryDeleted, $catlinkstatus;
 
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND category = $id");
 	db_query("DELETE FROM `link_category` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langCategoryDeleted;
+        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id));
 }
