@@ -543,7 +543,7 @@ function collapsed_facultes_horiz($fc) {
 	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="fc" onChange="document.depform.submit();"', 'defaults' => $fc, 'useKey' => 'id', 'where' => 'AND node.allow_course = true', 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="fc" onChange="document.depform.submit();"', 'defaults' => $fc, 'tree' => null, 'useKey' => 'id', 'where' => 'AND node.allow_course = true', 'multiple' => false));
         $head_content .= $js;
         $retString .= $html;
 	$retString .=  "\n    </li>";

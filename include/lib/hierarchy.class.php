@@ -945,6 +945,7 @@ jContent;
     public function buildCourseNodePicker($options = array())
     {
         $defaults = array('params' => 'name="department[]"',
+                          'tree' => null,
                           'useKey' => 'id',
                           'where' => 'AND node.allow_course = true',
                           'multiple' => get_config('course_multidep'));
@@ -977,6 +978,7 @@ jContent;
     public function buildUserNodePicker($options = array())
     {
         $defaults = array('params' => 'name="department[]"',
+                          'tree' => null,
                           'useKey' => 'id',
                           'where' => 'AND node.allow_course = true',
                           'multiple' => get_config('user_multidep'));

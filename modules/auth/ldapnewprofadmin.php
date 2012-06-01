@@ -207,7 +207,7 @@ if ($submit)  {
 	<tr>
 	<th class='left'>$langFaculty</th>
 	<td>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>";

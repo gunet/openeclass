@@ -29,9 +29,11 @@ $require_help = TRUE;
 $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
+require_once('../../include/lib/user.class.php');
 require_once('../../include/lib/course.class.php');
 require_once('../../include/lib/hierarchy.class.php');
 
+$user = new user();
 $course = new course();
 $tree = new hierarchy();
 
@@ -72,21 +74,34 @@ if (isset($_POST['submit'])) {
                 }
 
                 $departments = isset($_POST['department']) ? $_POST['department'] : array();
-		
-                db_query("UPDATE course
-                          SET title = " . autoquote($_POST['title']) .",
-                              public_code = " . autoquote($_POST['fcode']) .",
-                              keywords = ".autoquote($_POST['course_keywords']) . ",
-                              visible = " . intval($_POST['formvisible']) . ",
-                              prof_names = " . autoquote($_POST['titulary']) . ",
-                              lang = '$newlang',
-                              password = " . autoquote($_POST['password']) . "
-                          WHERE id = $course_id");
-                $course->refresh($course_id, array($_POST['type']), $departments);
-                
-                $tool_content .= "<p class='success'>$langModifDone</p>
-                        <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$course_code'>$langBack</a></p>
-                        <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
+                $deps_valid = true;
+
+                foreach ($departments as $dep) {
+                    if ( get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)) )
+                        $deps_valid = false;
+                }
+
+                // Check if the teacher is allowed to create in the departments he chose
+                if (!$deps_valid) {
+                    $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
+                                      <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$course_code'>$langAgain</a></p>";
+                } else {
+                    
+                    db_query("UPDATE course
+                            SET title = " . autoquote($_POST['title']) .",
+                                public_code = " . autoquote($_POST['fcode']) .",
+                                keywords = ".autoquote($_POST['course_keywords']) . ",
+                                visible = " . intval($_POST['formvisible']) . ",
+                                prof_names = " . autoquote($_POST['titulary']) . ",
+                                lang = '$newlang',
+                                password = " . autoquote($_POST['password']) . "
+                            WHERE id = $course_id");
+                    $course->refresh($course_id, array($_POST['type']), $departments);
+
+                    $tool_content .= "<p class='success'>$langModifDone</p>
+                            <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$course_code'>$langBack</a></p>
+                            <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
+                }
         }
 } else {
 	$tool_content .= "
@@ -136,7 +151,8 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id'])));
+        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "

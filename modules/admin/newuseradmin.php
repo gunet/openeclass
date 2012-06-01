@@ -211,7 +211,7 @@ $langEmail : $emailhelpdesk
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
         $depid = (isset($pt)) ? $pt : null;
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>

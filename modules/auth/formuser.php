@@ -248,7 +248,7 @@ if ($all_set) {
           <tr>
             <th>$langFaculty&nbsp;</th>
             <td>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "\n</td>
