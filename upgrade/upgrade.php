@@ -677,7 +677,7 @@ if (!isset($_POST['submit2'])) {
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
                             `comment` TEXT NOT NULL,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visible` TINYINT(4)',
+                            `visible` TINYINT(4),
                             `rank` INT(11) NOT NULL DEFAULT 0)");
                             //COMMENT='List of learning Paths';
                 db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
@@ -685,7 +685,7 @@ if (!isset($_POST['submit2'])) {
                             `learnPath_id` INT(11) NOT NULL DEFAULT 0,
                             `module_id` INT(11) NOT NULL DEFAULT 0,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visible` TINYINT(4)',
+                            `visible` TINYINT(4),
                             `specificComment` TEXT NOT NULL,
                             `rank` INT(11) NOT NULL DEFAULT '0',
                             `parent` INT(11) NOT NULL DEFAULT '0',
@@ -916,12 +916,14 @@ if (!isset($_POST['submit2'])) {
             
             if ($rebuildHierarchy) {
                 // copy faculties into the tree
+                $res = db_query("SELECT MAX(id) FROM `faculte`");
+                $max = mysql_fetch_array($res);
+                
                 $n = db_query("SELECT * FROM `faculte`");
                 $i = 0;
                 while ($r = mysql_fetch_assoc($n)) {
-                    $i++;
-                    $lft = $i * 2;
-                    $rgt = $lft + 1;
+                    $lft = 2 + 8 * $i;
+                    $rgt = $lft + 7;
                     db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
                         VALUES ('". $r['id'] ."',
                                 '". $r['code'] ."', 
@@ -930,11 +932,20 @@ if (!isset($_POST['submit2'])) {
                                 '". $r['generator'] ."', 
                                 '". $lft ."', 
                                 '". $rgt ."', true, true)");
+                    
+                    db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."PRE', '". $langpre ."', '". ($lft + 1) ."', '". ($lft + 2) ."', true, true)");
+                    db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
+                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."POST', '". $langpost ."', '". ($lft + 3) ."', '". ($lft + 4) ."', true, true)");
+                    db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
+                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."OTHER', '". $langother ."', '". ($lft + 5) ."', '". ($lft + 6) ."', true, true)");
+                    
+                    $i++;
                 }
 
                 $n = db_query("SELECT COUNT(*) FROM `faculte`");
                 $r = mysql_fetch_array($n);
-                $root_rgt = intval($r[0])*2 + 2;
+                $root_rgt = 2 + 8 * intval($r[0]);
                 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
                     VALUES ('', '". $_POST['Institution'] ."', '1', '". $root_rgt ."')");
             }
@@ -952,7 +963,7 @@ if (!isset($_POST['submit2'])) {
                             `course_type` int(11) NOT NULL references course_type(id) )");
             
             if ($rebuildHierarchy) {
-                $n = db_query("SELECT course_id, type FROM `cours`");
+                $n = db_query("SELECT cours_id, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
                     $type = 1;
                     if ($r['type'] == 'post')
@@ -961,7 +972,7 @@ if (!isset($_POST['submit2'])) {
                         $type = 3;
 
                     db_query("INSERT INTO `course_is_type` (course, course_type) 
-                        VALUES ('". $r['course_id'] ."', '". $type ."')");
+                        VALUES ('". $r['cours_id'] ."', '". $type ."')");
                 }
             }
 
@@ -971,10 +982,17 @@ if (!isset($_POST['submit2'])) {
                             `department` int(11) NOT NULL references hierarchy(id) )");
             
             if ($rebuildHierarchy) {
-                $n = db_query("SELECT course_id, faculteid FROM `cours`");
+                $n = db_query("SELECT cours_id, faculteid, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
+                    $qlike = 'lang' . $r['type'];
+                    $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent 
+                                      WHERE node.name LIKE '". $$qlike ."' 
+                                        AND parent.id = '". $r['faculteid'] ."' 
+                                        AND node.lft BETWEEN parent.lft AND parent.rgt");
+                    $node = mysql_fetch_assoc($res);
+                    
                     db_query("INSERT INTO `course_department` (course, department) 
-                        VALUES ('". $r['course_id'] ."', '". $r['faculteid'] ."')");
+                        VALUES ('". $r['cours_id'] ."', '". $node['id'] ."')");
                 }
             }
             
@@ -1169,7 +1187,7 @@ if (!isset($_POST['submit2'])) {
             }
             
             
-            if ($rebuildHierarchy) {
+            /*if ($rebuildHierarchy) {
                 // pros8hkh Programmatwn spoudwn kai eksamhnwn sto dentro
                 require_once('../include/lib/hierarchy.class.php');
                 $tree = new hierarchy();
@@ -1196,7 +1214,7 @@ if (!isset($_POST['submit2'])) {
                     
                     $tree->addNodeExt('Μεταπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'POST', $dep['number'], $dep['generator'], 1, 1, null);
                 }
-            }
+            }*/
 
 
          }
@@ -1232,7 +1250,7 @@ if (!isset($_POST['submit2'])) {
         // **********************************************
         // upgrade courses databases
         // **********************************************
-        $res = db_query("SELECT code, languageCourse, course_id
+        $res = db_query("SELECT code, languageCourse, cours_id
                          FROM cours ORDER BY code");
         $total = mysql_num_rows($res);
         $i = 1;
