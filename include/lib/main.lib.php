@@ -862,7 +862,7 @@ function greek_format($date, $time = false)
 // format the date according to language
 function nice_format($date, $time = false)
 {
-	if ($GLOBALS['language'] == 'greek') {
+	if ($GLOBALS['language'] == 'el') {
 		return greek_format($date, $time);
         } else {
                 return $date;

@@ -1,10 +1,10 @@
 <?php 
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,38 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-/*===========================================================================
-	work_functions.php
-	@version $Id$
-	@author: Dionysios G. Synodinos <synodinos@gmail.com>
-	@author: Evelthon Prodromou	<eprodromou@upnet.gr>
-==============================================================================        
-        @Description: Main script for the work tool
-
- 	This is a tool plugin that allows course administrators - or others with the
- 	same rights
-
- 	The user can : - navigate through files and directories.
-                       - upload a file
-                       - delete, copy a file or a directory
-                       - edit properties & content (name, comments, 
-			 html content)
-
- 	@Comments: The script is organised in four sections.
-
- 	1) Execute the command called by the user
-           Note (March 2004) some editing functions (renaming, commenting)
-           are moved to a separate page, edit_document.php. This is also
-           where xml and other stuff should be added.
-   	2) Define the directory to display
-  	3) Read files and directories from the directory defined in part 2
-  	4) Display all of that on an HTML page
- 
-  	@TODO: eliminate code duplication between document/document.php, scormdocument.php
-==============================================================================
-*/
-
 
 // Print a two-cell table row with that title, if the content is non-empty
 function table_row($title, $content, $html = false)
@@ -71,9 +39,9 @@ function table_row($title, $content, $html = false)
 // use the assignment's id instead. Also insures that secret subdir exists
 function work_secret($id)
 {
-	global $mysqlMainDb, $course_id, $workPath, $coursePath;
+	global $course_id, $workPath, $coursePath;
 	
-	$res = db_query("SELECT secret_directory FROM `$mysqlMainDb`.assignments WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb);
+	$res = db_query("SELECT secret_directory FROM assignment WHERE course_id = $course_id AND id = '$id'");
 	if ($res) {
 		$secret = mysql_fetch_row($res);
 		if (!empty($secret[0])) {
@@ -98,8 +66,9 @@ function work_secret($id)
 // Is this a group assignment?
 function is_group_assignment($id)
 {
-	global $tool_content, $mysqlMainDb, $course_id;
-	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE course_id = $course_id AND id = '$id'");
+	global $course_id;
+        
+	$res = db_query("SELECT group_submissions FROM assignment WHERE course_id = $course_id AND id = '$id'");
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		if ($row[0] == 0) {
@@ -117,19 +86,18 @@ function is_group_assignment($id)
 // Doesn't delete files if they are the same with $new_filename
 function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 {
-	global $m, $tool_content, $mysqlMainDb;
+	global $m;
 
 	$return = '';
         $res = db_query("SELECT id, file_path, file_name, uid, group_id
-				FROM `$mysqlMainDb`.assignment_submit
+				FROM assignment_submit
                                 WHERE assignment_id = $id AND
 				      (uid = $uid OR group_id = $gid)");
 	while ($row = mysql_fetch_array($res)) {
                 if ($row['file_path'] != $new_filename) {
         		@unlink("$GLOBALS[workPath]/$row[file_path]");
                 }
-                db_query("DELETE FROM `$mysqlMainDb`.assignment_submit
-                                 WHERE id = $row[id]");
+                db_query("DELETE FROM assignment_submit WHERE id = $row[id]");
 		if ($GLOBALS['uid'] == $row['uid']) {
 			$return .= $m['deleted_work_by_user'];
 		} else {
@@ -143,18 +111,18 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 
 // Find submissions by a user (or the user's groups)
 function find_submissions($is_group_assignment, $uid, $id, $gids)
-{
-        global $course_id, $mysqlMainDb;
+{        
+        
         if ($is_group_assignment AND count($gids)) {
                 $groups_sql = join(', ', array_keys($gids));
                 $res = db_query("SELECT id, uid, group_id, submission_date,
 					file_path, file_name, comments, grade,
 					grade_comments, grade_submission_date
-					FROM `$mysqlMainDb`.assignment_submit
+					FROM assignment_submit
                                         WHERE assignment_id = $id AND
                                               group_id IN ($groups_sql)");
         } else {
-                $res = db_query("SELECT id, grade FROM `$mysqlMainDb`.assignment_submit
+                $res = db_query("SELECT id, grade FROM assignment_submit
                                         WHERE assignment_id = '$id' AND uid = '$uid'");
         }
 	$subs = array();
@@ -172,10 +140,10 @@ function find_submissions($is_group_assignment, $uid, $id, $gids)
 // grade or professor comment is set
 function submission_grade($subid)
 {
-	global $m, $tool_content, $mysqlMainDb;
+	global $m;
 
 	$res = mysql_fetch_row(db_query("SELECT grade, grade_comments
-                                                FROM `$mysqlMainDb`.assignment_submit
+                                                FROM assignment_submit
                                                 WHERE id = '$subid'"));
 	if ($res) {
 		$grade = trim($res[0]);
@@ -198,13 +166,13 @@ function submission_grade($subid)
 // assignments were found.
 function was_graded($uid, $id, $ret_val = FALSE)
 {
-        global $tool_content, $course_id, $mysqlMainDb;
+        global $course_id;
 
-        $res = db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
+        $res = db_query("SELECT * FROM assignment_submit
                                   WHERE assignment_id = '$id'
                                         AND (uid = '$uid' OR
-                                        group_id IN (SELECT group_id FROM `$mysqlMainDb`.`group` AS grp,
-                                                                          `$mysqlMainDb`.group_members AS members
+                                        group_id IN (SELECT group_id FROM `group` AS grp,
+                                                                          group_members AS members
                                                             WHERE grp.id = members.group_id AND
                                                                   user_id = $uid AND
                                                                   course_id = $course_id))");
@@ -227,10 +195,10 @@ function was_graded($uid, $id, $ret_val = FALSE)
 // Show details of a submission
 function show_submission_details($id)
 {
-	global $uid, $m, $mysqlMainDb, $langSubmittedAndGraded, $tool_content, $course_code;
+	global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code;
+        
 	$sub = mysql_fetch_array(
-		db_query("SELECT * FROM `$mysqlMainDb`.assignment_submit
-			           WHERE id = '$id'"));
+		db_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
 	if (!$sub) {
 		die("Error: submission $id doesn't exist.");
 	}
@@ -276,22 +244,20 @@ function show_submission_details($id)
           <th>".$m['filename'].":</th>
           <td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;get=$sub[id]'>".q($sub['file_name'])."</a></td>
         </tr>";
-		    table_row($m['comments'], $sub['comments'], true);
+        table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "
         </table>
-        </fieldset>";
-	mysql_select_db($mysqlMainDb);
+        </fieldset>";	
 }
 
 
 // Check if a file has been submitted by user uid or group gid
 // for assignment id. Returns 'user' if by user, 'group' if by group
 function was_submitted($uid, $gid, $id)
-{
-	global $tool_content, $mysqlMainDb;
+{	
 	
 	$q = db_query("SELECT uid, group_id
-			      FROM `$mysqlMainDb`.assignment_submit
+			      FROM assignment_submit
 			      WHERE assignment_id = $id AND
 				    (uid = $uid or group_id = $gid)");
 	if (mysql_num_rows($q) == 0) {

@@ -61,6 +61,7 @@ $action->record(MODULE_ID_VIDEO);
 
 include '../../include/lib/forcedownload.php';
 require_once 'video_functions.php';
+include '../../include/log.php';
 
 $nameTools = $langVideo;
 
@@ -185,7 +186,14 @@ if (isset($_POST['edit_submit'])) { // edit
                                                       publisher = ".autoquote($_POST['publisher'])."
                                                   WHERE id = $id";
 		}
-		$result = db_query($sql, $mysqlMainDb);
+		$result = db_query($sql, $mysqlMainDb);                
+                $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
+                Log::record(MODULE_ID_VIDEO, LOG_MODIFY,
+                          array('id' => $id,                          
+                                'url' => autoquote(canonicalize_url($_POST['url'])),
+                                'title' => autoquote($_POST['title']),     
+                                'desc' => $txt_description));
+                
 		$tool_content .= "<p class='success'>$langTitleMod</p><br />";
 		$id = "";
 	}
@@ -200,13 +208,20 @@ if (isset($_POST['add_submit'])) {  // add
 			}
 			$sql = 'INSERT INTO videolinks (course_id, url, title, description, creator, publisher, date)
                                 VALUES ('.autoquote($course_id).',
-                                		'.autoquote(canonicalize_url($url)).',
+                               		'.autoquote(canonicalize_url($url)).',
                                         '.autoquote($title).',
-				        				'.autoquote($_POST['description']).',
+					'.autoquote($_POST['description']).',
                                         '.autoquote($_POST['creator']).',
                                         '.autoquote($_POST['publisher']).',
                                         '.autoquote($_POST['date']).')';
 			$result = db_query($sql, $mysqlMainDb);
+                        $id = mysql_insert_id();				
+                        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
+                        Log::record(MODULE_ID_VIDEO, LOG_INSERT,
+                                @array('id' => $id,
+                                       'url' => autoquote(canonicalize_url($url)),
+                                       'title' => $title,
+                                       'desc' => $txt_description));
 			$tool_content .= "<p class='success'>$langLinkAdded</p><br />";
 		} else {  // add video
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -251,7 +266,15 @@ if (isset($_POST['add_submit'])) {  // add
                                                                  autoquote($_POST['publisher']).', '.
                                                                  autoquote($_POST['date']).')';
 				}
+                                $id = mysql_insert_id();
 				$result = db_query($sql, $mysqlMainDb);
+                                $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
+                                Log::record(MODULE_ID_VIDEO, LOG_INSERT,
+                                        @array('id' => $id,
+                                                'path' => quote($path),
+                                                'url' => $_POST['url'],
+                                                'title' => autoquote($_POST['title']),
+                                                 'desc' => $txt_description));
 				$tool_content .= "<p class='success'>$langFAdd</p><br />";
 			}
 		}
@@ -267,8 +290,9 @@ if (isset($_POST['add_submit'])) {  // add
 		}
 		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql, $mysqlMainDb);
+                Log::record(MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id));
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
-		$id="";
+		$id = "";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
 		$nameTools = $langAddV;
 		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
@@ -377,17 +401,16 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$nameTools = $langModify;
 		$navigation[] = array ('url' => "video.php?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
-           <form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
-           <fieldset>
-           <legend>$langModify</legend>
-
-           <table width='100%' class='tbl'>";
+                <form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
+                <fieldset>
+                <legend>$langModify</legend>
+                <table width='100%' class='tbl'>";
 		if ($table_edit == 'videolinks') {
 			$tool_content .= "
-           <tr>
-             <th>$langURL:</th>
-             <td><input type='text' name='url' value='".q($url)."' size='55'></td>
-           </tr>";
+                        <tr>
+                        <th>$langURL:</th>
+                        <td><input type='text' name='url' value='".q($url)."' size='55'></td>
+                        </tr>";
 		}
 		elseif ($table_edit == 'video') {
 			$tool_content .= "<input type='hidden' name='url' value='".q($url)."'>";
@@ -425,7 +448,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 
 if (!isset($_GET['form_input'])) {
           $tool_content .= "
-        <div id='operations_container'>
+          <div id='operations_container'>
 	  <ul id='opslist'>
 	    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
 	    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
@@ -446,8 +469,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         $count_video_presented_for_admin = 1;
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
-        <tr>
-        
+        <tr>     
           <th colspan='2'><div align='left'>$langVideoDirectory</div></th>
           <th width='150'><div align='left'>$langcreator</div></th>
           <th width='150'><div align='left'>$langpublisher</div></th>

@@ -1,10 +1,10 @@
 <?php 
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,14 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*===========================================================================
-	grade_edit.php
- * @version $Id$
-	@author: Dionysios G. Synodinos <synodinos@gmail.com>
-	@author: Evelthon Prodromou <eprodromou@upnet.gr>
-==============================================================================        
-*/
-
 $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
@@ -34,7 +26,6 @@ include 'work_functions.php';
 include '../group/group_functions.php';
 
 $nameTools = $m['grades'];
-mysql_select_db($mysqlMainDb);
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
@@ -51,7 +42,8 @@ if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 function get_assignment_details($id)
 {
     global $course_id;
-	return mysql_fetch_array(db_query("SELECT * FROM assignments WHERE course_id = $course_id AND id = '$id'"));
+
+    return mysql_fetch_array(db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = '$id'"));
 }
 
 
@@ -59,7 +51,7 @@ function get_assignment_details($id)
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign)
 {
-	global $m, $langGradeOk, $tool_content, $langGradeWork, $course_code;
+	global $m, $langGradeOk, $tool_content, $course_code;
 
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {		
 		$uid_2_name = display_user($sub['uid']);
@@ -102,7 +94,6 @@ function show_edit_form($id, $sid, $assign)
 			</form>
 			<br/>";
 	} else {
-		$tool_content .= "<p class='caution'>error - no such submission with id $sid</p>\n";
+		$tool_content .= "<p class='caution'>$langSubmissionError</p>";
 	}
 }
-?>
