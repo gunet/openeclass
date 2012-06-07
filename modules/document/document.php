@@ -33,6 +33,7 @@ include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/pclzip/pclzip.lib.php' ;
 require_once '../video/video_functions.php';
+include '../../include/log.php';
 
 load_js('tools.js');
 load_modal_box(true);
@@ -267,9 +268,16 @@ if ($can_upload) {
                                                         format = " . autoquote($file_format) . ",
                                                         language = " . autoquote($_POST['file_language']) . ",
                                                         copyrighted = " . intval($_POST['file_copyrighted']));
-
+                                        $id = mysql_insert_id();
                                         /*** Copy the file to the desired destination ***/
                                         copy ($userFile, $basedir . $file_path);
+                                        // Logging
+                                        Log::record(MODULE_ID_DOCS, LOG_INSERT,
+                                                array('id' => $id,
+                                                      'filepath' => quote($file_path),
+                                                      'filename' => autoquote($fileName),
+                                                      'comment' => autoquote($_POST['file_comment']),
+                                                      'title' => autoquote($_POST['file_title'])));
                                         $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
                                 } else {
                                         $action_message .= "<p class='caution'>$error</p><br />";
@@ -284,12 +292,11 @@ if ($can_upload) {
 	/*-------------------------------------
 	MOVE FILE OR DIRECTORY : STEP 2
 	--------------------------------------*/
-        if (isset($_POST['moveTo'])) {
-		
+        if (isset($_POST['moveTo'])) {		
                 $moveTo = $_POST['moveTo'];
                 $source = $_POST['source'];
                 $sourceXml = $source . '.xml';
-		//elegxos ean source kai destintation einai to idio
+		//check if source and destination are the same
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
 			if (move($basedir . $source, $basedir . $moveTo)) {
 				if (hasMetaData($source, $basedir, $group_sql))
@@ -345,6 +352,9 @@ if ($can_upload) {
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
                           WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
+                Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                                array('path' => autoquote($_POST['sourceFile']),
+                                        'newfilename' => autoquote($_POST['renameTo'])));                
 		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
 			$q = db_query("UPDATE document SET filename=" .
                                       autoquote($_POST['renameTo'] . '.xml') .
@@ -365,21 +375,20 @@ if ($can_upload) {
                                                    path = " . autoquote($_GET['rename']));
                 $res = mysql_fetch_array($result);
                 $fileName = $res['filename'];
-                $dialogBox .= "
-            <form method='post' action='document.php?course=$course_code'>
-            <input type='hidden' name='sourceFile' value='" .
-                q($_GET['rename']) . "' />
-	    $group_hidden_input
-            <fieldset>
-		<table class='tbl' width='100%'>
-                <tr>
-		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
-		  <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
-		  <td class='right'><input type='submit' value='$langRename' /></td>
-		</tr>
-		</table>
-            </fieldset>
-            </form>\n";
+                $dialogBox .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+                <input type='hidden' name='sourceFile' value='" .
+                        q($_GET['rename']) . "' />
+                $group_hidden_input
+                <fieldset>
+                        <table class='tbl' width='100%'>
+                        <tr>
+                        <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
+                        <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
+                        <td class='right'><input type='submit' value='$langRename' /></td>
+                        </tr>
+                        </table>
+                </fieldset>
+                </form>\n";
 	}
 
 	// create directory
@@ -400,25 +409,23 @@ if ($can_upload) {
 	// step 1: display a field to enter the new dir name
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
-                $dialogBox .= "
-			<form action='document.php?course=$course_code' method='post'>
-            $group_hidden_input
-			<fieldset>
-				<input type='hidden' name='newDirPath' value='$createDir' />
-				<table class='tbl' width='100%'>
-				<tr>
-					<th>$langNameDir</th>
-					<td width='1'><input type='text' name='newDirName' /></td>
-					<td><input type='submit' value='$langCreateDir' /></td>
-				</tr>
-				</table>
-           </fieldset>
-           </form>
-           <br />\n";
+                $dialogBox .= "<form action='document.php?course=$course_code' method='post'>
+                $group_hidden_input
+                <fieldset>
+                        <input type='hidden' name='newDirPath' value='$createDir' />
+                        <table class='tbl' width='100%'>
+                        <tr>
+                                <th>$langNameDir</th>
+                                <td width='1'><input type='text' name='newDirName' /></td>
+                                <td><input type='submit' value='$langCreateDir' /></td>
+                        </tr>
+                        </table>
+                </fieldset>
+                </form>
+                <br />\n";
 	}
 
 	// add/update/remove comment
-	// h $commentPath periexei to path tou arxeiou gia to opoio tha epikyrothoun ta metadata
 	if (isset($_POST['commentPath'])) {
                 $commentPath = $_POST['commentPath'];
 		//elegxos ean yparxei eggrafh sth vash gia to arxeio
@@ -444,6 +451,10 @@ if ($can_upload) {
                                                 copyrighted = " . intval($_POST['file_copyrighted']) . "
                                         WHERE $group_sql AND
 					      path = '$commentPath'");
+                        Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                                array('path' => $commentPath,
+                                      'comment' => autoquote($_POST['file_comment']),
+                                      'title' => autoquote($_POST['file_title'])));
 			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
@@ -523,6 +534,10 @@ if ($can_upload) {
                                 		      filename=" . autoquote($_FILES['newFile']['name'] . ".xml") .
                                 		    " WHERE $group_sql AND path =" . quote($oldpath . ".xml"));
                                 	}
+                                        Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                                                array('oldpath' => quote($oldpath),
+                                                      'newpath' => quote($newpath),
+                                                      'filename' => autoquote($_FILES['newFile']['name'])));
                                 	$action_message = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
@@ -859,10 +874,10 @@ if($can_upload) {
             /*----------------------------------------
             Create new folder
             --------------------------------------*/
-            $tool_content .= "\n      <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+            $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
             $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-            $tool_content .= "\n      <li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
-            $tool_content .= "\n    </ul>\n  </div>\n";
+            $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
+            $tool_content .= "</ul></div>\n";
         }
 
 	// Dialog Box

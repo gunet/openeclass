@@ -52,10 +52,12 @@ function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 {
 	if ($action == "delete") {
 		db_query("DELETE FROM ".$dbTable." 
-			WHERE path LIKE \"".$oldPath."%\""); 
+			WHERE path LIKE \"".$oldPath."%\"");
+                Log::record(MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath));
 	} elseif ($action = "update") {
 		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
 			WHERE path LIKE '$oldPath%'");
+                Log::record(MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldPath, 'newpath' => $newPath));
 	}
 }
 
