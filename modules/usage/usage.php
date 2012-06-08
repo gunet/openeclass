@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -42,6 +42,7 @@ include '../../include/baseTheme.php';
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
+    <li><a href='displaylog.php?course=$course_code'>$langUsersLog</a></li>
     <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
     <li><a href='userlogins.php?course=$course_code&amp;first='>$langUserLogins</a></li>
     <li><a href='userduration.php?course=$course_code'>$langUserDuration</a></li>
@@ -57,13 +58,8 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else {
-    $lang = 'en';
-}
 
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";

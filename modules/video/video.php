@@ -326,7 +326,7 @@ if (isset($_POST['add_submit'])) {  // add
 		  <td><input type='text' name='publisher' value='$nick' size='55'></td>
 		</tr>
 		<tr>
-		  <th>$langdate:</th>
+		  <th>$langDate:</th>
 		  <td><input type='text' name='date' value='".date('Y-m-d G:i:s')."' size='55'></td>
 		</tr>
 		<tr>
@@ -369,7 +369,7 @@ if (isset($_POST['add_submit'])) {  // add
 		  <td><input type='text' name='publisher' value='$nick' size='55'></td>
 		</tr>
 		<tr>
-		  <th>$langdate:</th>
+		  <th>$langDate:</th>
 		  <td><input type='text' name='date' value='".date('Y-m-d G:i')."' size='55'></td>
 		</tr>
 		<tr>
@@ -473,7 +473,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
           <th colspan='2'><div align='left'>$langVideoDirectory</div></th>
           <th width='150'><div align='left'>$langcreator</div></th>
           <th width='150'><div align='left'>$langpublisher</div></th>
-          <th width='70'>$langdate</th>
+          <th width='70'>$langDate</th>
           <th width='70'>$langActions</th>
         </tr>";
         foreach($results as $table => $result)

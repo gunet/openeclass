@@ -500,6 +500,7 @@ $langDeleteOK="Το γεγονός διαγράφηκε";
 $langNoEvents = "Δεν υπάρχουν γεγονότα";
 $langSureToDel = "Είστε σίγουρος ότι θέλετε να διαγράψετε το γεγονός με τίτλο";
 $langDelete = "Διαγραφή";
+$langInsert = "Εισαγωγή";
 $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
@@ -539,7 +540,7 @@ $langAnnouncement = "Ανακοίνωση";
 $langMove = "Μετακίνηση";
 $langAnnModify="η ανακοίνωση άλλαξε";
 $langAnnAdd="Η ανακοίνωση προστέθηκε";
-$langAnnDel="η ανακοίνωση διαγράφηκε";
+$langAnnDel="H ανακοίνωση διαγράφηκε";
 $langPubl="αναρτήθηκε την";
 $langAddAnn="Προσθήκη Ανακοίνωσης";
 $langContent="Περιεχόμενο";
@@ -2903,6 +2904,19 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langDumpUserDurationToFile = "Σε αρχείο τύπου csv";
  $langCodeUTF = "κωδικοποίηση UTF-8";
  $langCodeWin= "κωδικοποίηση Windows-1253";
+ 
+ /*************************************************
+  *  log.php
+  * ************************************************/
+  
+ $langUsersLog = "Ενέργειες χρηστών";
+ $langLogTypes = "Είδος Ενεργειών";
+ $langLogModules = "Είδος Υποσυστημάτων";
+ $langAllActions = "Όλες οι ενέργειες";
+ $langUnknownAction = "Άγνωστη ενέργεια";
+ $langWithTitle = "με τίτλο";
+ $langWithContent = "με περιεχόμενο";
+ $langWithID = "με νούμερο";
 
 /****************************************************************
 * video.php
@@ -2922,7 +2936,6 @@ $langVideoDeleted = "Όλοι οι σύνδεσμοι διαγράφηκαν";
 $langURL="Εξωτερικός σύνδεσμος προς τον εξυπηρετητή ήχου ή βίντεο";
 $langcreator="Δημιουργός";
 $langpublisher="Εκδότης";
-$langdate="Ημερομηνία";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";

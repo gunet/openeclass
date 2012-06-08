@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,7 +43,6 @@ $require_login = true;
 include '../../include/baseTheme.php';
 include('../../include/action.php');
 
-
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
@@ -53,7 +52,7 @@ $tool_content .= "
     <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
     <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
-</div>\n";
+</div>";
 
 
 $dateNow = date("d-m-Y / H:i:s",time());
@@ -64,15 +63,9 @@ $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066; padding-left: 15px; padding-right : 15px; }
     .content { position: relative; left: 25px; }';
 
-
 include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
 
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
     if (!extension_loaded('gd')) {
