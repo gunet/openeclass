@@ -98,7 +98,6 @@ function escape_if_exists($name) {
 }
 escape_if_exists('title');
 escape_if_exists('titulaires');
-escape_if_exists('type');
 escape_if_exists('languageCourse');
 escape_if_exists('description');
 escape_if_exists('course_keywords');
@@ -133,7 +132,6 @@ if (empty($titulaires)) {
 $tool_content .= $title_html .
                  $faculte_html .
                  $titulaires_html .
-                 $type_html .
                  $languageCourse_html .
                  $description_html .
                  $course_keywords_html .
@@ -166,11 +164,6 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         <tr>
 	  <th>$langTeachers:</th>
 	  <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
-	  <td>&nbsp;</td>
-        </tr>
-	<tr>
-	  <th class='left'>$langType:</th>
-	  <td>" . selection($course->buildTypes(), 'type', $type) . "</td>
 	  <td>&nbsp;</td>
         </tr>
 	<tr>
@@ -410,7 +403,7 @@ if (isset($_POST['create_course'])) {
                         documents = 1,
                         wiki = 0,
                         agenda = 0");
-        $course->refresh($new_course_id, array($type), $departments);
+        $course->refresh($new_course_id, $departments);
                 
         $description = purify($description);        
         $unit_id = description_unit_id($new_course_id);

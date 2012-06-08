@@ -77,14 +77,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                         'course_title' => true,
                                         'course_desc' => true,
                                         'course_vis' => true,
-                                        'course_prof' => true,
-                                        'course_type' => true), 'all', 'autounquote');
+                                        'course_prof' => true), 'all', 'autounquote');
         
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         
         $r = $restoreThis . '/html';
 	list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title,
-                $course_desc, $departments, $course_vis, $course_prof, $course_type);
+                $course_desc, $departments, $course_vis, $course_prof);
 
         $cours_file = $_POST['restoreThis'] . '/cours';
         if (file_exists($cours_file)) {
@@ -812,7 +811,7 @@ function assignment_submit($userid, $assignment_id, $submission_date,
 }
 
 // creating course and inserting entries into the main database
-function create_course($code, $lang, $title, $desc, $departments, $vis, $prof, $type) {
+function create_course($code, $lang, $title, $desc, $departments, $vis, $prof) {
 	global $mysqlMainDb, $courseObj;
 
 	$repertoire = new_code($departments[0]);
@@ -834,7 +833,7 @@ function create_course($code, $lang, $title, $desc, $departments, $vis, $prof, $
 			quote($code))).
                 ')');
         $cid = mysql_insert_id();
-        $courseObj->refresh($cid, array($type), $departments);
+        $courseObj->refresh($cid, $departments);
 
 	if (!db_query("CREATE DATABASE `$repertoire`")) {
 		echo "Database $repertoire creation failure ";
@@ -1034,9 +1033,9 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
 {
         global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
                $langCourseDescription, $langFaculty, $langCourseVis,
-               $langTeacher, $langCourseType, $langUsersWillAdd,
+               $langTeacher, $langUsersWillAdd,
                $langOk, $langAll, $langsTeachers, $langMultiRegType, $langActivate,
-               $langNone, $courseObj, $treeObj;
+               $langNone, $treeObj;
 
 	// find available languages
 	$languages = array();
@@ -1070,7 +1069,6 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                    <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
                    <tr><th>$langTeacher:</th>
                        <td><input type='text' name='course_prof' value='".q($prof)."' size='50' /></td></tr>
-                   <tr><th>$langCourseType:</th><td>". selection($courseObj->buildTypes(), 'course_type') ."</td></tr>
                    <tr><td>&nbsp;</td></tr>
                    <tr><th>$langUsersWillAdd:</th>
                        <td><input type='radio' name='add_users' value='all' id='add_users_all'>

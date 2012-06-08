@@ -698,16 +698,6 @@ db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allo
 db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user) 
     VALUES ('TMCPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '30', '100', '65', '66', true, true)");
 
-db_query("CREATE TABLE IF NOT EXISTS `course_type` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `name` varchar(255) NOT NULL )");
-db_query("INSERT INTO `course_type` (id, name) VALUES ('1', 'langpre'), ('2', 'langpost'), ('3', 'langother')");
-
-db_query("CREATE TABLE IF NOT EXISTS `course_is_type` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `course` int(11) NOT NULL references course(id),
-                `course_type` int(11) NOT NULL references course_type(id) )");
-
 db_query("CREATE TABLE IF NOT EXISTS `course_department` (
                 `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                 `course` int(11) NOT NULL references course(id),

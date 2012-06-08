@@ -67,16 +67,12 @@ if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course.keywords, course_type.name AS type, course.visible, course.prof_names, course.public_code
+$res = db_query("SELECT course.keywords, course.visible, course.prof_names, course.public_code
                   FROM course
-             LEFT JOIN course_is_type ON course_is_type.course = course.id
-             LEFT JOIN course_type on course_type.id = course_is_type.course_type
                  WHERE course.id = $course_id");
 $result = mysql_fetch_array($res);
 
 $keywords = q(trim($result['keywords']));
-$type = $result['type'];
-$containslang = (substr($type, 0, strlen("lang")) === "lang") ? true : false;
 $visible = $result['visible'];
 $professor = $result['prof_names'];
 $public_code = $result['public_code'];
@@ -236,8 +232,6 @@ if ($first and !$is_editor) {
         $cunits_content = '';
 }
 
-$lessonType = ($containslang) ? $$type : $type;
-
 $bar_content .= "\n<ul class='custom_list'><li><b>".$langCode."</b>: ".q($public_code)."</li>".
                 "\n<li><b>".$langTeachers."</b>: ".q($professor)."</li>".
                 "\n<li><b>".$langFaculty."</b>: ";
@@ -250,8 +244,7 @@ foreach ($departments as $dep) {
     $i++;
 }
         
-$bar_content .= "</li>".
-                "\n<li> <b>".$langType."</b>: ".$lessonType."</li>";
+$bar_content .= "</li>\n";
 
 $require_help = TRUE;
 $helpTopic = 'course_home';

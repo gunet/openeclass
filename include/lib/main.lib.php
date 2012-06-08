@@ -1501,7 +1501,6 @@ function delete_course($cid)
                          (SELECT id FROM course_units WHERE course_id = $cid)");
         db_query("DELETE FROM course_units WHERE course_id = $cid");
 	db_query("DELETE FROM course_user WHERE course_id = $cid");
-        db_query("DELETE FROM course_is_type WHERE course = $cid");
         db_query("DELETE FROM course_department WHERE course = $cid");
 	db_query("DELETE FROM course WHERE id = $cid");
 	db_query("DELETE FROM video WHERE course_id = $cid");

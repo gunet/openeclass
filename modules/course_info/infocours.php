@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
                                 lang = '$newlang',
                                 password = " . autoquote($_POST['password']) . "
                             WHERE id = $course_id");
-                    $course->refresh($course_id, array($_POST['type']), $departments);
+                    $course->refresh($course_id, $departments);
 
                     $tool_content .= "<p class='success'>$langModifDone</p>
                             <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$course_code'>$langBack</a></p>
@@ -114,15 +114,13 @@ if (isset($_POST['submit'])) {
 	</div>";
 
 	$sql = "SELECT course.title, course.keywords, course.visible,
-		       course.public_code, course.prof_names, course.lang, course_is_type.course_type AS type,
+		       course.public_code, course.prof_names, course.lang,
 		       course.password, course.id
-		FROM course
-           LEFT JOIN course_is_type on course.id = course_is_type.course
-		WHERE course.code = '$course_code'";
+		  FROM course
+                 WHERE course.code = '$course_code'";
 	$result = db_query($sql);
 	$c = mysql_fetch_array($result);
 	$title = q($c['title']);
-	$type = $c['type'];
 	$visible = $c['visible'];
 	$visibleChecked[$visible] = " checked='1'";
 	$public_code = q($c['public_code']);
@@ -158,13 +156,6 @@ if (isset($_POST['submit'])) {
 	$tool_content .= "
                 </td>
             </tr>
-	    <tr>
-	        <th>$langType:</th>
-	        <td>";
-	$tool_content .= selection($course->buildTypes(), 'type', $type);
-	$tool_content .= "
-                </td>
-	    </tr>
 	    <tr>
 		<th>$langCourseKeywords</th>
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>

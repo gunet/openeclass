@@ -896,8 +896,6 @@ if (!isset($_POST['submit2'])) {
             
             if ($rebuildHierarchy) {
                 db_query("DROP TABLE IF EXISTS `hierarchy`");
-                db_query("DROP TABLE IF EXISTS `course_type`");
-                db_query("DROP TABLE IF EXISTS `course_is_type`");
                 db_query("DROP TABLE IF EXISTS `course_department`");
                 db_query("DROP TABLE IF EXISTS `user_department`");
             }
@@ -950,32 +948,6 @@ if (!isset($_POST['submit2'])) {
                     VALUES ('', '". $_POST['Institution'] ."', '1', '". $root_rgt ."')");
             }
             
-            db_query("CREATE TABLE IF NOT EXISTS `course_type` (
-                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                            `name` varchar(255) NOT NULL )");
-            
-            if ($rebuildHierarchy)
-                db_query("INSERT INTO `course_type` (id, name) VALUES ('1', 'langpre'), ('2', 'langpost'), ('3', 'langother')");
-            
-            db_query("CREATE TABLE IF NOT EXISTS `course_is_type` (
-                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                            `course` int(11) NOT NULL references course(id),
-                            `course_type` int(11) NOT NULL references course_type(id) )");
-            
-            if ($rebuildHierarchy) {
-                $n = db_query("SELECT cours_id, type FROM `cours`");
-                while ($r = mysql_fetch_assoc($n)) {
-                    $type = 1;
-                    if ($r['type'] == 'post')
-                        $type = 2;
-                    elseif ($r['type'] == 'other')
-                        $type = 3;
-
-                    db_query("INSERT INTO `course_is_type` (course, course_type) 
-                        VALUES ('". $r['cours_id'] ."', '". $type ."')");
-                }
-            }
-
             db_query("CREATE TABLE IF NOT EXISTS `course_department` (
                             `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                             `course` int(11) NOT NULL references course(id),
@@ -1185,37 +1157,6 @@ if (!isset($_POST['submit2'])) {
                                     END IF;
                                 END");
             }
-            
-            
-            /*if ($rebuildHierarchy) {
-                // pros8hkh Programmatwn spoudwn kai eksamhnwn sto dentro
-                require_once('../include/lib/hierarchy.class.php');
-                $tree = new hierarchy();
-                
-                $n = db_query("SELECT * FROM `hierarchy` WHERE lft > 1");
-                $deps = array();
-                
-                while ($r = mysql_fetch_assoc($n))
-                    $deps[] = $r;
-                
-                foreach ($deps as $dep) {
-                    $dlft = $tree->getNodeLft($dep['id']);
-                    $ppsid = $tree->addNodeExt('Προπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'PRE', $dep['number'], $dep['generator'], 1, 1, null);
-                    $ppslft = $tree->getNodeLft($ppsid);
-                    
-                    $tree->addNodeExt('1ο εξάμηνο', $ppslft, $dep['code'].'1', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('2ο εξάμηνο', $ppslft, $dep['code'].'2', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('3ο εξάμηνο', $ppslft, $dep['code'].'3', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('4ο εξάμηνο', $ppslft, $dep['code'].'4', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('5ο εξάμηνο', $ppslft, $dep['code'].'5', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('6ο εξάμηνο', $ppslft, $dep['code'].'6', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('7ο εξάμηνο', $ppslft, $dep['code'].'7', $dep['number'], $dep['generator'], 1, 1, null);
-                    $tree->addNodeExt('8ο εξάμηνο', $ppslft, $dep['code'].'8', $dep['number'], $dep['generator'], 1, 1, null);
-                    
-                    $tree->addNodeExt('Μεταπτυχιακό Πρόγραμμα Σπουδών', $dlft, $dep['code'].'POST', $dep['number'], $dep['generator'], 1, 1, null);
-                }
-            }*/
-
 
          }
 
