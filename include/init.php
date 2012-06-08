@@ -195,18 +195,27 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
         $is_power_user = true;
         $is_usermanage_user = true;
+        $is_departmentmanage_user = true;
 } elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
 	$is_power_user = true;
         $is_usermanage_user = true;
+        $is_departmentmanage_user = true;
 	$is_admin = false;
 } elseif (isset($_SESSION['is_usermanage_user']) and $_SESSION['is_usermanage_user']) {
         $is_usermanage_user = true;
+        $is_power_user = false;        
+	$is_admin = false;
+        $is_departmentmanage_user = false;
+} elseif (isset($_SESSION['is_departmentmanage_user']) and $_SESSION['is_departmentmanage_user']) {
+        $is_departmentmanage_user = true;
+        $is_usermanage_user = false;
         $is_power_user = false;        
 	$is_admin = false;
 } else {
 	$is_admin = false;
 	$is_power_user = false;              
         $is_usermanage_user = false;
+        $is_departmentmanage_user = false;
 }
 
 if (!isset($_SESSION['theme'])) {
@@ -242,6 +251,13 @@ if (isset($require_usermanage_user) && $require_usermanage_user) {
 		$toolContent_ErrorExists = caution($langCheckUserManageUser);
 		$errorMessagePath = "../../";
 	} 
+}
+
+if (isset($require_departmentmanage_user) && $require_departmentmanage_user) {
+    if (!($is_admin or $is_departmentmanage_user)) {
+        $toolContent_ErrorExists = caution($langCheckDepartmentManageUser);
+        $errorMessagePath = "../../";
+    }
 }
 
 if (!isset($guest_allowed) || $guest_allowed != true) {

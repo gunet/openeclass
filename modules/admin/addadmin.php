@@ -40,6 +40,8 @@ if(isset($_POST['submit']) and !empty($username)) {
                     break;                                
                 case 'manageuser': $privilege = '2'; //  manage user accounts
                     break;                                
+                case 'managedepartment' : $privilege = '3'; // manage departments
+                    break;
             }  
             $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");               
             if ($sql) {
@@ -93,6 +95,8 @@ while($row = mysql_fetch_array($r1)) {
                 break;
             case '2': $message = $langManageUser;
                 break;
+            case '3' : $message = $langManageDepartment;
+                break;
         }
         $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
@@ -125,7 +129,8 @@ draw($tool_content, 3);
 function printform ($message) {
 	
     global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData;
+            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData,
+            $langManageDepartment, $langHelpManageDepartment;
         
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
     $ret .= "
@@ -136,7 +141,7 @@ function printform ($message) {
             <th class='left'>".$message."</th>
             <td><input type='text' name='username' size='30' maxlength='30'></td>
         </tr>
-        <tr><th rowspan='3'>$langAddRole</th>            
+        <tr><th rowspan='4'>$langAddRole</th>            
             <td><input type='radio' name='adminrights' value='admin' checked>&nbsp;$langAdministrator&nbsp;
         <span class='smaller'>($langHelpAdministrator)</span></td></tr>
         <tr>
@@ -144,6 +149,8 @@ function printform ($message) {
             <span class='smaller'>($langHelpPowerUser)</span></td></tr>
         <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
             <span class='smaller'>($langHelpManageUser)</span></td></tr>
+        <tr><td><input type='radio' name='adminrights' value='managedepartment'>&nbsp;$langManageDepartment&nbsp;
+            <span class='smaller'>($langHelpManageDepartment)</span></td></tr>
         <tr>
             <td colspan='2' class='right'><input type='submit' name='submit' value='$langAdd'></td>
         </tr>

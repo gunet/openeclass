@@ -159,12 +159,13 @@ function getExternalLinks() {
  */
 function loggedInMenu(){
 	global $uid, $is_admin, $is_power_user, $is_usermanage_user, 
-                $urlServer, $mysqlMainDb;
+                $is_departmentmanage_user, $urlServer, $mysqlMainDb;
 
 	$sideMenuGroup = array();
 
 	if ((isset($is_admin) and $is_admin) or (isset($is_power_user) and $is_power_user)
-                or (isset($is_usermanage_user) and ($is_usermanage_user))) {
+                or (isset($is_usermanage_user) and ($is_usermanage_user)) 
+                or (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
 		$sideMenuSubGroup = array();
 		$sideMenuText = array();
 		$sideMenuLink = array();
@@ -175,8 +176,15 @@ function loggedInMenu(){
 		$arrMenuType['text'] = $GLOBALS['langAdminOptions'];
 		array_push($sideMenuSubGroup, $arrMenuType);
 	
-		array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
-		array_push($sideMenuLink, $urlServer . "modules/admin/");
+		
+                if ( isset($is_departmentmanage_user) && $is_departmentmanage_user ) {
+                    array_push($sideMenuText, "<b style=\"color:#a33033;\">". $GLOBALS['langHierarchy'] ."</b>");
+                    array_push($sideMenuLink, $urlServer . "modules/admin/hierarchy.php");
+                }
+                else {
+                    array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
+                    array_push($sideMenuLink, $urlServer . "modules/admin/");
+                }
 		array_push($sideMenuImg, "arrow.png");
 		
 		array_push($sideMenuSubGroup, $sideMenuText);

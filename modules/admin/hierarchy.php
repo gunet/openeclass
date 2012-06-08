@@ -29,7 +29,7 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
 require_once('../../include/baseTheme.php');
 
 $TBL_HIERARCHY         = 'hierarchy';
@@ -37,8 +37,10 @@ $TBL_USER_DEPARTMENT   = 'user_department';
 $TBL_COURSE_DEPARTMENT = 'course_department';
 
 require_once('../../include/lib/hierarchy.class.php');
+require_once('../../include/lib/user.class.php');
 
 $tree = new hierarchy();
+$user = new user();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -153,6 +155,12 @@ function customMenu(node) {
             action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id'); }
         }
     };
+    
+    if (node.attr('rel') == 'nosel') {
+        delete items.editItem;
+        delete items.deleteItem;
+    }
+
 
     return items;
 }
@@ -161,7 +169,7 @@ function customMenu(node) {
 </script>
 hContent;
     
-    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array('codesuffix' => true)) ."</div></td></tr>";
+    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin) )) ."</div></td></tr>";
     
     // Close table correctly
     $tool_content .= "</table>\n";
@@ -230,7 +238,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
       <tr>
         <th class='left'>".$langNodeParent.":</th>
         <td>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin) ));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= " <i>".$langNodeParent2."</i></td>
@@ -260,6 +268,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
     $id = intval($_GET['id']);
+    validate($id);
     
     // locate the lft and rgt of the node we want to delete
     $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
@@ -292,6 +301,8 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $id = intval($_REQUEST['id']);
+    validate($id);
+    
     if (isset($_POST['edit'])) {
         // Check for empty fields
         
@@ -365,7 +376,10 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
            <td>";
-       list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
+       if ($is_admin)
+          list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false ));
+       else
+          list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft['lft'], 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid) ));
        $head_content .= $js;
        $tool_content .= $html;
        $tool_content .= " <i>".$langNodeParent2."</i></td>
@@ -399,3 +413,36 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
 }
 
 draw($tool_content, 3, null, $head_content);
+
+
+function validate($id) {
+    global $tool_content, $head_content, $is_admin, $tree, $user, $TBL_HIERARCHY, $uid, 
+            $langBack, $langNotAllowed;
+    
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    
+    if ($id <= 0) {
+        $tool_content .= $notallowed;
+        draw($tool_content, 3, null, $head_content);
+        exit();
+    }
+    
+    $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE id = '$id'");
+    
+    if (mysql_num_rows($result) < 1) {
+        $tool_content .= $notallowed;
+        draw($tool_content, 3, null, $head_content);
+        exit();
+    }
+    
+    if (!$is_admin) {
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        
+        if (!in_array($id, $subtrees)) {
+            $tool_content .= $notallowed;
+            draw($tool_content, 3, null, $head_content);
+            exit();
+        }
+    }
+        
+}

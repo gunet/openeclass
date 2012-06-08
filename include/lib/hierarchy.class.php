@@ -592,6 +592,7 @@ class hierarchy {
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'dashprefix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
      * 'codesuffix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
      * 
      * @return string  $html - HTML output
@@ -605,12 +606,14 @@ class hierarchy {
         $dashprefix          = (array_key_exists('dashprefix', $options)) ? $options['dashprefix'] : false;
         $codesuffix          = (array_key_exists('codesuffix', $options)) ? $options['codesuffix'] : false;
         $defaults            = (array_key_exists('defaults'  , $options)) ? $options['defaults']   : '';
+        $allowables          = (array_key_exists('allowables', $options)) ? $options['allowables'] : null;
         $allow_only_defaults = (array_key_exists('allow_only_defaults', $options)) ? $options['allow_only_defaults'] : false;
         $mark_allow_user     = (strstr($where, 'allow_user')   !== false) ? true : false;
         $mark_allow_course   = (strstr($where, 'allow_course') !== false) ? true : false;
         
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
-        $subdefs = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
+        $subdefs   = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
+        $suballowed = ($allowables != null) ? $this->buildSubtrees($allowables) : null;
         $html = '<ul>' . "\n";
         
         list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
@@ -646,7 +649,8 @@ class hierarchy {
             $class = '';
             if ( ($mark_allow_course && !$allowcoursemap[$key]) || 
                  ($mark_allow_user && !$allowusermap[$key]) ||
-                 ($allow_only_defaults && !in_array($key, $subdefs) )
+                 ($allow_only_defaults && !in_array($idmap[$key], $subdefs) ) ||
+                 ($suballowed != null && !in_array($idmap[$key], $suballowed) ) 
                )
                 $rel = 'nosel';
             if (!empty($rel)) {
@@ -815,6 +819,7 @@ jContent;
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * This method uses default values, but you should at least provide 'params'.
      * 
      * @return string  $html - The returned HTML code
@@ -908,6 +913,7 @@ jContent;
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You must provide at least 'params' because this method does not use any default values.
      * 
      * @return array - Return array containing (<js, html>) all necessary JS and HTML code 
@@ -938,6 +944,7 @@ jContent;
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
      * 
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
@@ -971,6 +978,7 @@ jContent;
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
      * 
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
@@ -1091,7 +1099,13 @@ jContent;
         }
     }
     
-    private function buildSubtrees($nodes)
+    /**
+     * Builds an array containing all the subtree nodes of the (parent) nodes given
+     * 
+     * @param  array $nodes - Array containing the (parent) nodes whose subtree nodes we want
+     * @return array $subs  - Array containing the returned subtree nodes
+     */
+    public function buildSubtrees($nodes)
     {
         $subs = array();
         $ids = '';
@@ -1100,7 +1114,7 @@ jContent;
         {
             $ids .= $id .',';
         }
-        // remove last , from $ids
+        // remove last ',' from $ids
         $q = substr($ids , 0, -1);
         
         $sql = "SELECT node.id
