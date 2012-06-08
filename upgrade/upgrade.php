@@ -906,8 +906,8 @@ if (!isset($_POST['submit2'])) {
                             `name` text NOT NULL,
                             `number` int(11) NOT NULL default 1000,
                             `generator` int(11) NOT NULL default 100,
-                            `lft` int(11) NOT NULL,
-                            `rgt` int(11) NOT NULL,
+                            `lft` int(11) NOT NULL UNIQUE,
+                            `rgt` int(11) NOT NULL UNIQUE,
                             `allow_course` boolean not null default false,
                             `allow_user` boolean NOT NULL default false,
                             `order_priority` int(11) default null )");
