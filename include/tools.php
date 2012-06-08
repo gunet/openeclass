@@ -177,14 +177,17 @@ function loggedInMenu(){
 		array_push($sideMenuSubGroup, $arrMenuType);
 	
 		
-                if ( isset($is_departmentmanage_user) && $is_departmentmanage_user ) {
-                    array_push($sideMenuText, "<b style=\"color:#a33033;\">". $GLOBALS['langHierarchy'] ."</b>");
-                    array_push($sideMenuLink, $urlServer . "modules/admin/hierarchy.php");
-                }
-                else {
+                
+                if ((isset($is_admin) and $is_admin) or (isset($is_power_user) and $is_power_user)
+                    or (isset($is_usermanage_user) and ($is_usermanage_user)) ) {
                     array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
                     array_push($sideMenuLink, $urlServer . "modules/admin/");
                 }
+                else {
+                    array_push($sideMenuText, "<b style=\"color:#a33033;\">". $GLOBALS['langHierarchy'] ."</b>");
+                    array_push($sideMenuLink, $urlServer . "modules/admin/hierarchy.php");
+                }
+                
 		array_push($sideMenuImg, "arrow.png");
 		
 		array_push($sideMenuSubGroup, $sideMenuText);
