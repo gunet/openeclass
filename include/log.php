@@ -43,7 +43,7 @@ class Log {
         // display users actions 
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
-                global $tool_content, $langDate, $langUser, $langAction, $langDetail;
+                global $tool_content, $langDate, $langUser, $langAction, $langDetail, $langModule, $modules;
                 
                 $q1 = $q2 = $q3 = '';
                 if ($user_id != -1) {
@@ -57,9 +57,10 @@ class Log {
                 }                                                           
                 $sql = db_query("SELECT user_id, details, action_type, ts FROM log
                                         WHERE course_id = $course_id $q1 $q2 $q3 
-                                        AND ts BETWEEN '$date_from' AND '$date_now'");
+                                        AND ts BETWEEN '$date_from' AND '$date_now' ORDER BY ts DESC");
                 $tool_content .= "<table class='tbl'><tr>";
-                $tool_content .= "<th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
+                $tool_content .= "<th colspan='4'>$langModule '".$modules[$module_id]['title']."'</th></tr>";
+                $tool_content .= "<tr><th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
                 $tool_content .= "</tr>";
                 while ($r = mysql_fetch_array($sql)) {
                         $tool_content .= "<tr>";
@@ -84,20 +85,22 @@ class Log {
         
         private function announcement_action_details($action_type, $details) {
                 
-                global $langAnnAdd, $langWithTitle, $langWithContent, $langAnd,
-                        $langThe, $langAnnouncement, $langWithID, $langAnnDel;
+                global $langTitle, $langContent, $langWithID;
                 
                 $details = unserialize($details);
                 
                 switch ($action_type) {
-                        case LOG_INSERT: 
-                                $content = "$langAnnAdd $langWithID ".$details['id'].",
-                                                  $langWithTitle '".$details['title'].
-                                                "' $langAnd $langWithContent '".$details['content']."'.";
+                        case LOG_INSERT:
+                                $content = "$langTitle &laquo".$details['title'].
+                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
                                 break;
-                        case LOG_MODIFY: break;
-                        case LOG_DELETE: 
-                                $content = "$langAnnDel $langWithID ".$details['id'].".";
+                        case LOG_MODIFY: 
+                                $content = "$langTitle &laquo".$details['title'].
+                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
+                                break;
+                        case LOG_DELETE:
+                                $content = "$langTitle &laquo".$details['title'].
+                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
                                 break;
                 }
                 return $content;

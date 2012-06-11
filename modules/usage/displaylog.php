@@ -93,7 +93,7 @@ if (isset($_GET['first'])) {
         WHERE b.course_id = $course_id";
 }
 
-$user_opts = '<option value="-1">'.$langAllUsers."</option>";
+$user_opts = "<option value='-1'>$langAllUsers</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
         if ($u_user_id == $row['user_id']) {
@@ -129,13 +129,13 @@ $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_
     $tool_content .= "</select></td></tr>
     <tr>
         <td>$langLogTypes :</td>
-        <td>
-        <select name='logtype'>
-                <option value='0'>$langAllActions</option>
-                <option value='1'>$langInsert</option>
-                <option value='2'>$langModify</option>
-                <option value='3'>$langDelete</option>
-        </select>
+        <td>";
+    $log_types = array('0' => $langAllActions,
+                        '1' => $langInsert,
+                        '2' => $langModify, 
+                        '3' => $langDelete);
+    $tool_content .= selection($log_types, 'logtype', $logtype);    
+    $tool_content .= "        
         </td>
     </tr>
     <tr>

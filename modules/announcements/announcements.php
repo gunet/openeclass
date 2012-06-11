@@ -106,9 +106,13 @@ if ($is_editor) {
     /* delete */
     if (isset($_GET['delete'])) {
 	$delete = intval($_GET['delete']);
-        $result = db_query("DELETE FROM announcement WHERE id='$delete'");
+        $row = mysql_fetch_array(db_query("SELECT title, content FROM announcement WHERE id = $delete"));
+        $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
+        $result = db_query("DELETE FROM announcement WHERE id = $delete");
         Log::record(MODULE_ID_ANNOUNCE, LOG_DELETE,
-                    array('id' => $delete));
+                    array('id' => $delete,
+                         'title' => $row['title'],
+                         'content' => $txt_content));
         $message = "<p class='success'>$langAnnDel</p>";
     }
 
@@ -302,7 +306,7 @@ if ($is_editor) {
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>";
 	if ($announcementNumber > 0) {
-		$tool_content .= "<tr><th colspan='2'>$langAnnouncement</th>";
+		$tool_content .= "<tr><th colspan='2'>$langAnnouncements</th>";
                 if ($announcementNumber > 1) {
                     $colsNum= 2;
                 } else {
