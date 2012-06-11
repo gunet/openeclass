@@ -370,8 +370,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                                                                 AND p.forum_id = $row[forum_id]
                                                                 AND p.topic_id = $row2[topic_id]");
                                 while ($row3 = mysql_fetch_array($sql3)) {
-                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_posts` (`topic_id`, `forum_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`) 
-                                                                VALUES ($newtopic_id, $newforum_id, '$row3[post_text]', $row3[poster_id], '$row3[post_time]', '$row3[poster_ip]')");
+                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_posts`
+                                                         (`topic_id`, `forum_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`) 
+                                                         VALUES ($newtopic_id, $newforum_id, ".
+                                                         quote($row3['post_text']) . ", $row3[poster_id], '$row3[post_time]', " .
+                                                         quote($row3['poster_ip']) . ')');
                                 }
                         }
                 }
@@ -855,6 +858,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         list($assignmentsubmitid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment_submit"));
         $assignmentsubmitid_offset = (!$assignmentsubmitid_offset) ? 0 : intval($assignmentsubmitid_offset);
         
+        db_query("UPDATE assignment_submit SET group_id = 0 WHERE group_id IS NULL");
         $ok = db_query("INSERT INTO `$mysqlMainDb`.assignment_submit
                          (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`, 
                           `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`, 
@@ -886,8 +890,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     if (mysql_table_exists($code, 'agenda')) {
         
         // ----- agenda DB Table ----- //    
-        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility = '1' WHERE visibility = 'v'");
-        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility = '0' WHERE visibility = 'i'");            
+        db_query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
+        db_query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");            
                     
         list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
         $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);
@@ -953,7 +957,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                           ORDER BY exercise_user_record.eurid") && $ok;
         
         // ----- questions DB Table ----- //
-        list($questionid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.question"));
+        list($questionid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise_question"));
         $questionid_offset = (!$questionid_offset) ? 0 : intval($questionid_offset);
         
         db_query("CREATE TEMPORARY TABLE question_map AS
@@ -967,7 +971,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM questions ORDER BY id") && $ok;
         
         // ----- reponses DB Table ----- //
-        list($answerid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
+        list($answerid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise_answer"));
         $answerid_offset = (!$answerid_offset) ? 0 : intval($answerid_offset);
         
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_answer
@@ -1027,7 +1031,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 
     
     // -------------------------------------------------------
-    // Move table `accueil` to table `course_module` in main DB
+    // Move table `accueil` to table `modules` in main DB
     // -------------------------------------------------------
     
     // external links are moved to table `links` with category = -1
@@ -1036,7 +1040,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 SELECT $course_id, lien, rubrique, -1 FROM accueil
                         WHERE define_var = 'HTML_PAGE'", $code);
         
-        $q2 = db_query("INSERT INTO `$mysqlMainDb`.course_module
+        $q2 = db_query("INSERT INTO `$mysqlMainDb`.modules
                         (module_id, visible, course_id) 
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',

@@ -1102,6 +1102,11 @@ if (!isset($_POST['submit2'])) {
                 db_query("RENAME TABLE `cours` TO `course`");
                 db_query("UPDATE course SET description = '' WHERE description IS NULL");
                 db_query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
+                if (mysql_field_exists($mysqlMainDb, 'course', 'course_objectives')) {
+                        db_query("ALTER TABLE course DROP COLUMN `course_objectives`,
+                                                     DROP COLUMN `course_prerequisites`,
+                                                     DROP COLUMN `course_references`");
+                }
                 db_query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
@@ -1117,9 +1122,6 @@ if (!isset($_POST['submit2'])) {
                                              DROP COLUMN `expirationDate`,
                                              DROP COLUMN `type`,
                                              DROP COLUMN `faculteid`,
-                                             DROP COLUMN `course_objectives`,
-                                             DROP COLUMN `course_prerequisites`,
-                                             DROP COLUMN `course_references`,
                                              CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
                                              CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0");
                 $lang_q = db_query('SELECT DISTINCT lang from course');
@@ -1128,9 +1130,10 @@ if (!isset($_POST['submit2'])) {
                         db_query("UPDATE course SET lang = '$new_lang' WHERE lang = '$old_lang'");
                 }
                 db_query("RENAME TABLE `cours_user` TO `course_user`");
-                db_query('ALTER TABLE `course_user`
-                                DROP COLUMN `code_cours`');
-
+                if (mysql_field_exists($mysqlMainDb, 'course_user', 'code_cours')) {
+                        db_query('ALTER TABLE `course_user`
+                                        DROP COLUMN `code_cours`');
+                }
         }
 
         mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
