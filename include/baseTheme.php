@@ -32,7 +32,7 @@
  * interface. In that case function drawPerso needs to be called.
  *
  */
-include ('init.php');
+include 'init.php';
 
 if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
         $eclass_module_id = intval($_GET['eclass_module_id']);
@@ -43,11 +43,7 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
                         course_id = $cid");
 }
 
-//template path for logged out + logged in (ex., when session expires)
-$extraMessage = ''; //initialise var for security
-if (isset($errorMessagePath)) {
-	$relPath = $errorMessagePath;
-}
+$extraMessage = '';
 
 if (isset($toolContent_ErrorExists)) {
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
@@ -66,8 +62,8 @@ if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 	unset($_SESSION['errMessage']);
 }
 
-include ($relPath . "template/template.inc.php");
-include ('tools.php');
+include 'template/template.inc.php';
+include 'tools.php';
 
 /**
  * Function draw
@@ -92,9 +88,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons, 
                $langPersonalisedBriefcase, $langSearch, $langUser, 
                $langUserBriefcase, $langUserHeader, $language, $nameTools, 
-               $navigation, $page_name, $page_navi, $relPath, 
+               $navigation, $page_name, $page_navi,
                $require_current_course, $require_help, $siteName, $siteName, 
-               $statut, $switchLangURL, $theme, $themeimg, $webDir,
+               $statut, $switchLangURL, $theme, $themeimg,
                $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer;        
 
 	//get blocks content from $toolContent array
@@ -123,7 +119,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $toolArr = ($is_mobile || $is_embedonce) ? array() : getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
-	$t = new Template($relPath . 'template/' . $theme);
+	$t = new Template('template/' . $theme);
 
         if ($is_mobile)
             $t->set_file('fh', 'mtheme.html');
@@ -218,7 +214,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'USER_NAME', q($_SESSION['prenom']) );
 			$t->set_var ( 'USER_SURNAME', q($_SESSION['nom']) . ", " );
 			$t->set_var ('LANG_LOGOUT', $langLogout);
-			$t->set_var ('LOGOUT_LINK', $relPath . 'index.php?logout=yes');
+			$t->set_var ('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
                 } else {
 			if (!get_config('dont_display_login_form')) {
 				$t->set_var ('LANG_LOGOUT', $langLogin);
@@ -406,7 +402,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >" );
 		}
 
-		$t->set_var ( 'TOOL_PATH', $relPath );
+		$t->set_var ( 'TOOL_PATH', $urlAppend );
 
 		if (isset ( $head_content )) {
 			$t->set_var ( 'HEAD_EXTRAS', $head_content );
@@ -423,8 +419,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			if (isset($require_current_course) and !$is_editor) {
 				$helpTopic .= '_student';
 			}
-			$help_link_icon = " <a href=\"" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
-        onClick=\"window.open('" . $relPath . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
+			$help_link_icon = " <a href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\"
+        onClick=\"window.open('" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=350,height=450,left=300,top=10');
         return false;\"><img class='HelpIcon' src='$themeimg/help.png' alt='$langHelp' title='$langHelp' /></a>";
 
 			$t->set_var ( 'HELP_LINK_ICON', $help_link_icon );
@@ -452,7 +448,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'AGENDA_CONTENT', $agenda_content );
 			$t->set_var ( 'FORUM_CONTENT', $forum_content );
 			$t->set_var ( 'URL_PATH', $urlAppend.'/' );
-			$t->set_var ( 'TOOL_PATH', $relPath );
+			$t->set_var ( 'TOOL_PATH', $urlAppend );
 		}
 
 		$t->set_var ( 'LANG_COPYRIGHT_NOTICE', $langCopyrightFooter );

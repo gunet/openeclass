@@ -39,11 +39,11 @@ NOTE : if the free latex fonts furnished with this script don't work well (very 
 // NEW in 0.3 version : no more / at the end of $dirfonts and $dirimg
 
 // absolute path to the fonts directory
-$dirfonts=$webDir."include/phpmathpublisher/fonts";
+$dirfonts = $webDir."/include/phpmathpublisher/fonts";
 // or $dirfonts=dirname(__FILE__)."/phpmathpublisher/fonts";
 
 // absolute path to the images directory
-$dirimg=$webDir."courses/mathimg";
+$dirimg = $webDir."/courses/mathimg";
 // or $dirimg=dirname(__FILE__)."/phpmathpublisher/img";
 
 if (!file_exists($dirimg)) {

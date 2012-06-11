@@ -20,13 +20,9 @@
 
 define('UPGRADE', true);
 
-//Flag for fixing relative path
-//See init.php to undestand its logic
-$path2add = 2;
-
 include '../include/baseTheme.php';
-include '../include/lib/fileUploadLib.inc.php';
-include '../include/lib/forcedownload.php';
+include 'include/lib/fileUploadLib.inc.php';
+include 'include/lib/forcedownload.php';
 
 // set default storage engine
 db_query("SET storage_engine=MYISAM");
@@ -51,65 +47,47 @@ if ($extra_messages) {
 }
 
 $nameTools = $langUpgrade;
-$tool_content = "";
 
 $auth_methods = array("imap","pop3","ldap","db");
 $OK = "[<font color='green'> $langSuccessOk </font>]";
 $BAD = "[<font color='red'> $langSuccessBad </font>]";
 
-// default quota values  (if needed)
-$diskQuotaDocument = 40000000;
-$diskQuotaGroup = 40000000;
-$diskQuotaVideo = 20000000;
-$diskQuotaDropbox = 40000000;
-
-$fromadmin = true;
-
-if (isset($_POST['submit_upgrade'])) {
-	$fromadmin = false;
-}
-
-if (!defined('UTF8')) {
-        $Institution = iconv('ISO-8859-7', 'UTF-8', $Institution);
-        $postaddress = iconv('ISO-8859-7', 'UTF-8', $postaddress);
-}
+// Coming from the admin tool or stand-alone upgrade?
+$fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!isset($_POST['submit2'])) {
-        if(isset($encryptedPasswd) and $encryptedPasswd) {
-                $newpass = md5(@$_POST['password']);
-        } else {
-                // plain text password since the passwords are not hashed
-                $newpass = @$_POST['password'];
-        }
-
-        if (!is_admin(@$_POST['login'], $newpass, $mysqlMainDb)) {
+        if (!is_admin($_POST['login'], $_POST['password'])) {
                 $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
                         <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);
                 exit;
         }
 }
-$_SESSION['user_perso_active'] = false;
+
+if (!mysql_table_exists($mysqlMainDb, 'config')) {
+        $tool_content .= "<p class='alert1'>$langUpgTooOld</p>";
+        draw($tool_content, 0);
+        exit;
+}
+
 // Make sure 'video' subdirectory exists and is writable
-if (!file_exists('../video')) {
-        if (!mkdir('../video')) {
+$videoDir = $webDir . '/video';
+if (!file_exists($videoDir)) {
+        if (!mkdir($videoDir)) {
                 die("$langUpgNoVideoDir");
         }
-} elseif (!is_dir('../video')) {
+} elseif (!is_dir($videoDir)) {
         die("$langUpgNoVideoDir2");
-} elseif (!is_writable('../video')) {
+} elseif (!is_writable($videoDir)) {
         die("$langUpgNoVideoDir3");
 }
 
-mkdir_or_error('../courses/temp');
-mkdir_or_error('../courses/userimg');
+mkdir_or_error('courses/temp');
+mkdir_or_error('courses/userimg');
 
 // ********************************************
 // upgrade config.php
 // *******************************************
-if (!@chdir("../config/")) {
-     die ("$langConfigError4");
-}
 
 if (!isset($_POST['submit2'])) {
         if (ini_get('register_globals')) { // check if register globals is Off
@@ -153,67 +131,35 @@ if (!isset($_POST['submit2'])) {
         echo "<p class='title1'>$langUpgradeStart</p>",
              "<p class='sub_title1'>$langUpgradeConfig</p>";
 	flush();
-        // backup of config file
-        if (!copy("config.php","config_backup.php"))
-                die ("$langConfigError1");
 
-        $conf = file_get_contents("config.php");
-        if (!$conf)
-                die ("$langConfigError2");
-
-        $lines_to_add = "";
-
-        // Convert to UTF-8 if needed
-        if (!defined('UTF8')) {
-                $lines_to_add .= "define('UTF8', true);\n";
-                $conf = iconv('ISO-8859-7', 'UTF-8', $conf);
+        if (isset($urlServer)) {
+                // Upgrade to 3.x-style config
+                if (!copy('config/config.php', 'config/config_backup.php')) {
+                        die ($langConfigError1);
+                }
+                if (!isset($durationAccount)) {
+                        $durationAccount = 4 * 365;
+                } else {
+                        $durationAccount = $durationAccount / 60 / 60 / 24;
+                }
+                set_config('account_duration', $durationAccount);
+                set_config('institution', $_POST['Institution']);
+                set_config('phone', $_POST['telephone']);
+                set_config('postaddress', $_POST['postaddress']);
+                set_config('fax', $_POST['fax']);
+                $new_conf = "<?php
+\$mysqlServer = " . quote($mysqlServer) . ";
+\$mysqlUser = " . quote($mysqlUser) . ";
+\$mysqlPassword = " . quote($mysqlPassword) . ";
+\$mysqlMainDb = " . quote($mysqlMainDb) . ";
+";
+                $fp = @fopen('config/config.php', 'w');
+                if (!$fp) {
+                        die ($langConfigError3);
+                }
+                fwrite($fp, $new_conf);
+                fclose($fp);
         }
-
-        // for upgrading 1.5 --> 1.7
-        if (!strstr($conf, '$postaddress')) {
-                $lines_to_add .= "\$postaddress = '$_POST[postaddress]';\n";
-        }
-        if (!strstr($conf, '$fax')) {
-                $lines_to_add .= "\$fax = '$_POST[fax]';\n";
-        }
-
-        if (!strstr($conf, '$durationAccount')) {
-                $lines_to_add .= "\$durationAccount = \"126144000\";\n";
-        }
-        if (!strstr($conf, '$persoIsActive')) {
-                $lines_to_add .= "\$persoIsActive = true;\n";
-        }
-        if (!strstr($conf, '$encryptedPasswd')) {
-                $lines_to_add .= "\$encryptedPasswd = true;\n";
-        }
-        $new_copyright = file_get_contents('../info/license/header.txt');
-
-        $new_conf = preg_replace(
-                        array(
-				'#^.*(mainInterfaceWidth|bannerPath|userMailCanBeEmpty|colorLight|colorMedium|colorDark|table_border|color1|color2).*$#m',
-                                '#\$postaddress\b[^;]*;#sm',
-                                '#\$fax\b[^;]*;#',
-                                '#(\?>)?\s*$#',
-                                '#\$Institution\b[^;]*;#',
-                                '#\$telephone\b[^;]*;#',
-                                '#^/\*$.*^\*/$#sm',
-                                '#\/\/ .*^\/\/ HTTP_COOKIE[^\n]+$#sm'),
-                        array(
-				'',
-                                "\$postaddress = '$_POST[postaddress]';",
-                                "\$fax = '$_POST[fax]';",
-                            	'',
-                                "\$Institution = '$_POST[Institution]';",
-                                "\$telephone = '$_POST[telephone]';",
-                                $new_copyright,
-                                ''),
-                        $conf) . "\n" . $lines_to_add;
-        $fp = @fopen("config.php","w");
-        if (!$fp)
-                die ("$langConfigError3");
-        fwrite($fp, $new_conf);
-        fclose($fp);
-
 
         // ****************************************************
         // 		upgrade eclass main database
@@ -224,31 +170,18 @@ if (!isset($_POST['submit2'])) {
         mysql_select_db($mysqlMainDb);
 
 	// Create or upgrade config table
-	if (!mysql_table_exists($mysqlMainDb, 'config')) {
+        if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
+                db_query("RENAME TABLE config TO old_config");
                 db_query("CREATE TABLE `config`
                                 (`key` VARCHAR(32) NOT NULL,
                                  `value` VARCHAR(255) NOT NULL,
                                  PRIMARY KEY (`key`))");
-                db_query("INSERT INTO `config` (`key`, `value`)
-                                 VALUES ('version', '2.1.2')");
-                $oldversion = '2.1.2';
-	        db_query('SET NAMES greek');
-        	// old queries
-        	require "upgrade_main_db_old.php";
-	} else {
-                if (mysql_field_exists($mysqlMainDb, 'config', 'id')) {
-                        db_query("RENAME TABLE config TO old_config");
-                        db_query("CREATE TABLE `config`
-                                        (`key` VARCHAR(32) NOT NULL,
-                                         `value` VARCHAR(255) NOT NULL,
-                                         PRIMARY KEY (`key`))");
-                        db_query("INSERT INTO config
-                                         SELECT `key`, `value` FROM old_config
-                                         GROUP BY `key`");
-                        db_query("DROP TABLE old_config");
-                }
-                $oldversion = get_config('version');
+                db_query("INSERT INTO config
+                                 SELECT `key`, `value` FROM old_config
+                                 GROUP BY `key`");
+                db_query("DROP TABLE old_config");
         }
+        $oldversion = get_config('version');
         db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
   			('dont_display_login_form', '0'),
 			('email_required', '0'),
@@ -528,49 +461,54 @@ if (!isset($_POST['submit2'])) {
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
         }
 
-        if ($oldversion < '3.0') {
-                
+        if ($oldversion < '3') {
+
                 db_query("CREATE TABLE IF NOT EXISTS `log` (
-                        `id` int(11) NOT NULL auto_increment,
-                        `user_id` int(11) NOT NULL default '0',
-                        `course_id` int(11) NOT NULL default '0',
-                        `module_id` int(11) NOT NULL default '0',
-                        `details` text NOT NULL,
-                        `action_type` int(11) NOT NULL default '0',
-                        `ts` datetime NOT NULL,
-                        `ip` varchar(39) NOT NULL default '0',
-                        PRIMARY KEY  (`id`)) DEFAULT CHARSET=utf8");
-                
+                        `id` INT(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` INT(11) NOT NULL DEFAULT 0,
+                        `course_id` INT(11) NOT NULL DEFAULT 0,
+                        `module_id` INT(11) NOT NULL default 0,
+                        `details` TEXT NOT NULL,
+                        `action_type` INT(11) NOT NULL DEFAULT 0,
+                        `ts` DATETIME NOT NULL,
+                        `ip` VARCHAR(39) NOT NULL DEFAULT '',
+                        PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
+
 		// add index on `loginout`.`id_user` for performace
 		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
+
                 // update table admin_announcement
                 db_query("RENAME TABLE `admin_announcements` TO `admin_announcement`");
                 db_query("ALTER TABLE admin_announcement CHANGE `ordre` `order` MEDIUMINT(11)");
                 db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TEXT");
-                db_query("UPDATE admin_announcement SET visible=1 WHERE visible='V'");
-                db_query("UPDATE admin_announcement SET visible=0 WHERE visible='I'");
+                db_query("UPDATE admin_announcement SET visible = '1' WHERE visible = 'V'");
+                db_query("UPDATE admin_announcement SET visible = '0' WHERE visible = 'I'");
                 db_query("ALTER TABLE admin_announcement CHANGE `visible` `visible` TINYINT(4)");
-                 // update table course_units and unit_resources       
-                db_query("UPDATE `course_units` SET visibility=1 WHERE visibility='v'");
-                db_query("UPDATE `course_units` SET visibility=0 WHERE visibility='i'");
-                db_query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4)");
-                db_query("UPDATE `unit_resources` SET visibility=1 WHERE visibility='v'");
-                db_query("UPDATE `unit_resources` SET visibility=0 WHERE visibility='i'");
-                db_query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4)");
+
+                // update table course_units and unit_resources
+                db_query("UPDATE `course_units` SET visibility = '1' WHERE visibility = 'v'");
+                db_query("UPDATE `course_units` SET visibility = '0' WHERE visibility = 'i'");
+                db_query("ALTER TABLE `course_units` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
+
+                db_query("UPDATE `unit_resources` SET visibility = '1' WHERE visibility = 'v'");
+                db_query("UPDATE `unit_resources` SET visibility = '0' WHERE visibility = 'i'");
+                db_query("ALTER TABLE `unit_resources` CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
+
                 // update table document
-                db_query("UPDATE `document` SET visibility=1 WHERE visibility='v'");
-                db_query("UPDATE `document` SET visibility=0 WHERE visibility='i'");
-                db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");                
+                db_query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+                db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+                db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");
+
                 // Rename table `annonces` to `announcements`
-	        if (!mysql_table_exists($mysqlMainDb, 'announcements')) {
+	        if (!mysql_table_exists($mysqlMainDb, 'announcement')) {
                         db_query("RENAME TABLE annonces TO announcement");
-                        db_query("UPDATE announcement SET visibility=1 WHERE visibility='v'");
-                        db_query("UPDATE announcement SET visibility=0 WHERE visibility='i'");
-                        db_query("ALTER TABLE announcement CHANGE `contenu` `content` MEDIUMTEXT,
-                                                            CHANGE `temps` `date` DATETIME,
-                                                            CHANGE `cours_id` `course_id` INT(11),
-                                                            CHANGE `ordre` `order` MEDIUMINT(11),
-                                                            CHANGE `visibility` `visible` TINYINT(4)");
+                        db_query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
+                        db_query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
+                        db_query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
+                                                           CHANGE `temps` `date` DATETIME,
+                                                           CHANGE `cours_id` `course_id` INT(11),
+                                                           CHANGE `ordre` `order` MEDIUMINT(11),
+                                                           CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
                 }
 
                 // create forum tables
@@ -581,17 +519,17 @@ if (!isset($_POST['submit2'])) {
                         `course_id` INT(11),
                         KEY (id, course_id))");
 
-                db_query("CREATE TABLE forum (                     
+                db_query("CREATE TABLE forum (
                      id int(10),
                      name varchar(150),
-                     `desc` text,                                          
+                     `desc` text,
                      num_topics int(10) DEFAULT 0 NOT NULL,
                      num_posts int(10) DEFAULT 0 NOT NULL,
                      last_post_id int(10) DEFAULT 0 NOT NULL,
-                     cat_id int(10),                     
-                     course_id int(11),                     
+                     cat_id int(10),
+                     course_id int(11),
                      KEY (id, course_id))");
-                
+
                 db_query("CREATE TABLE forum_posts (
                       id int(10),
                       topic_id int(10) DEFAULT 0 NOT NULL,
@@ -599,9 +537,9 @@ if (!isset($_POST['submit2'])) {
                       post_text mediumtext,
                       poster_id int(10) DEFAULT 0 NOT NULL,
                       post_time DATETIME,
-                      poster_ip VARCHAR(16),                      
+                      poster_ip VARCHAR(16),
                       KEY (id, topic_id, forum_id))");
-                
+
                 db_query("CREATE TABLE forum_topics (
                        id int(10),
                        title varchar(100),
@@ -610,9 +548,9 @@ if (!isset($_POST['submit2'])) {
                        num_views int(10) DEFAULT '0' NOT NULL,
                        num_replies int(10) DEFAULT '0' NOT NULL,
                        last_post_id int(10) DEFAULT '0' NOT NULL,
-                       forum_id int(10) DEFAULT '0' NOT NULL,                       
-                       KEY (forum_id, id))");                
-                
+                       forum_id int(10) DEFAULT '0' NOT NULL,
+                       KEY (forum_id, id))");
+
                 db_query("ALTER TABLE `forum_posts` ADD FULLTEXT `post` (`post_text`)");
                 db_query("ALTER TABLE `forum` ADD FULLTEXT `forum` (`name`,`desc`)");
 
@@ -851,14 +789,14 @@ if (!isset($_POST['submit2'])) {
                             `question_id` INT(11) NOT NULL DEFAULT '0',
                             `exercise_id` INT(11) NOT NULL DEFAULT '0',
                             PRIMARY KEY (question_id, exercise_id) )");
-                
+
                 db_query("CREATE TABLE IF NOT EXISTS `modules` (
                         `id` int(11) NOT NULL auto_increment,
                         `module_id` int(11) NOT NULL,
                         `visible` tinyint(4) NOT NULL,
                         `course_id` int(11) NOT NULL,
                          PRIMARY KEY (`id`))");
-                
+
                 db_query("CREATE TABLE IF NOT EXISTS `actions` (
                           `id` int(11) NOT NULL auto_increment,
                           `user_id` int(11) NOT NULL,
@@ -869,7 +807,7 @@ if (!isset($_POST['submit2'])) {
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`),
                           KEY `actionsindex` (`module_id`,`date_time`))");
-                
+
                 db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
                           `id` int(11) NOT NULL auto_increment,
                           `module_id` int(11) NOT NULL,
@@ -879,7 +817,7 @@ if (!isset($_POST['submit2'])) {
                           `duration` int(11) NOT NULL,
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
-                
+
                 db_query("CREATE TABLE IF NOT EXISTS `logins` (
                           `id` int(11) NOT NULL auto_increment,
                           `user_id` int(11) NOT NULL,
@@ -887,31 +825,31 @@ if (!isset($_POST['submit2'])) {
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
-                
+
             // hierarchy tables
             $n = db_query("SHOW TABLES LIKE 'faculte'");
             $rebuildHierarchy = (mysql_num_rows($n) == 1) ? true : false;
             // Whatever code $rebuildHierarchy wraps, can only be executed once.
             // Everything else can be executed several times.
-            
+
             if ($rebuildHierarchy) {
                 db_query("DROP TABLE IF EXISTS `hierarchy`");
                 db_query("DROP TABLE IF EXISTS `course_department`");
                 db_query("DROP TABLE IF EXISTS `user_department`");
             }
-            
+
             db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
-                            `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                            `code` varchar(10) NOT NULL,
-                            `name` text NOT NULL,
-                            `number` int(11) NOT NULL default 1000,
-                            `generator` int(11) NOT NULL default 100,
-                            `lft` int(11) NOT NULL UNIQUE,
-                            `rgt` int(11) NOT NULL UNIQUE,
-                            `allow_course` boolean not null default false,
-                            `allow_user` boolean NOT NULL default false,
-                            `order_priority` int(11) default null )");
-            
+                            `id` INT(11) NOT NULL auto_increment PRIMARY KEY,
+                            `code` VARCHAR(20) NOT NULL,
+                            `name` TEXT NOT NULL,
+                            `number` INT(11) NOT NULL DEFAULT 1000,
+                            `generator` INT(11) NOT NULL DEFAULT 100,
+                            `lft` INT(11) NOT NULL UNIQUE,
+                            `rgt` INT(11) NOT NULL UNIQUE,
+                            `allow_course` BOOLEAN NOT NULL DEFAULT FALSE,
+                            `allow_user` BOOLEAN NOT NULL DEFAULT FALSE,
+                            `order_priority` INT(11) DEFAULT NULL )");
+
             if ($rebuildHierarchy) {
                 // copy faculties into the tree
                 $res = db_query("SELECT MAX(id) FROM `faculte`");
@@ -923,20 +861,18 @@ if (!isset($_POST['submit2'])) {
                     $lft = 2 + 8 * $i;
                     $rgt = $lft + 7;
                     db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
-                        VALUES ('". $r['id'] ."',
-                                '". $r['code'] ."', 
-                                '". $r['name'] ."', 
-                                '". $r['number'] ."', 
-                                '". $r['generator'] ."', 
-                                '". $lft ."', 
-                                '". $rgt ."', true, true)");
+                        VALUES ($r[id],
+                                ". quote($r['code']) .", 
+                                ". quote($r['name']) .", 
+                                $r[number], $r[generator], 
+                                $lft, $rgt, true, true)");
                     
                     db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
-                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."PRE', '". $langpre ."', '". ($lft + 1) ."', '". ($lft + 2) ."', true, true)");
+                                VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langpre) .", ". ($lft + 1) .", ". ($lft + 2) .", true, true)");
                     db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."POST', '". $langpost ."', '". ($lft + 3) ."', '". ($lft + 4) ."', true, true)");
+                                VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langpost) .", ". ($lft + 3) .", ". ($lft + 4) .", true, true)");
                     db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                                VALUES ('". (++$max[0]) ."', '". $r['code'] ."OTHER', '". $langother ."', '". ($lft + 5) ."', '". ($lft + 6) ."', true, true)");
+                                VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langother) .", ". ($lft + 5) .", ". ($lft + 6) .", true, true)");
                     
                     $i++;
                 }
@@ -944,66 +880,64 @@ if (!isset($_POST['submit2'])) {
                 $n = db_query("SELECT COUNT(*) FROM `faculte`");
                 $r = mysql_fetch_array($n);
                 $root_rgt = 2 + 8 * intval($r[0]);
-                db_query("INSERT INTO `hierarchy` (code, name, lft, rgt) 
-                    VALUES ('', '". $_POST['Institution'] ."', '1', '". $root_rgt ."')");
+                db_query("INSERT INTO `hierarchy` (code, name, lft, rgt)
+                    VALUES ('', ". quote($_POST['Institution']) .", 1, $root_rgt)");
             }
             
             db_query("CREATE TABLE IF NOT EXISTS `course_department` (
                             `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                             `course` int(11) NOT NULL references course(id),
                             `department` int(11) NOT NULL references hierarchy(id) )");
-            
+
             if ($rebuildHierarchy) {
                 $n = db_query("SELECT cours_id, faculteid, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
                     $qlike = 'lang' . $r['type'];
                     $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent 
-                                      WHERE node.name LIKE '". $$qlike ."' 
-                                        AND parent.id = '". $r['faculteid'] ."' 
+                                      WHERE node.name LIKE ". quote($$qlike) ." 
+                                        AND parent.id = ". $r['faculteid'] ." 
                                         AND node.lft BETWEEN parent.lft AND parent.rgt");
                     $node = mysql_fetch_assoc($res);
                     
-                    db_query("INSERT INTO `course_department` (course, department) 
-                        VALUES ('". $r['cours_id'] ."', '". $node['id'] ."')");
+                    db_query("INSERT INTO `course_department` (course, department)
+                                     VALUES ($r[cours_id], $node[id])");
                 }
             }
-            
+
             db_query("CREATE TABLE IF NOT EXISTS `user_department` (
                             `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                             `user` mediumint(8) unsigned NOT NULL references user(user_id),
                             `department` int(11) NOT NULL references hierarchy(id) )");
-            
+
             if ($rebuildHierarchy) {
-                $n = db_query("SELECT user_id, department FROM `user` WHERE department IS NOT NULL");
-                while ($r = mysql_fetch_assoc($n)) {
-                    db_query("INSERT INTO `user_department` (user, department) 
-                        VALUES('". $r['user_id'] ."', '". $r['department'] ."')");
-                }
+                    $n = db_query("SELECT user_id, department FROM `user` WHERE department IS NOT NULL");
+                    while ($r = mysql_fetch_assoc($n)) {
+                            db_query("INSERT INTO `user_department` (user, department)
+                                             VALUES($r[user_id], $r[department])");
+                    }
             }
-            
+
             if ($rebuildHierarchy) {
                 // drop old way of referencing course type and course faculty
-                db_query("ALTER TABLE `cours` DROP COLUMN type");
-                db_query("ALTER TABLE `cours` DROP COLUMN faculteid");
                 db_query("ALTER TABLE `user` DROP COLUMN department");
                 db_query("DROP TABLE IF EXISTS `faculte`");
             }
-            
+
             // hierarchy stored procedures
             if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
                 db_query("DROP VIEW IF EXISTS `hierarchy_depth`");
                 db_query("CREATE VIEW `hierarchy_depth` AS
-                                SELECT node.id, node.code, node.name, node.number, node.generator, 
-                                       node.lft, node.rgt, node.allow_course, node.allow_user, 
+                                SELECT node.id, node.code, node.name, node.number, node.generator,
+                                       node.lft, node.rgt, node.allow_course, node.allow_user,
                                        node.order_priority, COUNT(parent.id) - 1 AS depth
                                 FROM hierarchy AS node,
                                      hierarchy AS parent
                                 WHERE node.lft BETWEEN parent.lft AND parent.rgt
                                 GROUP BY node.id
                                 ORDER BY node.lft");
-            
+
                 db_query("DROP PROCEDURE IF EXISTS `add_node`");
-                db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11), 
+                db_query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
                                     IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
                                     IN p_order_priority INT(11))
                                 LANGUAGE SQL
@@ -1017,10 +951,10 @@ if (!isset($_POST['submit2'])) {
 
                                     INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
                                 END");
-                
+
                 db_query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-                db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11), 
-                                    IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11), 
+                db_query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
+                                    IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
                                     IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                                 LANGUAGE SQL
                                 BEGIN
@@ -1035,12 +969,12 @@ if (!isset($_POST['submit2'])) {
                                 END");
 
                 db_query("DROP PROCEDURE IF EXISTS `update_node`");
-                db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255), 
-                                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11), 
+                db_query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+                                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
                                     IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                                LANGUAGE SQL  
+                                LANGUAGE SQL
                                 BEGIN
-                                    UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt, 
+                                    UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
                                         code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
                                         order_priority = p_order_priority WHERE id = p_id;
 
@@ -1051,8 +985,8 @@ if (!isset($_POST['submit2'])) {
 
                 db_query("DROP PROCEDURE IF EXISTS `delete_node`");
                 db_query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
-                                LANGUAGE SQL  
-                                BEGIN  
+                                LANGUAGE SQL
+                                BEGIN
                                     DECLARE p_lft, p_rgt INT(11);
 
                                     SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
@@ -1099,8 +1033,8 @@ if (!isset($_POST['submit2'])) {
                 db_query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
                                 LANGUAGE SQL
                                 BEGIN
-                                    UPDATE `hierarchy` 
-                                    SET lft = (lft - (p_lft - 1)) + maxrgt, 
+                                    UPDATE `hierarchy`
+                                    SET lft = (lft - (p_lft - 1)) + maxrgt,
                                         rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
                                 END");
 
@@ -1157,13 +1091,48 @@ if (!isset($_POST['submit2'])) {
                                     END IF;
                                 END");
             }
-
          }
+        
+        // Rename table `cours` to `course` and `cours_user` to `course_user`
+        if (!mysql_table_exists($mysqlMainDb, 'course')) {
+                mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
+                        db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
+                mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
+                        db_query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
+                db_query("RENAME TABLE `cours` TO `course`");
+                db_query("UPDATE course SET description = '' WHERE description IS NULL");
+                db_query("UPDATE course SET course_keywords = '' WHERE course_keywords IS NULL");
+                db_query("ALTER TABLE course CHANGE `cours_id` `id` INT(11),
+                                             CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
+                                             CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
+                                             CHANGE `description` `description` MEDIUMTEXT NOT NULL,
+                                             CHANGE `course_keywords` `keywords` TEXT NOT NULL,
+                                             DROP COLUMN `course_addon`,
+                                             CHANGE `titulaires` `prof_names` varchar(200) NOT NULL DEFAULT '',
+                                             CHANGE `fake_code` `public_code` varchar(20) NOT NULL DEFAULT '',
+                                             DROP COLUMN `departmentUrlName`,
+                                             DROP COLUMN `departmentUrl`,
+                                             DROP COLUMN `lastVisit`,
+                                             DROP COLUMN `lastEdit`,
+                                             DROP COLUMN `expirationDate`,
+                                             DROP COLUMN `type`,
+                                             DROP COLUMN `faculteid`,
+                                             DROP COLUMN `course_objectives`,
+                                             DROP COLUMN `course_prerequisites`,
+                                             DROP COLUMN `course_references`,
+                                             CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
+                                             CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0");
+                $lang_q = db_query('SELECT DISTINCT lang from course');
+                while (list($old_lang) = mysql_fetch_row($lang_q)) {
+                        $new_lang = langname_to_code($old_lang);
+                        db_query("UPDATE course SET lang = '$new_lang' WHERE lang = '$old_lang'");
+                }
+                db_query("RENAME TABLE `cours_user` TO `course_user`");
+                db_query('ALTER TABLE `course_user`
+                                DROP COLUMN `code_cours`');
 
-        mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
-                db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
-        mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or
-                db_query("ALTER TABLE `cours` ADD `glossary_index` BOOL NOT NULL DEFAULT 1");
+        }
+
         mysql_field_exists($mysqlMainDb, 'ebook', 'visible') or
                 db_query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
         mysql_field_exists($mysqlMainDb, 'admin', 'privilege') or
@@ -1191,35 +1160,26 @@ if (!isset($_POST['submit2'])) {
         // **********************************************
         // upgrade courses databases
         // **********************************************
-        $res = db_query("SELECT code, languageCourse, cours_id
-                         FROM cours ORDER BY code");
+        $res = db_query("SELECT id, code, lang FROM course ORDER BY code");
         $total = mysql_num_rows($res);
         $i = 1;
-        while ($code = mysql_fetch_row($res)) {
-                // get course language
-                $lang = $code[1];
-                if ($oldversion < '2.1.3') {
-                        db_query('SET NAMES greek');
-        		upgrade_course_old($code[0], $lang, "($i / $total)");
-                        db_query('SET NAMES utf8');
-               	        upgrade_course_2_1_3($code[0], "($i / $total)");
-                }
+        while (list($id, $code, $lang) = mysql_fetch_row($res)) {
                 if ($oldversion <= '2.2') {
-               	        upgrade_course_2_2($code[0], $lang, "($i / $total)");
+               	        upgrade_course_2_2($code, $lang, "($i / $total)");
 		}
                 if ($oldversion < '2.3') {
-			upgrade_course_2_3($code[0], "($i / $total)");
+			upgrade_course_2_3($code, "($i / $total)");
 		}
                 if ($oldversion < '2.4') {
-                        convert_description_to_units($code[0], $code[2]);
-                        upgrade_course_index_php($code[0]);
-			upgrade_course_2_4($code[0], $lang, "($i / $total)");
+                        convert_description_to_units($code, $id);
+                        upgrade_course_index_php($code);
+			upgrade_course_2_4($code, $lang, "($i / $total)");
                 }
                 if ($oldversion < '2.5') {
-			upgrade_course_2_5($code[0], $lang, "($i / $total)");
+			upgrade_course_2_5($code, $lang, "($i / $total)");
                 }
                 if ($oldversion < '3.0') {
-                    upgrade_course_3_0($code[0], $lang, "($i / $total)");
+                    upgrade_course_3_0($code, $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

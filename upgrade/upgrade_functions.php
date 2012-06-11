@@ -218,15 +218,28 @@ function update_assignment_submit()
 
 
 // checks if admin user
-function is_admin($username, $password, $mysqlMainDb) {
-
-	mysql_select_db($mysqlMainDb);
-	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
-            AND user.username = '$username' AND user.password = '$password'");
+function is_admin($username, $password)
+{
+        global $mysqlMainDb;
+        if (mysql_field_exists($mysqlMainDb, 'user', 'user_id')) {
+                $r = db_query("SELECT * FROM user, admin
+                                      WHERE admin.idUser = user.user_id AND
+                                            BINARY user.username = ".quote($username));
+        } else {
+                $r = db_query("SELECT * FROM user, admin
+                                      WHERE admin.user_id = user.id AND
+                                            BINARY user.username = ".quote($username));
+        }
 	if (!$r or mysql_num_rows($r) == 0) {
-		return FALSE;
-	} else {
-		$row = mysql_fetch_array($r);
+		return false;
+        } else {
+                $row = mysql_fetch_assoc($r);
+                if (isset($row['privilege']) and $row['privilege'] !== '0') {
+                        return false;
+                }
+                if ($row['password'] != md5($password)) {
+                        return false;
+                }
 		$_SESSION['uid'] = $row['user_id'];
 		$_SESSION['nom'] = $row['nom'];
 		$_SESSION['prenom'] = $row['prenom'];
@@ -234,9 +247,7 @@ function is_admin($username, $password, $mysqlMainDb) {
                 $_SESSION['uname'] = $username;
                 $_SESSION['statut'] = $row['statut'];
                 $_SESSION['is_admin'] = true;
-		//we need to return the user id
-		//or setup session UID with the admin's User ID so that it validates @ init.php
-		return TRUE;
+		return true;
 	}
 }
 
@@ -472,14 +483,15 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         mysql_table_exists($code, 'lp_user_module_progress') ) {
         
         // first change `visibility` field name and type to lp_learnPath table
-        db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` TEXT");
-        db_query("UPDATE lp_learnPath SET visibility = 1 WHERE visibility = 'SHOW'");
-        db_query("UPDATE lp_learnPath SET visibility = 0 WHERE visibility = 'HIDE'");
+        db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
+        db_query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
+        db_query("UPDATE lp_learnPath SET visibility = '0' WHERE visibility = 'HIDE'");
         db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visible` TINYINT(4)");
+
         // first change `visibility` field name and type to lp_rel_learnPath_module table
-        db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` TEXT");
-        db_query("UPDATE lp_rel_learnPath_module SET visibility = 1 WHERE visibility = 'SHOW'");
-        db_query("UPDATE lp_rel_learnPath_module SET visibility = 0 WHERE visibility = 'HIDE'");
+        db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visibility` VARCHAR(5)");
+        db_query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
+        db_query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
         db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
             
         $asset_map = array();
@@ -506,7 +518,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
                          (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visible`, `rank`)
                          SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`, 
-                         `visibility`, `rank` FROM lp_learnPath ORDER BY learnPath_id");
+                         `visible`, `rank` FROM lp_learnPath ORDER BY learnPath_id");
         
         // ----- lp_module DB Table ----- //
         list($moduleid_offset) = mysql_fetch_row(db_query("SELECT max(module_id) FROM `$mysqlMainDb`.lp_module"));
@@ -570,7 +582,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                           `rank`, `parent`, `raw_to_pass`)
                          SELECT DISTINCT lp_rel_learnPath_module.learnPath_module_id + $relid_offset,
                                 lp_map.new_id, module_map.new_id, lp_rel_learnPath_module.lock,
-                                lp_rel_learnPath_module.visibility, lp_rel_learnPath_module.specificComment,
+                                lp_rel_learnPath_module.visible, lp_rel_learnPath_module.specificComment,
                                 lp_rel_learnPath_module.rank, lp_rel_learnPath_module.parent,
                                 lp_rel_learnPath_module.raw_to_pass
                            FROM lp_rel_learnPath_module, lp_map, module_map 
@@ -874,8 +886,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     if (mysql_table_exists($code, 'agenda')) {
         
         // ----- agenda DB Table ----- //    
-        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility=1 WHERE visibility='v'");
-        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility=0 WHERE visibility='i'");            
+        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility = '1' WHERE visibility = 'v'");
+        db_query("UPDATE `$mysqlMainDb`.agenda SET visibility = '0' WHERE visibility = 'i'");            
                     
         list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
         $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);

@@ -66,4 +66,3 @@ $tool_content = "
 ";
 echo $tool_content;
 exit();
-?>

@@ -133,12 +133,12 @@ db_query("CREATE TABLE `agenda` (
 #
 
 db_query("CREATE TABLE `course` (
-  `id` int(11) NOT NULL auto_increment,
-  `code` varchar(20) NOT NULL,
+  `id` INT(11) NOT NULL auto_increment,
+  `code` VARCHAR(20) NOT NULL,
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
-  `title` varchar(250) NOT NULL DEFAULT '',
-  `description` TEXT,
-  `keywords` TEXT,
+  `title` VARCHAR(250) NOT NULL DEFAULT '',
+  `description` MEDIUMTEXT NOT NULL,
+  `keywords` TEXT NOT NULL,
   `visible` tinyint(4) NOT NULL,
   `prof_names` varchar(200) NOT NULL DEFAULT '',
   `public_code` varchar(20) NOT NULL DEFAULT '',  
@@ -147,7 +147,7 @@ db_query("CREATE TABLE `course` (
   `video_quota` float NOT NULL default '104857600',
   `group_quota` float NOT NULL default '104857600',
   `dropbox_quota` float NOT NULL default '104857600',
-  `password` varchar(50) DEFAULT NULL,
+  `password` varchar(50) NOT NULL DEFAULT '',
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   PRIMARY KEY  (`id`)) $charset_spec");
@@ -615,7 +615,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
 // hierarchy tables
 db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `code` varchar(10) NOT NULL,
+                `code` varchar(20) NOT NULL,
                 `name` text NOT NULL,
                 `number` int(11) NOT NULL default 1000,
                 `generator` int(11) NOT NULL default 100,
