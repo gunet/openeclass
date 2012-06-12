@@ -35,7 +35,7 @@ $usage_defaults = array (
         'u_user_id' => -1,
         'u_module_id' => -1,
         'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
-        'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
+        'u_date_end' => strftime('%Y-%m-%d', strtotime('now +1 day')),
 );
 
 foreach ($usage_defaults as $key => $val) {

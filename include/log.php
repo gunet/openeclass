@@ -78,32 +78,37 @@ class Log {
                                                          
                 switch ($module_id) {
                         case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($action_type, $details);
+                                break;                        
+                        case MODULE_ID_AGENDA: $content = $this->agenda_action_details($action_type, $details);
                                 break;
-                        }
+                        }       
                 return $content;
         }
         
+        
         private function announcement_action_details($action_type, $details) {
                 
-                global $langTitle, $langContent, $langWithID;
+                global $langTitle, $langContent;
                 
-                $details = unserialize($details);
-                
-                switch ($action_type) {
-                        case LOG_INSERT:
-                                $content = "$langTitle &laquo".$details['title'].
-                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
-                                break;
-                        case LOG_MODIFY: 
-                                $content = "$langTitle &laquo".$details['title'].
-                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
-                                break;
-                        case LOG_DELETE:
-                                $content = "$langTitle &laquo".$details['title'].
-                                                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";
-                                break;
-                }
+                $details = unserialize($details);                
+                $content = "$langTitle &laquo".$details['title'].
+                            "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";                
                 return $content;
+        }
+        
+        private function agenda_action_details($action_type, $details) {
+                
+                global $langTitle, $langContent, $langDuration, $langhours, $langDate;
+                
+                $details = unserialize($details);                
+                $date = autounquote($details['day'])." ".autounquote($details['hour']);
+                                                
+                $content = "$langTitle &laquo".$details['title'].
+                            "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo
+                             &nbsp;&mdash;&nbsp;$langDate: ".nice_format($date, true)."
+                             &nbsp;&mdash;&nbsp;$langDuration: ".$details['lasting']." $langhours";
+                return $content;
+                
         }
         
         // return the real action names
