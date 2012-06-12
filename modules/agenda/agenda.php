@@ -106,31 +106,29 @@ if ($is_editor) {
                 db_query("UPDATE agenda SET visible = 1 WHERE course_id = $course_id AND id = $id");
 	}
 	if (isset($_POST['submit'])) {
-                register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
-                $title = autoquote($title);                
-                $content = autoquote(purify($content));                
-                $lasting = autoquote($lasting);        
+                register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));                
+                $content = purify($content);
                 $datetime = explode(' ', $date);
-                $date = autoquote($datetime[0]);      
-                $hour = autoquote($datetime[1]);        
+                $date = $datetime[0];
+                $hour = $datetime[1];
 		if (isset($_POST['id']) and !empty($_POST['id'])) {
 			$id = intval($_POST['id']);
                         db_query("UPDATE agenda
-                                         SET title = $title,
-                                             content = $content,
-                                             day = $date,
-                                             hour = $hour,
-                                             lasting = $lasting
+                                         SET title = ".autoquote($title).",
+                                             content = ".autoquote($content).",
+                                             day = ".autoquote($date).",
+                                             hour = ".autoquote($hour).",
+                                             lasting = ".autoquote($lasting)."
                                          WHERE course_id = $course_id AND id = $id");
                         $log_type = LOG_MODIFY;
 		} else {
 			db_query("INSERT INTO agenda
                                          SET course_id = $course_id,
-                                             title = $title,
-                                             content = $content,
-                                             day = $date,
-                                             hour = $hour,
-                                             lasting = $lasting,
+                                             title = ".autoquote($title).",
+                                             content = ".autoquote($content).",
+                                             day = ".autoquote($date).",
+                                             hour = ".autoquote($hour).",
+                                             lasting = ".autoquote($lasting).",
                                              visible = 1");
                         $id = mysql_insert_id();
                         $log_type = LOG_INSERT;
@@ -150,8 +148,16 @@ if ($is_editor) {
 		unset($addEvent);
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
+                $row = mysql_fetch_array(db_query("SELECT title, content, day, hour, lasting 
+                                        FROM agenda WHERE id = $id"));
+                $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
-                Log::record(MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id));
+                Log::record(MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
+                                                                'day' => $row['day'],
+                                                                'hour' => $row['hour'],
+                                                                'lasting' => $row['lasting'],
+                                                                'title' => $row['title'],
+                                                                'content' => $txt_content));
 		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
 		unset($addEvent);
 	}
@@ -353,10 +359,7 @@ if (mysql_num_rows($result) > 0) {
                         $tool_content .= q($myrow['title']);
                 }
 		$tool_content .= "</b> $msg $content</div></td>";
-
-                //agenda event functions
-                //added icons next to each function
-                //(evelthon, 12/05/2006)
+                
 		if ($is_editor) {
                         $tool_content .=  "
                         <td class='right' width='70'>
