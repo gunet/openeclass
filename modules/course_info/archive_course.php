@@ -21,13 +21,13 @@
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
 include '../../include/baseTheme.php';
-include '../../include/lib/fileManageLib.inc.php';
+include 'include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
 $navigation[] = array('url' => "infocours.php?course=$course_code", 'name' => $langModifInfo);
 
 if (extension_loaded('zlib')) {
-	include '../../include/pclzip/pclzip.lib.php';
+	include 'include/pclzip/pclzip.lib.php';
 }
 
 

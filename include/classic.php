@@ -33,7 +33,7 @@ if (!defined('INDEX_START')) {
 	die("Action not allowed!");
 }
 
-include("./include/lib/textLib.inc.php");
+include 'include/lib/textLib.inc.php';
 
 function course_table_header($statut)
 {

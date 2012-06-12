@@ -23,8 +23,8 @@
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
-require_once '../../include/pclzip/pclzip.lib.php';
-include '../../include/lib/fileUploadLib.inc.php';
+require_once 'include/pclzip/pclzip.lib.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langEBookCreate;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);

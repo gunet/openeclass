@@ -231,9 +231,7 @@ if($module['contentType'] != CTLABEL_ )
     // this the comment of the module in ALL learning paths
     if ( $cmd == "updatecomment" )
     {
-        $tool_content .= "".commentBox(MODULE_, UPDATE_)."";
-        $head_content .= disp_html_area_head("insertCommentBox");
-		$body_action = "onload=\"initEditor()\"";
+        $tool_content .= commentBox(MODULE_, UPDATE_);
     }
     elseif ($cmd == "delcomment" )
     {
@@ -254,17 +252,15 @@ $tool_content .="
     // this is a comment for THIS module in THIS learning path
     if ( $cmd == "updatespecificComment" )
     {
-        $tool_content .= "".commentBox(LEARNINGPATHMODULE_, UPDATE_)."";
-        $head_content .= disp_html_area_head("insertCommentBox");
-		$body_action = "onload=\"initEditor()\"";
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, UPDATE_);
     }
     elseif ($cmd == "delspecificComment" )
     {
-        $tool_content .= "".commentBox(LEARNINGPATHMODULE_, DELETE_)."";
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, DELETE_);
     }
     else
     {
-        $tool_content .= "".commentBox(LEARNINGPATHMODULE_, DISPLAY_)."";
+        $tool_content .= commentBox(LEARNINGPATHMODULE_, DISPLAY_);
     }
 } //  if($module['contentType'] != CTLABEL_ )
 

@@ -18,10 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $TBL_HIERARCHY = 'hierarchy';
-require_once '../../include/lib/hierarchy.class.php';
+require_once 'include/lib/hierarchy.class.php';
 $tree = new hierarchy();
 
 load_js('jquery');

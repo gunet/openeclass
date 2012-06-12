@@ -32,20 +32,17 @@
 
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
-include('../../include/sendMail.inc.php');
+include 'include/sendMail.inc.php';
 $nameTools = $lang_remind_pass;
 
 function check_password_editable($password)
 {
-	$authmethods = array("pop3","imap","ldap","db","shibboleth","cas");
-	if(in_array($password,$authmethods))
-	{
-		return false; // it is not editable, because it belongs in external auth method
-	}
-	else
-	{
-		return true; // is editable
-	}
+        $authmethods = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
+        if (in_array($password,$authmethods)) {
+                return false; // it is not editable, because it belongs in external auth method
+        } else {
+                return true; // is editable
+        }
 }
 
 if (isset($_GET['do']) and $_GET['do'] == 'go') {

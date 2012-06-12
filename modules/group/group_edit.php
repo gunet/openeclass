@@ -32,10 +32,10 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langEditGroup;
 
-include 'group_functions.php';
+require_once 'group_functions.php';
 initialize_group_id();
 initialize_group_info($group_id);
 

@@ -33,7 +33,7 @@ $require_course_admin = TRUE;
 $require_login = TRUE;
 
 include '../../include/baseTheme.php';
-include '../../include/jscalendar/calendar.php';
+include 'include/jscalendar/calendar.php';
 
 $nameTools = $langRefreshCourse;
 

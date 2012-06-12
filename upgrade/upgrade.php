@@ -132,7 +132,7 @@ if (!isset($_POST['submit2'])) {
              "<p class='sub_title1'>$langUpgradeConfig</p>";
 	flush();
 
-        if (isset($urlServer)) {
+        if (isset($telephone)) {
                 // Upgrade to 3.x-style config
                 if (!copy('config/config.php', 'config/config_backup.php')) {
                         die ($langConfigError1);
@@ -142,11 +142,19 @@ if (!isset($_POST['submit2'])) {
                 } else {
                         $durationAccount = $durationAccount / 60 / 60 / 24;
                 }
+                set_config('site_name', $siteName);
                 set_config('account_duration', $durationAccount);
                 set_config('institution', $_POST['Institution']);
+                set_config('institution_url', $InstitutionUrl);
                 set_config('phone', $_POST['telephone']);
                 set_config('postaddress', $_POST['postaddress']);
                 set_config('fax', $_POST['fax']);
+                set_config('base_url', $urlServer);
+                if ($urlSecure != $urlServer) {
+                        set_config('secure_url', $urlSecure);
+                }
+                set_config('phpMyAdminURL', $phpMyAdminURL);
+                set_config('phpSysInfoURL', $phpSysInfoURL);
                 $new_conf = "<?php
 \$mysqlServer = " . quote($mysqlServer) . ";
 \$mysqlUser = " . quote($mysqlUser) . ";
@@ -790,12 +798,13 @@ if (!isset($_POST['submit2'])) {
                             `exercise_id` INT(11) NOT NULL DEFAULT '0',
                             PRIMARY KEY (question_id, exercise_id) )");
 
-                db_query("CREATE TABLE IF NOT EXISTS `modules` (
-                        `id` int(11) NOT NULL auto_increment,
-                        `module_id` int(11) NOT NULL,
-                        `visible` tinyint(4) NOT NULL,
-                        `course_id` int(11) NOT NULL,
-                         PRIMARY KEY (`id`))");
+                db_query("CREATE TABLE IF NOT EXISTS `course_module` (
+                            `id` int(11) NOT NULL auto_increment,
+                            `module_id` int(11) NOT NULL,
+                            `visible` tinyint(4) NOT NULL,
+                            `course_id` int(11) NOT NULL,
+                            PRIMARY KEY  (`id`),
+                            UNIQUE KEY `module_course` (`module_id`,`course_id`))");
 
                 db_query("CREATE TABLE IF NOT EXISTS `actions` (
                           `id` int(11) NOT NULL auto_increment,
@@ -1130,6 +1139,8 @@ if (!isset($_POST['submit2'])) {
                         db_query("UPDATE course SET lang = '$new_lang' WHERE lang = '$old_lang'");
                 }
                 db_query("RENAME TABLE `cours_user` TO `course_user`");
+                db_query('ALTER TABLE `course_user`
+                                CHANGE `cours_id` `course_id` INT(11) NOT NULL DEFAULT 0');
                 if (mysql_field_exists($mysqlMainDb, 'course_user', 'code_cours')) {
                         db_query('ALTER TABLE `course_user`
                                         DROP COLUMN `code_cours`');

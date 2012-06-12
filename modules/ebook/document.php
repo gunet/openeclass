@@ -1,3 +1,3 @@
 <?php
 define('EBOOK_DOCUMENTS', true);
-include "../document/document.php";
+require_once "../document/document.php";

@@ -39,9 +39,9 @@ define('HIDE_TOOL_TITLE', 1);
 // $path2add is used in init.php to fix relative paths
 $path2add = 1;
 include '../../include/baseTheme.php';
-require_once '../../modules/video/video_functions.php';
-require_once('../../include/lib/hierarchy.class.php');
-require_once('../../include/lib/course.class.php');
+include 'modules/video/video_functions.php';
+include 'include/lib/hierarchy.class.php';
+include 'include/lib/course.class.php';
 
 $tree = new hierarchy();
 $course = new course();
@@ -59,7 +59,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id=$uid, course_id = $course_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
 db_query($sql_log);
-include '../../include/action.php';
+include 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 

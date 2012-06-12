@@ -31,13 +31,13 @@
  *
  */
 
-require_once("functions.php");
-$nameTools = $dropbox_lang["dropbox"];
+include 'functions.php';
+$nameTools = $dropbox_lang['dropbox'];
 $basedir = $webDir . 'courses/' . $course_code . '/dropbox';
 $diskUsed = dir_total_space($basedir);
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+include 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DROPBOX);
 /**************************************/

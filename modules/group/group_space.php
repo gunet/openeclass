@@ -30,11 +30,11 @@ $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Group';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
 $navigation[] = array('url' => 'group.php?course='.$course_code, 'name' => $langGroups);
 
-include 'group_functions.php';
+require_once 'group_functions.php';
 mysql_select_db($mysqlMainDb);
 initialize_group_id();
 initialize_group_info($group_id);

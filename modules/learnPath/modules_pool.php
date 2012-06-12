@@ -218,10 +218,6 @@ switch( $cmd )
                     ."</td><td><input type=\"submit\" value=\"".$langImport."\">\n"
                     ."</td></tr></table>\n"
                     ."</form><br />\n";
-
-                 $head_content .= disp_html_area_head("comment");
-
-                 $body_action = "onload=\"initEditor()\"";
             }
             else
             {
@@ -234,9 +230,6 @@ switch( $cmd )
                     ."<input type=\"submit\" value=\"".$langOk."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
-
-                 $head_content .= disp_html_area_head("comment");
-                 $body_action = "onload=\"initEditor()\"";
             }
         } // else no module_id
         break;

@@ -18,10 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
-require_once('../../include/lib/hierarchy.class.php');
+include 'include/sendMail.inc.php';
+include 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 
@@ -102,7 +101,7 @@ if(user_app_exists(autounquote($username))) {
 
 if (get_config("display_captcha")) {
         // captcha check
-        require_once '../../include/securimage/securimage.php';
+        include 'include/securimage/securimage.php';
         $securimage = new Securimage();
         if ($securimage->check($captcha_code) == false) {
                 $errors[] = $langCaptchaWrong;

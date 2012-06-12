@@ -397,8 +397,6 @@ $tool_content .="
 if ($cmd == "updatecomment")
 {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
-    $head_content .= disp_html_area_head("insertCommentBox");
-    $body_action = "onload=\"initEditor()\"";
 } elseif ($cmd == "delcomment" ) {
     $tool_content .= commentBox(LEARNINGPATH_, DELETE_);
 } else {

@@ -33,8 +33,7 @@
 */
 
 // pop3 class
-require 'methods/pop3.php';
-
+include 'modules/auth/methods/pop3.php';
 
 $auth_ids = array(1 => 'eclass',
                   2 => 'pop3',

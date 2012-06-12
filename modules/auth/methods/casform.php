@@ -19,8 +19,6 @@
  * ======================================================================== */
 
 
-#include('../../include/CAS/CAS.php');
-
 if (!method_exists('phpCAS', 'setDebug')) {
     $tool_content .= "<p align='center'><font color='red'><strong>$langCASNotWork.</strong></font></p>";
 }

@@ -23,15 +23,14 @@ $require_current_course = TRUE;
 $require_login = true;
 
 include 'work_functions.php' ;
-include '../../include/baseTheme.php';
-include '../../include/pclzip/pclzip.lib.php';
-include '../../include/lib/fileManageLib.inc.php';
-include '../../include/lib/forcedownload.php';
-
+include 'include/baseTheme.php';
+include 'include/pclzip/pclzip.lib.php';
+include 'include/lib/fileManageLib.inc.php';
+include 'include/lib/forcedownload.php';
 
 define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
-include '../document/doc_init.php';
+include 'modules/document/doc_init.php';
 
 $coursePath = $webDir.'/courses/'.$course_code;
 if (!file_exists($coursePath))

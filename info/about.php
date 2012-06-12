@@ -19,7 +19,6 @@
  * ======================================================================== */
 
 
-$path2add = 2;
 include '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content .= "<table class='tbl_1' width='100%'>

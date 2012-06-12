@@ -24,8 +24,8 @@ $require_help = true;
 $helpTopic = 'EBook';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
-include '../../include/lib/fileDisplayLib.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 mysql_select_db($mysqlMainDb);
 
@@ -43,7 +43,7 @@ if (isset($_REQUEST['id'])) {
 }
 
 define('EBOOK_DOCUMENTS', true);
-include '../document/doc_init.php';
+require_once 'modules/document/doc_init.php';
 
 if (isset($_GET['delete'])) {
         db_query("DELETE FROM ebook_section WHERE ebook_id = $ebook_id AND id = " . intval($_GET['delete']));

@@ -34,8 +34,8 @@
 
 $require_current_course = TRUE;
 $guest_allowed = true;
-include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 $nameTools = $langSearch;
 $found = false;
 register_posted_variables(array('announcements' => true,

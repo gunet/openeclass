@@ -36,39 +36,34 @@ session_start();
 define('INDEX_START', 1);
 define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
-$path2add = 0;
-include "include/baseTheme.php";
-include "include/CAS/CAS.php";
-include "modules/auth/auth.inc.php";
-require_once 'modules/video/video_functions.php';
+
+include 'include/baseTheme.php';
+include 'include/CAS/CAS.php';
+include 'modules/auth/auth.inc.php';
+include 'modules/video/video_functions.php';
+
 load_modal_box();
-//$homePage is used by baseTheme.php to parse correctly the breadcrumb
+// $homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
-$tool_content = "";
-// first check
+
 // check if we can connect to database. If not then eclass is most likely not installed
 if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
 	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 	if (mysql_version()) db_query("SET NAMES utf8");
+} else {
+        $db = false;
 }
 if (!$db) {
-	include "include/not_installed.php";
+	include 'include/not_installed.php';
 }
 
 // unset system that records visitor only once by course for statistics
-include('include/action.php');
+include 'include/action.php';
 if (isset($dbname)) {        
         $action = new action();
         $action->record('MODULE_ID_UNITS', 'exit');
 }
 unset($dbname);
-
-// second check
-// can we select a database? if not then there is some sort of a problem
-if (isset($mysqlMainDb)) $selectResult = mysql_select_db($mysqlMainDb,$db);
-if (!isset($selectResult)) {
-	include "include/not_installed.php";
-}
 
 // if we try to login... then authenticate user.
 $warning = '';
@@ -114,14 +109,14 @@ if (isset($_GET['logout']) and $uid) {
 // in case he has a different language set in his/her profile
 if (isset($language)) {
         // include_messages
-        include("${webDir}lang/$language/common.inc.php");
-        $extra_messages = "${webDir}/config/$language.inc.php";
+        include("lang/$language/common.inc.php");
+        $extra_messages = "config/$language.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("${webDir}lang/$language/messages.inc.php");
+        include("lang/$language/messages.inc.php");
         if ($extra_messages) {
                 include $extra_messages;
         }

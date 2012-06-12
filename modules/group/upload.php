@@ -1,3 +1,3 @@
 <?php
 define('GROUP_DOCUMENTS', true);
-include '../document/upload.php';
+require_once '../document/upload.php';

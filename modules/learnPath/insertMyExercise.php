@@ -34,8 +34,8 @@
                   admin can add them to a learning path
 ============================================================================== */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once '../../include/lib/learnPathLib.inc.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -49,10 +49,11 @@ $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISE           = "exercise";
 
-require_once("../../include/baseTheme.php");
-$messBox = "";
+require_once '../../include/baseTheme.php';
 
-require_once '../video/video_functions.php';
+$messBox = '';
+
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 $head_content .= <<<EOF
 <script type='text/javascript'>
@@ -68,8 +69,8 @@ $(document).ready(function() {
 </script>
 EOF;
 
-$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name' => $langLearningPath);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
 mysql_select_db($mysqlMainDb);

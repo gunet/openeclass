@@ -21,10 +21,9 @@
 
 $require_login = TRUE;
 $guest_allowed = true;
-include '../../include/baseTheme.php';
-include('../../include/sendMail.inc.php');
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 $nameTools = "Αποστολή ενημερωτικού email στον διδάσκοντα";
-$tool_content = "";
 
 if (isset($_POST["submit"])) {
 //	$tool_content .= "<table width=\"99%\"><tbody><tr><td>";

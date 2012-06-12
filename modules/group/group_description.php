@@ -21,8 +21,8 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 
 $nameTools = $langAddDescription;
 $navigation[] = array("url" => "group.php?course=$course_code", "name" => $langGroups);

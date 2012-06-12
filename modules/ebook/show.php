@@ -59,10 +59,10 @@ $require_current_course = true;
 $guest_allowed = true;
 define('EBOOK_DOCUMENTS', true);
 
-include '../../include/baseTheme.php';
-include '../../include/lib/forcedownload.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-include '../document/doc_init.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/document/doc_init.php';
 
 if ($not_found) {
         not_found($uri);

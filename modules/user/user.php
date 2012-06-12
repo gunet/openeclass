@@ -25,7 +25,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';
-include '../admin/admin.inc.php';
+include 'modules/admin/admin.inc.php';
 
 define ('COURSE_USERS_PER_PAGE', 15);
 

@@ -25,9 +25,9 @@
 
 $path2add = 2;
 
-include "../include/baseTheme.php";
-include('../include/CAS/CAS.php');
-include "../modules/auth/auth.inc.php";
+include '../include/baseTheme.php';
+include 'include/CAS/CAS.php';
+include 'modules/auth/auth.inc.php';
 
 $auth = 7;
 cas_authenticate($auth);

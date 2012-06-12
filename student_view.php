@@ -1,6 +1,5 @@
 <?php
 session_start();
-$path2add = 0;
 include 'include/baseTheme.php';
 
 if (!isset($_SESSION['saved_editor'])) {

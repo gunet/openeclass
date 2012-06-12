@@ -32,8 +32,8 @@ if (isset($from_reg)) {
 	$helpTopic = 'Contact';
 }
 
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 
 if (isset($from_reg)) {
 	$title = course_id_to_title($course_id);

@@ -26,11 +26,11 @@ $guest_allowed = true;
 
 define('EBOOK', 2);
 
-include '../../include/baseTheme.php';
-include '../../include/lib/fileManageLib.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_EBOOK);
 /**************************************/

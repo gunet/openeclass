@@ -30,7 +30,7 @@ $require_help = true;
 $helpTopic = 'Work';
 
 include '../../include/baseTheme.php';
-include '../../include/lib/forcedownload.php';
+include 'include/lib/forcedownload.php';
 
 $head_content = "
 <script type='text/javascript'>
@@ -77,18 +77,18 @@ require_once '../video/video_functions.php';
 load_modal_box();
 
 /**** The following is added for statistics purposes ***/
-include '../../include/action.php';
+include 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /**************************************/
 
 include 'work_functions.php';
-include '../group/group_functions.php';
-include '../../include/lib/fileUploadLib.inc.php';
-include '../../include/lib/fileManageLib.inc.php';
-include '../../include/sendMail.inc.php';
-include '../../include/libchart/libchart.php';
-include '../../include/log.php';
+include 'modules/group/group_functions.php';
+include 'include/lib/fileUploadLib.inc.php';
+include 'include/lib/fileManageLib.inc.php';
+include 'include/sendMail.inc.php';
+include 'include/libchart/libchart.php';
+include 'include/log.php';
 
 $workPath = $webDir."courses/".$course_code."/work";
 
@@ -101,7 +101,7 @@ if (isset($_GET['get'])) {
 // Only course admins can download all assignments in a zip file
 if ($is_editor) {
         if (isset($_GET['download'])) {
-                include "../../include/pclzip/pclzip.lib.php";
+                include 'include/pclzip/pclzip.lib.php';
                 download_assignments(intval($_GET['download']));
         }
 }

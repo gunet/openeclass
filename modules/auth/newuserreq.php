@@ -20,10 +20,10 @@
 
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
+include 'include/sendMail.inc.php';
 
-require_once('../../include/lib/user.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+include 'include/lib/user.class.php';
+include 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();

@@ -64,11 +64,22 @@ if (mysql_version()) {
 mysql_select_db($mysqlMainDb, $db);
 
 if (isset($language)) {
+        // Old-style config.php, redirect to upgrade
         $language = langname_to_code($language);
         if (!defined('UPGRADE')) {
                 redirect_to_home_page('upgrade/');
         }
 } else {
+        // Global configuration
+        $siteName = get_config('site_name');
+        $Institution = get_config('institution');
+        $InstitutionUrl = get_config('institution_url');
+        $urlServer = get_config('base_url');
+        $urlSecure = get_config('secure_url');
+        if (empty($urlSecure)) {
+                $urlSecure = $urlServer;
+        }
+        $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
         $language = get_config('default_language');
 }
 

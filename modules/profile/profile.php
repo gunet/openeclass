@@ -23,11 +23,11 @@ $require_help = true;
 $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
-include '../auth/auth.inc.php';
+include 'modules/auth/auth.inc.php';
 $require_valid_uid = TRUE;
 
-require_once('../../include/lib/user.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();

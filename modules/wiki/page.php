@@ -39,12 +39,12 @@
 ==============================================================================
 */
 $tlabelReq = 'CLWIKI__';
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/textLib.inc.php");
+include 'include/lib/learnPathLib.inc.php';
+include 'include/lib/textLib.inc.php';
 $require_current_course = TRUE;
 $require_help           = TRUE;
-$helpTopic              = "Wiki";
-require_once("../../include/baseTheme.php");
+$helpTopic              = 'Wiki';
+include 'include/baseTheme.php';
 $style= '';
 $_gid = null;
 
@@ -60,7 +60,7 @@ mysql_select_db($mysqlMainDb);
 // check and set user access level for the tool
 if ( ! isset( $_REQUEST['wikiId'] ) )
 {
-    header( "Location: wiki.php?course=$course_code" );
+    header("Location: wiki.php?course=$course_code");
     exit();
 }
 
@@ -86,15 +86,15 @@ else
 }
 
 // Wiki specific classes and libraries
-require_once "lib/class.clarodbconnection.php";
-require_once "lib/class.wiki2xhtmlrenderer.php";
-require_once "lib/class.wikipage.php";
-require_once "lib/class.wikistore.php";
-require_once "lib/class.wiki.php";
-require_once "lib/lib.requestfilter.php";
-require_once "lib/lib.wikisql.php";
-require_once "lib/lib.wikidisplay.php";
-require_once "lib/lib.javascript.php";
+include 'modules/wiki/lib/class.clarodbconnection.php';
+include 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
+include 'modules/wiki/lib/class.wikipage.php';
+include 'modules/wiki/lib/class.wikistore.php';
+include 'modules/wiki/lib/class.wiki.php';
+include 'modules/wiki/lib/lib.requestfilter.php';
+include 'modules/wiki/lib/lib.wikisql.php';
+include 'modules/wiki/lib/lib.wikidisplay.php';
+include 'modules/wiki/lib/lib.javascript.php';
 
 // security fix : disable access to other groups wiki
 if ( isset( $_REQUEST['wikiId'] ) )
@@ -317,9 +317,9 @@ $message = '';
 switch( $action )
 {
     // show differences
-    case "diff":
+    case 'diff':
     {
-	require_once "lib/lib.diff.php";
+	include 'modules/wiki/lib/lib.diff.php';
 
 	if ( $wikiStore->pageExists( $wikiId, $title ) )
 	{
@@ -342,19 +342,19 @@ switch( $action )
 	break;
     }
     // recent changes
-    case "recent":
+    case 'recent':
     {
 	$recentChanges = $wiki->recentChanges();
 	break;
     }
     // all pages
-    case "all":
+    case 'all':
     {
 	$allPages = $wiki->allPages();
 	break;
     }
     // edit page content
-    case "edit":
+    case 'edit':
     {
 	if( $wikiStore->pageExists( $wikiId, $title ) )
 	{
@@ -383,13 +383,13 @@ switch( $action )
 	    if ( $content == '' )
 	    {
 		$message = $langWikiNoContent;
-		$style = "caution";
+		$style = 'caution';
 	    }
 	}
 	break;
     }
     // view page
-    case "show":
+    case 'show':
     {
 	unset( $_SESSION['wikiLastVersion'] );
 
@@ -410,17 +410,17 @@ switch( $action )
 	}
 	else
 	{
-	    $message = "Page " . $title . " not found";
-	    $style = "caution";
+	    $message = 'Page ' . $title . ' not found';
+	    $style = 'caution';
 	}
 	break;
     }
     // save page
-    case "save":
+    case 'save':
     {
 	if ( isset( $content ) )
 	{
-	    $time = date( "Y-m-d H:i:s" );
+	    $time = date( 'Y-m-d H:i:s' );
 
 	    if ( $wikiPage->pageExists( $title ) )
 	    {
@@ -430,7 +430,7 @@ switch( $action )
 		    unset( $_SESSION['wikiLastVersion'] );
 
 		    $message = $langWikiIdenticalContent;
-		    $style = "caution";
+		    $style = 'caution';
 		    $action = 'show';
 		}
 		else
@@ -463,13 +463,13 @@ switch( $action )
 		$wikiPage->create( $creatorId, $title, $content, $time, true );
 		if ( $wikiPage->hasError() )
 		{
-		    $message = "Database error : " . $wikiPage->getError();
-		    $style = "caution";
+		    $message = 'Database error : ' . $wikiPage->getError();
+		    $style = 'caution';
 		}
 		else
 		{
 		    $message = $langWikiPageSaved;
-		    $style = "success";
+		    $style = 'success';
 		}
 		$action = 'show';
 	    }
@@ -477,7 +477,7 @@ switch( $action )
 	break;
     }
     // page history
-    case "history":
+    case 'history':
     {
 	$wikiPage->loadPage( $title );
 	$title = $wikiPage->getTitle();

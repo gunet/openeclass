@@ -38,9 +38,8 @@
 
 // BASETHEME, OTHER INCLUDES AND NAMETOOLS
 include '../../include/baseTheme.php';
-include('../../include/sendMail.inc.php');
+include 'include/sendMail.inc.php';
 $nameTools = $langContactAdmin;
-$tool_content = "";
 
 
 // MAIN BODY

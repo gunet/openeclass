@@ -20,14 +20,14 @@
 
 $require_power_user = true;
 include '../../include/baseTheme.php';
-include '../../upgrade/upgrade_functions.php';
-include '../../include/lib/fileUploadLib.inc.php';
-include '../../include/lib/fileManageLib.inc.php';
-include '../../include/lib/forcedownload.php';
-include '../../include/pclzip/pclzip.lib.php';
+include 'upgrade/upgrade_functions.php';
+include 'include/lib/fileUploadLib.inc.php';
+include 'include/lib/fileManageLib.inc.php';
+include 'include/lib/forcedownload.php';
+include 'include/pclzip/pclzip.lib.php';
 
-require_once('../../include/lib/course.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+include 'include/lib/course.class.php';
+include 'include/lib/hierarchy.class.php';
 
 $treeObj = new hierarchy();
 $courseObj = new course();
@@ -548,14 +548,14 @@ function course_details($code, $lang, $title, $desc, $vis, $prof) {
 	global $action, $langNameOfLang, $version;
 	global $siteName, $InstitutionUrl, $Institution;
 
-        include("../lang/greek/common.inc.php");
-        $extra_messages = "../../config/greek.inc.php";
+        include 'lang/greek/common.inc.php';
+        $extra_messages = 'config/greek.inc.php';
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("../lang/greek/messages.inc.php");
+        include 'lang/greek/messages.inc.php';
         if ($extra_messages) {
                 include $extra_messages;
         }

@@ -25,7 +25,7 @@ $helpTopic = 'Guest';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array ("url" => "user.php?course=$course_code", "name" => $langAdminUsers);
+$navigation[] = array('url' => "user.php?course=$course_code", 'name' => $langAdminUsers);
 
 $default_guest_username = $langGuestUserName . $course_code;
 

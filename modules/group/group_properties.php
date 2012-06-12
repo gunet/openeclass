@@ -33,11 +33,11 @@ $require_help = true;
 $helpTopic = 'Group';
 $require_editor = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
-$navigation[] = array ("url"=>"group.php?course=$course_code", "name"=> $langGroupManagement);
+$navigation[] = array('url' => "group.php?course=$course_code", 'name' => $langGroupManagement);
 
-include 'group_functions.php';
+require_once 'group_functions.php';
 initialize_group_info();
 
 $checked['self_reg'] = $self_reg? ' checked="1"': '';

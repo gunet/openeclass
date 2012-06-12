@@ -27,10 +27,10 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 
-include '../../include/baseTheme.php';
-include '../../include/lib/learnPathLib.inc.php';
-include 'group_functions.php';
-include '../usage/duration_query.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'group_functions.php';
+require_once 'modules/usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {

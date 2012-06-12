@@ -21,25 +21,25 @@
 // This script lists all available media and medialinks and the course
 // admin cann add them to a learning path
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once '../../include/lib/learnPathLib.inc.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH          = "lp_learnPath";
-$TABLEMODULE             = "lp_module";
-$TABLELEARNPATHMODULE    = "lp_rel_learnPath_module";
-$TABLEASSET              = "lp_asset";
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
+$TABLELEARNPATH          = 'lp_learnPath';
+$TABLEMODULE             = 'lp_module';
+$TABLELEARNPATHMODULE    = 'lp_rel_learnPath_module';
+$TABLEASSET              = 'lp_asset';
+$TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
 
-require_once("../../include/baseTheme.php");
-require_once("../video/video_functions.php");
+require_once '../../include/baseTheme.php';
+require_once 'modules/video/video_functions.php';
 
-$dialogBox = "";
+$dialogBox = '';
 
-$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
-$navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
+$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPath);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
 load_modal_box(true);

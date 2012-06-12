@@ -31,12 +31,12 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 // -------------- jscalendar -----------------
-include('../../include/jscalendar/calendar.php');
+include 'include/jscalendar/calendar.php';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);
+$navigation[] = array('url' => "questionnaire.php?course=$course_code", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
 if (isset($_REQUEST['pid'])) {

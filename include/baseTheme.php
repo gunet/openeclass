@@ -164,7 +164,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				$t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
 				$t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                                 if (in_array($toolArr[$i][2][$j],
-                                             array($GLOBALS['phpMyAdminURL'], $GLOBALS['phpSysInfoURL'])) or
+                                             array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
                                     strpos($toolArr[$i][3][$j], 'external_link') === 0) {
                                         $t->set_var ('TOOL_ATTR', ' target="_blank"');
                                 } else {

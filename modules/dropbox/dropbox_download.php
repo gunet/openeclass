@@ -30,12 +30,11 @@
  * 
  */
 
-require_once("functions.php");
-require_once("dropbox_class.inc.php");
-include '../../include/lib/forcedownload.php';
+include 'functions.php';
+include 'dropbox_class.inc.php';
+include 'include/lib/forcedownload.php';
 
-if (!isset($uid))
-{
+if (!isset($uid)) {
     exit();
 }
 

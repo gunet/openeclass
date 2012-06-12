@@ -23,9 +23,9 @@ $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Glossary';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 mysql_select_db($mysqlMainDb);

@@ -26,11 +26,10 @@ search.php
 
 */
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $require_current_course = FALSE;
 
 $nameTools = $langSearch;
-
 
 if (!register_posted_variables(array('search_terms' => false,
                                     'search_terms_title' => false,

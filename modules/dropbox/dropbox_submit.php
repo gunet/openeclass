@@ -30,10 +30,12 @@
  *
  */
 
-require_once("functions.php");
-include "../../include/lib/forcedownload.php";
-include '../../include/sendMail.inc.php';
-$nameTools = $dropbox_lang["dropbox"];
+include 'functions.php';
+
+include '../../include/lib/forcedownload.php';
+include 'include/sendMail.inc.php';
+
+$nameTools = $dropbox_lang['dropbox'];
 
 /**
  * ========================================
@@ -46,13 +48,13 @@ $nameTools = $dropbox_lang["dropbox"];
  * behaviours with POST requests.
  */
 
-if (isset($_POST["dropbox_unid"])) {
-	$dropbox_unid = $_POST["dropbox_unid"];
-} elseif (isset($_GET["dropbox_unid"]))
+if (isset($_POST['dropbox_unid'])) {
+	$dropbox_unid = $_POST['dropbox_unid'];
+} elseif (isset($_GET['dropbox_unid']))
 {
-	$dropbox_unid = $_GET["dropbox_unid"];
+	$dropbox_unid = $_GET['dropbox_unid'];
 } else {
-	die($dropbox_lang["badFormData"]);
+	die($dropbox_lang['badFormData']);
 }
 
 if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dropbox_unid == $_SESSION["dropbox_uniqueid"]) {

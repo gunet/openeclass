@@ -27,10 +27,10 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
+include 'include/sendMail.inc.php';
 
 $nameTools = $langAddUser;
-$navigation[] = array ("url"=>"user.php?course=$course_code", "name"=> $langAdminUsers);
+$navigation[] = array ('url' => "user.php?course=$course_code", 'name' => $langAdminUsers);
 
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);

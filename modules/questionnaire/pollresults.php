@@ -23,10 +23,10 @@ $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 include '../../include/baseTheme.php';
-require_once '../../include/libchart/libchart.php';
+include 'include/libchart/libchart.php';
 
 $nameTools = $langPollCharts;
-$navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);
+$navigation[] = array('url' => "questionnaire.php?course=$course_code", 'name' => $langQuestionnaire);
 
 $questions = array();
 $answer_total = 0;

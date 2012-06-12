@@ -24,7 +24,7 @@ $guest_allowed = FALSE;
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
 include '../../include/baseTheme.php';
-include "../../include/lib/fileUploadLib.inc.php";
+include 'include/lib/fileUploadLib.inc.php';
 
 // javascript functions
 $head_content ='<script type="text/javascript">

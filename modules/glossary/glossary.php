@@ -23,9 +23,9 @@ $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Glossary';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/video/video_functions.php';
 
-require_once '../video/video_functions.php';
 load_modal_box();
 
 $base_url = 'glossary.php?course=' . $course_code;
@@ -34,7 +34,7 @@ $cat_url = 'categories.php?course=' . $course_code;
 /*
  * *** The following is added for statistics purposes **
  */
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_GLOSSARY);
 

@@ -32,7 +32,7 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 $require_editor = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langNewGroupCreate;
 $navigation[]= array ("url"=>"group.php?course=$course_code", "name"=> $langGroups);

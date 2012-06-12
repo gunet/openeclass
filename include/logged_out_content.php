@@ -42,7 +42,7 @@ if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
-include('lib/textLib.inc.php');
+include 'include/lib/textLib.inc.php';
 
 $tool_content .= <<<lCont
 

@@ -29,9 +29,9 @@ $require_help = TRUE;
 $helpTopic = 'Infocours';
 include '../../include/baseTheme.php';
 
-require_once('../../include/lib/user.class.php');
-require_once('../../include/lib/course.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+include '../../include/lib/user.class.php';
+include '../../include/lib/course.class.php';
+include '../../include/lib/hierarchy.class.php';
 
 $user = new user();
 $course = new course();
@@ -53,14 +53,14 @@ if (isset($_POST['submit'])) {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = $_POST['localize'];
                         // include_messages
-                        include("${webDir}lang/$language/common.inc.php");
-                        $extra_messages = "${webDir}/config/$language.inc.php";
+                        include "$webDir/lang/$language/common.inc.php";
+                        $extra_messages = "$webDir/config/$language.inc.php";
                         if (file_exists($extra_messages)) {
                                 include $extra_messages;
                         } else {
                                 $extra_messages = false;
                         }
-                        include("${webDir}lang/$language/messages.inc.php");
+                        include "$webDir/lang/$language/messages.inc.php");
                         if ($extra_messages) {
                                 include $extra_messages;
                         }
