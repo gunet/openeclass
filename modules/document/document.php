@@ -274,10 +274,10 @@ if ($can_upload) {
                                         // Logging
                                         Log::record(MODULE_ID_DOCS, LOG_INSERT,
                                                 array('id' => $id,
-                                                      'filepath' => quote($file_path),
-                                                      'filename' => autoquote($fileName),
-                                                      'comment' => autoquote($_POST['file_comment']),
-                                                      'title' => autoquote($_POST['file_title'])));
+                                                      'filepath' => $file_path,
+                                                      'filename' => $fileName,
+                                                      'comment' => $_POST['file_comment'],
+                                                      'title' => $_POST['file_title']));
                                         $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
                                 } else {
                                         $action_message .= "<p class='caution'>$error</p><br />";
@@ -294,14 +294,16 @@ if ($can_upload) {
 	--------------------------------------*/
         if (isset($_POST['moveTo'])) {		
                 $moveTo = $_POST['moveTo'];
-                $source = $_POST['source'];
-                $sourceXml = $source . '.xml';
+                $source = $_POST['source'];                
+                $sourceXml = $source . '.xml';                
 		//check if source and destination are the same
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
+                        $r = mysql_fetch_array(db_query("SELECT filename FROM document WHERE $group_sql AND path='$source'"));
+                        $filename = $r['filename'];                        
 			if (move($basedir . $source, $basedir . $moveTo)) {
 				if (hasMetaData($source, $basedir, $group_sql))
 					move($basedir . $sourceXml, $basedir . $moveTo);
-				update_db_info('document', 'update', $source, $moveTo.'/'.my_basename($source));
+				update_db_info('document', 'update', $source, $filename, $moveTo.'/'.my_basename($source));
 				$action_message = "<p class='success'>$langDirMv</p><br />";
 			} else {
 				$action_message = "<p class='caution'>$langImpossible</p><br />";
@@ -330,14 +332,16 @@ if ($can_upload) {
 	**************************************/
         if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
                 $delete = str_replace('..', '', $_POST['filePath']);
-		// Check if file actually exists
-                $result = db_query("SELECT path, format FROM document
+		// Check if file actually exists                
+                $result = db_query("SELECT path, format, filename FROM document
 					WHERE $group_sql AND path=" . autoquote($delete));
+                $r = mysql_fetch_array($result);
+                $filename = $r['filename'];
                 if (mysql_num_rows($result) > 0) {
                         if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                         		if (hasMetaData($delete, $basedir, $group_sql))
                                 	my_delete($basedir . $delete . ".xml");
-                                update_db_info('document', 'delete', $delete);
+                                update_db_info('document', 'delete', $delete, $filename);
                                 $action_message = "<p class='success'>$langDocDeleted</p><br />";
                         }
                 }
@@ -348,13 +352,15 @@ if ($can_upload) {
 	******************************************/
 	// Step 2: Rename file by updating record in database
 	if (isset($_POST['renameTo'])) {
+                $r = mysql_fetch_array(db_query("SELECT filename FROM document WHERE path = ".autoquote($_POST['sourceFile']).""));
 		db_query("UPDATE document SET filename=" .
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
                           WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
                 Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
-                                array('path' => autoquote($_POST['sourceFile']),
-                                        'newfilename' => autoquote($_POST['renameTo'])));                
+                                array('path' => $_POST['sourceFile'],
+                                        'filename' => $r['filename'],
+                                        'newfilename' => $_POST['renameTo']));
 		if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
 			$q = db_query("UPDATE document SET filename=" .
                                       autoquote($_POST['renameTo'] . '.xml') .
@@ -428,7 +434,7 @@ if ($can_upload) {
 	// add/update/remove comment
 	if (isset($_POST['commentPath'])) {
                 $commentPath = $_POST['commentPath'];
-		//elegxos ean yparxei eggrafh sth vash gia to arxeio
+		// check if file exists
 		$result = db_query("SELECT * FROM document
 					     WHERE $group_sql AND
 					           path=" . autoquote($commentPath));
@@ -453,8 +459,9 @@ if ($can_upload) {
 					      path = '$commentPath'");
                         Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
                                 array('path' => $commentPath,
-                                      'comment' => autoquote($_POST['file_comment']),
-                                      'title' => autoquote($_POST['file_title'])));
+                                      'filename' => $res['filename'],
+                                      'comment' => $_POST['file_comment'],
+                                      'title' => $_POST['file_title']));
 			$action_message = "<p class='success'>$langComMod</p>";
                 }
 	}
@@ -535,9 +542,9 @@ if ($can_upload) {
                                 		    " WHERE $group_sql AND path =" . quote($oldpath . ".xml"));
                                 	}
                                         Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
-                                                array('oldpath' => quote($oldpath),
-                                                      'newpath' => quote($newpath),
-                                                      'filename' => autoquote($_FILES['newFile']['name'])));
+                                                array('oldpath' => $oldpath,
+                                                      'newpath' => $newpath,
+                                                      'filename' => $_FILES['newFile']['name']));
                                 	$action_message = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
@@ -853,7 +860,6 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 // Display
 // ----------------------------------------------
 
-$dspCurDirName = htmlspecialchars($curDirName);
 $cmdCurDirPath = rawurlencode($curDirPath);
 $cmdParentDir  = rawurlencode($parentDir);
 

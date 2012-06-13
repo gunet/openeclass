@@ -67,26 +67,30 @@ class Log {
                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";               
                         $tool_content .= "<td>".display_user($r['user_id'])."</td>";
                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                        $tool_content .= "<td>".$this->action_details($module_id, $r['action_type'], $r['details'])."</td>";
+                        $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
                         $tool_content .= "</tr>";
                 }
                 $tool_content .= "</table>";         
                 return;
         }
  
-        private function action_details($module_id, $action_type, $details) {
+        private function action_details($module_id, $details) {
                                                          
                 switch ($module_id) {
-                        case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($action_type, $details);
+                        case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($details);
                                 break;                        
-                        case MODULE_ID_AGENDA: $content = $this->agenda_action_details($action_type, $details);
+                        case MODULE_ID_AGENDA: $content = $this->agenda_action_details($details);
+                                break;
+                        case MODULE_ID_LINKS: $content = $this->link_action_details($details);
+                                break;
+                        case MODULE_ID_DOCS: $content = $this->document_action_details($details);
                                 break;
                         }       
                 return $content;
         }
         
         
-        private function announcement_action_details($action_type, $details) {
+        private function announcement_action_details($details) {
                 
                 global $langTitle, $langContent;
                 
@@ -96,12 +100,12 @@ class Log {
                 return $content;
         }
         
-        private function agenda_action_details($action_type, $details) {
+        private function agenda_action_details($details) {
                 
                 global $langTitle, $langContent, $langDuration, $langhours, $langDate;
                 
-                $details = unserialize($details);                
-                $date = autounquote($details['day'])." ".autounquote($details['hour']);
+                $details = unserialize($details);
+                $date = $details['day']." ".$details['hour'];
                                                 
                 $content = "$langTitle &laquo".$details['title'].
                             "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo
@@ -109,6 +113,46 @@ class Log {
                              &nbsp;&mdash;&nbsp;$langDuration: ".$details['lasting']." $langhours";
                 return $content;
                 
+        }
+        
+        private function link_action_details($details) {
+                
+                global $langTitle, $langURL, $langDescription;
+                                
+                $details = unserialize($details);
+                
+                $content = "$langURL ".$details['url'];
+                if (!empty($details['title'])) {
+                        $content .= " $langTitle &laquo".$details['title']."&raquo";
+                }
+                if (!empty($details['description'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".$details['description']."&raquo";
+                }                        
+                
+                return $content;
+        }
+        
+        private function document_action_details($details) {
+                
+                global $langFileName, $langComments, $langTitle, $langRename, $langMove, $langTo, $langIn;
+                
+                $details = unserialize($details);
+                
+                $content = "$langFileName &laquo".$details['filename']."&raquo";
+                if (!empty($details['title'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langTitle &laquo".$details['title']."&raquo";
+                }
+                if (!empty($details['comment'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo".$details['comment']."&raquo";
+                }
+                if (!empty($details['newfilename'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langRename $langIn &laquo".$details['newfilename']."&raquo";
+                }
+                if (!empty($details['newpath'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo".$details['newpath']."&raquo";
+                }
+                
+                return $content;
         }
         
         // return the real action names
