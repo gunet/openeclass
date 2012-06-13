@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,12 +35,6 @@
 	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
                       Hugues Peeters    <peeters@ipm.ucl.ac.be>
                       Christophe Gesche <gesche@ipm.ucl.ac.be>
-==============================================================================        
-    @Description: 
-
-    @Comments:
- 
-    @todo: 
 ==============================================================================
 */
 
@@ -566,9 +560,9 @@ function process_extracted_file($p_event, &$p_header) {
                                 Log::record(MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
                                                 'filepath' => $path,
-                                                'filename' => quote($filename),
-                                                'comment' => quote($file_comment),
-                                                'title' => quote($file_title)));
+                                                'filename' => $filename,
+                                                'comment' => $file_comment,
+                                                'title' => $file_title));
                 // File will be extracted with new encoded filename
                 $p_header['filename'] = $basedir . $path;
                 return 1;
@@ -617,7 +611,7 @@ function make_path($path, $path_components)
                         Log::record(MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
                                                 'path' => $path,
-                                                'filename' => quote($component)));
+                                                'filename' => $component));
                         $path_already_exists = false;
                 }
         }
