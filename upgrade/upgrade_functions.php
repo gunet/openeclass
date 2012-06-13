@@ -831,7 +831,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     if (mysql_table_exists($code, 'assignments') && mysql_table_exists($code, 'assignment_submit') ) {
     
         // ----- assigments DB Table ----- //
-        list($assignmentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignments"));
+        list($assignmentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment"));
         $assignmentid_offset = (!$assignmentid_offset) ? 0 : intval($assignmentid_offset);
         
         if ($return_mapping) {
@@ -847,7 +847,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                    SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
                      FROM assignments AS old ORDER by id");
         
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.assignments
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.assignment
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`, 
                           `active`, `secret_directory`, `group_submissions`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
