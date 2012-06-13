@@ -42,11 +42,9 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$path2add = 3;
-include("../../../include/init.php");
-require_once("../../../include/lib/learnPathLib.inc.php");
-mysql_select_db($mysqlMainDb);
+$require_current_course = true;
+require_once '../../../include/init.php';
+require_once 'include/lib/learnPathLib.inc.php';
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";

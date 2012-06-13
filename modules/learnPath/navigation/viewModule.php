@@ -43,9 +43,8 @@
 */
 
 
-$require_current_course = TRUE;
-$path2add = 3;
-include("../../../include/init.php");
+$require_current_course = true;
+require_once '../../../include/init.php';
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";
@@ -56,8 +55,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $clarolineRepositoryWeb = $urlServer."courses/".$course_code;
 
 // lib of this tool
-require_once("../../../include/lib/learnPathLib.inc.php");
-mysql_select_db($course_code);
+require_once 'include/lib/learnPathLib.inc.php';
 
 $unit_parm = isset($_SESSION['unit'])? ('&unit=' . $_SESSION['unit']): '';
 

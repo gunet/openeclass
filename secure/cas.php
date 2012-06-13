@@ -23,7 +23,6 @@
  *  	Authors:	Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
  */
 
-$path2add = 2;
 
 require_once '../include/baseTheme.php';
 require_once 'include/CAS/CAS.php';

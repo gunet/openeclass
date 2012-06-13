@@ -33,14 +33,11 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$path2add = 3;
-
-require_once "../../../include/init.php";
-require_once '../../../include/lib/textLib.inc.php' ;
+$require_current_course = true;
+require_once '../../../include/init.php';
+require_once 'include/lib/textLib.inc.php' ;
 
 $nameTools = $langCourseProgram;
-
 
 $unit_id = description_unit_id($course_id);
 

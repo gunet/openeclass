@@ -19,16 +19,13 @@
  * ======================================================================== */
 
 
-$require_current_course = TRUE;
-$path2add = 3;
-
-require_once "../../../include/init.php";
-require_once "../../video/video_functions.php";
+$require_current_course = true;
+require_once '../../../include/init.php';
+require_once 'modules/video/video_functions.php';
 
 $nameTools = $langMediaTypeDesc;
 
-if (isset($_GET['id']))
-{
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     
     echo medialink_iframe_object(html_entity_decode($id), '#ffffff', '#000000');

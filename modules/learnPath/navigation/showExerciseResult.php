@@ -27,13 +27,12 @@
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session
-require_once('../../exercise/exercise.class.php');
-require_once('../../exercise/question.class.php');
-require_once('../../exercise/answer.class.php');
+require_once '../../exercise/exercise.class.php';
+require_once '../../exercise/question.class.php';
+require_once '../../exercise/answer.class.php';
 
-$require_current_course = TRUE;
-$path2add = 3;
-include("../../../include/init.php");
+$require_current_course = true;
+require_once '../../../include/init.php';
 
 // answer types
 define('UNIQUE_ANSWER',	1);
@@ -53,10 +52,10 @@ $TABLELEARNPATHMODULE    = "lp_rel_learnPath_module";
 $TABLEASSET              = "lp_asset";
 $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
-require_once('../../../include/lib/learnPathLib.inc.php');
-require_once('../../../include/lib/textLib.inc.php');
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 
-require_once '../../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 // Ksekiname to diko mas html output giati probaloume mesa se iframe
@@ -98,7 +97,7 @@ if(!is_array($_SESSION['exerciseResult'][$exerciseId])
 $exerciseTitle            = $objExercise->selectTitle();
 $exerciseDescription      = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "{$webDir}courses/mathimg/");
+$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "$webDir/courses/mathimg/");
 $displayResults           = $objExercise->selectResults();
 $displayScore             = $objExercise->selectScore();
 
@@ -131,7 +130,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
     $questionDescription      = $objQuestionTmp->selectDescription();
     $questionDescription      = $questionDescription;
 	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "{$webDir}courses/mathimg/");
+	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "$webDir/courses/mathimg/");
     $questionWeighting        = $objQuestionTmp->selectWeighting();
     $answerType               = $objQuestionTmp->selectType();
 
@@ -200,8 +199,8 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 		$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
 		$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 		// support for math symbols
-		$answer = mathfilter($answer, 12, "{$webDir}courses/mathimg/");
-		$answerComment = mathfilter($answerComment, 12, "{$webDir}courses/mathimg/");
+		$answer = mathfilter($answer, 12, "$webDir/courses/mathimg/");
+		$answerComment = mathfilter($answerComment, 12, "$webDir/courses/mathimg/");
 
 		switch($answerType)
 		{

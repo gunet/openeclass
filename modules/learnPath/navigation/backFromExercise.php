@@ -22,10 +22,11 @@
 // his updated learning path progress and prompts him
 // to click next after finishing an exercise.
 
-$require_current_course = TRUE;
-$path2add = 3;
-include("../../../include/init.php");
+$require_current_course = true;
+require_once '../../../include/init.php';
+
 $TOCurl = "../viewer_toc.php?course=$course_code";
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>

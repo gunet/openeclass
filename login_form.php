@@ -1,7 +1,6 @@
 <?php
 
 define('INDEX_START', 1);
-$path2add = 0;
 require_once 'include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 $tool_content = '';

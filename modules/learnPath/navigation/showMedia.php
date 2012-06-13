@@ -19,16 +19,13 @@
  * ======================================================================== */
 
 
-$require_current_course = TRUE;
-$path2add = 3;
-
-require_once "../../../include/init.php";
-require_once "../../video/video_functions.php";
+$require_current_course = true;
+require_once '../../../include/init.php';
+require_once 'modules/video/video_functions.php';
 
 $nameTools = $langMediaTypeDesc;
 
-if (isset($_GET['id']))
-{
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $videoPath = $urlServer ."video/". $course_code . $id;
     $videoURL = $urlServer ."modules/video/video.php?course=$course_code&amp;action=download&amp;id=". $id;

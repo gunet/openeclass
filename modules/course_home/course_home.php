@@ -29,19 +29,14 @@
  *
  */
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $guest_allowed = true;
 define('HIDE_TOOL_TITLE', 1);
 
-// $courseHome is used by the breadcrumb logic
-// See function draw() in baseTheme.php for details
-// $courseHome = true;
-// $path2add is used in init.php to fix relative paths
-$path2add = 1;
-include '../../include/baseTheme.php';
-include 'modules/video/video_functions.php';
-include 'include/lib/hierarchy.class.php';
-include 'include/lib/course.class.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/video/video_functions.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
 
 $tree = new hierarchy();
 $course = new course();
@@ -56,10 +51,11 @@ load_js('jquery');
 load_modal_box();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
-//For statistics: record login
-$sql_log = "INSERT INTO logins SET user_id=$uid, course_id = $course_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
+// For statistics: record login
+$sql_log = "INSERT INTO logins SET user_id = $uid, course_id = $course_id, ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
 db_query($sql_log);
-include 'include/action.php';
+
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 

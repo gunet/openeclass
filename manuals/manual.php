@@ -29,7 +29,6 @@
  *
  */
 
-$path2add=2;
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
 $nameTools = $langManuals;

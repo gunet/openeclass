@@ -27,21 +27,18 @@
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading 
 // apo to session
-require_once('../../exercise/exercise.class.php');
-require_once('../../exercise/question.class.php');
-require_once('../../exercise/answer.class.php');
+require_once '../../exercise/exercise.class.php';
+require_once '../../exercise/question.class.php';
+require_once '../../exercise/answer.class.php';
 
-$require_current_course = TRUE;
-
-$path2add = 3;
-include("../../../include/init.php");
+$require_current_course = true;
+require_once '../../../include/init.php';
 
 // Genikws o kwdikas apo edw kai katw kanei akribws o,ti kai to
 // exercise_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai 
-require_once('../../../include/lib/textLib.inc.php');
-
-require_once '../../video/video_functions.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 // answer types
@@ -51,7 +48,7 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 $nameTools = $langExercice;
-$picturePath='../../'.$course_code.'/image';
+$picturePath = 'courses/'.$course_code.'/image';
 
 
 $TBL_EXERCISE           = 'exercise';
