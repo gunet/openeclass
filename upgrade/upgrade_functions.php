@@ -1037,9 +1037,10 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     
     // external links are moved to table `links` with category = -1
         $q1 = db_query("INSERT INTO `$mysqlMainDb`.link
-                        (course_id, url, title, category) 
-                SELECT $course_id, lien, rubrique, -1 FROM accueil
-                        WHERE define_var = 'HTML_PAGE'", $code);
+                               (course_id, url, title, category) 
+                               SELECT $course_id, lien, rubrique, -1 FROM accueil
+                                      WHERE define_var = 'HTML_PAGE' OR
+                                            image = 'external_link'", $code);
         
         $q2 = db_query("INSERT INTO `$mysqlMainDb`.course_module
                         (module_id, visible, course_id) 
@@ -1048,7 +1049,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                                          'MODULE_ID_COURSEINFO', 
                                          'MODULE_ID_USERS', 
                                          'MODULE_ID_USAGE',
-                                         'HTML_PAGE')", $code);
+                                         'HTML_PAGE') AND
+                      image <> 'external_link'", $code);
         
         
         if ($q1 and $q2) { // if everything ok drop course db
