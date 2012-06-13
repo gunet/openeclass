@@ -34,7 +34,7 @@
 $require_current_course = true;
 $require_login = true;
 define('EBOOK', 2);
-include "../../include/baseTheme.php";
+require_once '../../include/baseTheme.php';
 
 if (isset($_GET['uploadPath'])) {
         $uploadPath = q($_GET['uploadPath']);
@@ -44,7 +44,7 @@ if (isset($_GET['uploadPath'])) {
 
 $can_upload = $is_editor;
 if (defined('GROUP_DOCUMENTS')) {
-        include '../group/group_functions.php';
+        require_once 'modules/group/group_functions.php';
         initialize_group_id();
         initialize_group_info($group_id);
 	$can_upload = $can_upload || $is_member;

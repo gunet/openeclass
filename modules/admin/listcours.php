@@ -46,25 +46,25 @@
 ==============================================================================*/
 
 $require_power_user = true;
-include '../../include/baseTheme.php';
-include 'admin.inc.php';
-require_once('../../include/lib/hierarchy.class.php');
-require_once('../../include/lib/course.class.php');
+require_once '../../include/baseTheme.php';
+require_once 'admin.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
 
 $tree = new hierarchy();
 $course = new course();
 
 $nameTools = $langListCours;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$caption = "";
-// Initialize some variables
-$searchurl = "";
+$caption = '';
+$searchurl = '';
+
 // Manage list limits
 $countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course"));
 $fulllistsize = $countcourses['cnt'];
 
-define ('COURSES_PER_PAGE', 15);
+define('COURSES_PER_PAGE', 15);
 
 $limit = isset($_GET['limit'])? intval($_GET['limit']): 0;
 

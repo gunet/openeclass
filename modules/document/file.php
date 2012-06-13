@@ -69,8 +69,8 @@ if (isset($cinfo_components[1])) {
 $require_current_course = true;
 $guest_allowed = true;
 
-include '../../include/init.php';
-include '../../include/action.php';
+require_once '../../include/init.php';
+require_once 'include/action.php';
 
 // check user's access to cours
 check_cours_access();
@@ -79,8 +79,8 @@ check_cours_access();
 $action = new action();
 $action->record(MODULE_ID_DOCS);
 
-include 'doc_init.php';
-include '../../include/lib/forcedownload.php';
+require_once 'doc_init.php';
+require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
         if (!$uid) {
@@ -90,11 +90,11 @@ if (defined('GROUP_DOCUMENTS')) {
                 error($langNoRead);
         }
 } else {
-        $basedir = "{$webDir}courses/$course_code/document";
+        $basedir = "$webDir/courses/$course_code/document";
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if ($file_info['visibility'] != 'v' and !$is_editor) {
+if (!$file_info['visible'] and !$is_editor) {
         error($langNoRead);
 }
 
@@ -102,8 +102,8 @@ if (file_exists($basedir . $file_info['path'])) {
     if (!$is_in_playmode)
         send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
     else {
-        require_once ('../video/video_functions.php');
-        require_once '../../include/lib/fileDisplayLib.inc.php';
+        require_once 'modules/video/video_functions.php';
+        require_once 'include/lib/fileDisplayLib.inc.php';
         
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/document.php?course='. $course_code .'&amp;download='. $file_info['path'];

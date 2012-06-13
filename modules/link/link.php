@@ -37,22 +37,19 @@
  */
 
 $require_current_course = TRUE;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'Link';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
-
-require_once '../video/video_functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
+require_once 'linkfunctions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
-/**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_LINKS);
-/**************************************/
-include '../../include/log.php';
-include 'linkfunctions.php';
 
 $nameTools = $langLinks;
 

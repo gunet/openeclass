@@ -22,15 +22,15 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Conference';
-$tool_content = "";
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
 
 if (!isset($MCU)) {
-	$MCU="";
+	$MCU = '';
 }
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_CHAT);
 /**************************************/

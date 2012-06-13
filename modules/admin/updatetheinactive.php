@@ -34,8 +34,8 @@
 
 
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
-include 'admin.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'admin.inc.php';
 $nameTools = $langAddTime;		// Define $nameTools
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 

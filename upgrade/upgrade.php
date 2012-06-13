@@ -20,9 +20,9 @@
 
 define('UPGRADE', true);
 
-include '../include/baseTheme.php';
-include 'include/lib/fileUploadLib.inc.php';
-include 'include/lib/forcedownload.php';
+require '../include/baseTheme.php';
+require 'include/lib/fileUploadLib.inc.php';
+require 'include/lib/forcedownload.php';
 
 // set default storage engine
 db_query("SET storage_engine=MYISAM");
@@ -34,21 +34,21 @@ set_time_limit(0);
 load_global_messages();
 
 // include_messages
-include("${webDir}lang/$language/common.inc.php");
-$extra_messages = "${webDir}/config/$language.inc.php";
+require "lang/$language/common.inc.php";
+$extra_messages = "config/{$language_codes[$language]}.inc.php";
 if (file_exists($extra_messages)) {
         include $extra_messages;
 } else {
         $extra_messages = false;
 }
-include("${webDir}lang/$language/messages.inc.php");
+require "lang/$language/messages.inc.php";
 if ($extra_messages) {
         include $extra_messages;
 }
 
 $nameTools = $langUpgrade;
 
-$auth_methods = array("imap","pop3","ldap","db");
+$auth_methods = array('imap', 'pop3', 'ldap', 'db');
 $OK = "[<font color='green'> $langSuccessOk </font>]";
 $BAD = "[<font color='red'> $langSuccessBad </font>]";
 

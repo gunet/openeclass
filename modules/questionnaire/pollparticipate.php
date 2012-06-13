@@ -29,7 +29,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langParticipate;
 $navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);

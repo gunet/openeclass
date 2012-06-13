@@ -20,7 +20,7 @@
 
 
 // Functions for the new installer
-include '../template/template.inc.php';
+require_once '../template/template.inc.php';
 function draw($toolContent){
 	global $langUser, $prenom, $nom, $langLogout, $title,  $nameTools, $langHelp, $langAnonUser;
 	global $language, $helpTopic, $require_help, $langEclass, $langCopyrightFooter;

@@ -43,9 +43,9 @@
 ==============================================================================*/
 
 $require_admin = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
-require_once('../../include/lib/hierarchy.class.php');
+
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 

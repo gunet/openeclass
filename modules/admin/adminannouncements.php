@@ -20,11 +20,11 @@
 
 
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
-include '../../include/jscalendar/calendar.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'include/jscalendar/calendar.php';
 
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langAdminAn;
 
 $head_content .= <<<hContent

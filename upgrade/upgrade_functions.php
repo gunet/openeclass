@@ -288,10 +288,10 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 
 	$format = get_file_extension($title);
         $new_filename = safe_filename($format);
-	$path_to_dropbox = $webDir.'courses/'.$code.'/dropbox/';
+	$path_to_dropbox = $webDir.'/courses/'.$code.'/dropbox/';
 
         if (!file_exists($path_to_dropbox.$filename)) {
-                $filename = iconv("UTF-8", "ISO-8859-7", $filename);
+                $filename = iconv('UTF-8', 'ISO-8859-7', $filename);
         }
 
 	if (rename($path_to_dropbox.$filename, $path_to_dropbox.$new_filename)) {
@@ -629,7 +629,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         db_query("DROP TEMPORARY TABLE rel_map");
         
         if (false !== $ok) {
-            $scormPkgDir = $webDir .'courses/'. $code .'/scormPackages';
+            $scormPkgDir = $webDir.'/courses/'.$code.'/scormPackages';
             $pathTkn = 'path_';
             $pathids = array();
 
@@ -1239,7 +1239,7 @@ function upgrade_course_2_4($code, $lang, $extramessage = '')
 	db_query("ALTER TABLE `poll_question` CHANGE `pqid` `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT", $code);
 
         // move old chat files
-        $courses_dir = "${webDir}/courses/";
+        $courses_dir = "$webDir/courses/";
         foreach (array('chat.txt', 'tmpChatArchive.txt') as $f) {
                 $old_chat = $courses_dir . $code . '.' . $f;
                 if (file_exists($old_chat)) {
@@ -1362,7 +1362,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 		encode_dropbox_documents($code, $dbox['id'], $dbox['filename'], $dbox['title']);
 	}
 
-        $course_base_dir = "{$webDir}courses/$code";
+        $course_base_dir = "$webDir/courses/$code";
         if (!is_writable($course_base_dir)) {
                 die ("$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.");
         }
@@ -1898,9 +1898,9 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 	}
 
         // -------------- move video files to new directory ----
-        $course_video = "${webDir}courses/$code/video";
+        $course_video = "$webDir/courses/$code/video";
         if (is_dir($course_video)) {
-                if (!rename($course_video, "${webDir}video/$code")) {
+                if (!rename($course_video, "$webDir/video/$code")) {
                         echo "$langNotMovedDir $course_video $langToDir video<br>";
                 }
         }
@@ -2261,7 +2261,7 @@ function trim_path($path)
 function encode_group_documents($course_code, $group_id, $secret_directory)
 {
         $cwd = getcwd();
-        chdir($GLOBALS['webDir'].'courses/'.$course_code.'/group');
+        chdir($GLOBALS['webDir'].'/courses/'.$course_code.'/group');
 	if (is_dir($secret_directory)) {
 	        traverseDirTree($secret_directory, 'document_upgrade_file', 'document_upgrade_dir', $secret_directory);
 	} else {
@@ -2276,7 +2276,7 @@ function encode_group_documents($course_code, $group_id, $secret_directory)
 function fix_document_date_and_format($code)
 {
         global $webDir;
-        $base = "{$webDir}courses/$code/document";
+        $base = "$webDir/courses/$code/document";
 
         $q = db_query("SELECT * FROM document WHERE date = '0000-00-00 00:00:00' OR date IS NULL");
         while ($file = mysql_fetch_array($q)) {
@@ -2323,7 +2323,7 @@ function fix_multiple_document_entries($table)
 function encode_documents($course_code)
 {
         $cwd = getcwd();
-        chdir($GLOBALS['webDir'].'courses/'.$course_code);
+        chdir($GLOBALS['webDir'].'/courses/'.$course_code);
         traverseDirTree('document', 'document_upgrade_file', 'document_upgrade_dir', 'document');
         chdir($cwd);
 }
@@ -2367,7 +2367,7 @@ function upgrade_video($file, $id, $code)
         $fileName = add_ext_on_mime($fileName);
 	$fileName = php2phps($fileName);
         $safe_filename = date("YmdGis")."_".randomkeys('3').".".get_file_extension($fileName);
-	$path_to_video = $webDir.'video/'.$code.'/';
+	$path_to_video = $webDir.'/video/'.$code.'/';
         if (rename($path_to_video.$file, $path_to_video.$safe_filename)) {
         	db_query("UPDATE video SET path = '$safe_filename'
 	        	WHERE id = '$id'", $code);
@@ -2433,7 +2433,7 @@ function convert_description_to_units($code, $course_id)
 function upgrade_course_index_php($code)
 {
         global $langUpgNotIndex, $langCheckPerm;
-        $course_base_dir = "$GLOBALS[webDir]courses/$code";
+        $course_base_dir = "$GLOBALS[webDir]/courses/$code";
         if (!is_writable($course_base_dir)) {
                 echo "$langUpgNotIndex \"$course_base_dir\"! $langCheckPerm.<br>";
                 return;
@@ -2458,7 +2458,7 @@ function move_group_documents_to_main_db($code, $course_id)
                 return false;
         }
         while ($r = mysql_fetch_array($q)) {
-                $group_document_dir = $webDir . 'courses/' . $code . '/group/' . $r['secretDirectory'];
+                $group_document_dir = $webDir . '/courses/' . $code . '/group/' . $r['secretDirectory'];
                 list($new_group_id) = mysql_fetch_row(db_query("SELECT id FROM `$mysqlMainDb`.`group`
                                                                 WHERE course_id = $course_id AND
                                                                       secret_directory = '$r[secretDirectory]'"));
@@ -2516,27 +2516,27 @@ function mkdir_or_error($dirname)
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages()
 {
-        global $global_messages, $native_language_names, $webDir, $siteName, $InstitutionUrl, $Institution;
+        global $global_messages, $native_language_names, $language_codes, 
+               $webDir, $siteName, $InstitutionUrl, $Institution;
 
         foreach ($native_language_names as $code => $name) {
-                $templang = $code;
                 // include_messages
-                include("${webDir}lang/$templang/common.inc.php");
-                $extra_messages = "${webDir}/config/$templang.inc.php";
+                include "$webDir/lang/$code/common.inc.php";
+                $extra_messages = "config/{$language_codes[$code]}.inc.php";
                 if (file_exists($extra_messages)) {
                         include $extra_messages;
                 } else {
                         $extra_messages = false;
                 }
-                include("${webDir}lang/$templang/messages.inc.php");
+                include "$webDir/lang/$code/messages.inc.php";
                 if ($extra_messages) {
                         include $extra_messages;
                 }
-                $global_messages['langCourseDescription'][$templang] = $langCourseDescription;
-                $global_messages['langCourseUnits'][$templang] = $langCourseUnits;
-                $global_messages['langGlossary'][$templang] = $langGlossary;
-                $global_messages['langEBook'][$templang] = $langEBook;
-                $global_messages['langVideo'][$templang] = $langVideo;
+                $global_messages['langCourseDescription'][$code] = $langCourseDescription;
+                $global_messages['langCourseUnits'][$code] = $langCourseUnits;
+                $global_messages['langGlossary'][$code] = $langGlossary;
+                $global_messages['langEBook'][$code] = $langEBook;
+                $global_messages['langVideo'][$code] = $langVideo;
         }
 }
 

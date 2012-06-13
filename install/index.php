@@ -54,17 +54,17 @@ if ($lang == 'en') {
 	$install_info_file = "install_info.php";
 }
 
-include '../include/lib/main.lib.php';
-include 'install_functions.php';
+require_once '../include/lib/main.lib.php';
+require_once 'install_functions.php';
 // include_messages
-include "../lang/$lang/common.inc.php";
-$extra_messages = "../config/$lang.inc.php";
+require_once "../lang/$lang/common.inc.php";
+$extra_messages = "config/{$language_codes[$language]}.inc.php";
 if (file_exists($extra_messages)) {
         include $extra_messages;
 } else {
         $extra_messages = false;
 }
-include "../lang/$lang/messages.inc.php";
+require_once "../lang/$lang/messages.inc.php";
 if ($extra_messages) {
         include $extra_messages;
 }

@@ -19,9 +19,9 @@
  * ======================================================================== */
 
 $require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
-include '../auth/auth.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
+require_once 'modules/auth/auth.inc.php';
 
 $head_content = '
 <script type="text/javascript">

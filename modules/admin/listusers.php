@@ -24,12 +24,12 @@
 *  			eMail: info@openeclass.org
 * ========================================================================*/
 
-$require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-include_once '../../modules/auth/auth.inc.php';
-include 'admin.inc.php';
+$require_usermanage_user = true;
+require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
+require_once 'admin.inc.php';
 
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langListUsersActions;
 
 define ('USERS_PER_PAGE', 15);

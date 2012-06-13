@@ -18,12 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-// Othewise exit with appropriate message
 $require_usermanage_user = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
-// Define $nameTools
+
+require_once '../../include/baseTheme.php';
+
 $nameTools = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 

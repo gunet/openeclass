@@ -34,13 +34,13 @@ $require_help = TRUE;
 $helpTopic = 'Agenda';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
-include '../../include/action.php';
-include '../../include/log.php';
-include '../../include/jscalendar/calendar.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'include/action.php';
+require_once 'include/log.php';
+require_once 'include/jscalendar/calendar.php';
 
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $action = new action();

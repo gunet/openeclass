@@ -29,8 +29,8 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'Work';
 
-include '../../include/baseTheme.php';
-include 'include/lib/forcedownload.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
 
 $head_content = "
 <script type='text/javascript'>
@@ -72,23 +72,23 @@ function checkrequired(which, entry) {
 hContent;
 
 // For using with the pop-up calendar
-include 'jscalendar.inc.php';
+require_once 'jscalendar.inc.php';
 require_once '../video/video_functions.php';
 load_modal_box();
 
 /**** The following is added for statistics purposes ***/
-include 'include/action.php';
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /**************************************/
 
-include 'work_functions.php';
-include 'modules/group/group_functions.php';
-include 'include/lib/fileUploadLib.inc.php';
-include 'include/lib/fileManageLib.inc.php';
-include 'include/sendMail.inc.php';
-include 'include/libchart/libchart.php';
-include 'include/log.php';
+require_once 'work_functions.php';
+require_once 'modules/group/group_functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/sendMail.inc.php';
+require_once 'include/libchart/libchart.php';
+require_once 'include/log.php';
 
 $workPath = $webDir."courses/".$course_code."/work";
 

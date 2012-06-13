@@ -2,8 +2,8 @@
 
 define('INDEX_START', 1);
 $path2add = 0;
-include 'include/baseTheme.php';
-include 'modules/auth/auth.inc.php';
+require_once 'include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 $tool_content = '';
 $warning = '';
 $login_user = FALSE;

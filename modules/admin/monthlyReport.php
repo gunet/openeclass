@@ -19,7 +19,6 @@
  * ======================================================================== */
 
 
-
 /*
 ===========================================================================
     admin/monthlyReport.php
@@ -32,32 +31,28 @@
 ==============================================================================
 */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-$require_admin = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
-// Define $nameTools
+$require_admin = true;
+require_once '../../include/baseTheme.php';
+
 $nameTools = $langMonthlyReport;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-// Initialise $tool_content
-$tool_content = "";
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
-      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
-      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+  <div id='operations_container'>
+    <ul id='opslist'>
+      <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
+      <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
+      <li><a href='visitsCourseStats.php?first='>$langVisitsCourseStats</a></li>
+      <li><a href='oldStats.php'>$langOldStats</a></li>
     </ul>
   </div>";
 
 $months = "";
 for ($i=0; $i<12; $i++)
 {
-  $mon = mktime(0, 0, 0, date("m")-$i-1, date("d"),  date("Y"));
-  $mval = date("m Y", $mon);
-  $months .= "<option value='$mval'>".$langMonths[date("m", $mon)] . date(" Y", $mon);
+  $mon = mktime(0, 0, 0, date('m')-$i-1, date('d'),  date('Y'));
+  $mval = date('m Y', $mon);
+  $months .= "<option value='$mval'>".$langMonths[date('m', $mon)] . date(' Y', $mon);
 }
 
 $tool_content .= '
@@ -69,31 +64,31 @@ $tool_content .= '
 
 if (isset($_POST["selectedMonth"])) {
 
-    $month = $_POST["selectedMonth"];
-    list($m, $y) = explode(' ',$month);  //only month
-    $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details FROM monthly_summary ".
-        "WHERE `month` = '$month'";
+        $month = $_POST["selectedMonth"];
+        list($m, $y) = explode(' ', $month);  //only month
+        $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
+                       FROM monthly_summary WHERE `month` = ".quote($month);
 
-    $result = db_query($sql, $mysqlMainDb);
-    $coursNum='';
-    while ($row = mysql_fetch_assoc($result)) {
-            $profesNum = $row['profesNum'];
-            $studNum = $row['studNum'];
-            $visitorsNum = $row['visitorsNum'];
-            $coursNum = $row['coursNum'];
-            $logins = $row['logins'];
-            $details = $row['details'];
-    }
-    mysql_free_result($result);
+        $result = db_query($sql, $mysqlMainDb);
+        $coursNum='';
+        while ($row = mysql_fetch_assoc($result)) {
+                $profesNum = $row['profesNum'];
+                $studNum = $row['studNum'];
+                $visitorsNum = $row['visitorsNum'];
+                $coursNum = $row['coursNum'];
+                $logins = $row['logins'];
+                $details = $row['details'];
+        }
+        mysql_free_result($result);
 
-	if (isset($localize) and $localize == 'greek') {
-		$msg_of_month = substr($langMonths[$m], 0, -1);
-	} else {
-		$msg_of_month = $langMonths[$m];
-	}
+        if (isset($localize) and $localize == 'greek') {
+                $msg_of_month = substr($langMonths[$m], 0, -1);
+        } else {
+                $msg_of_month = $langMonths[$m];
+        }
 
-	if ($coursNum) {
-		$tool_content .= '
+        if ($coursNum) {
+            $tool_content .= '
 		<table class="FormData" width="99%" align="left">
 		<tbody>
 		<tr>
@@ -128,7 +123,7 @@ if (isset($_POST["selectedMonth"])) {
 		<td colspan="2">'.$details. '</td>
 		</tr>
 		</tbody>
-		</table>';           //$details includes an html table with all details
+		</table>';           // $details includes an html table with all details
     } else {
         $tool_content .= '<div class="alert1">'.$langNoReport.': '.$msg_of_month.' '.$y.'</div>';
     }

@@ -31,7 +31,7 @@
 
 $path2add=2;
 $mail_ver_excluded = true;
-include '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 $nameTools = $langManuals;
 
 $urlServerTemp = strrev(substr(strrev($urlServer),1));

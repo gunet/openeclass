@@ -41,24 +41,21 @@
 
 ==============================================================================*/
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_usermanage_user = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
-// Include functions needed to send email
-include('../../include/sendMail.inc.php');
-// Define $nameTools
-$nameTools=$langSendInfoMail;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
+
+$nameTools = $langSendInfoMail;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 /*****************************************************************************
 		MAIN BODY
 ******************************************************************************/
 // Send email after form post
-if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] == $langSend)) {
+if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
 	// Where to send the email
-	if ($_POST['sendTo'] == "0") {
+	if ($_POST['sendTo'] == '0') {
 		// All users
 		$sql = db_query("SELECT email, user_id FROM user");
 	} elseif ($_POST['sendTo'] == "1") {

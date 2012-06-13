@@ -30,10 +30,9 @@
 ==============================================================================
 */
 
-// BASETHEME, OTHER INCLUDES AND NAMETOOLS
-$require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-require_once '../../include/libchart/libchart.php';
+$require_usermanage_user = true;
+require_once '../../include/baseTheme.php';
+require_once 'include/libchart/libchart.php';
 $nameTools = $langVersion;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
@@ -66,11 +65,11 @@ if(!empty($u))
 		$k = 0;
 		for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 			$logs = mysql_fetch_array($sql);
-			if ($k%2 == 0) {
-		              $tool_content .= "<tr class=\"even\">";
-	                } else {
-		                $tool_content .= "<tr class=\"odd\">";
-	                }
+                        if ($k%2 == 0) {
+                                $tool_content .= "<tr class='even'>";
+                        } else {
+                                $tool_content .= "<tr class='odd'>";
+                        }
 			$tool_content .= "<td class='bullet' width='1'></td>
 				<td align='left'>".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
 				<td><div align='center'>";
@@ -132,7 +131,7 @@ if(!empty($u))
 		$chart->setDataSet($dataSet);
 		$chart->setTitle($langCourseVisits);
 		$chart_path = 'courses/chart_'.md5(serialize($chart)).'.png';
-		$chart->render($webDir.$chart_path);
+		$chart->render($webDir.'/'.$chart_path);
 		$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
 		$made_chart = true;
 	}
@@ -142,14 +141,14 @@ if(!empty($u))
 	$leResultat = db_query($sql, $mysqlMainDb);
 	$tool_content .= "<p>$langLastUserVisits $info[2]</p>\n";
 	$tool_content .= "
-	      <table class='tbl_alt' width=\"99%\">
+	      <table class='tbl_alt' width='99%'>
 	      <tr>
-		<th colspan=\"2\"><div align=\"left\">&nbsp;&nbsp;$langDate</div></th>
+		<th colspan='2'><div align='left'>&nbsp;&nbsp;$langDate</div></th>
 		<th>$langAction</th>
 	      </tr>";
 	$i = 0;
-	$nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-	$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
+	$nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
+	$nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
 	$i=0;
 	while ($leRecord = mysql_fetch_array($leResultat)) {
 		$when = $leRecord["when"];
@@ -158,11 +157,11 @@ if(!empty($u))
 			$tool_content .= "<tr>";
 		} else {
 			$tool_content .= "
-			<tr class=\"odd\">";
+			<tr class='odd'>";
 		}
 		$tool_content .= "<td class='bullet' width='1'></td>
 			<td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-			<td align=\"center\"><div align=\"center\">".$nomAction[$action]."</div></td>
+			<td align='center'><div align='center'>".$nomAction[$action]."</div></td>
 		      </tr>";
 		$i++;
 	}

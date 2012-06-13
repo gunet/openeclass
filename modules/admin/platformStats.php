@@ -35,7 +35,7 @@
 // Othewise exit with appropriate message
 $require_admin = TRUE;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langVisitsStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats.": ".$langVisitsStats;
@@ -51,13 +51,8 @@ $tool_content .= "
   </div>";
 
 // jscalendar is used in order to select the time period for the statistics
-include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
-
+require_once 'include/jscalendar/calendar.php';
+$lang = ($language == 'el')? 'el': 'en';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 

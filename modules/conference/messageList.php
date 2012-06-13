@@ -20,7 +20,7 @@
 
 
 $require_current_course = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
@@ -34,11 +34,11 @@ body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 </head>
 <body>
 <?php
-include '../../include/lib/textLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 
-$coursePath = $webDir."courses";
-$fileChatName = $coursePath.'/'.$course_code.'/chat.txt';
-$tmpArchiveFile = $coursePath.'/'.$course_code.'/tmpChatArchive.txt';
+$coursePath = $webDir.'/courses/';
+$fileChatName = $coursePath.$course_code.'/chat.txt';
+$tmpArchiveFile = $coursePath.$course_code.'/tmpChatArchive.txt';
 
 $nick = uid_to_name($uid);
 
@@ -72,7 +72,7 @@ if (isset($_GET['reset']) && $is_editor) {
 
 // store
 if (isset($_GET['store']) && $is_editor) {
-        include '../document/doc_init.php';
+        require_once 'modules/document/doc_init.php';
 	$saveIn = "chat.".date("Y-m-j-B").".txt";
 	$chat_filename = '/' . safe_filename('txt');
 

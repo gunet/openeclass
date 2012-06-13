@@ -35,10 +35,11 @@
 ==============================================================================
 */
 
-$require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
+$require_usermanage_user = true;
+require_once '../../include/baseTheme.php';
+
 $nameTools = $langUnregUser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+$navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them
 $u = isset($_GET['u'])? intval($_GET['u']): false;

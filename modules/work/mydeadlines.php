@@ -19,9 +19,9 @@
  * ======================================================================== */
 
 define('INDEX_START', 1);
-include '../../include/baseTheme.php';
-include 'modules/video/video_functions.php';
-include 'include/perso.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/video/video_functions.php';
+require_once 'include/perso.php';
 
 $nameTools = $langMyPersoDeadlines;
 

@@ -21,19 +21,19 @@
 $require_current_course = TRUE;
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 /**** The following is added for statistics purposes ***/
-include '../../include/action.php';
+require_once 'include/action.php';
 $action = new action();
-include 'doc_init.php';
-include 'doc_metadata.php';
-include '../../include/lib/forcedownload.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-include '../../include/lib/fileManageLib.inc.php';
-include '../../include/lib/fileUploadLib.inc.php';
-include '../../include/pclzip/pclzip.lib.php' ;
-require_once '../video/video_functions.php';
-include '../../include/log.php';
+require_once 'doc_init.php';
+require_once 'doc_metadata.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/pclzip/pclzip.lib.php' ;
+require_once 'modules/video/video_functions.php';
+require_once 'include/log.php';
 
 load_js('tools.js');
 load_modal_box(true);
@@ -129,7 +129,7 @@ if (isset($_GET['download'])) {
 
         if ($format == '.dir') {
                 $real_filename = $real_filename.'.zip';
-                $dload_filename = $webDir . 'courses/temp/'.safe_filename('zip');
+                $dload_filename = $webDir . '/courses/temp/'.safe_filename('zip');
                 zip_documents_directory($dload_filename, $downloadDir, $is_editor);
                 $delete = true;
         } else {

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'include/baseTheme.php';
+require_once 'include/baseTheme.php';
 
 if (!isset($_SESSION['saved_editor'])) {
     $course_id = course_code_to_id($_GET['course']);

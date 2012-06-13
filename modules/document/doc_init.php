@@ -25,7 +25,7 @@ define('GROUP', 1);
 define('EBOOK', 2);
 $can_upload = $is_editor;
 if (defined('GROUP_DOCUMENTS')) {
-        include '../group/group_functions.php';
+        require_once 'modules/group/group_functions.php';
 	$subsystem = GROUP;
         initialize_group_id();
         initialize_group_info($group_id);        
@@ -36,7 +36,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;' . $groupset;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $basedir = $webDir . 'courses/' . $course_code . '/group/' . $secret_directory;
+        $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;
 	$can_upload = $can_upload || $is_member;
         $nameTools = $langGroupDocumentsLink;
 } elseif (defined('EBOOK_DOCUMENTS')) {
@@ -49,7 +49,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;' . $groupset;
         $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
+        $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
 } else {
 	$subsystem = MAIN;
         $base_url = $_SERVER['PHP_SELF'] . '?course=' .$course_code .'&amp;';
@@ -57,7 +57,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $groupset = '';
         $group_sql = "course_id = $course_id AND subsystem = $subsystem";
         $group_hidden_input = '';
-        $basedir = $webDir . 'courses/' . $course_code . '/document';
+        $basedir = $webDir . '/courses/' . $course_code . '/document';
         $nameTools = $langDoc;
 }       
 mysql_select_db($mysqlMainDb);

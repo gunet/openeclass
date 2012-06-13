@@ -30,10 +30,10 @@
  *
  */
 
-include 'functions.php';
+require_once 'functions.php';
 
-include '../../include/lib/forcedownload.php';
-include 'include/sendMail.inc.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/sendMail.inc.php';
 
 $nameTools = $dropbox_lang['dropbox'];
 

@@ -410,11 +410,12 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
     This scipt uses the 'gaugebar.php' class for the graphic gauge bar
 ===============================================================*/
 
+require_once 'include/lib/gaugebar.php';
+
 function showquota($quota, $used) {
 
 	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, 
                $course_code, $subsystem, $group_id;
-	include 'gaugebar.php';
 
 	$retstring = '';
 	

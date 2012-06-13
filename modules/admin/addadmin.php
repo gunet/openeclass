@@ -18,13 +18,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
+
 $nameTools = $langAdmins;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
 // Initialize the incoming variables
 $username = isset($_POST['username'])?$_POST['username']:'';
 

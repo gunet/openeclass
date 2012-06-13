@@ -37,7 +37,7 @@
 // Othewise exit with appropriate message
 $require_admin = TRUE;
 // Include baseTheme
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 // Define $nameTools
 $nameTools = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -53,18 +53,15 @@ $tool_content .= "
   </div>";
 
 
-//move data from table 'loginout' to 'loginout_summary' if older than eight months
-require_once "summarizeLogins.php";
-#see if chart has content
-$chart_content=0;
+// move data from table 'loginout' to 'loginout_summary' if older than eight months
+require_once 'summarizeLogins.php';
 
-include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
+// see if chart has content
+$chart_content = 0;
 
+require_once 'include/jscalendar/calendar.php';
+
+$lang = ($language == 'el')? 'el': 'en';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
@@ -124,14 +121,14 @@ if (!extension_loaded('gd')) {
                 $chart_content=1;
             }
     
-        $chart->setTitle("$langOldStats");
+        $chart->setTitle($langOldStats);
     
         mysql_free_result($result);
-        if (!file_exists("../../courses/temp")) {
-            mkdir("../../courses/temp", 0777);
+        if (!file_exists("courses/temp")) {
+            mkdir("courses/temp", 0777);
         }
         $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-        $chart->render($webDir.$chart_path);
+        $chart->render($webDir.'/'.$chart_path);
     }
     
 //check if there are statistics to show

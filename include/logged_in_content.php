@@ -49,7 +49,7 @@ jQuery(document).ready(function() {
 });
 </script>";
 
-include 'include/perso.php';
+require_once 'include/perso.php';
 
 $tool_content = "
 <div class='panel_left'>

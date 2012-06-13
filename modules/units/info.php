@@ -24,9 +24,9 @@ Units module
 */
 
 $require_current_course = true;
-$require_help = TRUE;
+$require_help = true;
 $helpTopic = 'AddCourseUnits';
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langEditUnit;
 

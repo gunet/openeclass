@@ -27,8 +27,8 @@ $require_current_course = TRUE;
 $require_login = true;
 $require_editor = true;
 
-include '../../include/baseTheme.php';
-include '../units/functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/units/functions.php';
 
 $tool_content = $head_content = "";
 $nameTools = $langEditCourseProgram ;

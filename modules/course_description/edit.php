@@ -36,8 +36,8 @@ $helpTopic = 'Coursedescription';
 $require_login = true;
 $require_editor = true;
 
-include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langEditCourseProgram ;
 $navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langCourseProgram);

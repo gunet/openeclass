@@ -20,7 +20,7 @@
 
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langDelCourse;
 

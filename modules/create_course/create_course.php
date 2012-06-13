@@ -315,18 +315,18 @@ if (isset($_POST['create_course'])) {
 
         // create new course code: uppercase, no spaces allowed
         $code = strtoupper(new_code($departments[0]));
-        $code = str_replace (' ', '', $code);
+        $code = str_replace(' ', '', $code);
 
         $language = $_POST['languageCourse'];
         // include_messages
-        include("${webDir}lang/$language/common.inc.php");
-        $extra_messages = "${webDir}/config/$language.inc.php";
+        include("lang/$language/common.inc.php");
+        $extra_messages = "config/{$language_codes[$language]}.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("${webDir}lang/$language/messages.inc.php");
+        include("lang/$language/messages.inc.php");
         if ($extra_messages) {
                 include $extra_messages;
         }

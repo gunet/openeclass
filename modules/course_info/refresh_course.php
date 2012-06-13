@@ -32,8 +32,8 @@ $require_current_course = TRUE;
 $require_course_admin = TRUE;
 $require_login = TRUE;
 
-include '../../include/baseTheme.php';
-include 'include/jscalendar/calendar.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/jscalendar/calendar.php';
 
 $nameTools = $langRefreshCourse;
 

@@ -37,19 +37,18 @@
 ==============================================================================
 */
 
-//  BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-include_once '../../modules/auth/auth.inc.php';
-include 'admin.inc.php';
-include '../../include/jscalendar/calendar.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
+require_once 'admin.inc.php';
+require_once 'include/jscalendar/calendar.php';
 
 $head_content = "";
 $lang_jscalendar = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
 
 // Main body

@@ -22,14 +22,12 @@
  * Announcements RSS Feed Component 
  */
 
-$path2add = 0;
-include 'include/init.php';
+require_once 'include/init.php';
 
-$rss_lang = langname_to_code($language);
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
 		FROM admin_announcements
-		WHERE visible = 'V' AND lang = '$rss_lang'
-		ORDER BY `date` DESC", $mysqlMainDb);
+		WHERE visible = 1 AND lang = '$language'
+		ORDER BY `date` DESC");
 list($lastbuilddate) = mysql_fetch_row($result);
 
 header ("Content-Type: application/xml;");
@@ -38,15 +36,15 @@ echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
 echo "<atom:link href='${urlServer}rss.php' rel='self' type='application/rss+xml' />";
 echo "<title>$langAnnouncements $siteName</title>";
-echo "<link>".$urlServer."rss.php?lang=".$rss_lang."</link>";
+echo "<link>".$urlServer."rss.php?lang=$language</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
-echo "<language>".$rss_lang."</language>";
+echo "<language>".$language."</language>";
 
 $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
 		FROM admin_announcements
-		WHERE visible = 'V' AND lang = '$rss_lang'
-		ORDER BY `date` DESC", $mysqlMainDb);
+		WHERE visible = 'V' AND lang = '$language'
+		ORDER BY `date` DESC");
 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";

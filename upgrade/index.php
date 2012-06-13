@@ -19,12 +19,12 @@
  * ======================================================================== */
 
 define('UPGRADE', true);
-$path2add = 2;
-include '../include/baseTheme.php';
+
+require_once '../include/baseTheme.php';
 
 $nameTools = $langUpgrade;
 
-if ($GLOBALS['language'] == 'el') {
+if ($language == 'el') {
 	$upgrade_info_file = 'upgrade_info.php';
 	$link_changes_file = 'CHANGES_el.txt';
 } else {

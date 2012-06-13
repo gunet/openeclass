@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-include '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 $nameTools = $langInfo;
 $tool_content .= "<table class='tbl_1' width='100%'>
 <tr'>

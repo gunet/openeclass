@@ -19,6 +19,6 @@
  * ======================================================================== */
 
 define('FILE_PHP__PLAY_MODE', 1);
-require_once('file.php');
+require_once 'file.php';
 
 exit();

@@ -18,19 +18,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_power_user = true;
-// Include baseTheme
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
+
 if(!isset($_GET['c'])) { die(); }
-// Define $nameTools
+
 $nameTools = $langAdminUsers;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
-// Initialise $tool_content
-$tool_content = "";
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'editcours.php?c='.htmlspecialchars($_GET['c']), 'name' => $langCourseEdit);
 
 // Initialize some variables
 $cid = course_code_to_id($_GET['c']);

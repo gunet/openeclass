@@ -21,9 +21,9 @@
 
 $require_current_course = TRUE;
 
-include '../../include/baseTheme.php';
-include 'work_functions.php';
-include 'modules/group/group_functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'work_functions.php';
+require_once 'modules/group/group_functions.php';
 
 $nameTools = $m['grades'];
 

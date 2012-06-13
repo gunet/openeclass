@@ -30,32 +30,25 @@
 ==============================================================================
 */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-$require_admin = TRUE;
-// Include baseTheme
-include '../../include/baseTheme.php';
-// Define $nameTools
+$require_admin = true;
+
+require_once '../../include/baseTheme.php';
+
 $nameTools = $langVisitsCourseStats;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
-      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
-      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
+  <div id='operations_container'>
+    <ul id='opslist'>
+      <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
+      <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
+      <li><a href='oldStats.php'>$langOldStats</a></li>
+      <li><a href='monthlyReport.php'>$langMonthlyReport</a></li>
     </ul>
   </div>";
 
-include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
-
+require_once 'include/jscalendar/calendar.php';
+$lang = ($language == 'el')? 'el': 'en';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
@@ -67,7 +60,7 @@ if (!extension_loaded('gd')) {
   /********************************************
     start making the chart
   *********************************************/
-    require_once '../../include/libchart/libchart.php';
+    require_once 'include/libchart/libchart.php';
 
     //default values for chart
     $usage_defaults = array (
@@ -248,17 +241,17 @@ if (!extension_loaded('gd')) {
         mysql_free_result($result);
     }
 
-    if (!file_exists("../../courses/temp")) {
-        mkdir("../../courses/temp", 0777);
+    if (!file_exists('courses/temp')) {
+        mkdir('courses/temp', 0777);
     }
 
     $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 
-    $chart->render($webDir.$chart_path);
+    $chart->render($webDir.'/'.$chart_path);
 
     //check if there are statistics to show
-if ($chart_content) {
-    $tool_content .= '
+    if ($chart_content) {
+            $tool_content .= '
     <table class="FormData" width="99%" align="left">
     <tbody>
     <tr>
@@ -267,8 +260,8 @@ if ($chart_content) {
     </tr>
     </tbody>
     </table>';    
-} elseif (isset($btnUsage) and $chart_content == 0) {
-    $tool_content .= '
+    } elseif (isset($btnUsage) and $chart_content == 0) {
+            $tool_content .= '
     <table class="FormData" width="99%" align="left">
     <tbody>
     <tr>
@@ -281,7 +274,7 @@ if ($chart_content) {
 $tool_content .= '<br />';
 
 /*************************************************************************
-   making the Form for determining time period, time interval and course
+   Form for determining time period, time interval and course
 ***************************************************************************/
 
     //calendar for determining start and end date
@@ -314,11 +307,11 @@ $tool_content .= '<br />';
     }
 
     if (isset($_GET['first'])) {
-        $firstletter = $_GET['first'];
-        $qry = "SELECT code, title FROM course 
-                WHERE LEFT(title,1) = '".mysql_real_escape_string($firstletter)."'";
+            $firstletter = $_GET['first'];
+            $qry = "SELECT code, title FROM course 
+                           WHERE LEFT(title,1) = '".mysql_real_escape_string($firstletter)."'";
     } else {
-        $qry = "SELECT code, title FROM course";
+            $qry = "SELECT code, title FROM course";
     }
 
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
@@ -341,7 +334,7 @@ $tool_content .= '<br />';
             '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
     //form
-     $tool_content .= '
+    $tool_content .= '
     <form method="post">
     <table class="FormData" width="99%" align="left">
     <tbody>

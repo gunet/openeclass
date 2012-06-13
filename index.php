@@ -37,10 +37,10 @@ define('INDEX_START', 1);
 define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
-include 'include/baseTheme.php';
-include 'include/CAS/CAS.php';
-include 'modules/auth/auth.inc.php';
-include 'modules/video/video_functions.php';
+require_once 'include/baseTheme.php';
+require_once 'include/CAS/CAS.php';
+require_once 'modules/auth/auth.inc.php';
+require_once 'modules/video/video_functions.php';
 
 load_modal_box();
 // $homePage is used by baseTheme.php to parse correctly the breadcrumb
@@ -54,11 +54,11 @@ if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
         $db = false;
 }
 if (!$db) {
-	include 'include/not_installed.php';
+	require_once 'include/not_installed.php';
 }
 
 // unset system that records visitor only once by course for statistics
-include 'include/action.php';
+require_once 'include/action.php';
 if (isset($dbname)) {        
         $action = new action();
         $action->record('MODULE_ID_UNITS', 'exit');
@@ -109,14 +109,14 @@ if (isset($_GET['logout']) and $uid) {
 // in case he has a different language set in his/her profile
 if (isset($language)) {
         // include_messages
-        include("lang/$language/common.inc.php");
-        $extra_messages = "config/$language.inc.php";
+        include "lang/$language/common.inc.php";
+        $extra_messages = "config/{$language_codes[$language]}.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("lang/$language/messages.inc.php");
+        include "lang/$language/messages.inc.php";
         if ($extra_messages) {
                 include $extra_messages;
         }
@@ -140,7 +140,7 @@ if ($uid AND !isset($_GET['logout'])) {
                         exit;
                 } else { // if course was deleted stop guest account
                         $warning = "<br><font color='red'>$langInvalidGuestAccount</font><br>";
-                        include "include/logged_out_content.php";
+                        require_once "include/logged_out_content.php";
                         draw($tool_content, 0);
                 }
         }
@@ -148,13 +148,13 @@ if ($uid AND !isset($_GET['logout'])) {
 	$require_help = true;
 	$helpTopic = 'Portfolio';
 
-        if ($_SESSION['user_perso_active']) {
+        if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active']) {
                 // if the user is not a guest, load personalized view
-                include "include/logged_in_content.php";
+                require_once "include/logged_in_content.php";
                 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
 	} else {
 		// load classic view
-		include "include/classic.php";
+		require_once "include/classic.php";
 		draw($tool_content, 1, null, $head_content);
 	}
 } else {
@@ -162,6 +162,6 @@ if ($uid AND !isset($_GET['logout'])) {
         $helpTopic = "Init";
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
                     $urlServer . "rss.php'>";
-	include "include/logged_out_content.php";
+	require_once "include/logged_out_content.php";
 	draw($tool_content, 0, null, $rss_link);
 }

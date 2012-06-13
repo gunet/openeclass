@@ -18,24 +18,17 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
-$require_admin = TRUE;
-include '../../include/baseTheme.php';
+$require_admin = true;
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langCleanUp;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
-
-// Initialise $tool_content
-$tool_content = "";
 
 if (isset($_POST['submit'])) {
 	foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
 		$tool_content .= sprintf("<p class='success'>$langCleaningUp</p>", "<b>$days</b>",
 			($days == 1)? $langDaySing: $langDayPlur, $dir);
-		cleanup("${webDir}courses/$dir", $days);
+		cleanup("$webDir/courses/$dir", $days);
 	}
 } else {
 	$tool_content .= "

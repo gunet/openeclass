@@ -28,9 +28,9 @@
 */
 
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langChangeUser;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
 	$sql = "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang

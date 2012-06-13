@@ -19,15 +19,15 @@
  * ======================================================================== */
 
 $require_power_user = true;
-include '../../include/baseTheme.php';
-include 'upgrade/upgrade_functions.php';
-include 'include/lib/fileUploadLib.inc.php';
-include 'include/lib/fileManageLib.inc.php';
-include 'include/lib/forcedownload.php';
-include 'include/pclzip/pclzip.lib.php';
+require_once '../../include/baseTheme.php';
+require_once 'upgrade/upgrade_functions.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'include/pclzip/pclzip.lib.php';
 
-include 'include/lib/course.class.php';
-include 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $treeObj = new hierarchy();
 $courseObj = new course();
@@ -849,7 +849,7 @@ function course_index($dir, $code) {
 session_start();
 \$dbname=\"$code\";
 \$_SESSION['dbname']=\"$code\";
-include(\"../../modules/course_home/course_home.php\");
+require_once(\"../../modules/course_home/course_home.php\");
 ");
 	fclose($f);
 }

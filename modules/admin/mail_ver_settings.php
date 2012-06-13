@@ -28,9 +28,9 @@
  */
 
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langMailVerification;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $mr = get_config('email_required')? $m['yes']: $m['no'];
 $mv = get_config('email_verification_required')? $m['yes']: $m['no'];

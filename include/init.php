@@ -35,7 +35,7 @@ if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
-include 'include/main_lib.php';
+require_once 'include/main_lib.php';
 
 // If session isn't started, start it
 if (!session_id()) { session_start(); }
@@ -45,18 +45,18 @@ header('Content-Type: text/html; charset=UTF-8');
 $active_ui_languages = array('el', 'en', 'es', 'de');
 
 if (is_readable('config/config.php')) {
-        include('config/config.php');
+        require_once 'config/config.php';
 } else {
-	include 'include/not_installed.php';
+	require_once 'include/not_installed.php';
 }
 if (!isset($mysqlServer)) {
-	include 'include/not_installed.php';
+	require_once 'include/not_installed.php';
 }
 
 // Connect to database
 @$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
 if (!$db) {
-	include 'include/not_installed.php';
+	require_once 'include/not_installed.php';
 }
 if (mysql_version()) {
         db_query('SET NAMES utf8');
@@ -102,7 +102,7 @@ $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
 $purifier->config->set('Filter.Custom', array( new HTMLPurifier_Filter_MyIframe() ));
 // PHP Math Publisher
-include 'include/phpmathpublisher/mathpublisher.php';
+require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
 define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
 // Set active user interface languages
@@ -126,14 +126,14 @@ if (isset($_SESSION['langswitch'])) {
 
 
 // include_messages
-include "$webDir/lang/$language/common.inc.php";
-$extra_messages = "$webDir/config/$language.inc.php";
+require "$webDir/lang/$language/common.inc.php";
+$extra_messages = "config/{$language_codes[$language]}.inc.php";
 if (file_exists($extra_messages)) {
 	include $extra_messages;
 } else {
 	$extra_messages = false;
 }
-include "$webDir/lang/$language/messages.inc.php";
+require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
 	include $extra_messages;
 }
@@ -372,7 +372,7 @@ if (isset($require_current_course) and $require_current_course) {
 			$language = $languageInterface;
 			// include_messages
 			include "$webDir/lang/$language/common.inc.php";
-			$extra_messages = "$webDir/config/$language.inc.php";
+                        $extra_messages = "config/{$language_codes[$language]}.inc.php";
 			if (file_exists($extra_messages)) {
 				include $extra_messages;
 			} else {

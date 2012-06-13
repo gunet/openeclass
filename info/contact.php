@@ -20,7 +20,7 @@
 
 
 $mail_ver_excluded = true;
-include '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 $nameTools = $contactpoint;
 
 if (!empty($postaddress)) {

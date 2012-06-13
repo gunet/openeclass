@@ -42,11 +42,10 @@
 ==============================================================================*/
 
 $require_power_user = true;
-// Include baseTheme
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+
 if(!isset($_GET['c'])) { die(); }
 
-// Define $nameTools
 $nameTools = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);

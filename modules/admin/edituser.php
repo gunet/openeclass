@@ -34,13 +34,13 @@ This script allows the admin to :
 */
 
 $require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-include 'admin.inc.php';
-include '../auth/auth.inc.php';
-include '../../include/jscalendar/calendar.php';
+require_once '../../include/baseTheme.php';
+require_once 'admin.inc.php';
+require_once 'modules/auth/auth.inc.php';
+require_once 'include/jscalendar/calendar.php';
 
-require_once('../../include/lib/user.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();

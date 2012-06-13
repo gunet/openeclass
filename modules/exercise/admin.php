@@ -19,7 +19,6 @@
  * ======================================================================== */
 
 
-
 // answer types
 define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
@@ -27,22 +26,17 @@ define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
 define('TRUE_FALSE',      5);
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include('exercise.lib.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
-$require_current_course = TRUE;
-include '../../include/baseTheme.php';
-include '../../include/jscalendar/calendar.php';
-require_once '../video/video_functions.php';
+$require_current_course = true;
+require_once '../../include/baseTheme.php';
+require_once 'include/jscalendar/calendar.php';
+require_once 'modules/video/video_functions.php';
 
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
-
+$lang = ($language == 'el')? 'el': 'en';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 load_modal_box();
@@ -51,7 +45,7 @@ $nameTools = $langExercices;
 $navigation[] = array ('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
-$picturePath='../../courses/'.$course_code.'/image';
+$picturePath = 'courses/'.$course_code.'/image';
 
 // the 4 types of answers
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);

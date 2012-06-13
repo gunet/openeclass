@@ -31,8 +31,8 @@
 */
 
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
-include_once '../../modules/auth/auth.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 $nameTools = $langAuthChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);

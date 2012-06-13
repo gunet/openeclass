@@ -30,61 +30,57 @@
 ==============================================================================
 */
 
-$require_admin = TRUE;
+$require_admin = true;
 $require_help = true;
 $helpTopic = 'Usage';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 // Define $nameTools
 $nameTools = $langUsersCourse;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
-      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
-      <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
-      <li><a href='usersCourseStats.php'>".$langUsersCourse."</a></li>
-      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
-      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a>></li>
+  <div id='operations_container'>
+    <ul id='opslist'>
+      <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
+      <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
+      <li><a href='usersCourseStats.php'>$langUsersCourse</a></li>
+      <li><a href='visitsCourseStats.php?first='>$langVisitsCourseStats</a></li>
+      <li><a href='oldStats.php'>$langOldStats</a></li>
+      <li><a href='monthlyReport.php'>$langMonthlyReport</a>></li>
     </ul>
   </div>";
 
 
-include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
+require_once 'include/jscalendar/calendar.php';
+$lang = ($language == 'el')? 'el': 'en';
 
-   if (!extension_loaded('gd')) {
+if (!extension_loaded('gd')) {
         $tool_content .= "<p>$langGDRequired</p>";
-    } else {
+} else {
         $made_chart = true;
 
         //make chart
-        require_once '../../include/libchart/libchart.php';
+        require_once 'include/libchart/libchart.php';
         $query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON ".
             " course.id = course_user.course_id GROUP BY course.id";
 
         $result = db_query($query);
         $chart = new VerticalBarChart(200, 300);
         while ($row = mysql_fetch_assoc($result)) {
-              $chart->addPoint(new Point($row['name'], $row['cnt']));
-              $chart->width += 25;
+                $chart->addPoint(new Point($row['name'], $row['cnt']));
+                $chart->width += 25;
         }
-       $chart->setTitle("$langUsersCourse");
+        $chart->setTitle($langUsersCourse);
 
-       mysql_free_result($result);
-       $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
+        mysql_free_result($result);
+        $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
 
-        $chart->render($webDir.$chart_path);
+        $chart->render($webDir.'/'.$chart_path);
 
         $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
 
-    }
+}
 
 draw($tool_content, 3, 'admin');

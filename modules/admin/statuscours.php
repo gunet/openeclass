@@ -44,15 +44,14 @@
 ==============================================================================*/
 
 $require_power_user = true;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 if(!isset($_GET['c'])) { die(); }
 
-// Define $nameTools
 $nameTools = $langCourseStatus;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+$navigation[] = array('url' => 'editcours.php?c='.htmlspecialchars($_GET['c']), 'name' => $langCourseEdit);
 
 // Update course status
 if (isset($_POST['submit']))  {

@@ -41,11 +41,10 @@
 ==============================================================================
 */
 
-//$require_power_user = true;
 $require_admin = true;
-include '../../include/baseTheme.php';
-include '../../include/CAS/CAS.php';
-include_once '../../modules/auth/auth.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/CAS/CAS.php';
+require_once 'modules/auth/auth.inc.php';
 $nameTools = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
@@ -267,17 +266,17 @@ else
 	</tr>";
 	
 	switch($auth) {
-		case 2: include_once '../auth/methods/pop3form.php';
+		case 2: require_once 'modules/auth/methods/pop3form.php';
 			break;
-		case 3: include_once '../auth/methods/imapform.php';
+		case 3: require_once 'modules/auth/methods/imapform.php';
 			break;
-		case 4: include_once '../auth/methods/ldapform.php';
+		case 4: require_once 'modules/auth/methods/ldapform.php';
 			break;
-		case 5: include_once '../auth/methods/dbform.php';
+		case 5: require_once 'modules/auth/methods/dbform.php';
 			break;
-		case 6: include_once '../auth/methods/shibform.php';
+		case 6: require_once 'modules/auth/methods/shibform.php';
 			break;
-		case 7: include_once '../auth/methods/casform.php';
+		case 7: require_once 'modules/auth/methods/casform.php';
 			break;
 		default:
 			break;

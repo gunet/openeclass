@@ -26,21 +26,22 @@ define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
-include '../../include/baseTheme.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-include '../../include/action.php';
-include 'functions.php';
-include '../document/doc_init.php';
-require_once '../video/video_functions.php';
+
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/action.php';
+require_once 'functions.php';
+require_once 'modules/document/doc_init.php';
+require_once 'modules/video/video_functions.php';
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);
 
-
 if (isset($_REQUEST['id'])) {
 	$id = intval($_REQUEST['id']);
 }
-$lang_editor = langname_to_code($language);
+
+$lang_editor = $language;
 load_js('tools.js');
 load_modal_box(true);
 

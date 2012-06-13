@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-include '../../include/init.php';
+require_once '../../include/init.php';
 $course_id = course_code_to_id(escapeSimple($_GET['c']));
 $id = intval($_GET['id']);
 if ($course_id !== false) {

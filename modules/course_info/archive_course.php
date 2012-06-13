@@ -20,8 +20,8 @@
 
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
-include '../../include/baseTheme.php';
-include 'include/lib/fileManageLib.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 $nameTools = $langArchiveCourse;
 $navigation[] = array('url' => "infocours.php?course=$course_code", 'name' => $langModifInfo);

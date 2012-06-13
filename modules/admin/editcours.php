@@ -46,10 +46,10 @@
 
 $require_power_user = true;
 
-include '../../include/baseTheme.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-require_once('../../include/lib/hierarchy.class.php');
-require_once('../../include/lib/course.class.php');
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
 
 $tree = new hierarchy();
 $course = new course();

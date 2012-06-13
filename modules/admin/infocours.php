@@ -43,12 +43,13 @@
 ==============================================================================*/
 
 $require_power_user = true;
-// Include baseTheme
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
+
 if(!isset($_GET['c'])) { die(); }
 
-require_once('../../include/lib/course.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $course = new course();
 $tree = new hierarchy();

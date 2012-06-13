@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-include '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 
 $nameTools = $langCopyright;
 $tool_content .= "<p align=justify>$langCopyrightNotice</p>";

@@ -32,7 +32,8 @@
  * interface. In that case function drawPerso needs to be called.
  *
  */
-include 'init.php';
+
+require_once 'init.php';
 
 if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
         $eclass_module_id = intval($_GET['eclass_module_id']);
@@ -49,7 +50,7 @@ if (isset($toolContent_ErrorExists)) {
 	$_SESSION['errMessage'] = $toolContent_ErrorExists;
 	session_write_close();
         if (!$uid) {
-                $next = str_replace($urlAppend, '', $_SERVER['REQUEST_URI']);
+                $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
                 header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
         } else {
                 header("Location:" . $urlServer . "index.php");
@@ -62,8 +63,8 @@ if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 	unset($_SESSION['errMessage']);
 }
 
-include 'template/template.inc.php';
-include 'tools.php';
+require_once 'template/template.inc.php';
+require_once 'tools.php';
 
 /**
  * Function draw
@@ -138,7 +139,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 	$t->set_block('leftNavCategoryBlock', 'leftNavLinkBlock', 'leftNavLink');
 
-        $t->set_var('template_base', $urlAppend . '/template/' . $theme);
+        $t->set_var('template_base', $urlAppend . 'template/' . $theme);
         $t->set_var('img_base', $themeimg);
 
 	if (is_array ($toolArr)) {
@@ -189,7 +190,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'CONTENT_MAIN_CSS', 'content_main' );
 		}
 
-		$t->set_var ( 'URL_PATH', $urlAppend.'/' );
+		$t->set_var ( 'URL_PATH', $urlAppend );
 		$t->set_var ( 'SITE_NAME', $siteName );
 
 		//If there is a message to display, show it (ex. Session timeout)
@@ -225,7 +226,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
 		// set the text and icon on the third bar (header)
 		if ($menuTypeID == 2) {
-			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='$urlServer/courses/$course_code/'>" . q($title) . '</a>' );
+			$t->set_var ( 'THIRD_BAR_TEXT', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>' );
 			$t->set_var ( 'THIRDBAR_LEFT_ICON', 'lesson_icon' );
 		} elseif ($menuTypeID == 3) {
 			$t->set_var ( 'THIRD_BAR_TEXT', $langAdmin );
@@ -255,7 +256,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$mod_activation = '';
 		if ($is_editor and isset($course_code)) {
 			// link for activating / deactivating module
-			if(file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
+			if (file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
 				include $module_ini_dir;
 				if (display_activation_link($module_id)) {                                        
 					if (visible_module($module_id)) {                                                
@@ -296,13 +297,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_block ( 'mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome' );
 
-		if ($statut != 10) {
+                if ($statut != 10) {
+                        $perso_breadcrumb = (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'])?
+                                $langPersonalisedBriefcase: $langUserBriefcase;
 			if (!isset($_SESSION['uid'])) {
 				$t->set_var ( 'BREAD_TEXT', $langHomePage );
-                        } elseif (isset($_SESSION['uid']) and $_SESSION['user_perso_active']) {
-				$t->set_var ( 'BREAD_TEXT', $langPersonalisedBriefcase );
-			} elseif (isset($_SESSION['uid']) and !$_SESSION['user_perso_active']) {
-				$t->set_var ( 'BREAD_TEXT', $langUserBriefcase );
+                        } else {
+				$t->set_var ( 'BREAD_TEXT', $perso_breadcrumb );
 			}
 
 			if (! $homePage) {
@@ -389,12 +390,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
                 // Add the optional mobile-specific css if necessarry
                 if ($is_mobile) {
-                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}/template/${theme}${tool_css}/theme_mobile.css\" rel=\"stylesheet\" type=\"text/css\" >");
+                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}template/${theme}${tool_css}/theme_mobile.css\" rel=\"stylesheet\" type=\"text/css\" >");
                 }
                 
                 // Add the optional embed-specific css if necessarry
                 if ($is_embedonce) {
-                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}/template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
+                    $t->set_var('EXTRA_CSS', "<link href=\"${urlAppend}template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
                 }
                 
 		// Add the optional tool-specific css of the tool, if it's set
@@ -430,7 +431,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'LANG_HELP', '' );
 		}
 		if (defined('RSS')) {
-			$t->set_var ('RSS_LINK_ICON', "&nbsp;<span class='feed'><a href='${urlAppend}/" . RSS . "'><img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
+			$t->set_var ('RSS_LINK_ICON', "&nbsp;<span class='feed'><a href='$urlAppend" . RSS . "'><img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' /></a></span>");
 		}
 
 		if ($perso_tool_content) {
@@ -447,7 +448,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'DOCS_CONTENT', $docs_content );
 			$t->set_var ( 'AGENDA_CONTENT', $agenda_content );
 			$t->set_var ( 'FORUM_CONTENT', $forum_content );
-			$t->set_var ( 'URL_PATH', $urlAppend.'/' );
+			$t->set_var ( 'URL_PATH', $urlAppend );
 			$t->set_var ( 'TOOL_PATH', $urlAppend );
 		}
 

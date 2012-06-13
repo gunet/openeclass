@@ -48,7 +48,7 @@
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 $require_admin = TRUE;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -347,11 +347,11 @@ else {
         <tr>
 	  <th class='left'><b>$langMainLang</b></th>
 	  <td><select name='default_language'>
-	    <option value='el' ".$grSel.">$langGreek</option>
-	    <option value='en' ".$enSel.">$langEnglish</option>
+	    <option value='el' $grSel>$langGreek</option>
+	    <option value='en' $enSel>$langEnglish</option>
 	  </select></td>
 	</tr>";
-	$langdirs = active_subdirs($webDir.'lang', 'messages.inc.php');        
+	$langdirs = active_subdirs($webDir.'/lang', 'messages.inc.php');        
 	$sel = array();
 	foreach ($language_codes as $langcode => $langname) {
 		if (in_array($langcode, $langdirs)) {
@@ -494,7 +494,7 @@ else {
 	// After restored values have been inserted into form then bring back
 	// values from original config.php, so the rest of the page can be displayed correctly
 	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
-		@include("../../config/config.php");
+		@include('config/config.php');
 	}
 }
 

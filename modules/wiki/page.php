@@ -39,12 +39,12 @@
 ==============================================================================
 */
 $tlabelReq = 'CLWIKI__';
-include 'include/lib/learnPathLib.inc.php';
-include 'include/lib/textLib.inc.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 $require_current_course = TRUE;
 $require_help           = TRUE;
 $helpTopic              = 'Wiki';
-include 'include/baseTheme.php';
+require_once 'include/baseTheme.php';
 $style= '';
 $_gid = null;
 
@@ -86,15 +86,15 @@ else
 }
 
 // Wiki specific classes and libraries
-include 'modules/wiki/lib/class.clarodbconnection.php';
-include 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
-include 'modules/wiki/lib/class.wikipage.php';
-include 'modules/wiki/lib/class.wikistore.php';
-include 'modules/wiki/lib/class.wiki.php';
-include 'modules/wiki/lib/lib.requestfilter.php';
-include 'modules/wiki/lib/lib.wikisql.php';
-include 'modules/wiki/lib/lib.wikidisplay.php';
-include 'modules/wiki/lib/lib.javascript.php';
+require_once 'modules/wiki/lib/class.clarodbconnection.php';
+require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
+require_once 'modules/wiki/lib/class.wikipage.php';
+require_once 'modules/wiki/lib/class.wikistore.php';
+require_once 'modules/wiki/lib/class.wiki.php';
+require_once 'modules/wiki/lib/lib.requestfilter.php';
+require_once 'modules/wiki/lib/lib.wikisql.php';
+require_once 'modules/wiki/lib/lib.wikidisplay.php';
+require_once 'modules/wiki/lib/lib.javascript.php';
 
 // security fix : disable access to other groups wiki
 if ( isset( $_REQUEST['wikiId'] ) )

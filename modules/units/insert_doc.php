@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-include '../document/doc_init.php';
+require_once 'modules/document/doc_init.php';
 
 function list_docs()
 {
