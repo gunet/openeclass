@@ -19,8 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-
+$require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';

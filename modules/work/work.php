@@ -73,7 +73,7 @@ hContent;
 
 // For using with the pop-up calendar
 require_once 'jscalendar.inc.php';
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 /**** The following is added for statistics purposes ***/

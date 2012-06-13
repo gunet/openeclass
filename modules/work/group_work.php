@@ -19,11 +19,11 @@
  * ======================================================================== */
 
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $require_login = true;
 
 require_once 'work_functions.php' ;
-require_once 'include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';

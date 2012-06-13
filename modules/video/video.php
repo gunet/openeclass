@@ -45,23 +45,23 @@ documents path.
 
 */
 
-$require_current_course = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_help = true;
 $helpTopic = 'Video';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
-include_once "../../include/lib/fileUploadLib.inc.php";
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_VIDEO);
 /**************************************/
 
-include '../../include/lib/forcedownload.php';
+require_once 'include/lib/forcedownload.php';
 require_once 'video_functions.php';
-include '../../include/log.php';
+require_once 'include/log.php';
 
 $nameTools = $langVideo;
 

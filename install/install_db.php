@@ -540,7 +540,7 @@ db_query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
                 `pqid` INT(11) NOT NULL DEFAULT 0,
                 `answer_text` TEXT NOT NULL ) $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS `assignments` (
+db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
                 `title` VARCHAR(200) NOT NULL DEFAULT '',

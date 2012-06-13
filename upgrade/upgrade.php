@@ -719,7 +719,7 @@ if (!isset($_POST['submit2'])) {
                             `pqid` INT(11) NOT NULL DEFAULT 0,
                             `answer_text` TEXT NOT NULL )");
 
-                db_query("CREATE TABLE IF NOT EXISTS `assignments` (
+                db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(200) NOT NULL DEFAULT '',
