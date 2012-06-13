@@ -933,13 +933,14 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                      FROM exercices AS old ORDER by id");
         db_query("INSERT INTO exercise_map (`old_id`, `new_id`) VALUES (0, 0)");
         
+        db_query("UPDATE exercices SET active = 0 WHERE active IS NULL");
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise
                          (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`, 
                           `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
                          SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`, 
                                 `StartDate`, `EndDate`, `TimeConstrain`, `AttemptsAllowed`, `random`,
                                 `active`, `results`, `score`
-                           FROM exercices ORDER BY id");
+                           FROM exercices ORDER BY id") && $ok;
     
         // ----- exercise_user_record DB Table ----- //
         list($eurid_offset) = mysql_fetch_row(db_query("SELECT max(eurid) FROM `$mysqlMainDb`.exercise_user_record"));
