@@ -306,8 +306,8 @@ db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `course_id` INT(11) NOT NULL,
                 `url` VARCHAR(255),
                 `title` VARCHAR(255),
-                `description` TEXT,
-                `category` INT(6) DEFAULT NULL,
+                `description` TEXT NOT NULL,
+                `category` INT(6) DEFAULT 0 NOT NULL,
                 `order` INT(6) DEFAULT 0 NOT NULL,
                 `hits` INT(6) DEFAULT 0 NOT NULL,
                 PRIMARY KEY (`id`, `course_id`)) $charset_spec");

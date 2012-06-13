@@ -1037,8 +1037,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     
     // external links are moved to table `links` with category = -1
         $q1 = db_query("INSERT INTO `$mysqlMainDb`.link
-                               (course_id, url, title, category) 
-                               SELECT $course_id, lien, rubrique, -1 FROM accueil
+                               (course_id, url, title, category, description) 
+                               SELECT $course_id, lien, rubrique, -1, '' FROM accueil
                                       WHERE define_var = 'HTML_PAGE' OR
                                             image = 'external_link'", $code);
         
