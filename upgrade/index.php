@@ -22,6 +22,10 @@ define('UPGRADE', true);
 
 require_once '../include/baseTheme.php';
 
+if ($urlAppend[strlen($urlAppend)-1] != '/') {
+        $urlAppend .= '/';
+}
+
 $nameTools = $langUpgrade;
 
 if ($language == 'el') {

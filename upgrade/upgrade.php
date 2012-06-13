@@ -33,6 +33,10 @@ set_time_limit(0);
 
 load_global_messages();
 
+if ($urlAppend[strlen($urlAppend)-1] != '/') {
+        $urlAppend .= '/';
+}
+
 // include_messages
 require "lang/$language/common.inc.php";
 $extra_messages = "config/{$language_codes[$language]}.inc.php";
@@ -155,6 +159,7 @@ if (!isset($_POST['submit2'])) {
                 }
                 set_config('phpMyAdminURL', $phpMyAdminURL);
                 set_config('phpSysInfoURL', $phpSysInfoURL);
+
                 $new_conf = "<?php
 \$mysqlServer = " . quote($mysqlServer) . ";
 \$mysqlUser = " . quote($mysqlUser) . ";

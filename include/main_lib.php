@@ -1576,7 +1576,7 @@ function get_config($key)
 function set_config($key, $value)
 {
 	global $mysqlMainDb;
-	
+
         db_query("REPLACE INTO `$mysqlMainDb`.config (`key`, `value`)
                           VALUES ('$key', " . quote($value) . ")");
 }
