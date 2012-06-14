@@ -153,7 +153,15 @@ if (!isset($_POST['submit2'])) {
                 set_config('phone', $_POST['telephone']);
                 set_config('postaddress', $_POST['postaddress']);
                 set_config('fax', $_POST['fax']);
+                set_config('email_sender', $emailAdministrator);
+                set_config('admin_name', $administratorName . ' ' . $administratorSurname);
+                set_config('email_helpdesk', $emailhelpdesk);
+                if (isset($emailAnnounce) and $emailAnnounce) {
+                        set_config('email_announce', $emailAnnounce);
+                }
                 set_config('base_url', $urlServer);
+                set_config('default_language', $language);
+                set_config('active_ui_languages', implode(' ', $active_ui_languages));
                 if ($urlSecure != $urlServer) {
                         set_config('secure_url', $urlSecure);
                 }

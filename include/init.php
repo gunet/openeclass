@@ -81,6 +81,7 @@ if (isset($language)) {
         }
         $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
         $language = get_config('default_language');
+        $active_ui_languages = explode(' ', get_config('active_ui_languages'));
 }
 
 if (isset($_REQUEST['localize'])) {

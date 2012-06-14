@@ -1562,7 +1562,6 @@ function csv_escape($string, $force = false)
 // Return the value of a key from the config table, or false if not found
 function get_config($key)
 {	
-	
         $r = db_query("SELECT `value` FROM config WHERE `key` = '$key'");
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);

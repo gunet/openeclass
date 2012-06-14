@@ -71,7 +71,7 @@ $tool_content .= "
   </tr>
       <tr>
         <th class='left'><strong>$langSupportUser</strong></th>
-        <td>$administratorName $administratorSurname</td>
+        <td>".q(get_config('admin_name'))."</td>
   </tr>
    </table>";
 
