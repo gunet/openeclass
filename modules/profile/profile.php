@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -77,15 +77,17 @@ if (isset($_POST['submit'])) {
 	if (!file_exists($webDir."courses/userimg/")) {
 		mkdir($webDir."courses/userimg/", 0775);
 	}
-	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
-        $perso_status = (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes')? 'yes': 'no';
+	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];        
         $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
         $old_language = $language;
-        $language = $_SESSION['langswitch'] = langcode_to_name($_POST['userLanguage']);
-        $langcode = langname_to_code($language);
+        $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];        
         $old_perso_status = $_SESSION['user_perso_active'];
-        $_SESSION['user_perso_active'] = $persoIsActive && $perso_status == 'no';
-        db_query("UPDATE user SET perso = '$perso_status',
+        if (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes') {
+                $_SESSION['user_perso_active'] = false;
+        } else {        
+                $_SESSION['user_perso_active'] = true;
+        }        
+        db_query("UPDATE user SET perso = '$_POST[persoStatus]',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
 
@@ -188,7 +190,7 @@ if (isset($_POST['submit'])) {
 		
 		redirect_to_message(1);
 	}
-	if ($old_language != $language or $old_perso_status != $perso_status) {
+	if ($old_language != $language or $old_perso_status != $_POST['persoStatus']) {
 		redirect_to_message(1);
 	}
 }
@@ -337,7 +339,6 @@ $tool_content .= selection($access_options, 'email_public', $myrow['email_public
                 selection($access_options, 'phone_public', $myrow['phone_public']) . "</td></tr>";
 
 ##[BEGIN personalisation modification]############
-if (isset($persoIsActive)) {
         $tool_content .= "
         <tr>
           <th>$langPerso:</th>
@@ -345,7 +346,7 @@ if (isset($persoIsActive)) {
               <input type='radio' name='persoStatus' id='persoStatus_yes' value='yes'$checkedClassic /><label for='persoStatus_yes'>$langClassic</label>
           </td>
         </tr>";
-}
+
 
 if (get_user_email_notification_from_courses($uid)) {
         $selectedyes = 'checked';

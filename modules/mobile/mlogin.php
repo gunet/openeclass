@@ -134,6 +134,6 @@ function set_session_mvars()
     $_SESSION['status'] = $status;
     $_SESSION['mobile'] = true;
     
-    if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no')
+    if ($GLOBALS['userPerso'] == 'no')
         $_SESSION['user_perso_active'] = true;
 }

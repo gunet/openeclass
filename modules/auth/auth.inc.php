@@ -688,10 +688,8 @@ function process_login()
 		} else {
 			db_query("INSERT INTO loginout
 						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
-						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-			if ($GLOBALS['persoIsActive'] and $GLOBALS['userPerso'] == 'no') {
-				$_SESSION['user_perso_active'] = true;
-			}                       
+						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");			
+                        $_SESSION['user_perso_active'] = true;			
 			if (get_config('email_verification_required') and
                             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {                        
 				$_SESSION['mail_verification_required'] = 1;
@@ -966,10 +964,10 @@ function shib_cas_login($type)
 	$_SESSION['statut'] = $statut;
 	//$_SESSION['is_admin'] = $is_admin;
 	$_SESSION['shib_user'] = 1; // now we are shibboleth user
-	if ($GLOBALS['persoIsActive'] and $userPerso == 'no') {
-		$_SESSION['user_perso_active'] = true;
-	}
-
+	if ($userPerso == 'no') {
+                $_SESSION['user_perso_active'] = true;
+        }
+	
 	db_query("INSERT INTO loginout 
 					(loginout.id_user, loginout.ip, loginout.when, loginout.action) 
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");

@@ -124,7 +124,6 @@ if (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
 }
 
-
 // include_messages
 require "$webDir/lang/$language/common.inc.php";
 $extra_messages = "config/{$language_codes[$language]}.inc.php";
@@ -170,10 +169,6 @@ $admin_modules = array(
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools/course_tools.php', 'image' => 'tooladmin'),
 );
 
-// Make sure personalized profile setting is set (true or false)
-if (!isset($persoIsActive)) {
-	$persoIsActive = false;
-}
 
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
@@ -477,7 +472,6 @@ if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.i
 set_glossary_cache();
 
 $tool_content = $head_content = '';
-
 function caution($s)
 {
 	return '<p class="alert1"' . $s . '</p>';

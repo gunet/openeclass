@@ -617,7 +617,6 @@ $Institution = '.autoquote($institutionForm).';
 $InstitutionUrl = '.autoquote($institutionUrlForm).';
 $postaddress = '.autoquote($postaddressForm).';
 
-$persoIsActive = TRUE;
 $durationAccount = "126144000";
 
 define("UTF8", true);

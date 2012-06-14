@@ -57,12 +57,13 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
                                                               'filename' => $filename));
 	} elseif ($action == "update") {
 		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-			WHERE path LIKE '$oldPath%'");                
+                                WHERE path LIKE '$oldPath%'");
                 list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath')) 
                                 FROM $dbTable WHERE path='$newPath'"));
-                list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable 
+                list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
                                         WHERE path = '$newencodepath'"));                                                                               
-                Log::record(MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldPath,
+                Log::record(MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
+                                                              'newencpath' => $newPath,
                                                               'newpath' => $newpath,
                                                               'filename' => $filename));
 	}

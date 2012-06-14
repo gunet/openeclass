@@ -274,7 +274,7 @@ if (!isset($_POST['submit'])) {
 			$_SESSION['prenom'] = $prenom;
 			$_SESSION['nom'] = $nom;
 			$_SESSION['uname'] = $uname;
-			$_SESSION['user_perso_active'] = $GLOBALS['persoIsActive'];
+			$_SESSION['user_perso_active'] = true;
 			$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>";
 		}
 		// user msg

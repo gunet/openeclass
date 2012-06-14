@@ -126,7 +126,6 @@ $postaddress = '.autoquote($_POST['formpostaddress']).';
 $fax = '.autoquote($_POST['formfax']).';
 
 $encryptedPasswd = "true";
-$persoIsActive = TRUE;
 
 $durationAccount = '.autoquote($_POST['formdurationAccount']).';
 $active_ui_languages = '.$string_active_ui_languages."\n";
