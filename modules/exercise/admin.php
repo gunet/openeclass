@@ -19,13 +19,6 @@
  * ======================================================================== */
 
 
-// answer types
-define('UNIQUE_ANSWER',   1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS',  3);
-define('MATCHING',        4);
-define('TRUE_FALSE',      5);
-
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
@@ -36,8 +29,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'modules/video/video_functions.php';
 
-$lang = ($language == 'el')? 'el': 'en';
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 load_modal_box();
 
@@ -45,13 +37,12 @@ $nameTools = $langExercices;
 $navigation[] = array ('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
-$picturePath = 'courses/'.$course_code.'/image';
-
+$picturePath = "courses/$course_code/image";
 // the 4 types of answers
 $aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse);
 
 // tables used in the exercise tool
-$TBL_EXERCISE_QUESTION = 'exercise_with_question';
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
@@ -257,4 +248,3 @@ function jscal_html($name, $u_date) {
 	
 	return $cal;
 }
-?>

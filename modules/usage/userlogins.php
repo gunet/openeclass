@@ -40,7 +40,8 @@ $helpTopic = 'Usage';
 $require_login = true;
 
 include '../../include/baseTheme.php';
-include('../../include/action.php');
+require_once 'include/action.php';
+require_once 'include/jscalendar/calendar.php';
 
 $tool_content .= "
 <div id='operations_container'>
@@ -61,7 +62,7 @@ $local_style = '
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
 
-include('../../include/jscalendar/calendar.php');
+
 
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);

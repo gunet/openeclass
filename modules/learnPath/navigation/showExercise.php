@@ -41,15 +41,8 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'modules/video/video_functions.php';
 load_modal_box();
 
-// answer types
-define('UNIQUE_ANSWER', 1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
 $nameTools = $langExercice;
-$picturePath = 'courses/'.$course_code.'/image';
-
+$picturePath = "courses/$course_code/image";
 
 $TBL_EXERCISE           = 'exercise';
 $TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
@@ -100,7 +93,7 @@ if (isset($_POST['formSent'])) {
         if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
-            header('Location: ../../exercise/exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
+                        header('Location: ../../exercise/exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
 			exit();
 		} 
 	}
@@ -345,10 +338,10 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     $questionDescription_temp
                     </td>
                     </tr>";
-		if(file_exists($picturePath.'/quiz-'.$questionId)) {
+		if(file_exists($picturePath.'/quiz-'.$questionId)) {                        
                     echo "
                       <tr class='even'>
-                        <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+                        <td class='center' colspan='2'><img src='../../$picturePath/quiz-.$questionId'></td>
                       </tr>";
 		}
 	}  // end if(!$onlyAnswers)
@@ -425,38 +418,33 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			}
 			else
 			{
-				echo ("
-                              <tr class='even'>
+				echo "<tr class='even'>
                                 <td colspan='2'>
                                   <table class='tbl'>
                                   <tr>
                                     <td width='200'><b>${cpt2}.</b> ${answer}</td>
                                     <td width='130'><div align='center'>
                                      <select name='choice[${questionId}][${answerId}]'>
-                                       <option value='0'>--</option>");
+                                       <option value='0'>--</option>";
 
 				// fills the list-box
 				 foreach($select as $key=>$val) {
-					 echo ("
-                                            <option value=\"${key}\">${val['Lettre']}</option>");
+					 echo "<option value=\"${key}\">${val['Lettre']}</option>";
 				 }
-				 echo ("
-                                     </select></div>
-                                    </td>
-                                    <td width='200'>");
+				 echo "</select></div></td>
+                                    <td width='200'>";
 				 if(isset($select[$cpt2]))
-				       echo ('<b>'.$select[$cpt2]['Lettre'].'.</b> '.$select[$cpt2]['Reponse']);
+				       echo '<b>'.$select[$cpt2]['Lettre'].'.</b> '.$select[$cpt2]['Reponse'];
 				 else
-				       echo ('&nbsp;');
+				       echo '&nbsp;';
 
-				echo ("</td></tr></table></td></tr>");
+				echo "</td></tr></table></td></tr>";
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
 					// if it remains answers to shown at the right side
 					while(isset($select[$cpt2])) 	{
-						echo ("
-                                              <tr class='even'>
+						echo "<tr class='even'>
                                                 <td colspan='2'>
                                                   <table>
                                                   <tr>
@@ -466,29 +454,23 @@ function showQuestion($questionId, $onlyAnswers = false) {
                                                   </tr>
                                                   </table>
                                                 </td>
-                                              </tr>");
+                                              </tr>";
 						$cpt2++;
 					}	// end while()
 				}  // end if()
-			}
-                               // echo (" </table>");
+			}                               
 		}
 		elseif($answerType == TRUE_FALSE) {
-			echo ("
-  <tr class='even'>
-    <td width='1' align='center'>
-      <input type='radio' name='choice[${questionId}]' value='${answerId}' />
-    </td>
-    <td>$answer</td>
-  </tr>");
+			echo "<tr class='even'>
+                                <td width='1' align='center'>
+                                <input type='radio' name='choice[${questionId}]' value='${answerId}' />
+                                </td><td>$answer</td>
+                                </tr>";
 		}
 	}	// end for()
 
 	if(!$nbrAnswers) {
-		echo ("
-  <tr>
-    <td colspan='2'><p class='caution'>$langNoAnswer</td>
-  </tr>");
+		echo "<tr><td colspan='2'><p class='caution'>$langNoAnswer</td></tr>";
 	}
 	// destruction of the Answer object
 	unset($objAnswerTmp);
@@ -496,4 +478,3 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	unset($objQuestionTmp);
 	return $nbrAnswers;
 }
-?>

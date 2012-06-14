@@ -321,14 +321,14 @@ $tool_content .= "
 					case 5:
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[course_id]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[id]'>
 						<img src='$themeimg/delete.png' title='$langDelete'></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
-						<a href='unreguser.php?u=$u&amp;c=$logs[course_id]'>
+						<a href='unreguser.php?u=$u&amp;c=$logs[id]'>
 						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td></tr>\n";
 						break;
 				}

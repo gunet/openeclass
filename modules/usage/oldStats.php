@@ -40,7 +40,7 @@ $helpTopic = 'Usage';
 $require_login = true;
 
 include '../../include/baseTheme.php';
-include('../../include/action.php');
+require_once 'include/action.php';
 
 $tool_content .= "
   <div id='operations_container'>

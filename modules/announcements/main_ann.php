@@ -22,7 +22,7 @@ $require_help = true;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langAnnouncements;
 

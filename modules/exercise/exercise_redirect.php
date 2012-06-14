@@ -32,9 +32,9 @@ $helpTopic = 'Exercise';
 include '../../include/baseTheme.php';
 
 $nameTools = $langExercicesView;
-include('../../include/lib/textLib.inc.php');
+require_once 'include/lib/textLib.inc.php';
 
-$picturePath='../../courses/'.$course_code.'/image';
+$picturePath = "courses/$course_code/image";
 
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE ='exercise';

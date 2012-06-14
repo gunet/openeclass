@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,12 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
 
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
@@ -37,14 +31,16 @@ include('answer.class.php');
 $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"exercise.php?course=$course_code", "name"=> $langExercices);
 
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
-include('../../include/lib/textLib.inc.php');
+
+
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
 }

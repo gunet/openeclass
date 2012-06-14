@@ -27,7 +27,8 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
-require_once '../../include/libchart/libchart.php';
+require_once 'include/libchart/libchart.php';
+
 $usage_defaults = array (
     'u_stats_value' => 'visits',
     'u_interval' => 'daily',

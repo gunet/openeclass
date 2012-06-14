@@ -24,8 +24,8 @@ $require_course_admin = TRUE;
 $require_login = true;
 
 include '../../include/baseTheme.php';
-include('../../include/jscalendar/calendar.php');
-include '../../include/log.php';
+require_once 'include/jscalendar/calendar.php';
+require_once 'include/log.php';
 
 $nameTools = $langUsersLog;
 $navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);

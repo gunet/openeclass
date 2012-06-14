@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,8 +41,8 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats.": ".$langVisitsStats;
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
+  <div id='operations_container'>
+    <ul id='opslist'>
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
       <li><a href='oldStats.php'>".$langOldStats."</a></li>
@@ -52,8 +52,7 @@ $tool_content .= "
 
 // jscalendar is used in order to select the time period for the statistics
 require_once 'include/jscalendar/calendar.php';
-$lang = ($language == 'el')? 'el': 'en';
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
 if (!extension_loaded('gd')) {
@@ -61,9 +60,9 @@ if (!extension_loaded('gd')) {
 } else {
         $made_chart = true;
         //show chart with statistics
-        require_once "statsResults.php";
+        require_once "modules/admin/statsResults.php";
         //show form for determining time period and user
-        require_once "statsForm.php";
+        require_once "modules/admin/statsForm.php";
 }
 
 draw($tool_content, 3, null, $local_head);

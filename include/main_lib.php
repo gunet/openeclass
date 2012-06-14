@@ -84,6 +84,12 @@ define('MODULE_ID_TOOLADMIN', 25);
 define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 
+// exercise answer types
+define('UNIQUE_ANSWER',   1);
+define('MULTIPLE_ANSWER', 2);
+define('FILL_IN_BLANKS',  3);
+define('MATCHING',        4);
+define('TRUE_FALSE',      5);
 //
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
@@ -1531,11 +1537,11 @@ function delete_course($cid)
 	db_query("DELETE FROM exercise WHERE course_id = $cid");
         db_query("DELETE FROM course_module WHERE course_id = $cid");
 
-        $garbage = "${webDir}courses/garbage";
+        $garbage = "$webDir/courses/garbage";
         if (!is_dir($garbage)) {
                 mkdir($garbage, 0775);
         }
-	rename("${webDir}courses/$course_code", "$garbage/$course_code");
+	rename("$webDir/courses/$course_code", "$garbage/$course_code");
 }
 
 function csv_escape($string, $force = false)

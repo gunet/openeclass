@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -21,8 +20,8 @@
 
 
 function showQuestion($questionId, $onlyAnswers = false) {
-	global $tool_content, $picturePath, $webDir;
-	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
+	global $tool_content, $picturePath, $langNoAnswer, 
+                $langColumnA, $langColumnB, $langMakeCorrespond;
 
         // construction of the Question object
 	$objQuestionTmp=new Question();
@@ -47,7 +46,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
 			$tool_content .= "
                   <tr class='even'>
-                    <td class='center' colspan='2'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+                    <td class='center' colspan='2'><img src='../../$picturePath/quiz-$questionId'></td>
                   </tr>";
 		}
 	}  // end if(!$onlyAnswers)

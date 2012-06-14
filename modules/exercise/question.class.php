@@ -20,9 +20,6 @@
  * ======================================================================== */
 
 
-// Needed for add_ext_on_mime() which is not yet suported here
-// include '../../include/lib/fileUploadLib.inc.php';
-
 if(!class_exists('Question')):
 
 		/*>>>>>>>>>>>>>>>>>>>> CLASS QUESTION <<<<<<<<<<<<<<<<<<<<*/
@@ -286,6 +283,7 @@ class Question
 	function uploadPicture($picture, $type)
 	{
 		global $picturePath;
+                
                 if($this->id) {
                         $filename_final = $picturePath . '/quiz-' . $this->id;
 			if (!copy_resized_image($picture, $type, 760, 512, $filename_final)) {

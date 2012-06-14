@@ -38,13 +38,13 @@ $helpTopic = 'Announce';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
-include '../../include/sendMail.inc.php';
-require_once '../video/video_functions.php';
-include '../../include/log.php';
-
+require_once 'include/lib/textLib.inc.php';
+require_once 'include/sendMail.inc.php';
+require_once 'modules/video/video_functions.php';
+require_once 'include/log.php';
 // The following is added for statistics purposes
-include('../../include/action.php');
+require_once 'include/action.php';
+
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
 

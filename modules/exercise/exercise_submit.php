@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,12 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-define('UNIQUE_ANSWER',	  1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS',  3);
-define('MATCHING',        4);
-define('TRUE_FALSE',      5);
 
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
@@ -41,12 +35,12 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langExercicesView;
-$picturePath='../../courses/'.$course_code.'/image';
+$picturePath = "courses/$course_code/image";
 
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 if (isset($_GET['exerciseId'])) {
@@ -297,7 +291,7 @@ foreach($questionList as $questionId) {
 		$tool_content .= "/".$nbrQuestions;
 	}
 	$tool_content .= "</td></tr>";
-        unset($question);        	
+        unset($question);        
 	showQuestion($questionId);
         
 	$tool_content .= "

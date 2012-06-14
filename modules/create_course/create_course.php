@@ -30,14 +30,14 @@ if (isset($_SESSION['statut']) and $_SESSION['statut'] != 1) { // if we are not 
     redirect_to_home_page();
 }
 if (get_config("betacms")) { // added support for betacms
-	require_once '../betacms_bridge/include/bcms.inc.php';
+	require_once 'betacms_bridge/include/bcms.inc.php';
 }
 
 $TBL_USER_DEPARTMENT   = 'user_department';
 
-require_once('../../include/lib/course.class.php');
-require_once('../../include/lib/user.class.php');
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $course = new course();
@@ -333,16 +333,16 @@ if (isset($_POST['create_course'])) {
 
         // create directories
         umask(0);
-        if (!(mkdir("../../courses/$code", 0777) and
-              mkdir("../../courses/$code/image", 0777) and
-              mkdir("../../courses/$code/document", 0777) and
-              mkdir("../../courses/$code/dropbox", 0777) and
-              mkdir("../../courses/$code/page", 0777) and
-              mkdir("../../courses/$code/work", 0777) and
-              mkdir("../../courses/$code/group", 0777) and
-              mkdir("../../courses/$code/temp", 0777) and
-              mkdir("../../courses/$code/scormPackages", 0777) and
-              mkdir("../../video/$code", 0777))) {
+        if (!(mkdir("courses/$code", 0777) and
+              mkdir("courses/$code/image", 0777) and
+              mkdir("courses/$code/document", 0777) and
+              mkdir("courses/$code/dropbox", 0777) and
+              mkdir("courses/$code/page", 0777) and
+              mkdir("courses/$code/work", 0777) and
+              mkdir("courses/$code/group", 0777) and
+              mkdir("courses/$code/temp", 0777) and
+              mkdir("courses/$code/scormPackages", 0777) and
+              mkdir("video/$code", 0777))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;
@@ -413,7 +413,7 @@ if (isset($_POST['create_course'])) {
                         
         // ----------- main course index.php -----------
 
-        $fd = fopen("../../courses/$code/index.php", "w");
+        $fd = fopen("courses/$code/index.php", "w");
         fwrite($fd, "<?php\nsession_start();\n" .
                     "\$_SESSION['dbname']='$code';\n" .
                     "include '../../modules/course_home/course_home.php';\n");

@@ -19,9 +19,9 @@
  * ======================================================================== */
 
 define('INDEX_START', 1);
-require_once('../../include/baseTheme.php');
-require_once('../video/video_functions.php');
-require_once('../../include/perso.php');
+require_once '../../include/baseTheme.php';
+require_once 'modules/video/video_functions.php';
+require_once 'include/perso.php';
 
 $nameTools = $langMyPersoAnnouncements;
 

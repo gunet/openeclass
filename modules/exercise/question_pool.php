@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System

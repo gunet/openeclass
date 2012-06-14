@@ -41,7 +41,9 @@ $helpTopic = 'Usage';
 $require_login = true;
 
 include '../../include/baseTheme.php';
-include('../../include/action.php');
+require_once 'include/action.php';
+require_once 'include/jscalendar/calendar.php';
+require_once 'include/libchart/libchart.php';
 
 $tool_content .= "
 <div id='operations_container'>
@@ -63,7 +65,7 @@ $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066; padding-left: 15px; padding-right : 15px; }
     .content { position: relative; left: 25px; }';
 
-include('../../include/jscalendar/calendar.php');
+
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
@@ -73,7 +75,7 @@ $local_head = $jscalendar->get_load_files_code();
     } else {
         $made_chart = true;
         //make chart
-        require_once '../../include/libchart/libchart.php';
+        
         $usage_defaults = array (
             'u_stats_value' => 'visits',
             'u_user_id' => -1,
@@ -155,7 +157,7 @@ $local_head = $jscalendar->get_load_files_code();
         break;
     }
     mysql_free_result($result);
-    $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';    
+    $chart_path = '/courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';    
     
     if (isset($_POST['btnUsage'])) {        
         if ($chart_content > 0) {

@@ -29,10 +29,9 @@ $require_help = TRUE;
 $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
-include('exercise.class.php');
-include('../../include/lib/textLib.inc.php');
-
-require_once '../video/video_functions.php';
+include 'exercise.class.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $nameTools = $langResults;
@@ -87,11 +86,8 @@ while($row=mysql_fetch_array($result)) {
 		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
-		$tool_content .= "
-    <table class='tbl_alt' width='100%'>";
-		$tool_content .= "
-    <tr>
-      <td colspan='3'>";
+		$tool_content .= "<table class='tbl_alt' width='100%'>";
+		$tool_content .= "<tr><td colspan='3'>";
 		if (!$sid) {
 			$tool_content .= "$langNoGroupStudents";
 		} else {
@@ -107,31 +103,24 @@ while($row=mysql_fetch_array($result)) {
       <th width='150' class='center'>".$langYourTotalScore2."</td>
     </tr>";
  	
-                $k=0;
-		while($row2=mysql_fetch_array($result2)) {
-        if ($k%2 == 0) {
-                $tool_content .= "    <tr class='even'>\n";
-        } else {
-                $tool_content .= "    <tr class='odd'>\n";
-        }
-
-			$tool_content .= "
-      <td class='center'>$row2[record_start_date]</td>";
+        $k=0;
+        while($row2=mysql_fetch_array($result2)) {
+                if ($k%2 == 0) {
+                        $tool_content .= "<tr class='even'>";
+                } else {
+                        $tool_content .= "<tr class='odd'>";
+                }
+                $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
 			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 
-				$tool_content .= "
-      <td class='center'>$langNotRecorded</td>";
+				$tool_content .= "<td class='center'>$langNotRecorded</td>";
 			} else {
-				$tool_content .= "
-      <td class='center'>".format_time_duration($row2['time_duration'])."</td>";
+				$tool_content .= "<td class='center'>".format_time_duration($row2['time_duration'])."</td>";
 			}
-			$tool_content .= "
-      <td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
-    </tr>";
-    $k++;
+			$tool_content .= "<td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
+                        </tr>";
+                        $k++;
 		}
-	$tool_content .= "
-    </table>
-    <br/>";
+	$tool_content .= "</table><br/>";
 	}
 }
 draw($tool_content, 2, null, $head_content);

@@ -95,7 +95,7 @@ if(isset($usedInSeveralExercises)) {
 	$questionDescription=$objQuestion->selectDescription();
 	$questionId = $objQuestion->selectId();
 	// is picture set ?
-	$okPicture=file_exists($picturePath.'/quiz-'.$questionId)?true:false;
+	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
 	$tool_content .= "
 	<fieldset>
         <legend>$langQuestion &nbsp;";
@@ -112,7 +112,7 @@ if(isset($usedInSeveralExercises)) {
 	$tool_content .= "<br/><i>$questionDescription</i>";
 	// show the picture of the question
 	if($okPicture) {
-		$tool_content .= "<br/><center><img src='$picturePath/quiz-$questionId' /></center><br/>";
+		$tool_content .= "<br/><center><img src='../../$picturePath/quiz-$questionId' /></center><br/>";
 	}
 	$tool_content .= "
 	</fieldset>

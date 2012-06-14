@@ -30,7 +30,7 @@ $helpTopic = 'Usage';
 $require_login = true;
 
 include '../../include/baseTheme.php';
-include '../group/group_functions.php';
+require_once 'modules/group/group_functions.php';
 
 $tool_content .= "
 <div id='operations_container'>

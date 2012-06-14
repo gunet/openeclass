@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -505,9 +505,9 @@ if(isset($_GET['modifyAnswers'])) {
 		     
 			<fieldset>
 			<legend>$langQuestionAnswers</legend>
-			<table width=\"99%\" class=\"tbl\">
+			<table width='100%' class=\"tbl\">
 			<tr>
-			  <td colspan=\"5\" >";
+			  <td colspan='5' >";
 			
 			if($answerType == UNIQUE_ANSWER) {
 				$tool_content .= "$langUniqueSelect";
@@ -521,7 +521,7 @@ if(isset($_GET['modifyAnswers'])) {
 			if($okPicture) {
 				$tool_content .= "
 				<tr>
-				  <td colspan='5' align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></td>
+				  <td colspan='5' align='center'><img src='../../$picturePath/quiz-$questionId' /></td>
 				</tr>";
 			}
 
@@ -617,7 +617,7 @@ if(isset($_GET['modifyAnswers'])) {
 				 <b>$questionName</b>
 				 <br />";
 				if($okPicture) {
-					$tool_content .= "<div align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
+					$tool_content .= "<div align='center'><img src='../../$picturePath/quiz-$questionId'></div>";
 				}
 				$tool_content .= "</fieldset>";
 				$tool_content .= "
@@ -709,7 +709,7 @@ if(isset($_GET['modifyAnswers'])) {
 		if($okPicture) {
 			$tool_content .= "
 			<tr>
-			  <td colspan='4' class='center'><img src='${picturePath}/quiz-${questionId}'></td>
+			  <td colspan='4' class='center'><img src='../../$picturePath/quiz-$questionId' /></td>
 			</tr>";
 		}
 
@@ -827,7 +827,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			// if there is a picture, display this
 			if($okPicture) {
 				$tool_content .= "
-				<div align=\"center\">"."<img src=\"".$picturePath."/quiz-".$questionId."\"></div>";
+				<div align='center'><img src='../../$picturePath/quiz-$questionId' /></div>";
 			}
 			$tool_content .="
 			</fieldset> 

@@ -48,8 +48,7 @@ $tool_content .= "
   </div>";
 
 require_once 'include/jscalendar/calendar.php';
-$lang = ($language == 'el')? 'el': 'en';
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
 if (!extension_loaded('gd')) {
@@ -114,12 +113,11 @@ if (!extension_loaded('gd')) {
     if ($u_course_id == -1) {
      //show chart for all courses
            $qry1 = "SELECT id FROM course";
-           $res1 = db_query($qry1, $mysqlMainDb);
+           $res1 = db_query($qry1);
 
            $point = array();
            while ($row1 = mysql_fetch_assoc($res1)) {
-                $cid = $row1['course_id'];
-
+                $cid = $row1['id'];
                 $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
                         WHERE course_id = $cid AND $date_where $date_group
                         ORDER BY date_time ASC";
@@ -189,7 +187,6 @@ if (!extension_loaded('gd')) {
         $cid = course_code_to_id($u_course_id);
         $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
                 WHERE course_id = $cid AND $date_where $date_group ORDER BY date_time ASC";        
-        echo "<br />";
         $result = db_query($query);
 
         $chart = new VerticalBarChart();
@@ -222,18 +219,18 @@ if (!extension_loaded('gd')) {
             break;
             case "monthly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                    $chart->width += 25;
-                    $chart->setDataSet($dataSet);
-                    $chart_content=1;
+                        $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
+                        $chart->width += 25;
+                        $chart->setDataSet($dataSet);
+                        $chart_content=1;
                 }
             break;
             case "yearly":                    
                 while ($row = mysql_fetch_assoc($result)) {
-                    $dataSet->addPoint(new Point($row['year'], $row['cnt']));
-                    $chart->width += 25;
-                    $chart->setDataSet($dataSet);
-                    $chart_content=1;
+                        $dataSet->addPoint(new Point($row['year'], $row['cnt']));
+                        $chart->width += 25;
+                        $chart->setDataSet($dataSet);
+                        $chart_content=1;
                 }
             break;
         }
@@ -244,33 +241,21 @@ if (!extension_loaded('gd')) {
     if (!file_exists('courses/temp')) {
         mkdir('courses/temp', 0777);
     }
-
-    $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-
-    $chart->render($webDir.'/'.$chart_path);
-
     //check if there are statistics to show
     if ($chart_content) {
-            $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
-    <tr>
-      <th width="220"  class="left">'.$langVisits.' :</th>
-      <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-    </tr>
-    </tbody>
-    </table>';    
-    } elseif (isset($btnUsage) and $chart_content == 0) {
-            $tool_content .= '
-    <table class="FormData" width="99%" align="left">
-    <tbody>
-    <tr>
-      <th width="220" class="left">'.$langVisits.' :</th>
-      <td valign="top">'.$langNoStatistics.'</td>
-    </tr>
-    </tbody>
-    </table>';
-}
+        $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
+        $chart->render($webDir.'/'.$chart_path);
+        $tool_content .= '
+        <table class="FormData" width="99%" align="left">
+        <tbody>
+        <tr>        
+        <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
+        </tr>
+        </tbody>
+        </table>';        
+    } else {            
+        $tool_content .= "<div class='alert1'>$langNoStatistics</div>";        
+     }
 $tool_content .= '<br />';
 
 /*************************************************************************

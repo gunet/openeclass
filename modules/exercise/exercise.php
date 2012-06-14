@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,12 +19,6 @@
  * ======================================================================== */
 
 
-// answer types
-define('UNIQUE_ANSWER', 1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
 
 include('exercise.class.php');
 include('question.class.php');
@@ -37,11 +31,10 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 
-require_once '../video/video_functions.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
-
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_EXERCISE);
 

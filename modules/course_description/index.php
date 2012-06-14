@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -87,7 +87,7 @@ hCont;
         }
 }
 
-$q = db_query("SELECT id, title, comments, res_id, visibility FROM unit_resources WHERE
+$q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
                         unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
 if ($q and mysql_num_rows($q) > 0) {
         list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
@@ -97,7 +97,7 @@ if ($q and mysql_num_rows($q) > 0) {
 		<table width='100%' class='tbl_border'>
 		<tr class='odd'>
 		 <td class='bold'>" . q($row['title']) . "</td>\n" .
-		 actions('description', $row['id'], $row['visibility'], $row['res_id']) . "
+		 actions('description', $row['id'], $row['visible'], $row['res_id']) . "
 		</tr>
 		<tr>";
 	      if ($is_editor) {

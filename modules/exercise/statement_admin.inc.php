@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -94,7 +93,7 @@ else
 }
 if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	$questionId = $objQuestion->selectId();
-	// is picture set ?
+	// is picture set ?        
 	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
         // if there is an error message
         if(!empty($msgErr)) {
@@ -107,7 +106,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>
 	  <tr>
-	    <th>".$langQuestion." :</th>
+	    <th>".$langQuestion.":</th>
 	    <td><input type='text' name='questionName'" ."size='50' value='".htmlspecialchars($questionName)."'></td>
 	  </tr>
 	  <tr>
@@ -125,16 +124,15 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 		$tool_content .= "$langAddPicture";
 	}	
 
-	$tool_content .= " :</th>
-        <td>";
-	if($okPicture) {
-		$tool_content .= "<img src='$picturePath/quiz-$questionId'><br/><br/>";
+	$tool_content .= ":</th><td>";
+	if($okPicture) {         
+		$tool_content .= "<img src='../../$picturePath/quiz-$questionId'><br/><br/>";
 	}
 	$tool_content .= "<input type='file' name='imageUpload' size='30'></td></tr>";
 
 	if ($okPicture) {
 		$tool_content .= "<tr>
-		<th>$langDeletePicture :</th>
+		<th>$langDeletePicture:</th>
 		<td><input type='checkbox' name='deletePicture' value='1' ";
 		if(isset($_POST['deletePicture'])) {
 			$tool_content .= 'checked="checked"'; 
@@ -143,7 +141,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 		$tool_content .= "</td></tr>";
 	}
 	$tool_content .= "<tr>
-        <th valign='top'>$langAnswerType :</th>
+        <th valign='top'>$langAnswerType:</th>
 	<td><input type='radio' name='answerType' value='1' ";
         if ($answerType == 1) {
                 $tool_content .= 'checked="checked"';

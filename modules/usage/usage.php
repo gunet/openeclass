@@ -38,6 +38,7 @@ $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 include '../../include/baseTheme.php';
+require_once 'include/jscalendar/calendar.php';
 
 $tool_content .= "
 <div id='operations_container'>
@@ -56,8 +57,6 @@ $nameTools = $langUsage;
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #edecdf; padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
-
-include('../../include/jscalendar/calendar.php');
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();

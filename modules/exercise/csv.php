@@ -20,7 +20,7 @@
 
 
 $require_current_course = TRUE;
-include '../../include/init.php';
+require_once '../../include/init.php';
 
 if ($is_editor) {
 	header("Content-disposition: filename=".$currentCourse."_".$_GET['exerciseId']."_".date("Y-m-d").".xls");

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,8 +43,8 @@ $nameTools = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
+  <div id='operations_container'>
+    <ul id='opslist'>
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
       <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
@@ -54,7 +54,7 @@ $tool_content .= "
 
 
 // move data from table 'loginout' to 'loginout_summary' if older than eight months
-require_once 'summarizeLogins.php';
+require_once 'modules/admin/summarizeLogins.php';
 
 // see if chart has content
 $chart_content = 0;
@@ -85,7 +85,7 @@ if (!extension_loaded('gd')) {
     /*****************************************
       start making chart
      *******************************************/
-     require_once '../../include/libchart/libchart.php';
+     require_once 'include/libchart/libchart.php';
 
      //default values for chart
      $usage_defaults = array (

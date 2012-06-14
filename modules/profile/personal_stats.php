@@ -19,7 +19,8 @@
  * ======================================================================== */
 
 include '../../include/baseTheme.php';
-include "../auth/auth.inc.php";
+require_once 'modules/auth/auth.inc.php';
+
 $require_valid_uid = TRUE;
 $require_help = TRUE;
 $helpTopic = 'PersonalStats';
@@ -36,7 +37,8 @@ if (!extension_loaded('gd')) {
 } else {
 	$totalHits = 0;
         $totalDuration = 0;
-	require_once '../../include/libchart/libchart.php';
+	require_once 'include/libchart/libchart.php';
+        
         $sql = "SELECT a.code code, a.title title
                 FROM course AS a LEFT JOIN course_user AS b
                      ON a.id = b.course_id
@@ -82,10 +84,10 @@ if (!extension_loaded('gd')) {
 			}
 		}
 		$chart->setTitle($langCourseVisits);
-		if (!file_exists("../../courses/temp")) {
-			mkdir("../../courses/temp", 0777);
-		}
-		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
+		if (!file_exists("courses/temp")) {
+			mkdir("courses/temp", 0777);
+		}                
+		$chart_path = '/courses/temp/chart_'.md5(serialize($chart)).'.png';
 		if ($chart_content) {
 			$chart->render($webDir.$chart_path);
 			$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
@@ -135,15 +137,15 @@ if (!extension_loaded('gd')) {
 $sql = "SELECT * FROM loginout
     WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
-$leResultat = db_query($sql, $mysqlMainDb);
+$leResultat = db_query($sql);
 $tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
 $tool_content .= "<table class='tbl_alt' width='550'>
             <tr>
               <th colspan='2'>$langDate</th>
               <th width='140'>$langAction</th>
             </tr>";
-$nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-$nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
+$nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
+$nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
 $i=0;
 while ($leRecord = mysql_fetch_array($leResultat)) {
         $when = $leRecord["when"];
@@ -154,7 +156,7 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
                 $tool_content .= "<tr class='odd'>";
         }
         $tool_content .= "
-        <td width=\"16\"><img src='$themeimg/arrow.png' alt=''></td>
+        <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
         <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
         <td>".$nomAction[$action]."</td>
         </tr>";

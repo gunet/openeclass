@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -97,7 +96,7 @@ class Exercise
 			$this->results         = $object->results;
 			$this->score           = $object->score;
 
-			$sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION` 
+			$sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
 				WHERE course_id = $course_id AND question_id = id AND exercise_id = '$id' ORDER BY q_position";
 			$result = db_query($sql);
 
