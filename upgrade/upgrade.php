@@ -168,12 +168,17 @@ if (!isset($_POST['submit2'])) {
                 set_config('phpMyAdminURL', $phpMyAdminURL);
                 set_config('phpSysInfoURL', $phpSysInfoURL);
 
-                $new_conf = "<?php
-\$mysqlServer = " . quote($mysqlServer) . ";
-\$mysqlUser = " . quote($mysqlUser) . ";
-\$mysqlPassword = " . quote($mysqlPassword) . ";
-\$mysqlMainDb = " . quote($mysqlMainDb) . ";
-";
+                $new_conf = '<?php
+/* ========================================================
+ * Open eClass 3.0 configuration file
+ * Created by upgrade on '.date('Y-m-d H:i').'
+ * ======================================================== */
+
+$mysqlServer = '.quote($mysqlServer).';
+$mysqlUser = '.quote($mysqlUser).';
+$mysqlPassword = '.quote($mysqlPassword).';
+$mysqlMainDb = '.quote($mysqlMainDb).';
+';
                 $fp = @fopen('config/config.php', 'w');
                 if (!$fp) {
                         die ($langConfigError3);

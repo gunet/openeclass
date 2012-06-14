@@ -499,16 +499,3 @@ else {
 
 draw($tool_content, 3);
 
-// Return a list of all subdirectories of $base which contain a file named $filename
-function active_subdirs($base, $filename)
-{
-	$dir = opendir($base);
-	$out = array();
-	while (($f = readdir($dir)) !== false) {
-		if (is_dir($base . '/' . $f) and $f != '.' and $f != '..' and file_exists($base . '/' . $f . '/' . $filename)) {
-			$out[] = $f;
-		}
-	}
-	closedir($dir);
-	return $out;
-}

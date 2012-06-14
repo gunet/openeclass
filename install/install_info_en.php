@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 3.0</title>
+<title>Open eClass 3.0 Installation Instructions</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -18,7 +18,7 @@ p {
 
 <a href="http://www.openeclass.org/" title="Open eClass" alt="Open eClass" class="logo"></a></div>
 
-  <p class="title1">Installation Instructions Open eClass 3.0</p>
+  <p class="title1">Open eClass 3.0 Installation Instructions </p>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet
 to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group
 and is distributed for free as open-source software.</p>

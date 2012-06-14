@@ -1592,12 +1592,19 @@ function set_config($key, $value)
 // If $what = 'any' returns true if any variable is set
 function register_posted_variables($var_array, $what = 'all', $callback = null)
 {
+        global $missing_posted_variables;
+
+        if (!isset($missing_posted_variables)) {
+                $missing_posted_variables = array();
+        }
+
         $all_set = true;
         $any_set = false;
         foreach ($var_array as $varname => $required) {
                 if (isset($_POST[$varname])) {
                         $GLOBALS[$varname] = canonicalize_whitespace($_POST[$varname]);
                         if ($required and empty($GLOBALS[$varname])) {
+                                $missing_posted_variables[$varname] = true;
                                 $all_set = false;
                         }
                         if (!empty($GLOBALS[$varname])) {
@@ -1606,6 +1613,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
                 } else {
                         $GLOBALS[$varname] = '';
                         if ($required) {
+                                $missing_posted_variables[$varname] = true;
                                 $all_set = false;
                         }
                 }
@@ -2264,4 +2272,21 @@ function get_user_email_notification_from_courses($user_id) {
         } else {
                 return FALSE;
         }                  
+}
+
+
+// Return a list of all subdirectories of $base which contain a file named $filename
+function active_subdirs($base, $filename)
+{
+	$dir = opendir($base);
+	$out = array();
+	while (($f = readdir($dir)) !== false) {
+                if (is_dir($base.'/'.$f) and
+                    $f != '.' and $f != '..' and
+                    file_exists($base.'/'.$f.'/'.$filename)) {
+			$out[] = $f;
+		}
+	}
+	closedir($dir);
+	return $out;
 }

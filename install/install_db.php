@@ -880,9 +880,9 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
-                 VALUES (" . autoquote($nameForm) . ', ' . autoquote($surnameForm) . ', ' .
-                             autoquote($loginForm) . ", '$password_encrypted', " .
-                             autoquote($emailForm) . ", 1, " . time() . ", $exp_time, 1)");
+                 VALUES (" . quote($nameForm) . ", '', " .
+                             quote($loginForm) . ", '$password_encrypted', " .
+                             quote($emailForm) . ", 1, " . time() . ", $exp_time, 1)");
 $admin_uid = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                  VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -957,32 +957,47 @@ db_query("CREATE TABLE `config`
                  `value` VARCHAR(255) NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
+                ('base_url', ".quote($urlForm)."),
                 ('default_language', '$lang'),
-		('dont_display_login_form', $dont_display_login_form),
-		('email_required', $email_required),
+                ('dont_display_login_form', $dont_display_login_form),
+                ('email_required', $email_required),
                 ('email_from', $email_from),
-		('email_verification_required', $email_verification_required),
-		('dont_mail_unverified_mails', $dont_mail_unverified_mails),
-		('am_required', $am_required),
-		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
-		('block_username_change', $block_username_change),
-		('betacms', $betacms),
-		('enable_mobileapi', $enable_mobileapi),
-		('code_key', '" . generate_secret_key(32) . "'),
-		('display_captcha', $display_captcha),
-		('insert_xml_metadata', $insert_xml_metadata),
-		('doc_quota', $doc_quota),
-		('video_quota', $video_quota),
-		('group_quota', $group_quota),
-		('dropbox_quota', $dropbox_quota),
+                ('email_verification_required', $email_verification_required),
+                ('dont_mail_unverified_mails', $dont_mail_unverified_mails),
+                ('am_required', $am_required),
+                ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
+                ('block_username_change', $block_username_change),
+                ('betacms', $betacms),
+                ('enable_mobileapi', $enable_mobileapi),
+                ('code_key', '" . generate_secret_key(32) . "'),
+                ('display_captcha', $display_captcha),
+                ('insert_xml_metadata', $insert_xml_metadata),
+                ('doc_quota', $doc_quota),
+                ('video_quota', $video_quota),
+                ('group_quota', $group_quota),
+                ('dropbox_quota', $dropbox_quota),
                 ('close_user_registration', $close_user_registration),
-		('disable_eclass_stud_reg', $disable_eclass_stud_reg),
-		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
-		('course_multidep', $course_multidep),
-		('user_multidep', $user_multidep),
-		('restrict_teacher_owndep', $restrict_teacher_owndep),
+                ('disable_eclass_stud_reg', $disable_eclass_stud_reg),
+                ('disable_eclass_prof_reg', $disable_eclass_prof_reg),
+                ('course_multidep', $course_multidep),
+                ('user_multidep', $user_multidep),
+                ('restrict_teacher_owndep', $restrict_teacher_owndep),
                 ('max_glossary_terms', '250'),
-		('version', '" . ECLASS_VERSION ."')");
+                ('phpMyAdminURL', ".quote($phpMyAdminURL)."),
+                ('phpSysInfoURL', ".quote($phpSysInfoURL)."),
+                ('email_sender', ".quote($emailForm)."),
+                ('admin_name', ".quote($nameForm)."),
+                ('email_helpdesk', ".quote($helpdeskmail)."),
+                ('site_name', ".quote($campusForm)."),
+                ('phone', ".quote($helpdeskForm)."),
+                ('fax', ".quote($faxForm)."),
+                ('postaddress', ".quote($postaddressForm)."),
+                ('institution', ".quote($institutionForm)."),
+                ('institution_url', ".quote($institutionUrlForm)."),
+                ('account_duration', '126144000'),
+                ('language', ".quote($lang)."),
+                ('active_ui_languages', ".quote($active_ui_languages)."),
+                ('version', '" . ECLASS_VERSION ."')");
 
 // Table passwd_reset (used by the password reset module)
 db_query("CREATE TABLE `passwd_reset` (

@@ -30,35 +30,39 @@ header('Content-Type: text/html; charset=UTF-8');
  *
  */
 
+require_once '../include/main_lib.php';
+require_once 'install_functions.php';
+
+$tool_content = '';
+if (!isset($siteName)) $siteName = '';
+if (!isset($InstitutionUrl)) $InstitutionUrl = '';
+if (!isset($Institution)) $Institution = '';
+
 if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 	date_default_timezone_set("Europe/Athens");
 }
 
-$tool_content = "";
-if (!isset($siteName)) $siteName = "";
-if (!isset($InstitutionUrl)) $InstitutionUrl = "";
-if (!isset($Institution)) $Institution = "";
-
 // get installation language. Greek is the default language.
 if (isset($_POST['lang'])) {
-	$_SESSION['lang'] = $_POST['lang'];
+	$lang = $_SESSION['lang'] = $_POST['lang'];
+} elseif (isset($_SESSION['lang'])) {
+        $lang = $_SESSION['lang'];
 } else {
-        $_SESSION['lang'] = 'el';
+        $lang = 'el';
+}
+if (!isset($language_codes[$lang])) {
+        $lang = 'el';
 }
 
-$lang = $_SESSION['lang'];
-
-if ($lang == 'en') {
-	$install_info_file = "install_info_en.php";
+if ($lang == 'el') {
+	$install_info_file = 'install_info.php';
 } else {
-	$install_info_file = "install_info.php";
+	$install_info_file = 'install_info_en.php';
 }
 
-require_once '../include/lib/main.lib.php';
-require_once 'install_functions.php';
 // include_messages
 require_once "../lang/$lang/common.inc.php";
-$extra_messages = "config/{$language_codes[$language]}.inc.php";
+$extra_messages = "../config/{$language_codes[$lang]}.inc.php";
 if (file_exists($extra_messages)) {
         include $extra_messages;
 } else {
@@ -106,15 +110,13 @@ if (isset($_POST['welcomeScreen'])) {
 	$dbHostForm = 'localhost';
 	$dbUsernameForm = 'root';
 	$dbNameForm = 'eclass';
-	$dbMyAdmin = '../admin/mysql/';
+	$phpMyAdminURL = '../admin/mysql/';
 	$phpSysInfoURL = '../admin/sysinfo/';
-	// extract the path to append to the url if it is not installed on the web root directory
-	$urlAppendPath = str_replace('/install/index.php', '', $_SERVER['PHP_SELF']);
-	$urlForm = "http://".$_SERVER['SERVER_NAME']."$urlAppendPath/";
-	$pathForm = realpath('../') . '/';
+        $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'])? 'https://': 'http://') .
+                   $_SERVER['SERVER_NAME'] .
+                   str_replace('/install/index.php', '/', $_SERVER['PHP_SELF']);
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$nameForm = $langDefaultAdminName;
-	$surnameForm = $langDefaultAdminSurname;
 	$loginForm = 'admin';
 	$passForm = create_pass();
 	$campusForm = 'Open eClass';
@@ -138,15 +140,12 @@ if (isset($_POST['welcomeScreen'])) {
                 'dbHostForm' => true,
                 'dbUsernameForm' => true,
                 'dbNameForm' => true,
-                'dbMyAdmin' => true,
+                'phpMyAdminURL' => true,
                 'dbPassForm' => true,        
                 'phpSysInfoURL' => true,
-                'urlAppendPath' => true,
                 'urlForm' => true,
-                'pathForm' => true,
                 'emailForm' => true,
                 'nameForm' => true,
-                'surnameForm' => true,
                 'loginForm' => true,
                 'passForm' => true,
                 'campusForm' => true,
@@ -182,7 +181,6 @@ if (isset($_POST['welcomeScreen'])) {
 		'video_quota' => true), 'all', 'intval');
 }
 
-$pathForm = str_replace("\\", '/', realpath($pathForm) . '/');
 
 function hidden_vars($names)
 {
@@ -217,8 +215,8 @@ function textarea_input($name, $rows, $cols)
                q($GLOBALS[$name]) . "</textarea>";
 }
 
-$all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
-                  'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'surnameForm', 'loginForm',
+$all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
+                  'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'loginForm',
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
@@ -254,7 +252,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
 	$tool_content .= "
-	<div>$langDBSettingIntro</div>
+	<div>$langWillWrite $langDBSettingIntro</div>
 	<br />
         <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
@@ -274,15 +272,6 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<th class='left'>$langMainDB</th>
 	<td>".text_input('dbNameForm', 25)."&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
-	<tr>
-	<th class='left'>URL του phpMyAdmin</th>
-	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
-	</tr>
-	<tr>
-	<th class='left'>URL του System info</th>
-	<td>".text_input('phpSysInfoURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
-	</tr>
-	<tr>
 	<td colspan='2' class='right'>
 		<input type='submit' name='back2' value='&laquo; $langPreviousStep' />
 		&nbsp;<input type='submit' name='install4' value='$langNextStep &raquo;' />
@@ -303,17 +292,13 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
         if (empty($helpdeskmail)) {
                 $helpdeskmail = '';
         }
-	$tool_content .= "<div> $langWillWrite</div><br />
+	$tool_content .= "
                 <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
                 <table width='100%' class='tbl smaller'>
                 <tr><th class='left' width='220'>$langSiteUrl</th>
                     <td>".text_input('urlForm', 40)."&nbsp;&nbsp;(*)</td></tr>
-                <tr><th class='left'>$langLocalPath</th>
-                    <td>".text_input('pathForm', 40)."&nbsp;&nbsp;(*)</td></tr>
                 <tr><th class='left'>$langAdminName</th>
                     <td>".text_input('nameForm', 40)."</td></tr>
-                <tr><th class='left'>$langAdminSurname</th>
-                    <td>".text_input('surnameForm', 40)."</td></tr>
                 <tr><th class='left'>$langAdminEmail</th>
                     <td>".text_input('emailForm', 40)."</td></tr>
                 <tr><th class='left'>$langAdminLogin</th>
@@ -334,6 +319,10 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
                     <td>".text_input('institutionUrlForm', 40)."</td></tr>
                 <tr><th class='left'>$langInstitutePostAddress</th>
                     <td>".textarea_input('postaddressForm', 3, 40)."</td></tr>
+	        <tr><th class='left'>$langphpMyAdminURL</th>
+                    <td>".text_input('phpMyAdminURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td></tr>
+                <tr><th class='left'>$langSystemInfoURL</th>
+                    <td>".text_input('phpSysInfoURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td></tr>
 		<tr><th class='left'>$langDocQuota</th>
 			<td>".text_input('doc_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langVideoQuota</th>
@@ -477,15 +466,11 @@ elseif(isset($_REQUEST['install6']))
 	</tr>
 	<tr>
 	<th class='left'>PHPMyAdmin URL:</th>
-	<td>$dbMyAdmin</td>
+	<td>$phpMyAdminURL</td>
 	</tr>
 	<tr>
 	<th class='left'>$langSiteUrl:</th>
 	<td>$urlForm</td>
-	</tr>
-	<tr>
-	<th class='left'>$langLocalPath:</th>
-	<td>$pathForm</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminEmail:</th>
@@ -494,10 +479,6 @@ elseif(isset($_REQUEST['install6']))
 	<tr>
 	<th class='left'>$langAdminName:</th>
 	<td>$nameForm</td>
-	</tr>
-	<tr>
-	<th class='left'>$langAdminSurname:</th>
-	<td>$surnameForm</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminLogin:</th>
@@ -581,47 +562,27 @@ elseif(isset($_REQUEST['install7']))
 		exit();
 	}
 	$mysqlMainDb = $dbNameForm;
+        $active_ui_languages = implode(' ',
+                active_subdirs('../lang', 'messages.inc.php'));
+
 	// create main database
-	require "install_db.php";
+        require 'install_db.php';
+
 	// create config.php
-	$fd=@fopen("../config/config.php", "w");
+	$fd = @fopen("../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
 	} else {		
-		$stringConfig='<?php
+		$stringConfig = '<?php
 /* ========================================================
- * OpeneClass 3.0 configuration file
- * Automatically created by install on '.date('Y-m-d H:i').'
+ * Open eClass 3.0 configuration file
+ * Created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
-$urlServer = "'.$urlForm.'";
-$urlAppend = "'.$urlAppendPath.'";
-$webDir    = "'.$pathForm.'";
-
-$mysqlServer = "'.$dbHostForm.'";
-$mysqlUser = "'.$dbUsernameForm.'";
-$mysqlPassword = '.autoquote($dbPassForm).';
-$mysqlMainDb = "'.$mysqlMainDb.'";
-$phpMyAdminURL = "'.$dbMyAdmin.'";
-$phpSysInfoURL = "'.$phpSysInfoURL.'";
-$emailAdministrator = '.autoquote($emailForm).';
-$administratorName = '.autoquote($nameForm).';
-$administratorSurname = '.autoquote($surnameForm).';
-$siteName = '.autoquote($campusForm).';
-
-$telephone = '.autoquote($helpdeskForm).';
-$fax = '.autoquote($faxForm).';
-$emailhelpdesk = '.autoquote($helpdeskmail).';
-
-$Institution = '.autoquote($institutionForm).';
-$InstitutionUrl = '.autoquote($institutionUrlForm).';
-$postaddress = '.autoquote($postaddressForm).';
-
-$durationAccount = "126144000";
-
-define("UTF8", true);
-
-$encryptedPasswd = true;
+$mysqlServer = '.quote($dbHostForm).';
+$mysqlUser = '.quote($dbUsernameForm).';
+$mysqlPassword = '.quote($dbPassForm).';
+$mysqlMainDb = '.quote($mysqlMainDb).';
 ';
 	// write to file
 	fwrite($fd, $stringConfig);

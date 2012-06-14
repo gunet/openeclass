@@ -74,10 +74,10 @@ function redirect_to_message($id) {
 
 if (isset($_POST['submit'])) {
         // First do personalization and language changes
-	if (!file_exists($webDir."courses/userimg/")) {
-		mkdir($webDir."courses/userimg/", 0775);
+	if (!file_exists($webDir.'/courses/userimg/')) {
+		mkdir($webDir.'/courses/userimg/', 0775);
 	}
-	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];        
+	$image_path = $webDir.'/courses/userimg/'.$_SESSION['uid'];        
         $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
         $old_language = $language;
         $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];        
@@ -92,18 +92,18 @@ if (isset($_POST['submit'])) {
                               WHERE user_id = $uid");
 
         $all_ok = register_posted_variables(array(
-                'am_form' => false,
+                'am_form' => get_config('am_required') and $myrow['statut'] != 1,
                 'desc_form' => false,
                 'phone_form' => false,
                 'email_form' => get_config('email_required'),
-                'nom_form' => true,
+                'nom_form' => !$is_admin,
                 'prenom_form' => true,
                 'username_form' => true,
                 'email_public' => false, 
                 'phone_public' => false, 
                 'am_public' => false), 'all');
-        
-        if (!isset($_POST['department'])) {
+
+        if (!isset($_POST['department']) and !$is_admin) {
             $all_ok = false;
             $departments = array();
         } else
