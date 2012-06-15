@@ -19,14 +19,14 @@
  * ======================================================================== */
 
 
-$require_current_course = TRUE;
-$require_login = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_login = true;
+$require_help = true;
 $helpTopic = 'For';
-include '../../include/baseTheme.php';
-include_once "config.php";
-include "functions.php"; 
-require_once '../video/video_functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'config.php';
+require_once 'functions.php'; 
+require_once 'modules/video/video_functions.php';
 
 load_modal_box();
 $head_content .= '
@@ -66,8 +66,8 @@ if (!$myrow = mysql_fetch_array($result)) {
 	draw($tool_content, 2);
 	exit();
 }
-$forum_name = $myrow["name"];
-$forum = $myrow["id"];
+$forum_name = $myrow['name'];
+$forum = $myrow['id'];
 
 if (isset($_GET['delete'])) {
 	$post_id = intval($_GET['post_id']);
@@ -122,8 +122,8 @@ $myrow = mysql_fetch_array($result);
 $topic_subject = $myrow["title"];
 
 if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
-	$navigation[]= array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum", "name"=> $forum_name);
+	$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+	$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => $forum_name);
 }
 $nameTools = $topic_subject;
 

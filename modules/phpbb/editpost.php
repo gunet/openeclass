@@ -23,9 +23,9 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = FALSE;
 $require_editor = TRUE;
-include "../../include/baseTheme.php";
-include_once "config.php";
-include "functions.php"; 
+require_once '../../include/baseTheme.php';
+require_once 'config.php';
+require_once 'functions.php'; 
 
 if (isset($_GET['forum'])) {
         $forum_id = intval($_GET['forum']);
@@ -49,10 +49,10 @@ if (isset($_POST['submit'])) {
         }
         
         $myrow = mysql_fetch_array($result);
-        $topic_id = $myrow["topic_id"];
-        $forum_id = $myrow["forum_id"];        
-        $this_post_time = $myrow["post_time"];
-        list($day, $time) = explode(' ', $myrow["post_time"]);
+        $topic_id = $myrow['topic_id'];
+        $forum_id = $myrow['forum_id'];        
+        $this_post_time = $myrow['post_time'];
+        list($day, $time) = explode(' ', $myrow['post_time']);
         $date = date("Y-m-d H:i");
 
         $row1 = mysql_fetch_row(db_query("SELECT name FROM forum 
@@ -65,9 +65,9 @@ if (isset($_POST['submit'])) {
         $topic_title = $row2[0];
 
         $nameTools = $langReply;
-        $navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
-        $navigation[] = array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $name);
-        $navigation[] = array ("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $title);
+        $navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langForums);
+        $navigation[] = array ('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $name);
+        $navigation[] = array ('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $title);
                                 
         $sql = "UPDATE forum_posts SET post_text = " . autoquote(purify($message)) . "
                         WHERE id = $post_id 
@@ -111,9 +111,9 @@ if (isset($_POST['submit'])) {
         $myrow = mysql_fetch_array($result);
 
         $nameTools = $langReply;
-        $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langForums);
-        $navigation[] = array("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $myrow['name']);
-        $navigation[] = array("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", "name"=> $myrow['title']);
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+        $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $myrow['name']);
+        $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow['title']);
         
         $sql = "SELECT p.post_text, p.post_time, t.title 
                         FROM forum_posts p, forum_topics t

@@ -21,14 +21,14 @@
 /*
  * Open eClass 3.x standard stuff
  */
-$require_current_course = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_help = true;
 $helpTopic = 'For';
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
-include '../group/group_functions.php';
-include_once("./config.php");
-include("functions.php");
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
+require_once 'modules/group/group_functions.php';
+require_once 'config.php';
+require_once 'functions.php';
 
 if (isset($_GET['forum'])) {
 	$forum = intval($_GET['forum']);
@@ -54,9 +54,9 @@ $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
 $nameTools = $langReply;
-$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
-$navigation[]= array ("url"=>"viewforum.php?course=$course_code&amp;forum=$forum_id", "name"=> $forum_name);
-$navigation[]= array ("url"=>"viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", "name"=> $topic_title);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
+$navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $forum_name);
+$navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => $topic_title);
 
 if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 	$tool_content .= $langErrorTopicSelect;

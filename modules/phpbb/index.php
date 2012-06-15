@@ -22,17 +22,18 @@ $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langForums;
+
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_FORUM);
 /**************************************/
 
-include_once("./config.php");
-include "functions.php";
-include "../group/group_functions.php";
+require_once 'config.php';
+require_once 'functions.php';
+require_once 'modules/group/group_functions.php';
 
 if ($is_editor) {
 	$head_content .= '
@@ -99,16 +100,16 @@ if ($total_categories) {
 	while ($cat_row = mysql_fetch_array($result)) {
 		$categories[] = $cat_row;
 	}
-	$sql = "SELECT f.*, p.post_time, p.topic_id, p.poster_id
+	$sql = "SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
 		FROM forum f LEFT JOIN forum_posts p ON p.id = f.last_post_id
                 AND f.course_id = $course_id
 		ORDER BY f.cat_id, f.id";
 		
 	$f_res = db_query($sql);
-	while ($forum_data = mysql_fetch_array($f_res)) {
+	while ($forum_data = mysql_fetch_assoc($f_res)) {
 		$forum_row[] = $forum_data;
 	}
-	for($i=0; $i < $total_categories; $i++) {
+	for ($i=0; $i < $total_categories; $i++) {
 		$title = stripslashes($categories[$i]["cat_title"]);
 		$catNum = $categories[$i]["id"];
 		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
@@ -168,7 +169,7 @@ if ($total_categories) {
 					if (!isset($last_visit)) {
 						$last_visit = 0;
 					}
-					if(@$last_post_time > $last_visit && $last_post != $langNoPosts) {
+					if (@$last_post_time > $last_visit && $last_post != $langNoPosts) {
 						$tool_content .= "<td width='1'><img src='$newposts_image' /></td>\n";
 					} else {
 						$tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";

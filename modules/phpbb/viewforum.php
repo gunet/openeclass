@@ -18,22 +18,22 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$require_login = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_login = true;
+$require_help = true;
 $helpTopic = 'For';
-include '../../include/baseTheme.php';
-include '../group/group_functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/group/group_functions.php';
 
-if (!add_units_navigation(TRUE)) {
-	$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
+if (!add_units_navigation(true)) {
+	$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
 
 $paging = true;
 $next = 0;
 
-include_once("./config.php");
-include("functions.php");
+require_once 'config.php';
+require_once 'functions.php';
 
 $local_head = '
 <script type="text/javascript">
@@ -54,12 +54,12 @@ $group_id = init_forum_group_info($forum_id);
 $result = db_query("SELECT id, name FROM forum WHERE id = $forum_id AND course_id = $course_id");
 $myrow = mysql_fetch_array($result);
  
-$forum_name = $myrow["name"];
-$forum_id = $myrow["id"];
+$forum_name = $myrow['name'];
+$forum_id = $myrow['id'];
 
 $nameTools = $forum_name;
 
-if (isset($_GET['empty'])) {// if we come from newtopic.php
+if (isset($_GET['empty'])) { // if we come from newtopic.php
 	$tool_content .= "<p class='alert1'>$langEmptyNewTopic</p>";
 }
 

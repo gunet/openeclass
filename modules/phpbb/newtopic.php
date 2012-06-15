@@ -21,15 +21,15 @@
 /*
  * Open eClass 3.x standard stuff
  */
-$require_current_course = TRUE;
-$require_login = TRUE;
-$require_help = FALSE;
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
-include '../group/group_functions.php';
+$require_current_course = true;
+$require_login = true;
+$require_help = false;
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
+require_once 'modules/group/group_functions.php';
 
-include_once("./config.php");
-include("functions.php"); 
+require_once 'config.php';
+require_once 'functions.php';
 
 if (isset($_GET['forum'])) {
 	$forum = intval($_GET['forum']);

@@ -27,12 +27,12 @@ $require_help = TRUE;
 $helpTopic = 'For';
 $require_editor = true;
 
-include '../../include/baseTheme.php';
-include '../../include/sendMail.inc.php';
-include 'functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
+require_once 'functions.php';
 
 $nameTools = $langCatForumAdmin;
-$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langForums);
+$navigation[]= array ('url' => "index.php?course=$course_code", 'name' => $langForums);
 
 $forum_id = isset($_REQUEST['forum_id'])? intval($_REQUEST['forum_id']): '';
 $cat_id = isset($_REQUEST['cat_id'])? intval($_REQUEST['cat_id']): '';
