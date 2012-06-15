@@ -134,8 +134,8 @@ while ($listex = mysql_fetch_array($resultex) )
             $order = $orderMax + 1;
             // finally : insert in learning path
             $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                    (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
-                    VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN')";
+                    (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
+                    VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedExercice_id."','".addslashes($langDefaultModuleAddedComment)."', ".$order.",'OPEN', 1)";
             $query = db_query($sql);
 
             $messBox .= "<tr>". disp_message_box($exercise['title'] ." :  ".$langExInsertedAsModule."<br>", "success") . "</td></tr>";
@@ -167,8 +167,8 @@ while ($listex = mysql_fetch_array($resultex) )
                 $order = $orderMax + 1;
                 // finally : insert in learning path
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
-                        VALUES (".(int)$_SESSION['path_id'].", ".(int)$thisExerciseModule['module_id'].",'".addslashes($langDefaultModuleAddedComment)."', ".$order.", 'OPEN')";
+                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
+                        VALUES (".(int)$_SESSION['path_id'].", ".(int)$thisExerciseModule['module_id'].",'".addslashes($langDefaultModuleAddedComment)."', ".$order.", 'OPEN', 1)";
                 $query = db_query($sql);
 
                 // select infos about added exercise
@@ -199,8 +199,7 @@ $tool_content .= display_my_exercises("", "");
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-$tool_content .= "
-    <p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."'>$langBackToLPAdmin</p>";
+$tool_content .= "<p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."'>$langBackToLPAdmin</p>";
 
 draw($tool_content, 2, null, $head_content);
 

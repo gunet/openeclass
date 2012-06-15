@@ -254,15 +254,15 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 		}
 	} else {
                 $lp = mysql_fetch_array($r, MYSQL_ASSOC);
-		$status = ($lp['visibility'] == 'SHOW')? 'v': 'i';
+		$status = $lp['visible'];
 		$link = "<a href='${urlServer}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
                 if (!$module_visible) {
 			$link .= " <i>($langInactiveModule)</i>";
                 }
 		$imagelink = "<img src='$themeimg/lp_" .
-			($status == 'i'? 'off': 'on') . ".png' />";
+			($status == '0'? 'off': 'on') . ".png' />";
 	}
-        if ($status != 'v' and !$is_editor) {
+        if ($status != '1' and !$is_editor) {
 			return '';
         }
 

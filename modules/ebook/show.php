@@ -76,7 +76,7 @@ if ($show_orphan_file and $file_path) {
     if (!$is_in_playmode)
         send_file_by_url_file_path($file_path);
     else {
-        require_once ('../video/video_functions.php');
+        require_once 'modules/video/video_functions.php';
         
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
@@ -171,7 +171,7 @@ if ($file_path) {
 }
 
 $t = new Template();
-$t->set_root($webDir . 'template/' . $theme);
+$t->set_root($webDir . '/template/' . $theme);
 $t->set_file('page', 'ebook_fullscreen.html');
 $t->set_var('page_title', q($currentCourseName . ': ' . $nameTools));
 $t->set_var('course_title', q($currentCourseName));

@@ -34,13 +34,6 @@ require_once '../../exercise/answer.class.php';
 $require_current_course = true;
 require_once '../../../include/init.php';
 
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS', 3);
-define('MATCHING', 4);
-define('TRUE_FALSE', 5);
-
 $TBL_EXERCISE           = 'exercise';
 $TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
 $TBL_QUESTION           = 'exercise_question';
@@ -125,14 +118,14 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	$objQuestionTmp = new Question();
 	$objQuestionTmp->read($questionId);
 
-    $questionName             = $objQuestionTmp->selectTitle();
-    $questionName             = $questionName;
-    $questionDescription      = $objQuestionTmp->selectDescription();
-    $questionDescription      = $questionDescription;
-	$questionDescription_temp = nl2br(make_clickable($questionDescription));
-	$questionDescription_temp = mathfilter($questionDescription_temp, 12, "$webDir/courses/mathimg/");
-    $questionWeighting        = $objQuestionTmp->selectWeighting();
-    $answerType               = $objQuestionTmp->selectType();
+        $questionName             = $objQuestionTmp->selectTitle();
+        $questionName             = $questionName;
+        $questionDescription      = $objQuestionTmp->selectDescription();
+        $questionDescription      = $questionDescription;
+        $questionDescription_temp = nl2br(make_clickable($questionDescription));
+        $questionDescription_temp = mathfilter($questionDescription_temp, 12, "$webDir/courses/mathimg/");
+        $questionWeighting        = $objQuestionTmp->selectWeighting();
+        $answerType               = $objQuestionTmp->selectType();
 
 	// destruction of the Question object
 	unset($objQuestionTmp);
@@ -150,43 +143,40 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 		$colspan=1;
 	}
 	$iplus=$i+1;
-	echo ("
-    <br/>
-    <table width='100%' class='tbl_alt'>
-    <tr class='odd'>
-      <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
-    </tr>
-    <tr>
-      <td class='even' colspan='${colspan}'>
+        
+	echo "<br/>
+        <table width='100%' class='tbl_alt'>
+        <tr class='odd'>
+        <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+        </tr>
+        <tr>
+        <td class='even' colspan='${colspan}'>
         <b>$questionName</b>
         <br />
         $questionDescription_temp
         <br/><br/>
-      </td>
-    </tr>");
+        </td>
+        </tr>";
 
 	$questionScore=0;
 
 	if ($displayResults == 1) {
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-			echo ("
-    <tr class='even'>
-      <td width='50' valign='top'><b>$langChoice</b></td>
-      <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
-      <td valign='top'><b>$langAnswer</b></td>
-      <td valign='top'><b>$langComment</b></td>
-    </tr>");
+			echo "<tr class='even'>
+                        <td width='50' valign='top'><b>$langChoice</b></td>
+                        <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+                        <td valign='top'><b>$langAnswer</b></td>
+                        <td valign='top'><b>$langComment</b></td>
+                        </tr>";
 		} elseif($answerType == FILL_IN_BLANKS) {
-			echo ("
-    <tr>
-      <td class='even'><b>$langAnswer</b></td>
-    </tr>");
+			echo "<tr>
+                        <td class='even'><b>$langAnswer</b></td>
+                        </tr>";
 		} else {
-			echo ("
-    <tr class='even'>
-      <td><b>$langElementList</b></td>
-      <td><b>$langCorrespondsTo</b></td>
-    </tr>");
+			echo "<tr class='even'>
+                        <td><b>$langElementList</b></td>
+                        <td><b>$langCorrespondsTo</b></td>
+                        </tr>";
 		}
 	}
 	// construction of the Answer object

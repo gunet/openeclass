@@ -281,9 +281,9 @@ function create_new_module($title, $description, $path, $contentType)
 
     // finally : insert in learning path
     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-            (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
+            (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
             VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','"
-            ."', ".(int)$order.", 'OPEN')";
+            ."', ".(int)$order.", 'OPEN', 1)";
     $query = db_query($sql);
 }
 
@@ -300,9 +300,9 @@ function reuse_module($module_id)
 
     // finally : insert in learning path
     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                    (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
+                    (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                     VALUES ('". (int)$_SESSION['path_id']."', '"
                     .(int)$module_id."','"
-                    ."', ".(int)$order.",'OPEN')";
+                    ."', ".(int)$order.",'OPEN', 1)";
     $query = db_query($sql);
 }

@@ -40,11 +40,8 @@
 
 $require_current_course = TRUE;
 
-require_once("../../include/baseTheme.php");
-require_once("../../include/lib/learnPathLib.inc.php");
-
-$head_content = "";
-$tool_content = "";
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
 
 // the following constant defines the default display of the learning path browser
 // 0 : display eclass header and footer and table of content, and content
@@ -52,10 +49,12 @@ $tool_content = "";
 define ('FULL_SCREEN' , 1);
 
 // override session vars if get args are present
-if (isset($_GET['path_id']) && !empty($_GET['path_id']))
+if (isset($_GET['path_id']) && !empty($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
-if (isset($_GET['module_id']) && !empty($_GET['module_id']))
+}
+if (isset($_GET['module_id']) && !empty($_GET['module_id'])) {
 	$_SESSION['lp_module_id'] = intval($_GET['module_id']);
+}
 
 check_LPM_validity($is_editor, $course_code, true);
 
@@ -76,20 +75,18 @@ if(!empty($title))
     $titlePage .= $title . ' - ';
 }
 $titlePage .= $siteName;
-
 if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen']))
 {
     $displayFull = (int) $_GET['fullscreen'];
 }
 else
-{
+{        
     // choose default display
     // default display is without fullscreen
     $displayFull = FULL_SCREEN;
 }
-
 if ($displayFull == 0)
-{
+{        
 	$tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" "
 		."width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
@@ -99,7 +96,7 @@ if ($displayFull == 0)
 	draw($tool_content, 2, null, $head_content);
 }
 else
-{
+{               
 	echo
 	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
 	."   \"http://www.w3.org/TR/html4/frameset.dtd\">"."\n"

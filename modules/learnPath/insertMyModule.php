@@ -149,8 +149,8 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
             //create and call the insertquery on the DB to add the checked module to the learning path
 
             $insertquery="INSERT INTO `".$TABLELEARNPATHMODULE."`
-                          (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock` )
-                          VALUES (". (int)$_SESSION['path_id'].", ". (int)$list['module_id'].", '',".$order.", 'OPEN')";
+                          (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible` )
+                          VALUES (". (int)$_SESSION['path_id'].", ". (int)$list['module_id'].", '',".$order.", 'OPEN', 1)";
             db_query($insertquery);
 
             $atleastOne = TRUE;

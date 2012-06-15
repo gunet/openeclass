@@ -100,9 +100,9 @@ if ($num == 0)
 
 	// finally : insert in learning path
 	$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-		(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
+		(`learnPath_id`, `module_id`, `rank`, `lock`, `visible`, `specificComment`)
 		VALUES ('". (int)$_SESSION['path_id']."', '". (int)$insertedModule_id."',
-		" . (int)$order . ", 'OPEN', '')";
+		" . (int)$order . ", 'OPEN', 1, '')";
 	$query = db_query($sql);
 }
 else
@@ -131,9 +131,9 @@ else
 		$order = $orderMax + 1;
 		// finally : insert in learning path
 		$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-			(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
+			(`learnPath_id`, `module_id`, `rank`, `lock`, `visible`, `specificComment`)
 			VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
-			" . (int)$order . ", 'OPEN', '')";
+			" . (int)$order . ", 'OPEN', 1, '')";
 		$query = db_query($sql);
 
     }

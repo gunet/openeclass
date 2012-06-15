@@ -1817,7 +1817,7 @@ function get_limited_list($sql, $limiter)
  */
 function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extraDepth = false)
 {
-	global $mysqlMainDb, $course_id;
+	global $course_id;
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
 	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
@@ -1826,17 +1826,17 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 	}
 	
 	if ($extraQuery) {
-		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id", $mysqlMainDb);
+		$q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id");
 		$lp = mysql_fetch_array($q);
 		
-		if ( !$is_editor && $lp['visible'] == 0 ) {
+		if (!$is_editor && $lp['visible'] == 0 ) {
 			// if the learning path is invisible, don't allow users in it
 			header("Location: ".$depth."learningPathList.php?course=$course_code");
 			exit();
 		}
 		
 		if (!$is_editor) {
-			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`", $mysqlMainDb);
+			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`");
 			if ($lps != false) {
 				$block_met = false;
 				foreach ($lps as $lp) {
@@ -1856,7 +1856,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 		}
 	}
 		
-	$q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $mysqlMainDb);
+	$q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
 		// if the combination path/module is invalid, don't allow users in it
@@ -1865,7 +1865,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 	}
 	
 	if (!$is_editor) {
-		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`", $mysqlMainDb);
+		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`");
 		if ($lpms != false) {
 			$block_met = false;
 			foreach ($lpms as $lpm) {

@@ -125,9 +125,9 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 			// finally : insert in learning path
 			$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
+				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','"
-				."', ".(int)$order.", 'OPEN')";
+				."', ".(int)$order.", 'OPEN', 1)";
 			$query = db_query($sql);
 
 			$dialogBox .= q($row['title'])." : ".$langLinkInsertedAsModule."<br />";
@@ -160,10 +160,10 @@ while ($iterator <= $_POST['maxLinkForm']) {
 
 				// finally : insert in learning path
 				$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
+					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES ('". (int)$_SESSION['path_id']."', '"
 					.(int)$thisLinkModule['module_id']."','"
-					."', ".(int)$order.",'OPEN')";
+					."', ".(int)$order.",'OPEN', 1)";
 				$query = db_query($sql);
 
 				$dialogBox .= q($row['title'])." : ".$langLinkInsertedAsModule."<br />";
@@ -177,8 +177,6 @@ while ($iterator <= $_POST['maxLinkForm']) {
 	}
 	$iterator++;
 }
-
-
 
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= "<table width=\"99%\"><tr>";

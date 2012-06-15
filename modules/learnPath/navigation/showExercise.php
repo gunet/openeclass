@@ -317,7 +317,8 @@ echo "</html>"."\n";
 // register_globals, apla einai scoping twn metablhtwn pou yparxoun
 // pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
-	global $picturePath;
+	
+        global $picturePath, $urlServer;
 	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
 	// construction of the Question object
@@ -337,11 +338,10 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     <td colspan='2'><b>$questionName</b><br />
                     $questionDescription_temp
                     </td>
-                    </tr>";
+                    </tr>";                    
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {                        
-                    echo "
-                      <tr class='even'>
-                        <td class='center' colspan='2'><img src='../../$picturePath/quiz-.$questionId'></td>
+                    echo "<tr class='even'>
+                        <td class='center' colspan='2'><img src='$urlServer/$picturePath/quiz-$questionId' /></td>
                       </tr>";
 		}
 	}  // end if(!$onlyAnswers)

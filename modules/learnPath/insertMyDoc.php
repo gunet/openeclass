@@ -175,8 +175,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
 
                 // finally : insert in learning path
                 $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`)
-                        VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN')";
+                        (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
+                        VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.", 'OPEN', 1)";
                 $query = db_query($sql);
                 $addedDoc = $filenameDocument;
                 $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br />";
@@ -212,8 +212,8 @@ while ($iterator <= $_REQUEST['maxDocForm'])
                     $order = $orderMax + 1;
                     // finally : insert in learning path
                     $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-                            (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`)
-                            VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN')";
+                            (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
+                            VALUES ('". (int)$_SESSION['path_id']."', '". (int)$thisDocumentModule['module_id']."','".addslashes($langDefaultModuleAddedComment)."', ".(int)$order.",'OPEN', 1)";
                     $query = db_query($sql);
                     $addedDoc =  $filenameDocument;
                     $InfoBox = $addedDoc ." ".$langDocInsertedAsModule."<br />";

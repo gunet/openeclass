@@ -33,16 +33,15 @@
 */
 
 $require_current_course = TRUE;
-require_once("../../include/baseTheme.php");
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 $TABLEMODULE            = "lp_module";
 $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-mysql_select_db($mysqlMainDb);
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head><title>-</title>
@@ -125,10 +124,10 @@ foreach ($flatElementList as $module)
         $image_bullet = "on";
     }
     
-	// indent a child based on label ownership
-	$marginIndent = 0; 	 
-	for($i = 0; $i < $module['children']; $i++) 	 
-		$marginIndent += 10;
+    // indent a child based on label ownership
+       $marginIndent = 0; 	 
+       for($i = 0; $i < $module['children']; $i++)
+               $marginIndent += 10;
 
     if ($module['contentType'] == CTLABEL_) // chapter head
     {
@@ -143,7 +142,6 @@ foreach ($flatElementList as $module)
         else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
         	$moduleImg = "description_$image_bullet.png";
         else if($module['contentType'] == CTDOCUMENT_ ) {
-        	//$moduleImg = "docs_$image_bullet.png";
         	$moduleImg = choose_image(basename($module['path']));
         }
         else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
@@ -155,33 +153,33 @@ foreach ($flatElementList as $module)
 
         $contentType_alt = selectAlt($module['contentType']);
         
-		// eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
-		unset($imagePassed);
-		if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-			if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
-				$moduleImg = "tick.png";
-			else
-				$imagePassed = '<img src="'.$themeimg.'/tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
-		}
+        // eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
+        unset($imagePassed);
+        if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
+                if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
+                        $moduleImg = "tick.png";
+                else
+                        $imagePassed = '<img src="'.$themeimg.'/tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+        }
 
-		if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
-			$moduleImg = "lp_failed.png";
+        if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
+                $moduleImg = "lp_failed.png";
 
-		echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt='' title='' />";
+        echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt='' title='' />";
 
-		// emphasize currently displayed module or not
-		if ( $_SESSION['lp_module_id'] == $module['module_id'] )
-			echo "<em>".htmlspecialchars($module['name'])."</em>";
-		else        
-			echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
-		if(isset($imagePassed))
-			echo "&nbsp;&nbsp;".$imagePassed;
-		echo "</li>";
-		
-		if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' 
-			&& $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED') {
-			$is_blocked = true;
-		}
+        // emphasize currently displayed module or not
+        if ( $_SESSION['lp_module_id'] == $module['module_id'] )
+                echo "<em>".htmlspecialchars($module['name'])."</em>";
+        else        
+                echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
+        if(isset($imagePassed))
+                echo "&nbsp;&nbsp;".$imagePassed;
+        echo "</li>";
+
+        if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' 
+                && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED') {
+                $is_blocked = true;
+        }
 
     }
 } // end of foreach

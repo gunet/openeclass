@@ -38,9 +38,7 @@
 */
 
 $require_current_course = TRUE;
-
-require_once("../../config/config.php");
-require_once("../../include/init.php");
+require_once '../../include/init.php';
 
 /*
  * DB tables definition
@@ -52,18 +50,14 @@ $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /**************************************/
-
 // lib of this tool
-require_once("../../include/lib/learnPathLib.inc.php");
-
+require_once 'include/lib/learnPathLib.inc.php';
 //lib of document tool
-require_once("../../include/lib/fileDisplayLib.inc.php");
-
-mysql_select_db($mysqlMainDb);
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 //  set redirection link
 $returl = "navigation/viewModule.php?course=$course_code&amp;go=" . 

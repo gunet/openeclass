@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,19 +22,19 @@
 
 function list_lps()
 {
-        global $id, $course_id, $mysqlMainDb, $tool_content, $urlServer, $langComments,
+        global $id, $course_id, $tool_content, $urlServer, $langComments,
                $langAddModulesButton, $langChoice, $langNoLearningPath,
                $langLearningPaths, $course_code, $themeimg;
 
 
-        $result = db_query("SELECT * FROM lp_learnPath WHERE course_id = $course_id ORDER BY name", $mysqlMainDb);
+        $result = db_query("SELECT * FROM lp_learnPath WHERE course_id = $course_id ORDER BY name");
         $lpinfo = array();
         while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $lpinfo[] = array(
 			'id' => $row['learnPath_id'],
 		        'name' => $row['name'],
                         'comment' => $row['comment'],
-                        'visibility' => $row['visibility'],
+                        'visibility' => $row['visible'],
                         'rank' => $row['rank']);
         }
         if (count($lpinfo) == 0) {
@@ -53,10 +53,10 @@ function list_lps()
 				if ($entry['visibility'] == 'HIDE') { 
 					$vis = 'invisible';
 				} else {
-						if ($i%2 == 0) {
-							$vis = 'even';
+					if ($i%2 == 0) {
+						$vis = 'even';
 					} else {
-							$vis = 'odd';
+						$vis = 'odd';
 					}
 				}
 				$tool_content .= "\n  <tr class='$vis'>";

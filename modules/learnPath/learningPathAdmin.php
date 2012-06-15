@@ -51,9 +51,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
-
 $require_current_course = TRUE;
 
 $TABLELEARNPATH         = 'lp_learnPath';
@@ -63,6 +60,8 @@ $TABLEASSET             = 'lp_asset';
 $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 $body_action = '';
 $dialogBox = '';
@@ -91,8 +90,6 @@ if ( !$is_editor )
     }
     exit();
 }
-
-mysql_select_db($mysqlMainDb);
 
 load_js('tools.js');
 
@@ -149,7 +146,7 @@ switch($cmd)
         // get the modules tree ( cmdid module and all its children)
         $temp[0] = get_module_tree( build_element_list($extendedList, 'parent', 'learnPath_module_id'), $_REQUEST['cmdid'] );
         // change the visibility according to the new father visibility
-        set_module_tree_visibility( $temp, $visibility);
+        set_module_tree_visibility($temp, $visibility);
 
         break;
 

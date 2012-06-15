@@ -37,11 +37,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
-require_once("../../include/lib/fileManageLib.inc.php");
-require_once("../../include/lib/fileUploadLib.inc.php");
-
 $require_current_course = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
@@ -53,8 +48,12 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 $TABLEQUIZTEST          = "exercise";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
-require_once("../../include/baseTheme.php");
-require_once '../video/video_functions.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $body_action = '';
@@ -68,7 +67,6 @@ if (!add_units_navigation()) {
 	}
 }
 
-
 if ( isset($_GET['path_id']) && $_GET['path_id'] != '' )
 {
     $_SESSION['path_id'] = intval($_GET['path_id']);
@@ -79,7 +77,6 @@ if ( isset($_GET['module_id']) && $_GET['module_id'] != '')
     $_SESSION['lp_module_id'] = intval($_GET['module_id']);
 }
 
-mysql_select_db($mysqlMainDb);
 
 $q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id");
 $lp = mysql_fetch_array($q);

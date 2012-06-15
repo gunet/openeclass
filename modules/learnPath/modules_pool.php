@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,8 +43,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
@@ -55,8 +53,8 @@ $TABLEASSET             = 'lp_asset';
 $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
-
-require_once '../video/video_functions.php';
+require_once "include/lib/learnPathLib.inc.php";
+require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $body_action = '';
@@ -73,7 +71,6 @@ function confirmation(name) {
 
 $navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPaths);
 $nameTools = $langLearningObjectsInUse;
-mysql_select_db($mysqlMainDb);
 
 // display use explication text
 $tool_content .= "<p>$langUseOfPool</p><br />";
@@ -87,7 +84,7 @@ switch( $cmd )
     case "eraseModule" :
         if (isset($_GET['cmdid']) && is_numeric($_GET['cmdid']) ) {
 			// used to physically delete the module  from server
-			require_once("../../include/lib/fileManageLib.inc.php");
+			require_once "include/lib/fileManageLib.inc.php";
 
 			$moduleDir   = "courses/".$course_code."/modules";
 			$moduleWorkDir = $webDir.$moduleDir;
@@ -139,20 +136,20 @@ switch( $cmd )
 			$list = mysql_fetch_array($result);
 
 			$tool_content .= disp_message_box("
-   <form method=\"post\" name=\"rename\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">
-   
-   <table width=\"100%\" class=\"tbl\">
-   <tr>
-     <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
-     <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
-        <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
-        <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
-	<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
-     </td>
-   </tr>
-   </table>
-   </form>
-   <br />")."";
+                        <form method='post' name='rename' action='$_SERVER[PHP_SELF]?course=$course_code'>
+
+                        <table width='100%' class='tbl'>
+                        <tr>
+                        <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
+                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+                                <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
+                                <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
+                                <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
+                        </td>
+                        </tr>
+                        </table>
+                        </form>
+                        <br />")."";
         }
         break;
 
@@ -267,15 +264,13 @@ $atleastOne = false;
 $query_num_results = db_query($sql);
 $num_results = mysql_numrows($query_num_results);
 
-
 if (!$num_results == 0) {
-
-$tool_content .= "
-    <table width=\"100%\" class=\"tbl_alt\">
-    <tr>
-      <th colspan=\"2\">".$langLearningObjects."</th>
-      <th width=\"65\">".$langTools."</th>
-    </tr>\n";
+        $tool_content .= "
+        <table width=\"100%\" class=\"tbl_alt\">
+        <tr>
+        <th colspan=\"2\">".$langLearningObjects."</th>
+        <th width=\"65\">".$langTools."</th>
+        </tr>\n";
 }
 // Display modules of the pool of this course
 
@@ -310,13 +305,10 @@ while ($list = mysql_fetch_array($result))
     $ind++;
 } //end while another module to display
 
-$tool_content .= "
-    </table>";
+$tool_content .= "</table>";
 
 if ($atleastOne == false) {
-    $tool_content .= "
-      <p class=\"alert1\">".$langNoModule."</p>";
+    $tool_content .= "<p class='alert1'>$langNoModule</p>";
 }
 
 draw($tool_content, 2, null, $head_content, $body_action);
-
