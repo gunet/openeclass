@@ -43,7 +43,7 @@ if ($course_id === false) {
 }
 
 list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE code = '$code'"));
-$title = htmlspecialchars($intitule, ENT_NOQUOTES); 
+$title = htmlspecialchars($title, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
 		FROM announcement WHERE course_id = $course_id AND visible = 1 

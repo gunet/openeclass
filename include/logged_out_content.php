@@ -49,10 +49,9 @@ $tool_content .= <<<lCont
 <p align='justify'>$langInfoAbout</p>
 lCont;
 
-$qlang = ($language == "greek")? 'el': 'en';
 $sql = "SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
         WHERE `visible` = 1
-		AND lang='$qlang'
+		AND lang='$language'
 		AND (`begin` <= CURDATE() or `begin` IS null)
 		AND (CURDATE() <= `end` or `end` IS null)
 	ORDER BY `order` DESC";

@@ -26,24 +26,20 @@ require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langAnnouncements;
 
-$qlang = ($language == 'greek')? 'el': 'en';
-
 if (isset($_GET['aid'])) {
 	$aid = intval($_GET['aid']);
 	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = '$aid'";
 } else {
 	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement`
-	        WHERE `visible` = 'V' AND lang='$qlang' ORDER BY `date` DESC";
+	        WHERE `visible` = 1 AND lang='$language' ORDER BY `date` DESC";
 }
-$result = db_query($sql, $mysqlMainDb);
+$result = db_query($sql);
 if (mysql_num_rows($result) > 0) {
 	$announceArr = array();
 	while ($eclassAnnounce = mysql_fetch_array($result)) {
 		array_push($announceArr, $eclassAnnounce);
 	}
-        $tool_content .= "
-        <table width='100%' class='sortable'>";
-
+        $tool_content .= "<table width='100%' class='sortable'>";
 	$numOfAnnouncements = count($announceArr);
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$tool_content .= "<tr><td>
@@ -57,5 +53,4 @@ if (mysql_num_rows($result) > 0) {
 	}
 	$tool_content .= "</table>";
 }
-
 draw($tool_content, 0);

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,7 +25,7 @@
 require_once 'include/init.php';
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM admin_announcements
+		FROM admin_announcement
 		WHERE visible = 1 AND lang = '$language'
 		ORDER BY `date` DESC");
 list($lastbuilddate) = mysql_fetch_row($result);
@@ -42,8 +42,8 @@ echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>".$language."</language>";
 
 $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
-		FROM admin_announcements
-		WHERE visible = 'V' AND lang = '$language'
+		FROM admin_announcement
+		WHERE visible = 1 AND lang = '$language'
 		ORDER BY `date` DESC");
 
 while ($r = mysql_fetch_array($sql)) {
@@ -55,5 +55,4 @@ while ($r = mysql_fetch_array($sql)) {
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
 	echo "</item>";
 }
-
 echo "</channel></rss>";
