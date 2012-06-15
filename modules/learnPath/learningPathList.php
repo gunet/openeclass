@@ -49,8 +49,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
 $require_help           = TRUE;
@@ -64,10 +62,12 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 define('CLARO_FILE_PERMISSIONS', 0777);
 
-require_once("../../include/baseTheme.php");
+include "../../include/baseTheme.php";
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /**************************************/
@@ -111,8 +111,6 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
           $dialogBox .= '<ul>'."\n";
       }
 } // endif $cmd == export12
-
-mysql_select_db($mysqlMainDb);
 
 if ($is_editor) {
 	$head_content .= "<script type='text/javascript'>
@@ -275,25 +273,25 @@ if ($is_editor) {
 					$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
-    <form action='$_SERVER[PHP_SELF]?course=$course_code' method='POST'>
-    <fieldset>
-    <legend>$langLearningPathData</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
-      <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
-    </tr>
-    <tr>
-      <th><label for='newComment'>$langComment</label>:</th>
-      <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+                                        <form action='$_SERVER[PHP_SELF]?course=$course_code' method='POST'>
+                                        <fieldset>
+                                        <legend>$langLearningPathData</legend>
+                                        <table width='100%' class='tbl'>
+                                        <tr>
+                                        <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
+                                        <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
+                                        </tr>
+                                        <tr>
+                                        <th><label for='newComment'>$langComment</label>:</th>
+                                        <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
+                                        </tr>
+                                        <tr>
+                                        <th>&nbsp;</th>
+                                        <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
+                                        </tr>
+                                        </table>
+                                        </fieldset>
+                                        </form>";
 					}
 				break;
 			default:
@@ -363,15 +361,15 @@ if($is_editor) {
 		exit;
 	} else {
 		$tool_content .= "
-    <div id='operations_container'>
-      <ul id='opslist'>
-        <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;cmd=create' title='$langCreateNewLearningPath'>$langCreate</a></li>
-        <li><a href='importLearningPath.php?course=$course_code' title='$langimportLearningPath'>$langImport</a></li>
-        <li><a href='detailsAll.php?course=$course_code' title='$langTrackAllPathExplanation'>$langProgress</a></li>
-        <li><a href='modules_pool.php?course=$course_code'>$langLearningObjectsInUse_sort</a></li>
-      </ul>
-    </div>
-    ";
+                <div id='operations_container'>
+                <ul id='opslist'>
+                        <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;cmd=create' title='$langCreateNewLearningPath'>$langCreate</a></li>
+                        <li><a href='importLearningPath.php?course=$course_code' title='$langimportLearningPath'>$langImport</a></li>
+                        <li><a href='detailsAll.php?course=$course_code' title='$langTrackAllPathExplanation'>$langProgress</a></li>
+                        <li><a href='modules_pool.php?course=$course_code'>$langLearningObjectsInUse_sort</a></li>
+                </ul>
+                </div>
+                ";
 	}
 }
 
@@ -383,12 +381,10 @@ if ((mysql_num_rows($l) == 0)) {
 	exit;
 }
 
-
 $tool_content .= "
     <table width='100%' class='tbl_alt'>
     <tr>
       <th colspan='2'><div align='left'>$langLearningPaths</div></th>\n";
-
 
 if($is_editor) {
      // Titles for teachers

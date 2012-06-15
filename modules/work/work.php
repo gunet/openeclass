@@ -90,7 +90,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/libchart/libchart.php';
 require_once 'include/log.php';
 
-$workPath = $webDir."courses/".$course_code."/work";
+$workPath = $webDir."/courses/".$course_code."/work";
 
 if (isset($_GET['get'])) {
         if (!send_file(intval($_GET['get']))) {
@@ -249,7 +249,7 @@ function show_submission($sid)
 function add_assignment($title, $desc, $deadline, $group_submissions)
 {
         global $tool_content, $workPath, $course_id;
-
+        
         $secret = uniqid('');
         $title = autoquote($title);
         $desc = autoquote(purify($desc));

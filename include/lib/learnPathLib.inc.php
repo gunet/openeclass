@@ -73,7 +73,7 @@ define ( 'LEARNINGPATHMODULE_', 4 );
  */
 function commentBox($type, $mode)
 {
-    global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists,
+    global $is_editor, $themeimg, $langModify, $langSubmit,
            $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
            $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
            $mysqlMainDb, $course_id;
@@ -142,15 +142,12 @@ function commentBox($type, $mode)
             $sql = "SELECT `".$col_name."`
                        FROM `" . $tbl_name . "`
                       WHERE " . $where_cond;
-            $oldComment = db_query_get_single_value($sql, $mysqlMainDb);
+            $oldComment = db_query_get_single_value($sql);
 
-            $output .= '
-      <form method="POST" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">' . "\n"
-                .disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
-                .'        <input type="hidden" name="cmd" value="update' . $col_name . '" />' . "\n"
-                .'        <input type="submit" value="' . $langOk . '" />' . "\n"
-                .'      </form>' . "\n"
-            ;
+            $output .= "<form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code'>
+                ".rich_text_editor('insertCommentBox', 1, 50, $oldComment)." 
+                <input type='hidden' name='cmd' value='update$col_name' />
+                <input type='submit' value=$langSubmit /></form>";
         }
 
     }
@@ -161,7 +158,7 @@ function commentBox($type, $mode)
         $sql =  "UPDATE `" . $tbl_name . "`
                  SET `" . $col_name . "` = ''
                  WHERE " . $where_cond;
-        db_query($sql, $mysqlMainDb);
+        db_query($sql);
         $dsp = TRUE;
     }
 
@@ -862,12 +859,10 @@ function display_my_documents($dialogBox, $style)
             }
 
             if ($fileList['type'][$fileKey] == A_FILE)
-            {
+            {                    
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
-                $date        = format_date($fileList['date'][$fileKey]);
-                //$doc_url = $cmdFileName;
-                //$urlFileName = "../../".$courseDir.$doc_url;
+                $date        = format_date($fileList['date'][$fileKey]);                
                 $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = choose_media_ahref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);

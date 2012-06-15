@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,11 +41,6 @@
 ==============================================================================
 */
 
-require_once '../../include/lib/learnPathLib.inc.php';
-require_once '../../include/lib/fileDisplayLib.inc.php';
-require_once '../../include/lib/fileManageLib.inc.php';
-require_once '../../include/lib/textLib.inc.php';
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
@@ -55,9 +50,13 @@ $TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
 $TABLEASSET             = 'lp_asset';
 $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once '../../include/baseTheme.php';
-require_once '../document/doc_init.php';
-require_once '../video/video_functions.php';
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'modules/document/doc_init.php';
+require_once 'modules/video/video_functions.php';
 
 load_modal_box(true);
 $head_content .= <<<EOF
@@ -76,7 +75,7 @@ EOF;
 
 $pwd = getcwd();
 
-$courseDir   = "courses/".$course_code."/document";
+$courseDir   = "/courses/".$course_code."/document";
 $baseWorkDir = $webDir.$courseDir;
 $InfoBox = '';
 $navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name' => $langLearningPath);

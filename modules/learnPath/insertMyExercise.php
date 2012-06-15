@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,8 +34,6 @@
                   admin can add them to a learning path
 ============================================================================== */
 
-require_once '../../include/lib/learnPathLib.inc.php';
-require_once '../../include/lib/fileDisplayLib.inc.php';
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -49,7 +47,9 @@ $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 // exercises table name
 $TABLEEXERCISE           = "exercise";
 
-require_once '../../include/baseTheme.php';
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 $messBox = '';
 
@@ -73,10 +73,7 @@ $navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyExerciseToolName;
 
-mysql_select_db($mysqlMainDb);
-
 // see checked exercises to add
-
 $sql = "SELECT * FROM `".$TABLEEXERCISE."` WHERE course_id = $course_id AND active = 1";
 $resultex = db_query($sql);
 
@@ -188,7 +185,7 @@ while ($listex = mysql_fetch_array($resultex) )
     } // end if request
 } //end while
 
-$tool_content .= "<table width=\"100%\" class=\"tbl_alt\">";
+$tool_content .= "<table width='100%' class='tbl_alt'>";
 $tool_content .= $messBox;
 $tool_content .= "</table><br />";
 
@@ -202,8 +199,8 @@ $tool_content .= display_my_exercises("", "");
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-	$tool_content .= "
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</p>";
+$tool_content .= "
+    <p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."'>$langBackToLPAdmin</p>";
 
 draw($tool_content, 2, null, $head_content);
 

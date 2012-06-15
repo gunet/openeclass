@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,8 +33,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -45,7 +43,9 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 load_js('jquery');
 $head_content .= <<<EOF
@@ -68,7 +68,6 @@ $navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyLinkToolName;
 
-mysql_select_db($mysqlMainDb);
 $iterator = 1;
 
 if (!isset($_POST['maxLinkForm'])) $_POST['maxLinkForm'] = 0;
@@ -227,26 +226,26 @@ function showlinks()
 	{
 		$myrow[3] = parse_tex($myrow[3]);
 		$output .= 	"
-    <tr>
-      <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
-      <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
-      <br />
-      <small class='comments'>".q($myrow[3])."</small></td>";
-		$output .= 	"
-      <td><div align='center'><input type='checkbox' name='insertLink_".$i."' id='insertLink_".$i."' value='$myrow[0]' /></div></td>
-    </tr>";
+                <tr>
+                <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
+                <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=".$myrow[0]."&amp;link_url=".urlencode($myrow[1])."' target='_blank'>".q($myrow[2])."</a>
+                <br />
+                <small class='comments'>".q($myrow[3])."</small></td>";
+                                $output .= 	"
+                <td><div align='center'><input type='checkbox' name='insertLink_".$i."' id='insertLink_".$i."' value='$myrow[0]' /></div></td>
+                </tr>";
 		$i++;
 	}
 	$output .= "
-    <tr>
-      <th colspan='3'>
-        <div align='right'>
-          <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
-          <input type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
-        </div></th>
-      </tr>
-    </tbody>
-    </table>
-    </form>";
+        <tr>
+        <th colspan='3'>
+                <div align='right'>
+                <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
+                <input type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+                </div></th>
+        </tr>
+        </tbody>
+        </table>
+        </form>";
 	return $output;
 }

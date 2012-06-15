@@ -40,9 +40,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
-
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
@@ -52,9 +49,11 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/video/video_functions.php';
 
-require_once '../video/video_functions.php';
 load_modal_box();
 $head_content .= <<<EOF
 <script type='text/javascript'>
@@ -73,9 +72,6 @@ EOF;
 $navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPath);
 $navigation[]= array ("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyModulesTitle;
-
-
-mysql_select_db($mysqlMainDb);
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 

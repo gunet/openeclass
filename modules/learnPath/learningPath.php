@@ -38,8 +38,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
 
@@ -49,10 +47,12 @@ $TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
 $TABLEASSET             = 'lp_asset';
 $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once '../../include/baseTheme.php';
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 /**** The following is added for statistics purposes ***/
-include '../../include/action.php';
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /**************************************/
@@ -110,8 +110,6 @@ else {
 		}
 	}
 }
-
-mysql_select_db($mysqlMainDb);
 
 // main page
 if ($uid) {
@@ -348,8 +346,6 @@ foreach ($flatElementList as $module)
     $tool_content .= '    </tr>'."\n";
     $ind++;
 }
-
-
 
 
 if($uid && $moduleNb > 0) {

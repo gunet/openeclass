@@ -24,7 +24,7 @@ $guest_allowed = FALSE;
 $require_help = TRUE;
 $helpTopic = 'Dropbox';
 include '../../include/baseTheme.php';
-include 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 // javascript functions
 $head_content ='<script type="text/javascript">
@@ -73,7 +73,8 @@ $dropbox_cnf["personTbl"] = "dropbox_person";
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["sysPath"] = $webDir."courses/".$course_code."/dropbox"; 
+$dropbox_cnf["sysPath"] = $webDir."/courses/".$course_code."/dropbox"; 
+
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
 } 
@@ -87,7 +88,7 @@ if (get_config('dropbox_allow_student_to_student') == true) {
 } else {
 	$dropbox_cnf["allowStudentToStudent"] = false;	
 }
-$basedir = $webDir . 'courses/' . $course_code . '/dropbox';
+$basedir = $dropbox_cnf["sysPath"];
 $diskUsed = dir_total_space($basedir);
 
 /*
@@ -96,23 +97,23 @@ $diskUsed = dir_total_space($basedir);
 */
 function removeUnusedFiles()
 {
-    global $dropbox_cnf, $dropbox_lang, $course_id, $mysqlMainDb;
+    global $dropbox_cnf, $dropbox_lang, $course_id;
+    
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM `" . $dropbox_cnf["fileTbl"] . "` f
 			LEFT JOIN `" . $dropbox_cnf["personTbl"] . "` p ON f.id = p.fileId
 			WHERE f.course_id = $course_id AND p.personId IS NULL";
-    $result = db_query($sql, $mysqlMainDb);
+    $result = db_query($sql);
     while ($res = mysql_fetch_array($result))
     {
 	//delete the selected files from the post and file tables
 	$sql = "DELETE FROM `" . $dropbox_cnf["postTbl"] . "` WHERE fileId='" . $res['id'] . "'";
-        $result1 = db_query($sql, $mysqlMainDb);
+        $result1 = db_query($sql);
         $sql = "DELETE FROM `" . $dropbox_cnf["fileTbl"] . "` WHERE id='" . $res['id'] . "'";
-        $result1 = db_query($sql, $mysqlMainDb);
+        $result1 = db_query($sql);
 
-		//delete file from server
+        //delete file from server
         unlink($dropbox_cnf["sysPath"] . "/" . $res["filename"]);
     }
 }
-?>

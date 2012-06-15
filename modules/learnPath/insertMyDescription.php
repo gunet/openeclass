@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,7 +33,6 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -44,13 +43,12 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
-
+include '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
+        
 $navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
-
-mysql_select_db($mysqlMainDb);
 
 /*======================================*/
 
@@ -102,9 +100,9 @@ if ($num == 0)
 
 	// finally : insert in learning path
 	$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-		(`learnPath_id`, `module_id`, `rank`, `lock`)
+		(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
 		VALUES ('". (int)$_SESSION['path_id']."', '". (int)$insertedModule_id."',
-		" . (int)$order . ", 'OPEN')";
+		" . (int)$order . ", 'OPEN', '')";
 	$query = db_query($sql);
 }
 else
@@ -131,22 +129,18 @@ else
 
 		list($orderMax) = mysql_fetch_row($result);
 		$order = $orderMax + 1;
-
 		// finally : insert in learning path
 		$sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
-			(`learnPath_id`, `module_id`, `rank`, `lock`)
+			(`learnPath_id`, `module_id`, `rank`, `lock`, `specificComment`)
 			VALUES ('". (int)$_SESSION['path_id']."', '".(int)$thisDocumentModule['module_id']."',
-			" . (int)$order . ", 'OPEN')";
+			" . (int)$order . ", 'OPEN', '')";
 		$query = db_query($sql);
 
     }
 }
-$tool_content = "<table width=\"99%\" class=\"tbl\"><tr><td class=\"success\">";
+$tool_content = "<table width='100%' class='tbl'><tr><td class='success'>";
 
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</td></tr></table>";
-	$tool_content .= "
-    <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a></p>";
+$tool_content .= "<br /><p align='right'><a href='learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."'>$langBackToLPAdmin</a></p>";
 draw($tool_content, 2);
-?>

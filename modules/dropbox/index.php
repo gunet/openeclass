@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,7 +17,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
 
 /*
  * File exchange Component
@@ -33,11 +32,10 @@
 
 include 'functions.php';
 $nameTools = $dropbox_lang['dropbox'];
-$basedir = $webDir . 'courses/' . $course_code . '/dropbox';
 $diskUsed = dir_total_space($basedir);
 
 /**** The following is added for statistics purposes ***/
-include 'include/action.php';
+require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DROPBOX);
 /**************************************/
@@ -138,10 +136,10 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 		|| $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
 	{
 		// select all users except yourself
-		$sql = "SELECT DISTINCT u.id user_id, CONCAT(u.nom,' ', u.prenom) AS name
+		$sql = "SELECT DISTINCT u.user_id user_id, CONCAT(u.nom,' ', u.prenom) AS name
 			FROM user u, course_user cu
 			WHERE cu.course_id = $course_id
-				AND cu.user_id = u.id AND u.id != $uid
+				AND cu.user_id = u.user_id AND u.user_id != $uid
 				ORDER BY UPPER(u.nom), UPPER(u.prenom)";
 	}
 	/*
@@ -150,12 +148,12 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	else
 	{
 		// select all the teachers except yourself
-		$sql = "SELECT DISTINCT u.id user_id, CONCAT(u.nom,' ', u.prenom) AS name
+		$sql = "SELECT DISTINCT u.user_id user_id, CONCAT(u.nom,' ', u.prenom) AS name
 			FROM user u, course_user cu
 			WHERE cu.course_id = $course_id
-				AND cu.user_id = u.id
+				AND cu.user_id = u.user_id
 				AND (cu.statut <> 5 OR cu.tutor = 1)
-				AND u.id != $uid
+				AND u.user_id != $uid
 				ORDER BY UPPER(u.nom), UPPER(u.prenom)";
 	}
 	$result = db_query($sql);
