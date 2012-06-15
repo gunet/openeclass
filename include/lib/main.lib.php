@@ -1566,11 +1566,43 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame;
+	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame, $is_editor;
 	
         $filebrowser = '';
+        $activemodule = 'document/document.php';
         if (isset($code_cours) && !empty($code_cours))
+        {
             $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            
+            if (!$is_editor)
+            {
+                $sql = "SELECT * FROM accueil
+                    WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
+                    AND VISIBLE = 1 ORDER BY rubrique";
+
+                $result = db_query($sql, $code_cours);
+                $module = mysql_fetch_assoc($result);
+
+                if ($module === false)
+                    $filebrowser = '';
+                else {
+                    switch ($module['id']) {
+                        case 2:
+                            $activemodule  = 'link/link.php';
+                            break;
+                        case 3:
+                            $activemodule  = 'document/document.php';
+                            break;
+                        case 4:
+                            $activemodule  = 'video/video.php';
+                            break;
+                        default:
+                            $filebrowser = '';
+                            break;
+                    }
+                }
+            }
+        }
         
 	$lang_editor = langname_to_code($language);
 	
@@ -1626,7 +1658,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '$urlAppend/modules/document/document.php?course=$code_cours&embedtype=tinymce&docsfilter=' + type,
+        file: '$urlAppend/modules/$activemodule?course=$code_cours&embedtype=tinymce&docsfilter=' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,

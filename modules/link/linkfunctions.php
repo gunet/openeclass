@@ -47,7 +47,8 @@ function showlinksofcategory($catid)
         global $is_editor, $cours_id, $urlview, $tool_content, 
                $urlServer, $currentCourseID, $code_cours, $themeimg,
                $langLinkDelconfirm, $langDelete, $langUp, $langDown, 
-               $langModify, $langLinks, $langCategoryDelconfirm;
+               $langModify, $langLinks, $langCategoryDelconfirm,
+               $is_in_tinymce;
 
         $result = db_query("SELECT * FROM `link`
                                    WHERE course_id = $cours_id AND category = $catid
@@ -72,15 +73,16 @@ function showlinksofcategory($catid)
                 } else {
                     $num_merge_cols = 1;
                 }
+                $aid = ($is_in_tinymce) ? " id='fileURL' ": '';
                 $tool_content .= "
-                  <td valign='top' colspan='$num_merge_cols'><a href='go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
+                  <td valign='top' colspan='$num_merge_cols'><a $aid href='".$urlServer ."modules/link/go.php?c=$currentCourseID&amp;id=$myrow[id]&amp;url=" .
                   urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";
                 if (!empty($myrow['description'])) {
                         $tool_content .= "<br />" . standard_text_escape($myrow['description']);
                 }
                 $tool_content .= "</td>";
 
-                if ($is_editor) {
+                if ($is_editor && !$is_in_tinymce) {
                         $tool_content .=  "
                   <td width='45' valign='top' align='right'>";
                         if (isset($category)) {

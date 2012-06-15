@@ -65,6 +65,12 @@ function getSideMenu($menuTypeID){
 			$menu = customMenu();
 			break;
 		}
+                
+		case 5: { // tools when embedded in tinymce
+			$menu = pickerMenu();
+			break;
+		}
+                    
 	}
 	return $menu;
 }
@@ -559,5 +565,55 @@ function lessonToolsMenu(){
                 array_push($sideMenuGroup, $sideMenuSubGroup);
         }
 
+	return $sideMenuGroup;
+}
+
+
+/**
+ * Function pickerMenu
+ *
+ * Creates a multi-dimensional array of the user's tools/links
+ * for the menu presented for the embedded theme.
+ * *
+ * @return array
+ */
+function pickerMenu() {
+
+	global $urlServer, $code_cours, $is_editor;
+        
+        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. $_REQUEST['docsfilter'] : '';
+        $params = "?course=$code_cours&amp;embedtype=tinymce". $docsfilter;
+
+	$sideMenuGroup = array();
+
+	$sideMenuSubGroup = array();
+	$sideMenuText 	= array();
+	$sideMenuLink 	= array();
+	$sideMenuImg	= array();
+
+	$arrMenuType = array();
+	$arrMenuType['type'] = 'text';
+	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	array_push($sideMenuSubGroup, $arrMenuType);
+        
+        $visible = ($is_editor) ? '' : 'AND visible = 1';
+        $sql = "SELECT * FROM accueil
+                 WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
+                 $visible  ORDER BY rubrique";
+        
+        $result = db_query($sql, $code_cours);
+        
+        while($module = mysql_fetch_assoc($result))
+        {
+            array_push($sideMenuText, $module['rubrique']);
+            array_push($sideMenuLink, $module['lien']. $params);
+            array_push($sideMenuImg , $module['image']."_on.png");
+        }
+        
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+
+        array_push($sideMenuGroup, $sideMenuSubGroup);
 	return $sideMenuGroup;
 }

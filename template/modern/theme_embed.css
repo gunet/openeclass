@@ -3,5 +3,11 @@
 }
 
 #content_main {
-    width: 98%;
+    width: 518px;
+}
+
+#leftnav {
+    width: 120px;
+    padding:8px;
+    margin: 10px;
 }
