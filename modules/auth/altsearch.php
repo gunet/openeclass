@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,9 +33,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/CAS/CAS.php';
 require_once 'auth.inc.php';
-
-require_once '../../include/lib/user.class.php';
-require_once '../../include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();
@@ -232,7 +231,7 @@ if ($is_valid) {
         }
 
         $registered_at = time();
-        $expires_at = time() + $durationAccount;
+        $expires_at = time() + get_config('account_duration');
         $authmethods = array('2', '3', '4', '5');
         $lang = langname_to_code($language);
 

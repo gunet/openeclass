@@ -31,7 +31,7 @@
 
 include '../../include/baseTheme.php';
 require_once 'hierarchy.inc.php';
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 
@@ -122,15 +122,14 @@ while ($mycours = mysql_fetch_array($result)) {
         if ($visible == $mycours['visible']) {
             $tool_content .= $image;
         }
-    }
-    
+    }   
     $tool_content .= "</td>\n";
     $tool_content .= "</tr>";
     $k++;
 }
 
-if ($k > 0)
-    $tool_content .= "\n</table>\n";
-
+if ($k > 0) {
+    $tool_content .= "</table>";
+}
 
 draw($tool_content, (isset($uid) and $uid)? 1: 0);

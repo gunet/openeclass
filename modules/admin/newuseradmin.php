@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,9 +22,8 @@
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-
 require_once 'include/lib/user.class.php';
-require_once('../../include/lib/hierarchy.class.php');
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();
@@ -59,9 +58,10 @@ if($submit) {
         $depid = intval(isset($_POST['department'])? $_POST['department']: 0);
         $proflanguage = isset($_POST['language'])? $_POST['language']: '';
         if (!isset($native_language_names[$proflanguage])) {
-                $proflanguage = langname_to_code($language);
+                //$proflanguage = langname_to_code($language);
+                $proflanguage = $language;
         }
-		  $verified_mail = isset($_REQUEST['verified_mail_form'])?intval($_REQUEST['verified_mail_form']):2;
+        $verified_mail = isset($_REQUEST['verified_mail_form'])?intval($_REQUEST['verified_mail_form']):2;
 
         $backlink = $_SERVER['PHP_SELF'] .
                     isset($rid)? ('?id=' . intval($rid)): '';
@@ -83,9 +83,9 @@ if($submit) {
                         <br /><br /><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } else {
                 $registered_at = time();
-                $expires_at = time() + $durationAccount;
+                $expires_at = time() + get_config('account_duration');
                 $password_encrypted = md5($password);
-                $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
+                $inscr_user = db_query("INSERT INTO user
                                 (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail)
                                 VALUES (" .
                                 autoquote($nom_form) . ', '.
@@ -115,7 +115,7 @@ if($submit) {
                 $tool_content .= "<p class='success'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
                 
                 // send email
-                
+                $telephone = get_config('phone');
                 $emailsubject = "$langYourReg $siteName $type_message";
                 $emailbody = "
 $langDestination $prenom_form $nom_form
@@ -135,7 +135,7 @@ $langEmail : $emailhelpdesk
 
 } else {
         $lang = false;
-        $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $lang = '';
+        $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $language = '';
         if (isset($_GET['id'])) { // if we come from prof request
                 $id = $_GET['id'];
                 // display actions toolbar
@@ -143,13 +143,11 @@ $langEmail : $emailhelpdesk
                 <ul id='opslist'>
                 <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
                 <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
-        if (isset($_GET['id'])) {
-                $tool_content .= "
-                <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>";
-        }
-
-                $tool_content .= "
-                </ul></div>";
+                if (isset($_GET['id'])) {
+                        $tool_content .= "
+                        <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>";
+                }
+                $tool_content .= "</ul></div>";
                 $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
                         comment, lang, date_open, statut, verified_mail FROM user_request WHERE id = $id"));
                 $ps = $res['surname'];
@@ -161,7 +159,7 @@ $langEmail : $emailhelpdesk
                 $pam = $res['am'];
                 $pphone = $res['phone'];
                 $pcom = $res['comment'];
-                $lang = $res['lang'];
+                $language = $res['lang'];
                 $pstatut = intval($res['statut']);
                 $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
         } elseif (@$_GET['type'] == 'user') {
@@ -179,32 +177,31 @@ $langEmail : $emailhelpdesk
         }
 
         $tool_content .= "
-      <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();'>
-      <fieldset>
-      <legend>$title</legend>  
+        <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();'>
+        <fieldset>
+        <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>
         <tr><th class='left' width='180'><b>$langName:</b></th>
-            <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
+        <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langSurname:</b></th>
-            <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
+        <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langUsername:</b></th>
-            <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
+        <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langPass:</b></th>
-            <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
+        <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
         <tr><th class='left'><b>$langEmail:</b></th>
-            <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
+        <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langEmailVerified:</b></th>
-		  		<td>";
-		  $verified_mail_data = array();
-		  $verified_mail_data[0] = $m['pending'];
-		  $verified_mail_data[1] = $m['yes'];
-		  $verified_mail_data[2] = $m['no'];
-		  if (isset($pv)) {
-			  $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
-		  } else {
-			  $tool_content .= selection($verified_mail_data,"verified_mail_form");
-		  }
-
+        <td>";
+        $verified_mail_data = array();
+        $verified_mail_data[0] = $m['pending'];
+        $verified_mail_data[1] = $m['yes'];
+        $verified_mail_data[2] = $m['no'];
+        if (isset($pv)) {
+                $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
+        } else {
+                $tool_content .= selection($verified_mail_data,"verified_mail_form");
+        }
         $tool_content .= "</td></tr>
         <tr><th class='left'><b>$langPhone:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='phone' value='".q($pphone)."' /></td></tr>
@@ -219,7 +216,7 @@ $langEmail : $emailhelpdesk
             <td><input class='FormData_InputText' type='text' name='am' value='".q($pam)."' />&nbsp;</td></tr>
         <tr><th class='left'>$langLanguage:</th>
             <td>";
-        $tool_content .= lang_select_options('language', '', $lang);
+        $tool_content .= lang_select_options('language', '', $language);
         $tool_content .= "</td></tr>";
         if (isset($_GET['id'])) {
                 $tool_content .="<tr><th class='left'><b>$langComments</b></th>

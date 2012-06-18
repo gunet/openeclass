@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,9 +34,8 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 require_once 'auth.inc.php';
-
-include '../../include/lib/user.class.php';
-include '../../include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
 $userObj = new user();
@@ -89,8 +88,8 @@ if ($submit)  {
             break;
           case '5': $password = "db";
             break;
-					case '6': $password = "shibboleth";
-						break;
+          case '6': $password = "shibboleth";
+            break;
           case '7': $password = "cas";
             break;
           default:  $password = "";
@@ -98,11 +97,11 @@ if ($submit)  {
         }
 
 	$registered_at = time();
-        $expires_at = time() + $durationAccount;
+        $expires_at = time() + get_config('account_duration');
 
 	$verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
 
-	$sql = db_query("INSERT INTO `$mysqlMainDb`.user
+	$sql = db_query("INSERT INTO user
 			(nom, prenom, username, password, email, statut,
 			am, registered_at, expires_at, lang, verified_mail)
 			VALUES (" .

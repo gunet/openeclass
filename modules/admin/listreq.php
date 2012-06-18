@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -170,7 +170,7 @@ if (!empty($show) and $show == 'closed') {
                 }
 		break;
 	case '2':
-		$submit = isset($_POST['submit'])? $_POST['submit']: '';
+		$submit = isset($_POST['submit'])? $_POST['submit']: '';                
 		if(!empty($submit)) {
 			// post the comment and do the delete action
 			if (!empty($_POST['comment'])) {
@@ -180,6 +180,7 @@ if (!empty($show) and $show == 'closed') {
                                                WHERE id = $id";
 				if (db_query($sql)) {
 					if (isset($_POST['sendmail']) and ($_POST['sendmail'] == 1)) {
+                                                $telephone = get_config('phone');
 						$emailsubject = $langemailsubjectBlocked;
 						$emailbody = "$langemailbodyBlocked
 $langComments:> $_POST[comment]

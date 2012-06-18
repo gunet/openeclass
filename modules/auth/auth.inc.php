@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -833,7 +833,7 @@ $type is 'shibboleth' or 'cas'
 ****************************************************************/
 function shib_cas_login($type)
 {
-	global $nom, $prenom, $email, $statut, $language, $durationAccount, $urlServer,
+	global $nom, $prenom, $email, $statut, $language, $urlServer,
 		$is_admin, $is_power_user, $is_usermanage_user, $is_departmentmanage_user, $langUserAltAuth;
 
 	$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
@@ -924,7 +924,7 @@ function shib_cas_login($type)
 	} elseif ($autoregister and !get_config('am_required')) {
 			// else create him automatically
 			$registered_at = time();
-			$expires_at = time() + $durationAccount;  
+			$expires_at = time() + get_config('account_duration');
 
 			if (get_config('email_verification_required')) {
 				$verified_mail = 0;

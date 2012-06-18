@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -149,69 +149,69 @@ if (isset($_POST['submit'])) {
         $profile_options = array(0 => $langModern,
                                  1 => $langClassic);
         $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
-            <form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validateNodePickerForm();' >
-            <fieldset>
-  <legend>$langMultiRegUserData</legend>
-<table class='tbl' width='100%'>
-<tr><th>$langMultiRegFields:</th>
-    <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
-<tr><th>$langUsersData:</th>
-    <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
-</tr>
-<tr><th>$langMultiRegType:</th>
-    <td><select name='type'>
-        <option value='stud'>$langsOfStudents</option>
-        <option value='prof'>$langOfTeachers</option></select></td>
-</tr>
-<tr><th>$langMultiRegPrefix:</th>
-    <td><input type='text' name='prefix' size='10' value='user' /></td>
-</tr>
-<tr><th>$langFaculty:</th>
-    <td>"; 
-        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
-        $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "</td>
-</tr>
-<tr><th>$langAm:</th>
-    <td><input type='text' name='am' size='10' /></td>
-</tr>
-<tr><th>$langLanguage:</th>
-    <td>" . lang_select_options('lang') . "</td>
-</tr>
-<tr><th>$langEmail</th>
-    <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
-<tr><th>$langAm</th>
-    <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
-<tr><th>$langPhone</th>
-    <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
-<tr><th>$langUserBriefcase</th>
-    <td>" . selection($profile_options, 'perso', 0) . "</td></tr>
-<tr><th>$langInfoMail:</th>
-    <td><input name='send_mail' type='checkbox' />
-        $langMultiRegSendMail</td>
-</tr>
-<tr><th>&nbsp;</th>
-    <td class='right'><input type='submit' name='submit' value='$langSubmit' /></td>
-</tr>
-</table>
-</fieldset>
-</form>";
+        <form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validateNodePickerForm();' >
+        <fieldset>
+        <legend>$langMultiRegUserData</legend>
+        <table class='tbl' width='100%'>
+        <tr><th>$langMultiRegFields:</th>
+        <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
+        <tr><th>$langUsersData:</th>
+        <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
+        </tr>
+        <tr><th>$langMultiRegType:</th>
+        <td><select name='type'>
+                <option value='stud'>$langsOfStudents</option>
+                <option value='prof'>$langOfTeachers</option></select></td>
+        </tr>
+        <tr><th>$langMultiRegPrefix:</th>
+        <td><input type='text' name='prefix' size='10' value='user' /></td>
+        </tr>
+        <tr><th>$langFaculty:</th>
+        <td>"; 
+                list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
+                $head_content .= $js;
+                $tool_content .= $html;
+                $tool_content .= "</td>
+        </tr>
+        <tr><th>$langAm:</th>
+        <td><input type='text' name='am' size='10' /></td>
+        </tr>
+        <tr><th>$langLanguage:</th>
+        <td>" . lang_select_options('lang') . "</td>
+        </tr>
+        <tr><th>$langEmail</th>
+        <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
+        <tr><th>$langAm</th>
+        <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
+        <tr><th>$langPhone</th>
+        <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
+        <tr><th>$langUserBriefcase</th>
+        <td>" . selection($profile_options, 'perso', 0) . "</td></tr>
+        <tr><th>$langInfoMail:</th>
+        <td><input name='send_mail' type='checkbox' />
+                $langMultiRegSendMail</td>
+        </tr>
+        <tr><th>&nbsp;</th>
+        <td class='right'><input type='submit' name='submit' value='$langSubmit' /></td>
+        </tr>
+        </table>
+        </fieldset>
+        </form>";
 }
 
-draw($tool_content,3,'admin', $head_content);
+draw($tool_content, 3, null, $head_content);
 
 
 function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail,
                      $email_public, $phone_public, $am_public, $perso)
 {
-        global $charset, $mysqlMainDb, $langAsUser, $langAsProf,
+        global $charset, $langAsUser, $langAsProf,
                $langYourReg, $siteName, $langDestination, $langYouAreReg,
                $langSettings, $langPass, $langAddress, $langIs, $urlServer,
                $langProblem, $administratorName, $administratorSurname,
-               $langManager, $langTel, $telephone, $langEmail,
-               $emailAdministrator, $emailhelpdesk, $profsuccess, $usersuccess,
-               $durationAccount, $userObj;
+               $langManager, $langTel, $langEmail,
+               $emailhelpdesk, $profsuccess, $usersuccess,
+               $userObj;
 
         if ($statut == 1) {
                 $message = $profsuccess;
@@ -229,7 +229,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
         }
 
         $registered_at = time();
-        $expires_at = time() + $durationAccount;
+        $expires_at = time() + get_config('account_duration');
         $password_encrypted = md5($password);
 
         $req = db_query("INSERT INTO user
@@ -246,6 +246,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
                                 autoquote($phone) . ", $email_public, $phone_public, $am_public, '$perso')");
         $id = mysql_insert_id();
         $userObj->refresh($id, $departments);
+        $telephone = get_config('phone');
 
         $emailsubject = "$langYourReg $siteName $type_message";
         $emailbody = "

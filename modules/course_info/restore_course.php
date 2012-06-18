@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,7 +25,6 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/pclzip/pclzip.lib.php';
-
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
@@ -616,7 +615,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
               $registered_at = NULL, $expires_at = NULL, $inst_id = NULL)
 {
         global $action, $new_course_code, $course_id, $userid_map,
-               $mysqlMainDb, $durationAccount, $version, $langUserWith, $langAlready,
+               $mysqlMainDb, $version, $langUserWith, $langAlready,
                $langWithUsername, $langUserisAdmin, $langUsernameSame,
                $langRestoreUserExists, $langRestoreUserNew,
                $langUsername, $langPrevId, $langNewId, $langUserName;
@@ -637,7 +636,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
 		$registered_at = time();
 	}
 	if (!$expires_at) {
-		$expires_at = time() + $durationAccount;
+		$expires_at = time() + get_config('account_duration');
 	}
 
 	$u = db_query("SELECT * FROM `$mysqlMainDb`.user WHERE BINARY username=".quote($login));
@@ -1090,7 +1089,7 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
 
 function restore_users($course_id, $users, $cours_user)
 {
-	global $tool_content, $mysqlMainDb, $durationAccount, $version,
+	global $tool_content, $mysqlMainDb, $version,
                $langUserWith, $langWithUsername, $langUserisAdmin,
                $langUsernameSame, $langRestoreUserExists,
                $langRestoreUserNew;
@@ -1135,7 +1134,7 @@ function restore_users($course_id, $users, $cours_user)
                                              phone = ".quote($data['phone']).",
                                              department = ".quote($data['department']).",
                                              registered_at = ".quote($data['registered_at']).",
-                                             expires_at = ". quote($data['registered_at']+ $durationAccount));
+                                             expires_at = ". quote($data['registered_at'] + get_config('account_duration')));
                         $userid_map[$data['userid']] = mysql_insert_id();
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserNew,

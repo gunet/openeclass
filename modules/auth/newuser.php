@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,8 +61,6 @@ if (get_config('close_user_registration')) {
 	draw($tool_content,0);
 	exit;
 }
- 
-$lang = langname_to_code($language);
 
 // display form
 if (!isset($_POST['submit'])) {
@@ -90,7 +88,7 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
-	<td colspan='2'><input type='text' name='uname' value='".$_GET['uname']."' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='text' name='uname' value='".q($_GET['uname'])."' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>
@@ -102,12 +100,16 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langEmail:</th>
-	<td valign='top'><input type='text' name='email' size='30' maxlength='100' value='".$_GET['email']."' class='FormData_InputText' /></td>
+	<td valign='top'><input type='text' name='email' size='30' maxlength='100' value='".q($_GET['email'])."' class='FormData_InputText' /></td>
 	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAm:</th>
-	<td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
+	<td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='".q($_GET['am'])."' class='FormData_InputText' />$am_message</td>
+	</tr>
+        <tr>
+	<th class='left'>$langPhone:</th>
+	<td colspan='2' valign='top'><input type='text' name='phone' size='20' maxlength='20' value='".q($_GET['phone'])."' class='FormData_InputText' /></td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty:</th>
@@ -125,7 +127,7 @@ if (!isset($_POST['submit'])) {
 	</tr>";
 	if (get_config("display_captcha")) {
 		$tool_content .= "<tr>
-		<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+		<th class='left'><img id='captcha' src='include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
 		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
 		</tr>";
 	}
@@ -157,6 +159,7 @@ if (!isset($_POST['submit'])) {
 					'password' => true,
 					'password1' => true,
 					'email' => $email_arr_value,
+                                        'phone' => false,
 					'am' => $am_arr_value));
         
         if (!isset($_POST['department'])) {
@@ -172,14 +175,14 @@ if (!isset($_POST['submit'])) {
 	} else {
 		$uname = canonicalize_whitespace($uname);
 		// check if the username is already in use
-		$q2 = "SELECT username FROM `$mysqlMainDb`.user WHERE username = ".autoquote($uname);
+		$q2 = "SELECT username FROM user WHERE username = ".autoquote($uname);
 		$username_check = db_query($q2);
 		if ($myusername = mysql_fetch_array($username_check)) {
 			$registration_errors[] = $langUserFree;
 		}
 		if (get_config("display_captcha")) {
 			// captcha check
-			require_once '../../include/securimage/securimage.php';
+			require_once 'include/securimage/securimage.php';
 			$securimage = new Securimage();
 			
 			if ($securimage->check($_POST['captcha_code']) == false) {
@@ -207,23 +210,24 @@ if (!isset($_POST['submit'])) {
 		}
 
 		$registered_at = time();
-		$expires_at = time() + $durationAccount;  
+		$expires_at = time() + get_config('account_duration');
 		// manage the store/encrypt process of password into database
 		$uname = escapeSimple($uname);  
 		$password = escapeSimpleSelect($password); 
 		$password_encrypted = md5($password);
 
-		$q1 = "INSERT INTO `$mysqlMainDb`.user
-			(nom, prenom, username, password, email, statut, am, registered_at, expires_at, lang, verified_mail)
+		$q1 = "INSERT INTO user
+			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail)
 			VALUES (". autoquote($nom_form) .",
 				". autoquote($prenom_form) .",
 				". autoquote($uname) .",
 				'$password_encrypted',
 				". autoquote($email) .",
-				5,
+				5,                                
 				". autoquote($am) .",
+                                ". autoquote($phone) .",
 				$registered_at, $expires_at,
-				'$lang', $verified_mail)";
+				'$language', $verified_mail)";
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
                 $userObj->refresh($last_id, $departments);
@@ -236,14 +240,15 @@ if (!isset($_POST['submit'])) {
 		$emailsubject = "$langYourReg $siteName";
 		$uname = autounquote($uname); 
 		$password = unescapeSimple($password);
+                $telephone = get_config('phone');
 		$emailbody = "$langDestination $prenom_form $nom_form\n" .
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .
 			"$urlServer\n" .
 			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
-			"$langProblem\n$langFormula" .
-			"$administratorName $administratorSurname\n" .
-			"$langManager $siteName \n$langTel $telephone \n" .
+			"$langProblem\n$langFormula\n" . 
+			"$administratorName\n" .
+			"$langManager $siteName \n$langTel $telephone\n" .
 			"$langEmail: $emailhelpdesk";
 
 		// send email to user
@@ -285,8 +290,7 @@ if (!isset($_POST['submit'])) {
 
 		// footer msg
 		if (!$vmail) {
-			$tool_content .= 
-				"<p>$langPersonalSettingsMore</p>";
+			$tool_content .= "<p>$langPersonalSettingsMore</p>";
 		}
 		else {
 			$tool_content .=
@@ -298,9 +302,16 @@ if (!isset($_POST['submit'])) {
 		// errors exist - registration failed
 		$tool_content .= "<p class='caution'>";
 		foreach ($registration_errors as $error) {
-			$tool_content .= "$error";
+			$tool_content .= " $error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;uname=$_POST[uname]&amp;email=$_POST[email]&amp;am=$_POST[am]'>$langAgain</a></p>";
+		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?" .
+                        'prenom_form=' . urlencode($prenom_form) .
+                        '&amp;nom_form=' . urlencode($nom_form) .
+                        '&amp;uname=' . urlencode($uname) .
+                        '&amp;email=' . urlencode($email) .
+                        '&amp;am=' . urlencode($am) .
+                        '&amp;phone=' . urlencode($phone) .
+                        "'>$langAgain</a></p>";
 	}
 } // end of registration
 

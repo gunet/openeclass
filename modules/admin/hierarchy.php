@@ -30,14 +30,14 @@
 ==============================================================================*/
 
 $require_departmentmanage_user = true;
-require_once('../../include/baseTheme.php');
+require_once '../../include/baseTheme.php';
 
 $TBL_HIERARCHY         = 'hierarchy';
 $TBL_USER_DEPARTMENT   = 'user_department';
 $TBL_COURSE_DEPARTMENT = 'course_department';
 
-require_once('../../include/lib/hierarchy.class.php');
-require_once('../../include/lib/user.class.php');
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
 
 $tree = new hierarchy();
 $user = new user();

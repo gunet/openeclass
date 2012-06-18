@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -101,7 +101,7 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 
 // register user
     $registered_at = time();
-    $expires_at = time() + $durationAccount;
+    $expires_at = time() + get_config('account_duration');
 
     $password_encrypted = md5($password);
     $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
@@ -181,7 +181,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 
 } // end of if 
 
-draw($tool_content,3, 'auth', $head_content);
+draw($tool_content,3, null, $head_content);
 
 // -----------------
 // functions
@@ -204,5 +204,3 @@ function end_tables() {
 	
 	return $retstring;
 }
-
-?>

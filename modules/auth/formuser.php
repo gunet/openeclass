@@ -28,8 +28,6 @@ load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
 
-$lang = langname_to_code($language);
-
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
@@ -139,7 +137,7 @@ if ($all_set) {
 			verified_mail = $verified_mail,
 			date_open = NOW(),
 			comment = " . autoquote($usercomment). ',
-			lang = ' . quote(langname_to_code($language)). ",
+			lang = ' . quote($language). ",
 			ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
 		$mysqlMainDb);
 
@@ -197,9 +195,8 @@ if ($all_set) {
 			"<br />$langMailVerificationSuccess
 			$langMailVerificationSuccess2</div><br /><p>$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
 	}
-
-		draw($tool_content, 0);
-		exit();
+        draw($tool_content, 0);
+        exit();
 
 // first time we visit the form or on error
 } else {
@@ -233,11 +230,11 @@ if ($all_set) {
           </tr>";
         if (!$prof) {
                 $tool_content .= "
-          <tr>
-            <th>$langAm</th>
-            <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' />" .
-                ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
-          </tr>";
+                <tr>
+                <th>$langAm</th>
+                <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' />" .
+                        ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
+                </tr>";
         }
         $tool_content .= "
           <tr>
@@ -255,24 +252,22 @@ if ($all_set) {
         <tr>
         <th>$langLanguage</th>
         <td>";
-           $tool_content .= lang_select_options('localize');
-           $tool_content .= "</td>
-        </tr>";
+        $tool_content .= lang_select_options('localize');
+        $tool_content .= "</td></tr>";
         if (get_config("display_captcha")) {
 		$tool_content .= "<tr>
 		<th class='left'><img id='captcha' src='../../include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
 		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
 		</tr>";
 	}
-        $tool_content .= "
-        <tr>
+        $tool_content .= "<tr>
         <td>&nbsp;</td>
         <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
-     </tr>
-     </table>
-     </fieldset>
-     </form>
-     <div class='right smaller'>$langRequiredFields</div>";
+        </tr>
+        </table>
+        </fieldset>
+        </form>
+        <div class='right smaller'>$langRequiredFields</div>";
 }
 
 draw($tool_content, 0, null, $head_content);
