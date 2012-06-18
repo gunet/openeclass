@@ -1,10 +1,9 @@
-<?
-
+<?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,8 +21,8 @@
 $require_current_course = TRUE;
 
 include '../../include/init.php';
-require_once "../../include/lib/learnPathLib.inc.php";
-include '../group/group_functions.php';
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'modules/group/group_functions.php';
 
 // IF PROF ONLY
 if($is_editor) {
@@ -47,8 +46,7 @@ if($is_editor) {
 		WHERE U.`user_id`= CU.`user_id`
 		AND CU.`course_id` = $course_id
 		ORDER BY U.`nom` ASC";
-	$usersList = get_limited_list($sql, 500000);
-	mysql_select_db($mysqlMainDb);
+	$usersList = get_limited_list($sql, 500000);	
 	foreach ($usersList as $user)
 	{
 		echo "$crlf";

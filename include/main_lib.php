@@ -40,6 +40,11 @@ define('COURSE_REGISTRATION', 1);
 define('COURSE_CLOSED', 0);
 define('COURSE_INACTIVE', 3);
 
+// user status
+define('USER_TEACHER', 1);
+define('USER_STUDENT', 5);
+define('USER_GUEST', 10);
+        
 // resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
