@@ -53,7 +53,7 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
-$sql = "SELECT f.id, f.name FROM forum f, forum_topics t 
+$sql = "SELECT f.id, f.name FROM forum f, forum_topic t 
             WHERE f.id = $forum
             AND t.id = $topic
             AND t.forum_id = f.id
@@ -73,18 +73,18 @@ if (isset($_GET['delete'])) {
 	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic, $forum);
 	
-	$result = db_query("SELECT post_time FROM forum_posts 
+	$result = db_query("SELECT post_time FROM forum_post
                             WHERE id = $post_id");
      
 	$myrow = mysql_fetch_array($result);
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = explode(' ', $this_post_time);
 		
-	db_query("DELETE FROM forum_posts WHERE id = $post_id");
-	db_query("UPDATE forum SET forum_posts = forum_posts-1 WHERE id = $forum");
+	db_query("DELETE FROM forum_post WHERE id = $post_id");
+	db_query("UPDATE forum SET num_posts = num_posts - 1 WHERE id = $forum");
 	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
-		$sql = "UPDATE forum_topics
+		$sql = "UPDATE forum_topic
 			SET topic_time = '$topic_time_fixed'
 			WHERE id = $topic AND forum_id = $forum";
 		if (!$r = db_query($sql)) {
@@ -95,7 +95,7 @@ if (isset($_GET['delete'])) {
 	}
 	$total = get_total_posts($topic, "topic");
 	if ($total == 0) {
-		db_query("DELETE FROM forum_topics WHERE id = $topic AND forum_id = $forum");
+		db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
 		db_query("UPDATE forum SET num_topics = num_topics-1 
                             WHERE id = $forum 
                             AND course_id = $cours_id");
@@ -116,7 +116,7 @@ if ($paging and $total > $posts_per_page) {
 	$pages = $times;
 }
         
-$result = db_query("SELECT title FROM forum_topics WHERE id = $topic");
+$result = db_query("SELECT title FROM forum_topic WHERE id = $topic");
 $myrow = mysql_fetch_array($result);
 
 $topic_subject = $myrow["title"];
@@ -209,15 +209,15 @@ if ($is_editor) {
     $tool_content .= "</tr>";
 
 if (isset($_GET['all'])) {
-    $sql = "SELECT * FROM forum_posts WHERE topic_id = $topic ORDER BY id";
+    $sql = "SELECT * FROM forum_post WHERE topic_id = $topic ORDER BY id";
 } elseif (isset($_GET['start'])) {
 	$start = intval($_GET['start']);
-	$sql = "SELECT * FROM forum_posts
+	$sql = "SELECT * FROM forum_post
 		WHERE topic_id = $topic		
 		ORDER BY id
                 LIMIT $start, $posts_per_page";
 } else {
-	$sql = "SELECT * FROM forum_posts
+	$sql = "SELECT * FROM forum_post
 		WHERE topic_id = '$topic'		
 		ORDER BY id 
                 LIMIT $posts_per_page";
@@ -257,7 +257,7 @@ do {
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
-$sql = "UPDATE forum_topics SET num_views = num_views + 1 
+$sql = "UPDATE forum_topic SET num_views = num_views + 1 
             WHERE id = $topic AND forum_id = $forum";
 db_query($sql);
 

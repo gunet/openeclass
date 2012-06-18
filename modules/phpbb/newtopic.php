@@ -75,17 +75,17 @@ if (isset($_POST['submit'])) {
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
 	
-	$sql = "INSERT INTO forum_topics (title, poster_id, forum_id, topic_time)
+	$sql = "INSERT INTO forum_topic (title, poster_id, forum_id, topic_time)
 			VALUES (" . autoquote($subject) . ", $uid, $forum_id, '$time')";
 	$result = db_query($sql);
 
 	$topic_id = mysql_insert_id();
-	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
+	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic_id, $forum_id, ".autoquote($message).", $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 	
         $post_id = mysql_insert_id();
-        db_query("UPDATE forum_topics
+        db_query("UPDATE forum_topic
                     SET last_post_id = $post_id
                 WHERE id = $topic_id 
                 AND forum_id = $forum_id");

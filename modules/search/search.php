@@ -242,13 +242,13 @@ function search_in_course($search_terms, $course_id, $course_code) {
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT id, title FROM forum_topics WHERE course_id = $course_id AND MATCH (title)".$query);
+	$sql = db_query("SELECT id, title FROM forum_topic WHERE course_id = $course_id AND MATCH (title)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	while($res = mysql_fetch_array($sql)) {
 		$sql = db_query("SELECT topic_id AS topicid, post_text AS posttext
-					FROM forum_posts
+					FROM forum_post
 					WHERE forum_id = $res[forum_id]						
 						AND MATCH (post_text)".$query);
 		if (mysql_num_rows($sql) > 0) {

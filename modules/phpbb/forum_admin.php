@@ -115,7 +115,7 @@ elseif (isset($_GET['forumgoedit'])) {
                 <th>$langChangeCat</th>
                 <td>
                 <select name='cat_id'>";
-        $result = db_query("SELECT id, cat_title FROM forum_categories WHERE course_id = $cours_id");
+        $result = db_query("SELECT id, cat_title FROM forum_category WHERE course_id = $cours_id");
         while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
         if ($cat_id == $cat_id_1) {
                         $tool_content .= "<option value='$cat_id' selected>$cat_title</option>"; 
@@ -133,7 +133,7 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
-        $result = db_query("SELECT id, cat_title FROM forum_categories
+        $result = db_query("SELECT id, cat_title FROM forum_category
                                 WHERE id = $cat_id 
                                 AND course_id = $cours_id");
         list($cat_id, $cat_title) = mysql_fetch_row($result);
@@ -158,7 +158,7 @@ elseif (isset($_GET['forumcatedit'])) {
 
 // Save forum category
 elseif (isset($_GET['forumcatsave'])) {
-        db_query("UPDATE forum_categories SET cat_title = " . autoquote($_POST['cat_title']) . "
+        db_query("UPDATE forum_category SET cat_title = " . autoquote($_POST['cat_title']) . "
                                         WHERE id = $cat_id AND course_id = $cours_id");
         $tool_content .= "<p class='success'>$langNameCatMod</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
@@ -178,7 +178,7 @@ elseif (isset($_GET['forumgosave'])) {
 
 // Add category to forums
 elseif (isset($_GET['forumcatadd'])) {
-        db_query("INSERT INTO forum_categories 
+        db_query("INSERT INTO forum_category 
                         SET cat_title = " . autoquote($_POST['categories']) .",
                         course_id = $cours_id");
         $tool_content .= "<p class='success'>$langCatAdded</p>
@@ -224,13 +224,13 @@ elseif (isset($_GET['forumgoadd'])) {
 elseif (isset($_GET['forumcatdel'])) {
         $result = db_query("SELECT id FROM forum WHERE cat_id = $cat_id AND course_id = $cours_id");
         while(list($forum_id) = mysql_fetch_row($result)) {
-                db_query("DELETE FROM forum_posts WHERE forum_id = $forum_id");
-                db_query("DELETE FROM forum_topics WHERE forum_id = $forum_id");
+                db_query("DELETE FROM forum_post WHERE forum_id = $forum_id");
+                db_query("DELETE FROM forum_topic WHERE forum_id = $forum_id");
                 db_query("DELETE FROM forum_notify WHERE forum_id = $forum_id AND course_id = $course_id");
         }
         db_query("DELETE FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
         db_query("DELETE FROM forum_notify WHERE cat_id = $cat_id AND course_id = $cours_id");
-        db_query("DELETE FROM forum_categories WHERE id = $cat_id AND course_id = $cours_id");        
+        db_query("DELETE FROM forum_category WHERE id = $cat_id AND course_id = $cours_id");        
         $tool_content .= "<p class='success'>$langCatForumDelete</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
 }
@@ -241,8 +241,8 @@ elseif (isset($_GET['forumgodel'])) {
         $navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?course=$course_code", "name"=> $langCatForumAdmin);
         $result = db_query("SELECT id FROM forum WHERE id = $forum_id AND course_id = $course_id");
         while(list($forum_id) = mysql_fetch_row($result)) {
-                db_query("DELETE FROM forum_posts WHERE forum_id = $forum_id");
-                db_query("DELETE FROM forum_topics WHERE forum_id = $forum_id");
+                db_query("DELETE FROM forum_post WHERE forum_id = $forum_id");
+                db_query("DELETE FROM forum_topic WHERE forum_id = $forum_id");
                 db_query("DELETE FROM forum_notify WHERE forum_id = $forum_id AND course_id = $course_id");
                 db_query("DELETE FROM forum WHERE id = $forum_id AND course_id = $cours_id");
                 db_query("UPDATE `group` SET forum_id = 0 

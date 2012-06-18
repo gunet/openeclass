@@ -53,7 +53,7 @@ function add_field_after_field($table, $field, $after_field, $type)
 	global $langToTable, $langAddField, $langAfterField, $BAD;
 
 	$retString = "";
-	
+
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (!db_query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
@@ -69,7 +69,7 @@ function rename_field($table, $field, $new_field, $type)
 	global $langToA, $langRenameField, $langToTable, $BAD;
 
 	$retString = "";
-	
+
 	$fields = db_query("SHOW COLUMNS FROM $table LIKE '$new_field'");
 	if (mysql_num_rows($fields) == 0) {
 		if (!db_query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
@@ -85,7 +85,7 @@ function delete_field($table, $field) {
 
 	$retString = "";
 	if (!db_query("ALTER TABLE `$table` DROP `$field`")) {
-		$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";	
+		$retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
 		$retString .= " $BAD<br>";
 	}
 	return $retString;
@@ -108,7 +108,7 @@ function merge_tables($table_destination,$table_source,$fields_destination,$fiel
 	global $langMergeTables, $BAD;
 
 	$retString = "";
-	
+
 	$query = "INSERT INTO $table_destination (";
 	foreach($fields_destination as $val)
 	{
@@ -177,7 +177,7 @@ function add_index($index, $table, $column)  {
 		$st = '';
 		for ($j=0; $j<count($arguments); $j++) {
 			$st .= $arguments[$j].',';
-		}	
+		}
 		$ind_sql = db_query("SHOW INDEXES FROM `$table`");
 		while ($i = mysql_fetch_array($ind_sql))  {
 			if ($i['Key_name'] == $index) {
@@ -283,8 +283,8 @@ function convert_db_utf8($database)
 // -------------------------------------
 
 function encode_dropbox_documents($code, $id, $filename, $title) {
-	
-	global $webDir, $langEncDropboxError;	
+
+	global $webDir, $langEncDropboxError;
 
 	$format = get_file_extension($title);
         $new_filename = safe_filename($format);
@@ -324,95 +324,90 @@ function upgrade_course($code, $lang)
 // ----------------------------------
 function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = false)
 {
-    global $langUpgCourse, $mysqlMainDb, $webDir;
-    
-    $course_id = course_code_to_id($code);
-    mysql_select_db($code);
-    echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
-    flush();
+        global $langUpgCourse, $mysqlMainDb, $webDir;
 
-    
-    // move forum tables to central db 
-        if (mysql_table_exists($code, 'catagories')) {
-                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_categories`
-                        (`id`, `cat_title`, `cat_order`, `course_id`)
-                        SELECT `cat_id`, `cat_title`,
-                        `cat_order`, $course_id FROM catagories"); 
+        $course_id = course_code_to_id($code);
+        mysql_select_db($code);
+        echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
+        flush();
 
-        }        
+
+        // move forum tables to central db
         if (mysql_table_exists($code, 'forums')) {
-                $sql = db_query("SELECT forum_id, forum_name, forum_desc, forum_topics, 
-                                forum_posts, forum_last_post_id, cat_id FROM forums ORDER by forum_id");        
-                while ($row = mysql_fetch_array($sql)) {
-                        db_query("INSERT INTO `$mysqlMainDb`.`forum` (`name`, `desc`, `num_topics`, `num_posts`, `last_post_id`, `cat_id`, `course_id`) 
-                                VALUES ('$row[forum_name]', '$row[forum_desc]', $row[forum_topics], $row[forum_posts], $row[forum_last_post_id], $row[cat_id], $course_id)");
-                        $newforum_id = mysql_insert_id();
-                        db_query("UPDATE `$mysqlMainDb`.forum_notify SET forum_id = $newforum_id 
-                                        WHERE forum_id = $row[forum_id]
-                                        AND course_id = $course_id");
-                        db_query("UPDATE `$mysqlMainDb`.group SET forum_id = $newforum_id
-                                        WHERE forum_id = $row[forum_id]
-                                        AND course_id = $course_id");
-                        $sql2 = db_query("SELECT topic_id, topic_title, topic_poster, topic_time, topic_views,
-                                                topic_replies, topic_last_post_id, forum_id FROM topics
-                                                WHERE forum_id = $row[forum_id]");
-                        while ($row2 = mysql_fetch_array($sql2)) {
-                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_topics` 
-                                                (`title`, `poster_id`, `topic_time`, `num_views`, `num_replies`, `last_post_id`, `forum_id`)
-                                                VALUES ('$row2[topic_title]', $row2[topic_poster], '$row2[topic_time]', $row2[topic_views], $row2[topic_replies],
-                                                $row2[topic_last_post_id], $newforum_id)");
-                                        $newtopic_id = mysql_insert_id();
-                                        db_query("UPDATE `$mysqlMainDb`.forum_notify SET topic_id = $newtopic_id 
-                                                        WHERE topic_id = $row2[topic_id]
-                                                        AND course_id = $course_id");
-                                        $sql3 = db_query("SELECT pt.post_text AS post_text, p.poster_id, p.post_time, p.poster_ip 
-                                                                FROM posts p, posts_text pt WHERE p.post_id = pt.post_id 
-                                                                AND p.forum_id = $row[forum_id]
-                                                                AND p.topic_id = $row2[topic_id]");
-                                while ($row3 = mysql_fetch_array($sql3)) {
-                                        db_query("INSERT INTO `$mysqlMainDb`.`forum_posts`
-                                                         (`topic_id`, `forum_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`) 
-                                                         VALUES ($newtopic_id, $newforum_id, ".
-                                                         quote($row3['post_text']) . ", $row3[poster_id], '$row3[post_time]', " .
-                                                         quote($row3['poster_ip']) . ')');
-                                }
+                list($forumcatid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.forum_category"));
+                $forumcatid_offset = intval($forumcatid_offset);
+                db_query("UPDATE catagories SET cat_order = 0 WHERE cat_order IS NULL OR cat_order = ''");
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_category`
+                        (`id`, `cat_title`, `cat_order`, `course_id`)
+                        SELECT `cat_id` + $forumcatid_offset, `cat_title`,
+                               `cat_order`, $course_id FROM catagories");
+                list($forumid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.forum"));
+                $forumid_offset = intval($forumid_offset);
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum`
+                        (`id`, `name`, `desc`, `num_topics`, `num_posts`, `last_post_id`, `cat_id`, `course_id`)
+                        SELECT forum_id + $forumid_offset, forum_name, forum_desc, forum_topics,
+                               forum_posts, forum_last_post_id, cat_id + $forumcatid_offset, $course_id
+                        FROM forums ORDER by forum_id") && $ok;
+                $ok = db_query("UPDATE `$mysqlMainDb`.group SET forum_id = forum_id + $forumid_offset
+                                          WHERE course_id = $course_id") && $ok;
+                list($forumtopicid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.forum_topic"));
+                $forumtopicid_offset = intval($forumtopicid_offset);
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_topic`
+                        (`id`, `title`, `poster_id`, `topic_time`, `num_views`, `num_replies`, `last_post_id`, `forum_id`)
+                        SELECT topic_id + $forumtopicid_offset, topic_title, topic_poster, topic_time, topic_views,
+                               topic_replies, topic_last_post_id, forum_id + $forumid_offset
+                        FROM topics") && $ok;
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_post`
+                        (`topic_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`)
+                        SELECT p.topic_id + $forumtopicid_offset,
+                               pt.post_text, p.poster_id, p.post_time, p.poster_ip
+                        FROM posts p, posts_text pt
+                        WHERE p.post_id = pt.post_id") && $ok;
+                $ok = db_query("UPDATE `$mysqlMainDb`.forum_notify
+                                       SET cat_id = cat_id + $forumcatid_offset,
+                                           forum_id = forum_id + $forumid_offset,
+                                           topic_id = topic_id + $forumtopicid_offset
+                                       WHERE course_id = $course_id") && $ok;
+                if ($ok) {
+                        foreach (array('posts', 'topics', 'forums', 'catagories') as $table) {
+                                db_query('DROP TABLE '.$table);
                         }
                 }
         }
-        
-    $video_map = array();
-    // move video to central db and drop table
-    if (mysql_table_exists($code, 'video')) {
-        
-        list($videoid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
-        $videoid_offset = (!$videoid_offset) ? 0 : intval($videoid_offset);
-        
-        if ($return_mapping) {
-            $result = db_query("SELECT * FROM video ORDER by id");
-            while ($row = mysql_fetch_array($result)) {
-                $oldid = intval($row['id']);
-                $newid = $oldid + $videoid_offset;
-                $video_map[$oldid] = $newid;
-            }
-        }
-        
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.video
+
+        $video_map = array();
+        // move video to central db and drop table
+        if (mysql_table_exists($code, 'video')) {
+
+                list($videoid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.video"));
+                $videoid_offset = (!$videoid_offset) ? 0 : intval($videoid_offset);
+
+                if ($return_mapping) {
+                        $result = db_query("SELECT * FROM video ORDER by id");
+                        while ($row = mysql_fetch_array($result)) {
+                                $oldid = intval($row['id']);
+                                $newid = $oldid + $videoid_offset;
+                                $video_map[$oldid] = $newid;
+                        }
+                }
+
+                $ok = db_query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
                                `creator`, `publisher`, `date` FROM video ORDER by id");
-        
+
         if (false !== $ok)
             db_query("DROP TABLE video");
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $videoid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
     }
-    
+
     $videolinks_map = array();
     // move videolinks to central db and drop table
     if (mysql_table_exists($code, 'videolinks')) {
-        
+
         list($linkid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
         $linkid_offset = (!$linkid_offset) ? 0 : intval($linkid_offset);
 
@@ -424,67 +419,67 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $videolinks_map[$oldid] = $newid;
             }
         }
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.videolinks
                         (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
                                `publisher`, `date` FROM videolinks ORDER by id");
-        
+
         if (false !== $ok)
             db_query("DROP TABLE videolinks");
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
     }
-    
+
     // move dropbox to central db and drop tables
-    if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') && 
+    if (mysql_table_exists($code, 'dropbox_file') && mysql_table_exists($code, 'dropbox_person') &&
         mysql_table_exists($code, 'dropbox_post')) {
-        
+
         list($fileid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.dropbox_file"));
         $fileid_offset = (!$fileid_offset) ? 0 : intval($fileid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE dropbox_map AS
                    SELECT old.id AS old_id, old.id + $fileid_offset AS new_id
                      FROM dropbox_file AS old ORDER by id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,  
+                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,
                          `description`, `author`, `uploadDate`, `lastUploadDate`)
                         SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
-                               `filesize`, `title`, `description`, `author`, `uploadDate`, 
+                               `filesize`, `title`, `description`, `author`, `uploadDate`,
                                `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person
                          (`fileId`, `personId`)
                          SELECT DISTINCT dropbox_map.new_id, dropbox_person.personId
                            FROM dropbox_person, dropbox_map
                           WHERE dropbox_person.fileId = dropbox_map.old_id
                           ORDER BY dropbox_person.fileId") && $ok;
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_post
                          (`fileId`, `recipientId`)
                          SELECT DISTINCT dropbox_map.new_id, dropbox_post.recipientId
                            FROM dropbox_post, dropbox_map
                           WHERE dropbox_post.fileId = dropbox_map.old_id
                           ORDER BY dropbox_post.fileId") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE dropbox_map");
-        
+
         if (false !== $ok) {
             db_query("DROP TABLE dropbox_file");
             db_query("DROP TABLE dropbox_person");
             db_query("DROP TABLE dropbox_post");
         }
     }
-    
+
     $lp_map = array();
     // move learn path to central db and drop tables
     if (mysql_table_exists($code, 'lp_learnPath') && mysql_table_exists($code, 'lp_module') &&
         mysql_table_exists($code, 'lp_asset') && mysql_table_exists($code, 'lp_rel_learnPath_module') &&
         mysql_table_exists($code, 'lp_user_module_progress') ) {
-        
+
         // first change `visibility` field name and type to lp_learnPath table
         db_query("ALTER TABLE lp_learnPath CHANGE `visibility` `visibility` VARCHAR(5)");
         db_query("UPDATE lp_learnPath SET visibility = '1' WHERE visibility = 'SHOW'");
@@ -496,15 +491,15 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         db_query("UPDATE lp_rel_learnPath_module SET visibility = '1' WHERE visibility = 'SHOW'");
         db_query("UPDATE lp_rel_learnPath_module SET visibility = '0' WHERE visibility = 'HIDE'");
         db_query("ALTER TABLE lp_rel_learnPath_module CHANGE `visibility` `visible` TINYINT(4)");
-            
+
         $asset_map = array();
         $rel_map = array();
         $rel_map[0] = 0;
-        
-        // ----- lp_learnPath DB Table ----- // 
+
+        // ----- lp_learnPath DB Table ----- //
         list($lpid_offset) = mysql_fetch_row(db_query("SELECT MAX(learnPath_id) FROM `$mysqlMainDb`.lp_learnPath"));
         $lpid_offset = (!$lpid_offset) ? 0 : intval($lpid_offset);
-        
+
         if ($return_mapping) {
             $result = db_query("SELECT * FROM lp_learnPath ORDER by learnPath_id");
             while ($row = mysql_fetch_array($result)) {
@@ -513,43 +508,43 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $lp_map[$oldid] = $newid;
             }
         }
-        
+
         db_query("CREATE TEMPORARY TABLE lp_map AS
                    SELECT old.learnPath_id AS old_id, old.learnPath_id + $lpid_offset AS new_id
                      FROM lp_learnPath AS old ORDER by learnPath_id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_learnPath
                          (`learnPath_id`, `course_id`, `name`, `comment`, `lock`, `visible`, `rank`)
-                         SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`, 
+                         SELECT `learnPath_id` + $lpid_offset, $course_id, `name`, `comment`, `lock`,
                          `visible`, `rank` FROM lp_learnPath ORDER BY learnPath_id");
-        
+
         // ----- lp_module DB Table ----- //
         list($moduleid_offset) = mysql_fetch_row(db_query("SELECT max(module_id) FROM `$mysqlMainDb`.lp_module"));
         $moduleid_offset = (!$moduleid_offset) ? 0 : intval($moduleid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE module_map AS
                    SELECT old.module_id AS old_id, old.module_id + $moduleid_offset AS new_id
                      FROM lp_module AS old ORDER by module_id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_module
-                         (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`, 
+                         (`module_id`, `course_id`, `name`, `comment`, `accessibility`, `startAsset_id`,
                           `contentType`, `launch_data`)
-                         SELECT `module_id` + $moduleid_offset, $course_id, `name`, `comment`, 
+                         SELECT `module_id` + $moduleid_offset, $course_id, `name`, `comment`,
                                 `accessibility`, `startAsset_id`, `contentType`, `launch_data`
                            FROM lp_module ORDER by module_id") && $ok;
-        
+
         // ----- lp_asset DB Table ----- //
         list($assetid_offset) = mysql_fetch_row(db_query("SELECT max(asset_id) FROM `$mysqlMainDb`.lp_asset"));
         $assetid_offset = (!$assetid_offset) ? 0 : intval($assetid_offset);
-        
+
         $result = db_query("SELECT * FROM lp_asset ORDER by asset_id");
-        
+
         while ($row = mysql_fetch_array($result)) {
             $oldid = intval($row['asset_id']);
             $newid = $oldid + $assetid_offset;
             $asset_map[$oldid] = $newid;
         }
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_asset
                          (`asset_id`, `module_id`, `path`, `comment`)
                          SELECT DISTINCT lp_asset.asset_id + $assetid_offset, module_map.new_id,
@@ -557,29 +552,29 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM lp_asset, module_map
                           WHERE lp_asset.module_id = module_map.old_id
                            ORDER BY lp_asset.asset_id") && $ok;
-        
+
         foreach ($asset_map as $key => $value) {
-            $ok = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value 
+            $ok = db_query("UPDATE `$mysqlMainDb`.lp_module SET `startAsset_id` = $value
                              WHERE `course_id` = $course_id AND `startAsset_id` = $key") && $ok;
         }
-        
+
         // ----- lp_rel_learnPath_module DB Table ----- //
         list($relid_offset) = mysql_fetch_row(db_query("SELECT max(learnPath_module_id) FROM `$mysqlMainDb`.lp_rel_learnPath_module"));
         $relid_offset = (!$relid_offset) ? 0 : intval($relid_offset);
-        
+
         $result = db_query("SELECT * FROM lp_rel_learnPath_module ORDER by learnPath_module_id");
-        
+
         while ($row = mysql_fetch_array($result)) {
             $oldid = intval($row['learnPath_module_id']);
             $newid = $oldid + $relid_offset;
             $rel_map[$oldid] = $newid;
         }
-        
+
         db_query("CREATE TEMPORARY TABLE rel_map AS
                    SELECT old.learnPath_module_id AS old_id, old.learnPath_module_id + $relid_offset AS new_id
                      FROM lp_rel_learnPath_module AS old ORDER by learnPath_module_id");
         db_query("INSERT INTO rel_map (old_id, new_id) VALUES (0, 0)");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_rel_learnPath_module
                          (`learnPath_module_id`, `learnPath_id`, `module_id`, `lock`, `visible`, `specificComment`,
                           `rank`, `parent`, `raw_to_pass`)
@@ -588,23 +583,23 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                                 lp_rel_learnPath_module.visible, lp_rel_learnPath_module.specificComment,
                                 lp_rel_learnPath_module.rank, lp_rel_learnPath_module.parent,
                                 lp_rel_learnPath_module.raw_to_pass
-                           FROM lp_rel_learnPath_module, lp_map, module_map 
+                           FROM lp_rel_learnPath_module, lp_map, module_map
                           WHERE lp_rel_learnPath_module.learnPath_id = lp_map.old_id
                             AND lp_rel_learnPath_module.module_id = module_map.old_id
                           ORDER BY lp_rel_learnPath_module.learnPath_module_id") && $ok;
-        
+
         foreach ($rel_map as $key => $value) {
-            $ok = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value 
-                             WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
+            $ok = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value
+                             WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id)
                                AND `parent` = $key") && $ok;
         }
-        
+
         // ----- lp_user_module_progress DB Table ----- //
         list($lumid_offset) = mysql_fetch_row(db_query("SELECT max(user_module_progress_id) FROM `$mysqlMainDb`.lp_user_module_progress"));
         $lumid_offset = (!$lumid_offset) ? 0 : intval($lumid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.lp_user_module_progress
-                         (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`, 
+                         (`user_module_progress_id`, `user_id`, `learnPath_module_id`, `learnPath_id`,
                           `lesson_location`, `lesson_status`, `entry`, `raw`, `scoreMin`, `scoreMax`,
                           `total_time`, `session_time`, `suspend_data`, `credit`)
                          SELECT DISTINCT lp_user_module_progress.user_module_progress_id + $lumid_offset,
@@ -623,11 +618,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                           WHERE lp_user_module_progress.learnPath_module_id = rel_map.old_id
                             AND lp_user_module_progress.learnPath_id = lp_map.old_id
                           ORDER BY lp_user_module_progress.user_module_progress_id") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE lp_map");
         db_query("DROP TEMPORARY TABLE module_map");
         db_query("DROP TEMPORARY TABLE rel_map");
-        
+
         if (false !== $ok) {
             $scormPkgDir = $webDir.'/courses/'.$code.'/scormPackages';
             $pathTkn = 'path_';
@@ -637,7 +632,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 if (($handle = opendir($scormPkgDir))) {
                     while (false !== ($entry = readdir($handle))) {
                         if ($entry != "." && $entry != ".." && substr($entry, 0, strlen($pathTkn)) === $pathTkn && is_dir($scormPkgDir.'/'.$entry))
-                            $pathids[] = substr($entry, strlen($pathTkn), strlen($entry)); 
+                            $pathids[] = substr($entry, strlen($pathTkn), strlen($entry));
                     }
                     rsort($pathids);
                     foreach ($pathids as $pathid)
@@ -645,28 +640,28 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                     closedir($handle);
                 }
             }
-            
+
             db_query("DROP TABLE lp_learnPath");
             db_query("DROP TABLE lp_module");
             db_query("DROP TABLE lp_asset");
             db_query("DROP TABLE lp_rel_learnPath_module");
             db_query("DROP TABLE lp_user_module_progress");
         }
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $lpid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'lp'");
     }
-    
+
     $wiki_map = array();
     // move wiki to central db and drop tables
     if (mysql_table_exists($code, 'wiki_properties') && mysql_table_exists($code, 'wiki_acls') &&
         mysql_table_exists($code, 'wiki_pages') && mysql_table_exists($code, 'wiki_pages_content') ) {
-        
+
         // ----- wiki_properties and wiki_acls DB Tables ----- //
         list($wikiid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_properties"));
         $wikiid_offset = (!$wikiid_offset) ? 0 : intval($wikiid_offset);
-        
+
         if ($return_mapping) {
             $result = db_query("SELECT * FROM wiki_properties ORDER by id");
             while ($row = mysql_fetch_array($result)) {
@@ -675,27 +670,27 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $wiki_map[$oldid] = $newid;
             }
         }
-        
+
         db_query("CREATE TEMPORARY TABLE wiki_map AS
                    SELECT old.id AS old_id, old.id + $wikiid_offset AS new_id
                      FROM wiki_properties AS old ORDER by id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_properties
                          (`id`, `course_id`, `title`, `description`, `group_id`)
                          SELECT `id` + $wikiid_offset, $course_id, `title`, `description`, `group_id`
                            FROM wiki_properties ORDER BY id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_acls
                          (`wiki_id`, `flag`, `value`)
                          SELECT DISTINCT wiki_map.new_id, wiki_acls.flag, wiki_acls.value
                            FROM wiki_acls, wiki_map
                           WHERE wiki_acls.wiki_id = wiki_map.old_id
                           ORDER BY wiki_acls.wiki_id") && $ok;
-        
+
         // ----- wiki_pages DB Table ----- //
         list($wikipageid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages"));
         $wikipageid_offset = (!$wikipageid_offset) ? 0 : intval($wikipageid_offset);
-        
+
         $result = db_query("SELECT * FROM wiki_pages ORDER by id");
         $wiki_page_map = array();
         while ($row = mysql_fetch_array($result)) {
@@ -703,24 +698,24 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
             $newid = $oldid + $wikipageid_offset;
             $wiki_page_map[$oldid] = $newid;
         }
-        
+
         db_query("CREATE TEMPORARY TABLE wikipage_map AS
                    SELECT old.id AS old_id, old.id + $wikipageid_offset AS new_id
                      FROM wiki_pages AS old ORDER by id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages
                          (`id`, `wiki_id`, `owner_id`, `title`, `ctime`, `last_version`, `last_mtime`)
-                         SELECT DISTINCT wiki_pages.id + $wikipageid_offset, wiki_map.new_id, 
-                                wiki_pages.owner_id, wiki_pages.title, wiki_pages.ctime, 
+                         SELECT DISTINCT wiki_pages.id + $wikipageid_offset, wiki_map.new_id,
+                                wiki_pages.owner_id, wiki_pages.title, wiki_pages.ctime,
                                 wiki_pages.last_version, wiki_pages.last_mtime
                            FROM wiki_pages, wiki_map
                           WHERE wiki_pages.wiki_id = wiki_map.old_id
                           ORDER BY wiki_pages.id") && $ok;
-        
+
         // ----- wiki_pages_content DB Table ----- //
         list($wikipagecontentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.wiki_pages_content"));
         $wikipagecontentid_offset = (!$wikipagecontentid_offset) ? 0 : intval($wikipagecontentid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.wiki_pages_content
                          (`id`, `pid`, `editor_id`, `mtime`, `content`)
                          SELECT DISTINCT wiki_pages_content.id + $wikipagecontentid_offset,
@@ -729,49 +724,49 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM wiki_pages_content, wikipage_map
                           WHERE wiki_pages_content.pid = wikipage_map.old_id
                           ORDER BY wiki_pages_content.id") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE wiki_map");
         db_query("DROP TEMPORARY TABLE wikipage_map");
-        
+
         if (false !== $ok) {
             db_query("DROP TABLE wiki_properties");
             db_query("DROP TABLE wiki_acls");
             db_query("DROP TABLE wiki_pages");
             db_query("DROP TABLE wiki_pages_content");
         }
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $wikiid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'wiki'");
     }
-    
-    
+
+
     // move polls to central db and drop tables
     if (mysql_table_exists($code, 'poll') && mysql_table_exists($code, 'poll_answer_record') &&
         mysql_table_exists($code, 'poll_question') && mysql_table_exists($code, 'poll_question_answer') ) {
-    
+
         // ----- poll DB Table ----- //
         list($pollid_offset) = mysql_fetch_row(db_query("SELECT max(pid) FROM `$mysqlMainDb`.poll"));
         $pollid_offset = (!$pollid_offset) ? 0 : intval($pollid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE poll_map AS
                    SELECT old.pid AS old_id, old.pid + $pollid_offset AS new_id
                      FROM poll AS old ORDER by pid");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.poll
                          (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
                          SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
-                                `end_date`, `active` 
+                                `end_date`, `active`
                            FROM poll ORDER BY pid");
-        
+
         // ----- poll_question DB Table ----- //
         list($pollquestionid_offset) = mysql_fetch_row(db_query("SELECT max(pqid) FROM `$mysqlMainDb`.poll_question"));
         $pollquestionid_offset = (!$pollquestionid_offset) ? 0 : intval($pollquestionid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE pollquestion_map AS
                    SELECT old.pqid AS old_id, old.pqid + $pollquestionid_offset AS new_id
                      FROM poll_question AS old ORDER by pqid");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_question
                          (`pqid`, `pid`, `question_text`, `qtype`)
                          SELECT DISTINCT poll_question.pqid + $pollquestionid_offset, poll_map.new_id,
@@ -779,29 +774,29 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM poll_question, poll_map
                           WHERE poll_question.pid = poll_map.old_id
                           ORDER BY poll_question.pqid") && $ok;
-        
+
         // ----- poll_question_answer DB Table ----- //
         list($pollanswerid_offset) = mysql_fetch_row(db_query("SELECT max(pqaid) FROM `$mysqlMainDb`.poll_question_answer"));
         $pollanswerid_offset = (!$pollanswerid_offset) ? 0 : intval($pollanswerid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE pollanswer_map AS
                    SELECT old.pqaid AS old_id, old.pqaid + $pollanswerid_offset AS new_id
                      FROM poll_question_answer AS old ORDER by pqaid");
         db_query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (0, 0)");
         db_query("INSERT INTO pollanswer_map (`old_id`, `new_id`) VALUES (-1, -1)");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_question_answer
                          (`pqaid`, `pqid`, `answer_text`)
-                         SELECT DISTINCT poll_question_answer.pqaid + $pollanswerid_offset, 
+                         SELECT DISTINCT poll_question_answer.pqaid + $pollanswerid_offset,
                                 pollquestion_map.new_id, poll_question_answer.answer_text
                            FROM poll_question_answer, pollquestion_map
                           WHERE poll_question_answer.pqid = pollquestion_map.old_id
                           ORDER BY poll_question_answer.pqaid") && $ok;
-        
+
         // ----- poll_answer_record DB Table ----- //
         list($pollrecordid_offset) = mysql_fetch_row(db_query("SELECT max(arid) FROM `$mysqlMainDb`.poll_answer_record"));
         $pollrecordid_offset = (!$pollrecordid_offset) ? 0 : intval($pollrecordid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.poll_answer_record
                          (`arid`, `pid`, `qid`, `aid`, `answer_text`, `user_id`, `submit_date`)
                          SELECT DISTINCT poll_answer_record.arid + $pollrecordid_offset,
@@ -813,11 +808,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                             AND poll_answer_record.qid = pollquestion_map.old_id
                             AND poll_answer_record.aid = pollanswer_map.old_id
                           ORDER BY poll_answer_record.arid") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE poll_map");
         db_query("DROP TEMPORARY TABLE pollquestion_map");
         db_query("DROP TEMPORARY TABLE pollanswer_map");
-        
+
         if (false !== $ok) {
             db_query("DROP TABLE poll");
             db_query("DROP TABLE poll_answer_record");
@@ -825,15 +820,15 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
             db_query("DROP TABLE poll_question_answer");
         }
     }
-    
+
     $assignments_map = array();
     // move assignments to central db and drop tables
     if (mysql_table_exists($code, 'assignments') && mysql_table_exists($code, 'assignment_submit') ) {
-    
+
         // ----- assigments DB Table ----- //
         list($assignmentid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment"));
         $assignmentid_offset = (!$assignmentid_offset) ? 0 : intval($assignmentid_offset);
-        
+
         if ($return_mapping) {
             $result = db_query("SELECT * FROM assignments ORDER by id");
             while ($row = mysql_fetch_array($result)) {
@@ -842,70 +837,70 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $assignments_map[$oldid] = $newid;
             }
         }
-        
+
         db_query("CREATE TEMPORARY TABLE assignments_map AS
                    SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
                      FROM assignments AS old ORDER by id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.assignment
-                         (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`, 
+                         (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
                                 `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`
                            FROM assignments ORDER BY id");
-    
+
         // ----- assigments DB Table ----- //
         list($assignmentsubmitid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.assignment_submit"));
         $assignmentsubmitid_offset = (!$assignmentsubmitid_offset) ? 0 : intval($assignmentsubmitid_offset);
-        
+
         db_query("UPDATE assignment_submit SET group_id = 0 WHERE group_id IS NULL");
         $ok = db_query("INSERT INTO `$mysqlMainDb`.assignment_submit
-                         (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`, 
-                          `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`, 
+                         (`id`, `uid`, `assignment_id`, `submission_date`, `submission_ip`, `file_path`, `file_name`,
+                          `comments`, `grade`, `grade_comments`, `grade_submission_date`, `grade_submission_ip`,
                           `group_id`)
-                         SELECT DISTINCT assignment_submit.id + $assignmentsubmitid_offset, 
-                                assignment_submit.uid, assignments_map.new_id, 
+                         SELECT DISTINCT assignment_submit.id + $assignmentsubmitid_offset,
+                                assignment_submit.uid, assignments_map.new_id,
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
-                                assignment_submit.file_path, assignment_submit.file_name, 
+                                assignment_submit.file_path, assignment_submit.file_name,
                                 assignment_submit.comments, assignment_submit.grade, assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
                            FROM assignment_submit, assignments_map
                           WHERE assignment_submit.assignment_id = assignments_map.old_id
                           ORDER BY assignment_submit.id") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE assignments_map");
-        
+
         if (false !== $ok) {
             db_query("DROP TABLE assignments");
             db_query("DROP TABLE assignment_submit");
         }
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $assignmentid_offset
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'work'");
     }
-    
+
     // move agenda to central db and drop table
     if (mysql_table_exists($code, 'agenda')) {
-        
-        // ----- agenda DB Table ----- //    
+
+        // ----- agenda DB Table ----- //
         db_query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
-        db_query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");            
-                    
+        db_query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");
+
         list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
         $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.agenda
                          (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visible`)
-                         SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, `day`, `hour`, `lasting`, 
+                         SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, `day`, `hour`, `lasting`,
                                 `visibility` FROM agenda ORDER BY id");
-    
+
         if (false !== $ok)
             db_query("DROP TABLE agenda");
-            
+
     }
-    
+
     $exercise_map = array();
     $exercise_map[0] = 0;
     // move exercises to central db and drop tables
@@ -914,11 +909,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
         mysql_table_exists($code, 'questions') &&
         mysql_table_exists($code, 'reponses') &&
         mysql_table_exists($code, 'exercice_question') ) {
-    
+
         // ----- exercices DB Table ----- //
         list($exerciseid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise"));
         $exerciseid_offset = (!$exerciseid_offset) ? 0 : intval($exerciseid_offset);
-    
+
         if ($return_mapping) {
             $result = db_query("SELECT * FROM exercices ORDER by id");
             while ($row = mysql_fetch_array($result)) {
@@ -927,27 +922,27 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                 $exercise_map[$oldid] = $newid;
             }
         }
-        
+
         db_query("CREATE TEMPORARY TABLE exercise_map AS
                    SELECT old.id AS old_id, old.id + $exerciseid_offset AS new_id
                      FROM exercices AS old ORDER by id");
         db_query("INSERT INTO exercise_map (`old_id`, `new_id`) VALUES (0, 0)");
-        
+
         db_query("UPDATE exercices SET active = 0 WHERE active IS NULL");
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise
-                         (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`, 
+                         (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`,
                           `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
-                         SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`, 
+                         SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`,
                                 `StartDate`, `EndDate`, `TimeConstrain`, `AttemptsAllowed`, `random`,
                                 `active`, `results`, `score`
                            FROM exercices ORDER BY id") && $ok;
-    
+
         // ----- exercise_user_record DB Table ----- //
         list($eurid_offset) = mysql_fetch_row(db_query("SELECT max(eurid) FROM `$mysqlMainDb`.exercise_user_record"));
         $eurid_offset = (!$eurid_offset) ? 0 : intval($eurid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_user_record
-                         (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`, 
+                         (`eurid`, `eid`, `uid`, `record_start_date`, `record_end_date`, `total_score`,
                           `total_weighting`, `attempt`)
                          SELECT DISTINCT exercise_user_record.eurid + $eurid_offset, exercise_map.new_id,
                                 exercise_user_record.uid, exercise_user_record.RecordStartDate,
@@ -956,25 +951,25 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM exercise_user_record, exercise_map
                           WHERE exercise_user_record.eid = exercise_map.old_id
                           ORDER BY exercise_user_record.eurid") && $ok;
-        
+
         // ----- questions DB Table ----- //
         list($questionid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise_question"));
         $questionid_offset = (!$questionid_offset) ? 0 : intval($questionid_offset);
-        
+
         db_query("CREATE TEMPORARY TABLE question_map AS
                    SELECT old.id AS old_id, old.id + $questionid_offset AS new_id
                      FROM questions AS old ORDER by id");
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_question
                          (`id`, `course_id`, `question`, `description`, `weight`, `q_position`, `type`)
                          SELECT `id` + $questionid_offset, $course_id, `question`, `description`, `ponderation`,
                                 `q_position`, `type`
                            FROM questions ORDER BY id") && $ok;
-        
+
         // ----- reponses DB Table ----- //
         list($answerid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise_answer"));
         $answerid_offset = (!$answerid_offset) ? 0 : intval($answerid_offset);
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_answer
                          (`id`, `question_id`, `answer`, `correct`, `comment`, `weight`, `r_position`)
                          SELECT DISTINCT reponses.id + $answerid_offset, question_map.new_id,
@@ -983,17 +978,17 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                            FROM reponses, question_map
                           WHERE reponses.question_id = question_map.old_id
                           ORDER BY reponses.id") && $ok;
-        
+
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise_with_questions
                          (`question_id`, `exercise_id`)
                          SELECT DISTINCT question_map.new_id, exercise_map.new_id
                            FROM exercice_question, exercise_map, question_map
                           WHERE exercice_question.exercice_id = exercise_map.old_id
                             AND exercice_question.question_id = question_map.old_id") && $ok;
-        
+
         db_query("DROP TEMPORARY TABLE exercise_map");
         db_query("DROP TEMPORARY TABLE question_map");
-    
+
         if (false !== $ok) {
             db_query("DROP TABLE exercices");
             db_query("DROP TABLE exercise_user_record");
@@ -1001,7 +996,7 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
             db_query("DROP TABLE reponses");
             db_query("DROP TABLE exercice_question");
         }
-        
+
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                      SET res_id = res_id + $exerciseid_offset
                    WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'exercise'");
@@ -1009,50 +1004,50 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                      SET path = path + $exerciseid_offset
                    WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
     }
-    
+
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
-    
+
     // move table `actions`, `actions_summary`, `login` in main DB
         db_query("INSERT INTO $mysqlMainDb.actions
-                        (user_id, module_id, action_type_id, date_time, duration, course_id) 
-                        SELECT user_id, module_id, action_type_id, date_time, duration, $course_id  
+                        (user_id, module_id, action_type_id, date_time, duration, course_id)
+                        SELECT user_id, module_id, action_type_id, date_time, duration, $course_id
                         FROM actions", $code);
 
         db_query("INSERT INTO $mysqlMainDb.actions_summary
-                (module_id, visits, start_date, end_date, duration, course_id) 
-                SELECT module_id, visits, start_date, end_date, duration, $course_id  
+                (module_id, visits, start_date, end_date, duration, course_id)
+                SELECT module_id, visits, start_date, end_date, duration, $course_id
                 FROM actions_summary", $code);
 
         db_query("INSERT INTO $mysqlMainDb.logins
-                (user_id, ip, date_time, course_id) 
-                SELECT user_id, ip, date_time, $course_id  
+                (user_id, ip, date_time, course_id)
+                SELECT user_id, ip, date_time, $course_id
                 FROM logins", $code);
 
-    
+
     // -------------------------------------------------------
     // Move table `accueil` to table `course_module` in main DB
     // -------------------------------------------------------
-    
+
     // external links are moved to table `links` with category = -1
         $q1 = db_query("INSERT INTO `$mysqlMainDb`.link
-                               (course_id, url, title, category, description) 
+                               (course_id, url, title, category, description)
                                SELECT $course_id, lien, rubrique, -1, '' FROM accueil
                                       WHERE define_var = 'HTML_PAGE' OR
                                             image = 'external_link'", $code);
-        
+
         $q2 = db_query("INSERT INTO `$mysqlMainDb`.course_module
-                        (module_id, visible, course_id) 
+                        (module_id, visible, course_id)
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',
-                                         'MODULE_ID_COURSEINFO', 
-                                         'MODULE_ID_USERS', 
+                                         'MODULE_ID_COURSEINFO',
+                                         'MODULE_ID_USERS',
                                          'MODULE_ID_USAGE',
                                          'HTML_PAGE') AND
                       image <> 'external_link'", $code);
-        
-        
+
+
         if ($q1 and $q2) { // if everything ok drop course db
                 echo "Done...";
                 //db_query("DROP DATABASE $code");
@@ -1060,55 +1055,55 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
-        
+
         global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
-	flush();                
+	flush();
 
         db_query("UPDATE `accueil` SET `rubrique` = " .
                         quote($global_messages['langVideo'][$lang]) . "
                         WHERE `define_var` = 'MODULE_ID_VIDEO'");
-        
-        db_query("ALTER TABLE `assignments` 
-                        CHANGE `deadline` `deadline` DATETIME 
+
+        db_query("ALTER TABLE `assignments`
+                        CHANGE `deadline` `deadline` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
-        db_query("ALTER TABLE `assignments` 
-                        CHANGE `submission_date` `submission_date` DATETIME 
+
+        db_query("ALTER TABLE `assignments`
+                        CHANGE `submission_date` `submission_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
-        db_query("ALTER TABLE `assignment_submit` 
-                        CHANGE `submission_date` `submission_date` DATETIME 
+
+        db_query("ALTER TABLE `assignment_submit`
+                        CHANGE `submission_date` `submission_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
+
         db_query("ALTER TABLE `poll`
                         CHANGE `start_date` `start_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
+
         db_query("ALTER TABLE `poll`
                         CHANGE `end_date` `end_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
+
         db_query("ALTER TABLE `poll`
                         CHANGE `creation_date` `creation_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
+
         db_query("ALTER TABLE `poll_answer_record`
                         CHANGE `submit_date` `submit_date` DATETIME
                         NOT NULL DEFAULT '0000-00-00 00:00:00'");
-        
+
         db_query("ALTER TABLE `exercices`
                         CHANGE `StartDate` `StartDate` DATETIME
                         DEFAULT NULL");
-        
+
         db_query("ALTER TABLE `exercices`
                         CHANGE `EndDate` `EndDate` DATETIME
                         DEFAULT NULL");
-        
+
         db_query("ALTER TABLE `lp_module`
-                        CHANGE `contentType` 
+                        CHANGE `contentType`
                         `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK')");
 }
 
@@ -1312,7 +1307,7 @@ function upgrade_course_2_1_3($code, $extramessage = '')
 
         echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
 	flush();
-	
+
 	// added field visibility in agenda
 	if (!mysql_field_exists("$code",'agenda','visibility'))
                 echo add_field('agenda', 'visibility', "CHAR(1) NOT NULL DEFAULT 'v'");
@@ -1353,7 +1348,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 
         echo "<hr><p>$langUpgIndex <b>$code</b> $extramessage<br>";
 	flush();
-	
+
 	// added field visibility in agenda
 	if (!mysql_field_exists("$code",'agenda','visibility'))
                 echo add_field('agenda', 'visibility', "CHAR(1) NOT NULL DEFAULT 'v'");
@@ -1467,7 +1462,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (!mysql_table_exists($code, 'dropbox_file'))  {
                 db_query("INSERT INTO accueil VALUES (
                         16,
-                        '$langDropbox[$lang]',
+                        '{$langDropbox[$lang]}',
                         '../../modules/dropbox/index.php',
                         'dropbox',
                         '0',
@@ -1947,7 +1942,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (accueil_tool_missing('MODULE_ID_QUESTIONNAIRE')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
                         '21',
-                        '$langQuestionnaire[$lang]',
+                        '{$langQuestionnaire[$lang]}',
                         '../../modules/questionnaire/questionnaire.php',
                         'questionnaire',
                         '0',
@@ -1960,7 +1955,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (accueil_tool_missing('MODULE_ID_LP')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
                         '23',
-                        '$langLearnPath[$lang]',
+                        '{$langLearnPath[$lang]}',
                         '../../modules/learnPath/learningPathList.php',
                         'lp',
                         '0',
@@ -1973,7 +1968,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (accueil_tool_missing('MODULE_ID_USAGE')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
                         '24',
-                        '$langCourseStat[$lang]',
+                        '{$langCourseStat[$lang]}',
                         '../../modules/usage/usage.php',
                         'usage',
                         '0',
@@ -1985,7 +1980,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (accueil_tool_missing('MODULE_ID_TOOLADMIN')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
                         '25',
-                        '$langToolManagement[$lang]',
+                        '{$langToolManagement[$lang]}',
                         '../../modules/course_tools/course_tools.php',
                         'tooladmin',
                         '0',
@@ -1998,7 +1993,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (accueil_tool_missing('MODULE_ID_WIKI')) {
                 db_query("INSERT IGNORE INTO accueil VALUES (
                         '26',
-                        '$langWiki[$lang]',
+                        '{$langWiki[$lang]}',
                         '../../modules/wiki/wiki.php',
                         'wiki',
                         '0',
@@ -2098,13 +2093,13 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         }
 
         // update menu entries with new messages
-        update_field("accueil", "rubrique", "$langWork[$lang]", "id", "5");
-        update_field("accueil", "rubrique", "$langForums[$lang]", "id", "9");
-        update_field("accueil", "rubrique", "$langUsers[$lang]", "id", "8");
-        update_field("accueil", "visible", "0", "id", "8");
-        update_field("accueil", "admin", "1", "id", "8");
-        update_field("accueil", "rubrique", "$langCourseAdmin[$lang]", "id", "14");
-        update_field("accueil", "rubrique", "$langDropBox[$lang]", "id", "16");
+        update_field('accueil', 'rubrique', $langWork[$lang], 'id', '5');
+        update_field('accueil', 'rubrique', $langForums[$lang], 'id', '9');
+        update_field('accueil', 'rubrique', $langUsers[$lang], 'id', '8');
+        update_field('accueil', 'visible', '0', 'id', '8');
+        update_field('accueil', 'admin', '1', 'id', '8');
+        update_field('accueil', 'rubrique', $langCourseAdmin[$lang], 'id', '14');
+        update_field('accueil', 'rubrique', $langDropBox[$lang], 'id', '16');
 
         // remove table 'introduction' entries and insert them in table 'cours' (field 'description') in eclass maindb
         // after that drop table introduction
@@ -2519,7 +2514,7 @@ function mkdir_or_error($dirname)
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages()
 {
-        global $global_messages, $native_language_names, $language_codes, 
+        global $global_messages, $native_language_names, $language_codes,
                $webDir, $siteName, $InstitutionUrl, $Institution;
 
         foreach ($native_language_names as $code => $name) {

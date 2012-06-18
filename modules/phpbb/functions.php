@@ -24,7 +24,7 @@ function get_total_topics($forum_id) {
 
         global $langError;
         
-	$sql = "SELECT COUNT(*) AS total FROM forum_topics
+	$sql = "SELECT COUNT(*) AS total FROM forum_topic
                         WHERE forum_id = $forum_id";
 	if(!$result = db_query($sql))
 		return($langError);
@@ -41,11 +41,11 @@ function get_total_posts($id, $type) {
 
     switch($type) {
         case 'forum':
-          $sql = "SELECT COUNT(*) AS total FROM forum_posts 
+          $sql = "SELECT COUNT(*) AS total FROM forum_post
                     WHERE forum_id = $id";
           break;
         case 'topic':
-          $sql = "SELECT COUNT(*) AS total FROM forum_posts
+          $sql = "SELECT COUNT(*) AS total FROM forum_post
                     WHERE topic_id = $id";
           break;
     }
@@ -65,7 +65,7 @@ function get_last_post($topic_id, $forum_id) {
    
     global $langError, $langNoPosts;
     
-     $sql = "SELECT post_time FROM forum_posts
+     $sql = "SELECT post_time FROM forum_post
                 WHERE topic_id = $topic_id
                 AND forum_id = $forum_id
                 ORDER BY post_time DESC LIMIT 1";
@@ -96,7 +96,7 @@ function does_exists($id, $type) {
                                 AND course_id = $course_id";
 		break;
 		case 'topic':
-			$sql = "SELECT id FROM forum_topics 
+			$sql = "SELECT id FROM forum_topic
                                 WHERE id = $id";
 		break;
 	}
@@ -113,7 +113,7 @@ function does_exists($id, $type) {
 
 function is_first_post($topic_id, $post_id) {
     
-    $sql = "SELECT id FROM forum_posts 
+    $sql = "SELECT id FROM forum_post
                 WHERE topic_id = $topic_id
                 ORDER BY id LIMIT 1";
     if(!$r = db_query($sql)) {
@@ -137,19 +137,19 @@ function sync($id, $type) {
    
    switch($type) {
    	case 'forum':
-   		$sql = "SELECT MAX(id) AS last_post FROM forum_posts
+   		$sql = "SELECT MAX(id) AS last_post FROM forum_post
                             WHERE forum_id = $id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_posts
+   		$sql = "SELECT COUNT(id) AS total FROM forum_post
                                 WHERE forum_id = $id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_topics
+   		$sql = "SELECT COUNT(id) AS total FROM forum_topic
                             WHERE forum_id = $id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
@@ -165,22 +165,23 @@ function sync($id, $type) {
    	break;
 
    	case 'topic':
-   		$sql = "SELECT MAX(id) AS last_post FROM forum_posts
+   		$sql = "SELECT MAX(id) AS last_post FROM forum_post
                             WHERE topic_id = $id";
 		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$last_post = $row["last_post"];
    		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_posts
-                            WHERE topic_id = $id";
+   		$sql = "SELECT COUNT(id) AS total FROM forum_post
+                               WHERE topic_id = $id";
    		$result = db_query($sql);
    		if($row = mysql_fetch_array($result)) {
    			$total_posts = $row["total"];
    		}
    		$total_posts -= 1;
-   		$sql = "UPDATE forum_topics SET num_replies = $total_posts,
-                            last_post_id = $last_post
-			WHERE forum_id = $id";
+                $sql = "UPDATE forum_topic
+                               SET num_replies = $total_posts,
+                                   last_post_id = $last_post
+                               WHERE forum_id = $id";
    		$result = db_query($sql);
    	break;
    }
@@ -226,7 +227,7 @@ function category_name($id) {
 	
 	global $course_id;
 	
-	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_categories
+	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_category
                     WHERE id = $id
                     AND course_id = $course_id"))) {
 		return $r[0];

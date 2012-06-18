@@ -38,7 +38,7 @@ if (isset($_GET['topic'])) {
 }
 
 $sql = "SELECT f.name, t.title
-            FROM forum f, forum_topics t 
+            FROM forum f, forum_topic t 
             WHERE f.id = $forum
             AND t.id = $topic 
             AND t.forum_id = f.id
@@ -86,11 +86,11 @@ if (isset($_POST['submit'])) {
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
 	
-	$sql = "INSERT INTO forum_posts (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
+	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic, $forum_id, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 	$this_post = mysql_insert_id();
-        $sql = "UPDATE forum_topics SET topic_time = '$time',
+        $sql = "UPDATE forum_topic SET topic_time = '$time',
                     num_replies = num_replies+1,
                     last_post_id = $this_post
 		WHERE id = $topic AND forum_id = $forum_id";
@@ -160,7 +160,7 @@ if (isset($_POST['submit'])) {
         <tr>
         <td>$langBodyMessage:";
 	if (isset($quote) && $quote) {
-		$sql = "SELECT post_text, post_time FROM forum_posts WHERE id = $post";
+		$sql = "SELECT post_text, post_time FROM forum_post WHERE id = $post";
 		if ($r = db_query($sql)) {
 			$m = mysql_fetch_array($r);
 			$text = $m["post_text"];

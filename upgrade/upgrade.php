@@ -56,6 +56,8 @@ $auth_methods = array('imap', 'pop3', 'ldap', 'db');
 $OK = "[<font color='green'> $langSuccessOk </font>]";
 $BAD = "[<font color='red'> $langSuccessBad </font>]";
 
+$charset_spec = 'DEFAULT CHARACTER SET=utf8';
+
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
@@ -538,47 +540,54 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 }
 
                 // create forum tables
-                db_query("CREATE TABLE forum_categories (
-                        `id` INT(10),
-                        `cat_title` VARCHAR(100),
-                        `cat_order` VARCHAR(10),
-                        `course_id` INT(11),
-                        KEY (id, course_id))");
+                db_query("CREATE TABLE IF NOT EXISTS `forum` (
+                        `id` INT(10) NOT NULL AUTO_INCREMENT,
+                        `name` VARCHAR(150) DEFAULT '' NOT NULL,
+                        `desc` MEDIUMTEXT NOT NULL, 
+                        `num_topics` INT(10) DEFAULT 0 NOT NULL,
+                        `num_posts` INT(10) DEFAULT 0 NOT NULL,
+                        `last_post_id` INT(10) DEFAULT 0 NOT NULL,
+                        `cat_id` INT(10) DEFAULT 0 NOT NULL,  
+                        `course_id` INT(11) NOT NULL,
+                        PRIMARY KEY (`id`),
+                        FULLTEXT KEY `forum` (`name`,`desc`)) $charset_spec");
 
-                db_query("CREATE TABLE forum (
-                     id int(10),
-                     name varchar(150),
-                     `desc` text,
-                     num_topics int(10) DEFAULT 0 NOT NULL,
-                     num_posts int(10) DEFAULT 0 NOT NULL,
-                     last_post_id int(10) DEFAULT 0 NOT NULL,
-                     cat_id int(10),
-                     course_id int(11),
-                     KEY (id, course_id))");
+                db_query("CREATE TABLE IF NOT EXISTS `forum_category` (
+                        `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `cat_title` VARCHAR(100) DEFAULT '' NOT NULL,
+                        `cat_order` INT(11) DEFAULT 0 NOT NULL,
+                        `course_id` INT(11) NOT NULL,
+                        KEY `forum_category_index` (`id`, `course_id`)) $charset_spec");
 
-                db_query("CREATE TABLE forum_posts (
-                      id int(10),
-                      topic_id int(10) DEFAULT 0 NOT NULL,
-                      forum_id int(10) DEFAULT 0 NOT NULL,
-                      post_text mediumtext,
-                      poster_id int(10) DEFAULT 0 NOT NULL,
-                      post_time DATETIME,
-                      poster_ip VARCHAR(16),
-                      KEY (id, topic_id, forum_id))");
+                db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
+                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+                        `user_id` INT(11) DEFAULT 0 NOT NULL,
+                        `cat_id` INT(11) DEFAULT 0 NOT NULL ,
+                        `forum_id` INT(11) DEFAULT 0 NOT NULL,
+                        `topic_id` INT(11) DEFAULT 0 NOT NULL ,
+                        `notify_sent` BOOL DEFAULT 0 NOT NULL ,
+                        `course_id` INT(11) DEFAULT 0 NOT NULL) $charset_spec");
 
-                db_query("CREATE TABLE forum_topics (
-                       id int(10),
-                       title varchar(100),
-                       poster_id int(10),
-                       topic_time DATETIME,
-                       num_views int(10) DEFAULT '0' NOT NULL,
-                       num_replies int(10) DEFAULT '0' NOT NULL,
-                       last_post_id int(10) DEFAULT '0' NOT NULL,
-                       forum_id int(10) DEFAULT '0' NOT NULL,
-                       KEY (forum_id, id))");
+                db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
+                        `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `topic_id` INT(10) NOT NULL default '0',
+                        `post_text` MEDIUMTEXT NOT NULL,
+                        `poster_id` INT(10) NOT NULL default '0',
+                        `post_time` DATETIME,
+                        `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,  
+                        FULLTEXT KEY `posts_text` (`post_text`)) $charset_spec");
 
-                db_query("ALTER TABLE `forum_posts` ADD FULLTEXT `post` (`post_text`)");
-                db_query("ALTER TABLE `forum` ADD FULLTEXT `forum` (`name`,`desc`)");
+                db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
+                        `id` int(10) NOT NULL auto_increment,
+                        `title` varchar(100) DEFAULT NULL,
+                        `poster_id` int(10) DEFAULT NULL,
+                        `topic_time` datetime,
+                        `num_views` int(10) NOT NULL default '0',
+                        `num_replies` int(10) NOT NULL default '0',
+                        `last_post_id` int(10) NOT NULL default '0',
+                        `forum_id` int(10) NOT NULL default '0',  
+                        PRIMARY KEY  (`id`)) $charset_spec");
+                
 
                 // create video tables
                 db_query('CREATE TABLE IF NOT EXISTS video (

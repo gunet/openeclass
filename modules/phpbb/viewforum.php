@@ -132,14 +132,14 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}	
-	$sql = db_query("SELECT id FROM forum_posts
-                    WHERE topic_id = $topic_id 
-                    AND forum_id = $forum_id");
+	$sql = db_query("SELECT id FROM forum_post
+                                WHERE topic_id = $topic_id AND
+                                      forum_id = $forum_id");
         
 	while ($r = mysql_fetch_array($sql)) {
-		db_query("DELETE FROM forum_posts WHERE id = $r[id]");
+		db_query("DELETE FROM forum_post WHERE id = $r[id]");
 	}
-	db_query("DELETE FROM forum_topics WHERE id = $topic_id AND forum_id = $forum_id");
+	db_query("DELETE FROM forum_topic WHERE id = $topic_id AND forum_id = $forum_id");
         
         $number_of_posts = get_total_posts($topic_id, "topic");
 	db_query("UPDATE forum SET num_topics = num_topics-1,
@@ -166,8 +166,8 @@ if(isset($_GET['topicnotify'])) {
 }
 
 $sql = "SELECT t.*, p.post_time, p.poster_id AS poster_id
-        FROM forum_topics t
-        LEFT JOIN forum_posts p ON t.last_post_id = p.id
+        FROM forum_topic t
+        LEFT JOIN forum_post p ON t.last_post_id = p.id
         WHERE t.forum_id = $forum_id
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page";
 
@@ -193,7 +193,7 @@ if (mysql_num_rows($result) > 0) { // topics found
                 }
 		$replies = 1 + $myrow['num_replies'];                
                 $topic_id = $myrow['id'];
-		$last_post = $last_post_datetime = $myrow["post_time"];
+		$last_post_datetime = $myrow['post_time'];
 		list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
 		list($year, $month, $day) = explode("-", $last_post_date);
 		list($hour, $min) = explode(":", $last_post_time);

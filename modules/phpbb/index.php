@@ -91,7 +91,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 /*
 * Populate data with forum categories
 */
-$sql = "SELECT id, cat_title FROM forum_categories WHERE course_id = $course_id ORDER BY id ";
+$sql = "SELECT id, cat_title FROM forum_category WHERE course_id = $course_id ORDER BY id ";
 
 $result = db_query($sql);
 $total_categories = mysql_num_rows($result);
@@ -101,7 +101,7 @@ if ($total_categories) {
 		$categories[] = $cat_row;
 	}
 	$sql = "SELECT f.id forum_id, f.*, p.post_time, p.topic_id, p.poster_id
-		FROM forum f LEFT JOIN forum_posts p ON p.id = f.last_post_id
+		FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
                 AND f.course_id = $course_id
 		ORDER BY f.cat_id, f.id";
 		
@@ -110,8 +110,8 @@ if ($total_categories) {
 		$forum_row[] = $forum_data;
 	}
 	for ($i=0; $i < $total_categories; $i++) {
-		$title = stripslashes($categories[$i]["cat_title"]);
-		$catNum = $categories[$i]["id"];
+		$title = stripslashes($categories[$i]['cat_title']);
+		$catNum = $categories[$i]['id'];
 		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $course_id", $mysqlMainDb));
 		if (!isset($action_notify)) {

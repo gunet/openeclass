@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['subject'])) {
                 $subject = $_POST['subject'];	
         }
-        $sql = "SELECT * FROM forum_posts WHERE id = $post_id AND forum_id = $forum_id";
+        $sql = "SELECT * FROM forum_post WHERE id = $post_id AND forum_id = $forum_id";
         if (!$result = db_query($sql)) {
                 $tool_content .= $langErrorDataOne;
                 draw($tool_content, 2, null, $head_content);
@@ -56,12 +56,12 @@ if (isset($_POST['submit'])) {
         $date = date("Y-m-d H:i");
 
         $row1 = mysql_fetch_row(db_query("SELECT name FROM forum 
-                                        WHERE forum_id=$forum_id
-                                        AND course_id = $course_id"));
+                                                 WHERE forum_id=$forum_id AND
+                                                       course_id = $course_id"));
         $forum_name = $row1[0];
-        $row2 = mysql_fetch_row(db_query("SELECT title FROM forum_topics
-                                        WHERE topic_id=$topic_id
-                                        AND forum_id = $forum_id"));
+        $row2 = mysql_fetch_row(db_query("SELECT title FROM forum_topic
+                                                 WHERE topic_id=$topic_id AND
+                                                       forum_id = $forum_id"));
         $topic_title = $row2[0];
 
         $nameTools = $langReply;
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
         $navigation[] = array ('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $name);
         $navigation[] = array ('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $title);
                                 
-        $sql = "UPDATE forum_posts SET post_text = " . autoquote(purify($message)) . "
+        $sql = "UPDATE forum_post SET post_text = " . autoquote(purify($message)) . "
                         WHERE id = $post_id 
                         AND forum_id = $forum_id";
         if (!$result = db_query($sql)) {
@@ -81,7 +81,7 @@ if (isset($_POST['submit'])) {
                 $subject = strip_tags($subject);
         }
         if (isset($subject) && (trim($subject) != '')) {			
-                $sql = "UPDATE forum_topics
+                $sql = "UPDATE forum_topic
                         SET title = " . autoquote($subject) . " 
                         WHERE id = $topic_id
                                 AND forum_id = $forum_id";
@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
         exit;
 } else {
         $sql = "SELECT f.name, t.title
-                        FROM forum f, forum_topics t
+                        FROM forum f, forum_topic t
                         WHERE f.id = $forum_id
                                 AND t.id = $topic_id
                                 AND t.forum_id = f.id";
@@ -116,7 +116,7 @@ if (isset($_POST['submit'])) {
         $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow['title']);
         
         $sql = "SELECT p.post_text, p.post_time, t.title 
-                        FROM forum_posts p, forum_topics t
+                        FROM forum_post p, forum_topic t
                         WHERE p.id = $post_id 
                         AND p.topic_id = t.id";
         $result = db_query($sql);

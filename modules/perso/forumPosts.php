@@ -143,23 +143,23 @@ function createForumQueries($dateVar, $code) {
         
         $forum_query = 'SELECT forum.id,
                                forum.name,
-                               forum_topics.id,
-                               forum_topics.title,
-                               forum_topics.num_replies,
-                               forum_posts.post_time,
-                               forum_posts.poster_id,
-                               forum_posts.post_text
-                        FROM forum, forum_topics, forum_posts, course_module
-                        WHERE CONCAT(forum_topics.title, forum_posts.post_text) != \'\'
-                               AND forum.id = forum_topics.forum_id
-                               AND forum_posts.forum_id = forum.id
-                               AND forum_posts.topic_id = forum_topics.id
+                               forum_topic.id,
+                               forum_topic.title,
+                               forum_topic.num_replies,
+                               forum_post.post_time,
+                               forum_post.poster_id,
+                               forum_post.post_text
+                        FROM forum, forum_topic, forum_post, course_module
+                        WHERE CONCAT(forum_topic.title, forum_post.post_text) != \'\'
+                               AND forum.id = forum_topic.forum_id
+                               AND forum_post.forum_id = forum.id
+                               AND forum_post.topic_id = forum_topic.id
                                AND forum.course_id = '.$course_id.'
-                               AND DATE_FORMAT(forum_posts.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
+                               AND DATE_FORMAT(forum_post.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
                                AND course_module.visible = 1
                                AND course_module.module_id = '.MODULE_ID_FORUM.'
                                AND course_module.course_id = '.$course_id.'     
-                        ORDER BY forum_posts.post_time LIMIT 15';
+                        ORDER BY forum_post.post_time LIMIT 15';
 
 	return $forum_query;
 }
