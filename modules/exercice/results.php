@@ -40,7 +40,7 @@ $nameTools = $langResults;
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = $_GET['exerciseId'];
+	$exerciseId = intval($_GET['exerciseId']);
 }
 
 // if the object is not in the session

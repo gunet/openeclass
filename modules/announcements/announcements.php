@@ -260,13 +260,13 @@ if ($is_editor) {
     /* display announcements */
 	if ($is_editor) {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id]", $mysqlMainDb);
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = ". intval($_GET['an_id']), $mysqlMainDb);
 		} else {
 			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id ORDER BY ordre DESC", $mysqlMainDb);
 		}
 	} else {
 		if (isset($_GET['an_id'])) {
-			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = $_GET[an_id] AND visibility = 'v'", $mysqlMainDb);
+			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND id = ". intval($_GET['an_id']) ." AND visibility = 'v'", $mysqlMainDb);
 		} else {
 			$result = db_query("SELECT * FROM annonces WHERE cours_id = $cours_id AND visibility = 'v' ORDER BY ordre DESC", $mysqlMainDb);
 		}

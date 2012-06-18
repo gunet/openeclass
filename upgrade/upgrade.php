@@ -76,13 +76,13 @@ if (!defined('UTF8')) {
 
 if (!isset($_POST['submit2'])) {
         if(isset($encryptedPasswd) and $encryptedPasswd) {
-                $newpass = md5(@$_POST['password']);
+                $newpass = md5(@q($_POST['password']));
         } else {
                 // plain text password since the passwords are not hashed
-                $newpass = @$_POST['password'];
+                $newpass = @q($_POST['password']);
         }
 
-        if (!is_admin(@$_POST['login'], $newpass, $mysqlMainDb)) {
+        if (!is_admin(@q($_POST['login']), $newpass, $mysqlMainDb)) {
                 $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
                         <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);

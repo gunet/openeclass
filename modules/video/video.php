@@ -167,7 +167,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 
 if (isset($_GET['action']) and $_GET['action'] == "play")
 {
-        $id = $_GET['id'];
+        $id = q($_GET['id']);
         $videoPath = $urlServer ."video/". $currentCourseID . $id;
         $videoURL = "$_SERVER[PHP_SELF]?course=$code_cours&amp;action=download&amp;id=". $id;
         
@@ -188,7 +188,7 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
 
 if (isset($_GET['action']) and $_GET['action'] == "playlink")
 {
-        $id = $_GET['id'];
+        $id = q($_GET['id']);
         
         echo medialink_iframe_object(html_entity_decode($id));
         exit;

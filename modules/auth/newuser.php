@@ -72,15 +72,15 @@ if (!isset($_POST['submit'])) {
 	<table width='100%' class='tbl'>
 	<tr>
 	<th class='left' width='180'>$langName:</th>
-	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='50' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='50' value='".q($_GET['prenom_form'])."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSurname:</th>
-	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='100' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='100' value='".q($_GET['nom_form'])."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
-	<td colspan='2'><input type='text' name='uname' value='".$_GET['uname']."' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='text' name='uname' value='".q($_GET['uname'])."' size='30' maxlength='30' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>
@@ -92,12 +92,12 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langEmail:</th>
-	<td valign='top'><input type='text' name='email' size='30' maxlength='100' value='".$_GET['email']."' class='FormData_InputText' /></td>
+	<td valign='top'><input type='text' name='email' size='30' maxlength='100' value='".q($_GET['email'])."' class='FormData_InputText' /></td>
 	<td><small>$email_message</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langAm:</th>
-	<td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='".$_GET['am']."' class='FormData_InputText' />$am_message</td>
+	<td colspan='2' valign='top'><input type='text' name='am' size='20' maxlength='20' value='".q($_GET['am'])."' class='FormData_InputText' />$am_message</td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty:</th>
@@ -286,7 +286,7 @@ if (!isset($_POST['submit'])) {
 		foreach ($registration_errors as $error) {
 			$tool_content .= "$error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&amp;nom_form=$_POST[nom_form]&amp;uname=$_POST[uname]&amp;email=$_POST[email]&amp;am=$_POST[am]'>$langAgain</a></p>";
+		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=". q($_POST['prenom_form']) ."&amp;nom_form=". $_POST['nom_form'] ."&amp;uname=". $_POST['uname'] ."&amp;email=". $_POST['email'] ."&amp;am=". $_POST['am']. "'>$langAgain</a></p>";
 	}
 } // end of registration
 
