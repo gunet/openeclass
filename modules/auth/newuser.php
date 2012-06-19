@@ -64,27 +64,27 @@ if (get_config('close_user_registration')) {
 
 // display form
 if (!isset($_POST['submit'])) {
-	if (get_config("email_required")) {
+	if (get_config('email_required')) {
 		$email_message = "(*)";
 	} else {
 		$email_message = $langEmailNotice;
 	}
-	if (get_config("am_required")) {
+	if (get_config('am_required')) {
 		$am_message = "&nbsp;&nbsp;<small>(*)</small>";
 	} else {
 		$am_message = '';
 	}
-	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
         <legend>$langUserData</legend>
 	<table width='100%' class='tbl'>
 	<tr>
 	<th class='left' width='180'>$langName:</th>
-	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='50' value='".$_GET['prenom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='prenom_form' size='30' maxlength='50' value='".q($_GET['prenom_form'])."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langSurname:</th>
-	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='100' value='".$_GET['nom_form']."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
+	<td colspan='2'><input type='text' name='nom_form' size='30' maxlength='100' value='".q($_GET['nom_form'])."' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
@@ -143,24 +143,24 @@ if (!isset($_POST['submit'])) {
 <div class='right smaller'>$langRequiredFields</div>
 ";
 } else {
-	if (get_config("email_required")) {
+	if (get_config('email_required')) {
 		$email_arr_value = true;
 	} else {
 		$email_arr_value = false;
 	}
-	if (get_config("am_required")) {
+	if (get_config('am_required')) {
 		$am_arr_value = true;
 	} else {
 		$am_arr_value = false;
 	}
 	$missing = register_posted_variables(array('uname' => true,
-					'nom_form' => true,
-					'prenom_form' => true,
-					'password' => true,
-					'password1' => true,
-					'email' => $email_arr_value,
-                                        'phone' => false,
-					'am' => $am_arr_value));
+                                                   'nom_form' => true,
+                                                   'prenom_form' => true,
+                                                   'password' => true,
+                                                   'password1' => true,
+                                                   'email' => $email_arr_value,
+                                                   'phone' => false,
+                                                   'am' => $am_arr_value));
         
         if (!isset($_POST['department'])) {
             $departments = array();
@@ -180,7 +180,7 @@ if (!isset($_POST['submit'])) {
 		if ($myusername = mysql_fetch_array($username_check)) {
 			$registration_errors[] = $langUserFree;
 		}
-		if (get_config("display_captcha")) {
+		if (get_config('display_captcha')) {
 			// captcha check
 			require_once 'include/securimage/securimage.php';
 			$securimage = new Securimage();
@@ -203,8 +203,7 @@ if (!isset($_POST['submit'])) {
 		if (get_config('email_verification_required') && !empty($email)) {
 			$verified_mail = 0;
 			$vmail = TRUE;
-		}
-		else {
+		} else {
 			$verified_mail = 2;
 			$vmail = FALSE;
 		}
@@ -304,7 +303,7 @@ if (!isset($_POST['submit'])) {
 		foreach ($registration_errors as $error) {
 			$tool_content .= " $error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?" .
+		$tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?" .
                         'prenom_form=' . urlencode($prenom_form) .
                         '&amp;nom_form=' . urlencode($nom_form) .
                         '&amp;uname=' . urlencode($uname) .

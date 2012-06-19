@@ -74,7 +74,7 @@ if (isset($_SESSION['prenom'])) {
 // ----------------------
 
 if (isset($_GET['action']) and $_GET['action'] == "download") {
-	$id = $_GET['id'];
+	$id = intval($_GET['id']);
 	$real_file = $webDir."/video/".$course_code."/".$id;
 	if (strpos($real_file, '/../') === FALSE) {
                 $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " .
@@ -94,19 +94,16 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 // play video
 // ----------------------
 
-if (isset($_GET['action']) and $_GET['action'] == "play")
+if (isset($_GET['action']) and $_GET['action'] == 'play')
 {
         $id = $_GET['id'];
         $videoPath = $urlServer ."video/". $course_code . $id;
         $videoURL = "$_SERVER[PHP_SELF]?course=$course_code&amp;action=download&amp;id=". $id;
         
-        if (strpos($videoPath, '/../') === FALSE)
-        {
-            echo media_html_object($videoPath, $videoURL);
-        }
-        else
-        {
-            header("Refresh: ${urlServer}modules/video/video.php?course=$course_code");
+        if (strpos($videoPath, '/../') === FALSE) {
+                echo media_html_object($videoPath, $videoURL);
+        } else {
+                header("Refresh: ${urlServer}modules/video/video.php?course=$course_code");
         }
         exit;
 }
@@ -115,9 +112,8 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
 // play videolink
 // ----------------------
 
-if (isset($_GET['action']) and $_GET['action'] == "playlink")
-{
-        $id = $_GET['id'];
+if (isset($_GET['action']) and $_GET['action'] == 'playlink') {
+        $id = intval($_GET['id']);
         
         echo medialink_iframe_object(html_entity_decode($id));
         exit;
@@ -158,7 +154,7 @@ $diskQuotaVideo = $d['video_quota'];
 $updir = "$webDir/video/$course_code"; //path to upload directory
 $diskUsed = dir_total_space($updir);
 
-if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	$nameTools = $langQuotaBar;
 	$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$course_code", 'name' => $langVideo);
 	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
@@ -170,7 +166,7 @@ if (isset($_POST['edit_submit'])) { // edit
 	if(isset($_POST['id'])) {
 		$id = intval($_POST['id']);
 		if (isset($_POST['table'])) {
-			$table = $_POST['table'];
+			$table = select_table($_POST['table']);
 		}
 		if ($table == 'video') {
 			$sql = "UPDATE video SET title = ".autoquote($_POST['title']).",
@@ -280,15 +276,15 @@ if (isset($_POST['add_submit'])) {  // add
 		}
 	}	// end of add
 	if (isset($_GET['delete'])) { // delete
-		$id = intval($_GET['id']);
-		$table = $_GET['table'];
-		$sql_select="SELECT * FROM $table WHERE course_id = $course_id AND id='".mysql_real_escape_string($id)."'";
-		$result = db_query($sql_select, $mysqlMainDb);
-		$myrow = mysql_fetch_array($result);
-		if($table == "video") {
-			unlink("$webDir/video/$course_code/".$myrow['path']);
-		}
-		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id='".mysql_real_escape_string($id)."'";
+                $id = intval($_GET['id']);
+                $table = select_table($_GET['table']);
+                $sql_select = "SELECT * FROM $table WHERE course_id = $course_id AND id = $id";
+                $result = db_query($sql_select, $mysqlMainDb);
+                $myrow = mysql_fetch_array($result);
+                if ($table == 'video') {
+                        unlink("$webDir/video/$course_code/".$myrow['path']);
+                }
+		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id = $id";
 		$result = db_query($sql, $mysqlMainDb);
                 Log::record(MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id));
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
@@ -385,7 +381,7 @@ if (isset($_POST['add_submit'])) {  // add
 // ------------------- if no submit -----------------------
 if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	$id = intval($_GET['id']);
-	$table_edit = $_GET['table_edit'];
+	$table_edit = select_table($_GET['table_edit']);
 	if ($id) {
 		$sql = "SELECT * FROM $table_edit WHERE course_id = $course_id AND id = $id ORDER BY title";
 		$result = db_query($sql, $mysqlMainDb);
@@ -399,7 +395,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$publisher = $myrow['publisher'];
 		
 		$nameTools = $langModify;
-		$navigation[] = array ('url' => "video.php?course=$course_code", 'name' => $langVideo);
+		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
                 <form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
@@ -435,8 +431,8 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	       <tr>
 		 <th>&nbsp;</th>
 		 <td class='right'><input type='submit' name='edit_submit' value='$langModify'>
-		     <input type='hidden' name='id' value='".$id."'>
-		     <input type='hidden' name='table' value='".$table_edit."'>
+		     <input type='hidden' name='id' value='$id'>
+		     <input type='hidden' name='table' value='$table_edit'>
 		 </td>
 	       </tr>
 	       </table>
@@ -535,7 +531,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 // student view
 else {
     
-    load_modal_box(true);
+        load_modal_box(true);
     
 	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
@@ -599,4 +595,13 @@ if (isset($head_content)) {
 	draw($tool_content, 2, null, $head_content);
 } else {
         draw($tool_content, 2);
+}
+
+function select_table($table)
+{
+        if ($table == 'videolinks') {
+                return $table;
+        } else {
+                return 'video';
+        }
 }

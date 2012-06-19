@@ -145,7 +145,7 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename,
  * 
  * @global string $userServer
  * @global string $course_code
- * @param  string $mediaURL
+ * @param  string $mediaURL - should be already urlencoded if possible
  * @param  string $title
  * @return string 
  */

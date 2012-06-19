@@ -986,7 +986,7 @@ if ($doc_count == 0) {
                         if ($is_dir) {
                                 $image = $themeimg.'/folder.png';
                                 $file_url = $base_url . "openDir=$cmdDirName";
-				$link_title = $entry['filename'];
+				$link_title = q($entry['filename']);
                                 $dload_msg = $langDownloadDir;
                                 $link_href = "<a href='$file_url'>$link_title</a>";
                         } else {
@@ -994,14 +994,15 @@ if ($doc_count == 0) {
                                 $file_url = file_url($cmdDirName, $entry['filename']);
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
                                 $link_extra = " id='fileURL' title='$langSave' target='_blank'";
-                                $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);
-                                $link_title_extra = ($entry['copyrighted']) ? " <img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
+                                $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
+                                $link_title_extra = ($entry['copyrighted'])?
+                                        " <img src='$urlAppend/modules/document/img/copyrighted.png' />": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
-                                    $furl = (is_supported_media($entry['path'], true)) ? $play_url : $file_url;
-                                    $link_href = "<a href='$furl'$link_extra>".$link_title.$link_title_extra."</a>";
+                                        $furl = (is_supported_media($entry['path'], true)) ? $play_url : $file_url;
+                                        $link_href = "<a href='$furl'$link_extra>$link_title$link_title_extra</a>";
                                 } else {
-                                    $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
+                                        $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
                                 }
                         }
                         $img_href = "<img src='$image' />";

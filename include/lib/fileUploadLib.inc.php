@@ -503,7 +503,7 @@ function process_extracted_file($p_event, &$p_header) {
                 // Check if file already exists
                 $result = db_query("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
-                                                 path REGEXP '^$path/[^/]+$' AND
+                                                 path REGEXP " . quote("^$path/[^/]+$") . " AND
                                                  filename = " . quote($filename) . " LIMIT 1");
                 $format = get_file_extension($filename);
                 if (mysql_num_rows($result)) {
@@ -524,7 +524,7 @@ function process_extracted_file($p_event, &$p_header) {
                                                   '_backup_' . $backup_n . '.' . $format;
                                         $q = db_query("SELECT COUNT(*) FROM document
                                                               WHERE $group_sql AND
-                                                                    path REGEXP '^$path/[^/]+$' AND
+                                                                    path REGEXP " . quote("^$path/[^/]+$") . " AND
                                                                     filename = " . quote($backup) . " LIMIT 1");
                                         list($n) = mysql_fetch_row($q);
                                         $backup_n++;
@@ -559,10 +559,10 @@ function process_extracted_file($p_event, &$p_header) {
                                 $id = mysql_insert_id();
                                 Log::record(MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
-                                                'filepath' => $path,
-                                                'filename' => $filename,
-                                                'comment' => $file_comment,
-                                                'title' => $file_title));
+                                              'filepath' => $path,
+                                              'filename' => $filename,
+                                              'comment' => $file_comment,
+                                              'title' => $file_title));
                 // File will be extracted with new encoded filename
                 $p_header['filename'] = $basedir . $path;
                 return 1;
@@ -586,7 +586,7 @@ function make_path($path, $path_components)
                                       FROM document
                                       WHERE $group_sql AND
                                             filename = " . quote($component) . " AND
-                                            path LIKE '$path%' HAVING depth = $depth");
+                                            path LIKE " . quote($path . '%') . " HAVING depth = $depth");
                 if (mysql_num_rows($q) > 0) {
                         // Path component already exists in database
                         $r = mysql_fetch_array($q);
@@ -600,18 +600,18 @@ function make_path($path, $path_components)
                                           course_id = $course_id,
 					  subsystem = $subsystem,
                                           subsystem_id = $subsystem_id,
-                                          path='$path',
-                                          filename=" . quote($component) . ",
-                                          visible=1,
-                                          creator=" . quote($prenom." ".$nom) . ",
-                                          date=NOW(),
-                                          date_modified=NOW(),
-                                          format='.dir'");
+                                          path = " . quote($path) . ",
+                                          filename = " . quote($component) . ",
+                                          visible = 1,
+                                          creator = " . quote($prenom.' '.$nom) . ",
+                                          date = NOW(),
+                                          date_modified = NOW(),
+                                          format = '.dir'");
                         $id = mysql_insert_id();
                         Log::record(MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
-                                                'path' => $path,
-                                                'filename' => $component));
+                                              'path' => $path,
+                                              'filename' => $component));
                         $path_already_exists = false;
                 }
         }

@@ -28,17 +28,17 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
-include '../../include/baseTheme.php';
-include 'exercise.class.php';
+require_once '../../include/baseTheme.php';
+require_once 'exercise.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $nameTools = $langResults;
-$navigation[]=array("url" => "exercise.php?course=$course_code","name" => $langExercices);
+$navigation[]=array('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = $_GET['exerciseId'];
+	$exerciseId = intval($_GET['exerciseId']);
 }
 
 // if the object is not in the session
@@ -57,8 +57,8 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 	$objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
-$exerciseTitle=$objExercise->selectTitle();
-$exerciseDescription=$objExercise->selectDescription();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 	
 $tool_content .= "
