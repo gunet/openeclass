@@ -152,7 +152,6 @@ function createForumQueries($dateVar, $code) {
                         FROM forum, forum_topic, forum_post, course_module
                         WHERE CONCAT(forum_topic.title, forum_post.post_text) != \'\'
                                AND forum.id = forum_topic.forum_id
-                               AND forum_post.forum_id = forum.id
                                AND forum_post.topic_id = forum_topic.id
                                AND forum.course_id = '.$course_id.'
                                AND DATE_FORMAT(forum_post.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
