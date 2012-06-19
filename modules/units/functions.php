@@ -449,12 +449,12 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 	$class_vis = ($visibility == 0)? ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	if ($type == 'forum') {
-		$link = "<a href='${urlServer}modules/phpbb/viewforum.php?course=$course_code&amp;forum=$ft_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$ft_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	} else {
 		$r = db_query("SELECT forum_id FROM forum_topics WHERE id = $ft_id");
 		list($forum_id) = mysql_fetch_array($r);
-		$link = "<a href='${urlServer}modules/phpbb/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
                 if (!$module_visible) {
                         $forumlink .= "<i>($langInactiveModule)</i>";

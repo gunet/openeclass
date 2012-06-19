@@ -148,7 +148,7 @@ $modules = array(
     MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video/video.php', 'image' => 'videos'),
     MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work/work.php', 'image' => 'assignments'),
     MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements/announcements.php', 'image' => 'announcements'),
-    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'phpbb/index.php', 'image' => 'forum'),
+    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum/index.php', 'image' => 'forum'),
     MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise/exercise.php', 'image' => 'exercise'),
     MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group/group.php', 'image' => 'groups'),
     MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox/index.php', 'image' => 'dropbox'),

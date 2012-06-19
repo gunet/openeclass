@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<table width='99%'>
         <tbody><tr><td class='success'>$langStored</td>
         </tr></tbody></table>";
-        header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id" . $page);
+        header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id" . $page);
         exit;
 } else {
         $sql = "SELECT f.name, t.title

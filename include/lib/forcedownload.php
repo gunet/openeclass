@@ -347,13 +347,23 @@ function public_path_to_disk_path($path_components, $path = '')
 
 function not_found($path)
 {
-        global $uri;
         header("HTTP/1.0 404 Not Found");
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
              '<title>404 Not Found</title></head><body>',
              '<h1>Not Found</h1><p>The requested path "',
              htmlspecialchars($path),
              '" was not found.</p></body></html>';
+        exit;
+}
+
+function forbidden($path)
+{
+        header("HTTP/1.0 403 Forbidden");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+             '<title>403 Forbidden</title></head><body>',
+             '<h1>Forbidden</h1><p>You don\'t have permission to acces the requested path "',
+             htmlspecialchars($path),
+             '".</p></body></html>';
         exit;
 }
 

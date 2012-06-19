@@ -140,7 +140,7 @@ if (isset($_POST['submit'])) {
 		$page = '';
 	}
 	$_SESSION['message'] = "<p class='success'>$langStored</p>";
-	header("Location: {$urlServer}modules/phpbb/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
+	header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
 	exit;
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id");	

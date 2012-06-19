@@ -195,7 +195,7 @@ function loadGroupTools(){
         }
         // Drive members into their own forum
         if ($has_forum and $forum_id <> 0) {
-                $group_tools .= "<li><a href='../phpbb/viewforum.php?course=$course_code&amp;forum=$forum_id'>$langForums</a></li>";
+                $group_tools .= "<li><a href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>$langForums</a></li>";
         }
         // Drive members into their own File Manager
         if ($documents) {

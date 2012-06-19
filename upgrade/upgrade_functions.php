@@ -2130,7 +2130,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         @mysql_query("ALTER TABLE `liens` ADD FULLTEXT `liens` (`url` ,`titre` ,`description`)");
         @mysql_query("ALTER TABLE `video` ADD FULLTEXT `video` (`url` ,`titre` ,`description`)");
 
-        // bogart: Update code for phpbb functionality START
+        // bogart: Update code for forum functionality START
         // Remove tables banlist, disallow, headermetafooter, priv_msgs, ranks, sessions, themes, whosonline, words
         db_query("DROP TABLE IF EXISTS access");
         db_query("DROP TABLE IF EXISTS banlist");
@@ -2145,7 +2145,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         db_query("DROP TABLE IF EXISTS themes");
         db_query("DROP TABLE IF EXISTS whosonline");
         db_query("DROP TABLE IF EXISTS words");
-        // bogart: Update code for phpbb functionality END
+        // bogart: Update code for forum functionality END
 
         // remove tables liste_domains. Used for old statistics module
         db_query("DROP TABLE IF EXISTS liste_domaines");

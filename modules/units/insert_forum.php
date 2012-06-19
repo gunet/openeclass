@@ -49,7 +49,7 @@ function list_forums()
 		foreach ($foruminfo as $entry) {
 			$tool_content .= "<tr class='odd'>";
 			$tool_content .= "<td>
-			<a href='${urlServer}modules/phpbb/viewforum.php?course=$course_code&amp;forum=$entry[id]'>$entry[name]</a></td>";
+			<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$entry[id]'>$entry[name]</a></td>";
 			$tool_content .= "<td>$entry[comment]</td>";
 			$tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
 			$tool_content .= "</tr>";
@@ -64,7 +64,7 @@ function list_forums()
 				}
 				foreach ($topicinfo as $topicentry) {
 					$tool_content .= "\n  <tr class='even'>";
-					$tool_content .= "\n    <td>&nbsp;<img src='../../modules/phpbb/images/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/phpbb/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
+					$tool_content .= "\n    <td>&nbsp;<img src='../../modules/forum/images/topic_read.gif' />&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum=$entry[id]'>$topicentry[topic_title]</a></td>";
 					$tool_content .= "\n    <td>&nbsp;</td>";
 					$tool_content .= "\n    <td class='center'><input type='checkbox' name='forum[]'  value='$entry[id]:$topicentry[topic_id]' /></td>";
 					$tool_content .= "\n  </tr>";

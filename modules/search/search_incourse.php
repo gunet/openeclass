@@ -303,7 +303,7 @@ if(empty($search_terms)) {
                         } else { 
                                 $desc_text = "<br /><span class='smaller'>($res[forum_desc])</span>";
                         }
-                        $link_forum = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+                        $link_forum = "${urlServer}/modules/forum/viewforum.php?forum=$res[forum_id]";
                         $tool_content .= "<a href='$link_forum'>".$res['forum_name']."</a> $desc_text
                         </td>
                         </tr>";				
@@ -333,7 +333,7 @@ if(empty($search_terms)) {
                   <tr $class_view>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-			$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
+			$link_topic = "${urlServer}/modules/forum/viewforum.php?forum=$res[forum_id]";
 			$tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['topic_title']."</a>";
 			$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
 					FROM posts, posts_text
@@ -344,7 +344,7 @@ if(empty($search_terms)) {
 			if(mysql_num_rows($result2) > 0) {
 			while($res2 = mysql_fetch_array($result2))
 			{
-			  $link_post = "${urlServer}/modules/phpbb/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
+			  $link_post = "${urlServer}/modules/forum/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
 			  $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
 			}
 	          }

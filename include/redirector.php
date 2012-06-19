@@ -38,22 +38,22 @@ if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
 			$url = 'modules/work/work.php?id=' . $i;
 			break;
 		}
-		case 2: {//announcements
+		case 2: { //announcements
 			$url = 'modules/announcements/announcements.php';
 			break;
 		}
-		case 4: {//agenda
+		case 4: { //agenda
 			$url = 'modules/agenda/agenda.php';
 			break;
 		}
-		case 5: {//forum
-			$url = "modules/phpbb/viewtopic.php?topic=" .
+		case 5: { //forum
+			$url = "modules/forum/viewtopic.php?topic=" .
 			       intval($_GET['t']) . "&forum=" .
 			       intval($_GET['f']) . "&sub=" .
 			       intval($_GET['s']);
 			break;
 		}
-		case 6: {//documents
+		case 6: { //documents
 			$url = "modules/document/document.php?openDir=" . $_GET['p'];	
 			break;
 		}
