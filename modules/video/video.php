@@ -551,7 +551,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                             $furl = (is_supported_media($myrow[1], true)) ? $mediaPlay : $mediaURL;
                                             $link_href = "<a href='$furl' id='fileURL'>". q($myrow[3]) ."</a>";
                                         } else {
-                                            $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br/><small>". q($myrow[4]) . "</small";
+                                            $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br/><small>". q($myrow[4]) . "</small>";
                                         }
                                         
                                         $link_to_add = "<td>". $link_href . "</td>";
