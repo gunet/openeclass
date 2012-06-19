@@ -117,7 +117,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         unset($_SESSION['embedonce']);
 
 	//get the left side menu from tools.php
-        $toolArr = ($is_mobile || $is_embedonce) ? array() : getSideMenu ( $menuTypeID );
+        $toolArr = ($is_mobile) ? array() : getSideMenu ( $menuTypeID );
 	$numOfToolGroups = count ( $toolArr );
 
 	$t = new Template('template/' . $theme);

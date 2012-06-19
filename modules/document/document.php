@@ -42,6 +42,7 @@ $require_help = TRUE;
 $helpTopic = 'Doc';
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$menuTypeID = ($is_in_tinymce) ? 5: 2;
 
 if ($is_in_tinymce) {
     
@@ -99,7 +100,7 @@ if (isset($_GET['showQuota'])) {
         	$navigation[] = array ('url' => 'document.php?course='.$course_code, 'name' => $langDoc);
         }
 	$tool_content .= showquota($diskQuotaDocument, $diskUsed);
-	draw($tool_content, 2);
+	draw($tool_content, $menuTypeID);
 	exit;
 }
 
@@ -787,7 +788,7 @@ if ($parentDir == '\\') {
 if (strpos($curDirName, '/../') !== false or
     !is_dir(realpath($basedir . $curDirPath))) {
 	$tool_content .=  $langInvalidDir;
-        draw($tool_content, 2);
+        draw($tool_content, $menuTypeID);
         exit;
 }
 
@@ -894,7 +895,7 @@ if($can_upload) {
 }
 
 // check if there are documents
-list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql" .
+list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql $filter" .
 				            ($is_editor? '': " AND visible=1")));
 if ($doc_count == 0) {
 	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
@@ -1104,4 +1105,4 @@ if ($doc_count == 0) {
         $tool_content .= "\n    <br />";
 }
 add_units_navigation(TRUE);
-draw($tool_content, 2, null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);

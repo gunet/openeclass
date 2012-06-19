@@ -1638,11 +1638,45 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame;
+	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $mysqlMainDb;
 	
         $filebrowser = '';
+        $activemodule = 'document/document.php';
         if (isset($course_code) && !empty($course_code))
+        {
             $filebrowser = "file_browser_callback : 'openDocsPicker',";
+            
+            if (!$is_editor)
+            {
+                $cid = course_code_to_id($course_code);
+                $sql = "SELECT * FROM course_module
+                    WHERE course_id = $cid
+                      AND (module_id =".MODULE_ID_DOCS." OR module_id =".MODULE_ID_VIDEO." OR module_id =".MODULE_ID_LINKS.")
+                      AND VISIBLE = 1 ORDER BY module_id";
+
+                $result = db_query($sql, $mysqlMainDb);
+                $module = mysql_fetch_assoc($result);
+
+                if ($module === false)
+                    $filebrowser = '';
+                else {
+                    switch ($module['module_id']) {
+                        case MODULE_ID_LINKS:
+                            $activemodule  = 'link/link.php';
+                            break;
+                        case MODULE_ID_DOCS:
+                            $activemodule  = 'document/document.php';
+                            break;
+                        case MODULE_ID_VIDEO:
+                            $activemodule  = 'video/video.php';
+                            break;
+                        default:
+                            $filebrowser = '';
+                            break;
+                    }
+                }
+            }
+        }
         
 	$lang_editor = langname_to_code($language);
 	
@@ -1698,7 +1732,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '$urlAppend/modules/document/document.php?course=$course_code&embedtype=tinymce&docsfilter=' + type,
+        file: '$urlAppend/modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,

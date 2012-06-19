@@ -65,6 +65,12 @@ function getSideMenu($menuTypeID){
 			$menu = customMenu();
 			break;
 		}
+                
+		case 5: { // tools when embedded in tinymce
+			$menu = pickerMenu();
+			break;
+		}
+                    
 	}
 	return $menu;
 }
@@ -599,5 +605,57 @@ function lessonToolsMenu() {
                 array_push($sideMenuSubGroup, $sideMenuID);
                 array_push($sideMenuGroup, $sideMenuSubGroup);                
          }         
+	return $sideMenuGroup;
+}
+
+
+/**
+ * Function pickerMenu
+ *
+ * Creates a multi-dimensional array of the user's tools/links
+ * for the menu presented for the embedded theme.
+ * *
+ * @return array
+ */
+function pickerMenu() {
+
+	global $urlServer, $mysqlMainDb, $course_code, $is_editor, $modules;
+        
+        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. q($_REQUEST['docsfilter']) : '';
+        $params = "?course=$course_code&amp;embedtype=tinymce". $docsfilter;
+        $cid = course_code_to_id($course_code);
+
+	$sideMenuGroup = array();
+
+	$sideMenuSubGroup = array();
+	$sideMenuText 	= array();
+	$sideMenuLink 	= array();
+	$sideMenuImg	= array();
+
+	$arrMenuType = array();
+	$arrMenuType['type'] = 'text';
+	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	array_push($sideMenuSubGroup, $arrMenuType);
+        
+        $visible = ($is_editor) ? '' : 'AND visible = 1';
+        $sql = "SELECT * FROM course_module
+                 WHERE course_id = $cid AND (module_id =".MODULE_ID_DOCS." OR module_id =".MODULE_ID_VIDEO." OR module_id =".MODULE_ID_LINKS.")
+                 $visible ORDER BY module_id";
+        
+        $result = db_query($sql, $mysqlMainDb);
+        
+        while($module = mysql_fetch_assoc($result))
+        {
+            $mid = $module['module_id'];
+            array_push($sideMenuText, q($modules[$mid]['title']));
+            array_push($sideMenuLink, $urlServer."modules/".q($modules[$mid]['link']). $params);
+            array_push($sideMenuImg , $modules[$mid]['image']."_on.png");
+        }
+        
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+
+        array_push($sideMenuGroup, $sideMenuSubGroup);
 	return $sideMenuGroup;
 }

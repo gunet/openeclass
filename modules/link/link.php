@@ -53,6 +53,50 @@ $action_stats->record(MODULE_ID_LINKS);
 
 $nameTools = $langLinks;
 
+$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$menuTypeID = ($is_in_tinymce) ? 5: 2;
+$tinymce_params = '';
+
+if ($is_in_tinymce) {
+    
+    $_SESSION['embedonce'] = true; // necessary for baseTheme
+    $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. $_REQUEST['docsfilter'] : '';
+    $tinymce_params = '&amp;embedtype=tinymce'. $docsfilter;
+    
+    load_js('jquery');
+    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
+    
+    $head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $("a#fileURL").click(function() { 
+        var URL = $(this).attr('href');
+        var win = tinyMCEPopup.getWindowArg("window");
+
+        // insert information now
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
+
+        // are we an image browser
+        if (typeof(win.ImageDialog) != "undefined") {
+            // we are, so update image dimensions...
+            if (win.ImageDialog.getImageData)
+                win.ImageDialog.getImageData();
+
+            // ... and preview if necessary
+            if (win.ImageDialog.showPreviewImage)
+                win.ImageDialog.showPreviewImage(URL);
+        }
+
+        // close popup window
+        tinyMCEPopup.close();
+        return false;
+    });
+});
+</script>
+EOF;
+}
+
 $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
@@ -119,18 +163,21 @@ if ($is_editor) {
 	   $tool_content .=  "<p class='success'>$catlinkstatus</p>\n";
 	}
 
-	$tool_content .="<div id='operations_container'><ul id='opslist'>";
-	if (isset($category)) {
-		$tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
-        } else {
-		$tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
+        if (!$is_in_tinymce)
+        {
+            $tool_content .="<div id='operations_container'><ul id='opslist'>";
+            if (isset($category)) {
+                    $tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
+            } else {
+                    $tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
+            }
+            if (isset($urlview)) {
+                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
+            } else {
+                    $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
+            }
+            $tool_content .=  "</ul></div>";
         }
-	if (isset($urlview)) {
-		$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
-        } else {
-		$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
-        }
-        $tool_content .=  "</ul></div>";
 
 	// Display the correct title and form for adding or modifying a category or link.
         if (in_array($action, array('addlink', 'editlink'))) {
@@ -228,10 +275,10 @@ if (mysql_num_rows($resultcategories) > 0) {
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
 		  <td width='1'><img src='$themeimg/folder_closed.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params .
 	              "'>$shownone</a></td>
 		  <td width='1'><img src='$themeimg/folder_open.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params .
 		      "'>$showall</a></td>
 		</tr>
                 </table>";
@@ -272,11 +319,11 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .= "
                 <tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview'>".q($myrow['name'])."</a>";
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
                         }
-                        if ($is_editor) {
+                        if ($is_editor && !$is_in_tinymce) {
                                 showcategoryadmintools($myrow["id"]);
                         } else {
                                 $tool_content .=  "
@@ -289,13 +336,13 @@ if (mysql_num_rows($resultcategories) > 0) {
 		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
 		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
-			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
+			$tool_content .= $tinymce_params ."'>" . q($myrow['name']) . "</a>";
 		        $description = standard_text_escape($myrow['description']);
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div>
                   </th>";
                         }
-			if ($is_editor) {
+			if ($is_editor && !$is_in_tinymce) {
 			showcategoryadmintools($myrow["id"]);
                         } else {
                                 $tool_content .=  "
@@ -320,7 +367,7 @@ if (mysql_num_rows($resultcategories) > 0) {
                 </table>";
 	} else {
                 $tool_content .= "<p class='alert1'>$langNoLinksExist</p>";
-		if ($is_editor){
+		if ($is_editor && !$is_in_tinymce){
 			// if the user is the course administrator instruct him/her
                         // what he can do to add links
                         $tool_content .= "<p class='center'>
@@ -330,6 +377,6 @@ if (mysql_num_rows($resultcategories) > 0) {
 }
 
 add_units_navigation(true);
-draw($tool_content, 2, null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);
 
 

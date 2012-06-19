@@ -69,6 +69,78 @@ if (isset($_SESSION['prenom'])) {
         $nick = q($_SESSION['prenom'].' '.$_SESSION['nom']);
 }
 
+$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$menuTypeID = ($is_in_tinymce) ? 5: 2;
+
+if ($is_in_tinymce) {
+    
+    $_SESSION['embedonce'] = true; // necessary for baseTheme
+
+    load_js('jquery');
+    load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
+    
+    $head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $("a#fileURL").click(function() { 
+        var URL = $(this).attr('href');
+        var win = tinyMCEPopup.getWindowArg("window");
+
+        // insert information now
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
+
+        // are we an image browser
+        if (typeof(win.ImageDialog) != "undefined") {
+            // we are, so update image dimensions...
+            if (win.ImageDialog.getImageData)
+                win.ImageDialog.getImageData();
+
+            // ... and preview if necessary
+            if (win.ImageDialog.showPreviewImage)
+                win.ImageDialog.showPreviewImage(URL);
+        }
+
+        // close popup window
+        tinyMCEPopup.close();
+        return false;
+    });
+});
+</script>
+EOF;
+}
+
+$filterv = '';
+$filterl = '';
+if (isset($_REQUEST['docsfilter'])) {
+    
+    switch ($_REQUEST['docsfilter']) {
+        case 'image':
+            $ors = '';
+            $first = true;
+            foreach (get_supported_images() as $imgfmt)
+            {
+                if ($first)
+                {
+                    $ors .= "path LIKE '%$imgfmt%'";
+                    $first = false;
+                } else
+                    $ors .= " OR path LIKE '%$imgfmt%'";
+            }
+            
+            $filterv = "AND ( $ors )";
+            $filterl = "AND false";
+            break;
+        case 'zip':
+            $filterv = $filterl = "AND false";
+            break;
+        case 'media':
+        case 'file':
+        default:
+            break;
+    }
+}
+
 // ----------------------
 // download video
 // ----------------------
@@ -158,7 +230,7 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	$nameTools = $langQuotaBar;
 	$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
-	draw($tool_content, 2);
+	draw($tool_content, $menuTypeID);
 	exit;
 }	
 
@@ -224,7 +296,7 @@ if (isset($_POST['add_submit'])) {  // add
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
 					$tool_content .= "<p class='caution'>$langNoSpace<br />
 						<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
-						draw($tool_content, 2, null, $head_content);
+						draw($tool_content, $menuTypeID, null, $head_content);
 						exit;
 				} else {
 					$file_name = $_FILES['userFile']['name'];
@@ -235,7 +307,7 @@ if (isset($_POST['add_submit'])) {  // add
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
 						$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
-						draw($tool_content, 2, null, $head_content);
+						draw($tool_content, $menuTypeID, null, $head_content);
 						exit;
 					}
 					$file_name = str_replace(" ", "%20", $file_name);
@@ -246,7 +318,7 @@ if (isset($_POST['add_submit'])) {  // add
 					if(!$iscopy) {
 						$tool_content .= "<p class='success'>$langFileNot<br />
 						<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
-						draw($tool_content, 2, null, $head_content);
+						draw($tool_content, $menuTypeID, null, $head_content);
 						exit;
 					}
 					$path = '/' . $safe_filename;
@@ -442,7 +514,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	}
 }	// if id
 
-if (!isset($_GET['form_input'])) {
+if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
           $tool_content .= "
           <div id='operations_container'>
 	  <ul id='opslist'>
@@ -453,25 +525,30 @@ if (!isset($_GET['form_input'])) {
 	</div>";
 }
 
-$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id ORDER BY title", $mysqlMainDb));
-$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id
+$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb));
+$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl
 				ORDER BY title", $mysqlMainDb));
 
 if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         // print the list if there is no editing
-        $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
-        $results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
+        $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb);
+        $results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title", $mysqlMainDb);
         $i = 0;
         $count_video_presented_for_admin = 1;
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
         <tr>     
-          <th colspan='2'><div align='left'>$langVideoDirectory</div></th>
+          <th colspan='2'><div align='left'>$langVideoDirectory</div></th>";
+        if (!$is_in_tinymce)
+        {
+          $tool_content .= "
           <th width='150'><div align='left'>$langcreator</div></th>
-          <th width='150'><div align='left'>$langpublisher</div></th>
-          <th width='70'>$langDate</th>
-          <th width='70'>$langActions</th>
-        </tr>";
+          <th width='150'><div align='left'>$langpublisher</div></th>";
+        }
+        $tool_content .= "<th width='70'>$langDate</th>";
+        if (!$is_in_tinymce)
+            $tool_content .= "<th width='70'>$langActions</th>";
+        $tool_content .= "</tr>";
         foreach($results as $table => $result)
                 while ($myrow = mysql_fetch_array($result)) {
                         switch($table){
@@ -483,20 +560,32 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 					} else {
                                             list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 					}
-                                        $link_to_add = "<td>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br>\n".
-                                                q($myrow['description']) . "</td><td>" .
-                                                q($myrow['creator']) . "</td><td>" .
-                                                q($myrow['publisher']) . "</td><td align='center'>".
-                                                nice_format(date('Y-m-d', strtotime($myrow['date'])))."</td>";
+                                        
+                                        if ($is_in_tinymce) {
+                                            $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
+                                            $link_href = "<a href='$furl' id='fileURL'>". q($myrow['title']) ."</a>";
+                                        } else {
+                                            $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
+                                        }
+                                        
+                                        $link_to_add = "<td>". $link_href . "</td>";
+                                        
+                                        if (!$is_in_tinymce)
+                                            $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
+                                        
+                                        $link_to_add .= "<td align='center'>". nice_format(date('Y-m-d', strtotime($myrow['date'])))."</td>";
                                         $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $link_to_add = "<td>". choose_medialink_ahref(q($myrow['url']), q($myrow['title'])) ."<br>" .
-                                                q($myrow['description']) . "</td><td>" .
-                                                q($myrow['creator']) . "</td><td>" .
-                                                q($myrow['publisher']) . "</td><td align='center'>" .
-                                                nice_format(date('Y-m-d', strtotime($myrow['date']))) .
-                                                "</td>";
+                                        $aid = ($is_in_tinymce) ? 'fileURL' : null;
+                                        $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aid);
+                                        
+                                        $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
+                                    
+                                        if (!$is_in_tinymce)
+                                            $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
+                                        
+                                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['diate']))) . "</td>";
                                         $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
 				default:
@@ -512,11 +601,15 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                    <td width='1' valign='top'>
                                       <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
                                    </td>
-                                   $link_to_add
+                                   $link_to_add";
+                        if (!$is_in_tinymce)
+                        {
+                            $tool_content .= "
                                    <td align='right'>
                                       $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow['id']."&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow['id']."&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape($langConfirmDelete ." ". $myrow['title'])."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
-                                   </td>
-                                </tr>";
+                                   </td>";
+                        }
+                        $tool_content .= "</tr>";
                         $i++;
                         $count_video_presented_for_admin++;
 		} // while
@@ -533,17 +626,19 @@ else {
     
         load_modal_box(true);
     
-	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
-	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id ORDER BY title", $mysqlMainDb);
-	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id", $mysqlMainDb));
-	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id", $mysqlMainDb));
+	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb);
+	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title", $mysqlMainDb);
+	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv", $mysqlMainDb));
+	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl", $mysqlMainDb));
+        
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
 		<table width='100%' class='tbl_alt'>
 		<tr>
-                  <th colspan='2'><div align='left'>$langDirectory $langVideo</div></th>
-                  <th width='70'>$langActions</th>
-		</tr>";
+                  <th colspan='2'><div align='left'>$langDirectory $langVideo</div></th>";
+                if (!$is_in_tinymce)
+                    $tool_content .= "<th width='70'>$langActions</th>";
+                $tool_content .= "</tr>";
 		$i=0;
 		$count_video_presented=1;
 		foreach($results as $table => $result) {
@@ -557,13 +652,23 @@ else {
 						} else {
                                                     list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 						}
-                                                $link_to_add = "<td>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br /><small>" .
-                                                        q($myrow['description']) . "</small></td>";
+                                                
+                                                if ($is_in_tinymce) {
+                                                   $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
+                                                    $link_href = "<a href='$furl' id='fileURL'>". q($myrow['title']) ."</a>";
+                                                } else {
+                                                    $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
+                                                }
+
+                                                $link_to_add = "<td>". $link_href . "</td>";
                                                 $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $link_to_add = "<td>". choose_medialink_ahref(q($myrow['url']), q($myrow['title'])) ."<br />" .
-                                                        q($myrow['description']) . "</td>";
+                                                $aid = ($is_in_tinymce) ? 'fileURL' : null;
+                                                $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aid);
+                                                
+                                                $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
+
                                                 $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 						break;
 					default:
@@ -577,7 +682,8 @@ else {
 				$tool_content .= "<tr $rowClass>";
 				$tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
 				$tool_content .= $link_to_add;
-                                $tool_content .= "<td align='center'>$link_to_save</td>";
+                                if (!$is_in_tinymce)
+                                    $tool_content .= "<td align='center'>$link_to_save</td>";
 				$tool_content .= "</tr>";
 				$i++;
 				$count_video_presented++;
@@ -592,9 +698,9 @@ else {
 add_units_navigation(TRUE);
 
 if (isset($head_content)) {
-	draw($tool_content, 2, null, $head_content);
+	draw($tool_content, $menuTypeID, null, $head_content);
 } else {
-        draw($tool_content, 2);
+        draw($tool_content, $menuTypeID);
 }
 
 function select_table($table)
