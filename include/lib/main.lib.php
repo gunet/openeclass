@@ -1381,7 +1381,7 @@ function ellipsize($string, $maxlen, $postfix = '...')
 function course_code_to_title($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT intitule FROM cours WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT intitule FROM cours WHERE code=".quote($code), $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1395,7 +1395,7 @@ function course_code_to_title($code)
 function course_code_to_id($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT cours_id FROM cours WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT cours_id FROM cours WHERE code=".quote($code), $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
