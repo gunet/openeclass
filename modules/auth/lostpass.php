@@ -52,8 +52,8 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 	$userUID = isset($_GET['u'])?intval($_GET['u']):'';
 	$hash = isset($_GET['h'])?$_GET['h']:'';
 	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
-			WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
-			AND `hash` = '" . mysql_escape_string($hash) . "'
+			WHERE `user_id` = " . quote($userUID) . "
+			AND `hash` = " . quote($hash) . "
 			AND TIME_TO_SEC(TIMEDIFF(`datetime`,NOW())) < 3600
 			", $mysqlMainDb);
 
@@ -106,8 +106,8 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 	$userName = isset($_POST['userName'])?canonicalize_whitespace($_POST['userName']):'';
 	/***** If valid e-mail address was entered, find user and send email *****/
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-			WHERE email = '" . mysql_escape_string($email) . "'
-			AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
+			WHERE email = " . quote($email) . "
+			AND BINARY username = " . quote($userName), $mysqlMainDb);
 
         $found_editable_password = false;
 	if (mysql_num_rows($res) == 1) {
@@ -172,23 +172,23 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
                 if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
                         $tool_content = "<div class='caution'>
                                 <p><strong>$langAccountEmailError1</strong></p>
-                                <p>$langAccountEmailError2 $email.</p>
+                                <p>$langAccountEmailError2 ".q($email).".</p>
                                 <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
                                 <p><a href=\"../../index.php\">$langHome</a></p>";
                 } elseif (!isset($auth)) {
-                    $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>$email</strong><br/><br/><a href=\"../../index.php\">$langHome</a></div>";
+                    $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>".q($email)."</strong><br/><br/><a href=\"../../index.php\">$langHome</a></div>";
                         }
                 }
        } else {
 		$tool_content .= "<div class='caution'>
-		    <p><strong>$langAccountNotFound1 ($userName / $email)</strong></p>
+		    <p><strong>$langAccountNotFound1 (".q($userName)." / ".q($email).")</strong></p>
 		    <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
 		    <p><a href=\"../../index.php\">$langHome</a></p>";
         }
 } else {
 	$tool_content = "<div class='caution'>
 	    <p><strong>$langAccountEmailError1</strong></p>
-	    <p>$langAccountEmailError2 $email.</p>
+	    <p>$langAccountEmailError2 ".q($email).".</p>
 	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
 	    <p><a href=\"../../index.php\">$langHome</a></p>";
 }
