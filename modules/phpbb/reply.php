@@ -218,7 +218,7 @@ if (isset($_POST['submit'])) {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>
 		<fieldset>
 		   <legend></legend>     
 			<table align='left' width='99%'>
@@ -257,7 +257,7 @@ if (isset($_POST['submit'])) {
 	</ul>
     </div>";
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
 	<fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl' width='100%'>

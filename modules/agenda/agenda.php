@@ -211,16 +211,16 @@ if ($is_editor) {
 	} else {
 		$tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 		if ((!isset($addEvent) && @$addEvent != 1) || isset($_POST['submit'])) {
-			$tool_content .= "\n<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;addEvent=1'>".$langAddEvent."</a></li>";
+			$tool_content .= "\n<li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;addEvent=1'>".$langAddEvent."</a></li>";
 		}
 		$sens =" ASC";
 		$result = db_query("SELECT id FROM agenda", $currentCourseID);
 		if (mysql_num_rows($result) > 1) {
 			if (isset($_GET["sens"]) && $_GET["sens"]=="d") {
-				$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
+				$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sens=' >$langOldToNew</a></li>";
 				$sens=" DESC ";
 			} else {
-				$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
+				$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sens=d' >$langOldToNew</a></li>";
 			}
 		}
 		$tool_content .= "</ul></div>\n";
@@ -231,9 +231,9 @@ if ($is_editor) {
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 		$nameTools = $langAddEvent;
-		$navigation[] = array ("url" => $_SERVER['PHP_SELF']."?course=$code_cours", "name" => $langAgenda);
+		$navigation[] = array ("url" => $_SERVER['SCRIPT_NAME']."?course=$code_cours", "name" => $langAgenda);
 		$tool_content .= "
-		<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours' onsubmit='return checkrequired(this, \"titre\");'>
+		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' onsubmit='return checkrequired(this, \"titre\");'>
 		<input type='hidden' name='id' value='$id' />
                 <fieldset>
                   <legend>$langOptions</legend>
@@ -382,17 +382,17 @@ if (mysql_num_rows($result) > 0) {
 		if ($is_editor) {
                         $tool_content .=  "
                         <td class='right' width='70'>
-                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
                         <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
-                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
                         <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
                         if ($myrow["visibility"] == 'v') {
                                 $tool_content .= "
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
                                 <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
                         } else {
                                 $tool_content .= "
-                                <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
                                 <img src='$themeimg/invisible.png' border='0' title='".$langVisible."'></a>";
                         }
                         $tool_content .= "</td>";

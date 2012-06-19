@@ -21,7 +21,7 @@
 
 echo "<center>";
 
-$update_form = "<form method=\"POST\" action=\"$PHP_SELF\">\n"
+$update_form = "<form method=\"POST\" action=\"$SCRIPT_NAME\">\n"
              . "\t" . $text['template'] . ":&nbsp;\n"
              . "\t<select name=\"template\">\n";
 

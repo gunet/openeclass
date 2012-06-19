@@ -160,7 +160,7 @@ if ($total_categories) {
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
 			<img src='$themeimg/delete.png' title='$langDelete' /></a>";
 		}
-		$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
+		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
 		<img src='$themeimg/email$icon.png' title='$langNotify' alt='$langNotify' />
 		</a></th>
 		</tr>\n";
@@ -256,7 +256,7 @@ if ($total_categories) {
 						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
 						 <img src='$themeimg/delete.png' title='$langDelete' /></a>";
 					}
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
+					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
 					<img src='$themeimg/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
 					</td></tr>\n";
 				}

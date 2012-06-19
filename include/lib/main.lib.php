@@ -1039,7 +1039,7 @@ function display_activation_link($module_id) {
 		WHERE id ='$module_id'", $currentCourseID));
 	$newlien = str_replace("../..","","$v[lien]");
 
-	if (strpos($_SERVER['PHP_SELF'],$newlien) === FALSE) {
+	if (strpos($_SERVER['SCRIPT_NAME'],$newlien) === FALSE) {
 		return FALSE;
 	} else {
 		return TRUE;

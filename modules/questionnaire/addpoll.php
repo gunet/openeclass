@@ -155,7 +155,7 @@ function printPollCreationForm() {
 	} else {
 		$pidvar = '';
 	}
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' id='poll' method='post'>";
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post'>";
 	$tool_content .= "
         <div id=\"operations_container\">
           <ul id=\"opslist\">

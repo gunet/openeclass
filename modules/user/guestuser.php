@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
                                     'username' => $default_guest_username);
                 $submit_label = $langAdd;
         }
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
             <fieldset>
             <legend>$langUserData</legend>
         <table width='100%' class='tbl'>

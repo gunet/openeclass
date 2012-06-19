@@ -61,7 +61,7 @@
         global $langPreview, $langCancel, $langSave, $langWikiMainPage, $code_cours;
 
         // create script
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$code_cours" : $script;
         $script = add_request_variable_to_url( $script, "title", rawurlencode($title) );
 
         // set display title
@@ -180,7 +180,7 @@
     {
         global $langSave,$langEdit,$langCancel, $code_cours;
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$code_cours" : $script;
 
         $out = '<br><div><form method="POST" action="' . $script
             . '" name="previewform" id="previewform">' . "\n"
@@ -264,7 +264,7 @@
         $other_edit_checked = ( $acl['other_edit'] == true ) ? ' checked="checked"' : '';
         $other_create_checked = ( $acl['other_create'] == true ) ? ' checked="checked"' : '';
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$code_cours" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$code_cours" : $script;
 
         $form = '   <form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
               . '   <fieldset>' . "\n"
@@ -372,7 +372,7 @@
 
 
         $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button ($_SERVER['PHP_SELF'] . '?course='.$code_cours.'&amp;action=list', $langCancel) . "\n"
+            . disp_button ($_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;action=list', $langCancel) . "\n"
             ;
 
         $form .= '        </td>' . "\n"

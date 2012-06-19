@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
                 $facs[$n['id']] = $n['name'];
         }
         $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
-            <form method='post' action='$_SERVER[PHP_SELF]'>
+            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
             <fieldset>
   <legend>$langMultiRegUserData</legend>
 <table class='tbl' width='100%'>

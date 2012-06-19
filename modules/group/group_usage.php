@@ -59,7 +59,7 @@ if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits',
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 
-$base = $_SERVER['PHP_SELF'].'?course='.$code_cours.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
+$base = $_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
 
 function link_current($title, $this_type)
 {

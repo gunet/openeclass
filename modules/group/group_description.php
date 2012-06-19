@@ -49,7 +49,7 @@ if (isset($_GET['delete'])) {
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
 	list($description) = mysql_fetch_array($sql);
 	
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
 	  <table class='FormData' width='99%' align='left'>
 	  <tbody>
 	  <tr>

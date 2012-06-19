@@ -66,7 +66,7 @@ if (!isset($_POST['submit'])) {
 	} else {
 		$am_message = '';
 	}
-	@$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+	@$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
         <legend>$langUserData</legend>
 	<table width='100%' class='tbl'>
@@ -286,7 +286,7 @@ if (!isset($_POST['submit'])) {
 		foreach ($registration_errors as $error) {
 			$tool_content .= "$error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=". q($_POST['prenom_form']) ."&amp;nom_form=". $_POST['nom_form'] ."&amp;uname=". $_POST['uname'] ."&amp;email=". $_POST['email'] ."&amp;am=". $_POST['am']. "'>$langAgain</a></p>";
+		$tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?prenom_form=". q($_POST['prenom_form']) ."&amp;nom_form=". $_POST['nom_form'] ."&amp;uname=". $_POST['uname'] ."&amp;email=". $_POST['email'] ."&amp;am=". $_POST['am']. "'>$langAgain</a></p>";
 	}
 } // end of registration
 

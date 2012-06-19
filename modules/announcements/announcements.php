@@ -208,7 +208,7 @@ if ($is_editor) {
     /* display form */
     if ($displayForm and (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]?course=".$code_cours."' onsubmit=\"return checkrequired(this, 'antitle');\">
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$code_cours."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <legend>$langAnnouncement</legend>
 	<table class='tbl' width='100%'>";
@@ -251,7 +251,7 @@ if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='" . $_SERVER['PHP_SELF'] . "?course=" .$code_cours . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>
+	    <li><a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" .$code_cours . "&amp;addAnnounce=1'>" . $langAddAnn . "</a></li>
 	  </ul>
 	</div>";
     }
@@ -314,7 +314,7 @@ if ($is_editor) {
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;
 		} else {
-		    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
+		    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
 		}
 		$tool_content .= "</b><div class='smaller'>" . nice_format($myrow["temps"]). "</div>";
 		if (isset($_GET['an_id'])) {
@@ -322,30 +322,30 @@ if ($is_editor) {
 			$nameTools = q($myrow['title']);
 			$tool_content .= $content;
 		} else {
-			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
+			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
 		}
 		$tool_content .= "</td>";
 		
 		if ($is_editor) {
 			$tool_content .= "
 			<td width='70' class='right'>
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
+			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
 			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
+			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
 			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-			      <a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
+			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
 			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
 			</td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
+			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
 			    <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
 			    </a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-			    $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
+			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
 			    <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
 			    </a>";
 			}

@@ -119,7 +119,7 @@ if (!isset($_POST['submit2'])) {
                 $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
         }
         // get old contact values
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>" .
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>" .
                 "<div class='info'>" .
                 "<p>$langConfigFound" .
                 "<br>$langConfigMod</p></div>" .

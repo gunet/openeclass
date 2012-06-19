@@ -93,7 +93,7 @@ if ($u)	{
                                 $current_auth = $auth;
                         }
                 }
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+                $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
                         <fieldset>
                         <legend>$langEditAuth: ".q($info['username'])."</legend>
                         <table class='tbl' width='100%'>
@@ -127,7 +127,7 @@ if ($u)	{
               <li><a href='./listusers.php'>$langBack</a></li>";
                 $tool_content .= "</ul></div>";
                    $tool_content .= "
-                    <form name='edituser' method='post' action='$_SERVER[PHP_SELF]'>
+                    <form name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]'>
                     <fieldset>
                     <legend>$langEditUser: ".q($info['username'])."</legend>
                     <table class='tbl' width='100%'>
@@ -370,14 +370,14 @@ $tool_content .= "
 	if (empty($fname) OR empty($lname) OR empty($username)) {
 		$tool_content .= "<table width='99%'><tbody><tr>
 		<td class='caution' height='60'><p>$langFieldsMissing</p>
-		<p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+		<p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
 		draw($tool_content, 3, ' ', $head_content);
 		  exit();
 	      }
 	elseif(isset($user_exist) AND $user_exist == TRUE) {
 	       $tool_content .= "<table width='100%'><tbody><tr>
 	       <td class='caution' height='60'><p>$langUserFree</p>
-	       <p><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
+	       <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
 	       draw($tool_content, 3, null, $head_content);
 	   exit();
 	}

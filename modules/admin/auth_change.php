@@ -62,7 +62,7 @@ foreach ($auth_methods as $value) {
 }
 
 $c = count_auth_users($auth);
-$tool_content .= "<form name='authchange' method='post' action='$_SERVER[PHP_SELF]'>
+$tool_content .= "<form name='authchange' method='post' action='$_SERVER[SCRIPT_NAME]'>
 <fieldset>
 <legend>".get_auth_info($auth)." ($langNbUsers: $c)</legend>
 <table width='100%' class='tbl'><tr>

@@ -146,7 +146,7 @@ if(isset($_POST['ump_id']))
 ?>
 </head>
 <body>
-   <form name="cmiForm" method="POST" action="<?php echo $_SERVER["PHP_SELF"]."?course=$code_cours" ?>"> 
+   <form name="cmiForm" method="POST" action="<?php echo $_SERVER["SCRIPT_NAME"]."?course=$code_cours" ?>"> 
 	<input type="hidden" name="ump_id" />
 	<input type="hidden" name="lesson_status" />
 	<input type="hidden" name="lesson_location" />

@@ -257,7 +257,7 @@ else
 	if ( $auth != 6) {
 		$auth_data = get_auth_settings($auth);
 	}
-	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[PHP_SELF]'>
+	$tool_content .= "<form name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>
 	<legend>".get_auth_info($auth)."</legend>
 	<table width='100%' class='tbl'><tr>

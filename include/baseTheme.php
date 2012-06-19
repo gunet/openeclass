@@ -261,10 +261,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				if (display_activation_link($module_id)) {
 					if (visible_module($module_id)) {
 						$message = $langDeactivate;
-						$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+						$mod_activation = "<a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
 					} else {
 						$message = $langActivate;
-						$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+						$mod_activation = "<a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$currentCourseID&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
 					}
 				}
 			}
@@ -557,7 +557,7 @@ function lang_selections() {
         if (count($GLOBALS['active_ui_languages']) < 2) {
                 return ('&nbsp;');
         }
-        $html = '<form name="langform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
+        $html = '<form name="langform" action="' . $_SERVER ['SCRIPT_NAME'] . '" method="get" >';
         $html .= lang_select_options('localize', 'onChange="document.langform.submit();"');
         $html .= '</form>';
         return $html;

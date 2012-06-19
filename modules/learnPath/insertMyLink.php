@@ -209,7 +209,7 @@ function showlinks()
 	$numberoflinks=mysql_num_rows($result);
 
     $output = "
-<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='POST'>
+<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='POST'>
                       <table width='100%' class='tbl_alt'>
                     
                       <tr>

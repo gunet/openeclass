@@ -196,21 +196,21 @@ while ($cu = mysql_fetch_array($sql)) {
                 $cunits_content .= "\n        <th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
                         "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
-                        "\n        <a href='$_SERVER[PHP_SELF]?del=$cu[id]' " .
+                        "\n        <a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
                         "<img src='$themeimg/delete.png' " .
                         "title='$langDelete' /></a>" .
-                        "\n        <a href='$_SERVER[PHP_SELF]?vis=$cu[id]'>" .
+                        "\n        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
                         "<img src='$themeimg/$icon_vis' " .
                         "title='$langVisibility' /></a></th>";
                 if ($cu['id'] != $last_id) {
-                        $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[PHP_SELF]?down=$cu[id]'>" .
+                        $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
                         "<img src='$themeimg/down.png' title='$langDown' /></a>";
                 } else {
                         $cunits_content .= "\n        <th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "\n        <a href='$_SERVER[PHP_SELF]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "\n        <a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
                 } else {
                         $cunits_content .= "\n        &nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
@@ -331,7 +331,7 @@ $tool_content .= "
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
              <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
-             <a href='$_SERVER[PHP_SELF]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
+             <a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
             <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
             </td>                     
         </tr>        

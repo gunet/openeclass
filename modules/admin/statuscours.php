@@ -77,7 +77,7 @@ else {
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
 	
-	$tool_content .= "<form action=".$_SERVER['PHP_SELF']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
+	$tool_content .= "<form action=".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
 <fieldset>
 	<legend>".$langCourseStatusChange."</legend>
 	<table class='tbl' width='100%'>";

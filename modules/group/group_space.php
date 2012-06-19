@@ -63,7 +63,7 @@ if ($is_editor or $is_tutor) {
         $tool_content .= "<li><a href='group_edit.php?course=$code_cours&amp;group_id=$group_id'>$langEditGroup</a></li>\n";
 } elseif ($self_reg and isset($uid) and !$is_member) {
 	if ($max_members == 0 or $member_count < $max_members) {
-		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
+		$tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;registration=1&amp;group_id=$group_id'>$langRegIntoGroup</a></li>\n";
 	}
 } elseif (isset($regDone)) {
         $tool_content .= "$message&nbsp;";

@@ -74,9 +74,9 @@ if($search == 'yes')	{ // coming from search_user.php (search with criteria)
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='$_SERVER[PHP_SELF]?search=yes'>$langAllUsers</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]?search=yes'>$langAllUsers</a></li>
       <li><a href='search_user.php'>$langSearchUser</a></li>
-      <li><a href='$_SERVER[PHP_SELF]?search=inactive'>$langInactiveUsers</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]?search=inactive'>$langInactiveUsers</a></li>
     </ul>
   </div>";
 
@@ -374,7 +374,7 @@ if($countUser > 0) {
                 $pagination_link .= "&amp;ord=$ord";
         }
         if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE                        
-                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$pagination_link");
+                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[SCRIPT_NAME]", "$pagination_link");
         }
         $qry .= " ORDER BY $order LIMIT $limit, ".USERS_PER_PAGE."";
         mysql_free_result($sql);
@@ -383,11 +383,11 @@ if($countUser > 0) {
         $tool_content .= "
         <table class='tbl_alt' width='100%'>
         <tr>
-          <th colspan='2' width='150'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=n$header_link'>$langSurname</a></div></th>
-          <th width='100'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=p$header_link'>$langName</a></div></th>
-          <th width='170'><div align='left'><a href='$_SERVER[PHP_SELF]?ord=u$header_link'>$langUsername</a></div></th>
+          <th colspan='2' width='150'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=n$header_link'>$langSurname</a></div></th>
+          <th width='100'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=p$header_link'>$langName</a></div></th>
+          <th width='170'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=u$header_link'>$langUsername</a></div></th>
           <th scope='col'>$langEmail</th>
-          <th scope='col'><a href='$_SERVER[PHP_SELF]?ord=s$header_link'>$langProperty</a></th>
+          <th scope='col'><a href='$_SERVER[SCRIPT_NAME]?ord=s$header_link'>$langProperty</a></th>
           <th scope='col' colspan='4'>$langActions</th>
         </tr>";
         $k = 0;
@@ -449,7 +449,7 @@ if($countUser > 0) {
         }
         $tool_content .= "</table> <br><div class='right smaller'>".$caption."</div>";
         if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
-                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[PHP_SELF]", "$pagination_link");
+                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[SCRIPT_NAME]", "$pagination_link");
         }  
 } else {
         $tool_content .= "<p class='caution'>$langNoSuchUsers</p>";

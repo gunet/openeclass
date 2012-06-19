@@ -129,7 +129,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         } else {
                 $titleform = $langAdminAddAnn;
         }
-	$navigation[] = array("url" => "$_SERVER[PHP_SELF]", "name" => $langAdminAn);
+	$navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
 	$nameTools = $titleform;
 	
 	if (!isset($contentToModify)) {
@@ -139,7 +139,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 		$titleToModify = "";
 	}
 
-        $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>";
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>";
 	if (isset($_GET['modify'])) {
 		$tool_content .= "<input type='hidden' name='id' value='$id' />";
 	}
@@ -244,7 +244,7 @@ if ($displayAnnouncementList == true) {
         if (!isset($_GET['addAnnounce'])) {
                 $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
-                $tool_content .= "<a href='".$_SERVER['PHP_SELF']."?addAnnounce=1'>".$langAdminAddAnn."</a>";
+                $tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?addAnnounce=1'>".$langAdminAddAnn."</a>";
                 $tool_content .= "</li></ul></div>\n";
         }
         if ($announcementNumber > 0) {
@@ -278,23 +278,23 @@ if ($displayAnnouncementList == true) {
 			$tool_content .= "<td width='180'><b>".q($myrow['title'])."</b><br><span class='smaller'>$myrow[date]</span></td>\n";
 			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>\n";
 			$tool_content .= "<td width='60'>
-			<a href='$_SERVER[PHP_SELF]?modify=$myrow[id]'>
+			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow[id]'>
 			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
 			</a> 
-			<a href='$_SERVER[PHP_SELF]?delete=$myrow[id]' onClick='return confirmation();'>
+			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick='return confirmation();'>
 			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
 			
-			<a href='$_SERVER[PHP_SELF]?id=$myrow[id]&amp;vis=$visibility'>
+			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow[id]&amp;vis=$visibility'>
 			<img src='$themeimg/$icon' title='$langVisibility'/></a>";
 			if ($announcementNumber > 1) {
 				$tool_content .= "<td align='right' width='40'>";
 			}
 			if ($iterator != 1) {
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?up=" . $myrow["id"] . "'>
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=" . $myrow["id"] . "'>
 				<img class='displayed' src='$themeimg/up.png' title='" . $langUp . "' /></a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?down=" . $myrow["id"] . "'>
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow["id"] . "'>
 				<img class='displayed' src='$themeimg/down.png' title='" . $langDown . "' /></a>";
 			}
 			$tool_content .= "</td>\n</tr>\n";

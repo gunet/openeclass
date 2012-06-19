@@ -97,7 +97,7 @@ while($row = mysql_fetch_array($r1)) {
         $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
                 $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[PHP_SELF]?delete=1&amp;aid=".$row['user_id']."'>
+                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=".$row['user_id']."'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
                         </td>";
@@ -127,7 +127,7 @@ function printform ($message) {
     global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
             $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData;
         
-    $ret = "<form method='post' name='makeadmin' action='$_SERVER[PHP_SELF]'>";
+    $ret = "<form method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
     $ret .= "
         <fieldset>
         <legend>$langUserFillData</legend>

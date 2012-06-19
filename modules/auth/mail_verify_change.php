@@ -84,7 +84,7 @@ elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_veri
 	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
 	
-$tool_content .= "<br /><br /><form method='post' action='$_SERVER[PHP_SELF]'>
+$tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
                 <legend>$langUserData</legend>
                 <table class='tbl' with='100%'>

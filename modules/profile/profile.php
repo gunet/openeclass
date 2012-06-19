@@ -58,7 +58,7 @@ if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
 }
 
 function redirect_to_message($id) {
-        header('Location: ' . $_SERVER['PHP_SELF'] . '?msg=' . $id);
+        header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?msg=' . $id);
         exit();
 }
 

@@ -426,7 +426,7 @@ function user_info_form()
         }
 
         $tool_content .= "
-        <form action='$_SERVER[PHP_SELF]' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]' method='post'>
         " . ($init_auth? "<p class='success'>$langTheUser $ldapfound.</p>": '') .
         ($_SESSION['was_validated']['uname_exists']? "<p class='caution'>$langUserFree</p>": '') . "
         <fieldset>

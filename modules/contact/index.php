@@ -84,7 +84,7 @@ function form()
 		$hidden = '';
 	}
 	
-	$ret = "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+	$ret = "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>
 	$hidden

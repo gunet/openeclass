@@ -134,7 +134,7 @@ function display_add_block_form()
         }
 
         $tool_content .= "
-        <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
         <input type='hidden' name='add' value='1' />
         <fieldset>
           <legend>$langAddCat</legend>

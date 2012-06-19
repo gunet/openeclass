@@ -72,7 +72,7 @@ function printPollForm() {
 	
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
-	<form action='$_SERVER[PHP_SELF]?course=$code_cours' id='poll' method='post'>
+	<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post'>
 	<input type='hidden' value='2' name='UseCase' />
 	<input type='hidden' value='$pid' name='pid' />
 

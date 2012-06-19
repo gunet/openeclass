@@ -123,7 +123,7 @@ if (mysql_num_rows($q) == 0) {
       </ul>
     </div>
     
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
     <fieldset>
     <legend>$langEBook</legend>
       <table width='100%' class='tbl_alt'>
@@ -143,7 +143,7 @@ if (mysql_num_rows($q) == 0) {
 
         // Form #2 - edit sections
         $tool_content .= "
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
     <fieldset>
     <legend>$langSections</legend>
     <input type='hidden' name='id' value='$ebook_id' />

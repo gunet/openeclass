@@ -54,7 +54,7 @@ if (isset($_GET['add'])) {
 		$tool_content .= "<br /><a href='adduser.php?course=$code_cours'>$langAddBack</a></p><br />\n";
 
 } else {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>";
+	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>";
         register_posted_variables(array('search_nom' => true,
                                         'search_prenom' => true,
                                         'search_uname' => true), 'any');
@@ -125,7 +125,7 @@ if (isset($_GET['add'])) {
                                     }
                                     $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
                                                      q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
-                                                     <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                                     <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
                                     $i++;
                             }
                             $tool_content .= "</table>";

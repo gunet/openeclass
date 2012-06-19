@@ -41,7 +41,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 			$tool_content .=  "<p><b>$langConfirm</b></p>\n";
 			$tool_content .=  "<ul class=\"listBullet\">\n";
 			$tool_content .=  "<li>$langYes: ";
-			$tool_content .=  "<a href='$_SERVER[PHP_SELF]?doit=yes'>$langDelete</a>";
+			$tool_content .=  "<a href='$_SERVER[SCRIPT_NAME]?doit=yes'>$langDelete</a>";
 			$tool_content .=  "</li>\n";
 			$tool_content .=  "<li>$langNo: <a href='../profile/profile.php'>$langBack</a>";
 			$tool_content .=  "</li>\n        </ul>";

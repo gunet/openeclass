@@ -57,5 +57,5 @@ if (isset($_REQUEST['username'])) {
         }
 } 
 
-$tool_content .= "<legend><form action='$_SERVER[PHP_SELF]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
+$tool_content .= "<legend><form action='$_SERVER[SCRIPT_NAME]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
 draw($tool_content, 3);

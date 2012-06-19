@@ -145,10 +145,10 @@ if(!$nbrExercises) {
 		$prevpage = $page - 1;
 		$nextpage = $page + 1;
 		if ($prevpage >= 0) {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
+			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
 		}
 		if ($nextpage < $maxpage) { 
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
+			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
 		}
 	}
 
@@ -223,25 +223,25 @@ if(!$nbrExercises) {
 			$tool_content .= "<td align = 'right'>
 			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
 			  </a>
-				<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
+				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
 			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
 			  </a>";
 		
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
-					$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
+					$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
 					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			} else { // else if not active
 				if (isset($page)) {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				} else {
-					$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;choice=enable&amp;exerciseId=".$row['id']."'>
+					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;exerciseId=".$row['id']."'>
 					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			}

@@ -173,7 +173,7 @@ if ($is_editor) { // course admin
 	
 		if (($myrow["forum_type"] == 1) && !$user_logged_in && !$logging_in) {
 			// Private forum, no valid session, and login form not submitted...
-			$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+			$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>
 			<table width='100%' class='tbl'>
 			<tr><td>$langPrivateNotice</td></tr>
 			<tr><td>
@@ -244,7 +244,7 @@ if ($is_editor) { // course admin
 		// Special handling for </textarea> tags in the message, which can break the editing form..
 		$message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
 		list($day, $time) = explode(' ', $myrow["post_time"]);
-		$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
+		$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=$post_id&amp;forum=$forum' method='post'>
         <fieldset>
         <legend>$langReplyEdit </legend>
  <table width='100%' class='tbl'>

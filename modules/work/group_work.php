@@ -76,7 +76,7 @@ function show_assignments()
 		return;
 	}
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>
 		<input type='hidden' name='file' value='".q($_GET['submit'])."'>
 		<input type='hidden' name='group_id' value='$group_id'>
 	    <table class='tbl' width='99%'>

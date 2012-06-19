@@ -85,7 +85,7 @@ else
 	}
 	$_GET['cc'] = htmlspecialchars($_GET['cc']);
 	$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">$langReturn</a></p>";
-	$tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."?fc=".$_GET['fc']."\" method=\"post\">
+	$tool_content .= "<form action=\"".$_SERVER['SCRIPT_NAME']."?fc=".$_GET['fc']."\" method=\"post\">
 <table width=\"99%\"><thead>";
 	$tool_content .= "<tr><th>Όνομα:</th><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";
 	$tool_content .= "<tr><th>Επίθετο:</th><td><input type=\"text\" name=\"lastname\" value=\"".$row["prenom"]."\" readonly></td></tr>";

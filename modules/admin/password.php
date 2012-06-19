@@ -101,6 +101,6 @@ draw($tool_content, 3);
 function mes($message, $urlText, $type) {
 	global $urlServer, $langBack, $userid;
 
- 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></p>";
+ 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
 	return $str;
 }

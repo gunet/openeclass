@@ -158,21 +158,21 @@ function tools($id, $title, $k, $num, $vis)
         } else {
                 $icon_vis = $vis? 'visible.png': 'invisible.png';
                 $num--;
-                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>\n" .
+                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
                        "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;vis=$id'>
+                       "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$id'>
                            <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
                         </form></td><td class='right' width='40'>" .
-                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;down=$id'>
+                       (($k < $num)? "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
                                      '') . 
-                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;up=$id'>
+                       (($k > 0)? "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":
                                   '') . "</td>\n";

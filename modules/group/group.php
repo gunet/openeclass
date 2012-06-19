@@ -242,9 +242,9 @@ if ($is_editor) {
         <div id='operations_container'>
           <ul id='opslist'>
             <li><a href='group_creation.php?course=$code_cours' title='$langNewGroupCreate'>$langCreate</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
           </ul>
         </div>";
 
@@ -390,7 +390,7 @@ if ($is_editor) {
                   <td class='center'>
                         <a href='group_edit.php?course=$code_cours&amp;group_id=$group[id]'>
                         <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
-                        <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
                         <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
                 </tr>";

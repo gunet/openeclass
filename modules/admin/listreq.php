@@ -34,7 +34,7 @@ function confirmation() {
 }
 </script>';
 
-$basetoolurl = $_SERVER['PHP_SELF'];
+$basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
         $list_statut = 5;
         $nameTools = $langUserOpenRequests;
@@ -73,8 +73,8 @@ switch ($show) {
       <div id='operations_container'>
         <ul id='opslist'>
 	  <li><a href='newuseradmin.php$linkget'>$linkreg</a></li>
-          <li><a href='$_SERVER[PHP_SELF]?show=closed$reqtype'>$langReqHaveClosed</a></li>
-          <li><a href='$_SERVER[PHP_SELF]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
+          <li><a href='$_SERVER[SCRIPT_NAME]?show=closed$reqtype'>$langReqHaveClosed</a></li>
+          <li><a href='$_SERVER[SCRIPT_NAME]?show=rejected$reqtype'>$langReqHaveBlocked</a></li>
         </ul>
       </div>";
 
@@ -110,7 +110,7 @@ if (!empty($show) and $show == 'closed') {
             		$tool_content .= "<td align='center'>
 				<small>".nice_format(date('Y-m-d', strtotime($req['date_closed'])))."</small></td>";
 			$tool_content .= "<td align='center'>
-			<a href='$_SERVER[PHP_SELF]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
+			<a href='$_SERVER[SCRIPT_NAME]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a></td>\n  </tr>";
 			$k++;
 		}
 	}
@@ -149,7 +149,7 @@ if (!empty($show) and $show == 'closed') {
                 	$tool_content .= "<td align='center'>
 				<small>".nice_format(date('Y-m-d', strtotime($req['date_closed'])))."</small></td>";
 			$tool_content .= "<td align=center>
-			<a href='$_SERVER[PHP_SELF]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a>
+			<a href='$_SERVER[SCRIPT_NAME]?id=$req[id]&amp;show=closed$reqtype'>$langRestore</a>
 			</td></tr>";
 			$k++;
 		}
@@ -200,7 +200,7 @@ $langEmail: $emailhelpdesk";
                                               FROM user_request WHERE id = $id");
 			$d = mysql_fetch_assoc($r);
                         $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
-			$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+			$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 			<div class='alert1'>$warning</div>
 			<table width='100%' class='tbl_border'>
 			<tr><th class='left'>$langName</th>
@@ -302,7 +302,7 @@ else
 // If show is set then we return to listreq, else return to admin index.php
 //if (isset($close) or isset($closed)) {
 if (!empty($show) or !empty($close)) {
-	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]$linkget'>$langBackRequests</a></p><br>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]$linkget'>$langBackRequests</a></p><br>";
 }
 $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
 

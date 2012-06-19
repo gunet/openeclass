@@ -67,7 +67,7 @@ hContent;
 	if (isset($_GET['forumgo'])) {
 		$ctg = category_name($cat_id);
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
+		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
 		<fieldset>
 		  <legend>$langAddForCat</legend>    
 		  <table class='tbl' width='100%'>
@@ -98,7 +98,7 @@ hContent;
                                            FROM forums WHERE forum_id = $forum_id", $currentCourseID);
 		list($forum_id, $forum_name, $forum_desc, $forum_access, $cat_id_1, $forum_type) = mysql_fetch_row($result);
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
+		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
 		<input type='hidden' name='forum_id' value='$forum_id'>
 		<fieldset>
 		  <legend>$langChangeForum</legend>
@@ -140,7 +140,7 @@ hContent;
 		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
 		$tool_content .= "
-  		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
+  		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
     		<input type='hidden' name='cat_id' value='$cat_id'>
                 <fieldset>
                 <legend>$langModCatName</legend>
@@ -248,7 +248,7 @@ hContent;
                                   <p>&laquo; <a href='index.php?course=$code_cours'>$langBack</a></p>";
 	} else {
                 $tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'catagories');\">
+		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'catagories');\">
                 <fieldset>
                 <legend>$langAddCategory</legend>
 		<table class='tbl' width='100%'>

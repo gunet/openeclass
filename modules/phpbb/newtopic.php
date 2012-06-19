@@ -203,7 +203,7 @@ if (isset($_POST['submit'])) {
 	exit;
 } else {
 	$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
         <fieldset>
           <legend>$langTopicData</legend>
 	  <table class='tbl' width='100%'>

@@ -116,7 +116,7 @@ if (isset($_POST["submit"])) {
 				}
 				$tool_content .= "
                             <td>&nbsp;<img src='$themeimg/arrow.png' />&nbsp;
-				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
+				<a href='$_SERVER[SCRIPT_NAME]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a>&nbsp;
 				<span class='smaller'>($fac[code])</span>";
 				$n = db_query("SELECT COUNT(*) FROM cours
 					WHERE faculteid = $fac[id] AND (cours.visible = '1' OR cours.visible = '2')");
@@ -136,7 +136,7 @@ if (isset($_POST["submit"])) {
 		$numofcourses = getdepnumcourses($fc);
 		// display all the facultes collapsed
 		$tool_content .= collapsed_facultes_horiz($fc);
-		$tool_content .= "\n    <form action='$_SERVER[PHP_SELF]' method='post'>";
+		$tool_content .= "\n    <form action='$_SERVER[SCRIPT_NAME]' method='post'>";
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "<br />
@@ -359,7 +359,7 @@ function collapsed_facultes_horiz($fc) {
 
 	global $langSelectFac;
 
-	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
+	$retString = "\n   <form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
 	$retString .= dep_selection($fc);

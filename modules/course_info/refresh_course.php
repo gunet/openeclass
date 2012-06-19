@@ -75,7 +75,7 @@ if(isset($_POST['submit'])) {
         $head_content .= $jscalendar->get_load_files_code();
         $datetoday = date("Y-n-j",time());
 	
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$code_cours' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>
 	<table width='100%' class=\"FormData\">
 	<tbody>
 	<tr>

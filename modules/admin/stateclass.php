@@ -51,30 +51,30 @@ $tool_content .= "<div id='operations_container'>
 // Actions
 $tool_content .= "<table class='tbl_alt' width='100%'>
 	<tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=login'>$langNbLogin</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=login'>$langNbLogin</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=users'>$langUsers</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=users'>$langUsers</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=percourse'>$langUsersPerCourse</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=percourse'>$langUsersPerCourse</a></td>
 	</tr>
 	<tr>
 	<th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=cours'>$langStatCour</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=cours'>$langStatCour</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td>
-	<a href='$_SERVER[PHP_SELF]?stats=musers'>$langMultipleUsers</a></td>
+	<a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=memail'>$langMultipleAddr e-mail</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
-	<td><a href='$_SERVER[PHP_SELF]?stats=vmusers'>$langMailVerification</a></td>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=vmusers'>$langMailVerification</a></td>
 	</tr>
 	</table>";
 

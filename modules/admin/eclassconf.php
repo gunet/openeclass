@@ -194,7 +194,7 @@ else {
 		$titleextra = " ($langRestoredValues)";
 		@include("../../config/config_backup.php");
 	}
-        $tool_content .= "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"post\">";
+        $tool_content .= "<form action=\"".$_SERVER['SCRIPT_NAME']."\" method=\"post\">";
 	$tool_content .= "<fieldset><legend>$langFileEdit</legend>";	
 	$tool_content .= "
 	<table class='tbl' width=\"100%\">

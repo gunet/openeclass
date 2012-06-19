@@ -120,7 +120,7 @@ foreach (array('previous', 'next') as $i) {
         if ($q and mysql_num_rows($q) > 0) {
                 list($q_id, $q_title) = mysql_fetch_row($q);
                 $q_title = htmlspecialchars($q_title);
-                $link[$i] = "$arrow1<a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;id=$q_id'>$q_title</a>$arrow2";
+                $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$q_id'>$q_title</a>$arrow2";
         } else {
                 $link[$i] = '&nbsp;';
         }

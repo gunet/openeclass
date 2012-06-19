@@ -130,7 +130,7 @@ else {
         //$tool_content .= "<p class='success'>".$caption."</p>";
 	if ($fulllistsize > COURSES_PER_PAGE ) {
 		// Display navigation in pages
-		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[PHP_SELF]");
+		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
 	}
 }
 
@@ -209,7 +209,7 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$tool_content .= "\n    <p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
 } elseif ($fulllistsize > COURSES_PER_PAGE) {
 	// Display navigation in pages
-	$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[PHP_SELF]");
+	$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
 }
 
 }

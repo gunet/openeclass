@@ -1219,7 +1219,7 @@ else // if method == 'post'
       UPLOAD FORM
      --------------------------------------*/
     $tool_content .= "
-    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['PHP_SELF']."?course=$code_cours\" method=\"post\">
+    <form enctype=\"multipart/form-data\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours\" method=\"post\">
     <fieldset>
     <legend>$langImport</legend>
     <table width=\"100%\" class=\"tbl\">

@@ -364,7 +364,7 @@ function directory_selection($source_value, $command, $entryToExclude)
         }
 	$dirList = directory_list();
 	$dialogBox = "
-	<form action='$_SERVER[PHP_SELF]$groupset' method='post'>
+	<form action='$_SERVER[SCRIPT_NAME]$groupset' method='post'>
 	<fieldset>
 	<input type='hidden' name='source' value='$source_value'>
         <table class='tbl' width='99%'>

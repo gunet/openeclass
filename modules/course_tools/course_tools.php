@@ -167,7 +167,7 @@ if (isset($_POST['submit'])) {
                 $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
                 if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                 or empty($link) or empty($name_link))  {
-                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
+                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                         exit();
                 }
@@ -215,7 +215,7 @@ if (isset($_POST['submit'])) {
                         $tool_content .= "  <p class='success'>$langOkSent</p>\n";
                 } else {
                         $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "  <a href='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
+                        $tool_content .= "  <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
                         draw($tool_content, 2);
                 }
         }
@@ -225,7 +225,7 @@ if (isset($_POST['submit'])) {
         $helpTopic = 'Import';
 
         $tool_content .= "\n 
-            <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data'>
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
 
@@ -258,7 +258,7 @@ if (isset($_POST['submit'])) {
         $navigation[]= array ('url' => 'course_tools.php?course='.$code_cours, 'name' => $langToolManagement);
         $helpTopic = 'Module';
         $tool_content .=  "
-          <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours&amp;action=2'>
+          <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=2'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -318,7 +318,7 @@ $tool_content .= "
 </div>";
 
 $tool_content .= <<<tForm
-<form name="courseTools" action="$_SERVER[PHP_SELF]?course=$code_cours" method="post" enctype="multipart/form-data">
+<form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$code_cours" method="post" enctype="multipart/form-data">
 <table class="tbl_border" width="100%">
 <tr>
 <th width="45%" class="center">$langInactiveTools</th>

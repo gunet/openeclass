@@ -157,7 +157,7 @@ if ($submit)  {
 	}
 	
 	@$tool_content .= "
-      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>
       <legend>$langNewProf</legend>
 	<table width='100%' class='tbl'>

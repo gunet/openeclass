@@ -100,7 +100,7 @@ $langEmail : $emailhelpdesk
 	$tool_content .= "<p class='success'>$emailsuccess</p>";
 } else {
         // Display form to administrator
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>
         <legend>$langMessage</legend>
 	<table class='tbl' width='100%'>

@@ -81,7 +81,7 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 } elseif ((!isset($email) || !isset($userName) || empty($userName)) && !isset($_POST['do'])) {
 	/***** Email address entry form *****/
 	$tool_content .= "<div class='info'><p>$lang_pass_intro</p></div><br />";
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]'>
+	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
           <legend>$langUserData</legend>
 	  <table class='tbl' width='100%'>

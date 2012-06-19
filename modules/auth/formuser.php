@@ -201,7 +201,7 @@ if ($all_set) {
         $phone_star = $prof? '&nbsp;&nbsp;(*)': '';
 	$tool_content .= "<p>" .
                 ($prof? $langInfoProfReq: $langInfoStudReq) . "</p><br />
-        <form action='$_SERVER[PHP_SELF]' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]' method='post'>
          <input type='hidden' name='p' value='$prof'>
          <fieldset>
           <legend>$langUserData</legend>

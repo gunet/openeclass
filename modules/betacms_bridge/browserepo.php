@@ -78,7 +78,7 @@ else {
 		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
 		$tool_content .= "<p class=\"caution\">$langFieldsMissing</p>
-			<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+			<br/><br/><p align=\"right\"><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>";
 	}
 	else {
 		$repo = array(
@@ -94,7 +94,7 @@ else {
 			$tool_content .= "<p class=\"caution\">".
 				$GLOBALS['langFailConnectBetaCMSBridge'].
 				"</p>".
-				"<br/><br/><p align=\"right\"><a href='$_SERVER[PHP_SELF]'>$langAgain</a></p>";
+				"<br/><br/><p align=\"right\"><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>";
 			draw($tool_content,3);
 			die();
 		}
@@ -157,7 +157,7 @@ draw($tool_content,3);
 // HELPER FUNCTIONS
 
 function repoForm() {
-	return "<form action='$_SERVER[PHP_SELF]' method='post'>
+	return "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 	<table width='99%' align='left' class='FormData'>
 	<tbody><tr>
 	<th width='220'>&nbsp;</th>

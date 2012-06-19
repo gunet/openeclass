@@ -62,7 +62,7 @@ $statsIntervalOptions =
     '<option value="summary" '.(($u_interval=='summary')?('selected'):('')).'>'.$langSummary."</option>\n";
 
 $tool_content .= '
-<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$code_cours.'">
+<form method="post" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'">
 <fieldset>
   <legend>'.$langUsageVisits.'</legend>
   <table class="tbl">

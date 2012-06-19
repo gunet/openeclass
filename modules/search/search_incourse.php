@@ -63,7 +63,7 @@ if(empty($search_terms)) {
 	
 	// display form
 	$tool_content .= "
-	    <form method='post' action='$_SERVER[PHP_SELF]'>
+	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
 	    <fieldset>
 	    <legend>$langSearchCriteria</legend>
 	    <table width='100%' class='tbl'>
@@ -99,7 +99,7 @@ if(empty($search_terms)) {
 	$tool_content .= "
         <div id=\"operations_container\">
 	  <ul id='opslist'>
-	    <li><a href='$_SERVER[PHP_SELF]'>$langNewSearch</a></li>
+	    <li><a href='$_SERVER[SCRIPT_NAME]'>$langNewSearch</a></li>
 	  </ul>
 	</div>";
 	$tool_content .= "

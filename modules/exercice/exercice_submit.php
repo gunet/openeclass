@@ -241,7 +241,7 @@ $tool_content .= "
 
   <br />
 
-  <form method='post' action='$_SERVER[PHP_SELF]?course=$code_cours'>
+  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	

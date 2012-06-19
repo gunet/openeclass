@@ -52,7 +52,7 @@ if($submit) {
         }
 		  $verified_mail = isset($_REQUEST['verified_mail_form'])?intval($_REQUEST['verified_mail_form']):2;
 
-        $backlink = $_SERVER['PHP_SELF'] .
+        $backlink = $_SERVER['SCRIPT_NAME'] .
                     isset($rid)? ('?id=' . intval($rid)): '';
 
         // check if user name exists
@@ -166,7 +166,7 @@ $langEmail : $emailhelpdesk
         }
 
         $tool_content .= "
-      <form action='$_SERVER[PHP_SELF]' method='post'>
+      <form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>
       <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>

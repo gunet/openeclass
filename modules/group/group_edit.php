@@ -197,7 +197,7 @@ $tool_content .= "
 
 
 $tool_content .="
-  <form name='groupedit' method='post' action='".$_SERVER['PHP_SELF']."?course=$code_cours&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+  <form name='groupedit' method='post' action='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
     <fieldset>
     <legend>$langGroupInfo</legend>
     <table width='99%' class='tbl'>
