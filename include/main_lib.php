@@ -302,8 +302,8 @@ function load_js($file, $init = '')
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
-                $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-1.8.20.custom.css' />\n";
-                $file = 'jquery-ui-1.8.20.custom.min.js';
+                $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-1.8.21.custom.css' />\n";
+                $file = 'jquery-ui-1.8.21.custom.min.js';
         } elseif ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='$urlAppend/js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
