@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,8 +26,6 @@ $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-
-mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBookEdit;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);
@@ -123,7 +121,7 @@ if (mysql_num_rows($q) == 0) {
       </ul>
     </div>
     
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
     <legend>$langEBook</legend>
       <table width='100%' class='tbl_alt'>
@@ -143,7 +141,7 @@ if (mysql_num_rows($q) == 0) {
 
         // Form #2 - edit sections
         $tool_content .= "
-    <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
     <legend>$langSections</legend>
     <input type='hidden' name='id' value='$ebook_id' />

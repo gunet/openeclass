@@ -98,7 +98,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
 {
         $id = $_GET['id'];
         $videoPath = $urlServer ."video/". $course_code . $id;
-        $videoURL = "$_SERVER[PHP_SELF]?course=$course_code&amp;action=download&amp;id=". $id;
+        $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
         
         if (strpos($videoPath, '/../') === FALSE) {
                 echo media_html_object($videoPath, $videoURL);
@@ -156,7 +156,7 @@ $diskUsed = dir_total_space($updir);
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	$nameTools = $langQuotaBar;
-	$navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$course_code", 'name' => $langVideo);
+	$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -223,7 +223,7 @@ if (isset($_POST['add_submit'])) {  // add
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
 					$tool_content .= "<p class='caution'>$langNoSpace<br />
-						<a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p><br />";
+						<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
 						draw($tool_content, 2, null, $head_content);
 						exit;
 				} else {
@@ -234,7 +234,7 @@ if (isset($_POST['add_submit'])) {  // add
 					// check for dangerous file extensions
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
-						$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p><br />";
+						$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
 						draw($tool_content, 2, null, $head_content);
 						exit;
 					}
@@ -245,7 +245,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$iscopy = copy("$tmpfile", "$updir/$safe_filename");
 					if(!$iscopy) {
 						$tool_content .= "<p class='success'>$langFileNot<br />
-						<a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p><br />";
+						<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
 						draw($tool_content, 2, null, $head_content);
 						exit;
 					}
@@ -293,7 +293,7 @@ if (isset($_POST['add_submit'])) {  // add
 		$nameTools = $langAddV;
 		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
-              <form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
+              <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
               <fieldset>
               <legend>$langAddV</legend>
 		<table width='100%' class='tbl'>
@@ -338,7 +338,7 @@ if (isset($_POST['add_submit'])) {  // add
 		$nameTools = $langAddVideoLink;
 		$navigation[] = array ('url' => "video.php?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
-		<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
+		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
                 <legend>$langAddVideoLink</legend>
 		<table width='100%' class='tbl'>
@@ -397,7 +397,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$nameTools = $langModify;
 		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
-                <form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
+                <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
                 <legend>$langModify</legend>
                 <table width='100%' class='tbl'>";
@@ -446,9 +446,9 @@ if (!isset($_GET['form_input'])) {
           $tool_content .= "
           <div id='operations_container'>
 	  <ul id='opslist'>
-	    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
-	    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
-	    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
+	    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file'>$langAddV</a></li>
+	    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url'>$langAddVideoLink</a></li>
+	    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
 	  </ul>
 	</div>";
 }
@@ -514,7 +514,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                    </td>
                                    $link_to_add
                                    <td align='right'>
-                                      $link_to_save<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=".$myrow['id']."&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=".$myrow['id']."&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape($langConfirmDelete ." ". $myrow['title'])."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
+                                      $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow['id']."&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow['id']."&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape($langConfirmDelete ." ". $myrow['title'])."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
                                    </td>
                                 </tr>";
                         $i++;

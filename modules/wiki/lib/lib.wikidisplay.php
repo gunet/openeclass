@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,7 +61,7 @@
         global $langPreview, $langCancel, $langSave, $langWikiMainPage, $course_code;
 
         // create script
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$course_code" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$course_code" : $script;
         $script = add_request_variable_to_url( $script, "title", rawurlencode($title) );
 
         // set display title
@@ -180,7 +180,7 @@
     {
         global $langSave,$langEdit,$langCancel, $course_code;
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$course_code" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$course_code" : $script;
 
         $out = '<br><div><form method="POST" action="' . $script
             . '" name="previewform" id="previewform">' . "\n"
@@ -264,7 +264,7 @@
         $other_edit_checked = ( $acl['other_edit'] == true ) ? ' checked="checked"' : '';
         $other_create_checked = ( $acl['other_create'] == true ) ? ' checked="checked"' : '';
 
-        $script = ( is_null( $script ) ) ? $_SERVER['PHP_SELF']."?course=$course_code" : $script;
+        $script = ( is_null( $script ) ) ? $_SERVER['SCRIPT_NAME']."?course=$course_code" : $script;
 
         $form = '   <form method="POST" id="wikiProperties" action="'.$script.'">' . "\n"
               . '   <fieldset>' . "\n"
@@ -372,7 +372,7 @@
 
 
         $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button ($_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;action=list', $langCancel) . "\n"
+            . disp_button ($_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;action=list', $langCancel) . "\n"
             ;
 
         $form .= '        </td>' . "\n"

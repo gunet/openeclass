@@ -153,7 +153,7 @@ if (isset($_POST['submit'])) {
             </ul>
         </div>";
 
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
 	<fieldset>
         <legend>$langTopicAnswer: $topic_title</legend>
 	<table class='tbl' width='100%'>

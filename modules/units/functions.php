@@ -801,7 +801,7 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                 $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
         } else {
                 $icon_vis = ($status == 1)? 'visible.png': 'invisible.png';
-                $edit_link = "$_SERVER[PHP_SELF]?course=$course_code&amp;edit=$resource_id";
+                $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
         }
 
         if ($status != 'del') {
@@ -810,18 +810,18 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         } else {
                 $content = "<td width='3'>&nbsp;</td>";
         }
-        $content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;del=$resource_id'" .
+        $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id'" .
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='$themeimg/delete.png' " .
                     "title='$langDelete'></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
-			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;vis=$resource_id'>" .
+			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
                                     "title='$langVisibility'></a></td>";
 		} elseif(in_array($res_type, array('description'))) { 
-			$content .= "<td width='3'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;vis=$resource_id'>" .
+			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
                                     "title='$langAddToCourseHome'></a></td>";
 		} else {
@@ -832,13 +832,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                 $content .= "<td width='3'>&nbsp;</td>";
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
-                $content .= "<td width='12'><div align='right'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;down=$resource_id'>" .
+                $content .= "<td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id'>" .
                             "<img src='$themeimg/down.png' title='$langDown'></a></div></td>";
 	} else {
 		$content .= "<td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
-                $content .= "<td width='12'><div align='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;up=$resource_id'>" .
+                $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id'>" .
                             "<img src='$themeimg/up.png' title='$langUp'></a></div></td>";
         } else {
                 $content .= "<td width='12'>&nbsp;</td>";

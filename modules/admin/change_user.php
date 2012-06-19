@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -64,5 +64,5 @@ if (isset($_REQUEST['username'])) {
         }
 } 
 
-$tool_content .= "<legend><form action='$_SERVER[PHP_SELF]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
+$tool_content .= "<legend><form action='$_SERVER[SCRIPT_NAME]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
 draw($tool_content, 3);

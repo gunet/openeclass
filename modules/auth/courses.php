@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -168,7 +168,7 @@ hContent;
 		$numofcourses = getdepnumcourses($fc);
 		// display all the facultes collapsed
 		$tool_content .= collapsed_facultes_horiz($fc);
-		$tool_content .= "\n    <form action='$_SERVER[PHP_SELF]' method='post'>";
+		$tool_content .= "\n    <form action='$_SERVER[SCRIPT_NAME]' method='post'>";
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "<br />
@@ -178,7 +178,7 @@ hContent;
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
 				<tr>
-				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc, true, $_SERVER['PHP_SELF'].'?fc=') ."</th>
+				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</th>
 				</tr></table><br />";
                                 
                                 $tool_content .= departmentChildren($fc, 'courses');
@@ -239,7 +239,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
     $retString .= "<table width='100%' class='tbl_border'>
                    <tr>
-                   <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th></tr></table><br/>";
+                   <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th></tr></table><br/>";
     
     $retString .= departmentChildren($facid, 'courses');
 
@@ -347,7 +347,7 @@ function collapsed_facultes_horiz($fc) {
 
 	global $langSelectFac, $tree, $head_content;
         
-	$retString = "\n   <form name='depform' action='$_SERVER[PHP_SELF]' method='get'>\n";
+	$retString = "\n   <form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="fc" onChange="document.depform.submit();"', 'defaults' => $fc, 'tree' => null, 'useKey' => 'id', 'where' => 'AND node.allow_course = true', 'multiple' => false));

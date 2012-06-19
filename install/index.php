@@ -114,7 +114,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$phpSysInfoURL = '../admin/sysinfo/';
         $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'])? 'https://': 'http://') .
                    $_SERVER['SERVER_NAME'] .
-                   str_replace('/install/index.php', '/', $_SERVER['PHP_SELF']);
+                   str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$nameForm = $langDefaultAdminName;
 	$loginForm = 'admin';
@@ -231,7 +231,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 	$langStepTitle = $langLicence;
 	$langStep = $langStep2;
 	$_SESSION['step'] = 2;
-	$tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
              <table width='100%' class='tbl'>
                    <tr><td>$langInfoLicence</td></tr>
                 <tr><td><textarea cols='92' rows='15' class='FormData_InputText'>" .
@@ -254,7 +254,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$tool_content .= "
 	<div>$langWillWrite $langDBSettingIntro</div>
 	<br />
-        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
 	<tr>
 	  <th width='220' class='left'>$langdbhost</th>
@@ -293,7 +293,7 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
                 $helpdeskmail = '';
         }
 	$tool_content .= "
-                <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+                <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
                 <table width='100%' class='tbl smaller'>
                 <tr><th class='left' width='220'>$langSiteUrl</th>
                     <td>".text_input('urlForm', 40)."&nbsp;&nbsp;(*)</td></tr>
@@ -355,7 +355,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	$langStep = $langStep5;
 	$_SESSION['step'] = 5;
 	$tool_content .= "<div>$langWillWriteConfig</div><br />
-        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 	<table width='100%' class='tbl smaller'>
 	  <tr>
 		<th class='left' width='550'><b>$lang_email_required</b></th>
@@ -449,7 +449,7 @@ elseif(isset($_REQUEST['install6']))
 	}
 
 	$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+        <form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 	<div>$langReviewSettings</div> <br />
 		<table width='100%' class='tbl smaller'>
 	<tr>
@@ -554,7 +554,7 @@ elseif(isset($_REQUEST['install7']))
 		<li>$langDBPassword: " . q($dbPassForm) . "</li>
 		</ul>
 		<p>$langBackStep3_2</p><br />
-		<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+		<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
 		<input type='submit' name='install3' value='&lt; $langBackStep3' />"
 		. hidden_vars($all_vars) .
 		"</form>";
@@ -607,7 +607,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step'] = 1;
 	$configErrorExists = false;
 
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>";
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
 
 	// create config, courses and video catalogs
         mkdir_or_error('config');
@@ -686,12 +686,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
                   <li>$langWizardHelp3</li>
                </ul></td></tr>
         <tr>
-          <th><div>$langChooseLang:</div> <form name='langform' action='$_SERVER[PHP_SELF]' method='post' class='form_field'>" .
+          <th><div>$langChooseLang:</div> <form name='langform' action='$_SERVER[SCRIPT_NAME]' method='post' class='form_field'>" .
                       selection($langLanguages, 'lang', $lang, 'onChange="document.langform.submit();"') .
                       "</form></th>
         </tr>
         <tr>
-          <td colspan='2' align='right'><form action='$_SERVER[PHP_SELF]?alreadyVisited=1' method='post'>
+          <td colspan='2' align='right'><form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
             <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
             <input type='hidden' name='lang' value='$lang' />
             <input type='submit' name='install1' value='$langNextStep &raquo;' />

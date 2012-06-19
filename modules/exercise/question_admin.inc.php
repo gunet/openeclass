@@ -1,5 +1,4 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +24,7 @@
 if(isset($usedInSeveralExercises)) {
 	@$tool_content .= "
 	<h3>$questionName</h3>
-	<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
+	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
 	<table class='tbl' width='100%'><tr><td>";
 
 	// submit question
@@ -101,7 +100,7 @@ if(isset($usedInSeveralExercises)) {
         <legend>$langQuestion &nbsp;";
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
-                $tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;modifyQuestion=".$questionId."\">
+                $tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;modifyQuestion=".$questionId."\">
                 <img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
         }
 
@@ -122,7 +121,7 @@ if(isset($usedInSeveralExercises)) {
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
-		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;modifyAnswers=$questionId'>
+		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyAnswers=$questionId'>
 		<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
 	}
         $tool_content .= "<br/></th>

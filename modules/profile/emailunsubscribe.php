@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
         }        
         
 } else {
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>";
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
         if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
                 $user_email_status = get_mail_ver_status($uid);
                 if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or

@@ -50,7 +50,7 @@ $nameTools = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['action'])) {
-    $navigation[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langHierarchyActions);
+    $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'], 'name' => $langHierarchyActions);
     switch ($_GET['action']) {
         case 'add':
             $nameTools = $langNodeAdd;
@@ -68,7 +68,7 @@ if (isset($_GET['action'])) {
 $tool_content .= "
     <div id='operations_container'>
      <ul id='opslist'>
-      <li><a href='$_SERVER[PHP_SELF]?action=add'>".$langAdd."</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]?action=add'>".$langAdd."</a></li>
      </ul>
     </div>";
 

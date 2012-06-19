@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,7 +40,6 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array ('url' => 'edituser.php', 'name'=> $langEditUser);
 
 check_uid();
-$tool_content = "";
 
 if (!isset($urlSecure)) {
 	$passurl = $urlServer.'modules/admin/password.php';
@@ -101,6 +100,6 @@ draw($tool_content, 3);
 function mes($message, $urlText, $type) {
 	global $urlServer, $langBack, $userid;
 
- 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[PHP_SELF]?userid=$userid'>$langBack</a></p>";
+ 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
 	return $str;
 }

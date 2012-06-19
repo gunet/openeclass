@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -54,7 +54,7 @@ if (isset($_GET['add'])) {
 		$tool_content .= "<br /><a href='adduser.php?course=$course_code'>$langAddBack</a></p><br />\n";
 
 } else {
-	$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>";
+	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         register_posted_variables(array('search_nom' => true,
                                         'search_prenom' => true,
                                         'search_uname' => true), 'any');
@@ -125,7 +125,7 @@ if (isset($_GET['add'])) {
                                     }
                                     $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
                                                      q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
-                                                     <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
                                     $i++;
                             }
                             $tool_content .= "</table>";

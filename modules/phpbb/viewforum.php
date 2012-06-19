@@ -94,7 +94,7 @@ if (isset($_GET['start'])) {
 }
 
 if ($total_topics > $topics_per_page) { // navigation
-	$base_url = "$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;start=";
+	$base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
 	$tool_content .= "<table width='100%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
@@ -246,17 +246,17 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td class='center'>";
 		if ($is_editor) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick='return confirmation()'>
+			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick='return confirmation()'>
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
 		}
 		if (isset($_GET['start']) and $_GET['start'] > 0) {
 			$tool_content .= "
-			<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
+			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		} else {
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
+			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[id]'>
 			<img src='$themeimg/email$topic_icon.png' title='$langNotify' />
 			</a>";
 		}

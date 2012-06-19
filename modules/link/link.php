@@ -121,20 +121,20 @@ if ($is_editor) {
 
 	$tool_content .="<div id='operations_container'><ul id='opslist'>";
 	if (isset($category)) {
-		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
+		$tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink&amp;category=$category&amp;urlview=$urlview'>$langLinkAdd</a></li>";
         } else {
-		$tool_content .=  "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
+		$tool_content .=  "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink'>$langLinkAdd</a></li>";
         }
 	if (isset($urlview)) {
-		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
+		$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory&amp;urlview=$urlview'>$langCategoryAdd</a></li>";
         } else {
-		$tool_content .= "<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
+		$tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory'>$langCategoryAdd</a></li>";
         }
         $tool_content .=  "</ul></div>";
 
 	// Display the correct title and form for adding or modifying a category or link.
         if (in_array($action, array('addlink', 'editlink'))) {
-                $tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
                 if ($action == 'editlink') {
                         $tool_content .= "<input type='hidden' name='id' value='$id' />";
                         link_form_defaults($id);
@@ -179,7 +179,7 @@ if ($is_editor) {
                       </form>";
 
         } elseif (in_array($action, array('addcategory', 'editcategory'))) {
-                $tool_content .=  "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&urlview=$urlview'>\n";
+                $tool_content .=  "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>\n";
                 if ($action == 'editcategory') {
                         $tool_content .= "<input type='hidden' name='id' value='$id' />";
                         category_form_defaults($id);
@@ -228,10 +228,10 @@ if (mysql_num_rows($resultcategories) > 0) {
 		<tr>
 		  <td class='bold'>$langCategorisedLinks</td>
 		  <td width='1'><img src='$themeimg/folder_closed.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) .
 	              "'>$shownone</a></td>
 		  <td width='1'><img src='$themeimg/folder_open.png' title='$showall' /></td>
-		  <td width='60'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) .
+		  <td width='60'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) .
 		      "'>$showall</a></td>
 		</tr>
                 </table>";
@@ -272,7 +272,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .= "
                 <tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=$newurlview'>".q($myrow['name'])."</a>";
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
                         }
@@ -287,7 +287,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .=  "
 		<tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;urlview=";
+		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .=  "'>" . q($myrow['name']) . "</a>";
 		        $description = standard_text_escape($myrow['description']);

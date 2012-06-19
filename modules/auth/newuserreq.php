@@ -35,8 +35,6 @@ load_js('jstree');
 $nameTools = $langNewUser;
 $navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
 
-// Initialise $tool_content
-$tool_content = "";
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 // ----------------------------
 // register user
@@ -52,9 +50,9 @@ if($submit) {
   $departments = isset($_POST['department']) ? $_POST['department'] : array();
   $localize = isset($_POST['localize'])?$_POST['localize']:'';
   $lang = langname_to_code($localize);	
-
+die($lang);
       // check if user name exists
-  $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
+  $username_check = db_query("SELECT username FROM user WHERE username='$uname'");
   while ($myusername = mysql_fetch_array($username_check)) {
     $user_exist=$myusername[0];
   }
@@ -104,7 +102,7 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
     $expires_at = time() + get_config('account_duration');
 
     $password_encrypted = md5($password);
-    $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
+    $inscr_user = db_query("INSERT INTO user
       (user_id, nom, prenom, username, password, email, statut, registered_at, expires_at, lang)
       VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$registered_at', '$expires_at', '$lang')");
     $uid = mysql_insert_id();
@@ -124,16 +122,10 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 //---------------------------
 // 	display form
 // ---------------------------
-
-if (isset($_GET['lang'])) {
-	$lang = $_GET['lang'];
-	$lang = langname_to_code($language);
-}
-
-$tool_content .= "<table width=\"99%\"><tbody>
+$tool_content .= "<table width='100%'><tbody>
    <tr>
     <td>
-    <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();'>
+    <form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
     <table border=0 cellpadding='1' cellspacing='2' border='0' width='100%' align=center>
 	<thead>
     <tr>

@@ -144,7 +144,7 @@ function commentBox($type, $mode)
                       WHERE " . $where_cond;
             $oldComment = db_query_get_single_value($sql);
 
-            $output .= "<form method='POST' action='$_SERVER[PHP_SELF]?course=$course_code'>
+            $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 ".rich_text_editor('insertCommentBox', 1, 50, $oldComment)." 
                 <input type='hidden' name='cmd' value='update$col_name' />
                 <input type='submit' value=$langSubmit /></form>";
@@ -190,7 +190,7 @@ function commentBox($type, $mode)
             if ( $is_editor )
             {
                 $output .= '' . "\n"
-                .    '<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
+                .    '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
                 .    $langAdd . '</a>' . "\n"
                 ;
             }
@@ -202,10 +202,10 @@ function commentBox($type, $mode)
             // display edit and delete links if user as the right to see it
             if ( $is_editor )
             {
-                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
+                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=update' . $col_name . '">' . "\n"
                 .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
                 .    '</a>' . "\n"
-                .    '<a href="' . $_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;cmd=del' . $col_name . '" '
+                .    '<a href="' . $_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
                 .    "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>\n";
             }
@@ -293,7 +293,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
             $oldName = db_query_get_single_value($sql, $mysqlMainDb);
 
             $output .= '
-      <form method="POST" action="' . $_SERVER['PHP_SELF'].'?course='.$course_code.'">' . "\n";
+      <form method="POST" action="' . $_SERVER['SCRIPT_NAME'].'?course='.$course_code.'">' . "\n";
 
              if($formlabel != FALSE)
              	//$output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
@@ -329,7 +329,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
         $output .=  $currentName;
 
         if ($is_editor)
-            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmd=updateName">'
+            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=updateName">'
             .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
     }
 
@@ -646,7 +646,7 @@ function display_my_exercises($dialogBox, $style)
     {
         $output .= disp_message_box($dialogBox, $style).'<br />'."\n";
     }
-    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;cmdglobal=add">'."\n";
+    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmdglobal=add">'."\n";
     $output .= '    <table width="99%" class="tbl_alt">'."\n"
     .    '    <tr>'."\n"
     .    '      <th><div align="left">'
@@ -779,7 +779,7 @@ function display_my_documents($dialogBox, $style)
     $cmdParentDir  = rawurlencode($parentDir);
 
     $output .= '
-    <form action="' . $_SERVER['PHP_SELF'] . '?course='.$course_code.'" method="POST">';
+    <form action="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'" method="POST">';
 
     /*--------------------------------------
     DIALOG BOX SECTION
@@ -804,7 +804,7 @@ function display_my_documents($dialogBox, $style)
     if ($curDirName) /* if the $curDirName is empty, we're in the root point
     and we can't go to a parent dir */
     {
-        $linkup = "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;openDir=$cmdParentDir'>";
+        $linkup = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;openDir=$cmdParentDir'>";
         $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
                         "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
                    "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
@@ -872,7 +872,7 @@ function display_my_documents($dialogBox, $style)
                 $image       = 'folder.png';
                 $size        = '&nbsp;';
                 $date        = '&nbsp;';
-                $urlFileName = '<a href="'. $_SERVER['PHP_SELF'] . '?course='.$course_code.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
+                $urlFileName = '<a href="'. $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;openDir=' . $cmdFileName .'">'.$dspFileName.'</a>';
             }
 
             $output .= '
@@ -1718,7 +1718,7 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 	$prevpage = $currentpage - 1;
 	$nextpage = $currentpage + 1;
 
-	$url = basename($_SERVER['PHP_SELF'])."?course=$course_code";
+	$url = basename($_SERVER['SCRIPT_NAME'])."?course=$course_code";
 
 	switch($_SERVER['argc']) {
 		case 0:

@@ -65,7 +65,7 @@ hContent;
 if (isset($_GET['forumgo'])) {
         $ctg = category_name($cat_id);
         $tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <fieldset>
                 <legend>$langAddForCat</legend>    
                 <table class='tbl' width='100%'>
@@ -98,7 +98,7 @@ elseif (isset($_GET['forumgoedit'])) {
                                         AND course_id = $cours_id");
         list($forum_id, $forum_name, $forum_desc, $cat_id_1) = mysql_fetch_row($result);
         $tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
         <input type='hidden' name='forum_id' value='$forum_id'>
         <fieldset>
                 <legend>$langChangeForum</legend>
@@ -138,7 +138,7 @@ elseif (isset($_GET['forumcatedit'])) {
                                 AND course_id = $cours_id");
         list($cat_id, $cat_title) = mysql_fetch_row($result);
         $tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
         <input type='hidden' name='cat_id' value='$cat_id'>
         <fieldset>
         <legend>$langModCatName</legend>
@@ -238,7 +238,7 @@ elseif (isset($_GET['forumcatdel'])) {
 // delete forum
 elseif (isset($_GET['forumgodel'])) {
         $nameTools = $langDelete;
-        $navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?course=$course_code", "name"=> $langCatForumAdmin);
+        $navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $langCatForumAdmin);
         $result = db_query("SELECT id FROM forum WHERE id = $forum_id AND course_id = $course_id");
         while(list($forum_id) = mysql_fetch_row($result)) {
                 db_query("DELETE FROM forum_post WHERE forum_id = $forum_id");
@@ -253,7 +253,7 @@ elseif (isset($_GET['forumgodel'])) {
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
 } else {
         $tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">
         <fieldset>
         <legend>$langAddCategory</legend>
         <table class='tbl' width='100%'>

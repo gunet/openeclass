@@ -166,7 +166,7 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add'))
 
 $result = db_query(buildRequestModules());
 
-$tool_content .= '    <form name="addmodule" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;cmdglobal=add">'."\n\n";
+$tool_content .= '    <form name="addmodule" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;cmdglobal=add">'."\n\n";
 $tool_content .= '    <table width="100%" class="tbl_alt">'."\n"
        .'    <tr>'."\n"
        .'      <th><div align="left">'

@@ -79,7 +79,7 @@ if ($is_editor or $is_tutor)  {
 		$tool_content .= "<a href='group.php?course=$course_code'>$langBack</a></p>";
 	} else {
 		$tool_content .= "
-		<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
+		<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
 		<fieldset>
 		<legend>$langTypeMessage</legend>
 		<input type='hidden' name='group_id' value='$group_id'>

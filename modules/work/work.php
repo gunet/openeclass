@@ -112,7 +112,7 @@ $nameTools = $langWorks;
 // main program
 //-------------------------------------------
 
-$works_url = array('url' => "$_SERVER[PHP_SELF]?course=$course_code", 'name' => $langWorks);
+$works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
 
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
@@ -138,7 +138,7 @@ if ($is_editor) {
                 $id = intval($_REQUEST['id']);
                 $work_title = db_query_get_single_value("SELECT title FROM assignment
                                                                 WHERE id = $id");
-                $work_id_url = array('url' => "$_SERVER[PHP_SELF]?course=$course_code&id=$id",
+                $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id",
                                      'name' => $work_title);
                 if (isset($_POST['on_behalf_of'])) {
                         if (isset($_POST['user_id'])) {
@@ -201,7 +201,7 @@ if ($is_editor) {
                 if (isset($_POST['work_submit'])) {
                         $nameTools = $m['SubmissionStatusWorkInfo'];
                         $navigation[] = $works_url;
-                        $navigation[] = array('url' => "$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id", 'name' => $m['WorkView']);
+                        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $m['WorkView']);
                         submit_work($id);
                 } else {
                         $nameTools = $m['WorkView'];
@@ -308,7 +308,7 @@ function submit_work($id, $on_behalf_of = null)
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
         $nav[] = $works_url;
-        $nav[] = array('url' => "$_SERVER[PHP_SELF]?id=$id", 'name' => $row['title']);
+        $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $row['title']);
 
         if ($submit_ok) {
                 if ($group_sub) {
@@ -337,7 +337,7 @@ function submit_work($id, $on_behalf_of = null)
 
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
                         $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                        $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                        $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
                         return;
                 }
                 $secret = work_secret($id);
@@ -403,12 +403,12 @@ function submit_work($id, $on_behalf_of = null)
                                         grade_email_notify($id, $sid, $email_grade, $email_comments);
                                 }
                         }
-                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id'>$langBack</a></p><br />";
+                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBack</a></p><br />";
                 } else {
-                        $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p><br />";
+                        $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p><br />";
                 }
         } else { // not submit_ok
-                $tool_content .="<p class='caution'>$langExerciseNotPermit<br /><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p></br>";
+                $tool_content .="<p class='caution'>$langExerciseNotPermit<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p></br>";
         }
 }
 
@@ -426,7 +426,7 @@ function new_assignment()
 	$year	= date("Y");
 
 	$tool_content .= "
-        <form action='$_SERVER[PHP_SELF]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
         <fieldset>
         <legend>$m[WorkInfo]</legend>
         <table class='tbl' width='100%'>
@@ -455,7 +455,7 @@ function new_assignment()
         </fieldset>
         </form>
         <br />";
-        $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p>";
+        $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 
@@ -473,7 +473,7 @@ function show_edit_assignment($id)
 	$description = q($row['description']);
         $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 	$tool_content .= <<<cData
-    <form action="$_SERVER[PHP_SELF]?course=$course_code" method="post" onsubmit="return checkrequired(this, 'title');">
+    <form action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" onsubmit="return checkrequired(this, 'title');">
     <input type="hidden" name="id" value="$id" />
     <input type="hidden" name="choice" value="do_edit" />
     <fieldset>
@@ -524,7 +524,7 @@ cData;
     </fieldset>
     </form>";
 
-    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</ul></div>";
+    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</ul></div>";
 }
 
 // edit assignment
@@ -535,7 +535,7 @@ function edit_assignment($id)
                 $langEditError, $course_code, $works_url, $course_id;
 
 	$nav[] = $works_url;
-	$nav[] = array("url"=>"$_SERVER[PHP_SELF]?id=$id", "name"=> $_POST['title']);
+	$nav[] = array("url"=>"$_SERVER[SCRIPT_NAME]?id=$id", "name"=> $_POST['title']);
 
         $title = autoquote(trim($_POST['title']));
         $description = quote(purify($_POST['desc']));
@@ -555,7 +555,7 @@ function edit_assignment($id)
                                 deadline = $deadline 
                         WHERE course_id = $course_id AND id='$id'")) {
                 $title = autounquote($_POST['title']);
-                $tool_content .= "<p class='success'>$langEditSuccess<br /><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a></p><br />";
+                $tool_content .= "<p class='success'>$langEditSuccess<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a></p><br />";
                 
                 Log::record(MODULE_ID_ASSIGN, LOG_MODIFY, 
                         array('id' => $id,
@@ -564,7 +564,7 @@ function edit_assignment($id)
                         'deadline' => $deadline,                      
                         'group' => $group_submissions));
 	} else {
-                $tool_content .="<p class='caution'>$langEditError<br /><a href='$_SERVER[PHP_SELF]?course=$course_code&id=$id'>$langBackAssignment '$title'</a></p><br />";
+                $tool_content .="<p class='caution'>$langEditError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id'>$langBackAssignment '$title'</a></p><br />";
 	}
 }
 
@@ -582,7 +582,7 @@ function delete_assignment($id) {
         Log::record(MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id));
         
 	$tool_content .= "<p class='success'>$langDeleted<br />
-                        <a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p>";
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 
@@ -624,7 +624,7 @@ function show_student_assignment($id)
 		show_submission_form($id, $user_group_info);
 	}
 	$tool_content .= "<br/>
-            <p align='right'><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p>";
+            <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 
@@ -666,7 +666,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
                                      <td><input type='checkbox' value='1' id='email_button' name='email'></td></tr>": '';
         if (!$is_group_assignment or count($user_group_info)) {
                 $tool_content .= "
-                     <form enctype='multipart/form-data' action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
+                     <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
                         <fieldset>
                         <legend>$langSubmit</legend>
@@ -706,11 +706,11 @@ function assignment_details($id, $row, $message = null)
             $tool_content .= "
             <div id='operations_container'>
               <ul id='opslist'>
-              <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" .
+              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" .
                 js_escape($row['title']) . "\");'>$langDelAssign</a></li>
-                <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
-		<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
-		<li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
+		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
+		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
               </ul>
             </div>";
 	}
@@ -724,7 +724,7 @@ function assignment_details($id, $row, $message = null)
         <legend>".$m['WorkInfo'];
         if ($is_editor) {
                 $tool_content .= "&nbsp;
-                 <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$id&amp;choice=edit'>
+                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
                  <img src='$themeimg/edit.png' alt='$m[edit]' />
                  </a>";
         }
@@ -795,10 +795,10 @@ function sort_link($title, $opt, $attrib = '')
 			$r = 1;
 		}
 		$tool_content .= "
-                  <th $attrib><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sort=$opt&rev=$r$i'>" ."$title</a></th>";
+                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" ."$title</a></th>";
 	} else {
 		$tool_content .= "
-                  <th $attrib><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
+                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
 	}
 }
 
@@ -886,7 +886,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                                      ORDER BY $order $rev");
 
                         $tool_content .= "
-                  <form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>
+                  <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                     <input type='hidden' name='grades_id' value='$id' />
                     <p><div class='sub_title1'>$langSubmissions:</div><p>
                     <p>$num_of_submissions</p>
@@ -919,7 +919,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                         $row_color = "class='odd'";
                                 }
                                 $filelink = empty($row['file_name'])? '&nbsp;':
-                                        ("<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;get=$row[id]'>" .
+                                        ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row[id]'>" .
                                          q($row['file_name']) . "</a>");
                                 $tool_content .= "
 		  <tr $row_color>
@@ -996,7 +996,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                       <p class='alert1'>$langNoSubmissions</p>";
         }
 	$tool_content .= "<br/>
-                <p align='right'><a href='$_SERVER[PHP_SELF]?course=$course_code'>$langBack</a></p>";
+                <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 
@@ -1030,7 +1030,7 @@ function show_student_assignments()
                         $tool_content .= "
                                 <tr class='$class'>
                                     <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
-                                    <td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$row[id]'>$title_temp</a></td>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]'>$title_temp</a></td>
                                     <td width='150' align='center'>".nice_format($row['deadline'], TRUE);
                         if ($row['time'] > 0) {
                                 $tool_content .= " (<span>$langDaysLeft".format_time_duration($row['time']).")</span>";
@@ -1087,7 +1087,7 @@ function show_assignments($message = null)
 	$tool_content .="
             <div id='operations_container'>
               <ul id='opslist'>
-                <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;add=1'>$langNewAssign</a></li>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1'>$langNewAssign</a></li>
               </ul>
             </div>";
 
@@ -1129,24 +1129,24 @@ function show_assignments($message = null)
 
 			$tool_content .= "
 			  <td><img src='$themeimg/arrow.png' alt=''>
-			      <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=${row['id']}' ";
+			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=${row['id']}' ";
 			$tool_content .= ">";
 			$tool_content .= $row_title = q($row['title']);
                         $tool_content .= "</a></td>
 			  <td class='center'>$num_submitted</td>
 			  <td class='center'>$num_ungraded</td>
 			  <td class='center'>".nice_format($row['deadline'], true)."</td>
-			  <td class='right'><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
+			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
+			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
 			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
 			} else {
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
 			}
 			$tool_content .= "&nbsp;</td></tr>";
                         $index++;

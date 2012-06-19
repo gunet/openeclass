@@ -224,7 +224,7 @@ $local_head = $jscalendar->get_load_files_code();
         '<option value="duration" '.(($u_stats_value=='duration')?('selected'):('')) .'>'.$langDuration."</option>\n";
 
     $tool_content .= '
-    <form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
+    <form method="post" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'">
     <fieldset>
      <legend>'.$langFavourite.'</legend>
      <table class="tbl">

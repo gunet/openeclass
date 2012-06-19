@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
         $profile_options = array(0 => $langModern,
                                  1 => $langClassic);
         $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
-        <form method='post' action='$_SERVER[PHP_SELF]' onsubmit='return validateNodePickerForm();' >
+        <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
         <fieldset>
         <legend>$langMultiRegUserData</legend>
         <table class='tbl' width='100%'>

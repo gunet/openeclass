@@ -79,7 +79,7 @@ hContent;
 
 $titulaire_probable = "$_SESSION[prenom] $_SESSION[nom]";
 
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[PHP_SELF]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'titulaires');\">";
+$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'titulaires');\">";
 
 if (get_config("betacms")) { // added support for betacms
 	// Import from BetaCMS Bridge

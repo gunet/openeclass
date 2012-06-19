@@ -48,7 +48,7 @@ $lang_editor = langname_to_code($language);
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
                 $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
-                                  <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$course_code'>$langAgain</a></p>";
+                                  <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
                         $newlang = $language = $_POST['localize'];
@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
                 // Check if the teacher is allowed to create in the departments he chose
                 if (!$deps_valid) {
                     $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
-                                      <p>&laquo; <a href='$_SERVER[PHP_SELF]?course=$course_code'>$langAgain</a></p>";
+                                      <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
                 } else {
                     
                     db_query("UPDATE course
@@ -99,7 +99,7 @@ if (isset($_POST['submit'])) {
                     $course->refresh($course_id, $departments);
 
                     $tool_content .= "<p class='success'>$langModifDone</p>
-                            <p>&laquo; <a href='".$_SERVER['PHP_SELF']."?course=$course_code'>$langBack</a></p>
+                            <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code'>$langBack</a></p>
                             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
                 }
         }
@@ -130,7 +130,7 @@ if (isset($_POST['submit'])) {
 	$password = q($c['password']);
 
 	$tool_content .="
-	<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code' onsubmit='return validateNodePickerForm();'>
+	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
 	<table class='tbl' width='100%'>

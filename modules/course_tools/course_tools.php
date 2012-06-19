@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -106,7 +106,7 @@ if (isset($_POST['submit'])) {
                 $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
                 if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                 or empty($link) or empty($name_link))  {
-                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
+                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                         exit();
                 }
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
                         $tool_content .= "<p class='success'>$langOkSent</p>\n";
                 } else {
                         $tool_content .= "<p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=1'>$langHome</a></p><br />";
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=1'>$langHome</a></p><br />";
                         draw($tool_content, 2);
                 }
         }
@@ -146,7 +146,7 @@ if (isset($_POST['submit'])) {
         $helpTopic = 'Import';
 
         $tool_content .= "\n 
-            <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;submit=yes&action=1' enctype='multipart/form-data'>
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;submit=yes&action=1' enctype='multipart/form-data'>
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
               <fieldset>
@@ -177,7 +177,7 @@ if (isset($_POST['submit'])) {
         $navigation[]= array ('url' => 'course_tools.php?course='.$course_code, 'name' => $langToolManagement);
         $helpTopic = 'Module';
         $tool_content .=  "
-          <form method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>
+          <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -219,13 +219,13 @@ if (is_array($toolArr)) {
 $tool_content .= "
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=1'>$langUploadPage</a></li>
-    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;action=2'>$langAddExtLink</a></li>
+    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=1'>$langUploadPage</a></li>
+    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langAddExtLink</a></li>
   </ul>
 </div>";
 
 $tool_content .= <<<tForm
-<form name="courseTools" action="$_SERVER[PHP_SELF]?course=$course_code" method="post" enctype="multipart/form-data">
+<form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
 <table class="tbl_border" width="100%">
 <tr>
 <th width="45%" class="center">$langInactiveTools</th>
@@ -281,7 +281,7 @@ while ($externalLinks = mysql_fetch_array($sql)) {
         $tool_content .= "<th width='1'>
         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
         <td class='left'>$externalLinks[title]</td>
-        <td align='center'><form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+        <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks[id]' />
            <input type='image' src='$themeimg/delete.png' name='delete_button' 
                   onClick=\"return confirmation('" .

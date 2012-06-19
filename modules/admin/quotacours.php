@@ -85,7 +85,7 @@ else {
 	$drq = $q['dropbox_quota'] / MB;
 	
 	$tool_content .= "
-	<form action='$_SERVER[PHP_SELF]?c=".q($_GET['c'])."' method='post'>
+	<form action='$_SERVER[SCRIPT_NAME]?c=".q($_GET['c'])."' method='post'>
         <fieldset>
             <legend>".$langQuotaAdmin."</legend>
             <table width='100%' class='tbl'>

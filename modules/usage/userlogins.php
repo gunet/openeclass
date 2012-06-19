@@ -226,7 +226,7 @@ $start_cal = $jscalendar->make_input_field(
     }
 
 $tool_content .= '
-<form method="post" action="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'">
+<form method="post" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'">
 <fieldset>
   <legend>'.$langUserLogins.'</legend>
 

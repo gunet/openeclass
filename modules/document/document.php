@@ -381,7 +381,7 @@ if ($can_upload) {
                                                    path = " . autoquote($_GET['rename']));
                 $res = mysql_fetch_array($result);
                 $fileName = $res['filename'];
-                $dialogBox .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+                $dialogBox .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='sourceFile' value='" .
                         q($_GET['rename']) . "' />
                 $group_hidden_input

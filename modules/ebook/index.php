@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,8 +34,6 @@ require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_EBOOK);
 /**************************************/
-
-mysql_select_db($mysqlMainDb);
 
 $nameTools = $langEBook;
 
@@ -158,21 +156,21 @@ function tools($id, $title, $k, $num, $vis)
         } else {
                 $icon_vis = $vis? 'visible.png': 'invisible.png';
                 $num--;
-                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[PHP_SELF]?course=$course_code' method='post'>\n" .
+                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$course_code&amp;id=$id'>" .
                        "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
                        "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;vis=$id'>
+                       "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id'>
                            <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
                         </form></td><td class='right' width='40'>" .
-                       (($k < $num)? "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;down=$id'>
+                       (($k < $num)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
                                      '') . 
-                       (($k > 0)? "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;up=$id'>
+                       (($k > 0)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":
                                   '') . "</td>\n";

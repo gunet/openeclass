@@ -59,7 +59,7 @@ Code:<br />
   $valid = $img->check($_POST['code']);
 
   if($valid == true) {
-    echo "<center>Thanks, you entered the correct code.<br />Click <a href=\"{$_SERVER['PHP_SELF']}\">here</a> to go back.</center>";
+    echo "<center>Thanks, you entered the correct code.<br />Click <a href=\"{$_SERVER['SCRIPT_NAME']}\">here</a> to go back.</center>";
   } else {
     echo "<center>Sorry, the code you entered was invalid.  <a href=\"javascript:history.go(-1)\">Go back</a> to try again.</center>";
   }

@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -68,7 +68,7 @@ $icons = array(
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>
-                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, true, $_SERVER['PHP_SELF'].'?fc=') ."</b></th>
+                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th>
                     </tr>
                   </table><br/>\n\n";
 

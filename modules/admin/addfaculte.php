@@ -53,7 +53,7 @@ $nameTools = $langListFaculteActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['a'])) {
-        $navigation[] = array('url' => $_SERVER['PHP_SELF'], 'name' => $langListFaculteActions);
+        $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'], 'name' => $langListFaculteActions);
 	switch ($_GET['a']) {
 		case 1:
 			$nameTools = $langFaculteAdd;
@@ -70,7 +70,7 @@ if (isset($_GET['a'])) {
 $tool_content .= "
     <div id='operations_container'>
      <ul id='opslist'>
-      <li><a href='$_SERVER[PHP_SELF]?a=1'>".$langAdd."</a></li>
+      <li><a href='$_SERVER[SCRIPT_NAME]?a=1'>".$langAdd."</a></li>
      </ul>
     </div>";
 
@@ -106,9 +106,9 @@ if (!isset($_GET['a'])) {
 		$tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='50' align='center' nowrap>
-		<a href='$_SERVER[PHP_SELF]?a=2&amp;c=".$logs['id']."'>
+		<a href='$_SERVER[SCRIPT_NAME]?a=2&amp;c=".$logs['id']."'>
 		<img src='$themeimg/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
-		<a href='$_SERVER[PHP_SELF]?a=3&amp;c=".$logs['id']."'>
+		<a href='$_SERVER[SCRIPT_NAME]?a=3&amp;c=".$logs['id']."'>
 		<img src='$themeimg/edit.png' title='$langEdit' /></a></td>
 		</tr>\n";
 		$k++;
@@ -126,22 +126,22 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 		if (empty($codefaculte) or empty($faculte)) {
 			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
 			$tool_content .= "
-			<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
+			<a href=\"$_SERVER[SCRIPT_NAME]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check for greek letters
 		elseif (!preg_match("/^[A-Z0-9a-z_-]+$/", $codefaculte)) {
 			$tool_content .= "<p class='caution'>".$langGreekCode."<br />";
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
+			$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check if faculty code already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE code=" . autoquote($codefaculte))) > 0) {
 			$tool_content .= "<p class='caution'>".$langFCodeExists."<br />";
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
+			$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?a=1\">".$langReturnToAddFaculte."</a></p>";
 			}
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p class='caution'>".$langFaculteExists."<br />";
-			$tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddFaculte."</a></p>";
+			$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?a=1\">".$langReturnToAddFaculte."</a></p>";
 		} else {
 		// OK Create the new faculty
 			db_query("INSERT into faculte(code,name,generator,number) VALUES(" . autoquote($codefaculte) . ',' . autoquote($faculte) . ",'100','1000')")
@@ -151,7 +151,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
 	} else {
 		// Display form for new faculty information
 		$tool_content .= "
-        <form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?a=1\">
+        <form method=\"post\" action=\"".$_SERVER['SCRIPT_NAME']."?a=1\">
         <fieldset>
           <legend>$langFaculteIns</legend>
           <table width='100%' class='tbl'>
@@ -171,7 +171,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
         </fieldset>
 	</form>";
 	}
-	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]'>".$langBack."</a></p>";
 }
 // Delete faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
@@ -187,7 +187,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 2)  {
 		db_query("DELETE FROM faculte WHERE id = $c");
 		$tool_content .= "<p class='success'>$langErase</p>";
 	}
-	$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+	$tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]'>".$langBack."</a></p>";
 }
 // Edit a faculty
 elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
@@ -197,13 +197,13 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
                 $faculte = $_POST['faculte'];
 		if (empty($faculte)) {
 			$tool_content .= "<p class='caution'>".$langEmptyFaculte."<br />";
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
+			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
                 }
 		// Check if faculty name already exists
 		elseif (mysql_num_rows(db_query("SELECT * from faculte WHERE id <> $c
 					AND name=" . autoquote($faculte))) > 0) {
 			$tool_content .= "<p class='caution'>".$langFaculteExists."<br />";
-			$tool_content .= "<a href='$_SERVER[PHP_SELF]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
+			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?a=3&amp;c=$c'>$langReturnToEditFaculte</a></p>";
 		} else {
                         // OK Update the faculty
 			db_query("UPDATE faculte SET name = " .
@@ -219,7 +219,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 		$myrow = mysql_fetch_array($result);
 		// Display form for edit faculty information
 		$tool_content .= "
-           <form method='post' action='$_SERVER[PHP_SELF]?a=3'>
+           <form method='post' action='$_SERVER[SCRIPT_NAME]?a=3'>
            <fieldset>
            <legend>$langFaculteEdit</legend>
            <table width='100%' class='tbl'>
@@ -241,7 +241,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
            </fieldset>
 	   </form>";
 	}
-$tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+$tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]'>".$langBack."</a></p>";
 }
 
 draw($tool_content, 3);

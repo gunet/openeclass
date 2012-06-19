@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -103,7 +103,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 
 	$retString = $link_all = "";
 	if ($displayAll == TRUE) {
-	    $link_all = "<a href='$_SERVER[PHP_SELF]?all=TRUE'>$langAllUsers</a>"; 
+	    $link_all = "<a href='$_SERVER[SCRIPT_NAME]?all=TRUE'>$langAllUsers</a>"; 
 	} 
 	
 	// Page numbers of navigation

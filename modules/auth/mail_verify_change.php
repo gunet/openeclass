@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -84,7 +84,7 @@ elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_veri
 	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
 	
-$tool_content .= "<br /><br /><form method='post' action='$_SERVER[PHP_SELF]'>
+$tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
                 <legend>$langUserData</legend>
                 <table class='tbl' with='100%'>

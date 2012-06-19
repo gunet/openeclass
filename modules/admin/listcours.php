@@ -136,7 +136,7 @@ else {
         //$tool_content .= "<p class='success'>".$caption."</p>";
 	if ($fulllistsize > COURSES_PER_PAGE ) {
 		// Display navigation in pages
-		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[PHP_SELF]");
+		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
 	}
 }
 
@@ -207,11 +207,11 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
         $tool_content .= "</td>";
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
-      <td align='center' width='40'>
-        <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
-        <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
-        <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
-      </td>";
+        <td align='center' width='40'>
+                <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
+                <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
+                <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
+        </td>";
 	$k++;
 }
 // Close table correctly
@@ -223,7 +223,7 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$tool_content .= "\n    <p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
 } elseif ($fulllistsize > COURSES_PER_PAGE) {
 	// Display navigation in pages
-	$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[PHP_SELF]");
+	$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
 }
 
 }

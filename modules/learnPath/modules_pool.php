@@ -136,7 +136,7 @@ switch( $cmd )
 			$list = mysql_fetch_array($result);
 
 			$tool_content .= disp_message_box("
-                        <form method='post' name='rename' action='$_SERVER[PHP_SELF]?course=$course_code'>
+                        <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 
                         <table width='100%' class='tbl'>
                         <tr>
@@ -207,7 +207,7 @@ switch( $cmd )
             if( isset($comment['comment']) )
             {
 
-                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">\n"
+                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code\">\n"
                     .'<table width="99%" class="tbl"><tr><th class="left" width="160">'.$langComments.' :</th><td width="100">'."\n"
                     .disp_html_area('comment', $comment['comment'], 2, 40)
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
@@ -218,7 +218,7 @@ switch( $cmd )
             }
             else
             {
-            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."?course=$course_code\">\n"
+            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code\">\n"
                     .'<table><tr><td valign="top">'."\n"
                     .disp_html_area('comment', '', 2, 60)
                     ."</td></tr></table>\n"
@@ -298,7 +298,7 @@ while ($list = mysql_fetch_array($result))
     }
 
     $tool_content .= "</td>
-      <td><a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+      <td><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;

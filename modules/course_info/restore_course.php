@@ -510,7 +510,7 @@ elseif (isset($_POST['do_restore'])) {
         <table width='100%' class='tbl'><tr>
           <td>$langRequest1
 	  <br /><br />
-	  <form action='".$_SERVER['PHP_SELF']."' method='post' enctype='multipart/form-data'>
+	  <form action='".$_SERVER['SCRIPT_NAME']."' method='post' enctype='multipart/form-data'>
 	    <input type='file' name='archiveZipped' />
 	    <input type='submit' name='send_archive' value='".$langSend."' />
             </form>
@@ -529,7 +529,7 @@ elseif (isset($_POST['do_restore'])) {
 	<tr>
 	  <td>$langRequest2
 	  <br /><br />
-	  <form action='".$_SERVER['PHP_SELF']."' method='post'>
+	  <form action='".$_SERVER['SCRIPT_NAME']."' method='post'>
 	    <input type='text' name='pathToArchive' />
 	    <input type='submit' name='send_path' value='".$langSend."' />
 	  </form>
@@ -893,7 +893,7 @@ function unpack_zip_show_files($zipfile)
 	chdir($destdir);	
 	$state = $zip->extract(PCLZIP_CB_PRE_EXTRACT, 'fix_old_backup_names');
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
-                       <form action='$_SERVER[PHP_SELF]' method='post'>
+                       <form action='$_SERVER[SCRIPT_NAME]' method='post'>
                          <ol>";
         $checked = ' checked';
         foreach (find_backup_folders($destdir) as $folder) {
@@ -1051,7 +1051,7 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
 
         return "<p>$langInfo1</p>
                 <p>$langInfo2</p>
-                <form action='$_SERVER[PHP_SELF]' method='post' onsubmit='return validateNodePickerForm();' >
+                <form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();' >
                 <table width='99%' class='tbl'><tbody>
                    <tr><td>&nbsp;</td></tr>
                    <tr><th>$langCourseCode:</th>

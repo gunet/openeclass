@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
         // Special handling for </textarea> tags in the message, which can break the editing form..
         $message = preg_replace('#</textarea>#si', '&lt;/TEXTAREA&gt;', $message);
         list($day, $time) = explode(' ', $myrow["post_time"]);
-        $tool_content .= "<form action='$_SERVER[PHP_SELF]?course=$course_code&amp;post_id=$post_id&amp;forum=$forum_id' method='post'>
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=$post_id&amp;forum=$forum_id' method='post'>
                 <fieldset>
                 <legend>$langReplyEdit </legend>
                 <table width='100%' class='tbl'>";

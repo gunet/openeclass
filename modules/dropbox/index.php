@@ -42,7 +42,7 @@ $action->record(MODULE_ID_DROPBOX);
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"$_SERVER[PHP_SELF]?course=$course_code", "name"=> $dropbox_lang["dropbox"]);
+	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $dropbox_lang["dropbox"]);
 	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -52,8 +52,8 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 $tool_content .="
 <div id='operations_container'>
   <ul id='opslist'>
-    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;upload=1'>$dropbox_lang[uploadFile]</a></li>
-    <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
+    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1'>$dropbox_lang[uploadFile]</a></li>
+    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE'>$langQuotaBar</a></li>
   </ul>
 </div>";
 
@@ -309,7 +309,7 @@ if (count($dropbox_person->sentWork)==0) {
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
                         $tool_content .= $recipients_names;        
                 } else {
-                        $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
+                        $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                 }
                 $tool_content .= "</td>
                                 <td class='center'>$w->uploadDate</td>

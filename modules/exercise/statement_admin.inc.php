@@ -101,7 +101,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         }
 
 	@$tool_content .= "
-	<form enctype='multipart/form-data' method='post' action='$_SERVER[PHP_SELF]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
+	<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
 	<fieldset>
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>

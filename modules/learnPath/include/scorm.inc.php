@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -67,7 +67,7 @@ if( isset($learningPath_module[0]['lock'])
 	&& isset($learningPath_module[0]['raw_to_pass']) ) // this module blocks the user if he doesn't complete
 {
 	$tool_content .= "\n\n" . '<hr noshade="noshade" size="1" />' . "\n"
-	.    '<form method="POST" action="' . $_SERVER['PHP_SELF'] .'?course='.$course_code.'">' . "\n"
+	.    '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] .'?course='.$course_code.'">' . "\n"
 	.    '<label for="newRaw">' . $langChangeRaw . '</label>'."\n"
 	.    '<input type="text" value="' . htmlspecialchars($learningPath_module[0]['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
 	.    '<input type="submit" value="' . $langOk . '" />'."\n"

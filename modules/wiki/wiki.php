@@ -375,7 +375,7 @@ switch ( $action )
                 $tool_content .= '
               <div id="operations_container">
                 <ul id="opslist">
-                  <li><a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;action=rqEdit'
+                  <li><a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;action=rqEdit'
                     . '">'
                     . $langWikiCreateNewWiki
                     . '</a></li>
@@ -481,7 +481,7 @@ switch ( $action )
                             // edit link
 
                             $tool_content .= '          <td width="5" style="text-align: center;">';
-                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
+                            $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
                             . '<img src="'.$themeimg.'/edit.png" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
@@ -492,7 +492,7 @@ switch ( $action )
                             // delete link
 
                             $tool_content .= '<td width="5" style="text-align: center;">';
-                            $tool_content .= '<a href="'.$_SERVER['PHP_SELF'].'?course='.$course_code.'&amp;wikiId='
+                            $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;wikiId='
                                     . $entry['id'].'&amp;action=exDelete'
                                     . '">'
                                     . '<img src="'.$themeimg.'/delete.png" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'
@@ -515,7 +515,7 @@ switch ( $action )
         }
         default:
         {
-            trigger_error( "Invalid action supplied to " . $_SERVER['PHP_SELF']
+            trigger_error( "Invalid action supplied to " . $_SERVER['SCRIPT_NAME']
                 , E_USER_ERROR
                 );
         }

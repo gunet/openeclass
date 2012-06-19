@@ -59,7 +59,7 @@ if(isset($_GET['deleteQuestion'])) {
 $tool_content .= "
     <div align='left' id='operations_container'>
       <ul id='opslist'>
-        <li><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;newQuestion=yes'>$langNewQu</a>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newQuestion=yes'>$langNewQu</a>
 	&nbsp;|&nbsp;
 	<a href='question_pool.php?course=$course_code&amp;fromExercise=$exerciseId'>$langGetExistingQuestion</a></li>
       </ul>
@@ -89,18 +89,18 @@ if($nbrQuestions) {
 			<td align='right' width='1'>".$i.".</td>
 			<td> ".$objQuestionTmp->selectTitle()."<br />
 			".$aType[$objQuestionTmp->selectType()-1]."</td>
-			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;editQuestion=".$id."\">".
+			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;editQuestion=".$id."\">".
 			"<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>".
-			" <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
+			" <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
 			"<img src='$themeimg/delete.png' align='middle' title='$langDelete' /></a></td>
 		<td width='20'>";
 		if($i != 1) {
-			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;moveUp=".$id."\">
+			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveUp=".$id."\">
    			<img src='$themeimg/up.png' align='middle' title='$langUp' /></a> ";
 		}
 		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
-			$tool_content .= "<a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;moveDown=".$id."\">
+			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveDown=".$id."\">
 			<img src='$themeimg/down.png' align='middle' title='$langDown' /></a> ";
 		}
 		$tool_content .= "</td></tr>";

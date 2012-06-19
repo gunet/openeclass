@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -75,7 +75,7 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
 
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {
-	$tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[PHP_SELF]'>
+	$tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 		<tr><td class='left' colspan='3'><b>$langMailVerificationSettings</b></td></tr>
 		<tr><td class='left' colspan='2'>$lang_email_required:</td>
@@ -123,7 +123,7 @@ else {
 	$c = list_1Result("SELECT count(*) FROM user WHERE verified_mail = $sub;");
 
 	if (isset($sub)) {
-		$tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[PHP_SELF]'>
+		$tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
 		<fieldset>
 		<legend>$msg ($langNbUsers: $c)</legend>
 		<table width='100%' class='tbl'>

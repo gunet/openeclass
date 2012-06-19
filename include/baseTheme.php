@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -261,10 +261,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 				if (display_activation_link($module_id)) {                                        
 					if (visible_module($module_id)) {                                                
 						$message = $langDeactivate;
-						$mod_activation = "<a class='deactivate_module' href='$_SERVER[PHP_SELF]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+						$mod_activation = "<a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
 					} else {
 						$message = $langActivate;
-						$mod_activation = "<a class='activate_module' href='$_SERVER[PHP_SELF]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+						$mod_activation = "<a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
 					}
 				}
 			}
@@ -557,7 +557,7 @@ function lang_selections() {
         if (count($GLOBALS['active_ui_languages']) < 2) {
                 return ('&nbsp;');
         }
-        $html = '<form name="langform" action="' . $_SERVER ['PHP_SELF'] . '" method="get" >';
+        $html = '<form name="langform" action="' . $_SERVER ['SCRIPT_NAME'] . '" method="get" >';
         $html .= lang_select_options('localize', 'onChange="document.langform.submit();"');
         $html .= '</form>';
         return $html;

@@ -429,9 +429,9 @@ function showquota($quota, $used) {
 	// telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	// ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
         if ($subsystem == 'GROUP') {
-                $link = "$_SERVER[PHP_SELF]?course=$course_code&amp;group_id=$group_id";
+                $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id";
         } else {
-                $link = "$_SERVER[PHP_SELF]?course=$course_code";
+                $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
         $retstring .= "
                <div id='operations_container'>

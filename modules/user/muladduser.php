@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,8 +28,6 @@ include '../../include/baseTheme.php';
 
 $nameTools = $langAddManyUsers;
 $navigation[] = array ("url"=>"user.php?course=$course_code", "name"=> $langAdminUsers);
-
-mysql_select_db($mysqlMainDb);
 
 if (isset($_POST['submit'])) {
         $ok = array();
@@ -76,7 +74,7 @@ if (isset($_POST['submit'])) {
         }
 }
 
-$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
            <legend>$langUsersData</legend>
            <table width='100%' class='tbl'> 

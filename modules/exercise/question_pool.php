@@ -109,7 +109,7 @@ if($is_editor) {
 	
 	$tool_content .= "</li></ul></div>";
 
-	$tool_content .= "<form name='qfilter' method='get' action='$_SERVER[PHP_SELF]'><input type='hidden' name='course' value='$course_code'>";
+	$tool_content .= "<form name='qfilter' method='get' action='$_SERVER[SCRIPT_NAME]'><input type='hidden' name='course' value='$course_code'>";
 	if (isset($fromExercise)) {
 		$tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 	}
@@ -228,7 +228,7 @@ if($is_editor) {
 				</td>
 				<td><a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
-				  <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;recup=".$row['id'].
+				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;recup=".$row['id'].
 				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
 				</td>";
 			}
@@ -236,7 +236,7 @@ if($is_editor) {
 			if(!isset($fromExercise)) {
 				$tool_content .= "
 				<td width='3' align='center'>
-				  <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
+				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
 				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
 				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' /></a>
 				</td>";
@@ -270,24 +270,24 @@ if($is_editor) {
 		if ($page > 0) {
 			$prevpage = $page-1;
 			if (isset($fromExercise)) {
-				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId.
+				$tool_content .= "<small>&lt;&lt; <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;exerciseId=".$exerciseId.
 				"&amp;fromExercise=".$fromExercise.
 				"&amp;page=".$prevpage."\">".$langPreviousPage."</a>&nbsp;</small>";
 			} else {
 				$tool_content .= "<small>&lt;&lt; 
-				<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$prevpage'>$langPreviousPage</a></small>";
+				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$prevpage'>$langPreviousPage</a></small>";
 			}
 		}
 		if ($page < $numpages) {
 			$nextpage = $page+1;
 			if (isset($fromExercise)) {
-				$tool_content .= "<small><a href='".$_SERVER['PHP_SELF']."?course=$course_code&amp;exerciseId=".$exerciseId.
+				$tool_content .= "<small><a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;exerciseId=".$exerciseId.
 				"&amp;fromExercise=".$fromExercise.
 				"&amp;page=".$nextpage."'>".$langNextPage.
 				"</a> &gt;&gt;</small>";
 			} else {
 				$tool_content .= "<small>
-				<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;
+				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;
 				</small>";
 			}
 		}

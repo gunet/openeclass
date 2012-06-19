@@ -68,7 +68,7 @@ function list_docs()
                                                                    WHERE $group_sql AND path = '$path'"));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
-                        $parentlink = $_SERVER['PHP_SELF'] . "?course=$course_code&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
+                        $parentlink = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
                         $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> <a href='$parentlink'>" .
                                       "<img src='$themeimg/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
                         $colspan = 4;
@@ -95,7 +95,7 @@ function list_docs()
 				$dir = $entry['path'];
 				if ($is_dir) {
 					$image = $themeimg.'/folder.png';
-					$file_url = "$_SERVER[PHP_SELF]?course=$course_code&amp;type=doc&amp;id=$id&amp;path=$dir";
+					$file_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;type=doc&amp;id=$id&amp;path=$dir";
 					$link_extra = '';
 					$link_text = $entry['name'];
 				} else {

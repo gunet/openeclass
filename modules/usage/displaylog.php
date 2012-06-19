@@ -104,7 +104,7 @@ while ($row = mysql_fetch_assoc($result)) {
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
 }
 
-$tool_content .= "<form method='post' action='$_SERVER[PHP_SELF]?course=$course_code'>
+$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
     <legend>$langUsersLog</legend>
     <table class='tbl'>
