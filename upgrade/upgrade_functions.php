@@ -357,12 +357,19 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
                         SELECT topic_id + $forumtopicid_offset, topic_title, topic_poster, topic_time, topic_views,
                                topic_replies, topic_last_post_id, forum_id + $forumid_offset
                         FROM topics") && $ok;
+                list($forumpostid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.forum_post"));
+                $forumpostid_offset = intval($forumpostid_offset);
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.`forum_post`
-                        (`topic_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`)
-                        SELECT p.topic_id + $forumtopicid_offset,
+                        (`id`, `topic_id`, `post_text`, `poster_id`, `post_time`, `poster_ip`)
+                        SELECT p.post_id + $forumpostid_offset, p.topic_id + $forumtopicid_offset,
                                pt.post_text, p.poster_id, p.post_time, p.poster_ip
                         FROM posts p, posts_text pt
                         WHERE p.post_id = pt.post_id") && $ok;
+                $ok = db_query("UPDATE `$mysqlMainDb`.`forum_topic` ft, `$mysqlMainDb`.`forum` f
+                                       SET f.last_post_id = f.last_post_id + $forumpostid_offset,
+                                           ft.last_post_id = ft.last_post_id + $forumpostid_offset
+                                       WHERE ft.forum_id = f.id AND
+                                             course_id = $course_id") && $ok;
                 $ok = db_query("UPDATE `$mysqlMainDb`.forum_notify
                                        SET cat_id = cat_id + $forumcatid_offset,
                                            forum_id = forum_id + $forumid_offset,
