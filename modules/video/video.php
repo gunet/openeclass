@@ -74,7 +74,7 @@ if (isset($_SESSION['prenom'])) {
 // ----------------------
 
 if (isset($_GET['action']) and $_GET['action'] == "download") {
-	$id = intval($_GET['id']);
+	$id = q($_GET['id']);
 	$real_file = $webDir."/video/".$course_code."/".$id;
 	if (strpos($real_file, '/../') === FALSE) {
                 $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " .
@@ -96,7 +96,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 
 if (isset($_GET['action']) and $_GET['action'] == 'play')
 {
-        $id = $_GET['id'];
+        $id = q($_GET['id']);
         $videoPath = $urlServer ."video/". $course_code . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
         
@@ -113,7 +113,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
 // ----------------------
 
 if (isset($_GET['action']) and $_GET['action'] == 'playlink') {
-        $id = intval($_GET['id']);
+        $id = q($_GET['id']);
         
         echo medialink_iframe_object(html_entity_decode($id));
         exit;
