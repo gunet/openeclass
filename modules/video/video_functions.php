@@ -359,7 +359,7 @@ function media_html_object($mediaPath, $mediaURL, $bgcolor = '#000000', $color =
 /**
  * Construct a proper iframe html tag for each type of medialink
  * 
- * @param  string $mediaURL
+ * @param  string $mediaURL - should be already urlencoded if possible
  * @param  string $bgcolor
  * @param  string $color
  * @return string 

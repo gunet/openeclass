@@ -400,7 +400,7 @@ if ($can_upload) {
 	// create directory
 	// step 2: create the new directory
 	if (isset($_POST['newDirPath'])) {
-                $newDirName = canonicalize_whitespace($_POST['newDirName']);
+                $newDirName = canonicalize_whitespace(q($_POST['newDirName']));
                 if (!empty($newDirName)) {
                         make_path($_POST['newDirPath'], array($newDirName));
                         // $path_already_exists: global variable set by make_path()
