@@ -104,7 +104,6 @@ $langPleaseWait</div>
         $mtext = "<table>";
         $mtext .= "<tr><th>".$langCourse."</th>
 		<th>".$langCoursVisible."</th>
-		<th>".$langType."</th>
 		<th>".$langFaculty."</th>
 		<th>".$langTeacher."</th>
 		<th>".$langNbUsers."</th></tr>";
@@ -130,7 +129,7 @@ $langPleaseWait</div>
             else {
                 $cvisible = $langTypeOpen;
             }
-            $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td><td> ".$ctype."</td>
+            $mtext .= "<tr><td>".$row['name']."</td><td> ".$cvisible."</td>
 		<td align=center>".$row['dept']."</td>
 		<td>".$row['proff']."</td><td align=center>".$row['cnt']."</td></tr>";
         }
