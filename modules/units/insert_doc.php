@@ -30,17 +30,16 @@ function list_docs()
 
         $basedir = $webDir . 'courses/' . $course_code . '/document';
         if (isset($_GET['path'])) {
-                $path = escapeSimple($_GET['path']);
                 if ($path == '/' or $path == '\\') {
 			$path = '';
 		}
         } else {
-                $path = "";
+                $path = '';
         }
         $result = db_query("SELECT * FROM document
                             WHERE $group_sql AND
-			          path LIKE '$path/%' AND
-                                  path NOT LIKE '$path/%/%'");
+			          path LIKE " . quote("$path/%") . " AND
+                                  path NOT LIKE " . quote("$path/%/%"));
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(
@@ -65,7 +64,7 @@ function list_docs()
                         $colspan = 5;
                 } else {
                         list($dirname) = mysql_fetch_row(db_query("SELECT filename FROM document
-                                                                   WHERE $group_sql AND path = '$path'"));
+                                                                   WHERE $group_sql AND path = " . quote($path)));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
                         $parentlink = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;

@@ -219,8 +219,8 @@ if ($can_upload) {
                                         // Check if file already exists
 					$result = db_query("SELECT path, visible FROM document WHERE
                                                                    $group_sql AND
-                                                                   path REGEXP '^" . escapeSimple($uploadPath) . "/[^/]+$' AND
-                                                                   filename = " . autoquote($fileName) ." LIMIT 1");
+                                                                   path REGEXP " . quote("^$uploadPath/[^/]+$") . " AND
+                                                                   filename = " . quote($fileName) ." LIMIT 1");
                                         if (mysql_num_rows($result)) {
                                                 if (isset($_POST['replace'])) {
                                                         // Delete old file record when replacing file

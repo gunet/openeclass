@@ -32,19 +32,21 @@ include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 $nameTools = $langMailVerify;
 
-$code = (isset($_GET['ver']) && ctype_xdigit($_GET['ver']))? escapeSimple($_GET['ver']): NULL;
-$req_id = (isset($_GET['rid']) && is_numeric($_GET['rid']))? escapeSimple(intval($_GET['rid'])): NULL;
-$u_id = (isset($_GET['id']) && is_numeric($_GET['id']))? escapeSimple(intval($_GET['id'])): NULL;
+$code = (isset($_GET['ver']) && ctype_xdigit($_GET['ver']))? $_GET['ver']: NULL;
+$req_id = (isset($_GET['rid']) && is_numeric($_GET['rid']))? intval($_GET['rid']): NULL;
+$u_id = (isset($_GET['id']) && is_numeric($_GET['id']))? intval($_GET['id']): NULL;
 
 if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 	// user has applied for account
-	if(!empty($req_id)) {
-		$qry = "SELECT id, uname, email, verified_mail, name, surname, faculty_id, phone, am, status, statut, comment, lang from `user_request` WHERE id=".autoquote($req_id);
+	if (!empty($req_id)) {
+                $qry = "SELECT id, uname, email, verified_mail, name, surname,
+                               faculty_id, phone, am, status, statut, comment, lang
+                               FROM `user_request` WHERE id = $req_id";
 		$id = $req_id;
 	}
 	// no user application. user account has been created with pending mail verification
 	elseif(!empty($u_id)) {
-		$qry = "SELECT user_id, username, email, verified_mail from `user` WHERE user_id=".autoquote($u_id);
+		$qry = "SELECT user_id, username, email, verified_mail FROM `user` WHERE user_id = $u_id";
 		$id = $u_id;
 	}
 	// no id given

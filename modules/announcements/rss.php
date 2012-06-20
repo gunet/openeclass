@@ -27,7 +27,7 @@ include '../../include/init.php';
 
 if (isset($_GET['c'])) {
 	$code = $_GET['c'];
-	$course_id = course_code_to_id(escapeSimple($code));
+	$course_id = course_code_to_id($code);
 } else {
 	$code = '';
 	$course_id = false;
@@ -42,7 +42,7 @@ if ($course_id === false) {
 	exit;
 }
 
-list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE code = '$code'"));
+list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE id = $course_id"));
 $title = htmlspecialchars($title, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
@@ -54,9 +54,9 @@ header ("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
-echo "<atom:link href='".$urlServer."modules/announcements/rss.php?c=".$code."' rel='self' type='application/rss+xml' />";
-echo "<title>$langCourseAnnouncements $title</title>";
-echo "<link>".$urlServer."courses/".$code."</link>";
+echo "<atom:link href='{$urlServer}modules/announcements/rss.php?c=".urlencode($code)."' rel='self' type='application/rss+xml' />";
+echo "<title>$langCourseAnnouncements " . q($title) . "</title>";
+echo "<link>{$urlServer}courses/".q($code)."/</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
@@ -67,7 +67,7 @@ $sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T 
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
-	echo "<link>".$urlServer."modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".$code."</link>";
+	echo "<link>{$urlServer}modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".urlencode($code)."</link>";
 	echo "<description>".htmlspecialchars($r['content'], ENT_NOQUOTES)."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";

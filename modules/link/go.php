@@ -20,7 +20,7 @@
 
 
 require_once '../../include/init.php';
-$course_id = course_code_to_id(escapeSimple($_GET['c']));
+$course_id = course_code_to_id($_GET['c']);
 $id = intval($_GET['id']);
 if ($course_id !== false) {
         db_query("UPDATE link SET hits = hits + 1 WHERE course_id = $course_id AND id = $id");

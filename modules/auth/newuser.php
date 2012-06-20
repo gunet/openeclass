@@ -55,7 +55,7 @@ if ($disable_eclass_stud_reg) {
 	draw($tool_content,0);
 	exit;
 }
-	
+
 if (get_config('close_user_registration')) {
 	$tool_content .= "<div class='td_main'>$langForbidden</div>";
 	draw($tool_content,0);
@@ -161,13 +161,13 @@ if (!isset($_POST['submit'])) {
                                                    'email' => $email_arr_value,
                                                    'phone' => false,
                                                    'am' => $am_arr_value));
-        
+
         if (!isset($_POST['department'])) {
             $departments = array();
             $missing = false;
         } else
             $departments = $_POST['department'];
-        
+
 	$registration_errors = array();
 	// check if there are empty fields
 	if (!$missing) {
@@ -184,10 +184,10 @@ if (!isset($_POST['submit'])) {
 			// captcha check
 			require_once 'include/securimage/securimage.php';
 			$securimage = new Securimage();
-			
+
 			if ($securimage->check($_POST['captcha_code']) == false) {
 				$registration_errors[] = $langCaptchaWrong;
-			}	
+			}
 		}
 	}
 	if (!empty($email) and !email_seems_valid($email)) {
@@ -210,23 +210,23 @@ if (!isset($_POST['submit'])) {
 
 		$registered_at = time();
 		$expires_at = time() + get_config('account_duration');
-		// manage the store/encrypt process of password into database
-		$uname = escapeSimple($uname);  
-		$password = escapeSimpleSelect($password); 
+
+		$password = unescapeSimple($password);
 		$password_encrypted = md5($password);
 
 		$q1 = "INSERT INTO user
 			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail)
-			VALUES (". autoquote($nom_form) .",
-				". autoquote($prenom_form) .",
-				". autoquote($uname) .",
+			VALUES (". quote($nom_form) .",
+				". quote($prenom_form) .",
+				". quote($uname) .",
 				'$password_encrypted',
-				". autoquote($email) .",
-				5,                                
-				". autoquote($am) .",
-                                ". autoquote($phone) .",
+				". quote($email) .",
+				5,
+				". quote($am) .",
+                                ". quote($phone) .",
 				$registered_at, $expires_at,
-				'$language', $verified_mail)";
+                                " . quote($language) . ",
+                                $verified_mail)";
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
                 $userObj->refresh($last_id, $departments);
@@ -237,15 +237,14 @@ if (!isset($_POST['submit'])) {
 		}
 
 		$emailsubject = "$langYourReg $siteName";
-		$uname = autounquote($uname); 
-		$password = unescapeSimple($password);
+		$uname = autounquote($uname);
                 $telephone = get_config('phone');
 		$emailbody = "$langDestination $prenom_form $nom_form\n" .
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .
 			"$urlServer\n" .
 			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
-			"$langProblem\n$langFormula\n" . 
+			"$langProblem\n$langFormula\n" .
 			"$administratorName\n" .
 			"$langManager $siteName \n$langTel $telephone\n" .
 			"$langEmail: $emailhelpdesk";
@@ -258,7 +257,7 @@ if (!isset($_POST['submit'])) {
 		else {
 			$user_msg = $langPersonalSettingsLess;
 		}
-	
+
 		// verification needed
 		if ($vmail) {
 			$user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
@@ -282,7 +281,7 @@ if (!isset($_POST['submit'])) {
 			$tool_content .= "<p>$langDear " . q("$prenom $nom") . ",</p>";
 		}
 		// user msg
-		$tool_content .= 
+		$tool_content .=
 			"<div class='success'>" .
 			"<p>$user_msg</p>" .
 			"</div>";

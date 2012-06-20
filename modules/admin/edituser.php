@@ -367,12 +367,12 @@ $tool_content .= "
 	$user_exist= FALSE;
 	// check if username is free
 	$username_check = db_query("SELECT username FROM user WHERE
-		user_id <> $u AND username = '".escapeSimple($username)."'");
+		user_id <> $u AND username = ".quote($username)."'");
 	if (mysql_num_rows($username_check) > 0) {
 		$user_exist = TRUE;
 	}
 
-  // check if there are empty fields
+        // check if there are empty fields
 	if (empty($fname) OR empty($lname) OR empty($username)) {
 		$tool_content .= "<table width='99%'><tbody><tr>
 		<td class='caution' height='60'><p>$langFieldsMissing</p>

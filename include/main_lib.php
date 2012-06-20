@@ -215,7 +215,7 @@ function db_query_fetch_all($sqlQuery, $db = FALSE) {
 
 // Quote string for SQL query
 function quote($s) {
-	return "'".addslashes(canonicalize_whitespace($s))."'";
+	return "'".mysql_real_escape_string(canonicalize_whitespace($s))."'";
 }
 
 
@@ -244,37 +244,6 @@ function q($s)
 {
 	return htmlspecialchars($s, ENT_QUOTES);
 }
-
-/*
-* Escapes a string according to the current DBMS's standards
-* @param string $str  the string to be escaped
-* @return string  the escaped string
-* Function Purpose: prepends backslashes to the following characters:
-* \x00, \n, \r, \, ', " and \x1a
-*/
-function escapeSimple($str)
-{
-	global $db;
-	if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-		return $str;
-	} else {
-		if (function_exists('mysql_real_escape_string')) {
-			return @mysql_real_escape_string($str, $db);
-		} else {
-			return @mysql_escape_string($str);
-		}
-	}
-}
-
-function escapeSimpleSelect($str)
-{
-	if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-		return addslashes($str);
-	} else {
-		return $str;
-	}
-}
-
 
 function unescapeSimple($str)
 {
@@ -1420,7 +1389,7 @@ function ellipsize($string, $maxlen, $postfix = '...')
 function course_code_to_title($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT title FROM course WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT title FROM course WHERE code = " . quote($code));
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
@@ -1434,7 +1403,7 @@ function course_code_to_title($code)
 function course_code_to_id($code)
 {
         global $mysqlMainDb;
-        $r = db_query("SELECT id FROM course WHERE code='$code'", $mysqlMainDb);
+        $r = db_query("SELECT id FROM course WHERE code = " . quote($code));
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
