@@ -615,11 +615,13 @@ db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 `name` text NOT NULL,
                 `number` int(11) NOT NULL default 1000,
                 `generator` int(11) NOT NULL default 100,
-                `lft` int(11) NOT NULL UNIQUE,
-                `rgt` int(11) NOT NULL UNIQUE,
+                `lft` int(11) NOT NULL,
+                `rgt` int(11) NOT NULL,
                 `allow_course` boolean not null default false,
                 `allow_user` boolean NOT NULL default false,
-                `order_priority` int(11) default null )");
+                `order_priority` int(11) default null,
+                KEY `lftindex` (`lft`),
+                KEY `rgtindex` (`rgt`) )");
 
 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt)
     VALUES ('', ".quote($institutionForm).", '1', '68')");

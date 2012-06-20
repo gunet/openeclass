@@ -880,11 +880,13 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `name` TEXT NOT NULL,
                             `number` INT(11) NOT NULL DEFAULT 1000,
                             `generator` INT(11) NOT NULL DEFAULT 100,
-                            `lft` INT(11) NOT NULL UNIQUE,
-                            `rgt` INT(11) NOT NULL UNIQUE,
+                            `lft` INT(11) NOT NULL,
+                            `rgt` INT(11) NOT NULL,
                             `allow_course` BOOLEAN NOT NULL DEFAULT FALSE,
                             `allow_user` BOOLEAN NOT NULL DEFAULT FALSE,
-                            `order_priority` INT(11) DEFAULT NULL )");
+                            `order_priority` INT(11) DEFAULT NULL,
+                            KEY `lftindex` (`lft`),
+                            KEY `rgtindex` (`rgt`) )");
 
             if ($rebuildHierarchy) {
                 // copy faculties into the tree
