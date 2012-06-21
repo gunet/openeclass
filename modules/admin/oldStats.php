@@ -97,7 +97,7 @@ if (!extension_loaded('gd')) {
          if (!isset($_POST[$key])) {
              $$key = $val;
          } else {
-             $$key = $_POST[$key];
+             $$key = q($_POST[$key]);
          }
      }
 

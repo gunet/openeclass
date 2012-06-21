@@ -63,7 +63,7 @@ $tool_content .= '
 </form>';
 
 if (isset($_POST["selectedMonth"])) {
-        $month = $_POST["selectedMonth"];
+        $month = q($_POST["selectedMonth"]);
         list($m, $y) = explode(' ', $month);  //only month
         $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
                        FROM monthly_summary WHERE `month` = ".quote($month);
