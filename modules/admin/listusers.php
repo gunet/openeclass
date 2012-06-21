@@ -207,12 +207,12 @@ if(!empty($auth_type))
 	}
 	$criteria++;
 	if($auth_type >=2) {
-		$auth_type_qry .= " password='{$auth_ids[$auth_type]}'";
+		$auth_type_qry .= " password=".quote($auth_ids[$auth_type]);
 	}
 	elseif($auth_type==1) {
-		$auth_type_qry .= " password != '{$auth_ids[1]}'";
+		$auth_type_qry .= " password != ".quote($auth_ids[1]);
 		for ($i = 2; $i <= count($auth_ids); $i++) {
-			$auth_type_qry .= " AND password != '{$auth_ids[$i]}'";
+			$auth_type_qry .= " AND password != ".quote($auth_ids[$i]);
 		}
 	}
 }

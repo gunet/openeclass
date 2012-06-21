@@ -286,7 +286,14 @@ if (!isset($_POST['submit'])) {
 		foreach ($registration_errors as $error) {
 			$tool_content .= "$error";
 		}
-		$tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?prenom_form=". q($_POST['prenom_form']) ."&amp;nom_form=". $_POST['nom_form'] ."&amp;uname=". $_POST['uname'] ."&amp;email=". $_POST['email'] ."&amp;am=". $_POST['am']. "'>$langAgain</a></p>";
+                $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?" .
+                        'prenom_form=' . urlencode($prenom_form) .
+                        '&amp;nom_form=' . urlencode($nom_form) .
+                        '&amp;uname=' . urlencode($uname) .
+                        '&amp;email=' . urlencode($email) .
+                        '&amp;am=' . urlencode($am) .
+                        '&amp;phone=' . urlencode($phone) .
+                        "'>$langAgain</a></p>";		
 	}
 } // end of registration
 

@@ -40,6 +40,8 @@ foreach ($usage_defaults as $key => $val) {
 $chart_content = 0;
 
 $date_fmt = '%Y-%m-%d';
+$u_date_start = mysql_real_escape_string($u_date_start);
+$u_date_end = mysql_real_escape_string($u_date_end);
 $date_where = " (`when` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 $date_what  = "DATE_FORMAT(MIN(`when`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`when`), '$date_fmt') AS date_end ";
 
