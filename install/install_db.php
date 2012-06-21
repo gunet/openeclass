@@ -137,17 +137,16 @@ db_query("CREATE TABLE `course` (
   `code` VARCHAR(20) NOT NULL,
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
   `title` VARCHAR(250) NOT NULL DEFAULT '',
-  `description` MEDIUMTEXT NOT NULL,
   `keywords` TEXT NOT NULL,
-  `visible` tinyint(4) NOT NULL,
-  `prof_names` varchar(200) NOT NULL DEFAULT '',
-  `public_code` varchar(20) NOT NULL DEFAULT '',
-  `created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `doc_quota` float NOT NULL default '104857600',
-  `video_quota` float NOT NULL default '104857600',
-  `group_quota` float NOT NULL default '104857600',
-  `dropbox_quota` float NOT NULL default '104857600',
-  `password` varchar(50) NOT NULL DEFAULT '',
+  `visible` TINYINT(4) NOT NULL,
+  `prof_names` VARCHAR(200) NOT NULL DEFAULT '',
+  `public_code` VARCHAR(20) NOT NULL DEFAULT '',
+  `created` DATETIME NOT NULL default '0000-00-00 00:00:00',
+  `doc_quota` FLOAT NOT NULL default '104857600',
+  `video_quota` FLOAT NOT NULL default '104857600',
+  `group_quota` FLOAT NOT NULL default '104857600',
+  `dropbox_quota` FLOAT NOT NULL default '104857600',
+  `password` VARCHAR(50) NOT NULL DEFAULT '',
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   PRIMARY KEY  (`id`)) $charset_spec");
@@ -368,22 +367,23 @@ db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
   `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `topic_id` INT(10) NOT NULL default '0',
+  `topic_id` INT(10) NOT NULL DEFAULT 0,
   `post_text` MEDIUMTEXT NOT NULL,
-  `poster_id` INT(10) NOT NULL default '0',
+  `poster_id` INT(10) NOT NULL DEFAULT 0,
   `post_time` DATETIME,
   `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,
+  `parent_post_id` INT(10) NOT NULL DEFAULT 0
   FULLTEXT KEY `posts_text` (`post_text`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
-  `id` int(10) NOT NULL auto_increment,
-  `title` varchar(100) DEFAULT NULL,
-  `poster_id` int(10) DEFAULT NULL,
-  `topic_time` datetime,
-  `num_views` int(10) NOT NULL default '0',
-  `num_replies` int(10) NOT NULL default '0',
-  `last_post_id` int(10) NOT NULL default '0',
-  `forum_id` int(10) NOT NULL default '0',
+  `id` INT(10) NOT NULL auto_increment,
+  `title` VARCHAR(100) DEFAULT NULL,
+  `poster_id` INT(10) DEFAULT NULL,
+  `topic_time` DATETIME,
+  `num_views` INT(10) NOT NULL DEFAULT 0,
+  `num_replies` INT(10) NOT NULL DEFAULT 0,
+  `last_post_id` INT(10) NOT NULL DEFAULT 0,
+  `forum_id` INT(10) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 
@@ -1055,7 +1055,7 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
 
 // Create full text indexes
 db_query("ALTER TABLE `announcement` ADD FULLTEXT `announcement` (`content`, `title`)");
-db_query("ALTER TABLE `course` ADD FULLTEXT `course` (`code` ,`description` ,`title` ,`keywords`)");
+db_query("ALTER TABLE `course` ADD FULLTEXT `course` (`code`, `title`, `keywords`)");
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');

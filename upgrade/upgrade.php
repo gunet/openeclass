@@ -570,11 +570,12 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
                 db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
                         `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `topic_id` INT(10) NOT NULL default '0',
+                        `topic_id` INT(10) NOT NULL DEFAULT 0,
                         `post_text` MEDIUMTEXT NOT NULL,
-                        `poster_id` INT(10) NOT NULL default '0',
+                        `poster_id` INT(10) NOT NULL DEFAULT 0,
                         `post_time` DATETIME,
-                        `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,  
+                        `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,
+                        `parent_post_id` INT(10) NOT NULL DEFAULT 0
                         FULLTEXT KEY `posts_text` (`post_text`)) $charset_spec");
 
                 db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (

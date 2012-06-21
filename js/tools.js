@@ -109,8 +109,8 @@ function add_bookmark() {
 }
 
 function control_deactivate_off() {
-        $("div#unsubscontrols input").attr('disabled', '1');
-        $("div#unsubscontrols").addClass('inactive');
+        $("unsubscontrols input").attr('disabled', '1');
+        $("unsubscontrols").addClass('inactive');
 }
 
 // Deactivate course e-mail subscription controls
