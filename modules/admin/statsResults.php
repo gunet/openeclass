@@ -32,7 +32,7 @@ foreach ($usage_defaults as $key => $val) {
     if (!isset($_POST[$key])) {
         $$key = $val;
     } else {
-        $$key = $_POST[$key];
+        $$key = q($_POST[$key]);
     }
 }
 
@@ -67,6 +67,10 @@ switch ($u_interval) {
     case "yearly":
         $date_what .= ", YEAR(`when`) AS year ,";
         $date_group = "  GROUP BY YEAR(`when`) ";
+    break;
+    default:
+        $date_what = '';
+        $date_group = '';
     break;
 }
 if ($u_user_id != -1) {
@@ -127,7 +131,8 @@ switch ($u_stats_type) {
     $chart->setTitle($langVisits);
     break;
 }
-mysql_free_result($result);
+if ($result !== false)
+    mysql_free_result($result);
 
 if (!file_exists("../../courses/temp")) {
     mkdir("../../courses/temp", 0777);
