@@ -74,24 +74,24 @@ if ($count_prof_requests > 0) {
 // Find last course created
 $sql = "SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0,1";
 $result = db_query($sql);
-$myrow = mysql_fetch_array($result);
-if (empty($myrow)) {
-	$last_course_info = $langNoCourses;
+if (mysql_num_rows($result)) {
+        $myrow = mysql_fetch_array($result);
+	$last_course_info = "<b>".q($myrow['title'])."</b> ".q($myrow['code']).", ".q($myrow['prof_names']).")";
 } else {
-	$last_course_info = "<b>".$myrow['title']."</b> (".$myrow['code'].", ".$myrow['prof_names'].")";
+	$last_course_info = $langNoCourses;
 }
 
 // Find last prof registration
 $sql = "SELECT prenom, nom, username, registered_at FROM user WHERE statut = 1 ORDER BY user_id DESC LIMIT 0,1";
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
-$last_prof_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['username'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+$last_prof_info = "<b>".q($myrow['prenom'])." ".q($myrow['nom'])."</b> (".q($myrow['username']).", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 
 // Find last stud registration
 $sql = "SELECT prenom, nom, username, registered_at FROM user WHERE statut = 5 ORDER BY user_id DESC LIMIT 0,1";
 $result = db_query($sql);
 if ( ($myrow = mysql_fetch_array($result)) != FALSE) {
-	$last_stud_info = "<b>".$myrow['prenom']." ".$myrow['nom']."</b> (".$myrow['username'].", ".date("j/n/Y H:i",$myrow['registered_at']).")";
+	$last_stud_info = "<b>".q($myrow['prenom'])." ".q($myrow['nom'])."</b> (".q($myrow['username']).", ".date("j/n/Y H:i",$myrow['registered_at']).")";
 }
 else {
 	// no student is yet registered
@@ -99,7 +99,7 @@ else {
 }
 
 // Find admin's last login
-$sql = "SELECT `when` FROM loginout WHERE id_user = '".$uid."' AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1";
+$sql = "SELECT `when` FROM loginout WHERE id_user = $uid AND action = 'LOGIN' ORDER BY `when` DESC LIMIT 1,1";
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastadminlogin = strtotime($myrow['when']!=""?$myrow['when']:0);
@@ -120,9 +120,9 @@ $lastregisteredstuds = $myrow['cnt'];
 $tool_content .= "
   <fieldset>
   <legend>$langInfoAdmin</legend>
-    <table width=\"100%\" class=\"tbl\">
+    <table width='100%' class='tbl'>
     <tr>
-      <th width=\"260\">$langOpenRequests:</th>
+      <th width='260'>$langOpenRequests:</th>
       <td>".$prof_request_msg."</td>
     </tr>
     <tr>

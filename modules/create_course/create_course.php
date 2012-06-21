@@ -422,12 +422,12 @@ if (isset($_POST['create_course'])) {
         $_SESSION['status'] = $status;
 
         // ----------- Import from BetaCMS Bridge -----------
-	if (get_config("betacms")) {
+	if (get_config('betacms')) {
 	        $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
 	}
         // --------------------------------------------------
         $tool_content .= "
-                <p class='success'><b>$langJustCreated:</b> $title<br>
+                <p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
                 <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
 } // end of submit
