@@ -43,12 +43,12 @@ class Log {
         // display users actions 
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
-                global $tool_content, $langDate, $langUser, $langAction, $langDetail, $langModule, $modules;
+                global $tool_content, $langDate, $langUser, $langAction, $langDetail, $langModule, $langAllModules, $modules;
                 
                 $q1 = $q2 = $q3 = '';
                 if ($user_id != -1) {
                         $q1 = "AND user_id = $user_id";
-                }
+                }                
                 if ($module_id != -1) {
                         $q2 = "AND module_id = $module_id";
                 }
@@ -59,7 +59,11 @@ class Log {
                                         WHERE course_id = $course_id $q1 $q2 $q3 
                                         AND ts BETWEEN '$date_from' AND '$date_now' ORDER BY ts DESC");
                 $tool_content .= "<table class='tbl'><tr>";
-                $tool_content .= "<th colspan='4'>$langModule '".$modules[$module_id]['title']."'</th></tr>";
+                if ($module_id != -1) {
+                        $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th></tr>";
+                } else {
+                        $tool_content .= "<th colspan='4'>$langAllModules</th></tr>";
+                }
                 $tool_content .= "<tr><th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
                 $tool_content .= "</tr>";
                 while ($r = mysql_fetch_array($sql)) {
@@ -75,17 +79,25 @@ class Log {
         }
  
         private function action_details($module_id, $details) {
-                                                         
+                                      
+                global $langUnknownModule;
+                
                 switch ($module_id) {
-                        case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($details);
-                                break;                        
                         case MODULE_ID_AGENDA: $content = $this->agenda_action_details($details);
-                                break;
+                                break;                        
                         case MODULE_ID_LINKS: $content = $this->link_action_details($details);
                                 break;
                         case MODULE_ID_DOCS: $content = $this->document_action_details($details);
                                 break;
-                        }       
+                        case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($details);
+                                break;
+                        //case -1: $content = $this->announcement_action_details($details);
+                        case -1: $content = "όλα τα υποσυστήματα";
+                                break;
+                        default: $content = $langUnknownModule;
+                                break;
+                        }
+                        
                 return $content;
         }
         

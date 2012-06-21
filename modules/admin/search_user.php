@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,10 +43,7 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'admin.inc.php';
 require_once 'include/jscalendar/calendar.php';
 
-$head_content = "";
-$lang_jscalendar = langname_to_code($language);
-
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
@@ -68,7 +65,6 @@ $tool_content .= "
 
 // display the search form
 $tool_content .= "
-
 <form action='listusers.php?search=$new' method='post' name='user_search'>
 <fieldset>
   <legend>$langUserData</legend>

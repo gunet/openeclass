@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -63,13 +63,12 @@ $tool_content .= '
 </form>';
 
 if (isset($_POST["selectedMonth"])) {
-
         $month = $_POST["selectedMonth"];
         list($m, $y) = explode(' ', $month);  //only month
         $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
                        FROM monthly_summary WHERE `month` = ".quote($month);
 
-        $result = db_query($sql, $mysqlMainDb);
+        $result = db_query($sql);
         $coursNum='';
         while ($row = mysql_fetch_assoc($result)) {
                 $profesNum = $row['profesNum'];
@@ -128,6 +127,4 @@ if (isset($_POST["selectedMonth"])) {
         $tool_content .= '<div class="alert1">'.$langNoReport.': '.$msg_of_month.' '.$y.'</div>';
     }
 }
-
-draw($tool_content, 3, 'admin');
-?>
+draw($tool_content, 3);

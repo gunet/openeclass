@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,10 +39,9 @@ $end_cal = $jscalendar->make_input_field(
                  'value'       => $u_date_end));
 
 
-
     $qry = "SELECT LEFT(nom, 1) AS first_letter FROM user
             GROUP BY first_letter ORDER BY first_letter";
-    $result = db_query($qry, $mysqlMainDb);
+    $result = db_query($qry);
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];

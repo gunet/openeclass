@@ -74,7 +74,7 @@ if (!isset($_POST['submit'])) {
 	} else {
 		$am_message = '';
 	}
-	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
+	@$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
         <fieldset>
         <legend>$langUserData</legend>
 	<table width='100%' class='tbl'>
@@ -113,7 +113,7 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty:</th>
-		<td colspan='2'>";
+        <td colspan='2'>";
         list($js, $html) = $tree->buildUserNodePicker();
         $head_content .= $js;
         $tool_content .= $html;

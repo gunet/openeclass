@@ -2918,7 +2918,9 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langLogTypes = "Είδος Ενεργειών";
  $langLogModules = "Είδος Υποσυστημάτων";
  $langAllActions = "Όλες οι ενέργειες";
- $langUnknownAction = "Άγνωστη ενέργεια"; 
+ $langUnknownAction = "Άγνωστη ενέργεια";
+ $langUnknownModule = "Άγνωστο Υποσύστημα";
+ $langAllModules = "Όλα τα υποσυστήματα";
  $langWithID = "με νούμερο";
 
 /****************************************************************

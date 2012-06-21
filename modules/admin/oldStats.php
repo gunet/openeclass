@@ -102,11 +102,15 @@ if (!extension_loaded('gd')) {
      }
 
     $date_fmt = '%Y-%m-%d';
+    $u_date_start = mysql_real_escape_string($u_date_start);
+    $u_date_end = mysql_real_escape_string($u_date_end);
     $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-    $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits FROM loginout_summary ".
-            " WHERE $date_where GROUP BY MONTH(start_date)";
+    $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits 
+                        FROM loginout_summary 
+                        WHERE $date_where 
+                        GROUP BY MONTH(start_date)";
 
-    $result = db_query($query, $mysqlMainDb);
+    $result = db_query($query);
     
     if (mysql_num_rows($result) > 0) {
             $chart = new VerticalBarChart();

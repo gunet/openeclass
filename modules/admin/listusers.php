@@ -88,7 +88,7 @@ $criteria = 0;
 // surname search
 if(!empty($user_surname))
 {
-	$user_surname_qry = " nom LIKE " . autoquote('%' . $user_surname . '%');
+	$user_surname_qry = " nom LIKE " . quote('%' . $user_surname . '%');
 	$criteria++;
 }
 else
@@ -108,7 +108,7 @@ if(!empty($user_firstname))
 		$user_firstname_qry = "";
 	}
 	$criteria++;
-	$user_firstname_qry .= " prenom LIKE " . autoquote('%' . $user_firstname . '%');
+	$user_firstname_qry .= " prenom LIKE " . quote('%' . $user_firstname . '%');
 }
 else
 {
@@ -127,7 +127,7 @@ if(!empty($user_username))
 		$user_username_qry = "";
 	}
 	$criteria++;
-	$user_username_qry .= " username LIKE " . autoquote('%' . $user_username . '%');
+	$user_username_qry .= " username LIKE " . quote('%' . $user_username . '%');
 }
 else
 {
@@ -148,7 +148,7 @@ if($verified_mail === EMAIL_VERIFICATION_REQUIRED
 		$verified_mail_qry = "";
 	}
 	$criteria++;
-	$verified_mail_qry .= " verified_mail=" . autoquote($verified_mail);
+	$verified_mail_qry .= " verified_mail=" . quote($verified_mail);
 }
 else
 {
@@ -168,7 +168,7 @@ if(!empty($user_am))
 		$user_am_qry = "";
 	}
 	$criteria++;
-	$user_am_qry .= " am=" . autoquote($user_am);
+	$user_am_qry .= " am=" . quote($user_am);
 }
 else
 {
@@ -207,12 +207,12 @@ if(!empty($auth_type))
 	}
 	$criteria++;
 	if($auth_type >=2) {
-		$auth_type_qry .= " password='{$auth_ids[$auth_type]}'";
+		$auth_type_qry .= " password=".quote($auth_ids[$auth_type]);
 	}
 	elseif($auth_type==1) {
-		$auth_type_qry .= " password != '{$auth_ids[1]}'";
+		$auth_type_qry .= " password != ".quote($auth_ids[1]);
 		for ($i = 2; $i <= count($auth_ids); $i++) {
-			$auth_type_qry .= " AND password != '{$auth_ids[$i]}'";
+			$auth_type_qry .= " AND password != ".quote($auth_ids[$i]);
 		}
 	}
 }
@@ -233,7 +233,7 @@ if(!empty($user_email))
 		$user_email_qry = "";
 	}
 	$criteria++;
-	$user_email_qry .= " email LIKE " . autoquote('%' . $user_email . '%');
+	$user_email_qry .= " email LIKE " . quote('%' . $user_email . '%');
 }
 else
 {
@@ -421,10 +421,10 @@ if($countUser > 0) {
                         <td align='center'>";
                         switch ($logs['statut'])
                         {
-                                case 1:	$tool_content .= "<img src='$themeimg/teacher.png' title='$langTeacher' />";break;
-                                case 5:	$tool_content .= "<img src='$themeimg/student.png' title='$langStudent' />";break;
-                                case 10: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' />";break;
-                                default: $tool_content .= "$langOther ($logs[6])";break;
+                                case USER_TEACHER: $tool_content .= "<img src='$themeimg/teacher.png' title='$langTeacher' />";break;
+                                case USER_STUDENT: $tool_content .= "<img src='$themeimg/student.png' title='$langStudent' />";break;
+                                case USER_GUEST: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' />";break;
+                                default: $tool_content .= "$langOther ($logs[statut])";break;
                         }
                         $tool_content .= "</td>";
                         if ($logs['user_id'] == 1) { // don't display actions for admin user
