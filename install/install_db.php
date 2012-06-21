@@ -355,7 +355,7 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
 $password_encrypted = md5($passForm);
 $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
-	VALUES ('$nameForm', '$surnameForm', '$loginForm','$password_encrypted','$emailForm','1',".time().",".$exp_time.", 1)");
+	VALUES (".quote($nameForm).", ".quote($surnameForm).", ".quote($loginForm).",".quote($password_encrypted).",".quote($emailForm).",'1',".time().", $exp_time, 1)");
 $idOfAdmin = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 	 VALUES ($idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");

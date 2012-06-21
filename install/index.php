@@ -449,83 +449,83 @@ elseif(isset($_REQUEST['install6']))
 		<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
-	<td>$dbHostForm</td>
+	<td>".q($dbHostForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDBLogin:</th>
-	<td>$dbUsernameForm</td>
+	<td>".q($dbUsernameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langMainDB: </th>
-	<td>$dbNameForm</td>
+	<td>".q($dbNameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>PHPMyAdmin URL:</th>
-	<td>$dbMyAdmin</td>
+	<td>".q($dbMyAdmin)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langSiteUrl:</th>
-	<td>$urlForm</td>
+	<td>".q($urlForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langLocalPath:</th>
-	<td>$pathForm</td>
+	<td>".q($pathForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminEmail:</th>
-	<td>$emailForm</td>
+	<td>".q($emailForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminName:</th>
-	<td>$nameForm</td>
+	<td>".q($nameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminSurname:</th>
-	<td>$surnameForm</td>
+	<td>".q($surnameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminLogin:</th>
-	<td>$loginForm</td>
+	<td>".q($loginForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminPass:</th>
-	<td>" . q($passForm) . "</td>
+	<td>".q($passForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langCampusName:</th>
-	<td>$campusForm</td>
+	<td>".q($campusForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskPhone: </th>
-	<td>$helpdeskForm</td>
+	<td>".q($helpdeskForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskEmail:</th>
-	<td>$helpdeskmail</td>
+	<td>".q($helpdeskmail)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteShortName:</th>
-	<td>$institutionForm</td>
+	<td>".q($institutionForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteName:</th>
-	<td>$institutionUrlForm</td>
+	<td>".q($institutionUrlForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstitutePostAddress:</th>
-	<td>" . nl2br(q($postaddressForm)) . "</td>
+	<td>".nl2br(q($postaddressForm))."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langGroupStudentRegistrationType</th>
-	<td>$mes_add</td>
+	<td>".q($mes_add)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDisableEclassStudRegType</th>
-	<td>$disable_eclass_stud_reg_info</td>
+	<td>".q($disable_eclass_stud_reg_info)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDisableEclassProfRegType</th>
-	<td>$disable_eclass_prof_reg_info</td>
+	<td>".q($disable_eclass_prof_reg_info)."</td>
 	</tr>";
 	$tool_content .= "<tr><td class='right'>&nbsp;</td>
 	<td class='right'>
@@ -619,7 +619,6 @@ $encryptedPasswd = true;
 	<br />
 	<div>$langProtect</div>
 	<br /><br />
-	</form>
 	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
 	draw($tool_content);
 	}
