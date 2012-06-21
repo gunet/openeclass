@@ -57,7 +57,7 @@ define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
-	echo "<hr /><pre>$sql</pre><hr />";
+	echo "<hr /><pre>".q($sql)."</pre><hr />";
 	return db_query($sql, $db);
 }
 

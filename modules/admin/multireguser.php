@@ -41,7 +41,7 @@ if (isset($_POST['submit'])) {
         $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
-                        $tool_content = "<p class='caution'>$langMultiRegFieldError <b>$field</b></p>";
+                        $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
                         draw($tool_content, 3, 'admin');
                         exit;
                 }
@@ -70,7 +70,8 @@ if (isset($_POST['submit'])) {
                                                 $info['id'] = $am . ' - ' . $info['id'];
                                         }
                                 }
-
+                                $nom = isset($info['last'])? $info['last']: '';
+                                $prenom = isset($info['first'])? $info['last']: '';
                                 if (!isset($info['username'])) {
                                         $info['username'] = create_username($newstatut,
                                                                             $facid,
@@ -84,8 +85,8 @@ if (isset($_POST['submit'])) {
                                 $new = create_user($newstatut,
                                                    $info['username'],
                                                    $info['password'],
-                                                   @$info['last'],
-                                                   @$info['first'],
+                                                   $nom,
+                                                   $prenom,
                                                    @$info['email'],
                                                    $facid,
                                                    @$info['id'],
@@ -102,7 +103,7 @@ if (isset($_POST['submit'])) {
                                                 if (!register($new[0], $course_code)) {
                                                         $unparsed_lines .=
                                                                 sprintf($langMultiRegCourseInvalid . "\n",
-                                                                        "$info[last] $info[first] ($info[username])",
+                                                                        q("$info[last] $info[first] ($info[username])"),
                                                                         $course_code);
                                                 }
                                         }
@@ -118,7 +119,7 @@ if (isset($_POST['submit'])) {
         }
         $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
         foreach ($new_users_info as $n) {
-                $tool_content .= "<tr><td>$n[1]</td><td>$n[2]</td><td>$n[3]</td><td>$n[4]</td><td>$n[5]</td><td>$n[6]</td><td>$n[7]</td></tr>\n";
+                $tool_content .= "<tr><td>".quote($n[1])."</td><td>".quote($n[2])."</td><td>".quote($n[3])."</td><td>".quote($n[4])."</td><td>".quote($n[5])."</td><td>".quote($n[6])."</td><td>".quote($n[7])."</td></tr>\n";
         }
         $tool_content .= "</table>\n";
 } else {
@@ -235,7 +236,7 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
 {
         $wildcard = str_pad('', SUFFIX_LEN, '_');
         $req = db_query("SELECT username FROM user
-                         WHERE username LIKE '$prefix$wildcard'
+                         WHERE username LIKE ".quote($prefix.$wildcard)."
                          ORDER BY username DESC LIMIT 1");
         if ($req and mysql_num_rows($req) > 0) {
                 list($last_uname) = mysql_fetch_row($req);
