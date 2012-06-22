@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
         }
         $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
         foreach ($new_users_info as $n) {
-                $tool_content .= "<tr><td>".quote($n[1])."</td><td>".quote($n[2])."</td><td>".quote($n[3])."</td><td>".quote($n[4])."</td><td>".quote($n[5])."</td><td>".quote($n[6])."</td><td>".quote($n[7])."</td></tr>\n";
+                $tool_content .= "<tr><td>".q($n[1])."</td><td>".q($n[2])."</td><td>".q($n[3])."</td><td>".q($n[4])."</td><td>".q($n[5])."</td><td>".q($n[6])."</td><td>".q($n[7])."</td></tr>\n";
         }
         $tool_content .= "</table>\n";
 } else {
