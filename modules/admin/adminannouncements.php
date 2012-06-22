@@ -51,7 +51,7 @@ $displayForm = true;
 
 foreach (array('title', 'newContent', 'lang_admin_ann') as $var) {
         if (isset($_POST[$var])) {
-                $GLOBALS[$var] = autoquote($_POST[$var]);
+                $GLOBALS[$var] = q($_POST[$var]);
         } else {
                 $GLOBALS[$var] = '';
         }
@@ -59,8 +59,8 @@ foreach (array('title', 'newContent', 'lang_admin_ann') as $var) {
 
 // modify visibility
 if (isset($_GET['vis'])) {
-	$id = $_GET['id'];
-	$vis = $_GET['vis'];
+	$id = q($_GET['id']);
+	$vis = q($_GET['vis']);
 	if ($vis == 0) {
 		$vis = 'I';
 	} else {
@@ -94,8 +94,8 @@ if (isset($_GET['delete'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
-                        SET title = $title, body = $newContent,
-			lang = $lang_admin_ann, 
+                        SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
+			lang = ". autoquote($lang_admin_ann). ", 
 			`date` = NOW(), $start_sql, $end_sql
                         WHERE id = $id", $mysqlMainDb);
                 $message = $langAdminAnnModify;
@@ -106,8 +106,8 @@ if (isset($_GET['delete'])) {
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
                 db_query("INSERT INTO admin_announcements
-                        SET title = $title, body = $newContent,
-                        visible = 'V', lang = $lang_admin_ann,
+                        SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
+                        visible = 'V', lang = ". autoquote($lang_admin_ann) .",
                         `date` = NOW(), ordre = $order, $start_sql, $end_sql");
                 $message = $langAdminAnnAdd;
         }
@@ -201,11 +201,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 
 // modify order taken from announcements.php
 if (isset($_GET['down'])) {
-	$thisAnnouncementId = $_GET['down'];
+	$thisAnnouncementId = q($_GET['down']);
 	$sortDirection = "DESC";
 }
 if (isset($_GET['up'])) {
-	$thisAnnouncementId = $_GET['up'];
+	$thisAnnouncementId = q($_GET['up']);
 	$sortDirection = "ASC";
 }
 

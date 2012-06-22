@@ -50,7 +50,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
 
 if (isset($_GET['c'])) {
-	$c = $_GET['c'];
+	$c = q($_GET['c']);
 	$_SESSION['c_temp'] = $c;
 }
 
@@ -75,6 +75,16 @@ if (isset($c)) {
 	// Get information about selected course
 	$sql = db_query("SELECT * FROM cours WHERE code = " . quote($c));
 	$row = mysql_fetch_array($sql);
+        
+        if ($row === false) {
+            // Print an error message
+            $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
+            // Display link to go back to listcours.php
+            $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
+            draw($tool_content, 3);
+            exit();
+        }
+        
 	// Display course information and link to edit
         $faculte = find_faculty_by_id($row['faculteid']);
 	$tool_content .= "<fieldset>
