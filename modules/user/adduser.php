@@ -35,7 +35,7 @@ $navigation[] = array ("url"=>"user.php?course=$code_cours", "name"=> $langAdmin
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);
 	mysql_select_db($mysqlMainDb);
-	$result = db_query("INSERT INTO cours_user (user_id, cours_id, statut, reg_date) ".
+	$result = db_query("INSERT IGNORE INTO cours_user (user_id, cours_id, statut, reg_date) ".
                            "VALUES ($uid_to_add, $cours_id, 5, CURDATE())");
 		// notify user via email
 		$email = uid_to_email($uid_to_add);
@@ -51,7 +51,7 @@ if (isset($_GET['add'])) {
 	} else {
 		$tool_content .=  "<p class='alert1'>$langAddError</p>";
 	}
-		$tool_content .= "<br /><a href='adduser.php?course=$code_cours'>$langAddBack</a></p><br />\n";
+		$tool_content .= "<br /><p><a href='adduser.php?course=$code_cours'>$langAddBack</a></p><br />\n";
 
 } else {
 	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>";
