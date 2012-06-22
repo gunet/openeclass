@@ -53,21 +53,19 @@ $ord = isset($_GET['ord'])?$_GET['ord']:'';
 $limit = isset($_GET['limit'])?$_GET['limit']:0;
 $mail_ver_required = get_config('email_verification_required');
 
-if($search == 'yes')	{ // coming from search_user.php (search with criteria)	
-        @$date = explode('-',  $_POST['date']);
-        if (array_key_exists(1, $date)) {
-                $day = $date[0];
-                $month = $date[1];
-                $year = $date[2];
-                $mytime = mktime($hour, $minute, 0, $month, $day, $year);
-         } else {
-                $mytime = mktime($hour, $minute, 0, 0, 0, 0);
+$user_registered_at = '';
+if ($search == 'yes')	{ // coming from search_user.php (search with criteria)
+        if (isset($_POST['date'])) {
+                $date = explode('-',  $_POST['date']);
+                if (count($date) == 3) {
+                        $day = intval($date[0]);
+                        $month = intval($date[1]);
+                        $year = intval($date[2]);
+                        $user_registered_at = mktime($hour, $minute, 0, $month, $day, $year);
+                } else {
+                        $user_registered_at = mktime($hour, $minute, 0, 0, 0, 0);
+                }
         }
-        if(!empty($mytime)) {
-                $user_registered_at = $mytime;
-        } else {
-                $user_registered_at = '';
-        }        
 }
 
 // Display Actions Toolbar
@@ -84,207 +82,67 @@ $tool_content .= "
 /***************
 Criteria/Filters
 ***************/
-$criteria = 0;
+$criteria = array();
 // surname search
-if(!empty($user_surname))
-{
-	$user_surname_qry = " nom LIKE " . autoquote('%' . $user_surname . '%');
-	$criteria++;
+if (!empty($user_surname)) {
+	$criteria[] = "nom LIKE " . autoquote('%' . $user_surname . '%');
 }
-else
-{
-	$user_surname_qry = "";
-}
-
 // first name search
-if(!empty($user_firstname))
-{
-	if($criteria!=0)
-	{
-		$user_firstname_qry = " AND";
-	}
-	else
-	{
-		$user_firstname_qry = "";
-	}
-	$criteria++;
-	$user_firstname_qry .= " prenom LIKE " . autoquote('%' . $user_firstname . '%');
+if (!empty($user_firstname)) {
+	$criteria[] = "prenom LIKE " . autoquote('%' . $user_firstname . '%');
 }
-else
-{
-	$user_firstname_qry = "";
-}
-
 // username search
-if(!empty($user_username))
-{
-	if($criteria!=0)
-	{
-		$user_username_qry = " AND";
-	}
-	else
-	{
-		$user_username_qry = "";
-	}
-	$criteria++;
-	$user_username_qry .= " username LIKE " . autoquote('%' . $user_username . '%');
+if (!empty($user_username)) {
+	$criteria[] = "username LIKE " . autoquote('%' . $user_username . '%');
 }
-else
-{
-	$user_username_qry = "";
-}
-
 // mail verified
-if($verified_mail === EMAIL_VERIFICATION_REQUIRED 
-        or $verified_mail === EMAIL_VERIFIED 
-        or $verified_mail ===EMAIL_UNVERIFIED)
-{
-	if($criteria!=0)
-	{
-		$verified_mail_qry = " AND";
-	}
-	else
-	{
-		$verified_mail_qry = "";
-	}
-	$criteria++;
-	$verified_mail_qry .= " verified_mail=" . autoquote($verified_mail);
+if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or
+    $verified_mail === EMAIL_VERIFIED or
+    $verified_mail === EMAIL_UNVERIFIED) {
+        $criteria[] = "verified_mail=" . autoquote($verified_mail);
 }
-else
-{
-	$verified_mail_qry = "";
-}
-
-
 //user am search
-if(!empty($user_am))
-{
-	if($criteria!=0)
-	{
-		$user_am_qry = " AND";
-	}
-	else
-	{
-		$user_am_qry = "";
-	}
-	$criteria++;
-	$user_am_qry .= " am=" . autoquote($user_am);
+if (!empty($user_am)) {
+	$criteria[] = "am=" . autoquote($user_am);
 }
-else
-{
-	$user_am_qry = "";
-}
-
 // user type search
-if(!empty($user_type))
-{
-	if($criteria!=0)
-	{
-		$user_type_qry = " AND";
-	}
-	else
-	{
-		$user_type_qry = "";
-	}
-	$criteria++;
-	$user_type_qry .= " statut=" . intval($user_type);
+if (!empty($user_type)) {
+	$criteria[] = "statut=" . intval($user_type);
 }
-else
-{
-	$user_type_qry = "";
-}
-
 // auth type search
-if(!empty($auth_type))
-{
-	if($criteria!=0)
-	{
-		$auth_type_qry = " AND";
-	}
-	else
-	{
-		$auth_type_qry = "";
-	}
-	$criteria++;
-	if($auth_type >=2) {
-		$auth_type_qry .= " password=".quote($auth_ids[$auth_type]);
-	}
-	elseif($auth_type==1) {
-		$auth_type_qry .= " password != ".quote($auth_ids[1]);
-		for ($i = 2; $i <= count($auth_ids); $i++) {
-			$auth_type_qry .= " AND password != ".quote($auth_ids[$i]);
-		}
+if (!empty($auth_type)) {
+	if ($auth_type >= 2) {
+		$criteria[] = "password=".quote($auth_ids[$auth_type]);
+	} elseif ($auth_type == 1) {
+                $criteria[] = "password NOT IN ('" .
+                        implode("', '", $auth_ids) .
+                        "')";
 	}
 }
-else
-{
-	$auth_type_qry = "";
-}
-
 // email search
-if(!empty($user_email))
-{
-	if($criteria!=0)
-	{
-		$user_email_qry = " AND";
-	}
-	else
-	{
-		$user_email_qry = "";
-	}
-	$criteria++;
-	$user_email_qry .= " email LIKE " . autoquote('%' . $user_email . '%');
+if (!empty($user_email)) {
+	$criteria[] = " email LIKE " . autoquote('%' . $user_email . '%');
 }
-else
-{
-	$user_email_qry = "";
-}
-
 // join the above with registered at search
-if(!empty($user_registered_at_flag))
-{
-	if($criteria!=0)
-	{
-		$user_registered_at_qry = " AND";
-		$criteria++;
-	}
-	else
-	{
-		$user_registered_at_qry = "";
-	}
-	$user_registered_at_qry .= " registered_at";
-	switch($user_registered_at_flag)
-	{
-		case 1:	$user_registered_at_qry .= " >="; break;
-		case 2: $user_registered_at_qry .= " <="; break;
-		default: $user_registered_at_qry .= " <="; break;
-	}
-	if(!empty($user_registered_at))
-	{
-		$user_registered_at_qry .= $user_registered_at;
-	}
-	else
-	{
-		$user_registered_at_qry = "";
-	}
-}
-else
-{
-	$user_registered_at_qry = "";
+if (!empty($user_registered_at_flag) and !empty($user_registered_at)) {
+	$user_registered_at_qry = "registered_at " .
+                (($user_registered_at_flag == 1)? '>=': '<=') .
+                ' ' . $user_registered_at;
+	$criteria[] = $user_registered_at_qry;
 }
 
 // end filter/criteria
 
-if($search == 'inactive') { // search for inactive users	
-	$users_active_qry = " expires_at<".time()." AND user_id<>1";
-} elseif ($search == 'no_login') {      
-	$no_login_qry = "SELECT `user_id`, `nom`, `prenom`, `username`, `email`, `verified_mail`, `statut` 
-                                FROM `user` LEFT JOIN `loginout` 
-                                ON `user`.`user_id` = `loginout`.`id_user` 
+if ($search == 'inactive') { // search for inactive users
+	$criteria[] = "expires_at < ".time()." AND user_id <> 1";
+} elseif ($search == 'no_login') {
+	$no_login_qry = "SELECT `user_id`, `nom`, `prenom`, `username`, `email`, `verified_mail`, `statut`
+                                FROM `user` LEFT JOIN `loginout`
+                                ON `user`.`user_id` = `loginout`.`id_user`
                                 WHERE `loginout`.`id_user` IS NULL";
 }
 
-if(!empty($ord)) { // if we want to order results
+if (!empty($ord)) { // if we want to order results
 	switch ($ord) {
 		case "s": $order = "statut,prenom,nom"; break;
 		case "n": $order = "nom,prenom,statut"; break;
@@ -296,30 +154,21 @@ if(!empty($ord)) { // if we want to order results
 	$order = "statut";
 }
 
-if (!empty($c)) { // users per course        
+if (!empty($c)) { // users per course
 	$qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, a.verified_mail, b.statut
 		FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
-		WHERE b.cours_id = $c";		
+		WHERE b.cours_id = $c";
 } elseif (!empty($users_active_qry)) { // inactive users
-         $qry = "SELECT user_id, nom, prenom, username, email, verified_mail, statut 
-                 FROM user WHERE $users_active_qry";         
-} elseif (!empty($no_login_qry)) { // users who have never logged in        
+         $qry = "SELECT user_id, nom, prenom, username, email, verified_mail, statut
+                 FROM user WHERE $users_active_qry";
+} elseif (!empty($no_login_qry)) { // users who have never logged in
          $qry = $no_login_qry;
 } else {
 	// Count users, with or without criteria/filters
 	$qry = "SELECT user_id, nom, prenom, username, email, statut FROM user";
-	if((!empty($user_surname_qry)) 
-                or (!empty($user_firstname_qry)) 
-                or (!empty($user_username_qry)) 
-                or (!empty($user_am_qry)) 
-                or (!empty($verified_mail_qry)) 
-                or (!empty($user_type_qry)) 
-                or (!empty($auth_type_qry)) 
-                or (!empty($user_registered_at_qry)) 
-                or (!empty($user_email_qry)))
-        {
-                $qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$verified_mail_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry;                
-        }        
+	if (count($criteria)) {
+                $qry .= " WHERE " . implode(' AND ', $criteria);
+        }
 }
 $sql = db_query($qry);
 $countUser = mysql_num_rows($sql);
@@ -338,14 +187,14 @@ while($numrows = mysql_fetch_array($sql, MYSQL_ASSOC)) {
 }
 
 if($countUser > 0) {
-        $caption .= "$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents 
+        $caption .= "$langThereAre: <b>$teachers</b> $langTeachers, <b>$students</b> $langStudents
                 $langAnd <b>$visitors</b> $langVisitors<br />";
         $caption .= "$langTotal: <b>$countUser</b> $langUsers<br />";
         if($search == 'inactive') {  // inactive users
                 $caption .= "&nbsp;$langAsInactive<br />";
                 $caption .= "<a href='updatetheinactive.php?activate=1'>".$langAddSixMonths."</a><br />";
                 $header_link = $pagination_link = '';
-        } elseif ($search == 'no_login') {      
+        } elseif ($search == 'no_login') {
                 $qry = $no_login_qry;
                 $header_link = $pagination_link = "&amp;search=no_login";
         } elseif (!empty($c)) { //users per course
@@ -354,27 +203,27 @@ if($countUser > 0) {
                 FROM user AS a LEFT JOIN cours_user AS b ON a.user_id = b.user_id
                 WHERE b.cours_id=$c";
         } else { // search with criteria
-                $header_link = $pagination_link = "&amp;user_surname=$user_surname&amp;user_firstname=$user_firstname&amp;user_username=$user_username&amp;user_am=$user_am&amp;user_email=$user_email&amp;user_type=$user_type&amp;auth_type=$auth_type&amp;user_registered_at_flag=$user_registered_at_flag&amp;verified_mail=$verified_mail";
+                $header_link = $pagination_link =
+                        "&amp;user_surname=".urlencode($user_surname).
+                        "&amp;user_firstname=".urlencode($user_firstname).
+                        "&amp;user_username=".urlencode($user_username).
+                        "&amp;user_am=".urlencode($user_am).
+                        "&amp;user_email=".urlencode($user_email).
+                        "&amp;user_type=".urlencode($user_type).
+                        "&amp;auth_type=".urlencode($auth_type).
+                        "&amp;user_registered_at_flag=".urlencode($user_registered_at_flag).
+                        "&amp;verified_mail=$verified_mail";
 
                 $qry = "SELECT user_id, nom, prenom, username, email, statut, verified_mail FROM user";
-                if((!empty($user_surname_qry)) 
-                        or (!empty($user_firstname_qry))
-                        or (!empty($user_username_qry)) 
-                        or (!empty($user_am_qry)) 
-                        or (!empty($verified_mail_qry))
-                        or (!empty($user_type_qry)) 
-                        or (!empty($auth_type_qry)) 
-                        or (!empty($user_registered_at_qry))
-                        or (!empty($user_email_qry)))
-                {
-                        $qry .= " WHERE".$user_surname_qry.$user_firstname_qry.$user_username_qry.$user_am_qry.$verified_mail_qry.$user_type_qry.$auth_type_qry.$user_email_qry.$user_registered_at_qry;
+                if (count($criteria)) {
+                        $qry .= " WHERE " . implode(' AND ', $criteria);
                 }
         }
         if (!empty($ord)) { // if we want to order results
                 $pagination_link .= "&amp;ord=$ord";
         }
-        if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE                        
-                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[SCRIPT_NAME]", "$pagination_link");
+        if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
+                $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, $_SERVER['SCRIPT_NAME'], $pagination_link);
         }
         $qry .= " ORDER BY $order LIMIT $limit, ".USERS_PER_PAGE."";
         mysql_free_result($sql);
@@ -400,19 +249,19 @@ if($countUser > 0) {
                         }
                         $tool_content .= "<td width='1'>
                         <img src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td>".htmlspecialchars($logs['nom'])."</td>
-                        <td>".htmlspecialchars($logs['prenom'])."</td>
-                        <td>".htmlspecialchars($logs['username'])."</td>
-                        <td width='200'>".htmlspecialchars($logs['email']);
+                        <td>".q($logs['nom'])."</td>
+                        <td>".q($logs['prenom'])."</td>
+                        <td>".q($logs['username'])."</td>
+                        <td width='200'>".q($logs['email']);
                         if ($mail_ver_required) {
                                 switch($logs['verified_mail']) {
-                                        case EMAIL_VERIFICATION_REQUIRED: 
+                                        case EMAIL_VERIFICATION_REQUIRED:
                                                 $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
                                                 break;
-                                        case EMAIL_VERIFIED: 
+                                        case EMAIL_VERIFIED:
                                                 $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
                                                 break;
-                                        case EMAIL_UNVERIFIED: 
+                                        case EMAIL_UNVERIFIED:
                                                 $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";
                                                 break;
                                 }
@@ -424,7 +273,7 @@ if($countUser > 0) {
                                 case 1:	$tool_content .= "<img src='$themeimg/teacher.png' title='$langTeacher' />";break;
                                 case 5:	$tool_content .= "<img src='$themeimg/student.png' title='$langStudent' />";break;
                                 case 10: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' />";break;
-                                default: $tool_content .= "$langOther ($logs[6])";break;
+                                default: $tool_content .= "$langOther (".q($logs[6]).")";break;
                         }
                         $tool_content .= "</td>";
                         if ($logs['user_id'] == 1) { // don't display actions for admin user
@@ -442,7 +291,7 @@ if($countUser > 0) {
                                 <img src='$themeimg/log_as.png' title='$langChangeUserAs ".
                                         q($logs['username'])."' /></a>
                                 </td>\n";
-                        }                                
+                        }
                         $tool_content .= "</tr>";
                         $k++;
                 }
@@ -450,7 +299,7 @@ if($countUser > 0) {
         $tool_content .= "</table> <br><div class='right smaller'>".$caption."</div>";
         if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
                 $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[SCRIPT_NAME]", "$pagination_link");
-        }  
+        }
 } else {
         $tool_content .= "<p class='caution'>$langNoSuchUsers</p>";
 }
