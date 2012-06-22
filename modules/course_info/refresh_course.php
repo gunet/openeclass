@@ -41,7 +41,7 @@ if(isset($_POST['submit'])) {
 	$output = array();	
 	if (isset($_POST['delusers'])) {
 		if (isset($_POST['before_date'])) {
-			$output[] = delete_users($_POST['before_date']);
+			$output[] = delete_users(q($_POST['before_date']));
 		} else {
 			$output[] = delete_users();
 		}

@@ -27,7 +27,7 @@ $nameTools = $langUnregCourse;
 $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
 if (isset($_GET['cid'])) {
-  $cid = $_GET['cid'];
+  $cid = q($_GET['cid']);
   $_SESSION['cid_tmp']=$cid;
 }
 if(!isset($_GET['cid'])) {
