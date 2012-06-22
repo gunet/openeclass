@@ -778,7 +778,7 @@ function new_code($fac) {
 	do {
 		$code = $gencode[0].$gencode[1];
 		$gencode[1] += 1;
-		db_query("UPDATE $mysqlMainDb.faculte SET generator = '$gencode[1]'
+		db_query("UPDATE `$mysqlMainDb`.faculte SET generator = '$gencode[1]'
 			WHERE id = '$fac'");
 	} while (mysql_select_db($code));
 	mysql_select_db($mysqlMainDb);

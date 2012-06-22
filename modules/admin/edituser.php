@@ -187,7 +187,6 @@ $tool_content .= "
              </tr>";
 
 $tool_content .= "
-     <tr>
    <tr>
      <th class='left'>$langAm: </th>
      <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>

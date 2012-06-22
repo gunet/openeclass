@@ -385,7 +385,7 @@ if (isset($_POST['create_course'])) {
         require "create_course_db.php";
 
         // ------------- update main Db------------
-        mysql_select_db("$mysqlMainDb");
+        mysql_select_db($mysqlMainDb);
         
         // get default quota values
         $doc_quota = get_config('doc_quota');
@@ -444,11 +444,11 @@ if (isset($_POST['create_course'])) {
 
         // ----------- Import from BetaCMS Bridge -----------
 	if (get_config("betacms")) {
-	        $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
+	       $tool_content .= doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir);
 	}
         // --------------------------------------------------
         $tool_content .= "
-                <p class='success'><b>$langJustCreated:</b> $intitule<br>
+                <p class='success'><b>$langJustCreated:</b> ".q($intitule)."<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
                 <p class='eclass_button'><a href='../../courses/$repertoire/index.php'>$langEnter</a></p>";
 } // end of submit

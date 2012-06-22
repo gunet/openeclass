@@ -103,7 +103,7 @@ if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or
 }
 //user am search
 if (!empty($user_am)) {
-	$criteria[] = "am=" . autoquote($user_am);
+	$criteria[] = "am LIKE " . autoquote('%' . $user_am . '%');
 }
 // user type search
 if (!empty($user_type)) {
