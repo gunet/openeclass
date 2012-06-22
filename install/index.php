@@ -133,7 +133,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = '';
         $course_multidep = $user_multidep = $restrict_teacher_owndep = '';
         $email_from = 1;
-        $close_user_registration = '';        
+        $close_user_registration = '';
 } else {
 	register_posted_variables(array(
                 'lang' => true,
@@ -141,7 +141,7 @@ if (isset($_POST['welcomeScreen'])) {
                 'dbUsernameForm' => true,
                 'dbNameForm' => true,
                 'phpMyAdminURL' => true,
-                'dbPassForm' => true,        
+                'dbPassForm' => true,
                 'phpSysInfoURL' => true,
                 'urlForm' => true,
                 'emailForm' => true,
@@ -173,7 +173,7 @@ if (isset($_POST['welcomeScreen'])) {
                 'course_multidep' => true,
                 'user_multidep' => true,
                 'restrict_teacher_owndep' => true));
-	
+
 	register_posted_variables(array(
 		'doc_quota' => true,
 		'group_quota' => true,
@@ -220,9 +220,9 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
                   'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
-                  'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required', 
+                  'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg', 
+		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
                   'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep', 'restrict_teacher_owndep', 'lang');
 
 // step 2 license
@@ -247,7 +247,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
 }
 
 // step 3 mysql database settings
-elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {	
+elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	$langStepTitle = $langDBSetting;
 	$langStep = $langStep3;
 	$_SESSION['step']=3;
@@ -281,7 +281,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
         <div class='right smaller'>(*) $langAllFieldsRequired</div>" .
         hidden_vars($all_vars) . "</form>";
 	draw($tool_content);
-}	 
+}
 
 // step 4 basic config settings
 elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
@@ -332,7 +332,7 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 		<tr><th class='left'>$langDropboxQuota</th>
 			<td>".text_input('dropbox_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langViaReq</th>
-			<td>".checkbox_input('close_user_registration')."</td></tr>                
+			<td>".checkbox_input('close_user_registration')."</td></tr>
 		<tr><th class='left'>$langDisableEclassStudReg</th>
 			<td>".checkbox_input('disable_eclass_stud_reg')."</td></tr>
 		<tr><th class='left'>$langDisableEclassProfReg</th>
@@ -454,75 +454,75 @@ elseif(isset($_REQUEST['install6']))
 		<table width='100%' class='tbl smaller'>
 	<tr>
 	<th class='left'>$langdbhost:</th>
-	<td>$dbHostForm</td>
+	<td>".q($dbHostForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDBLogin:</th>
-	<td>$dbUsernameForm</td>
+	<td>".q($dbUsernameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langMainDB: </th>
-	<td>$dbNameForm</td>
+	<td>".q($dbNameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>PHPMyAdmin URL:</th>
-	<td>$phpMyAdminURL</td>
+	<td>".q($phpMyAdminURL)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langSiteUrl:</th>
-	<td>$urlForm</td>
+	<td>".q($urlForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminEmail:</th>
-	<td>$emailForm</td>
+	<td>".q($emailForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminName:</th>
-	<td>$nameForm</td>
+	<td>".q($nameForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminLogin:</th>
-	<td>$loginForm</td>
+	<td>".q($loginForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langAdminPass:</th>
-	<td>" . q($passForm) . "</td>
+	<td>".q($passForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langCampusName:</th>
-	<td>$campusForm</td>
+	<td>".q($campusForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskPhone: </th>
-	<td>$helpdeskForm</td>
+	<td>".q($helpdeskForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langHelpDeskEmail:</th>
-	<td>$helpdeskmail</td>
+	<td>".q($helpdeskmail)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteShortName:</th>
-	<td>$institutionForm</td>
+	<td>".q($institutionForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstituteName:</th>
-	<td>$institutionUrlForm</td>
+	<td>".q($institutionUrlForm)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langInstitutePostAddress:</th>
-	<td>" . nl2br(q($postaddressForm)) . "</td>
+	<td>".nl2br(q($postaddressForm))."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langGroupStudentRegistrationType</th>
-	<td>$mes_add</td>
+	<td>".q($mes_add)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDisableEclassStudRegType</th>
-	<td>$disable_eclass_stud_reg_info</td>
+	<td>".q($disable_eclass_stud_reg_info)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langDisableEclassProfRegType</th>
-	<td>$disable_eclass_prof_reg_info</td>
+	<td>".q($disable_eclass_prof_reg_info)."</td>
 	</tr>";
 	$tool_content .= "<tr><td class='right'>&nbsp;</td>
 	<td class='right'>
@@ -572,7 +572,7 @@ elseif(isset($_REQUEST['install7']))
 	$fd = @fopen("../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
-	} else {		
+	} else {
 		$stringConfig = '<?php
 /* ========================================================
  * Open eClass 3.0 configuration file
@@ -589,15 +589,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 	// message
 	$tool_content .= "
 	<div class='success'>$langInstallSuccess</div>
-	
+
 	<br />
 	<div>$langProtect</div>
 	<br /><br />
-	</form>
 	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
-	draw($tool_content);
+        draw($tool_content);
 	}
-}	
+}
 
 // step 1 requirements
 elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
@@ -615,7 +614,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	mkdir_or_error('courses/temp');
 	mkdir_or_error('courses/userimg');
         mkdir_or_error('video');
-	
+
 	if($configErrorExists) {
 		$tool_content .= implode("<br />", $errorContent);
 		$tool_content .= "</form>";
@@ -642,12 +641,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$tool_content .= "<ul class='installBullet'>";
 	warnIfExtNotLoaded("ldap");
 	$tool_content .= "</ul>";
-        if (ini_get('register_globals')) { // check if register globals is Off     
+        if (ini_get('register_globals')) { // check if register globals is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
         }
         if (ini_get('short_open_tag')) { // check if short_open_tag is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall2</div>";
-        }                
+        }
 	$tool_content .= "
 	<p class='sub_title1'>$langOtherReq</p>
 	<ul class='installBullet'>
@@ -709,7 +708,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 // functions
 // -----------------------
 function mkdir_or_error($dirname) {
-                global $errorContent, $configErrorExists, $langWarningInstall3, 
+                global $errorContent, $configErrorExists, $langWarningInstall3,
                        $langWarnInstallNotice1, $langWarnInstallNotice2,
                        $install_info_file, $langHere;
                 if (!is_dir('../' . $dirname)) {

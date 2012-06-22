@@ -35,7 +35,7 @@ $navigation[] = array ('url' => "user.php?course=$course_code", 'name' => $langA
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);
 	mysql_select_db($mysqlMainDb);
-	$result = db_query("INSERT INTO course_user (user_id, course_id, statut, reg_date) ".
+	$result = db_query("INSERT IGNORE INTO course_user (user_id, course_id, statut, reg_date) ".
                            "VALUES ($uid_to_add, $course_id, 5, CURDATE())");
 		// notify user via email
 		$email = uid_to_email($uid_to_add);
@@ -51,58 +51,47 @@ if (isset($_GET['add'])) {
 	} else {
 		$tool_content .=  "<p class='alert1'>$langAddError</p>";
 	}
-		$tool_content .= "<br /><a href='adduser.php?course=$course_code'>$langAddBack</a></p><br />\n";
+		$tool_content .= "<br /><p><a href='adduser.php?course=$course_code'>$langAddBack</a></p><br />\n";
 
 } else {
 	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         register_posted_variables(array('search_nom' => true,
                                         'search_prenom' => true,
-                                        'search_uname' => true), 'any');
+                                        'search_username' => true,
+                                        'search_am' => true), 'any');
 
         $tool_content .= "
         <fieldset>
         <legend>$langUserData</legend>
-        <table width='100%' class='tbl'>
-        <tr>
-          <td colspan='2'>$langAskUser<br /><br /></td>
-        </tr>
-        <tr>
-          <th class='left' width='180'>$langSurname:</th>
-          <td><input type='text' name='search_nom' value='$search_nom' /></td>
-        </tr>
-            <tr>
-          <th class='left'>$langName:</th>
-          <td><input type='text' name='search_prenom' value='$search_prenom' /></td>
-        </tr>
-            <tr>
-          <th class='left'>$langUsername:</th>
-          <td><input type='text' name='search_uname' value='$search_uname' /></td>
-        </tr>
-        <tr>
-          <th class='left'>&nbsp;</th>
-          <td class='right'><input type='submit' name='search' value='$langSearch' /></td>
-        </tr>
+        <table class='tbl'>
+        <tr><td colspan='2'>$langAskUser<br /><br /></td></tr>
+        <tr><th class='left'>$langSurname:</th>
+            <td><input type='text' name='search_nom' value='".q($search_nom)."' /></td></tr>
+        <tr><th class='left'>$langName:</th>
+            <td><input type='text' name='search_prenom' value='".q($search_prenom)."' /></td></tr>
+        <tr><th class='left'>$langUsername:</th>
+            <td><input type='text' name='search_username' value='".q($search_username)."' /></td></tr>
+        <tr><th class='left'>$langAm:</th>
+            <td><input type='text' name='search_am' value='".q($search_am)."' /></td></tr>
+        <tr><th class='left'>&nbsp;</th>
+            <td class='right'><input type='submit' name='search' value='$langSearch' /></td></tr>
         </table>
         </fieldset>
         </form>";
 
 	mysql_select_db($mysqlMainDb);
-	$search=array();
-	if (!empty($search_nom)) {
-		$search[] = "u.nom LIKE " . autoquote($search_nom . '%');
-	}
-	if (!empty($search_prenom)) {
-		$search[] = "u.prenom LIKE " . autoquote($search_prenom . '%');
-	}
-	if (!empty($search_uname)) {
-		$search[] = "u.username LIKE " . autoquote($search_uname . '%');
-	}
-
+	$search = array();
+        foreach (array('nom', 'prenom', 'username', 'am') as $term) {
+                $tvar = 'search_'.$term;
+                if (!empty($GLOBALS[$tvar])) {
+                        $search[] = "u.$term LIKE " . quote($GLOBALS[$tvar] . '%');
+                }
+        }
 	$query = join(' AND ', $search);
 	if (!empty($query)) {
                     db_query("CREATE TEMPORARY TABLE lala AS
                     SELECT user_id FROM course_user WHERE course_id = $course_id");
-                    $result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username FROM
+                    $result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.am FROM
                         user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
                         c.user_id IS NULL AND $query");
                     if (mysql_num_rows($result) == 0) {
@@ -114,6 +103,7 @@ if (isset($_GET['add'])) {
                                   <th width='150'>$langName</th>
                                   <th width='150'>$langSurname</th>
                                   <th>$langUsername</th>
+                                  <th width='150'>$langAm</th>
                                   <th width='200'>$langActions</th>
                                 </tr>";
                             $i = 1;
@@ -123,9 +113,10 @@ if (isset($_GET['add'])) {
                                     } else {
                                             $tool_content .= "<tr class='odd'>";
                                     }
-                                    $tool_content .= "<td align='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
-                                                     q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td align='center'>
-                                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                    $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
+                                            q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td>" .
+                                            q($myrow['am']) . "</td><td align='center'>" .
+                                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
                                     $i++;
                             }
                             $tool_content .= "</table>";

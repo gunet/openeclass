@@ -246,7 +246,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value='3' /></td>
 	    <td>$langCourseInactive</td>
 	  </tr>
-	  </table>      
+	  </table>
 	  <br />
 	</td>
       </tr>
@@ -257,7 +257,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
  	  <table class='tbl smaller' width='100%'>
 	  <tr>";
-        $tool_content .= create_td($modules[MODULE_ID_AGENDA], MODULE_ID_AGENDA, 1);	    
+        $tool_content .= create_td($modules[MODULE_ID_AGENDA], MODULE_ID_AGENDA, 1);
         $tool_content .= "<th width='2' >&nbsp;</th>";
         $tool_content .= create_td($modules[MODULE_ID_DROPBOX], MODULE_ID_DROPBOX, 0);
         $tool_content .= "</tr><tr class='even'>";
@@ -346,17 +346,14 @@ if (isset($_POST['create_course'])) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;
-        }        
+        }
 
-        // ------------- update main Db------------
-        mysql_select_db("$mysqlMainDb");
-        
         // get default quota values
         $doc_quota = get_config('doc_quota');
         $group_quota = get_config('group_quota');
         $video_quota = get_config('video_quota');
         $dropbox_quota = get_config('dropbox_quota');
-        
+
         db_query("INSERT INTO course SET
                         code = ".quote($code) . ",
                         lang =" . quote($language) . ",
@@ -372,8 +369,8 @@ if (isset($_POST['create_course'])) {
                         password = " . quote($password) . ",
                         created = NOW()");
         $new_course_id = mysql_insert_id();
-        
-        
+
+
         // arxikopoihsh tou array gia ta checkboxes
         for ($i = 0; $i <= 50; $i++) {
                 $sbsystems[$i] = 0;
@@ -387,7 +384,7 @@ if (isset($_POST['create_course'])) {
         }
         // create entries in table `modules`
         create_modules($new_course_id, $sbsystems);
-        
+
         db_query("INSERT INTO course_user SET
                         course_id = $new_course_id,
                         user_id = $uid,
@@ -404,13 +401,13 @@ if (isset($_POST['create_course'])) {
                         wiki = 0,
                         agenda = 0");
         $course->refresh($new_course_id, $departments);
-                
-        $description = purify($description);        
+
+        $description = purify($description);
         $unit_id = description_unit_id($new_course_id);
         if (!empty($description)) {
                 add_unit_resource($unit_id, 'description', -1, $langDescription, $description);
         }
-                        
+
         // ----------- main course index.php -----------
 
         $fd = fopen("courses/$code/index.php", "w");
@@ -423,7 +420,7 @@ if (isset($_POST['create_course'])) {
 
         // ----------- Import from BetaCMS Bridge -----------
 	if (get_config('betacms')) {
-	        $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
+                $tool_content .= doImportFromBetaCMSAfterCourseCreation($code, $mysqlMainDb, $webDir);
 	}
         // --------------------------------------------------
         $tool_content .= "
@@ -457,23 +454,23 @@ function create_modules($cid, $sbsystems) {
         db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_DESCRIPTION.", ".$sbsystems[MODULE_ID_DESCRIPTION].", $cid)");
         db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_QUESTIONNAIRE.", ".$sbsystems[MODULE_ID_QUESTIONNAIRE].", $cid)");
         db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_LP.", ".$sbsystems[MODULE_ID_LP].", $cid)");
-        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");        
+        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");
 }
 
 // ----------------------------------------
 // create <td>....</td> for each module
 // ----------------------------------------
 function create_td($m, $value, $selected) {
-        
+
         global $themeimg;
-        
+
         $checkbox = '';
         if ($selected) {
                 $checkbox = "checked='checked'";
         }
         $td = "<td width='10' ><img src='$themeimg/$m[image]_on.png' alt='' height='16' width='16' /></td>
         <td width='150'>$m[title]</td>
-        <td width='30' ><input name='subsystems[]' type='checkbox' value='$value' $checkbox /></td>";        
-            
+        <td width='30' ><input name='subsystems[]' type='checkbox' value='$value' $checkbox /></td>";
+
         return $td;
 }

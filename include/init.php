@@ -137,39 +137,6 @@ require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
 	include $extra_messages;
 }
-// ----------------------------------------
-// Course modules array
-// user modules
-// ----------------------------------------
-$modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda/agenda.php', 'image' => 'calendar'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link/link.php', 'image' => 'links'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document/document.php', 'image' => 'docs'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video/video.php', 'image' => 'videos'),
-    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work/work.php', 'image' => 'assignments'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements/announcements.php', 'image' => 'announcements'),
-    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum/index.php', 'image' => 'forum'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise/exercise.php', 'image' => 'exercise'),
-    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group/group.php', 'image' => 'groups'),
-    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox/index.php', 'image' => 'dropbox'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary/glossary.php', 'image' => 'glossary'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook/index.php', 'image' => 'ebook'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference/conference.php', 'image' => 'conference'),
-    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description/index.php', 'image' => 'description'),
-    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire/questionnaire.php', 'image' => 'questionnaire'),
-    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath/learningPathList.php', 'image' => 'lp'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki/wiki.php', 'image' => 'wiki'),
-);
-// ----------------------------------------
-// course admin modules
-// ----------------------------------------
-$admin_modules = array(
-    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info/infocours.php', 'image' => 'course_info'),
-    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user/user.php', 'image' => 'users'),
-    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage/usage.php', 'image' => 'usage'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools/course_tools.php', 'image' => 'tooladmin'),
-);
-
 
 // Make sure that the $uid variable isn't faked
 if (isset($_SESSION['uid'])) {
@@ -367,20 +334,53 @@ if (isset($require_current_course) and $require_current_course) {
 		if ($language != $languageInterface) {
 			$language = $languageInterface;
 			// include_messages
-			include "$webDir/lang/$language/common.inc.php";
+			include "lang/$language/common.inc.php";
                         $extra_messages = "config/{$language_codes[$language]}.inc.php";
 			if (file_exists($extra_messages)) {
 				include $extra_messages;
 			} else {
 				$extra_messages = false;
 			}
-			include("$webDir/lang/$language/messages.inc.php");
+			include "lang/$language/messages.inc.php";
 			if ($extra_messages) {
 				include $extra_messages;
 			}
 		}
 	}
 }
+
+// ----------------------------------------
+// Course modules array
+// user modules
+// ----------------------------------------
+$modules = array(
+    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda/agenda.php', 'image' => 'calendar'),
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link/link.php', 'image' => 'links'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document/document.php', 'image' => 'docs'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video/video.php', 'image' => 'videos'),
+    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work/work.php', 'image' => 'assignments'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements/announcements.php', 'image' => 'announcements'),
+    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum/index.php', 'image' => 'forum'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise/exercise.php', 'image' => 'exercise'),
+    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group/group.php', 'image' => 'groups'),
+    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox/index.php', 'image' => 'dropbox'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary/glossary.php', 'image' => 'glossary'),
+    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook/index.php', 'image' => 'ebook'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference/conference.php', 'image' => 'conference'),
+    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description/index.php', 'image' => 'description'),
+    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire/questionnaire.php', 'image' => 'questionnaire'),
+    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath/learningPathList.php', 'image' => 'lp'),
+    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki/wiki.php', 'image' => 'wiki'),
+);
+// ----------------------------------------
+// course admin modules
+// ----------------------------------------
+$admin_modules = array(
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info/infocours.php', 'image' => 'course_info'),
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user/user.php', 'image' => 'users'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage/usage.php', 'image' => 'usage'),
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools/course_tools.php', 'image' => 'tooladmin'),
+);
 
 // actually a prof has $status 1
 // the system admin has rights to all courses

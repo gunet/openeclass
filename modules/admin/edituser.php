@@ -195,7 +195,6 @@ $tool_content .= "
              </tr>";
 
 $tool_content .= "
-     <tr>
    <tr>
      <th class='left'>$langAm: </th>
      <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
@@ -367,7 +366,7 @@ $tool_content .= "
 	$user_exist= FALSE;
 	// check if username is free
 	$username_check = db_query("SELECT username FROM user WHERE
-		user_id <> $u AND username = ".quote($username)."'");
+		user_id <> $u AND username = ".quote($username));
 	if (mysql_num_rows($username_check) > 0) {
 		$user_exist = TRUE;
 	}
