@@ -91,6 +91,8 @@ class Log {
                                 break;
                         case MODULE_ID_ANNOUNCE: $content = $this->announcement_action_details($details);
                                 break;
+                        case MODULE_ID_ASSIGN: $content = $this->assignment_action_details($details);
+                                break;
                         //case -1: $content = $this->announcement_action_details($details);
                         case -1: $content = "όλα τα υποσυστήματα";
                                 break;
@@ -101,6 +103,27 @@ class Log {
                 return $content;
         }
         
+        private function assignment_action_details($details) {
+                
+                global $langTitle, $langDescription, $m;
+                
+                $details = unserialize($details);
+                $content = "$langTitle  &laquo".$details['title']."&raquo";
+                if (!empty($details['description'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".$details['description']."&raquo";
+                }
+                if (!empty($details['filename'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; ".$m['filename']." &laquo".$details['filename']."&raquo";
+                }
+                if (!empty($details['comments'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; ".$m['comments']." &laquo".$details['comments']."&raquo";
+                }
+                if (!empty($details['grade'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; ".$m['grade']." &laquo".$details['grade']."&raquo";
+                }
+                
+                return $content;
+        }
         
         private function announcement_action_details($details) {
                 
