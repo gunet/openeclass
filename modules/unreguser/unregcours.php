@@ -25,7 +25,7 @@ include '../../include/baseTheme.php';
 $nameTools = $langUnregCourse;
 
 if (isset($_GET['cid'])) {
-  $cid = $_GET['cid'];
+  $cid = q($_GET['cid']);
   $_SESSION['cid_tmp']=$cid;
 }
 if(!isset($_GET['cid'])) {
@@ -53,24 +53,26 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 
 } else {
         if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
-                list($course_id) = mysql_fetch_row(db_query(
-                        "SELECT cours_id FROM cours
-                                WHERE code = " . quote($cid)));
-                db_query("DELETE FROM group_members
-                                 WHERE group_id IN ( SELECT id FROM `group`
-                                                            WHERE course_id = $course_id ) AND
-                                       user_id = $_SESSION[uid]");
-                db_query("DELETE FROM cours_user
-                                 WHERE cours_id = $course_id AND
-                                       user_id = $_SESSION[uid]");
-                if (mysql_affected_rows() > 0) {
-                        // clear session access to lesson
-                        unset($_SESSION['dbname']);
-                        unset($_SESSION['cid_tmp']);
-                        unset($_SESSION['status'][$cid]);
-                        $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
-                } else {
-                        $tool_content .= "<p class='caution_small'>$langCoursError</p>";
+                $row = mysql_fetch_row(db_query("SELECT cours_id FROM cours WHERE code = " . quote($cid)));
+                if ($row !== false) {
+                    $course_id = $row[0];
+                    
+                    db_query("DELETE FROM group_members
+                                    WHERE group_id IN ( SELECT id FROM `group`
+                                                                WHERE course_id = $course_id ) AND
+                                        user_id = $_SESSION[uid]");
+                    db_query("DELETE FROM cours_user
+                                    WHERE cours_id = $course_id AND
+                                        user_id = $_SESSION[uid]");
+                    if (mysql_affected_rows() > 0) {
+                            // clear session access to lesson
+                            unset($_SESSION['dbname']);
+                            unset($_SESSION['cid_tmp']);
+                            unset($_SESSION['status'][$cid]);
+                            $tool_content .= "<p class='success_small'>$langCoursDelSuccess</p>";
+                    } else {
+                            $tool_content .= "<p class='caution_small'>$langCoursError</p>";
+                    }
                 }
         }
         $tool_content .= "<br><br><div align=right><a href='../../index.php' class=mainpage>$langBack</a></div>";
