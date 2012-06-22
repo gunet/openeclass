@@ -73,7 +73,7 @@ if (!extension_loaded('gd')) {
             if (!isset($_POST[$key])) {
                 $$key = $val;
             } else {
-                $$key = $_POST[$key];
+                $$key = q($_POST[$key]);
             }
     }
 
@@ -106,6 +106,10 @@ if (!extension_loaded('gd')) {
             case "yearly":
                 $date_what .= ", YEAR(date_time) AS year, ";
                 $date_group = "GROUP BY YEAR(date_time) ";
+            break;
+            default:
+                $date_what = '';
+                $date_group = '';
             break;
     }
 
@@ -163,7 +167,8 @@ if (!extension_loaded('gd')) {
                         }
                     break;
             }
-            mysql_free_result($result);
+            if ($result !== false)
+                mysql_free_result($result);
         }
 
         if ($u_interval != "monthly") {
@@ -181,7 +186,8 @@ if (!extension_loaded('gd')) {
                 $chart_content=1;
         }
         $chart->setTitle($langVisits);
-        mysql_free_result($res1);
+        if ($res1 !== false)
+            mysql_free_result($res1);
         
 } else {    //show chart for a specific course
         $cid = course_code_to_id($u_course_id);
@@ -235,7 +241,8 @@ if (!extension_loaded('gd')) {
             break;
         }
         $chart->setTitle($langVisits);
-        mysql_free_result($result);
+        if ($result !== false)
+            mysql_free_result($result);
     }
 
     if (!file_exists('courses/temp')) {

@@ -55,7 +55,7 @@ $tree = new hierarchy();
 $course = new course();
 
 if (isset($_GET['c'])) {
-	$c = $_GET['c'];
+	$c = q($_GET['c']);
 	$_SESSION['c_temp'] = $c;
 }
 
@@ -83,6 +83,16 @@ if (isset($c)) {
 		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
 	$result = db_query($sql);
 	$row = mysql_fetch_array($result);
+        
+        if ($row === false) {
+            // Print an error message
+            $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
+            // Display link to go back to listcours.php
+            $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
+            draw($tool_content, 3);
+            exit();
+        }
+        
 	// Display course information and link to edit
 	$tool_content .= "<fieldset>
                 <legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">
