@@ -94,7 +94,7 @@ if (isset($_POST['submit'])) {
                                                    $_POST['lang'],
                                                    $send_mail);
                                 if ($new === false) {
-                                        $unparsed_lines .= $line . "\n" . $error . "\n";
+                                        $unparsed_lines .= q($line . "\n" . $error . "\n");
                                 } else {
                                         $new_users_info[] = $new;
 
@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) {
                                                         $unparsed_lines .=
                                                                 sprintf($langMultiRegCourseInvalid . "\n",
                                                                         q("$info[last] $info[first] ($info[username])"),
-                                                                        $course_code);
+                                                                        q($course_code));
                                                 }
                                         }
                                 }
