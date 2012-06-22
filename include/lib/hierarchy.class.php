@@ -736,8 +736,8 @@ $(function() {
                     $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                          + '<input type="hidden" $params value="' + newnode.attr("id") + '" />'
                                          + newnode.children("a").text()
-                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png"/></a>'
-                                         + '</p>');
+                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png"/><\/a>'
+                                         + '<\/p>');
                     
                     $( "#dialog-set-value" ).val( newnode.children("a").text() );
                     $( "#dialog-set-key" ).val(newnode.attr("id"));
