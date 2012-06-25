@@ -47,91 +47,47 @@
 
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
-$require_admin = TRUE;
+$require_admin = true;
 require_once '../../include/baseTheme.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
+define('MONTHS', 30 * 24 * 60 * 60);
+
 // Save new config.php
 if (isset($_POST['submit']))  {
-	// Make config directory writable
-	@chmod("../../config", 777);
-	@chmod("../../config", 0777);
-	// Create backup file
-	if (isset($_POST['backupfile']) and $_POST['backupfile'] == "on") {
-		// If a backup already exists delete it
-		if (file_exists("../../config/config_backup.php"))
-			unlink("../../config/config_backup.php");
-		// Create the backup
-		copy("../../config/config.php","../../config/config_backup.php");
-	}
-	// Open config.php empty
-	$fd=@fopen("../../config/config.php", "w");
-	if (!$fd) {
-		$tool_content .= $langFileError;
-   }
-	else {		
-		if (defined('UTF8')) {
-			$utf8define = "define('UTF8', true);";
-		}
+        $active_lang_codes = array();
+        if (isset($_POST['av_lang'])) { 
+                foreach ($_POST['av_lang'] as $langname => $langvalue) {
+                        if (isset($language_codes[$langname])) {
+                                $active_lang_codes[] = $langvalue;
+                        }
+                }
+        }
+        if (!count($active_lang_codes)) {
+                $active_lang_codes = array('el');
+        }
+        if (isset($_POST['default_language']) and
+            isset($language_codes[$_POST['default_language']])) {
+                set_config('language', $_POST['default_language']);
+        }
 
-		$active_lang_codes = array();
-		if (isset($_POST['av_lang'])) { 
-			foreach ($_POST['av_lang'] as $langname => $langvalue) {
-				$active_lang_codes[] = autoquote($langvalue);
-			}
-		}
-
-		if (!count($active_lang_codes)) {
-			$active_lang_codes = array("'el'");
-		}
-
-		$string_active_ui_languages = 'array(' . implode(', ', $active_lang_codes) . ');';
-
-		// Prepare config.php content
-		$stringConfig='<?php
-/*===========================================================================
- *   Open eClass 3.0
- *   E-learning and Course Management System
- *===========================================================================
-
- config.php automatically generated on '.date('c').'
-
- */
-
-'.$utf8define.'
-$urlServer	=	'.autoquote($_POST['formurlServer']).';
-$urlAppend	=	'.autoquote($_POST['formurlAppend']).';
-$webDir		=	"'.str_replace("\\","/",realpath($_POST['formwebDir'])."/").'" ;
-
-$mysqlServer='.autoquote($_POST['formmysqlServer']).';
-$mysqlUser='.autoquote($_POST['formmysqlUser']).';
-$mysqlPassword= '.autoquote($_POST['formmysqlPassword']).';
-$mysqlMainDb='.autoquote($_POST['formmysqlMainDb']).';
-$phpMyAdminURL='.autoquote($_POST['formphpMyAdminURL']).';
-$phpSysInfoURL='.autoquote($_POST['formphpSysInfoURL']).';
-$emailAdministrator='.autoquote($_POST['formemailAdministrator']).';
-$administratorName='.autoquote($_POST['formadministratorName']).';
-$administratorSurname='.autoquote($_POST['formadministratorSurname']).';
-$siteName='.autoquote($_POST['formsiteName']).';
-
-$telephone='.autoquote($_POST['formtelephone']).';
-$emailhelpdesk='.autoquote($_POST['formemailhelpdesk']).';
-$Institution='.autoquote($_POST['formInstitution']).';
-$InstitutionUrl='.autoquote($_POST['formInstitutionUrl']).';
-
-$postaddress = '.autoquote($_POST['formpostaddress']).';
-$fax = '.autoquote($_POST['formfax']).';
-
-$encryptedPasswd = "true";
-
-$durationAccount = '.autoquote($_POST['formdurationAccount']).';
-$active_ui_languages = '.$string_active_ui_languages."\n";
-
-	// Save new config.php
-	fwrite($fd, $stringConfig);
+        set_config('active_ui_languages', implode(' ', $active_lang_codes));
+        set_config('base_url', $_POST['formurlServer']);
+        set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
+        set_config('phpSysInfoURL', $_POST['formphpSysInfoURL']);
+        set_config('email_sender', $_POST['formemailAdministrator']);
+        set_config('admin_name', $_POST['formadministratorName']);
+        set_config('site_name', $_POST['formsiteName']);
+        set_config('phone', $_POST['formtelephone']);
+        set_config('email_helpdesk', $_POST['formemailhelpdesk']);
+        set_config('institution', $_POST['formInstitution']);
+        set_config('institution_url', $_POST['formInstitutionUrl']);
+        set_config('postaddress', $_POST['formpostaddress']);
+        set_config('fax', $_POST['formfax']);
+        set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
 
 	$config_vars = array('email_required' => true,
 		'email_verification_required' => true,
@@ -160,126 +116,74 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 		'user_multidep' => true,
 		'restrict_teacher_owndep' => true);
 
-        $lang_var = array('default_language' => true);
-        
-	register_posted_variables($config_vars, 'all', 'intval');
-	$_SESSION['theme'] = $theme = $available_themes[$theme];
-        register_posted_variables($lang_var);
-        
-        // update table `config`
-	foreach ($config_vars as $varname => $what) {
-		set_config($varname, $GLOBALS[$varname]);
-	}
-        foreach ($lang_var as $varname => $what) {
-		set_config($varname, $GLOBALS[$varname]);
-	}        	
-        
-	// Display result message
-	$tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
-} // end of else($fd)
+        register_posted_variables($config_vars, 'all', 'intval');
+        $_SESSION['theme'] = $theme = $available_themes[$theme];
 
-	// Display link to go back to index.php
-	$tool_content .= "<p class='right'><a href=\"index.php\">".$langBack."</a></p>";
+        // update table `config`
+        foreach ($config_vars as $varname => $what) {
+                set_config($varname, $GLOBALS[$varname]);
+        }
+
+        // Display result message
+        $tool_content .= "<p class='success'>".$langFileUpdatedSuccess."</p>";
+
+        // Display link to go back to index.php
+        $tool_content .= "<p class='right'><a href=\"index.php\">".$langBack."</a></p>";
 
 } // end of if($submit)
 
 // Display config.php edit form
 else {
-	// Check if a backup file exists
-	if (file_exists("../../config/config_backup.php")) {
-  	// Give option to restore values from backup file
-		$tool_content .= "<div id='operations_container'>
-		<ul id='opslist'>
-		<li><a href=\"eclassconf.php?restore=yes\">$langRestoredValues</a></li>
-		</ul>
-		</div>";
-	}
-	$titleextra = "config.php";
-	// Check if restore has been selected
-	if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
-		// Substitute variables with those from backup file
-		$titleextra = " ($langRestoredValues)";
-		@include("../../config/config_backup.php");
-	}
-        $tool_content .= "<form action=\"".$_SERVER['SCRIPT_NAME']."\" method=\"post\">";
-	$tool_content .= "<fieldset><legend>$langFileEdit</legend>";	
-	$tool_content .= "
-	<table class='tbl' width=\"100%\">
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
+                <fieldset><legend>$langBaseConf</legend>
+	<table class='tbl' width='100%'>
 	<tr>
-	  <th width='200' class=\"left\"><b>\$urlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
+	  <th width='200' class='left'><b>\$urlServer:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formurlServer' size='40' value='".q($urlServer)."'></td>
+	</tr>
+        <tr>
+	  <th class='left'><b>\$phpMyAdminURL:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formphpMyAdminURL' size='40' value='".q(get_config('phpMyAdminURL'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$urlAppend:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlAppend\" size='40' value=\"".$urlAppend."\"></td>
+	  <th class='left'><b>\$phpSysInfoURL:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formphpSysInfoURL' size='40' value='".q(get_config('phpSysInfoURL'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$webDir:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formwebDir\" size='40' value=\"".$webDir."\"></td>
+	  <th class='left'><b>\$emailAdministrator:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formemailAdministrator' size='40' value='".q(get_config('email_sender'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlServer\" size='40' value=\"".$mysqlServer."\"></td>
+	  <th class='left'><b>\$administratorName:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formadministratorName' size='40' value='".q(get_config('admin_name'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlUser:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlUser\" size='40' value=\"".$mysqlUser."\"></td>
+	  <th class='left'><b>\$siteName:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formsiteName' size='40' value='".q(get_config('site_name'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlPassword:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\"></td>
+	  <th class='left'><b>\$postaddress:</b></th>
+	      <td><textarea rows='3' cols='40' name='formpostaddress'>".q(get_config('postaddress'))."</textarea></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlMainDb:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlMainDb\" size='40' value=\"".$mysqlMainDb."\"></td>
-	</tr>";
-	      $tool_content .= "  <tr>
-	  <th class=\"left\"><b>\$phpMyAdminURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpMyAdminURL\" size='40' value=\"".$phpMyAdminURL."\"></td>
+	  <th class='left'><b>\$telephone:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formtelephone' size='40' value='".q(get_config('phone'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$phpSysInfoURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpSysInfoURL\" size='40' value=\"".$phpSysInfoURL."\"></td>
+	  <th class='left'><b>\$fax:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formfax' size='40' value='".q(get_config('fax'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$emailAdministrator:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailAdministrator\" size='40' value=\"".$emailAdministrator."\"></td>
+	  <th class='left'><b>\$emailhelpdesk:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formemailhelpdesk' size='40' value='".q(get_config('email_helpdesk'))."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$administratorName:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorName\" size='40' value=\"".$administratorName."\"></td>
+	  <th class='left'><b>\$Institution:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formInstitution' size='40' value='".$Institution."'></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$administratorSurname:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorSurname\" size='40' value=\"".$administratorSurname."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$siteName:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formsiteName\" size='40' value=\"".$siteName."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$postaddress:</b></th>
-	      <td><textarea rows='3' cols='40' name='formpostaddress'>$postaddress</textarea></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$telephone:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formtelephone\" size='40' value=\"".$telephone."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$fax:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formfax\" size='40' value=\"".$fax."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$emailhelpdesk:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailhelpdesk\" size='40' value=\"".$emailhelpdesk."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$Institution:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitution\" size='40' value=\"".$Institution."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$InstitutionUrl:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitutionUrl\" size='40' value=\"".$InstitutionUrl."\"></td>
+	  <th class='left'><b>\$InstitutionUrl:</b></th>
+	  <td><input class='FormData_InputText' type='text' name='formInstitutionUrl' size='40' value='".$InstitutionUrl."'></td>
 	</tr>";              
 	if ($language == "el") {
 		$grSel = "selected";
@@ -335,13 +239,9 @@ else {
 	$tool_content .= "
         <tr>
         <td class='left'><b>\$durationAccount:</b></td>
-        <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
-        <tr>
-	    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
-	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
-	  </tr>";
-        $tool_content .= "</table></fieldset>";
-        $tool_content .= "<fieldset><legend>$langEclassThemes</legend>
+        <td><input type='text' name='formdurationAccount' size='15' value='".intval(get_config('account_duration') / MONTHS)."'>&nbsp;&nbsp;$langUserDurationAccount&nbsp;($langMonthsUnit)</td></tr>
+        </table></fieldset>
+        <fieldset><legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>
         <tr>
 	  <th class='left'><b>$langMainLang</b></th>

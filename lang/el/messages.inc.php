@@ -432,6 +432,7 @@ $langAddSixMonths = "Προσθήκη χρόνου: 6 μήνες";
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
 $langEclassConf = "Αρχείο ρυθμίσεων του $siteName";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
+$langBaseConf = 'Βασικές ρυθμίσεις';
 $langFileEdit = "Επεξεργασία αρχείου ρυθμίσεων (config.php)";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langReplaceBackupFile = "Αντικατάσταση του config_backup.php.";
@@ -446,6 +447,7 @@ $langOtherOptions = "Άλλες ρυθμίσεις";
 $langDefaultQuota = "Αποθηκευτικός χώρος νέων μαθημάτων";
 $langCreateBackup = "Δημουργία αντιγράφου ασφαλείας των ρυθμίσεων";
 $langCaseInsensitiveUsername = "Χωρίς διάκριση πεζών/κεφαλαίων στο όνομα χρήστη";
+$langMonthsUnit = 'μήνες';
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
