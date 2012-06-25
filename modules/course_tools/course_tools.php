@@ -233,8 +233,7 @@ if (isset($_POST['submit'])) {
         $navigation[]= array ("url"=>"course_tools.php?course=$code_cours", "name"=> $langToolManagement);
         $helpTopic = 'Import';
 
-        $tool_content .= "\n 
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'link_name');\>
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'link_name');\">
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
 
