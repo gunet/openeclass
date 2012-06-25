@@ -148,7 +148,7 @@ if (isset($_REQUEST['docsfilter'])) {
 if (isset($_GET['action']) and $_GET['action'] == "download") {
 	$id = q($_GET['id']);
 	$real_file = $webDir."/video/".$course_code."/".$id;
-	if (strpos($real_file, '/../') === FALSE) {
+	if (strpos($real_file, '/../') === FALSE && file_exists($real_file)) {
                 $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " .
                                    autoquote($id), $mysqlMainDb);
 		$row = mysql_fetch_array($result);
@@ -172,12 +172,16 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
         $videoPath = $urlServer ."video/". $course_code . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
         
-        if (strpos($videoPath, '/../') === FALSE) {
+        $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = ". autoquote($id), $mysqlMainDb);
+        $row = mysql_fetch_array($result);
+        
+        if (strpos($videoPath, '/../') === FALSE && !empty($row))
+        {
                 echo media_html_object($videoPath, $videoURL);
+                exit;
         } else {
                 header("Refresh: ${urlServer}modules/video/video.php?course=$course_code");
         }
-        exit;
 }
 
 // ----------------------
@@ -187,7 +191,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
 if (isset($_GET['action']) and $_GET['action'] == 'playlink') {
         $id = q($_GET['id']);
         
-        echo medialink_iframe_object(html_entity_decode($id));
+        echo medialink_iframe_object(urldecode($id));
         exit;
 }
 

@@ -48,13 +48,13 @@ if (isset($_POST['submit'])) {
                                         'phone_public' => true),
                                   'all', 'intval');
         $perso = $perso? 'no': 'yes';
-        $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
+        $send_mail = isset($_POST['send_mail']) && q($_POST['send_mail']);
         $unparsed_lines = '';
         $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $departments = isset($_POST['facid']) ? $_POST['facid'] : array();;
-        $am = $_POST['am'];
-        $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+        $am = q($_POST['am']);
+        $fields = preg_split('/[ \t,]+/', q($_POST['fields']), -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
                         $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
                 }
         }
         $numfields = count($fields);
-        $line = strtok($_POST['user_info'], "\n");
+        $line = strtok(q($_POST['user_info']), "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
                                                                             $departments,
                                                                             $nom,
                                                                             $prenom,
-                                                                            $_POST['prefix']);
+                                                                            q($_POST['prefix']));
                                 }
                                 if (!isset($info['password'])) {
                                         $info['password'] = create_pass();
@@ -107,7 +107,7 @@ if (isset($_POST['submit'])) {
                                                    $departments,
                                                    @$info['id'],
                                                    @$info['phone'],
-                                                   $_POST['lang'],
+                                                   q($_POST['lang']),
                                                    $send_mail,
                                                    $email_public, $phone_public, $am_public, $perso);
                                 if ($new === false) {
