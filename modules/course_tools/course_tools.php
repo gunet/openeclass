@@ -41,7 +41,7 @@ $require_help = TRUE;
 $helpTopic = 'courseTools';
 $require_login = true;
 include '../../include/baseTheme.php';
-require_once 'include/lib/fileUploadLib.inc.php';
+require_once '../../include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langToolManagement;
 add_units_navigation(TRUE);
