@@ -23,19 +23,20 @@ $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
 $nameTools = $contactpoint;
 
-if (!empty($postaddress)) {
-    $message = $postaddress;
-} else {
-    $message = '';
-}
-
+$postaddress = nl2br(q(get_config('postaddress')));
+$Institution = q(get_config('institution'));
+$phone = q(get_config('phone'));
+$phonemessage = empty($phone)? '': "<tr><th>$langPhone</th><td>$phone</td></tr>";
+$fax = q(get_config('fax'));
+$faxmessage = empty($fax)? '': "<tr><th>$langFax</th><td>$fax</td></tr>";
+$emailhelpdesk = get_config('email_helpdesk');
 
 $tool_content .= "
 <table class='tbl_1' width='100%'>
-<tr><th width='155'>$langPostMail</th><td> $Institution<br> $message </td>
+<tr><th width='155'>$langPostMail</th><td> $Institution<br> $postaddress </td>
 </tr>
-<tr><th><b>$langPhone:</b></td><td> $telephone</th></tr>
-<tr><th>$langFax</th><td> $fax</td></tr>
+$phonemessage
+$faxmessage
 <tr><th><b>$langEmail:</b></th><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
 </table>";
 

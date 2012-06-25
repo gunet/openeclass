@@ -890,7 +890,7 @@ function mailto($address, $alternative='(e-mail address hidden)')
                 $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
                       "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");
                 return "<script type='text/javascript'>eval(unescape('" .
-                      $prog . "'));</script><noscript>$alternative</noscript>";
+                      $prog . "'));</script><noscript>" . q($alternative) . "</noscript>";
         }
 }
 
