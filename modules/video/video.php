@@ -145,9 +145,9 @@ if (isset($_REQUEST['docsfilter'])) {
 // ----------------------
 
 if (isset($_GET['action']) and $_GET['action'] == "download") {
-	$id = $_GET['id'];
+	$id = q($_GET['id']);
 	$real_file = $webDir."/video/".$currentCourseID."/".$id;
-	if (strpos($real_file, '/../') === FALSE) {
+	if (strpos($real_file, '/../') === FALSE && file_exists($real_file)) {
                 $result = db_query("SELECT url FROM video WHERE path = " .
                                    autoquote($id), $currentCourseID);
 		$row = mysql_fetch_array($result);
@@ -171,15 +171,18 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
         $videoPath = $urlServer ."video/". $currentCourseID . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=download&amp;id=". $id;
         
-        if (strpos($videoPath, '/../') === FALSE)
+        $result = db_query("SELECT url FROM video WHERE path = ". autoquote($id), $currentCourseID);
+        $row = mysql_fetch_array($result);
+        
+        if (strpos($videoPath, '/../') === FALSE && !empty($row))
         {
             echo media_html_object($videoPath, $videoURL);
+            exit;
         }
         else
         {
             header("Refresh: ${urlServer}modules/video/video.php?course=$code_cours");
         }
-        exit;
 }
 
 // ----------------------
@@ -190,7 +193,7 @@ if (isset($_GET['action']) and $_GET['action'] == "playlink")
 {
         $id = q($_GET['id']);
         
-        echo medialink_iframe_object(html_entity_decode($id));
+        echo medialink_iframe_object(urldecode($id));
         exit;
 }
 
@@ -241,7 +244,7 @@ if (isset($_POST['edit_submit'])) { // edit
 	if(isset($_POST['id'])) {
 		$id = intval($_POST['id']);
 		if (isset($_POST['table'])) {
-			$table = $_POST['table'];
+			$table = q($_POST['table']);
 		}
 		if ($table == 'video') {
 			$sql = "UPDATE video SET titre = ".autoquote($_POST['titre']).",
@@ -328,7 +331,7 @@ if (isset($_POST['add_submit'])) {  // add
 	}	// end of add
 	if (isset($_GET['delete'])) { // delete
 		$id = intval($_GET['id']);
-		$table = $_GET['table'];
+		$table = q($_GET['table']);
 		$sql_select="SELECT * FROM $table WHERE id='".mysql_real_escape_string($id)."'";
 		$result = db_query($sql_select,$currentCourseID);
 		$myrow = mysql_fetch_array($result);
@@ -431,7 +434,7 @@ if (isset($_POST['add_submit'])) {  // add
 // ------------------- if no submit -----------------------
 if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	$id = intval($_GET['id']);
-	$table_edit = $_GET['table_edit'];
+	$table_edit = q($_GET['table_edit']);
 	if ($id) {
 		$sql = "SELECT * FROM $table_edit WHERE id = $id ORDER BY titre";
 		$result = db_query($sql,$currentCourseID);

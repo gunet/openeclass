@@ -32,13 +32,13 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
-        $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
+        $send_mail = isset($_POST['send_mail']) && q($_POST['send_mail']);
         $unparsed_lines = '';
         $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
-        $am = $_POST['am'];
-        $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+        $am = q($_POST['am']);
+        $fields = preg_split('/[ \t,]+/', q($_POST['fields']), -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
                         $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
                 }
         }
         $numfields = count($fields);
-        $line = strtok($_POST['user_info'], "\n");
+        $line = strtok(q($_POST['user_info']), "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
                                                                             $facid,
                                                                             $nom,
                                                                             $prenom,
-                                                                            $_POST['prefix']);
+                                                                            q($_POST['prefix']));
                                 }
                                 if (!isset($info['password'])) {
                                         $info['password'] = create_pass();
@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
                                                    $facid,
                                                    @$info['id'],
                                                    @$info['phone'],
-                                                   $_POST['lang'],
+                                                   q($_POST['lang']),
                                                    $send_mail);
                                 if ($new === false) {
                                         $unparsed_lines .= q($line . "\n" . $error . "\n");
