@@ -41,11 +41,14 @@ $require_help = TRUE;
 $helpTopic = 'courseTools';
 $require_login = true;
 include '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langToolManagement;
 add_units_navigation(TRUE);
 
-$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
+load_js('tools.js');
+$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+			 $langNoPgTitle . '";</script>';
 
 if (isset($_GET['action'])) {
         $action = intval($_GET['action']);
@@ -91,7 +94,7 @@ if (isset($_POST['delete'])) {
         if($r['category'] == -2) { // if we want to delete html page also delete file
                 $link = explode(" ", $r['url']);
                 $path = substr($link[0], 6);
-                $file2Delete = $webDir . $path;
+                $file2Delete = $webDir ."/". $path;
                 unlink($file2Delete);
         }                
         db_query("DELETE FROM link WHERE `id` = $delete");
@@ -107,7 +110,7 @@ if (isset($_POST['submit'])) {
                 if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                 or empty($link) or empty($name_link))  {
                         $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
-                        draw($tool_content, 2);
+                        draw($tool_content, 2, null, $head_content);
                         exit();
                 }
                 $link = autoquote($link);
@@ -116,37 +119,41 @@ if (isset($_POST['submit'])) {
                                     VALUES (".course_code_to_id($course_code).", 
                                                 $link, $name_link, -1)");
                 $tool_content .= "<p class='success'>$langLinkAdded</p>";
-        } elseif ($action == 1) { 
+        } elseif ($action == 1) {
                 $updir = "$webDir/courses/$course_code/page"; //path to upload directory
                 $size = "20971520"; //file size is 20M (1024x1024x20)
-                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
-                    && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
+                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+                        if (unwanted_file($_FILES['file']['name'])) {
+                                $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
+                                                   q($_FILES['file']['name']) . "</p>";
+                                draw($tool_content, 2, null, $head_content);
+                                exit;
+                        } elseif ($_FILES['file']['size'] > "$size") {
+                                $tool_content .= "<p class='caution'>$langTooBig<br />\n";
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=1'>$langHome</a></p><br />";
+                                draw($tool_content, 2, null, $head_content);
+                        } else {
+                                $tmpfile = $_FILES['file']['tmp_name'];
+                                $file_name = $_FILES['file']['name'];
+                                $file_name = php2phps(add_ext_on_mime($file_name));
+                                @copy("$tmpfile", "$updir/$file_name")
+                                        or die("<p>$langCouldNot</p></tr>");                                                
 
-                        $tmpfile = $_FILES['file']['tmp_name'];
-                        $file_name = $_FILES['file']['name'];
-                        @copy("$tmpfile", "$updir/$file_name")
-                                or die("<p>$langCouldNot</p></tr>");                                                
+                                $link_name = quote($_POST['link_name']);
+                                $link = quote("../../courses/$currentCourse/page/$file_name");
 
-                        $link_name = autoquote($_POST['link_name']);
-                        $link = quote("../../courses/$currentCourse/page/$file_name");
-                        
-                        db_query("INSERT INTO link (course_id, url, title, category) 
-                                    VALUES (".course_code_to_id($course_code).", 
-                                                $link, $link_name, -2)");                                                
-                        $tool_content .= "<p class='success'>$langOkSent</p>\n";
-                } else {
-                        $tool_content .= "<p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=1'>$langHome</a></p><br />";
-                        draw($tool_content, 2);
+                                db_query("INSERT INTO link (course_id, url, title, category) 
+                                        VALUES (".course_code_to_id($course_code).", 
+                                                        $link, $link_name, -2)");                                                
+                                $tool_content .= "<p class='success'>$langOkSent</p>\n";
+                        }
                 }
         }
 } elseif ($action == 1) { // upload html file
         $nameTools = $langUploadPage;
-        $navigation[]= array ("url"=>"course_tools.php?course=$course_code", "name"=> $langToolManagement);
+        $navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $langToolManagement);
         $helpTopic = 'Import';
-
-        $tool_content .= "\n 
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;submit=yes&action=1' enctype='multipart/form-data'>
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;submit=yes&action=1' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'link_name');\">
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
               <fieldset>
@@ -159,7 +166,7 @@ if (isset($_POST['submit'])) {
               </tr>
               <tr>
                 <th>$langPgTitle</th>
-                <td><input type='Text' name='link_name' size='40'></td>
+                <td><input type='text' name='link_name' size='40'></td>
                 <td class='right smaller'>$langExplanation_2</td>
               </tr>
               <tr>
@@ -170,14 +177,13 @@ if (isset($_POST['submit'])) {
               </fieldset>
             </form>
             <div class='right smaller'>$langNoticeExpl</div>'";
-        draw($tool_content, 2);
+        draw($tool_content, 2, null, $head_content);
         exit();
 } elseif ($action == 2) { // add external link
         $nameTools = $langAddExtLink;
-        $navigation[]= array ('url' => 'course_tools.php?course='.$course_code, 'name' => $langToolManagement);
+        $navigation[]= array ('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
         $helpTopic = 'Module';
-        $tool_content .=  "
-          <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>
+        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -199,7 +205,7 @@ if (isset($_POST['submit'])) {
             </table>
             </fieldset>
           </form>";
-        draw($tool_content, 2);
+        draw($tool_content, 2, null, $head_content);
         exit();
 }
 
