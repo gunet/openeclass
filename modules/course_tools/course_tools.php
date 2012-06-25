@@ -41,12 +41,14 @@ $require_help = TRUE;
 $helpTopic = 'courseTools';
 $require_login = true;
 include '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langToolManagement;
 add_units_navigation(TRUE);
 
-$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
-
+load_js('tools.js');
+$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+			 $langNoPgTitle . '";</script>';
 
 if (isset($_GET['action'])) {
         $action = intval($_GET['action']);
@@ -54,14 +56,15 @@ if (isset($_GET['action'])) {
         $action = 0;
 }
 if (isset($_REQUEST['toolStatus']) ) {
-        if(isset($_POST['toolStatActive'])) $tool_stat_active = $_POST['toolStatActive'];
-
+        if (isset($_POST['toolStatActive'])) {
+                $tool_stat_active = $_POST['toolStatActive'];
+        }
         if (isset($tool_stat_active)) {
                 $loopCount = count($tool_stat_active);
-        } else  {
+        } else {
                 $loopCount = 0;
         }
-        $i =0;
+        $i = 0;
         $publicTools = array();
         $tool_id = null;
         while ($i< $loopCount) {
@@ -157,7 +160,7 @@ if (isset($_POST['delete'])) {
         $sql = "DELETE FROM `accueil` WHERE `id` = " . $_POST['delete'] ." ";
         db_query($sql, $dbname);
         unset($sql);
-        $tool_content .= "<p class=\"success\">$langLinkDeleted</p>";
+        $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
 
 if (isset($_POST['submit'])) {
@@ -168,7 +171,7 @@ if (isset($_POST['submit'])) {
                 if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
                                 or empty($link) or empty($name_link))  {
                         $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
-                        draw($tool_content, 2);
+                        draw($tool_content, 2, null, $head_content);
                         exit();
                 }
 
@@ -180,43 +183,49 @@ if (isset($_POST['submit'])) {
                 $name_link = autoquote($name_link);
                 db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
                 $tool_content .= "<p class='success'>$langLinkAdded</p>";
-        } elseif ($action == 1) { 
+        } elseif ($action == 1) {
                 $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
                 $size = "20971520"; //file size is 20M (1024x1024x20)
-                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])
-                    && ($_FILES['file']['size'] < "$size") and (!empty($_POST['link_name']))) {
+                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+                        if (unwanted_file($_FILES['file']['name'])) {
+                                $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
+                                                   q($_FILES['file']['name']) . "</p>";
+                                draw($tool_content, 2, null, $head_content);
+                                exit;
+                        } elseif ($_FILES['file']['size'] > "$size") {
+                                $tool_content .= "<p class='caution'>$langTooBig<br />\n";
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?action=1'>$langHome</a></p><br />";
+                                draw($tool_content, 2, null, $head_content);
+                        } else {
+                                $tmpfile = $_FILES['file']['tmp_name'];
+                                $file_name = $_FILES['file']['name'];
+                                $file_name = php2phps(add_ext_on_mime($file_name));
+                                @copy("$tmpfile", "$updir/$file_name")
+                                        or die("<p>$langCouldNot</p></tr>");
 
-                        $tmpfile = $_FILES['file']['tmp_name'];
-                        $file_name = $_FILES['file']['name'];
-                        @copy("$tmpfile", "$updir/$file_name")
-                                or die("<p>$langCouldNot</p></tr>");
+                                $sql = 'SELECT MAX(`id`) FROM `accueil` ';
+                                $res = db_query($sql,$dbname);
+                                while ($maxID = mysql_fetch_row($res)) {
+                                        $mID = $maxID[0];
+                                }
 
-                        $sql = 'SELECT MAX(`id`) FROM `accueil` ';
-                        $res = db_query($sql,$dbname);
-                        while ($maxID = mysql_fetch_row($res)) {
-                                $mID = $maxID[0];
+                                if($mID < 101) $mID = 101;
+                                else $mID = $mID+1;
+
+                                $link_name = quote($_POST['link_name']);
+                                $lien = quote("../../courses/$currentCourse/page/$file_name");
+                                db_query("INSERT INTO accueil VALUES (
+                                                $mID,
+                                                $link_name,
+                                                $lien,
+                                                'external_link',
+                                                '1',
+                                                '0',
+                                                '',
+                                                'HTML_PAGE'
+                                                )", $currentCourse);
+                                $tool_content .= "  <p class='success'>$langOkSent</p>\n";                
                         }
-
-                        if($mID < 101) $mID = 101;
-                        else $mID = $mID+1;
-
-                        $link_name = quote($_POST['link_name']);
-                        $lien = quote("../../courses/$currentCourse/page/$file_name");
-                        db_query("INSERT INTO accueil VALUES (
-                                        $mID,
-                                        $link_name,
-                                        $lien,
-                                        'external_link',
-                                        '1',
-                                        '0',
-                                        '',
-                                        'HTML_PAGE'
-                                        )", $currentCourse);
-                        $tool_content .= "  <p class='success'>$langOkSent</p>\n";
-                } else {
-                        $tool_content .= "  <p class='caution'>$langTooBig<br />\n";
-                        $tool_content .= "  <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=1'>$langHome</a></p>\n  <br />\n";
-                        draw($tool_content, 2);
                 }
         }
 } elseif ($action == 1) { // upload html file
@@ -239,7 +248,7 @@ if (isset($_POST['submit'])) {
               </tr>
               <tr>
                 <th>$langPgTitle</th>
-                <td><input type='Text' name='link_name' size='40'></td>
+                <td><input type='text' name='link_name' size='40'></td>
                 <td class='right smaller'>$langExplanation_2</td>
               </tr>
               <tr>
@@ -250,8 +259,8 @@ if (isset($_POST['submit'])) {
               </fieldset>
 
             </form>
-                                <div class='right smaller'>$langNoticeExpl</div>'";
-        draw($tool_content, 2);
+            <div class='right smaller'>$langNoticeExpl</div>'";
+        draw($tool_content, 2, null, $head_content);
         exit();
 } elseif ($action == 2) { // add external link
         $nameTools = $langAddExtLink;
@@ -280,7 +289,7 @@ if (isset($_POST['submit'])) {
             </table>
             </fieldset>
           </form>";
-        draw($tool_content, 2);
+        draw($tool_content, 2, null, $head_content);
         exit();
 }
 
