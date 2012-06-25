@@ -84,6 +84,7 @@ elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_veri
 	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
 	
+if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
 $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
                 <legend>$langUserData</legend>
@@ -102,6 +103,7 @@ $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'
                 <br />
         </fieldset>
 </form>";
+}
 
 if (isset($_GET['from_profile'])) {
         draw($tool_content, 1);
