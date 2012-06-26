@@ -1282,8 +1282,8 @@ function download_assignments($id)
 	header("Content-Type: application/x-zip");
 	header("Content-Disposition: attachment; filename=$filename");
         stop_output_buffering();
-	readfile($filename);
-	unlink($filename);
+	@readfile($filename);
+	@unlink($filename);
 	exit;
 }
 

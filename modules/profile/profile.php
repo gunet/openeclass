@@ -169,19 +169,19 @@ if (isset($_POST['submit'])) {
 	// everything is ok
 	$email_form = mb_strtolower(trim($email_form));
 
-	if (db_query("UPDATE user SET nom = " . autoquote($nom_form) . ",
-						prenom = " . autoquote($prenom_form) . ",
-						username = " . autoquote($username_form) . ",
-						email = " . autoquote($email_form) . ",
-						am = " . autoquote($am_form) . ",
-						phone = " . autoquote($phone_form) . ",
-						description = " . autoquote(purify($desc_form)) . ",
-						email_public = $email_public,
-						phone_public = $phone_public,
-                                                receive_mail = $subscribe,
-						am_public = $am_public
+	if (db_query("UPDATE user SET nom = " . quote($nom_form) . ",
+						prenom = " . quote($prenom_form) . ",
+						username = " . quote($username_form) . ",
+						email = " . quote($email_form) . ",
+						am = " . quote($am_form) . ",
+						phone = " . quote($phone_form) . ",
+						description = " . quote(purify($desc_form)) . ",
+						email_public = ". quote($email_public) .",
+						phone_public = ". quote($phone_public) .",
+                                                receive_mail = ". quote($subscribe) .",
+						am_public = ". quote($am_public) ."
                                                 $verified_mail_sql
-						WHERE user_id = $_SESSION[uid]")) {
+						WHERE user_id = ". quote($_SESSION['uid']) )) {
                 $userObj->refresh($uid, $departments);
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;

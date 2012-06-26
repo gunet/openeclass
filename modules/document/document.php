@@ -403,7 +403,7 @@ if ($can_upload) {
 	if (isset($_POST['newDirPath'])) {
                 $newDirName = canonicalize_whitespace(q($_POST['newDirName']));
                 if (!empty($newDirName)) {
-                        make_path($_POST['newDirPath'], array($newDirName));
+                        make_path(q($_POST['newDirPath']), array($newDirName));
                         // $path_already_exists: global variable set by make_path()
                         if ($path_already_exists) {
                                 $action_message = "<p class='caution'>$langFileExists</p>";

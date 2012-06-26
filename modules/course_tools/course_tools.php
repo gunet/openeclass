@@ -69,9 +69,9 @@ if (isset($_REQUEST['toolStatus']) ) {
         $tool_id = null;
         while ($i< $loopCount) {
                 if (!isset($tool_id)) {
-                        $tool_id = " (`module_id` = " . $tool_stat_active[$i] .")" ;
+                        $tool_id = " (`module_id` = " . quote(intval($tool_stat_active[$i])) .")" ;
                 } else {
-                        $tool_id .= " OR (`module_id` = " . $tool_stat_active[$i] .")" ;
+                        $tool_id .= " OR (`module_id` = " . quote(intval($tool_stat_active[$i])) .")" ;
                 }
                 $i++;
         }
