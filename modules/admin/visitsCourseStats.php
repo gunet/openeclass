@@ -59,7 +59,7 @@ if (!extension_loaded('gd')) {
   /********************************************
     start making the chart
   *********************************************/
-    require_once 'include/libchart/libchart.php';
+    require_once 'include/libchart/classes/libchart.php';
 
     //default values for chart
     $usage_defaults = array (

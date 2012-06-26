@@ -27,7 +27,7 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 
 $usage_defaults = array (
     'u_stats_value' => 'visits',
@@ -46,7 +46,7 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 if ($u_module_id != -1) {
-    $mod_where = " (course_module.module_id = '$u_module_id') ";
+    $mod_where = " (module_id = '$u_module_id') ";
 } else {
     $mod_where = " (1) ";
 }
@@ -86,7 +86,6 @@ $chart_content=0;
 
 switch ($u_stats_value) {
     case "visits":
-
         $chart = new VerticalBarChart(300, 300);
         $dataSet = new XYDataSet();
         $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
@@ -94,6 +93,7 @@ switch ($u_stats_value) {
                          AND $mod_where 
                          AND course_id = $course_id
                         GROUP BY $date_group ORDER BY `date_time` ASC";
+        
         $result = db_query($query);
 
         switch ($u_interval) {
@@ -112,9 +112,7 @@ switch ($u_stats_value) {
                     }
             break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {
-                    $chart->setLabelMarginBottom(110);
-                    $chart->setLabelMarginRight(80);
+                while ($row = mysql_fetch_assoc($result)) {                    
                     $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                     $chart->width += 25;
                     $chart_content = 1;
@@ -129,7 +127,7 @@ switch ($u_stats_value) {
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $chart->addPoint(new Point($row['year'], $row['cnt']));
+                    $dataSet->addPoint(new Point($row['year'], $row['cnt']));
                     $chart->width += 25;
                     $chart_content = 1;
                 }
@@ -139,11 +137,12 @@ switch ($u_stats_value) {
 
     break;
     case "duration":        
+            
             $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur
-                FROM actions, course_module WHERE actions.module_id = course_module.module_id
-                AND $date_where 
+                FROM actions 
+                WHERE $date_where 
                 AND $mod_where
-                AND actions.course_id = $course_id
+                AND course_id = $course_id
                 GROUP BY ".$date_group." ORDER BY date_time ASC";
 
         $result = db_query($query);
@@ -168,9 +167,7 @@ switch ($u_stats_value) {
          break;
          case "weekly":
              while ($row = mysql_fetch_assoc($result)) {
-		$row['tot_dur'] = round($row['tot_dur'] / 60);
-		$chart->setLabelMarginBottom(110);
-                $chart->setLabelMarginRight(80);
+		$row['tot_dur'] = round($row['tot_dur'] / 60);		
                 $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;
@@ -204,7 +201,7 @@ mysql_free_result($result);
 
 $chart->setDataSet($dataSet);
 $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
-$chart->render($webDir.$chart_path);
+$chart->render($webDir."/".$chart_path);
 
 if ($chart_content) {
         $tool_content .= '<p align="center"><img src="'.$urlServer.$chart_path.'" /></p>';

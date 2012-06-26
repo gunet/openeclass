@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 $usage_defaults = array (
     'u_stats_type' => 'visits',
     'u_interval' => 'daily',

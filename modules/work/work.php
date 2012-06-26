@@ -87,7 +87,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 require_once 'include/log.php';
 
 $workPath = $webDir."/courses/".$course_code."/work";

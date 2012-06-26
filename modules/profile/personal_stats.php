@@ -18,26 +18,24 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+$require_help = TRUE;
+$helpTopic = 'PersonalStats';
 include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 
 $require_valid_uid = TRUE;
-$require_help = TRUE;
-$helpTopic = 'PersonalStats';
 
 check_uid();
-
 $nameTools = $langPersonalStats;
-
 check_guest();
 
 // Chart display added - haniotak
 if (!extension_loaded('gd')) {
-	$tool_content .= "$langGDRequired";
+	$tool_content .= $langGDRequired;
 } else {
 	$totalHits = 0;
         $totalDuration = 0;
-	require_once 'include/libchart/libchart.php';
+	require_once 'include/libchart/classes/libchart.php';
         
         $sql = "SELECT a.code code, a.title title
                 FROM course AS a LEFT JOIN course_user AS b
@@ -52,23 +50,23 @@ if (!extension_loaded('gd')) {
 			$course_names[$row['code']]=$row['title'];
 		}
 		mysql_free_result($result);
-		foreach ($course_codes as $course_code) {
-                        $cid = course_code_to_id($course_code);
+		foreach ($course_codes as $code) {
+                        $cid = course_code_to_id($code);
 			$sql = "SELECT COUNT(*) AS cnt FROM actions 
                                 WHERE user_id = $uid 
                                 AND course_id = $cid";
 			$result = db_query($sql);
 			while ($row = mysql_fetch_assoc($result)) {				
 				$totalHits += $row['cnt'];
-				$hits[$course_code] = $row['cnt'];
+				$hits[$code] = $row['cnt'];
 			}
 			mysql_free_result($result);
 			$sql = "SELECT SUM(duration) FROM actions 
                                         WHERE user_id = $uid
                                         AND course_id = $cid";
 			$result = db_query($sql);
-			list($duration[$course_code]) = mysql_fetch_row($result);
-                        $totalDuration += $duration[$course_code];
+			list($duration[$code]) = mysql_fetch_row($result);
+                        $totalDuration += $duration[$code];
 			mysql_free_result($result);
 		}
 

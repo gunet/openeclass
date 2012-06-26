@@ -23,7 +23,7 @@ $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 
 $nameTools = $langPollCharts;
 $navigation[] = array('url' => "questionnaire.php?course=$course_code", 'name' => $langQuestionnaire);

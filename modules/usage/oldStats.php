@@ -91,7 +91,7 @@ if (!extension_loaded('gd')) {
 } else {
        $made_chart = true;
        //make chart
-       require_once 'include/libchart/libchart.php';
+       require_once 'include/libchart/classes/libchart.php';
        $usage_defaults = array (
 	   'u_stats_value' => 'visits',
 	   'u_module_id' => -1,
@@ -170,7 +170,7 @@ if (!extension_loaded('gd')) {
    $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
 
    if ($chart_content) {
-	$chart->render($webDir.$chart_path);
+	$chart->render($webDir."/".$chart_path);
 	$tool_content .= "<p>$langOldStatsExpl</p>";
 	$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
    } elseif (isset($btnUsage) and $chart_content == 0) {

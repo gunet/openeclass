@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,12 +20,11 @@
 
 session_start();
 
-if (!isset($_GET['language'])) {
-	$language = 'greek';
-} else {
+if (isset($_GET['language'])) {
 	$language = preg_replace('/[^a-z-]/', '', $_GET['language']);
+} else {
+        $language = 'el';
 }
-
 if (isset($_SESSION['theme'])) {
         $theme = $_SESSION['theme'];
 } else {
@@ -33,12 +32,12 @@ if (isset($_SESSION['theme'])) {
 }
 $themeimg = '../../template/' . $theme . '/img';
 
-if (file_exists("../lang/$language/help.inc.php")) {
+if (file_exists("../../lang/$language/help.inc.php")) {        
         $siteName = '';
-	include("../lang/$language/common.inc.php");
-	include("../lang/$language/help.inc.php");
+	include "../../lang/$language/common.inc.php";
+	include "../../lang/$language/help.inc.php";
 } else {
-	die('No such help topic');
+	die("$langNoHelpTopic");
 }
 
 // Default topic
@@ -50,8 +49,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
         <title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>

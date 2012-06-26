@@ -43,7 +43,7 @@ $require_login = true;
 include '../../include/baseTheme.php';
 require_once 'include/action.php';
 require_once 'include/jscalendar/calendar.php';
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 
 $tool_content .= "
 <div id='operations_container'>

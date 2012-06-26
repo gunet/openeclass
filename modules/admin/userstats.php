@@ -32,7 +32,7 @@
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/libchart/libchart.php';
+require_once 'include/libchart/classes/libchart.php';
 $nameTools = $langVersion;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
