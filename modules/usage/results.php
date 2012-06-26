@@ -109,8 +109,6 @@ switch ($u_stats_value) {
             break;
             case "weekly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $chart->setLabelMarginBottom(110);
-                    $chart->setLabelMarginRight(80);
                     $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                     $chart->width += 25;
                     $chart_content = 1;
@@ -125,7 +123,7 @@ switch ($u_stats_value) {
             break;
             case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
-                    $chart->addPoint(new Point($row['year'], $row['cnt']));
+                    $dataSet->addPoint(new Point($row['year'], $row['cnt']));
                     $chart->width += 25;
                     $chart_content = 1;
                 }
@@ -162,8 +160,6 @@ switch ($u_stats_value) {
          case "weekly":
              while ($row = mysql_fetch_assoc($result)) {
 		$row['tot_dur'] = round($row['tot_dur'] / 60);
-		$chart->setLabelMarginBottom(110);
-                $chart->setLabelMarginRight(80);
                 $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;
