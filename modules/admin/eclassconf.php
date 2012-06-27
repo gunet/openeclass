@@ -60,9 +60,9 @@ define('MONTHS', 30 * 24 * 60 * 60);
 if (isset($_POST['submit']))  {
         $active_lang_codes = array();
         if (isset($_POST['av_lang'])) { 
-                foreach ($_POST['av_lang'] as $langname => $langvalue) {
-                        if (isset($language_codes[$langname])) {
-                                $active_lang_codes[] = $langvalue;
+                foreach ($_POST['av_lang'] as $langcode) {
+                        if (isset($language_codes[$langcode])) {
+                                $active_lang_codes[] = $langcode;
                         }
                 }
         }
@@ -373,20 +373,8 @@ else {
 		<th class='left'><b>$langDropboxQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr></table>	  
-	  </fieldset>";
-        
-        $tool_content .= "<fieldset><legend>$langCreateBackup</legend>
-          <table class='tbl' width='100%'>	
-        <tr>
-	    <th class='left'>$langReplaceBackupFile</th>
-	    <td><input type='checkbox' name='backupfile' checked></td>
-	  </tr>
-	  <tr>
-	    <th class='left'>&nbsp;</th>
-	    <td class='right'><input type='submit' name='submit' value='$langModify'></td>
-	  </tr>	  
-	  </table>
 	  </fieldset>
+	    <input type='submit' name='submit' value='$langModify'>
         </form>";
 	// Display link to index.php
 	$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";

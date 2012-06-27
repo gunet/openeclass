@@ -24,7 +24,7 @@ $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'CreateCourse';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 if (isset($_SESSION['statut']) and $_SESSION['statut'] != 1) { // if we are not teachers
     redirect_to_home_page();
@@ -317,16 +317,16 @@ if (isset($_POST['create_course'])) {
         $code = strtoupper(new_code($departments[0]));
         $code = str_replace(' ', '', $code);
 
-        $language = $_POST['languageCourse'];
+        $language = validate_language_code($_POST['languageCourse']);
         // include_messages
-        include("lang/$language/common.inc.php");
+        include "lang/$language/common.inc.php";
         $extra_messages = "config/{$language_codes[$language]}.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
         } else {
                 $extra_messages = false;
         }
-        include("lang/$language/messages.inc.php");
+        include "lang/$language/messages.inc.php";
         if ($extra_messages) {
                 include $extra_messages;
         }

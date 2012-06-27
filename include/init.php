@@ -85,13 +85,9 @@ if (isset($language)) {
 }
 
 if (isset($_REQUEST['localize'])) {
-	$_SESSION['langswitch'] = $language = $_REQUEST['localize'];
+        $_SESSION['langswitch'] = $language = validate_language_code($_REQUEST['localize']);
 } elseif (isset($_SESSION['langswitch'])) {
 	$language = $_SESSION['langswitch'];
-}
-
-if (!isset($language_codes[$language])) {
-        $language = 'en';
 }
 
 // HTML Purifier

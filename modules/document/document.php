@@ -441,11 +441,7 @@ if ($can_upload) {
 					           path=" . autoquote($commentPath));
 		$res = mysql_fetch_array($result);
 		if(!empty($res)) {
-                        if (!isset($language_codes[$_POST['file_language']])) {
-                                $file_language = langname_to_code($language);
-                        } else {
-                                $file_language = $_POST['file_language'];
-                        }
+                        $file_language = validate_language_code($_POST['file_language'], $language);
 			db_query("UPDATE document SET
                                                 comment = " . autoquote($_POST['file_comment']) . ",
                                                 category = " . intval($_POST['file_category']) . ",

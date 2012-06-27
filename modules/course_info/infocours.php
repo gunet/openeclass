@@ -51,10 +51,7 @@ if (isset($_POST['submit'])) {
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
-                        $language = $_POST['localize'];
-                        if (!isset($language_codes[$language])) {
-                                $language = 'en';
-                        }
+                        $language = validate_language_code($_POST['localize']);
                         // include_messages
                         include "lang/$language/common.inc.php";
                         $extra_messages = "config/{$language_codes[$language]}.inc.php";

@@ -3,7 +3,7 @@
 * ========================================================================
 * Open eClass 3.0 - E-learning and Course Management System
 * ========================================================================
- 
+
 Copyright(c) 2003-2012  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
@@ -44,8 +44,8 @@ define('COURSE_INACTIVE', 3);
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
 define('USER_GUEST', 10);
-        
-// resized user image 
+
+// resized user image
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
 
@@ -277,7 +277,7 @@ function load_js($file, $init = '')
             $file = 'jstree/jquery.jstree.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
-            $file = 'shadowbox/shadowbox.js'; 
+            $file = 'shadowbox/shadowbox.js';
         } elseif ($file == 'fancybox2') {
             $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
             $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
@@ -286,7 +286,7 @@ function load_js($file, $init = '')
             $file = 'colorbox/jquery.colorbox-min.js';
         }
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-        
+
         if (strlen($init) > 0)
             $head_content .= $init;
 }
@@ -306,8 +306,8 @@ function uid_to_username($uid)
 }
 
 
-// Return HTML for a user - first parameter is either a user id (so that the 
-// user's info is fetched from the DB) or a hash with user_id, prenom, nom, 
+// Return HTML for a user - first parameter is either a user id (so that the
+// user's info is fetched from the DB) or a hash with user_id, prenom, nom,
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
@@ -615,11 +615,11 @@ function check_guest() {
 // ------------------------------------------------
 
 function check_editor() {
-	
+
         global $mysqlMainDb, $uid, $course_id;
-        
+
 	if (isset($uid)) {
-		$res = db_query("SELECT editor FROM course_user 
+		$res = db_query("SELECT editor FROM course_user
                             WHERE user_id = $uid
                             AND course_id = $course_id");
 		$s = mysql_fetch_array($res);
@@ -666,7 +666,7 @@ function user_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-        
+
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -684,7 +684,7 @@ function user_app_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-        
+
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -830,9 +830,9 @@ function my_basename($path) {
  */
 function greek_format($date, $time = false)
 {
-        if ($time) {                
-        	$datetime = explode(' ', $date);                
-                $new_date = implode('-', array_reverse(explode('-', $datetime[0])));                
+        if ($time) {
+        	$datetime = explode(' ', $date);
+                $new_date = implode('-', array_reverse(explode('-', $datetime[0])));
                 return $new_date.' '.$datetime[1];
         } else {
                 return implode('-', array_reverse(explode('-',$date)));
@@ -1040,26 +1040,26 @@ function mkpath($path)  {
 
 // check if we can display activationlink (e.g. module_id is one of our modules)
 function display_activation_link($module_id) {
-	
-        global $modules;       
-        
-        if (array_key_exists($module_id, $modules)) {        
+
+        global $modules;
+
+        if (array_key_exists($module_id, $modules)) {
         	return TRUE;
 	} else {
 		return FALSE;
-	}        
+	}
 }
 
 // checks if a module is visible
 function visible_module($module_id) {
-        
+
         global $course_code;
-        
+
         $cid = course_code_to_id($course_code);
-	
+
 	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
-                                WHERE module_id = $module_id AND 
-                                course_id = $cid"));        
+                                WHERE module_id = $module_id AND
+                                course_id = $cid"));
 
 	if ($v['visible'] == 1) {
 		return TRUE;
@@ -1252,6 +1252,16 @@ function langname_to_code($langname)
 	}
 }
 
+// Make sure a language code is valid - if not, default language is Greek
+function validate_language_code($langcode, $default = 'el')
+{
+        global $active_ui_languages;
+        if (array_search($langcode, $active_ui_languages) === false) {
+                return $default;
+        } else {
+                return $langcode;
+        }
+}
 
 function append_units($amount, $singular, $plural)
 {
@@ -1278,29 +1288,29 @@ function format_time_duration($sec)
         }
         if ($min < 60) {
                 return append_units($min, $langminute, $langminutes);
-        }        
+        }
         $hour = floor($min / 60);
         $min = $min % 60;
         if ($hour < 24) {
                 append_units($hour, $langhour, $langhours) .
                (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
         }
-        $day = floor($hour / 24);                
+        $day = floor($hour / 24);
         $hour = $hour % 24;
         return (($day == 0)? '': (' ' . append_units($day, $langDay, $langDays))) .
-                (($hour == 0)? '': (' ' . append_units($hour, $langhour, $langhours))) .                 
+                (($hour == 0)? '': (' ' . append_units($hour, $langhour, $langhours))) .
                 (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
 }
 
-// Return the URLs for media files 
+// Return the URLs for media files
 function media_url($path)
 {
 	global $urlServer, $course_code, $course_code;
-        
+
         $mediaURL  = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
         $mediaPath = $urlServer ."video/". $course_code . $path;
         $mediaPlay = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
-        
+
         return array($mediaURL, $mediaPath, $mediaPlay);
 }
 
@@ -1455,7 +1465,7 @@ function delete_course($cid)
 {
         global $mysqlMainDb, $webDir;
 
-	$course_code = course_id_to_code($cid);	
+	$course_code = course_id_to_code($cid);
 
         mysql_select_db($mysqlMainDb);
 	db_query("DELETE FROM announcement WHERE course_id = $cid");
@@ -1540,7 +1550,7 @@ function csv_escape($string, $force = false)
 
 // Return the value of a key from the config table, or false if not found
 function get_config($key)
-{	
+{
         $r = db_query("SELECT `value` FROM config WHERE `key` = '$key'");
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
@@ -1607,13 +1617,13 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $mysqlMainDb;
-	
+
         $filebrowser = '';
         $activemodule = 'document/document.php';
         if (isset($course_code) && !empty($course_code))
         {
             $filebrowser = "file_browser_callback : 'openDocsPicker',";
-            
+
             if (!$is_editor)
             {
                 $cid = course_code_to_id($course_code);
@@ -1645,9 +1655,9 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 }
             }
         }
-        
+
 	$lang_editor = langname_to_code($language);
-	
+
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
@@ -1670,7 +1680,7 @@ tinyMCE.init({
                 relative_urls : false,
                 advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
                 $filebrowser
-	
+
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
 		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,emotions,charmap,|,insertdate,inserttime',
@@ -1715,7 +1725,7 @@ function openDocsPicker(field_name, url, type, win) {
     return false;
 }
 </script>";
-	
+
 	/*$text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),
 			                      $text); */
@@ -1726,7 +1736,7 @@ function openDocsPicker(field_name, url, type, win) {
 }
 
 
-// Display a simple textarea with name $name 
+// Display a simple textarea with name $name
 // Apply automatically various fixes for the text to be edited
 function text_area($name, $rows, $cols, $text, $extra = '')
 {
@@ -2005,7 +2015,7 @@ function set_glossary_cache()
 
 function invalidate_glossary_cache()
 {
-        unset($_SESSION['glossary']); 
+        unset($_SESSION['glossary']);
 }
 
 function redirect_to_home_page($path = '')
@@ -2028,7 +2038,7 @@ function odd_even($k, $extra='')
         } else {
                 return " class='odd$extra'";
         }
-} 
+}
 
 // Translate Greek characters to Latin
 function greek_to_latin($string)
@@ -2105,7 +2115,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 function profile_image($uid, $size, $default = FALSE)
 {
 	global $urlServer, $themeimg;
-	
+
 	if (!$default) {
 		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".uid_to_name($uid)."'>";
 	} else {
@@ -2173,24 +2183,24 @@ function read_urandom($len) {
 
 // Get user admin rights from table `admin`
 function get_admin_rights($user_id) {
-    
+
     global $mysqlMainDb;
 
-    $r = db_query("SELECT privilege FROM admin 
+    $r = db_query("SELECT privilege FROM admin
                     WHERE idUser = $user_id", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
 	} else {
                 return -1;
-	} 
+	}
 }
 
 // checks if a course is inactive
 function check_inactive_course($course_id)
 {
         global $mysqlMainDb;
-        
+
         $res = db_query("SELECT visible FROM course WHERE id = $course_id", $mysqlMainDb);
         $g = mysql_fetch_row($res);
         if ($g[0] == COURSE_INACTIVE) {
@@ -2202,10 +2212,10 @@ function check_inactive_course($course_id)
 
 // get user email verification status
 function get_mail_ver_status($uid) {
-	
+
         $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
         $g = mysql_fetch_row($res);
-        return $g[0];        		
+        return $g[0];
 }
 
 
@@ -2228,10 +2238,10 @@ function check_username_sensitivity($posted, $dbuser) {
 }
 
 // checks if user is notified via email from a given course
-function get_user_email_notification($user_id, $course_id=null) 
-{        
+function get_user_email_notification($user_id, $course_id=null)
+{
         global $mysqlMainDb;
-        
+
         // checks if a course is active or not
         if (isset($course_id)) {
                 if (check_inactive_course($course_id) == TRUE) {
@@ -2240,19 +2250,19 @@ function get_user_email_notification($user_id, $course_id=null)
         }
         // checks if user has verified his email address
         if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
-                $verified_mail = get_mail_ver_status($user_id);                
-                if ($verified_mail == EMAIL_VERIFICATION_REQUIRED 
-                        or $verified_mail == EMAIL_UNVERIFIED) {                
+                $verified_mail = get_mail_ver_status($user_id);
+                if ($verified_mail == EMAIL_VERIFICATION_REQUIRED
+                        or $verified_mail == EMAIL_UNVERIFIED) {
                         return FALSE;
                 }
-        }        
+        }
         // checks if user has choosen not to be notified by email from all courses
         if (!get_user_email_notification_from_courses($user_id)) {
                 return FALSE;
         }
         if (isset($course_id)) {
         // finally checks if user has choosen not to be notified from a specific course
-                $r = db_query("SELECT receive_mail FROM course_user 
+                $r = db_query("SELECT receive_mail FROM course_user
                                 WHERE user_id = $user_id
                                 AND course_id = $course_id");
                 if ($r and mysql_num_rows($r) > 0) {
@@ -2260,7 +2270,7 @@ function get_user_email_notification($user_id, $course_id=null)
                         return $row[0];
                 } else {
                         return FALSE;
-                }        
+                }
         }
         return TRUE;
 }
@@ -2268,17 +2278,17 @@ function get_user_email_notification($user_id, $course_id=null)
 
 // checks if user is notified via email from courses
 function get_user_email_notification_from_courses($user_id) {
-        
+
         global $mysqlMainDb;
-        
-        $r = db_query("SELECT receive_mail FROM user 
+
+        $r = db_query("SELECT receive_mail FROM user
                         WHERE user_id = $user_id", $mysqlMainDb);
-        list($result) = mysql_fetch_row($r);        
+        list($result) = mysql_fetch_row($r);
         if ($result == 1) {
                 return TRUE;
         } else {
                 return FALSE;
-        }                  
+        }
 }
 
 
