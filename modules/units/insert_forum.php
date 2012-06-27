@@ -53,7 +53,7 @@ function list_forums()
 			$tool_content .= "<td>$entry[comment]</td>";
 			$tool_content .= "<td class='center'><input type='checkbox' name='forum[]' value='$entry[id]' /></td>";
 			$tool_content .= "</tr>";
-			$r = db_query("SELECT * FROM forum_topics WHERE forum_id = $entry[id]");
+			$r = db_query("SELECT * FROM forum_topic WHERE forum_id = $entry[id]");
 			if (mysql_num_rows($r) > 0) { // if forum topics found 
 				$topicinfo = array();
 				while($topicrow = mysql_fetch_array($r, MYSQL_ASSOC)) {

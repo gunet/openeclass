@@ -204,7 +204,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <div class='lp_left'>
         <a href='$urlAppend/courses/$course_code' target='_top' title='" .
                 q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
-        <a href='$urlAppend/modules/learnPath/learningPathList.php?course=$course_code' target='_top'>
+        <a href='$urlAppend/modules/learnPath/index.php?course=$course_code' target='_top'>
                 $langLearningPaths</a> &#187;
         <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a></div>
     <div class='clear'></div>

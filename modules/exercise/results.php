@@ -35,7 +35,7 @@ require_once 'modules/video/video_functions.php';
 load_modal_box();
 
 $nameTools = $langResults;
-$navigation[]=array('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
+$navigation[]=array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,8 +28,8 @@ $nameTools = $langMediaTypeDesc;
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $videoPath = $urlServer ."video/". $course_code . $id;
-    $videoURL = $urlServer ."modules/video/video.php?course=$course_code&amp;action=download&amp;id=". $id;
-    
+    $videoURL = $urlServer ."modules/video/index.php?course=$course_code&amp;action=download&amp;id=". $id;
+ 
     if (strpos($videoPath, '/../') === FALSE)
     {
         echo media_html_object($videoPath, $videoURL, '#ffffff', '#000000');

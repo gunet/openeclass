@@ -222,7 +222,7 @@ if(empty($search_terms)) {
                                 } else {
                                         $add_comment = "<br /><span class='smaller'> ($res[comment])</span>";
                                 }
-                                $link_document = "{$urlServer}modules/document/document.php?action2=download&amp;id=$res[path]";
+                                $link_document = "{$urlServer}modules/document/index.php?action2=download&amp;id=$res[path]";
                                 $tool_content .= "<a href='$link_document'>".$res['filename']."</a>$add_comment
                                 </td>
                                 </tr>";
@@ -434,7 +434,7 @@ if(empty($search_terms)) {
 				} else {
 					$desc_text = "<span class='smaller'>($res[description])</span>";
 				}
-				$link_video = "${urlServer}modules/video/video.php?action=download&amp;id=$res[path]";				
+				$link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";				
 				$tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
                   </td>
                 </tr>";

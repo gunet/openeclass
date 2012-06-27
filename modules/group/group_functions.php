@@ -14,7 +14,7 @@ function initialize_group_id($param = 'group_id')
 		if (isset($_REQUEST[$param])) {
 			$group_id = intval($_REQUEST[$param]);
 		} else {
-			header("Location: {$urlServer}modules/group/group.php?course=$course_code");
+			header("Location: {$urlServer}modules/group/index.php?course=$course_code");
 			exit;
 		}
 	}
@@ -41,7 +41,7 @@ function initialize_group_info($group_id = false)
                 $res = db_query("SELECT name, description, forum_id, max_members, secret_directory
                                  FROM `group` WHERE course_id = $course_id AND id = $group_id");
                 if (!$res or mysql_num_rows($res) == 0) {
-                        header("Location: {$urlServer}modules/group/group.php?course=$course_code");
+                        header("Location: {$urlServer}modules/group/index.php?course=$course_code");
                         exit;
                 }
                 list($group_name, $group_description, $forum_id, $max_members, $secret_directory) = mysql_fetch_row($res);

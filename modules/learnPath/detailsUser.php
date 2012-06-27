@@ -45,9 +45,10 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
+require_once '../../include/baseTheme.php';
 
 $TABLECOURSUSER	        = 'course_user';
 $TABLEUSER              = 'user';
@@ -57,9 +58,9 @@ $TABLELEARNPATHMODULE   = 'lp_rel_learnPath_module';
 $TABLEASSET             = 'lp_asset';
 $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
-require_once '../../include/baseTheme.php';
+require_once 'include/lib/learnPathLib.inc.php';
 
-$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name' => $langLearningPaths);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
 $navigation[] = array('url' => "detailsAll.php?course=$course_code", 'name' => $langTrackAllPathExplanation);
 $nameTools = $langTrackUser;
 

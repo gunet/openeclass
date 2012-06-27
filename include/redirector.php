@@ -35,15 +35,15 @@ if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
 	switch ($perso){
 		case 1: { //assignments
 			$i = intval($_GET['i']);
-			$url = 'modules/work/work.php?id=' . $i;
+			$url = 'modules/work/index.php?id=' . $i;
 			break;
 		}
 		case 2: { //announcements
-			$url = 'modules/announcements/announcements.php';
+			$url = 'modules/announcements/index.php';
 			break;
 		}
 		case 4: { //agenda
-			$url = 'modules/agenda/agenda.php';
+			$url = 'modules/agenda/index.php';
 			break;
 		}
 		case 5: { //forum
@@ -54,7 +54,7 @@ if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
 			break;
 		}
 		case 6: { //documents
-			$url = "modules/document/document.php?openDir=" . $_GET['p'];	
+			$url = "modules/document/index.php?openDir=" . $_GET['p'];	
 			break;
 		}
 	}

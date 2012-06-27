@@ -38,10 +38,10 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
+require_once '../../include/baseTheme.php';
 
 $TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
@@ -51,15 +51,16 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
+require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
-$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"details.php?course=$course_code&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
 
 if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php?course=$course_code");
+	header("Location: ./index.php?course=$course_code");
 	exit();
 }
 

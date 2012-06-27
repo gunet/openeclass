@@ -106,9 +106,9 @@ if (file_exists($basedir . $file_info['path'])) {
         require_once 'include/lib/fileDisplayLib.inc.php';
         
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer .'modules/document/document.php?course='. $course_code .'&amp;download='. $file_info['path'];
+        $mediaURL = $urlServer .'modules/document/index.php?course='. $course_code .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer .'modules/group/document.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+            $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
         
         $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;

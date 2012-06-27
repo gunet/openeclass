@@ -62,7 +62,7 @@ require_once("../../include/baseTheme.php");
 $tool_content = "";
 $pwd = getcwd();
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($course_code);
@@ -1214,7 +1214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     {
         $tool_content .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    $tool_content .= "\n<br /><a href=\"learningPathList.php?course=$course_code\">$langBack</a></p>";
+    $tool_content .= "\n<br /><a href='index.php?course=$course_code'>$langBack</a></p>";
 }
 else // if method == 'post'
 {

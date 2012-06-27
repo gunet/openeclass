@@ -68,7 +68,7 @@ $dialogBox = '';
 
 if (!add_units_navigation()) {
 	$nameTools = $langAdm;
-	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 }
 
 // $_SESSION
@@ -86,7 +86,7 @@ if ( !$is_editor )
     }
     else
     {
-        header("Location: ./learningPathList.php?course=$course_code");
+        header("Location: ./index.php?course=$course_code");
     }
     exit();
 }

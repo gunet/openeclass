@@ -3,7 +3,7 @@
 * ========================================================================
 * Open eClass 3.0 - E-learning and Course Management System
 * ========================================================================
-
+ 
 Copyright(c) 2003-2012  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
@@ -44,8 +44,8 @@ define('COURSE_INACTIVE', 3);
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
 define('USER_GUEST', 10);
-
-// resized user image
+        
+// resized user image 
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
 
@@ -266,6 +266,7 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend;
 
         if ($file == 'jquery') {
+                //$file = 'jquery-1.4.3.min.js';
 		$file = 'jquery-1.6.4.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
@@ -306,8 +307,8 @@ function uid_to_username($uid)
 }
 
 
-// Return HTML for a user - first parameter is either a user id (so that the
-// user's info is fetched from the DB) or a hash with user_id, prenom, nom,
+// Return HTML for a user - first parameter is either a user id (so that the 
+// user's info is fetched from the DB) or a hash with user_id, prenom, nom, 
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
@@ -597,9 +598,11 @@ function selection3($entries, $name, $default = '') {
 // ------------------------------------------
 
 function check_guest() {
-	global $mysqlMainDb, $uid;
+	
+    global $uid;
+        
 	if (isset($uid)) {
-		$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'", $mysqlMainDb);
+		$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
 		$g = mysql_fetch_row($res);
 
 		if ($g[0] == 10) {
@@ -615,9 +618,9 @@ function check_guest() {
 // ------------------------------------------------
 
 function check_editor() {
-
-        global $mysqlMainDb, $uid, $course_id;
-
+	
+        global $uid, $course_id;
+        
 	if (isset($uid)) {
 		$res = db_query("SELECT editor FROM course_user
                             WHERE user_id = $uid
@@ -666,7 +669,7 @@ function user_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-
+        
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -684,7 +687,7 @@ function user_app_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-
+        
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -1040,10 +1043,10 @@ function mkpath($path)  {
 
 // check if we can display activationlink (e.g. module_id is one of our modules)
 function display_activation_link($module_id) {
-
-        global $modules;
-
-        if (array_key_exists($module_id, $modules)) {
+	
+        global $modules;       
+        
+        if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {        
         	return TRUE;
 	} else {
 		return FALSE;
@@ -1052,11 +1055,10 @@ function display_activation_link($module_id) {
 
 // checks if a module is visible
 function visible_module($module_id) {
+        
+	global $course_code;
 
-        global $course_code;
-
-        $cid = course_code_to_id($course_code);
-
+    $cid = course_code_to_id($course_code);
 	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
                                 WHERE module_id = $module_id AND
                                 course_id = $cid"));
@@ -1068,6 +1070,28 @@ function visible_module($module_id) {
 	}
 }
 
+
+// Find the current module id from the script URL
+function current_module_id()
+{
+        global $modules, $urlAppend;
+        static $module_id;
+        
+        if (isset($module_id)) {
+                return $module_id;
+        }
+        
+        $module_path = str_replace($urlAppend.'modules/', '', $_SERVER['SCRIPT_NAME']);
+        $link = preg_replace('|/.*$|', '', $module_path);
+        
+        foreach ($modules as $mid => $info) {
+                if ($info['link'] == $link) {
+                        $module_id = $mid;
+                        return $mid;
+                }
+        }        
+        return false;
+}
 
 // Returns true if a string is invalid UTF-8
 function invalid_utf8($s)
@@ -1306,11 +1330,11 @@ function format_time_duration($sec)
 function media_url($path)
 {
 	global $urlServer, $course_code, $course_code;
-
-        $mediaURL  = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
+        
+        $mediaURL  = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
         $mediaPath = $urlServer ."video/". $course_code . $path;
-        $mediaPlay = $urlServer .'modules/video/video.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
-
+        $mediaPlay = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
+        
         return array($mediaURL, $mediaPath, $mediaPlay);
 }
 
@@ -1463,11 +1487,10 @@ function course_id_to_public_code($cid)
 // Delete course with id = $cid
 function delete_course($cid)
 {
-        global $mysqlMainDb, $webDir;
+        global $webDir;
 
-	$course_code = course_id_to_code($cid);
-
-        mysql_select_db($mysqlMainDb);
+	$course_code = course_id_to_code($cid);	
+       
 	db_query("DELETE FROM announcement WHERE course_id = $cid");
 	db_query("DELETE FROM document WHERE course_id = $cid");
         db_query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1525,6 +1548,7 @@ function delete_course($cid)
                 mkdir($garbage, 0775);
         }
 	rename("$webDir/courses/$course_code", "$garbage/$course_code");
+        unlink("$webDir/video/$course_code");
 }
 
 function csv_escape($string, $force = false)
@@ -1617,13 +1641,12 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $mysqlMainDb;
-
+	
         $filebrowser = '';
-        $activemodule = 'document/document.php';
+        $activemodule = 'document/index.php';
         if (isset($course_code) && !empty($course_code))
         {
             $filebrowser = "file_browser_callback : 'openDocsPicker',";
-
             if (!$is_editor)
             {
                 $cid = course_code_to_id($course_code);
@@ -1640,13 +1663,13 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 else {
                     switch ($module['module_id']) {
                         case MODULE_ID_LINKS:
-                            $activemodule  = 'link/link.php';
+                            $activemodule  = 'link/index.php';
                             break;
                         case MODULE_ID_DOCS:
-                            $activemodule  = 'document/document.php';
+                            $activemodule  = 'document/index.php';
                             break;
                         case MODULE_ID_VIDEO:
-                            $activemodule  = 'video/video.php';
+                            $activemodule  = 'video/index.php';
                             break;
                         default:
                             $filebrowser = '';
@@ -1655,9 +1678,9 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 }
             }
         }
-
+        
 	$lang_editor = langname_to_code($language);
-
+	
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
@@ -2278,7 +2301,6 @@ function get_user_email_notification($user_id, $course_id=null)
 
 // checks if user is notified via email from courses
 function get_user_email_notification_from_courses($user_id) {
-
         global $mysqlMainDb;
 
         $r = db_query("SELECT receive_mail FROM user

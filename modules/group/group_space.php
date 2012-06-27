@@ -32,7 +32,7 @@ $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
-$navigation[] = array('url' => 'group.php?course='.$course_code, 'name' => $langGroups);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langGroups);
 
 require_once 'group_functions.php';
 mysql_select_db($mysqlMainDb);
@@ -199,7 +199,7 @@ function loadGroupTools(){
         }
         // Drive members into their own File Manager
         if ($documents) {
-                $group_tools .=  "<li><a href='document.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
+                $group_tools .=  "<li><a href='index.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
         }
 	
         if ($is_editor or $is_tutor) {

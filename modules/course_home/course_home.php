@@ -32,7 +32,7 @@
 $require_current_course = true;
 $guest_allowed = true;
 define('HIDE_TOOL_TITLE', 1);
-
+define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
 require_once 'modules/video/video_functions.php';
 require_once 'include/lib/hierarchy.class.php';

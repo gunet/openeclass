@@ -254,20 +254,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$searchAdvancedURL = $searchAction;
 		}
 		$mod_activation = '';
-		if ($is_editor and isset($course_code)) {
-			// link for activating / deactivating module
-			if (file_exists($module_ini_dir = getcwd() . "/module.ini.php")) {
-				include $module_ini_dir;
-				if (display_activation_link($module_id)) {                                        
-					if (visible_module($module_id)) {                                                
-						$message = $langDeactivate;
-						$mod_activation = "<a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
-					} else {
-						$message = $langActivate;
-						$mod_activation = "<a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
-					}
-				}
-			}
+		if ($is_editor and isset($course_code)) {                        
+			// link for activating / deactivating module                                              			
+                        $module_id = current_module_id();
+                        if (display_activation_link($module_id)) {
+                                if (visible_module($module_id)) {
+                                        $message = $langDeactivate;
+                                        $mod_activation = "<a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>($langDeactivate)</a>";
+                                } else {
+                                        $message = $langActivate;
+                                        $mod_activation = "<a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>($langActivate)</a>";
+                                }
+                        }			
 		}
 
 		$t->set_var ( 'SEARCH_ACTION', $searchAction );

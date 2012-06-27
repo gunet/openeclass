@@ -36,7 +36,7 @@ require_once 'include/jscalendar/calendar.php';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
 
-$navigation[] = array('url' => "questionnaire.php?course=$course_code", 'name' => $langQuestionnaire);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
 if (isset($_REQUEST['pid'])) {
@@ -47,7 +47,7 @@ if (isset($_REQUEST['pid'])) {
 if (isset($_GET['edit']) and isset($pid))  {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "$langThereAreParticipants";
-		$tool_content .= "<br ><br /><div align='right'><a href='questionnaire.php?course=$course_code'>$langBack</a></div>";
+		$tool_content .= "<br ><br /><div align='right'><a href='index.php?course=$course_code'>$langBack</a></div>";
 		draw($tool_content, 2, null, $local_head);
 		exit();
 	} else {
@@ -288,7 +288,7 @@ function createPoll($questions, $question_types) {
 		mysql_real_escape_string($PollActive) ."')");
 	$pid = mysql_insert_id();
 	insertPollQuestions($pid, $questions, $question_types);
-	$tool_content .= "<p class='success'>".$langPollCreated."</p><a href=\"questionnaire.php?course=$course_code\">".$langBack."</a>";
+	$tool_content .= "<p class='success'>".$langPollCreated."</p><a href='index.php?course=$course_code'>".$langBack."</a>";
 }
 
 
@@ -309,7 +309,7 @@ function editPoll($pid, $questions, $question_types) {
 		(SELECT pqid FROM poll_question WHERE pid='$pid')");
 	db_query("DELETE FROM poll_question WHERE pid='$pid'");
  	insertPollQuestions($pid, $questions, $question_types);
-	$tool_content .= "<p class='success'>".$langPollEdited."</p><a href=\"questionnaire.php?course=$course_code\">".$langBack."</a>";
+	$tool_content .= "<p class='success'>".$langPollEdited."</p><a href='index.php?course=$course_code'>".$langBack."</a>";
 }
 
 

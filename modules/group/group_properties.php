@@ -35,7 +35,7 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 $nameTools = $langGroupProperties;
-$navigation[] = array('url' => "group.php?course=$course_code", 'name' => $langGroupManagement);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroupManagement);
 
 require_once 'group_functions.php';
 initialize_group_info();
@@ -48,7 +48,7 @@ $checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
 $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
 
 $tool_content = "
-<form method='post' action='group.php?course=$course_code'>
+<form method='post' action='index.php?course=$course_code'>
     <fieldset>
     <legend>$langGroupProperties / $langTools</legend>
     <table width='100%' class='tbl'>

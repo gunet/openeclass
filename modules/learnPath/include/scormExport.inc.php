@@ -54,7 +54,7 @@
                   - No multi-page exercises
 
                   This file is currently supposed to be included by 
-                  learningPathList.php, in order to inherit some of its global 
+                  index.php, in order to inherit some of its global 
                   variables, like some tables' names.
 ==============================================================================
 */

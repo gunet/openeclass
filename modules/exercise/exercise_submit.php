@@ -52,7 +52,7 @@ if (isset($exerciseId)) {
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE` 
 		WHERE course_id = $course_id AND id = '$exerciseId'", $mysqlMainDb));
 	if (($active['active'] == 0) and (!$is_editor)) {
-		header('Location: exercise.php?course='.$course_code);
+		header('Location: index.php?course='.$course_code);
 		exit();
 	} 
 }
@@ -64,7 +64,7 @@ if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
 // if the user has clicked on the "Cancel" button
 if(isset($_POST['buttonCancel'])) {
 	// returns to the exercise list
-	header('Location: exercise.php?course='.$course_code);
+	header('Location: index.php?course='.$course_code);
 	exit();
 }
 	
@@ -131,7 +131,7 @@ if (isset($_POST['formSent'])) {
 } // end of submit
 
 if (!add_units_navigation()) {
-	$navigation[] = array("url" => "exercise.php?course=$course_code","name" => $langExercices);
+	$navigation[] = array("url" => "index.php?course=$course_code","name" => $langExercices);
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
@@ -191,7 +191,7 @@ if (!$is_editor) {
                     </tr>
                     <tr>
                       <td><br/><br/><br/><div align='center'>
-                        <a href='exercise.php?course=$course_code'>$langBack</a></div></td>
+                        <a href='index.php?course=$course_code'>$langBack</a></div></td>
                     </tr>
                     </table>";
                 draw($tool_content, 2);

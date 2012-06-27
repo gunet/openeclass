@@ -35,7 +35,7 @@ $require_editor = TRUE;
 
 require_once("../../include/baseTheme.php");
 
-$navigation[]= array ("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($course_code);

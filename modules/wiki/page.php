@@ -60,7 +60,7 @@ mysql_select_db($mysqlMainDb);
 // check and set user access level for the tool
 if ( ! isset( $_REQUEST['wikiId'] ) )
 {
-    header("Location: wiki.php?course=$course_code");
+    header("Location: index.php?course=$course_code");
     exit();
 }
 
@@ -72,7 +72,7 @@ if ( $_gid && $is_groupAllowed )
 {
     // group context
     $grouId = $_gid;
-    $navigation[]  = array ('url' => '../group/group.php?course='.$course_code, 'name' => $langGroups);
+    $navigation[]  = array ('url' => '../group/index.php?course='.$course_code, 'name' => $langGroups);
     $navigation[]= array ('url' => '../group/group_space.php?course='.$course_code, 'name' => $_group['name']);
 }
 elseif ($_gid && ! $is_groupAllowed )
@@ -508,7 +508,7 @@ $head_content .= "<script type=\"text/javascript\">"
     ;
 //navigation bar
     if (!add_units_navigation()) {
-	    $navigation[]= array ( 'url' => 'wiki.php?course='.$course_code, 'name' => $langWiki);
+	    $navigation[]= array ( 'url' => 'index.php?course='.$course_code, 'name' => $langWiki);
 	    $navigation[]= array ( 'url' => 'page.php?course='.$course_code.'&amp;wikiId='.$wikiId.'&amp;action=show', 'name' => $wiki->getTitle());
     }
     mysql_select_db($mysqlMainDb);
@@ -642,7 +642,7 @@ $tool_content .= '          <li>'
     ;
 
 $tool_content .= '          <li>'
-    . '<img src="'.$themeimg.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'wiki.php?course='.$course_code
+    . '<img src="'.$themeimg.'/list.png" align="middle" />&nbsp;<a class="claroCmd" href="'.'index.php?course='.$course_code
     . '">'
     . $langWikiList .'</a></li>' . "\n"
     ;

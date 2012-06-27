@@ -184,7 +184,7 @@ switch ($module['contentType'])
                 else
                 {
                     $moduleStartAssetPage = htmlspecialchars($urlServer 
-                                                            ."modules/video/video.php?course=$course_code&action=download&id=".$assetPath
+                                                            ."modules/video/index.php?course=$course_code&action=download&id=".$assetPath
                                                             , ENT_QUOTES);
                 }
                 break;

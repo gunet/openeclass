@@ -60,7 +60,7 @@ check_LPM_validity($is_editor, $course_code, true);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
-	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 	$navigation[] = array("url"=>"learningPath.php?course=$course_code", "name"=> $langAdm);
 }
 

@@ -175,7 +175,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $status = $file['visible'];
                 if ($file['format'] == '.dir') {
                         $image = $themeimg.'/folder.png';
-                        $link = "<a href='{$urlServer}modules/document/document.php?course=$course_code&amp;openDir=$file[path]&amp;unit=$id'>";
+                        $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file[path]&amp;unit=$id'>";
                 } else {
                         $image = '../document/img/' .
                                 choose_image('.' . $file['format']);
@@ -362,7 +362,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 		}
 	} else {
                 $work = mysql_fetch_array($r, MYSQL_ASSOC);
-		$link = "<a href='${urlServer}modules/work/work.php?course=$course_code&amp;id=$work_id&amp;unit=$id'>";
+		$link = "<a href='${urlServer}modules/work/index.php?course=$course_code&amp;id=$work_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
                 if (!$module_visible) {
 			$exlink .= " <i>($langInactiveModule)</i>";
@@ -452,7 +452,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 		$link = "<a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$ft_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";
 	} else {
-		$r = db_query("SELECT forum_id FROM forum_topics WHERE id = $ft_id");
+		$r = db_query("SELECT forum_id FROM forum_topic WHERE id = $ft_id");
 		list($forum_id) = mysql_fetch_array($r);
 		$link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
                 $forumlink = $link . "$title</a>";

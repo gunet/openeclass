@@ -26,7 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/libchart/classes/libchart.php';
 
 $nameTools = $langPollCharts;
-$navigation[] = array('url' => "questionnaire.php?course=$course_code", 'name' => $langQuestionnaire);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 
 $questions = array();
 $answer_total = 0;

@@ -28,12 +28,12 @@ $nameTools = $m['grades'];
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
-		$navigation[] = array("url"=>"work.php?course=$course_code", "name"=>$langWorks);
-		$navigation[] = array("url"=>"work.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
+		$navigation[] = array("url"=>"index.php?course=$course_code", "name"=>$langWorks);
+		$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
 		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
 		draw($tool_content, 2);
 } else {
-		header('Location: work.php?course='.$course_code);
+		header('Location: index.php?course='.$course_code);
 		exit;
 }
 
@@ -60,7 +60,7 @@ function show_edit_form($id, $sid, $assign)
 					"$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)";
 		} else $group_submission = "";
 			$tool_content .= "
-			<form method='post' action='work.php?course=$course_code'>
+			<form method='post' action='index.php?course=$course_code'>
 			<input type='hidden' name='assignment' value='$id'>
 			<input type='hidden' name='submission' value='$sid'>
                         <fieldset>
@@ -74,7 +74,7 @@ function show_edit_form($id, $sid, $assign)
 			  <td>${sub['submission_date']}</td></tr>
 			<tr>
 			  <th class='left'>${m['filename']}:</th>
-			  <td><a href='work.php?course=$course_code&amp;get=${sub['id']}'>${sub['file_name']}</a></td>
+			  <td><a href='index.php?course=$course_code&amp;get=${sub['id']}'>${sub['file_name']}</a></td>
 			</tr>";
 		        $tool_content .= "<tr>
 			  <th class='left'>$m[grade]:</th>

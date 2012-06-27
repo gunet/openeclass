@@ -33,7 +33,7 @@ $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
 $nameTools = $langQuestionPool;
-$navigation[]=array("url" => "exercise.php?course=$course_code","name" => $langExercices);
+$navigation[]=array("url" => "index.php?course=$course_code","name" => $langExercices);
 if (isset($_GET['fromExercise'])) {
 	$fromExercise = $_GET['fromExercise'];
 	$navigation[]= array ("url" => "admin.php?course=$course_code&amp;exerciseId=$fromExercise", "name" => $langExerciseManagement);

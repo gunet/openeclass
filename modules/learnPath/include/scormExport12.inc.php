@@ -55,14 +55,14 @@
                   - No multi-page exercises
 
                   This file is currently supposed to be included by 
-                  learningPathList.php, in order to inherit some of its global 
+                  index.php, in order to inherit some of its global 
                   variables, like some tables' names.
 ==============================================================================
 */
 
 if(!class_exists('ScormExport')):
 
-require_once("../../include/lib/fileManageLib.inc.php");
+require_once '../../include/lib/fileManageLib.inc.php';
 require_once("../../include/lib/fileUploadLib.inc.php");
 require_once("../../include/pclzip/pclzip.lib.php");
 require_once('../../include/lib/textLib.inc.php');

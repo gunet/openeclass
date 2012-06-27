@@ -39,7 +39,7 @@ require_once 'group_functions.php';
 initialize_group_id();
 initialize_group_info($group_id);
 
-$navigation[] = array ('url' => 'group.php?course='.$course_code, 'name' => $langGroups);
+$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langGroups);
 $navigation[] = array ('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => q($group_name));
 
 load_js('jquery');

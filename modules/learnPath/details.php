@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,9 +40,10 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
+require_once '../../include/baseTheme.php';
 
 $TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
@@ -52,15 +53,15 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
+require_once 'include/lib/learnPathLib.inc.php';
 
-$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
 if( empty($_REQUEST['path_id']) )
 {
-	header("Location: ./learningPathList.php?course=$course_code");
+	header("Location: ./index.php?course=$course_code");
 	exit();
 }
 

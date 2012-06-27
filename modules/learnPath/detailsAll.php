@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -42,9 +42,11 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
+
 $require_current_course = TRUE;
 $require_editor = TRUE;
+
+require_once '../../include/baseTheme.php';
 
 $TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
@@ -53,12 +55,13 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
-require_once("../../include/baseTheme.php");
+ require_once 'include/lib/learnPathLib.inc.php';
+
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
         $navigation[] = array('url' => '../usage/usage.php?course='.$course_code, 'name' => $langUsage);
         $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
-        $navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+        $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
         $nameTools = $langTrackAllPathExplanation;
 }
 

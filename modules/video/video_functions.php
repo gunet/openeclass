@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -161,7 +161,7 @@ function choose_medialink_ahref($mediaURL, $title, $id = null)
     
     if (is_embeddable_medialink($mediaURL))
     {
-        $linkPlay = $urlServer ."modules/video/video.php?course=$course_code&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
+        $linkPlay = $urlServer ."modules/video/index.php?course=$course_code&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
         
         if (file_exists(get_shadowbox_dir()))
             $ahref = "<a $aid href='".make_embeddable_medialink($mediaURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";

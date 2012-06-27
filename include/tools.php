@@ -513,9 +513,9 @@ function adminMenu(){
  * @return array
  */
 function lessonToolsMenu() {
-	global $is_editor, $uid, $is_course_admin;	
+	global $is_editor, $is_course_admin;	
 	global $course_code, $langAdministrationTools, $langExternalLinks;
-        global $modules, $admin_modules, $urlServer;
+        global $modules, $admin_modules, $urlAppend;
 
 	$sideMenuGroup = array();
 	$sideMenuSubGroup = array();
@@ -554,9 +554,9 @@ function lessonToolsMenu() {
                 array_push($sideMenuSubGroup, $arrMenuType);          
                 while ($toolsRow = mysql_fetch_array($result)) {
                         $mid = $toolsRow['module_id'];                                   
-                        $modules[$mid]['link'] .= "?course=".$course_code;
+                        $modules[$mid]['link'] .= "/?course=".$course_code;
                         array_push($sideMenuText, q($modules[$mid]['title']));
-                        array_push($sideMenuLink, $urlServer."modules/".q($modules[$mid]['link']));
+                        array_push($sideMenuLink, $urlAppend . 'modules/' . q($modules[$mid]['link']));
                         array_push($sideMenuImg, $modules[$mid]['image'].$section['iconext']);
                         array_push($sideMenuID, $mid);                        
                 }                
@@ -596,7 +596,7 @@ function lessonToolsMenu() {
                 array_push($sideMenuSubGroup, $arrMenuType);                 
                 foreach ($admin_modules as $adm_mod) {                        
                         array_push($sideMenuText, $adm_mod['title']);
-                        array_push($sideMenuLink, $urlServer."modules/".q($adm_mod['link']));
+                        array_push($sideMenuLink, $urlAppend."modules/".q($adm_mod['link']));
                         array_push($sideMenuImg, $adm_mod['image'].$section['iconext']);                        
                 }                                
                 array_push($sideMenuSubGroup, $sideMenuText);

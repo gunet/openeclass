@@ -49,7 +49,7 @@ if (isset($_GET['submit'])) {
 	submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
 	draw($tool_content, 2);
 } else {
-	header("Location: work.php?course=$course_code");
+	header("Location: index.php?course=$course_code");
 }
 
 
@@ -93,7 +93,7 @@ function show_assignments()
 
 		$tool_content .= "<tr><td width=\"1%\">
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
-			<td><div align='left'><a href='work.php?course=$course_code&amp;id=$row[id]'>".q($row['title'])."</a></td>
+			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row[id]'>".q($row['title'])."</a></td>
 			<td align='center'>".nice_format($row['deadline']);
 		if ($row['days'] > 1) {
 			$tool_content .=  " ($m[in]&nbsp;$row[days]&nbsp;$langDays";
@@ -170,9 +170,9 @@ function submit_work($uid, $group_id, $id, $file) {
 
 		$tool_content .="<p class='success'>$langUploadSuccess
 			<br />$m[the_file] \"$original_filename\" $m[was_submitted]<br />
-			<a href='work.php?course=$course_code'>$langBack</a></p><br />";
+			<a href='index.php?course=$course_code'>$langBack</a></p><br />";
 	} else {
 		$tool_content .="<p class='caution'>$langUploadError<br />
-		<a href='work.php?course=$course_code'>$langBack</a></p><br />";
+		<a href='index.php?course=$course_code'>$langBack</a></p><br />";
 	}
 }

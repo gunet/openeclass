@@ -1241,7 +1241,7 @@ function doImport($course_code, $mysqlMainDb, $webDir, $scoFileSize, $scoFileNam
     {
         $importMessages .= "\n<br /><center><b>".$langNotInstalled."</b></center>";
     }
-    //$importMessages .= "\n<br /><a href=\"learningPathList.php?course=$course_code\">$langBack</a></p>";
+    //$importMessages .= "\n<br /><a href=\"index.php?course=$course_code\">$langBack</a></p>";
     $importMessages .= "\n<br /></p>";
     
     mysql_select_db($mysqlMainDb);

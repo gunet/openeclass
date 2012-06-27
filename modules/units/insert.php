@@ -22,7 +22,7 @@
 /*
 Units module: insert new resource
 */
-
+define('STATIC_MODULE', 1);
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -256,7 +256,7 @@ function insert_forum($id)
 		$ids = explode(':', $for_id);
 		if (count($ids) == 2) {
                         list($forum_id, $topic_id) = $ids;
-			$topic = mysql_fetch_array(db_query("SELECT * FROM forum_topics
+			$topic = mysql_fetch_array(db_query("SELECT * FROM forum_topic
                                         WHERE id =" . intval($topic_id) ." 
                                         AND forum_id =" . intval($forum_id)), MYSQL_ASSOC);
 			db_query("INSERT INTO unit_resources SET unit_id=$id, type='topic', title=" .

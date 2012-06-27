@@ -130,7 +130,7 @@ $tool_content .= "
     <li><a href='muladduser.php?course=$course_code'>$langManyUsers</a></li>
     <li><a href='guestuser.php?course=$course_code'>$langGUser</a>&nbsp;</li>
     <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;search=1'>$langSearchUser</a></li>
-    <li><a href='../group/group.php?course=$course_code'>$langGroupUserManagement</a></li>
+    <li><a href='../group/index.php?course=$course_code'>$langGroupUserManagement</a></li>
     <li><a href='../course_info/refresh_course.php?course=$course_code'>$langDelUsers</a></li>
   </ul>
 </div>";

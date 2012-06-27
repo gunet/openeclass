@@ -32,7 +32,7 @@ $helpTopic = 'Questionnaire';
 require_once '../../include/baseTheme.php';
 
 $nameTools = $langParticipate;
-$navigation[] = array("url"=>"questionnaire.php?course=$course_code", "name"=> $langQuestionnaire);
+$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langQuestionnaire);
 
 if(!isset($_REQUEST['UseCase'])) $_REQUEST['UseCase'] = "";
 if(!isset($_REQUEST['pid'])) die();
@@ -136,5 +136,5 @@ function submitPoll() {
 		db_query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
 			VALUES ($pid, $pqid, $aid, $answer_text, $user_id , '$CreationDate')");
 	}
-	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href=\"questionnaire.php?course=$course_code\">".$langBack."</a></p>";
+	$tool_content .= "<p class='success'>".$langPollSubmitted."<br /><a href='index.php?course=$course_code'>".$langBack."</a></p>";
 }

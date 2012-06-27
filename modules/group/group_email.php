@@ -38,7 +38,7 @@ require_once 'include/sendMail.inc.php';
 $group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langEmailGroup;
-$navigation[]= array ("url"=>"group.php?course=$course_code", "name"=> $langGroupSpace,
+$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langGroupSpace,
 "url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
 
 list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
@@ -76,7 +76,7 @@ if ($is_editor or $is_tutor)  {
 		// aldo send email to professor 
 		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
 		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
-		$tool_content .= "<a href='group.php?course=$course_code'>$langBack</a></p>";
+		$tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></p>";
 	} else {
 		$tool_content .= "
 		<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>

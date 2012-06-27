@@ -28,7 +28,7 @@
 		  a file to upload and add some metadata with it.
 
     The script shows a form with a "Browse file" tag and some simple
-    inputs for metadata. The actual uploading takes place at document.php
+    inputs for metadata. The actual uploading takes place at document/index.php
 ==============================================================================*/
 
 $require_current_course = true;
@@ -49,9 +49,9 @@ if (defined('GROUP_DOCUMENTS')) {
         initialize_group_info($group_id);
 	$can_upload = $can_upload || $is_member;
         $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $navigation[] = array ('url' => 'group.php?course='.$course_code, 'name' => $langGroups);
+        $navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langGroups);
         $navigation[] = array ('url' => 'group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
-	$navigation[] = array ('url' => "document.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
+	$navigation[] = array ('url' => "index.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
 } elseif (defined('EBOOK_DOCUMENTS')) {
 	if (isset($_REQUEST['ebook_id'])) {    
             $ebook_id = intval($_REQUEST['ebook_id']);
@@ -61,14 +61,14 @@ if (defined('GROUP_DOCUMENTS')) {
         $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
 } else {
-	$navigation[] = array ('url' => "document.php?course=$course_code&amp;openDir=$uploadPath", 'name' => $langDoc);
+	$navigation[] = array ('url' => "index.php?course=$course_code&amp;openDir=$uploadPath", 'name' => $langDoc);
         $group_hidden_input = '';
 }
 
 if ($can_upload) {
 	$nameTools = $langDownloadFile;
 	$tool_content .= "
-	<form action='document.php?course=$course_code' method='post' enctype='multipart/form-data'>
+	<form action='index.php?course=$course_code' method='post' enctype='multipart/form-data'>
         <fieldset>
 	<input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input

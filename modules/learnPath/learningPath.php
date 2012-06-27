@@ -66,7 +66,7 @@ if (isset($_GET['path_id'])) {
     $_SESSION['path_id'] = intval($_GET['path_id']);
 } elseif ((!isset($_SESSION['path_id']) || $_SESSION['path_id'] == '')) {
     // if path id not set, redirect user to the list of learning paths
-    header("Location: ./learningPathList.php?course=$course_code");
+    header("Location: ./index.php?course=$course_code");
     exit();
 }
 
@@ -74,7 +74,7 @@ $q = db_query("SELECT name, visible FROM $TABLELEARNPATH WHERE learnPath_id = '"
 $lp = mysql_fetch_array($q);
 $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
-	$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+	$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 }
 
 
@@ -88,7 +88,7 @@ if ( $is_editor )
 else {
 	if ($lp['visible'] == 0) {
 		// if the learning path is invisible, don't allow users in it
-		header("Location: ./learningPathList.php?course=$course_code");
+		header("Location: ./index.php?course=$course_code");
 		exit();
 	}
 	
@@ -99,7 +99,7 @@ else {
 			if ($lp['learnPath_id'] == $_SESSION['path_id']) {
 				if ($block_met) {
 					// if a previous learning path was blocked, don't allow users in it
-					header("Location: ./learningPathList.php?course=$course_code");
+					header("Location: ./index.php?course=$course_code");
 					exit();
 				}
 				else

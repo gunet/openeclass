@@ -31,7 +31,6 @@
  */
 
 $require_login = TRUE;
-$ignore_module_ini = true;
 $require_help = TRUE;
 $helpTopic = 'MyAgenda';
 
@@ -93,7 +92,7 @@ function get_agendaitems($query, $month, $year) {
                                         AND visible = 1");
 
                 while ($item = mysql_fetch_array($result)) {
-                        $URL = $urlServer."modules/agenda/agenda.php?course=".$mycours['k'];
+                        $URL = $urlServer."modules/agenda/index.php?course=".$mycours['k'];
                         $agendadate = explode("-", $item['day']);                            
                         $agendatime = explode(":", $item['hour']);
                         $time = $agendatime[0].":".$agendatime[1];

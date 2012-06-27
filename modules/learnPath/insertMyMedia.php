@@ -37,7 +37,7 @@ require_once 'modules/video/video_functions.php';
 
 $dialogBox = '';
 
-$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPath);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name'=> $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 

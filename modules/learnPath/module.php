@@ -60,7 +60,7 @@ $body_action = '';
 
 $nameTools = $langLearningObject;
 if (!add_units_navigation()) {
-	$navigation[] = array('url' => "learningPathList.php?course=$course_code", 'name'=> $langLearningPaths);
+	$navigation[] = array('url' => "index.php?course=$course_code", 'name'=> $langLearningPaths);
 	if ($is_editor) {
                 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'],
                                       'name' => $langAdm);
@@ -86,7 +86,7 @@ if (!add_units_navigation() && !$is_editor) {
 
 if ( !$is_editor && $lp['visible'] == 0 ) {
 	// if the learning path is invisible, don't allow users in it
-	header("Location: ./learningPathList.php?course=$course_code");
+	header("Location: ./index.php?course=$course_code");
 	exit();
 }
 

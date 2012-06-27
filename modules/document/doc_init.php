@@ -30,7 +30,7 @@ if (defined('GROUP_DOCUMENTS')) {
         initialize_group_id();
         initialize_group_info($group_id);        
         $subsystem_id = $group_id;
-        $navigation[] = array('url' => $urlAppend . '/modules/group/group.php?course='.$course_code, 'name' => $langGroups);
+        $navigation[] = array('url' => $urlAppend . '/modules/group/index.php?course='.$course_code, 'name' => $langGroups);
         $navigation[] = array('url' => $urlAppend . '/modules/group/group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
         $groupset = "group_id=$group_id&amp;";
         $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' .$course_code .'&amp;' . $groupset;

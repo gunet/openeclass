@@ -1025,7 +1025,7 @@ $langAddPage = "Eine Seite hinzufügen";
 $langPageAdded = "Die Seite wurde hinzugefügt";
 $langPageTitleModified = "Der Titel der Seite wurde geändert";
 $langSendPage = "Dateiname der Seite";
-$langCouldNotSendPage = "Die Datei ist nicht im HTML Format und konnte nicht gesendet werden. Falls Sie Dateien, die nicht im HTML Format formatiert sind, verschicken möchten (PDF, Word, Power Point, Video, etc.) benutzen Sie <a href='../document/document.php'>Dokumente</a>";
+$langCouldNotSendPage = "Die Datei ist nicht im HTML Format und konnte nicht gesendet werden. Falls Sie Dateien, die nicht im HTML Format formatiert sind, verschicken möchten (PDF, Word, Power Point, Video, etc.) benutzen Sie <a href='../document/inde.php'>Dokumente</a>";
 $langAddPageToSite = "Eine Seite zur Website hinzufügen";
 $langCouldNot = "Die Datei konnte nicht gesendet werden";
 $langOkSent = "<p><b>Ihre Seite wurde gesendet</b><br/><br/>Ein Link wurde im linken Menue erzeugt</p>";
@@ -1033,7 +1033,7 @@ $langTooBig = "Sie haben keine Datei zum Absenden ausgewählt oder die Datei ist
 $langExplanation_0 = "Falls Sie eine Seite für Ihren Kurs im HTML Format erzeugt haben (z.B. \"my_page.htm\"), dann können Sie die nachfolgende Form benutzen zum Hinzufügen eines Link im Menu des Kurses (links). Ihre Seite wird auf diese Weise auf der Plattform öffentlich zugänglich (hochladen) und wird zusammen mit den anderen Werkzeugen angezeigt. <br/>Dieser Link kann zur besseren Flexibilität aktiviert / deaktiviert werden wie auch die anderen Werkzeuge.";
 $langExplanation_1 = "Informationen zur Seite";
 $langExplanation_2 = "Der Name, der im linken Menu angezeigt wird.";
-$langExplanation_3 = "Falls Sie Dateien, die <u>nicht</u> im HTML Format formatiert sind, erzeugen möchten (PDF, Word, Power Point, Video, etc.) benutzen Sie <a href='../document/document.php'>Dokumente</a>";
+$langExplanation_3 = "Falls Sie Dateien, die <u>nicht</u> im HTML Format formatiert sind, erzeugen möchten (PDF, Word, Power Point, Video, etc.) benutzen Sie <a href='../document/index.php'>Dokumente</a>";
 $langExplanation_4 = "Informationen zum externen Link";
 $langNoticeExpl = "Bem: Die maximal zulässige Dateigröße der Seite beträgt 20 MB";
 $langPgTitle = "Titel der Seite";

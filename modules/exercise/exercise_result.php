@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langExercicesResult;
-$navigation[] = array ("url"=>"exercise.php?course=$course_code", "name"=> $langExercices);
+$navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langExercices);
 
 require_once 'modules/video/video_functions.php';
 load_modal_box();
@@ -72,7 +72,7 @@ $tool_content .= "
   </tr>
   </table>";
 
-$tool_content .= "<form method='GET' action='exercise.php'><input type='hidden' name='course' value='$course_code'/>";
+$tool_content .= "<form method='GET' action='index.php'><input type='hidden' name='course' value='$course_code'/>";
 
 $i=$totalScore=$totalWeighting=0;
 

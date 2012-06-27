@@ -1821,7 +1821,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
 	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
-		header("Location: ".$depth."learningPathList.php?course=$course_code");
+		header("Location: ".$depth."index.php?course=$course_code");
 		exit();
 	}
 	
@@ -1831,7 +1831,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 		
 		if (!$is_editor && $lp['visible'] == 0 ) {
 			// if the learning path is invisible, don't allow users in it
-			header("Location: ".$depth."learningPathList.php?course=$course_code");
+			header("Location: ".$depth."index.php?course=$course_code");
 			exit();
 		}
 		
@@ -1843,7 +1843,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 					if ($lp['learnPath_id'] == $_SESSION['path_id']) {
 						if ($block_met) {
 							// if a previous learning path was blocked, don't allow users in it
-							header("Location: ".$depth."learningPathList.php?course=$course_code");
+							header("Location: ".$depth."index.php?course=$course_code");
 							exit();
 						}
 						else
@@ -1860,7 +1860,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
 		// if the combination path/module is invalid, don't allow users in it
-		header("Location: ".$depth."learningPathList.php?course=$course_code");
+		header("Location: ".$depth."index.php?course=$course_code");
 		exit();
 	}
 	
@@ -1872,7 +1872,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 				if ($lpm['module_id'] == $_SESSION['lp_module_id']) {
 					if ($block_met) {
 						// if a previous learning path module was blocked, don't allow users in it
-						header("Location: ".$depth."learningPathList.php?course=$course_code");
+						header("Location: ".$depth."index.php?course=$course_code");
 						exit();
 					}
 					else

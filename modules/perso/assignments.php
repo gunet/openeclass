@@ -137,7 +137,7 @@ aCont;
 			for ($j=0; $j < $iterator; $j++) {
                                 /*$url = $urlServer . "index.php?perso=1&amp;c=" .
                                        $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];*/
-                                $url = $urlAppend . "/modules/work/work.php?course=".$data[$i][1]."&amp;id=". $data[$i][2][$j][0];
+                                $url = $urlAppend . "/modules/work/index.php?course=".$data[$i][1]."&amp;id=". $data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
 					$submit_status = "".$langGroupWorkSubmitted."";

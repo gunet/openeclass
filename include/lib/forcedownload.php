@@ -23,7 +23,7 @@
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
 ==============================================================================        
-    @Description: Support functions used by document, document_upgrade, video.php
+    @Description: Support functions used by document, document_upgrade, video/index.php
 
     This script contains the function that forces the web browser to donwload
     a file instead of just opening it. This happens for security reasons.

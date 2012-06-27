@@ -30,7 +30,7 @@ load_modal_box();
 
 mysql_select_db($mysqlMainDb);
 
-$base_url = 'glossary.php?course=' . $course_code;
+$base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);

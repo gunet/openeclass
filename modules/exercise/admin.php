@@ -34,7 +34,7 @@ $head_content = $jscalendar->get_load_files_code();
 load_modal_box();
 
 $nameTools = $langExercices;
-$navigation[] = array ('url' => "exercise.php?course=$course_code", 'name' => $langExercices);
+$navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
 $picturePath = "courses/$course_code/image";
@@ -144,7 +144,7 @@ if(isset($_POST['cancelExercise'])) {
 		unset($_GET['modifyExercise']);
 	} else {
 		// goes back to the exercise list
-		header('Location: exercise.php?course='.$course_code);
+		header('Location: index.php?course='.$course_code);
 		exit();
 	}
 }
