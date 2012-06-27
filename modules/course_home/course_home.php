@@ -193,14 +193,14 @@ while ($cu = mysql_fetch_array($sql)) {
         if ($is_editor) { // display actions
                 $cunits_content .= "<th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$course_code&amp;edit=$cu[id]'>" .
-                        "<img src='$themeimg/edit.png' title='$langEdit' /></a>" .
+                        "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>" .
                         "\n        <a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
                         "<img src='$themeimg/delete.png' " .
-                        "title='$langDelete' /></a>" .
+                        "title='$langDelete' alt='$langDelete'></a>" .
                         "\n        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
                         "<img src='$themeimg/$icon_vis' " .
-                        "title='$langVisibility' /></a></th>";
+                        "title='$langVisibility' alt='$langVisibility'></a></th>";
                 if ($cu['id'] != $last_id) {
                         $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
                         "<img src='$themeimg/down.png' title='$langDown' /></a>";

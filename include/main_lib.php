@@ -266,27 +266,26 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend;
 
         if ($file == 'jquery') {
-                //$file = 'jquery-1.4.3.min.js';
 		$file = 'jquery-1.6.4.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
-                $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-1.8.21.custom.css' />\n";
+                $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-1.8.21.custom.css'>\n";
                 $file = 'jquery-ui-1.8.21.custom.min.js';
         } elseif ($file == 'jstree') {
-            $head_content .= "<script type='text/javascript' src='$urlAppend/js/jstree/jquery.cookie.min.js'></script>\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
         } elseif ($file == 'shadowbox') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css' />";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/shadowbox/shadowbox.css'>";
             $file = 'shadowbox/shadowbox.js'; 
         } elseif ($file == 'fancybox2') {
-            $head_content .= "<link rel='stylesheet' href='$urlAppend/js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen' />";
+            $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
             $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
         } elseif ($file == 'colorbox') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/colorbox/colorbox.css' />";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>";
             $file = 'colorbox/jquery.colorbox-min.js';
         }
-        $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
         
         if (strlen($init) > 0)
             $head_content .= $init;

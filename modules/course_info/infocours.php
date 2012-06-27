@@ -23,9 +23,9 @@ if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['
         session_start();
         $_SESSION['dbname'] = $_GET['cid'];
 }
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
+$require_help = true;
 $helpTopic = 'Infocours';
 require_once '../../include/baseTheme.php';
 
@@ -51,7 +51,10 @@ if (isset($_POST['submit'])) {
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
                 if (isset($_POST['localize'])) {
-                        $newlang = $language = $_POST['localize'];
+                        $language = $_POST['localize'];
+                        if (!isset($language_codes[$language])) {
+                                $language = 'en';
+                        }
                         // include_messages
                         include "lang/$language/common.inc.php";
                         $extra_messages = "config/{$language_codes[$language]}.inc.php";
@@ -86,16 +89,15 @@ if (isset($_POST['submit'])) {
                     $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
                                       <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
                 } else {
-                    
-                    db_query("UPDATE course
-                            SET title = " . autoquote($_POST['title']) .",
-                                public_code = " . autoquote($_POST['fcode']) .",
-                                keywords = ".autoquote($_POST['course_keywords']) . ",
-                                visible = " . intval($_POST['formvisible']) . ",
-                                prof_names = " . autoquote($_POST['titulary']) . ",
-                                lang = '$newlang',
-                                password = " . autoquote($_POST['password']) . "
-                            WHERE id = $course_id");
+                        db_query("UPDATE course
+                                    SET title = ".quote($_POST['title']).",
+                                        public_code =".quote($_POST['fcode']).",
+                                        keywords = ".quote($_POST['course_keywords']).",
+                                        visible = ".intval($_POST['formvisible']).",
+                                        prof_names = ".quote($_POST['titulary']).",
+                                        lang = ".quote($language).",
+                                        password = ".quote($_POST['password'])."
+                                    WHERE id = $course_id");
                     $course->refresh($course_id, $departments);
 
                     $tool_content .= "<p class='success'>$langModifDone</p>
@@ -210,5 +212,5 @@ if (isset($_POST['submit'])) {
 	<p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
 	</form>";
 }
-add_units_navigation(TRUE);
+
 draw($tool_content, 2, null, $head_content);
