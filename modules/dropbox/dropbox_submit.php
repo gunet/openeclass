@@ -33,6 +33,7 @@
 require_once 'functions.php';
 
 require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
 $nameTools = $dropbox_lang['dropbox'];
@@ -124,7 +125,7 @@ if (isset($_POST["submitWork"]))
 		if (is_dir($dropbox_cnf["sysPath"])) {
 			$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
 		}
-		$dropbox_filename = $_FILES['file']['name'];
+		$dropbox_filename = php2phps($_FILES['file']['name']);
 		$dropbox_filesize = $_FILES['file']['size'];
 		$dropbox_filetype = $_FILES['file']['type'];
 		$dropbox_filetmpname = $_FILES['file']['tmp_name'];
