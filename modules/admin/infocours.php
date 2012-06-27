@@ -59,10 +59,10 @@ if (isset($_POST['submit']))  {
 	$department = intval($_POST['department']);
 	$facname = find_faculty_by_id($department);
 	// Update query
-	db_query("UPDATE cours SET titulaires = ".autoquote($_POST['titulaires']).",
-                                   intitule = ".autoquote($_POST['intitule']).",
+	db_query("UPDATE cours SET titulaires = ". quote($_POST['titulaires']) .",
+                                   intitule = ". quote($_POST['intitule']) .",
                                    faculteid = $department
-                               WHERE code = ".autoquote($_GET['c']));
+                               WHERE code = ". quote($_GET['c']));
 	
 	$tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
@@ -87,7 +87,7 @@ else {
 	</tr>
 	<tr>
 	  <th>".$langTeacher.":</th>
-	  <td><input type='text' name='titulaires' value='".$row['titulaires']."' size='60'></td>
+	  <td><input type='text' name='titulaires' value='". q($row['titulaires']) ."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
