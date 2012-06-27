@@ -86,6 +86,8 @@ if (isset($language)) {
 
 if (isset($_REQUEST['localize'])) {
 	$_SESSION['langswitch'] = $language = $_REQUEST['localize'];
+} elseif (isset($_SESSION['langswitch'])) {
+	$language = $_SESSION['langswitch'];
 }
 
 if (!isset($language_codes[$language])) {
@@ -118,11 +120,6 @@ if (!isset($urlSecure)) {
 }
 if (!isset($urlMobile)) {
     $urlMobile = $urlServer;
-}
-
-// load the correct language (Author: Evelthon Prodromou)
-if (isset($_SESSION['langswitch'])) {
-	$language = $_SESSION['langswitch'];
 }
 
 // include_messages
@@ -180,7 +177,7 @@ if (!isset($_SESSION['theme'])) {
 	}
 }
 $theme = $_SESSION['theme'];
-$themeimg = $urlAppend . '/template/' . $theme . '/img';
+$themeimg = $urlAppend . 'template/' . $theme . '/img';
 if (isset($require_login) and $require_login and !$uid) {
 	// to langLoginRequired einai ligo akyro?
 	$toolContent_ErrorExists = caution($langSessionIsLost);
