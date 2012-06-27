@@ -1392,7 +1392,7 @@ $langEmail="email";
 $langGroupStudentsInGroup=" ".$langsStudents." εγγεγραμμένοι σε ομάδες χρηστών";
 $langGroupStudentsRegistered=" ".$langsStudents." εγγεγραμμένοι στο μάθημα";
 $langGroupNoGroup="μη εγγεγραμμένοι ".$langsStudents." ";
-$langGroupUsersList="<a href=../user/user.php>Χρήστες</a>";
+$langGroupUsersList="Χρήστες";
 $langGroupTooManyMembers="Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupTutor="Υπεύθυνος ομάδας";

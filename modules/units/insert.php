@@ -18,11 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*
 Units module: insert new resource
 */
-define('STATIC_MODULE', 1);
+
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';

@@ -18,8 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 
 include '../../include/init.php';
 

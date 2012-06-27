@@ -20,8 +20,8 @@
 
 /*
 ===========================================================================
-    usage/usage.php
- * @version $Id$
+    usage/index.php
+    @version $Id$
     @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
     @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
 ==============================================================================
@@ -32,12 +32,12 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 
 $tool_content .= "
@@ -72,5 +72,5 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
         require_once "form.php";
     }
 }
-add_units_navigation(TRUE);
+add_units_navigation(true);
 draw($tool_content, 2, null, $local_head);

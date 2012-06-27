@@ -3,7 +3,7 @@
 * ========================================================================
 * Open eClass 3.0 - E-learning and Course Management System
 * ========================================================================
- 
+
 Copyright(c) 2003-2012  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
@@ -44,8 +44,8 @@ define('COURSE_INACTIVE', 3);
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
 define('USER_GUEST', 10);
-        
-// resized user image 
+
+// resized user image
 define('IMAGESIZE_LARGE', 256);
 define('IMAGESIZE_SMALL', 32);
 
@@ -94,10 +94,10 @@ define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
-define('TRUE_FALSE',      5);
+define('true_false',      5);
 //
 // Show query string and then do MySQL query
-function db_query2($sql, $db = FALSE)
+function db_query2($sql, $db = false)
 {
 	echo "<hr /><pre>".q($sql)."</pre><hr />";
 	return db_query($sql, $db);
@@ -154,7 +154,7 @@ function email_seems_valid($email)
 
 // Eclass SQL query wrapper returning only a single result value.
 // Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_value($sqlQuery, $db = FALSE) {
+function db_query_get_single_value($sqlQuery, $db = false) {
 	$result = db_query($sqlQuery, $db);
 
 	if ($result) {
@@ -169,7 +169,7 @@ function db_query_get_single_value($sqlQuery, $db = FALSE) {
 
 // Claroline SQL query wrapper returning only the first row of the result
 // Useful in some cases because, it avoid nested arrays of results.
-function db_query_get_single_row($sqlQuery, $db = FALSE) {
+function db_query_get_single_row($sqlQuery, $db = false) {
 	$result = db_query($sqlQuery, $db);
 
 	if($result) {
@@ -200,7 +200,7 @@ function db_fetch_all($sqlResultHandler, $resultType = MYSQL_ASSOC) {
 
 // Eclass SQL query and fetch array wrapper. It returns all the result rows
 // in an associative array.
-function db_query_fetch_all($sqlQuery, $db = FALSE) {
+function db_query_fetch_all($sqlQuery, $db = false) {
 	$result = db_query($sqlQuery, $db);
 
 	if ($result) return db_fetch_all($result);
@@ -302,13 +302,13 @@ function uid_to_username($uid)
 	$mysqlMainDb))) {
 		return $r[0];
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
 
-// Return HTML for a user - first parameter is either a user id (so that the 
-// user's info is fetched from the DB) or a hash with user_id, prenom, nom, 
+// Return HTML for a user - first parameter is either a user id (so that the
+// user's info is fetched from the DB) or a hash with user_id, prenom, nom,
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false)
 {
@@ -346,7 +346,7 @@ function display_user($user, $print_email = false)
 	} else {
 		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
 	}
-        return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
+        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
 }
@@ -361,7 +361,7 @@ function uid_to_name($uid)
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
 		return $r[0];
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 // Translate uid to real firstname
@@ -373,7 +373,7 @@ function uid_to_firstname($uid)
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
-                return FALSE;
+                return false;
         }
 }
 
@@ -387,7 +387,7 @@ function uid_to_surname($uid)
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
-                return FALSE;
+                return false;
         }
 }
 
@@ -400,7 +400,7 @@ function uid_to_email($uid)
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
                 return $r[0];
         } else {
-                return FALSE;
+                return false;
         }
 }
 
@@ -414,7 +414,7 @@ function uid_to_am($uid)
 		WHERE user_id = '$uid'", $mysqlMainDb))) {
 	return $r[0];
 		} else {
-			return FALSE;
+			return false;
 		}
 }
 
@@ -507,7 +507,7 @@ function user_groups($course_id, $user_id, $format = 'html')
         while ($r = mysql_fetch_array($q)) {
 		if ($format == 'html') {
 	                $groups .= (($count > 1)? '<li>': '') .
-				   "<a href='$urlAppend/modules/group/group_space.php?group_id=$r[id]' title='" .
+				   "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r[id]' title='" .
 				   q($r['name']) . "'>" .
 	                           q(ellipsize($r['name'], 20)) . "</a>" .
 				   (($count > 1)? '</li>': '');
@@ -598,9 +598,9 @@ function selection3($entries, $name, $default = '') {
 // ------------------------------------------
 
 function check_guest() {
-	
+
     global $uid;
-        
+
 	if (isset($uid)) {
 		$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
 		$g = mysql_fetch_row($res);
@@ -618,21 +618,21 @@ function check_guest() {
 // ------------------------------------------------
 
 function check_editor() {
-	
+
         global $uid, $course_id;
-        
+
 	if (isset($uid)) {
 		$res = db_query("SELECT editor FROM course_user
                             WHERE user_id = $uid
                             AND course_id = $course_id");
 		$s = mysql_fetch_array($res);
 		if ($s['editor'] == 1) {
-			return TRUE;
+			return true;
 		} else {
-			return FALSE;
+			return false;
 		}
 	} else {
-            return FALSE;
+            return false;
         }
 }
 // ---------------------------------------------------
@@ -669,7 +669,7 @@ function user_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-        
+
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -687,7 +687,7 @@ function user_app_exists($login) {
 	$qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
-        
+
   return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
@@ -714,7 +714,7 @@ function html2text ($string)
 
 function imap_auth($server, $username, $password)
 {
-	$auth = FALSE;
+	$auth = false;
 	$fp = fsockopen($server, 143, $errno, $errstr, 10);
 	if ($fp) {
 		fputs ($fp, "A1 LOGIN ".imap_literal($username).
@@ -723,7 +723,7 @@ function imap_auth($server, $username, $password)
 		while (!feof($fp)) {
 			$line = fgets ($fp,200);
 			if (substr($line, 0, 5) == 'A1 OK') {
-				$auth = TRUE;
+				$auth = true;
 			}
 		}
 		fclose ($fp);
@@ -775,7 +775,7 @@ function find_faculty_by_name($name) {
 	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy
 		WHERE name = '$name'"));
 	if (!$code) {
-		return FALSE;
+		return false;
 	} else {
 		return $code[0];
 	}
@@ -1021,7 +1021,7 @@ function warnIfExtNotLoaded($extensionName) {
 /*
  * to create missing directory in a gived path
  *
- * @returns a resource identifier or FALSE if the query was not executed correctly.
+ * @returns a resource identifier or false if the query was not executed correctly.
  * @author KilerCris@Mail.com original function from  php manual
  * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team
  * @since  28-Aug-2001 09:12
@@ -1043,30 +1043,29 @@ function mkpath($path)  {
 
 // check if we can display activationlink (e.g. module_id is one of our modules)
 function display_activation_link($module_id) {
-	
-        global $modules;       
-        
-        if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {        
-        	return TRUE;
+
+        global $modules;
+
+        if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {
+        	return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
 // checks if a module is visible
 function visible_module($module_id) {
-        
-	global $course_code;
 
-    $cid = course_code_to_id($course_code);
+	global $course_id;
+
 	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
                                 WHERE module_id = $module_id AND
-                                course_id = $cid"));
+                                course_id = $course_id"));
 
 	if ($v['visible'] == 1) {
-		return TRUE;
+		return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
@@ -1074,22 +1073,27 @@ function visible_module($module_id) {
 // Find the current module id from the script URL
 function current_module_id()
 {
-        global $modules, $urlAppend;
+        global $modules, $urlAppend, $static_module_paths;
         static $module_id;
-        
+
         if (isset($module_id)) {
                 return $module_id;
         }
-        
+
         $module_path = str_replace($urlAppend.'modules/', '', $_SERVER['SCRIPT_NAME']);
         $link = preg_replace('|/.*$|', '', $module_path);
-        
+        if (isset($static_module_paths[$link])) {
+                $module_id = $static_module_paths[$link];
+                define('STATIC_MODULE', true);
+                return false;
+        }
+
         foreach ($modules as $mid => $info) {
                 if ($info['link'] == $link) {
                         $module_id = $mid;
                         return $mid;
                 }
-        }        
+        }
         return false;
 }
 
@@ -1330,11 +1334,11 @@ function format_time_duration($sec)
 function media_url($path)
 {
 	global $urlServer, $course_code, $course_code;
-        
+
         $mediaURL  = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
         $mediaPath = $urlServer ."video/". $course_code . $path;
         $mediaPlay = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
-        
+
         return array($mediaURL, $mediaPath, $mediaPlay);
 }
 
@@ -1375,14 +1379,14 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametre. This happens if the user got to the module
-// page from a unit resource link. If entry_page == TRUE this is the initial page of module
+// page from a unit resource link. If entry_page == true this is the initial page of module
 // and is assumed that you're exiting the current unit unless $_GET['unit'] is set
-function add_units_navigation($entry_page = FALSE)
+function add_units_navigation($entry_page = false)
 {
         global $navigation, $course_id, $is_editor, $mysqlMainDb, $course_code;
         if ($entry_page and !isset($_GET['unit'])) {
 		unset($_SESSION['unit']);
-		return FALSE;
+		return false;
 	} elseif (isset($_GET['unit']) or isset($_SESSION['unit'])) {
                 if ($is_editor) {
                         $visibility_check = '';
@@ -1401,9 +1405,9 @@ function add_units_navigation($entry_page = FALSE)
                         list($unit_name) = mysql_fetch_row($q);
                         $navigation[] = array("url"=>"../units/index.php?course=$course_code&amp;id=$unit_id", "name"=> htmlspecialchars($unit_name));
                 }
-		return TRUE;
+		return true;
 	} else {
-		return FALSE;
+		return false;
 	}
 }
 
@@ -1489,8 +1493,8 @@ function delete_course($cid)
 {
         global $webDir;
 
-	$course_code = course_id_to_code($cid);	
-       
+	$course_code = course_id_to_code($cid);
+
 	db_query("DELETE FROM announcement WHERE course_id = $cid");
 	db_query("DELETE FROM document WHERE course_id = $cid");
         db_query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1641,7 +1645,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
 	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $mysqlMainDb;
-	
+
         $filebrowser = '';
         $activemodule = 'document/index.php';
         if (isset($course_code) && !empty($course_code))
@@ -1678,9 +1682,9 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 }
             }
         }
-        
+
 	$lang_editor = langname_to_code($language);
-	
+
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
@@ -1733,7 +1737,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '$urlAppend/modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=' + type,
+        file: '{$urlAppend}modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,
@@ -2135,7 +2139,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Link for displaying user profile
-function profile_image($uid, $size, $default = FALSE)
+function profile_image($uid, $size, $default = false)
 {
 	global $urlServer, $themeimg;
 
@@ -2227,9 +2231,9 @@ function check_inactive_course($course_id)
         $res = db_query("SELECT visible FROM course WHERE id = $course_id", $mysqlMainDb);
         $g = mysql_fetch_row($res);
         if ($g[0] == COURSE_INACTIVE) {
-                return TRUE;
+                return true;
         }
-        return FALSE;
+        return false;
 }
 
 
@@ -2267,8 +2271,8 @@ function get_user_email_notification($user_id, $course_id=null)
 
         // checks if a course is active or not
         if (isset($course_id)) {
-                if (check_inactive_course($course_id) == TRUE) {
-                        return FALSE;
+                if (check_inactive_course($course_id) == true) {
+                        return false;
                 }
         }
         // checks if user has verified his email address
@@ -2276,12 +2280,12 @@ function get_user_email_notification($user_id, $course_id=null)
                 $verified_mail = get_mail_ver_status($user_id);
                 if ($verified_mail == EMAIL_VERIFICATION_REQUIRED
                         or $verified_mail == EMAIL_UNVERIFIED) {
-                        return FALSE;
+                        return false;
                 }
         }
         // checks if user has choosen not to be notified by email from all courses
         if (!get_user_email_notification_from_courses($user_id)) {
-                return FALSE;
+                return false;
         }
         if (isset($course_id)) {
         // finally checks if user has choosen not to be notified from a specific course
@@ -2292,10 +2296,10 @@ function get_user_email_notification($user_id, $course_id=null)
                         $row = mysql_fetch_row($r);
                         return $row[0];
                 } else {
-                        return FALSE;
+                        return false;
                 }
         }
-        return TRUE;
+        return true;
 }
 
 
@@ -2307,9 +2311,9 @@ function get_user_email_notification_from_courses($user_id) {
                         WHERE user_id = $user_id", $mysqlMainDb);
         list($result) = mysql_fetch_row($r);
         if ($result == 1) {
-                return TRUE;
+                return true;
         } else {
-                return FALSE;
+                return false;
         }
 }
 

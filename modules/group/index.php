@@ -255,22 +255,23 @@ if ($is_editor) {
               <a href='group_properties.php?course=$course_code' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
-          <td class='title1'>$langGroupUsersList</td>
+          <td class='title1'><a href='../user/?course=$course_code'>$langGroupUsersList</a></td>
 	</tr>";
 
         list($total_students) = mysql_fetch_row(db_query(
                 "SELECT COUNT(*) FROM course_user
                  WHERE course_id = $course_id AND statut = 5 AND tutor = 0"));
         list($unregistered_students) = mysql_fetch_row(db_query(
-                        "SELECT COUNT(*)
-                                FROM (user u, course_user cu)
-                                WHERE cu.course_id = $course_id AND
-                                      cu.user_id = u.user_id AND
-                                      cu.statut = 5 AND
-                                      cu.tutor = 0 AND
-                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
-                                                                       WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $course_id)"));
+                "SELECT COUNT(*)
+                        FROM (user u, course_user cu)
+                        WHERE cu.course_id = $course_id AND
+                              cu.user_id = u.user_id AND
+                              cu.statut = 5 AND
+                              cu.tutor = 0 AND
+                              u.user_id NOT IN (SELECT user_id
+                                                       FROM group_members, `group`
+                                                            WHERE `group`.id = group_members.group_id AND
+                                                                  `group`.course_id = $course_id)"));
 
         $registered_students = $total_students - $unregistered_students;
 

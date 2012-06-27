@@ -19,11 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_login = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/log.php';
 
@@ -46,9 +46,9 @@ foreach ($usage_defaults as $key => $val) {
         }
 }
 
-if (isset($_POST['submit'])) {    
-    $log = new Log();    
-    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end);         
+if (isset($_POST['submit'])) {
+    $log = new Log();
+    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end);
 }
 
 //----------------------- jscalendar -----------------------------
@@ -69,7 +69,7 @@ $start_cal = $jscalendar->make_input_field(
            array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
-    
+
 $qry = "SELECT LEFT(a.nom, 1) AS first_letter
         FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
         WHERE b.course_id = $course_id
@@ -98,7 +98,7 @@ $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
         if ($u_user_id == $row['user_id']) {
                 $selected = 'selected';
-        } else { 
+        } else {
                 $selected = '';
         }
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
@@ -132,10 +132,10 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         <td>";
     $log_types = array('0' => $langAllActions,
                         '1' => $langInsert,
-                        '2' => $langModify, 
+                        '2' => $langModify,
                         '3' => $langDelete);
-    $tool_content .= selection($log_types, 'logtype', $logtype);    
-    $tool_content .= "        
+    $tool_content .= selection($log_types, 'logtype', $logtype);
+    $tool_content .= "
         </td>
     </tr>
     <tr>

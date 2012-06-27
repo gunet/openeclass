@@ -993,7 +993,7 @@ if ($doc_count == 0) {
                                 $link_extra = " id='fileURL' title='$langSave' target='_blank'";
                                 $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
                                 $link_title_extra = ($entry['copyrighted'])?
-                                        " <img src='$urlAppend/modules/document/img/copyrighted.png' />": '';
+                                        " <img src='{$urlAppend}modules/document/img/copyrighted.png' />": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
                                         $furl = (is_supported_media($entry['path'], true)) ? $play_url : $file_url;
@@ -1080,7 +1080,7 @@ if ($doc_count == 0) {
 	                                }
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
-	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$course_code" .
+	                                $tool_content .= "<a href='{$urlAppend}modules/work/group_work.php?course=$course_code" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='$themeimg/book.png' " .
 							 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";			

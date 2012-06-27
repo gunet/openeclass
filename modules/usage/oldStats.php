@@ -33,8 +33,8 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
@@ -121,15 +121,15 @@ if (!extension_loaded('gd')) {
    $chart_content = 0;
    switch ($u_stats_value) {
        case "visits":
-	       $query = "SELECT module_id, MONTH(start_date) AS month, 
-                        YEAR(start_date) AS year, 
+	       $query = "SELECT module_id, MONTH(start_date) AS month,
+                        YEAR(start_date) AS year,
                         SUM(visits) AS visits
-                        FROM actions_summary 
+                        FROM actions_summary
                         WHERE $date_where
                         AND $mod_where
                         AND course_id = $course_id
                         GROUP BY MONTH(start_date)";
-	       
+
 	       $result = db_query($query);
 	       $chart = new PieChart(600, 300);
 	       $dataSet = new XYDataSet();
@@ -144,10 +144,10 @@ if (!extension_loaded('gd')) {
        break;
 
        case "duration":
-	   $query = "SELECT module_id, MONTH(start_date) AS month, 
+	   $query = "SELECT module_id, MONTH(start_date) AS month,
                         YEAR(start_date) AS year,
                         SUM(duration) AS tot_dur FROM actions_summary
-		    WHERE $date_where 
+		    WHERE $date_where
                     AND $mod_where
                     AND course_id = $course_id
                     GROUP BY MONTH(start_date)";
@@ -194,18 +194,18 @@ if (!extension_loaded('gd')) {
 	  array('style'  => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
 		'name'   => 'u_date_end',
 		'value' => $u_date_end));
-   
+
    $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = $course_id";
 
    $mod_opts = '<option value="-1">'.$langAllModules."</option>\n";
    $result = db_query($qry);
    while ($row = mysql_fetch_assoc($result)) {
-           $mid = $row['module_id'];   
+           $mid = $row['module_id'];
            $extra = '';
         if ($u_module_id == $mid) {
                 $extra = 'selected';
         }
-        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";                          
+        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";
    }
    mysql_free_result($result);
 

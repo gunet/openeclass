@@ -33,13 +33,13 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
 require_once 'include/jscalendar/calendar.php';
 
@@ -93,9 +93,9 @@ if ($u_user_id != -1) {
 }
 
 $sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
-                 WHERE ".$date_where." 
-                 AND ".$user_where." 
-                 AND course_id = $course_id 
+                 WHERE ".$date_where."
+                 AND ".$user_where."
+                 AND course_id = $course_id
                  ORDER BY date_time DESC";
 
 $sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username

@@ -18,9 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_current_course = true;
-$require_course_admin = TRUE;
+$require_course_admin = true;
 $require_login = true;
 
 $start_cal = $jscalendar->make_input_field(
@@ -46,12 +45,12 @@ $qry = "SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ".
 $mod_opts = '<option value="-1">'.$langAllModules."</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
-        $mid = $row['module_id'];   
+        $mid = $row['module_id'];
         $extra = '';
         if ($u_module_id == $mid) {
                 $extra = 'selected';
         }
-        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";            
+        $mod_opts .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";
 }
 
 $statsValueOptions =

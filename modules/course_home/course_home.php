@@ -203,12 +203,13 @@ while ($cu = mysql_fetch_array($sql)) {
                         "title='$langVisibility' alt='$langVisibility'></a></th>";
                 if ($cu['id'] != $last_id) {
                         $cunits_content .= "<th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
-                        "<img src='$themeimg/down.png' title='$langDown' /></a>";
+                        "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a>";
                 } else {
                         $cunits_content .= "<th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'>" .
+                                "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></th>";
                 } else {
                         $cunits_content .= "&nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
@@ -273,9 +274,9 @@ switch ($visible) {
 }
 $bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
 if ($is_course_admin) {
-    $link = "<a href='$urlAppend/modules/user/user.php?course=$course_code'>$numUsers $langRegistered</a>";
+        $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
-    $link = "$numUsers $langRegistered";
+        $link = "$numUsers $langRegistered";
 }
 $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 

@@ -23,7 +23,6 @@
 Units display module	
 */
 define('HIDE_TOOL_TITLE', 1);
-define('STATIC_MODULE', 1);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';

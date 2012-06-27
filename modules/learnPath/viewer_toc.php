@@ -194,7 +194,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <html>
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
-    <link href='$urlAppend/template/$theme/lp.css' rel='stylesheet' type='text/css' />
+    <link href='{$urlAppend}template/$theme/lp.css' rel='stylesheet' type='text/css' />
 </head>
 <body>
 <div class='header'>
@@ -202,9 +202,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
         <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
     <div class='lp_left'>
-        <a href='$urlAppend/courses/$course_code' target='_top' title='" .
+        <a href='{$urlAppend}courses/$course_code' target='_top' title='" .
                 q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
-        <a href='$urlAppend/modules/learnPath/index.php?course=$course_code' target='_top'>
+        <a href='{$urlAppend}modules/learnPath/index.php?course=$course_code' target='_top'>
                 $langLearningPaths</a> &#187;
         <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a></div>
     <div class='clear'></div>

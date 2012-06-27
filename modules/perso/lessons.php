@@ -153,7 +153,7 @@ function htmlInterface($data, $lesson_code)
 				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
-				<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."'>
+				<a href='${urlServer}modules/course_info/?from_home=true&amp;cid=".$data[2][$i]."'>
 				<img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
 			}
 			$lesson_content .= "</td></tr>";

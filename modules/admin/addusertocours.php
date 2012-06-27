@@ -68,13 +68,13 @@ if (isset($_POST['submit']))  {
 }
 // Display form to manage users
 else {
-        $head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n" .
+        load_js('tools.js');
 
-	$tool_content .= "<form action=".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])." method='post'>";
+	$tool_content .= "<form action='".q($_SERVER['SCRIPT_NAME']."?c=".$_GET['c'])."' method='post'>";
 	$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
                           <tr><th colspan='3'>".$langFormUserManage."</th></tr>
                           <tr><th align=left>".$langListNotRegisteredUsers."<br />
-                          <select id='unregusers_box' name='unregusers[]' size='20' multiple='1' class='auth_input'>";
+                          <select id='unregusers_box' name='unregusers[]' size='20' multiple class='auth_input'>";
 
 	// Registered users not registered in the selected course
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
@@ -83,19 +83,17 @@ else {
 		WHERE cu.user_id IS NULL ORDER BY nom";
 
 	$resultAll = db_query($sqll);
-	while ($myuser = mysql_fetch_array($resultAll))
-	{
-		$tool_content .= "<option value='$myuser[user_id]'>$myuser[nom] $myuser[prenom]</option>";
+	while ($myuser = mysql_fetch_assoc($resultAll)) {
+                $tool_content .= "<option value='$myuser[user_id]'>" .
+                        q("$myuser[nom] $myuser[prenom]") . '</option>';
 	}
 
 	$tool_content .= "</select></th>
 	<td width='3%' class='center' nowrap>
 	<p>&nbsp;</p>
 	<p>&nbsp;</p>
-	<p align='center'><b>".$langStudents."</b></p>
-	<p>";
-
-	$tool_content .= "<p align='center'><input type='button' onClick=\"move('unregusers_box','regstuds_box')\" value='   >>   ' />
+	<p align='center'><b>$langStudents</b></p>
+	<p align='center'><input type='button' onClick=\"move('unregusers_box','regstuds_box')\" value='   >>   ' />
 	<input type='button' onClick=\"move('regstuds_box','unregusers_box')\" value='   <<   ' />
 	</p>
 	<p>&nbsp;</p>
@@ -120,8 +118,9 @@ else {
 				AND cu.statut=5 ORDER BY nom");
 
 	$a=0;
-	while ($myStud = mysql_fetch_array($resultStud)) {
-                $tool_content .= "<option value='$myStud[user_id]'>$myStud[nom] $myStud[prenom]</option>";
+	while ($myStud = mysql_fetch_assoc($resultStud)) {
+                $tool_content .= "<option value='$myStud[user_id]'>" .
+                        q("$myStud[nom] $myStud[prenom]") . '</option>';
 		$a++;
 	}
 
@@ -137,8 +136,9 @@ else {
 				AND cu.statut = 1
 				ORDER BY nom, prenom");
 	$a=0;
-	while ($myProf = mysql_fetch_array($resultProf)) {
-		$tool_content .= "<option value='$myProf[user_id]'>$myProf[nom] $myProf[prenom]</option>";
+	while ($myProf = mysql_fetch_assoc($resultProf)) {
+                $tool_content .= "<option value='$myProf[user_id]'>" .
+                        q("$myProf[nom] $myProf[prenom]") . "</option>";
 		$a++;
 	}
 	$tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
@@ -146,15 +146,14 @@ else {
 		<td>&nbsp;</td>
 		</tr></tbody></table>";
 	$tool_content .= "</form>";
+}
 
-}
-// If course selected go back to editcours.php
 if (isset($_GET['c'])) {
+        // If course selected go back to editcours.php
 	$tool_content .= "<p align='right'>
-	<a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
-}
-// Else go back to index.php directly
-else {
+	<a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
+} else {
+        // Else go back to index.php directly
 	$tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
 }
 

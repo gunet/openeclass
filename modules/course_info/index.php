@@ -23,6 +23,7 @@ if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['
         session_start();
         $_SESSION['dbname'] = $_GET['cid'];
 }
+
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;

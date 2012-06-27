@@ -18,12 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*
 Units module	
 */
 
-define('STATIC_MODULE', 1);
 $require_current_course = true;
 $require_help = true;
 $helpTopic = 'AddCourseUnits';

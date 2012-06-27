@@ -34,8 +34,8 @@ require_once 'modules/usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-        $navigation[] = array('url' => '../usage/usage.php?course='.$course_code, 'name'=> $langUsage);
-        $navigation[] = array('url' => '../usage/index.php?course='.$course_code, 'name'=> $langGroupUsage);
+        $navigation[] = array('url' => '../usage/?course='.$course_code, 'name'=> $langUsage);
+        $navigation[] = array('url' => '../usage/group.php?course='.$course_code, 'name'=> $langGroupUsage);
         $module = 'module=usage&amp;';
 } else {
         $navigation[] = array('url' => 'index.php?course='.$course_code, 'name'=> $langGroupSpace);

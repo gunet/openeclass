@@ -33,13 +33,13 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'duration_query.php';
 require_once 'modules/group/group_functions.php';
 

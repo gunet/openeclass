@@ -132,7 +132,7 @@ if (extension_loaded('zlib')) {
 		draw($tool_content, 2);
 		exit;
 	} else {
-		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='$urlAppend/courses/archive/$course_code/archive.$course_code.$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
+		$tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='{$urlAppend}courses/archive/$course_code/archive.$course_code.$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
 	}
 
         $tool_content .= "<p align='right'>

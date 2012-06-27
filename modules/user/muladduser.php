@@ -18,10 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
+$require_help = true;
 $helpTopic = 'User';
 
 include '../../include/baseTheme.php';

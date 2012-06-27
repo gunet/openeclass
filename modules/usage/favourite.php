@@ -34,13 +34,13 @@
 ==============================================================================
 */
 
-$require_current_course = TRUE;
-$require_course_admin = TRUE;
+$require_current_course = true;
+$require_course_admin = true;
 $require_help	= true;
 $helpTopic = 'Usage';
 $require_login = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/libchart/classes/libchart.php';
@@ -75,7 +75,7 @@ $local_head = $jscalendar->get_load_files_code();
     } else {
         $made_chart = true;
         //make chart
-        
+
         $usage_defaults = array (
             'u_stats_value' => 'visits',
             'u_user_id' => -1,
@@ -120,7 +120,7 @@ $local_head = $jscalendar->get_load_files_code();
                         $dataSet->addPoint(new Point($langCourseUnits, $row['cnt']));
                 } else { // other modules
                         $dataSet->addPoint(new Point($modules[$mid]['title'], $row['cnt']));
-                }                
+                }
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content = 5;
@@ -130,7 +130,7 @@ $local_head = $jscalendar->get_load_files_code();
         break;
 
         case "duration":
-            $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions                     
+            $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions
                         WHERE $date_where
                         AND course_id = $course_id
                         AND $user_where GROUP BY module_id";
@@ -145,7 +145,7 @@ $local_head = $jscalendar->get_load_files_code();
                         $dataSet->addPoint(new Point($langCourseUnits, $row['tot_dur']));
                 } else { // other modules
                         $dataSet->addPoint(new Point($modules[$mid]['title'], $row['tot_dur']));
-                }                                
+                }
                 $chart->width += 7;
                 $chart->setDataSet($dataSet);
                 $chart_content=5;
@@ -157,14 +157,14 @@ $local_head = $jscalendar->get_load_files_code();
         break;
     }
     mysql_free_result($result);
-    $chart_path = '/courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';    
-    
-    if (isset($_POST['btnUsage'])) {        
+    $chart_path = '/courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
+
+    if (isset($_POST['btnUsage'])) {
         if ($chart_content > 0) {
             $chart->render($webDir.$chart_path);
             $tool_content .= "<p>$langFavouriteExpl</p>\n";
             $tool_content .= '<p class="center"><img src="'.$urlServer.$chart_path.'" /></p>';
-         } else {         
+         } else {
             $tool_content .= '<p class="alert1">'.$langNoStatistics.'</p>';
         }
     }

@@ -58,7 +58,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
  require_once 'include/lib/learnPathLib.inc.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
-        $navigation[] = array('url' => '../usage/usage.php?course='.$course_code, 'name' => $langUsage);
+        $navigation[] = array('url' => '../usage/?course='.$course_code, 'name' => $langUsage);
         $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
         $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);

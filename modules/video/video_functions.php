@@ -291,7 +291,7 @@ function media_html_object($mediaPath, $mediaURL, $bgcolor = '#000000', $color =
         case "f4v":
         case "m4v":
         case "mp3":
-            $ret .= "<script type='text/javascript' src='$urlAppend/js/flowplayer/flowplayer-3.2.6.min.js'></script>";
+            $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.6.min.js'></script>";
             $ret .= $startdiv;
             $ret .= '<div id="flowplayer" style="display: block; width: '.get_object_width().'px; height: '.get_object_height().'px;"></div>
                      <script type="text/javascript">

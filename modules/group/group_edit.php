@@ -61,7 +61,7 @@ if (!($is_editor or $is_tutor)) {
         exit;
 }
 
-$head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n" .
+$head_content .= "<script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n" .
         "<script type='text/javascript'>var langEmptyGroupName = '" .
         js_escape($langEmptyGroupName) . "';</script>\n";
 
@@ -194,7 +194,7 @@ $tool_content .= "
     <div id='operations_container'>
       <ul id='opslist'>
         <li><a href='group_space.php?course=$course_code&amp;group_id=$group_id'>$langGroupThisSpace</a></li>" .
-                ($is_editor? "<li><a href='../user/user.php?course=$course_code'>$langAddTutors</a></li>": '') . "</ul></div>";
+                ($is_editor? "<li><a href='../user/?course=$course_code'>$langAddTutors</a></li>": '') . "</ul></div>";
 
 
 $tool_content .="

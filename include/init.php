@@ -295,7 +295,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$statut = 0;
 		// The admin can see all courses as adminOfCourse
 		if ($is_admin) {
-			$statut = 1;
+			$statut = USER_TEACHER;
 		} else {
 			$res2 = db_query("SELECT statut FROM course_user
                                                  WHERE user_id = $uid AND
@@ -369,33 +369,39 @@ $modules = array(
 // course admin modules
 // ----------------------------------------
 $admin_modules = array(
-    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info/infocours.php', 'image' => 'course_info'),
-    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user/user.php', 'image' => 'users'),
-    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage/usage.php', 'image' => 'usage'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools/course_tools.php', 'image' => 'tooladmin'),
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'course_info'),
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
 );
 
-// actually a prof has $status 1
+// modules which can't be enabled or disabled
+$static_module_paths = array('user' => MODULE_ID_USERS,
+                             'usage' => MODULE_ID_UNITS,
+                             'course_info' => MODULE_ID_COURSEINFO,
+                             'course_tools' => MODULE_ID_TOOLADMIN,
+                             'units' => MODULE_ID_UNITS);
+
 // the system admin has rights to all courses
 if ($is_admin) {
-	$is_course_admin = TRUE;
+	$is_course_admin = true;
 	if (isset($currentCourse)) {
-		$_SESSION['status'][$currentCourse] = 1;
+		$_SESSION['status'][$currentCourse] = USER_TEACHER;
 	}
 } else {
-	$is_course_admin = FALSE;
+	$is_course_admin = false;
 }
 
-$is_editor = FALSE;
+$is_editor = false;
 if (isset($_SESSION['status'])) {
 	$status = $_SESSION['status'];
 	if (isset($currentCourse)) {
 		if (check_editor()) { // chech if user is editor of course
-			$is_editor = TRUE;
+			$is_editor = true;
 		}
-		if (@$status[$currentCourse] == 1) { // check if user is admin of course
-			$is_course_admin = TRUE;
-			$is_editor = TRUE;
+		if (@$status[$currentCourse] == USER_TEACHER) {
+			$is_course_admin = true;
+			$is_editor = true;
 		}
 	}
 } else {
@@ -422,13 +428,13 @@ if (isset($_SESSION['saved_statut'])) {
 	$is_course_admin = false;
 	$is_editor = false;
 	if (isset($currentCourse)) {
-		$_SESSION['status'][$currentCourse] = 5;
+		$_SESSION['status'][$currentCourse] = USER_STUDENT;
 	}
 }
 
 $module_id = current_module_id();
-//Security check:: Users that do not have Professor access for a course must not
-//be able to access inactive tools.
+// Security check:: Users that do not have Professor access for a course must not
+// be able to access inactive tools.
 if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
         if (!check_guest()) {
 		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
