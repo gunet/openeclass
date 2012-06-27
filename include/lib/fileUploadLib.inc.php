@@ -23,15 +23,15 @@
 	fileUploadLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.3 licensed under GPL
 	     and Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: fileUploadLib.inc.php Revision: 1.3
      extra porting from: fileUpload.lib.php Revision 1.29.2.4
      extra porting from: claro_main.lib.php Revision 1.164.2.4
-	      
+
 	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
                       Hugues Peeters    <peeters@ipm.ucl.ac.be>
                       Christophe Gesche <gesche@ipm.ucl.ac.be>
@@ -61,12 +61,12 @@ function replace_dangerous_char($string)
 
 function php2phps($fileName)
 {
-	$fileName = preg_replace('/\.php$/', '.phps', $fileName);
+	$fileName = preg_replace('/\.(php[0-9]?|phtml)$/', '.phps', $fileName);
 	return $fileName;
 }
 
 
-/* 
+/*
  * Compute the size already occupied by a directory and is subdirectories
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -95,10 +95,10 @@ function dir_total_space($dirPath)
 }
 
 
-/* 
+/*
  * Try to add an extension to files witout extension
  * Some applications on Macintosh computers don't add an extension to the files.
- * This subroutine try to fix this on the basis of the MIME type send 
+ * This subroutine try to fix this on the basis of the MIME type send
  * by the browser.
  *
  * Note : some browsers don't send the MIME Type (e.g. Netscape 4).
@@ -332,7 +332,7 @@ function get_secure_file_name($fileName)
     return $fileName;
 }
 
-/* 
+/*
  * Check if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
  *
@@ -370,9 +370,9 @@ function enough_size($fileSize, $dir, $maxDirSpace)
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @param int local max allowed file size e.g. remaining place in
- *	an allocated course directory	
- * @return int lower value between php.ini values of upload_max_filesize and 
- *	post_max_size and the claroline value of size left in directory 
+ *	an allocated course directory
+ * @return int lower value between php.ini values of upload_max_filesize and
+ *	post_max_size and the claroline value of size left in directory
  * @see    - get_max_upload_size() uses  dir_total_space() function
  */
 function get_max_upload_size($maxFilledSpace, $baseWorkDir)
@@ -392,7 +392,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 
 /*
 	function s1howquota()
-	param - quota 
+	param - quota
 	param - used , how much disp space is used
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
@@ -408,12 +408,12 @@ require_once 'include/lib/gaugebar.php';
 
 function showquota($quota, $used) {
 
-	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, 
+	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack,
                $course_code, $subsystem, $group_id;
 
 	$retstring = '';
-	
-        // diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas) 
+
+        // diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas)
         // kai ypologismos statistikwn stoixeiwn
         $oGauge = new myGauge();
 	$oGauge->MaxVal = $quota; //maximum value
@@ -458,7 +458,7 @@ function showquota($quota, $used) {
                 </tr>
                 </table>";
 	$tmp_cwd = getcwd();
-	
+
 	return $retstring;
 }
 
@@ -487,12 +487,12 @@ function process_extracted_file($p_event, &$p_header) {
                 $uploadPath = '';
         }
         $realFileSize += $p_header['size'];
-        $stored_filename = $p_header['stored_filename'];        
-        if (invalid_utf8($stored_filename)) {                                    
+        $stored_filename = $p_header['stored_filename'];
+        if (invalid_utf8($stored_filename)) {
                 $stored_filename = cp737_to_utf8($stored_filename);
-        }       
+        }
         $path_components = explode('/', $stored_filename);
-        $filename = array_pop($path_components);
+        $filename = php2phps(array_pop($path_components));
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
@@ -571,7 +571,7 @@ function process_extracted_file($p_event, &$p_header) {
 
 
 // Create a path with directory names given in array $path_components
-// under base path $path, inserting the appropriate entries in 
+// under base path $path, inserting the appropriate entries in
 // document table.
 // Returns the full encoded path created.
 function make_path($path, $path_components)
