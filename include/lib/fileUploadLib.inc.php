@@ -67,7 +67,7 @@ function replace_dangerous_char($string)
 
 function php2phps($fileName)
 {
-	$fileName = preg_replace('/\.php$/', '.phps', $fileName);
+	$fileName = preg_replace('/\.(php[0-9]?|phtml)$/', '.phps', $fileName);
 	return $fileName;
 }
 
@@ -497,7 +497,7 @@ function process_extracted_file($p_event, &$p_header) {
                 $stored_filename = cp737_to_utf8($stored_filename);
         }
         $path_components = explode('/', $stored_filename);
-        $filename = array_pop($path_components);
+        $filename = php2phps(array_pop($path_components));
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
