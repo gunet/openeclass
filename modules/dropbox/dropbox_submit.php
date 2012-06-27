@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5.2
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -122,7 +122,7 @@ if (isset($_POST["submitWork"]))
 		if (is_dir($dropbox_cnf["sysPath"])) {
 			$dropbox_space = dir_total_space($dropbox_cnf["sysPath"]);
 		}
-		$dropbox_filename = $_FILES['file']['name'];
+		$dropbox_filename = php2phps($_FILES['file']['name']);
 		$dropbox_filesize = $_FILES['file']['size'];
 		$dropbox_filetype = $_FILES['file']['type'];
 		$dropbox_filetmpname = $_FILES['file']['tmp_name'];
