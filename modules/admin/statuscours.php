@@ -56,7 +56,7 @@ $navigation[] = array('url' => 'editcours.php?c='.htmlspecialchars($_GET['c']), 
 // Update course status
 if (isset($_POST['submit']))  {
   // Update query
-	$sql = db_query("UPDATE course SET visible='$_POST[formvisible]'
+	$sql = db_query("UPDATE course SET visible='". quote(intval($_POST['formvisible'])) ."'
 			WHERE code='".mysql_real_escape_string($_GET['c'])."'");
 	// Some changes occured
 	if (mysql_affected_rows() > 0) {

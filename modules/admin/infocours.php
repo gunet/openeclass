@@ -68,9 +68,9 @@ $navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $lang
 if (isset($_POST['submit']))  {
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
 	// Update query
-	db_query("UPDATE course SET title = ".autoquote($_POST['title']).",
-                                   prof_names = ".autoquote($_POST['prof_names'])."
-                               WHERE code = ".autoquote($_GET['c']));
+	db_query("UPDATE course SET title = ". quote($_POST['title']) .",
+                                   prof_names = ". quote($_POST['prof_names']) ."
+                               WHERE code = ". quote($_GET['c']));
         $course->refresh(course_code_to_id($_GET['c']), null, $departments);
 	
 	$tool_content .= "<p class='success'>$langModifDone</p>
@@ -101,7 +101,7 @@ else {
 	</tr>
 	<tr>
 	  <th>".$langTeacher.":</th>
-	  <td><input type='text' name='prof_names' value='".$row['prof_names']."' size='60'></td>
+	  <td><input type='text' name='prof_names' value='". q($row['prof_names']) ."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
