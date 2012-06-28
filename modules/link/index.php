@@ -192,10 +192,8 @@ if ($is_editor) {
                         $form_legend = $langLinkAdd;
                         $submit_label = $langAdd;
                 } 
-
-                $tool_content .= "
-                      <fieldset>
-                      <legend>$form_legend</legend>
+                $tool_content .= "<fieldset>
+                        <legend>$form_legend</legend>
                         <table width='100%' class='tbl'>
                         <tr><th>URL:</th>
                             <td><input type='text' name='urllink' size='53'$form_url /></td></tr>
@@ -204,8 +202,8 @@ if ($is_editor) {
                         <tr><th>$langDescription:</th>
                             <td>" . rich_text_editor('description', 3, 50, $form_description) . "</td></tr>
                         <tr><th>$langCategory:</th>
-                            <td><select name='selectcategory'>
-                                <option value='0'>--</option>";
+                        <td><select name='selectcategory'>
+                        <option value='0'>--</option>";
                 $resultcategories = db_query("SELECT * FROM link_category WHERE course_id = $course_id ORDER BY `order`");
                 while ($myrow = mysql_fetch_array($resultcategories)) {
                         $tool_content .= "<option value='$myrow[id]'";
@@ -214,12 +212,9 @@ if ($is_editor) {
                         }
                         $tool_content .= '>' . q($myrow['name']) . "</option>\n";
                 }
-                $tool_content .=  "</select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <td class='right'><input type='submit' name='submitLink' value='$submit_label' /></td>
+                $tool_content .=  "</select></td></tr>
+                        <tr><th>&nbsp;</th>
+                        <td class='right'><input type='submit' name='submitLink' value='$submit_label' /></td>
                         </tr>
                         </table>
                       </fieldset>
@@ -235,7 +230,7 @@ if ($is_editor) {
                         $form_name = $form_description = '';
                         $form_legend = $langCategoryAdd;
                 } 
-                $tool_content .=  "<fieldset><legend>$form_legend</legend>
+                $tool_content .= "<fieldset><legend>$form_legend</legend>
                                    <table width='100%' class='tbl'>
                                    <tr><th>$langCategoryName:</th>
                                        <td><input type='text' name='categoryname' size='53'$form_name /></td></tr>
@@ -316,48 +311,43 @@ if (mysql_num_rows($resultcategories) > 0) {
 		if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
 			$newurlview = $urlview;
 			$newurlview[$i] = '0';
-			$tool_content .= "
-                <tr>
-		  <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>".q($myrow['name'])."</a>";
+			$tool_content .= "<tr>
+                        <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' /></th>
+                        <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
                                 $tool_content .= "<br />$description</div></th>";
                         }
                         if ($is_editor && !$is_in_tinymce) {
                                 showcategoryadmintools($myrow["id"]);
                         } else {
-                                $tool_content .=  "
-                </tr>";
+                                $tool_content .=  "</tr>";
                         }
 			showlinksofcategory($myrow["id"]);
 		} else {
 			$tool_content .=  "
-		<tr>
-		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
-			$tool_content .=  is_array($view)?implode('',$view):$view;
-			$tool_content .= $tinymce_params ."'>" . q($myrow['name']) . "</a>";
-		        $description = standard_text_escape($myrow['description']);
+                        <tr>
+                        <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
+                        <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                        $tool_content .=  is_array($view)?implode('',$view):$view;
+                        $tool_content .= $tinymce_params ."'>" . q($myrow['name']) . "</a>";
+                        $description = standard_text_escape($myrow['description']);
                         if (!empty($description)) {
-                                $tool_content .= "<br />$description</div>
-                  </th>";
+                                $tool_content .= "<br />$description</div></th>";
                         }
-			if ($is_editor && !$is_in_tinymce) {
-			showcategoryadmintools($myrow["id"]);
+                        if ($is_editor && !$is_in_tinymce) {
+                                showcategoryadmintools($myrow["id"]);
                         } else {
-                                $tool_content .=  "
-                </tr>";
-			}
+                                $tool_content .=  "</tr>";
+                        }
 		}
 		// displaying the link of the category
 		$i++;
 	}
-	$tool_content .=  "
-                </table>";
+	$tool_content .= "</table>";
 } else {   // no category
    if (getNumberOfLinks(0) > 0) {
 		$tool_content .=  "
-                <table width=\"100%\">
+                <table width='100%'>
 		<tr>
 		  <td width='1'><img src='$themeimg/folder_open.png' title='$langNoCategory' /></td>
 		  <td colspan='4'><b>$langLinks</b></td>
@@ -378,5 +368,3 @@ if (mysql_num_rows($resultcategories) > 0) {
 
 add_units_navigation(true);
 draw($tool_content, $menuTypeID, null, $head_content);
-
-

@@ -43,7 +43,8 @@ class Log {
         // display users actions 
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
-                global $tool_content, $langDate, $langUser, $langAction, $langDetail, $langModule, $langAllModules, $modules;
+                global $tool_content, $modules;
+                global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langModule, $langAllModules;
                 
                 $q1 = $q2 = $q3 = '';
                 if ($user_id != -1) {
@@ -58,23 +59,28 @@ class Log {
                 $sql = db_query("SELECT user_id, details, action_type, ts FROM log
                                         WHERE course_id = $course_id $q1 $q2 $q3 
                                         AND ts BETWEEN '$date_from' AND '$date_now' ORDER BY ts DESC");
-                $tool_content .= "<table class='tbl'><tr>";
-                if ($module_id != -1) {
-                        $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th></tr>";
-                } else {
-                        $tool_content .= "<th colspan='4'>$langAllModules</th></tr>";
-                }
-                $tool_content .= "<tr><th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
-                $tool_content .= "</tr>";
-                while ($r = mysql_fetch_array($sql)) {
-                        $tool_content .= "<tr>";
-                        $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";               
-                        $tool_content .= "<td>".display_user($r['user_id'])."</td>";
-                        $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                        $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
+                if (mysql_num_rows($sql) > 0) {
+                        $tool_content .= "<table class='tbl'><tr>";
+                        if ($module_id != -1) {
+                                $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th>";
+                        } else {
+                                $tool_content .= "<th colspan='4'>$langAllModules</th>";
+                        }
                         $tool_content .= "</tr>";
+                        $tool_content .= "<tr><th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
+                        $tool_content .= "</tr>";                
+                        while ($r = mysql_fetch_array($sql)) {
+                                $tool_content .= "<tr>";
+                                $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";               
+                                $tool_content .= "<td>".display_user($r['user_id'])."</td>";
+                                $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
+                                $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
+                                $tool_content .= "</tr>";
+                        }                
+                        $tool_content .= "</table>";
+                } else {
+                        $tool_content .= "<div class=alert1>$langNoUsersLog</div>";
                 }
-                $tool_content .= "</table>";         
                 return;
         }
  
@@ -93,14 +99,30 @@ class Log {
                                 break;
                         case MODULE_ID_ASSIGN: $content = $this->assignment_action_details($details);
                                 break;
+                        case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
+                                break;
                         //case -1: $content = $this->announcement_action_details($details);
                         case -1: $content = "όλα τα υποσυστήματα";
                                 break;
                         default: $content = $langUnknownModule;
                                 break;
-                        }
-                        
+                        }                        
                 return $content;
+        }
+        
+        private function video_action_details($details) {
+                
+                global $langTitle, $langDescription;
+                
+                $details = unserialize($details);
+                $content = "$langTitle  &laquo".$details['title']."&raquo";
+                if (!empty($details['description'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".$details['description']."&raquo";
+                }
+                if (!empty($details['url'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; URL &laquo".$details['url']."&raquo";
+                }                
+                return $content;                
         }
         
         private function assignment_action_details($details) {
@@ -120,8 +142,7 @@ class Log {
                 }
                 if (!empty($details['grade'])) {
                         $content .= "&nbsp;&mdash;&nbsp; ".$m['grade']." &laquo".$details['grade']."&raquo";
-                }
-                
+                }                
                 return $content;
         }
         
@@ -131,7 +152,7 @@ class Log {
                 
                 $details = unserialize($details);                
                 $content = "$langTitle &laquo".$details['title'].
-                            "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo.";                
+                            "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo";
                 return $content;
         }
         
@@ -152,18 +173,22 @@ class Log {
         
         private function link_action_details($details) {
                 
-                global $langTitle, $langURL, $langDescription;
+                global $langTitle, $langDescription, $langCategoryName;
                                 
                 $details = unserialize($details);
-                
-                $content = "$langURL ".$details['url'];
-                if (!empty($details['title'])) {
-                        $content .= " $langTitle &laquo".$details['title']."&raquo";
+                $content = '';
+                if (!empty($details['url'])) {
+                        $content .= "URL: ".$details['url'];
+                }                
+                if (!empty($details['category'])) {
+                        $content .= " $langCategoryName &laquo".$details['category']."&raquo";
                 }
+                if (!empty($details['title'])) {
+                        $content .= " &mdash; $langTitle &laquo".$details['title']."&raquo";
+                }                
                 if (!empty($details['description'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".$details['description']."&raquo";
-                }                        
-                
+                }                                        
                 return $content;
         }
         
@@ -185,8 +210,7 @@ class Log {
                 }
                 if (!empty($details['newpath'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo".$details['newpath']."&raquo";
-                }
-                
+                }                
                 return $content;
         }
         

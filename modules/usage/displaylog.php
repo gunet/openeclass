@@ -28,7 +28,7 @@ require_once 'include/jscalendar/calendar.php';
 require_once 'include/log.php';
 
 $nameTools = $langUsersLog;
-$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 
 $usage_defaults = array (
         'logtype' => 0,

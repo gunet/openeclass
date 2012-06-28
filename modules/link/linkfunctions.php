@@ -165,6 +165,7 @@ function submit_link()
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link` $set_sql WHERE course_id = $course_id AND id = $id");
+                
                 $catlinkstatus = $langLinkMod;
                 $log_type = LOG_MODIFY;
         } else {
@@ -172,11 +173,16 @@ function submit_link()
                                       WHERE course_id = $course_id AND category = $selectcategory");
                 list($order) = mysql_fetch_row($q);
                 $order++;
-                db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");
-                $id = mysql_insert_id();
+                db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");                
+                $id = mysql_insert_id();                
                 $catlinkstatus = $langLinkAdded;
                 $log_type = LOG_INSERT;
         }
+        // find category name
+        list($category) = mysql_fetch_array(db_query("SELECT link_category.name FROM link, link_category 
+                                                        WHERE link.category = link_category.id 
+                                                        AND link.course_id = $course_id 
+                                                        AND link.id = $id"));
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
         Log::record(MODULE_ID_LINKS, $log_type,
                     @array('id' => $id,
@@ -213,7 +219,7 @@ function submit_category()
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link_category` $set_sql WHERE course_id = $course_id AND id = $id");
-                $catlinkstatus = $langCategoryModded;
+                $catlinkstatus = $langCategoryModded;                
                 $log_type = LOG_MODIFY;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link_category`
@@ -228,7 +234,7 @@ function submit_category()
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
         Log::record(MODULE_ID_LINKS, $log_type,
                     array('id' => $id,
-                          'categoryname' => $categoryname,
+                          'category' => $categoryname,
                           'description' => $txt_description));
 }
 
@@ -236,9 +242,12 @@ function delete_link($id)
 {
 	global $course_id, $langLinkDeleted, $catlinkstatus;
 
+        list($url, $title) = mysql_fetch_row(db_query("SELECT url, title FROM link WHERE course_id = $course_id AND id = $id"));
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langLinkDeleted;
-        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('id' => $id));
+        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
+                                                       'url' => $url,
+                                                       'title' => $title));
 }
 
 function delete_category($id)
@@ -246,7 +255,9 @@ function delete_category($id)
 	global $course_id, $langCategoryDeleted, $catlinkstatus;
 
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND category = $id");
+        list($category) = mysql_fetch_array(db_query("SELECT name FROM link_category WHERE course_id = $course_id AND id = $id"));
 	db_query("DELETE FROM `link_category` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langCategoryDeleted;
-        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id));
+        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
+                                                       'category' => $category));
 }

@@ -149,8 +149,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	$id = q($_GET['id']);
 	$real_file = $webDir."/video/".$course_code."/".$id;
 	if (strpos($real_file, '/../') === FALSE && file_exists($real_file)) {
-                $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " .
-                                   autoquote($id), $mysqlMainDb);
+                $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " . quote($id));
 		$row = mysql_fetch_array($result);
 		if (!empty($row['url'])) {
 			$id = $row['url'];
@@ -158,7 +157,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 		send_file_to_client($real_file, my_basename($id), 'inline', true);
 		exit;
 	} else {
-		header("Refresh: ${urlServer}modules/video/video.php?course=$course_code");
+		header("Refresh: ${urlServer}modules/video/index.php?course=$course_code");
 	}
 }
 
@@ -172,7 +171,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
         $videoPath = $urlServer ."video/". $course_code . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
         
-        $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = ". autoquote($id), $mysqlMainDb);
+        $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = ". quote($id));
         $row = mysql_fetch_array($result);
         
         if (strpos($videoPath, '/../') === FALSE && !empty($row))
@@ -180,7 +179,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
                 echo media_html_object($videoPath, $videoURL);
                 exit;
         } else {
-                header("Refresh: ${urlServer}modules/video/video.php?course=$course_code");
+                header("Refresh: ${urlServer}modules/video/index.php?course=$course_code");
         }
 }
 
@@ -245,27 +244,26 @@ if (isset($_POST['edit_submit'])) { // edit
 			$table = select_table($_POST['table']);
 		}
 		if ($table == 'video') {
-			$sql = "UPDATE video SET title = ".autoquote($_POST['title']).",
-                                                 description = ".autoquote($_POST['description']).",
-                                                 creator = ".autoquote($_POST['creator']).",
-                                                 publisher = ".autoquote($_POST['publisher'])."
-                                             WHERE id = $id";	
+			$sql = "UPDATE video SET title = ".quote($_POST['title']).",
+                                                 description = ".quote($_POST['description']).",
+                                                 creator = ".quote($_POST['creator']).",
+                                                 publisher = ".quote($_POST['publisher'])."
+                                             WHERE id = $id";
 		} elseif ($table == 'videolinks') {
-			$sql = "UPDATE videolinks SET url = ".autoquote(canonicalize_url($_POST['url'])).",
-                                                      title = ".autoquote($_POST['title']).",
-                                                      description = ".autoquote($_POST['description']).",
-                                                      creator = ".autoquote($_POST['creator']).",
-                                                      publisher = ".autoquote($_POST['publisher'])."
+			$sql = "UPDATE videolinks SET url = ".quote(canonicalize_url($_POST['url'])).",
+                                                      title = ".quote($_POST['title']).",
+                                                      description = ".quote($_POST['description']).",
+                                                      creator = ".quote($_POST['creator']).",
+                                                      publisher = ".quote($_POST['publisher'])."
                                                   WHERE id = $id";
 		}
-		$result = db_query($sql, $mysqlMainDb);                
+		$result = db_query($sql);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record(MODULE_ID_VIDEO, LOG_MODIFY,
                           array('id' => $id,                          
-                                'url' => autoquote(canonicalize_url($_POST['url'])),
-                                'title' => autoquote($_POST['title']),     
-                                'desc' => $txt_description));
-                
+                                'url' => canonicalize_url($_POST['url']),
+                                'title' => $_POST['title'],
+                                'description' => $txt_description));
 		$tool_content .= "<p class='success'>$langTitleMod</p><br />";
 		$id = "";
 	}
@@ -279,21 +277,21 @@ if (isset($_POST['add_submit'])) {  // add
 				$title = $_POST['title'];
 			}
 			$sql = 'INSERT INTO videolinks (course_id, url, title, description, creator, publisher, date)
-                                VALUES ('.autoquote($course_id).',
-                               		'.autoquote(canonicalize_url($url)).',
-                                        '.autoquote($title).',
-					'.autoquote($_POST['description']).',
-                                        '.autoquote($_POST['creator']).',
-                                        '.autoquote($_POST['publisher']).',
-                                        '.autoquote($_POST['date']).')';
-			$result = db_query($sql, $mysqlMainDb);
+                                VALUES ('.quote($course_id).',
+                               		'.quote(canonicalize_url($url)).',
+                                        '.quote($title).',
+					'.quote($_POST['description']).',
+                                        '.quote($_POST['creator']).',
+                                        '.quote($_POST['publisher']).',
+                                        '.quote($_POST['date']).')';
+			$result = db_query($sql);
                         $id = mysql_insert_id();				
                         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                         Log::record(MODULE_ID_VIDEO, LOG_INSERT,
                                 @array('id' => $id,
-                                       'url' => autoquote(canonicalize_url($url)),
+                                       'url' => canonicalize_url($url),
                                        'title' => $title,
-                                       'desc' => $txt_description));
+                                       'description' => $txt_description));
 			$tool_content .= "<p class='success'>$langLinkAdded</p><br />";
 		} else {  // add video
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -329,24 +327,24 @@ if (isset($_POST['add_submit'])) {  // add
 					$url = $file_name;
                                         $sql = 'INSERT INTO video
                                                        (course_id, path, url, title, description, creator, publisher, date)
-                                                       VALUES ('.autoquote($course_id).', '.
+                                                       VALUES ('.quote($course_id).', '.
                                                                  quote($path).', '.
-                                                                 autoquote($url).', '.
-                                                                 autoquote($_POST['title']).', '.
-                                                                 autoquote($_POST['description']).', '.
-                                                                 autoquote($_POST['creator']).', '.
-                                                                 autoquote($_POST['publisher']).', '.
-                                                                 autoquote($_POST['date']).')';
+                                                                 quote($url).', '.
+                                                                 quote($_POST['title']).', '.
+                                                                 quote($_POST['description']).', '.
+                                                                 quote($_POST['creator']).', '.
+                                                                 quote($_POST['publisher']).', '.
+                                                                 quote($_POST['date']).')';
 				}
                                 $id = mysql_insert_id();
-				$result = db_query($sql, $mysqlMainDb);
+				$result = db_query($sql);
                                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                                 Log::record(MODULE_ID_VIDEO, LOG_INSERT,
                                         @array('id' => $id,
                                                 'path' => quote($path),
                                                 'url' => $_POST['url'],
-                                                'title' => autoquote($_POST['title']),
-                                                 'desc' => $txt_description));
+                                                'title' => $_POST['title'],
+                                                'description' => $txt_description));
 				$tool_content .= "<p class='success'>$langFAdd</p><br />";
 			}
 		}
@@ -354,65 +352,64 @@ if (isset($_POST['add_submit'])) {  // add
 	if (isset($_GET['delete'])) { // delete
                 $id = intval($_GET['id']);
                 $table = select_table($_GET['table']);
-                $sql_select = "SELECT * FROM $table WHERE course_id = $course_id AND id = $id";
-                $result = db_query($sql_select, $mysqlMainDb);
+                $sql_select = "SELECT title, path FROM $table WHERE course_id = $course_id AND id = $id";
+                $result = db_query($sql_select);
                 $myrow = mysql_fetch_array($result);
                 if ($table == 'video') {
                         unlink("$webDir/video/$course_code/".$myrow['path']);
                 }
 		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id = $id";
-		$result = db_query($sql, $mysqlMainDb);
-                Log::record(MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id));
+		$result = db_query($sql);
+                Log::record(MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow['title']));
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
 		$id = "";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
 		$nameTools = $langAddV;
-		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
+		$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
-              <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
-              <fieldset>
-              <legend>$langAddV</legend>
-		<table width='100%' class='tbl'>
-		<tr>
-		  <th valign='top'>$langWorkFile:</th>
-		  <td>
-		    <input type='hidden' name='id' value=''>
-		    <input type='file' name='userFile' size='38'>
-                    <br />
-                   <span class='smaller'>$langPathUploadFile</span>
-		  </td>
-		<tr>
-		  <th>$langTitle:</th>
-		  <td><input type='text' name='title' size='55'></td>
-		</tr>
-		<tr>
-		  <th>$langDescr:</th>
-		  <td><textarea rows='3' name='description' cols='52'></textarea></td>
-		</tr>
-		<tr>
-		  <th>$langcreator:</th>
-		  <td><input type='text' name='creator' value='$nick' size='55'></td>
-		</tr>
-		<tr>
-		  <th>$langpublisher:</th>
-		  <td><input type='text' name='publisher' value='$nick' size='55'></td>
-		</tr>
-		<tr>
-		  <th>$langDate:</th>
-		  <td><input type='text' name='date' value='".date('Y-m-d G:i:s')."' size='55'></td>
-		</tr>
-		<tr>
-		  <th>&nbsp;</th>
-		  <td class='right'><input type='submit' name='add_submit' value='$dropbox_lang[uploadFile]'></td>
-		</tr>
-
-		</table>
-        </fieldset>
-              <div class='smaller right'>$langMaxFileSize ". ini_get('upload_max_filesize') . "</div></form> <br>";        
+                <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">
+                <fieldset>
+                <legend>$langAddV</legend>
+                        <table width='100%' class='tbl'>
+                        <tr>
+                        <th valign='top'>$langWorkFile:</th>
+                        <td>
+                        <input type='hidden' name='id' value=''>
+                        <input type='file' name='userFile' size='38'>
+                        <br />
+                        <span class='smaller'>$langPathUploadFile</span>
+                        </td>
+                        <tr>
+                        <th>$langTitle:</th>
+                        <td><input type='text' name='title' size='55'></td>
+                        </tr>
+                        <tr>
+                        <th>$langDescr:</th>
+                        <td><textarea rows='3' name='description' cols='52'></textarea></td>
+                        </tr>
+                        <tr>
+                        <th>$langcreator:</th>
+                        <td><input type='text' name='creator' value='$nick' size='55'></td>
+                        </tr>
+                        <tr>
+                        <th>$langpublisher:</th>
+                        <td><input type='text' name='publisher' value='$nick' size='55'></td>
+                        </tr>
+                        <tr>
+                        <th>$langDate:</th>
+                        <td><input type='text' name='date' value='".date('Y-m-d G:i:s')."' size='55'></td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'><input type='submit' name='add_submit' value='$dropbox_lang[uploadFile]'></td>
+                        </tr>
+                        </table>
+                </fieldset>
+                <div class='smaller right'>$langMaxFileSize ". ini_get('upload_max_filesize') . "</div></form> <br>";
               
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'url') { // display video links form
 		$nameTools = $langAddVideoLink;
-		$navigation[] = array ('url' => "video.php?course=$course_code", 'name' => $langVideo);
+		$navigation[] = array ('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
 		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
@@ -460,7 +457,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	$table_edit = select_table($_GET['table_edit']);
 	if ($id) {
 		$sql = "SELECT * FROM $table_edit WHERE course_id = $course_id AND id = $id ORDER BY title";
-		$result = db_query($sql, $mysqlMainDb);
+		$result = db_query($sql);
 		$myrow = mysql_fetch_array($result);
 		
 		$id = $myrow['id'];
@@ -471,7 +468,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$publisher = $myrow['publisher'];
 		
 		$nameTools = $langModify;
-		$navigation[] = array('url' => "video.php?course=$course_code", 'name' => $langVideo);
+		$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
                 <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>
@@ -529,14 +526,14 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
-$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb));
+$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title"));
 $count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl
-				ORDER BY title", $mysqlMainDb));
+				ORDER BY title"));
 
 if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         // print the list if there is no editing
-        $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb);
-        $results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title", $mysqlMainDb);
+        $results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title");
+        $results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title");
         $i = 0;
         $count_video_presented_for_admin = 1;
         $tool_content .= "
@@ -589,7 +586,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         if (!$is_in_tinymce)
                                             $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
                                         
-                                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['diate']))) . "</td>";
+                                        $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
                                         $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
 				default:
@@ -630,10 +627,10 @@ else {
     
         load_modal_box(true);
     
-	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title", $mysqlMainDb);
-	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title", $mysqlMainDb);
-	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv", $mysqlMainDb));
-	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl", $mysqlMainDb));
+	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title");
+	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title");
+	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv"));
+	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl"));
         
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
