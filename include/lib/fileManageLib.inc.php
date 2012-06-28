@@ -121,49 +121,6 @@ function my_delete($file)
 
 
 /*
- * Delete a directory and its whole content
- *
- * @author - Hugues Peeters
- * @param  - $dirPath (String) - the path of the directory to delete
- * @return - no return !
- */
-function removeDir($dirPath)
-{
-
-	/* Try to remove the directory. If it can not manage to remove it,
-	 * it's probable the directory contains some files or other directories,
-	 * and that we must first delete them to remove the original directory.
-	 */
-
-	if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
-	{
-                $cwd = getcwd();
-                chdir($dirPath);
-		$handle = opendir($dirPath) ;
-
-		while ($element = readdir($handle)) {
-			if ( $element == "." || $element == "..") {
-				continue;	// skip current and parent directories
-			} elseif (is_file($element)) {
-				unlink($element);
-			} elseif (is_dir($element)) {
-				$dirToRemove[] = $dirPath."/".$element;
-			}
-		}
-
-		closedir ($handle) ;
-                chdir($cwd);
-
-		if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
-			foreach($dirToRemove as $j) removeDir($j) ; // recursivity
-		}
-
-		rmdir( $dirPath ) ;
-	}
-}
-
-
-/*
  * Rename a file or a directory
  * 
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>

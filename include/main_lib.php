@@ -94,7 +94,7 @@ define('UNIQUE_ANSWER',   1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
-define('true_false',      5);
+define('TRUE_FALSE',      5);
 //
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false)
@@ -1552,7 +1552,7 @@ function delete_course($cid)
                 mkdir($garbage, 0775);
         }
 	rename("$webDir/courses/$course_code", "$garbage/$course_code");
-        unlink("$webDir/video/$course_code");
+        removeDir("$webDir/video/$course_code");
 }
 
 function csv_escape($string, $force = false)
@@ -2332,4 +2332,47 @@ function active_subdirs($base, $filename)
 	}
 	closedir($dir);
 	return $out;
+}
+
+
+/*
+ * Delete a directory and its whole content
+ *
+ * @author - Hugues Peeters
+ * @param  - $dirPath (String) - the path of the directory to delete
+ * @return - no return !
+ */
+function removeDir($dirPath)
+{
+
+	/* Try to remove the directory. If it can not manage to remove it,
+	 * it's probable the directory contains some files or other directories,
+	 * and that we must first delete them to remove the original directory.
+	 */
+
+	if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
+	{
+                $cwd = getcwd();
+                chdir($dirPath);
+		$handle = opendir($dirPath) ;
+
+		while ($element = readdir($handle)) {
+			if ( $element == "." || $element == "..") {
+				continue;	// skip current and parent directories
+			} elseif (is_file($element)) {
+				unlink($element);
+			} elseif (is_dir($element)) {
+				$dirToRemove[] = $dirPath."/".$element;
+			}
+		}
+
+		closedir ($handle) ;
+                chdir($cwd);
+
+		if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
+			foreach($dirToRemove as $j) removeDir($j) ; // recursivity
+		}
+
+		rmdir( $dirPath ) ;
+	}
 }
