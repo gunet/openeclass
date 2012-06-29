@@ -96,7 +96,7 @@ if (!$myrow = mysql_fetch_array($result)) {
 $forum_name = own_stripslashes($myrow["forum_name"]);
 
 if (isset($_GET['delete'])) {
-	$post_id = $_GET['post_id'];
+	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic, $currentCourseID, "time_fix");
 	
 	$result = db_query("SELECT post_time FROM posts WHERE post_id = '$post_id'", $currentCourseID);
