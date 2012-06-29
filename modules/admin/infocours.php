@@ -83,7 +83,7 @@ else {
 	</tr>
 	<tr>
 	  <th>".$langTitle.":</b></th>
-	  <td><input type='text' name='intitule' value='".$row['intitule']."' size='60'></td>
+	  <td><input type='text' name='intitule' value='". q($row['intitule']) ."' size='60'></td>
 	</tr>
 	<tr>
 	  <th>".$langTeacher.":</th>

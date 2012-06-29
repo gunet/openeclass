@@ -775,7 +775,7 @@ switch( $action )
 
 	$userInfo = user_get_data( $oldEditor );
 	mysql_select_db($currentCourseID);
-	$oldEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
+	$oldEditorStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
 
 	$newTime = claro_format_locale_date( $dateTimeFormatLong
 		    , strtotime($newTime) )
@@ -783,7 +783,7 @@ switch( $action )
 
 	$userInfo = user_get_data( $newEditor );
 	mysql_select_db($currentCourseID);
-	$newEditorStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
+	$newEditorStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
 
 	$versionInfo = '('
 	    . sprintf( $langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr )
@@ -843,7 +843,7 @@ switch( $action )
 		$userInfo = user_get_data( $recentChange['editor_id'] );
 		mysql_select_db($currentCourseID);
 
-		$userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
+		$userStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
 		$userUrl = $userStr;
 		$tool_content .= '<li>'
 		    . sprintf( $langWikiRecentChangesPattern, $entry, $time, $userUrl )
@@ -957,7 +957,7 @@ switch( $action )
 		$editorInfo = user_get_data( $wikiPage->getEditorId() );
 		mysql_select_db($currentCourseID);
 
-		$editorStr = $editorInfo['firstname'] . "&nbsp;" . $editorInfo['lastname'];
+		$editorStr = q($editorInfo['firstname']) . "&nbsp;" . q($editorInfo['lastname']);
 
 		$editorUrl = '&nbsp;-&nbsp;' . $editorStr;
 
@@ -1059,7 +1059,7 @@ switch( $action )
 		$userInfo = user_get_data( $version['editor_id'] );
 		mysql_select_db($currentCourseID);
 
-		$userStr = $userInfo['firstname'] . "&nbsp;" . $userInfo['lastname'];
+		$userStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
 
 		$userUrl = $userStr;
 

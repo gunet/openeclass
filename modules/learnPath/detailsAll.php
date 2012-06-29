@@ -147,7 +147,7 @@ foreach ($usersList as $user)
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
 		.'    <td><a href="detailsUser.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-		.'    <td class="center">'.uid_to_am($user['user_id']).'</td>'."\n"
+		.'    <td class="center">'.q(uid_to_am($user['user_id'])).'</td>'."\n"
 		.'    <td align="center">'.user_groups($cours_id, $user['user_id']).'</td>'."\n"
 		.'    <td class="right" width=\'120\'>'
 		.disp_progress_bar($total, 1)

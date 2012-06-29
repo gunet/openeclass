@@ -272,9 +272,9 @@ if (mysql_num_rows($result) > 0) { // topics found
 		}
 		$tool_content .= "\n<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
 		$tool_content .= "\n<td class='center'>$replies</td>";
-		$tool_content .= "\n<td class='center'>$myrow[prenom] $myrow[nom]</td>";
+		$tool_content .= "\n<td class='center'>". q($myrow['prenom']) ." ". q($myrow['nom']) ."</td>";
 		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";
-		$tool_content .= "\n<td class='center'>$myrow[prenom1] $myrow[nom1]<br />$last_post</td>";
+		$tool_content .= "\n<td class='center'>". q($myrow['prenom1']) ." ". q($myrow['nom1']) ."<br />$last_post</td>";
 		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 			WHERE user_id = $uid AND topic_id = $myrow[topic_id] AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {

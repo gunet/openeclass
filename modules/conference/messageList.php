@@ -113,7 +113,7 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
 foreach ($fileReverse as $thisLine) {
-	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
+	$newline = preg_replace('/ : /', '</span> : ', q($thisLine));
 	if (strpos($newline, '</span>') === false) {
 		$newline .= '</span>';
 	}
