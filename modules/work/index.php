@@ -231,7 +231,7 @@ function show_submission($sid)
         if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 
                 $tool_content .= "<p>$langSubmissionDescr".
-                                 uid_to_name($sub['uid']).
+                                 q(uid_to_name($sub['uid'])).
                                  $sub['submission_date'].
                                  "<a href='$GLOBALS[urlServer]$GLOBALS[currentCourseID]".
                                  "/work/$sub[file_path]'>$sub[file_name]</a>";
@@ -1331,8 +1331,8 @@ function create_zip_index($path, $id, $online = FALSE)
                         ("<a href='$filename'>".htmlspecialchars($filename).'</a>');
 		fputs($fp, '
 			<tr class="sep">
-				<td>'.uid_to_name($row['uid']).'</td>
-				<td>'.uid_to_am($row['uid']).'</td>
+				<td>'.q(uid_to_name($row['uid'])).'</td>
+				<td>'.q(uid_to_am($row['uid'])).'</td>
 				<td align="center">'.$filelink.'</td>
 				<td align="center">'.$row['submission_date'].'</td>
 				<td align="center">'.$row['grade'].'</td>

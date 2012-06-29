@@ -139,7 +139,7 @@ while ($row = mysql_fetch_assoc($result)) {
         if ($known) {
                 $table_cont .= $user;
         } else {
-                $table_cont .= "<span class='red'>$user</span>";
+                $table_cont .= "<span class='red'>".q($user)."</span>";
         }
         $table_cont .= "</td>
                 <td align='center'>".$row['ip']."</td>

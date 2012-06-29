@@ -86,9 +86,9 @@ else
 	$tool_content .= "<p><a href=\"courses.php?fc=".$_GET['fc']."\">$langReturn</a></p>";
 	$tool_content .= "<form action=\"".$_SERVER['SCRIPT_NAME']."?fc=".$_GET['fc']."\" method=\"post\">
                 <table width=\"99%\"><thead>";
-	$tool_content .= "<tr><th>Όνομα:</th><td><input type=\"text\" name=\"firstname\" value=\"".$row["nom"]."\" readonly></td></tr>";
-	$tool_content .= "<tr><th>Επίθετο:</th><td><input type=\"text\" name=\"lastname\" value=\"".$row["prenom"]."\" readonly></td></tr>";
-	$tool_content .= "<tr><th>Email:</th><td><input type=\"text\" name=\"email\" value=\"".$row["email"]."\" readonly></td></tr>";
+	$tool_content .= "<tr><th>Όνομα:</th><td><input type=\"text\" name=\"firstname\" value=\"".q($row["nom"])."\" readonly></td></tr>";
+	$tool_content .= "<tr><th>Επίθετο:</th><td><input type=\"text\" name=\"lastname\" value=\"".q($row["prenom"])."\" readonly></td></tr>";
+	$tool_content .= "<tr><th>Email:</th><td><input type=\"text\" name=\"email\" value=\"".q($row["email"])."\" readonly></td></tr>";
 	$tool_content .= "<th>Σχόλια:</th><td><textarea rows=\"6\" cols=\"40\" name=\"body\"></textarea></td></tr>";
 	$tool_content .= "</thead></table>
 	<br/>

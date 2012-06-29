@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
         $name = uid_to_name($uid);
 	$forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
 	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />$forum_message <br /><br />$gunet<br /><a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
+	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />". q($forum_message) ."<br /><br />$gunet<br /><a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
 	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
 	while ($r = mysql_fetch_array($sql)) {
                 if (get_user_email_notification($r['user_id'], $course_id)) {

@@ -353,69 +353,60 @@ function display_user($user, $print_email = false)
 
 
 // Translate uid to real name / surname
-function uid_to_name($uid)
-{
-	global $mysqlMainDb;
+function uid_to_name($uid) {
+    global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
-		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
-		return $r[0];
-	} else {
-		return false;
-	}
+    $r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
+		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb));
+
+    if ($r !== false) {
+        return $r[0];
+    } else {
+        return false;
+    }
 }
-// Translate uid to real firstname
-function uid_to_firstname($uid)
-{
-        global $mysqlMainDb;
-
-        if ($r = mysql_fetch_row(db_query("SELECT prenom
-		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
-                return $r[0];
-        } else {
-                return false;
-        }
-}
-
 
 // Translate uid to real surname
-function uid_to_surname($uid)
-{
-        global $mysqlMainDb;
+function uid_to_surname($uid) {
+    global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query("SELECT nom
-		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
-                return $r[0];
-        } else {
-                return false;
-        }
+    $r = mysql_fetch_row(db_query("SELECT nom
+		FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
+
+    if ($r !== false) {
+        return $r[0];
+    } else {
+        return false;
+    }
 }
 
 // Translate uid to user email
-function uid_to_email($uid)
-{
-        global $mysqlMainDb;
+function uid_to_email($uid) {
+    global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query("SELECT email
-		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb))) {
-                return $r[0];
-        } else {
-                return false;
-        }
+    $r = mysql_fetch_row(db_query("SELECT email
+		FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
+
+    if ($r !== false) {
+        return $r[0];
+    } else {
+        return false;
+    }
 }
 
 
 // Translate uid to AM (student number)
-function uid_to_am($uid)
-{
-	global $mysqlMainDb;
+function uid_to_am($uid) {
+    global $mysqlMainDb;
 
-	if ($r = mysql_fetch_array(db_query("SELECT am from user
-		WHERE user_id = '$uid'", $mysqlMainDb))) {
-	return $r[0];
-		} else {
-			return false;
-		}
+    $r = mysql_fetch_array(db_query("SELECT am from user
+		WHERE user_id = '$uid'", $mysqlMainDb));
+
+    if ($r !== false) {
+        return $r[0];
+    } else {
+        return false;
+    }
 }
 
 
@@ -892,7 +883,7 @@ function mailto($address, $alternative='(e-mail address hidden)')
                 $prog = urlenc("var a='" . urlenc(str_replace('@', '&#64;', $address)) .
                       "';document.write('<a href=\"mailto:'+unescape(a)+'\">'+unescape(a)+'</a>');");
                 return "<script type='text/javascript'>eval(unescape('" .
-                      $prog . "'));</script><noscript>" . q($alternative) . "</noscript>";
+                      q($prog) . "'));</script><noscript>" . q($alternative) . "</noscript>";
         }
 }
 
@@ -2144,9 +2135,9 @@ function profile_image($uid, $size, $default = false)
 	global $urlServer, $themeimg;
 
 	if (!$default) {
-		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".uid_to_name($uid)."'>";
+		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".q(uid_to_name($uid))."'>";
 	} else {
-		return "<img src='$themeimg/default_$size.jpg' title='".uid_to_name($uid)."' />";
+		return "<img src='$themeimg/default_$size.jpg' title='".q(uid_to_name($uid))."' />";
 	}
 }
 

@@ -103,7 +103,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                         $tool_content .= '<dl>';
                         $answer_total = mysql_num_rows($answers);
                         while ($theAnswer = mysql_fetch_array($answers)) {
-                                $tool_content .= "<dt><u>$langUser</u>: <dd>" . uid_to_name($theAnswer['user_id']) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
+                                $tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
                         }
                         $tool_content .= '</dl><br />';                        
                 }

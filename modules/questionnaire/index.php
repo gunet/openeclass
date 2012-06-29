@@ -188,7 +188,7 @@ function printPolls() {
                                         }
                                 }
                                 $tool_content .= "</td>
-                        <td class='center'>$theCreator</td>";
+                        <td class='center'>".q($theCreator)."</td>";
                                 $tool_content .= "
                         <td class='center'>".nice_format(date("Y-m-d H:i", strtotime($thepoll["creation_date"])), true)."</td>";
                                 $tool_content .= "

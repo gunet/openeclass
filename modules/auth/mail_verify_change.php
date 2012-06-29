@@ -92,7 +92,7 @@ $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'
                 <br />
                 <tr>
                         <th class='left'>$lang_email:</th>
-                        <td><input type='text' name='email' size='30' maxlength='40' value='{$_SESSION['email']}' /></td>
+                        <td><input type='text' name='email' size='30' maxlength='40' value='". q($_SESSION['email']) ."' /></td>
                         <td><small>($langMailVerificationAddrChange)</small></td>
                 </tr>
                 <tr>

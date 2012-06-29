@@ -203,7 +203,7 @@ if ($total_categories) {
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
-						$tool_content .= "<span class='smaller'>$last_user_post&nbsp;
+						$tool_content .= "<span class='smaller'>". q($last_user_post) ."&nbsp;
                                                 <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						<img src='$icon_topic_latest' />
 						</a>

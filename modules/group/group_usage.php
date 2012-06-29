@@ -186,7 +186,7 @@ if ($result) {
                         $sortkey = $total;
                         $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
                 }
-                $tool_content .= "<td width='30%'>$name</td><td width='30%'>$am</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
+                $tool_content .= "<td width='30%'>".q($name)."</td><td width='30%'>".q($am)."</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
         }
         $tool_content .= "</tbody></table>";
 }

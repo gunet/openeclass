@@ -114,7 +114,7 @@ function forumHtmlInterface($data)
                                 //        "... <b>[$langMore]</b>");
 				$content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
 				<b>".$data[$i][2][0][$j][3]." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
-                                </a><div class='smaller grey'><b>".uid_to_name($data[$i][2][0][$j][6]).
+                                </a><div class='smaller grey'><b>".q(uid_to_name($data[$i][2][0][$j][6])).
                                 "</b></div><div class='smaller'>" .
                                 standard_text_escape(ellipsize($data[$i][2][0][$j][7], 150,
                                                      "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
