@@ -229,7 +229,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
+		$tool_content .= "<td><a href='$topiclink'><b>".q($topic_title)."</b></a>$pagination</td>";
 		$tool_content .= "<td class='center'>$replies</td>";
 		$tool_content .= "<td class='center'>".q(uid_to_name($myrow['poster_id']))."</td>";
 		$tool_content .= "<td class='center'>$myrow[num_views]</td>";

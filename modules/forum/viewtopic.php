@@ -236,7 +236,7 @@ do {
 	// support for math symbols
 	$message = mathfilter($message, 12, "../../courses/mathimg/");
 	if ($count == 0) {
-		$postTitle = "<b>$langPostTitle: </b>$topic_subject";
+		$postTitle = "<b>$langPostTitle: </b>". q($topic_subject);
 	} else {
 		$postTitle = "";
 	}
