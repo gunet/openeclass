@@ -2371,7 +2371,7 @@ function removeDir($dirPath)
 }
 
 
-function token_generate($module, $user_id, $need_timestamp=false)
+function token_generate($info, $need_timestamp=false)
 {
         if ($need_timestamp) {
                 $ts = sprintf('%x-', time());
@@ -2379,10 +2379,10 @@ function token_generate($module, $user_id, $need_timestamp=false)
                 $ts = '';
         }
         $code_key = get_config('code_key');
-        return $ts.hash('ripemd160', $ts.$module.$code_key.$user_id);
+        return $ts . hash_hmac('ripemd160', $ts.$info, $code_key);
 }
 
-function token_validate($module, $user_id, $token, $ts_valid_time=0)
+function token_validate($info, $token, $ts_valid_time=0)
 {
         $data = explode('-', $token);
         if (count($data) > 1) {
@@ -2396,6 +2396,6 @@ function token_validate($module, $user_id, $token, $ts_valid_time=0)
                 $ts = '';
         }
         $code_key = get_config('code_key');
-        return $token == hash('ripemd160', $ts.$module.$code_key.$user_id);
+        return $token == hash_hmac('ripemd160', $ts.$info, $code_key);
 }
 

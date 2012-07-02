@@ -127,7 +127,7 @@ if (!isset($_POST['submit'])) {
 	</tr>";
 	if (get_config("display_captcha")) {
 		$tool_content .= "<tr>
-		<th class='left'><img id='captcha' src='include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
+		<th class='left'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></th>
 		<td colspan='2'><input type='text' name='captcha_code' maxlength='6' class='FormData_InputText' />&nbsp;&nbsp;<small>(*)&nbsp;$langTipCaptcha</small></td>
 		</tr>";
 	}
@@ -239,6 +239,8 @@ if (!isset($_POST['submit'])) {
 		$emailsubject = "$langYourReg $siteName";
 		$uname = autounquote($uname);
                 $telephone = get_config('phone');
+                $administratorName = get_config('admin_name');
+                $emailhelpdesk = get_config('email_helpdesk');
 		$emailbody = "$langDestination $prenom_form $nom_form\n" .
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .

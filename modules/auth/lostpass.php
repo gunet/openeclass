@@ -54,7 +54,7 @@ if (isset($_REQUEST['u']) and
     isset($_REQUEST['h'])) {
         $change_ok = false;
 	$userUID = intval($_REQUEST['u']);
-        $valid = token_validate('password', $userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
+        $valid = token_validate('password'.$userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
 	$res = db_query("SELECT user_id FROM user
                                 WHERE user_id = $userUID AND
                                       password NOT IN ('" .
@@ -118,7 +118,7 @@ if (isset($_REQUEST['u']) and
 				//prepare instruction for password reset
 				$text .= $langPassResetGoHere;
                                 $text .= $urlServer . "modules/auth/lostpass.php?u=$s[user_id]&h=" .
-                                         token_generate('password', $s['user_id'], true);
+                                         token_generate('password'.$s['user_id'], true);
 
 			} else { //other type of auth...
                                 $auth = array_search($s['password'], $auth_ids) or 1;
@@ -141,7 +141,7 @@ if (isset($_REQUEST['u']) and
                                 $homelink";
                         } elseif (!isset($auth)) {
                                 $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>".
-                                        q($email)."</strong>$homelink</div>";
+                                        q($email)."</strong></div>$homelink";
                         }
                 }
         } else {
