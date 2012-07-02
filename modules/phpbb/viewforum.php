@@ -270,7 +270,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 			}
 			$pagination .= "&nbsp;</span></strong>";
 		}
-		$tool_content .= "\n<td><a href='$topiclink'><b>$topic_title</b></a>$pagination</td>";
+		$tool_content .= "\n<td><a href='$topiclink'><b>".q($topic_title)."</b></a>$pagination</td>";
 		$tool_content .= "\n<td class='center'>$replies</td>";
 		$tool_content .= "\n<td class='center'>". q($myrow['prenom']) ." ". q($myrow['nom']) ."</td>";
 		$tool_content .= "\n<td class='center'>$myrow[topic_views]</td>";

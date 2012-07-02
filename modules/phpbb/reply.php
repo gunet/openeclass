@@ -259,7 +259,7 @@ if (isset($_POST['submit'])) {
 
 	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;topic=$topic&forum=$forum' method='post'>
 	<fieldset>
-        <legend>$langTopicAnswer: $topic_title</legend>
+        <legend>$langTopicAnswer: ".q($topic_title)."</legend>
 	<table class='tbl' width='100%'>
         <tr>
         <td>$langBodyMessage:";
