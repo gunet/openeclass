@@ -2370,7 +2370,13 @@ function removeDir($dirPath)
 	}
 }
 
-
+/**
+ * Generate a token verifying some info
+ * 
+ * @param  string  $info           - The info that will be verified by the token
+ * @param  boolean $need_timestamp - Whether the token will include a timestamp
+ * @return string  $ret            - The new token
+ */
 function token_generate($info, $need_timestamp=false)
 {
         if ($need_timestamp) {
@@ -2382,6 +2388,14 @@ function token_generate($info, $need_timestamp=false)
         return $ts . hash_hmac('ripemd160', $ts.$info, $code_key);
 }
 
+/**
+ * Validate a token verifying some info
+ * 
+ * @param  string  $info           - The info that will be verified by the token
+ * @param  string  $token          - The token to verify
+ * @param  int     $ts_valid_time  - Period of validity of token in seconds, if token includes a timestamp
+ * @return boolean $ret            - True if the token is valid, false otherwise
+ */
 function token_validate($info, $token, $ts_valid_time=0)
 {
         $data = explode('-', $token);
