@@ -41,7 +41,7 @@ function work_secret($id)
 {
 	global $course_id, $workPath, $coursePath;
 	
-	$res = db_query("SELECT secret_directory FROM assignment WHERE course_id = $course_id AND id = '$id'");
+	$res = db_query("SELECT secret_directory FROM assignment WHERE course_id = ". quote($course_id) ." AND id = '$id'");
 	if ($res) {
 		$secret = mysql_fetch_row($res);
 		if (!empty($secret[0])) {
