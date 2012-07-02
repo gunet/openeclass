@@ -32,13 +32,13 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
-        $send_mail = isset($_POST['send_mail']) && q($_POST['send_mail']);
+        $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
         $unparsed_lines = '';
         $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
         $facid = intval($_POST['facid']);
-        $am = q($_POST['am']);
-        $fields = preg_split('/[ \t,]+/', q($_POST['fields']), -1, PREG_SPLIT_NO_EMPTY);
+        $am = $_POST['am'];
+        $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
                         $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
                 }
         }
         $numfields = count($fields);
-        $line = strtok(q($_POST['user_info']), "\n");
+        $line = strtok($_POST['user_info'], "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
@@ -77,7 +77,7 @@ if (isset($_POST['submit'])) {
                                                                             $facid,
                                                                             $nom,
                                                                             $prenom,
-                                                                            q($_POST['prefix']));
+                                                                            $_POST['prefix']);
                                 }
                                 if (!isset($info['password'])) {
                                         $info['password'] = create_pass();
@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
                                                    $facid,
                                                    @$info['id'],
                                                    @$info['phone'],
-                                                   q($_POST['lang']),
+                                                   $_POST['lang'],
                                                    $send_mail);
                                 if ($new === false) {
                                         $unparsed_lines .= q($line . "\n" . $error . "\n");
@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
                 $line = strtok("\n");
         }
         if (!empty($unparsed_lines)) {
-                $tool_content .= "<p><b>$langErrors</b></p><pre>$unparsed_lines</pre>";
+                $tool_content .= "<p><b>$langErrors</b></p><pre>".q($unparsed_lines)."</pre>";
         }
         $tool_content .= "<table><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
         foreach ($new_users_info as $n) {
@@ -207,7 +207,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
 				autoquote(mb_strtolower(trim($email))) .
 				", $statut, $depid, " .
                                 "$registered_at, $expires_at, '$lang', " .
-                                autoquote($am) . ', ' .
+                                quote($am) . ', ' .
                                 autoquote($phone) . ')');
         $id = mysql_insert_id();
 
