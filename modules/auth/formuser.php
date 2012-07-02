@@ -175,11 +175,11 @@ if ($all_set) {
 	}
 	// email needs verification -> mail user
 	else {
-		$code_key = get_config('code_key');
-		$hmac = hash_hmac('sha256', $username.$usermail.$request_id, base64_decode($code_key));
+		$hmac = token_generate($username.$usermail.$request_id);
 		//----------------------------- Email Verification -----------------------
 		$subject = $langMailVerificationSubject;
-		$MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&rid='.$request_id);
+		$MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?h='.$hmac.'&rid='.$request_id);
+                $emailhelpdesk = get_config('email_helpdesk');
 		if (!send_mail('', $emailhelpdesk, '', $usermail, $subject, $MailMessage, $charset)) {
 			$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$usermail,$urlServer."modules/auth/registration.php",
 				"<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");

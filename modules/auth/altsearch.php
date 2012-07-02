@@ -254,10 +254,9 @@ if ($is_valid) {
         $last_id = mysql_insert_id();
         $userObj->refresh($last_id, array(intval($depid)));
 
-                                 if ($vmail and !empty($email)) {
-                                                $code_key = get_config('code_key');
-                                                $hmac = hash_hmac('sha256', $uname.$email.$last_id, base64_decode($code_key));
-                                 }
+        if ($vmail and !empty($email)) {
+                $hmac = token_generate($uname.$email.$last_id);
+        }
 
         // Register a new user
         $password = $auth_ids[$auth];
@@ -267,8 +266,8 @@ if ($is_valid) {
                      "$langYouAreReg $siteName $langSettings $uname\n" .
                      "$langPassSameAuth\n$langAddress $siteName: " .
                      "$urlServer\n" .
-                                                                  ($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
-                                                                  "$langProblem\n$langFormula" .
+                     ($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
+                     "$langProblem\n$langFormula" .
                      "$administratorName $administratorSurname\n" .
                      "$langManager $siteName \n$langTel $telephone \n" .
                      "$langEmail: $emailhelpdesk";
@@ -367,9 +366,8 @@ if ($is_valid) {
         $tool_content .= "<p class='success'>$greeting,<br />$success<br /></p><p>$infoprof</p><br />
                           <p>&laquo; <a href='$urlServer'>$langBack</a></p>";
                         } else {
-                        // email needs verification -> mail user
-                                $code_key = get_config('code_key');
-                                $hmac = hash_hmac('sha256', $uname.$email.$request_id, base64_decode($code_key));
+                                // email needs verification -> mail user
+                                $hmac = token_generate($uname.$email.$request_id);
 
                                 $subject = $langMailVerificationSubject;
                                 $MailMessage = sprintf($mailbody1.$langMailVerificationBody1, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&rid='.$request_id);

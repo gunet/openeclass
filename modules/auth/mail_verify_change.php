@@ -61,14 +61,14 @@ if (!empty($_POST['submit'])) {
 			db_query($qry);
 		}
 		//send new code
-		$code_key = get_config('code_key');
-		$hmac = hash_hmac('sha256', $_SESSION['uname'].$email.$uid, base64_decode($code_key));
+                $hmac = token_generate($_SESSION['uname'].$email.$uid);
 		
 		$subject = $langMailChangeVerificationSubject;
-		$MailMessage = sprintf($mailbody1.$langMailVerificationChangeBody, $urlServer.'modules/auth/mail_verify.php?ver='.$hmac.'&id='.$uid);
+		$MailMessage = sprintf($mailbody1.$langMailVerificationChangeBody, $urlServer.'modules/auth/mail_verify.php?h='.$hmac.'&id='.$uid);
+                $emailhelpdesk = get_config('email_helpdesk');
 		if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
 			$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$email,$urlServer."auth/registration.php",
-				"<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
+				"<a href='mailto:".q($emailhelpdesk)."' class='mainpage'>".q($emailhelpdesk)."</a>.</p>");
 			$tool_content .= $mail_ver_error;
 		}
 		else {

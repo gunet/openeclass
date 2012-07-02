@@ -32,7 +32,7 @@ include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 $nameTools = $langMailVerify;
 
-$code = (isset($_GET['ver']) && ctype_xdigit($_GET['ver']))? $_GET['ver']: NULL;
+$code = (isset($_GET['h']) && ctype_xdigit($_GET['h']))? $_GET['h']: NULL;
 $req_id = (isset($_GET['rid']) && is_numeric($_GET['rid']))? intval($_GET['rid']): NULL;
 $u_id = (isset($_GET['id']) && is_numeric($_GET['id']))? intval($_GET['id']): NULL;
 
@@ -65,12 +65,8 @@ if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 		if (!empty($ar)) {
 			$username = $ar[1];
 			$email = $ar[2];
-
-			$code_key = get_config('code_key');
-			$hmac = hash_hmac('sha256', $username.$email.$id, base64_decode($code_key));
-
 			// success
-			if ($hmac == $code) {
+			if (token_validate($username.$email.$id, $code)) {
 				$verified_mail = intval($ar['verified_mail']);
 				// update user's application
 				if (!empty($req_id) and ($verified_mail!==1) ) {
@@ -95,7 +91,8 @@ if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 						"$langProfUname: $username\n$langProfEmail : $usermail\n" .
 						"$contactphone: $userphone\n\n\n$logo\n\n";
 
-					if (!send_mail('', $usermail, '', $emailhelpdesk, $subject, $MailMessage, $charset))  {
+                                        if (!send_mail('', $usermail, '', get_config('email_helpdesk'),
+                                                       $subject, $MailMessage, $charset))  {
 						$user_msg = $langMailErrorMessage;
 					}
 					else {

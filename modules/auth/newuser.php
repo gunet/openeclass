@@ -232,8 +232,7 @@ if (!isset($_POST['submit'])) {
                 $userObj->refresh($last_id, $departments);
 
 		if ($vmail) {
-			$code_key = get_config('code_key');
-			$hmac = hash_hmac('sha256', $uname.$email.$last_id, base64_decode($code_key));
+			$hmac = token_generate($uname.$email.$last_id);
 		}
 
 		$emailsubject = "$langYourReg $siteName";
@@ -245,7 +244,7 @@ if (!isset($_POST['submit'])) {
 			"$langYouAreReg $siteName $langSettings $uname\n" .
 			"$langPass: $password\n$langAddress $siteName: " .
 			"$urlServer\n" .
-			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?ver=".$hmac."&id=".$last_id."\n":"") .
+			($vmail?"\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer"."modules/auth/mail_verify.php?h=".$hmac."&id=".$last_id."\n":"") .
 			"$langProblem\n$langFormula\n" .
 			"$administratorName\n" .
 			"$langManager $siteName \n$langTel $telephone\n" .
