@@ -46,12 +46,12 @@
 
 /*
  * replaces some dangerous character in a string for HTML use
- * currently: ?*<>\/"|:
+ * currently: ?*<>\/"|:.
  */
 
 function replace_dangerous_char($string)
 {
-	return preg_replace('/[?*<>\\/\\\\"|:\']/', '_', $string);
+	return preg_replace('/[?*<>\\/\\\\"|:\'\.]/', '_', $string);
 }
 
 //------------------------------------------------------------------------------
