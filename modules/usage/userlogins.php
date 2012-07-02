@@ -149,7 +149,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 $table_cont .= "<tr class='odd'>";
         }
         $table_cont .= "
-                <td width=\"1\"><img src='$themeimg/arrow.png' title='bullet'></td>
+                <td width=\"1\"><img src='$themeimg/arrow.png' alt=''></td>
                 <td>";
         if ($known) {
                 $table_cont .= $user;

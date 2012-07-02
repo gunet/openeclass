@@ -142,7 +142,7 @@ if ($numoftypes > 0) {
             } else {
                 $tool_content .= "\n<tr class='odd'>";
             }
-            $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
+            $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";

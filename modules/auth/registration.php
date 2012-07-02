@@ -56,7 +56,7 @@ $tool_content .= "<table class='tbl_1' width='100%'>";
 
 if (!$disable_eclass_stud_reg) { // if we allow user registration
         $tool_content .= "<tr><th width='160'>$langOfStudent</th><td>";
-	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet'>
+	$tool_content .= "<img src='$themeimg/arrow.png' alt=''>
                                 <a href='$newuser'>$user_reg_type</a>";
         if (count($auth) > 1) {
            $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -64,7 +64,7 @@ if (!$disable_eclass_stud_reg) { // if we allow user registration
         foreach($auth as $k => $v) {
                 if ($v != 1) {  // bypass the eclass auth method, as it has already been displayed
                         $tool_content .= "<br />&nbsp;&nbsp;&nbsp;
-                                        <img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;
+                                        <img src='$themeimg/arrow.png' alt='' />&nbsp;
                                         <a href='altnewuser.php?auth=".$v."'>".get_auth_info($v)."</a>";
                 }
         }        
@@ -76,7 +76,7 @@ if (!$disable_eclass_stud_reg) { // if we allow user registration
 
 if (!$disable_eclass_prof_reg) { // if we allow teacher registration
         $tool_content .= "<tr><th>$langOfTeacher</th><td>";
-	$tool_content .= "<img src='$themeimg/arrow.png' title='bullet' alt='bullet' />
+	$tool_content .= "<img src='$themeimg/arrow.png' alt='' />
                                 <a href='formuser.php?p=1'>$langUserAccountInfo1</a>";
         if (count($auth) > 1) {
                 $tool_content .= "<br />&nbsp;&nbsp;&nbsp;&nbsp;$langUserAccountInfo4:";
@@ -84,7 +84,7 @@ if (!$disable_eclass_prof_reg) { // if we allow teacher registration
         foreach($auth as $k=>$v) {
                 if ($v != 1) {  // bypass the eclass auth method, as it has already been displayed
                         $tool_content .= "<br />&nbsp;&nbsp;&nbsp;
-                                <img src='$themeimg/arrow.png' title='bullet' alt='bullet' />&nbsp;
+                                <img src='$themeimg/arrow.png' alt='' />&nbsp;
                                 <a href='altnewuser.php?p=1&amp;auth=".$v."'>".get_auth_info($v)."</a>";
                 }
         }        

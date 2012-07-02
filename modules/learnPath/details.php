@@ -113,7 +113,7 @@ if( $learnPathName )
 	           $tool_content .= "\n    <tr class=\"odd\">";
             }
 		$tool_content .= ''."\n"
-		.'      <td width="1"><img src="'.$themeimg.'/arrow.png" alt="bullet" title="bullet" border="0"></td>'."\n"
+		.'      <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
 		.'      <td><a href="detailsUserPath.php?course='.$code_cours.'&amp;uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
 		.'      <td align="right">'
 		.disp_progress_bar($lpProgress, 1)

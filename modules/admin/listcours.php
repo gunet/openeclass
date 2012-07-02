@@ -168,7 +168,7 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 
 	$tool_content .= "
       <td width='1'>
-	<img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
+	<img style='margin-top:4px;' src='$themeimg/arrow.png' alt=''></td>
       <td><a href='{$urlServer}courses/$logs[code]/'><b>".q($logs[2])."</b>
 	</a> (".q($logs[1]).")<br /><i>".q($logs[3])."</i>
       </td>

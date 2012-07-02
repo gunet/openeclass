@@ -131,7 +131,7 @@ if(empty($search_terms)) {
 
 		  $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
 				$tool_content .= "<small>("
 				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
@@ -168,7 +168,7 @@ if(empty($search_terms)) {
                              }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 				$message = $langUnknown;
 				if ($res["lasting"] != "") {
@@ -215,7 +215,7 @@ if(empty($search_terms)) {
                    }
                 $tool_content .= "
                 <tr $class_view>
-                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                   <td>";
 				if (empty($res['comment']))  { 
 					$add_comment = "";
@@ -257,7 +257,7 @@ if(empty($search_terms)) {
                    }
                 $tool_content .= "
                 <tr $class_view>
-                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                   <td>";
 
 				if (empty($res['description'])) { 
@@ -299,7 +299,7 @@ if(empty($search_terms)) {
                    }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 
 				if (empty($res['forum_desc'])) { 
@@ -336,7 +336,7 @@ if(empty($search_terms)) {
                    }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 			$link_topic = "${urlServer}/modules/phpbb/viewforum.php?forum=$res[forum_id]";
 			$tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['topic_title']."</a>";
@@ -388,7 +388,7 @@ if(empty($search_terms)) {
                    }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 
 				if (empty($res['description'])) { 
@@ -431,7 +431,7 @@ if(empty($search_terms)) {
                    }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 
 				if (empty($res['description'])) {
@@ -469,7 +469,7 @@ if(empty($search_terms)) {
                     }
                   $tool_content .= "
                   <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                     <td>";
 
 		    if (empty($res['description'])) {
@@ -514,7 +514,7 @@ if(empty($search_terms)) {
 			      }
 			    $tool_content .= "
 			    <tr $class_view>
-			      <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+			      <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
 			      <td>";
 	  
 			      if (empty($res['comments'])) {
@@ -554,7 +554,7 @@ if(empty($search_terms)) {
 			      }
 			      $tool_content .= "
 				<tr $class_view>
-			      <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+			      <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
 			      <td>";
 				if (empty($res2['comments'])) {
 					$comments_text = "";

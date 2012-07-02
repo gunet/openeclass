@@ -141,7 +141,7 @@ if ($is_editor) {
                 $id = intval($_REQUEST['id']);
                 $work_title = db_query_get_single_value("SELECT title FROM assignments
                                                                 WHERE id = $id");
-                $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours&id=$id",
+                $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id",
                                      'name' => $work_title);
                 if (isset($_POST['on_behalf_of'])) {
                         if (isset($_POST['user_id'])) {
@@ -226,7 +226,8 @@ draw($tool_content, 2, null, $head_content.$local_head);
 // Show details of a student's submission to professor
 function show_submission($sid)
 {
-        global $tool_content, $works_url, $langSubmissionDescr, $langNotice3, $code_cours;
+        global $tool_content, $works_url, $langSubmissionDescr, $langNotice3, $code_cours,
+               $nameTools, $navigation;
 
         $nameTools = $langWorks;
         $navigation[] = $works_url;
@@ -262,12 +263,13 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
         mkdir("$workPath/$secret",0777);
 }
 
-function submit_work($id, $on_behalf_of)
+function submit_work($id, $on_behalf_of=null)
 {
         global $tool_content, $workPath, $uid, $cours_id, $works_url,
                $langUploadSuccess, $langBack, $langUploadError, $currentCourseID,
                $langExerciseNotPermit, $langUnwantedFiletype, $code_cours,
-               $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment;
+               $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment,
+               $navigation, $langNoAssign;
 
         if (isset($on_behalf_of)) {
                 $user_id = $on_behalf_of;
@@ -283,11 +285,15 @@ function submit_work($id, $on_behalf_of)
                                 // user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                         FROM assignments WHERE id = $id");
-                                $row = mysql_fetch_array($res);
-                                if ($row['time'] < 0 and !$on_behalf_of) {
-                                        $submit_ok = FALSE; // after assignment deadline
+                                if ($res and mysql_num_rows($res) == 1) {
+                                        $row = mysql_fetch_array($res);
+                                        if ($row['time'] < 0 and !$on_behalf_of) {
+                                                $submit_ok = FALSE; // after assignment deadline
+                                        } else {
+                                                $submit_ok = TRUE; // before deadline
+                                        }
                                 } else {
-                                        $submit_ok = TRUE; // before deadline
+                                        $tool_content .= "<p class='caution'>$langNoAssign</p>";
                                 }
                         } else {
                                 //user NOT registered to this lesson
@@ -299,8 +305,8 @@ function submit_work($id, $on_behalf_of)
         $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = $id");
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
-        $nav[] = $works_url;
-        $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $row['title']);
+        $navigation[] = $works_url;
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $row['title']);
 
         if ($submit_ok) {
                 if ($group_sub) {
@@ -328,8 +334,8 @@ function submit_work($id, $on_behalf_of)
                 }
 
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                        $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                        $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id\">$langBack</a></p><br />";
+                        $tool_content .= "<div class='caution'>$langUnwantedFiletype: ".q($_FILES['userfile']['name']).
+                                "</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBack</a></p></div>";
                         return;
                 }
                 $secret = work_secret($id);
@@ -388,12 +394,12 @@ function submit_work($id, $on_behalf_of)
                                         grade_email_notify($id, $sid, $email_grade, $email_comments);
                                 }
                         }
-                        $tool_content .= "<p class='success'>$msg2<br />$msg1<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBack</a></p><br />";
+                        $tool_content .= "<div class='success'><p>$msg2</p><p>$msg1</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBack</a></p></div>";
                 } else {
-                        $tool_content .= "<p class='caution'>$langUploadError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p><br />";
+                        $tool_content .= "<div class='caution'><p>$langUploadError</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p></div>";
                 }
         } else { // not submit_ok
-                $tool_content .="<p class='caution'>$langExerciseNotPermit<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p></br>";
+                $tool_content .="<div class='caution'><p>$langExerciseNotPermit</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p></div>";
         }
 }
 
@@ -458,23 +464,22 @@ function show_edit_assignment($id)
 
 	$description = q($row['description']);
         $textarea = rich_text_editor('desc', 4, 20, $row['description']);
-	$tool_content .= <<<cData
-    <form action="$_SERVER[SCRIPT_NAME]?course=$code_cours" method="post" onsubmit="return checkrequired(this, 'title');">
-    <input type="hidden" name="id" value="$id" />
-    <input type="hidden" name="choice" value="do_edit" />
+	$tool_content .= "
+    <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post' onsubmit=\"return checkrequired(this, 'title');\">
+    <input type='hidden' name='id' value='$id'>
+    <input type='hidden' name='choice' value='do_edit'>
     <fieldset>
     <legend>$m[WorkInfo]</legend>
     <table class='tbl'>
     <tr>
       <th>$m[title]:</th>
-      <td><input type="text" name="title" size="45" value="${row['title']}" /></td>
+      <td><input type='text' name='title' size='45' value='".q($row['title'])."'></td>
     </tr>
     <tr>
       <th valign='top'>$m[description]:</th>
       <td>$textarea</td>
-    </tr>
-cData;
-	$comments = trim($row['comments']);
+    </tr>";
+	$comments = q(trim($row['comments']));
         if (!empty($comments)) {
                 $tool_content .= "
     <tr>
@@ -484,7 +489,7 @@ cData;
         }
 
 	if ($row['group_submissions'] == '0') {
-                $group_checked_0 = ' checked="1"';
+                $group_checked_0 = ' checked';
                 $group_checked_1 = '';
         } else {
                 $group_checked_0 = '';
@@ -510,17 +515,18 @@ cData;
     </fieldset>
     </form>";
 
-    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</ul></div>";
+    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></div>";
 }
 
 // edit assignment
 function edit_assignment($id)
 {
 
-	global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langEdit, $code_cours, $works_url;
+        global $tool_content, $langBackAssignment, $langEditSuccess, $langEditError, $langEdit,
+               $code_cours, $works_url, $navigation;
 
-	$nav[] = $works_url;
-	$nav[] = array("url"=>"$_SERVER[SCRIPT_NAME]?id=$id", "name"=> $_POST['title']);
+	$navigation[] = $works_url;
+	$navigation[] = array("url"=>"$_SERVER[SCRIPT_NAME]?id=$id", "name"=> $_POST['title']);
 
         if (!isset($_POST['comments'])) {
                 $comments = "''";
@@ -532,9 +538,9 @@ function edit_assignment($id)
 		comments=$comments, deadline=".autoquote($_POST['WorkEnd'])." WHERE id='$id'")) {
 
         $title = autounquote($_POST['title']);
-	$tool_content .="\n  <p class='success'>$langEditSuccess<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBackAssignment '$title'</a></p><br />";
+	$tool_content .="\n  <p class='success'>$langEditSuccess<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBackAssignment '".q($title)."'</a></p><br />";
 	} else {
-	$tool_content .="\n  <p class='caution'>$langEditError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&id=$id'>$langBackAssignment '$title'</a></p><br />";
+	$tool_content .="\n  <p class='caution'>$langEditError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBackAssignment '".q($title)."'</a></p><br />";
 	}
 }
 
@@ -559,41 +565,43 @@ function show_student_assignment($id)
 {
 	global $tool_content, $m, $uid, $langSubmitted, $langSubmittedAndGraded, $langNotice3,
                $works_url, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
-               $currentCourseID, $cours_id, $code_cours;
+               $currentCourseID, $cours_id, $code_cours, $navigation, $langNoAssign;
 
+        $navigation[] = $works_url;
         $user_group_info = user_group_info($uid, $cours_id);
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM `$currentCourseID`.assignments
                                  WHERE id = $id");
-        	
-	$row = mysql_fetch_array($res);
+        if ($res and mysql_num_rows($res) == 1) {
+                $row = mysql_fetch_array($res);
 
-	$nav[] = $works_url;
+                assignment_details($id, $row);
 
-	assignment_details($id, $row);
+                $submit_ok = ($row['time'] > 0);
 
-        $submit_ok = ($row['time'] > 0);
-
-	if (!$uid) {
-		$tool_content .= "<p>$langUserOnly</p>";
-		$submit_ok = FALSE;
-	} elseif ($GLOBALS['statut'] == 10) {
-		$tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
-		$submit_ok = FALSE;
-	} else {
-                foreach (find_submissions($row['group_submissions'],
-                                          $uid, $id, $user_group_info) as $sub) {
-                          if ($sub['grade'] != '') {
-                                  $submit_ok = false;
-                          }
-                          show_submission_details($sub['id']);
+                if (!$uid) {
+                        $tool_content .= "<p>$langUserOnly</p>";
+                        $submit_ok = FALSE;
+                } elseif ($GLOBALS['statut'] == 10) {
+                        $tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
+                        $submit_ok = FALSE;
+                } else {
+                        foreach (find_submissions($row['group_submissions'],
+                                                  $uid, $id, $user_group_info) as $sub) {
+                                  if ($sub['grade'] != '') {
+                                          $submit_ok = false;
+                                  }
+                                  show_submission_details($sub['id']);
+                        }
                 }
-	}
-	if ($submit_ok) {
-		show_submission_form($id, $user_group_info);
-	}
-	$tool_content .= "<br/>
-            <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p>";
+                if ($submit_ok) {
+                        show_submission_form($id, $user_group_info);
+                }
+                $tool_content .= "<br/>
+                        <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p>";
+        } else {
+                $tool_content .= "<p class='caution'>$langNoAssign</p>";
+        }
 }
 
 
@@ -666,7 +674,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
 // Print a box with the details of an assignment
 function assignment_details($id, $row, $message = null)
 {
-        global $tool_content, $is_editor, $code_cours, $themeimg, $m, $langDaysLeft, 
+        global $tool_content, $is_editor, $code_cours, $themeimg, $m, $langDaysLeft,
                $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
                $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
                $langSaved, $langGraphResults;
@@ -701,7 +709,7 @@ function assignment_details($id, $row, $message = null)
         <table class='tbl'>
         <tr>
           <th width='150'>$m[title]:</th>
-          <td>$row[title]</td>
+          <td>".q($row['title'])."</td>
         </tr>";
         $tool_content .= "
         <tr>
@@ -712,7 +720,7 @@ function assignment_details($id, $row, $message = null)
 		$tool_content .= "
                 <tr>
                   <th class='left'>$m[comments]:</th>
-                  <td>$row[comments]</td>
+                  <td>".q($row['comments'])."</td>
                 </tr>";
 	}
 	$tool_content .= "
@@ -755,7 +763,7 @@ function sort_link($title, $opt, $attrib = '')
 	global $tool_content, $code_cours;
 	$i = '';
 	if (isset($_REQUEST['id'])) {
-		$i = "&id=$_REQUEST[id]";
+		$i = "&amp;id=$_REQUEST[id]";
 	}
 	if (@($_REQUEST['sort'] == $opt)) {
 		if (@($_REQUEST['rev'] == 1)) {
@@ -764,7 +772,7 @@ function sort_link($title, $opt, $attrib = '')
 			$r = 1;
 		}
 		$tool_content .= "
-                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sort=$opt&rev=$r$i'>" ."$title</a></th>";
+                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sort=$opt&amp;rev=$r$i'>" ."$title</a></th>";
 	} else {
 		$tool_content .= "
                   <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;sort=$opt$i'>$title</a></th>";
@@ -779,14 +787,15 @@ function show_assignment($id, $message = false, $display_graph_results = false)
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
                $mysqlMainDb, $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
-               $nameTools, $langGraphResults, $m, $code_cours, $themeimg, $works_url;
+               $nameTools, $langGraphResults, $m, $code_cours, $themeimg, $works_url,
+               $navigation;
 
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignments	
+                                 FROM assignments
                                  WHERE id = $id");
 	$row = mysql_fetch_array($res);
 
-	$nav[] = $works_url;
+	$navigation[] = $works_url;
 	if ($message) {
 		assignment_details($id, $row, $message);
 	} else {
@@ -820,10 +829,10 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 db_query("SELECT COUNT(*)
                                                  FROM `$GLOBALS[code_cours]`.assignment_submit AS assign,
                                                       `$mysqlMainDb`.user AS user
-                                                 WHERE assign.assignment_id = $id AND 
+                                                 WHERE assign.assignment_id = $id AND
                                                        user.user_id = assign.uid AND
                                                        assign.grade <> ''"));
-	
+
 	$num_results = mysql_num_rows($result);
         if ($num_results > 0) {
                 if ($num_results == 1) {
@@ -880,7 +889,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 }
 
                                 $uid_2_name = display_user($row['uid']);
-                                $stud_am = mysql_fetch_array(db_query("SELECT am from $mysqlMainDb.user WHERE user_id = '$row[uid]'"));
+                                $stud_am = mysql_fetch_array(db_query("SELECT am from `$mysqlMainDb`.user WHERE user_id = '$row[uid]'"));
                                 if ($i%2 == 1) {
                                         $row_color = "class='even'";
                                 } else {
@@ -937,7 +946,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		  <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
 		  </form>";
                 }
-	
+
                 if ($display_graph_results) { // display pie chart with grades results
                         if ($gradesExists) {
                                 $chart = new PieChart(300, 200);
@@ -997,7 +1006,7 @@ function show_student_assignments()
                         $class = $k%2? 'odd': 'even';
                         $tool_content .= "
                                 <tr class='$class'>
-                                    <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
+                                    <td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
                                     <td><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]'>$title_temp</a></td>
                                     <td width='150' align='center'>".nice_format($row['deadline'], TRUE);
                         if ($row['time'] > 0) {
@@ -1111,10 +1120,10 @@ function show_assignments($message = null)
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' alt='$deactivate_temp'></a>";
 			} else {
 				$activate_temp = htmlspecialchars($m['activate']);
-				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
+				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' alt='$activate_temp'></a>";
 			}
 			$tool_content .= "&nbsp;</td></tr>";
                         $index++;
@@ -1340,7 +1349,7 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments)
         if ($comments) {
                 $body .= "$m[gradecomments]: $comments\n";
         }
-        $body .= "\n$m[link_follows]\n{$urlServer}modules/work/work.php?course=$currentCourseID&id=$assignment_id\n";
+        $body .= "\n$m[link_follows]\n{$urlServer}modules/work/work.php?course=$currentCourseID&amp;id=$assignment_id\n";
         if (!$group or !$info['group_id']) {
                 send_mail_to_user_id($info['uid'], $subject, $body);
         } else {

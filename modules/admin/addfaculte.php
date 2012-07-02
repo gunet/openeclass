@@ -103,7 +103,7 @@ if (!isset($_GET['a'])) {
 			$tool_content .= "\n<tr class='odd'>";
 		}
 		$tool_content .= "\n<td width='1'>
-		<img src='$themeimg/arrow.png' title='bullet' /></td>";
+		<img src='$themeimg/arrow.png' alt=''></td>";
 		$tool_content .= "\n<td>".htmlspecialchars($logs[1])."</td>";
 		$tool_content .= "\n<td width='100' class='smaller center'>".htmlspecialchars($logs[0])."</td>";
 		// Give administrator a link to delete or edit a faculty

@@ -296,7 +296,7 @@ $tool_content .= "
                                         }
                                 }
 				$tool_content .= "
-                                        <td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
+                                        <td width='1'><img src='$themeimg/arrow.png' alt=''></td>
 					<td><a href='{$urlServer}courses/$logs[code]/'>".q($logs['code'])."</a></td>
 					<td>".q($logs['intitule'])."</td><td align='center'>";
 				if ($logs['reg_date'] == '0000-00-00') {
@@ -315,14 +315,14 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/delete.png' title='$langDelete'></a></td>
+						<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/delete.png' title='$langDelete'></img></a></td></tr>\n";
+						<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></img></a></td></tr>\n";
 						break;
 				}
                                 $k++;

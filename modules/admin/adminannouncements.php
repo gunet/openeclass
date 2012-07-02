@@ -274,7 +274,7 @@ if ($displayAnnouncementList == true) {
 			}
 			$myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
 			$tool_content .= "<tr class='$classvis'>\n";
-                        $tool_content .= "<td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>";
+                        $tool_content .= "<td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' alt=''></td>";
 			$tool_content .= "<td width='180'><b>".q($myrow['title'])."</b><br><span class='smaller'>$myrow[date]</span></td>\n";
 			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>\n";
 			$tool_content .= "<td width='60'>

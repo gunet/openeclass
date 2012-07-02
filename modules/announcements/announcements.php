@@ -309,7 +309,7 @@ if ($is_editor) {
 		    }
 		}
 		$tool_content .= "<td width='16' valign='top'>
-			<img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+			<img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><b>";
 		if (empty($myrow['title'])) {
 		    $tool_content .= $langAnnouncementNoTille;

@@ -50,7 +50,7 @@ class DHTML_Calendar {
     function get_load_files_code() {
         $code  = ( '<link rel="stylesheet" type="text/css" media="all" href="' .
                    $this->calendar_lib_path . $this->calendar_theme_file .
-                   '" />' . NEWLINE );
+                   '">' . NEWLINE );
         $code .= ( '<script type="text/javascript" src="' .
                    $this->calendar_lib_path . $this->calendar_file .
                    '"></script>' . NEWLINE );

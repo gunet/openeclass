@@ -881,28 +881,28 @@ function urlenc($string)
 
 function user_get_data($user_id)
 {
-	global $mysqlMainDb;
-	mysql_select_db($mysqlMainDb);
+        global $mysqlMainDb;
+        mysql_select_db($mysqlMainDb);
 
-    $sql = 'SELECT  `user_id`,
-                    `nom` AS `lastname` ,
-                    `prenom`  AS `firstname`,
-                    `username`,
-                    `email`,
-                    `phone` AS `phone`,
-                    `statut` AS `status`
-		      	FROM   `user`
-		            WHERE `user_id` = "' . (int) $user_id . '"';
-    $result = db_query($sql);
+        $sql = 'SELECT  `user_id`,
+                `nom` AS `lastname` ,
+                `prenom`  AS `firstname`,
+                `username`,
+                `email`,
+                `phone` AS `phone`,
+                `statut` AS `status`
+                FROM   `user`
+                WHERE `user_id` = "' . (int) $user_id . '"';
+        $result = db_query($sql);
 
-    if (mysql_num_rows($result)) {
-        $data = mysql_fetch_array($result);
-        return $data;
-    }
-    else
-    {
-        return null;
-    }
+        if (mysql_num_rows($result)) {
+                $data = mysql_fetch_array($result);
+                return $data;
+        }
+        else
+        {
+                return null;
+        }
 }
 
 
@@ -1655,7 +1655,7 @@ function openDocsPicker(field_name, url, type, win) {
 			                      $text));
 
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
-	       str_replace('{','&#123;', $text) .
+	       q(str_replace('{','&#123;', $text)) .
 	       "</textarea>\n";
 }
 
@@ -2041,9 +2041,9 @@ function profile_image($uid, $size, $default = FALSE)
 	global $urlServer, $themeimg;
 	
 	if (!$default) {
-		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".q(uid_to_name($uid))."'>";
+		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' alt='".q(uid_to_name($uid))."'>";
 	} else {
-		return "<img src='$themeimg/default_$size.jpg' title='".q(uid_to_name($uid))."' />";
+		return "<img src='$themeimg/default_$size.jpg' alt='".q(uid_to_name($uid))."' />";
 	}
 }
 

@@ -180,11 +180,11 @@ function printPolls() {
                                 }
                                 if ($is_editor) {
                                         $tool_content .= "
-                        <td width='16'><img src='$themeimg/$arrow_png.png' title='bullet' /></td>
+                        <td width='16'><img src='$themeimg/$arrow_png.png' alt='' /></td>
                         <td><a href='pollresults.php?course=$code_cours&amp;pid=$pid'>$thepoll[name]</a>";
                                 } else {
                                         $tool_content .= "
-                        <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td><img style='border:0px; padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
                         <td>";
                                         if (($has_participated[0] == 0) and $poll_ended == 0) {
                                                 $tool_content .= "<a href='pollparticipate.php?course=$code_cours&amp;UseCase=1&pid=$pid'>$thepoll[name]</a>";

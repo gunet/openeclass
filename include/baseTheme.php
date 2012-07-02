@@ -275,7 +275,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 		$t->set_var ( 'SEARCH_TITLE', $langSearch );
 		$t->set_var ( 'SEARCH_ADVANCED', $langAdvancedSearch );
 
-		$t->set_var ( 'TOOL_NAME', $nameTools );
+		$t->set_var ( 'TOOL_NAME', q($nameTools) );
 
 		if ($is_editor) {
 			$t->set_var ( 'ACTIVATE_MODULE', $mod_activation );
@@ -352,33 +352,33 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 				$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 				$t->set_var ( 'BREAD_LINK', $step['url'] );
-				$t->set_var ( 'BREAD_TEXT', ellipsize($step['name'], 64) );
+				$t->set_var ( 'BREAD_TEXT', q(ellipsize($step['name'], 64) ));
 				$t->set_var ( 'BREAD_ARROW', '&#187;' );
 				$t->set_var ( 'BREAD_HREF_END', '</a>' );
 				$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );
 
 				$breadIterator ++;
 
-				$pageTitle .= " | " . $step ["name"];
+				$pageTitle .= ' | ' . q($step['name']);
 			}
 		}
 
 		if (isset ( $page_name ) && ! $homePage) {
 
 			$t->set_var ( 'BREAD_HREF_FRONT', '' );
-			$t->set_var ( 'BREAD_TEXT', $page_name );
+			$t->set_var ( 'BREAD_TEXT', q($page_name) );
 			$t->set_var ( 'BREAD_ARROW', '&#187;' );
 			$t->set_var ( 'BREAD_HREF_END', '' );
 
 			$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );
 			$breadIterator ++;
-			$pageTitle .= " | " . $page_name;
+			$pageTitle .= " | " . q($page_name);
 
 		}
 
 		$t->set_block ( 'mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd' );
 
-		for($breadIterator2 = 0; $breadIterator2 < $breadIterator; $breadIterator2 ++) {
+		for ($breadIterator2 = 0; $breadIterator2 < $breadIterator; $breadIterator2 ++) {
 
 			$t->parse ( 'breadCrumbEnd', 'breadCrumbEndBlock', true );
 		}

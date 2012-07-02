@@ -248,7 +248,7 @@ if($countUser > 0) {
                                 $tool_content .= "<tr class='odd'>";
                         }
                         $tool_content .= "<td width='1'>
-                        <img src='$themeimg/arrow.png' title='bullet' /></td>
+                        <img src='$themeimg/arrow.png' alt=''></td>
                         <td>".q($logs['nom'])."</td>
                         <td>".q($logs['prenom'])."</td>
                         <td>".q($logs['username'])."</td>

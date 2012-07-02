@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 	$department = $c['faculteid'];
 	$type = $c['type'];
 	$visible = $c['visible'];
-	$visibleChecked[$visible] = " checked='1'";
+	$visibleChecked[$visible] = " checked";
 	$fake_code = q($c['fake_code']);
 	$titulary = q($c['titulaires']);
 	$languageCourse	= $c['languageCourse'];

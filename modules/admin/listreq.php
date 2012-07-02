@@ -101,7 +101,7 @@ if (!empty($show) and $show == 'closed') {
 	              		$tool_content .= "\n  <tr class='odd'>";
 	            	}
 	        	$tool_content .= "<td width='1'>
-			<img style='border:0px;' src='$themeimg/arrow.png' title='bullet'></td>";
+			<img style='border:0px;' src='$themeimg/arrow.png' alt=''></td>";
 			$tool_content .= '<td>'.q($req['name'])."&nbsp;".q($req['surname'])."";
 			$tool_content .= '<td>'.q($req['uname']).'</td>';
 			$tool_content .= '<td>'.q(find_faculty_by_id($req['faculty_id'])).'</td>';
@@ -140,7 +140,7 @@ if (!empty($show) and $show == 'closed') {
 	              		$tool_content .= "\n  <tr class=\"odd\">";
 	            	}
 	    		$tool_content .= "<td width='1'>
-			<img src='$themeimg/arrow.png' title='bullet'></td>";
+			<img src='$themeimg/arrow.png' alt=''></td>";
 			$tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
                         $tool_content .= "<td>".q($req['uname'])."&nbsp;</td>";
 			$tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
@@ -252,7 +252,7 @@ else
                               $tool_content .= "\n<tr class='odd'>";
                         }
                         $tool_content .= "<td align='right' width='1'>
-                        <img src='$themeimg/arrow.png' title='bullet'></td>";
+                        <img src='$themeimg/arrow.png' alt=''></td>";
                         $tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
                         $tool_content .= "<td>".q($req['uname'])."</td>";
                         $tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
