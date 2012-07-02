@@ -2369,3 +2369,33 @@ function removeDir($dirPath)
 		rmdir( $dirPath ) ;
 	}
 }
+
+
+function token_generate($module, $user_id, $need_timestamp=false)
+{
+        if ($need_timestamp) {
+                $ts = sprintf('%x-', time());
+        } else {
+                $ts = '';
+        }
+        $code_key = get_config('code_key');
+        return $ts.hash('ripemd160', $ts.$module.$code_key.$user_id);
+}
+
+function token_validate($module, $user_id, $token, $ts_valid_time=0)
+{
+        $data = explode('-', $token);
+        if (count($data) > 1) {
+                $timediff = time() - hexdec($data[0]);
+                if ($timediff > $ts_valid_time) {
+                        return false;
+                }
+                $token = $data[1];
+                $ts = $data[0].'-';
+        } else {
+                $ts = '';
+        }
+        $code_key = get_config('code_key');
+        return $token == hash('ripemd160', $ts.$module.$code_key.$user_id);
+}
+

@@ -116,13 +116,14 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 
 // Determine the correct From: header
 function from($from, $from_address)
-{     
-        global $langVia, $siteName, $emailAdministrator, $charset;
+{
+        global $langVia, $siteName, $charset;
 
-        if (empty($from_address) or !get_config('email_from')) {                
+        if (empty($from_address) or !get_config('email_from')) {
+                $from_address = get_config('email_sender');
                 return "From: " . qencode($siteName, $charset) .
-                       " <$emailAdministrator>\n";                
-        } else {                
+                       " <$from_address>\n";
+        } else {
 		return "From: " .
                        qencode("$from ($langVia: $siteName)", $charset) .
                        " <$from_address>\n";
