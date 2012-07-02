@@ -72,7 +72,7 @@ class Log {
                         while ($r = mysql_fetch_array($sql)) {
                                 $tool_content .= "<tr>";
                                 $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";               
-                                $tool_content .= "<td>".display_user($r['user_id'])."</td>";
+                                $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
                                 $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
                                 $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
                                 $tool_content .= "</tr>";

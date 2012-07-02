@@ -274,7 +274,7 @@ if($countUser > 0) {
           <th width='170'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=u$header_link'>$langUsername</a></div></th>
           <th scope='col'>$langEmail</th>
           <th scope='col'><a href='$_SERVER[SCRIPT_NAME]?ord=s$header_link'>$langProperty</a></th>
-          <th scope='col' colspan='4'>$langActions</th>
+          <th scope='col'>$langActions</th>
         </tr>";
         $k = 0;
         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -336,11 +336,11 @@ if($countUser > 0) {
                                 $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $changetip = q("$langChangeUserAs $logs[username]");
-                                $tool_content .= "<td width='80'>
+                                $tool_content .= "<td width='100'>
                                         <a href='edituser.php?u=$logs[user_id]'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
                                         <a href='unreguser.php?u=$logs[user_id]'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
                                         <a href='userstats.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langStat' alt='$langStat'></a>
-
+                                        <a href='userlogs.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langActions' alt='$langActions'></a>
                                         <a href='change_user.php?username=".urlencode($logs['username'])."'><img src='$themeimg/log_as.png' title='$changetip' alt='$changetip'></a>
                                 </td>\n";
                         }

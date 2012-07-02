@@ -310,9 +310,9 @@ function uid_to_username($uid)
 // Return HTML for a user - first parameter is either a user id (so that the
 // user's info is fetched from the DB) or a hash with user_id, prenom, nom,
 // email, or an array of user ids or user info arrays
-function display_user($user, $print_email = false)
+function display_user($user, $print_email = false, $icon = true)
 {
-        global $mysqlMainDb, $langAnonymous, $langAm, $urlAppend;
+        global $langAnonymous, $urlAppend;
 
         if (count($user) == 0) {
                 return '-';
@@ -329,7 +329,7 @@ function display_user($user, $print_email = false)
                 }
                 return $html;
         } elseif (!is_array($user)) {
-	        $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user", $mysqlMainDb);
+	        $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user");
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
@@ -341,11 +341,13 @@ function display_user($user, $print_email = false)
                 $email = trim($user['email']);
                 $print_email = $print_email && !empty($email);
         }
-	if ($user['has_icon']) {
-		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
-	} else {
-		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
-	}
+        if ($icon) {
+                if ($user['has_icon']) {
+                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
+                } else {
+                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
+                }
+        }
         return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 

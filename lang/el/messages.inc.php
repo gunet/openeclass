@@ -2913,6 +2913,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langDumpUserDurationToFile = "Σε αρχείο τύπου csv";
  $langCodeUTF = "κωδικοποίηση UTF-8";
  $langCodeWin= "κωδικοποίηση Windows-1253";
+ $langNoUserSelected = "Δεν επιλέξατε χρήστη";
  
 /*************************************************
 * log.php

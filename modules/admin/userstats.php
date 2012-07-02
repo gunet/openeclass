@@ -33,18 +33,18 @@
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/libchart/classes/libchart.php';
-$nameTools = $langVersion;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 
 $nameTools = $langUserStats;
+$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+$navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
 $u = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
 
 if(!empty($u))	
 {
-	$sql = db_query("SELECT nom, prenom, username FROM user WHERE user_id = $u");
+	$sql = db_query("SELECT username FROM user WHERE user_id = $u");
 	$info = mysql_fetch_array($sql);
-    	$tool_content .= "<p class='title1'>$langUserStats: <b>$info[2]</b></p>
+    	$tool_content .= "<p class='title1'>$langUserStats: <b>$info[username]</b></p>
 		<p><b>$langStudentParticipation</b></p>";
         $sql = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
                            FROM course AS a 
@@ -54,7 +54,7 @@ if(!empty($u))
                           WHERE b.user_id = $u
                        ORDER BY b.statut, hierarchy.name");
 
-	// αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
+	// display user courses (if any)
 	if (mysql_num_rows($sql) > 0) {
     		$tool_content .= "
 		<table class='tbl_alt' width='99%' align='left'>
@@ -71,13 +71,13 @@ if(!empty($u))
                                 $tool_content .= "<tr class='odd'>";
                         }
 			$tool_content .= "<td class='bullet' width='1'></td>
-				<td align='left'>".htmlspecialchars($logs[0])." (".htmlspecialchars($logs[1]).")</td>
-				<td><div align='center'>";
-			switch ($logs[2]) {
-				case 1:
+				<td align=''>".htmlspecialchars($logs['code'])." (".htmlspecialchars($logs['title']).")</td>
+				<td><div align='left'>";
+			switch ($logs['statut']) {
+				case USER_TEACHER:
 					$tool_content .= $langTeacher;
 					break;
-				case 5:
+				case USER_STUDENT:
 					$tool_content .= $langStudent;
 					break;
 				default:
@@ -112,7 +112,7 @@ if(!empty($u))
 			mysql_free_result($result);
 			foreach ($course_codes as $course_code) {
 				$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$u'";
-				$result = db_query($sql, $course_code);
+				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
 					$totalHits += $row['cnt'];
 					$hits[$course_code] = $row['cnt'];
@@ -138,8 +138,8 @@ if(!empty($u))
 	// End of chart display; chart unlinked at end of script.
 	$sql = "SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15";
 	
-	$leResultat = db_query($sql, $mysqlMainDb);
-	$tool_content .= "<p>$langLastUserVisits $info[2]</p>\n";
+	$result = db_query($sql);
+	$tool_content .= "<p>$langLastUserVisits $info[username]</p>\n";
 	$tool_content .= "
 	      <table class='tbl_alt' width='99%'>
 	      <tr>
@@ -147,30 +147,29 @@ if(!empty($u))
 		<th>$langAction</th>
 	      </tr>";
 	$i = 0;
-	$nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
-	$nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
-	$i=0;
-	while ($leRecord = mysql_fetch_array($leResultat)) {
-		$when = $leRecord["when"];
-		$action = $leRecord["action"];
+	$Action["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
+	$Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";	
+	while ($r = mysql_fetch_array($result)) {
+		$when = $r["when"];
+		$action = $r["action"];
 		if ($i%2 == 0) {
 			$tool_content .= "<tr>";
 		} else {
-			$tool_content .= "
-			<tr class='odd'>";
+			$tool_content .= "<tr class='odd'>";
 		}
 		$tool_content .= "<td class='bullet' width='1'></td>
 			<td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-			<td align='center'><div align='center'>".$nomAction[$action]."</div></td>
+			<td align='center'><div align='center'>".$Action[$action]."</div></td>
 		      </tr>";
 		$i++;
 	}
-	$tool_content .= "</table>\n";
-} else {
-    // Αλλιώς... τι γίνεται;
-    $tool_content .= "<p class='caution'>$langError</p>\n<p align='right'>
-	<a href='listcours.php'>$langBack</p>\n";
+	$tool_content .= "</table>";
+} else {    
+    $tool_content .= "<p class='caution'>$langNoUserSelected</p>
+                <p align='right'><a href='index.php'>$langBack</p>";
+    draw($tool_content, 3);
+    exit();
 }
 
 $tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";
-draw($tool_content,3);
+draw($tool_content, 3);

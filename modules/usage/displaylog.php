@@ -30,21 +30,11 @@ require_once 'include/log.php';
 $nameTools = $langUsersLog;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 
-$usage_defaults = array (
-        'logtype' => 0,
-        'u_user_id' => -1,
-        'u_module_id' => -1,
-        'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
-        'u_date_end' => strftime('%Y-%m-%d', strtotime('now +1 day')),
-);
-
-foreach ($usage_defaults as $key => $val) {
-        if (!isset($_POST[$key])) {
-               $$key = $val;
-        } else {
-                $$key = $_POST[$key];
-        }
-}
+$logtype = isset($_POST['logtype'])? intval($_POST['logtype']): '0';
+$u_user_id = isset($_REQUEST['u_user_id'])?intval($_REQUEST['u_user_id']):'-1';
+$u_module_id = isset($_POST['u_module_id'])? intval($_POST['u_module_id']): '-1';
+$u_date_start = isset($_POST['u_date_start'])? $_POST['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
+$u_date_end = isset($_POST['u_date_end'])? $_POST['u_date_end']: strftime('%Y-%m-%d', strtotime('now +1 day'));
 
 if (isset($_POST['submit'])) {
     $log = new Log();
@@ -103,63 +93,55 @@ while ($row = mysql_fetch_assoc($result)) {
         }
         $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
 }
-
 $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    <fieldset>
-    <legend>$langUsersLog</legend>
-    <table class='tbl'>
-    <tr>
-       <td>&nbsp;</td>
-       <td class='bold'>$langCreateStatsGraph:</td>
-    </tr>
-    <tr>
-       <td>$langLogModules :</td>
-       <td><select name='u_module_id'>";
-    $tool_content .= "<option value='-1'>$langAllModules</option>";
-    $result = db_query("SELECT module_id FROM course_module WHERE course_id = $course_id");
-    while ($row = mysql_fetch_assoc($result)) {
-             $mid = $row['module_id'];
-             $extra = '';
-             if ($u_module_id == $mid) {
-                     $extra = 'selected';
-             }
-             $tool_content .= "<option value=".$mid." $extra>".$modules[$mid]['title']."</option>";
-    }
-
-    $tool_content .= "</select></td></tr>
-    <tr>
-        <td>$langLogTypes :</td>
-        <td>";
-    $log_types = array('0' => $langAllActions,
-                        '1' => $langInsert,
-                        '2' => $langModify,
-                        '3' => $langDelete);
-    $tool_content .= selection($log_types, 'logtype', $logtype);
-    $tool_content .= "
+        <fieldset>
+        <legend>$langUsersLog</legend>
+        <table class='tbl'>
+        <tr>
+        <td>&nbsp;</td>
+        <td class='bold'>$langCreateStatsGraph:</td>
+        </tr>
+        <th class='left'>$langLogModules :</th>
+        <td><select name='u_module_id'>";
+        $tool_content .= "<option value='-1'>$langAllModules</option>";
+        foreach ($modules as $m => $mid) {
+                $extra = '';
+                if ($u_module_id == $m) {
+                        $extra = 'selected';
+                }
+                $tool_content .= "<option value=".$m." $extra>".$mid['title']."</option>";
+        }
+        $tool_content .= "</select></td></tr>
+        <tr><th class='left'>$langLogTypes :</th>
+         <td>";
+        $log_types = array('0' => $langAllActions,
+                           '1' => $langInsert,
+                           '2' => $langModify,
+                           '3' => $langDelete);
+        $tool_content .= selection($log_types, 'logtype', $logtype);
+        $tool_content .= "</td></tr>
+        <tr>
+        <th class='left'>$langStartDate :</th>
+        <td>$start_cal</td>
+        </tr>
+        <tr>
+        <th class='left'>$langEndDate :</th>
+        <td>$end_cal</td>
+        </tr>
+        <tr>
+        <th class='left' rowspan='2' valign='top'>$langUser:</td>
+        <td>$langFirstLetterUser : $letterlinks </td>
+        </tr>
+        <tr>
+        <td><select name='u_user_id'>$user_opts</select></td>
+        </tr>
+        <tr>
+        <td>&nbsp;</td>
+        <td><input type='submit' name='submit' value='$langSubmit'>
         </td>
-    </tr>
-    <tr>
-       <td>$langStartDate :</td>
-       <td>$start_cal</td>
-    </tr>
-    <tr>
-       <td>$langEndDate :</td>
-       <td>$end_cal</td>
-    </tr>
-    <tr>
-       <td rowspan='2' valign='top'>$langUser:</td>
-       <td>$langFirstLetterUser : $letterlinks </td>
-    </tr>
-    <tr>
-       <td><select name='u_user_id'>$user_opts</select></td>
-    </tr>
-    <tr>
-       <td>&nbsp;</td>
-       <td><input type='submit' name='submit' value='$langSubmit'>
-       </td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+        </tr>
+        </table>
+        </fieldset>
+        </form>";
 
 draw($tool_content, 2, null, $local_head);

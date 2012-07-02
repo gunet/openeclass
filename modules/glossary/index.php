@@ -28,7 +28,7 @@ require_once 'modules/video/video_functions.php';
 
 load_modal_box();
 
-$base_url = 'glossary.php?course=' . $course_code;
+$base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 /*
@@ -37,8 +37,6 @@ $cat_url = 'categories.php?course=' . $course_code;
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_GLOSSARY);
-
-mysql_select_db($mysqlMainDb);
 
 if ($is_editor) {
         load_js('tools.js');
