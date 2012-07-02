@@ -44,84 +44,80 @@ function check_password_editable($password)
         }
 }
 
-if (isset($_GET['do']) and $_GET['do'] == 'go') {
-	$userUID = isset($_GET['u'])?intval($_GET['u']):'';
-	$hash = isset($_GET['h'])?$_GET['h']:'';
-	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
-			WHERE `user_id` = '" . mysql_escape_string($userUID) . "'
-			AND `hash` = '" . mysql_escape_string($hash) . "'
-			AND TIME_TO_SEC(TIMEDIFF(`datetime`,NOW())) < 3600
-			", $mysqlMainDb);
-
-	if (mysql_num_rows($res) == 1) {
-		$myrow = mysql_fetch_array($res);
-		//copy pass hash (md5) from reset_pass to user table
-		$sql = "UPDATE `user` SET `password` = '".$myrow['hash']."' WHERE `user_id` = ".$myrow['user_id']."";
-		if(db_query($sql, $mysqlMainDb)) {
-			//send email to the user of his new pass (not hashed)
-			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
-			$myrow2 = mysql_fetch_array($res);
-			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
-			$tool_content .= "<div class='success'>
-                            <p>$langAccountResetSuccess1</p>
-			    <p>$text</p>
-    			    <p><a href=\"../../index.php\">$langHome</a></p></div>";
-			db_query("DELETE FROM `passwd_reset` WHERE `user_id` = '$myrow[user_id]'", $mysqlMainDb);
-			// delete passws_reset entries older from 2 days
-			db_query("DELETE FROM `passwd_reset` 
-				WHERE DATE_SUB(CURDATE(),INTERVAL 2 DAY) > `datetime`", $mysqlMainDb);
+if (isset($_REQUEST['u']) and
+    isset($_REQUEST['h']) and
+    isset($_REQUEST['ts'])) {
+        $change_ok = false;
+        $ts = intval($_REQUEST['ts']);
+	$userUID = intval($_REQUEST['u']);
+        $valid = token_validate('password', $userUID, $_REQUEST['h'], $ts);
+	$res = db_query("SELECT user_id FROM user
+                                WHERE user_id = $userUID AND
+                                      password NOT IN ('" .
+                                      implode("', '", $auth_ids) . "')");
+	if ($valid and mysql_num_rows($res) == 1) {
+                if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
+                    $_POST['newpass'] == $_POST['newpass1']) {
+                        if (db_query("UPDATE user SET `password` = ".quote(md5($_POST['newpass']))."
+                                         WHERE user_id = $userUID")) {
+                                $tool_content = "<div class='success'>
+                                                 <p>$langAccountResetSuccess1</p>
+                                                 <p><a href='$urlAppend'>$langHome</a></p></div>";
+                                $change_ok = true;
+                        }
+                } else {
+                        $tool_content = "<p class='alert1'>$langPassTwo</p>";
+                }
+		if (!$change_ok) {
+                        $tool_content = "
+        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <input type='hidden' name='ts' value='$ts'>
+        <input type='hidden' name='u' value='$userUID'>
+        <input type='hidden' name='h' value='".q($_REQUEST['h']).">
+        <fieldset>
+        <legend>$langPassword</legend>
+        <table class='tbl'>
+        <tr>
+           <th>$langNewPass1</th>
+           <td><input type='password' size='40' name='newpass' value=''></td>
+        </tr>
+        <tr>
+           <th>$langNewPass2</th>
+           <td><input type='password' size='40' name='newpass1' value=''></td>
+        </tr>
+        <tr>
+           <th>&nbsp;</th>
+           <td><input type='submit' name='submit' value='$langModify'></td>
+        </tr>
+        </table>
+        </fieldset>
+        </form>";
 		}
 	} else {
-		$tool_content = "<div class='caution'>$langAccountResetInvalidLink </div><a href=\"../../index.php\">$langHome</a></td>";
+		$tool_content = "<div class='caution'><p>$langAccountResetInvalidLink</p>
+                                 <p><a href='$urlAppend'>$langHome</a></p></td>";
 	}
-} elseif ((!isset($email) || !isset($userName) || empty($userName)) && !isset($_POST['do'])) {
-	/***** Email address entry form *****/
-	$tool_content .= "<div class='info'><p>$lang_pass_intro</p></div><br />";
-	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <fieldset>
-          <legend>$langUserData</legend>
-	  <table class='tbl' width='100%'>
-	  <tr>
-            <th width='100'>$lang_username:</th>
-	    <td><input type=\"text\" name=\"userName\" size=\"40\" /></td>
-          </tr>
-	  <tr>
-	    <th>$lang_email: </th>
-	    <td><input type=\"text\" name=\"email\" size=\"40\" /></td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td class='right'><input type=\"submit\" name=\"do\" value=\"".$lang_pass_submit."\" /></td>
-          </tr>
-	  </table>
-        </fieldset>
-	</form>";
+} elseif (isset($_POST['send_link'])) {
 
-} elseif (isset($_POST['do'])) {
-	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
-	$userName = isset($_POST['userName'])?canonicalize_whitespace($_POST['userName']):'';
+	$email = isset($_POST['email'])? mb_strtolower(trim($_POST['email'])): '';
+	$userName = isset($_POST['userName'])? canonicalize_whitespace($_POST['userName']): '';
 	/***** If valid e-mail address was entered, find user and send email *****/
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-			WHERE email = '" . mysql_escape_string($email) . "'
-			AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
+                                WHERE email = " . quote($email) . " AND
+                                      BINARY username = " . quote($userName));
 
         $found_editable_password = false;
 	if (mysql_num_rows($res) == 1) {
 		$text = $langPassResetIntro. $emailhelpdesk;
 		$text .= "$langHowToResetTitle";
 		while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
-			$is_editable = check_password_editable($s['password']);
-			if($is_editable) {
+			if (check_password_editable($s['password'])) {
                                 $found_editable_password = true;
 				//insert an md5 key to the db
 				$new_pass = create_pass();
-				//TODO: add a query to check if the newly generated password already exists in the
-				//reset-pass table. If yes, attempt to generate another one.
-				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
-				db_query($sql, $mysqlMainDb);
 				//prepare instruction for password reset
 				$text .= $langPassResetGoHere;
-				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .md5($new_pass);
+				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=$s[user_id]&h=".md5($new_pass);
 
 			} else { //other type of auth...
 				switch($s['password'])  {
@@ -187,6 +183,29 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
 	    <p>$langAccountEmailError2 $email.</p>
 	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
 	    <p><a href=\"../../index.php\">$langHome</a></p>";
+
+} else {
+	/***** Email address entry form *****/
+	$tool_content .= "<div class='info'><p>$lang_pass_intro</p></div><br />";
+	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <fieldset>
+          <legend>$langUserData</legend>
+	  <table class='tbl' width='100%'>
+	  <tr>
+            <th width='100'>$lang_username:</th>
+	    <td><input type='text' name='userName' size='40'></td>
+          </tr>
+	  <tr>
+	    <th>$lang_email: </th>
+	    <td><input type='text' name='email' size='40'></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td class='right'><input type='submit' name='send_link' value='$lang_pass_submit'></td>
+          </tr>
+	  </table>
+        </fieldset>
+	</form>";
 }
-draw($tool_content,0);
-?>
+
+draw($tool_content, 0);

@@ -166,17 +166,7 @@
                         ) TYPE = MYISAM ", $mysqlMainDb);
         }
 
-        // Table passwd_reset (used by the password reset module)
-        if (!mysql_table_exists($mysqlMainDb, 'passwd_reset'))  {
-                db_query("CREATE TABLE `passwd_reset` (
-                              `user_id` int(11) NOT NULL,
-                              `hash` varchar(40) NOT NULL,
-                              `password` varchar(8) NOT NULL,
-                              `datetime` datetime NOT NULL
-                              ) TYPE=MyISAM", $mysqlMainDb);
-        	}
-
-        // add 5 new fields to table users
+        // add 5 new fields to table user
         if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
                 echo add_field('user', 'perso', "enum('yes','no') NOT NULL default 'yes'");
         if (!mysql_field_exists("$mysqlMainDb",'user','announce_flag'))

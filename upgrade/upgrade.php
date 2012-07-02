@@ -491,6 +491,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
         if ($oldversion < '3') {
 
+                db_query("DROP TABLE IF EXISTS passwd_reset");
+
                 db_query("CREATE TABLE IF NOT EXISTS `log` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT,
                         `user_id` INT(11) NOT NULL DEFAULT 0,

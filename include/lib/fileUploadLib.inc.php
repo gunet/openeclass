@@ -493,6 +493,9 @@ function process_extracted_file($p_event, &$p_header) {
         }
         $path_components = explode('/', $stored_filename);
         $filename = php2phps(array_pop($path_components));
+        if (unwanted_file($filename)) {
+                $filename .= '.bin';
+        }
         $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
