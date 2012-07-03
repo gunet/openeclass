@@ -619,8 +619,8 @@ function pickerMenu() {
 
 	global $urlServer, $course_code, $course_id, $is_editor, $modules;
 
-        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. q($_REQUEST['docsfilter']) : '';
-        $params = "?course=$course_code&amp;embedtype=tinymce". $docsfilter;
+        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';
+        $params = "?course=$course_code&embedtype=tinymce". $docsfilter;
 
 	$sideMenuGroup = array();
 

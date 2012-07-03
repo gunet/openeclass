@@ -125,11 +125,10 @@ $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
 
-$administratorName $administratorSurname
+".get_config('admin_name')."
 $langManager $siteName
 $langTel $telephone
-$langEmail : $emailhelpdesk
-";
+$langEmail : ".get_config('email_helpdesk')."\n";
                 send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
         }
 
@@ -137,17 +136,14 @@ $langEmail : $emailhelpdesk
         $lang = false;
         $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $language = '';
         if (isset($_GET['id'])) { // if we come from prof request
-                $id = $_GET['id'];
+                $id = intval($_GET['id']);
                 // display actions toolbar
                 $tool_content .= "<div id='operations_container'>
-                <ul id='opslist'>
-                <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-                <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
-                if (isset($_GET['id'])) {
-                        $tool_content .= "
-                        <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>";
-                }
-                $tool_content .= "</ul></div>";
+                    <ul id='opslist'>
+                        <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
+                        <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+                        <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
+                    </ul></div>";
                 $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
                         comment, lang, date_open, statut, verified_mail FROM user_request WHERE id = $id"));
                 $ps = $res['surname'];
@@ -181,24 +177,21 @@ $langEmail : $emailhelpdesk
         <fieldset>
         <legend>$title</legend>  
         <table width='100%' align='left' class='tbl'>
-        <tr><th class='left' width='180'><b>$langName:</b></th>
-        <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langSurname:</b></th>
-        <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langUsername:</b></th>
-        <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langPass:</b></th>
-        <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
-        <tr><th class='left'><b>$langEmail:</b></th>
-        <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
-        <tr><th class='left'><b>$langEmailVerified:</b></th>
-        <td>";
-        $verified_mail_data = array();
-        $verified_mail_data[0] = $m['pending'];
-        $verified_mail_data[1] = $m['yes'];
-        $verified_mail_data[2] = $m['no'];
+          <tr><th class='left' width='180'><b>$langName:</b></th>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
+          <tr><th class='left'><b>$langSurname:</b></th>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
+          <tr><th class='left'><b>$langUsername:</b></th>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
+          <tr><th class='left'><b>$langPass:</b></th>
+              <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
+          <tr><th class='left'><b>$langEmail:</b></th>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
+          <tr><th class='left'><b>$langEmailVerified:</b></th>
+             <td>";
+        $verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
         if (isset($pv)) {
-                $tool_content .= selection($verified_mail_data,"verified_mail_form",$pv);
+                $tool_content .= selection($verified_mail_data,"verified_mail_form", $pv);
         } else {
                 $tool_content .= selection($verified_mail_data,"verified_mail_form");
         }

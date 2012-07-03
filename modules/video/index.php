@@ -83,7 +83,7 @@ if ($is_in_tinymce) {
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a#fileURL").click(function() { 
+    $("a.fileURL").click(function() { 
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -564,7 +564,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         
                                         if ($is_in_tinymce) {
                                             $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
-                                            $link_href = "<a href='$furl' id='fileURL'>". q($myrow['title']) ."</a>";
+                                            $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                         } else {
                                             $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
                                         }

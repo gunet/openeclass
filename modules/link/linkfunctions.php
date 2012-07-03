@@ -69,7 +69,7 @@ function showlinksofcategory($catid)
                 } else {
                     $num_merge_cols = 1;
                 }
-                $aid = ($is_in_tinymce) ? " id='fileURL' ": '';
+                $aid = ($is_in_tinymce) ? " class='fileURL' ": '';
                 $tool_content .= "
                   <td valign='top' colspan='$num_merge_cols'><a $aid href='".$urlServer ."modules/link/go.php?c=$course_code&amp;id=$myrow[id]&amp;url=" .
                   urlencode($myrow['url']) . "' target='_blank'>" . q($title) . "</a>";

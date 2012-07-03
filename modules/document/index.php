@@ -57,7 +57,7 @@ if ($is_in_tinymce) {
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a#fileURL").click(function() { 
+    $("a.fileURL").click(function() { 
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -382,20 +382,22 @@ if ($can_upload) {
                                                    path = " . autoquote($_GET['rename']));
                 $res = mysql_fetch_array($result);
                 $fileName = $res['filename'];
-                $dialogBox .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <input type='hidden' name='sourceFile' value='" .
-                        q($_GET['rename']) . "' />
-                $group_hidden_input
-                <fieldset>
-                        <table class='tbl' width='100%'>
-                        <tr>
-                        <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
-                        <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
-                        <td class='right'><input type='submit' value='$langRename' /></td>
-                        </tr>
-                        </table>
-                </fieldset>
-                </form>\n";
+                $dialogBox .= "
+  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+  <fieldset>
+    <legend>$langRename:</legend>
+    <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
+    $group_hidden_input
+    <table class='tbl' width='100%'>
+      <tr>
+        <td><b>".q($fileName)."</b> $langIn:
+          <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
+        <td class='right'><input type='submit' value='$langRename' /></td>
+      </tr>
+    </table>
+  </fieldset>
+  </form>
+  \n";
 	}
 
 	// create directory
@@ -604,10 +606,10 @@ if ($can_upload) {
                         $dialogBox .= "
 			<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 			<fieldset>
+			  <legend>$langAddComment</legend>
 			  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
 			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
 			  $group_hidden_input
-			  <legend>$langAddComment</legend>
 			  <table class='tbl' width='100%'>
 			  <tr>
 			    <th>$langWorkFile:</th>
@@ -915,7 +917,7 @@ if ($doc_count == 0) {
         // Link for sortable table headings
         function headlink($label, $this_sort)
         {
-                global $sort, $reverse, $curDirPath, $base_url, $themeimg;
+                global $sort, $reverse, $curDirPath, $base_url, $themeimg, $langUp, $langDown;
 
                 if (empty($curDirPath)) {
                         $path = '/';
@@ -925,7 +927,8 @@ if ($doc_count == 0) {
                 if ($sort == $this_sort) {
                         $this_reverse = !$reverse;
                         $indicator = " <img src='$themeimg/arrow_" . 
-                                ($reverse? 'up': 'down') . ".png' />";
+                                ($reverse? 'up': 'down') . ".png' alt='" .
+                                ($reverse? $langUp: $langDown) . "'>";
                 } else {
                         $this_reverse = $reverse;
                         $indicator = '';
@@ -939,7 +942,7 @@ if ($doc_count == 0) {
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         {
                 $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='icon'/></a>";
+                $tool_content .=  "<a href='$parentlink'>$langUp</a> <a href='$parentlink'><img src='$themeimg/folder_up.png' height='16' width='16' alt='$langUp'/></a>";
         }
         $tool_content .= "</div></td>
     </tr>
@@ -990,10 +993,10 @@ if ($doc_count == 0) {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
-                                $link_extra = " id='fileURL' title='$langSave' target='_blank'";
+                                $link_extra = " class='fileURL' title='$langSave' target='_blank'";
                                 $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
                                 $link_title_extra = ($entry['copyrighted'])?
-                                        " <img src='{$urlAppend}modules/document/img/copyrighted.png' />": '';
+                                        " <img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
                                         $furl = (is_supported_media($entry['path'], true)) ? $play_url : $file_url;
@@ -1002,7 +1005,7 @@ if ($doc_count == 0) {
                                         $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
                                 }
                         }
-                        $img_href = "<img src='$image' />";
+                        $img_href = "<img src='$image' alt=''>";
                         $download_url = $base_url . "download=$cmdDirName";
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";

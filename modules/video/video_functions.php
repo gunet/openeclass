@@ -127,7 +127,7 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename,
         }
         else if (file_exists(get_fancybox2_dir()))
         {
-            $ahref = "<a href='$mediaPlay' class='fancybox fancybox.iframe' title='$title'>".$title_extra."</a>";
+            $ahref = "<a href='$mediaPlay' class='fancybox iframe' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
                 $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>".$title_extra."</a>";
         }
@@ -152,23 +152,24 @@ function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename,
  * @param  string $id
  * @return string 
  */
-function choose_medialink_ahref($mediaURL, $title, $id = null)
+function choose_medialink_ahref($mediaURL, $title, $class = null)
 {
     global $urlServer, $course_code;
     
-    $aid = ($id == null) ? '' : " id='$id' ";
-    $ahref = "<a $aid href='$mediaURL' target='_blank'>". $title ."</a>";
+    $aclass = $class? '': " class='$id'";
+    $ahref = "<a$aclass href='$mediaURL' target='_blank'>". $title ."</a>";
+    $class = $class? '': " $class";
     
     if (is_embeddable_medialink($mediaURL))
     {
         $linkPlay = $urlServer ."modules/video/index.php?course=$course_code&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
         
         if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a $aid href='".make_embeddable_medialink($mediaURL)."' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
+            $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox$class' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
         else if (file_exists(get_fancybox2_dir()))
-            $ahref = "<a $aid href='".$linkPlay."' class='fancybox fancybox.iframe' title='$title'>$title</a>";
+            $ahref = "<a href='".$linkPlay."' class='fancybox iframe$class' title='$title'>$title</a>";
         else if (file_exists(get_colorbox_dir()))
-            $ahref = "<a $aid href='".$linkPlay."' class='colorboxframe' title='$title'>$title</a>";
+            $ahref = "<a href='".$linkPlay."' class='colorboxframe$class' title='$title'>$title</a>";
     }
     
     return $ahref;
