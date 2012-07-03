@@ -110,7 +110,7 @@ if(empty($search_terms)) {
 	{
 		$myquery = "SELECT title, content, `date` FROM announcement
 				WHERE course_id = $course_id
-				AND visibility = 'v'
+				AND visible = 1
 				AND MATCH (title, content)".$query;
 		$result = db_query($myquery, $mysqlMainDb);
 		if(mysql_num_rows($result) > 0) {
@@ -140,18 +140,17 @@ if(empty($search_terms)) {
                   </tr>";
                         $numLine++;
 			}
-		$tool_content .= "
-                  </table>\n\n\n";
-		$found = true;
+                        $tool_content .= "</table>";
+                        $found = true;
 		}
 	}
 	// search in agenda
 	if ($agenda) {
 		$myquery = "SELECT title, content, day, hour, lasting FROM agenda
 				WHERE course_id = $course_id
-				AND visibility = 'v'
+				AND visible = 1
 				AND MATCH (title, content)".$query;
-		$result = db_query($myquery, $mysqlMainDb);	
+		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
                   <script type='text/javascript' src='../auth/sorttable.js'></script>
@@ -196,9 +195,9 @@ if(empty($search_terms)) {
 		$myquery = "SELECT * FROM document
 				WHERE course_id = $course_id
 				AND subsystem = 0
-				AND visibility = 'v'
+				AND visible = 1
 				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
+		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
                         <script type='text/javascript' src='../auth/sorttable.js'></script>
@@ -312,7 +311,7 @@ if(empty($search_terms)) {
 		  $tool_content .= "</table>";
 		  $found = true;
 		}
-		$myquery = "SELECT id, title FROM forum_topics WHERE MATCH (title)".$query;		
+		$myquery = "SELECT id, title FROM forum_topic WHERE MATCH (title)".$query;		
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
@@ -348,9 +347,7 @@ if(empty($search_terms)) {
 			  $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
 			}
 	          }
-                  $tool_content .= "
-                    </td>
-                  </tr>";
+                  $tool_content .= "</td></tr>";
                   $numLine++;
 		  }
 		  $tool_content .= "</table>";
@@ -428,20 +425,18 @@ if(empty($search_terms)) {
                   <tr $class_view>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-
-				if (empty($res['description'])) {
-					$desc_text = "";
-				} else {
-					$desc_text = "<span class='smaller'>($res[description])</span>";
-				}
-				$link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";				
-				$tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
-                  </td>
-                </tr>";
-                $numLine++;
+                        if (empty($res['description'])) {
+                                $desc_text = "";
+                        } else {
+                                $desc_text = "<span class='smaller'>($res[description])</span>";
+                        }
+                        $link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";				
+                        $tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
+                        </td>
+                        </tr>";
+                        $numLine++;
 		}
-			$tool_content .= "
-                </table>\n\n\n";
+			$tool_content .= "</table>";
 			$found = true;
 		}
 		$myquery = "SELECT * FROM videolinks
@@ -487,7 +482,7 @@ if(empty($search_terms)) {
 	{
 		$myquery = "SELECT id, title, comments FROM course_units
 				WHERE course_id = $course_id
-				AND visibility = 'v' 
+				AND visible = 1
 				AND MATCH (title, comments)".$query;
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
@@ -527,7 +522,7 @@ if(empty($search_terms)) {
 			FROM unit_resources, course_units
 				WHERE unit_resources.unit_id = course_units.id
 				AND course_units.course_id = $course_id
-				AND course_units.visibility = 'v'
+				AND course_units.visible = 1
 			AND MATCH(unit_resources.title, unit_resources.comments)".$query;
 		$result2 = db_query($myquery2);
 		if (mysql_num_rows($result2) > 0) {

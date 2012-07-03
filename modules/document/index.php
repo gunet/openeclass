@@ -93,11 +93,11 @@ $diskQuotaDocument = $d[0];
 if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
         if ($subsystem == GROUP) {
-        	$navigation[] = array ('url' => 'document.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => $langDoc);
+        	$navigation[] = array ('url' => 'index.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => $langDoc);
         } elseif ($subsystem == EBOOK) {
-		$navigation[] = array ('url' => 'document.php?course='.$course_code.'&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
+		$navigation[] = array ('url' => 'index.php?course='.$course_code.'&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
 	} else {
-        	$navigation[] = array ('url' => 'document.php?course='.$course_code, 'name' => $langDoc);
+        	$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langDoc);
         }
 	$tool_content .= showquota($diskQuotaDocument, $diskUsed);
 	draw($tool_content, $menuTypeID);
@@ -416,7 +416,7 @@ if ($can_upload) {
 	// step 1: display a field to enter the new dir name
         if (isset($_GET['createDir'])) {
                 $createDir = q($_GET['createDir']);
-                $dialogBox .= "<form action='document.php?course=$course_code' method='post'>
+                $dialogBox .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 $group_hidden_input
                 <fieldset>
                         <input type='hidden' name='newDirPath' value='$createDir' />
@@ -559,7 +559,7 @@ if ($can_upload) {
                         $filename = q($filename);
                         $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
                         $dialogBox = "
-				<form method='post' action='document.php?course=$course_code' enctype='multipart/form-data'>
+				<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
 				<fieldset>
 				<input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
 				$group_hidden_input
@@ -602,7 +602,7 @@ if ($can_upload) {
                         $fileName = my_basename($comment);
                         if (empty($oldFilename)) $oldFilename = $fileName;
                         $dialogBox .= "
-			<form method='post' action='document.php?course=$course_code'>
+			<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 			<fieldset>
 			  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
 			  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
@@ -1035,7 +1035,7 @@ if ($doc_count == 0) {
                         }
                         if (!$is_in_tinymce) {
                             if ($can_upload) {
-                                $tool_content .= "\n<td class='right' valign='top'><form action='document.php?course=$course_code' method='post'>" . $group_hidden_input .
+                                $tool_content .= "\n<td class='right' valign='top'><form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />" .
                                                  $download_icon . $padding;
                                 if (!$is_dir && $entry['format'] != ".meta") {

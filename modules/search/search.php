@@ -94,10 +94,10 @@ if (!register_posted_variables(array('search_terms' => false,
         $terms = array();
 
         $search_keys = array(
-                       'search_terms_title' => 'title',
-                       'search_terms_instructor' => 'prof_names',
-                       'search_terms_keywords' => 'keywords',
-                       'search_terms_coursecode' => array('code', 'public_code'));
+                       'search_terms_title' => 'course.title',
+                       'search_terms_instructor' => 'course.prof_names',
+                       'search_terms_keywords' => 'course.keywords',
+                       'search_terms_coursecode' => array('course.code', 'course.public_code'));
 
         foreach ($search_keys as $key => $subject) {
                 if (isset($GLOBALS[$key]) and !empty($GLOBALS[$key])) {
@@ -116,7 +116,7 @@ if (!register_posted_variables(array('search_terms' => false,
         if (!empty($search_terms_description)) {
                 db_query('CREATE TEMPORARY TABLE desc_search_tmp AS
                                 SELECT unit_id FROM unit_resources WHERE
-                                        (visibility = "v" OR unit_resources.`order` < 0) AND 
+                                        (visible = 1 OR unit_resources.`order` < 0) AND 
                                         MATCH (title, comments)
                                         AGAINST (' . quote($search_terms_description) . ' IN BOOLEAN MODE)');
                 db_query('INSERT INTO desc_search_tmp
@@ -138,8 +138,8 @@ if (!register_posted_variables(array('search_terms' => false,
                           FROM course ' . $course_user_join . '
                                      LEFT JOIN course_units ON course.id = course_units.course_id
                           WHERE ' . $course_restriction . ' AND
-                                (course_units.visibility = "v" OR
-                                 course_units.visibility IS NULL OR
+                                (course_units.visible = 1 OR
+                                 course_units.visible IS NULL OR
                                  course_units.`order` < 0) AND (' .
                   implode($join_op, $terms) . ') GROUP BY code ORDER BY code';
 
@@ -211,22 +211,22 @@ function search_in_course($search_terms, $course_id, $course_code) {
 	
 	$sql = db_query("SELECT title, content, `date` FROM announcement
 				WHERE course_id = $course_id
-				AND visibility = 'v'
-				AND MATCH (title, content)".$query, $mysqlMainDb);
+				AND visible = 1
+				AND MATCH (title, content)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT title, content, day, hour, lasting FROM agenda
 				WHERE course_id = $course_id
-				AND visibility = 'v'
-				AND MATCH (title, content)".$query, $mysqlMainDb);
+				AND visible = 1
+				AND MATCH (title, content)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT * FROM document
 				WHERE course_id = $course_id
 				AND subsystem = 0
-				AND visibility = 'v'
+				AND visible = 1
 				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query, $mysqlMainDb);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
@@ -275,7 +275,7 @@ function search_in_course($search_terms, $course_id, $course_code) {
 	}
 	$sql = db_query("SELECT id, title, comments FROM course_units
 				WHERE course_id = $course_id
-				AND visibility = 'v' 
+				AND visible = 1 
 				AND MATCH (title, comments)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
@@ -286,8 +286,8 @@ function search_in_course($search_terms, $course_id, $course_code) {
 			FROM unit_resources, course_units
 				WHERE unit_resources.unit_id = course_units.id
 				AND course_units.course_id = $course_id
-				AND course_units.visibility = 'v'
-			AND MATCH(unit_resources.title, unit_resources.comments)".$query, $mysqlMainDb);
+				AND course_units.visible = 1
+			AND MATCH(unit_resources.title, unit_resources.comments)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
