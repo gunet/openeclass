@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/log.php';
 
-$nameTools = $langUsersLog;
+$nameTools = $langUserLog;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
     $qry = "SELECT LEFT(title, 1) AS first_letter FROM course
             GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry);
-    $letterlinks='';
+    $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
         $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
@@ -96,8 +96,9 @@ if (isset($_POST['submit'])) {
     // display form
     // --------------------------------------    
     $tool_content .= "<form method='post'>
-        <table class='FormData' width='100%' align='left'>
-        <tbody>
+        <fieldset>
+        <legend>$langUserLog</legend>
+        <table class='tbl'>        
         <tr>
         <th width='220' class='left'>$langStartDate</th>
         <td>$start_cal</td>
@@ -138,9 +139,9 @@ if (isset($_POST['submit'])) {
         <tr>
         <th class='left'>&nbsp;</th>
         <td><input type='submit' name='submit' value=$langSubmit></td>
-        </tr>
-        </tbody>
+        </tr>        
         </table>
+        </fieldset>
         </form>";
     
 $tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";

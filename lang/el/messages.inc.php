@@ -2919,6 +2919,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
 * log.php
 * ************************************************/  
  $langUsersLog = "Ενέργειες χρηστών";
+ $langUserLog = "Ενέργειες χρήστη";
  $langLogTypes = "Είδος Ενεργειών";
  $langLogModules = "Είδος Υποσυστημάτων";
  $langAllActions = "Όλες οι ενέργειες";

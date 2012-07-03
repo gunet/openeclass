@@ -76,7 +76,6 @@ $tool_content .= "
     </ul>
     </div>";
 
-
 // A search has been submitted
 if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	$searchurl = "&search=yes";
@@ -132,8 +131,7 @@ else {
         $sql = db_query("SELECT code, title, prof_names, visible, id
                            FROM course
                        ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
-        
-        //$tool_content .= "<p class='success'>".$caption."</p>";
+                
 	if ($fulllistsize > COURSES_PER_PAGE ) {
 		// Display navigation in pages
 		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
@@ -141,91 +139,80 @@ else {
 }
 
 $key = mysql_num_rows($sql);
-if ($key==0) {
-  $tool_content .= "<p class='alert1'>$langNoCourses</p>";
-
+if ($key == 0) {
+        $tool_content .= "<p class='alert1'>$langNoCourses</p>";
 } else {
-// Construct course list table
-$tool_content .= "
-    <table class=\"tbl_alt\" width=\"100%\">
-    <tr>
-      <td colspan='7' class='right'>
-        ".$caption."
-      </td>
-    </tr>
-    <tr>
-     <th scope='col' width='1' class='odd'>&nbsp;</th>
-     <th scope='col' class='odd'><div align='left'>".$langCourseCode."</div></th>
-     <th scope='col' width='1' class='odd'>".$langGroupAccess."</th>
-     <th scope='col' width='280' class='odd'><div align='left'>".$langFaculty."</div></th>
-     <th scope='col' width='40' class='odd'>".$langActions."</th>
-    </tr>";
-
-$k = 0;
-for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-	$logs = mysql_fetch_array($sql);
-	if ($k%2 == 0) {
-		$tool_content .= "<tr class='even'>";
-	} else {
-		$tool_content .= "<tr class='odd'>";
-	}
-
-	$tool_content .= "
-        <td width='1'>
-                <img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
-        <td><a href='{$urlServer}courses/".$logs['code']."/'><b>".q($logs['title'])."</b>
-                </a> (".q($logs['code']).")<br /><i>".q($logs['prof_names'])."</i>
+        // Construct course list table
+        $tool_content .= "<table class='tbl_alt' width='100%'>
+        <tr>
+        <td colspan='7' class='right'>
+                ".$caption."
         </td>
-        <td align='center'>";
-	// Define course type
-	switch ($logs['visible']) {
-                case COURSE_CLOSED:
-			$tool_content .= "<img src='$themeimg/lock_closed.png' title='$langClosedCourse' />";
-			break;
-                case COURSE_REGISTRATION:
-			$tool_content .= "<img src='$themeimg/lock_registration.png' title='$langRegCourse' />";
-			break;
-		case COURSE_OPEN:
-			$tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
-			break;				
-                case COURSE_INACTIVE:
-			$tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langCourseInactiveShort' />";
-			break;				
-	}
-	$tool_content .= "
-      </td>
-      <td class='smaller'>";
-        
-        $departments = $course->getDepartmentIds($logs['id']);
-        $i = 1;
-        foreach ($departments as $dep) {
-            $br = ($i < count($departments)) ? '<br/>' : '';
-            $tool_content .= $tree->getFullPath($dep) . $br;
-            $i++;
-        }
-        
-        $tool_content .= "</td>";
-	// Add links to course users, delete course and course edit
-	$tool_content .= "
-        <td align='center' width='40'>
-                <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
-                <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
-                <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
-        </td>";
-	$k++;
-}
-// Close table correctly
-$tool_content .= "
-    </tr>
-    </table>";
-// If a search is started display link to search page
-if (isset($_GET['search']) && $_GET['search'] == "yes") {
-	$tool_content .= "\n    <p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
-} elseif ($fulllistsize > COURSES_PER_PAGE) {
-	// Display navigation in pages
-	$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
-}
+        </tr>
+        <tr>
+        <th scope='col' width='1' class='odd'>&nbsp;</th>
+        <th scope='col' class='odd'><div align='left'>".$langCourseCode."</div></th>
+        <th scope='col' width='1' class='odd'>".$langGroupAccess."</th>
+        <th scope='col' width='260' class='odd'><div align='left'>".$langFaculty."</div></th>
+        <th scope='col' width='100' class='odd'>".$langActions."</th>
+        </tr>";
+        $k = 0;
+        for ($j = 0; $j < mysql_num_rows($sql); $j++) {
+                $logs = mysql_fetch_array($sql);
+                if ($k%2 == 0) {
+                        $tool_content .= "<tr class='even'>";
+                } else {
+                        $tool_content .= "<tr class='odd'>";
+                }
+                $tool_content .= "<td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                <td><a href='{$urlServer}courses/".$logs['code']."/'><b>".q($logs['title'])."</b>
+                        </a> (".q($logs['code']).")<br /><i>".q($logs['prof_names'])."</i>
+                </td>
+                <td align='center'>";
+                // Define course type
+                switch ($logs['visible']) {
+                        case COURSE_CLOSED:
+                                $tool_content .= "<img src='$themeimg/lock_closed.png' title='$langClosedCourse' />";
+                                break;
+                        case COURSE_REGISTRATION:
+                                $tool_content .= "<img src='$themeimg/lock_registration.png' title='$langRegCourse' />";
+                                break;
+                        case COURSE_OPEN:
+                                $tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
+                                break;				
+                        case COURSE_INACTIVE:
+                                $tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langCourseInactiveShort' />";
+                                break;				
+                }
+                $tool_content .= "</td><td class='smaller'>";
 
+                $departments = $course->getDepartmentIds($logs['id']);
+                $i = 1;
+                foreach ($departments as $dep) {
+                        $br = ($i < count($departments)) ? '<br/>' : '';
+                        $tool_content .= $tree->getFullPath($dep) . $br;
+                        $i++;
+                }
+                $tool_content .= "</td>";
+                // Add links to course users, delete course and course edit
+                $tool_content .= "
+                <td align='center' width='40'>
+                        <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
+                        <a href='../usage/displaylog.php?c=".$logs['code']."'><img src='$themeimg/user_list.png' title='$langUsersLog' /></a>&nbsp;
+                        <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
+                        <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
+                </td>";
+                $k++;
+        }
+        // Close table correctly
+        $tool_content .= "</tr></table>";
+        // If a search is started display link to search page
+        if (isset($_GET['search']) && $_GET['search'] == "yes") {
+                $tool_content .= "<p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
+        } elseif ($fulllistsize > COURSES_PER_PAGE) {
+                // Display navigation in pages
+                $tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
+        }
 }
 // Display link to index.php
 $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";

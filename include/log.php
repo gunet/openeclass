@@ -40,7 +40,13 @@ class Log {
                 return;
         }
         
+        //-------------------------------------------------------------
         // display users actions 
+        //
+        // $module_id = -1 means that all modules have been choosed
+        // $logtype = 0 means that all logtypes have been choosed
+        // $user_id = -1 means that all users have been choosed
+        //-------------------------------------------------------------
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
                 global $tool_content, $modules;
@@ -56,34 +62,48 @@ class Log {
                 if ($logtype != 0) {
                         $q3 = "AND action_type = $logtype";
                 }                                                           
-                $sql = db_query("SELECT user_id, details, action_type, ts FROM log
+                $sql = db_query("SELECT user_id, module_id, details, action_type, ts FROM log
                                         WHERE course_id = $course_id $q1 $q2 $q3 
                                         AND ts BETWEEN '$date_from' AND '$date_now' ORDER BY ts DESC");
-                if (mysql_num_rows($sql) > 0) {
-                        $tool_content .= "<table class='tbl'><tr>";
-                        if ($module_id != -1) {
-                                $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th>";
-                        } else {
-                                $tool_content .= "<th colspan='4'>$langAllModules</th>";
-                        }
-                        $tool_content .= "</tr>";
-                        $tool_content .= "<tr><th>$langDate</th><th>$langUser</th><th>$langAction</th><th>$langDetail</th>";
-                        $tool_content .= "</tr>";                
-                        while ($r = mysql_fetch_array($sql)) {
-                                $tool_content .= "<tr>";
-                                $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";               
-                                $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
-                                $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                                $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
+                if (mysql_num_rows($sql) > 0) {                                                
+                                $tool_content .= "<table class='tbl'><tr>";
+                                if ($module_id != -1) {
+                                        $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th>";
+                                } else {
+                                        $tool_content .= "<th colspan='5'>$langAllModules</th>";
+                                }
                                 $tool_content .= "</tr>";
-                        }                
-                        $tool_content .= "</table>";
+                                $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
+                                if ($module_id == -1) {
+                                        $tool_content .= "<th>$langModule</th>";
+                                }
+                                $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
+                                $tool_content .= "</tr>";                
+                                while ($r = mysql_fetch_array($sql)) {
+                                        $tool_content .= "<tr>";
+                                        $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
+                                        $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
+                                        if ($module_id == -1) { // all modules
+                                               $mid = $r['module_id'];
+                                               $tool_content .= "<td>".$modules[$mid]['title']."</td>";
+                                        }                                        
+                                        $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
+                                        if ($module_id != -1) { // display each module
+                                                $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
+                                                
+                                        } else { // display all modules
+                                                $tool_content .= "<td>".$this->action_details($r['module_id'], $r['details'])."</td>";
+                                        }                                        
+                                        $tool_content .= "</tr>";
+                                }                
+                                $tool_content .= "</table>";
                 } else {
                         $tool_content .= "<div class=alert1>$langNoUsersLog</div>";
                 }
                 return;
         }
- 
+         
+       
         private function action_details($module_id, $details) {
                                       
                 global $langUnknownModule;
@@ -100,10 +120,7 @@ class Log {
                         case MODULE_ID_ASSIGN: $content = $this->assignment_action_details($details);
                                 break;
                         case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
-                                break;
-                        //case -1: $content = $this->announcement_action_details($details);
-                        case -1: $content = "όλα τα υποσυστήματα";
-                                break;
+                                break;                                                
                         default: $content = $langUnknownModule;
                                 break;
                         }                        
@@ -212,7 +229,7 @@ class Log {
                         $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo".$details['newpath']."&raquo";
                 }                
                 return $content;
-        }
+        }                
         
         // return the real action names
         private function get_action_names($action_type) {
