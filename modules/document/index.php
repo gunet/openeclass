@@ -273,7 +273,7 @@ if ($can_upload) {
                                         /*** Copy the file to the desired destination ***/
                                         copy ($userFile, $basedir . $file_path);
                                         // Logging
-                                        Log::record(MODULE_ID_DOCS, LOG_INSERT,
+                                        Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
                                                 array('id' => $id,
                                                       'filepath' => $file_path,
                                                       'filename' => $fileName,
@@ -358,7 +358,7 @@ if ($can_upload) {
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
                           WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
-                Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, 
                                 array('path' => $_POST['sourceFile'],
                                         'filename' => $r['filename'],
                                         'newfilename' => $_POST['renameTo']));
@@ -456,7 +456,7 @@ if ($can_upload) {
                                                 copyrighted = " . intval($_POST['file_copyrighted']) . "
                                         WHERE $group_sql AND
 					      path = '$commentPath'");
-                        Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, 
                                 array('path' => $commentPath,
                                       'filename' => $res['filename'],
                                       'comment' => $_POST['file_comment'],
@@ -540,7 +540,7 @@ if ($can_upload) {
                                 		      filename=" . autoquote($_FILES['newFile']['name'] . ".xml") .
                                 		    " WHERE $group_sql AND path =" . quote($oldpath . ".xml"));
                                 	}
-                                        Log::record(MODULE_ID_DOCS, LOG_MODIFY, 
+                                        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, 
                                                 array('oldpath' => $oldpath,
                                                       'newpath' => $newpath,
                                                       'filename' => $_FILES['newFile']['name']));

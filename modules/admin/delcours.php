@@ -77,7 +77,7 @@ else {
 		<br /><br /><i>".$langNoticeDel."</i><br />
 		</div></td></tr>";
 	$tool_content .= "<tr>
-	<td><ul class='custom_list'><li><a href='".$_SERVER['SCRIPT_NAME']."?c=". $cours_id ."&amp;delete=yes'><b>$langYes</b></a></li>
+	<td><ul class='custom_list'><li><a href='".$_SERVER['SCRIPT_NAME']."?c=". $course_id ."&amp;delete=yes'><b>$langYes</b></a></li>
 	<li><a href='listcours.php'><b>$langNo</b></a></li></ul></td>
 	</tr>";
 	$tool_content .= "</table></fieldset>";

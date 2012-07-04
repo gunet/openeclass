@@ -258,7 +258,7 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
                 ($course_id, ".quote($title).", ".quote($desc).", ".quote($deadline).", ' ', NOW(), '$secret', ".quote($group_submissions).")");
         mkdir("$workPath/$secret",0777);
         $id = mysql_insert_id();
-        Log::record(MODULE_ID_ASSIGN, LOG_INSERT,
+        Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT,
                 array('id' => $id,
                       'title' => $title,
                       'description' => $desc,
@@ -272,7 +272,7 @@ function submit_work($id, $on_behalf_of = null)
         global $tool_content, $workPath, $uid, $course_id, $works_url,
                $langUploadSuccess, $langBack, $langUploadError,
                $langExerciseNotPermit, $langUnwantedFiletype, $course_code,
-               $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment;
+               $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment, $course_id;
 
         if (isset($on_behalf_of)) {
                 $user_id = $on_behalf_of;
@@ -389,7 +389,7 @@ function submit_work($id, $on_behalf_of = null)
                                                         ".quote($stud_comments).", 
                                                         $grade, $grade_comments, $grade_ip, NOW(), $group_id)");
                                 $sid = mysql_insert_id();
-                                Log::record(MODULE_ID_ASSIGN, LOG_INSERT,
+                                Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT,
                                         array('id' => $sid,
                                         'title' => $title,
                                         'assignment_id' => $id,
@@ -560,7 +560,7 @@ function edit_assignment($id)
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a>
                                         </p><br />";
                 
-                Log::record(MODULE_ID_ASSIGN, LOG_MODIFY, 
+                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, 
                         array('id' => $id,
                         'title' => $title,
                         'description' => $description,
@@ -585,7 +585,7 @@ function delete_assignment($id) {
 	db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
 	move_dir("$workPath/$secret", "$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
         
-        Log::record(MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
+        Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                                                         'title' => $title));
         
 	$tool_content .= "<p class='success'>$langDeleted<br />
@@ -1168,7 +1168,7 @@ function show_assignments($message = null)
 // submit grade and comment for a student submission
 function submit_grade_comments($id, $sid, $grade, $comment, $email)
 {
-	global $tool_content, $langGrades, $langWorkWrongInput;
+	global $tool_content, $langGrades, $langWorkWrongInput, $course_id;
 
 	$stupid_user = 0;
 
@@ -1185,7 +1185,7 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email)
                                      grade_submission_ip = '$_SERVER[REMOTE_ADDR]'
                                  WHERE id = $sid");                                
                 list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment WHERE id = $id"));                
-                        Log::record(MODULE_ID_ASSIGN, LOG_MODIFY,
+                        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
                                 array('id' => $sid,
                                     'title' => $title,
                                     'grade' => $grade, 
@@ -1203,7 +1203,7 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email)
 // submit grades to students
 function submit_grades($grades_id, $grades, $email = false)
 {
-	global $tool_content, $langGrades, $langWorkWrongInput;
+	global $tool_content, $langGrades, $langWorkWrongInput, $course_id;
 
 	$stupid_user = 0;
 
@@ -1232,7 +1232,7 @@ function submit_grades($grades_id, $grades, $email = false)
                                 list($assign_id) = mysql_fetch_row(db_query("SELECT assignment_id FROM assignment_submit WHERE id = $sid"));
                                 list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment
                                                                         WHERE assignment.id = $assign_id"));
-                                Log::record(MODULE_ID_ASSIGN, LOG_MODIFY,
+                                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
                                                 array('id' => $sid,
                                                      'title' => $title,
                                                      'grade' => $grade));

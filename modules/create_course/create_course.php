@@ -35,6 +35,7 @@ if (get_config("betacms")) { // added support for betacms
 
 $TBL_USER_DEPARTMENT   = 'user_department';
 
+require_once 'include/log.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -162,27 +163,27 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	unset($code);
 	$tool_content .= "
         <tr>
-	  <th>$langTeachers:</th>
-	  <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
-	  <td>&nbsp;</td>
+        <th>$langTeachers:</th>
+        <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
+        <td>&nbsp;</td>
         </tr>
-	<tr>
-	  <th class='left'>$langLanguage:</th>
-	  <td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
-          <td>&nbsp;</td>
+        <tr>
+        <th class='left'>$langLanguage:</th>
+        <td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
+        <td>&nbsp;</td>
         </tr>
-	<tr>
-          <th>&nbsp;</th>
-	  <td class='right'>&nbsp;</td>
-	  <td class='right'>
-            <input type='submit' name='create2' value='$langNextStep &raquo;' />
-	    <input type='hidden' name='visit' value='true' />
-	  </td>
+        <tr>
+        <th>&nbsp;</th>
+        <td class='right'>&nbsp;</td>
+        <td class='right'>
+        <input type='submit' name='create2' value='$langNextStep &raquo;' />
+        <input type='hidden' name='visit' value='true' />
+        </td>
         </tr>
         </table>
-              </fieldset>
+        </fieldset>
         <div align='right' class='smaller'>(*) &nbsp;$langFieldsRequ</div>
-      <br />";
+        <br />";
 }
 
 // --------------------------------
@@ -192,71 +193,71 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
  elseif (isset($_POST['create2']) or isset($_POST['back2']))  {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 2 " .$langCreateCourseStep2 . " 3 )";
 	$tool_content .= "
-    <fieldset>
-      <legend>$langCreateCourseStep2Title</legend>
-      <table class='tbl' width='100%'>
-      <tr>
-        <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
-      </tr>
-      <tr>
-	<td>$langCourseKeywords&nbsp;<br />
-	  <input type='text' name='course_keywords' size='65' value='".q($course_keywords)."' />
-        </td>
-      </tr>
-      <tr>
-	<td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
-      </tr>
-      </table>
-    </fieldset>
-    <div align='right' class='smaller'>$langFieldsOptionalNote</div>
-    <br />";
+        <fieldset>
+        <legend>$langCreateCourseStep2Title</legend>
+        <table class='tbl' width='100%'>
+        <tr>
+                <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
+        </tr>
+        <tr>
+                <td>$langCourseKeywords&nbsp;<br />
+                <input type='text' name='course_keywords' size='65' value='".q($course_keywords)."' />
+                </td>
+        </tr>
+        <tr>
+                <td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
+        </tr>
+        </table>
+        </fieldset>
+        <div align='right' class='smaller'>$langFieldsOptionalNote</div>
+        <br />";
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
 	$tool_content .= "
         <fieldset>
-      <legend>$langCreateCourseStep3Title</legend>
-        <table class='tbl' width='100%'>
-      <tr>
-      <td class='sub_title1'>$langAvailableTypes<br></td>
-      </tr>
-      <tr>
-	<td>
-	  <table class='tbl' width='100%'>
-	  <tr class='smaller'>
-	    <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' width='16' height='16' /> ".$m['legopen']."</th>
-	    <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
-	    <td>$langPublic</td>
-	  </tr>
-	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
-	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
-	    <td>
-              $langPrivOpen<br />
-              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
-            </td>
-          </tr>
-	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
-	    <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
-	    <td>$langPrivate</td>
-	  </tr>
-          <tr class='smaller'>
-	    <th valign='top'><img src=\"$themeimg/lock_inactive.png\" title=\"".$m['linactive']."\" width=\"16\" height=\"16\" /> ".$m['linactive']."</th>
-	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value='3' /></td>
-	    <td>$langCourseInactive</td>
-	  </tr>
-	  </table>
-	  <br />
-	</td>
-      </tr>
-      <tr>
-	<td class='sub_title1'>$langSubsystems</td>
-      </tr>
-      <tr>
-	<td>
- 	  <table class='tbl smaller' width='100%'>
-	  <tr>";
+        <legend>$langCreateCourseStep3Title</legend>
+         <table class='tbl' width='100%'>
+        <tr>
+        <td class='sub_title1'>$langAvailableTypes<br></td>
+        </tr>
+        <tr>
+                <td>
+                <table class='tbl' width='100%'>
+                <tr class='smaller'>
+                <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' width='16' height='16' /> ".$m['legopen']."</th>
+                <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
+                <td>$langPublic</td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
+                <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
+                <td>
+                $langPrivOpen<br />
+                <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
+                </td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
+                <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
+                <td>$langPrivate</td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src=\"$themeimg/lock_inactive.png\" title=\"".$m['linactive']."\" width=\"16\" height=\"16\" /> ".$m['linactive']."</th>
+                <td valign='top'><input name=\"formvisible\" type=\"radio\" value='3' /></td>
+                <td>$langCourseInactive</td>
+                </tr>
+                </table>
+                <br />
+                </td>
+        </tr>
+        <tr>
+                <td class='sub_title1'>$langSubsystems</td>
+        </tr>
+        <tr>
+        <td>
+        <table class='tbl smaller' width='100%'>
+        <tr>";
         $tool_content .= create_td($modules[MODULE_ID_AGENDA], MODULE_ID_AGENDA, 1);
         $tool_content .= "<th width='2' >&nbsp;</th>";
         $tool_content .= create_td($modules[MODULE_ID_DROPBOX], MODULE_ID_DROPBOX, 0);
@@ -291,21 +292,21 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         $tool_content .= "</tr><tr>";
         $tool_content .= create_td($modules[MODULE_ID_EBOOK], MODULE_ID_EBOOK, 0);
         $tool_content .= "<th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-	  </tr>
-	  </table>
-        <br />
-	</td>
-      </tr>
-      <tr>
-	<td class='right'>
-          <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
-	  <input type='submit' name='create_course' value='$langFinalize' />
-        </td>
-      </tr>
-      </table>
-      </fieldset>
-      <div class='right smaller'>$langFieldsOptionalNote</div>
-      <br />";
+                </tr>
+                </table>
+                <br />
+                </td>
+        </tr>
+        <tr>
+                <td class='right'>
+                <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
+                <input type='submit' name='create_course' value='$langFinalize' />
+                </td>
+        </tr>
+        </table>
+        </fieldset>
+        <div class='right smaller'>$langFieldsOptionalNote</div>
+        <br />";
 } // end of create3
 
 // create the course and the course database
@@ -371,7 +372,7 @@ if (isset($_POST['create_course'])) {
         $new_course_id = mysql_insert_id();
 
 
-        // arxikopoihsh tou array gia ta checkboxes
+        // checkboxes array
         for ($i = 0; $i <= 50; $i++) {
                 $sbsystems[$i] = 0;
         }
@@ -427,6 +428,13 @@ if (isset($_POST['create_course'])) {
                 <p class='success'><b>$langJustCreated:</b> " . q($title) . "<br>
                 <span class='smaller'>$langEnterMetadata</span></p>
                 <p class='eclass_button'><a href='../../courses/$code/index.php'>$langEnter</a></p>";
+        // logging
+        Log::record(0, 0, LOG_CREATE_COURSE,
+                        array('id' => $new_course_id,
+                                'code' => $code,
+                                'title' => $title,
+                                'language' => $language,
+                                'visible' => $formvisible));
 } // end of submit
 
 $tool_content .= "</form>";

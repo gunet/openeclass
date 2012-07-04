@@ -50,10 +50,12 @@
 
 function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
 {        
+        global $course_id;
+        
 	if ($action == "delete") {
 		db_query("DELETE FROM ".$dbTable."
 			WHERE path LIKE \"".$oldPath."%\"");
-                Log::record(MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
+                Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
                                                               'filename' => $filename));
 	} elseif ($action == "update") {
 		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
@@ -62,7 +64,7 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
                                 FROM $dbTable WHERE path='$newPath'"));
                 list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
                                         WHERE path = '$newencodepath'"));                                                                               
-                Log::record(MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
+                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
                                                               'newencpath' => $newPath,
                                                               'newpath' => $newpath,
                                                               'filename' => $filename));

@@ -134,7 +134,7 @@ if ($is_editor) {
                         $log_type = LOG_INSERT;
 		}
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
-                Log::record(MODULE_ID_AGENDA, $log_type,
+                Log::record($course_id, MODULE_ID_AGENDA, $log_type,
                     array('id' => $id,
                           'day' => $date,
                           'hour' => $hour,
@@ -152,7 +152,7 @@ if ($is_editor) {
                                         FROM agenda WHERE id = $id"));
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
-                Log::record(MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
+                Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
                                                                 'day' => $row['day'],
                                                                 'hour' => $row['hour'],
                                                                 'lasting' => $row['lasting'],

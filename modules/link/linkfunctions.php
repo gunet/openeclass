@@ -184,7 +184,7 @@ function submit_link()
                                                         AND link.course_id = $course_id 
                                                         AND link.id = $id"));
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
-        Log::record(MODULE_ID_LINKS, $log_type,
+        Log::record($course_id, MODULE_ID_LINKS, $log_type,
                     @array('id' => $id,
                           'url' => $urllink,
                           'title' => $title,
@@ -232,7 +232,7 @@ function submit_category()
                 $log_type = LOG_INSERT;
         }
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
-        Log::record(MODULE_ID_LINKS, $log_type,
+        Log::record($course_id, MODULE_ID_LINKS, $log_type,
                     array('id' => $id,
                           'category' => $categoryname,
                           'description' => $txt_description));
@@ -245,7 +245,7 @@ function delete_link($id)
         list($url, $title) = mysql_fetch_row(db_query("SELECT url, title FROM link WHERE course_id = $course_id AND id = $id"));
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langLinkDeleted;
-        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
+        Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
                                                        'url' => $url,
                                                        'title' => $title));
 }
@@ -258,6 +258,6 @@ function delete_category($id)
         list($category) = mysql_fetch_array(db_query("SELECT name FROM link_category WHERE course_id = $course_id AND id = $id"));
 	db_query("DELETE FROM `link_category` WHERE course_id = $course_id AND id = $id");
         $catlinkstatus = $langCategoryDeleted;
-        Log::record(MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
+        Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
                                                        'category' => $category));
 }

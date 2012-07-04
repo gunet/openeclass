@@ -259,7 +259,7 @@ if (isset($_POST['edit_submit'])) { // edit
 		}
 		$result = db_query($sql);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
-                Log::record(MODULE_ID_VIDEO, LOG_MODIFY,
+                Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY,
                           array('id' => $id,                          
                                 'url' => canonicalize_url($_POST['url']),
                                 'title' => $_POST['title'],
@@ -287,7 +287,7 @@ if (isset($_POST['add_submit'])) {  // add
 			$result = db_query($sql);
                         $id = mysql_insert_id();				
                         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
-                        Log::record(MODULE_ID_VIDEO, LOG_INSERT,
+                        Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT,
                                 @array('id' => $id,
                                        'url' => canonicalize_url($url),
                                        'title' => $title,
@@ -339,7 +339,7 @@ if (isset($_POST['add_submit'])) {  // add
                                 $id = mysql_insert_id();
 				$result = db_query($sql);
                                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
-                                Log::record(MODULE_ID_VIDEO, LOG_INSERT,
+                                Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT,
                                         @array('id' => $id,
                                                 'path' => quote($path),
                                                 'url' => $_POST['url'],
@@ -360,7 +360,7 @@ if (isset($_POST['add_submit'])) {  // add
                 }
 		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id = $id";
 		$result = db_query($sql);
-                Log::record(MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow['title']));
+                Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow['title']));
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
 		$id = "";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form

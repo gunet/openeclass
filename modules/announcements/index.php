@@ -106,7 +106,7 @@ if ($is_editor) {
                 $row = mysql_fetch_array(db_query("SELECT title, content FROM announcement WHERE id = $delete"));
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 $result = db_query("DELETE FROM announcement WHERE id = $delete");
-                Log::record(MODULE_ID_ANNOUNCE, LOG_DELETE,
+                Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE,
                         array('id' => $delete,
                               'title' => $row['title'],
                               'content' => $txt_content));
@@ -154,7 +154,7 @@ if ($is_editor) {
                         $log_type = LOG_INSERT;
                 }
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
-                Log::record(MODULE_ID_ANNOUNCE, $log_type,
+                Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type,
                         array('id' => $id,
                               'email' => $send_mail,
                               'title' => $_POST['antitle'],

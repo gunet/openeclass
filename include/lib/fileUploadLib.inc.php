@@ -560,7 +560,7 @@ function process_extracted_file($p_event, &$p_header) {
                                  copyrighted = " . intval($file_copyrighted));
                                 // Logging
                                 $id = mysql_insert_id();
-                                Log::record(MODULE_ID_DOCS, LOG_INSERT,
+                                Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
                                               'filepath' => $path,
                                               'filename' => $filename,
@@ -611,7 +611,7 @@ function make_path($path, $path_components)
                                           date_modified = NOW(),
                                           format = '.dir'");
                         $id = mysql_insert_id();
-                        Log::record(MODULE_ID_DOCS, LOG_INSERT,
+                        Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
                                               'path' => $path,
                                               'filename' => $component));

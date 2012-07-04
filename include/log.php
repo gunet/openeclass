@@ -22,12 +22,13 @@
 define('LOG_INSERT', 1);
 define('LOG_MODIFY', 2);
 define('LOG_DELETE', 3);
+define('LOG_PROFILE', 4);
+define('LOG_CREATE_COURSE', 5);
+define('LOG_DELETE_COURSE', 6);
 
 class Log {
         // log users actions
-        public static function record($module_id, $action_type, $details) {
-                
-                global $course_id;
+        public static function record($course_id, $module_id, $action_type, $details) {               
                                 
                 db_query("INSERT INTO log SET 
                                 user_id = $_SESSION[uid],
@@ -41,10 +42,10 @@ class Log {
         }
         
         //-------------------------------------------------------------
-        // display users actions 
+        // display users logging
         //
         // $module_id = -1 means all modules
-        // $logtype = 0 means logtypes
+        // $logtype = -1 means logtypes
         // $user_id = -1 means all users
         // $course_id = -1 means all courses
         //-------------------------------------------------------------
@@ -58,25 +59,29 @@ class Log {
                 if ($user_id != -1) {
                         $q1 = "AND user_id = $user_id";
                 }                
-                if ($module_id != -1) {
+                if ($module_id > 0) {
                         $q2 = "AND module_id = $module_id";
+                } elseif ($module_id == -1) { // display all course module logging
+                        $q2 = "AND module_id > 0"; // but exclude modules logging not specific to course
                 }
                 if ($logtype != 0) {
                         $q3 = "AND action_type = $logtype";
-                }
-                if ($course_id != -1) {
+                }                
+                if ($course_id > 0) {
                         $q4 = "AND course_id = $course_id";
+                } elseif ($course_id == -1) { // display all course logging
+                        $q4 = "AND course_id > 0"; // but exclude logging not specific to course
                 }
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");
+                                ORDER BY ts DESC");                
                 
                 if (mysql_num_rows($sql) > 0) {
-                                if ($course_id != -1) {
+                                if ($course_id > 0) {
                                         $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."</div>";
                                 }                                
-                                if ($module_id != -1) {
+                                if ($module_id > 0) {
                                         $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
                                 }
                                 $tool_content .= "<table class='tbl'>";                                                                
@@ -90,7 +95,7 @@ class Log {
                                 $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
                                 $tool_content .= "</tr>";                
                                 while ($r = mysql_fetch_array($sql)) {
-                                              $tool_content .= "<tr>";
+                                        $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
                                         $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
                                         if ($course_id == -1) { // all courses
@@ -101,7 +106,11 @@ class Log {
                                                $tool_content .= "<td>".$modules[$mid]['title']."</td>";
                                         }                                        
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                                        $tool_content .= "<td>".$this->action_details($r['module_id'], $r['details'])."</td>";
+                                        if ($course_id == 0 or $module_id == 0) {
+                                                $tool_content . "<td>".$this->other_action_details($logtype, $r['details'])."</td>";
+                                        } else {
+                                                $tool_content .= "<td>".$this->course_action_details($r['module_id'], $r['details'])."</td>";
+                                        }
                                         $tool_content .= "</tr>";
                                 }                
                                 $tool_content .= "</table>";
@@ -112,7 +121,7 @@ class Log {
         }
          
        
-        private function action_details($module_id, $details) {
+        private function course_action_details($module_id, $details) {
                                       
                 global $langUnknownModule;
                 
@@ -133,6 +142,44 @@ class Log {
                                 break;
                         }                        
                 return $content;
+        }
+        
+        private function other_action_details($logtype, $details) {
+                
+                global $langUnknownAction;
+                
+                switch ($logtype) {
+                        case LOG_CREATE_COURSE: $content = $this->create_course_action_details($details);                                
+                                break;
+                        case LOG_DELETE_COURSE: $content = $this->delete_course_action_details($details);
+                                break;
+                        case LOG_PROFILE: $content = $this->profile_action_details($details);
+                                break;
+                        default: $content = $langUnknownAction;
+                                break;                                
+                }
+                return $content;
+        }
+
+        private function create_course_action_details($details) {
+                
+                $content = "create course";
+                
+                return $content;
+        }
+        
+        
+        private function delete_course_action_details($details) {
+                
+                $content = 'delete course';
+                
+                return $content;
+        }
+        
+        private function profile_action_details($details) {
+                
+                $content = 'profile';
+                return $content;                
         }
         
         private function video_action_details($details) {
@@ -242,12 +289,16 @@ class Log {
         // return the real action names
         private function get_action_names($action_type) {
                 
-                global $langInsert, $langModify, $langDelete, $langUnknownAction;
+                global $langInsert, $langModify, $langDelete, $langModProfile, 
+                       $langCourseCreate, $langDeleteCourse, $langUnknownAction;
                 
                 switch ($action_type) {
                         case LOG_INSERT: return $langInsert;
                         case LOG_MODIFY: return $langModify;
                         case LOG_DELETE: return $langDelete;
+                        case LOG_PROFILE: return $langModProfile;
+                        case LOG_CREATE_COURSE: return $langCourseCreate;
+                        case LOG_DELETE_COURSE: return $langDeleteCourse;
                         default: return $langUnknownAction;
                 }
         }
