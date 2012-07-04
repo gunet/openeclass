@@ -43,16 +43,18 @@ class Log {
         //-------------------------------------------------------------
         // display users actions 
         //
-        // $module_id = -1 means that all modules have been choosed
-        // $logtype = 0 means that all logtypes have been choosed
-        // $user_id = -1 means that all users have been choosed
+        // $module_id = -1 means all modules
+        // $logtype = 0 means logtypes
+        // $user_id = -1 means all users
+        // $course_id = -1 means all courses
         //-------------------------------------------------------------
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
                 global $tool_content, $modules;
-                global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, $langModule, $langAllModules;
+                global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, 
+                        $langCourse, $langModule, $langAllModules;
                 
-                $q1 = $q2 = $q3 = '';
+                $q1 = $q2 = $q3 = $q4 = '';
                 if ($user_id != -1) {
                         $q1 = "AND user_id = $user_id";
                 }                
@@ -61,19 +63,27 @@ class Log {
                 }
                 if ($logtype != 0) {
                         $q3 = "AND action_type = $logtype";
-                }                                                           
-                $sql = db_query("SELECT user_id, module_id, details, action_type, ts FROM log
-                                        WHERE course_id = $course_id $q1 $q2 $q3 
-                                        AND ts BETWEEN '$date_from' AND '$date_now' ORDER BY ts DESC");
-                if (mysql_num_rows($sql) > 0) {                                                
-                                $tool_content .= "<table class='tbl'><tr>";
+                }
+                if ($course_id != -1) {
+                        $q4 = "AND course_id = $course_id";
+                }
+                $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
+                                WHERE ts BETWEEN '$date_from' AND '$date_now'
+                                $q1 $q2 $q3 $q4
+                                ORDER BY ts DESC");
+                
+                if (mysql_num_rows($sql) > 0) {
+                                if ($course_id != -1) {
+                                        $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."&nbsp;&mdash;&nbsp;</div>";
+                                }                                
                                 if ($module_id != -1) {
-                                        $tool_content .= "<th colspan='4'>$langModule: ".$modules[$module_id]['title']."</th>";
-                                } else {
-                                        $tool_content .= "<th colspan='5'>$langAllModules</th>";
+                                        $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
                                 }
-                                $tool_content .= "</tr>";
+                                $tool_content .= "<table class='tbl'>";                                                                
                                 $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
+                                if ($course_id == -1) {
+                                        $tool_content .= "<th>$langCourse</th>";
+                                }
                                 if ($module_id == -1) {
                                         $tool_content .= "<th>$langModule</th>";
                                 }
@@ -83,22 +93,20 @@ class Log {
                                         $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
                                         $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
+                                        if ($course_id == -1) { // all courses
+                                                $tool_content .= "<td>".course_id_to_title($r['course_id'])."</td>";
+                                        }
                                         if ($module_id == -1) { // all modules
                                                $mid = $r['module_id'];
                                                $tool_content .= "<td>".$modules[$mid]['title']."</td>";
                                         }                                        
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                                        if ($module_id != -1) { // display each module
-                                                $tool_content .= "<td>".$this->action_details($module_id, $r['details'])."</td>";
-                                                
-                                        } else { // display all modules
-                                                $tool_content .= "<td>".$this->action_details($r['module_id'], $r['details'])."</td>";
-                                        }                                        
+                                        $tool_content .= "<td>".$this->action_details($r['module_id'], $r['details'])."</td>";
                                         $tool_content .= "</tr>";
                                 }                
                                 $tool_content .= "</table>";
                 } else {
-                        $tool_content .= "<div class=alert1>$langNoUsersLog</div>";
+                        $tool_content .= "<div class='alert1'>$langNoUsersLog</div>";
                 }
                 return;
         }
