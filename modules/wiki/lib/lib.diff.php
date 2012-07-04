@@ -174,25 +174,25 @@
         {
             case DIFF_EQUAL:
             {
-                return $line. ' : ' . ' = <span class="diffEqual" >' . $value . '</span><br />' . "\n" ;
+                return $line. ' : ' . ' = <span class="diffEqual" >' . q($value) . '</span><br />' . "\n" ;
 
                 break;
             }
             case DIFF_MOVED:
             {
-                return $line. ' : ' . ' M <span class="diffMoved" >' . $value . '</span><br />' . "\n" ;
+                return $line. ' : ' . ' M <span class="diffMoved" >' . q($value) . '</span><br />' . "\n" ;
 
                 break;
             }
             case DIFF_ADDED:
             {
-                return $line . ' : ' . ' + <span class="diffAdded" >' . $value . '</span><br />' . "\n" ;
+                return $line . ' : ' . ' + <span class="diffAdded" >' . q($value) . '</span><br />' . "\n" ;
 
                 break;
             }
             case DIFF_DELETED:
             {
-                return $line . ' : ' . ' - <span class="diffDeleted" >' . $value . '</span><br />' . "\n" ;
+                return $line . ' : ' . ' - <span class="diffDeleted" >' . q($value) . '</span><br />' . "\n" ;
 
                 break;
             }
@@ -219,7 +219,7 @@
             case DIFF_EQUAL:
             {
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;=</td><td><span class="diffEqual" >'
-                    . $value . '</span></td></tr>' . "\n"
+                    . q($value) . '</span></td></tr>' . "\n"
                     ;
                  
                 break;
@@ -227,7 +227,7 @@
             case DIFF_MOVED:
             {
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;M</td><td><span class="diffMoved" >'
-                    . $value . '</span></td></tr>' . "\n"
+                    . q($value) . '</span></td></tr>' . "\n"
                     ;
                  
                 break;
@@ -235,7 +235,7 @@
             case DIFF_ADDED:
             {
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;+</td><td><span class="diffAdded" >'
-                    . $value . '</span></td></tr>' . "\n"
+                    . q($value) . '</span></td></tr>' . "\n"
                     ;
                  
                 break;
@@ -243,7 +243,7 @@
             case DIFF_DELETED:
             {
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;-</td><td><span class="diffDeleted" >'
-                    . $value . '</span></td></tr>' . "\n"
+                    . q($value) . '</span></td></tr>' . "\n"
                     ;
                     
                 break;

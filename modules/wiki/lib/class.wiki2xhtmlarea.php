@@ -161,7 +161,7 @@
                 $attr .= ' ' . $attribute . '="' . $value . '"';
             }
 
-            $wikiarea .= '<textarea'.$attr.'>'.$this->getContent().'</textarea>' . "\n";
+            $wikiarea .= '<textarea'.$attr.'>'.q($this->getContent()).'</textarea>' . "\n";
 
             $wikiarea .= $this->getToolbar();
 
