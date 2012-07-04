@@ -74,7 +74,7 @@ class Log {
                 
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id != -1) {
-                                        $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."&nbsp;&mdash;&nbsp;</div>";
+                                        $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."</div>";
                                 }                                
                                 if ($module_id != -1) {
                                         $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
@@ -90,7 +90,7 @@ class Log {
                                 $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
                                 $tool_content .= "</tr>";                
                                 while ($r = mysql_fetch_array($sql)) {
-                                        $tool_content .= "<tr>";
+                                              $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
                                         $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
                                         if ($course_id == -1) { // all courses
