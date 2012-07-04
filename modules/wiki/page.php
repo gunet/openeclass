@@ -740,7 +740,7 @@ switch( $action )
 	$tool_content .= '<textarea name="conflictContent" id="wiki_content"'
 	     . ' cols="80" rows="15" wrap="virtual">'
 	     ;
-	$tool_content .= $content;
+	$tool_content .= q($content);
 	$tool_content .= '</textarea><br /><br />' . "\n";
 	$tool_content .= '<div>' . "\n";
 	$tool_content .= '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n";

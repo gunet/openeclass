@@ -88,7 +88,7 @@
             $out .= '<textarea name="wiki_content" id="wiki_content"'
                  . ' cols="80" rows="15" wrap="virtual">'
                  ;
-            $out .= $content;
+            $out .= q($content);
             $out .= '</textarea>' . "\n";
         }
 
@@ -282,7 +282,7 @@
               . '      <tr>' . "\n"
               . '        <th>'.$langWikiDescription.' :</th>' . "\n"
               . '        <td>' . "\n"
-              . '        <textarea id="wikiDesc" name="desc" cols="50" rows="5">'.$desc.'</textarea>' . "\n";
+              . '        <textarea id="wikiDesc" name="desc" cols="50" rows="5">'.q($desc).'</textarea>' . "\n";
 
 
               /*
@@ -300,7 +300,7 @@
               . '</div>' . "\n"
               . '<div style="padding: 5px">' . "\n"
               . '<label for="wikiDesc">'.$langWikiDescription.' :</label><br />' . "\n"
-              . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.$desc.'</textarea>' . "\n"
+              . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.q($desc).'</textarea>' . "\n"
               . '</div>' . "\n"
               . '</fieldset>' . "\n"
               */
