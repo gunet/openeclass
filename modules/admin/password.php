@@ -34,6 +34,7 @@ $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';
+require_once 'include/phpass/PasswordHash.php';
 
 $nameTools = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -86,7 +87,8 @@ if (!isset($_POST['changePass'])) {
 		exit();
 	}
 	// All checks ok. Change password!
-	$new_pass = md5($_POST['password_form']);
+	$hasher = new PasswordHash(8, false);
+	$new_pass = $hasher->HashPassword($_POST['password_form']);
 	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = $userid";
 	db_query($sql, $mysqlMainDb);
 	$tool_content .= mes($langPassChanged, $langHome, 'success');

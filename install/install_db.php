@@ -18,6 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once '../include/phpass/PasswordHash.php';
 
 if (!defined('ECLASS_VERSION')) {
         exit;
@@ -176,7 +177,7 @@ db_query("CREATE TABLE user (
       nom VARCHAR(60) DEFAULT NULL,
       prenom VARCHAR(60) DEFAULT NULL,
       username VARCHAR(50) DEFAULT 'empty',
-      password VARCHAR(50) DEFAULT 'empty',
+      password VARCHAR(60) DEFAULT 'empty',
       email VARCHAR(100) DEFAULT NULL,
       statut TINYINT(4) DEFAULT NULL,
       phone VARCHAR(20) DEFAULT NULL,
@@ -875,7 +876,8 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 }
 
 // encrypt the admin password into DB
-$password_encrypted = md5($passForm);
+$hasher = new PasswordHash(8, false);
+$password_encrypted = $hasher->HashPassword($passForm);
 $exp_time = time() + 140000000;
 db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
                  VALUES (" . quote($nameForm) . ", '', " .

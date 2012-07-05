@@ -24,6 +24,7 @@ define('SUFFIX_LEN', 4);
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/phpass/PasswordHash.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -231,7 +232,8 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
 
         $registered_at = time();
         $expires_at = time() + get_config('account_duration');
-        $password_encrypted = md5($password);
+        $hasher = new PasswordHash(8, false);
+        $password_encrypted = $hasher->HashPassword($password);
 
         $req = db_query("INSERT INTO user
                                (nom, prenom, username, password, email, statut, registered_at, expires_at, lang, am, phone,

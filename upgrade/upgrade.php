@@ -23,6 +23,7 @@ define('UPGRADE', true);
 require '../include/baseTheme.php';
 require 'include/lib/fileUploadLib.inc.php';
 require 'include/lib/forcedownload.php';
+require_once 'include/phpass/PasswordHash.php';
 
 // set default storage engine
 db_query("SET storage_engine=MYISAM");
@@ -487,6 +488,10 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
+        }
+        
+        if ($oldversion < '2.5.2') {
+        	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
         }
 
         if ($oldversion < '3') {

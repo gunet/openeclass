@@ -32,6 +32,7 @@ $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';
+require_once 'include/phpass/PasswordHash.php';
 
 $nameTools = $langChangePass;
 $navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifyProfile);
@@ -55,11 +56,10 @@ if (isset($_POST['submit'])) {
 	$result = db_query($sql, $mysqlMainDb);
 	$myrow = mysql_fetch_array($result);
 
-	$old_pass = md5($_REQUEST['old_pass']) ;
-	$old_pass_db = $myrow['password'];
-	$new_pass = md5($_REQUEST['password_form']);
+	$hasher = new PasswordHash(8, false);
+	$new_pass = $hasher->HashPassword($_REQUEST['password_form']);
 
-	if($old_pass == $old_pass_db) {
+	if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow['password'])) {
 		$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = ".$_SESSION["uid"]."";
 		db_query($sql, $mysqlMainDb);
 		header("location:". $passurl."?msg=4");

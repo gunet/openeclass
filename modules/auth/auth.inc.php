@@ -283,20 +283,28 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
         $testauth = false;
         switch($auth) {
 	case '1':
-	    // Returns true if the username and password work and false if they don't
-            $sql = "SELECT user_id FROM user
-                           WHERE username ";
 		
-	    if (get_config('case_insensitive_usernames')) {
-         	$sql .= "= ".quote($test_username);
-	    } else {
-		$sql .= "COLLATE utf8_bin = ".quote($test_username);
-	    }
-	    $sql .= " AND password = ".quote(md5($test_password));
-	    $result = db_query($sql);
-            if (mysql_num_rows($result) == 1) {
-                    $testauth = true;
-            }
+			$unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = " ;
+			$sql = "SELECT password FROM user WHERE username ". $unamewhere . quote($test_username);
+			$result = db_query($sql);
+	
+			if (mysql_num_rows($result) == 1) {
+	
+				$myrow = mysql_fetch_assoc($result);
+				$hasher = new PasswordHash(8, false);
+	
+				if ($hasher->CheckPassword($test_password, $myrow['password']))
+					$testauth = true;
+				else if (strlen($myrow['password']) < 60 && md5($test_password) == $myrow['password']) {
+					$testauth = true;
+	
+					// password is in old md5 format, update transparently
+					$password_encrypted = $hasher->HashPassword($test_password);
+	
+					$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE username COLLATE utf8_bin = ". quote($test_username);
+					db_query($sql, $mysqlMainDb);
+				}
+			}
             break;
 
 	case '2':
@@ -708,8 +716,28 @@ function process_login()
 Authenticate user via eclass
 ****************************************************************/
 function login($user_info_array, $posted_uname, $pass)
-{        
-        if (check_username_sensitivity($posted_uname, $user_info_array['username']) and md5($pass) == $user_info_array['password']) {
+{
+		global $mysqlMainDb;
+	
+		$pass_match = false;
+		$hasher = new PasswordHash(8, false);
+
+		if (check_username_sensitivity($posted_uname, $user_info_array['username'])) {
+			if ($hasher->CheckPassword($pass, $user_info_array['password'])) {
+				$pass_match = true;
+			} else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
+				$pass_match = true;
+		
+				// password is in old md5 format, update transparently
+				$password_encrypted = $hasher->HashPassword($pass);
+				$user_info_array['password'] = $password_encrypted;
+		
+				$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE user_id = ". intval($user_info_array['user_id']);
+				db_query($sql, $mysqlMainDb);
+			}
+		}
+	
+		if ($pass_match) {
 
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);

@@ -32,6 +32,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include 'include/sendMail.inc.php';
+require_once 'include/phpass/PasswordHash.php';
 $nameTools = $lang_remind_pass;
 
 // Password reset link is valid for 1 hour = 3600 sec
@@ -62,7 +63,8 @@ if (isset($_REQUEST['u']) and
 	if ($valid and mysql_num_rows($res) == 1) {
                 if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                     $_POST['newpass'] == $_POST['newpass1']) {
-                        if (db_query("UPDATE user SET `password` = ".quote(md5($_POST['newpass']))."
+                		$hasher = new PasswordHash(8, false);
+                        if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
                                          WHERE user_id = $userUID")) {
                                 $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
                                                  $homelink";

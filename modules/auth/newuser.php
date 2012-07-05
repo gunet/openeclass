@@ -35,6 +35,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/phpass/PasswordHash.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -212,7 +213,8 @@ if (!isset($_POST['submit'])) {
 		$expires_at = time() + get_config('account_duration');
 
 		$password = unescapeSimple($password);
-		$password_encrypted = md5($password);
+		$hasher = new PasswordHash(8, false);
+		$password_encrypted = $hasher->HashPassword($password);
 
 		$q1 = "INSERT INTO user
 			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail)

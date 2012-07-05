@@ -84,7 +84,8 @@ if($submit) {
         } else {
                 $registered_at = time();
                 $expires_at = time() + get_config('account_duration');
-                $password_encrypted = md5($password);
+                $hasher = new PasswordHash(8, false);
+                $password_encrypted = $hasher->HashPassword($password);
                 $inscr_user = db_query("INSERT INTO user
                                 (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail)
                                 VALUES (" .
