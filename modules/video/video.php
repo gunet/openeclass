@@ -149,7 +149,7 @@ if (isset($_GET['action']) and $_GET['action'] == "download") {
 	$real_file = $webDir."/video/".$currentCourseID."/".$id;
 	if (strpos($real_file, '/../') === FALSE && file_exists($real_file)) {
                 $result = db_query("SELECT url FROM video WHERE path = " .
-                                   autoquote($id), $currentCourseID);
+                                   quote($id), $currentCourseID);
 		$row = mysql_fetch_array($result);
 		if (!empty($row['url'])) {
 			$id = $row['url'];
@@ -171,7 +171,7 @@ if (isset($_GET['action']) and $_GET['action'] == "play")
         $videoPath = $urlServer ."video/". $currentCourseID . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=download&amp;id=". $id;
         
-        $result = db_query("SELECT url FROM video WHERE path = ". autoquote($id), $currentCourseID);
+        $result = db_query("SELECT url FROM video WHERE path = ". quote($id), $currentCourseID);
         $row = mysql_fetch_array($result);
         
         if (strpos($videoPath, '/../') === FALSE && !empty($row))

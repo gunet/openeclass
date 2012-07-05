@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
                                                 receive_mail = ". quote($subscribe) .",
 						am_public = ". quote($am_public) ."
                                                 $verified_mail_sql
-						WHERE user_id = ". quote($_SESSION['uid']) )) {
+						WHERE user_id = ". intval($_SESSION['uid']) )) {
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
 		$_SESSION['prenom'] = $prenom_form;

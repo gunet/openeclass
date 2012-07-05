@@ -284,7 +284,7 @@ function submit_work($id, $on_behalf_of=null)
                         if (isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION['dbname']])) {
                                 // user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignments WHERE id = ". quote($id));
+                                        FROM assignments WHERE id = ". intval($id));
                                 if ($res and mysql_num_rows($res) == 1) {
                                         $row = mysql_fetch_array($res);
                                         if ($row['time'] < 0 and !$on_behalf_of) {
@@ -302,7 +302,7 @@ function submit_work($id, $on_behalf_of=null)
                 }
         } //checks for submission validity end here
 
-        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = ". quote($id));
+        $res = db_query("SELECT title, group_submissions FROM assignments WHERE id = ". intval($id));
         $row = mysql_fetch_array($res);
         $group_sub = $row['group_submissions'];
         $navigation[] = $works_url;
@@ -457,7 +457,7 @@ function show_edit_assignment($id)
 	global $tool_content, $m, $langEdit, $langBack, $code_cours,
 	       $urlAppend, $works_url, $end_cal_Work_db;
 
-	$res = db_query("SELECT * FROM assignments WHERE id = ". quote($id));
+	$res = db_query("SELECT * FROM assignments WHERE id = ". intval($id));
 	$row = mysql_fetch_array($res);
 
 	$deadline = $row['deadline'];
@@ -571,7 +571,7 @@ function show_student_assignment($id)
         $user_group_info = user_group_info($uid, $cours_id);
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM `$currentCourseID`.assignments
-                                 WHERE id = ". quote($id));
+                                 WHERE id = ". intval($id));
         if ($res and mysql_num_rows($res) == 1) {
                 $row = mysql_fetch_array($res);
 
