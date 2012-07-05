@@ -287,7 +287,7 @@ function submit_work($id, $on_behalf_of = null)
                         if (isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION['dbname']])) {
                                 // user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE id = ". quote($id));
+                                        FROM assignment WHERE id = ". intval($id));
                                 $row = mysql_fetch_array($res);
                                 if ($row['time'] < 0 and !$on_behalf_of) {
                                         $submit_ok = FALSE; // after assignment deadline
@@ -301,7 +301,7 @@ function submit_work($id, $on_behalf_of = null)
                 }
         } //checks for submission validity end here
 
-        $res = db_query("SELECT title, group_submissions FROM assignment WHERE course_id = ". quote($course_id) ." AND id = ". quote($id));
+        $res = db_query("SELECT title, group_submissions FROM assignment WHERE course_id = ". intval($course_id) ." AND id = ". intval($id));
         $row = mysql_fetch_array($res);
         $title = $row['title'];
         $group_sub = $row['group_submissions'];
@@ -466,7 +466,7 @@ function show_edit_assignment($id)
 	global $tool_content, $m, $langEdit, $langBack, $course_code,
 	       $urlAppend, $works_url, $end_cal_Work_db;
 
-	$res = db_query("SELECT * FROM assignment WHERE id = ". quote($id));
+	$res = db_query("SELECT * FROM assignment WHERE id = ". intval($id));
 	$row = mysql_fetch_array($res);
 
 	$deadline = $row['deadline'];
