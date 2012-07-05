@@ -27,6 +27,7 @@ $path2add = 2;
 include '../include/baseTheme.php';
 include '../include/lib/fileUploadLib.inc.php';
 include '../include/lib/forcedownload.php';
+require_once '../include/phpass/PasswordHash.php';
 
 // set default storage engine
 db_query("SET storage_engine=MYISAM");
@@ -75,12 +76,8 @@ if (!defined('UTF8')) {
 }
 
 if (!isset($_POST['submit2'])) {
-        if(isset($encryptedPasswd) and $encryptedPasswd) {
-                $newpass = md5(@q($_POST['password']));
-        } else {
-                // plain text password since the passwords are not hashed
-                $newpass = @q($_POST['password']);
-        }
+
+		$newpass = @q($_POST['password']);
 
         if (!is_admin(@q($_POST['login']), $newpass, $mysqlMainDb)) {
                 $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
@@ -523,6 +520,10 @@ if (!isset($_POST['submit2'])) {
 
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
+        }
+        
+        if ($oldversion < '2.5.2') {
+        	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

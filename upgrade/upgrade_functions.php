@@ -220,23 +220,45 @@ function update_assignment_submit()
 // checks if admin user
 function is_admin($username, $password, $mysqlMainDb) {
 
+	global $encryptedPasswd;
+	
 	mysql_select_db($mysqlMainDb);
 	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
-            AND user.username = '$username' AND user.password = '$password'");
+            AND user.username = ". quote($username) );
 	if (!$r or mysql_num_rows($r) == 0) {
 		return FALSE;
 	} else {
 		$row = mysql_fetch_array($r);
-		$_SESSION['uid'] = $row['user_id'];
-		$_SESSION['nom'] = $row['nom'];
-		$_SESSION['prenom'] = $row['prenom'];
-		$_SESSION['email'] = $row['email'];
-                $_SESSION['uname'] = $username;
-                $_SESSION['statut'] = $row['statut'];
-                $_SESSION['is_admin'] = true;
-		//we need to return the user id
-		//or setup session UID with the admin's User ID so that it validates @ init.php
-		return TRUE;
+		$ret = FALSE;
+		
+		if ($encryptedPasswd) {
+			
+			$hasher = new PasswordHash(8, false);
+			if ($hasher->CheckPassword($password, $row['password']))
+				$ret = TRUE;
+			else if (strlen($row['password']) < 60 && md5($password) == $row['password'])
+				$ret = TRUE;
+			
+		} else {
+			
+			if ($password == $row['password'])
+				$ret = TRUE;
+			
+		}
+		
+		if ($ret) {
+			$_SESSION['uid'] = $row['user_id'];
+			$_SESSION['nom'] = $row['nom'];
+			$_SESSION['prenom'] = $row['prenom'];
+			$_SESSION['email'] = $row['email'];
+			$_SESSION['uname'] = $username;
+			$_SESSION['statut'] = $row['statut'];
+			$_SESSION['is_admin'] = true;
+			//we need to return the user id
+			//or setup session UID with the admin's User ID so that it validates @ init.php
+		}
+		
+		return $ret;
 	}
 }
 

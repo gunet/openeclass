@@ -24,6 +24,7 @@ define('SUFFIX_LEN', 4);
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+require_once '../../include/phpass/PasswordHash.php';
 
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
@@ -196,7 +197,8 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $depid, 
 
         $registered_at = time();
         $expires_at = time() + $durationAccount;
-        $password_encrypted = md5($password);
+        $hasher = new PasswordHash(8, false);
+        $password_encrypted = $hasher->HashPassword($password);
 
         $req = db_query("INSERT INTO user
                                 (nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang, am, phone)

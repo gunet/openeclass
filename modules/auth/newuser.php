@@ -35,6 +35,7 @@
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
+require_once '../../include/phpass/PasswordHash.php';
 
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
@@ -197,7 +198,8 @@ if (!isset($_POST['submit'])) {
 		// manage the store/encrypt process of password into database
 		$uname = escapeSimple($uname);  
 		$password = escapeSimpleSelect($password); 
-		$password_encrypted = md5($password);
+		$hasher = new PasswordHash(8, false);
+		$password_encrypted = $hasher->HashPassword($password);
 
 		$q1 = "INSERT INTO `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang, verified_mail)

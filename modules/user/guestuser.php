@@ -22,6 +22,7 @@ $require_current_course = TRUE;
 $require_course_admin = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Guest';
+require_once '../../include/phpass/PasswordHash.php';
 include '../../include/baseTheme.php';
 
 $nameTools = $langAddGuest;
@@ -91,7 +92,8 @@ function createguest($username, $cours_id, $password)
 	global $langGuestName, $langGuestSurname, $mysqlMainDb;
 
 	mysql_select_db($mysqlMainDb);
-        $password = md5($password);
+	$hasher = new PasswordHash(8, false);
+	$password = $hasher->HashPassword($password);
 
 	$q = db_query("SELECT user_id from cours_user WHERE statut=10 AND cours_id = $cours_id");
 	if (mysql_num_rows($q) > 0) {

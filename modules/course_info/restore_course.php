@@ -25,6 +25,7 @@ include '../../include/lib/fileUploadLib.inc.php';
 include '../../include/lib/fileManageLib.inc.php';
 include '../../include/lib/forcedownload.php';
 include '../../include/pclzip/pclzip.lib.php';
+require_once '../../include/phpass/PasswordHash.php';
 
 $nameTools = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
@@ -447,7 +448,8 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
                              '<i>' . q("$name $surname") . '</i>'), '<br>';
 	} elseif (isset($_POST['create_users'])) {
 		if ($version == 1) { // if we come from a archive < 2.x encrypt user password
-			$password = md5($password);
+			$hasher = new PasswordHash(8, false);
+			$password = $hasher->HashPassword($password);
 		}
 		db_query("INSERT INTO `$mysqlMainDb`.user
 			(nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at, description)

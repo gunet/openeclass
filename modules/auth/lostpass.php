@@ -33,6 +33,7 @@
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include('../../include/sendMail.inc.php');
+require_once '../../include/phpass/PasswordHash.php';
 $nameTools = $lang_remind_pass;
 
 function check_password_editable($password)
@@ -119,13 +120,15 @@ if (isset($_GET['do']) and $_GET['do'] == 'go') {
                                 $found_editable_password = true;
 				//insert an md5 key to the db
 				$new_pass = create_pass();
+				$hasher = new PasswordHash(8, false);
+				$password_encrypted = $hasher->HashPassword($new_pass);
 				//TODO: add a query to check if the newly generated password already exists in the
 				//reset-pass table. If yes, attempt to generate another one.
-				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".md5($new_pass)."', '$new_pass', NOW())";
+				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".$password_encrypted."', '$new_pass', NOW())";
 				db_query($sql, $mysqlMainDb);
 				//prepare instruction for password reset
 				$text .= $langPassResetGoHere;
-				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .md5($new_pass);
+				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .$password_encrypted;
 
 			} else { //other type of auth...
 				switch($s['password'])  {

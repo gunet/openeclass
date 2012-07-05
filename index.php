@@ -41,6 +41,7 @@ include "include/baseTheme.php";
 include "include/CAS/CAS.php";
 include "modules/auth/auth.inc.php";
 require_once 'modules/video/video_functions.php';
+require_once 'include/phpass/PasswordHash.php';
 load_modal_box();
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
