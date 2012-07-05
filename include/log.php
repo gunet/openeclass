@@ -28,7 +28,7 @@ define('LOG_DELETE_COURSE', 6);
 
 class Log {
         // log users actions
-        public static function record($course_id, $module_id, $action_type, $details) {               
+        public static function record($course_id, $module_id, $action_type, $details) {
                                 
                 db_query("INSERT INTO log SET 
                                 user_id = $_SESSION[uid],
@@ -48,6 +48,7 @@ class Log {
         // $logtype = -1 means logtypes
         // $user_id = -1 means all users
         // $course_id = -1 means all courses
+        // $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
         //-------------------------------------------------------------
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
                  
@@ -107,7 +108,7 @@ class Log {
                                         }                                        
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
                                         if ($course_id == 0 or $module_id == 0) {
-                                                $tool_content . "<td>".$this->other_action_details($logtype, $r['details'])."</td>";
+                                                $tool_content .= "<td>".$this->other_action_details($logtype, $r['details'])."</td>";
                                         } else {
                                                 $tool_content .= "<td>".$this->course_action_details($r['module_id'], $r['details'])."</td>";
                                         }
@@ -163,7 +164,12 @@ class Log {
 
         private function create_course_action_details($details) {
                 
-                $content = "create course";
+                global $langTitle;
+                
+                $details = unserialize($details);
+                
+                $content = "$langTitle &laquo;".$details['title']."&raquo;";
+                $content .= "&nbsp;(".$details['code'].")";
                 
                 return $content;
         }

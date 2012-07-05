@@ -28,8 +28,11 @@ $nameTools = $langUserLog;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
+load_js('jquery');
+load_js('tools.js');
+$head_content .= '<script type="text/javascript">$(course_log_controls_init);</script>';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content .= $jscalendar->get_load_files_code();
 
 $u_user_id = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
 $u_date_start = isset($_POST['u_date_start'])? $_POST['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
@@ -44,7 +47,7 @@ if (!isset($_GET['p'])) {
 // display logs
 if (isset($_POST['submit'])) {
     $log = new Log();
-    if (isset($_GET['p'])) {
+    if (isset($_GET['p'])) { // display system logging
         $log->display(0, $u_user_id, 0, $logtype, $u_date_start, $u_date_end);        
     } else { // display course modules logging
         $log->display($u_course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end);
@@ -103,63 +106,43 @@ if (isset($_POST['submit'])) {
     
     // --------------------------------------
     // display form
-    // --------------------------------------    
+    // --------------------------------------
+    $module_names[-1] = $langAllModules;
+    foreach ($modules as $mid => $info) {
+            $module_names[$mid] = $info['title'];
+    }
+    $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
+    $log_types = array(0 => $langAllActions,
+                       -1 => $i."$langCourseActions",
+                       LOG_INSERT => $i.$i.$langInsert,
+                       LOG_MODIFY => $i.$i.$langModify,
+                       LOG_DELETE => $i.$i.$langDelete,
+                       -2 => $i."$langSystemActions",
+                       LOG_PROFILE => $i.$i.$langModProfile,
+                       LOG_CREATE_COURSE => $i.$i.$langCourseCreate,
+                       LOG_DELETE_COURSE => $i.$i.$langCourseDel);
     $tool_content .= "<form method='post'>
-        <fieldset>
-        <legend>$langUserLog</legend>
-        <table class='tbl'>        
-        <tr>
-        <th width='220' class='left'>$langStartDate</th>
-        <td>$start_cal</td>
-        </tr>
-        <tr>
-        <th class='left'>$langEndDate</th>
-        <td>$end_cal</td>
-        </tr>";
-        if (!isset($_GET['p'])) {
-                $tool_content .= "<tr>
-                <th class='left'>$langFirstLetterCourse</th>
-                <td>$letterlinks</td>
-                </tr>
-                <tr>
-                <th class='left'>$langCourse</th>
-                <td><select name='u_course_id'>$cours_opts</select></td>
-                </tr>
-                <tr>
-                <th class='left'>$langLogModules :</th>
-                <td><select name='u_module_id'>";
-                $tool_content .= "<option value='-1'>$langAllModules</option>";
-                foreach ($modules as $m => $mid) {
-                        $extra = '';
-                        if ($u_module_id == $m) {
-                                $extra = 'selected';
-                        }
-                        $tool_content .= "<option value=".$m." $extra>".$mid['title']."</option>";
-                }        
-                $tool_content .= "</select></td></tr>";
-        }
-        $tool_content .= "<tr><th class='left'>$langLogTypes :</th><td>";
-        if (!isset($_GET['p'])) {
-                $log_types = array('0' => $langAllActions,
-                                LOG_INSERT => $langInsert,
-                                LOG_MODIFY => $langModify,
-                                LOG_DELETE => $langDelete);
-        } else {
-                $log_types = array('0' => $langAllActions,
-                                LOG_PROFILE => $langModProfile,
-                                LOG_CREATE_COURSE => $langCourseCreate,
-                                LOG_DELETE_COURSE => $langCourseDel);
-        }
-        $tool_content .= selection($log_types, 'logtype', $logtype);
-        $tool_content .= "</td></tr>        
-        <tr>
-        <th class='left'>&nbsp;</th>
-        <td><input type='submit' name='submit' value=$langSubmit></td>
-        </tr>        
-        </table>
-        </fieldset>
-        </form>";
+    <fieldset>
+      <legend>$langUserLog</legend>
+      <table class='tbl'>        
+        <tr><th width='220' class='left'>$langStartDate</th>
+            <td>$start_cal</td></tr>
+        <tr><th class='left'>$langEndDate</th>
+            <td>$end_cal</td></tr>
+        <tr><th class='left'>$langLogTypes :</th>
+            <td>".selection($log_types, 'logtype', $logtype)."</td></tr>
+        <tr class='course'><th class='left'>$langFirstLetterCourse</th>
+            <td>$letterlinks</td></tr>
+        <tr class='course'><th class='left'>$langCourse</th>
+            <td><select name='u_course_id'>$cours_opts</select></td></tr>
+        <tr class='course'><th class='left'>$langLogModules:</th>
+            <td>".selection($module_names, 'u_module_id', $m)."</td></tr>
+        <tr><th class='left'>&nbsp;</th>
+            <td><input type='submit' name='submit' value=$langSubmit></td></tr>        
+      </table>
+    </fieldset>
+  </form>";
     
 $tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";
 
-draw($tool_content, 3, null, $local_head);
+draw($tool_content, 3, null, $head_content);

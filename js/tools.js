@@ -109,8 +109,8 @@ function add_bookmark() {
 }
 
 function control_deactivate_off() {
-        $("unsubscontrols input").attr('disabled', '1');
-        $("unsubscontrols").addClass('inactive');
+        $("#unsubscontrols input").attr('disabled', 'disabled');
+        $("#unsubscontrols").addClass('inactive');
 }
 
 // Deactivate course e-mail subscription controls
@@ -119,10 +119,25 @@ function control_deactivate() {
         $("#unsub").change(function () {
                 checkState = $(this).is(':checked');
                 if (checkState) {
-                        $("div#unsubscontrols input").removeAttr('disabled');
-                        $("div#unsubscontrols").removeClass('inactive');
+                        $("#unsubscontrols input").removeAttr('disabled');
+                        $("#unsubscontrols").removeClass('inactive');
                 } else {
                         control_deactivate_off();
                 }
         });
+}
+
+function activate_course_log_controls() {
+        $("#course select").attr('disabled', 'disabled');
+        $("#course").addClass('invisible');
+        alert('after');
+}
+
+function course_log_controls_init() {
+        var select = $('[name=logtype]');
+        select.change(function () {
+                if ($(this).val() == '-2') {
+                        activate_course_log_controls();
+                }
+        })
 }
