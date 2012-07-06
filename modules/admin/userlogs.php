@@ -37,23 +37,20 @@ $head_content .= '<script type="text/javascript">
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
-$u_user_id = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
+$u = isset($_GET['u'])?intval($_GET['u']):'';
 $u_date_start = isset($_GET['u_date_start'])? $_GET['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
 $u_date_end = isset($_GET['u_date_end'])? $_GET['u_date_end']: strftime('%Y-%m-%d', strtotime('now +1 day'));
 $logtype = isset($_GET['logtype'])? intval($_GET['logtype']): '0';
-
-if (!isset($_GET['p'])) {
-        $u_course_id = isset($_GET['u_course_id'])? intval($_GET['u_course_id']): '-1';
-        $u_module_id = isset($_GET['u_module_id'])? intval($_GET['u_module_id']): '-1';
-}
+$u_course_id = isset($_GET['u_course_id'])? intval($_GET['u_course_id']): '-1';
+$u_module_id = isset($_GET['u_module_id'])? intval($_GET['u_module_id']): '-1';
 
 // display logs
 if (isset($_GET['submit'])) {
     $log = new Log();
-    if (isset($_GET['p'])) { // display system logging
-        $log->display(0, $u_user_id, 0, $logtype, $u_date_start, $u_date_end);
-    } else { // display course modules logging
-        $log->display($u_course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end);
+    if ($logtype == -2) { // display system logging
+        $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end);
+    } else { // display course modules logging         
+        $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end);
     }
 }
 
@@ -75,8 +72,7 @@ if (isset($_GET['submit'])) {
            array('style'       => '',
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
-
-    if (!isset($_GET['p'])) {
+    
         //possible courses
         $qry = "SELECT LEFT(title, 1) AS first_letter FROM course
                 GROUP BY first_letter ORDER BY first_letter";
@@ -99,8 +95,7 @@ if (isset($_GET['submit'])) {
         $result = db_query($qry);
         while ($row = mysql_fetch_assoc($result)) {
                 $cours_opts[$row['id']] = $row['title'];
-        }
-    }
+        }    
 
     // --------------------------------------
     // display form
@@ -109,6 +104,7 @@ if (isset($_GET['submit'])) {
     foreach ($modules as $mid => $info) {
             $module_names[$mid] = $info['title'];
     }
+    
     $i = html_entity_decode('&nbsp;&nbsp;&nbsp;', ENT_QUOTES, 'UTF-8');
     $log_types = array(0 => $langAllActions,
                        -1 => $i.$langCourseActions,
@@ -136,9 +132,10 @@ if (isset($_GET['submit'])) {
         <tr class='course'><th class='left'>$langLogModules:</th>
             <td>".selection($module_names, 'u_module_id', $m)."</td></tr>
         <tr><th class='left'>&nbsp;</th>
-            <td><input type='submit' name='submit' value='$langSubmit'></td></tr>
+            <td><input type='submit' name='submit' value='$langSubmit'></td></tr>            
       </table>
     </fieldset>
+    <input type='hidden' name='u' value='$u'>
   </form>";
 
 $tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";

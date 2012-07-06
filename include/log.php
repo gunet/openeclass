@@ -57,26 +57,40 @@ class Log {
                         $langCourse, $langModule, $langAllModules;
                 
                 $q1 = $q2 = $q3 = $q4 = '';
+                
                 if ($user_id != -1) {
-                        $q1 = "AND user_id = $user_id";
+                        $q1 = "AND user_id = $user_id"; // display specific user
                 }                
-                if ($module_id > 0) {
-                        $q2 = "AND module_id = $module_id";
-                } elseif ($module_id == -1) { // display all course module logging
-                        $q2 = "AND module_id > 0"; // but exclude modules logging not specific to course
+                
+                if ($logtype > 0) {
+                        $q3 = "AND action_type = $logtype"; // specific course logging
+                        if ($logtype > 3) { // specific system logging
+                               $module_id = $course_id = 0;
+                        }
+                } elseif ($logtype == -2) { // display all system logging
+                       $q2 = "AND module_id = 0";
+                       $q4 = "AND course_id = 0";
                 }
-                if ($logtype != 0) {
-                        $q3 = "AND action_type = $logtype";
-                }                
+                
+                if ($module_id > 0) {
+                        $q2 = "AND module_id = $module_id"; // display specific module
+                } elseif ($module_id == -1) { // display all course module logging
+                        $q2 = "AND module_id > 0"; // but exclude system logging
+                }
+                
                 if ($course_id > 0) {
-                        $q4 = "AND course_id = $course_id";
+                        $q4 = "AND course_id = $course_id"; // display specific course
                 } elseif ($course_id == -1) { // display all course logging
-                        $q4 = "AND course_id > 0"; // but exclude logging not specific to course
+                        $q4 = "AND course_id > 0"; // but exclude system logging
                 }
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");                
+                echo "<br />SELECT user_id, course_id, module_id, details, action_type, ts FROM log
+                                WHERE ts BETWEEN '$date_from' AND '$date_now'
+                                $q1 $q2 $q3 $q4
+                                ORDER BY ts DESC<br />";
                 
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id > 0) {
@@ -107,9 +121,9 @@ class Log {
                                                $tool_content .= "<td>".$modules[$mid]['title']."</td>";
                                         }                                        
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
-                                        if ($course_id == 0 or $module_id == 0) {
-                                                $tool_content .= "<td>".$this->other_action_details($logtype, $r['details'])."</td>";
-                                        } else {
+                                        if ($course_id == 0 or $module_id == 0) { // system logging
+                                                $tool_content .= "<td>".$this->other_action_details($r['action_type'], $r['details'])."</td>";
+                                        } else { // course logging
                                                 $tool_content .= "<td>".$this->course_action_details($r['module_id'], $r['details'])."</td>";
                                         }
                                         $tool_content .= "</tr>";

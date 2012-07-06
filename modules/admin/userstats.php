@@ -40,11 +40,6 @@ $navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
 $u = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
 
-$tool_content .= "<div id='operations_container'>
-      <ul id='opslist'>
-      <li><a href='userlogs.php?u=$u&amp;p=1'>$langUserLog</a></li>
-      </ul></div>";
-
 if(!empty($u))	
 {
 	$sql = db_query("SELECT username FROM user WHERE user_id = $u");
@@ -116,7 +111,8 @@ if(!empty($u))
 			}
 			mysql_free_result($result);
 			foreach ($course_codes as $code) {
-				$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$u'";
+				$sql = "SELECT COUNT(*) AS cnt FROM actions
+                                        WHERE user_id = $u AND course_id = " . course_code_to_id($code);
 				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
 					$totalHits += $row['cnt'];
@@ -125,6 +121,7 @@ if(!empty($u))
 				mysql_free_result($result);
 			}
 		}
+               
 		$tool_content .= "<b>$totalHits</b></p>";
 		$chart = new PieChart(600, 300);
 		$dataSet = new XYDataSet();
