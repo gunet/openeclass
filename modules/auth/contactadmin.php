@@ -45,22 +45,20 @@ $nameTools = $langContactAdmin;
 // MAIN BODY
 
 // get the incoming values and initialize them
-$userid = isset($_GET['userid'])?$_GET['userid']:(isset($_POST['id'])?$_POST['id']:'');
-$submit = isset($_POST['submit'])?$_POST['submit']:'';
-if(!empty($userid))
+$userid = isset($_GET['userid'])? intval($_GET['userid']): (isset($_POST['id'])? intval($_POST['id']): 0);
+
+if (!empty($userid))
 {
-	$sql = db_query("SELECT * FROM user WHERE user_id='".$userid."'");
+	$sql = db_query("SELECT * FROM user WHERE user_id = ".$userid);
 	while ($m = mysql_fetch_array($sql)) {
-		$sirname = $m["nom"];
-		$firstname = $m["prenom"];
-		$email = $m["email"];
+		$name = $m['nom'] . ' ' . $m['prenom'];
+		$email = $m['email'];
 	}
 	
-        if (!empty($_POST["submit"])) {
-                $body = isset($_POST['body'])?$_POST['body']:'';
-                $tool_content .= "<table width=\"99%\"><tbody><tr><td>";
-                //$to = $email;
-                $to = $GLOBALS['emailhelpdesk'];
+        if (isset($_POST['submit'])) {
+                $body = isset($_POST['body'])? $_POST['body']: '';
+                $tool_content .= "<table width='99%'><tbody><tr><td>";
+                $to = get_config('email_helpdesk');
                 $emailsubject = "Ενεργοποίηση λογαριασμού χρήστη";
                 $emailbody = "Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
                         επανενεργοποίηση του λογαριασμού του:
@@ -68,7 +66,7 @@ if(!empty($userid))
                         Email: $email
                         Σχόλια: $body";
                 if (!send_mail('', '', '', $to,	$emailsubject, $emailbody, $charset)) {
-                        $tool_content .= "<h4>'$langEmailNotSend' '$to'!</h4>";
+                        $tool_content .= "<h4>$langEmailNotSend ".q($to)."!</h4>";
                 } else {
                         $tool_content .= "<h4>$emailsuccess</h4>";
                 }
@@ -76,18 +74,18 @@ if(!empty($userid))
         }
 	else
 	{
-		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
-	<table width=\"99%\"><caption>$langForm</caption><tbody>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langName:</b></td><td>".$firstname."</td></tr>";	
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langSurname:</b></td><td>".$sirname."</td></tr>";	
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Email:</b></td><td>".$email."</td></tr>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langComments:</b></td><td><textarea rows=\"6\" cols=\"40\" name=\"body\">
-		$langActivateAccount
-		</textarea></td></tr>";
-		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\">&nbsp;</td><td>
-		<input type=\"submit\" name=\"submit\" value=\"".$langSend."\">
-		<input type=\"hidden\" name=\"userid\" value=\"".$userid."\"</td></tr>";
-		$tool_content .= "</tbody></table></form>";
+		$tool_content .= "<form action='contactadmin.php?userid=$userid' method='post'>
+        <table width='99%'><caption>$langForm</caption><tbody>
+            <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>".q($firstname)."</td></tr>
+            <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>".$sirname."</td></tr>
+            <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>".$email."</td></tr>
+            <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td><td><textarea rows='6' cols='40' name='body'>
+        $langActivateAccount
+        </textarea></td></tr>";
+$tool_content .= "<tr><td width='3%' nowrap valign='top'>&nbsp;</td><td>
+        <input type='submit' name='submit' value='".$langSend."'>
+        <input type='hidden' name='userid' value='".$userid."'</td></tr>";
+$tool_content .= "</tbody></table></form>";
 	}
 	
 }

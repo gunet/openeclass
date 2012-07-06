@@ -63,18 +63,18 @@ if (isset($_REQUEST['u']) and
 	if ($valid and mysql_num_rows($res) == 1) {
                 if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                     $_POST['newpass'] == $_POST['newpass1']) {
-                		$hasher = new PasswordHash(8, false);
-                        if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
-                                         WHERE user_id = $userUID")) {
-                                $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
-                                                 $homelink";
-                                $change_ok = true;
+                            $hasher = new PasswordHash(8, false);
+                            if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
+                                                      WHERE user_id = $userUID")) {
+                                      $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
+                                                       $homelink";
+                                      $change_ok = true;
                         }
-                } else {
-                        $tool_content = "<p class='alert1'>$langPassTwo</p>";
+                } elseif (isset($_POST['newpass'])) {
+                        $tool_content .= "<p class='alert1'>$langPassTwo</p>";
                 }
 		if (!$change_ok) {
-                        $tool_content = "
+                        $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <input type='hidden' name='u' value='$userUID'>
         <input type='hidden' name='h' value='".q($_REQUEST['h'])."'>
