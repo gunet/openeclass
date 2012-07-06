@@ -45,7 +45,7 @@ if($submit) {
   $lang = langname_to_code($localize);	
 
       // check if user name exists
-  $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username='$uname'");
+  $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=". quote($uname));
   while ($myusername = mysql_fetch_array($username_check)) {
     $user_exist=$myusername[0];
   }
@@ -96,19 +96,24 @@ send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
 
     $hasher = new PasswordHash(8, false);
     $password_encrypted = $hasher->HashPassword($password);
-    $s = db_query("SELECT id FROM faculte WHERE name='$department'");
+    $s = db_query("SELECT id FROM faculte WHERE name= ". quote($department) );
     $dep = mysql_fetch_array($s);
-    $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
-      (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
-      VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email_form', '5', '$dep[id]', '$registered_at', '$expires_at', '$lang')");
-
-    // close request
+    
+    if ($dep !== false)
+    {
+        $inscr_user = db_query("INSERT INTO `$mysqlMainDb`.user
+          (user_id, nom, prenom, username, password, email, statut, department, registered_at, expires_at, lang)
+          VALUES ('NULL', ". quote($nom_form) .", ". quote($prenom_form) .", ". quote($uname) .", ". 
+                        quote($password_encrypted) .", ". quote($email_form) .", 5, ". quote($dep['id']) .", ". 
+                        quote($registered_at) .", ". quote($expires_at) .", ". quote($lang) );
+    
+        // close request
         $rid = intval($_POST['rid']);
-        db_query("UPDATE user_request set status = 2,
-         date_closed = NOW() WHERE id = '$rid'");
-
-    $tool_content .= "<tr><td valign='top' align='center' class='alert1'>$usersuccess
-    <br><br><a href='../admin/listreq.php?type=user' class='mainpage'>$langBack</a>";
+        db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $rid");
+    
+        $tool_content .= "<tr><td valign='top' align='center' class='alert1'>$usersuccess
+        <br><br><a href='../admin/listreq.php?type=user' class='mainpage'>$langBack</a>";
+    }
   }
 
 } else {
@@ -130,17 +135,17 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	<thead>
     <tr>
     <th class='left' width=20%>$langSurname</th>
-	 <td><input type='text' class=auth_input_admin name='nom_form' value='".@$ps."' >
+	 <td><input type='text' class=auth_input_admin name='nom_form' value='".@q($ps)."' >
 	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langName</th>
-	  <td><input type='text' class=auth_input_admin name='prenom_form' value='".@$pn."' >
+	  <td><input type='text' class=auth_input_admin name='prenom_form' value='".@q($pn)."' >
 	<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langUsername</th>
-	  <td><input type='text' class=auth_input_admin name='uname' value='".@$pu."'>
+	  <td><input type='text' class=auth_input_admin name='uname' value='".@q($pu)."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
@@ -149,7 +154,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  </tr>
 	  <tr>
     	<th class='left'>$langEmail</th>
-	  <td><input type='text' class=auth_input_admin name='email_form' value='".@$pe."'>
+	  <td><input type='text' class=auth_input_admin name='email_form' value='".@q($pe)."'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
@@ -174,7 +179,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 		<tr><td>&nbsp;</td>
 		<td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" ></td>
 		</tr></thead></table>
-		<input type='hidden' name='rid' value='".@$id."'>
+		<input type='hidden' name='rid' value='".@q($id)."'>
 		</tbody></table></form>";
     $tool_content .= "<center><p><a href=\"../admin/index.php\">$langBack</p></center>";
 

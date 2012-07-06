@@ -33,25 +33,30 @@ if (isset($_GET['id'])) {
         $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
         $id = $uid;
 }
+
 $userdata = db_query_get_single_row("SELECT nom, prenom, email, phone, am, department, has_icon, description, email_public, phone_public, am_public FROM user WHERE user_id = $id");
-$tool_content .= "<table class='tbl'>
-        <tr>
-            <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
-            <td><b>" . q("$userdata[prenom] $userdata[nom]") . "</b><br>";
-if (!empty($userdata['email']) and allow_access($userdata['email_public'])) {
-        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
+
+if ($userdata !== false)
+{
+	$tool_content .= "<table class='tbl'>
+	        <tr>
+	            <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
+	            <td><b>" . q("$userdata[prenom] $userdata[nom]") . "</b><br>";
+	if (!empty($userdata['email']) and allow_access($userdata['email_public'])) {
+	        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
+	}
+	if (!empty($userdata['am']) and allow_access($userdata['am_public'])) {
+	        $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
+	}
+	if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
+	        $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
+	}
+	$tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['department']) . "<br>";
+	if (!empty($userdata['description'])) {
+	        $tool_content .= standard_text_escape($userdata['description']);
+	}
+	$tool_content .= "</td></tr></table>";
 }
-if (!empty($userdata['am']) and allow_access($userdata['am_public'])) {
-        $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
-}
-if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
-        $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
-}
-$tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['department']) . "<br>";
-if (!empty($userdata['description'])) {
-        $tool_content .= standard_text_escape($userdata['description']);
-}
-$tool_content .= "</td></tr></table>";
 
 draw($tool_content, 1);
 

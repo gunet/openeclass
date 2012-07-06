@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
                                 WHERE user_id = $uid AND cours_id = $cid");        
                 }                
                 $course_title = course_id_to_title($cid);        
-                $tool_content .= "<div class='success'>".sprintf($course_title, $langEmailUnsubSuccess)."</div>";
+                $tool_content .= "<div class='success'>".q(sprintf($course_title, $langEmailUnsubSuccess))."</div>";
         } else { // change email subscription for all courses
                 foreach ($_SESSION['status'] as $course_code => $c_value) {
                         if (@array_key_exists($course_code, $_POST['c_unsub'])) {                        
@@ -79,14 +79,14 @@ if (isset($_POST['submit'])) {
                 $cid = intval($_POST['cid']);
                 $course_title = course_id_to_title($cid);        
                 $selected = get_user_email_notification($uid, $cid) ? 'checked': '';        
-                $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;$course_title <br />";
+                $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;". q($course_title) ."<br />";
                 $tool_content .= "<input type='hidden' name='cid' value='$cid'>";
         } else { // displays all courses
                 foreach ($_SESSION['status'] as $course_code => $status) {
                         $course_title = course_code_to_title($course_code);
                         $cid = course_code_to_id($course_code);        
                         $selected = get_user_email_notification($uid, $cid) ? 'checked': '';        
-                        $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;$course_title <br />";
+                        $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;". q($course_title) ."<br />";
                 }       
         }
         $tool_content .= "</div><br /><input type='submit' name='submit' value='$langSubmit'>";
