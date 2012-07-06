@@ -61,7 +61,7 @@ if ($submit)  {
     }
 
     // check if user name exists
-    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=".autoquote($pu));
+    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=". quote($pu));
      
     if (mysql_num_rows($username_check) > 0) {
         $tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
