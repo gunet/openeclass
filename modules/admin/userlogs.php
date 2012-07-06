@@ -113,7 +113,7 @@ if (isset($_GET['submit'])) {
                        LOG_DELETE => $i.$i.$langDelete,
                        -2 => $i.$langSystemActions,
                        LOG_PROFILE => $i.$i.$langModProfile,
-                       LOG_CREATE_COURSE => $i.$i.$langCourseCreate,
+                       LOG_CREATE_COURSE => $i.$i.$langFinalize,
                        LOG_DELETE_COURSE => $i.$i.$langCourseDel);
     $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
     <fieldset>

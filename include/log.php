@@ -87,10 +87,10 @@ class Log {
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");                
-                echo "<br />SELECT user_id, course_id, module_id, details, action_type, ts FROM log
+                /*echo "<br />SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC<br />";
+                                ORDER BY ts DESC<br />";*/
                 
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id > 0) {
@@ -191,7 +191,12 @@ class Log {
         
         private function delete_course_action_details($details) {
                 
-                $content = 'delete course';
+                global $langTitle;
+                
+                $details = unserialize($details);
+                
+                $content = "$langTitle &laquo;".$details['title']."&raquo;";
+                $content .= "&nbsp;(".$details['code'].")";
                 
                 return $content;
         }
@@ -310,15 +315,15 @@ class Log {
         private function get_action_names($action_type) {
                 
                 global $langInsert, $langModify, $langDelete, $langModProfile, 
-                       $langCourseCreate, $langDeleteCourse, $langUnknownAction;
+                       $langFinalize, $langCourseDel, $langUnknownAction;
                 
                 switch ($action_type) {
                         case LOG_INSERT: return $langInsert;
                         case LOG_MODIFY: return $langModify;
                         case LOG_DELETE: return $langDelete;
                         case LOG_PROFILE: return $langModProfile;
-                        case LOG_CREATE_COURSE: return $langCourseCreate;
-                        case LOG_DELETE_COURSE: return $langDeleteCourse;
+                        case LOG_CREATE_COURSE: return $langFinalize;
+                        case LOG_DELETE_COURSE: return $langCourseDel;
                         default: return $langUnknownAction;
                 }
         }

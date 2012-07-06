@@ -114,10 +114,10 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         $tool_content .= "</select></td></tr>
         <tr><th class='left'>$langLogTypes :</th>
          <td>";
-        $log_types = array('0' => $langAllActions,
-                           '1' => $langInsert,
-                           '2' => $langModify,
-                           '3' => $langDelete);
+        $log_types = array(0 => $langAllActions,
+                           LOG_INSERT => $langInsert,
+                           LOG_MODIFY => $langModify,
+                           LOG_DELETE => $langDelete);
         $tool_content .= selection($log_types, 'logtype', $logtype);
         $tool_content .= "</td></tr>
         <tr>

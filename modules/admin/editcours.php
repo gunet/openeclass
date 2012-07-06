@@ -207,7 +207,7 @@ if (isset($c)) {
   // Delete course
 	$tool_content .= "
 	<tr>
-	  <td><a href=\"delcours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langCourseDelFull."</a></td>
+	  <td><a href=\"delcours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langCourseDel."</a></td>
 	</tr>";
 	$tool_content .= "</table></fieldset>";
 

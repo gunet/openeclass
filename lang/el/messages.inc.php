@@ -271,7 +271,6 @@ $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
 $langCurrentStatus = "Τρέχουσα κατάσταση";
 $langListUsers = "Λίστα Χρηστών";
-$langCourseDelFull = "Διαγραφή Μαθήματος";
 $langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
 $langStatsCourse = "Στατιστικά Μαθήματος";
 
@@ -857,7 +856,7 @@ $langcourse_objectives="Στόχοι του μαθήματος";
 $langcourse_prerequisites="Προαπαιτούμενες γνώσεις";
 $langNextStep="Επόμενο βήμα";
 $langPreviousStep="Προηγούμενο βήμα";
-$langFinalize="Δημιουργία μαθήματος!";
+$langFinalize="Δημιουργία μαθήματος";
 $langCourseCategory="Η κατηγορία στην οποία ανήκει το μάθημα";
 $langProfessorsInfo="Ονοματεπώνυμα $langsOfTeachers του μαθήματος χωρισμένα με κόμματα (π.χ.<i>Νίκος Τζικόπουλος, Κώστας Αδαμόπουλος</i>)";
 $langPublic="Ελεύθερη Πρόσβαση (χωρίς εγγραφή) από τη αρχική σελίδα χωρίς συνθηματικό";

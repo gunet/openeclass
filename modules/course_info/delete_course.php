@@ -21,11 +21,16 @@
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 
 $nameTools = $langDelCourse;
 
 if(isset($_POST['delete'])) {
     delete_course($course_id);
+    // logging
+    Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
+                                                'code' => $course_code,
+                                                'title' => $title));
     $tool_content .= "<p class='success_small'>$langTheCourse <b>($title $course_code)</b> $langHasDel</p>
                       <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
     unset($course_code);
