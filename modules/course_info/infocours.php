@@ -65,14 +65,14 @@ if (isset($_POST['submit'])) {
 		
 		$facname = find_faculty_by_id($department);
                 db_query("UPDATE `$mysqlMainDb`.cours
-                          SET intitule = " . autoquote($_POST['title']) .",
-                              fake_code = " . autoquote($_POST['fcode']) .",
-                              course_keywords = ".autoquote($_POST['course_keywords']) . ",
-                              visible = " . intval($_POST['formvisible']) . ",
-                              titulaires = " . autoquote($_POST['titulary']) . ",
+                          SET intitule = " . quote($_POST['title']) .",
+                              fake_code = " . quote($_POST['fcode']) .",
+                              course_keywords = ". quote($_POST['course_keywords']) .",
+                              visible = " . intval($_POST['formvisible']) .",
+                              titulaires = " . quote($_POST['titulary']) .",
                               languageCourse = '$newlang',
-                              type = " . autoquote($_POST['type']) . ",
-                              password = " . autoquote($_POST['password']) . ",
+                              type = " . quote($_POST['type']) .",
+                              password = " . quote($_POST['password']) .",
                               faculteid = $department
                           WHERE cours_id = $cours_id");
 

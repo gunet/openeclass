@@ -28,12 +28,12 @@ if(!isset($_GET['c'])) { die(); }
 $nameTools = $langAdminUsers;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listcours.php", "name" => $langListCours);
-$navigation[] = array("url" => "editcours.php?c=".htmlspecialchars($_GET['c']), "name" => $langCourseEdit);
+$navigation[] = array("url" => "editcours.php?c=".q($_GET['c']), "name" => $langCourseEdit);
 // Initialise $tool_content
 $tool_content = "";
 
 // Initialize some variables
-$cid = course_code_to_id($_GET['c']);
+$cid = intval(course_code_to_id($_GET['c']));
 
 // Register - Unregister students - professors to course
 if (isset($_POST['submit']))  {
@@ -73,7 +73,7 @@ if (isset($_POST['submit']))  {
 else {
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n" .
 
-	$tool_content .= "<form action=".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])." method='post'>";
+	$tool_content .= "<form action=".$_SERVER['SCRIPT_NAME']."?c=".q($_GET['c'])." method='post'>";
 	$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
                           <tr><th colspan='3'>".$langFormUserManage."</th></tr>
                           <tr><th align=left>".$langListNotRegisteredUsers."<br />
@@ -88,7 +88,7 @@ else {
 	$resultAll = db_query($sqll);
 	while ($myuser = mysql_fetch_array($resultAll))
 	{
-		$tool_content .= "<option value='$myuser[user_id]'>$myuser[nom] $myuser[prenom]</option>";
+		$tool_content .= "<option value='". q($myuser['user_id']) ."'>". q($myuser['nom']) ." ". q($myuser['prenom']) ."</option>";
 	}
 
 	$tool_content .= "</select></th>
@@ -124,7 +124,7 @@ else {
 
 	$a=0;
 	while ($myStud = mysql_fetch_array($resultStud)) {
-                $tool_content .= "<option value='$myStud[user_id]'>$myStud[nom] $myStud[prenom]</option>";
+                $tool_content .= "<option value='". q($myStud['user_id']) ."'>". q($myStud['nom']) ." ". q($myStud['prenom']) ."</option>";
 		$a++;
 	}
 
@@ -141,7 +141,7 @@ else {
 				ORDER BY nom, prenom");
 	$a=0;
 	while ($myProf = mysql_fetch_array($resultProf)) {
-		$tool_content .= "<option value='$myProf[user_id]'>$myProf[nom] $myProf[prenom]</option>";
+		$tool_content .= "<option value='". q($myProf['user_id']) ."'>". q($myProf['nom']) ." ". q($myProf['prenom']) ."</option>";
 		$a++;
 	}
 	$tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
@@ -154,7 +154,7 @@ else {
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
 	$tool_content .= "<p align='right'>
-	<a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
+	<a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
 }
 // Else go back to index.php directly
 else {

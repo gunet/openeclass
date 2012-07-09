@@ -26,7 +26,7 @@ $nameTools = $langDelCourse;
 
 if(isset($_POST['delete'])) {
     delete_course($cours_id);
-    $tool_content .= "<p class='success_small'>$langTheCourse <b>($intitule $currentCourseID)</b> $langHasDel</p>
+    $tool_content .= "<p class='success_small'>$langTheCourse <b>(". q($intitule) ." $currentCourseID)</b> $langHasDel</p>
                       <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
     unset($currentCourseID);
     unset($_SESSION['dbname']);
@@ -37,7 +37,7 @@ if(isset($_POST['delete'])) {
     <table class='tbl'>
     <tr>
     <td class='caution_NoBorder' height='60' colspan='3'>
-            <p>$langByDel_A <b>$intitule ($currentCourseID) </b>&nbsp;?  </p>
+            <p>$langByDel_A <b>". q($intitule) ." ($currentCourseID) </b>&nbsp;?  </p>
     </td>
     </tr>
     <tr>
@@ -48,11 +48,11 @@ if(isset($_POST['delete'])) {
     <td><small>$langByDel</small></td>
     </tr>
     <tr>
-    <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='$code_cours'/>
+    <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='". q($code_cours) ."'/>
                     <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
     <td>&nbsp;</td>
     </tr>
     </table>";
-    $tool_content .= "<p align='right'><a href='infocours.php?course=$code_cours'>$langBack</a></p>";
+    $tool_content .= "<p align='right'><a href='infocours.php?course=". q($code_cours) ."'>$langBack</a></p>";
 } 
 draw($tool_content, 2);
