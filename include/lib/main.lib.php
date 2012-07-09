@@ -2195,3 +2195,48 @@ function get_user_email_notification_from_courses($user_id) {
                 return FALSE;
         }                  
 }
+
+
+/**
+ * Generate a token verifying some info
+ * 
+ * @param  string  $info           - The info that will be verified by the token
+ * @param  boolean $need_timestamp - Whether the token will include a timestamp
+ * @return string  $ret            - The new token
+ */
+function token_generate($info, $need_timestamp=false)
+{
+        if ($need_timestamp) {
+                $ts = sprintf('%x-', time());
+        } else {
+                $ts = '';
+        }
+        $code_key = get_config('code_key');
+        return $ts . hash_hmac('ripemd160', $ts.$info, $code_key);
+}
+
+/**
+ * Validate a token verifying some info
+ * 
+ * @param  string  $info           - The info that will be verified by the token
+ * @param  string  $token          - The token to verify
+ * @param  int     $ts_valid_time  - Period of validity of token in seconds, if token includes a timestamp
+ * @return boolean $ret            - True if the token is valid, false otherwise
+ */
+function token_validate($info, $token, $ts_valid_time=0)
+{
+        $data = explode('-', $token);
+        if (count($data) > 1) {
+                $timediff = time() - hexdec($data[0]);
+                if ($timediff > $ts_valid_time) {
+                        return false;
+                }
+                $token = $data[1];
+                $ts = $data[0].'-';
+        } else {
+                $ts = '';
+        }
+        $code_key = get_config('code_key');
+        return $token == hash_hmac('ripemd160', $ts.$info, $code_key);
+}
+

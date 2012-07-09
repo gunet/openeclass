@@ -36,6 +36,11 @@ include('../../include/sendMail.inc.php');
 require_once '../../include/phpass/PasswordHash.php';
 $nameTools = $lang_remind_pass;
 
+// Password reset link is valid for 1 hour = 3600 sec
+define('TOKEN_VALID_TIME', 3600);
+
+$homelink = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
+
 function check_password_editable($password)
 {
 	$authmethods = array("pop3","imap","ldap","db","shibboleth","cas");
@@ -49,151 +54,130 @@ function check_password_editable($password)
 	}
 }
 
-if (isset($_GET['do']) and $_GET['do'] == 'go') {
-	$userUID = isset($_GET['u'])?intval($_GET['u']):'';
-	$hash = isset($_GET['h'])?$_GET['h']:'';
-	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
-			WHERE `user_id` = " . quote($userUID) . "
-			AND `hash` = " . quote($hash) . "
-			AND TIME_TO_SEC(TIMEDIFF(`datetime`,NOW())) < 3600
-			", $mysqlMainDb);
-
-	if (mysql_num_rows($res) == 1) {
-		$myrow = mysql_fetch_array($res);
-		//copy pass hash (md5) from reset_pass to user table
-		$sql = "UPDATE `user` SET `password` = '".$myrow['hash']."' WHERE `user_id` = ".$myrow['user_id']."";
-		if(db_query($sql, $mysqlMainDb)) {
-			//send email to the user of his new pass (not hashed)
-			$res = db_query("SELECT `email` FROM user WHERE `user_id` = ".$myrow['user_id']."", $mysqlMainDb);
-			$myrow2 = mysql_fetch_array($res);
-			$text = "$langPassEmail1 <em>$myrow[password]</em><br>$langPassEmail2";
-			$tool_content .= "<div class='success'>
-                            <p>$langAccountResetSuccess1</p>
-			    <p>$text</p>
-    			    <p><a href=\"../../index.php\">$langHome</a></p></div>";
-			db_query("DELETE FROM `passwd_reset` WHERE `user_id` = '$myrow[user_id]'", $mysqlMainDb);
-			// delete passws_reset entries older from 2 days
-			db_query("DELETE FROM `passwd_reset` 
-				WHERE DATE_SUB(CURDATE(),INTERVAL 2 DAY) > `datetime`", $mysqlMainDb);
+if (isset($_REQUEST['u']) and
+    isset($_REQUEST['h'])) {
+        $change_ok = false;
+	$userUID = intval($_REQUEST['u']);
+        $valid = token_validate('password'.$userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
+	$res = db_query("SELECT user_id FROM user
+                                WHERE user_id = $userUID AND
+                                      password NOT IN ('" .
+                                      implode("', '", $auth_ids) . "')");
+	if ($valid and mysql_num_rows($res) == 1) {
+                if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
+                    $_POST['newpass'] != '' and
+                    $_POST['newpass'] == $_POST['newpass1']) {
+                            $hasher = new PasswordHash(8, false);
+                            if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
+                                                      WHERE user_id = $userUID")) {
+                                      $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
+                                                       $homelink";
+                                      $change_ok = true;
+                        }
+                } elseif (isset($_POST['newpass'])) {
+                        $tool_content .= "<p class='alert1'>$langPassTwo</p>";
+                }
+		if (!$change_ok) {
+                        $tool_content .= "
+        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        <input type='hidden' name='u' value='$userUID'>
+        <input type='hidden' name='h' value='".q($_REQUEST['h'])."'>
+        <fieldset>
+        <legend>$langPassword</legend>
+        <table class='tbl'>
+        <tr>
+           <th>$langNewPass1</th>
+           <td><input type='password' size='40' name='newpass' value=''></td>
+        </tr>
+        <tr>
+           <th>$langNewPass2</th>
+           <td><input type='password' size='40' name='newpass1' value=''></td>
+        </tr>
+        <tr>
+           <th>&nbsp;</th>
+           <td><input type='submit' name='submit' value='$langModify'></td>
+        </tr>
+        </table>
+        </fieldset>
+        </form>";
 		}
 	} else {
-		$tool_content = "<div class='caution'>$langAccountResetInvalidLink </div><a href=\"../../index.php\">$langHome</a></td>";
+		$tool_content = "<div class='caution'>$langAccountResetInvalidLink</div>
+                                 $homelink";
 	}
-} elseif ((!isset($email) || !isset($userName) || empty($userName)) && !isset($_POST['do'])) {
+} elseif (isset($_POST['send_link'])) {
+
+	$email = isset($_POST['email'])? mb_strtolower(trim($_POST['email'])): '';
+	$userName = isset($_POST['userName'])? canonicalize_whitespace($_POST['userName']): '';
+	/***** If valid e-mail address was entered, find user and send email *****/
+	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
+                                WHERE email = " . quote($email) . " AND
+                                      BINARY username = " . quote($userName));
+
+        $found_editable_password = false;
+	if (mysql_num_rows($res) == 1) {
+		$text = $langPassResetIntro. $emailhelpdesk;
+		$text .= $langHowToResetTitle;
+		while ($s = mysql_fetch_assoc($res)) {
+			if (check_password_editable($s['password'])) {
+                                $found_editable_password = true;
+				//prepare instruction for password reset
+				$text .= $langPassResetGoHere;
+                                $text .= $urlServer . "modules/auth/lostpass.php?u=$s[user_id]&h=" .
+                                         token_generate('password'.$s['user_id'], true);
+
+			} else { //other type of auth...
+                                $auth = array_search($s['password'], $auth_ids) or 1;
+				$tool_content = "<div class='caution'>
+				    <p><strong>$langPassCannotChange1</strong></p>
+                                    <p>$langPassCannotChange2 ".get_auth_info($auth).
+                                    ". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
+                                    $homelink</div>";
+			}
+		}
+
+                /***** Account details found, now send e-mail *****/
+                if ($found_editable_password) {
+                        $emailsubject = $lang_remind_pass;
+                        if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
+                                $tool_content = "<div class='caution'>
+                                <p><strong>$langAccountEmailError1</strong></p>
+                                <p>$langAccountEmailError2 $email.</p>
+                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
+                                $homelink";
+                        } elseif (!isset($auth)) {
+                                $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>".
+                                        q($email)."</strong></div>$homelink";
+                        }
+                }
+        } else {
+		$tool_content .= "<div class='caution'>
+		    <p><strong>$langAccountNotFound1 (".q("$userName / $email").")</strong></p>
+		    <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
+		    $homelink";
+        }
+} else {
 	/***** Email address entry form *****/
-	$tool_content .= "<div class='info'><p>$lang_pass_intro</p></div><br />";
+	$tool_content .= "<div class='info'>$lang_pass_intro</div><br>";
 	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
           <legend>$langUserData</legend>
 	  <table class='tbl' width='100%'>
 	  <tr>
             <th width='100'>$lang_username:</th>
-	    <td><input type=\"text\" name=\"userName\" size=\"40\" /></td>
+	    <td><input type='text' name='userName' size='40'></td>
           </tr>
 	  <tr>
 	    <th>$lang_email: </th>
-	    <td><input type=\"text\" name=\"email\" size=\"40\" /></td>
+	    <td><input type='text' name='email' size='40'></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td class='right'><input type=\"submit\" name=\"do\" value=\"".$lang_pass_submit."\" /></td>
+            <td class='right'><input type='submit' name='send_link' value='$lang_pass_submit'></td>
           </tr>
 	  </table>
         </fieldset>
 	</form>";
-
-} elseif (isset($_POST['do'])) {
-	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
-	$userName = isset($_POST['userName'])?canonicalize_whitespace($_POST['userName']):'';
-	/***** If valid e-mail address was entered, find user and send email *****/
-	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-			WHERE email = " . quote($email) . "
-			AND BINARY username = " . quote($userName), $mysqlMainDb);
-
-        $found_editable_password = false;
-	if (mysql_num_rows($res) == 1) {
-		$text = $langPassResetIntro. $emailhelpdesk;
-		$text .= "$langHowToResetTitle";
-		while ($s = mysql_fetch_array($res, MYSQL_ASSOC)) {
-			$is_editable = check_password_editable($s['password']);
-			if($is_editable) {
-                                $found_editable_password = true;
-				//insert an md5 key to the db
-				$new_pass = create_pass();
-				$hasher = new PasswordHash(8, false);
-				$password_encrypted = $hasher->HashPassword($new_pass);
-				//TODO: add a query to check if the newly generated password already exists in the
-				//reset-pass table. If yes, attempt to generate another one.
-				$sql = "INSERT INTO `passwd_reset` (`user_id`, `hash`, `password`, `datetime`) VALUES ('".$s['user_id']."',  '".$password_encrypted."', '$new_pass', NOW())";
-				db_query($sql, $mysqlMainDb);
-				//prepare instruction for password reset
-				$text .= $langPassResetGoHere;
-				$text .= $urlServer . "modules/auth/lostpass.php?do=go&u=".$s['user_id']."&h=" .$password_encrypted;
-
-			} else { //other type of auth...
-				switch($s['password'])  {
-					case 'pop3':{
-						$auth = 2;
-						break;
-					}
-					case 'imap':{
-						$auth = 3;
-						break;
-					}
-					case 'ldap':{
-						$auth = 4;
-						break;
-					}
-					case 'db':{
-						$auth = 5;
-						break;
-					}
-					case 'shibboleth': {
-						$auth = 6;
-						break;
-					}
-					case 'cas': {
-						$auth = 7;
-						break;
-					}
-					default:{
-						$auth = 1;
-						break;
-					}
-				}
-				$tool_content = "<div class='caution'>
-				    <p><strong>$langPassCannotChange1</strong></p>
-				    <p>$langPassCannotChange2 ".get_auth_info($auth).". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
-				    <p><a href=\"../../index.php\">$langHome</a></p>
-</div>";
-			}
-		}
-
-	/***** Account details found, now send e-mail *****/
-        if ($found_editable_password) {
-                $emailsubject = $lang_remind_pass;
-                if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
-                        $tool_content = "<div class='caution'>
-                                <p><strong>$langAccountEmailError1</strong></p>
-                                <p>$langAccountEmailError2 ".q($email).".</p>
-                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
-                                <p><a href=\"../../index.php\">$langHome</a></p>";
-                } elseif (!isset($auth)) {
-                    $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>".q($email)."</strong><br/><br/><a href=\"../../index.php\">$langHome</a></div>";
-                        }
-                }
-       } else {
-		$tool_content .= "<div class='caution'>
-		    <p><strong>$langAccountNotFound1 (".q($userName)." / ".q($email).")</strong></p>
-		    <p>$langAccountNotFound2 <a href='mailto: $emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
-		    <p><a href=\"../../index.php\">$langHome</a></p>";
-        }
-} else {
-	$tool_content = "<div class='caution'>
-	    <p><strong>$langAccountEmailError1</strong></p>
-	    <p>$langAccountEmailError2 ".q($email).".</p>
-	    <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
-	    <p><a href=\"../../index.php\">$langHome</a></p>";
 }
-draw($tool_content,0);
-?>
+
+draw($tool_content, 0);
