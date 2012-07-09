@@ -102,8 +102,8 @@ if (!$doit) {
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
-                                                                $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
-                                                                        htmlspecialchars($logs['title'])."</td><td align='center'>";
+                                                                $tool_content .= "<tr><td>". q($logs['code']) ."</td><td>".
+                                                                        q($logs['title']) ."</td><td align='center'>";
                                                                 switch ($logs[4])
                                                                 {
                                                                         case '1':
@@ -112,11 +112,11 @@ if (!$doit) {
                                                                                 break;
                                                                         case '0':
                                                                                 $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                         default:
                                                                                 $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                 }
                                                         }
@@ -138,8 +138,8 @@ if (!$doit) {
                                                                 "<th>$langProperty</th><th>$langActions</th></tr>";
                                                         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                                 $logs = mysql_fetch_array($sql);
-                                                                $tool_content .= "<tr><td>".htmlspecialchars($logs[0])."</td><td>".
-                                                                        htmlspecialchars($logs[1])."</td><td align=\"center\">";
+                                                                $tool_content .= "<tr><td>".q($logs[0])."</td><td>".
+                                                                        q($logs[1])."</td><td align=\"center\">";
                                                                 $tool_content .= $langTeacher;
                                                                 $tool_content .= "</td><td align=\"center\">---</td></tr>\n";
                                                         }
@@ -164,8 +164,8 @@ if (!$doit) {
                                                         "<th>$langProperty</th><th>$langActions</th></tr>";
                                                 for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                                                         $logs = mysql_fetch_array($sql);
-                                                        $tool_content .= "<tr><td>".htmlspecialchars($logs['code'])."</td><td>".
-                                                                htmlspecialchars($logs['title'])."</td><td align=\"center\">";
+                                                        $tool_content .= "<tr><td>". q($logs['code']) ."</td><td>".
+                                                                q($logs['title']) ."</td><td align=\"center\">";
                                                         switch ($logs['statut']) {
                                                                 case 1:
                                                                         $tool_content .= $langTeacher;
@@ -173,11 +173,11 @@ if (!$doit) {
                                                                         break;
                                                                 case 5:
                                                                         $tool_content .= $langStudent;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                                 default:
                                                                         $tool_content .= $langVisitor;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$logs[course_id]'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                         }
                                                 }
@@ -207,7 +207,7 @@ if (!$doit) {
                                 db_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
                         }
                         if (mysql_affected_rows() > 0) {
-                                $tool_content .= "<p>$langUserWithId ".htmlspecialchars($u)." $langWasAdmin.</p>\n";
+                                $tool_content .= "<p>$langUserWithId ".q($u)." $langWasAdmin.</p>\n";
                         }
 
                         // delete guest user from course_user

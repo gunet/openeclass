@@ -30,7 +30,7 @@ $username = isset($_POST['username'])?$_POST['username']:'';
 
 if(isset($_POST['submit']) and !empty($username)) {
 	$res = db_query("SELECT user_id FROM user 
-                        WHERE username=".autoquote($username));		
+                        WHERE username=". quote($username));		
 	if (mysql_num_rows($res) == 1) 	{                        
             list($user_id) = mysql_fetch_array($res);
             switch ($_POST['adminrights']) {
@@ -43,20 +43,20 @@ if(isset($_POST['submit']) and !empty($username)) {
                 case 'managedepartment' : $privilege = '3'; // manage departments
                     break;
             }  
-            $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");               
+            $sql = db_query("INSERT INTO admin VALUES(". intval($user_id) .", $privilege)");               
             if ($sql) {
                 $tool_content .= "<p class='success'>
-                        $langTheUser ".htmlspecialchars($username)." $langWith id=$user_id $langDone</p>";                
+                        $langTheUser ". q($username) ." $langWith id=$user_id $langDone</p>";                
             }			
         } else {	
-		$tool_content .= "<p class='caution'>$langTheUser ".htmlspecialchars($username)." $langNotFound.</p>";	
+		$tool_content .= "<p class='caution'>$langTheUser ". q($username) ." $langNotFound.</p>";	
 	}
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-            $sql = db_query("DELETE FROM admin WHERE admin.idUser = $aid");
+            $sql = db_query("DELETE FROM admin WHERE admin.idUser = ". $aid);
             if (!$sql) {
-                        $tool_content .= "<center><br />$langDeleteAdmin".$aid." $langNotFeasible  <br /></center>";
+                        $tool_content .= "<center><br />$langDeleteAdmin". q($aid) ." $langNotFeasible  <br /></center>";
             } else {
                 $tool_content .= "<p class='success'>$langNotAdmin</p>";
             }
@@ -85,9 +85,9 @@ $tool_content .= "
 
 while($row = mysql_fetch_array($r1)) {
         $tool_content .= "<tr>";
-        $tool_content .= "<td align='right'>".htmlspecialchars($row['user_id']).".</td>".
-        "<td>".htmlspecialchars($row['prenom'])." " .htmlspecialchars($row['nom'])."</td>".
-        "<td>".htmlspecialchars($row['username'])."</td>";
+        $tool_content .= "<td align='right'>". q($row['user_id']) .".</td>".
+        "<td>". q($row['prenom']) ." ". q($row['nom']) ."</td>".
+        "<td>". q($row['username']) ."</td>";
         switch ($row['privilege']) {
             case '0': $message = $langAdministrator;
                 break;
@@ -101,7 +101,7 @@ while($row = mysql_fetch_array($r1)) {
         $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
                 $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=".$row['user_id']."'>
+                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=". q($row['user_id']) ."'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
                         </td>";

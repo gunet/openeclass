@@ -38,9 +38,9 @@ if (isset($_REQUEST['username'])) {
 		WHERE username ";
 
 	if (get_config('case_insensitive_usernames')) {
-		$sql .= "= " . autoquote($_REQUEST['username']);
+		$sql .= "= " . quote($_REQUEST['username']);
 	} else {
-		$sql .= "COLLATE utf8_bin = " . autoquote($_REQUEST['username']);
+		$sql .= "COLLATE utf8_bin = " . quote($_REQUEST['username']);
 	}
 	$result = db_query($sql);
 	if (mysql_num_rows($result) > 0) {

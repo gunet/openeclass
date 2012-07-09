@@ -31,7 +31,7 @@ if(isset($_POST['delete'])) {
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                 'code' => $course_code,
                                                 'title' => $title));
-    $tool_content .= "<p class='success_small'>$langTheCourse <b>($title $course_code)</b> $langHasDel</p>
+    $tool_content .= "<p class='success_small'>$langTheCourse <b>(". q($title) ." $course_code)</b> $langHasDel</p>
                       <br /><p align='right'><a href='../../index.php'>$langBackHome $siteName</a></p>";
     unset($course_code);
     unset($_SESSION['dbname']);
@@ -42,7 +42,7 @@ if(isset($_POST['delete'])) {
     <table class='tbl'>
     <tr>
     <td class='caution_NoBorder' height='60' colspan='3'>
-            <p>$langByDel_A <b>$title ($course_code) </b>&nbsp;?  </p>
+            <p>$langByDel_A <b>". q($title) ." ($course_code) </b>&nbsp;?  </p>
     </td>
     </tr>
     <tr>
@@ -53,11 +53,11 @@ if(isset($_POST['delete'])) {
     <td><small>$langByDel</small></td>
     </tr>
     <tr>
-    <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='$course_code'/>
+    <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='". q($course_code) ."'/>
                     <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
     <td>&nbsp;</td>
     </tr>
     </table>";
-    $tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
+    $tool_content .= "<p align='right'><a href='infocours.php?course=". q($course_code) ."'>$langBack</a></p>";
 } 
 draw($tool_content, 2);
