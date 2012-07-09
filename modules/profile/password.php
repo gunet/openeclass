@@ -31,23 +31,27 @@ $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 require_once 'include/phpass/PasswordHash.php';
 
 $nameTools = $langChangePass;
-$navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifyProfile);
+$navigation[]= array('url' => 'profile.php', 'name'=> $langModifyProfile);
 
 check_uid();
-$tool_content = "";
+
 $passurl = $urlSecure.'modules/profile/password.php';
 
 if (isset($_POST['submit'])) {
-	if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1']) || empty($_REQUEST['old_pass'])) {
-		header("location:". $passurl."?msg=2");
+	if (empty($_POST['password_form']) or empty($_POST['password_form1']) or empty($_POST['old_pass'])) {
+		header("Location:". $passurl."?msg=2");
 		exit();
 	}
-	if ($_REQUEST['password_form1'] !== $_REQUEST['password_form']) {
-		header("location:". $passurl."?msg=1");
+	if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {
+                $_SESSION['password_error_text'] = "<ul><li>" .
+                                implode("</li>\n<li>", $error_messages) .
+                                "</li></ul>";
+		header("Location:". $passurl."?msg=1");
 		exit();
 	}
 
@@ -60,12 +64,12 @@ if (isset($_POST['submit'])) {
 	$new_pass = $hasher->HashPassword($_REQUEST['password_form']);
 
 	if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow['password'])) {
-		$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = ".$_SESSION["uid"]."";
-		db_query($sql, $mysqlMainDb);
-		header("location:". $passurl."?msg=4");
+                db_query("UPDATE `user` SET `password` = '$new_pass'
+                                 WHERE `user_id` = ".$_SESSION["uid"]);
+		header("Location:". $passurl."?msg=4");
 		exit();
 	} else {
-		header("location:". $passurl."?msg=3");
+		header("Location:". $passurl."?msg=3");
 		exit();
 	}
 
@@ -76,17 +80,19 @@ if(isset($_GET['msg'])) {
 	$msg = $_GET['msg'];
 	switch ($msg){
 
-		case 1: { // passwords do not match
-			$message = $langPassTwo;
+		case 1: { // Passwords not acceptable
+                        $message = isset($_SESSION['password_error_text'])?
+                                   $_SESSION['password_error_text']: '';
+                        unset($_SESSION['password_error_text']);
 			$urlText = '';
-			$type = 'caution';
+			$type = 'alert1';
 			break;
 		}
 
 		case 2: { // admin tools
 			$message = $langFieldsMissing;
 			$urlText = '';
-			$type = 'caution';
+			$type = 'alert1';
 			break;
 		}
 		case 3: { // wrong old password entered
@@ -102,9 +108,8 @@ if(isset($_GET['msg'])) {
 			$type = 'success';
 			break;
 		}
-		default: die('invalid message id');
 	}
-	$tool_content .= "<p class='$type'>$message<br /><a href='$urlServer'>$urlText</a></p>";
+	$tool_content .= "<div class='$type'>$message<br /><a href='$urlServer'>$urlText</a></div>";
 }
 
 if (!isset($_POST['changePass'])) {

@@ -88,6 +88,7 @@ if (isset($_POST['submit']))  {
         set_config('postaddress', $_POST['formpostaddress']);
         set_config('fax', $_POST['formfax']);
         set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
+        set_config('min_password_len', intval($_POST['min_password_len']));
 
 	$config_vars = array('email_required' => true,
 		'email_verification_required' => true,
@@ -238,8 +239,11 @@ else {
 
 	$tool_content .= "
         <tr>
-        <td class='left'><b>\$durationAccount:</b></td>
+        <td class='left'><b>account_duration</b></td>
         <td><input type='text' name='formdurationAccount' size='15' value='".intval(get_config('account_duration') / MONTHS)."'>&nbsp;&nbsp;$langUserDurationAccount&nbsp;($langMonthsUnit)</td></tr>
+        <tr>
+        <td class='left'><b>min_password_len</b></td>
+        <td><input type='text' name='min_password_len' size='15' value='".intval(get_config('min_password_len'))."'>&nbsp;&nbsp;$langMinPasswordLen</td></tr>
         </table></fieldset>
         <fieldset><legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>
