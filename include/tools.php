@@ -473,15 +473,15 @@ function adminMenu(){
             $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
             array_push($sideMenuSubGroup, $arrMenuType);
 
-            array_push($sideMenuText, $GLOBALS['langAdminAn']);
-            array_push($sideMenuLink, "../admin/adminannouncements.php");
-            array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langConfigFile']);
+            array_push($sideMenuText, $GLOBALS['langConfig']);
             array_push($sideMenuLink, "../admin/eclassconf.php");
-            array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langPlatformStats']);
+            array_push($sideMenuImg, "arrow.png");            
+            array_push($sideMenuText, $GLOBALS['langStats']);
             array_push($sideMenuLink, "../admin/stateclass.php");
             array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langAdminAn']);
+            array_push($sideMenuLink, "../admin/adminannouncements.php");
+            array_push($sideMenuImg, "arrow.png");            
             array_push($sideMenuText, $GLOBALS['langAdminManual']);
             if ($language == 'greek') {
                     array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass25_ManA_el.pdf");

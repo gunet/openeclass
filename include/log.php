@@ -29,6 +29,10 @@ define('LOG_DELETE_COURSE', 6);
 class Log {
         // log users actions
         public static function record($course_id, $module_id, $action_type, $details) {
+                
+                if (get_config('disable_log_user_actions')) {
+                        return;
+                }
                                 
                 db_query("INSERT INTO log SET 
                                 user_id = $_SESSION[uid],

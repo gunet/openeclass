@@ -114,7 +114,8 @@ if (isset($_POST['submit']))  {
                 'case_insensitive_usernames' => true,
 		'course_multidep' => true,
 		'user_multidep' => true,
-		'restrict_teacher_owndep' => true);
+		'restrict_teacher_owndep' => true,
+                'disable_log_user_actions' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -135,7 +136,7 @@ if (isset($_POST['submit']))  {
 // Display config.php edit form
 else {
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBaseConf</legend>
+                <fieldset><legend>$langBasicCfgSetting</legend>
 	<table class='tbl' width='100%'>
 	<tr>
 	  <th width='200' class='left'><b>\$urlServer:</b></th>
@@ -195,7 +196,7 @@ else {
 	$tool_content .= "</table></fieldset>";
         
         $tool_content .= "<fieldset>
-        <legend>$langUserAuthentication</legend>
+        <legend>$langUpgReg</legend>
         <table class='tbl' width='100%'>";              
 	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
 	$tool_content .= "
@@ -235,11 +236,31 @@ else {
 	  <td><input type='checkbox' name='case_insensitive_usernames' value='1'
 	    $cbox_case_insensitive_usernames>&nbsp;$langCaseInsensitiveUsername</td>
 	</tr>";
+        $cbox_email_required = get_config('email_required')?'checked':'';
+	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
+        $tool_content .= "<tr>
+		<th class='left'><b>email_required</b></th>
+		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>email_verification_required</b></th>
+		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
+	  </tr>";
+          $cbox_am_required = get_config('am_required')?'checked':'';	
+          $tool_content .= "<tr>
+		<th class='left'><b>am_required</b></th>
+		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
+	  </tr>";
+          $cbox_display_captcha = get_config('display_captcha')?'checked':'';
+          $tool_content .= "<tr>
+		<th class='left'><b>display_captcha</b></th>
+		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
+	  </tr>";
 
 	$tool_content .= "
         <tr>
-        <td class='left'><b>\$durationAccount:</b></td>
-        <td><input type='text' name='formdurationAccount' size='15' value='".intval(get_config('account_duration') / MONTHS)."'>&nbsp;&nbsp;$langUserDurationAccount&nbsp;($langMonthsUnit)</td></tr>
+        <td class='left'><b>durationAccount</b></td>
+        <td><input type='text' name='formdurationAccount' size='5' value='".intval(get_config('account_duration') / MONTHS)."'>&nbsp;&nbsp;$langUserDurationAccount&nbsp;($langIn $langMonthsUnit)</td></tr>
         </table></fieldset>
         <fieldset><legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>
@@ -263,44 +284,22 @@ else {
 	    <td>" . implode(' ', $sel) . "</td></tr>";                
         
 	$tool_content .= "
-	  <tr><td class='left'><b>$langThemes:</b></td>
+	  <tr><td class='left'><b>$langThemes</b></td>
 	    <td>" . selection($available_themes, 'theme',
 		 array_search($theme, $available_themes)) . "</td></tr>";
+        $cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
+        $tool_content .= "<tr>
+		<th class='left'><b>dont_display_login_form</b></th>
+		<td><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
+	  </tr>";
 	$tool_content .= "</table></fieldset>";
         
-        $cbox_email_required = get_config('email_required')?'checked':'';
-	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
-	$cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
-        $cbox_email_from = get_config('email_from')?'checked':'';
-	$cbox_am_required = get_config('am_required')?'checked':'';
-	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
-	$cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
-	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
-	$cbox_display_captcha = get_config('display_captcha')?'checked':'';
-	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
-	$cbox_betacms = get_config('betacms')?'checked':'';
-	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
-        $max_glossary_terms = get_config('max_glossary_terms');
-        $cbox_course_multidep = get_config('course_multidep')?'checked':'';
-        $cbox_user_multidep = get_config('user_multidep')?'checked':'';
-        $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
-
+        $cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
+        $cbox_email_from = get_config('email_from')?'checked':'';	
         $tool_content .= "<fieldset>
-        <legend>$langOtherOptions</legend>
-        <table class='tbl' width='100%'>	
-	  <tr>
-		<th class='left'><b>max_glossary_terms</b></th>
-		<td><input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' />&nbsp;$lang_max_glossary_terms</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>email_required</b></th>
-		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>email_verification_required</b></th>
-		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
-	  </tr>
-	  <tr>
+        <legend>$langEmailSettings</legend>
+        <table class='tbl' width='100%'>       
+        <tr>
 		<th class='left'><b>dont_mail_unverified_mails</b></th>
 		<td><input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails />&nbsp;$lang_dont_mail_unverified_mails</td>
 	  </tr>
@@ -308,39 +307,17 @@ else {
 		<th class='left'><b>email_from</b></th>
 		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>am_required</b></th>
-		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>dropbox_allow_student_to_student</b></th>
-		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>dont_display_login_form</b></th>
-		<td><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>block_username_change</b></th>
-		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>display_captcha</b></th>
-		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>insert_xml_metadata</b></th>
-		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>betacms</b></th>
-		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>enable_mobileapi</b></th>
-		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
-	  </tr>
-	  <tr>
+        </table></fieldset>";
+                		
+        
+        $cbox_course_multidep = get_config('course_multidep')?'checked':'';
+        $cbox_user_multidep = get_config('user_multidep')?'checked':'';
+        $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
+        
+        $tool_content .= "<fieldset>
+        <legend>$langCourseSettings</legend>
+        <table class='tbl' width='100%'>
+        <tr>
 		<th class='left'><b>course_multidep</b></th>
 		<td><input type='checkbox' name='course_multidep' value='1' $cbox_course_multidep />&nbsp;$lang_course_multidep</td>
 	  </tr>
@@ -352,6 +329,47 @@ else {
 		<th class='left'><b>restrict_teacher_owndep</b></th>
 		<td><input type='checkbox' name='restrict_teacher_owndep' value='1' $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
+        </table></fieldset>";
+        
+        $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
+	$cbox_block_username_change = get_config('block_username_change')?'checked':'';	
+	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
+	$cbox_betacms = get_config('betacms')?'checked':'';
+	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
+        $max_glossary_terms = get_config('max_glossary_terms');        
+        $cbox_disable_log_user_actions = get_config('disable_log_user_actions')?'checked':'';
+
+        $tool_content .= "<fieldset>
+        <legend>$langOtherOptions</legend>
+        <table class='tbl' width='100%'>
+          <tr>
+                <th class='left'><b>disable_log_user_actions</b></th>
+                <td><input type='checkbox' name='disable_log_user_actions' value='1' $cbox_disable_log_user_actions />&nbsp;$lang_disable_log_user_actions</td>
+          </tr>
+	  <tr>
+		<th class='left'><b>max_glossary_terms</b></th>
+		<td><input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' />&nbsp;$lang_max_glossary_terms</td>
+	  </tr>	  
+	  <tr>
+		<th class='left'><b>dropbox_allow_student_to_student</b></th>
+		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
+	  </tr>	  
+	  <tr>
+		<th class='left'><b>block_username_change</b></th>
+		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
+	  </tr>	  
+	  <tr>
+		<th class='left'><b>insert_xml_metadata</b></th>
+		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>betacms</b></th>
+		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>enable_mobileapi</b></th>
+		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
+	  </tr>	  
         </table></fieldset>";
         
         $tool_content .= "<fieldset>
