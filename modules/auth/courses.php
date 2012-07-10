@@ -172,8 +172,7 @@ hContent;
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "<br />
-				<div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>
-				</form>";
+				<div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
 		} else {
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
@@ -187,6 +186,7 @@ hContent;
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
 			}
 		}
+		$tool_content .= "\n    </form>";
 	} // end of else (department exists)
 }
 
