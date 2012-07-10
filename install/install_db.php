@@ -510,13 +510,6 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('max_glossary_terms', '250'),
 		('version', '" . ECLASS_VERSION ."')");
 
-// Table passwd_reset (used by the password reset module)
-db_query("CREATE TABLE `passwd_reset` (
-                `user_id` INT(11) NOT NULL,
-                `hash` VARCHAR(40) NOT NULL,
-                `password` VARCHAR(8) NOT NULL,
-                `datetime` DATETIME NOT NULL) $charset_spec");
-
 // tables for units module
 db_query("CREATE TABLE `course_units` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,

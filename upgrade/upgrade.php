@@ -122,13 +122,13 @@ if (!isset($_POST['submit2'])) {
                 "<br>$langConfigMod</p></div>" .
                 "<fieldset><legend>$langUpgContact</legend>" .
                 "<table width='100%' class='tbl'><tr><th width='220'>$langInstituteShortName:</th>" .
-                "<td><input class=auth_input_admin type='text' size='40' name='Institution' value='".@$Institution."'></td></tr>" .
+                "<td><input class=auth_input_admin type='text' size='40' name='Institution' value='".q(@$Institution)."'></td></tr>" .
                 "<tr><th>$langUpgAddress</th>" .
-                "<td><textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".@$postaddress."</textarea></td></tr>" .
+                "<td><textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>".q(@$postaddress)."</textarea></td></tr>" .
                 "<tr><th>$langUpgTel</th>" .
-                "<td><input class=auth_input_admin type='text' name='telephone' value='".@$telephone."'></td></tr>" .
+                "<td><input class=auth_input_admin type='text' name='telephone' value='".q(@$telephone)."'></td></tr>" .
                 "<tr><th>Fax:</th>" .
-                "<td><input class=auth_input_admin type='text' name='fax' value='".@$fax."'></td></tr></table></fieldset>
+                "<td><input class=auth_input_admin type='text' name='fax' value='".q(@$fax)."'></td></tr></table></fieldset>
                 <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
                 </form>";
 } else {
@@ -168,10 +168,10 @@ if (!isset($_POST['submit2'])) {
 
         // for upgrading 1.5 --> 1.7
         if (!strstr($conf, '$postaddress')) {
-                $lines_to_add .= "\$postaddress = '$_POST[postaddress]';\n";
+                $lines_to_add .= "\$postaddress = ".quote($_POST['postaddress']).";\n";
         }
         if (!strstr($conf, '$fax')) {
-                $lines_to_add .= "\$fax = '$_POST[fax]';\n";
+                $lines_to_add .= "\$fax = ".quote($_POST['fax']).";\n";
         }
 
         if (!strstr($conf, '$durationAccount')) {
@@ -197,11 +197,11 @@ if (!isset($_POST['submit2'])) {
                                 '#\/\/ .*^\/\/ HTTP_COOKIE[^\n]+$#sm'),
                         array(
 				'',
-                                "\$postaddress = '$_POST[postaddress]';",
-                                "\$fax = '$_POST[fax]';",
+                                "\$postaddress = ".quote($_POST['postaddress']).";",
+                                "\$fax = ".quote($_POST['fax']).";",
                             	'',
-                                "\$Institution = '$_POST[Institution]';",
-                                "\$telephone = '$_POST[telephone]';",
+                                "\$Institution = ".quote($_POST['Institution']).";",
+                                "\$telephone = ".quote($_POST['telephone']).";",
                                 $new_copyright,
                                 ''),
                         $conf) . "\n" . $lines_to_add;
@@ -524,6 +524,7 @@ if (!isset($_POST['submit2'])) {
         
         if ($oldversion < '2.5.2') {
         	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
+                db_query("DROP TABLE IF EXISTS passwd_reset");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
