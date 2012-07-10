@@ -29,28 +29,42 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $username = isset($_POST['username'])?$_POST['username']:'';
 
 if(isset($_POST['submit']) and !empty($username)) {
-	$res = db_query("SELECT user_id FROM user 
-                        WHERE username=". quote($username));		
-	if (mysql_num_rows($res) == 1) 	{                        
-            list($user_id) = mysql_fetch_array($res);
-            switch ($_POST['adminrights']) {
-                case 'admin': $privilege = '0'; // platform admin user
-                    break;
-                case 'poweruser': $privilege = '1'; // power user
-                    break;                                
-                case 'manageuser': $privilege = '2'; //  manage user accounts
-                    break;                                
-                case 'managedepartment' : $privilege = '3'; // manage departments
-                    break;
-            }  
-            $sql = db_query("INSERT INTO admin VALUES(". intval($user_id) .", $privilege)");               
-            if ($sql) {
+    
+    $res = db_query("SELECT user_id FROM user WHERE username=". quote($username));
+
+    if (mysql_num_rows($res) == 1)
+    {
+        list($user_id) = mysql_fetch_array($res);
+        switch ($_POST['adminrights']) {
+            case 'admin': $privilege = '0'; // platform admin user
+            break;
+            case 'poweruser': $privilege = '1'; // power user
+            break;
+            case 'manageuser': $privilege = '2'; //  manage user accounts
+            break;
+            case 'managedepartment' : $privilege = '3'; // manage departments
+            break;
+        }
+
+        if (isset($privilege))
+        {
+            $sql = db_query("INSERT INTO admin VALUES(". intval($user_id) .", $privilege)");
+            if ($sql)
+            {
                 $tool_content .= "<p class='success'>
-                        $langTheUser ". q($username) ." $langWith id=$user_id $langDone</p>";                
-            }			
-        } else {	
-		$tool_content .= "<p class='caution'>$langTheUser ". q($username) ." $langNotFound.</p>";	
-	}
+                $langTheUser ". q($username) ." $langWith id=$user_id $langDone</p>";
+            }
+        }
+        else
+        {
+            $tool_content .= "<p class='caution'>$langError</p>";
+        }
+    }
+    else
+    {
+        $tool_content .= "<p class='caution'>$langTheUser ". q($username) ." $langNotFound.</p>";
+    }
+	
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
