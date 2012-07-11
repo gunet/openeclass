@@ -662,7 +662,9 @@ class hierarchy {
             if ($codesuffix && strlen($codemap[$key]) > 0)
                 $valcode = ' ('. $codemap[$key] .')';
             
-            $html .= '<li id="'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value . $valcode .'</a></li>' . "\n";
+            // valid HTML requires ids starting with letters.
+            // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2) 
+            $html .= '<li id="nd'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value . $valcode .'</a></li>' . "\n";
             
             $i++;
         }
@@ -740,7 +742,7 @@ $(function() {
                                          + '<\/p>');
                     
                     $( "#dialog-set-value" ).val( newnode.children("a").text() );
-                    $( "#dialog-set-key" ).val(newnode.attr("id"));
+                    $( "#dialog-set-key" ).val(newnode.attr("id").substring(2));
                     document.getElementById('dialog-set-key').onchange();
         
                     $( this ).dialog( "close" );

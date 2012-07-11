@@ -152,11 +152,11 @@ function customMenu(node) {
     var items = {
         editItem: { 
             label: "$langEdit",
-            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id'); }
+            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id').substring(2); }
         },
         deleteItem: {
             label: "$langDelete",
-            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id'); }
+            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id').substring(2); }
         }
     };
     

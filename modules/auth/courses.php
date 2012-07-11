@@ -152,7 +152,7 @@ $(function() {
                 return priorityA < priorityB ? 1 : -1;
         }
     })
-    .bind("select_node.jstree", function (event, data) { document.location.href='?fc=' + data.rslt.obj.attr("id"); });
+    .bind("select_node.jstree", function (event, data) { document.location.href='?fc=' + data.rslt.obj.attr("id").substring(2); });
     
 });
 
