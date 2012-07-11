@@ -578,8 +578,8 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $aid = ($is_in_tinymce) ? 'fileURL' : null;
-                                        $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aid);
+                                        $aclass = ($is_in_tinymce) ? 'fileURL' : null;
+                                        $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aclass);
                                         
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
                                     
@@ -656,7 +656,7 @@ else {
                                                 
                                                 if ($is_in_tinymce) {
                                                    $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
-                                                    $link_href = "<a href='$furl' id='fileURL'>". q($myrow['title']) ."</a>";
+                                                    $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                                 } else {
                                                     $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
                                                 }
@@ -665,8 +665,8 @@ else {
                                                 $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $aid = ($is_in_tinymce) ? 'fileURL' : null;
-                                                $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aid);
+                                                $aclass = ($is_in_tinymce) ? 'fileURL' : null;
+                                                $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aclass);
                                                 
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
 
