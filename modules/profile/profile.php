@@ -23,11 +23,12 @@ $require_help = true;
 $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
-include 'modules/auth/auth.inc.php';
+require_once 'modules/auth/auth.inc.php';
 $require_valid_uid = TRUE;
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/log.php';
 
 $tree = new hierarchy();
 $userObj = new user();
@@ -127,11 +128,16 @@ if (isset($_POST['submit'])) {
 			redirect_to_message(7);
 		}
 		db_query("UPDATE user SET has_icon = 1 WHERE user_id = $_SESSION[uid]");
+                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                                      'addimage' => 1,
+                                                      'imagetype' => $type));
 	}
 	if (isset($_POST['delimage'])) {
 		@unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
 		@unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
 		db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
+                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                                      'deleteimage' => 1));
 	}
 
 	// check if email is valid
@@ -168,7 +174,7 @@ if (isset($_POST['submit'])) {
 	}
 	// everything is ok
 	$email_form = mb_strtolower(trim($email_form));
-
+        
 	if (db_query("UPDATE user SET nom = " . quote($nom_form) . ",
 						prenom = " . quote($prenom_form) . ",
 						username = " . quote($username_form) . ",
@@ -183,6 +189,11 @@ if (isset($_POST['submit'])) {
                                                 $verified_mail_sql
 						WHERE user_id = ". intval($_SESSION['uid']) )) {
                 $userObj->refresh($uid, $departments);
+                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                                     'modifyprofile' => 1,
+                                                     'username' => $username_form,
+                                                     'email' => $email_form,
+                                                     'am' => $am_form));
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
 		$_SESSION['prenom'] = $prenom_form;
@@ -224,7 +235,6 @@ if (isset($_GET['msg'])) {
                 $message = $langInvalidCharsUsername;
                 break;
             default:
-                //header('Location: ' . $urlAppend . '/modules/profile/profile.php');
                 exit;
         }
 	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";

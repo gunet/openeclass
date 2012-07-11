@@ -206,8 +206,33 @@ class Log {
         }
         
         private function profile_action_details($details) {
+                                
+                global $lang_username, $langAm, $langChangePass, $langUpdateImage, 
+                        $langType, $langDelImage, $langPersoDetails;
+                        
+                $details = unserialize(($details));
+                $content = '';
                 
-                $content = 'profile';
+                if (!empty($details['modifyprofile'])) {
+                        $content .= "$langPersoDetails<br />$lang_username&nbsp;&laquo;".$details['username']."&raquo;&nbsp;email&nbsp;&laquo;".$details['email']."&raquo;&nbsp;";
+                        if (!empty($details['am'])) {
+                                $content .= "&nbsp;($langAm: ".$details['am'];
+                        }
+                        $content .= ")";
+                }
+                if (!empty($details['pass_change'])) {
+                        $content .= "$langChangePass";
+                }
+                if (!empty($details['addimage'])) {
+                        $content .= "$langUpdateImage&nbsp;($langType: ".$details['imagetype'].")";
+                }
+                if (!empty($details['deleteimage'])) {
+                        $content .= "$langDelImage";
+                }
+                /*if (!empty($details['deleteuser'])) {
+                        $content .= "$langUnregUser <br />&nbsp;&laquo;$langName".$details['name']."&raquo;&nbsp;$lang_username&nbsp;&laquo;".$details['username']."&raquo;";
+                }*/
+                                
                 return $content;                
         }
         

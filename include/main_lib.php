@@ -595,10 +595,10 @@ function check_guest() {
     global $uid;
 
 	if (isset($uid)) {
-		$res = db_query("SELECT statut FROM user WHERE user_id = '$uid'");
+		$res = db_query("SELECT statut FROM user WHERE user_id = $uid");
 		$g = mysql_fetch_row($res);
 
-		if ($g[0] == 10) {
+		if ($g[0] == USER_GUEST) {
 			return true;
 		} else {
 			return false;
