@@ -1007,3 +1007,29 @@ function shib_cas_login($type)
 		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
 	}
 }
+
+/**
+ * Check passwords entered in password change form for validity
+ * 
+ * @param string $pass1 - First password field
+ * @param string $pass2 - Second password field
+ * @return array - Array of error messages, empty if no errors encountered
+ */
+function acceptable_password($pass1, $pass2)
+{
+        global $ldapempty, $langPassTwo, $langPassShort;
+
+        $errors = array();
+        if ($pass1 === '' or $pass2 === '') {
+                $errors[] = $ldapempty;
+        }
+        if ($pass1 !== $pass2) {
+                $errors[] = $langPassTwo;
+        }
+        $min_len = intval(get_config('min_password_len'));
+        if (mb_strlen($pass1, 'UTF-8') < $min_len) {
+                $errors[] = sprintf($langPassShort, $min_len);
+        }
+        return $errors;
+}
+

@@ -41,13 +41,14 @@ define('TOKEN_VALID_TIME', 3600);
 $emailhelpdesk = q(get_config('email_helpdesk'));
 $homelink = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
 
-function check_password_editable($password)
+function password_is_editable($password)
 {
-        $authmethods = array('pop3', 'imap', 'ldap', 'db', 'shibboleth', 'cas');
-        if (in_array($password,$authmethods)) {
-                return false; // it is not editable, because it belongs in external auth method
+        global $auth_ids;
+
+        if (in_array($password, $auth_ids)) {
+                return false; // not editable, external auth method
         } else {
-                return true; // is editable
+                return true;  // editable
         }
 }
 
@@ -60,9 +61,10 @@ if (isset($_REQUEST['u']) and
                                 WHERE user_id = $userUID AND
                                       password NOT IN ('" .
                                       implode("', '", $auth_ids) . "')");
+        $error_messages = array();
 	if ($valid and mysql_num_rows($res) == 1) {
                 if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
-                    $_POST['newpass'] == $_POST['newpass1']) {
+                    count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
                             $hasher = new PasswordHash(8, false);
                             if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
                                                       WHERE user_id = $userUID")) {
@@ -70,8 +72,10 @@ if (isset($_REQUEST['u']) and
                                                        $homelink";
                                       $change_ok = true;
                         }
-                } elseif (isset($_POST['newpass'])) {
-                        $tool_content .= "<p class='alert1'>$langPassTwo</p>";
+                } elseif (count($error_messages)) {
+                        $tool_content .= "<div class='alert1'><ul><li>" .
+                                implode("</li>\n<li>", $error_messages) .
+                                "</li></ul></div>";
                 }
 		if (!$change_ok) {
                         $tool_content .= "
@@ -115,7 +119,7 @@ if (isset($_REQUEST['u']) and
 		$text = $langPassResetIntro. $emailhelpdesk;
 		$text .= $langHowToResetTitle;
 		while ($s = mysql_fetch_assoc($res)) {
-			if (check_password_editable($s['password'])) {
+			if (password_is_editable($s['password'])) {
                                 $found_editable_password = true;
 				//prepare instruction for password reset
 				$text .= $langPassResetGoHere;
