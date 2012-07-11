@@ -765,8 +765,9 @@ function parse_tex($textext)
 
 // Returns the code of a faculty given its name
 function find_faculty_by_name($name) {
-	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy
-		WHERE name = '$name'"));
+    
+	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =". quote($name) ));
+	
 	if (!$code) {
 		return false;
 	} else {
@@ -776,7 +777,9 @@ function find_faculty_by_name($name) {
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
-	$req = db_query("SELECT name FROM hierarchy WHERE id = $id");
+    
+	$req = db_query("SELECT name FROM hierarchy WHERE id = ". intval($id) );
+	
 	if ($req and mysql_num_rows($req)) {
 		$fac = mysql_fetch_row($req);
 		return $fac[0];
@@ -787,6 +790,7 @@ function find_faculty_by_id($id) {
 			return $fac[0];
 		}
 	}
+	
 	return false;
 }
 
@@ -795,14 +799,13 @@ function new_code($fac) {
 	global $mysqlMainDb;
 
 	mysql_select_db($mysqlMainDb);
-	$gencode = mysql_fetch_row(db_query("SELECT code, generator
-		FROM hierarchy WHERE id = $fac"));
+	$gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = ". intval($fac) ));
+	
 	do {
 		$code = $gencode[0].$gencode[1];
 		$gencode[1] += 1;
-		db_query("UPDATE hierarchy SET generator = $gencode[1]
-                                 WHERE id = $fac");
-	} while (mysql_select_db($code));
+		db_query("UPDATE hierarchy SET generator = ". intval($gencode[1]) ." WHERE id = ". intval($fac) );
+	} while (file_exists("courses/". $code));
 	mysql_select_db($mysqlMainDb);
 
 	// Make sure the code returned isn't empty!

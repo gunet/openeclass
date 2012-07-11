@@ -28,7 +28,7 @@ function departmentChildren($depid, $url = '') {
                             (SELECT MAX(S.lft) 
                             FROM hierarchy AS S WHERE node.lft > S.lft
                                 AND node.lft < S.rgt)
-                      WHERE parent.id = ". $depid ."
+                      WHERE parent.id = ". intval($depid) ."
                         AND node.allow_course = true");
     
     
@@ -47,17 +47,17 @@ function departmentChildren($depid, $url = '') {
         
         foreach ($nodenames as $key => $value)
         {
-            $ret .= "<tr><td><a href='$url.php?fc=". $key ."'>". 
-                    $value .
-                    "</a>&nbsp;&nbsp;<small>(". $nodecodes[$key] .")";
+            $ret .= "<tr><td><a href='$url.php?fc=". intval($key) ."'>". 
+                    q($value) .
+                    "</a>&nbsp;&nbsp;<small>(". q($nodecodes[$key]) .")";
             
             $n = db_query("SELECT COUNT(*) 
                              FROM course, course_department 
                             WHERE course.id = course_department.course 
-                              AND course_department.department = ". $key);
+                              AND course_department.department = ". intval($key));
             $r = mysql_fetch_array($n);
 
-            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". $r[0] ."&nbsp;". ($r[0] == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". intval($r[0]) ."&nbsp;". ($r[0] == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
         }
         
         $ret .= "</table><br />";

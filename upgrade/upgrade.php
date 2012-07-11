@@ -884,7 +884,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
             db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                             `id` INT(11) NOT NULL auto_increment PRIMARY KEY,
-                            `code` VARCHAR(20) NOT NULL,
+                            `code` VARCHAR(20),
                             `name` TEXT NOT NULL,
                             `number` INT(11) NOT NULL DEFAULT 1000,
                             `generator` INT(11) NOT NULL DEFAULT 100,

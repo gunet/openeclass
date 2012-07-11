@@ -207,11 +207,6 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
             $tool_content .= "<p class='caution'>".$langGreekCode."<br />";
             $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
-        }
-        // Check if node code already exists
-        elseif (!empty($code) && mysql_num_rows(db_query("SELECT * from $TBL_HIERARCHY WHERE code = " . autoquote($code))) > 0) {
-            $tool_content .= "<p class='caution'>".$langNCodeExists."<br />";
-            $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
         } else {
             // OK Create the new node
             $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
@@ -327,11 +322,6 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
         if (empty($name)) {
             $tool_content .= "<p class='caution'>".$langEmptyNodeName."<br />";
             $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
-        }
-        // Check if node code already exists
-        elseif (!empty($code) && mysql_num_rows(db_query("SELECT * from $TBL_HIERARCHY WHERE id <> $id AND code = ". autoquote($code))) > 0) {
-            $tool_content .= "<p class='caution'>".$langNCodeExists."<br />";
-            $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?action=edit&amp;id=$id\">".$langReturnToEditNode."</a></p>";
         } else {
             // OK Update the node
             $tree->updateNode($id, $name, intval($_POST['nodelft']), 
@@ -356,7 +346,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        <table width='100%' class='tbl'>
        <tr>
            <th class='left' width='180'>".$langNodeCode1.":</th>
-           <td><input type='text' name='code' value='".$myrow['code']."' />&nbsp;<i>".$langCodeFaculte2."</i></td>
+           <td><input type='text' name='code' value='".q($myrow['code'])."' />&nbsp;<i>".$langCodeFaculte2."</i></td>
        </tr>
        <tr>
            <th class='left'>".$langNodeName.":</th>";
@@ -373,7 +363,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
                 $n = $myrow['name'];
             
             $tdpre = ($i > 0) ? "<tr><td></td>" : '';
-            $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' value='".htmlspecialchars($n, ENT_QUOTES)."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
+            $tool_content .= $tdpre ."<td><input type='text' name='name-".q($langcode)."' value='". q($n)."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
             $i++;
         }
         
@@ -398,14 +388,14 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        </tr>
        <tr>
            <th class='left'>".$langNodeOrderPriority.":</th>
-           <td><input type='text' name='order_priority' value='". $myrow['order_priority'] ."' /> <i>".$langNodeOrderPriority2."</i></td>
+           <td><input type='text' name='order_priority' value='". q($myrow['order_priority']) ."' /> <i>".$langNodeOrderPriority2."</i></td>
        </tr>
        <tr>
            <th>&nbsp;</th>
            <td class='right'><input type='hidden' name='id' value='$id' />
            <input type='hidden' name='parentLft' value='".$parentLft['lft']."'/>
-           <input type='hidden' name='lft' value='".$myrow['lft']."'/>
-           <input type='hidden' name='rgt' value='".$myrow['rgt']."'/>
+           <input type='hidden' name='lft' value='". q($myrow['lft']) ."'/>
+           <input type='hidden' name='rgt' value='". q($myrow['rgt']) ."'/>
            <input type='submit' name='edit' value='$langAcceptChanges' />
            </td>
        </tr>
@@ -431,7 +421,7 @@ function validate($id) {
         exit();
     }
     
-    $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE id = '$id'");
+    $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE id = ". intval($id) );
     
     if (mysql_num_rows($result) < 1) {
         $tool_content .= $notallowed;

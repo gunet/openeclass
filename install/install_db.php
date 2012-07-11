@@ -612,7 +612,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
 // hierarchy tables
 db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `code` varchar(20) NOT NULL,
+                `code` varchar(20),
                 `name` text NOT NULL,
                 `number` int(11) NOT NULL default 1000,
                 `generator` int(11) NOT NULL default 100,

@@ -66,7 +66,7 @@ class hierarchy {
         
         if ($this->useProcedures())
         {
-            db_query("CALL add_node(".autoquote($name).", $parentlft, ".autoquote($code).", $allow_course, $allow_user, $order_priority)");
+            db_query("CALL add_node(". quote($name) .", $parentlft, ". quote($code) .", $allow_course, $allow_user, $order_priority)");
             $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
             $ret = $r[0];
         }
@@ -77,7 +77,7 @@ class hierarchy {
             $this->shiftRight($parentlft);
 
             $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, allow_course, allow_user, order_priority) "
-                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $allow_course, $allow_user, $order_priority)";
+                    ."VALUES (". quote($name) .", $lft, $rgt, ". quote($code) .", $allow_course, $allow_user, $order_priority)";
             db_query($query);
             $ret = mysql_insert_id();
         }
@@ -104,7 +104,7 @@ class hierarchy {
         
         if ($this->useProcedures())
         {
-            db_query("CALL add_node_ext(".autoquote($name).", $parentlft, ".autoquote($code).", $number, $generator, $allow_course, $allow_user, $order_priority)");
+            db_query("CALL add_node_ext(". quote($name) .", $parentlft, ". quote($code) .", $number, $generator, $allow_course, $allow_user, $order_priority)");
             $r = mysql_fetch_array(db_query("SELECT LAST_INSERT_ID()"));
             $ret = $r[0];
         }
@@ -115,7 +115,7 @@ class hierarchy {
             $this->shiftRight($parentlft);
 
             $query = "INSERT INTO ". $this->dbtable ." (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
-                    ."VALUES (".autoquote($name).", $lft, $rgt, ".autoquote($code).", $number, $generator, $allow_course, $allow_user, $order_priority)";
+                    ."VALUES (". quote($name) .", $lft, $rgt, ". quote($code) .", $number, $generator, $allow_course, $allow_user, $order_priority)";
             db_query($query);
             $ret = mysql_insert_id();
         }
@@ -141,12 +141,12 @@ class hierarchy {
     {
         if ($this->useProcedures())
         {
-            db_query("CALL update_node($id, ".autoquote($name).", $nodelft, $lft, $rgt, $parentlft, ".autoquote($code).", $allow_course, $allow_user, $order_priority)");
+            db_query("CALL update_node($id, ". quote($name) .", $nodelft, $lft, $rgt, $parentlft, ". quote($code) .", $allow_course, $allow_user, $order_priority)");
         }
         else
         {
-            $query = "UPDATE ". $this->dbtable ." SET name = ".autoquote($name).",  lft = $lft, rgt = $rgt,
-                    code = ".autoquote($code).", allow_course = $allow_course, allow_user = $allow_user
+            $query = "UPDATE ". $this->dbtable ." SET name = ". quote($name) .",  lft = $lft, rgt = $rgt,
+                    code = ". quote($code) .", allow_course = $allow_course, allow_user = $allow_user
                     order_priority = $order_priority WHERE id = $id";
             db_query($query);
 
