@@ -74,7 +74,7 @@ if ($is_in_tinymce) {
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a#fileURL").click(function() { 
+    $("a.fileURL").click(function() { 
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 

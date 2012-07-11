@@ -56,7 +56,7 @@ if ($is_in_tinymce) {
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a#fileURL").click(function() { 
+    $("a.fileURL").click(function() { 
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -976,7 +976,7 @@ if ($doc_count == 0) {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
-                                $link_extra = " id='fileURL' title='$langSave' target='_blank'";
+                                $link_extra = " class='fileURL' title='$langSave' target='_blank'";
                                 $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);
                                 $link_title_extra = ($entry['copyrighted']) ? " <img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
                                 $dload_msg = $langSave;

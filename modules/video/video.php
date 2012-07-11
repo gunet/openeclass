@@ -82,7 +82,7 @@ if ($is_in_tinymce) {
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a#fileURL").click(function() { 
+    $("a.fileURL").click(function() { 
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -552,7 +552,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         
                                         if ($is_in_tinymce) {
                                             $furl = (is_supported_media($myrow[1], true)) ? $mediaPlay : $mediaURL;
-                                            $link_href = "<a href='$furl' id='fileURL'>". q($myrow[3]) ."</a>";
+                                            $link_href = "<a href='$furl' class='fileURL'>". q($myrow[3]) ."</a>";
                                         } else {
                                             $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br/><small>". q($myrow[4]) . "</small>";
                                         }
@@ -566,8 +566,8 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $aid = ($is_in_tinymce) ? 'fileURL' : null;
-                                        $link_href = choose_medialink_ahref(q($myrow[1]), q($myrow[2]), $aid);
+                                        $aclass = ($is_in_tinymce) ? 'fileURL' : null;
+                                        $link_href = choose_medialink_ahref(q($myrow[1]), q($myrow[2]), $aclass);
                                         
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow[3]) . "</td>";
                                     
@@ -644,7 +644,7 @@ else {
                                                 
                                                 if ($is_in_tinymce) {
                                                     $furl = (is_supported_media($myrow[1], true)) ? $mediaPlay : $mediaURL;
-                                                    $link_href = "<a href='$furl' id='fileURL'>". q($myrow[3]) ."</a>";
+                                                    $link_href = "<a href='$furl' class='fileURL'>". q($myrow[3]) ."</a>";
                                                 } else {
                                                     $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow[3]), $myrow[1]) ."<br/><small>". q($myrow[4]) . "</small>";
                                                 }
@@ -653,8 +653,8 @@ else {
                                                 $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $aid = ($is_in_tinymce) ? 'fileURL' : null;
-                                                $link_href = choose_medialink_ahref(q($myrow[1]), q($myrow[2]), $aid);
+                                                $aclass = ($is_in_tinymce) ? 'fileURL' : null;
+                                                $link_href = choose_medialink_ahref(q($myrow[1]), q($myrow[2]), $aclass);
                                                 
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow[3]) . "</td>";
                                                 
