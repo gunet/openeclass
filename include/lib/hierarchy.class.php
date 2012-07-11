@@ -1073,8 +1073,10 @@ jContent;
         
         if ($values !== false)
         {
-            if (isset($values[langname_to_code($language)]) && !empty($values[langname_to_code($language)]))
-                return $values[langname_to_code($language)];
+            if (isset($values[$language]) && !empty($values[$language]))
+                return $values[$language];
+            else if (isset($values['en']) && !empty($values['en']))
+                return $values['en'];
             else
                 return array_shift($values);
         } else {

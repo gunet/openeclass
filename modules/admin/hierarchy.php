@@ -64,6 +64,10 @@ if (isset($_GET['action'])) {
     }
 }
 
+// handle current lang missing from active langs
+if (!in_array($language, $active_ui_languages))
+	array_unshift($active_ui_languages, $language);
+
 // link to add a new node
 $tool_content .= "
     <div id='operations_container'>
