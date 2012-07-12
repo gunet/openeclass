@@ -107,6 +107,7 @@ function createCoursesDom($coursesArr) {
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
+            $c->appendChild(new DOMAttr('description', ""));
             
             //$c->appendChild(new DOMAttr('teacher', $course->titulaires));
             //$c->appendChild(new DOMAttr('visible', $course->visible));
