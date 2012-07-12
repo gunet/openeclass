@@ -27,8 +27,8 @@ if (isset($_POST['token']))
     
     if (isset($_REQUEST['logout']))
     {
-        require_once ('../../include/CAS/CAS.php');
-        require_once ('../auth/auth.inc.php');
+        require_once ('include/CAS/CAS.php');
+        require_once ('modules/auth/auth.inc.php');
 
         if (isset($_SESSION['uid']))
             db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
@@ -69,8 +69,9 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
 {
     $require_noerrors = true;
     require_once ('minit.php');
-    require_once ('../../include/CAS/CAS.php');
-    require_once ('../auth/auth.inc.php');
+    require_once ('include/CAS/CAS.php');
+    require_once ('modules/auth/auth.inc.php');
+    require_once ('include/phpass/PasswordHash.php');
     
     $uname = autounquote(canonicalize_whitespace($_POST['uname']));
     $pass = autounquote($_POST['pass']);
@@ -79,7 +80,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
         unset($_SESSION[$key]);
     $_SESSION['user_perso_active'] = false;
     
-    $sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
+    $sqlLogin = "SELECT *
                    FROM user 
                   WHERE username ";
     if (get_config('case_insensitive_usernames')) {

@@ -29,7 +29,6 @@ $courses = array();
 $sql = "SELECT course.code,
                course.lang, 
                course.title,
-               course.description,
                course.keywords,
                course.visible,
                course.prof_names,
@@ -41,7 +40,6 @@ $sql = "SELECT course.code,
 $sql2 = "SELECT course.code,
                 course.lang, 
                 course.title,
-                course.description,
                 course.keywords,
                 course.visible,
                 course.prof_names,
@@ -109,7 +107,6 @@ function createCoursesDom($coursesArr) {
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
-            $c->appendChild(new DOMAttr('description', $course->description));
             
             //$c->appendChild(new DOMAttr('teacher', $course->titulaires));
             //$c->appendChild(new DOMAttr('visible', $course->visible));
