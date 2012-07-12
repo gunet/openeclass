@@ -71,6 +71,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     require_once ('minit.php');
     require_once ('../../include/CAS/CAS.php');
     require_once ('../auth/auth.inc.php');
+    require_once ('../../include/phpass/PasswordHash.php');
     
     $uname = autounquote(canonicalize_whitespace($_POST['uname']));
     $pass = autounquote($_POST['pass']);
@@ -79,7 +80,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
         unset($_SESSION[$key]);
     $_SESSION['user_perso_active'] = false;
     
-    $sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
+    $sqlLogin = "SELECT *
                    FROM user 
                   WHERE username COLLATE utf8_bin = " . quote($uname);
     $result = db_query($sqlLogin);
