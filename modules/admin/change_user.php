@@ -57,7 +57,7 @@ if (isset($_REQUEST['username'])) {
                 } else {
         		$_SESSION['user_perso_active'] = false;
                 }
-                $_SESSION['langswitch'] = langcode_to_name($myrow['lang']);
+                $_SESSION['langswitch'] = $myrow['lang'];
                 redirect_to_home_page();
         } else {
                 $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
