@@ -2935,3 +2935,5 @@ $langAddGrade = '$langAddGrade';
 $langOnBehalfOf = '$langOnBehalfOf';
 $langOnBehalfOfUserComment = '$langOnBehalfOfUserComment';
 $langOnBehalfOfGroupComment = '$langOnBehalfOfGroupComment';
+$langAccountActivate = 'User Account Reactivation';
+$langAccountActivateMessage = 'The following user is requesting account reactivation:';

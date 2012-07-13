@@ -2958,3 +2958,5 @@ $langAddGrade = 'Add grade/submission';
 $langOnBehalfOf = 'On behalf of';
 $langOnBehalfOfUserComment = 'Submitted by %s, on behalf of: %s';
 $langOnBehalfOfGroupComment = 'Submitted by %s, on behalf of group "%s"';
+$langAccountActivate = 'User Account Reactivation';
+$langAccountActivateMessage = 'The following user is requesting account reactivation:';
