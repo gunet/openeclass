@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.5.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -57,6 +57,8 @@ $tool_content = "";
 $auth_methods = array("imap","pop3","ldap","db");
 $OK = "[<font color='green'> $langSuccessOk </font>]";
 $BAD = "[<font color='red'> $langSuccessBad </font>]";
+
+$charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 // default quota values  (if needed)
 $diskQuotaDocument = 40000000;
@@ -225,7 +227,7 @@ if (!isset($_POST['submit2'])) {
                 db_query("CREATE TABLE `config`
                                 (`key` VARCHAR(32) NOT NULL,
                                  `value` VARCHAR(255) NOT NULL,
-                                 PRIMARY KEY (`key`))");
+                                 PRIMARY KEY (`key`)) $charset_spec");
                 db_query("INSERT INTO `config` (`key`, `value`)
                                  VALUES ('version', '2.1.2')");
                 $oldversion = '2.1.2';
@@ -238,7 +240,7 @@ if (!isset($_POST['submit2'])) {
                         db_query("CREATE TABLE `config`
                                         (`key` VARCHAR(32) NOT NULL,
                                          `value` VARCHAR(255) NOT NULL,
-                                         PRIMARY KEY (`key`))");
+                                         PRIMARY KEY (`key`)) $charset_spec");
                         db_query("INSERT INTO config
                                          SELECT `key`, `value` FROM old_config
                                          GROUP BY `key`");
@@ -281,7 +283,7 @@ if (!isset($_POST['submit2'])) {
 			`comments` MEDIUMTEXT,
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 			`order` INT(11) NOT NULL DEFAULT 0,
-			`course_id` INT(11) NOT NULL)");
+			`course_id` INT(11) NOT NULL) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `unit_resources` (
 			`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 			`unit_id` INT(11) NOT NULL ,
@@ -291,7 +293,7 @@ if (!isset($_POST['submit2'])) {
 			`type` VARCHAR(255) NOT NULL DEFAULT '',
 			`visibility` CHAR(1) NOT NULL DEFAULT 'v',
 			`order` INT(11) NOT NULL DEFAULT 0,
-			`date` DATETIME NOT NULL DEFAULT '0000-00-00')");
+			`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
 	}
 
         if ($oldversion < '2.2.1') {
@@ -306,7 +308,7 @@ if (!isset($_POST['submit2'])) {
                         `forum_id` INT NULL ,
                         `topic_id` INT NULL ,
                         `notify_sent` BOOL NOT NULL DEFAULT '0',
-                        `course_id` INT NOT NULL DEFAULT '0')");
+                        `course_id` INT NOT NULL DEFAULT '0') $charset_spec");
 
         	if (!mysql_field_exists($mysqlMainDb, 'cours_user', 'cours_id')) {
 	        	db_query('ALTER TABLE cours_user ADD cours_id int(11) DEFAULT 0 NOT NULL FIRST');
@@ -386,7 +388,7 @@ if (!isset($_POST['submit2'])) {
                                 `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
                                 FULLTEXT KEY `document`
                                         (`filename`, `comment`, `title`, `creator`,
-                                         `subject`, `description`, `author`, `language`))");
+                                         `subject`, `description`, `author`, `language`)) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
                                 `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
@@ -396,7 +398,7 @@ if (!isset($_POST['submit2'])) {
                                 `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
                                 `documents` TINYINT(4) NOT NULL DEFAULT 1,
                                 `wiki` TINYINT(4) NOT NULL DEFAULT 0,
-                                `agenda` TINYINT(4) NOT NULL DEFAULT 0)");
+                                `agenda` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `group` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -404,13 +406,13 @@ if (!isset($_POST['submit2'])) {
                                 `description` TEXT,
                                 `forum_id` INT(11) NULL,
                                 `max_members` INT(11) NOT NULL DEFAULT 0,
-                                `secret_directory` varchar(30) NOT NULL DEFAULT '0')");
+                                `secret_directory` varchar(30) NOT NULL DEFAULT '0') $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                                 `group_id` INT(11) NOT NULL,
                                 `user_id` INT(11) NOT NULL,
                                 `is_tutor` INT(11) NOT NULL DEFAULT 0,
                                 `description` TEXT,
-                                PRIMARY KEY (`group_id`, `user_id`))");
+                                PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `glossary` (
 			       `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			       `term` VARCHAR(255) NOT NULL,
@@ -418,7 +420,7 @@ if (!isset($_POST['submit2'])) {
 			       `url` text,
                                `order` INT(11) NOT NULL DEFAULT 0,
                                `datestamp` DATETIME NOT NULL,
-                               `course_id` INT(11) NOT NULL)");
+                               `course_id` INT(11) NOT NULL) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `link` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                                 `course_id` INT(11) NOT NULL,
@@ -428,31 +430,31 @@ if (!isset($_POST['submit2'])) {
                                 `category` INT(6) DEFAULT NULL,
                                 `order` INT(6) DEFAULT 0 NOT NULL,
                                 `hits` INT(6) DEFAULT 0 NOT NULL,
-                                PRIMARY KEY (`id`, `course_id`))");
+                                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
                 db_query("CREATE TABLE IF NOT EXISTS `link_category` (
                                 `id` INT(6) NOT NULL AUTO_INCREMENT,
                                 `course_id` INT(11) NOT NULL,
                                 `name` VARCHAR(255) NOT NULL,
                                 `description` TEXT,
                                 `order` INT(6) NOT NULL DEFAULT 0,
-                                PRIMARY KEY (`id`, `course_id`))");
+                                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
                 db_query('CREATE TABLE IF NOT EXISTS ebook (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
                                 `order` INT(11) NOT NULL,
-                                `title` TEXT)');
+                                `title` TEXT) ' . $charset_spec);
                 db_query('CREATE TABLE IF NOT EXISTS ebook_section (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `ebook_id` INT(11) NOT NULL,
                                 `public_id` VARCHAR(11) NOT NULL,
 				`file` VARCHAR(128),
-                                `title` TEXT)');
+                                `title` TEXT) ' . $charset_spec);
                 db_query('CREATE TABLE IF NOT EXISTS ebook_subsection (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `section_id` VARCHAR(11) NOT NULL,
                                 `public_id` VARCHAR(11) NOT NULL,
                                 `file_id` INT(11) NOT NULL,
-                                `title` TEXT)');
+                                `title` TEXT) ' . $charset_spec);
 
                 if (mysql_table_exists($mysqlMainDb, 'prof_request')) {
                         db_query("RENAME TABLE prof_request TO user_request");
@@ -482,7 +484,7 @@ if (!isset($_POST['submit2'])) {
                                         `visible` ENUM('V','I') NOT NULL,
                                         `lang` VARCHAR(10) NOT NULL DEFAULT 'el',
                                         `ordre` MEDIUMINT(11) NOT NULL DEFAULT 0,
-                                        PRIMARY KEY (`id`))");
+                                        PRIMARY KEY (`id`)) $charset_spec");
 
                         $aq = db_query("INSERT INTO admin_announcements (title, body, `date`, visible, lang)
                                         SELECT gr_title AS title, CONCAT_WS('  ', gr_body, gr_comment) AS body, `date`, visible, 'el'
@@ -545,7 +547,7 @@ if (!isset($_POST['submit2'])) {
                                 `course_id` INT(11) NOT NULL,
                                 `name` VARCHAR(255) NOT NULL,
                                 `description` TEXT NOT NULL,
-                                `order` INT(11) NOT NULL DEFAULT 0)");
+                                `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
         }
 
 	mysql_index_exists('document', 'doc_path_index') or

@@ -622,7 +622,7 @@ function process_login()
         global $warning, $nom, $prenom, $email, $statut, $is_admin, $language,
                $langInvalidId, $langAccountInactive1, $langAccountInactive2,
                $langNoCookies, $langEnterPlatform, $urlServer, $urlAppend, $langHere,
-               $auth_ids;
+               $auth_ids, $inactive_uid;;
 
 	if (isset($_POST['uname'])) {
 		$posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
@@ -675,7 +675,9 @@ function process_login()
 					break;
 				case 2: $warning .= "<p class='alert1'>$langInvalidId</p>"; 
 					break;
-				case 3: $warning .= "<p class='alert1'>$langAccountInactive1 <a href='modules/auth/contactadmin.php?userid=$GLOBALS[inactive_uid]'>$langAccountInactive2</a></p>"; 
+                                case 3: $warning .= "<p class='alert1'>$langAccountInactive1 " .
+                                        "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=".
+                                        token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>";
 					break;
 				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>"; 
 					break;

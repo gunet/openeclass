@@ -1,32 +1,36 @@
 <?php
 
+if (!defined('ECLASS_VERSION')) {
+        die('Operation not allowed!');
+}
+
 // **************************************
 // old queries
 //  *************************************
 
         //upgrade queries from 1.2 --> 1.4
-        if (!mysql_field_exists("$mysqlMainDb", 'user', 'am'))
+        if (!mysql_field_exists($mysqlMainDb, 'user', 'am'))
                 echo add_field('user', 'am', "VARCHAR( 20 ) NOT NULL");
         if (mysql_table_exists($mysqlMainDb, 'todo'))
                 db_query("DROP TABLE `todo`");
         // upgrade queries to 1.4
-        if (!mysql_field_exists("$mysqlMainDb",'cours','type'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','type'))
                 echo add_field('cours', 'type', "ENUM('pre', 'post', 'other') DEFAULT 'pre' NOT NULL");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','doc_quota'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','doc_quota'))
                 echo add_field('cours', 'doc_quota', "FLOAT DEFAULT '$diskQuotaDocument' NOT NULL");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','video_quota'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','video_quota'))
                 echo add_field('cours', 'video_quota', "FLOAT DEFAULT '$diskQuotaVideo' NOT NULL");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','group_quota'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','group_quota'))
                 echo add_field('cours', 'group_quota', "FLOAT DEFAULT '$diskQuotaGroup' NOT NULL");
 
         // upgrade query to 1.6
-        if (!mysql_field_exists("$mysqlMainDb",'cours','dropbox_quota'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','dropbox_quota'))
                 echo add_field('cours', 'dropbox_quota', "FLOAT DEFAULT '$diskQuotaDropbox' NOT NULL");
 
         // upgrade query to 1.7
-        if (!mysql_field_exists("$mysqlMainDb", 'annonces','title'))
+        if (!mysql_field_exists($mysqlMainDb, 'annonces','title'))
                 echo add_field_after_field('annonces', 'title', 'id', "varchar(255) NULL");
-        if (!mysql_field_exists("$mysqlMainDb", 'prof_request','statut'))
+        if (!mysql_field_exists($mysqlMainDb, 'prof_request','statut'))
                 echo add_field('prof_request', 'statut', "tinyint(4) NOT NULL default 1");
 
         // ***********************************************
@@ -37,23 +41,23 @@
 	if (mysql_table_exists($mysqlMainDb, 'institution'))
                 db_query("DROP TABLE `institution`");
 
-        if (!mysql_field_exists("$mysqlMainDb",'cours','course_keywords'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','course_keywords'))
                 echo add_field('cours', 'course_keywords', "TEXT");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','course_addon'))
                 echo add_field('cours', 'course_addon', "TEXT");
-        if (!mysql_field_exists("$mysqlMainDb",'cours','first_create'))
+        if (!mysql_field_exists($mysqlMainDb,'cours','first_create'))
                 echo add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
 
         // delete useless fields
-        if (mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
+        if (mysql_field_exists($mysqlMainDb,'cours','cahier_charges'))
                 echo delete_field('cours', 'cahier_charges');
-        if (mysql_field_exists("$mysqlMainDb",'cours','versionDb'))
+        if (mysql_field_exists($mysqlMainDb,'cours','versionDb'))
                 echo delete_field('cours', 'versionDb');
-        if (mysql_field_exists("$mysqlMainDb",'cours','versionClaro'))
+        if (mysql_field_exists($mysqlMainDb,'cours','versionClaro'))
                 echo delete_field('cours', 'versionClaro');
-        if (mysql_field_exists("$mysqlMainDb",'user','inst_id'))
+        if (mysql_field_exists($mysqlMainDb,'user','inst_id'))
                 echo delete_field('user', 'inst_id');
-	if (mysql_field_exists("$mysqlMainDb",'cours_user','role'))
+	if (mysql_field_exists($mysqlMainDb,'cours_user','role'))
                 echo delete_field('cours_user', 'role');
 
 	// add field to cours_user to keep track course user registration date
@@ -118,7 +122,7 @@
                            logins int(11) NOT NULL default '0',
                            details text NOT NULL default '',
                            PRIMARY KEY  (id))
-                                TYPE=MyISAM DEFAULT CHARACTER SET=utf8");
+                           $charset_spec");
         }
         // new table 'auth' with auth methods
         if(!mysql_table_exists($mysqlMainDb, 'auth')) {
@@ -128,7 +132,7 @@
                         `auth_settings` text NOT NULL default '',
                         `auth_instructions` text NOT NULL default '',
                         `auth_default` tinyint( 1 ) NOT NULL default '0',
-                        PRIMARY KEY ( `auth_id` )) ",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
+                        PRIMARY KEY ( `auth_id` )) $charset_spec",$mysqlMainDb); //TYPE = MYISAM  COMMENT='New table with auth methods in Eclass 2.0'
                   // Insert the default values into the new table 'auth'
                    	db_query("INSERT INTO `auth` VALUES (1, 'eclass', '', '', 1)");
                 	db_query("INSERT INTO `auth` VALUES (2, 'pop3', '', '', 0)");
@@ -148,7 +152,7 @@
                         `hour` time NOT NULL default '00:00:00',
                         `lasting` varchar(20) NOT NULL default '',
                         `lesson_code` varchar(50) NOT NULL default '',
-                        PRIMARY KEY  (`id`)) TYPE=MyISAM ", $mysqlMainDb);
+                        PRIMARY KEY  (`id`)) $charset_spec", $mysqlMainDb);
         }
 
         // table admin_announcemets (stores administrator  announcements)
@@ -163,18 +167,8 @@
                         `en_comment` VARCHAR( 255 ) NULL ,
                         `date` DATE NOT NULL ,
                         `visible` ENUM( 'V', 'I' ) NOT NULL
-                        ) TYPE = MYISAM ", $mysqlMainDb);
+                        ) $charset_spec", $mysqlMainDb);
         }
-
-        // Table passwd_reset (used by the password reset module)
-        if (!mysql_table_exists($mysqlMainDb, 'passwd_reset'))  {
-                db_query("CREATE TABLE `passwd_reset` (
-                              `user_id` int(11) NOT NULL,
-                              `hash` varchar(40) NOT NULL,
-                              `password` varchar(8) NOT NULL,
-                              `datetime` datetime NOT NULL
-                              ) TYPE=MyISAM", $mysqlMainDb);
-        	}
 
         // add 5 new fields to table users
         if (!mysql_field_exists("$mysqlMainDb",'user','perso'))

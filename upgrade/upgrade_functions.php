@@ -682,7 +682,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `active` char(1) NOT NULL default '1',
                         `secret_directory` varchar(30) NOT NULL,
                         `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
-                        UNIQUE KEY `id` (`id`))", $code);
+                        UNIQUE KEY `id` (`id`)) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'assignment_submit')) {
@@ -700,7 +700,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `grade_submission_date` date NOT NULL default '0000-00-00',
                         `grade_submission_ip` varchar(16) NOT NULL default '',
                         `group_id` INT( 11 ) DEFAULT NULL,
-                        UNIQUE KEY `id` (`id`))",$code);
+                        UNIQUE KEY `id` (`id`)) $GLOBALS[charset_spec]",$code);
         }
         update_assignment_submit();
 
@@ -712,7 +712,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            titre varchar(200),
                            description text,
                            visibility CHAR(1) DEFAULT '1' NOT NULL,
-                           PRIMARY KEY (id))", $code);
+                           PRIMARY KEY (id)) $GLOBALS[charset_spec]", $code);
         }
 
         // upgrade queries for eClass 1.6
@@ -724,7 +724,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `categoryname` varchar(255) default NULL,
                         `description` text,
                         `ordre` mediumint(8) NOT NULL default '0',
-                        PRIMARY KEY  (`id`))",$code);
+                        PRIMARY KEY  (`id`)) $GLOBALS[charset_spec]",$code);
         }
 
         // correct link entries to correctly appear in a blank window
@@ -739,7 +739,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (!mysql_table_exists($code, 'dropbox_file'))  {
                 db_query("INSERT INTO accueil VALUES (
                         16,
-                        '$langDropbox[$lang]',
+                        '{$langDropbox[$lang]}',
                         '../../modules/dropbox/index.php',
                         'dropbox',
                         '0',
@@ -758,19 +758,19 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
                            lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
                            PRIMARY KEY (id),
-                           UNIQUE KEY UN_filename (filename))", $code);
+                           UNIQUE KEY UN_filename (filename)) $GLOBALS[charset_spec]", $code);
         }
         if (!mysql_table_exists($code, 'dropbox_person'))  {
                 db_query("CREATE TABLE dropbox_person (
                         fileId int(11) unsigned NOT NULL default '0',
                                personId int(11) unsigned NOT NULL default '0',
-                               PRIMARY KEY  (fileId,personId))", $code);
+                               PRIMARY KEY  (fileId,personId)) $GLOBALS[charset_spec]", $code);
         }
         if (!mysql_table_exists($code, 'dropbox_post'))  {
                 db_query("CREATE TABLE dropbox_post (
                         fileId int(11) unsigned NOT NULL default '0',
                                recipientId int(11) unsigned NOT NULL default '0',
-                               PRIMARY KEY  (fileId,recipientId))", $code);
+                               PRIMARY KEY  (fileId,recipientId)) $GLOBALS[charset_spec]", $code);
         }
 
         // ********************************************
@@ -818,7 +818,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `id` INT(4) NOT NULL AUTO_INCREMENT,
                         `path` VARCHAR(255) default NULL ,
                         `filename` VARCHAR(255) default NULL,
-                        PRIMARY KEY(id))", $code);
+                        PRIMARY KEY(id)) $GLOBALS[charset_spec]", $code);
         }
 
         // Learning Path tables
@@ -832,7 +832,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK') NOT NULL,
                         `launch_data` text NOT NULL,
                         PRIMARY KEY  (`module_id`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='List of available modules used in learning paths';
         }
         if (!mysql_table_exists($code, 'lp_learnPath'))  {
                 db_query("CREATE TABLE `lp_learnPath` (
@@ -844,7 +844,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `rank` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`learnPath_id`),
                         UNIQUE KEY rank (`rank`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='List of learning Paths';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='List of learning Paths';
         }
 
         if (!mysql_table_exists($code, 'lp_rel_learnPath_module'))  {
@@ -859,7 +859,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `parent` int(11) NOT NULL default '0',
                         `raw_to_pass` tinyint(4) NOT NULL default '50',
                         PRIMARY KEY  (`learnPath_module_id`)
-                                ) ", $code);//TYPE=MyISAM COMMENT='This table links module to the learning path using them';
+                                ) $GLOBALS[charset_spec]", $code);//TYPE=MyISAM COMMENT='This table links module to the learning path using them';
         }
 
         if (!mysql_table_exists($code, 'lp_asset'))  {
@@ -869,7 +869,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `path` varchar(255) NOT NULL default '',
                         `comment` varchar(255) default NULL,
                         PRIMARY KEY  (`asset_id`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='List of resources of module of learning paths';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='List of resources of module of learning paths';
         }
 
         if (!mysql_table_exists($code, 'lp_user_module_progress'))  {
@@ -889,7 +889,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `suspend_data` text NOT NULL,
                         `credit` enum('CREDIT','NO-CREDIT') NOT NULL default 'NO-CREDIT',
                         PRIMARY KEY  (`user_module_progress_id`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='Record the last known status of the user in the course';
         }
 
         // Wiki tables
@@ -900,7 +900,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `description` TEXT NULL,
                         `group_id` INT(11) NOT NULL DEFAULT 0,
                         PRIMARY KEY(`id`)
-                                ) ", $code);
+                                ) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'wiki_acls'))  {
@@ -908,7 +908,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `wiki_id` INT(11) UNSIGNED NOT NULL,
                         `flag` VARCHAR(255) NOT NULL,
                         `value` ENUM('false','true') NOT NULL DEFAULT 'false'
-                                ) ", $code);
+                                ) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'wiki_pages'))  {
@@ -921,7 +921,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `last_version` int(11) unsigned NOT NULL default '0',
                         `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
                         PRIMARY KEY  (`id`)
-                                ) ", $code);
+                                ) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'wiki_pages_content'))  {
@@ -932,7 +932,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
                         `content` text NOT NULL,
                         PRIMARY KEY  (`id`)
-                                ) ", $code);
+                                ) $GLOBALS[charset_spec]", $code);
         }
 
         // questionnaire tables
@@ -948,7 +948,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `type` int(11) NOT NULL default '0',
                         `active` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`sid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
         if (!mysql_table_exists($code, 'survey_answer'))  {
                 db_query("CREATE TABLE `survey_answer` (
@@ -957,7 +957,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `sid` bigint(12) NOT NULL default '0',
                         `date` datetime NOT NULL default '0000-00-00 00:00:00',
                         PRIMARY KEY  (`aid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
         if (!mysql_table_exists($code, 'survey_answer_record'))  {
                 db_query("CREATE TABLE `survey_answer_record` (
@@ -966,7 +966,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `question_text` varchar(250) NOT NULL default '',
                         `question_answer` varchar(250) NOT NULL default '',
                         PRIMARY KEY  (`arid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
         if (!mysql_table_exists($code, 'survey_question'))  {
                 db_query("CREATE TABLE `survey_question` (
@@ -974,7 +974,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `sid` bigint(12) NOT NULL default '0',
                         `question_text` varchar(250) NOT NULL default '',
                         PRIMARY KEY  (`sqid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
         if (!mysql_table_exists($code, 'survey_question_answer'))  {
                 db_query("CREATE TABLE `survey_question_answer` (
@@ -982,7 +982,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `sqid` bigint(12) NOT NULL default '0',
                         `answer_text` varchar(250) default NULL,
                         PRIMARY KEY  (`sqaid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
 
         // poll tables
@@ -998,7 +998,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `type` int(11) NOT NULL default '0',
                         `active` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`pid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the poll module';
         } else {
                 db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
                 db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
@@ -1012,7 +1012,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `question_text` varchar(250) NOT NULL default '',
                         `question_answer` varchar(250) NOT NULL default '',
                         PRIMARY KEY  (`arid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the poll module';
         }
 
         if (!mysql_field_exists("$code",'poll_answer_record', 'qtype'))
@@ -1038,7 +1038,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `pid` bigint(12) NOT NULL default '0',
                         `question_text` varchar(250) NOT NULL default '',
                         PRIMARY KEY  (`pqid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the poll module';
         }
 
         if (!mysql_field_exists("$code",'poll_question','qtype'))
@@ -1050,7 +1050,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `pqid` bigint(12) NOT NULL default '0',
                         `answer_text` varchar(250) default NULL,
                         PRIMARY KEY  (`pqaid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the poll module';
         }
 
 
@@ -1063,7 +1063,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            action_type_id int(11) NOT NULL,
                            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
                            duration int(11) NOT NULL,
-                           PRIMARY KEY (id))", $code);
+                           PRIMARY KEY (id)) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'logins')) {
@@ -1072,14 +1072,14 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            user_id int(11) NOT NULL,
                            ip char(16) NOT NULL default '0.0.0.0',
                            date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
-                           PRIMARY KEY (id))", $code);
+                           PRIMARY KEY (id)) $GLOBALS[charset_spec]", $code);
         }
 
         if (!mysql_table_exists($code, 'action_types')) {
                 db_query("CREATE TABLE action_types (
                         id int(11) NOT NULL auto_increment,
                            name varchar(200),
-                           PRIMARY KEY (id))", $code);
+                           PRIMARY KEY (id)) $GLOBALS[charset_spec]", $code);
                 db_query("INSERT INTO action_types VALUES ('1', 'access')", $code);
         }
         if (!mysql_table_exists($code, 'actions_summary')) {
@@ -1090,7 +1090,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
                            end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
                            duration int(11) NOT NULL,
-                           PRIMARY KEY (id))", $code);
+                           PRIMARY KEY (id)) $GLOBALS[charset_spec]", $code);
         }
 
         // exercise tables
@@ -1105,7 +1105,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `TotalWeighting` int(11) default '0',
                         `attempt` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`eurid`)
-                                ) ", $code); //TYPE=MyISAM COMMENT='For the exercise module';
+                                ) $GLOBALS[charset_spec]", $code); //TYPE=MyISAM COMMENT='For the exercise module';
         }
 
         // Upgrading EXERCICES table for new func of EXERCISE module
