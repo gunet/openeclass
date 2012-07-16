@@ -95,7 +95,7 @@ if (!$myrow = mysql_fetch_array($result)) {
 }
 $forum_name = own_stripslashes($myrow["forum_name"]);
 
-if (isset($_GET['delete'])) {
+if (isset($_GET['delete']) && $is_editor) {
 	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic, $currentCourseID, "time_fix");
 	
