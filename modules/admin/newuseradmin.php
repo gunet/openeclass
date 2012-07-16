@@ -24,6 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/phpass/PasswordHash.php';
 
 $tree = new hierarchy();
 $userObj = new user();
