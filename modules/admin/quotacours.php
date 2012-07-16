@@ -83,7 +83,7 @@ else {
 	$vq = $q['video_quota'] / MB;
 	$gq = $q['group_quota'] / MB;
 	$drq = $q['dropbox_quota'] / MB;
-	
+
 	$tool_content .= "
 	<form action='$_SERVER[SCRIPT_NAME]?c=".q($_GET['c'])."' method='post'>
         <fieldset>

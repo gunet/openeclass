@@ -67,7 +67,7 @@ if ($is_editor) {
    <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
      <fieldset>
      <legend>$langUpload</legend>
-     
+
      <table width='100%' class='tbl'>
      <tr>
        <th>$langTitle:</th>
@@ -169,7 +169,7 @@ function tools($id, $title, $k, $num, $vis)
                        (($k < $num)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
                                            title='$langMove $langDown' alt='$langMove $langDown' /></a>":
-                                     '') . 
+                                     '') .
                        (($k > 0)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
                                         title='$langMove $langUp' alt='$langMove $langUp' /></a>":

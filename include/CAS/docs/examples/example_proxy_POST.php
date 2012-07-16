@@ -12,13 +12,13 @@ phpCAS::setDebug();
 // Initialize phpCAS
 phpCAS::proxy(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 
-// For production use set the CA certificate that is the issuer of the cert 
+// For production use set the CA certificate that is the issuer of the cert
 // on the CAS server and uncomment the line below
 // phpCAS::setCasServerCACert($cas_server_ca_cert_path);
 
-// For quick testing you can disable SSL validation of the CAS server. 
-// THIS SETTING IS NOT RECOMMENDED FOR PRODUCTION. 
-// VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL! 
+// For quick testing you can disable SSL validation of the CAS server.
+// THIS SETTING IS NOT RECOMMENDED FOR PRODUCTION.
+// VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL!
 phpCAS::setNoCasServerValidation();
 
 // force CAS authentication
@@ -45,7 +45,7 @@ $serviceUrl = $curbase.$curdir.'example_service_POST.php';
     <h2>Response from service <?php echo $serviceUrl; ?></h2>
 <?php
 	flush();
-	
+
 	// call a service and change the color depending on the result
 	try {
 		$service = phpCAS::getProxiedService(PHPCAS_PROXIED_SERVICE_HTTP_POST);
@@ -72,7 +72,7 @@ $serviceUrl = $curbase.$curdir.'example_service_POST.php';
 		} else
 			// Other proxy ticket errors are from bad request format (shouldn't happen)
 			// or CAS server failure (unlikely) so lets just stop if we hit those.
-			throw $e; 
+			throw $e;
 	} catch (CAS_ProxiedService_Exception $e) {
 		// Something prevented the service request from being sent or received.
 		// We didn't even get a valid error response (404, 500, etc), so this
@@ -80,8 +80,8 @@ $serviceUrl = $curbase.$curdir.'example_service_POST.php';
 		// We could handle it in some way, but for now we will just stop.
 		throw $e;
 	}
-	
-	
+
+
 ?>
   </body>
 </html>

@@ -20,7 +20,7 @@
 
 
 /*
-Units display module	
+Units display module
 */
 define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
@@ -72,7 +72,7 @@ if ($is_editor) {
 		<input type='hidden' name='course' value='$course_code'>
 		</form>
 		</div>".
-		$form; 
+		$form;
 }
 
 if ($is_editor) {

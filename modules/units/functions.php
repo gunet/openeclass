@@ -1,21 +1,21 @@
 <?php
 
 //
-// Units utility functions	
+// Units utility functions
 //
 
 // Process resource actions
 function process_actions()
 {
         global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified;
-	
+
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         return edit_res($res_id);
                 }
         } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
-                $res_id = intval($_REQUEST['resource_id']);	
+                $res_id = intval($_REQUEST['resource_id']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         @$restitle = autoquote(trim($_REQUEST['restitle']));
                         $rescomments = autoquote(purify($_REQUEST['rescomments']));
@@ -31,7 +31,7 @@ function process_actions()
                         db_query("DELETE FROM unit_resources WHERE id = $res_id");
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
-        } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
+        } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
                 $res_id = intval($_REQUEST['vis']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         $sql = db_query("SELECT `visible` FROM unit_resources WHERE id=$res_id");
@@ -58,11 +58,11 @@ function process_actions()
 
 // Check that a specified resource id belongs to a resource in the
 // current course, and that the user is an admin in this course.
-// Return the id of the unit or false if user is not an admin 
+// Return the id of the unit or false if user is not an admin
 function check_admin_unit_resource($resource_id)
 {
 	global $course_id, $is_editor;
-	
+
 	if ($is_editor) {
 		$q = db_query("SELECT course_units.id FROM course_units,unit_resources WHERE
 			course_units.course_id = $course_id AND course_units.id = unit_resources.unit_id
@@ -89,7 +89,7 @@ function show_resources($unit_id)
 		while ($info = mysql_fetch_array($req)) {
 			$info['comments'] = standard_text_escape($info['comments']);
 			show_resource($info);
-		}	
+		}
 		$tool_content .= "
         </table>\n";
 	}
@@ -99,7 +99,7 @@ function show_resources($unit_id)
 function show_resource($info)
 {
         global $tool_content, $langUnknownResType, $is_editor;
-	
+
         if ($info['visible'] == 0 and !$is_editor) {
                 return;
         }
@@ -237,11 +237,11 @@ function show_lp($title, $comments, $resource_id, $lp_id)
         $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
-        }        
+        }
         $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = (!$module_visible)?
-                     ' class="invisible"': ' class="even"';                
-	
+                     ' class="invisible"': ' class="even"';
+
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM lp_learnPath WHERE course_id = $course_id AND learnPath_id = $lp_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if lp was deleted
@@ -270,7 +270,7 @@ function show_lp($title, $comments, $resource_id, $lp_id)
                 $comment_box = "<br />$comments";
         } else {
                 $comment_box = '';
-        }        
+        }
 	return "
         <tr$class_vis>
           <td width='1'>$imagelink</a></td>
@@ -288,20 +288,20 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
-        }        
+        }
         $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';        
-        
+                     ' class="invisible"': ' class="even"';
+
         $result = db_query("SELECT * FROM $table WHERE course_id = $course_id AND id=$video_id",
                             $mysqlMainDb);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-                
-                if ($table == 'video') 
+
+                if ($table == 'video')
                 {
                     list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
-                    
+
                     $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
                 }
                 else
@@ -320,7 +320,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $videolink = $title;
                 $imagelink = "<img src='$themeimg/delete.png' />";
                 $visibility = 'del';
-        }        
+        }
 
 
         if (!empty($comments)) {
@@ -345,11 +345,11 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
         $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
-        }        
+        }
         $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';        
-	
+                     ' class="invisible"': ' class="even"';
+
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = $work_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
@@ -370,7 +370,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 		$imagelink = $link .
                         "<img src='$themeimg/assignments_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
-	}	
+	}
 
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
@@ -395,11 +395,11 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
         if (!$module_visible and !$is_editor) {
                 return '';
-        }        
+        }
         $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';        
-	
+                     ' class="invisible"': ' class="even"';
+
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM exercise WHERE course_id = $course_id AND id = $exercise_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
@@ -421,13 +421,13 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                         "<img src='$themeimg/exercise_" .
 			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
-	
+
 
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
 	} else {
                 $comment_box = "";
-        }        
+        }
 	return "
         <tr$class_vis>
           <td width='3'>$imagelink</td>
@@ -440,7 +440,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
 	global $id, $urlServer, $is_editor, $course_id, $course_code, $themeimg;
-        
+
     $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
     if (!$module_visible and !$is_editor) {
                return '';
@@ -485,13 +485,13 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
 	global $id, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $langInactiveModule, $course_id, $course_code, $themeimg;
-      
+
         $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
-        
+
         if (!$module_visible and !$is_editor) {
                        return '';
-        }        
-        
+        }
+
 	$comment_box = $imagelink = $link = $class_vis = '';
 	$class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';
@@ -536,12 +536,12 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
-        
+
         $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
-        
+
         if (!$module_visible and !$is_editor) {
                        return '';
-        }        
+        }
 	$comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';
@@ -569,7 +569,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
 		$imagelink = $link .
                         "<img src='$themeimg/links_" .
 			($visibility == 0? 'off': 'on') . ".png' /></a>";
-	}	
+	}
 
         if (!empty($comments)) {
                 $comment_box = '<br />' . standard_text_escape($comments);
@@ -589,16 +589,16 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
-	
+
 	$content = $linkcontent = '';
         $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
-        
+
         if (!$module_visible and !$is_editor) {
                        return '';
-        }        
+        }
 	$comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';	
+                     ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$sql = db_query("SELECT * FROM `$mysqlMainDb`.link_category WHERE course_id = $course_id AND id = $linkcat_id");
 	if (mysql_num_rows($sql) == 0) { // check if it was deleted
@@ -609,7 +609,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 			$imagelink = "<img src='$themeimg/delete.png' />";
 			$exlink = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
 		}
-	} else {                
+	} else {
 		while ($lcat = mysql_fetch_array($sql)) {
 			$content .= "
                         <tr$class_vis>
@@ -644,15 +644,15 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
                $langWasDeleted, $course_code, $themeimg, $langInactiveModule;
-	
+
         $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
-        
+
         if (!$module_visible and !$is_editor) {
                        return '';
-        }        
+        }
 	$comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';	
+                     ' class="invisible"': ' class="even"';
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM ebook WHERE id = $ebook_id", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
@@ -690,13 +690,13 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility)
 function show_ebook_section($title, $comments, $resource_id, $section_id, $visibility)
 {
 	global $id, $course_id, $mysqlMainDb;
-                
+
 	$r = db_query("SELECT ebook.id AS ebook_id, ebook_subsection.id AS ssid
 				FROM ebook, ebook_section, ebook_subsection
 				WHERE ebook.course_id = $course_id AND
 				    ebook_section.ebook_id = ebook.id AND
 				    ebook_section.id = ebook_subsection.section_id AND
-				    ebook_section.id = $section_id 
+				    ebook_section.id = $section_id
 				ORDER BY CONVERT(ebook_subsection.public_id, UNSIGNED), ebook_subsection.public_id
 				LIMIT 1", $mysqlMainDb);
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
@@ -732,7 +732,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
 		$display_id = $data['sid'] . ',' . $subsection_id;
 	}
 	return show_ebook_resource($title, $comments, $resource_id, $ebook_id,
-		                   $display_id, $visibility, $deleted);	
+		                   $display_id, $visibility, $deleted);
 }
 
 // display resource ebook subsection
@@ -743,13 +743,13 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
                $langWasDeleted, $course_code, $course_id, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
-        
+
         if (!$module_visible and !$is_editor) {
                        return '';
         }
         $comment_box = $class_vis = $imagelink = $link = '';
         $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';	
+                     ' class="invisible"': ' class="even"';
 	if ($deleted) {
 		if (!$is_editor) {
 			return '';
@@ -768,7 +768,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id,
                         "<img src='$themeimg/ebook_" .
 			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
-	
+
 
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
@@ -814,18 +814,18 @@ function actions($res_type, $resource_id, $status, $res_id = false)
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='$themeimg/delete.png' " .
                     "title='$langDelete'></a></td>";
-	 
+
 	if ($status != 'del') {
-		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
+		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) {
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
                                     "title='$langVisibility'></a></td>";
-		} elseif(in_array($res_type, array('description'))) { 
+		} elseif(in_array($res_type, array('description'))) {
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
                                     "title='$langAddToCourseHome'></a></td>";
 		} else {
-			
+
 			$content .= "<td width='3'>&nbsp;</td>";
 		}
         } else {
@@ -849,10 +849,10 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 
 
 // edit resource
-function edit_res($resource_id) 
+function edit_res($resource_id)
 {
 	global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify, $course_code;
-	 
+
         $sql = db_query("SELECT id, title, comments, type FROM unit_resources WHERE id='$resource_id'");
         $ru = mysql_fetch_array($sql);
         $restitle = " value='" . htmlspecialchars($ru['title'], ENT_QUOTES) . "'";

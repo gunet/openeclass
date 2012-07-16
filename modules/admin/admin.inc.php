@@ -103,9 +103,9 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 
 	$retString = $link_all = "";
 	if ($displayAll == TRUE) {
-	    $link_all = "<a href='$_SERVER[SCRIPT_NAME]?all=TRUE'>$langAllUsers</a>"; 
-	} 
-	
+	    $link_all = "<a href='$_SERVER[SCRIPT_NAME]?all=TRUE'>$langAllUsers</a>";
+	}
+
 	// Page numbers of navigation
 	$pn = 15;
 	$retString .= "

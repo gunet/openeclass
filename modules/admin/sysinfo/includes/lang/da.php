@@ -69,7 +69,7 @@ $text['gb']             = 'GB';
 $text['none']           = 'ingen';
 
 $text['capacity']       = 'Kapacitet';
-  
+
 $text['template']       = 'Skabelon';
 $text['language']       = 'Sprog';
 $text['submit']         = 'Okay';

@@ -66,22 +66,22 @@ $limit_sql = '';
 if (isset($_GET['giveAdmin'])) {
         $new_admin_gid = intval($_GET['giveAdmin']);
         db_query("UPDATE course_user SET statut = 1
-                        WHERE user_id = $new_admin_gid 
+                        WHERE user_id = $new_admin_gid
                         AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['giveTutor'])) {
         $new_tutor_gid = intval($_GET['giveTutor']);
         db_query("UPDATE course_user SET tutor = 1
-                        WHERE user_id = $new_tutor_gid 
+                        WHERE user_id = $new_tutor_gid
                         AND course_id = $course_id", $mysqlMainDb);
         db_query("UPDATE group_members, `group` SET is_tutor = 0
-                        WHERE `group`.id = group_members.group_id AND 
+                        WHERE `group`.id = group_members.group_id AND
                               `group`.course_id = $course_id AND
                               group_members.user_id = $new_tutor_gid");
 } elseif (isset($_GET['giveEditor'])) {
         $new_editor_gid = intval($_GET['giveEditor']);
         db_query("UPDATE course_user SET editor = 1
-                        WHERE user_id = $new_editor_gid 
-                        AND course_id = $course_id", $mysqlMainDb);            
+                        WHERE user_id = $new_editor_gid
+                        AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['removeAdmin'])) {
         $removed_admin_gid = intval($_GET['removeAdmin']);
         db_query("UPDATE course_user SET statut = 5
@@ -91,12 +91,12 @@ if (isset($_GET['giveAdmin'])) {
 } elseif (isset($_GET['removeTutor'])) {
         $removed_tutor_gid = intval($_GET['removeTutor']);
         db_query("UPDATE course_user SET tutor = 0
-                        WHERE user_id = $removed_tutor_gid 
+                        WHERE user_id = $removed_tutor_gid
                               AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['removeEditor'])) {
         $removed_editor_gid = intval($_GET['removeEditor']);
         db_query("UPDATE course_user SET editor = 0
-                        WHERE user_id = $removed_editor_gid 
+                        WHERE user_id = $removed_editor_gid
                         AND course_id = $course_id", $mysqlMainDb);
 } elseif (isset($_GET['unregister'])) {
         $unregister_gid = intval($_GET['unregister']);
@@ -146,7 +146,7 @@ $tool_content .= "
 $search_sql = '';
 if (isset($_GET['search'])) {
         $search_params = "&amp;search=1";
-        $search_nom = $search_prenom = $search_uname = ''; 
+        $search_nom = $search_prenom = $search_uname = '';
         if (!empty($_REQUEST['search_nom'])) {
                 $search_nom = ' value="' . q($_REQUEST['search_nom']) . '"';
                 $search_sql .= " AND user.nom LIKE " . autoquote(mysql_escape_string($_REQUEST['search_nom']).'%');
@@ -162,7 +162,7 @@ if (isset($_GET['search'])) {
                 $search_sql .= " AND user.username LIKE " . autoquote(mysql_escape_string($_REQUEST['search_uname']).'%');
                 $search_params .= "&amp;search_uname=" . urlencode($_REQUEST['search_uname']);
         }
-        
+
         $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;search=1'>
         <fieldset>
         <legend>$langUserData</legend>
@@ -210,7 +210,7 @@ $tool_content .= "
   <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
   <th class='center' width='160'>$langGroup</th>
   <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
-  <th colspan='3' class='center'>$langAddRole</th>          
+  <th colspan='3' class='center'>$langAddRole</th>
 </tr>";
 
 
@@ -234,9 +234,9 @@ $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
                            user.am, user.has_icon, course_user.statut,
                            course_user.tutor, course_user.editor, course_user.reg_date
                     FROM course_user, user
-                    WHERE `user`.`user_id` = `course_user`.`user_id` 
+                    WHERE `user`.`user_id` = `course_user`.`user_id`
                     AND `course_user`.`course_id` = $course_id
-                    $search_sql $order_sql $limit_sql"); 
+                    $search_sql $order_sql $limit_sql");
 
 while ($myrow = mysql_fetch_array($result)) {
         // bi colored table

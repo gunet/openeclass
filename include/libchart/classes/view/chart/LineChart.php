@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Line chart.
      *
@@ -45,7 +45,7 @@
             }
             $this->plot->computeLayout();
         }
-        
+
         /**
          * Print the axis.
          */
@@ -58,10 +58,10 @@
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
-            
+
             // Vertical axis
             for ($value = $minValue; $value <= $maxValue; $value += $stepValue) {
                 $y = $graphArea->y2 - ($value - $minValue) * ($graphArea->y2 - $graphArea->y1) / ($this->axis->displayDelta);
@@ -74,7 +74,7 @@
 
             // Get first serie of a list
             $pointList = $this->getFirstSerieOfList();
-            
+
             // Horizontal Axis
             $pointCount = count($pointList);
             reset($pointList);
@@ -101,19 +101,19 @@
         protected function printLine() {
             $minValue = $this->axis->getLowerBoundary();
             $maxValue = $this->axis->getUpperBoundary();
-            
+
             // Get the data as a list of series for consistency
             $serieList = $this->getDataAsSerieList();
-            
+
             // Get graphical obects
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
             $primitive = $this->plot->getPrimitive();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
-            
+
             $lineColorSet = $palette->lineColorSet;
             $lineColorSet->reset();
             for ($j = 0; $j < count($serieList); $j++) {
@@ -136,37 +136,37 @@
                     next($pointList);
 
                     $value = $point->getY();
-                    
+
                     $y2 = $graphArea->y2 - ($value - $minValue) * ($graphArea->y2 - $graphArea->y1) / ($this->axis->displayDelta);
 
-                    // Draw line 
+                    // Draw line
                     if ($x1) {
                         $primitive->line($x1, $y1, $x2, $y2, $lineColor, 4);
                         $primitive->line($x1, $y1 - 1, $x2, $y2 - 1, $lineColorShadow, 2);
                     }
-                    
+
                     $x1 = $x2;
                     $y1 = $y2;
                 }
             }
         }
-        
+
         /**
          * Renders the caption.
          */
         protected function printCaption() {
             // Get the list of labels
             $labelList = $this->dataSet->getTitleList();
-            
+
             // Create the caption
             $caption = new Caption();
             $caption->setPlot($this->plot);
             $caption->setLabelList($labelList);
-            
+
             $palette = $this->plot->getPalette();
             $lineColorSet = $palette->lineColorSet;
             $caption->setColorSet($lineColorSet);
-            
+
             // Render the caption
             $caption->render();
         }

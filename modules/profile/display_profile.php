@@ -40,10 +40,10 @@ if (isset($_GET['id'])) {
         $id = $uid;
 }
 
-$userdata = db_query_get_single_row("SELECT user.nom, user.prenom, user.email, user.phone, user.am, 
-                                            user.has_icon, user.description, 
-                                            user.email_public, user.phone_public, user.am_public 
-                                        FROM user 
+$userdata = db_query_get_single_row("SELECT user.nom, user.prenom, user.email, user.phone, user.am,
+                                            user.has_icon, user.description,
+                                            user.email_public, user.phone_public, user.am_public
+                                        FROM user
                                         WHERE user.user_id = $id ");
 
 if ($userdata !== false)
@@ -61,8 +61,8 @@ if ($userdata !== false)
     if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
             $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
     }
-    $tool_content .= "<b>$langFaculty:</b> "; 
-    
+    $tool_content .= "<b>$langFaculty:</b> ";
+
     $departments = $user->getDepartmentIds($id);
     $i = 1;
     foreach ($departments as $dep) {
@@ -70,7 +70,7 @@ if ($userdata !== false)
         $tool_content .= $tree->getFullPath($dep) . $br;
         $i++;
     }
-    
+
     $tool_content .= "<br>";
     if (!empty($userdata['description'])) {
             $tool_content .= standard_text_escape($userdata['description']);

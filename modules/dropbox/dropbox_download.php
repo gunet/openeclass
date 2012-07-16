@@ -21,13 +21,13 @@
 /**
  * handles downloads of files. Direct downloading is prevented because of an .htaccess file in the
  * dropbox directory. So everything goes through this script.
- * 
+ *
  * 1. Initialising vars
- * 2. Authorisation 
+ * 2. Authorisation
  * 3. Sanity check of get data & file
  * 4. Send headers
  * 5. Send file
- * 
+ *
  */
 
 include 'functions.php';

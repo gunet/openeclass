@@ -28,7 +28,7 @@ if (defined('GROUP_DOCUMENTS')) {
         require_once 'modules/group/group_functions.php';
 	$subsystem = GROUP;
         initialize_group_id();
-        initialize_group_info($group_id);        
+        initialize_group_info($group_id);
         $subsystem_id = $group_id;
         $navigation[] = array('url' => $urlAppend . '/modules/group/index.php?course='.$course_code, 'name' => $langGroups);
         $navigation[] = array('url' => $urlAppend . '/modules/group/group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
@@ -40,7 +40,7 @@ if (defined('GROUP_DOCUMENTS')) {
 	$can_upload = $can_upload || $is_member;
         $nameTools = $langGroupDocumentsLink;
 } elseif (defined('EBOOK_DOCUMENTS')) {
-        if (isset($_REQUEST['ebook_id'])) {    
+        if (isset($_REQUEST['ebook_id'])) {
             $ebook_id = intval($_REQUEST['ebook_id']);
         }
 	$subsystem = EBOOK;
@@ -59,5 +59,5 @@ if (defined('GROUP_DOCUMENTS')) {
         $group_hidden_input = '';
         $basedir = $webDir . '/courses/' . $course_code . '/document';
         $nameTools = $langDoc;
-}       
+}
 mysql_select_db($mysqlMainDb);

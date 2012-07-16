@@ -114,7 +114,7 @@ function installerMenu(){
 			if ($i == $_SESSION['step']-1) {
 				$currentStep[$i] = true;
 			} else {
-				$currentStep[$i] = false;	
+				$currentStep[$i] = false;
 			}
 			$stepImg[$i] = "arrow.png";
 		}
@@ -135,7 +135,7 @@ function installerMenu(){
 	array_push($sideMenuText, $langBasicCfgSetting);
 	array_push($sideMenuLink, $currentStep[3]);
 	array_push($sideMenuImg, $stepImg[3]);
-	
+
 	array_push($sideMenuText, $langOptionalCfgSetting);
 	array_push($sideMenuLink, $currentStep[4]);
 	array_push($sideMenuImg, $stepImg[4]);

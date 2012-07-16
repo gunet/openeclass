@@ -48,14 +48,14 @@ default:
    printPollForm();
 }
 
-draw($tool_content, 2); 
+draw($tool_content, 2);
 
 function printPollForm() {
-	global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart, 
+	global $mysqlMainDb, $course_id, $course_code, $tool_content, $langPollStart,
 	$langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown;
-	
+
 	$pid = intval($_REQUEST['pid']);
-	
+
 	// *****************************************************************************
 	//		Get poll data
 	//******************************************************************************/
@@ -69,7 +69,7 @@ function printPollForm() {
 	$temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
 	$temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
 	$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
-	
+
 	if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
 		$tool_content .= "
 	<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
@@ -81,7 +81,7 @@ function printPollForm() {
 		//*****************************************************************************
 		//		Get answers + questions
 		//******************************************************************************/
-		$questions = db_query("SELECT * FROM poll_question 
+		$questions = db_query("SELECT * FROM poll_question
 			WHERE pid=" . intval($pid) . " ORDER BY pqid", $mysqlMainDb);
 		while ($theQuestion = mysql_fetch_array($questions)) {
 			$pqid = $theQuestion["pqid"];
@@ -91,7 +91,7 @@ function printPollForm() {
         <p>
 	<input type='hidden' name='question[$pqid]' value='$qtype' />";
 			if ($qtype == 'multiple') {
-				$answers = db_query("SELECT * FROM poll_question_answer 
+				$answers = db_query("SELECT * FROM poll_question_answer
 					WHERE pqid=$pqid ORDER BY pqaid", $mysqlMainDb);
 				while ($theAnswer = mysql_fetch_array($answers)) {
 					$tool_content .= "
@@ -111,13 +111,13 @@ function printPollForm() {
         </form>";
 	} else {
 		$tool_content .= $langPollInactive;
-	}	
+	}
 }
 
 
 function submitPoll() {
 	global $tool_content, $course_code, $user_id, $langPollSubmitted, $langBack;
-	
+
 	// first populate poll_answer
 	$user_id = $GLOBALS['uid'];
 	$CreationDate = date("Y-m-d H:i");

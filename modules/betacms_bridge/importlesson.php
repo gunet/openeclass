@@ -23,7 +23,7 @@
 	@last update: 09-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
-    @Description: 
+    @Description:
 
     @Comments:
 ==============================================================================
@@ -41,22 +41,22 @@ session_start();
 if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	$repo = $_SESSION[BETACMSREPO];
 	$coId = $_GET['id'];
-	
+
 	$co = getLesson($repo, $coId);
-	
+
 	destroyContentObjectInSession();
 	putContentObjectInSession($co);
-	
+
 	// redirect to create course
 	$tool_content .= $GLOBALS['langBetaCMSRedirectAfterImport'].
 		" <a href='../create_course/create_course.php'>".
 		$GLOBALS['langBetaCMSRedirectHere']."...</a>";
-	
+
 	$redirect = $urlServer;
 	if ( !substr( $urlServer, strlen( $urlServer ) - strlen( "/" ) ) === "/" ) {
 		$redirect .= "/";
 	}
-	
+
 	$head_content = '
 		<script type="text/javascript">
 			<!--//
@@ -89,7 +89,7 @@ function destroyContentObjectInSession() {
 	unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
 	unset($_SESSION[IMPORT_DOCUMENTFILES]);
 	unset($_SESSION[IMPORT_DOCUMENTFILES_SIZE]);
-	
+
 	return;
 }
 
@@ -110,7 +110,7 @@ function putContentObjectInSession($obj) {
 	$_SESSION[IMPORT_SCORMFILES_SIZE] = $obj[KEY_SCORMFILES_SIZE];
 	$_SESSION[IMPORT_DOCUMENTFILES] = $obj[KEY_DOCUMENTFILES];
 	$_SESSION[IMPORT_DOCUMENTFILES_SIZE] = $obj[KEY_DOCUMENTFILES_SIZE];
-	
+
 	return;
 }
 ?>

@@ -21,7 +21,7 @@
 
 /*===========================================================================
 	toc.php
-	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr> 
+	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr>
 	               Alexandros Diamantidis <adia@noc.uoa.gr>
 	               Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
@@ -123,9 +123,9 @@ foreach ($flatElementList as $module)
         $style = "";
         $image_bullet = "on";
     }
-    
+
     // indent a child based on label ownership
-       $marginIndent = 0; 	 
+       $marginIndent = 0;
        for($i = 0; $i < $module['children']; $i++)
                $marginIndent += 10;
 
@@ -152,7 +152,7 @@ foreach ($flatElementList as $module)
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        
+
         // eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
         unset($imagePassed);
         if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
@@ -170,13 +170,13 @@ foreach ($flatElementList as $module)
         // emphasize currently displayed module or not
         if ( $_SESSION['lp_module_id'] == $module['module_id'] )
                 echo "<em>".htmlspecialchars($module['name'])."</em>";
-        else        
+        else
                 echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
         if(isset($imagePassed))
                 echo "&nbsp;&nbsp;".$imagePassed;
         echo "</li>";
 
-        if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT' 
+        if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT'
                 && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED') {
                 $is_blocked = true;
         }

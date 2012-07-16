@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -101,10 +101,10 @@ class Answer
 	function read()
 	{
 		global $TBL_ANSWER, $mysqlMainDb;
-		
+
 		$questionId = $this->questionId;
 		mysql_select_db($mysqlMainDb);
-		$sql = "SELECT answer, correct, comment, weight, r_position 
+		$sql = "SELECT answer, correct, comment, weight, r_position
 			FROM `$TBL_ANSWER` WHERE question_id = '$questionId' ORDER BY r_position";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 		$i = 1;
@@ -154,11 +154,11 @@ class Answer
 	function selectAnswer($id)
 	{
 		if (isset($this->answer[$id])) {
-			return $this->answer[$id];	
+			return $this->answer[$id];
 		} else {
 			return '::0';
 		}
-		
+
 	}
 
 	/**
@@ -300,7 +300,7 @@ class Answer
 			}
 
 			$sql = substr($sql, 0, -1);
-			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);			
+			db_query($sql) or die("Error : INSERT in file ".__FILE__." at line ".__LINE__);
 		}
 	}
 }

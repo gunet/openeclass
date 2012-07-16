@@ -24,7 +24,7 @@ if (isset($_POST['token']))
     $require_mlogin = true;
     $require_noerrors = true;
     require_once ('minit.php');
-    
+
     if (isset($_REQUEST['logout']))
     {
         require_once ('include/CAS/CAS.php');
@@ -53,13 +53,13 @@ if (isset($_POST['token']))
         echo RESPONSE_OK;
         exit();
     }
-    
+
     if (isset($_REQUEST['redirect']))
     {
         header('Location: '. urldecode($_REQUEST['redirect']));
         exit();
     }
-    
+
     echo RESPONSE_OK;
     exit();
 }
@@ -72,31 +72,31 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     require_once ('include/CAS/CAS.php');
     require_once ('modules/auth/auth.inc.php');
     require_once ('include/phpass/PasswordHash.php');
-    
+
     $uname = autounquote(canonicalize_whitespace($_POST['uname']));
     $pass = autounquote($_POST['pass']);
-    
+
     foreach(array_keys($_SESSION) as $key)
         unset($_SESSION[$key]);
     $_SESSION['user_perso_active'] = false;
-    
+
     $sqlLogin = "SELECT *
-                   FROM user 
+                   FROM user
                   WHERE username ";
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin .= "= " . quote($uname);
-    } else {	
+    } else {
         $sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
     }
     $result = db_query($sqlLogin);
-    
-    while ($myrow = mysql_fetch_assoc($result)) 
+
+    while ($myrow = mysql_fetch_assoc($result))
         $ok = login($myrow, $uname, $pass);
-    
+
     if (isset($_SESSION['uid']) && $ok == 1) {
         db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                 VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-        
+
         set_session_mvars();
         echo session_id();
     } else
@@ -109,7 +109,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
 function set_session_mvars()
 {
     $status = array();
-    
+
     $sql = "SELECT course.id course_id, course.code code, course.public_code,
                    course.title title, course.prof_names profs, course_user.statut statut
               FROM course JOIN course_user ON course.id = course_user.course_id
@@ -134,7 +134,7 @@ function set_session_mvars()
 
     $_SESSION['status'] = $status;
     $_SESSION['mobile'] = true;
-    
+
     if ($GLOBALS['userPerso'] == 'no')
         $_SESSION['user_perso_active'] = true;
 }

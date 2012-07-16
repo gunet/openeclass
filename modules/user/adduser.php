@@ -43,9 +43,9 @@ if (isset($_GET['add'])) {
 			$emailsubject = "$langYourReg " . course_id_to_title($course_id);
 			$emailbody = "$langNotifyRegUser1 '".course_id_to_title($course_id). "' $langNotifyRegUser2 $langFormula \n$gunet";
 			send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-		}	
+		}
 		$tool_content .= "";
-		
+
 	if ($result) {
 		$tool_content .=  "<p class='success'>$langTheU $langAdded</p>";
 	} else {
@@ -122,6 +122,6 @@ if (isset($_GET['add'])) {
                             $tool_content .= "</table>";
                     }
                     db_query("DROP TABLE lala");
-            } 
+            }
 }
 draw($tool_content, 2);

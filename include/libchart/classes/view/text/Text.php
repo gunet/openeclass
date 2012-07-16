@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Tr�meaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Text drawing helper
      *
@@ -35,7 +35,7 @@
          */
         public function Text() {
             $baseDir = dirname(__FILE__) . "/../../../";
-        
+
             // Free low-res fonts based on Bitstream Vera <http://dejavu.sourceforge.net/wiki/>
             //$this->fontCondensed = $baseDir . "fonts/DejaVuSansCondensed.ttf";
             //$this->fontCondensedBold = $baseDir . "fonts/DejaVuSansCondensed-Bold.ttf";
@@ -92,7 +92,7 @@
 
             imagettftext($img, $fontSize, $angle, $px, $py, $color->getColor($img), $fontFileName, $text);
         }
-        
+
         /**
          * Print text centered horizontally on the image.
          *

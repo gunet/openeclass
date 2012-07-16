@@ -61,7 +61,7 @@ $exerciseDescription      = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
 $displayResults           = $objExercise->selectResults();
-$displayScore             = $objExercise->selectScore(); 
+$displayScore             = $objExercise->selectScore();
 
 $tool_content .= "
   <table class='tbl_border' width='99%'>
@@ -152,7 +152,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	// construction of the Answer object
 	$objAnswerTmp = new Answer($questionId);
 	$nbrAnswers   = $objAnswerTmp->selectNbrAnswers();
-	
+
 	for($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 		$answer          = $objAnswerTmp->selectAnswer($answerId);
 		$answerComment   = $objAnswerTmp->selectComment($answerId);
@@ -254,7 +254,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					}
 				break;
 		}	// end switch()
-		if ($displayResults == 1) { 
+		if ($displayResults == 1) {
 			if($answerType != MATCHING || $answerCorrect) {
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 					$tool_content .= "
@@ -271,11 +271,11 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					} else {
 						$tool_content .= "_off";
 					}
-		
+
 					$tool_content .= ".png' /></div>
 					</td>
 					<td><div align='center'>";
-	
+
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						$tool_content .= "<img src='$themeimg/radio";
 					} else {
@@ -284,18 +284,18 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					if ($answerCorrect) {
 						$tool_content .= "_on";
 					} else {
-						$tool_content .= "_off";	
+						$tool_content .= "_off";
 					}
-					$tool_content .= ".png' /></div>";	
+					$tool_content .= ".png' /></div>";
 					$tool_content .= "
 					</td>
 					<td>${answer}</td>
 					<td>";
 					if ($studentChoice) {
-						$tool_content .= nl2br(make_clickable($answerComment)); 
-					} else { 
+						$tool_content .= nl2br(make_clickable($answerComment));
+					} else {
 						$tool_content .= '&nbsp;';
-					} 
+					}
 					$tool_content .= "</td></tr>";
 				} elseif($answerType == FILL_IN_BLANKS) {
 					$tool_content .= "
@@ -309,7 +309,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					  <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
 					</tr>";
 				}
-			} 
+			}
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {

@@ -29,12 +29,12 @@ define('LOG_DELETE_COURSE', 6);
 class Log {
         // log users actions
         public static function record($course_id, $module_id, $action_type, $details) {
-                
+
                 if (get_config('disable_log_user_actions')) {
                         return;
                 }
-                                
-                db_query("INSERT INTO log SET 
+
+                db_query("INSERT INTO log SET
                                 user_id = $_SESSION[uid],
                                 course_id = $course_id,
                                 module_id = $module_id,
@@ -44,7 +44,7 @@ class Log {
                                 ip = '$_SERVER[SERVER_ADDR]'");
                 return;
         }
-        
+
         //-------------------------------------------------------------
         // display users logging
         //
@@ -55,17 +55,17 @@ class Log {
         // $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
         //-------------------------------------------------------------
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
-                 
+
                 global $tool_content, $modules;
-                global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail, 
+                global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
                         $langCourse, $langModule, $langAllModules;
-                
+
                 $q1 = $q2 = $q3 = $q4 = '';
-                
+
                 if ($user_id != -1) {
                         $q1 = "AND user_id = $user_id"; // display specific user
-                }                
-                
+                }
+
                 if ($logtype > 0) {
                         $q3 = "AND action_type = $logtype"; // specific course logging
                         if ($logtype > 3) { // specific system logging
@@ -75,13 +75,13 @@ class Log {
                        $q2 = "AND module_id = 0";
                        $q4 = "AND course_id = 0";
                 }
-                
+
                 if ($module_id > 0) {
                         $q2 = "AND module_id = $module_id"; // display specific module
                 } elseif ($module_id == -1) { // display all course module logging
                         $q2 = "AND module_id > 0"; // but exclude system logging
                 }
-                
+
                 if ($course_id > 0) {
                         $q4 = "AND course_id = $course_id"; // display specific course
                 } elseif ($course_id == -1) { // display all course logging
@@ -90,20 +90,20 @@ class Log {
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");                
+                                ORDER BY ts DESC");
                 /*echo "<br />SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC<br />";*/
-                
+
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id > 0) {
                                         $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."</div>";
-                                }                                
+                                }
                                 if ($module_id > 0) {
                                         $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
                                 }
-                                $tool_content .= "<table class='tbl'>";                                                                
+                                $tool_content .= "<table class='tbl'>";
                                 $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
                                 if ($course_id == -1) {
                                         $tool_content .= "<th>$langCourse</th>";
@@ -112,7 +112,7 @@ class Log {
                                         $tool_content .= "<th>$langModule</th>";
                                 }
                                 $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
-                                $tool_content .= "</tr>";                
+                                $tool_content .= "</tr>";
                                 while ($r = mysql_fetch_array($sql)) {
                                         $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
@@ -123,7 +123,7 @@ class Log {
                                         if ($module_id == -1) { // all modules
                                                $mid = $r['module_id'];
                                                $tool_content .= "<td>".$modules[$mid]['title']."</td>";
-                                        }                                        
+                                        }
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
                                         if ($course_id == 0 or $module_id == 0) { // system logging
                                                 $tool_content .= "<td>".$this->other_action_details($r['action_type'], $r['details'])."</td>";
@@ -131,22 +131,22 @@ class Log {
                                                 $tool_content .= "<td>".$this->course_action_details($r['module_id'], $r['details'])."</td>";
                                         }
                                         $tool_content .= "</tr>";
-                                }                
+                                }
                                 $tool_content .= "</table>";
                 } else {
                         $tool_content .= "<div class='alert1'>$langNoUsersLog</div>";
                 }
                 return;
         }
-         
-       
+
+
         private function course_action_details($module_id, $details) {
-                                      
+
                 global $langUnknownModule;
-                
+
                 switch ($module_id) {
                         case MODULE_ID_AGENDA: $content = $this->agenda_action_details($details);
-                                break;                        
+                                break;
                         case MODULE_ID_LINKS: $content = $this->link_action_details($details);
                                 break;
                         case MODULE_ID_DOCS: $content = $this->document_action_details($details);
@@ -156,63 +156,63 @@ class Log {
                         case MODULE_ID_ASSIGN: $content = $this->assignment_action_details($details);
                                 break;
                         case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
-                                break;                                                
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
-                        }                        
+                        }
                 return $content;
         }
-        
+
         private function other_action_details($logtype, $details) {
-                
+
                 global $langUnknownAction;
-                
+
                 switch ($logtype) {
-                        case LOG_CREATE_COURSE: $content = $this->create_course_action_details($details);                                
+                        case LOG_CREATE_COURSE: $content = $this->create_course_action_details($details);
                                 break;
                         case LOG_DELETE_COURSE: $content = $this->delete_course_action_details($details);
                                 break;
                         case LOG_PROFILE: $content = $this->profile_action_details($details);
                                 break;
                         default: $content = $langUnknownAction;
-                                break;                                
+                                break;
                 }
                 return $content;
         }
 
         private function create_course_action_details($details) {
-                
+
                 global $langTitle;
-                
+
                 $details = unserialize($details);
-                
+
                 $content = "$langTitle &laquo;".$details['title']."&raquo;";
                 $content .= "&nbsp;(".$details['code'].")";
-                
+
                 return $content;
         }
-        
-        
+
+
         private function delete_course_action_details($details) {
-                
+
                 global $langTitle;
-                
+
                 $details = unserialize($details);
-                
+
                 $content = "$langTitle &laquo;".$details['title']."&raquo;";
                 $content .= "&nbsp;(".$details['code'].")";
-                
+
                 return $content;
         }
-        
+
         private function profile_action_details($details) {
-                                
-                global $lang_username, $langAm, $langChangePass, $langUpdateImage, 
+
+                global $lang_username, $langAm, $langChangePass, $langUpdateImage,
                         $langType, $langDelImage, $langPersoDetails;
-                        
+
                 $details = unserialize(($details));
                 $content = '';
-                
+
                 if (!empty($details['modifyprofile'])) {
                         $content .= "$langPersoDetails<br />$lang_username&nbsp;&laquo;".$details['username']."&raquo;&nbsp;email&nbsp;&laquo;".$details['email']."&raquo;&nbsp;";
                         if (!empty($details['am'])) {
@@ -232,14 +232,14 @@ class Log {
                 /*if (!empty($details['deleteuser'])) {
                         $content .= "$langUnregUser <br />&nbsp;&laquo;$langName".$details['name']."&raquo;&nbsp;$lang_username&nbsp;&laquo;".$details['username']."&raquo;";
                 }*/
-                                
-                return $content;                
+
+                return $content;
         }
-        
+
         private function video_action_details($details) {
-                
+
                 global $langTitle, $langDescription;
-                
+
                 $details = unserialize($details);
                 $content = "$langTitle  &laquo".$details['title']."&raquo";
                 if (!empty($details['description'])) {
@@ -247,14 +247,14 @@ class Log {
                 }
                 if (!empty($details['url'])) {
                         $content .= "&nbsp;&mdash;&nbsp; URL &laquo".$details['url']."&raquo";
-                }                
-                return $content;                
+                }
+                return $content;
         }
-        
+
         private function assignment_action_details($details) {
-                
+
                 global $langTitle, $langDescription, $m;
-                
+
                 $details = unserialize($details);
                 $content = "$langTitle  &laquo".$details['title']."&raquo";
                 if (!empty($details['description'])) {
@@ -268,62 +268,62 @@ class Log {
                 }
                 if (!empty($details['grade'])) {
                         $content .= "&nbsp;&mdash;&nbsp; ".$m['grade']." &laquo".$details['grade']."&raquo";
-                }                
+                }
                 return $content;
         }
-        
+
         private function announcement_action_details($details) {
-                
+
                 global $langTitle, $langContent;
-                
-                $details = unserialize($details);                
+
+                $details = unserialize($details);
                 $content = "$langTitle &laquo".$details['title'].
                             "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo";
                 return $content;
         }
-        
+
         private function agenda_action_details($details) {
-                
+
                 global $langTitle, $langContent, $langDuration, $langhours, $langDate;
-                
+
                 $details = unserialize($details);
                 $date = $details['day']." ".$details['hour'];
-                                                
+
                 $content = "$langTitle &laquo".$details['title'].
                             "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo
                              &nbsp;&mdash;&nbsp;$langDate: ".nice_format($date, true)."
                              &nbsp;&mdash;&nbsp;$langDuration: ".$details['lasting']." $langhours";
                 return $content;
-                
+
         }
-        
+
         private function link_action_details($details) {
-                
+
                 global $langTitle, $langDescription, $langCategoryName;
-                                
+
                 $details = unserialize($details);
                 $content = '';
                 if (!empty($details['url'])) {
                         $content .= "URL: ".$details['url'];
-                }                
+                }
                 if (!empty($details['category'])) {
                         $content .= " $langCategoryName &laquo".$details['category']."&raquo";
                 }
                 if (!empty($details['title'])) {
                         $content .= " &mdash; $langTitle &laquo".$details['title']."&raquo";
-                }                
+                }
                 if (!empty($details['description'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".$details['description']."&raquo";
-                }                                        
+                }
                 return $content;
         }
-        
+
         private function document_action_details($details) {
-                
+
                 global $langFileName, $langComments, $langTitle, $langRename, $langMove, $langTo, $langIn;
-                
+
                 $details = unserialize($details);
-                
+
                 $content = "$langFileName &laquo".$details['filename']."&raquo";
                 if (!empty($details['title'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langTitle &laquo".$details['title']."&raquo";
@@ -336,16 +336,16 @@ class Log {
                 }
                 if (!empty($details['newpath'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langMove $langTo &laquo".$details['newpath']."&raquo";
-                }                
+                }
                 return $content;
-        }                
-        
+        }
+
         // return the real action names
         private function get_action_names($action_type) {
-                
-                global $langInsert, $langModify, $langDelete, $langModProfile, 
+
+                global $langInsert, $langModify, $langDelete, $langModProfile,
                        $langFinalize, $langCourseDel, $langUnknownAction;
-                
+
                 switch ($action_type) {
                         case LOG_INSERT: return $langInsert;
                         case LOG_MODIFY: return $langModify;

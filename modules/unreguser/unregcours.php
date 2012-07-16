@@ -43,7 +43,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
       <td class='caution_NoBorder' height='60' colspan='2'>
       	<p>$langConfirmUnregCours:</p><p> <em>".q(course_code_to_title($cid))."</em>&nbsp;? </p>
 	<ul class='listBullet'>
-	<li>$langYes: 
+	<li>$langYes:
 	<a href='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
 	</li>
 	<li>$langNo: <a href='../../index.php' class=mainpage>$langBack</a>

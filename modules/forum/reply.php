@@ -38,11 +38,11 @@ if (isset($_GET['topic'])) {
 }
 
 $sql = "SELECT f.name, t.title
-            FROM forum f, forum_topic t 
+            FROM forum f, forum_topic t
             WHERE f.id = $forum
-            AND t.id = $topic 
+            AND t.id = $topic
             AND t.forum_id = f.id
-            AND f.course_id = $course_id";	
+            AND f.course_id = $course_id";
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 
@@ -75,17 +75,17 @@ if (isset($_POST['submit'])) {
                 draw($tool_content, 2, null, $head_content);
 		exit();
 	}
-	
+
         if (isset($quote) && $quote) {
                 // If it's been edited more than once, there might be old "edited by" strings with
                 // escaped HTML code in them. We want to fix this up right here:
                 $message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $langEditedBy(.*?)\ \]&lt;/font&gt;#si", '[ ' . $langEditedBy . '\1 ]', $message);
         }
-			
+
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
-	
+
 	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic, $forum_id, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
@@ -95,8 +95,8 @@ if (isset($_POST['submit'])) {
                     last_post_id = $this_post
 		WHERE id = $topic AND forum_id = $forum_id";
 	$result = db_query($sql);
-	$sql = "UPDATE forum SET num_posts = num_posts+1, 
-                    last_post_id = $this_post 
+	$sql = "UPDATE forum SET num_posts = num_posts+1,
+                    last_post_id = $this_post
 		WHERE id = $forum_id
                     AND course_id = $cours_id";
 	$result = db_query($sql);
@@ -105,15 +105,15 @@ if (isset($_POST['submit'])) {
 		draw($tool_content, 2, null, $head_content);
 		exit();
 	}
-	
+
 	// --------------------------------
-	// notify users 
+	// notify users
 	// --------------------------------
 	$subject_notify = "$logo - $langSubjectNotify";
 	$category_id = forum_category($forum_id);
 	$cat_name = category_name($category_id);
-	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
-			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id) 
+	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id)
 			AND notify_sent = 1 AND course_id = $coursε_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
@@ -132,9 +132,9 @@ if (isset($_POST['submit'])) {
                 }
 	}
 	// end of notification
-	
+
 	$total_posts = get_total_posts($topic, "topic");
-	if ($total_posts > $posts_per_page) { 
+	if ($total_posts > $posts_per_page) {
 		$page = '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
 	} else {
 		$page = '';
@@ -143,8 +143,8 @@ if (isset($_POST['submit'])) {
 	header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
 	exit;
 } elseif (isset($_POST['cancel'])) {
-	header("Location: viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id");	
-} else {	
+	header("Location: viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id");
+} else {
 	// Topic review
 	$tool_content .= "
         <div id='operations_container'>
@@ -165,7 +165,7 @@ if (isset($_POST['submit'])) {
 			$m = mysql_fetch_array($r);
 			$text = $m["post_text"];
 			$text = str_replace("<BR>", "\n", $text);
-			$text = stripslashes($text);						
+			$text = stripslashes($text);
 			$text = str_replace("[addsig]", "", $text);
 			eval("\$reply = \"$langQuoteMsg\";");
 		} else {

@@ -57,7 +57,7 @@ $tool_content = "";
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 // professor registration
 if ($submit)  {
-    
+
     $pn = $_POST['pn'];
     $ps = $_POST['ps'];
     $pu = $_POST['pu'];
@@ -72,7 +72,7 @@ if ($submit)  {
 
     // check if user name exists
     $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=". quote($pu));
-     
+
     if (mysql_num_rows($username_check) > 0) {
         $tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
@@ -112,11 +112,11 @@ if ($submit)  {
                     quote($password) .', '.
                     quote($pe) .', 1, '.
                     quote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
-	
+
     $last_id = mysql_insert_id();
     $userObj->refresh($last_id, array(intval($department)));
 
-	// Close user request 
+	// Close user request
 	$rid = intval($_POST['rid']);
 	db_query("UPDATE user_request set status = 2, date_closed = NOW(), verified_mail=$verified_mail WHERE id = $rid");
 	$emailbody = "$langDestination $pn $ps\n" .
@@ -141,7 +141,7 @@ if ($submit)  {
 	<p class='success'>$profsuccess<br><br>
 	<a href='../admin/listreq.php'>$langBackRequests</a></p>";
 
-} else { 
+} else {
 	// if not submit then display the form
 	if (isset($_GET['id'])) { // if we come from prof request
 		$id = intval($_GET['id']);
@@ -156,7 +156,7 @@ if ($submit)  {
         }
                 $tool_content .= "
 		</ul></div>";
-		$res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, 
+		$res = mysql_fetch_array(db_query("SELECT name, surname, uname, email,
 			faculty_id, comment, lang, date_open, phone, am, verified_mail FROM user_request WHERE id = $id"));
 		$ps = $res['surname'];
 		$pn = $res['name'];
@@ -170,7 +170,7 @@ if ($submit)  {
 		$pvm = intval($res['verified_mail']);
 		$pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 	}
-	
+
 	@$tool_content .= "
       <form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>

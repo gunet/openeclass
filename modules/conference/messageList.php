@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 <title>Chat messages</title>
 <style type="text/css">
 span { color: #727266; font-size: 11px; }
-div { font-size: 12px; } 
+div { font-size: 12px; }
 body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 </style>
 </head>

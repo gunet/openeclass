@@ -67,7 +67,7 @@ if($submit) {
                     isset($rid)? ('?id=' . intval($rid)): '';
 
         // check if user name exists
-        $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user 
+        $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user
                         WHERE username=".autoquote($uname));
         $user_exist = (mysql_num_rows($username_check) > 0);
 
@@ -114,7 +114,7 @@ if($submit) {
                         // $langAsUser;
                 }
                 $tool_content .= "<p class='success'>$message</p><br><br><p align='right'><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></p>";
-                
+
                 // send email
                 $telephone = get_config('phone');
                 $emailsubject = "$langYourReg $siteName $type_message";
@@ -176,7 +176,7 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
-        <legend>$title</legend>  
+        <legend>$title</legend>
         <table width='100%' align='left' class='tbl'>
           <tr><th class='left' width='180'><b>$langName:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>

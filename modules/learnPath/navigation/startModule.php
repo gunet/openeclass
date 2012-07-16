@@ -123,13 +123,13 @@ switch ($module['contentType'])
 		} // else anonymous : record nothing
                 $file_url = file_url($assetPath);
                 $play_url = file_playurl($assetPath);
-                
+
                 $furl = $file_url;
                 if (is_supported_media($module['name'], true)) {
                     $furl = $play_url;
                     $_SESSION['FILE_PHP__LIGHT_STYLE'] = true;
                 }
-                
+
                 $moduleStartAssetPage = $furl;
 		break;
 
@@ -176,14 +176,14 @@ switch ($module['contentType'])
                 {
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
-                
+
                 if (is_supported_media($assetPath))
                 {
                     $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=".$assetPath;
                 }
                 else
                 {
-                    $moduleStartAssetPage = htmlspecialchars($urlServer 
+                    $moduleStartAssetPage = htmlspecialchars($urlServer
                                                             ."modules/video/index.php?course=$course_code&action=download&id=".$assetPath
                                                             , ENT_QUOTES);
                 }
@@ -193,7 +193,7 @@ switch ($module['contentType'])
                 {
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
-                
+
                 if (is_embeddable_medialink($assetPath))
                 {
                     $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=".urlencode(make_embeddable_medialink($assetPath));
@@ -221,7 +221,7 @@ echo "<frame src='../viewer_toc.php?course=$course_code' name='tocFrame' scrolli
 echo "<frameset border='0' cols='200,*' frameborder='0'>";
 echo "<frame src='../toc.php?course=$course_code' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
-echo "</frameset>"; 
+echo "</frameset>";
 echo "</frameset>";
 echo "<noframes>";
 echo "<body>";

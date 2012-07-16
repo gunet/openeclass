@@ -115,7 +115,7 @@ function createguest($username, $course_id, $password)
 // Check if guest account exists and return account information
 
 function guestinfo($course_id) {
-	
+
 	$q = db_query("SELECT nom, prenom, username FROM user, course_user
                        WHERE user.user_id = course_user.user_id AND
                              course_user.statut = ".USER_GUEST." AND

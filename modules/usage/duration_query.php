@@ -4,11 +4,11 @@
 // Returns a MySQL resource, where fetching rows results in:
 // duration, nom, prenom, user_id, am
 function user_duration_query($course_code, $course_id, $start = false, $end = false, $group = false)
-{ 
+{
         global $mysqlMainDb, $course_id;
 
         mysql_select_db($mysqlMainDb);
-        
+
         if ($start !== false AND $end !== false) {
                 $date_where = 'WHERE c.date_time BETWEEN ' .
                               quote($start . ' 00:00:00') . ' AND ' .
@@ -55,6 +55,6 @@ function user_duration_query_end()
         global $mysqlMainDb;
 
         mysql_select_db($mysqlMainDb);
-        
+
         db_query('DROP TEMPORARY TABLE duration', $mysqlMainDb);
 }

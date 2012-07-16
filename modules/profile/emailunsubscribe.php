@@ -29,35 +29,35 @@ $navigation[]= array("url"=>"profile.php", "name"=> $langModifyProfile);
 
 check_uid();
 
-if (isset($_POST['submit'])) {     
+if (isset($_POST['submit'])) {
         if (isset($_POST['unsub'])) {
                 db_query("UPDATE user SET receive_mail = 1");
         }
-        if (isset($_POST['cid'])) {  // change email subscription for one course                
+        if (isset($_POST['cid'])) {  // change email subscription for one course
                 $cid = intval($_POST['cid']);
                 if (isset($_POST['c_unsub'])) {
                         db_query("UPDATE course_user SET receive_mail = 1
-                                WHERE user_id = $uid AND course_id = $cid");        
+                                WHERE user_id = $uid AND course_id = $cid");
                 } else {
                         db_query("UPDATE course_user SET receive_mail = 0
-                                WHERE user_id = $uid AND course_id = $cid");        
-                }                
-                $course_title = course_id_to_title($cid);        
+                                WHERE user_id = $uid AND course_id = $cid");
+                }
+                $course_title = course_id_to_title($cid);
                 $tool_content .= "<div class='success'>".q(sprintf($course_title, $langEmailUnsubSuccess))."</div>";
         } else { // change email subscription for all courses
                 foreach ($_SESSION['status'] as $course_code => $c_value) {
-                        if (@array_key_exists($course_code, $_POST['c_unsub'])) {                        
+                        if (@array_key_exists($course_code, $_POST['c_unsub'])) {
                                 db_query("UPDATE course_user SET receive_mail = 1
                                 WHERE user_id = $uid AND course_id = ". course_code_to_id($course_code));
-                        } else {                        
+                        } else {
                                  db_query("UPDATE course_user SET receive_mail = 0
                                 WHERE user_id = $uid AND course_id = ". course_code_to_id($course_code));
                         }
                 }
                 $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />
                                 <a href='../profile/profile.php'>$langBack</a></div>";
-        }        
-        
+        }
+
 } else {
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
         if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
@@ -75,19 +75,19 @@ if (isset($_POST['submit'])) {
         }
         $tool_content .= "<div class='info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
-        if (isset($_POST['cid'])) { // one course only                
+        if (isset($_POST['cid'])) { // one course only
                 $cid = intval($_POST['cid']);
-                $course_title = course_id_to_title($cid);        
-                $selected = get_user_email_notification($uid, $cid) ? 'checked': '';        
+                $course_title = course_id_to_title($cid);
+                $selected = get_user_email_notification($uid, $cid) ? 'checked': '';
                 $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;". q($course_title) ."<br />";
                 $tool_content .= "<input type='hidden' name='cid' value='$cid'>";
         } else { // displays all courses
                 foreach ($_SESSION['status'] as $course_code => $status) {
                         $course_title = course_code_to_title($course_code);
-                        $cid = course_code_to_id($course_code);        
-                        $selected = get_user_email_notification($uid, $cid) ? 'checked': '';        
+                        $cid = course_code_to_id($course_code);
+                        $selected = get_user_email_notification($uid, $cid) ? 'checked': '';
                         $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;". q($course_title) ."<br />";
-                }       
+                }
         }
         $tool_content .= "</div><br /><input type='submit' name='submit' value='$langSubmit'>";
         $tool_content .= "</form>";

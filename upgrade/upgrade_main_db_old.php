@@ -61,7 +61,7 @@
                 echo add_field('course_user','reg_date',"DATE NOT NULL");
 		db_query("UPDATE course_user SET reg_date=NOW()");
 	} else {
-		$min_reg_date_res = mysql_fetch_row(db_query("SELECT MIN(reg_date) 
+		$min_reg_date_res = mysql_fetch_row(db_query("SELECT MIN(reg_date)
 				FROM course_user WHERE reg_date <> '0000-00-00'"));
 		$min_reg_date = $min_reg_date_res[0]? ("'" . $min_reg_date_res[0] . "'"): 'NOW()';
 		db_query("UPDATE course_user SET reg_date=$min_reg_date WHERE reg_date = '0000-00-00'");

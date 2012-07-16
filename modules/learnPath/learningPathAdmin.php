@@ -361,7 +361,7 @@ $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
 $tool_content .="
- 
+
   <fieldset>
   <legend>$langLearningPathData</legend>
     <table width=\"100%\" class=\"tbl\">";

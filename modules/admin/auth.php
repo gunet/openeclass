@@ -123,7 +123,7 @@ $tool_content .= "</div></td></tr><tr><td><b>LDAP:</b></td><td>[";
 $tool_content .= in_array("4",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=4&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=4&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
-$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";	
+$tool_content .= "&nbsp;&nbsp;<a href=\"auth_process.php?auth=4\">$langAuthSettings</a>";
 $tool_content .= "</div></td></tr><tr class='odd'><td><b>External DB:</b></td><td>[";
 
 $tool_content .= in_array("5",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=5&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=5&amp;active=yes\">".$langActivate."</a>]";
@@ -142,7 +142,7 @@ $tool_content .= "</div></td></tr><tr class='odd'><td><b>CAS:</b></td><td>[";
 $tool_content .= in_array("7",$auth_methods)? "<a class=\"add\" href=\"auth.php?auth=7&amp;active=no\">".$langDeactivate."</a>]":"<a class=\"revoke\" href=\"auth.php?auth=7&amp;active=yes\">".$langActivate."</a>]";
 $tool_content .= "</td><td><div align=\"right\">";
 
-$tool_content .= "<a href=\"auth_process.php?auth=7\">$langAuthSettings</a>";	
+$tool_content .= "<a href=\"auth_process.php?auth=7\">$langAuthSettings</a>";
 $tool_content .= "</div></td></tr></table>";
 
 draw($tool_content, 3);

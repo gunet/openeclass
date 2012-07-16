@@ -80,30 +80,30 @@ $tool_content .= "
 if (!isset($_GET['action'])) {
     // Count available nodes
     $a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM $TBL_HIERARCHY"));
-    
+
     $query = "SELECT max(depth) FROM (SELECT  COUNT(parent.id) - 1 AS depth
-                FROM `hierarchy` AS node, `hierarchy` AS parent 
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt 
-                    GROUP BY node.id 
+                FROM `hierarchy` AS node, `hierarchy` AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
+                    GROUP BY node.id
                     ORDER BY node.lft) AS hierarchydepth";
     $maxdepth = mysql_fetch_array(db_query($query));
 
     // Construct a table
     $tool_content .= "
     <table width='100%' class='tbl_border'>
-    <tr>	
+    <tr>
     <td colspan='". ($maxdepth[0] + 4) ."' class='right'>
             $langManyExist: <b>$a[0]</b> $langHierarchyNodes
     </td>
     </tr>";
-    
+
     $initopen = $tree->buildJSTreeInitOpen();
 
     $head_content .= <<<hContent
 <script type="text/javascript">
 
 $(function() {
-        
+
     $( "#js-tree" ).jstree({
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
         "core" : {
@@ -129,10 +129,10 @@ $(function() {
                 }
             }
         },
-        "sort" : function (a, b) { 
+        "sort" : function (a, b) {
             priorityA = this._get_node(a).attr("tabindex");
             priorityB = this._get_node(b).attr("tabindex");
-            
+
             if (priorityA == priorityB)
                 return this.get_text(a) > this.get_text(b) ? 1 : -1;
             else
@@ -144,13 +144,13 @@ $(function() {
         }
     })
     .delegate("a", "click.jstree", function (e) { $("#js-tree").jstree("show_contextmenu", e.currentTarget); });
-    
+
 });
 
 function customMenu(node) {
-    
+
     var items = {
-        editItem: { 
+        editItem: {
             label: "$langEdit",
             action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id').substring(2); }
         },
@@ -159,7 +159,7 @@ function customMenu(node) {
             action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id').substring(2); }
         }
     };
-    
+
     if (node.attr('rel') == 'nosel') {
         delete items.editItem;
         delete items.deleteItem;
@@ -172,9 +172,9 @@ function customMenu(node) {
 
 </script>
 hContent;
-    
+
     $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin) )) ."</div></td></tr>";
-    
+
     // Close table correctly
     $tool_content .= "</table>\n";
     $tool_content .= "<br /><p class='right'><a href=\"index.php\">".$langBack."</a></p>";
@@ -183,7 +183,7 @@ hContent;
 elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
     if (isset($_POST['add'])) {
         $code = $_POST['code'];
-        
+
         $names = array();
         foreach ($active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
@@ -191,9 +191,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
                 $names[$langcode] = $n;
             }
         }
-        
+
         $name = serialize($names);
-        
+
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
@@ -225,14 +225,14 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
       </tr>
       <tr>
         <th class='left'>".$langNodeName.":</th>";
-        
+
         $i = 0;
         foreach ($active_ui_languages as $key => $langcode) {
             $tdpre = ($i > 0) ? "<tr><td></td>" : '';
             $tool_content .= $tdpre ."<td><input type='text' name='name-".$langcode."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
             $i++;
         }
-        
+
         $tool_content .= "
       <tr>
         <th class='left'>".$langNodeParent.":</th>
@@ -268,12 +268,12 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
     $id = intval($_GET['id']);
     validate($id);
-    
+
     // locate the lft and rgt of the node we want to delete
     $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
-    
+
     if ($node !== false) {
-    
+
         // locate the subtree of the node we want to delete. the subtree contains the node itself
         $subres = db_query("SELECT id FROM $TBL_HIERARCHY WHERE lft BETWEEN ". $node['lft'] ." AND ". $node['rgt']);
         $c = 0;
@@ -283,7 +283,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
             $c += mysql_num_rows(db_query("SELECT * FROM $TBL_COURSE_DEPARTMENT WHERE department = ". $subnode['id']));
             $c += mysql_num_rows(db_query("SELECT * FROM $TBL_USER_DEPARTMENT WHERE department = ". $subnode['id']));
         }
-        
+
         if ($c > 0)  {
             // The node cannot be deleted
             $tool_content .= "<p>".$langNodeProErase."</p><br />";
@@ -294,17 +294,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
             $tool_content .= "<p class='success'>$langNodeErase</p>";
         }
     }
-    
+
     $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 }
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $id = intval($_REQUEST['id']);
     validate($id);
-    
+
     if (isset($_POST['edit'])) {
         // Check for empty fields
-        
+
         $names = array();
         foreach ($active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-'.$langcode])) ? $_POST['name-'.$langcode] : null;
@@ -312,9 +312,9 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
                 $names[$langcode] = $n;
             }
         }
-                
+
         $name = serialize($names);
-        
+
         $code = $_POST['code'];
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
@@ -324,7 +324,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
             $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
         } else {
             // OK Update the node
-            $tree->updateNode($id, $name, intval($_POST['nodelft']), 
+            $tree->updateNode($id, $name, intval($_POST['nodelft']),
                 intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']),
                 $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<p class='success'>$langEditNodeSuccess</p><br />";
@@ -350,23 +350,23 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
        </tr>
        <tr>
            <th class='left'>".$langNodeName.":</th>";
-        
+
         $is_serialized = false;
         $names = @unserialize($myrow['name']);
         if ($names !== false)
             $is_serialized = true;
-        
+
         $i = 0;
         foreach ($active_ui_languages as $key => $langcode) {
             $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
             if (!$is_serialized && $key == 0)
                 $n = $myrow['name'];
-            
+
             $tdpre = ($i > 0) ? "<tr><td></td>" : '';
             $tool_content .= $tdpre ."<td><input type='text' name='name-".q($langcode)."' value='". q($n)."' /> <i>".$langFaculte2." (".$langNameOfLang[langcode_to_name($langcode)].")</i></td></tr>";
             $i++;
         }
-        
+
        $tool_content .= "<tr>
            <th class='left'>".$langNodeParent.":</th>
            <td>";
@@ -410,33 +410,33 @@ draw($tool_content, 3, null, $head_content);
 
 
 function validate($id) {
-    global $tool_content, $head_content, $is_admin, $tree, $user, $TBL_HIERARCHY, $uid, 
+    global $tool_content, $head_content, $is_admin, $tree, $user, $TBL_HIERARCHY, $uid,
             $langBack, $langNotAllowed;
-    
+
     $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
-    
+
     if ($id <= 0) {
         $tool_content .= $notallowed;
         draw($tool_content, 3, null, $head_content);
         exit();
     }
-    
+
     $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE id = ". intval($id) );
-    
+
     if (mysql_num_rows($result) < 1) {
         $tool_content .= $notallowed;
         draw($tool_content, 3, null, $head_content);
         exit();
     }
-    
+
     if (!$is_admin) {
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-        
+
         if (!in_array($id, $subtrees)) {
             $tool_content .= $notallowed;
             draw($tool_content, 3, null, $head_content);
             exit();
         }
     }
-        
+
 }

@@ -22,31 +22,31 @@
 	class.wiki2xhtmlrenderer.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: class.wiki2xhtmlrenderer Revision: 1.8.2.6
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
 
-  
+
 
     require_once dirname(__FILE__) . '/wiki2xhtml/class.wiki2xhtml.php';
     require_once dirname(__FILE__) . '/class.wikistore.php';
     require_once dirname(__FILE__) . '/class.wikipage.php';
-     
+
     define ("WIKI_WORD_PATTERN", '((?<![A-Za-z0-9])([A-Z][a-z]+){2,}(?![A-Za-z0-9]))' );
-     
+
     /**
     * Wiki2xhtml rendering engine
     *
@@ -55,7 +55,7 @@
     class Wiki2xhtmlRenderer extends wiki2xhtml
     {
         var /*% Wiki*/ $wiki;
-         
+
         /**
          * Constructor
          * @param Wiki wiki
@@ -63,9 +63,9 @@
         function Wiki2xhtmlRenderer( &$wiki )
         {
             wiki2xhtml::wiki2xhtml();
-             
+
             $this->wiki =& $wiki;
-             
+
             // set wiki rendering options
             // use wikiwords to link wikipages
             $this->setOpt( 'active_wikiwords', 1 );
@@ -84,7 +84,7 @@
             // use urls to link wikipages
             $this->setOpt( 'active_wiki_urls', 1 );
         }
-         
+
         /**
          * Parse WikiWords and create hypertext reference to wiki page
          *
@@ -118,7 +118,7 @@
                     ;
             }
         }
-         
+
         /**
          * Parse links in pages
          *
@@ -129,7 +129,7 @@
             $n_str = $this->__inlineWalk($str, array('acronym', 'img' ) );
             $data = $this->__splitTagsAttr($n_str );
             $no_image = false;
-             
+
             if (count($data ) == 1)
             {
                 $url = trim($str );
@@ -152,13 +152,13 @@
                 ? (boolean) $data[4] :
                 false ;
             }
-             
+
             $array_url = $this->__specialUrls();
             $url = preg_replace(array_flip($array_url ), $array_url, $url );
-             
+
             # On vire les &nbsp; dans l'url
             $url = str_replace('&nbsp;', ' ', $url);
-             
+
             if ( preg_match('/^(.+)[.](gif|jpg|jpeg|png)$/', $url )
                 && !$no_image && $this->getOpt('active_auto_img' ) )
             {
@@ -175,10 +175,10 @@
                     {
                         $path_img = $url;
                     }
-                     
+
                     $img_size = @getimagesize($path_img );
                 }
-                 
+
                 $attr = ' src="'.$this->protectAttr($this->protectUrls($url ) ).'"' . $attr .= (count($data) > 1 )
                 ? ' alt="'.$this->protectAttr($content ).'"' :
                 ' alt=""' ;
@@ -190,7 +190,7 @@
                 '' ;
                 $attr .= (is_array($img_size ) ) ? ' '.$img_size[3] :
                 '';
-                 
+
                 $tag = 'img';
                 $type = 'close';
                 return NULL;
@@ -201,7 +201,7 @@
                 {
                     $url = 'mailto:'.$this->__antiSpam(substr($url, 7));
                 }
-                 
+
                 if ((!preg_match('|[a-zA-Z0-9]+://|', $url)
                     && !preg_match('~^#~', $url)
                     && !preg_match('~^\.*/~', $url)
@@ -214,14 +214,14 @@
                 {
                     $attr = ' href="'.$this->protectAttr($this->protectUrls($url)).'"' . ' rel="nofollow"' ;
                 }
-                
+
                 $attr .= ($lang)
                 ? ' hreflang="'.$lang.'"' :
                 '' ;
                 $attr .= ($title)
                 ? ' title="'.$this->protectAttr($title ).'"' :
                 '' ;
-                 
+
                 return $content;
             }
         }
@@ -246,13 +246,13 @@
         function _getWikiPageLink( $pageName )
         {
 	    global $course_code;
-	    
+
             // allow links to use wikiwords for wiki page locations
             if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
             {
                 $pageName = preg_replace('/'.$this->getOpt('words_pattern').'/msU', '$1', $pageName);
             }
-             
+
             if ($this->wiki->pageExists( $pageName ) )
             {
                 return ' href="' . $_SERVER['SCRIPT_NAME'].'?course='.$course_code
@@ -270,7 +270,7 @@
                     ;
             }
         }
-        
+
         function __initTags()
         {
 		  $this->tags = array(

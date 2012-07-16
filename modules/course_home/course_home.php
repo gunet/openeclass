@@ -130,8 +130,8 @@ if ($is_editor) {
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
 		$id = intval($_REQUEST['vis']);
 		$sql = db_query("SELECT `visible` FROM course_units WHERE id=$id");
-		list($vis) = mysql_fetch_row($sql);                
-		$newvis = ($vis == 1)? 0: 1;                
+		list($vis) = mysql_fetch_row($sql);
+		$newvis = ($vis == 1)? 0: 1;
 		db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down
@@ -240,7 +240,7 @@ foreach ($departments as $dep) {
     $bar_content .= $tree->getFullPath($dep) . $br;
     $i++;
 }
-        
+
 $bar_content .= "</li>\n";
 
 $require_help = TRUE;
@@ -252,10 +252,10 @@ $sql = "SELECT COUNT(user_id) AS numUsers
 $res = db_query($sql, $mysqlMainDb);
 while($result = mysql_fetch_row($res)) {
         $numUsers = $result[0];
-}        
-//set the lang var for lessons visibility status      
-switch ($visible) {                
-        case COURSE_CLOSED: { 
+}
+//set the lang var for lessons visibility status
+switch ($visible) {
+        case COURSE_CLOSED: {
                 $lessonStatus = "<span title='$langPrivate'>$langPrivateShort</span>";
                 break;
         }
@@ -263,11 +263,11 @@ switch ($visible) {
                 $lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
                 break;
         }
-        case COURSE_OPEN: { 
+        case COURSE_OPEN: {
                 $lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
                 break;
-        }                
-        case COURSE_INACTIVE: {                                                          
+        }
+        case COURSE_INACTIVE: {
                 $lessonStatus = "<span class='invisible' title='$langCourseInactive'>$langCourseInactiveShort</span>";
                 break;
         }
@@ -281,7 +281,7 @@ if ($is_course_admin) {
 $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 
 
-if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) 
+if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'])
         or (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
         if (isset($_SESSION['saved_statut'])) {
                 $button_message = $langStudentViewDisable;
@@ -299,9 +299,9 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 
 $emailnotification = '';
 if ($uid and $statut != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
-        $emailnotification = "<div class='alert1'>$langNoUserEmailNotification 
+        $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
         (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
-} 
+}
 
 $tool_content .= "
 <div id='content_course'>
@@ -325,11 +325,11 @@ $tool_content .= "
           <td class='left'>$toggle_student_view";
           if ($statut != USER_GUEST) {
                 $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
-          }                    
+          }
           $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
-            </td>                     
-        </tr>        
+            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close
+            </td>
+        </tr>
         </table>
         $emailnotification
         <br />\n";

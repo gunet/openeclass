@@ -22,39 +22,39 @@
 /**===========================================================================
 	scromExport.inc.php
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: scormExport.inc.php Revision: 1.11.2.4
-	      
+
 	Claroline authors: Amand Tihon <amand.tihon@alrj.org>
-==============================================================================        
+==============================================================================
     @Description: This script is for export to SCORM 2004 package.
-                  
+
                   How SCORM export should be done
 
                   1. Get (flat) list of LP's content
-                  2. Create export directory structure, with base files 
+                  2. Create export directory structure, with base files
                   (dtd/xsd, javascript, ...)
                   3. Find if any SCOs are used in the LP
-                  4. If it's the case, copy the whole SCORM content into 
+                  4. If it's the case, copy the whole SCORM content into
                   destination directory
                   5. Rebuild imsmanifest.xml from the list we got in 1.
-                     - *EVERY* document must be present in the LP. If an 
-                     HTML document includes an image, 
+                     - *EVERY* document must be present in the LP. If an
+                     HTML document includes an image,
                      it must be declared in the LP, but marked as "invisible".
-                     - If a module is "visible", add it both as an <item> and 
+                     - If a module is "visible", add it both as an <item> and
                      as a <resource>, otherwise, add it only as a <resource>.
-                     - The rebuild must take into acount that modules are ordered 
+                     - The rebuild must take into acount that modules are ordered
                      in a tree, not a flat list.
 
                   Current limitations :
                   - Dependencies between resources are not taken into account.
                   - No multi-page exercises
 
-                  This file is currently supposed to be included by 
-                  index.php, in order to inherit some of its global 
+                  This file is currently supposed to be included by
+                  index.php, in order to inherit some of its global
                   variables, like some tables' names.
 ==============================================================================
 */
@@ -105,16 +105,16 @@ class ScormExport
     var $srcDirDocument;
     var $srcDirExercise;
     var $srcDirVideo;
-    
+
     var $manifest_itemTree;
     var $scormURL;
     var $mp3Found;
-    
+
     var $error;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param $learnPathId The ID of the learning path to export
      * @author Amand Tihon <amand@alrj.org>
      */
@@ -127,10 +127,10 @@ class ScormExport
         $this->resourceMap = array();
         $this->itemTree = array();
         $this->error = array();
-        
+
     }
-    
-   
+
+
     /**
      * Returns the error
      *
@@ -140,9 +140,9 @@ class ScormExport
     {
         return $this->error;
     }
-         
+
     /**
-     * Fetch info from the database 
+     * Fetch info from the database
      *
      * @return False on error, true otherwise.
      * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -152,42 +152,42 @@ class ScormExport
     {
         global $TABLELEARNPATH, $TABLELEARNPATHMODULE, $TABLEMODULE, $TABLEASSET, $webDir, $course_code,
                $mysqlMainDb, $course_id, $langLearningPathNotFound, $langLearningPathEmpty;
-    
+
         /* Get general infos about the learning path */
         $sql = 'SELECT `name`, `comment`
                 FROM `'.$TABLELEARNPATH.'`
                 WHERE `learnPath_id` = '. $this->id .'
         		AND `course_id` = '. $course_id;
-                
+
         $result = db_query($sql, $mysqlMainDb);
         if ( empty($result) )
         {
             $this->error[] = $langLearningPathNotFound;
             return false;
         }
-        
+
         $list = mysql_fetch_array($result, MYSQL_ASSOC);
         if ( empty($list) )
         {
             $this->error[] = $langLearningPathNotFound;
             return false;
         }
-        
+
         $this->name = $list['name'];
         $this->comment = $list['comment'];
-        
+
         /* Build various directories' names */
-        
+
         // Replace ',' too, because pclzip doesn't support it.
-        $this->destDir = $webDir . "courses/" . $course_code . '/temp/' 
+        $this->destDir = $webDir . "courses/" . $course_code . '/temp/'
             . str_replace(',', '_', replace_dangerous_char($this->name));
         $this->srcDirDocument = $webDir . "courses/" . $course_code . "/document";
         $this->srcDirExercise  = $webDir . "courses/" . $course_code . "/exercise";
         $this->srcDirScorm    = $webDir . "courses/" . $course_code . "/scormPackages/path_".$this->id;
         $this->srcDirVideo = $webDir . "video/" . $course_code;
-        
+
         /* Now, get the complete list of modules, etc... */
-        $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`, 
+        $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`,
                         LPM.`parent`, LPM.`raw_to_pass`, LPM.`specificComment` itemComment,
                         M.`name`, M.`contentType`, M.`comment` resourceComment, A.`path`
                 FROM `'.$TABLELEARNPATHMODULE.'` AS LPM
@@ -206,22 +206,22 @@ class ScormExport
             $this->error = $langLearningPathEmpty;
             return false;
         }
-        
+
         while ($module = mysql_fetch_array($result, MYSQL_ASSOC))
         {
             // Check for SCORM content. If at least one module is SCORM, we need to export the existing SCORM package
             if ( $module['contentType'] == 'SCORM' || $module['contentType'] == 'SCORM_ASSET' ) $this->fromScorm = true;
-            
+
             // If it is an exercise, create a filename for it.
             if ( $module['contentType'] == 'EXERCISE' )    $module['fileName'] = 'quiz_' . $module['path'] . '.html';
-            
+
             // Only for clarity :
             $id = $module['ID'];
             $parent = $module['parent'];
-            
+
             // Add to the flat resource map
             $this->resourceMap[$id] = $module;
-            
+
             // Build Item tree, only keeping visible modules
             if ( $module['visible'] == 1) {
                 if ( ! $parent )
@@ -238,21 +238,21 @@ class ScormExport
             }
         }
 
-        
+
         return true;
     }
-    
-    
+
+
     /**
     * Exports an exercise as a SCO.
     * This method is intended to be called from the prepare method.
     *
     *@note There's a lot of nearly cut-and-paste from exercise.lib.php here
-    *      because of some little differences... 
+    *      because of some little differences...
     *      Perhaps something that could be refactorised ?
-    * 
+    *
     * @see prepare
-    * @param $quizId The quiz 
+    * @param $quizId The quiz
     * @param $raw_to_pass The needed score to attain
     * @return False on error, True if everything went well.
     * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -267,8 +267,8 @@ class ScormExport
         global $attachedFilePathSys;
         $attachedFilePathWeb = 'Exercises';
         $attachedFilePathSys = $this->destDir . '/Exercises';
-                
-// Generate standard page header 
+
+// Generate standard page header
         $pageHeader = '<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
@@ -280,12 +280,12 @@ class ScormExport
 <script language="javascript" type="text/javascript" src="scores.js"></script>
 ' . "\n";
 
-        
+
         $pageBody = '<body onload="loadPage()">
     <div id="claroBody"><form id="quiz">
     <table width="99%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
-        
-        
+
+
         // read the exercise
         $quiz = new Exercise();
         if (! $quiz->read($quizId))
@@ -293,27 +293,27 @@ class ScormExport
             $this->error[] = $langErrorLoadingExercise;
             return false;
         }
-        
+
         // Get the question list
         $questionList = $quiz->selectQuestionList();
         $questionCount = $quiz->selectNbrQuestions();
-        
+
         // Keep track of raw scores (ponderation) for each question
         $questionPonderationList = array();
-        
+
         // Keep track of correct texts for fill-in type questions
         $fillAnswerList = array();
 
         // Counter used to generate the elements' id. Incremented after every <input> or <select>
         $idCounter = 0;
-        
+
         // Display each question
         $questionCount = 0;
         foreach($questionList as $questionId)
         {
             // Update question number
             $questionCount++;
-        
+
             // read the question, abort on error
             $question = new Question();
             if (!$question->read($questionId))
@@ -325,14 +325,14 @@ class ScormExport
             $qtitle       = $question->selectTitle();
             $qdescription = $question->selectDescription();
             $questionPonderationList[$questionId] = $question->selectWeighting();
-            
+
             // Generic display, valid for all kind of question
             $pageBody .= '<table width="99%">
                 <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
                 <tfoot>
                         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
                         <tr><td valign="top" colspan="2"><i>' . parse_user_text($qdescription) . '</i></td></tr>' . "\n";
-            
+
             // Attached file, if it exists.
             //$attachedFile = $question->selectAttachedFile();
             if ( !empty($attachedFile))
@@ -343,44 +343,44 @@ class ScormExport
                     $this->error[] = $langErrorCopyAttachedFile . $attachedFile;
                     return false;
                 }
-                
+
                 // Ok, if it was an mp3, we need to copy the flash mp3-player too.
                 $extension=substr(strrchr($attachedFile, '.'), 1);
                 if ( $extension == 'mp3')   $this->mp3Found = true;
-                
+
                 $pageBody .= '<tr><td colspan="2">' . display_attached_file($attachedFile) . '</td></tr>' . "\n";
             }
-        
+
             /*
              * Display the possible answers
              */
-            
+
             $answer = new Answer($questionId);
             $answerCount = $answer->selectNbrAnswers();
-            
+
             // Used for matching:
             $letterCounter = 'A';
             $choiceCounter = 1;
             $Select = array();
-            
+
             for ($answerId=1; $answerId <= $answerCount; $answerId++)
             {
                 $answerText = $answer->selectAnswer($answerId);
                 $answerCorrect = $answer->isCorrect($answerId);
-                
+
                 // Unique answer
                 if ( $qtype == UNIQUE_ANSWER || $qtype == TRUEFALSE )
                 {
                     // Construct the identifier
                     $htmlQuestionId = 'unique_' . $questionCount . '_x';
-                    
+
                     $pageBody .= '<tr><td width="5%" align="center">
                         <input type="radio" name="' . $htmlQuestionId . '"
                         id="scorm_' . $idCounter . '"
                         value="' . $answer->selectWeighting($answerId) . '"></td>
                     <td width="95%"><label for="scorm_' . $idCounter . '">' . $answerText . '</label>
                     </td></tr>';
-                    
+
                     $idCounter++;
                 }
                 // Multiple answers
@@ -388,26 +388,26 @@ class ScormExport
                 {
                     // Construct the identifier
                     $htmlQuestionId = 'multiple_' . $questionCount . '_' . $answerId;
-                    
+
                     // Compute the score modifier if this answer is checked
                     $raw = $answer->selectWeighting($answerId);
-                    
+
                     $pageBody .= '<tr><td width="5%" align="center">
                         <input type="checkbox" name="' . $htmlQuestionId . '"
-                        id="scorm_' . $idCounter . '" 
+                        id="scorm_' . $idCounter . '"
                         value="' . $raw . '"></td>
                     <td width="95%"><label for="scorm_' . $idCounter . '">' . $answerText . '</label>
                     </td></tr>';
-                    
+
                     $idCounter++;
                 }
                 // Fill in blanks
                 elseif ( $qtype == FILL_IN_BLANKS )
                 {
                     $pageBody .= '<tr><td colspan="2">';
-                
+
                     // We must split the text, to be able to treat each input independently
-                    
+
                     // separate the text and the scorings
                     $explodedAnswer = explode( '::',$answerText);
 		            $phrase = (isset($explodedAnswer[0]))?$explodedAnswer[0]:'';
@@ -419,7 +419,7 @@ class ScormExport
                     // get the scorings as a list
                     $fillScoreList = explode(',', $weighting);
                     $fillScoreCounter = 0;
-                    
+
                     if( $fillType == LISTBOX_FILL )// listbox
 					{
 			            // get the list of propositions (good and wrong) to display in lists
@@ -466,7 +466,7 @@ class ScormExport
 							$rawtext = $part;
 							$blankText = "";
 						}
-                        
+
                         $pageBody .= $rawtext;
 
                         // If there's a blank to fill-in after the text (this is usually not the case at the end)
@@ -495,12 +495,12 @@ class ScormExport
                             $fillScoreCounter++;
                             $idCounter++;
                         }
-                    
+
                         $acount++;
                     }
-                    
+
                     $pageBody .= '</td></tr>' . "\n";
-                
+
                 }
                 // Matching
                 elseif ( $qtype == MATCHING )
@@ -516,12 +516,12 @@ class ScormExport
                         <table border="0" cellpadding="0" cellspacing="0" width="99%">
                         <tr>
                             <td width="40%" valign="top"><b>' . $choiceCounter . '.</b> ' . $answerText . '</td>
-                            <td width="20%" valign="center">&nbsp;<select name="matching_' . $questionCount . '_' . 
+                            <td width="20%" valign="center">&nbsp;<select name="matching_' . $questionCount . '_' .
                             $answerId . '" id="scorm_' . $idCounter . '">
                             <option value="0">--</option>';
-                            
+
                         $idCounter++;
-                        
+
                         // fills the list-box
                         $letter = 'A';
                         foreach ($Select as $key => $val)
@@ -530,18 +530,18 @@ class ScormExport
                             $pageBody .= '<option value="' . $scoreModifier . '">' . $letter++ .
                             '</option>';
                         }
-                        
+
                         $pageBody .= '</select></td><td width="40%" valign="top">';
                         if ( isset($Select[$choiceCounter]) )
                         {
                             $pageBody .= '<b>' . $letterCounter . '.</b> ' . $Select[$choiceCounter];
                         }
                         $pageBody .= '&nbsp;</td></tr></table></td></tr>' . "\n";
-                        
+
                         // Done with this one
                         $letterCounter++;
                         $choiceCounter++;
-                        
+
                         // If the left side has been completely displayed :
                         if ( $answerId == $answerCount )
                         {
@@ -557,7 +557,7 @@ class ScormExport
                                 </tr>
                                 </table>
                                 </td></tr>' . "\n";
-                                
+
                                 $letterCounter++;
                                 $choiceCounter++;
                             } // end while
@@ -565,12 +565,12 @@ class ScormExport
                     } // else
                 } // end if (MATCHING)
             } // end for each answer
-            
+
             // End of the question
             $pageBody .= '</tfoot></table>' . "\n\n";
-            
+
         } // foreach($questionList as $questionId)
-        
+
         // No more questions, add the button.
         $pageEnd = '</td></tr>
             <tr>
@@ -579,13 +579,13 @@ class ScormExport
             </table>
             </form>
             </div></body></html>' . "\n";
-            
+
         /* Generate the javascript that'll calculate the score
          * We have the following variables to help us :
          * $idCounter : number of elements to check. their id are "scorm_XY"
          * $raw_to_pass : score (on 100) needed to pass the quiz
          * $fillAnswerList : a list of arrays (text, score) indexed on <input>'s names
-         * 
+         *
          */
         $pageHeader .= '
 <script type="text/javascript" language="javascript">
@@ -595,7 +595,7 @@ class ScormExport
     var scoreCommited = false;
     var showScore = true;
     var fillAnswerList = new Array();' . "\n";
-    
+
         // Add the data for fillAnswerList
         foreach ($fillAnswerList as $key=>$val)
         {
@@ -604,7 +604,7 @@ class ScormExport
 
         // This is the actual code present in every exported exercise.
         $pageHeader .= '
-        
+
     function calcScore()
     {
 		if( !scoreCommited )
@@ -642,14 +642,14 @@ class ScormExport
 
 </script>
 ';
-        
+
         // Construct the HTML file and save it.
         $filename = "quiz_" . $quizId . ".html";
-        
-        $pageContent = $pageHeader 
+
+        $pageContent = $pageHeader
                      . $pageBody
                      . $pageEnd;
-                
+
         if (! $f = fopen($this->destDir . '/' . $filename, 'w') )
         {
             $this->error[] = $langErrorCreatingFile . $filename;
@@ -662,13 +662,13 @@ class ScormExport
         return True;
     }
 
-    
+
     /**
      * Prepare the temporary destination directory that'll be zipped and exported.
      * Existing SCORM, documents, as well as required or helper javascript files and XML schemas
      * are copied into the directory.
      * No manifest created yet.
-     * 
+     *
      * @return False on error, true otherwise.
      * @see createManifest
      * @author Thanos Kyritsis <atkyritsis@upnet.gr>
@@ -680,7 +680,7 @@ class ScormExport
         global $langErrorCopyScormFiles, $langErrorCreatingDirectory, $langErrorCopyingScorm, $langErrorCopyAttachedFile;
         // (re)create fresh directory
         claro_delete_file($this->destDir);
-        if ( 
+        if (
                !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true)
             || !claro_mkdir($this->destDir."/common", CLARO_FILE_PERMISSIONS , true)
             || !claro_mkdir($this->destDir."/extend", CLARO_FILE_PERMISSIONS , true)
@@ -691,7 +691,7 @@ class ScormExport
             $this->error[] = $langErrorCreatingDirectory . $this->destDir;
             return false;
         }
-        
+
         // Copy usual files (.css, .js, .xsd, etc)
         if (
                !claro_copy_file('export/APIWrapper.js', $this->destDir)
@@ -737,10 +737,10 @@ class ScormExport
             $this->error[] = $langErrorCopyScormFiles;
             return false;
         }
-        
-        
+
+
         // Copy SCORM package, if needed
-        if ($this->fromScorm) 
+        if ($this->fromScorm)
         {
             // Copy the scorm directory as OrigScorm/
             if (
@@ -751,13 +751,13 @@ class ScormExport
                 return false;
             }
         }
-        
+
         // Create destination directory for "pure" documents
         claro_mkdir($this->destDir.'/Documents', CLARO_FILE_PERMISSIONS, true);
-        
+
         // And for exercises
         claro_mkdir($this->destDir.'/Exercises', CLARO_FILE_PERMISSIONS, true);
-        
+
         // Copy documents into the created directory
         foreach($this->resourceMap as $module)
         {
@@ -768,7 +768,7 @@ class ScormExport
                 {
                     $destinationDir = $this->destDir . '/Documents' . dirname($module['path']) . '/';
                 }
-                else 
+                else
                 {
                     $destinationDir = $this->destDir . '/Documents/';
                 }
@@ -793,24 +793,24 @@ class ScormExport
                 @copy($this->srcDirVideo . $module['path'], $destinationDir . $documentName);
             }
         }
-        
+
         // Did we find an mp3 ?
         /*if ( $this->mp3Found)
-        {        
+        {
             if ( !claro_copy_file($clarolineRepositorySys . '/exercise/claroPlayer.swf', $this->destDir) )
             {
-                $this->error[] = $langErrorCopyAttachedFile . $clarolineRepositorySys . '/exercise/claroPlayer.swf'; 
-                
+                $this->error[] = $langErrorCopyAttachedFile . $clarolineRepositorySys . '/exercise/claroPlayer.swf';
+
                 // This is *NOT* a fatal error.
                 // Do *NOT* return false.
             }
         }*/
-        
-        
+
+
         return true;
     }
-    
-    
+
+
     /**
      * Create the imsmanifest.xml file.
      *
@@ -833,7 +833,7 @@ class ScormExport
         function makeMetaData($title, $description, $identifier)
         {
             if ( empty($title) and empty($description) ) return ' ';
-        
+
             $out = "<metadata>"."\n"
                   ."<lom:lom>"."\n"
                   ."<lom:general>"."\n"
@@ -841,7 +841,7 @@ class ScormExport
                   ."<lom:entry>".$identifier
                   ."</lom:entry>"."\n"
                   ."</lom:identifier>"."\n";
-        
+
             if (empty($title))
             {
             	$title = "null";
@@ -851,7 +851,7 @@ class ScormExport
                    .htmlspecialchars($title)
                    ."</lom:string>"."\n"
                    ."</lom:title>"."\n";
-        
+
             if (empty($description))
             {
             	$description = "null";
@@ -867,7 +867,7 @@ class ScormExport
                    .htmlspecialchars($description)
                    ."</lom:string>"."\n"
                    ."</lom:keyword>"."\n";
-            
+
             $out .= "</lom:general>"."\n"
                    ."<lom:lifeCycle>"."\n"
                    ."<lom:version>"."\n"
@@ -901,10 +901,10 @@ class ScormExport
                    ."</lom:rights>"."\n"
                    ."</lom:lom>"."\n"
                    ."</metadata>"."\n";
-        
+
             return $out;
         }
-        
+
         /**
          * Create a <metadata> for the whole CAM model package
          *
@@ -918,13 +918,13 @@ class ScormExport
         function makeCAMetaData($title, $description)
         {
             if ( empty($title) and empty($description) ) return ' ';
-        
+
             $out = "<metadata>"."\n"
                   ."<schema>ADL SCORM</schema>"."\n"
                   ."<schemaversion>CAM 1.3</schemaversion>"."\n"
                   ."<lom:lom>"."\n"
                   ."<lom:general>"."\n";
-        
+
             if (empty($title))
             {
             	$title = "null";
@@ -934,7 +934,7 @@ class ScormExport
                    .htmlspecialchars($title)
                    ."</lom:string>"."\n"
                    ."</lom:title>"."\n";
-            
+
             if (empty($description))
             {
             	$description = "null";
@@ -944,7 +944,7 @@ class ScormExport
                    .htmlspecialchars($description)
                    ."</lom:string>"."\n"
                    ."</lom:description>"."\n";
-            
+
             $out .= "</lom:general>"."\n"
                    ."<lom:metaMetadata>"."\n"
                    ."<lom:metadataSchema>LOMv1.0</lom:metadataSchema>"."\n"
@@ -952,10 +952,10 @@ class ScormExport
                    ."</lom:metaMetadata>"."\n"
                    ."</lom:lom>"."\n"
                    ."</metadata>"."\n";
-            
+
             return $out;
         }
-        
+
         /**
          * Recursive function to deal with the tree representation of the items
          *
@@ -967,7 +967,7 @@ class ScormExport
          * @author Amand Tihon <amand@alrj.org>
          */
         $blocking = "";
-        
+
         function createItemList($itemlist, $depth=0)
         {
             global $blocking;
@@ -984,23 +984,23 @@ class ScormExport
                 }
                 $out .= '>' . "\n";
                 $out .= $ident . '    <title>'.htmlspecialchars($item['name']).'</title>' . "\n";
-                
+
                 // Check if previous was blocking
                 // not valid for scorm 2004
                 /*if (!empty($blocking) && ($item['contentType'] != 'LABEL'))
                 {
                     $out .= '        <adlcp:prerequisites type="aicc_script"><![CDATA[I_'.$blocking.']]></adlcp:prerequisites>'."\n";
                 }*/
-                
+
                 // Add metadata, except for LABELS
                 if ( $item['contentType'] != 'LABEL' )
                 {
                     $out .= makeMetaData($item['name'], $item['itemComment'], $identifier);
                 }
-                
+
                 if ( ! isset($item['children']) )
                 {
-                    // change only if we do not recurse. 
+                    // change only if we do not recurse.
                     $blocking = ($item['lock'] == 'CLOSE') ? $item['ID'] : '';
                 }
                 else
@@ -1011,7 +1011,7 @@ class ScormExport
             }
             return $out;
         }
-        
+
         /**
          * Create the frame file that'll hold the document. This frame is supposed to
          * set the SCO's status
@@ -1025,13 +1025,13 @@ class ScormExport
         function createFrameFile($fileName, $targetPath)
         {
             global $langErrorCreatingFrame, $langErrorCreatingManifest, $charset;
-            
+
             if ( !($f = fopen($fileName, 'w')) )
             {
                 $this->error[] = $langErrorCreatingFrame;
                 return false;
             }
-            
+
             fwrite($f, '<html><head>
     <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
     <script src="APIWrapper.js" type="text/javascript" language="JavaScript"></script>
@@ -1042,12 +1042,12 @@ class ScormExport
 </frameset>
 </html>');
             fclose($f);
-            
+
             return true;
         }
-        
+
         /**
-         * Create the frame file that'll hold the course description. 
+         * Create the frame file that'll hold the course description.
          * This frame sets the SCO's status
          * @param $filename string: the name of the file to create, absolute.
          * @return False on error, true otherwise.
@@ -1057,13 +1057,13 @@ class ScormExport
         function createDescFrameFile($fileName)
         {
             global $langErrorCreatingFrame, $langErrorCreatingManifest, $langThisCourseDescriptionIsEmpty, $charset;
-            
+
             if ( !($f = fopen($fileName, 'w')) )
             {
                 $this->error[] = $langErrorCreatingFrame;
                 return false;
             }
-            
+
             $course_description = "";
 			$sql = "SELECT `id`,`title`,`content` FROM `course_description` order by id";
 			$res = db_query($sql);
@@ -1072,7 +1072,7 @@ class ScormExport
 				$course_description .= "
 					<hr noshade size=\"1\">";
 				while ($bloc = mysql_fetch_array($res))
-				{ 
+				{
 					$course_description .= "
 					<H4>
 						".$bloc["title"]."
@@ -1086,7 +1086,7 @@ class ScormExport
 			{
 				$course_description .= "<br><h4>$langThisCourseDescriptionIsEmpty</h4>";
 			}
-            
+
             fwrite($f, '<html>'."\n"
             	.'<head>'."\n"
             	.'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
@@ -1110,37 +1110,37 @@ class ScormExport
 				.'</html>'."\n"
             	);
             fclose($f);
-            
+
             return true;
         }
-        
-        
-        
+
+
+
         // Start creating sections for items and resources
-        
+
         // First the items...
         $manifest_itemTree = '<organizations default="A1"><organization identifier="A1">' . "\n"
             . '<title>' . $this->name . '</title>' . "\n"
             . createItemList($this->itemTree)
             . '</organization></organizations>' . "\n";
-        
+
         // ...Then the resources
-            
+
         $manifest_resources = "<resources>\n";
         foreach ( $this->resourceMap as $module )
         {
             if ( $module['contentType'] == 'LABEL' ) continue;
-            
-            switch ( $module['contentType'] ) 
+
+            switch ( $module['contentType'] )
             {
-                case 'DOCUMENT': 
-                case 'MEDIA': 
+                case 'DOCUMENT':
+                case 'MEDIA':
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
 		    $targetfile = 'Documents'.$module['path'];
-                    
+
                     // Create an html file with a frame for the document.
                     if ( !createFrameFile($framefile, $targetfile)) return false;
-                    
+
                     // Add the resource to the manifest
                     $ridentifier = "R_".$module['ID'];
                     $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
@@ -1154,7 +1154,7 @@ class ScormExport
 
                 case 'EXERCISE':
                     $targetfile = $module['fileName'];
-                    
+
                     // Add the resource to the manifest
                     $ridentifier = "R_".$module['ID'];
                     $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
@@ -1164,7 +1164,7 @@ class ScormExport
                         . "</file>\n"
                         . "</resource>\n";
                     break;
-                        
+
                 case 'SCORM_ASSET' :
                 	// Add the resource to the manifest
                     $path = 'OrigScorm';
@@ -1176,8 +1176,8 @@ class ScormExport
                         . "</file>\n"
                         . "</resource>\n";
                     break;
-                    
-                case 'SCORM'   : 
+
+                case 'SCORM'   :
                     // Add the resource to the manifest
                     $path = 'OrigScorm';
                     $ridentifier = "R_".$module['ID'];
@@ -1188,13 +1188,13 @@ class ScormExport
                         . "</file>\n"
                         . "</resource>\n";
                     break;
-                    
+
                  case 'COURSE_DESCRIPTION':
                  	$framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
-                 	
+
                  	// Create an html file with a frame for the document.
                     if ( !createDescFrameFile($framefile)) return false;
-                    
+
                     // Add the resource to the manifest
                     $ridentifier = "R_".$module['ID'];
                     $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
@@ -1203,17 +1203,17 @@ class ScormExport
                         . makeMetaData($module['name'], $module['resourceComment'], $ridentifier)
                         . "</file>\n"
                         . "</resource>\n";
-                 	
+
                  	break;
-                 
-                 case 'LINK': 
-                 case 'MEDIALINK': 
+
+                 case 'LINK':
+                 case 'MEDIALINK':
                     $framefile = $this->destDir . '/frame_for_' . $module['ID'] . '.html';
                     $targetfile = $module['path'];
-                    
+
                     // Create an html file with a frame for the document.
                     if ( !createFrameFile($framefile, $targetfile)) return false;
-                    
+
                     // Add the resource to the manifest
                     $ridentifier = "R_".$module['ID'];
                     $manifest_resources .= '<resource identifier="' . $ridentifier . '" type="webcontent"  adlcp:scormType="sco" '
@@ -1223,34 +1223,34 @@ class ScormExport
                         . "</file>\n"
                         . "</resource>\n";
                     break;
-                    
+
                 default        : break;
             }
-            
+
         }
         $manifest_resources .= '</resources>' . "\n";
-                
+
         $manifestPath = $this->destDir . '/imsmanifest.xml';
-        if ( ! $f = fopen($manifestPath, 'w') ) 
+        if ( ! $f = fopen($manifestPath, 'w') )
         {
             $this->error[] = $langErrorCreatingManifest;
             return false;
         }
-        
+
         // Prepare Metadata
         $metadata = makeCAMetaData($this->name, $this->comment);
-        
+
         // Write header
         global $charset;
         fwrite($f, '<?xml version="1.0" encoding="' . $charset . '" ?>
 <manifest identifier="SingleCourseManifest" version="1.1"
-          xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" 
-          xmlns:lom="http://ltsc.ieee.org/xsd/LOM" 
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3" 
-          xmlns:imsss="http://www.imsglobal.org/xsd/imsss" 
-          xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3" 
-          xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3" 
+          xmlns="http://www.imsglobal.org/xsd/imscp_v1p1"
+          xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_v1p3"
+          xmlns:imsss="http://www.imsglobal.org/xsd/imsss"
+          xmlns:adlseq="http://www.adlnet.org/xsd/adlseq_v1p3"
+          xmlns:adlnav="http://www.adlnet.org/xsd/adlnav_v1p3"
           xsi:schemaLocation="http://www.imsglobal.org/xsd/imscp_v1p1 imscp_v1p1.xsd
           http://ltsc.ieee.org/xsd/LOM lom.xsd
           http://www.adlnet.org/xsd/adlcp_v1p3 adlcp_v1p3.xsd
@@ -1262,11 +1262,11 @@ class ScormExport
         fwrite($f, $manifest_resources);
         fwrite($f, "</manifest>\n");
         fclose($f);
-     
-        return true;   
+
+        return true;
     }
-    
-    
+
+
     /**
      * Create the final zip file.
      *
@@ -1276,27 +1276,27 @@ class ScormExport
     function zip()
     {
         global $langErrorCreatingScormArchive;
-        
+
         $list = 1;
         $zipFile = new PclZip($this->destDir . '.zip');
         $list = $zipFile->create($this->destDir, PCLZIP_OPT_REMOVE_PATH, $this->destDir);
-        
+
         if ( !$list )
         {
             $this->error[] = $langErrorCreatingScormArchive;
             return false;
         }
-        
+
         // Temporary directory can be deleted, now that the zip is made.
         claro_delete_file($this->destDir);
 
         return true;
-        
+
     }
-    
+
     /**
      * Send the .zip file to the browser.
-     * 
+     *
      * @return Does NOT return !
      * @author Amand Tihon <amand@alrj.org>
      */
@@ -1306,7 +1306,7 @@ class ScormExport
         header('Content-Description: File Transfer');
         header('Content-Type: application/zip');
         header('Content-Length: ' . filesize($filename));
-	header("Content-Disposition: attachment; filename=\"" . my_basename($filename) . "\""); 
+	header("Content-Disposition: attachment; filename=\"" . my_basename($filename) . "\"");
         readfile($filename);
         exit(0);
     }

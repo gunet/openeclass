@@ -80,13 +80,13 @@ if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen']))
     $displayFull = (int) $_GET['fullscreen'];
 }
 else
-{        
+{
     // choose default display
     // default display is without fullscreen
     $displayFull = FULL_SCREEN;
 }
 if ($displayFull == 0)
-{        
+{
 	$tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" "
 		."width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
 		.$langBrowserCannotSeeFrames
@@ -96,7 +96,7 @@ if ($displayFull == 0)
 	draw($tool_content, 2, null, $head_content);
 }
 else
-{               
+{
 	echo
 	 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
 	."   \"http://www.w3.org/TR/html4/frameset.dtd\">"."\n"

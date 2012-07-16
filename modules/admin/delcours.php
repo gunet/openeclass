@@ -62,7 +62,7 @@ if (isset($_GET['delete']) && $course_id)  {
 // Display confirmatiom message for course deletion
 else {
 	$row = mysql_fetch_array(db_query("SELECT * FROM course WHERE id = ". $course_id));
-        
+
         if ($row === false) {
             $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
             draw($tool_content, 3);

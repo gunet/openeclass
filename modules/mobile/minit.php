@@ -31,7 +31,7 @@ if (isset($require_noerrors) && $require_noerrors) {
 }
 
 if (isset($require_mlogin) && $require_mlogin) {
-    
+
     if (!isset($_POST['token'])) {
         echo RESPONSE_FAILED;
         exit();

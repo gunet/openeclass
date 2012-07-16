@@ -489,7 +489,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
         }
-        
+
         if ($oldversion < '2.5.2') {
         	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
         }
@@ -550,11 +550,11 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("CREATE TABLE IF NOT EXISTS `forum` (
                         `id` INT(10) NOT NULL AUTO_INCREMENT,
                         `name` VARCHAR(150) DEFAULT '' NOT NULL,
-                        `desc` MEDIUMTEXT NOT NULL, 
+                        `desc` MEDIUMTEXT NOT NULL,
                         `num_topics` INT(10) DEFAULT 0 NOT NULL,
                         `num_posts` INT(10) DEFAULT 0 NOT NULL,
                         `last_post_id` INT(10) DEFAULT 0 NOT NULL,
-                        `cat_id` INT(10) DEFAULT 0 NOT NULL,  
+                        `cat_id` INT(10) DEFAULT 0 NOT NULL,
                         `course_id` INT(11) NOT NULL,
                         PRIMARY KEY (`id`),
                         FULLTEXT KEY `forum` (`name`,`desc`)) $charset_spec");
@@ -593,9 +593,9 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `num_views` int(10) NOT NULL default '0',
                         `num_replies` int(10) NOT NULL default '0',
                         `last_post_id` int(10) NOT NULL default '0',
-                        `forum_id` int(10) NOT NULL default '0',  
+                        `forum_id` int(10) NOT NULL default '0',
                         PRIMARY KEY  (`id`)) $charset_spec");
-                
+
 
                 // create video tables
                 db_query('CREATE TABLE IF NOT EXISTS video (
@@ -900,26 +900,26 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 // copy faculties into the tree
                 $res = db_query("SELECT MAX(id) FROM `faculte`");
                 $max = mysql_fetch_array($res);
-                
+
                 $n = db_query("SELECT * FROM `faculte`");
                 $i = 0;
                 while ($r = mysql_fetch_assoc($n)) {
                     $lft = 2 + 8 * $i;
                     $rgt = $lft + 7;
-                    db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
+                    db_query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
                         VALUES ($r[id],
-                                ". quote($r['code']) .", 
-                                ". quote($r['name']) .", 
-                                $r[number], $r[generator], 
+                                ". quote($r['code']) .",
+                                ". quote($r['name']) .",
+                                $r[number], $r[generator],
                                 $lft, $rgt, true, true)");
-                    
-                    db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+
+                    db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langpre) .", ". ($lft + 1) .", ". ($lft + 2) .", true, true)");
                     db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langpost) .", ". ($lft + 3) .", ". ($lft + 4) .", true, true)");
                     db_query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (". (++$max[0]) .", ". quote($r['code']) .", ". quote($langother) .", ". ($lft + 5) .", ". ($lft + 6) .", true, true)");
-                    
+
                     $i++;
                 }
 
@@ -929,7 +929,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt)
                     VALUES ('', ". quote($_POST['Institution']) .", 1, $root_rgt)");
             }
-            
+
             db_query("CREATE TABLE IF NOT EXISTS `course_department` (
                             `id` int(11) NOT NULL auto_increment PRIMARY KEY,
                             `course` int(11) NOT NULL references course(id),
@@ -939,12 +939,12 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 $n = db_query("SELECT cours_id, faculteid, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
                     $qlike = 'lang' . $r['type'];
-                    $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent 
-                                      WHERE node.name LIKE ". quote($$qlike) ." 
-                                        AND parent.id = ". $r['faculteid'] ." 
+                    $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
+                                      WHERE node.name LIKE ". quote($$qlike) ."
+                                        AND parent.id = ". $r['faculteid'] ."
                                         AND node.lft BETWEEN parent.lft AND parent.rgt");
                     $node = mysql_fetch_assoc($res);
-                    
+
                     db_query("INSERT INTO `course_department` (course, department)
                                      VALUES ($r[cours_id], $node[id])");
                 }
@@ -1138,7 +1138,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 END");
             }
          }
-        
+
         // Rename table `cours` to `course` and `cours_user` to `course_user`
         if (!mysql_table_exists($mysqlMainDb, 'course')) {
                 mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

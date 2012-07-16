@@ -28,7 +28,7 @@ if(isset($_POST['submitQuestion'])) {
 	{
 		$msgErr = $langGiveQuestion;
 	}
-	// checks if the question is used in several exercises	
+	// checks if the question is used in several exercises
 	elseif($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1)
 	{
 		// duplicates the question
@@ -48,9 +48,9 @@ if(isset($_POST['submitQuestion'])) {
 		// copies answers from $modifyQuestion to $questionId
 		$objAnswerTmp->duplicate($questionId);
 		// destruction of the Answer object
-		unset($objAnswerTmp);	
+		unset($objAnswerTmp);
 	}
-	
+
 	$objQuestion->read($_GET['modifyQuestion']);
 	$objQuestion->updateTitle($questionName);
 	$objQuestion->updateDescription($questionDescription);
@@ -60,7 +60,7 @@ if(isset($_POST['submitQuestion'])) {
 	// upload or delete picture
 	if (isset($_POST['deletePicture'])) {
 		$objQuestion->removePicture();
-	} elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {                
+	} elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
 		$type = $_FILES['imageUpload']['type'];
 		if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
 			$tool_content .= "<div class='caution'>$langInvalidPicture</div>";
@@ -93,7 +93,7 @@ else
 }
 if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	$questionId = $objQuestion->selectId();
-	// is picture set ?        
+	// is picture set ?
 	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
         // if there is an error message
         if(!empty($msgErr)) {
@@ -120,12 +120,12 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 
 	if ($okPicture) {
 		$tool_content .= "$langReplacePicture";
-	} else { 
+	} else {
 		$tool_content .= "$langAddPicture";
-	}	
+	}
 
 	$tool_content .= ":</th><td>";
-	if($okPicture) {         
+	if($okPicture) {
 		$tool_content .= "<img src='../../$picturePath/quiz-$questionId'><br/><br/>";
 	}
 	$tool_content .= "<input type='file' name='imageUpload' size='30'></td></tr>";
@@ -135,7 +135,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 		<th>$langDeletePicture:</th>
 		<td><input type='checkbox' name='deletePicture' value='1' ";
 		if(isset($_POST['deletePicture'])) {
-			$tool_content .= 'checked="checked"'; 
+			$tool_content .= 'checked="checked"';
 		}
 		$tool_content .= "> ";
 		$tool_content .= "</td></tr>";

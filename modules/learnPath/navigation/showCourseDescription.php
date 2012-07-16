@@ -58,7 +58,7 @@ $q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources W
 if ($q and mysql_num_rows($q) > 0) {
 	list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
 			WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-	
+
 	while ($row = mysql_fetch_array($q)) {
 		echo "
 			<table width='100%' class='tbl_border'>
@@ -66,7 +66,7 @@ if ($q and mysql_num_rows($q) > 0) {
 			<td class='bold'>" . q($row['title']) . "</td>\n
 			</tr>
 			<tr>";
-		
+
 		if ($is_editor) {
 			echo "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
 		} else {

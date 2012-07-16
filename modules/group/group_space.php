@@ -46,7 +46,7 @@ if (isset($_GET['selfReg'])) {
 			$message = "<font color=red>$langGroupNowMember</font>";
 			$regDone = $is_member = true;
 		}
-	} else { 
+	} else {
 		$tool_content .= "<p class='caution'>$langForbidden</p>";
 		draw($tool_content, 2);
 		exit;
@@ -145,7 +145,7 @@ $myIndex = 0;
                 }
 
 		$tool_content .= "
-          <td>" . display_user($member);  
+          <td>" . display_user($member);
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
 		}
@@ -201,7 +201,7 @@ function loadGroupTools(){
         if ($documents) {
                 $group_tools .=  "<li><a href='index.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
         }
-	
+
         if ($is_editor or $is_tutor) {
                 $group_tools .=  "<li><a href='group_email.php?course=$course_code&amp;group_id=$group_id'>$langEmailGroup</a></li>
                 <li><a href='group_usage.php?course=$course_code&amp;group_id=$group_id'>$langUsage</a></li>";

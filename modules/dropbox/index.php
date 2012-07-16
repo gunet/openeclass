@@ -161,7 +161,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	{
 		$tool_content .= "<option value=".$res['user_id'].">".q($res['name'])."</option>";
 	}
-	
+
 	if ($dropbox_cnf["allowJustUpload"])  // RH
 	{
 		$tool_content .= '<option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
@@ -246,7 +246,7 @@ if (!isset($_GET['mailing'])) {
                 } //end of foreach
                 $tool_content .= "</table>";
         }
-}  
+}
 
 /*
  * --------------------------------------
@@ -283,10 +283,10 @@ if (count($dropbox_person->sentWork)==0) {
         <th width='130'>$dropbox_lang[date]</th>
         <th width='20'>$langDelete</th>
         </tr>";
-       
+
         $i = 0;
         foreach ($dropbox_person -> sentWork as $w) {
-                $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';  
+                $langSentTo = $dropbox_lang["sentTo"] . '&nbsp;';
                 $ahref = "dropbox_download.php?course=$course_code&amp;id=" . urlencode($w->id) ;
                 $imgsrc = $themeimg . '/outbox.png';
                 $fSize = ceil(($w->filesize)/1024);
@@ -307,7 +307,7 @@ if (count($dropbox_person->sentWork)==0) {
                         $recipients_names .= q($r['name']) . " <br />\n";
                 }
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
-                        $tool_content .= $recipients_names;        
+                        $tool_content .= $recipients_names;
                 } else {
                         $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                 }

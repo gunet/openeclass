@@ -65,7 +65,7 @@ require_once 'include/log.php';
 
 $nameTools = $langVideo;
 
-if (isset($_SESSION['prenom'])) { 
+if (isset($_SESSION['prenom'])) {
         $nick = q($_SESSION['prenom'].' '.$_SESSION['nom']);
 }
 
@@ -73,17 +73,17 @@ $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'ti
 $menuTypeID = ($is_in_tinymce) ? 5: 2;
 
 if ($is_in_tinymce) {
-    
+
     $_SESSION['embedonce'] = true; // necessary for baseTheme
 
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-    
+
     $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a.fileURL").click(function() { 
+    $("a.fileURL").click(function() {
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -113,7 +113,7 @@ EOF;
 $filterv = '';
 $filterl = '';
 if (isset($_REQUEST['docsfilter'])) {
-    
+
     switch ($_REQUEST['docsfilter']) {
         case 'image':
             $ors = '';
@@ -127,7 +127,7 @@ if (isset($_REQUEST['docsfilter'])) {
                 } else
                     $ors .= " OR path LIKE '%$imgfmt%'";
             }
-            
+
             $filterv = "AND ( $ors )";
             $filterl = "AND false";
             break;
@@ -170,10 +170,10 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
         $id = q($_GET['id']);
         $videoPath = $urlServer ."video/". $course_code . $id;
         $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
-        
+
         $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = ". quote($id));
         $row = mysql_fetch_array($result);
-        
+
         if (strpos($videoPath, '/../') === FALSE && !empty($row))
         {
                 echo media_html_object($videoPath, $videoURL);
@@ -189,7 +189,7 @@ if (isset($_GET['action']) and $_GET['action'] == 'play')
 
 if (isset($_GET['action']) and $_GET['action'] == 'playlink') {
         $id = q($_GET['id']);
-        
+
         echo medialink_iframe_object(urldecode($id));
         exit;
 }
@@ -223,7 +223,7 @@ function checkrequired(which, entry) {
 
 </script>
 hContent;
-	
+
 $d = mysql_fetch_array(db_query("SELECT video_quota FROM course WHERE code='$course_code'"));
 $diskQuotaVideo = $d['video_quota'];
 $updir = "$webDir/video/$course_code"; //path to upload directory
@@ -235,7 +235,7 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	$tool_content .= showquota($diskQuotaVideo, $diskUsed);
 	draw($tool_content, $menuTypeID);
 	exit;
-}	
+}
 
 if (isset($_POST['edit_submit'])) { // edit
 	if(isset($_POST['id'])) {
@@ -260,14 +260,14 @@ if (isset($_POST['edit_submit'])) { // edit
 		$result = db_query($sql);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY,
-                          array('id' => $id,                          
+                          array('id' => $id,
                                 'url' => canonicalize_url($_POST['url']),
                                 'title' => $_POST['title'],
                                 'description' => $txt_description));
 		$tool_content .= "<p class='success'>$langTitleMod</p><br />";
 		$id = "";
 	}
-}	
+}
 if (isset($_POST['add_submit'])) {  // add
 		if(isset($_POST['URL'])) { // add videolinks
 			$url = $_POST['URL'];
@@ -285,7 +285,7 @@ if (isset($_POST['add_submit'])) {  // add
                                         '.quote($_POST['publisher']).',
                                         '.quote($_POST['date']).')';
 			$result = db_query($sql);
-                        $id = mysql_insert_id();				
+                        $id = mysql_insert_id();
                         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                         Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT,
                                 @array('id' => $id,
@@ -406,7 +406,7 @@ if (isset($_POST['add_submit'])) {  // add
                         </table>
                 </fieldset>
                 <div class='smaller right'>$langMaxFileSize ". ini_get('upload_max_filesize') . "</div></form> <br>";
-              
+
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'url') { // display video links form
 		$nameTools = $langAddVideoLink;
 		$navigation[] = array ('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
@@ -459,14 +459,14 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$sql = "SELECT * FROM $table_edit WHERE course_id = $course_id AND id = $id ORDER BY title";
 		$result = db_query($sql);
 		$myrow = mysql_fetch_array($result);
-		
+
 		$id = $myrow['id'];
 		$url= $myrow['url'];
 		$title = $myrow['title'];
 		$description = $myrow['description'];
 		$creator = $myrow['creator'];
 		$publisher = $myrow['publisher'];
-		
+
 		$nameTools = $langModify;
 		$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
 		$tool_content .= "
@@ -538,7 +538,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         $count_video_presented_for_admin = 1;
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
-        <tr>     
+        <tr>
           <th colspan='2'><div align='left'>$langVideoDirectory</div></th>";
         if (!$is_in_tinymce)
         {
@@ -561,31 +561,31 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 					} else {
                                             list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 					}
-                                        
+
                                         if ($is_in_tinymce) {
                                             $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
                                             $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                         } else {
                                             $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
                                         }
-                                        
+
                                         $link_to_add = "<td>". $link_href . "</td>";
-                                        
+
                                         if (!$is_in_tinymce)
                                             $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
-                                        
+
                                         $link_to_add .= "<td align='center'>". nice_format(date('Y-m-d', strtotime($myrow['date'])))."</td>";
                                         $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
                                         $aclass = ($is_in_tinymce) ? 'fileURL' : null;
                                         $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aclass);
-                                        
+
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
-                                    
+
                                         if (!$is_in_tinymce)
                                             $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
-                                        
+
                                         $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
                                         $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
@@ -624,14 +624,14 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 
 // student view
 else {
-    
+
         load_modal_box(true);
-    
+
 	$results['video'] = db_query("SELECT * FROM video WHERE course_id = $course_id $filterv ORDER BY title");
 	$results['videolinks'] = db_query("SELECT * FROM videolinks WHERE course_id = $course_id $filterl ORDER BY title");
 	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv"));
 	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl"));
-        
+
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
 		<table width='100%' class='tbl_alt'>
@@ -653,7 +653,7 @@ else {
 						} else {
                                                     list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
 						}
-                                                
+
                                                 if ($is_in_tinymce) {
                                                    $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
                                                     $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
@@ -667,7 +667,7 @@ else {
 					case 'videolinks':
                                                 $aclass = ($is_in_tinymce) ? 'fileURL' : null;
                                                 $link_href = choose_medialink_ahref(q($myrow['url']), q($myrow['title']), $aclass);
-                                                
+
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
 
                                                 $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";

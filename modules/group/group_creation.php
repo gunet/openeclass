@@ -20,10 +20,10 @@
 
 /*
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -43,11 +43,11 @@ $tool_content = <<<tCont
     <fieldset>
     <legend>$langNewGroupCreateData</legend>
     <table width="99%" class="tbl">
-    <tr> 
+    <tr>
       <th width="160" class="left">$langNewGroups:</th>
       <td><input type="text" name="group_quantity" size="3" value="1"></td>
     </tr>
-    <tr> 
+    <tr>
       <th class="left">$langNewGroupMembers:</th>
       <td><input type="text" name="group_max" size="3" value="8">&nbsp;$langMax $langPlaces</td>
     </tr>

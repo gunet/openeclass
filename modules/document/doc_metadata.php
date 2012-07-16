@@ -16,12 +16,12 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */ 
+ * ======================================================================== */
 
 function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	// globals
 	global $course_code, $group_hidden_input;
-	
+
 	// lang globals
 	global $langAddMetadata, $langWorkFile, $langTitle, $langTitleHelp,
 		$langDescription, $langDescriptionHelp, $langAuthor, $langAuthorHelp,
@@ -32,7 +32,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 		$langTypicalAgeRange, $langTypicalAgeRangeHelp, $langComment, $langCommentHelp,
 		$langCopyright, $langCopyrightHelp, $langIntentedEndUserRole, $langIntentedEndUserRoleHelp,
 		$langOkComment, $langNotRequired;
-	
+
 	// variable definitions
 	$metaTitle = "";
 	$metaLanguage = "";
@@ -47,10 +47,10 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	$metaNotes = "";
 	$metaTopic = "";
 	$metaSubTopic = "";
-	
+
 	if (file_exists($real_filename.".xml")) {
 		$sxe = simplexml_load_file($real_filename.".xml");
-		
+
 		if ($sxe) {
 			$metaTitle = $sxe->general->title->string;
 			$metaLanguage = $sxe->general->language;
@@ -67,11 +67,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 			$metaSubTopic = $sxe->classification->taxonPath->taxon->entry->string;
 		}
 	}
-	
+
 	$checkMap['meta_learningresourcetype'] = metaBuildCheckMap($metaLearningResourceTypes, "meta_learningresourcetype");
 	$checkMap['meta_intendedenduserrole']  = metaBuildCheckMap($metaIntendedEndUserRoles, "meta_intendedenduserrole");
-	$checkMap['meta_level']                = metaBuildCheckMap($metaLevels, "meta_level"); 
-	
+	$checkMap['meta_level']                = metaBuildCheckMap($metaLevels, "meta_level");
+
 	$output = "
 	<form method='post' action='index.php?course=$course_code'>
 	<fieldset>
@@ -85,11 +85,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	    <th>$langWorkFile:</th>
 	    <td>$oldFilename</td>
 	  </tr>";
-	  
+
 	  $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp)
 	          .  metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4)
 	          .  metaCommaTextAreaRow($langAuthor, "meta_author", $metaAuthors, $langAuthorHelp);
-	  
+
 	  $cellLang = selection(array('el' => $langGreek,
 				'en' => $langEnglish,
 				'fr' => $langFrench,
@@ -97,25 +97,25 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 				'it' => $langItalian,
 				'es' => $langSpanish), 'meta_language', $metaLanguage);
 	  $output .= metaFormRow($langLanguage, $cellLang, $langLanguageHelp);
-	  
-	  $resourceTypes = array("narrative text", "simulation", "photo", "experiment", "image", "microexperiment", "figure", 
-	     "map", "diagram", "interactivemap", "graph", "exploration", "table", "interactivegame", "sound", "conceptualmap", 
-	     "music", "index", "narration", "problem statement", "video", "self assessment", "animation", "questionnaire", 
+
+	  $resourceTypes = array("narrative text", "simulation", "photo", "experiment", "image", "microexperiment", "figure",
+	     "map", "diagram", "interactivemap", "graph", "exploration", "table", "interactivegame", "sound", "conceptualmap",
+	     "music", "index", "narration", "problem statement", "video", "self assessment", "animation", "questionnaire",
 	     "3danimation", "quiz", "slide", "exam", "presentation", "exercise", "lecture", "learningscenario", "textbook", );
 	  $output .= metaCheckBoxRow($langLearningResourceType, "meta_learningresourcetype", $resourceTypes, $checkMap, $langLearningResourceTypeHelp, true)
 	          .  metaCommaTextAreaRow($langKeywords, "meta_keywords", $metaKeywords, $langKeywordsHelp, 2, "string")
 	          .  metaInputTextRow($langTopic, "meta_topic", $metaTopic, $langTopicHelp)
 	          .  metaInputTextRow($langSubTopic, "meta_subtopic", $metaSubTopic, $langSubTopicHelp);
-	  
+
 	  $levels = array("nursery", "primary", "secondary", "highschool", "technical", "training", "higher education", "other");
 	  $output .= metaCheckBoxRow($langLevel, "meta_level", $levels, $checkMap, $langLevelHelp)
 	          .  metaCommaInputTextRow($langTypicalAgeRange, "meta_typicalagerange", $metaTypicalAgeRanges, $langTypicalAgeRangeHelp, "string")
 	          .  metaTextAreaRow($langComment, "meta_notes", $metaNotes, $langCommentHelp, 4)
 	          .  metaTextAreaRow($langCopyright, "meta_rights", $metaRights, $langCopyrightHelp);
-	  
+
 	  $userRoles = array("teacher", "learner", "author", "manager", "other");
 	  $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
-	  
+
 	  $output .= "<tr>
 	    <th>&nbsp;</th>
 	    <td class='right'><input type='submit' value='$langOkComment' /></td>
@@ -127,22 +127,22 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </table>
 	</fieldset>
 	</form>";
-	  
+
 	return $output;
 }
 
 
 /*
- * Build Array Map for the Metadata Form to decide which checkboxes should be 
+ * Build Array Map for the Metadata Form to decide which checkboxes should be
  * checked when editing a XML file
  */
 function metaBuildCheckMap($values, $group){
 	$retAr = array();
-	
+
 	if (!empty($values))
 		foreach ($values as $value)
 			$retAr["$value->value"] = true;
-			
+
 	return $retAr;
 }
 
@@ -164,21 +164,21 @@ function metaFormRow($title, $cell, $help) {
 function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = false) {
 	$cell = "<table class='tbl'>";
 	$i = 0;
-	
+
 	foreach ($values as $value) {
 		$i++;
 		$langElement = "langMeta".ucfirst(str_replace(" ", "", $value));
 		global $$langElement;
-		
+
 		$check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
 		$start = ($twocols && $i%2 == 0) ? "<td>" : "<tr><td>";
 		$end   = ($twocols && $i%2 != 0 && $i < count($values)) ? "</td>\n" : "</td></tr>\n";
-		
+
 		$cell .= "$start<input type='checkbox' name='".$name."[]' value='$value' $check />".$$langElement . $end;
 	}
-	
+
 	$cell .= "</table>";
-	
+
 	return metaFormRow($title, $cell, $help);
 }
 
@@ -196,7 +196,7 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
  */
 function metaCommaTextAreaRow($title, $name, $values, $help, $rows = 2, $element = null) {
 	$cell = "<textarea cols='68' rows='$rows' name='$name'>";
-	
+
 	if (!empty($values)) {
 		$i = 0;
 		foreach ($values as $value) {
@@ -207,9 +207,9 @@ function metaCommaTextAreaRow($title, $name, $values, $help, $rows = 2, $element
 				$cell .= ", ";
 		}
 	}
-	
+
 	$cell .= "</textarea>";
-	
+
 	return metaFormRow($title, $cell, $help);
 }
 
@@ -227,7 +227,7 @@ function metaInputTextRow($title, $name, $value, $help) {
  */
 function metaCommaInputTextRow($title, $name, $values, $help, $element = null) {
 	$cell = "<input type='text' size='60' name='$name' value='";
-	
+
 	if (!empty($values)) {
 		$i = 0;
 		foreach ($values as $value) {
@@ -238,9 +238,9 @@ function metaCommaInputTextRow($title, $name, $values, $help, $element = null) {
 				$cell .= ", ";
 		}
 	}
-	  
+
 	$cell .= "' />";
-	  
+
 	return metaFormRow($title, $cell, $help);
 }
 
@@ -251,44 +251,44 @@ function metaCreateDomDocument($xmlFilename) {
 	$lom->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 	$lom->setAttribute('xsi:schemaLocation', 'http://ltsc.ieee.org/xsd/LOM ity.xsd');
 	// end of lom
-	
+
 	$general = $lom->appendChild($dom->createElement('general'));
-	
+
 	$identifier = $general->appendChild($dom->createElement('identifier'));
 	$catalog = $identifier->appendChild($dom->createElement('catalog', 'URL'));
 	$entry = $identifier->appendChild($dom->createElement('entry', $_POST['meta_filename']));
-	
+
 	$title = $general->appendChild($dom->createElement('title'));
 	$langstring = $title->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_title'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
-	
+
 	$general->appendChild($dom->createElement('language', $_POST['meta_language']));
-	
+
 	$description = $general->appendChild($dom->createElement('description'));
 	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_description'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
-	
+
 	metaLangStringLoop($dom, $general, $_POST['meta_language'], 'keyword', $_POST['meta_keywords']);
 	// end of general
-	
+
 	$lifecycle = $lom->appendChild($dom->createElement('lifeCycle'));
 	$contribute = $lifecycle->appendChild($dom->createElement('contribute'));
-	
+
 	metaSimpleLoop($dom, $contribute, 'entity', $_POST['meta_author']);
 	// end of lifeCycle
-	
+
 	$metaMetadata = $lom->appendChild($dom->createElement('metaMetadata'));
-	
+
 	$contribute = $metaMetadata->appendChild($dom->createElement('contribute'));
 	$entity = $contribute->appendChild($dom->createElement('entity', $_SESSION['prenom'] ." ". $_SESSION['nom']));
 	$date = $contribute->appendChild($dom->createElement('date'));
 	$dateTime = $date->appendChild($dom->createElement('dateTime', date('Y-m-d')));
 	// end of metametadata
-	
+
 	$technical = $lom->appendChild($dom->createElement('technical'));
 	$format = $technical->appendChild($dom->createElement('format', $_POST['meta_mimetype']));
 	// end of technical
-	
+
 	$educational = $lom->appendChild($dom->createElement('educational'));
 
 	if (isset($_POST['meta_learningresourcetype']))
@@ -298,40 +298,40 @@ function metaCreateDomDocument($xmlFilename) {
 	if (isset($_POST['meta_level']))
 		metaSourceValueArrayLoop($dom, $educational, 'context', $_POST['meta_level']);
 	metaLangStringLoop($dom, $educational, $_POST['meta_language'], 'typicalAgeRange', $_POST['meta_typicalagerange']);
-	
+
 	$description = $educational->appendChild($dom->createElement('description'));
 	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_notes'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
 	// end of educational
-	
+
 	$rights = $lom->appendChild($dom->createElement('rights'));
-	
+
 	$copyrightAndOtherRestrictionse = $rights->appendChild($dom->createElement('copyrightAndOtherRestrictions'));
 	$source = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('source', 'LOMv1.0'));
 	$value = $copyrightAndOtherRestrictionse->appendChild($dom->createElement('value', 'yes'));
-	
+
 	$description = $rights->appendChild($dom->createElement('description'));
 	$langstring = $description->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_rights'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
 	// end of rights
-	
+
 	$classification = $lom->appendChild($dom->createElement('classification'));
-	
+
 	$purpose = $classification->appendChild($dom->createElement('purpose'));
 	$source = $purpose->appendChild($dom->createElement('source', 'LOMv1.0'));
 	$value = $purpose->appendChild($dom->createElement('value', 'discipline'));
-	
+
 	$taxonPath = $classification->appendChild($dom->createElement('taxonPath'));
 	$source = $taxonPath->appendChild($dom->createElement('source'));
 	$langstring = $source->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_topic'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
-	
+
 	$taxon = $taxonPath->appendChild($dom->createElement('taxon'));
 	$entry = $taxon->appendChild($dom->createElement('entry'));
 	$langstring = $entry->appendChild($dom->createElement('string', htmlspecialchars($_POST['meta_subtopic'], ENT_QUOTES, 'utf-8')));
 	$langstring->setAttribute('language', $_POST['meta_language']);
 	// end of classification
-	
+
 	$dom->formatOutput = true;
 	$dom->save($xmlFilename);
 }
@@ -350,7 +350,7 @@ function metaLangStringLoop($dom, $parent, $lang, $element, $inputValue) {
 }
 
 function metaSimpleLoop($dom, $parent, $element, $inputValue) {
-	if (strlen(trim($inputValue))) {	
+	if (strlen(trim($inputValue))) {
 		$values = explode(',', htmlspecialchars($inputValue, ENT_QUOTES, 'utf-8'));
 		foreach ($values as $v)
 			if (strlen(trim($v)))
@@ -361,7 +361,7 @@ function metaSimpleLoop($dom, $parent, $element, $inputValue) {
 function metaSourceValueLoop($dom, $parent, $element, $inputValue) {
 	$child = $parent->appendChild($dom->createElement($element));
 	$source = $child->appendChild($dom->createElement('source', 'LOMv1.0'));
-	
+
 	if (strlen(trim($inputValue))) {
 		$values = explode(',', htmlspecialchars($inputValue, ENT_QUOTES, 'utf-8'));
 		$i = 0;
@@ -381,7 +381,7 @@ function metaSourceValueLoop($dom, $parent, $element, $inputValue) {
 function metaSourceValueArrayLoop($dom, $parent, $element, $inputValue) {
 	$child = $parent->appendChild($dom->createElement($element));
 	$source = $child->appendChild($dom->createElement('source', 'LOMv1.0'));
-	
+
 	$i = 0;
 	foreach ($inputValue as $v) {
 		$i++;
@@ -397,15 +397,15 @@ function hasMetaData($filename, $basedir, $group_sql) {
 	$xml = $filename.".xml";
 	$real_filename = $basedir . str_replace('/..', '', q($xml));
 	$result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($xml));
-		
+
 	if (file_exists($real_filename) && mysql_num_rows($result) > 0) {
-		
+
 		$row = mysql_fetch_array($result);
 		if ($row['format'] == ".meta")
 			return true;
-	} else 
+	} else
 		return false;
-	
+
 	return false;
 }
 
@@ -416,17 +416,17 @@ function hasMetaData($filename, $basedir, $group_sql) {
 function metaRenameDomDocument($xmlFilename, $newEntry) {
 	if (!file_exists($xmlFilename))
 		return;
-	
+
 	$sxe = simplexml_load_file($xmlFilename);
 	if ($sxe === false)
 		return;
-	
+
 	$sxe->general->identifier->entry = $newEntry;
-	
+
 	$dom_sxe = dom_import_simplexml($sxe);
  	if (!$dom_sxe)
  		return;
-	
+
 	$dom = new DOMDocument('1.0');
 	$dom_sxe = $dom->importNode($dom_sxe, true);
 	$dom_sxe = $dom->appendChild($dom_sxe);

@@ -72,7 +72,7 @@ if (isset($_POST['submit']))  {
                                    prof_names = ". quote($_POST['prof_names']) ."
                                WHERE code = ". quote($_GET['c']));
         $course->refresh(course_code_to_id($_GET['c']), null, $departments);
-	
+
 	$tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
 }

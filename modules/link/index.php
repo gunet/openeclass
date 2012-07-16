@@ -58,19 +58,19 @@ $menuTypeID = ($is_in_tinymce) ? 5: 2;
 $tinymce_params = '';
 
 if ($is_in_tinymce) {
-    
+
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. $_REQUEST['docsfilter'] : '';
     $tinymce_params = '&amp;embedtype=tinymce'. $docsfilter;
-    
+
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-    
+
     $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a.fileURL").click(function() { 
+    $("a.fileURL").click(function() {
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -151,7 +151,7 @@ if ($is_editor) {
                 submit_category();
         }
         switch ($action) {
-                case 'deletelink': 
+                case 'deletelink':
                         delete_link($id);
                         break;
                 case 'deletecategory':
@@ -191,7 +191,7 @@ if ($is_editor) {
                         $form_url = $form_title = $form_description = '';
                         $form_legend = $langLinkAdd;
                         $submit_label = $langAdd;
-                } 
+                }
                 $tool_content .= "<fieldset>
                         <legend>$form_legend</legend>
                         <table width='100%' class='tbl'>
@@ -229,7 +229,7 @@ if ($is_editor) {
                 } else {
                         $form_name = $form_description = '';
                         $form_legend = $langCategoryAdd;
-                } 
+                }
                 $tool_content .= "<fieldset><legend>$form_legend</legend>
                                    <table width='100%' class='tbl'>
                                    <tr><th>$langCategoryName:</th>

@@ -65,7 +65,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
 		// Only students
 		$sql = db_query("SELECT email, user_id FROM user where statut='5'");
 	} else { die(); } // invalid sendTo var
-        
+
         $recipients = array();
         $emailsubject = $langInfoAboutEclass;
 		$emailbody = "".$_POST['body_mail']."
@@ -84,14 +84,14 @@ $langEmail : $emailhelpdesk
                         array_push($recipients, $emailTo);
                 }
                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
-                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);            
-                $emailcontent = $emailbody.$unsubscribe.$linkhere;            
+                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);
+                $emailcontent = $emailbody.$unsubscribe.$linkhere;
                 if (count($recipients) >= 50) {
-                        send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset); 
+                        send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset);
                 }
-        } 
-        if (count($recipients) > 0)  {                    
-                send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset); 
+        }
+        if (count($recipients) > 0)  {
+                send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset);
         }
 	// Display result and close table correctly
 	$tool_content .= "<p class='success'>$emailsuccess</p>";

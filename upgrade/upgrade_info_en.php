@@ -12,12 +12,12 @@ p {
 </style>
   </head>
   <body>
-  
+
   <div id="container" style="padding: 30px;">
-  <div id="header"> 
+  <div id="header">
 
 <a href="http://www.openeclass.org/" title="Open eClass" class="logo"></a></div>
-    
+
 <p class="title1">Upgrade Instructions for Open eClass 2.5</p>
 
 <p>The new version of Open eClass (2.5) retains backward compatibility (with previous versions).
@@ -26,7 +26,7 @@ following the upgrade instructions provided below.
 Keeping a safety record of the course contents and the database before beginning to upgrade is recommended.</p>
 <div class="alert1">
 <ul>
-<li>Please ensure that during the platform's upgrade process there is no access to Open eClass courses by the platform's users and the platform's database is not accessible by anyone  
+<li>Please ensure that during the platform's upgrade process there is no access to Open eClass courses by the platform's users and the platform's database is not accessible by anyone
 </li>
 <li>Also check the platform's version that is already installed in your server, by following the link 'Platform Identity'
 in the home page. In order to the upgrade process (which is described below) to be possible,
@@ -85,13 +85,13 @@ rm -rf images/ include/ info/ install/ manuals/ template/ modules/ </pre>
 
 	Then copy from the temporary directory /tmp/openeclass-2.5 all of its contents in the installation directory e.g.
 	<pre>cp -a /tmp/openeclass-2.5/*  /var/www/html/eclass/</pre>
-	
+
 	So with the above steps you have replaced directory eclass, with the new one.
   </li>
   <li>Then move file <em>config.php</em> to directory <em>config</em>.
     e.g.
     <pre>mv /tmp/config.php /var/www/html/eclass/config/</pre>
-  <li>Correct (if necessary) the files and sub-directories permissions: (supposing that the apache is running as user www-data) 
+  <li>Correct (if necessary) the files and sub-directories permissions: (supposing that the apache is running as user www-data)
 
     <pre>cd /opt/eclass
 chown -R www-data *
@@ -105,7 +105,7 @@ find ./ -type d -exec chmod 775 {} \;
 Then, move on to  <a href="#dbase">the second step</a> in order to upgrade the platform databases.</p>
 <br />
 <p class="title1" id="win">1st Step: Upgrading in Ms Windows Computers</h3>
-<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.5.zip</b>.</p>  
+<p>The following example presupposes that eClass has already been installed to directory <code>C:\Program Files\Apache\htdocs\</code> and that you have downloaded <b>openeclass-2.5.zip</b>.</p>
 <p>Due to several changes included by the new version (2.5) you will have to delete the old and install the new one.
 To make sure that you old configuration remain intact you must do the following actions:</p>
 <ul>
@@ -118,14 +118,14 @@ To make sure that you old configuration remain intact you must do the following 
   <li>Go to the <em>eclass</em> folder (e.g.<tt>C:\Program Files\Apache\htdocs\eclass\</tt>) and delete all folders except <em>courses</em>, <em>video</em> and <em>config</em>.</li>
   <li>Unzip openeclass-2.5.zip to a temporary folder on the desktop. e.g.
     <code>C:\Documents and Settings\Administrator\Desktop\eclass25</code>
-	After that rename the temporary folder eclass25 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g. 
+	After that rename the temporary folder eclass25 to eclass and copy it along with its contents (files and documents). Then, open the file that includes eClass installation, e.g.
  <code>C:\Program
-    Files\Apache\htdocs\</code> 
-	and paste it. In that way, the eclass files is replaced by the new ones. 
+    Files\Apache\htdocs\</code>
+	and paste it. In that way, the eclass files is replaced by the new ones.
   </li>
   <li>Delete the desktop temporary folder.</li>
 </ul>
-<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.5) successfully. 
+<p>As soon as the above have been completed, you will have installed the new eClass version files (eClass 2.5) successfully.
         Then, follow the  <a href="#dbase">second step</a> so as to upgrade the platform database.
 </p>
 <br />
@@ -140,7 +140,7 @@ After providing them, you will be asked to change/correct contact details,
 as well as students' registration mode on the platform (free or applied registration).
 The database upgrade will begin afterwards. You will see several messages concerning your working progress.
 Probably you will not see any false messages.
-Note that depending on the number and content of courses, it is possible that the process will last for a long time. 
+Note that depending on the number and content of courses, it is possible that the process will last for a long time.
 </p>
 <p>In the opposite case (namely if error messages occur), then it is possible for a course not to be operating properly.
 Such error messages may occur if you have altered the structure of an eclass database table.
@@ -174,16 +174,16 @@ You can add text (e.g. information, links, etc.) to the left and right sidebars 
 </p>
 </li>
 <li>Open eClass supports mathematical symbols in the <em>Exercises</em>, <em>Forums</em> and <em>Announcements</em> subsystems. In <em>Exercises</em> you can add math symbols in the "Exercise Description" field when creating or modyfying a new exercise, and in "Comment" when adding or modifying a question, in <em>Forums</em> when you compose a new message or reply to an existing one, and in <em>Announcements</em> when a new announcement is created. Math symbols must be enclosed in <em>[m]</em> and <em>[/m]</em> tags.
-E.g. when you type 
+E.g. when you type
 <pre>
 [m]sqrt{x-1}[/m]
 </pre>
 the square root of x-1 will appear. Mathematical symbols syntax can be found in <a href="../manuals/PhpMathPublisherHelp.pdf"><em>the PhpMathPublisher help file</em></a>. Older versions used the <em>&lt;m></em> and <em>&lt;/m></em> which are still supported, although using the newer tags in brackets is recommended.
 <li>
-To use the platform with a web server with SSL support (e.g. https://eclass.gunet.gr), you define the <em>urlSecure</em> variable in <em>config.php</em>. For example: <code>$urlSecure = "https://eclass.gunet.gr"</code> 
+To use the platform with a web server with SSL support (e.g. https://eclass.gunet.gr), you define the <em>urlSecure</em> variable in <em>config.php</em>. For example: <code>$urlSecure = "https://eclass.gunet.gr"</code>
 </li>
 <li>
-<p> If you have SSL support activated and you want to enforce it between the platform and native mobile clients for increased security, 
+<p> If you have SSL support activated and you want to enforce it between the platform and native mobile clients for increased security,
 you can do it by defining the <em>urlMobile</em> variable on <em>config.php</em>. e.g.<code>$urlMobile = "https://eclass.gunet.gr"</code>
 </p>
 </li>
@@ -195,21 +195,21 @@ Note the change will be visible to users after next login to platform.</p>
 
 <div class='sub_title1'><a name="after_tbl_config">Basic settings</a></div>
 <p>
-   You can configure several options of platform. After logging as admin user, 
+   You can configure several options of platform. After logging as admin user,
         click in "Admin Tools" and after that, click in "Configuration File".
-        Basic options are stored in file <em>config.php</em>. 
+        Basic options are stored in file <em>config.php</em>.
         Also you can change the following options below:</p>
-<ul><li><em>Theme</em>: The default theme is «classic». 
-        You can change it with something else (e.g. «modern» or «ocean»). 
+<ul><li><em>Theme</em>: The default theme is «classic».
+        You can change it with something else (e.g. «modern» or «ocean»).
         Theme change will be visible to users in their next login.</li>
         <li><em>Available languages</em>: Available languages are English, German and Spanish.</li>
 </ul>
 <ul><li><em>disable_eclass_stud_reg</em>: Student registration is disabled</li>
      <li><em>disable_eclass_prof_reg</em>: Teacher registration is disabled</li>
-     <li><em>close_user_registration</em>: Registration of users with 'student' rights will not be free anymore. 
-             Users will have to follow a process similar to the teacher account creation process, 
-             namely filling in a student account application form, in order to obtain a platform account. 
-             The application will be examined by the administrator who either approves of it and opens an account, 
+     <li><em>close_user_registration</em>: Registration of users with 'student' rights will not be free anymore.
+             Users will have to follow a process similar to the teacher account creation process,
+             namely filling in a student account application form, in order to obtain a platform account.
+             The application will be examined by the administrator who either approves of it and opens an account,
              or rejects it.</li>
      <li><em>durationAccount</em>: Duration of users account.</li>
      <li><em>alt_auth_student_req</em>: Activation of users account request through alternative authentication methods.</li>
@@ -231,10 +231,10 @@ Note the change will be visible to users after next login to platform.</p>
 </ul>
 By default none of them is enabled.
 <ul>
- <li><em>doc_quota</em>: Defines the default quota in 'Documents'. 
- <li><em>video_quota</em>: Defines the default quota in 'Video'. 
- <li><em>dropbox_quota</em>: Defines the default quota in 'Dropbox'. 
- <li><em>group_quota</em>: Defines the default quota in 'Groups'. 
+ <li><em>doc_quota</em>: Defines the default quota in 'Documents'.
+ <li><em>video_quota</em>: Defines the default quota in 'Video'.
+ <li><em>dropbox_quota</em>: Defines the default quota in 'Dropbox'.
+ <li><em>group_quota</em>: Defines the default quota in 'Groups'.
 </ul>
 
 <p>Further information for these actions can be found in the Administrator's manual (linked from the platform Admin Tool).

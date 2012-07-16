@@ -36,11 +36,11 @@ if (!extension_loaded('gd')) {
 	$totalHits = 0;
         $totalDuration = 0;
 	require_once 'include/libchart/classes/libchart.php';
-        
+
         $sql = "SELECT a.code code, a.title title
                 FROM course AS a LEFT JOIN course_user AS b
                      ON a.id = b.course_id
-                WHERE b.user_id = $uid 
+                WHERE b.user_id = $uid
                 AND a.visible != ".COURSE_INACTIVE."
                 ORDER BY a.title";
 	$result = db_query($sql);
@@ -52,16 +52,16 @@ if (!extension_loaded('gd')) {
 		mysql_free_result($result);
 		foreach ($course_codes as $code) {
                         $cid = course_code_to_id($code);
-			$sql = "SELECT COUNT(*) AS cnt FROM actions 
-                                WHERE user_id = $uid 
+			$sql = "SELECT COUNT(*) AS cnt FROM actions
+                                WHERE user_id = $uid
                                 AND course_id = $cid";
 			$result = db_query($sql);
-			while ($row = mysql_fetch_assoc($result)) {				
+			while ($row = mysql_fetch_assoc($result)) {
 				$totalHits += $row['cnt'];
 				$hits[$code] = $row['cnt'];
 			}
 			mysql_free_result($result);
-			$sql = "SELECT SUM(duration) FROM actions 
+			$sql = "SELECT SUM(duration) FROM actions
                                         WHERE user_id = $uid
                                         AND course_id = $cid";
 			$result = db_query($sql);
@@ -84,7 +84,7 @@ if (!extension_loaded('gd')) {
 		$chart->setTitle($langCourseVisits);
 		if (!file_exists("courses/temp")) {
 			mkdir("courses/temp", 0777);
-		}                
+		}
 		$chart_path = '/courses/temp/chart_'.md5(serialize($chart)).'.png';
 		if ($chart_content) {
 			$chart->render($webDir.$chart_path);
@@ -162,5 +162,5 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 }
 $tool_content .= "</table>";
 $tool_content .= "</td></tr></table></fieldset>";
-   
+
 draw($tool_content, 1);

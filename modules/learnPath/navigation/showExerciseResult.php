@@ -25,7 +25,7 @@
 // application logic remains the same.
 
 // Ta objects prepei na ginoun include prin thn init
-// gia logous pou sxetizontai me to object loading 
+// gia logous pou sxetizontai me to object loading
 // apo to session
 require_once '../../exercise/exercise.class.php';
 require_once '../../exercise/question.class.php';
@@ -67,7 +67,7 @@ $nameTools = $langExercicesResult;
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
-}    
+}
 
 // ypologismos tou xronou pou xreiasthke o xrhsths gia thn oloklhrwsh ths askhshs
 if (isset($_SESSION['exercise_begin_time'][$exerciseId])) {
@@ -80,8 +80,8 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 // if the above variables are empty or incorrect, stops the script
-if(!is_array($_SESSION['exerciseResult'][$exerciseId]) 
-            || !is_array($_SESSION['questionList'][$exerciseId]) 
+if(!is_array($_SESSION['exerciseResult'][$exerciseId])
+            || !is_array($_SESSION['questionList'][$exerciseId])
             || !is_object($objExercise)) {
 	echo $langExerciseNotFound;
 	exit();
@@ -102,7 +102,7 @@ echo "<table class='tbl_border' width='99%'>
   </tr>
   </table>";
 
-// probaloume th dikia mas forma me to diko mas action 
+// probaloume th dikia mas forma me to diko mas action
 // kai me to katallhlo hidden pedio
 echo "<form method='GET' action='backFromExercise.php'><input type='hidden' name='course' value='$course_code'>".
 	"<input type='hidden' name='op' value='finish'>";
@@ -143,7 +143,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 		$colspan=1;
 	}
 	$iplus=$i+1;
-        
+
 	echo "<br/>
         <table width='100%' class='tbl_alt'>
         <tr class='odd'>
@@ -182,7 +182,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	// construction of the Answer object
     $objAnswerTmp = new Answer($questionId);
     $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-	
+
 	for($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 		$answer          = $objAnswerTmp->selectAnswer($answerId);
 		$answerComment   = $objAnswerTmp->selectComment($answerId);
@@ -284,7 +284,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					}
 				break;
 		}	// end switch()
-		if ($displayResults == 1) { 
+		if ($displayResults == 1) {
 			if($answerType != MATCHING || $answerCorrect) {
 				if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
 					echo ("
@@ -304,7 +304,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					echo (".png' /></div>
                                               </td>
                                               <td><div align='center'>");
-	
+
 					if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
 						echo ("<img src=\"$themeimg/radio");
 					} else {
@@ -313,17 +313,17 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					if ($answerCorrect) {
 						echo ("_on");
 					} else {
-						echo ("_off");	
+						echo ("_off");
 					}
-					echo (".png\" /></div>");	
+					echo (".png\" /></div>");
 					echo ("</td>
                                               <td>${answer}</td>
                                               <td>");
 					if ($studentChoice) {
-						echo nl2br(make_clickable($answerComment)); 
-					} else { 
+						echo nl2br(make_clickable($answerComment));
+					} else {
 						echo ('&nbsp;');
-					} 
+					}
 					echo ("</td></tr>");
 				} elseif($answerType == FILL_IN_BLANKS) {
 					echo ("
@@ -337,7 +337,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
                                           <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
                                         </tr>");
 				}
-			} 
+			}
 		} // end of if
 	}	// end for()
 	 if ($displayScore == 1) {

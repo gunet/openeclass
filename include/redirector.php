@@ -54,7 +54,7 @@ if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
 			break;
 		}
 		case 6: { //documents
-			$url = "modules/document/index.php?openDir=" . $_GET['p'];	
+			$url = "modules/document/index.php?openDir=" . $_GET['p'];
 			break;
 		}
 	}

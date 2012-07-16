@@ -75,7 +75,7 @@ else {
 		WHERE code='".mysql_real_escape_string($_GET['c'])."'"));
 	$visible = $row['visible'];
 	$visibleChecked[$visible]="checked";
-	
+
 	$tool_content .= "<form action=".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])." method=\"post\">
         <fieldset>
 	<legend>".$langCourseStatusChange."</legend>

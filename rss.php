@@ -19,12 +19,12 @@
  * ======================================================================== */
 
 /*
- * Announcements RSS Feed Component 
+ * Announcements RSS Feed Component
  */
 
 require_once 'include/init.php';
 
-$result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
+$result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
 		FROM admin_announcement
 		WHERE visible = 1 AND lang = '$language'
 		ORDER BY `date` DESC");
@@ -41,7 +41,7 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>".$language."</language>";
 
-$sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat 
+$sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
 		FROM admin_announcement
 		WHERE visible = 1 AND lang = '$language'
 		ORDER BY `date` DESC");
@@ -50,7 +50,7 @@ while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
 	echo "<link>".$urlServer."modules/announcements/main_ann.php?aid=".$r['id']."</link>";
-	echo "<description>".htmlspecialchars($r['body'], ENT_NOQUOTES)."</description>";	
+	echo "<description>".htmlspecialchars($r['body'], ENT_NOQUOTES)."</description>";
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
 	echo "</item>";

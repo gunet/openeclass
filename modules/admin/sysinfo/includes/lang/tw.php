@@ -66,7 +66,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = '無';
 
-$text['capacity']       = '容量'; 
+$text['capacity']       = '容量';
 
 $text['template']       = '範本';
 $text['language']       = '語言';

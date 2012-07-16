@@ -23,7 +23,7 @@
 	@last update: 31-05-2006 by Stratos Karatzidis
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
         @Description: Functions Library for authentication purposes
 
  	This library includes all the functions for authentication
@@ -283,24 +283,24 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
         $testauth = false;
         switch($auth) {
 	case '1':
-		
+
 			$unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = " ;
 			$sql = "SELECT password FROM user WHERE username ". $unamewhere . quote($test_username);
 			$result = db_query($sql);
-	
+
 			if (mysql_num_rows($result) == 1) {
-	
+
 				$myrow = mysql_fetch_assoc($result);
 				$hasher = new PasswordHash(8, false);
-	
+
 				if ($hasher->CheckPassword($test_password, $myrow['password']))
 					$testauth = true;
 				else if (strlen($myrow['password']) < 60 && md5($test_password) == $myrow['password']) {
 					$testauth = true;
-	
+
 					// password is in old md5 format, update transparently
 					$password_encrypted = $hasher->HashPassword($test_password);
-	
+
 					$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE username COLLATE utf8_bin = ". quote($test_username);
 					db_query($sql, $mysqlMainDb);
 				}
@@ -332,7 +332,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
                     $testauth = false;
             }
             break;
-        
+
 	case '3':
 	    $imaphost = $settings['imaphost'];
 	    $imapauth = imap_auth($imaphost, $test_username, $test_password);
@@ -356,7 +356,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
                                         $search_filter = "(|($settings[ldap_login_attr]=${test_username})
                                                             ($settings[ldap_login_attr2]=${test_username}))";
                                 }
-					
+
 				$userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
 				if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
 					 $user_dn = ldap_get_dn($ldap, $entry_id);
@@ -510,7 +510,7 @@ function get_ldap_attribute($search_result, $attribute)
 /****************************************************************
 CAS authentication
 if $new is false then we use stored settings from db
-if $new in true then we use new connection settings 
+if $new in true then we use new connection settings
 from the rest of the arguments
 Returns array of messages, errors
 ****************************************************************/
@@ -586,7 +586,7 @@ function get_cas_attrs($phpCASattrs, $settings)
 	$attrs = array();
 	foreach ($phpCASattrs as $key => $value) {
 		// multivalue: get only the first attribute
-		if (is_array($value)) 
+		if (is_array($value))
 			$attrs[$key] = $value[0];
 		else
 			$attrs[$key] = $value;
@@ -630,7 +630,7 @@ function process_login()
 	} else {
 		$posted_uname = '';
 	}
-	
+
 	$pass = isset($_POST['pass'])? autounquote($_POST['pass']): '';
 	$auth = get_auth_active_methods();
 	$is_eclass_unique = is_eclass_unique();
@@ -676,17 +676,17 @@ function process_login()
 		}
 		if (!isset($_SESSION['uid'])) {
 			switch($auth_allow) {
-				case 1: $warning .= ""; 
+				case 1: $warning .= "";
 					break;
-				case 2: $warning .= "<p class='alert1'>$langInvalidId</p>"; 
+				case 2: $warning .= "<p class='alert1'>$langInvalidId</p>";
 					break;
                                 case 3: $warning .= "<p class='alert1'>$langAccountInactive1 " .
                                                 "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=".
-                                                token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>"; 
+                                                token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>";
 					break;
-				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>"; 
+				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
 					break;
-				case 5: $warning .= "<p class='alert1'>$langNoCookies</p>"; 
+				case 5: $warning .= "<p class='alert1'>$langNoCookies</p>";
 					break;
 				case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
 					break;
@@ -698,19 +698,19 @@ function process_login()
 		} else {
 			db_query("INSERT INTO loginout
 						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
-						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");			
-                        $_SESSION['user_perso_active'] = true;			
+						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+                        $_SESSION['user_perso_active'] = true;
 			if (get_config('email_verification_required') and
-                            get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {                        
+                            get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
 				$_SESSION['mail_verification_required'] = 1;
 				$next = "modules/auth/mail_verify_change.php";
 			} elseif (isset($_POST['next'])) {
 				$next = autounquote($_POST['next']);
 			} else {
 				$next = '';
-			}                        
-			redirect_to_home_page($next);	
-		}                
+			}
+			redirect_to_home_page($next);
+		}
 	}  // end of user authentication
 }
 
@@ -720,7 +720,7 @@ Authenticate user via eclass
 function login($user_info_array, $posted_uname, $pass)
 {
 		global $mysqlMainDb;
-	
+
 		$pass_match = false;
 		$hasher = new PasswordHash(8, false);
 
@@ -729,27 +729,27 @@ function login($user_info_array, $posted_uname, $pass)
 				$pass_match = true;
 			} else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
 				$pass_match = true;
-		
+
 				// password is in old md5 format, update transparently
 				$password_encrypted = $hasher->HashPassword($pass);
 				$user_info_array['password'] = $password_encrypted;
-		
+
                                 db_query('SET sql_mode = TRADITIONAL');
 				$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE user_id = ". intval($user_info_array['user_id']);
 				db_query($sql, $mysqlMainDb);
 			}
 		}
-	
+
 		if ($pass_match) {
 
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);
                 // check for admin privileges
                 $admin_rights = get_admin_rights($user_info_array['user_id']);
-                if($admin_rights == ADMIN_USER) { 
-                        $is_active = 1;   // admin user is always active             
+                if($admin_rights == ADMIN_USER) {
+                        $is_active = 1;   // admin user is always active
                         $_SESSION['is_admin'] = 1;
-                } elseif($admin_rights == POWER_USER) {  
+                } elseif($admin_rights == POWER_USER) {
                         $_SESSION['is_power_user'] = 1;
                 } elseif($admin_rights == USERMANAGE_USER) {
                         $_SESSION['is_usermanage_user'] = 1;
@@ -779,7 +779,7 @@ function login($user_info_array, $posted_uname, $pass)
 
 
 /****************************************************************
-Authenticate user via alternate defined methods 
+Authenticate user via alternate defined methods
 ****************************************************************/
 function alt_login($user_info_array, $uname, $pass)
 {
@@ -814,10 +814,10 @@ function alt_login($user_info_array, $uname, $pass)
                         $is_active = check_activity($user_info_array['user_id']);
                          // check for admin privileges
                         $admin_rights = get_admin_rights($user_info_array['user_id']);
-                        if($admin_rights == ADMIN_USER) { 
-                                $is_active = 1;   // admin user is always active             
+                        if($admin_rights == ADMIN_USER) {
+                                $is_active = 1;   // admin user is always active
                                 $_SESSION['is_admin'] = 1;
-                        } elseif($admin_rights == POWER_USER) {  
+                        } elseif($admin_rights == POWER_USER) {
                                 $_SESSION['is_power_user'] = 1;
                         } elseif($admin_rights == USERMANAGE_USER) {
                                 $_SESSION['is_usermanage_user'] = 1;
@@ -849,7 +849,7 @@ function alt_login($user_info_array, $uname, $pass)
                         ;
                 } else {
                         $tool_content .= $langLoginFatalError . "<br />";
-                }	
+                }
         } else {
                 $warning .= "<br>$langInvalidAuth<br>";
         }
@@ -897,10 +897,10 @@ function shib_cas_login($type)
 	} else {
 		$sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
 	}
-	$r = db_query($sqlLogin);      
+	$r = db_query($sqlLogin);
 
 	if (mysql_num_rows($r) > 0) {
-		// if user found 
+		// if user found
 		$info = mysql_fetch_assoc($r);
 		if ($info['password'] != $type) {
 			// has different auth method - redirect to home page
@@ -914,7 +914,7 @@ function shib_cas_login($type)
 			$_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
 			redirect_to_home_page();
 		} else {
-			// don't force email address from CAS/Shibboleth. 
+			// don't force email address from CAS/Shibboleth.
 			// user might prefer a different one
 			if (!empty($info['email'])) {
 				$email = $info['email'];
@@ -929,11 +929,11 @@ function shib_cas_login($type)
 							WHERE user_id = $info[user_id]");
 			// check for admin privileges
 			$admin_rights = get_admin_rights($info['user_id']);
-			if($admin_rights == ADMIN_USER) { 
-				$is_active = 1;   // admin user is always active             
+			if($admin_rights == ADMIN_USER) {
+				$is_active = 1;   // admin user is always active
 				$_SESSION['is_admin'] = 1;
 				$is_admin = 1;
-			} elseif($admin_rights == POWER_USER) {  
+			} elseif($admin_rights == POWER_USER) {
 				$_SESSION['is_power_user'] = 1;
 				$is_power_user = 1;
 			} elseif ($admin_rights == USERMANAGE_USER) {
@@ -943,7 +943,7 @@ function shib_cas_login($type)
                                 $_SESSION['is_departmentmanage_user'] = 1;
                                 $is_departmentmanage_user = 1;
                         }
-			$_SESSION['uid'] = $info['user_id'];                        
+			$_SESSION['uid'] = $info['user_id'];
 			//$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
 			$userPerso = $info['perso'];
 			if (isset($_SESSION['langswitch'])) {
@@ -951,7 +951,7 @@ function shib_cas_login($type)
 			} else {
 				$language = $info['lang'];
 			}
-		}	
+		}
 	} elseif ($autoregister and !get_config('am_required')) {
 			// else create him automatically
 			$registered_at = time();
@@ -998,9 +998,9 @@ function shib_cas_login($type)
 	if ($userPerso == 'no') {
                 $_SESSION['user_perso_active'] = true;
         }
-	
-	db_query("INSERT INTO loginout 
-					(loginout.id_user, loginout.ip, loginout.when, loginout.action) 
+
+	db_query("INSERT INTO loginout
+					(loginout.id_user, loginout.ip, loginout.when, loginout.action)
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 
 	if (get_config('email_verification_required') and
@@ -1013,7 +1013,7 @@ function shib_cas_login($type)
 
 /**
  * Check passwords entered in password change form for validity
- * 
+ *
  * @param string $pass1 - First password field
  * @param string $pass2 - Second password field
  * @return array - Array of error messages, empty if no errors encountered

@@ -66,7 +66,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'ekkert';
 
-$text['capacity']       = 'Heildarstærð'; 
+$text['capacity']       = 'Heildarstærð';
 
 $text['template']       = 'Template';
 $text['language']       = 'Tungumál';

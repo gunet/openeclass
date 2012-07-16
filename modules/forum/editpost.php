@@ -25,7 +25,7 @@ $require_help = FALSE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'config.php';
-require_once 'functions.php'; 
+require_once 'functions.php';
 
 if (isset($_GET['forum'])) {
         $forum_id = intval($_GET['forum']);
@@ -39,7 +39,7 @@ if (isset($_GET['post_id'])) {
 if (isset($_POST['submit'])) {
         $message = $_POST['message'];
         if (isset($_POST['subject'])) {
-                $subject = $_POST['subject'];	
+                $subject = $_POST['subject'];
         }
         $sql = "SELECT * FROM forum_post WHERE id = $post_id AND forum_id = $forum_id";
         if (!$result = db_query($sql)) {
@@ -47,15 +47,15 @@ if (isset($_POST['submit'])) {
                 draw($tool_content, 2, null, $head_content);
                 exit();
         }
-        
+
         $myrow = mysql_fetch_array($result);
         $topic_id = $myrow['topic_id'];
-        $forum_id = $myrow['forum_id'];        
+        $forum_id = $myrow['forum_id'];
         $this_post_time = $myrow['post_time'];
         list($day, $time) = explode(' ', $myrow['post_time']);
         $date = date("Y-m-d H:i");
 
-        $row1 = mysql_fetch_row(db_query("SELECT name FROM forum 
+        $row1 = mysql_fetch_row(db_query("SELECT name FROM forum
                                                  WHERE forum_id=$forum_id AND
                                                        course_id = $course_id"));
         $forum_name = $row1[0];
@@ -68,9 +68,9 @@ if (isset($_POST['submit'])) {
         $navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langForums);
         $navigation[] = array ('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $name);
         $navigation[] = array ('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $title);
-                                
+
         $sql = "UPDATE forum_post SET post_text = " . autoquote(purify($message)) . "
-                        WHERE id = $post_id 
+                        WHERE id = $post_id
                         AND forum_id = $forum_id";
         if (!$result = db_query($sql)) {
                 $tool_content .= $langUnableUpdatePost;
@@ -80,9 +80,9 @@ if (isset($_POST['submit'])) {
         if (isset($subject)) {
                 $subject = strip_tags($subject);
         }
-        if (isset($subject) && (trim($subject) != '')) {			
+        if (isset($subject) && (trim($subject) != '')) {
                 $sql = "UPDATE forum_topic
-                        SET title = " . autoquote($subject) . " 
+                        SET title = " . autoquote($subject) . "
                         WHERE id = $topic_id
                                 AND forum_id = $forum_id";
                 if (!$result = db_query($sql)) {
@@ -114,13 +114,13 @@ if (isset($_POST['submit'])) {
         $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
         $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => $myrow['name']);
         $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => $myrow['title']);
-        
-        $sql = "SELECT p.post_text, p.post_time, t.title 
+
+        $sql = "SELECT p.post_text, p.post_time, t.title
                         FROM forum_post p, forum_topic t
-                        WHERE p.id = $post_id 
+                        WHERE p.id = $post_id
                         AND p.topic_id = t.id";
         $result = db_query($sql);
-        $myrow = mysql_fetch_array($result);        
+        $myrow = mysql_fetch_array($result);
         $message = $myrow["post_text"];
         $message = str_replace('{','&#123;',$message);
         // Special handling for </textarea> tags in the message, which can break the editing form..
@@ -138,7 +138,7 @@ if (isset($_POST['submit'])) {
         }
         $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />".
         rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
-        ."	
+        ."
         </td></tr>
         <tr><td class='right'>";
         $tool_content .= "<input class='Login' type='submit' name='submit' value='$langSubmit' />

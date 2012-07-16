@@ -44,9 +44,9 @@ function getNumberOfLinks($catid){
 
 function showlinksofcategory($catid)
 {
-        global $is_editor, $course_id, $urlview, $tool_content, 
+        global $is_editor, $course_id, $urlview, $tool_content,
                $urlServer, $course_code, $course_code, $themeimg,
-               $langLinkDelconfirm, $langDelete, $langUp, $langDown, 
+               $langLinkDelconfirm, $langDelete, $langUp, $langDown,
                $langModify, $langLinks, $langCategoryDelconfirm,
                $is_in_tinymce;
 
@@ -105,7 +105,7 @@ function showlinksofcategory($catid)
 
 function showcategoryadmintools($categoryid)
 {
-        global $urlview, $aantalcategories, $catcounter, $langDelete, 
+        global $urlview, $aantalcategories, $catcounter, $langDelete,
                $langModify, $langUp, $langDown, $langCatDel, $tool_content,
                $course_code, $themeimg;
 
@@ -165,7 +165,7 @@ function submit_link()
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link` $set_sql WHERE course_id = $course_id AND id = $id");
-                
+
                 $catlinkstatus = $langLinkMod;
                 $log_type = LOG_MODIFY;
         } else {
@@ -173,15 +173,15 @@ function submit_link()
                                       WHERE course_id = $course_id AND category = $selectcategory");
                 list($order) = mysql_fetch_row($q);
                 $order++;
-                db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");                
-                $id = mysql_insert_id();                
+                db_query("INSERT INTO `link` $set_sql, course_id = $course_id, `order` = $order");
+                $id = mysql_insert_id();
                 $catlinkstatus = $langLinkAdded;
                 $log_type = LOG_INSERT;
         }
         // find category name
-        list($category) = mysql_fetch_array(db_query("SELECT link_category.name FROM link, link_category 
-                                                        WHERE link.category = link_category.id 
-                                                        AND link.course_id = $course_id 
+        list($category) = mysql_fetch_array(db_query("SELECT link_category.name FROM link, link_category
+                                                        WHERE link.category = link_category.id
+                                                        AND link.course_id = $course_id
                                                         AND link.id = $id"));
         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
         Log::record($course_id, MODULE_ID_LINKS, $log_type,
@@ -219,7 +219,7 @@ function submit_category()
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE `link_category` $set_sql WHERE course_id = $course_id AND id = $id");
-                $catlinkstatus = $langCategoryModded;                
+                $catlinkstatus = $langCategoryModded;
                 $log_type = LOG_MODIFY;
         } else {
                 $q = db_query("SELECT MAX(`order`) FROM `link_category`

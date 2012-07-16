@@ -548,14 +548,14 @@ $langEBookContent = "<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
       <li><strong>correspond</strong> each uploaded file with the previous defined sections.</li>
       <li> define in each subsection the incremental number of each subsection in section<br />
 </li>
-    </ul>  
+    </ul>
 </li>
   <li>After that click in <strong>Submit</strong>. </li>
   <li>An informative message will be displayed.</li>
 </ol>
 <h2>&nbsp;&nbsp;E-Book browsing</h2>
 
-<p>Click in the desired E-Book name</p> 
+<p>Click in the desired E-Book name</p>
 
 <h2>&nbsp;&nbsp;Modify - Delete of E-Book</h2>
 <p>If you want to modify an E-Book click in icon <strong> Modify </strong>. <br />

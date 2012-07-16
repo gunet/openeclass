@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Chart composed of vertical bars.
      *
@@ -50,7 +50,7 @@
             }
             $this->plot->computeLayout();
         }
-        
+
         /**
          * Print the horizontal and veritcal axis.
          */
@@ -63,10 +63,10 @@
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
-            
+
             // Vertical axis
             for ($value = $minValue; $value <= $maxValue; $value += $stepValue) {
                 $y = $graphArea->y2 - ($value - $minValue) * ($graphArea->y2 - $graphArea->y1) / ($this->axis->displayDelta);
@@ -93,7 +93,7 @@
                 if ($i < $pointCount) {
                     $point = current($pointList);
                     next($pointList);
-    
+
                     $label = $point->getX();
 
                     $text->printDiagonal($img, $x + $columnWidth * 1 / 3, $graphArea->y2 + 10, $this->plot->getTextColor(), $label);
@@ -107,7 +107,7 @@
         protected function printBar() {
             // Get the data as a list of series for consistency
             $serieList = $this->getDataAsSerieList();
-            
+
             // Get graphical obects
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
@@ -146,7 +146,7 @@
                     next($pointList);
 
                     $value = $point->getY();
-                    
+
                     $ymin = $graphArea->y2 - ($value - $minValue) * ($graphArea->y2 - $graphArea->y1) / ($this->axis->displayDelta);
 
                     // Bar dimensions
@@ -163,7 +163,7 @@
                         $shadowColor = $barColorSet->currentShadowColor();
                         $barColorSet->next();
                     }
-                        
+
                     // Draw caption text on bar
                     if ($this->config->getShowPointCaption()) {
                         $text->printText($img, $x1 + $barWidth / 2 , $ymin - 5, $this->plot->getTextColor(), $value, $text->fontCondensed, $text->HORIZONTAL_CENTER_ALIGN | $text->VERTICAL_BOTTOM_ALIGN);
@@ -179,23 +179,23 @@
                 }
             }
         }
-        
+
         /**
          * Renders the caption.
          */
         protected function printCaption() {
             // Get the list of labels
             $labelList = $this->dataSet->getTitleList();
-            
+
             // Create the caption
             $caption = new Caption();
             $caption->setPlot($this->plot);
             $caption->setLabelList($labelList);
-            
+
             $palette = $this->plot->getPalette();
             $barColorSet = $palette->barColorSet;
             $caption->setColorSet($barColorSet);
-            
+
             // Render the caption
             $caption->render();
         }
@@ -208,7 +208,7 @@
         public function render($fileName = null) {
             // Check the data model
             $this->checkDataModel();
-            
+
             $this->bound->computeBound($this->dataSet);
             $this->computeAxis();
             $this->computeLayout();

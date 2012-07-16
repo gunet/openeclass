@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
                 }
                 $line = strtok("\n");
         }
-        
+
         if (count($not_found)) {
             $tool_content .= "<p class='alert1'>$langUsersNotExist<br>";
             foreach ($not_found as $uname) {
@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
 $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
            <legend>$langUsersData</legend>
-           <table width='100%' class='tbl'> 
+           <table width='100%' class='tbl'>
                <tr>
                    <td><input type='radio' name='type' value='uname' checked>&nbsp;$langUsername<br>
                        <input type='radio' name='type' value='am'>&nbsp;$langAm

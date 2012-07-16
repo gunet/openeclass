@@ -22,19 +22,19 @@
 	lib.diff.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: lib.diff Revision: 1.12.2.2
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -57,19 +57,19 @@
     {
         $oldArr = str_split_on_new_line( $old );
         $newArr = str_split_on_new_line( $new );
-         
+
         $oldCount = count ( $oldArr );
         $newCount = count ( $newArr );
-         
+
         $max = max( $oldCount, $newCount );
-         
+
         //get added and deleted lines
-         
+
         $deleted = array_diff_assoc( $oldArr, $newArr );
         $added = array_diff_assoc( $newArr, $oldArr );
-         
+
         $moved = array();
-         
+
         foreach ( $added as $key => $candidate )
         {
             foreach ( $deleted as $index => $content )
@@ -83,9 +83,9 @@
                 }
             }
         }
-         
+
         $output = '';
-         
+
         for ( $i = 0; $i < $max; $i++ )
         {
             // line changed
@@ -119,7 +119,7 @@
                 // skip
             }
         }
-         
+
         return $output;
     }
 
@@ -129,7 +129,7 @@
     function str_split_on_new_line( $str )
     {
         $content = array();
-         
+
         if ( strpos( $str, "\r\n" ) != false )
         {
             $content = explode("\r\n", $str );
@@ -146,10 +146,10 @@
         {
             $content[] = $str;
         }
-         
+
         return $content;
     }
-    
+
     /**
      * Default and prototype format line function
      * @param int line line number
@@ -213,7 +213,7 @@
         {
             $value = '&nbsp;';
         }
-         
+
         switch ( $type )
         {
             case DIFF_EQUAL:
@@ -221,7 +221,7 @@
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;=</td><td><span class="diffEqual" >'
                     . q($value) . '</span></td></tr>' . "\n"
                     ;
-                 
+
                 break;
             }
             case DIFF_MOVED:
@@ -229,7 +229,7 @@
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;M</td><td><span class="diffMoved" >'
                     . q($value) . '</span></td></tr>' . "\n"
                     ;
-                 
+
                 break;
             }
             case DIFF_ADDED:
@@ -237,7 +237,7 @@
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;+</td><td><span class="diffAdded" >'
                     . q($value) . '</span></td></tr>' . "\n"
                     ;
-                 
+
                 break;
             }
             case DIFF_DELETED:
@@ -245,12 +245,12 @@
                 return '<tr><td>' . $line. '&nbsp;:&nbsp;' . '&nbsp;-</td><td><span class="diffDeleted" >'
                     . q($value) . '</span></td></tr>' . "\n"
                     ;
-                    
+
                 break;
             }
         }
     }
-     
+
     if (! function_exists('array_diff_assoc') )
     {
         /**
@@ -271,7 +271,7 @@
                 trigger_error('Wrong parameter count for array_diff_assoc()', E_USER_WARNING );
                 return;
             }
-             
+
             // Check arrays
             for ($i = 0; $i < $count; $i++ )
             {
@@ -281,11 +281,11 @@
                     return;
                 }
             }
-             
+
             // Get the comparison array
             $array_comp = array_shift($args );
             --$count;
-             
+
             // Traverse values of the first array
             foreach ($array_comp as $key => $value )
             {
@@ -297,13 +297,13 @@
                     {
                         if ((string) $key === (string)$comp_key && (string) $value === (string) $comp_value )
                         {
-                             
+
                             unset($array_comp[$key] );
                         }
                     }
                 }
             }
-             
+
             return $array_comp;
         }
     }

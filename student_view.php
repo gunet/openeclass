@@ -14,7 +14,7 @@ if ((isset($_SESSION['statut']) and $_SESSION['statut'] == 1) or $is_editor) {
         $_SESSION['saved_statut'] = $_SESSION['statut'];
         $_SESSION['statut'] = 5;
         $_SESSION['saved_editor'] = $is_editor;
-} elseif (isset($_SESSION['saved_statut'])) {    
+} elseif (isset($_SESSION['saved_statut'])) {
         $_SESSION['statut'] = $_SESSION['saved_statut'];
         unset($_SESSION['saved_statut']);
         unset($_SESSION['saved_editor']);

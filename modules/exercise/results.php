@@ -22,7 +22,7 @@
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
-$TBL_ANSWER = 'exercise_answer'; 
+$TBL_ANSWER = 'exercise_answer';
 
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -47,7 +47,7 @@ if(!isset($_SESSION['objExercise'][$exerciseId])) {
 	$objExercise = new Exercise();
 	// if the specified exercise doesn't exist or is disabled
 	if(!$objExercise->read($exerciseId) && (!$is_editor)) {
-		$tool_content .= "<p>$langExerciseNotFound</p>";	
+		$tool_content .= "<p>$langExerciseNotFound</p>";
 		draw($tool_content, 2);
 		exit();
 	}
@@ -60,7 +60,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-	
+
 $tool_content .= "
     <table class=\"tbl_border\" width=\"100%\">
     <tr>
@@ -79,10 +79,10 @@ while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
 	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'");
 	$theStudent = mysql_fetch_array($StudentName);
-	
+
 	$sql2="SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
 		TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
-		AS time_duration, total_score, total_weighting 
+		AS time_duration, total_score, total_weighting
 		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
@@ -102,7 +102,7 @@ while($row=mysql_fetch_array($result)) {
       <th width='150' class='center'>".$langExerciseDuration."</td>
       <th width='150' class='center'>".$langYourTotalScore2."</td>
     </tr>";
- 	
+
         $k=0;
         while($row2=mysql_fetch_array($result2)) {
                 if ($k%2 == 0) {
@@ -111,7 +111,7 @@ while($row=mysql_fetch_array($result)) {
                         $tool_content .= "<tr class='odd'>";
                 }
                 $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
-			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility 
+			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
 				$tool_content .= "<td class='center'>$langNotRecorded</td>";
 			} else {
 				$tool_content .= "<td class='center'>".format_time_duration($row2['time_duration'])."</td>";

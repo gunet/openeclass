@@ -60,7 +60,7 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
 //  set redirection link
-$returl = "navigation/viewModule.php?course=$course_code&amp;go=" . 
+$returl = "navigation/viewModule.php?course=$course_code&amp;go=" .
           ($is_editor ? 'learningPathAdmin': 'learningPath');
 
 if ($uid) {

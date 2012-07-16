@@ -68,7 +68,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'Ei yht&auml;&auml;n';
 
-$text['capacity']       = 'Kapasiteetti'; 
+$text['capacity']       = 'Kapasiteetti';
 
 $text['template']       = 'Malli';
 $text['language']       = 'Kieli';

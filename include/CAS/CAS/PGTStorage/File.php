@@ -115,15 +115,15 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
 		phpCAS::traceBegin();
 		// call the ancestor's constructor
 		parent::__construct($cas_parent);
-		
+
 		if (empty($path) ) $path = CAS_PGT_STORAGE_FILE_DEFAULT_PATH;
 		// check that the path is an absolute path
 		if (getenv("OS")=="Windows_NT"){
-			 
+
 			if (!preg_match('`^[a-zA-Z]:`', $path)) {
 				phpCAS::error('an absolute path is needed for PGT storage to file');
 			}
-			 
+
 		}
 		else
 		{
@@ -233,7 +233,7 @@ class CAS_PGTStorage_File extends CAS_PGTStorage_AbstractStorage
 				}
 				fclose($f);
 			}
-			
+
 			// delete the PGT file
 			@unlink($fname);
 		}else{

@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Object representing the bounds of a dataset (its minimal and maximal values) on its vertical axis.
      * The bounds are automatically calculated from a XYDataSet or XYSeriesDataSet.
@@ -35,17 +35,17 @@
          * Manually set upper bound, overrides the value calculated by computeBound().
          */
         private $upperBound = null;
-        
+
         /**
          * Computed min bound.
          */
         private $yMinValue = null;
-        
+
         /**
          * Computed max bound.
          */
         private $yMaxValue = null;
-        
+
         /**
          * Compute the boundaries on the axis.
          *
@@ -58,7 +58,7 @@
             if ($dataSet instanceof XYDataSet) {
                 $pointList = $dataSet->getPointList();
                 $dataSetEmpty = count($pointList) == 0;
-                
+
                 if (!$dataSetEmpty) {
                     // Process it as a serie
                     $serieList = array();
@@ -73,7 +73,7 @@
             } else {
                 die("Error: unknown dataset type");
             }
-            
+
             // If the dataset is empty, default some bounds
             $yMin = 0;
             $yMax = 1;
@@ -85,7 +85,7 @@
                 foreach ($serieList as $serie) {
                     foreach ($serie->getPointList() as $point) {
                         $y = $point->getY();
-                        
+
                         if (!isset($yMin)) {
                             $yMin = $y;
                             $yMax = $y;
@@ -93,7 +93,7 @@
                             if ($y < $yMin) {
                                 $yMin = $y;
                             }
-            
+
                             if ($y > $yMax) {
                                 $yMax = $y;
                             }

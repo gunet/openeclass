@@ -20,9 +20,9 @@
 
 /*
  * User mail verification
- * 
+ *
  * @author Kapetanakis Giannis <bilias@edu.physics.uoc.gr>
- * 
+ *
  * @abstract This component verifies user's email address according to the verification code
  *
  */

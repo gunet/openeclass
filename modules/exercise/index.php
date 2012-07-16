@@ -140,7 +140,7 @@ if(!$nbrExercises) {
 		if ($prevpage >= 0) {
 			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$prevpage'>&lt;&lt; $langPreviousPage</a>&nbsp;";
 		}
-		if ($nextpage < $maxpage) { 
+		if ($nextpage < $maxpage) {
 			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;page=$nextpage'>$langNextPage &gt;&gt;</a>";
 		}
 	}
@@ -148,7 +148,7 @@ if(!$nbrExercises) {
 	$tool_content .= "
 	    <table width='100%' class='tbl_alt'>
 	    <tr>";
-	
+
 	// shows the title bar only for the administrator
 	if($is_editor) {
 		$tool_content .= "
@@ -186,9 +186,9 @@ if(!$nbrExercises) {
 				$tool_content .= "<tr class='odd'>";
 			}
 		}
-		
+
 		$row['description'] = standard_text_escape($row['description']);
-	
+
 		// prof only
 		if($is_editor) {
 			if (!empty($row['description'])) {
@@ -200,12 +200,12 @@ if(!$nbrExercises) {
 				<img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href=\"exercise_submit.php?course=$course_code&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
-			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
                                                 WHERE eid = '$eid'", $mysqlMainDb));
-	
+
 			if ($NumOfResults[0]) {
 				$tool_content .= "<td align='center'><a href=\"results.php?course=$course_code&amp;exerciseId=".$row['id']."\">".
-				$langExerciseScores1."</a> | 
+				$langExerciseScores1."</a> |
 				<a href=\"csv.php?course=$course_code&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
 			} else {
 				$tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
@@ -216,10 +216,10 @@ if(!$nbrExercises) {
 			$tool_content .= "<td align = 'right'>
 			  <a href='admin.php?course=$course_code&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
 			  </a>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
+				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>
 			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
 			  </a>";
-		
+
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
@@ -258,7 +258,7 @@ if(!$nbrExercises) {
                                 </td><td>".$row['title']."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
                         }
                         $tool_content .= "<br />$row[description]</td><td class='smaller' align='center'>
-                                ".nice_format(date("Y-m-d H:i", strtotime($row['start_date'])), true)." / 
+                                ".nice_format(date("Y-m-d H:i", strtotime($row['start_date'])), true)." /
                                 ".nice_format(date("Y-m-d H:i", strtotime($row['end_date'])), true)."</td>";
                         // how many attempts we have.
                         $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
@@ -275,9 +275,9 @@ if(!$nbrExercises) {
                                 $tool_content .= "<td align='center'> - </td>";
                         }
                         // user last exercise score
-                        $r = mysql_fetch_array(db_query("SELECT total_score, total_weighting 
-                                        FROM exercise_user_record WHERE uid=$uid 
-                                        AND eid=$row[id] 
+                        $r = mysql_fetch_array(db_query("SELECT total_score, total_weighting
+                                        FROM exercise_user_record WHERE uid=$uid
+                                        AND eid=$row[id]
                                         ORDER BY eurid DESC LIMIT 1", $mysqlMainDb));
                         if (empty($r['total_score'])) {
                                 $tool_content .= "<td align='center'>&dash;</td>";

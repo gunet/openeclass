@@ -477,16 +477,16 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                   AND M.`course_id` = $course_id
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = db_query($modulessql);
-        
+
         $play_img = "<img src='$themeimg/$image_bullet' alt='' />";
-        
+
         if (mysql_num_rows($resultmodules) > 0) {
             $firstmodule = mysql_fetch_array($resultmodules, MYSQL_ASSOC);
             $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=".$list['learnPath_id']."&amp;module_id=".$firstmodule['module_id']."'>$play_img</a>";
         }
         else
             $play_button = $play_img;
-        
+
         $tool_content .= "
       <td width='20'>$play_button</td>
       <td><a href='learningPath.php?course=$course_code&amp;path_id=".$list['learnPath_id']."'>".htmlspecialchars($list['name'])."</a></td>\n";
@@ -611,7 +611,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // check if the learning path is of a Scorm import package and add right popup:
         if (is_dir($real)) {
-            $tool_content .=  
+            $tool_content .=
                    "<a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
@@ -619,7 +619,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
                   ."</td>\n";
 
         } else {
-            $tool_content .=  
+            $tool_content .=
                    "<a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
                   ."<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -38,7 +38,7 @@ $TOCurl = "../viewer_toc.php?course=$course_code";
    parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
   //-->
  </script>
-</head> 
+</head>
 <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
     <div id="content">
   <br /><br /><br />

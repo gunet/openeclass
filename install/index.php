@@ -224,7 +224,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
                   'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
-                  'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep', 
+                  'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
                   'disable_log_user_actions', 'restrict_teacher_owndep', 'lang');
 
 // step 2 license

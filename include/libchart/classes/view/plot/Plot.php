@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * The plot holds graphical attributes, and is responsible for computing the layout of the graph.
      * The layout is quite simple right now, with 4 areas laid out like that:
@@ -50,82 +50,82 @@
     class Plot {
         // Style properties
         protected $title;
-        
+
         /**
          * Location of the logo. Can be overriden to your personalized logo.
          */
         protected $logoFileName;
-        
+
         /**
          * Outer area, whose dimension is the same as the PNG returned.
          */
         protected $outputArea;
-        
+
         /**
          * Outer padding surrounding the whole image, everything outside is blank.
          */
         protected $outerPadding;
-        
+
         /**
          * Coordinates of the area inside the outer padding.
          */
         protected $imageArea;
-        
+
         /**
          * Fixed title height in pixels.
          */
         protected $titleHeight;
-        
+
         /**
          * Padding of the title area.
          */
         protected $titlePadding;
-        
+
         /**
          *  Coordinates of the title area.
          */
         protected $titleArea;
-        
+
         /**
          * True if the plot has a caption.
          */
         protected $hasCaption;
-        
+
         /**
          * Ratio of graph/caption in width.
          */
         protected $graphCaptionRatio;
-        
+
         /**
          * Padding of the graph area.
          */
         protected $graphPadding;
-        
+
         /**
          * Coordinates of the graph area.
          */
         protected $graphArea;
-        
+
         /**
          * Padding of the caption area.
          */
         protected $captionPadding;
-        
+
         /**
          * Coordinates of the caption area.
          */
         protected $captionArea;
-        
+
         /**
          * Text writer.
          */
         protected $text;
-        
+
         /**
          * Color palette.
          */
         protected $palette;
-        
+
         /**
          * GD image
          */
@@ -151,7 +151,7 @@
 
             $this->text = new Text();
             $this->palette = new Palette();
-            
+
             // Default layout
             $this->outputArea = new Rectangle(0, 0, $width - 1, $height - 1);
             $this->outerPadding = new Padding(5);
@@ -169,7 +169,7 @@
         private function computeImageArea() {
             $this->imageArea = $this->outputArea->getPaddedRectangle($this->outerPadding);
         }
-        
+
         /**
          * Compute the title area.
          */
@@ -183,7 +183,7 @@
             );
             $this->titleArea = $titleArea->getPaddedRectangle($this->titlePadding);
         }
-        
+
         /**
          * Compute the graph area.
          */
@@ -209,7 +209,7 @@
             }
             $this->graphArea = $graphArea->getPaddedRectangle($this->graphPadding);
         }
-        
+
         /**
          * Compute the caption area.
          */
@@ -225,7 +225,7 @@
             );
             $this->captionArea = $captionArea->getPaddedRectangle($this->captionPadding);
         }
-        
+
         /**
          * Compute the layout of all areas of the graph.
          */
@@ -237,13 +237,13 @@
                 $this->computeCaptionArea();
             }
         }
-        
+
         /**
          * Creates and initialize the image.
          */
         public function createImage() {
             $this->img = imagecreatetruecolor($this->width, $this->height);
-            
+
             $this->primitive = new Primitive($this->img);
 
             $this->backGroundColor = new Color(255, 255, 255);
@@ -251,7 +251,7 @@
 
             // White background
             imagefilledrectangle($this->img, 0, 0, $this->width - 1, $this->height - 1, $this->backGroundColor->getColor($this->img));
-            
+
             //imagerectangle($this->img, $this->imageArea->x1, $this->imageArea->y1, $this->imageArea->x2, $this->imageArea->y2, $this->palette->red->getColor($this->img));
         }
 

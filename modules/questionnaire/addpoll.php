@@ -297,7 +297,7 @@ function createPoll($questions, $question_types) {
 // ----------------------------------------
 function editPoll($pid, $questions, $question_types) {
 	global $pid, $tool_content, $course_id, $course_code, $langPollEdited, $langBack;
-	
+
 	$PollName = $_POST['PollName'];
 	$StartDate = $_POST['PollStart'];
 	$EndDate = $_POST['PollEnd'];
@@ -318,8 +318,8 @@ function editPoll($pid, $questions, $question_types) {
 ******************************************************************************/
 function add_multiple_choice_question($i, $text)
 {
-    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers, 
-           $langPollUnknown, $langPollFillText, $langPollNumAnswers, 
+    global $tool_content, $langQuestion, $langPollMoreAnswers, $langAnswers,
+           $langPollUnknown, $langPollFillText, $langPollNumAnswers,
            $langPollAddAnswer, $langPollMC, $themeimg;
 
 	$tool_content .= "
@@ -327,7 +327,7 @@ function add_multiple_choice_question($i, $text)
         <table width=\"100%\" class='tbl'>
 	<tr>
 	  <td width='150'><b>$langQuestion #" . ($i+1) ."</b>&nbsp;&nbsp;&nbsp;</td>
-          <td> 
+          <td>
 	    <input type='text' name='question[$i]' value='$text' size='52' />" ."
 	    <input type='hidden' name='question_type[$i]' value='1' />&nbsp;($langPollMC)
 	  </td>

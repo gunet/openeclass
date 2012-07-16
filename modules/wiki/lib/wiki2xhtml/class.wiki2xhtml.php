@@ -23,24 +23,24 @@
 	class.wiki2xhtml.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on DotClear version 3.1d licensed under GPL
 	      copyright (c) 2004 Olivier Meunier and contributors.
-	      
+
 	      original file: class.wiki2xhtml Revision: 1.1.2.2
-	      
+
 	DotClear contributors: Stephanie Booth
                            Mathieu Pillard
                            Christophe Bonijol
                            Jean-Charles Bagneris
                            Nicolas Chachereau
                            Jérôme Lipowicz
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 

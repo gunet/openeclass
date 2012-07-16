@@ -116,7 +116,7 @@ if (!register_posted_variables(array('search_terms' => false,
         if (!empty($search_terms_description)) {
                 db_query('CREATE TEMPORARY TABLE desc_search_tmp AS
                                 SELECT unit_id FROM unit_resources WHERE
-                                        (visible = 1 OR unit_resources.`order` < 0) AND 
+                                        (visible = 1 OR unit_resources.`order` < 0) AND
                                         MATCH (title, comments)
                                         AGAINST (' . quote($search_terms_description) . ' IN BOOLEAN MODE)');
                 db_query('INSERT INTO desc_search_tmp
@@ -132,7 +132,7 @@ if (!register_posted_variables(array('search_terms' => false,
                 $course_user_join = 'LEFT JOIN course_user ON course.id = course_user.course_id AND course_user.user_id = ' . $uid;
         }
 
-        
+
 	// visible = 2 or 1 for Public and Open courses
         $search = 'SELECT course.code, course.public_code, course.title, course.prof_names, course.keywords
                           FROM course ' . $course_user_join . '
@@ -202,13 +202,13 @@ if (!empty($search_terms_description)) {
 // search inside course
 // -----------------------------
 function search_in_course($search_terms, $course_id, $course_code) {
-	
+
 	global $mysqlMainDb;
-	
+
 	$search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
 	$query = " AGAINST ('".$search_terms."";
 	$query .= "' IN BOOLEAN MODE)";
-	
+
 	$sql = db_query("SELECT title, content, `date` FROM announcement
 				WHERE course_id = $course_id
 				AND visible = 1
@@ -249,7 +249,7 @@ function search_in_course($search_terms, $course_id, $course_code) {
 	while($res = mysql_fetch_array($sql)) {
 		$sql = db_query("SELECT topic_id AS topicid, post_text AS posttext
 					FROM forum_post
-					WHERE forum_id = $res[forum_id]						
+					WHERE forum_id = $res[forum_id]
 						AND MATCH (post_text)".$query);
 		if (mysql_num_rows($sql) > 0) {
 			return TRUE;
@@ -261,21 +261,21 @@ function search_in_course($search_terms, $course_id, $course_code) {
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM video 
-				WHERE course_id = $course_id 
+	$sql = db_query("SELECT * FROM video
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
-	$sql = db_query("SELECT * FROM videolinks 
-				WHERE course_id = $course_id 
+	$sql = db_query("SELECT * FROM videolinks
+				WHERE course_id = $course_id
 				AND MATCH (url, title, description)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;
 	}
 	$sql = db_query("SELECT id, title, comments FROM course_units
 				WHERE course_id = $course_id
-				AND visible = 1 
+				AND visible = 1
 				AND MATCH (title, comments)".$query);
 	if (mysql_num_rows($sql) > 0) {
 		return TRUE;

@@ -25,7 +25,7 @@ function list_videos()
         global $id, $tool_content, $urlServer,
                $langTitle, $langDescr, $langDate, $langChoice,
                $langAddModulesButton, $langNoVideo, $course_code,
-               $themeimg, $course_id, $mysqlMainDb; 
+               $themeimg, $course_id, $mysqlMainDb;
 
         $table_started = false;
         $count = 0;
@@ -45,8 +45,8 @@ function list_videos()
                                                  "\n  </tr>";
                                 $table_started = true;
                         }
-                        
-                        if ($table == 'video') 
+
+                        if ($table == 'video')
                         {
                             list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
 

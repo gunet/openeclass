@@ -91,7 +91,7 @@ if (isset($_GET['delete'])) {
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcement
                         SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
-			lang = ". autoquote($lang_admin_ann) .", 
+			lang = ". autoquote($lang_admin_ann) .",
 			`date` = NOW(), $start_sql, $end_sql
                         WHERE id = $id");
                 $message = $langAdminAnnModify;
@@ -127,7 +127,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }
 	$navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
 	$nameTools = $titleform;
-	
+
 	if (!isset($contentToModify)) {
 		$contentToModify = "";
 	}
@@ -172,11 +172,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $lang_jscalendar = langname_to_code($language);
         $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
         $head_content .= $jscalendar->get_load_files_code();
-        
+
         $datetoday = date("Y-n-j",time());
         function make_calendar($id, $label, $name, $checkbox, $datetoday) {
                 global $jscalendar, $langActivate;
-                
+
                 return "<tr><td><b>" . $label . ":</b><br />" .
                         $jscalendar->make_input_field(
                         array('showOthers' => true,
@@ -276,10 +276,10 @@ if ($displayAnnouncementList == true) {
 			$tool_content .= "<td width='60'>
 			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow[id]'>
 			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
-			</a> 
+			</a>
 			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick='return confirmation();'>
 			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
-			
+
 			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow[id]&amp;vis=$visibility'>
 			<img src='$themeimg/$icon' title='$langVisibility'/></a>";
 			if ($announcementNumber > 1) {

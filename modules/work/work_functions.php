@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* ========================================================================
  * Open eClass 3.0
@@ -40,7 +40,7 @@ function table_row($title, $content, $html = false)
 function work_secret($id)
 {
 	global $course_id, $workPath, $coursePath;
-	
+
 	$res = db_query("SELECT secret_directory FROM assignment WHERE course_id = ". intval($course_id) ." AND id = ". intval($id));
 	if ($res) {
 		$secret = mysql_fetch_row($res);
@@ -67,7 +67,7 @@ function work_secret($id)
 function is_group_assignment($id)
 {
 	global $course_id;
-        
+
 	$res = db_query("SELECT group_submissions FROM assignment WHERE course_id = $course_id AND id = '$id'");
 	if ($res) {
 		$row = mysql_fetch_row($res);
@@ -111,8 +111,8 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '')
 
 // Find submissions by a user (or the user's groups)
 function find_submissions($is_group_assignment, $uid, $id, $gids)
-{        
-        
+{
+
         if ($is_group_assignment AND count($gids)) {
                 $groups_sql = join(', ', array_keys($gids));
                 $res = db_query("SELECT id, uid, group_id, submission_date,
@@ -196,7 +196,7 @@ function was_graded($uid, $id, $ret_val = FALSE)
 function show_submission_details($id)
 {
 	global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code;
-        
+
 	$sub = mysql_fetch_array(
 		db_query("SELECT * FROM assignment_submit WHERE id = '$id'"));
 	if (!$sub) {
@@ -209,7 +209,7 @@ function show_submission_details($id)
 		$graded = FALSE;
 		$notice = $GLOBALS['langSubmitted'];
 	}
-	
+
 	if ($sub['uid'] != $uid) {
 		$notice .= "<br>$m[submitted_by_other_member] " .
 			"<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
@@ -219,7 +219,7 @@ function show_submission_details($id)
                         "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
                         "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>";
         }
-	
+
 	$tool_content .= "
         <fieldset>
         <legend>$m[SubmissionWorkInfo]</legend>
@@ -247,15 +247,15 @@ function show_submission_details($id)
         table_row($m['comments'], $sub['comments'], true);
 	$tool_content .= "
         </table>
-        </fieldset>";	
+        </fieldset>";
 }
 
 
 // Check if a file has been submitted by user uid or group gid
 // for assignment id. Returns 'user' if by user, 'group' if by group
 function was_submitted($uid, $gid, $id)
-{	
-	
+{
+
 	$q = db_query("SELECT uid, group_id
 			      FROM assignment_submit
 			      WHERE assignment_id = $id AND
@@ -269,7 +269,7 @@ function was_submitted($uid, $gid, $id)
 		} else {
 			return 'group';
 		}
-		
+
 	}
 }
 

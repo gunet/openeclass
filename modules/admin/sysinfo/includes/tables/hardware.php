@@ -21,7 +21,7 @@
 
 $sys = $sysinfo->cpu_info();
 
-$ar_buf = $sysinfo->pci(); 
+$ar_buf = $sysinfo->pci();
 
 if (count($ar_buf)) {
     for ($i=0;$i<sizeof($ar_buf);$i++) {
@@ -31,7 +31,7 @@ if (count($ar_buf)) {
     $pci_devices .= '<i>'. $text['none'] . '</i>';
 }
 
-$ar_buf = $sysinfo->ide(); 
+$ar_buf = $sysinfo->ide();
 
 ksort($ar_buf);
 
@@ -47,7 +47,7 @@ if (count($ar_buf)) {
     $ide_devices .= '<i>' . $text['none']. '</i>';
 }
 
-$ar_buf = $sysinfo->scsi(); 
+$ar_buf = $sysinfo->scsi();
 
 if (count($ar_buf)) {
     for ($i=0;$i<sizeof($ar_buf);$i++) {

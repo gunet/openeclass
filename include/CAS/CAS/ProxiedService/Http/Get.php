@@ -34,7 +34,7 @@ require_once(dirname(__FILE__).'/Abstract.php');
  * This class is used to make proxied service requests via the HTTP GET method.
  *
  * Usage Example:
- *		
+ *
  *			try {
  * 				$service = phpCAS::getProxiedService(PHPCAS_PROXIED_SERVICE_HTTP_GET);
  * 				$service->setUrl('http://www.example.com/path/');
@@ -44,14 +44,14 @@ require_once(dirname(__FILE__).'/Abstract.php');
  *				else
  *					// The service responded with an error code 404, 500, etc.
  *					throw new Exception('The service responded with an error.');
- *				
+ *
  *			} catch (CAS_ProxyTicketException $e) {
  *				if ($e->getCode() == PHPCAS_SERVICE_PT_FAILURE)
  *					return "Your login has timed out. You need to log in again.";
  *				else
  *					// Other proxy ticket errors are from bad request format (shouldn't happen)
  *					// or CAS server failure (unlikely) so lets just stop if we hit those.
- *					throw $e; 
+ *					throw $e;
  *			} catch (CAS_ProxiedService_Exception $e) {
  *				// Something prevented the service request from being sent or received.
  *				// We didn't even get a valid error response (404, 500, etc), so this
@@ -64,10 +64,10 @@ require_once(dirname(__FILE__).'/Abstract.php');
 class CAS_ProxiedService_Http_Get
 	extends CAS_ProxiedService_Http_Abstract
 {
-	
+
 	/**
 	 * Add any other parts of the request needed by concrete classes
-	 * 
+	 *
 	 * @param CAS_RequestInterface $request
 	 * @return void
 	 */
@@ -76,5 +76,5 @@ class CAS_ProxiedService_Http_Get
 		// only data.
 	}
 
-	
+
 }

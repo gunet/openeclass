@@ -107,16 +107,16 @@ if (isset($_POST["submit"])) {
         $fac = getfacfromfc($fc);
 	if (!$fac) { // if user does not belong to department
 		$tool_content .= "<p align='justify'>$langAddHereSomeCourses</p>";
-		
+
                 $tool_content .= "<table width='100%' class='tbl_border' id='t1'>";
-                
+
                 $initopen = $tree->buildJSTreeInitOpen();
-                
+
                 $head_content .= <<<hContent
 <script type="text/javascript">
 
 $(function() {
-        
+
     $( "#js-tree" ).jstree({
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
         "core" : {
@@ -142,10 +142,10 @@ $(function() {
                 }
             }
         },
-        "sort" : function (a, b) { 
+        "sort" : function (a, b) {
             priorityA = this._get_node(a).attr("tabindex");
             priorityB = this._get_node(b).attr("tabindex");
-            
+
             if (priorityA == priorityB)
                 return this.get_text(a) > this.get_text(b) ? 1 : -1;
             else
@@ -153,12 +153,12 @@ $(function() {
         }
     })
     .bind("select_node.jstree", function (event, data) { document.location.href='?fc=' + data.rslt.obj.attr("id").substring(2); });
-    
+
 });
 
 </script>
 hContent;
-                
+
                 $tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array('where' => 'AND node.allow_course = true', 'codesuffix' => true)) ."</div></td></tr>";
 
                 $tool_content .= "</table>";
@@ -179,9 +179,9 @@ hContent;
 				<tr>
 				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</th>
 				</tr></table><br />";
-                                
+
                                 $tool_content .= departmentChildren($fc, 'courses');
-                                
+
 				$tool_content .= "<br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
 			}
@@ -214,7 +214,7 @@ function getfcfromuid($uid) {
 }
 
 function getdepnumcourses($fac) {
-	$res = mysql_fetch_row(db_query("SELECT COUNT(code) FROM course, course_department 
+	$res = mysql_fetch_row(db_query("SELECT COUNT(code) FROM course, course_department
                 WHERE course.id = course_department.course AND course_department.department = $fac"));
 	return $res[0];
 }
@@ -230,7 +230,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $usercourses = db_query("SELECT course.code course_code, course.public_code public_code,
                                     course.id course_id, statut
                                 FROM course_user, course
-                                WHERE course_user.course_id = course.id                                  
+                                WHERE course_user.course_id = course.id
                                 AND user_id = ".$uid);
 
     while ($row = mysql_fetch_array($usercourses)) {
@@ -240,7 +240,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString .= "<table width='100%' class='tbl_border'>
                    <tr>
                    <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th></tr></table><br/>";
-    
+
     $retString .= departmentChildren($facid, 'courses');
 
 
@@ -254,7 +254,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                             course.password password
                        FROM course, course_department
                       WHERE course.id = course_department.course
-                        AND course_department.department = $facid 
+                        AND course_department.department = $facid
                         AND course.visible != ".COURSE_INACTIVE."
                    ORDER BY course.title, course.prof_names");
 
@@ -265,13 +265,13 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString .= "\n      <th width='220'>$langTeacher</th>";
     $retString .= "\n      <th width='30' align='center'>$langType</th>";
     $retString .= "\n    </tr>";
-                
+
     $k=0;
     while ($mycours = mysql_fetch_array($result)) {
         $cid = $mycours['cid'];
         $course_title = q($mycours['i']);
         $password = q($mycours['password']);
-        
+
         // link creation
         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
             $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
@@ -280,17 +280,17 @@ function expanded_faculte($fac_name, $facid, $uid) {
         } else {
             $codelink = $course_title;
         }
-        
-        
+
+
         if ($k%2 == 0) {
             $retString .= "\n    <tr class='even'>";
         } else {
             $retString .= "\n    <tr class='odd'>";
         }
-        
+
         $retString .= "<td align='center'>";
         $requirepassword = '';
-        
+
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]['statut'] != 1) { // display registered courses
                 // password needed
@@ -312,29 +312,29 @@ function expanded_faculte($fac_name, $facid, $uid) {
             } else {
                 $requirepassword = '';
             }
-            
+
             if ($mycours['visible'] == 0) {
                 $retString .= "<input type='checkbox' disabled />";
             }
-            
+
             if (($mycours['visible'] == 1) or ($mycours['visible'] == 2)) {
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' />";
             }
         }
-        
+
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
         $retString .= "</td>";
         $retString .= "\n      <td>$codelink (" . q($mycours['public_code']) .")$requirepassword</td>";
         $retString .= "\n      <td>". q($mycours['t']) ."</td>";
         $retString .= "\n      <td align='center'>";
-        
+
         // show the necessary access icon
         foreach ($icons as $visible => $image) {
             if ($visible == $mycours['visible']) {
                 $retString .= $image;
             }
         }
-        
+
         $retString .= "</td></tr>";
         $k++;
     } // END of while
@@ -346,7 +346,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 function collapsed_facultes_horiz($fc) {
 
 	global $langSelectFac, $tree, $head_content;
-        
+
 	$retString = "\n   <form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>\n";
 	$retString .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
 	$retString .=  "\n    <li>$langSelectFac:&nbsp;";

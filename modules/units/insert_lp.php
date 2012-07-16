@@ -50,7 +50,7 @@ function list_lps()
                                  "\n  </tr>";
 			$i = 0;
 			foreach ($lpinfo as $entry) {
-				if ($entry['visibility'] == 'HIDE') { 
+				if ($entry['visibility'] == 'HIDE') {
 					$vis = 'invisible';
 				} else {
 					if ($i%2 == 0) {

@@ -20,12 +20,12 @@
 
 /**
  * creates variable $mimetype containing all known mimetypes based on the file extension
- * This is included in the download script and is used to give hints to browser about what 
+ * This is included in the download script and is used to give hints to browser about what
  * mimetype is being used
- * 
+ *
  */
 
-$mimetype = array( 
+$mimetype = array(
 'ez' => 'application/andrew-inset'
 , 'hqx' => 'application/mac-binhex40'
 , 'cpt' => 'application/mac-compactpro'

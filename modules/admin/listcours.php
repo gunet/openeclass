@@ -131,7 +131,7 @@ else {
         $sql = db_query("SELECT code, title, prof_names, visible, id
                            FROM course
                        ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
-                
+
 	if ($fulllistsize > COURSES_PER_PAGE ) {
 		// Display navigation in pages
 		$tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
@@ -179,10 +179,10 @@ if ($key == 0) {
                                 break;
                         case COURSE_OPEN:
                                 $tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
-                                break;				
+                                break;
                         case COURSE_INACTIVE:
                                 $tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langCourseInactiveShort' />";
-                                break;				
+                                break;
                 }
                 $tool_content .= "</td><td class='smaller'>";
 

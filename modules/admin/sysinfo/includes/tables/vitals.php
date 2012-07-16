@@ -19,7 +19,7 @@
 //
 // $Id$
 
-$ar_buf = $sysinfo->loadavg(); 
+$ar_buf = $sysinfo->loadavg();
 
 for ($i=0;$i<3;$i++) {
     if ($ar_buf[$i] > 2) {

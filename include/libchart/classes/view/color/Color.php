@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Color.
      *
@@ -28,7 +28,7 @@
         private $blue;
         private $alpha;
         private $gdColor;
-    
+
         /**
          * Creates a new color
          *
@@ -42,10 +42,10 @@
             $this->green = (int) $green;
             $this->blue = (int) $blue;
             $this->alpha = (int) round($alpha * 127.0 / 255);
-            
+
             $this->gdColor = null;
         }
-        
+
         /**
          * Get GD color.
          *
@@ -60,11 +60,11 @@
                     $this->gdColor = imagecolorallocatealpha($img, $this->red, $this->green, $this->blue, $this->alpha);
                 }
             }
-            
+
             // Returns GD color
             return $this->gdColor;
         }
-        
+
         /**
          * Clip a color component in the interval [0..255]
          *
@@ -77,10 +77,10 @@
             } else if ($component > 255) {
                 $component = 255;
             }
-            
+
             return $component;
         }
-        
+
         /**
          * Return a new color, which is a shadow of this one.
          *
@@ -92,7 +92,7 @@
             $green = $this->clip($this->green * $shadowFactor);
             $blue = $this->clip($this->blue * $shadowFactor);
             $shadowColor = new Color($red, $green, $blue);
-            
+
             return $shadowColor;
         }
     }

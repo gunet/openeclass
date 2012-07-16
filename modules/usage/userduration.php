@@ -55,7 +55,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 
         header("Content-Type: text/csv; charset=$charset");
         header("Content-Disposition: attachment; filename=usersduration.csv");
-        
+
         echo join(';', array_map("csv_escape",
                                  array($langSurnameName, $langAm, $langGroup, $langDuration))),
              $crlf, $crlf;
@@ -65,7 +65,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 
         $nameTools = $langUserDuration;
         $navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
-        
+
         $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
@@ -76,12 +76,12 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
             <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
         </div>\n";
-        
+
         // display number of users
         $tool_content .= "
         <div class='info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
-                2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>          
+                2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
           </div>";
 
         $local_style = '

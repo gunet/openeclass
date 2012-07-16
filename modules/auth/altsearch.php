@@ -22,10 +22,10 @@
 	altsearch.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
   @Description: This script/file tries to authenticate the user, using
   his user/pass pair and the authentication method defined by the admin
-  
+
 ==============================================================================
 */
 
@@ -112,7 +112,7 @@ if (!isset($_SESSION['was_validated']) or
                                 redirect_to_home_page('secure/index_reg.php' . ($prof? '?p=1': ''));
                         }
                         $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
-                }	
+                }
 
                 if ($auth == 7) {
                         if (phpCAS::checkAuthentication()) {
@@ -164,7 +164,7 @@ if ($is_valid) {
                 $tool_content .= "<p class='caution'>$langFieldsMissing</p>";
         }
         $ok = $ok && !$_SESSION['was_validated']['uname_exists'];
-        $depid = intval($department);        
+        $depid = intval($department);
         if (isset($auth_user_info)) {
                 $prenom_form = $auth_user_info['firstname'];
                 $nom_form = $auth_user_info['lastname'];
@@ -179,7 +179,7 @@ if ($is_valid) {
         else {
                 $email = mb_strtolower(trim($email));
         }
- 
+
         if (!$ok) {
                 user_info_form();
                 draw($tool_content, 0, null, $head_content);
@@ -235,9 +235,9 @@ if ($is_valid) {
         $authmethods = array('2', '3', '4', '5');
         $lang = langname_to_code($language);
 
-        $q1 = "INSERT INTO `$mysqlMainDb`.user 
+        $q1 = "INSERT INTO `$mysqlMainDb`.user
                       SET nom = " . autoquote($nom_form) . ",
-                          prenom = " . autoquote($prenom_form) . ", 
+                          prenom = " . autoquote($prenom_form) . ",
                           username = " . autoquote($uname) . ",
                           password = '$password',
                           email = " . autoquote($email) . ",
@@ -491,7 +491,7 @@ function user_info_form()
            <tr>
              <th class='left'>$langLanguage</th>
              <td colspan='2'>" . lang_select_options('localize') . "</td>
-           </tr>	
+           </tr>
            <tr>
              <th class='left'>&nbsp;</th>
              <td colspan='2'><input type='submit' name='submit' value='$langRegistration' />

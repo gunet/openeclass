@@ -44,13 +44,13 @@
  */
 
 function latex_content($text) {
-     
+
     global $webDir, $urlAppend, $have_latex;
 
     if (!isset($have_latex) or !$have_latex) {
 			return $text;
 		}
-    
+
 		include_once("class.latexrender.php");
 
     preg_match_all("#\[tex\](.*?)\[/tex\]#si",$text,$tex_matches);

@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Base abstract class for rendering both horizontal and vertical bar charts.
      *
@@ -26,7 +26,7 @@
         protected $bound;
         protected $axis;
         protected $hasSeveralSerie;
-        
+
         /**
          * Creates a new bar chart.
          *
@@ -60,7 +60,7 @@
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
             $primitive = $this->plot->getPrimitive();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
 
@@ -108,7 +108,7 @@
             if (!$this->dataSet) {
                 die("Error: No dataset defined.");
             }
-            
+
             // Bar charts accept both XYDataSet and XYSeriesDataSet
             if ($this->dataSet instanceof XYDataSet) {
                 // The dataset contains only one serie
@@ -125,7 +125,7 @@
                     }
                     $lastPointCount = $pointCount;
                 }
-                
+
                 // The dataset contains several series
                 $this->hasSeveralSerie = true;
             } else {
@@ -147,10 +147,10 @@
                 $serieList = array();
                 array_push($serieList, $this->dataSet);
             }
-            
+
             return $serieList;
         }
-        
+
         /**
          * Return the first serie of the list, or the dataSet itself if there is no serie.
          *
@@ -167,10 +167,10 @@
             } else if ($this->dataSet instanceof XYDataSet) {
                 $pointList = $this->dataSet->getPointList();
             }
-            
+
             return $pointList;
         }
-        
+
         /**
          * Retourns the bound.
          *

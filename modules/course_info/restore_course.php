@@ -78,9 +78,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                         'course_desc' => true,
                                         'course_vis' => true,
                                         'course_prof' => true), 'all', 'autounquote');
-        
+
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
-        
+
         $r = $restoreThis . '/html';
 	list($new_course_code, $course_id) = create_course($course_code, $course_lang, $course_title,
                 $course_desc, $departments, $course_vis, $course_prof);
@@ -131,7 +131,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 map_db_field('dropbox_person', 'personId', $userid_map);
                 map_db_field('dropbox_post', 'recipientId', $userid_map);
         }
-        
+
         if (!isset($eclass_version)) {
                 // if we come from older versions, do all upgrades
                 upgrade_course($new_course_code, $course_lang);
@@ -163,7 +163,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         convert_description_to_units($new_course_code, $course_id);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
-        
+
         if (file_exists("$restoreThis/cours")) {
                 // New-style backup - restore intividual tables
 
@@ -293,8 +293,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     $videolinks_map  = restore_table($restoreThis, 'videolinks',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
-                if (file_exists("$restoreThis/dropbox_file") && 
-                    file_exists("$restoreThis/dropbox_person") && 
+                if (file_exists("$restoreThis/dropbox_file") &&
+                    file_exists("$restoreThis/dropbox_person") &&
                     file_exists("$restoreThis/dropbox_post"))
                 {
                     $dropbox_map = restore_table($restoreThis, 'dropbox_file',
@@ -335,7 +335,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     // update parent
                     foreach ($lp_rel_learnPath_module_map as $key => $value) {
                         $result = db_query("UPDATE `$mysqlMainDb`.lp_rel_learnPath_module SET `parent` = $value
-                                					WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id) 
+                                					WHERE `learnPath_id` IN (SELECT learnPath_id FROM `$mysqlMainDb`.lp_learnPath WHERE course_id = $course_id)
                                 					AND `parent` = $key");
                     }
                     restore_table($restoreThis, 'lp_user_module_progress',
@@ -401,7 +401,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                              'assignment_id' => $assignments_map,
                                              'group_id' => $group_map)));
                 }
-                if (file_exists("$restoreThis/agenda")) 
+                if (file_exists("$restoreThis/agenda"))
                 {
                     restore_table($restoreThis, 'agenda',
                         array('delete' => array('id'),
@@ -423,11 +423,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     $question_map = restore_table($restoreThis, 'question',
                         array('set' => array('course_id' => $course_id),
                               'return_mapping' => 'id'));
-                    
+
                     list($answer_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.answer"));
                     if (!$answer_offset)
                         $answer_offset = 0;
-                    
+
                     restore_table($restoreThis, 'answer',
                         array('map_function' => 'offset_map_function',
                               'map_function_data' => array('id', $answer_offset),
@@ -435,13 +435,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     restore_table($restoreThis, 'exercise_question',
                         array('map' => array('question_id' => $question_map,
                                              'exercise_id' => $exercise_map)));
-                    
+
                     $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
-                                WHERE module.startAsset_id = asset.asset_id 
+                                WHERE module.startAsset_id = asset.asset_id
                                 AND course_id = $course_id AND contentType = 'EXERCISE'";
                     $result = db_query($sql, $mysqlMainDb);
-                    
-                    while($row = mysql_fetch_array($result)) 
+
+                    while($row = mysql_fetch_array($result))
                     {
                         db_query("UPDATE `lp_asset` SET path = ". $exercise_map[$row['path']] ." WHERE asset_id = ". $row['asset_id'], $mysqlMainDb);
                     }
@@ -466,7 +466,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                            $assignments_map,
                                                            $exercise_map)));
         }
-        
+
 	removeDir($restoreThis);
         $tool_content .= "</p><br />
                           <center><p><a href='../admin/index.php'>$langBack</a></p></center>";
@@ -505,9 +505,9 @@ elseif (isset($_POST['do_restore'])) {
 // Displaying Form
 // -------------------------------------
 	$tool_content .= "
-        <br />   
+        <br />
    <fieldset>
-  <legend>$langFirstMethod</legend>   
+  <legend>$langFirstMethod</legend>
         <table width='100%' class='tbl'><tr>
           <td>$langRequest1
 	  <br /><br />
@@ -524,7 +524,7 @@ elseif (isset($_POST['do_restore'])) {
 
 
  <fieldset>
-  <legend>$langSecondMethod</legend> 	
+  <legend>$langSecondMethod</legend>
         <table width='100%' class='tbl'>
 
 	<tr>
@@ -590,9 +590,9 @@ function announcement($text, $date, $order, $title = '') {
 // insert course units into the main database
 function course_units($title, $comments, $visibility, $order, $resource_units) {
 	global $action, $course_id, $mysqlMainDb;
-	
+
 	if (!$action) return;
-	
+
 	db_query("INSERT INTO `$mysqlMainDb`.course_units
 		(title, comments, visibility, `order`, course_id)
 		VALUES (".
@@ -892,7 +892,7 @@ function unpack_zip_show_files($zipfile)
 	$destdir = $webDir.'courses/tmpUnzipping/'.$uid;
 	mkpath($destdir);
 	$zip = new pclZip($zipfile);
-	chdir($destdir);	
+	chdir($destdir);
 	$state = $zip->extract(PCLZIP_CB_PRE_EXTRACT, 'fix_old_backup_names');
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
                        <form action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -968,8 +968,8 @@ function restore_table($basedir, $table, $options)
                         foreach ($options['map'] as $field => &$map) {
                                 if (isset($map[$data[$field]])) {
                                         $data[$field] = $map[$data[$field]];
-                                } else { 	 
-                                        continue 2; 	 
+                                } else {
+                                        continue 2;
                                 }
                         }
                 }
@@ -1048,7 +1048,7 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                         $languages[$entry] = $entry;
                 }
 	}
-        
+
         list($js, $html) = $treeObj->buildCourseNodePicker();
 
         return "<p>$langInfo1</p>
@@ -1064,7 +1064,7 @@ function course_details_form($code, $title, $prof, $lang, $vis, $desc)
                        <td><input type='text' name='course_title' value='".q($title)."' size='50' /></td></tr>
                    <tr><th>$langCourseDescription:</th>
                        <td><input type='text' name='course_desc' value='".q($desc)."' size='50' /></td></tr>
-                   <tr><th>$langFaculty:</th><td>". 
+                   <tr><th>$langFaculty:</th><td>".
                    $html ."
                    </td></tr>
                    <tr><th>$langCourseVis:</th><td>".visibility_select($vis)."</td></tr>
@@ -1125,7 +1125,7 @@ function restore_users($course_id, $users, $cours_user)
                                                  '<i>' . q("$res[prenom] $res[nom]") . '</i>',
                                                  '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
                                          "</p>\n";
-                } elseif (isset($_POST['create_users'])) {                        
+                } elseif (isset($_POST['create_users'])) {
                         db_query("INSERT INTO `$mysqlMainDb`.user
                                          SET nom = ".quote($data['nom']).",
                                              prenom = ".quote($data['prenom']).",

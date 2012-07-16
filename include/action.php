@@ -6,10 +6,10 @@ class action {
 
     function record($module_id, $action_name = 'access') {
         global $uid, $course_id;
-                
+
         $action_type = new action_type();
         $action_type_id = $action_type->get_action_type_id($action_name);
-        $exit = $action_type->get_action_type_id('exit');        
+        $exit = $action_type->get_action_type_id('exit');
 
         ###ophelia -28-08-2006 : add duration to previous
         $sql = "SELECT id, TIME_TO_SEC(TIMEDIFF(NOW(), date_time)) AS diff, action_type_id
@@ -50,19 +50,19 @@ class action {
 #ophelia 2006-08-02: per month and per course
     function summarize() {
         global $course_id;
-                
+
         ## edw ftia3e tis hmeromhnies
         $now = date('Y-m-d H:i:s');
         $current_month = date('Y-m-01 00:00:00');
-        
-        $sql_0 = "SELECT min(date_time) as min_date 
-                FROM actions 
+
+        $sql_0 = "SELECT min(date_time) as min_date
+                FROM actions
                 WHERE course_id = $course_id";   //gia na doume
-        $sql_1 = "SELECT DISTINCT module_id 
-                FROM actions 
+        $sql_1 = "SELECT DISTINCT module_id
+                FROM actions
                 WHERE course_id = $course_id";  //arkei gia twra.
 
- 
+
         $result = db_query($sql_0);
         while ($row = mysql_fetch_assoc($result)) {
             $start_date = $row['min_date'];
@@ -81,18 +81,18 @@ class action {
                 #edw kanoume douleia gia ka8e module
                 $module_id = $row['module_id'];
 
-                $sql_2 = "SELECT COUNT(id) AS visits, sum(duration) AS total_dur FROM actions 
+                $sql_2 = "SELECT COUNT(id) AS visits, sum(duration) AS total_dur FROM actions
                              WHERE module_id = $module_id AND
                              course_id = $course_id AND
-                             date_time >= '$start_date' AND 
+                             date_time >= '$start_date' AND
                              date_time < '$end_date' ";
-                    
+
                 $result_2 = db_query($sql_2);
                 $row2 = mysql_fetch_assoc($result_2);
                 $visits = $row2['visits'];
-                $total_dur = intval($row2['total_dur']);                
+                $total_dur = intval($row2['total_dur']);
                 mysql_free_result($result_2);
-		
+
                 $sql_3 = "INSERT INTO actions_summary SET ".
                     " module_id = $module_id, ".
                     " course_id = $course_id, ".
@@ -102,7 +102,7 @@ class action {
                     " duration = $total_dur";
                 $result_3 = db_query($sql_3);
                 @mysql_free_result($result_3);
-            
+
                 $sql_4 = "DELETE FROM actions ".
                     " WHERE module_id = $module_id ".
                     " AND course_id = $course_id".
@@ -110,13 +110,13 @@ class action {
                     " date_time < '$end_date'";
                 $result_4 = db_query($sql_4);
                 @mysql_free_result($result_4);
-            
+
             }
             mysql_free_result($result);
-            
+
             #next month
             $start_date = $end_date;
-	    $stmp = $end_stmp;	
+	    $stmp = $end_stmp;
             $end_stmp += 31*24*60*60;  //end time + 1 month
             $end_date = date('Y-m-01 00:00:00', $end_stmp);
 	    $start_date = date('Y-m-01 00:00:00', $stmp);

@@ -17,7 +17,7 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
-// $Id: ro.php,v 1.0 6/9/01 12:41PM 
+// $Id: ro.php,v 1.0 6/9/01 12:41PM
 // Translated by Silviu Simen - ssimen@sympatico.ca
 
 $text['title']          = 'Informatii despre sistem';
@@ -67,7 +67,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'nici unul';
 
-$text['capacity']       = 'Capacitate'; 
+$text['capacity']       = 'Capacitate';
 
 $text['template']       = 'Model';
 $text['language']       = 'Limba';

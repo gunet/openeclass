@@ -53,7 +53,7 @@ if (isset($usedInSeveralExercises) or isset($_POST['modifyIn'])) {
 		// construction of the duplicated Answers
 		$objAnswer=new Answer($questionId);
 	}
-	
+
 	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
 	{
 		$correct=unserialize($correct);
@@ -97,7 +97,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 				$nbrGoodAnswers++;
 				// a good answer can't have a negative weighting
 				$weighting[$i]=abs($weighting[$i]);
-				// calculates the sum of answer weighting 
+				// calculates the sum of answer weighting
 				if($weighting[$i]) {
 					$questionWeighting+=$weighting[$i];
 				}
@@ -210,7 +210,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 					// removes the character ']'
 					$temp=substr($temp,$pos+1);
 				}
-			} 
+			}
 		}
 		else
 		{
@@ -273,12 +273,12 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 		for($i=1;$i <= $nbrAnswers;$i++) {
 			$comment[$i] = trim($comment[$i]);
 			$goodAnswer=($correct == $i)?1:0;
-			
+
 			if($goodAnswer) {
 				$nbrGoodAnswers++;
 				// a good answer can't have a negative weighting
 				$weighting[$i]=abs($weighting[$i]);
-				// calculates the sum of answer weighting 
+				// calculates the sum of answer weighting
 				if($weighting[$i]) {
 					$questionWeighting+=$weighting[$i];
 				}
@@ -347,7 +347,7 @@ if(isset($_GET['modifyAnswers'])) {
 				$reponse[$i]=$objAnswer->selectAnswer($i);
 				$comment[$i]=$objAnswer->selectComment($i);
 				$weighting[$i]=$objAnswer->selectWeighting($i);
-				
+
 				if($answerType == MULTIPLE_ANSWER)
 				{
 					$correct[$i]=$objAnswer->isCorrect($i);
@@ -497,18 +497,18 @@ if(isset($_GET['modifyAnswers'])) {
 			<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyAnswers=$_GET[modifyAnswers]'>
 			<input type='hidden' name='formSent' value='1' />
 			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
-		     
+
 			<fieldset>
 			<legend>$langQuestion</legend>
 			  <b>".nl2br($questionName)."</b>
 			</fieldset>
-		     
+
 			<fieldset>
 			<legend>$langQuestionAnswers</legend>
 			<table width='100%' class=\"tbl\">
 			<tr>
 			  <td colspan='5' >";
-			
+
 			if($answerType == UNIQUE_ANSWER) {
 				$tool_content .= "$langUniqueSelect";
 			}
@@ -561,14 +561,14 @@ if(isset($_GET['modifyAnswers'])) {
 							$tool_content .= " /></td>";
 						}
 					}
-				
+
 				$tool_content .= "
 				<td>". text_area("reponse[$i]", 7, 40, @$reponse[$i], "class=''") ."</td>
 				<td class='center'>". text_area("comment[$i]", 7, 25, @$comment[$i], "class=''") ."</td>
 				<td valign='top' class='center'><input type='text' name=\"weighting[".$i."]\" size=\"5\" value=\"";
 				if (isset($weighting[$i])) {
 					$tool_content .= $weighting[$i];
-				} else {	
+				} else {
 					$tool_content .= 0;
 				}
 				$tool_content .= "\" /></td></tr>";
@@ -601,9 +601,9 @@ if(isset($_GET['modifyAnswers'])) {
 			if(!isset($setWeighting)) {
 				$tempSW = "";
 			} else {
-				$tempSW = $setWeighting;	
+				$tempSW = $setWeighting;
 			}
-			
+
 			$tool_content .= "
 			<input type='hidden' name='formSent' value='1' />\n
 			<input type='hidden' name='setWeighting' value='$tempSW' />\n";
@@ -628,7 +628,7 @@ if(isset($_GET['modifyAnswers'])) {
 				  <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
 				  <textarea name='reponse' cols='70' rows='6'>";
 				if(!isset($submitAnswers) && empty($reponse)) {
-				      $tool_content .= $langDefaultTextInBlanks; 
+				      $tool_content .= $langDefaultTextInBlanks;
 				}
 				else {
 				      $tool_content .= htmlspecialchars($reponse);
@@ -696,12 +696,12 @@ if(isset($_GET['modifyAnswers'])) {
 		    <input type='hidden' name='formSent' value='1' />
 		    <input type='hidden' name='nbrOptions' value='$nbrOptions' />
 		    <input type='hidden' name='nbrMatches' value='$nbrMatches' />
-			
+
 		    <fieldset>
 		    <legend>$langQuestion</legend>
 		    $questionName
-		    </fieldset>	
-		    
+		    </fieldset>
+
 		    <fieldset>
 		    <legend>$langAnswer</legend>
 		    <table width='99%' class='tbl'>";
@@ -741,32 +741,32 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
       <td><div align='right'>$langColumnB</div></td>
       <td>$langQuestionWeighting</td>
     </tr>";
-    
+
 	for($j=1;$j <= $nbrMatches;$i++,$j++) {
 		$tool_content .= "
 		<tr>
 		  <td class=\"right\"><b>".$j."</b></td>
 		  <td><input type=\"text\" name=\"match[".$i."]\" size=\"58\" value=\"";
-		if(!isset($formSent) && !isset($match[$i])) 
-			$tool_content .= "${langDefaultMakeCorrespond.$j}"; 
-		else 
+		if(!isset($formSent) && !isset($match[$i]))
+			$tool_content .= "${langDefaultMakeCorrespond.$j}";
+		else
 			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
-	
+
 		$tool_content .= "\" /></td>
 		<td><div align='right'><select name=\"sel[".$i."]\">";
 		foreach($listeOptions as $key=>$val) {
 			$tool_content .= "<option value=\"".$key."\" ";
-			if((!isset($submitAnswers) && !isset($sel[$i]) 
-				&& $j == 2 && $val == 'B') || @$sel[$i] == $key) 
+			if((!isset($submitAnswers) && !isset($sel[$i])
+				&& $j == 2 && $val == 'B') || @$sel[$i] == $key)
 				$tool_content .= "selected=\"selected\"";
 				$tool_content .= ">".$val."</option>";
 		} // end foreach()
-	
+
 	$tool_content .= "</select></div></td>
 	  <td><input type=\"text\" size=\"3\" ".
 		"name=\"weighting[".$i."]\" value=\"";
 		if(!isset($submitAnswers) && !isset($weighting[$i])) {
-			$tool_content .= '5'; 
+			$tool_content .= '5';
 		}
 		else {
 			$tool_content .= $weighting[$i];
@@ -795,10 +795,10 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			  <td><input type=\"text\" ".
 				"name=\"option[".$key."]\" size=\"58\" value=\"";
 			if(!isset($formSent) && !isset($option[$key]))
-				$tool_content .= ${"langDefaultMatchingOpt$val"}; 
-			else 
+				$tool_content .= ${"langDefaultMatchingOpt$val"};
+			else
 				@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
-				
+
 			$tool_content .= "\" /></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
@@ -811,11 +811,11 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 					    &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
 			  </td>
 			</tr>
-			</table>	
+			</table>
 			</fieldset>
 			</form>";
 	} // end of MATCHING
-		
+
 		elseif ($answerType == TRUE_FALSE) {
 			$tool_content .= "
 			<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyAnswers=$_GET[modifyAnswers]'>
@@ -830,7 +830,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 				<div align='center'><img src='../../$picturePath/quiz-$questionId' /></div>";
 			}
 			$tool_content .="
-			</fieldset> 
+			</fieldset>
 			<fieldset>
 			 <legend>$langQuestionAnswers</legend>";
 			// if there is an error message
@@ -843,7 +843,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			  <td colspan='2'><b>$langAnswer</b></td>
 			  <td class='center'><b>$langComment</b></td>
 			  <td class='center'><b>$langQuestionWeighting</b></td>
-			</tr>";		
+			</tr>";
 			$tool_content .="
 			<tr>
 			  <td valign='top' width='30'>$langCorrect</td>
@@ -853,7 +853,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			} else {
 				$tool_content .= "></td>";
 			}
-			
+
 			$tool_content .= "
       <input type='hidden' name='reponse[1]' value='$langCorrect' />
       <td>".
@@ -862,10 +862,10 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
       <td valign='top'><input type='text' name='weighting[1]' size='5' value=\"";
 			if (isset($weighting[1])) {
 				$tool_content .= $weighting[1];
-			} else {	
+			} else {
 				$tool_content .= 0;
 			}
-			$tool_content .= "\" /></td></tr>";		
+			$tool_content .= "\" /></td></tr>";
 			$tool_content .="<tr>";
 			$tool_content .= "
 			<td valign='top'>$langFalse</td>
@@ -883,7 +883,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			<td valign='top'><input type='text' name='weighting[2]' size='5' value=\"";
 			if (isset($weighting[2])) {
 				$tool_content .= $weighting[2];
-			} else {	
+			} else {
 				$tool_content .= 0;
 			}
 			$tool_content .= "\" /></td></tr>";

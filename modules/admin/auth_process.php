@@ -62,7 +62,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
                                 'shibcn' => true, 'checkseparator' => true,
                                 'submit' => true, 'auth_instructions' => true,
                                 'test_username' => true),
-                          'all', 'autounquote'); 
+                          'all', 'autounquote');
 
 // unescapeSimple() preserves whitespace in password
 $test_password = isset($_POST['test_password'])? unescapeSimple($_POST['test_password']): '';
@@ -75,7 +75,7 @@ if ($auth == 7) {
                                'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
                                'cas_altauth', 'cas_logout', 'cas_ssout', 'auth_instructions') as $var) {
                        if (isset($_POST[$var])) {
-                               $_SESSION[$var] = $_POST[$var];    
+                               $_SESSION[$var] = $_POST[$var];
                        }
                 }
         } else {
@@ -149,7 +149,7 @@ if ($submit or !empty($_SESSION['cas_do'])) {
                                                   'ldap_login_attr' => $ldap_login_attr,
                                                   'ldap_login_attr2' => $ldap_login_attr2);
                                 break;
-                        case '5': 
+                        case '5':
                                 $settings = array('dbhost' => $dbhost,
                                                   'dbname' => $dbname,
                                                   'dbuser' => $dbuser,
@@ -251,7 +251,7 @@ else
 		header('Location: ../admin/auth.php');
 		exit;
 	}
-	// Display the form 
+	// Display the form
 	// we need to load auth=7 settings
 	if ( $auth != 6) {
 		$auth_data = get_auth_settings($auth);
@@ -264,7 +264,7 @@ else
 	  <input type='hidden' name='auth' value='".intval($auth)."' />
 	</th>
 	</tr>";
-	
+
 	switch($auth) {
 		case 2: require_once 'modules/auth/methods/pop3form.php';
 			break;
@@ -285,7 +285,7 @@ else
 		$auth = 7;
 		$tool_content .= "<p class='alert1'>$langCASnochange</p>";
 	}
-	if ($auth != 6 && $auth != 7) { 
+	if ($auth != 6 && $auth != 7) {
 		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".q(canonicalize_whitespace($test_username))."'></td></tr>

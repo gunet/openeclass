@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Caption.
      *
@@ -26,16 +26,16 @@
     class Caption {
         protected $labelBoxWidth;
         protected $labelBoxHeight;
-    
+
         // Plot
         protected $plot;
-        
+
         // Label list
         protected $labelList;
-        
+
         // Color set
         protected $colorSet;
-        
+
         /**
          * Constructor of Caption
          */
@@ -43,7 +43,7 @@
             $this->labelBoxWidth = 15;
             $this->labelBoxHeight = 15;
         }
-        
+
         /**
          * Render the caption.
          */
@@ -53,14 +53,14 @@
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
             $primitive = $this->plot->getPrimitive();
-            
+
             // Get the caption area
             $captionArea = $this->plot->getCaptionArea();
 
             // Get the pie color set
             $colorSet = $this->colorSet;
             $colorSet->reset();
-            
+
             $i = 0;
             foreach ($this->labelList as $label) {
                 // Get the next color
@@ -89,7 +89,7 @@
         public function setPlot($plot) {
             $this->plot = $plot;
         }
-        
+
         /**
          * Sets the label list.
          *
@@ -98,8 +98,8 @@
         public function setLabelList($labelList) {
             $this->labelList = $labelList;
         }
-        
-        
+
+
         /**
          * Sets the color set.
          *

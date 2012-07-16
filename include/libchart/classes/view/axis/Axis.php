@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Automatic axis boundaries and ticks calibration
      *
@@ -31,7 +31,7 @@
         private $displayMin;
         private $displayMax;
         private $tics;
-    
+
         /**
          * Creates a new axis formatter.
          *
@@ -66,11 +66,11 @@
             } else if ($posns > 2) {
                 $tics = 1;        // e.g. 0, 1, 2, ...
             } else if ($posns > 0.25) {
-                $tics = 2;        // e.g. 0, 2, 4, 6 
+                $tics = 2;        // e.g. 0, 2, 4, 6
             } else {
                 $tics = ceil($norm);
             }
-            
+
             $this->tics = $tics * $this->magnitude;
         }
 
@@ -84,16 +84,16 @@
             // Check for null distribution
             if ($this->delta == 0)
                 $this->delta = 1;
-            
+
             // Order of magnitude of range
             $this->magnitude = pow(10, floor(log10($this->delta)));
-            
+
             $this->quantizeTics();
 
             $this->displayMin = floor($this->min / $this->tics) * $this->tics;
             $this->displayMax = ceil($this->max / $this->tics) * $this->tics;
             $this->displayDelta = $this->displayMax - $this->displayMin;
-        
+
             // Check for null distribution
             if ($this->displayDelta == 0) {
                 $this->displayDelta = 1;

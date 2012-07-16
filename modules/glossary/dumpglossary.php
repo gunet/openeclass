@@ -33,7 +33,7 @@ if($is_editor) {
 
 	header("Content-Type: text/csv; charset=$charset");
 	header("Content-Disposition: attachment; filename=glossary.csv");
-	
+
 	echo join(';', array_map("csv_escape", array($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl))),
 	     $crlf;
 	$sql = db_query("SELECT term, definition, url FROM glossary
@@ -52,4 +52,4 @@ if($is_editor) {
 		$r++;
 	}
 	echo "$crlf";
-} 
+}

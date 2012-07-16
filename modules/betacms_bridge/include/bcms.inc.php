@@ -23,7 +23,7 @@
 	@last update: 10-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
-    @Description: 
+    @Description:
 
     @Comments:
 ==============================================================================
@@ -89,27 +89,27 @@ function getLessonsList($bcmsrepo) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	$lessonsArray = array();
-	
+
 	$cli = connectToRepo($bcmsrepo);
-	
+
 	if (isset($cli)) {
 		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-		
+
 		$criteria = java("org.betaconceptframework.betacms.repository.model.factory.CmsCriteriaFactory")->newContentObjectCriteria();
 		$criteria->addContentObjectTypeEqualsCriterion(ECLASS_LESSON_OBJECT);
 		$criteria->setCacheable(java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
-		
+
 		//Execute query
 		$cmsOutcome = $cli->getContentService()->searchContentObjects($criteria);
-		
+
 		$i = 0;
-		
+
 		foreach ($cmsOutcome->getResults() as $key => $cmsRankedOutcome) {
 			$co = $cmsRankedOutcome->getCmsRepositoryEntity();
 			// $contentObjectType = $co->getContentObjectType();
-			
+
 			$titlePR = $co->getCmsProperty(PRKEY_TITLE);
 			$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
 			$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
@@ -117,7 +117,7 @@ function getLessonsList($bcmsrepo) {
 			$authorsPR = $co->getCmsProperty(KEY_AUTHORS);
 			$projectPR = $co->getCmsProperty(KEY_PROJECT);
 			$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
-			
+
 			$lessonsArray[$i] = array(
 				KEY_ID => java_values($co->getId()),
 				KEY_TITLE => java_values($titlePR->getSimpleTypeValue()),
@@ -128,14 +128,14 @@ function getLessonsList($bcmsrepo) {
 				KEY_PROJECT => java_values($projectPR->getSimpleTypeValue()),
 				KEY_COMMENTS => java_values($commentsPR->getSimpleTypeValue())
 			);
-					
+
 			$i++;
 		}
 	}
 	else {
 		return null;
 	}
-	
+
 	return $lessonsArray;
 }
 
@@ -147,15 +147,15 @@ function getLesson($bcmsrepo, $objectId) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	$cli = connectToRepo($bcmsrepo);
-	
+
 	if (isset($cli)) {
 		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-		
-		$co = $cli->getContentService()->getContentObjectById($objectId, 
+
+		$co = $cli->getContentService()->getContentObjectById($objectId,
 			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
-			
+
 		$titlePR = $co->getCmsProperty(PRKEY_TITLE);
 		$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
 		$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
@@ -166,7 +166,7 @@ function getLesson($bcmsrepo, $objectId) {
 		$unitsPR = $co->getCmsPropertyList(KEY_UNITS);
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
 		$docsPR = $co->getCmsProperty(KEY_DOCUMENTFILES);
-		
+
 		$unitArray = array();
 		$unitsSize = 0;
 		if (!java_is_null($unitsPR) && $unitsPR->size() > 0) {
@@ -174,7 +174,7 @@ function getLesson($bcmsrepo, $objectId) {
 				$ccprop = $unitsPR->get($i);
 				$unitTitle = java_values($ccprop->getChildProperty(KEY_TITLE)->getSimpleTypeValue());
 				$unitDesc = java_values($ccprop->getChildProperty(KEY_DESCRIPTION)->getSimpleTypeValue());
-				
+
 				if (isset($unitTitle) && isset($unitDesc)) {
 					$unitscosPR = $ccprop->getChildProperty(KEY_SCORMFILES);
 					$unitscoArray = array();
@@ -193,7 +193,7 @@ function getLesson($bcmsrepo, $objectId) {
 							$unitscoindex++;
 						}
 					}
-					
+
 					$unitdocsPR = $ccprop->getChildProperty(KEY_DOCUMENTFILES);
 					$unitdocArray = array();
 					$unitdocindex = 0;
@@ -211,7 +211,7 @@ function getLesson($bcmsrepo, $objectId) {
 							$unitdocindex++;
 						}
 					}
-					
+
 					$textsPR = $ccprop->getChildProperty(KEY_TEXTS);
 					$texts = $textsPR->getSimpleTypeValues();
 					$unittextArray = array();
@@ -222,8 +222,8 @@ function getLesson($bcmsrepo, $objectId) {
 							$unittextindex++;
 						}
 					}
-					
-					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc, 
+
+					$ar = array(KEY_TITLE => $unitTitle, KEY_DESCRIPTION => $unitDesc,
 						KEY_SCORMFILES => $unitscoArray, KEY_SCORMFILES_SIZE => $unitscoindex,
 						KEY_DOCUMENTFILES => $unitdocArray, KEY_DOCUMENTFILES_SIZE => $unitdocindex,
 						KEY_TEXTS => $unittextArray, KEY_TEXTS_SIZE => $unittextindex);
@@ -232,7 +232,7 @@ function getLesson($bcmsrepo, $objectId) {
 				}
 			}
 		}
-		
+
 		$scoArray = array();
 		$scoindex = 0;
 		if (!java_is_null($scosPR)) {
@@ -249,7 +249,7 @@ function getLesson($bcmsrepo, $objectId) {
 				$scoindex++;
 			}
 		}
-		
+
 		$docArray = array();
 		$docindex = 0;
 		if (!java_is_null($docsPR)) {
@@ -266,7 +266,7 @@ function getLesson($bcmsrepo, $objectId) {
 				$docindex++;
 			}
 		}
-		
+
 		$retArray = array(
 			KEY_ID => java_values($co->getId()),
 			KEY_TITLE => java_values($titlePR->getSimpleTypeValue()),
@@ -283,7 +283,7 @@ function getLesson($bcmsrepo, $objectId) {
 			KEY_DOCUMENTFILES => $docArray,
 			KEY_DOCUMENTFILES_SIZE => $docindex
 		);
-		
+
 		return $retArray;
 	}
 	else {
@@ -299,17 +299,17 @@ function getLessonSco($bcmsrepo, $objectId, $scoId) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	$cli = connectToRepo($bcmsrepo);
-	
+
 	if (isset($cli)) {
 		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-		
-		$co = $cli->getContentService()->getContentObjectById($objectId, 
+
+		$co = $cli->getContentService()->getContentObjectById($objectId,
 			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
-			
+
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
-		
+
 		$scoindex = 0;
 		if (!java_is_null($scosPR)) {
 			$scos = $scosPR->getSimpleTypeValues();
@@ -317,10 +317,10 @@ function getLessonSco($bcmsrepo, $objectId, $scoId) {
 				if (!java_is_null($sco) && $scoId == $scoindex) {
 					$bp = $sco->getCmsProperty(KEY_CONTENT);
 					$bc = $bp->getSimpleTypeValue();
-					
+
 					return java_values($bc->getContent());
 				}
-				
+
 				$scoindex++;
 			}
 		}
@@ -338,17 +338,17 @@ function getLessonDoc($bcmsrepo, $objectId, $docId) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	$cli = connectToRepo($bcmsrepo);
-	
+
 	if (isset($cli)) {
 		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-		
-		$co = $cli->getContentService()->getContentObjectById($objectId, 
+
+		$co = $cli->getContentService()->getContentObjectById($objectId,
 			java("org.betaconceptframework.betacms.repository.api.model.query.CacheRegion")->FIVE_MINUTES);
-			
+
 		$docsPR = $co->getCmsProperty(KEY_DOCUMENTFILES);
-		
+
 		$docindex = 0;
 		if (!java_is_null($docsPR)) {
 			$docs = $docsPR->getSimpleTypeValues();
@@ -356,10 +356,10 @@ function getLessonDoc($bcmsrepo, $objectId, $docId) {
 				if (!java_is_null($doc) && $docId == $docindex) {
 					$bp = $doc->getCmsProperty(KEY_CONTENT);
 					$bc = $bp->getSimpleTypeValue();
-					
+
 					return java_values($bc->getContent());
 				}
-				
+
 				$docindex++;
 			}
 		}
@@ -377,17 +377,17 @@ function putLesson($bcmsrepo, $lessonArray) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	$cli = connectToRepo($bcmsrepo);
-	
+
 	if (isset($cli)) {
 		require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-		
+
 		$co = $cli->getCmsRepositoryEntityFactory()->newContentObjectForType(ECLASS_LESSON_OBJECT, "el");
-		
+
 		$owner = $cli->getRepositoryUserService()->getSystemRepositoryUser();
 		$co->setOwner($owner);
-		
+
 		$canBeReadByProperty = $co->getCmsProperty("accessibility.canBeReadBy");
 		$canBeReadByProperty->addSimpleTypeValue("ALL");
 		$canBeUpdatedByProperty = $co->getCmsProperty("accessibility.canBeUpdatedBy");
@@ -396,8 +396,8 @@ function putLesson($bcmsrepo, $lessonArray) {
 		$canBeDeletedByProperty->addSimpleTypeValue("NONE");
 		$canBeTaggedByProperty = $co->getCmsProperty("accessibility.canBeTaggedBy");
 		$canBeTaggedByProperty->addSimpleTypeValue("ALL");
-		
-		
+
+
 		$titlePR = $co->getCmsProperty(PRKEY_TITLE);
 		$lessonDescPR = $co->getCmsProperty(PRKEY_DESCRIPTION);
 		$keywordsPR = $co->getCmsProperty(KEY_KEYWORDS);
@@ -407,7 +407,7 @@ function putLesson($bcmsrepo, $lessonArray) {
 		$commentsPR = $co->getCmsProperty(KEY_COMMENTS);
 		$unitsPR = $co->getCmsPropertyList(KEY_UNITS);
 		$scosPR = $co->getCmsProperty(KEY_SCORMFILES);
-		
+
 		$titlePR->setSimpleTypeValue($lessonArray[KEY_TITLE]);
 		$lessonDescPR->setSimpleTypeValue($lessonArray[KEY_DESCRIPTION]);
 		$keywordsPR->setSimpleTypeValue($lessonArray[KEY_KEYWORDS]);
@@ -415,10 +415,10 @@ function putLesson($bcmsrepo, $lessonArray) {
 		$authorsPR->setSimpleTypeValue($lessonArray[KEY_AUTHORS]);
 		$projectPR->setSimpleTypeValue($lessonArray[KEY_PROJECT]);
 		$commentsPR->setSimpleTypeValue($lessonArray[KEY_COMMENTS]);
-		
-		
+
+
 		$co = $cli->getContentService()->saveContentObject($co, false);
-		
+
 		return true;
 	}
 	else {
@@ -434,12 +434,12 @@ function connectToRepo($bcmsrepo) {
 	$bcms_repo = $bcmsrepo[BCMS_REPO];
 	$bcms_user = $bcmsrepo[BCMS_USER];
 	$bcms_pass = $bcmsrepo[BCMS_PASS];
-	
+
 	require_once("http://".$bridge_host."/".$bridge_context."/java/Java.inc");
-	
+
 	try {
 		$cli = new Java("org.betaconceptframework.betacms.repository.client.BetaCmsRepositoryClient", $bcms_host);
-		
+
 		if (java_values($cli->getRepositoryService()->isRepositoryAvailable($bcms_repo))) {
 			$pass = new Java("java.lang.String", $bcms_pass);
 			$passCh = $pass->toCharArray();
@@ -452,7 +452,7 @@ function connectToRepo($bcmsrepo) {
 	} catch (JavaException $e) {
 		return null;
 	}
-	
+
 	return $cli;
 }
 
@@ -460,10 +460,10 @@ function connectToRepo($bcmsrepo) {
 function checkConnectivityToRepo($bcmsrepo) {
 	$bridge_host = $bcmsrepo[BRIDGE_HOST];
 	$bridge_context = $bcmsrepo[BRIDGE_CONTEXT];
-	
+
 	$url = "http://".$bridge_host."/".$bridge_context."/java/Java.inc";
 	$fp = @fopen($url, "r");
-	
+
 	if (isset($fp) && $fp != false) {
 		$contents = "";
 		while (!feof($fp)) {
@@ -473,14 +473,14 @@ function checkConnectivityToRepo($bcmsrepo) {
 		if (substr_count($contents, "HTTP Status 404") > 0)
 			return false;
 
-			
+
 		@include_once($url);
 		if (!class_exists("Java"))
 			return false;
-			
+
 		if (connectToRepo($bcmsrepo) == null)
 			return false;
-			
+
 		return true;
 	}
 	else
@@ -498,7 +498,7 @@ function doImportFromBetaCMSBeforeCourseCreation() {
 		$_POST['course_addon'] = $_SESSION[IMPORT_COURSE_ADDON];
 		$_SESSION[IMPORT_FLAG] = false;
 		$_SESSION[IMPORT_FLAG_INITIATED] = true;
-		
+
 		// Remove them from session for proper memory/space management
 		unset($_SESSION[IMPORT_INTITULE]);
 		unset($_SESSION[IMPORT_DESCRIPTION]);
@@ -509,36 +509,36 @@ function doImportFromBetaCMSBeforeCourseCreation() {
 
 function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webDir) {
 	$importMessages = "";
-	
+
 	if (isset($_SESSION[IMPORT_FLAG_INITIATED]) && $_SESSION[IMPORT_FLAG_INITIATED] == true) {
-		
+
 		$insertedScosArray = array();
 		$insertedDocsArray = array();
-		
+
 		if ($_SESSION[IMPORT_SCORMFILES_SIZE] > 0) {
 			foreach ($_SESSION[IMPORT_SCORMFILES] as $key => $sco) {
 				$fp = fopen("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME], "w");
 				fwrite($fp, getLessonSco($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
 				fclose($fp);
-				
+
 				// Do the learningPath Import
 				require_once("../learnPath/importLearningPathLib.php");
 				list($messages, $insertedScosArray[$sco[KEY_ID]]) = doImport($repertoire, $mysqlMainDb, $webDir, $sco[KEY_CALCULATEDSIZE], $sco[KEY_SOURCEFILENAME]);
 				$importMessages .= $messages;
 				unlink("../../courses/".$repertoire."/temp/".$sco[KEY_SOURCEFILENAME]);
 			}
-			
+
 			// Remove them from session for proper memory/space management
 			unset($_SESSION[IMPORT_SCORMFILES]);
 			unset($_SESSION[IMPORT_SCORMFILES_SIZE]);
 		}
-		
+
 		if ($_SESSION[IMPORT_DOCUMENTFILES_SIZE] > 0) {
 			foreach ($_SESSION[IMPORT_DOCUMENTFILES] as $key => $doc) {
 				$fp = fopen("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME], "w");
 				fwrite($fp, getLessonDoc($_SESSION[BETACMSREPO], $_SESSION[IMPORT_ID], $key));
 				fclose($fp);
-				
+
 				// register document into the database and write it in the correct place with the correct filename
 				require_once("../../include/lib/forcedownload.php");
 				require_once("../../include/lib/fileDisplayLib.inc.php");
@@ -564,7 +564,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				mysql_select_db($mysqlMainDb);
 				unlink("../../courses/".$repertoire."/temp/".$doc[KEY_SOURCEFILENAME]);
 			}
-			
+
 			// Remove them from session for proper memory/space management
 			unset($_SESSION[IMPORT_DOCUMENTFILES]);
 			unset($_SESSION[IMPORT_DOCUMENTFILES_SIZE]);
@@ -575,7 +575,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 			$result = db_query("SELECT course_id FROM cours WHERE cours.code='" . $repertoire ."'");
 			$theCourse = mysql_fetch_array($result);
 			$cid = $theCourse["course_id"];
-			
+
 			foreach ($_SESSION[IMPORT_UNITS] as $key => $unit) {
 				// find order
 				$result = db_query("SELECT MAX(`order`) FROM course_units WHERE course_id = " . $cid);
@@ -583,18 +583,18 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 				$order = $maxorder + 1;
 
 				// add unit
-				db_query("INSERT INTO course_units SET title = '" . $unit[KEY_TITLE] ."', 
+				db_query("INSERT INTO course_units SET title = '" . $unit[KEY_TITLE] ."',
 						comments = '" . $unit[KEY_DESCRIPTION] ."', `order` = '" . $order ."', course_id = '" . $cid ."'");
 				$unitId = mysql_insert_id();
 				list($unitResOrder) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$unitId"));
-				
+
 				// add unit texts
 				foreach ($unit[KEY_TEXTS] as $key => $text) {
 					$unitResOrder++;
-					db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='text', title='', 
+					db_query("INSERT INTO unit_resources SET unit_id=$unitId, type='text', title='',
 						comments=" . autoquote($text) . ", visibility='v', `order`=$unitResOrder, `date`=NOW(), res_id=0");
 				}
-				
+
 				// add unit scorms
 				foreach ($unit[KEY_SCORMFILES] as $key => $unitsco) {
 					if (isset($insertedScosArray[$unitsco[KEY_ID]])) {
@@ -613,7 +613,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 							$mysqlMainDb);
 					}
 				}
-				
+
 				// add unit documents
 				foreach ($unit[KEY_DOCUMENTFILES] as $key => $unitdoc) {
 					if (isset($insertedDocsArray[$unitdoc[KEY_ID]])) {
@@ -629,7 +629,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 					}
 				}
 			}
-			
+
 			// Remove them from session for proper memory/space management
 			unset($_SESSION[IMPORT_UNITS]);
 			unset($_SESSION[IMPORT_UNITS_SIZE]);
@@ -641,7 +641,7 @@ function doImportFromBetaCMSAfterCourseCreation($repertoire, $mysqlMainDb, $webD
 		unset($_SESSION[IMPORT_FLAG_INITIATED]);
 		unset($_SESSION[IMPORT_ID]);
 	}
-	
+
 	return $importMessages;
 }
 ?>

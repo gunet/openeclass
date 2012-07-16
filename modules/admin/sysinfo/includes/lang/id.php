@@ -69,7 +69,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'tidak ditemukan';
 
-$text['capacity']       = 'Kapasitas'; 
+$text['capacity']       = 'Kapasitas';
 
 $text['template']       = 'Template';
 $text['language']       = 'Bahasa';

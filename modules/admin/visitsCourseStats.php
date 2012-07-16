@@ -188,11 +188,11 @@ if (!extension_loaded('gd')) {
         $chart->setTitle($langVisits);
         if ($res1 !== false)
             mysql_free_result($res1);
-        
+
 } else {    //show chart for a specific course
         $cid = course_code_to_id($u_course_id);
         $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
-                WHERE course_id = $cid AND $date_where $date_group ORDER BY date_time ASC";        
+                WHERE course_id = $cid AND $date_where $date_group ORDER BY date_time ASC";
         $result = db_query($query);
 
         $chart = new VerticalBarChart();
@@ -200,11 +200,11 @@ if (!extension_loaded('gd')) {
 
         switch ($u_interval) {
             case "summary":
-                while ($row = mysql_fetch_assoc($result)) {                                            
+                while ($row = mysql_fetch_assoc($result)) {
                         $dataSet->addPoint(new Point($langSummary, $row['cnt']));
                         $chart->width += 25;
                         $chart->setDataSet($dataSet);
-                        $chart_content=1;                        
+                        $chart_content=1;
                 }
             break;
             case "daily":
@@ -231,7 +231,7 @@ if (!extension_loaded('gd')) {
                         $chart_content=1;
                 }
             break;
-            case "yearly":                    
+            case "yearly":
                 while ($row = mysql_fetch_assoc($result)) {
                         $dataSet->addPoint(new Point($row['year'], $row['cnt']));
                         $chart->width += 25;
@@ -255,13 +255,13 @@ if (!extension_loaded('gd')) {
         $tool_content .= '
         <table class="FormData" width="99%" align="left">
         <tbody>
-        <tr>        
+        <tr>
         <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
         </tr>
         </tbody>
-        </table>';        
-    } else {            
-        $tool_content .= "<div class='alert1'>$langNoStatistics</div>";        
+        </table>';
+    } else {
+        $tool_content .= "<div class='alert1'>$langNoStatistics</div>";
      }
 $tool_content .= '<br />';
 
@@ -300,7 +300,7 @@ $tool_content .= '<br />';
 
     if (isset($_GET['first'])) {
             $firstletter = $_GET['first'];
-            $qry = "SELECT code, title FROM course 
+            $qry = "SELECT code, title FROM course
                            WHERE LEFT(title,1) = '".mysql_real_escape_string($firstletter)."'";
     } else {
             $qry = "SELECT code, title FROM course";
@@ -309,10 +309,10 @@ $tool_content .= '<br />';
     $cours_opts = '<option value="-1">'.$langAllCourses."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
     while ($row = mysql_fetch_assoc($result)) {
-        if ($u_course_id == $row['code']) { 
-                $selected = 'selected';                
-        } else { 
-                $selected = ''; 
+        if ($u_course_id == $row['code']) {
+                $selected = 'selected';
+        } else {
+                $selected = '';
         }
         $cours_opts .= '<option '.$selected.' value="'.$row["code"].'">'.$row['title']."</option>\n";
     }

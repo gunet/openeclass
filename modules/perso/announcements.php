@@ -50,7 +50,7 @@ function getUserAnnouncements($param = null, $type) {
 	$lesson_title		= $param['lesson_titles'];
 	$lesson_code		= $param['lesson_code'];
 	$lesson_professor	= $param['lesson_professor'];
-	
+
 	$last_month = strftime('%Y %m %d', strtotime('now -1 month'));
 
 	$announce_query_new = createQueries(array(
@@ -166,7 +166,7 @@ function createQueries($queryParam){
                                 AND DATE_FORMAT(`date`,'%Y %m %d') >='$dateVar'
                                 AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
                                 AND course_module.visible = 1
-                                AND course_module.course_id = $lesson_id[$i]                                
+                                AND course_module.course_id = $lesson_id[$i]
                         ORDER BY announcement.`date` DESC";
 	}
 	return $announce_query;

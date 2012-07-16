@@ -25,7 +25,7 @@ $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'config.php';
-require_once 'functions.php'; 
+require_once 'functions.php';
 require_once 'modules/video/video_functions.php';
 
 load_modal_box();
@@ -40,7 +40,7 @@ function confirmation()
 }
 </script>
 ';
- 
+
 if (isset($_GET['all'])) {
         $paging = false;
 } else {
@@ -53,15 +53,15 @@ if (isset($_GET['forum'])) {
 if (isset($_GET['topic'])) {
 	$topic = intval($_GET['topic']);
 }
-$sql = "SELECT f.id, f.name FROM forum f, forum_topic t 
+$sql = "SELECT f.id, f.name FROM forum f, forum_topic t
             WHERE f.id = $forum
             AND t.id = $topic
             AND t.forum_id = f.id
             AND f.course_id = $course_id";
-	
+
 $result = db_query($sql);
-	
-if (!$myrow = mysql_fetch_array($result)) {        
+
+if (!$myrow = mysql_fetch_array($result)) {
         $tool_content .= "<p class='alert1'>$langErrorTopicSelect</p>";
 	draw($tool_content, 2);
 	exit();
@@ -72,14 +72,14 @@ $forum = $myrow['id'];
 if (isset($_GET['delete']) && $is_editor) {
 	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic, $forum);
-	
+
 	$result = db_query("SELECT post_time FROM forum_post
                             WHERE id = $post_id");
-     
+
 	$myrow = mysql_fetch_array($result);
 	$this_post_time = $myrow["post_time"];
 	list($day, $time) = explode(' ', $this_post_time);
-		
+
 	db_query("DELETE FROM forum_post WHERE id = $post_id");
 	db_query("UPDATE forum SET num_posts = num_posts - 1 WHERE id = $forum");
 	if ($last_post_in_thread == $this_post_time) {
@@ -96,13 +96,13 @@ if (isset($_GET['delete']) && $is_editor) {
 	$total = get_total_posts($topic, "topic");
 	if ($total == 0) {
 		db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
-		db_query("UPDATE forum SET num_topics = num_topics-1 
-                            WHERE id = $forum 
+		db_query("UPDATE forum SET num_topics = num_topics-1
+                            WHERE id = $forum
                             AND course_id = $cours_id");
 		header("Location: viewforum.php?course=$course_code&forum=$forum");
 	}
 	sync($forum, 'forum');
-	sync($topic, 'topic');	
+	sync($topic, 'topic');
 	$tool_content .= "<p class='success'>$langDeletedMessage</p>";
 }
 
@@ -115,7 +115,7 @@ if ($paging and $total > $posts_per_page) {
 	}
 	$pages = $times;
 }
-        
+
 $result = db_query("SELECT title FROM forum_topic WHERE id = $topic");
 $myrow = mysql_fetch_array($result);
 
@@ -131,12 +131,12 @@ if (isset($_SESSION['message'])) {
 	$tool_content .= $_SESSION['message'];
 	unset($_SESSION['message']);
 }
-$tool_content .= "<div id='operations_container'> 	
+$tool_content .= "<div id='operations_container'>
 	<ul id='opslist'>
 	<li><a href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum'>$langReply";
 
 $tool_content .= "</a></li></ul></div>";
-	
+
 if ($paging and $total > $posts_per_page ) {
 	$times = 1;
 	$tool_content .= "
@@ -176,7 +176,7 @@ if ($paging and $total > $posts_per_page ) {
 		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
-	}	
+	}
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
 		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
@@ -191,7 +191,7 @@ if ($paging and $total > $posts_per_page ) {
 	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
 	<td align='right'>";
-	if ($total > $posts_per_page) {	
+	if ($total > $posts_per_page) {
 		$tool_content .= "<span class='pages'>
 		&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
 		</span>";
@@ -213,13 +213,13 @@ if (isset($_GET['all'])) {
 } elseif (isset($_GET['start'])) {
 	$start = intval($_GET['start']);
 	$sql = "SELECT * FROM forum_post
-		WHERE topic_id = $topic		
+		WHERE topic_id = $topic
 		ORDER BY id
                 LIMIT $start, $posts_per_page";
 } else {
 	$sql = "SELECT * FROM forum_post
-		WHERE topic_id = '$topic'		
-		ORDER BY id 
+		WHERE topic_id = '$topic'
+		ORDER BY id
                 LIMIT $posts_per_page";
 }
 $result = db_query($sql);
@@ -246,7 +246,7 @@ do {
 	  </div>
 	  <br />$message<br />
 	</td>";
-	if ($is_editor) { 
+	if ($is_editor) {
 		$tool_content .= "<td width='40' valign='top'>
                     <a href='editpost.php?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>
                     <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
@@ -257,7 +257,7 @@ do {
 	$count++;
 } while($myrow = mysql_fetch_array($result));
 
-$sql = "UPDATE forum_topic SET num_views = num_views + 1 
+$sql = "UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = $topic AND forum_id = $forum";
 db_query($sql);
 
@@ -269,7 +269,7 @@ if ($paging and $total > $posts_per_page) {
 	<tr>
 	<td width='50%'>
 	<span class='row'><strong class='pagination'><span>";
-	
+
 	$last_page = $start - $posts_per_page;
 	$tool_content .= "$langPages: ";
 
@@ -292,7 +292,7 @@ if ($paging and $total > $posts_per_page) {
 		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
 	} else {
 		$start = 0;
-	}	
+	}
 	if (($start + $posts_per_page) < $total) {
 		$next_page = $start + $posts_per_page;
 		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
@@ -308,7 +308,7 @@ if ($paging and $total > $posts_per_page) {
 	</span></td>
 	<td align='right'>
 	<span class='pages'>";
-	if ($total > $posts_per_page) {	
+	if ($total > $posts_per_page) {
 		$tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
         } else {
                 $tool_content .= '&nbsp;';

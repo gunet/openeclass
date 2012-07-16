@@ -23,25 +23,25 @@
 	class.wiki2xhtmlarea.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: class.wiki2xhtmlarea Revision: 1.10.2.2
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
-     
+
 
     require_once dirname(__FILE__) . "/lib.javascript.php";
-    
+
     /**
      * Wiki2xhtml editor textarea
      */
@@ -49,7 +49,7 @@
     {
         var $content;
         var $attributeList;
-        
+
         /**
          * Constructor
          * @param string content of the area
@@ -66,19 +66,19 @@
             , $extraAttributes = null )
         {
             $this->setContent( $content );
-            
+
             $attributeList = array();
             $attributeList['name'] = $name;
             $attributeList['id'] = $name;
             $attributeList['cols'] = $cols;
             $attributeList['rows'] = $rows;
-            
+
             $this->attributeList = ( is_array( $extraAttributes ) )
                 ? array_merge( $attributeList, $extraAttributes )
                 : $attributeList
                 ;
         }
-        
+
         /**
          * Set area content
          * @param string content
@@ -87,7 +87,7 @@
         {
             $this->content = $content;
         }
-        
+
         /**
          * Get area content
          * @return string area content
@@ -96,7 +96,7 @@
         {
             return $this->content;
         }
-        
+
         /**
          * Get area wiki syntax toolbar
          * @return string toolbar javascript code
@@ -134,10 +134,10 @@
 		tb.draw('');
 	}
 	</script>\n";
-            
+
             return $toolbar;
         }
-        
+
         /**
          * paint (ie echo) area
          */
@@ -145,7 +145,7 @@
         {
             echo $this->toHTML();
         }
-        
+
         /**
          * get area html code for string inclusion
          * @return string area html code

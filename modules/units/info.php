@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 /*
-Units module	
+Units module
 */
 
 $require_current_course = true;
@@ -38,7 +38,7 @@ if (!$is_editor) { // check teacher status
 }
 
 if (isset($_GET['edit'])) { // display form for editing course unit
-        $id = intval($_GET['edit']); 
+        $id = intval($_GET['edit']);
         $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
         $cu = mysql_fetch_array($sql);
         $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";

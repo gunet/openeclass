@@ -28,7 +28,7 @@ include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
 include('exercise.lib.php');
- 
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
@@ -48,13 +48,13 @@ if (isset($_GET['exerciseId'])) {
 }
 
 if (isset($exerciseId)) {
-	// security check 
-	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE` 
+	// security check
+	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE`
 		WHERE course_id = $course_id AND id = '$exerciseId'", $mysqlMainDb));
 	if (($active['active'] == 0) and (!$is_editor)) {
 		header('Location: index.php?course='.$course_code);
 		exit();
-	} 
+	}
 }
 
 if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
@@ -67,7 +67,7 @@ if(isset($_POST['buttonCancel'])) {
 	header('Location: index.php?course='.$course_code);
 	exit();
 }
-	
+
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
 	$exerciseId   = isset($_POST['exerciseId'])   ? intval($_POST['exerciseId']) : '';
@@ -83,27 +83,27 @@ if (isset($_POST['formSent'])) {
 	} else {
 		$exerciseResult = array();
 	}
-	
-	if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) { 
+
+	if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
 		$exerciseTimeConstraint = $exerciseTimeConstraint * 60;
 		$exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
 		$_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
-	
+
 		if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
 			header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
 			exit();
-		} 
+		}
 	}
 	$recordEndDate = date("Y-m-d H:i:s", time());
 	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
-		mysql_select_db($mysqlMainDb); 
+		mysql_select_db($mysqlMainDb);
 		$sql = "INSERT INTO exercise_user_record (eid, uid, record_start_date, record_end_date, attempt)
 			VALUES ('$eid_temp', '$uid', '$recordStartDate', '$recordEndDate', 1)";
 		$result = db_query($sql);
-	}	
-	
+	}
+
 	// if the user has answered at least one question
 	if(is_array($choice)) {
 		if($exerciseType == 1) {
@@ -171,14 +171,14 @@ $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_Curren
 if (!$is_editor) {
         $error = FALSE;
         // check if exercise has expired or is active
-        $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+        $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
                         WHERE eid = '$eid_temp' AND uid = '$uid'", $course_code));
         ++$currentAttempt[0];
         if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
                 $message = $langExerciseMaxAttemptsReached;
                 $error = TRUE;
-        }        
-        if (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate)) { 
+        }
+        if (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate)) {
                 $message = $langExerciseExpired;
                 $error = TRUE;
         }
@@ -239,8 +239,8 @@ $tool_content .= "
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
-  <input type='hidden' name='exerciseId' value='$exerciseId' />	
-  <input type='hidden' name='exerciseType' value='$exerciseType' />	
+  <input type='hidden' name='exerciseId' value='$exerciseId' />
+  <input type='hidden' name='exerciseType' value='$exerciseType' />
   <input type='hidden' name='questionNum' value='$questionNum' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
   <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
@@ -248,7 +248,7 @@ $tool_content .= "
   <input type='hidden' name='record_start_date' value='$recordStartDate' />";
 
 $i=0;
-foreach($questionList as $questionId) {        
+foreach($questionList as $questionId) {
 	$i++;
 	// for sequential exercises
 	if($exerciseType == 2) {
@@ -270,30 +270,30 @@ foreach($questionList as $questionId) {
 			}
 		}
 	}
-        
-        
+
+
         // shows the question and its answers
         $question = new Question();
         $question->read($questionId);
-        $questionWeight = $question->selectWeighting();        
-        $message = $langInfoGrades;             
-        if (intval($questionWeight) == $questionWeight) {        
+        $questionWeight = $question->selectWeighting();
+        $message = $langInfoGrades;
+        if (intval($questionWeight) == $questionWeight) {
                 $questionWeight = intval($questionWeight);
         }
         if ($questionWeight == 1) {
                 $message = $langInfoGrade;
-        } 
+        }
 	$tool_content .= "<table width='100%' class='tbl'>
                 <tr class='sub_title1'>
-                <td colspan='2'>".$langQuestion.": ".$i."&nbsp;($questionWeight $message)"; 
-	
-	if($exerciseType == 2) { 
+                <td colspan='2'>".$langQuestion.": ".$i."&nbsp;($questionWeight $message)";
+
+	if($exerciseType == 2) {
 		$tool_content .= "/".$nbrQuestions;
 	}
 	$tool_content .= "</td></tr>";
-        unset($question);        
+        unset($question);
 	showQuestion($questionId);
-        
+
 	$tool_content .= "
 	<tr>
 	  <td colspan='2'>&nbsp;</td>
@@ -314,7 +314,7 @@ if (!$questionList) {
               <p class='caution'>$langNoAnswer</p>
             </td>
           </tr>
-          </table>";	 
+          </table>";
 } else {
 	$tool_content .= "
           <br/>
@@ -333,6 +333,6 @@ if (!$questionList) {
         <td colspan=\"2\">&nbsp;</td>
         </tr>
         </table>";
-}	
+}
 $tool_content .= "</form>";
 draw($tool_content, 2, null, $head_content);

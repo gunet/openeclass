@@ -33,7 +33,7 @@
  * and receiving proxied HTTP requests.
  */
 interface CAS_ProxiedService_Http {
-	
+
 	/*********************************************************
 	 * Configure the Request
 	 *********************************************************/
@@ -46,7 +46,7 @@ interface CAS_ProxiedService_Http {
 	 * @throws CAS_OutOfSequenceException If called after the Request has been sent.
 	 */
 	public function setUrl ($url);
-	
+
 	/*********************************************************
 	 * 2. Send the Request
 	 *********************************************************/
@@ -78,5 +78,5 @@ interface CAS_ProxiedService_Http {
 	 * @throws CAS_OutOfSequenceException If called before the Request has been sent.
 	 */
 	public function getResponseBody ();
-	
+
 }

@@ -44,7 +44,7 @@
 function getUserAssignments($param, $type)
 {
 	global $mysqlMainDb;
-        
+
 	$uid	= $param['uid'];
 	$lesson_code	= $param['lesson_code'];
 	$lesson_id = $param['lesson_id'];
@@ -200,7 +200,7 @@ function submitted($uid, $assignment_id, $lesson_id)
     $prefix = './modules';
     if (!file_exists($prefix) && file_exists('../group') && file_exists('../work'))
         $prefix = '..';
-    
+
     require_once($prefix.'/group/group_functions.php');
     require_once($prefix.'/work/work_functions.php');
 
@@ -228,7 +228,7 @@ function submitted($uid, $assignment_id, $lesson_id)
 function isGroupAssignment($id)
 {
     global $mysqlMainDb;
-    
+
 	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE id = '$id'", $mysqlMainDb);
 	if ($res) {
 		$row = mysql_fetch_row($res);

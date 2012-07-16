@@ -54,7 +54,7 @@ $nameTools = $langAgenda;
 if (isset($_GET['id'])) {
 	$id = intval($_GET['id']);
 }
-		
+
 if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 	$lang_jscalendar = langname_to_code($language);
 
@@ -87,7 +87,7 @@ hContent;
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
-$start_cal = $jscalendar->make_input_field(                         
+$start_cal = $jscalendar->make_input_field(
 	array('showOthers' => true,
                'showsTime' => true,
 	        'align' => 'Tl',
@@ -106,7 +106,7 @@ if ($is_editor) {
                 db_query("UPDATE agenda SET visible = 1 WHERE course_id = $course_id AND id = $id");
 	}
 	if (isset($_POST['submit'])) {
-                register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));                
+                register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
                 $content = purify($content);
                 $datetime = explode(' ', $date);
                 $date = $datetime[0];
@@ -148,7 +148,7 @@ if ($is_editor) {
 		unset($addEvent);
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-                $row = mysql_fetch_array(db_query("SELECT title, content, day, hour, lasting 
+                $row = mysql_fetch_array(db_query("SELECT title, content, day, hour, lasting
                                         FROM agenda WHERE id = $id"));
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
@@ -200,7 +200,7 @@ if ($is_editor) {
                 $dayAncient = $myrow['day']. ' '.$hourAncient;
                 $lastingAncient = $myrow['lasting'];
                 $start_cal = $jscalendar->make_input_field(
-                        array('showsTime' => true,                           
+                        array('showsTime' => true,
                                 'showOthers' => true,
                                 'align' => 'Tl',
                                 'ifFormat' => '%Y-%m-%d %H:%M',
@@ -221,7 +221,7 @@ if ($is_editor) {
                 <fieldset>
                   <legend>$langOptions</legend>
 		  <table class='tbl' width='100%'>";
-		$day = date("d");		
+		$day = date("d");
 		if (isset($title)) {
 			$title_value = ' value="' . q($title) . '"';
 		} else {
@@ -232,10 +232,10 @@ if ($is_editor) {
                     <th>$langTitle:</th>
                     <td><input type='text' size='70' name='title'$title_value /></td>
                   </tr>
-		  <tr>  
+		  <tr>
                     <th>$langDate:</th>
                     <td> ".$start_cal."</td>
-                  </tr>                  
+                  </tr>
                   <tr>
                     <th>$langDuration <small> $langInHour</small>:</td>
                     <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
@@ -264,11 +264,11 @@ if ($is_editor) {
 *-------------------------------------------*/
 if (!isset($sens)) $sens =" ASC";
 
-if ($is_editor) { 
-	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $course_id 
+if ($is_editor) {
+	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $course_id
 		ORDER BY day ".$sens.", hour ".$sens);
 } else {
-	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $course_id 
+	$result = db_query("SELECT id, title, content, day, hour, lasting, visible FROM agenda WHERE course_id = $course_id
 		AND visible = 1 ORDER BY day ".$sens.", hour ".$sens);
 }
 
@@ -341,7 +341,7 @@ if (mysql_num_rows($result) > 0) {
 
                 $tool_content .= "\n<span class='day'>".
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($myrow['day']))).
-                        "</span> ($langHour: ".ucfirst(date('H:i', strtotime($myrow['hour']))).")";	
+                        "</span> ($langHour: ".ucfirst(date('H:i', strtotime($myrow['hour']))).")";
                 if ($myrow['lasting'] != '') {
                         if ($myrow['lasting'] == 1) {
                                 $message = $langHour;
@@ -359,7 +359,7 @@ if (mysql_num_rows($result) > 0) {
                         $tool_content .= q($myrow['title']);
                 }
 		$tool_content .= "</b> $msg $content</div></td>";
-                
+
 		if ($is_editor) {
                         $tool_content .=  "
                         <td class='right' width='70'>

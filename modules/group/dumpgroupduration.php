@@ -52,12 +52,12 @@ if($is_editor) {
 		$u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
 	}
-	
+
 	if (isset($u_date_start) and isset($u_date_end)) {
 		$first_line = "$langFrom $u_date_start $langAs $u_date_end";
 	} else {
 		$date_spec = '';
-		
+
 	}
 	echo csv_escape($first_line), $crlf, $crlf,
 	     join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
@@ -65,7 +65,7 @@ if($is_editor) {
 	$totalDuration = 0;
 
 	$result = user_duration_query($course_code, $course_id, $u_date_start, $u_date_end, $group_id);
-	
+
 	while ($row = mysql_fetch_assoc($result)) {
                 echo csv_escape($row['nom']) . ";" .
                      csv_escape($row['prenom']) . ";" .
@@ -75,5 +75,5 @@ if($is_editor) {
                      csv_escape(round($row['duration'] / 3600));
                 echo $crlf;
         }
-} 
+}
 user_duration_query_end();

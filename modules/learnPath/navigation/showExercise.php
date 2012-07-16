@@ -25,7 +25,7 @@
 // It also contains a replicate from exercise/exercise.lib.php
 
 // Ta objects prepei na ginoun include prin thn init
-// gia logous pou sxetizontai me to object loading 
+// gia logous pou sxetizontai me to object loading
 // apo to session
 require_once '../../exercise/exercise.class.php';
 require_once '../../exercise/question.class.php';
@@ -36,7 +36,7 @@ require_once '../../../include/init.php';
 
 // Genikws o kwdikas apo edw kai katw kanei akribws o,ti kai to
 // exercise_submit.php. Oi mones diafores einai xrhsh twn echo
-// anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai 
+// anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/video/video_functions.php';
 load_modal_box();
@@ -50,7 +50,7 @@ $TBL_QUESTION           = 'exercise_question';
 $TBL_ANSWER             = 'exercise_answer';
 
 if (isset($_GET['course'])) {
-	$course = intval($_GET['course']);       
+	$course = intval($_GET['course']);
 }
 
 if (isset($_GET['exerciseId'])) {
@@ -84,21 +84,21 @@ if (isset($_POST['formSent'])) {
 	} else {
 		$exerciseResult = array();
 	}
-	
+
     if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
         $exerciseTimeConstraint = $exerciseTimeConstraint * 60;
         $exerciseTimeConstraintSecs = time() - $exerciseTimeConstraint;
         $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
-        
+
         if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
                         header('Location: ../../exercise/exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
 			exit();
-		} 
+		}
 	}
     $recordEndDate = date("Y-m-d H:i:s", time());
-	
+
 	// if the user has answered at least one question
 	if(is_array($choice)) {
 		if($exerciseType == 1) {
@@ -163,7 +163,7 @@ $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_Curren
 if (!$is_editor) {
     $error = FALSE;
     // check if exercise has expired or is active
-    $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+    $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
                                                   WHERE eid='$eid_temp' AND uid='$uid'", $course_code));
     ++$currentAttempt[0];
     if ($exerciseAllowedAttempts > 0 and $currentAttempt[0] > $exerciseAllowedAttempts) {
@@ -233,8 +233,8 @@ echo ("
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
-  <input type='hidden' name='exerciseId' value='$exerciseId' />	
-  <input type='hidden' name='exerciseType' value='$exerciseType' />	
+  <input type='hidden' name='exerciseId' value='$exerciseId' />
+  <input type='hidden' name='exerciseType' value='$exerciseType' />
   <input type='hidden' name='questionNum' value='$questionNum' />
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
   <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
@@ -269,7 +269,7 @@ echo ("
           <tr class='sub_title1'>
             <td colspan=\"2\">".$langQuestion.": ".$i);
 
-            if($exerciseType == 2) { 
+            if($exerciseType == 2) {
                     echo ("/".$nbrQuestions);
             }
             echo ("</td></tr>");
@@ -290,7 +290,7 @@ echo ("
           <p class='caution'>$langNoAnswer</p>
         </td>
       </tr>
-      </table>");	 
+      </table>");
     } else {
 	echo "<br/><table width='100%' class='tbl'><tr>
                <td><div class='right'><input type='submit' value=\"";
@@ -304,20 +304,20 @@ echo ("
                 <td colspan=\"2\">&nbsp;</td>
               </tr>
               </table>";
-    }	
+    }
 echo "</form>";
 echo "</div></body>"."\n";
 echo "</html>"."\n";
 
 // auth edw h function einai kata bash idia me thn antistoixh sto
-// exercise.lib.php, mono pou anti gia xrhsh tou tool_content kanei 
-// echo ton html kwdika epeidh 8eloume na ton deixnoume mesa sto 
+// exercise.lib.php, mono pou anti gia xrhsh tou tool_content kanei
+// echo ton html kwdika epeidh 8eloume na ton deixnoume mesa sto
 // iframe tou learningPath.
 // ta global vars pou orizontai, den exoun na kanoun se kati me to
 // register_globals, apla einai scoping twn metablhtwn pou yparxoun
 // pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
-	
+
         global $picturePath, $urlServer;
 	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
@@ -332,14 +332,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
 	if(!$onlyAnswers) {
 		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();	
+		$questionDescription=$objQuestionTmp->selectDescription();
 		$questionDescription_temp = standard_text_escape($questionDescription);
 		echo "<tr class='even'>
                     <td colspan='2'><b>$questionName</b><br />
                     $questionDescription_temp
                     </td>
-                    </tr>";                    
-		if(file_exists($picturePath.'/quiz-'.$questionId)) {                        
+                    </tr>";
+		if(file_exists($picturePath.'/quiz-'.$questionId)) {
                     echo "<tr class='even'>
                         <td class='center' colspan='2'><img src='$urlServer/$picturePath/quiz-$questionId' /></td>
                       </tr>";
@@ -377,8 +377,8 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			// splits text and weightings that are joined with the character '::'
 			list($answer) = explode('::', $answer);
 			// replaces [blank] by an input field
-                        $answer = preg_replace('/\[[^]]+\]/', 
-                                    '<input type="text" name="choice['.$questionId.'][]" size="10" />', 
+                        $answer = preg_replace('/\[[^]]+\]/',
+                                    '<input type="text" name="choice['.$questionId.'][]" size="10" />',
                                     standard_text_escape($answer));
 		}
 		// unique answer
@@ -409,7 +409,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                       </tr>");
 		}
 		// matching
-		elseif($answerType == MATCHING) { 
+		elseif($answerType == MATCHING) {
 			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$select[$answerId]['Lettre']=$cpt1++;
@@ -458,7 +458,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 						$cpt2++;
 					}	// end while()
 				}  // end if()
-			}                               
+			}
 		}
 		elseif($answerType == TRUE_FALSE) {
 			echo "<tr class='even'>

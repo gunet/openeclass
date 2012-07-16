@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * A rectangle identified by the top-left and the bottom-right corners.
      *
@@ -33,17 +33,17 @@
          * Top left Y.
          */
         public $y1;
-        
+
         /**
          * Bottom right X.
          */
         public $x2;
-        
+
         /**
          * Bottom right Y.
          */
         public $y2;
-    
+
         /**
          * Constructor of Rectangle.
          *
@@ -58,7 +58,7 @@
             $this->x2 = $x2;
             $this->y2 = $y2;
         }
-        
+
         /**
          * Apply a padding and returns the resulting rectangle.
          * The result is an enlarged rectangle.
@@ -72,7 +72,7 @@
                     $this->x2 - $padding->right,
                     $this->y2 - $padding->bottom
             );
-            
+
             //echo "(" . $this->x1 . "," . $this->y1 . ") (" . $this->x2 . "," . $this->y2 . ")<br>";
             return $rectangle;
         }

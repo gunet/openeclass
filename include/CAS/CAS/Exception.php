@@ -38,12 +38,12 @@
  *
  * For example, an InvalidArgumentException in phpCAS should be defined as
  *
- *		class CAS_InvalidArgumentException 
- *			extends InvalidArgumentException 
+ *		class CAS_InvalidArgumentException
+ *			extends InvalidArgumentException
  *			implements CAS_Exception
  *		{ }
  *
- * This definition allows the CAS_InvalidArgumentException to be caught as either 
+ * This definition allows the CAS_InvalidArgumentException to be caught as either
  * an InvalidArgumentException or as a CAS_Exception.
  */
 interface CAS_Exception {

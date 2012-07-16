@@ -130,7 +130,7 @@ if ($type == 'duration') {
         $tool_content .= '<form method="post" action="' . $base . $type .
                 '"><table class="FormData" align="left">' .
                 "<tr><th class='left'>$langStartDate:</th>" .
-                "<td>$start_cal</td></tr>" . 
+                "<td>$start_cal</td></tr>" .
                 "<tr><th class='left'>$langEndDate:</th>" .
                 "<td>$end_cal</td></tr>" .
                 '<tr><th class="left">&nbsp;</th>' .

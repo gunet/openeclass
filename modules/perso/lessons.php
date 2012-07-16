@@ -82,7 +82,7 @@ function getUserLessonInfo($uid, $type)
                          ORDER BY course.title, course.prof_names";
         }
 
-	$lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code = 
+	$lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code =
                          $lesson_professor = $lesson_statut = array();
 	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
 	$repeat_val = 0;
@@ -137,7 +137,7 @@ function htmlInterface($data, $lesson_code)
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid, $themeimg;
-	
+
 	$lesson_content = '';
 	if ($data[0] > 0) {
 		$lesson_content .= "<table width='100%' class='tbl_lesson'>";
@@ -168,8 +168,8 @@ function htmlInterface($data, $lesson_code)
 		$lesson_content .= "\n<td align='left' width='10'>
 			<img src='$themeimg/arrow.png' alt='' />
 			</td>";
-		if ($statut == 1) {	
-			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";	
+		if ($statut == 1) {
+			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";
 		} else {
 			$lesson_content .= "\n<td align='left' >$langWelcomeStudPerso</td>";
 		}

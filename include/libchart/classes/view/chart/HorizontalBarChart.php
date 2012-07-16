@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Horizontal bar chart
      *
@@ -27,7 +27,7 @@
          * Ratio of empty space beside the bars.
          */
         private $emptyToFullRatio;
-    
+
         /**
          * Creates a new horizontal bar chart.
          *
@@ -50,7 +50,7 @@
             }
             $this->plot->computeLayout();
         }
-        
+
         /**
          * Print the axis.
          */
@@ -63,7 +63,7 @@
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
 
@@ -94,7 +94,7 @@
                 if ($i < $pointCount) {
                     $point = current($pointList);
                     next($pointList);
-    
+
                     $label = $point->getX();
 
                     $text->printText($img, $graphArea->x1 - 5, $y - $rowHeight / 2, $this->plot->getTextColor(), $label, $text->fontCondensed, $text->HORIZONTAL_RIGHT_ALIGN | $text->VERTICAL_CENTER_ALIGN);
@@ -108,7 +108,7 @@
         protected function printBar() {
             // Get the data as a list of series for consistency
             $serieList = $this->getDataAsSerieList();
-            
+
             // Get graphical obects
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
@@ -120,7 +120,7 @@
             $minValue = $this->axis->getLowerBoundary();
             $maxValue = $this->axis->getUpperBoundary();
             $stepValue = $this->axis->getTics();
-            
+
             // Start from the first color for the first serie
             $barColorSet = $palette->barColorSet;
             $barColorSet->reset();
@@ -131,7 +131,7 @@
                 $pointList = $serie->getPointList();
                 $pointCount = count($pointList);
                 reset($pointList);
-                
+
                 // Select the next color for the next serie
                 if (!$this->config->getUseMultipleColor()) {
                     $color = $barColorSet->currentColor();
@@ -147,7 +147,7 @@
                     next($pointList);
 
                     $value = $point->getY();
-                    
+
                     $xmax = $graphArea->x1 + ($value - $minValue) * ($graphArea->x2 - $graphArea->x1) / ($this->axis->displayDelta);
 
                     // Bar dimensions
@@ -164,15 +164,15 @@
                         $shadowColor = $barColorSet->currentShadowColor();
                         $barColorSet->next();
                     }
-                        
+
                     // Draw caption text on bar
                     if ($this->config->getShowPointCaption()) {
                         $text->printText($img, $xmax + 5, $y2 - $barWidth / 2, $this->plot->getTextColor(), $value, $text->fontCondensed, $text->VERTICAL_CENTER_ALIGN);
                     }
-                    
+
                     // Draw the horizontal bar
 	                imagefilledrectangle($img, $graphArea->x1 + 1, $y1, $xmax, $y2, $shadowColor->getColor($img));
-                    
+
 	                // Prevents drawing a small box when x = 0
                     if ($graphArea->x1 != $xmax) {
                         imagefilledrectangle($img, $graphArea->x1 + 2, $y1 + 1, $xmax - 4, $y2, $color->getColor($img));
@@ -180,23 +180,23 @@
                 }
             }
         }
-        
+
         /**
          * Renders the caption.
          */
         protected function printCaption() {
             // Get the list of labels
             $labelList = $this->dataSet->getTitleList();
-            
+
             // Create the caption
             $caption = new Caption();
             $caption->setPlot($this->plot);
             $caption->setLabelList($labelList);
-            
+
             $palette = $this->plot->getPalette();
             $barColorSet = $palette->barColorSet;
             $caption->setColorSet($barColorSet);
-            
+
             // Render the caption
             $caption->render();
         }
@@ -209,7 +209,7 @@
         public function render($fileName = null) {
             // Check the data model
             $this->checkDataModel();
-            
+
             $this->bound->computeBound($this->dataSet);
             $this->computeAxis();
             $this->computeLayout();

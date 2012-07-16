@@ -33,7 +33,7 @@ class Exercise
 	var $description;
 	var $type;
 	var $startDate;
-	var $endDate;	
+	var $endDate;
 	var $timeConstraint;
 	var $attemptsAllowed;
 	var $random;
@@ -74,10 +74,10 @@ class Exercise
 	function read($id)
 	{
 		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $mysqlMainDb, $course_id;
-		
+
 		mysql_select_db($mysqlMainDb);
-		$sql = "SELECT title, description, type, start_date, end_date, time_constraint, 
-			attempts_allowed, random, active, results, score 
+		$sql = "SELECT title, description, type, start_date, end_date, time_constraint,
+			attempts_allowed, random, active, results, score
 			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
 		$result = db_query($sql);
 		// if the exercise has been found
@@ -137,7 +137,7 @@ class Exercise
 	{
 		return $this->exercise;
 	}
-	
+
 	/**
 	* set title
 	*
@@ -350,7 +350,7 @@ class Exercise
 	{
 		$this->type = $type;
 	}
-	
+
 	function updateStartDate($startDate)
 	{
 		$this->startDate = $startDate;
@@ -428,13 +428,13 @@ class Exercise
 		$active          = $this->active;
 		$results         = $this->results;
 		$score           = $this->score;
-		
+
 		mysql_select_db($mysqlMainDb);
 
 		// exercise already exists
 		if($id)
 		{
-			$sql = "UPDATE `$TBL_EXERCISE` 
+			$sql = "UPDATE `$TBL_EXERCISE`
 				SET title = '$exercise', description = '$description', type = '$type',".
 				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
 				"attempts_allowed = '$attemptsAllowed', random = '$random',
@@ -465,7 +465,7 @@ class Exercise
 	* @return boolean
 	*/
 	function validate() {
-		
+
 	   $title = strip_tags($this->exercise);
 	   if(empty($title)) {
 	       $tool_content .= $langExerciseNoTitle;
@@ -476,7 +476,7 @@ class Exercise
 			return false;
 	       }
 	   }*/
-	return true; 
+	return true;
 	}
 
 	/**
@@ -488,15 +488,15 @@ class Exercise
 	function moveUp($id)
 	{
 		global $TBL_QUESTION, $mysqlMainDb, $course_id;
-		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
+
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
 							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
-	
+
 		if ($pos > 1) {
 			$temp = $this->questionList[$pos-1];
 			$this->questionList[$pos-1] = $this->questionList[$pos];
 			$this->questionList[$pos] = $temp;
-		} 
+		}
 		return;
 	}
 
@@ -509,15 +509,15 @@ class Exercise
 	function moveDown($id)
 	{
 		global $TBL_QUESTION, $mysqlMainDb, $course_id;
-		
-		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION` 
+
+		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
 							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
-		
+
 		if ($pos < count($this->questionList)) {
 			$temp = $this->questionList[$pos+1];
 			$this->questionList[$pos+1] = $this->questionList[$pos];
 			$this->questionList[$pos] = $temp;
-		} 
+		}
 		return;
 	}
 

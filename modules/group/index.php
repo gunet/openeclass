@@ -94,7 +94,7 @@ if ($is_editor) {
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $course_id"));
 
                 // Create a hidden category for group forums
-                $req = db_query("SELECT id FROM forum_categories 
+                $req = db_query("SELECT id FROM forum_categories
                                 WHERE cat_order = -1
                                 AND course_id = $course_id");
                 if ($req and mysql_num_rows($req) > 0) {
@@ -284,7 +284,7 @@ if ($is_editor) {
           </td>
         </tr>
         <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td> 
+          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td>
           <td align='right' width='50'>";
         if ($self_reg) {
                 $tool_content .= "<font color='green'>$langYes</font>";
@@ -356,7 +356,7 @@ if ($is_editor) {
 		$tool_content .= "<br />
 		<table width='100%' align='left' class='tbl_alt'>
 		<tr>
-           
+
 		  <th colspan='2'><div align='left'>$langGroupName</div></th>
 		  <th width='250'>$langGroupTutor</th>
 		  <th width='30'>$langRegistered</th>
@@ -415,9 +415,9 @@ if ($is_editor) {
                 <table width='100%' align='left' class='tbl_alt'>
                 <tr>
                   <th colspan='2'><div align='left'>$langGroupName</div></th>
-                  <th width='250'>$langGroupTutor</th>";		
+                  <th width='250'>$langGroupTutor</th>";
                 $tool_content .= "<th width='50'>$langRegistration</th>";
-		
+
 		$tool_content .= "
                   <th width='50'>$langRegistered</th>
                   <th width='50'>$langMax</th>
@@ -450,7 +450,7 @@ if ($is_editor) {
 			}
                         $tool_content .= "</td>";
                         $tool_content .= "<td class='center'>" . display_user($tutors) . "</td>";
-			
+
                         // If self-registration and multi registration allowed by admin and group is not full
                         $tool_content .= "<td class='center'>";
 			if ($uid and

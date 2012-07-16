@@ -82,7 +82,7 @@ if (isset($_REQUEST['toolStatus']) ) {
                 db_query("UPDATE course_module SET visible = 1
                                  WHERE $tool_id AND
                                        course_id = ". course_code_to_id($course_code));
-        }        
+        }
 }
 
 
@@ -94,7 +94,7 @@ if (isset($_POST['delete'])) {
                 $path = substr($link[0], 6);
                 $file2Delete = $webDir ."/". $path;
                 unlink($file2Delete);
-        }                
+        }
         db_query("DELETE FROM link WHERE `id` = $delete");
         unset($sql);
         $tool_content .= "<p class='success'>$langLinkDeleted</p>";
@@ -112,9 +112,9 @@ if (isset($_POST['submit'])) {
                         exit();
                 }
                 $link = autoquote($link);
-                $name_link = autoquote($name_link);                
-                db_query("INSERT INTO link (course_id, url, title, category) 
-                                    VALUES (".course_code_to_id($course_code).", 
+                $name_link = autoquote($name_link);
+                db_query("INSERT INTO link (course_id, url, title, category)
+                                    VALUES (".course_code_to_id($course_code).",
                                                 $link, $name_link, -1)");
                 $tool_content .= "<p class='success'>$langLinkAdded</p>";
         } elseif ($action == 1) {
@@ -135,14 +135,14 @@ if (isset($_POST['submit'])) {
                                 $file_name = $_FILES['file']['name'];
                                 $file_name = php2phps(add_ext_on_mime($file_name));
                                 @copy("$tmpfile", "$updir/$file_name")
-                                        or die("<p>$langCouldNot</p></tr>");                                                
+                                        or die("<p>$langCouldNot</p></tr>");
 
                                 $link_name = quote($_POST['link_name']);
                                 $link = quote("../../courses/$currentCourse/page/$file_name");
 
-                                db_query("INSERT INTO link (course_id, url, title, category) 
-                                        VALUES (".course_code_to_id($course_code).", 
-                                                        $link, $link_name, -2)");                                                
+                                db_query("INSERT INTO link (course_id, url, title, category)
+                                        VALUES (".course_code_to_id($course_code).",
+                                                        $link, $link_name, -2)");
                                 $tool_content .= "<p class='success'>$langOkSent</p>\n";
                         }
                 }
@@ -155,7 +155,7 @@ if (isset($_POST['submit'])) {
               <div class='info'><p>$langExplanation_0</p>
               <p>$langExplanation_3</p></div>
               <fieldset>
-              <legend>$langExplanation_1</legend> 
+              <legend>$langExplanation_1</legend>
               <table class='tbl'>
               <tr>
                 <th width='170'>$langSendPage</th>
@@ -209,11 +209,11 @@ if (isset($_POST['submit'])) {
 
 $toolArr = getSideMenu(2);
 
-if (is_array($toolArr)) {        
+if (is_array($toolArr)) {
         for ($i = 0; $i <= 1; $i++){
                 $toolSelection[$i] = '';
                 $numOfTools = count($toolArr[$i][1]);
-                for ($j = 0; $j < $numOfTools; $j++) {                        
+                for ($j = 0; $j < $numOfTools; $j++) {
                         $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
                                               $toolArr[$i][1][$j] . "</option>\n";
                 }
@@ -261,9 +261,9 @@ tForm;
 // ------------------------------------------------
 // display table to edit/delete external links
 // ------------------------------------------------
-$sql = db_query("SELECT id, title FROM link 
-                        WHERE category IN(-1,-2) AND 
-                        course_id = ".course_code_to_id($course_code));        
+$sql = db_query("SELECT id, title FROM link
+                        WHERE category IN(-1,-2) AND
+                        course_id = ".course_code_to_id($course_code));
 $tool_content .= "<br/>
 <table class='tbl_alt' width='100%'>
 <tr>
@@ -276,7 +276,7 @@ $tool_content .= "<br/>
   <th width='20'>$langDelete</th>
 </tr>\n";
 $i = 0;
-while ($externalLinks = mysql_fetch_array($sql)) {  
+while ($externalLinks = mysql_fetch_array($sql)) {
         if ($i % 2==0) {
                 $tool_content .= "<tr class='even'>\n";
         } else {
@@ -287,11 +287,11 @@ while ($externalLinks = mysql_fetch_array($sql)) {
         <td class='left'>$externalLinks[title]</td>
         <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks[id]' />
-           <input type='image' src='$themeimg/delete.png' name='delete_button' 
+           <input type='image' src='$themeimg/delete.png' name='delete_button'
                   onClick=\"return confirmation('" .
                             js_escape("$langDeleteLink {$externalLinks['title']}?") .
                        "');\" title='$langDelete' /></form></td>
-     </tr>\n";                                            
+     </tr>\n";
      $i++;
 }
 $tool_content .= "</table>\n";

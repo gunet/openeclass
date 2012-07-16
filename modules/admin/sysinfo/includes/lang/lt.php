@@ -67,7 +67,7 @@ $text['gb']             = 'GB';
 $text['none']           = 'none';
 
 $text['capacity']       = 'Capacity';
-  
+
 $text['template']       = 'Template';
 $text['language']       = 'Language';
 $text['submit']         = 'Submit';

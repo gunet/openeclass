@@ -60,7 +60,7 @@ if (!$db) {
 
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';
-if (isset($dbname)) {        
+if (isset($dbname)) {
         $action = new action();
         $action->record('MODULE_ID_UNITS', 'exit');
 }
@@ -77,11 +77,11 @@ if (isset($_SESSION['shib_uname'])) {
 } else {
 	// normal authentication
 	process_login();
-} 
+}
 
-if (isset($_SESSION['uid'])) { 
+if (isset($_SESSION['uid'])) {
 	$uid = $_SESSION['uid'];
-} else { 
+} else {
 	$uid = 0;
 }
 

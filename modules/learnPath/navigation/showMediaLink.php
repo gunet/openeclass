@@ -27,7 +27,7 @@ $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    
+
     echo medialink_iframe_object(html_entity_decode($id), '#ffffff', '#000000');
 }
 

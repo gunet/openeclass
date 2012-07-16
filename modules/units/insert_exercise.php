@@ -47,7 +47,7 @@ function list_exercises()
                                  "\n  </tr>";
 		$i = 0;
 		foreach ($quizinfo as $entry) {
-			if ($entry['visibility'] == '0') { 
+			if ($entry['visibility'] == '0') {
 				$vis = 'invisible';
 			} else {
 				if ($i%2 == 0) {

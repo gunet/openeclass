@@ -116,7 +116,7 @@ class sysinfo
             fclose($fd);
         } else {
             $results = array('N.A.','N.A.','N.A.');
-        } 
+        }
         return $results;
     }
 
@@ -249,7 +249,7 @@ class sysinfo
                 }
             }
         }
-        closedir($handle); 
+        closedir($handle);
 
         return $results;
     }
@@ -278,7 +278,7 @@ class sysinfo
                     $get_type = 0;
                 }
             }
-        } 
+        }
         return $results;
     }
 

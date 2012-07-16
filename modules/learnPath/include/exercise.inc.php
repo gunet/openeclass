@@ -23,12 +23,12 @@
 /**===========================================================================
 	exercise
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: exercise.inc.php Revision: 1.14.2.3
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
 ==============================================================================
@@ -102,6 +102,6 @@ if( $module )
 		.'<img src="'.$imgRepositoryWeb.'edit.png" border="0" alt="'.$langModify.'" title="'.$langModify.'" />'
 		.'</a>'."\n"
 		.'</p>'."\n";
-		
+
 	$tool_content .= '<hr noshade="noshade" size="1" />';
 } // else sql error, do nothing except in debug mode, where claro_sql_query_fetch_all will show the error

@@ -20,10 +20,10 @@
 
 /*
  * Groups Component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id: group_properties.php,v 1.24 2011-05-16 12:36:35 adia Exp $
- * 
+ *
  * @abstract This module is responsible for the user groups of each lesson
  *
  */
@@ -89,7 +89,7 @@ $tool_content = "
       <td class='right'><input type='submit' name='properties' value='$langModify' /></td>
     </tr>
     </table>
-    </fieldset>    
+    </fieldset>
     </form>";
     draw($tool_content, 2);
 

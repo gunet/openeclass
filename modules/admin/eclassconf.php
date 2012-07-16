@@ -59,7 +59,7 @@ define('MONTHS', 30 * 24 * 60 * 60);
 // Save new config.php
 if (isset($_POST['submit']))  {
         $active_lang_codes = array();
-        if (isset($_POST['av_lang'])) { 
+        if (isset($_POST['av_lang'])) {
                 foreach ($_POST['av_lang'] as $langcode) {
                         if (isset($language_codes[$langcode])) {
                                 $active_lang_codes[] = $langcode;
@@ -186,7 +186,7 @@ else {
 	<tr>
 	  <th class='left'><b>\$InstitutionUrl:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formInstitutionUrl' size='40' value='".$InstitutionUrl."'></td>
-	</tr>";              
+	</tr>";
 	if ($language == "el") {
 		$grSel = "selected";
 		$enSel = "";
@@ -195,10 +195,10 @@ else {
 		$enSel = "selected";
 	}
 	$tool_content .= "</table></fieldset>";
-        
+
         $tool_content .= "<fieldset>
         <legend>$langUpgReg</legend>
-        <table class='tbl' width='100%'>";              
+        <table class='tbl' width='100%'>";
 	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
 	$tool_content .= "
 	<tr>
@@ -214,8 +214,8 @@ else {
 	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
 	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
 	</tr>";
-        
-        $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';	
+
+        $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';
 	$tool_content .= "
 	<tr>
 	  <th class='left'>close_user_registration</th>
@@ -223,7 +223,7 @@ else {
 	  <input type=checkbox name='close_user_registration' value='1'
         $cbox_close_user_registration>&nbsp;$langViaReq</td>
 	</tr>";
-        
+
         $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
 	$tool_content .= "<tr>
 	  <th class='left'>alt_auth_student_req</th>
@@ -247,7 +247,7 @@ else {
 		<th class='left'><b>email_verification_required</b></th>
 		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
 	  </tr>";
-          $cbox_am_required = get_config('am_required')?'checked':'';	
+          $cbox_am_required = get_config('am_required')?'checked':'';
           $tool_content .= "<tr>
 		<th class='left'><b>am_required</b></th>
 		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
@@ -275,7 +275,7 @@ else {
 	    <option value='en' $enSel>$langEnglish</option>
 	  </select></td>
 	</tr>";
-	$langdirs = active_subdirs($webDir.'/lang', 'messages.inc.php');        
+	$langdirs = active_subdirs($webDir.'/lang', 'messages.inc.php');
 	$sel = array();
 	foreach ($language_codes as $langcode => $langname) {
 		if (in_array($langcode, $langdirs)) {
@@ -283,10 +283,10 @@ else {
 			$checked = in_array($langcode, $active_ui_languages)? ' checked': '';
 			$sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
 		}
-	}        
+	}
 	$tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>
-	    <td>" . implode(' ', $sel) . "</td></tr>";                
-        
+	    <td>" . implode(' ', $sel) . "</td></tr>";
+
 	$tool_content .= "
 	  <tr><td class='left'><b>$langThemes</b></td>
 	    <td>" . selection($available_themes, 'theme',
@@ -297,12 +297,12 @@ else {
 		<td><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
 	  </tr>";
 	$tool_content .= "</table></fieldset>";
-        
+
         $cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
-        $cbox_email_from = get_config('email_from')?'checked':'';	
+        $cbox_email_from = get_config('email_from')?'checked':'';
         $tool_content .= "<fieldset>
         <legend>$langEmailSettings</legend>
-        <table class='tbl' width='100%'>       
+        <table class='tbl' width='100%'>
         <tr>
 		<th class='left'><b>dont_mail_unverified_mails</b></th>
 		<td><input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails />&nbsp;$lang_dont_mail_unverified_mails</td>
@@ -312,12 +312,12 @@ else {
 		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
 	  </tr>
         </table></fieldset>";
-                		
-        
+
+
         $cbox_course_multidep = get_config('course_multidep')?'checked':'';
         $cbox_user_multidep = get_config('user_multidep')?'checked':'';
         $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
-        
+
         $tool_content .= "<fieldset>
         <legend>$langCourseSettings</legend>
         <table class='tbl' width='100%'>
@@ -334,13 +334,13 @@ else {
 		<td><input type='checkbox' name='restrict_teacher_owndep' value='1' $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
         </table></fieldset>";
-        
+
         $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
-	$cbox_block_username_change = get_config('block_username_change')?'checked':'';	
+	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
-        $max_glossary_terms = get_config('max_glossary_terms');        
+        $max_glossary_terms = get_config('max_glossary_terms');
         $cbox_disable_log_user_actions = get_config('disable_log_user_actions')?'checked':'';
 
         $tool_content .= "<fieldset>
@@ -353,15 +353,15 @@ else {
 	  <tr>
 		<th class='left'><b>max_glossary_terms</b></th>
 		<td><input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' />&nbsp;$lang_max_glossary_terms</td>
-	  </tr>	  
+	  </tr>
 	  <tr>
 		<th class='left'><b>dropbox_allow_student_to_student</b></th>
 		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
-	  </tr>	  
+	  </tr>
 	  <tr>
 		<th class='left'><b>block_username_change</b></th>
 		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-	  </tr>	  
+	  </tr>
 	  <tr>
 		<th class='left'><b>insert_xml_metadata</b></th>
 		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
@@ -373,12 +373,12 @@ else {
 	  <tr>
 		<th class='left'><b>enable_mobileapi</b></th>
 		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
-	  </tr>	  
+	  </tr>
         </table></fieldset>";
-        
+
         $tool_content .= "<fieldset>
         <legend>$langDefaultQuota</legend>
-        <table class='tbl' width='100%'>              
+        <table class='tbl' width='100%'>
 	  <tr>
 		<th class='left'><b>$langDocQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='doc_quota' value='".get_config('doc_quota')."' size='5'/>&nbsp;(Mb)</td>
@@ -394,7 +394,7 @@ else {
 	  <tr>
 		<th class='left'><b>$langDropboxQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
-	  </tr></table>	  
+	  </tr></table>
 	  </fieldset>
 	    <input type='submit' name='submit' value='$langModify'>
         </form>";

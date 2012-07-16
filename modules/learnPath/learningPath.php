@@ -58,7 +58,7 @@ $action->record(MODULE_ID_LP);
 /**************************************/
 
 if (isset($_GET['unit'])) {
-	$_SESSION['unit'] = intval($_GET['unit']); 
+	$_SESSION['unit'] = intval($_GET['unit']);
 }
 
 // $_SESSION
@@ -91,7 +91,7 @@ else {
 		header("Location: ./index.php?course=$course_code");
 		exit();
 	}
-	
+
 	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `course_id` = $course_id ORDER BY `rank`");
 	if ($lps != false) {
 		$block_met = false;
@@ -318,7 +318,7 @@ foreach ($flatElementList as $module)
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
         // display actions for current module (taking into consideration blocked modules)
-        if (!$is_blocked || !$first_blocked ) 
+        if (!$is_blocked || !$first_blocked )
           $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=".$module['module_id']."\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
         else
           $tool_content .= "<td></td>";

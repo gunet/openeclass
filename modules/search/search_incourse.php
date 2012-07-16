@@ -50,7 +50,7 @@ register_posted_variables(array('announcements' => true,
 
 if (isset($_GET['all'])) {
 	$all = intval($_GET['all']);
-	$announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1; 		     
+	$announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1;
 }
 
 if(isset($_REQUEST['search_terms'])) {
@@ -60,7 +60,7 @@ if(isset($_REQUEST['search_terms'])) {
 }
 
 if(empty($search_terms)) {
-	
+
 	// display form
 	$tool_content .= "
 	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
@@ -104,9 +104,9 @@ if(empty($search_terms)) {
 	</div>";
 	$tool_content .= "
         <p class='sub_title1'>$langResults</p>";
-	
+
 	// search in announcements
-	if ($announcements) 
+	if ($announcements)
 	{
 		$myquery = "SELECT title, content, `date` FROM announcement
 				WHERE course_id = $course_id
@@ -132,7 +132,7 @@ if(empty($search_terms)) {
 		  $tool_content .= "
                   <tr $class_view>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                    <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";	    
+                    <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";
 				$tool_content .= "<small>("
 				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
 				")</small><br />$res[content]
@@ -179,7 +179,7 @@ if(empty($search_terms)) {
 				}
 				$tool_content .= "<span class=day>".
 				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
-				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"				
+				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"
 				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['content']."
                     </td>
                   </tr>";
@@ -216,7 +216,7 @@ if(empty($search_terms)) {
                                 <tr $class_view>
                                 <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                                 <td>";
-                                if (empty($res['comment']))  { 
+                                if (empty($res['comment']))  {
                                         $add_comment = "";
                                 } else {
                                         $add_comment = "<br /><span class='smaller'> ($res[comment])</span>";
@@ -232,7 +232,7 @@ if(empty($search_terms)) {
 		}
 	}
 
-	// search in exercises	
+	// search in exercises
 	if ($exercises) {
 		$myquery = "SELECT * FROM exercise
 				WHERE course_id = $course_id
@@ -258,9 +258,9 @@ if(empty($search_terms)) {
                         <tr $class_view>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                        if (empty($res['description'])) { 
+                        if (empty($res['description'])) {
                                 $desc_text = "";
-                        } else { 
+                        } else {
                                 $desc_text = "<br /> <span class='smaller'>$res[description]</span>";
                         }
                         $link_exercise =" ${urlServer}/modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$res[id]";
@@ -285,7 +285,7 @@ if(empty($search_terms)) {
                         <tr>
                         <th colspan='2' class=\"left\">$langForum ($langCategories):</th>
                         </tr>";
-        
+
                         $numLine = 0;
                         while($res = mysql_fetch_array($result)) {
                         if ($numLine%2 == 0) {
@@ -299,19 +299,19 @@ if(empty($search_terms)) {
                         <td>";
                         if (empty($res['forum_desc'])) {
                                 $desc_text = "";
-                        } else { 
+                        } else {
                                 $desc_text = "<br /><span class='smaller'>($res[forum_desc])</span>";
                         }
                         $link_forum = "${urlServer}/modules/forum/viewforum.php?forum=$res[forum_id]";
                         $tool_content .= "<a href='$link_forum'>".$res['forum_name']."</a> $desc_text
                         </td>
-                        </tr>";				
+                        </tr>";
                         $numLine++;
 		  }
 		  $tool_content .= "</table>";
 		  $found = true;
 		}
-		$myquery = "SELECT id, title FROM forum_topic WHERE MATCH (title)".$query;		
+		$myquery = "SELECT id, title FROM forum_topic WHERE MATCH (title)".$query;
 		$result = db_query($myquery);
 		if(mysql_num_rows($result) > 0) {
 			$tool_content .= "
@@ -337,8 +337,8 @@ if(empty($search_terms)) {
 			$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
 					FROM posts, posts_text
 					WHERE posts.forum_id = $res[forum_id]
-						AND posts.post_id = posts_text.post_id 
-						AND MATCH (posts_text.post_text)".$query;		
+						AND posts.post_id = posts_text.post_id
+						AND MATCH (posts_text.post_text)".$query;
 			$result2 = db_query($myquery2, $course_code);
 			if(mysql_num_rows($result2) > 0) {
 			while($res2 = mysql_fetch_array($result2))
@@ -381,12 +381,12 @@ if(empty($search_terms)) {
                   <tr $class_view>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                        if (empty($res['description'])) { 
+                        if (empty($res['description'])) {
                                 $desc_text = "";
-                        } else { 
+                        } else {
                                 $desc_text = "<span class='smaller'>$res[description]</span>";
                         }
-                        $link_url = "{$urlServer}modules/link/go.php?c=$course_code&amp;id=$res[id]&amp;link_url=$res[url]"; 
+                        $link_url = "{$urlServer}modules/link/go.php?c=$course_code&amp;id=$res[id]&amp;link_url=$res[url]";
                         $tool_content .= "<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
                   </td>
                 </tr>";
@@ -430,7 +430,7 @@ if(empty($search_terms)) {
                         } else {
                                 $desc_text = "<span class='smaller'>($res[description])</span>";
                         }
-                        $link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";				
+                        $link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";
                         $tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
                         </td>
                         </tr>";
@@ -503,7 +503,7 @@ if(empty($search_terms)) {
                                 $tool_content .= "
                                 <tr $class_view>
                                 <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";	  
+                                <td>";
                                 if (empty($res['comments'])) {
                                         $comments_text = "";
                                 } else {
@@ -547,7 +547,7 @@ if(empty($search_terms)) {
 				} else {
 					$comments_text = "<span class='smaller'> $res2[comments]</span>";
 				}
-				$unitlink = "${urlServer}modules/units/?id=$res2[id]";				
+				$unitlink = "${urlServer}modules/units/?id=$res2[id]";
 				$tool_content .= "$res2[title]<a href='$unitlink'>".$comments_text."</a></td></tr>";
 				$numLine++;
 			}

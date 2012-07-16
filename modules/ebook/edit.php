@@ -102,7 +102,7 @@ if (isset($_GET['delete'])) {
                 }
         }
         $tool_content .= "<p class='success'>$langEBookSectionsModified</p>";
-} 
+}
 
 $q = db_query("SELECT * FROM `ebook` WHERE course_id = $course_id AND id = $ebook_id");
 
@@ -120,7 +120,7 @@ if (mysql_num_rows($q) == 0) {
         <li><a href='document.php?course=$course_code&amp;ebook_id=$ebook_id'>$langFileAdmin</a></li>
       </ul>
     </div>
-    
+
     <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
     <legend>$langEBook</legend>
@@ -223,7 +223,7 @@ if (mysql_num_rows($q) == 0) {
                              ORDER BY CONVERT(psid, UNSIGNED), psid,
                                       CONVERT(pssid, UNSIGNED), pssid");
         while ($r = mysql_fetch_array($q)) {
-                $class = odd_even($k); 
+                $class = odd_even($k);
                 $file_id = $r['file_id'];
                 $display_id = $r['sid'] . ',' . $r['ssid'];
                 $tool_content .= "
@@ -239,7 +239,7 @@ if (mysql_num_rows($q) == 0) {
                 $k++;
         }
         foreach ($files as $key => $file) {
-                $class = odd_even($k); 
+                $class = odd_even($k);
                 $path = $paths[$key];
                 $file_id = $file_ids[$key];
                 $title = get_html_title($basedir . $path);

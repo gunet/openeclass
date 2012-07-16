@@ -83,7 +83,7 @@ function form()
 		$message = $langContactMessage;
 		$hidden = '';
 	}
-	
+
 	$ret = "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>

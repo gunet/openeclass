@@ -24,25 +24,25 @@
 	class.wikistore.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: class.wikistore Revision: 1.11.2.3
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
     require_once dirname(__FILE__) . "/class.dbconnection.php";
     require_once dirname(__FILE__) . "/class.wiki.php";
-    
+
     // Error codes
     !defined("WIKI_NO_TITLE_ERROR") && define( "WIKI_NO_TITLE_ERROR", "Missing title" );
     !defined("WIKI_NO_TITLE_ERRNO") && define( "WIKI_NO_TITLE_ERRNO", 1 );
@@ -52,7 +52,7 @@
     !defined( "WIKI_CANNOT_BE_UPDATED_ERRNO") && define( "WIKI_CANNOT_BE_UPDATED_ERRNO", 3 );
     !defined( "WIKI_NOT_FOUND_ERROR") && define( "WIKI_NOT_FOUND_ERROR", "Wiki not found" );
     !defined( "WIKI_NOT_FOUND_ERRNO") && define( "WIKI_NOT_FOUND_ERRNO", 4 );
-    
+
     /**
      * Class representing the WikiStore
      * (ie the place where the wiki are stored)
@@ -61,7 +61,7 @@
     {
         // private fields
         var $con;
-        
+
         // default configuration
         var $config = array(
                 'tbl_wiki_pages' => 'wiki_pages',
@@ -69,11 +69,11 @@
                 'tbl_wiki_properties' => 'wiki_properties',
                 'tbl_wiki_acls' => 'wiki_acls'
             );
-            
+
         // error handling
         var $error = '';
         var $errno = 0;
-        
+
         /**
          * Constructor
          * @param DatabaseConnection con connection to the database
@@ -87,7 +87,7 @@
             }
             $this->con = $con;
         }
-        
+
         // load and save
         /**
          * Load a Wiki
@@ -97,17 +97,17 @@
         function loadWiki( $wikiId )
         {
             $wiki = new Wiki( $this->con, $this->config );
-            
+
             $wiki->load( $wikiId );
-            
+
             if ( $wiki->hasError() )
             {
                 $this->setError( $wiki->error, $wiki->errno );
             }
-            
+
             return $wiki;
         }
-        
+
         /**
          * Check if a page exists in a given wiki
          * @param int wikiId ID of the Wiki
@@ -130,7 +130,7 @@
 
             return $this->con->queryReturnsResult( $sql );
         }
-        
+
         /**
          * Check if a wiki exists usind its ID
          * @param int id wiki ID
@@ -153,7 +153,7 @@
 
             return $this->con->queryReturnsResult( $sql );
         }
-        
+
         // Wiki methods
 
         /**
@@ -168,17 +168,17 @@
             {
                 $this->con->connect();
             }
-            
+
             $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
                 . "WHERE `group_id` = ".$groupId . " "
                 . "AND `course_id` = $course_id "
                 . "ORDER BY `id` ASC"
                 ;
-                
+
             return $this->con->getAllRowsFromQuery( $sql );
         }
-        
+
         /**
          * Get the list of the wiki's in a course
          * @return array list of the wiki's in the course
@@ -188,7 +188,7 @@
         {
             return $this->getWikiListByGroup( 0 );
         }
-        
+
         /**
          * Get the list of the wiki's in all groups (exept course wiki's)
          * @return array list of all the group wiki's
@@ -200,17 +200,17 @@
             {
                 $this->con->connect();
             }
-            
+
             $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
                 . "WHERE `group_id` != 0 "
                 . "AND `course_id` = $course_id "
                 . "ORDER BY `group_id` ASC"
                 ;
-                
+
             return $this->con->getAllRowsFromQuery( $sql );
         }
-        
+
         function getNumberOfPagesInWiki( $wikiId )
         {
             if ( ! $this->con->isConnected() )
@@ -224,9 +224,9 @@
                     . "FROM `".$this->config['tbl_wiki_pages']."` "
                     . "WHERE `wiki_id` = " . $wikiId
                     ;
-                    
+
                 $result = $this->con->getRowFromQuery( $sql );
-                
+
                 return $result['pages'];
             }
             else
@@ -235,7 +235,7 @@
                 return false;
             }
         }
-        
+
         /**
          * Delete a Wiki from the store
          * @param int wikiId ID of the wiki
@@ -248,7 +248,7 @@
             {
                 $this->con->connect();
             }
-            
+
             if ( $this->wikiIdExists( $wikiId ) )
             {
                 // delete properties
@@ -256,53 +256,53 @@
                     . "WHERE `id` = " . $wikiId
                     ." AND `course_id` = $course_id"
                     ;
-                    
-                $numrows = $this->con->executeQuery( $sql );
-                
-                if ( $numrows < 1 || $this->hasError() )
-                {
-                    return false;
-                }
-                
-                // delete wiki acl
-                $sql = "DELETE FROM `".$this->config['tbl_wiki_acls']."` "
-                    . "WHERE `wiki_id` = " . $wikiId
-                    ;
-                    
+
                 $numrows = $this->con->executeQuery( $sql );
 
                 if ( $numrows < 1 || $this->hasError() )
                 {
                     return false;
                 }
-                
+
+                // delete wiki acl
+                $sql = "DELETE FROM `".$this->config['tbl_wiki_acls']."` "
+                    . "WHERE `wiki_id` = " . $wikiId
+                    ;
+
+                $numrows = $this->con->executeQuery( $sql );
+
+                if ( $numrows < 1 || $this->hasError() )
+                {
+                    return false;
+                }
+
                 $sql = "SELECT `id` "
                     . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
                     . "WHERE `wiki_id` = " . $wikiId
                     ;
-                    
+
                 $pageIds = $this->con->getAllRowsFromQuery( $sql );
-                
+
                 if ( $this->hasError() )
                 {
                     return false;
                 }
-                
+
                 foreach ( $pageIds as $pageId )
                 {
                     $sql = "DELETE "
                         . "FROM `".$this->config['tbl_wiki_pages_content']."` "
                         . "WHERE `pid` = " . $pageId['id']
                         ;
-                        
+
                     $this->con->executeQuery( $sql );
-                    
+
                     if ( $this->hasError() )
                     {
                         return false;
                     }
                 }
-                
+
 #                // delete wiki pages
 #                $sql = "DELETE `content`.* "
 #                    . "FROM `"
@@ -313,23 +313,23 @@
 #                    ;
 #
 #                $numrows = $this->con->executeQuery( $sql );
-#                
+#
 #                if ( $this->hasError() )
 #                {
 #                    return false;
 #                }
-                
+
                 $sql = "DELETE FROM `".$this->config['tbl_wiki_pages']."` "
                     . "WHERE `wiki_id` = " . $wikiId
                     ;
-                    
+
                 $numrows = $this->con->executeQuery( $sql );
 
                 if ( $this->hasError() )
                 {
                     return false;
                 }
-                
+
                 return true;
             }
             else
@@ -338,7 +338,7 @@
                 return false;
             }
         }
-        
+
         // error handling
 
         function setError( $errmsg = '', $errno = 0 )

@@ -162,7 +162,7 @@ class CAS_CookieJar {
 		// This implementation makes the assumption that semicolons will not
 		// be present in quoted attribute values. While attribute values that
 		// contain semicolons are allowed by RFC2965, they are hopefully rare
-		// enough to ignore for our purposes. Most browsers make the same 
+		// enough to ignore for our purposes. Most browsers make the same
 		// assumption.
 		$attributeStrings = explode( ';', $line );
 
@@ -294,7 +294,7 @@ class CAS_CookieJar {
 		// Verify that the scheme matches
 		if ($cookie['secure'] && $target['scheme'] != 'https')
 		return false;
-		
+
 		// Verify that the host matches
 		// Match domain and mulit-host cookies
 		if (strpos($cookie['domain'], '.') === 0) {

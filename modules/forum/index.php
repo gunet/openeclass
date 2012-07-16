@@ -49,17 +49,17 @@ if ($is_editor) {
 	';
 }
 
-if ($is_editor) { 	
-         $tool_content .= " 	        
-	<div id='operations_container'> 	
+if ($is_editor) {
+         $tool_content .= "
+	<div id='operations_container'>
 	<ul id='opslist'>
 	<li><a href='forum_admin.php?course=$course_code'>$langAddCategory</a>
 	</li>
-	</ul> 	         
-	</div>"; 	         
+	</ul>
+	</div>";
 }
- 
- 
+
+
 if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 	if (isset($_GET['cat_id'])) {
 		$cat_id = intval($_GET['cat_id']);
@@ -77,7 +77,7 @@ if(isset($_GET['forumcatnotify'])) { // modify forum category notification
 	if (isset($_GET['forum_id'])) {
 		$forum_id = intval($_GET['forum_id']);
 	}
-	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
+	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $course_id", $mysqlMainDb));
 	if ($rows > 0) {
 		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['forumnotify']) . "
@@ -104,7 +104,7 @@ if ($total_categories) {
 		FROM forum f LEFT JOIN forum_post p ON p.id = f.last_post_id
                 AND f.course_id = $course_id
 		ORDER BY f.cat_id, f.id";
-		
+
 	$f_res = db_query($sql);
 	while ($forum_data = mysql_fetch_assoc($f_res)) {
 		$forum_row[] = $forum_data;
@@ -112,7 +112,7 @@ if ($total_categories) {
 	for ($i=0; $i < $total_categories; $i++) {
 		$title = stripslashes($categories[$i]['cat_title']);
 		$catNum = $categories[$i]['id'];
-		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
+		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
 				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $course_id", $mysqlMainDb));
 		if (!isset($action_notify)) {
 			$link_notify = FALSE;
@@ -144,14 +144,14 @@ if ($total_categories) {
 		<td class='center'>$langLastPost</td>
 		<td class='center'>$langActions</td>
 		</tr>";
-		
+
 		@reset($forum_row);
 		// display forum topics
 		for ($x=0; $x < count($forum_row); $x++) {
 			unset($last_post);
 			$cat_id = $categories[$i]['id'];
 			$sql = db_query("SELECT * FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
-			if (mysql_num_rows($sql) > 0) { // if category forum topics are found 
+			if (mysql_num_rows($sql) > 0) { // if category forum topics are found
 				if ($forum_row[$x]['cat_id'] == $cat_id) {
 					if ($forum_row[$x]["post_time"]) {
 						$last_post = $forum_row[$x]["post_time"];
@@ -176,7 +176,7 @@ if ($total_categories) {
 					}
 					$forum_name = q($forum_row[$x]['name']);
 					$last_user_post = uid_to_name($forum_row[$x]['poster_id']);
-					$last_post_topic_id = $forum_row[$x]['topic_id'];                                        
+					$last_post_topic_id = $forum_row[$x]['topic_id'];
 					$total_posts = $forum_row[$x]['num_posts'];
 					$total_topics = $forum_row[$x]['num_topics'];
 					$desc = q($forum_row[$x]['desc']);
@@ -188,7 +188,7 @@ if ($total_categories) {
 					// Show link to forum if:
 					//  - user is admin of course
 					//  - forum doesn't belong to group
-					//  - forum belongs to group and group forums are enabled and					
+					//  - forum belongs to group and group forums are enabled and
 					//     - user is member of group
 					if ($is_editor or !$group_id or ($has_forum and $is_member)) {
 						$tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
@@ -243,7 +243,7 @@ if ($total_categories) {
 		}
 		$tool_content .= "</table>";
 	}
-	
+
 } else {
 	$tool_content .= "<p class='alert1'>$langNoForums</p>";
 }

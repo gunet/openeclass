@@ -89,11 +89,11 @@ switch ($u_stats_value) {
         $chart = new VerticalBarChart(300, 300);
         $dataSet = new XYDataSet();
         $query = "SELECT ".$date_what.", COUNT(*) AS cnt FROM actions
-                         WHERE $date_where 
-                         AND $mod_where 
+                         WHERE $date_where
+                         AND $mod_where
                          AND course_id = $course_id
                         GROUP BY $date_group ORDER BY `date_time` ASC";
-        
+
         $result = db_query($query);
 
         switch ($u_interval) {
@@ -112,7 +112,7 @@ switch ($u_stats_value) {
                     }
             break;
             case "weekly":
-                while ($row = mysql_fetch_assoc($result)) {                    
+                while ($row = mysql_fetch_assoc($result)) {
                     $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
                     $chart->width += 25;
                     $chart_content = 1;
@@ -136,11 +136,11 @@ switch ($u_stats_value) {
         $chart->setTitle("$langVisits");
 
     break;
-    case "duration":        
-            
+    case "duration":
+
             $query = "SELECT ".$date_what." , SUM(duration) AS tot_dur
-                FROM actions 
-                WHERE $date_where 
+                FROM actions
+                WHERE $date_where
                 AND $mod_where
                 AND course_id = $course_id
                 GROUP BY ".$date_group." ORDER BY date_time ASC";
@@ -167,7 +167,7 @@ switch ($u_stats_value) {
          break;
          case "weekly":
              while ($row = mysql_fetch_assoc($result)) {
-		$row['tot_dur'] = round($row['tot_dur'] / 60);		
+		$row['tot_dur'] = round($row['tot_dur'] / 60);
                 $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['tot_dur']));
                 $chart->width += 25;
                 $chart_content=1;

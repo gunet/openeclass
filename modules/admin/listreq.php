@@ -79,7 +79,7 @@ switch ($show) {
       </div>";
 
 // -----------------------------------
-// display closed requests 
+// display closed requests
 // ----------------------------------
 if (!empty($show) and $show == 'closed') {
 	if (!empty($id) and $id > 0) {
@@ -117,7 +117,7 @@ if (!empty($show) and $show == 'closed') {
 	$tool_content .= "\n  </table>\n";
 
 // -----------------------------------
-// display rejected requests 
+// display rejected requests
 // ----------------------------------
 } elseif (!empty($show) && ($show == 'rejected')) {
 	if (!empty($id) && ($id > 0)) {
@@ -170,7 +170,7 @@ if (!empty($show) and $show == 'closed') {
                 }
 		break;
 	case '2':
-		$submit = isset($_POST['submit'])? $_POST['submit']: '';                
+		$submit = isset($_POST['submit'])? $_POST['submit']: '';
 		if(!empty($submit)) {
 			// post the comment and do the delete action
 			if (!empty($_POST['comment'])) {
@@ -238,7 +238,7 @@ $langEmail: $emailhelpdesk";
 // -----------------------------------
 else
 {
-	
+
 	// show username as well (useful)
  	$sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
                                 WHERE (status = 1 AND statut = $list_statut)");
@@ -296,8 +296,8 @@ else
                 $tool_content .= "\n  </table>\n";
         } else {
                 $tool_content .= "<p class='alert1'>$langUserNoRequests</p>";
-        }       
-	
+        }
+
 }
 
 // If show is set then we return to listreq, else return to admin index.php
@@ -313,12 +313,12 @@ draw($tool_content, 3, null, $head_content);
 // function to display table header
 // --------------------------------------
 function table_header($addon = FALSE, $message = FALSE) {
-	
+
 	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;
 	global $langDateRequest_small, $list_statut;
 
 	$string = "";
-	if ($addon) { 
+	if ($addon) {
 		$rowspan=2;
 		$datestring = "<th colspan='2'>$langDate</th>
 		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
@@ -335,7 +335,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 	<th scope='col' colspan='2' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='center'>$langFaculty</div></th>";
-	$string .= $datestring; 
+	$string .= $datestring;
 	$string .= "</tr>";
 
 return $string;

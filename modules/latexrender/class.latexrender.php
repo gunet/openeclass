@@ -50,7 +50,7 @@ class LatexRender {
     // ====================================================================================
     // constructor
     // ====================================================================================
-    
+
     /**
      * Initializes the class
      *
@@ -62,7 +62,7 @@ class LatexRender {
         $this->_picture_path_httpd = $picture_path_httpd;
         $this->_tmp_filename = md5(rand());
     }
-    
+
     // ====================================================================================
     // public functions
     // ====================================================================================
@@ -104,12 +104,12 @@ class LatexRender {
     }
 
     /**
-     * Tries to match the LaTeX Formula given as argument against the 
+     * Tries to match the LaTeX Formula given as argument against the
      * formula cache. If the picture has not been rendered before, it'll
      * try to render the formula and drop it in the picture cache directory.
      *
      * @param string formula in LaTeX format
-     * @returns the webserver based URL to a picture which contains the 
+     * @returns the webserver based URL to a picture which contains the
      * requested LaTeX formula. If anything fails, the resultvalue is false.
      */
     function getFormulaURL($latex_formula) {
@@ -204,7 +204,7 @@ class LatexRender {
      *    this way.
      *
      * @param string LaTeX formula
-     * @returns true if the picture has been successfully saved to the picture 
+     * @returns true if the picture has been successfully saved to the picture
      *          cache directory
      */
     function renderLatex($latex_formula) {
@@ -233,15 +233,15 @@ class LatexRender {
         $command = $this->_convert_path." -density ".$this->_formula_density.
                     " -trim -transparent '#FFFFFF' ".$this->_tmp_filename.".ps ".
                     $this->_tmp_filename.".".$this->_image_format;
-        
+
         $status_code = exec($command);
 
         // test picture for correct dimensions
         $dim = $this->getDimensions($this->_tmp_filename.".".$this->_image_format);
 
         if ( ($dim["x"] > $this->_xsize_limit) or ($dim["y"] > $this->_ysize_limit)) {
-            $this->cleanTemporaryDirectory(); 
-            chdir($current_dir); 
+            $this->cleanTemporaryDirectory();
+            chdir($current_dir);
             return false;
         }
 
@@ -251,7 +251,7 @@ class LatexRender {
 
         $status_code = copy($this->_tmp_filename.".".$this->_image_format,$filename);
 
-        $this->cleanTemporaryDirectory();	
+        $this->cleanTemporaryDirectory();
 
         if (!$status_code) { chdir($current_dir); return false; }
         chdir($current_dir);

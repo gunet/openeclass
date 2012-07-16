@@ -70,11 +70,11 @@ if (isset($_POST['submit'])) {
 	if (empty($message) or empty($subject)) {
 		header("Location: viewforum.php?course=$course_code&forum=$forum_id&empty=true");
 		exit;
-	}	
-	$message = purify($message);        
+	}
+	$message = purify($message);
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
-	
+
 	$sql = "INSERT INTO forum_topic (title, poster_id, forum_id, topic_time)
 			VALUES (" . autoquote($subject) . ", $uid, $forum_id, '$time')";
 	$result = db_query($sql);
@@ -83,32 +83,32 @@ if (isset($_POST['submit'])) {
 	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic_id, $forum_id, ".autoquote($message).", $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
-	
+
         $post_id = mysql_insert_id();
         db_query("UPDATE forum_topic
                     SET last_post_id = $post_id
-                WHERE id = $topic_id 
+                WHERE id = $topic_id
                 AND forum_id = $forum_id");
-                        
+
 	db_query("UPDATE forum
-                    SET num_topics = num_topics+1, 
-                    num_posts = num_posts+1,                    
+                    SET num_topics = num_topics+1,
+                    num_posts = num_posts+1,
                     last_post_id = $post_id
 		WHERE id = $forum_id");
-        
+
 	$topic = $topic_id;
 	$total_forum = get_total_topics($forum_id);
-	$total_topic = get_total_posts($topic, "topic")-1;  
-	// subtract 1 because we want the number of replies, not the number of posts.	
+	$total_topic = get_total_posts($topic, "topic")-1;
+	// subtract 1 because we want the number of replies, not the number of posts.
 
 	// --------------------------------
-	// notify users 
+	// notify users
 	// --------------------------------
 	$subject_notify = "$logo - $langNewForumNotify";
 	$category_id = forum_category($forum_id);
 	$cat_name = category_name($category_id);
-	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
-			WHERE (forum_id = $forum_id OR cat_id = $category_id) 
+	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (forum_id = $forum_id OR cat_id = $category_id)
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
 	while ($r = mysql_fetch_array($sql)) {
                 if (get_user_email_notification($r['user_id'], $course_id)) {
                         $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-                        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);            
+                        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
                         $plain_body_topic_notify .= $unsubscribe.$linkhere;
                         $body_topic_notify .= $unsubscribe.$linkhere;
                         $emailaddr = uid_to_email($r['user_id']);
@@ -127,10 +127,10 @@ if (isset($_POST['submit'])) {
                 }
 	}
 	// end of notification
-	
+
 	$tool_content .= "<p class='success'>$langStored</p>
 		<p class='back'>&laquo; <a href='viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic'>$langReturnMessages</a></p>
-		<p class='back'>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>$langReturnTopic</a></p>"; 
+		<p class='back'>&laquo; <a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>$langReturnTopic</a></p>";
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewforum.php?course=$course_code&forum=$forum_id");
 	exit;

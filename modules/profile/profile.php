@@ -55,7 +55,7 @@ if (!$auth) {
 $auth_text = get_auth_info($auth);
 
 if ($auth != 1) {
-        $allow_username_change = false; 
+        $allow_username_change = false;
         $allow_password_change = false;
 } else {
         $allow_username_change = !get_config('block_username_change');
@@ -78,16 +78,16 @@ if (isset($_POST['submit'])) {
 	if (!file_exists($webDir.'/courses/userimg/')) {
 		mkdir($webDir.'/courses/userimg/', 0775);
 	}
-	$image_path = $webDir.'/courses/userimg/'.$_SESSION['uid'];        
+	$image_path = $webDir.'/courses/userimg/'.$_SESSION['uid'];
         $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
         $old_language = $language;
-        $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];        
+        $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
         $old_perso_status = $_SESSION['user_perso_active'];
         if (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes') {
                 $_SESSION['user_perso_active'] = false;
-        } else {        
+        } else {
                 $_SESSION['user_perso_active'] = true;
-        }        
+        }
         db_query("UPDATE user SET perso = '$_POST[persoStatus]',
                                   lang = '$langcode'
                               WHERE user_id = $uid");
@@ -100,8 +100,8 @@ if (isset($_POST['submit'])) {
                 'nom_form' => !$is_admin,
                 'prenom_form' => true,
                 'username_form' => true,
-                'email_public' => false, 
-                'phone_public' => false, 
+                'email_public' => false,
+                'phone_public' => false,
                 'am_public' => false), 'all');
 
         if (!isset($_POST['department']) and !$is_admin) {
@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
         $email_public = valid_access($email_public);
         $phone_public = valid_access($phone_public);
         $am_public = valid_access($am_public);
-	
+
 	// upload user picture
 	if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
 		$type = $_FILES['userimage']['type'];
@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
 	}
 
 	// check if email is valid
-	if ((get_config('email_required') | get_config('email_verification_required')) 
+	if ((get_config('email_required') | get_config('email_verification_required'))
                         and !email_seems_valid($email_form)) {
 		redirect_to_message(6);
 	}
@@ -165,16 +165,16 @@ if (isset($_POST['submit'])) {
 		}
 	}
 
-  	// TODO: Allow admin to configure allowed username format	
-	if (!empty($email_form) && ($email_form != $_SESSION['email']) 
+  	// TODO: Allow admin to configure allowed username format
+	if (!empty($email_form) && ($email_form != $_SESSION['email'])
                 && get_config('email_verification_required')) {
-		$verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;                	                
+		$verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;
 	} else {
 		$verified_mail_sql = '';
 	}
 	// everything is ok
 	$email_form = mb_strtolower(trim($email_form));
-        
+
 	if (db_query("UPDATE user SET nom = " . quote($nom_form) . ",
 						prenom = " . quote($prenom_form) . ",
 						username = " . quote($username_form) . ",
@@ -197,8 +197,8 @@ if (isset($_POST['submit'])) {
 		$_SESSION['uname'] = $username_form;
 		$_SESSION['nom'] = $nom_form;
 		$_SESSION['prenom'] = $prenom_form;
-		$_SESSION['email'] = $email_form;			
-		
+		$_SESSION['email'] = $email_form;
+
 		redirect_to_message(1);
 	}
 	if ($old_language != $language or $old_perso_status != $_POST['persoStatus']) {
@@ -369,22 +369,22 @@ $tool_content .= "<tr><th>$langEmailFromCourses:</th>
                   <td><input type='radio' name='subscribe' value='yes' $selectedyes />$langYes&nbsp;
                   <input type='radio' name='subscribe' value='no' $selectedno />$langNo&nbsp;
                   </td></tr>";
-if (get_config('email_verification_required')) {        
+if (get_config('email_verification_required')) {
         $user_email_status = get_mail_ver_status($uid);
         switch($user_email_status) {
                 case EMAIL_VERIFICATION_REQUIRED:
                         $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";                        
+                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";
                         break;
-                case EMAIL_VERIFIED: 
+                case EMAIL_VERIFIED:
                         $message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
                         break;
-                case EMAIL_UNVERIFIED:                        
+                case EMAIL_UNVERIFIED:
                         $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";                                                
-                default:	
+                        $message = "<div class='alert1'>$langMailNotVerified $link</div>";
+                default:
                         break;
-                
+
         }
         $tool_content .= "<tr><th>$langVerifiedMail</th><td>$message</td>";
 }
@@ -428,7 +428,7 @@ $tool_content .= "
           <th>$langDescription:</th>
           <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
         </tr>
-        <tr> 
+        <tr>
           <td>&nbsp;</td>
           <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
         </tr>

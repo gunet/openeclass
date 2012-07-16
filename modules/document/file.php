@@ -41,7 +41,7 @@ if (isset($_SESSION['course_code'])) {
         define('old_course_code', $_SESSION['course_code']);
 }
 
-$uri = preg_replace('/\?[^?]*$/', '', 
+$uri = preg_replace('/\?[^?]*$/', '',
                     $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
@@ -104,12 +104,12 @@ if (file_exists($basedir . $file_info['path'])) {
     else {
         require_once 'modules/video/video_functions.php';
         require_once 'include/lib/fileDisplayLib.inc.php';
-        
+
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/index.php?course='. $course_code .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
             $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
-        
+
         $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;
         exit();
@@ -134,9 +134,9 @@ function check_cours_access() {
 
 	switch($cours['visible']) {
 		case '2': return; 	// cours is open
-		case '1': 
-		case '0': 
-		default: 
+		case '1':
+		case '0':
+		default:
                 // check if user has access to course
                 if (isset($_SESSION['status'][$course_code]) && ($_SESSION['status'][$course_code] >= 1)) {
                         return;

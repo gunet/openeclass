@@ -49,7 +49,7 @@ function initialize_group_info($group_id = false)
                 list($member_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM group_members
 							       WHERE group_id = $group_id"));
 
-		$tutors = group_tutors($group_id);	
+		$tutors = group_tutors($group_id);
                 $is_tutor = $is_member = $user_group_description = false;
                 if (isset($uid)) {
                         $res = db_query("SELECT is_tutor, description FROM group_members
@@ -63,7 +63,7 @@ function initialize_group_info($group_id = false)
 }
 
 function group_tutors($group_id)
-{	
+{
 	$tutors = array();
 	$res = db_query("SELECT user.user_id, nom, prenom, has_icon FROM group_members, user
 			 WHERE group_id = $group_id AND
@@ -81,12 +81,12 @@ function group_tutors($group_id)
 function user_group_info($uid, $course_id)
 {
 	$gids = array();
-	
+
 	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
 			WHERE group_members.user_id = $uid
 			AND group_members.group_id = `group`.id
 			AND `group`.course_id = $course_id");
-	
+
 	while ($r = mysql_fetch_array($q)) {
 		$gids[$r['grp_id']] = $r['grp_name'];
 	}
@@ -96,7 +96,7 @@ function user_group_info($uid, $course_id)
 // returns group name gives its group id
 function gid_to_name($gid)
 {
-	
+
 	if ($res = mysql_fetch_row(db_query("SELECT name FROM `group` WHERE id = $gid"))) {
 		return $res[0];
 	} else {

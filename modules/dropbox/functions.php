@@ -45,7 +45,7 @@ $head_content ='<script type="text/javascript">
                 }
                 return true;
                 }
-	
+
 		function checkForm (frm) {
                 if (frm.elements["recipients[]"].selectedIndex < 0) {
                         alert("'.$dropbox_lang['noUserSelected'].'");
@@ -73,20 +73,20 @@ $dropbox_cnf["personTbl"] = "dropbox_person";
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["sysPath"] = $webDir."/courses/".$course_code."/dropbox"; 
+$dropbox_cnf["sysPath"] = $webDir."/courses/".$course_code."/dropbox";
 
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
-} 
-	
+}
+
 // get dropbox quotas from database
 $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code = '$course_code'"));
 $diskQuotaDropbox = $d['dropbox_quota'];
 $dropbox_cnf["allowJustUpload"] = false;
 if (get_config('dropbox_allow_student_to_student') == true) {
-	$dropbox_cnf["allowStudentToStudent"] = true;	
+	$dropbox_cnf["allowStudentToStudent"] = true;
 } else {
-	$dropbox_cnf["allowStudentToStudent"] = false;	
+	$dropbox_cnf["allowStudentToStudent"] = false;
 }
 $basedir = $dropbox_cnf["sysPath"];
 $diskUsed = dir_total_space($basedir);
@@ -98,7 +98,7 @@ $diskUsed = dir_total_space($basedir);
 function removeUnusedFiles()
 {
     global $dropbox_cnf, $dropbox_lang, $course_id;
-    
+
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM `" . $dropbox_cnf["fileTbl"] . "` f

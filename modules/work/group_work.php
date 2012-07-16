@@ -61,7 +61,7 @@ function show_assignments()
 
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		 FROM assignment WHERE course_id = $course_id");
-        
+
 	if (mysql_num_rows($res) == 0) {
 		$tool_content .=  $langNoAssign;
 		return;
@@ -85,7 +85,7 @@ function show_assignments()
 		<th align='center' width='10%'>$m[submitted]</th>
 		<th align='center' width='10%'>$m[select]</th>
 		</tr>";
-	
+
 	while ($row = mysql_fetch_array($res)) {
 		if (!$row['active']) {
 			continue;
@@ -146,7 +146,7 @@ function submit_work($uid, $group_id, $id, $file) {
 
         $ext = get_file_extension($file);
 	$local_name = greek_to_latin('Group '. $group_id . (empty($ext)? '': '.' . $ext));
-        
+
         list($original_filename) = mysql_fetch_row(db_query("SELECT filename FROM document
                                                                 WHERE $group_sql AND
                                                                       path = " . autoquote($file)));
@@ -154,7 +154,7 @@ function submit_work($uid, $group_id, $id, $file) {
 	$destination = work_secret($id)."/$local_name";
 
         delete_submissions_by_uid($uid, $group_id, $id, $destination);
-        
+
         if (is_dir($source)) {
                 $original_filename = $original_filename.'.zip';
                 $zip_filename = $webDir . 'courses/temp/'.safe_filename('zip');

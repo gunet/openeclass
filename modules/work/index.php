@@ -249,9 +249,9 @@ function show_submission($sid)
 function add_assignment($title, $desc, $deadline, $group_submissions)
 {
         global $tool_content, $workPath, $course_id;
-        
-        $secret = uniqid('');        
-        $desc = purify($desc);                
+
+        $secret = uniqid('');
+        $desc = purify($desc);
         db_query("INSERT INTO assignment
                 (course_id, title, description, deadline, comments, submission_date, secret_directory,
                 group_submissions) VALUES
@@ -383,10 +383,10 @@ function submit_work($id, $on_behalf_of = null)
                                                  (uid, assignment_id, submission_date, submission_ip, file_path,
                                                   file_name, comments, grade, grade_comments, grade_submission_ip,
                                                   grade_submission_date, group_id)
-                                          VALUES ($user_id, $id, NOW(), $submit_ip, 
-                                                        ".quote($filename).", 
+                                          VALUES ($user_id, $id, NOW(), $submit_ip,
+                                                        ".quote($filename).",
                                                         ".quote($file_name).",
-                                                        ".quote($stud_comments).", 
+                                                        ".quote($stud_comments).",
                                                         $grade, $grade_comments, $grade_ip, NOW(), $group_id)");
                                 $sid = mysql_insert_id();
                                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT,
@@ -417,7 +417,7 @@ function submit_work($id, $on_behalf_of = null)
 //  assignment - prof view only
 function new_assignment()
 {
-	global $tool_content, $m, $langAdd, $course_code;	
+	global $tool_content, $m, $langAdd, $course_code;
 	global $desc;
 	global $end_cal_Work;
 	global $langBack;
@@ -532,7 +532,7 @@ cData;
 function edit_assignment($id)
 {
 
-	global $tool_content, $langBackAssignment, $langEditSuccess, 
+	global $tool_content, $langBackAssignment, $langEditSuccess,
                 $langEditError, $course_code, $works_url, $course_id;
 
 	$nav[] = $works_url;
@@ -542,25 +542,25 @@ function edit_assignment($id)
         $description = purify($_POST['desc']);
         $deadline = $_POST['WorkEnd'];
         $group_submissions = $_POST['group_submissions'];
-                
+
         if (!isset($_POST['comments'])) {
                 $comments = "''";
         } else {
                 $comments = quote(purify($_POST['comments']));
         }
-	if (db_query("UPDATE assignment SET 
+	if (db_query("UPDATE assignment SET
                                 title = ".quote($title).",
                                 description = ".quote($description).",
                                 group_submissions = ".quote($group_submissions).",
-                                comments = $comments, 
+                                comments = $comments,
                                 deadline = ".quote($deadline)."
                         WHERE course_id = $course_id AND id='$id'")) {
                                 $title = autounquote($_POST['title']);
                                 $tool_content .= "<p class='success'>$langEditSuccess<br />
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a>
                                         </p><br />";
-                
-                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, 
+
+                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
                         array('id' => $id,
                         'title' => $title,
                         'description' => $description,
@@ -584,10 +584,10 @@ function delete_assignment($id) {
 	db_query("DELETE FROM assignment WHERE course_id = $course_id AND id = $id");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
 	move_dir("$workPath/$secret", "$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
-        
+
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                                                         'title' => $title));
-        
+
 	$tool_content .= "<p class='success'>$langDeleted<br />
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
@@ -603,7 +603,7 @@ function show_student_assignment($id)
         $user_group_info = user_group_info($uid, $course_id);
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignment WHERE course_id = $course_id AND id = $id");
-        	
+
 	$row = mysql_fetch_array($res);
 
 	$nav[] = $works_url;
@@ -704,7 +704,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
 // Print a box with the details of an assignment
 function assignment_details($id, $row, $message = null)
 {
-        global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft, 
+        global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
                $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
                $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
                $langSaved, $langGraphResults;
@@ -859,10 +859,10 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 db_query("SELECT COUNT(*)
                                                  FROM assignment_submit AS assign,
                                                       user AS user
-                                                 WHERE assign.assignment_id = $id AND 
+                                                 WHERE assign.assignment_id = $id AND
                                                        user.user_id = assign.uid AND
                                                        assign.grade <> ''"));
-	
+
 	$num_results = mysql_num_rows($result);
         if ($num_results > 0) {
                 if ($num_results == 1) {
@@ -976,7 +976,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		  <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
 		  </form>";
                 }
-	
+
                 if ($display_graph_results) { // display pie chart with grades results
                         if ($gradesExists) {
                                 $chart = new PieChart(300, 200);
@@ -1177,18 +1177,18 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email)
 	if (!is_numeric($grade) && '' != $grade ) {
 		$tool_content .= $langWorkWrongInput;
 		$stupid_user = 1;
-	} else {                                
+	} else {
                 db_query("UPDATE assignment_submit
                                  SET grade = ".quote($grade).",
                                      grade_comments = ".quote($comment).",
                                      grade_submission_date = NOW(),
                                      grade_submission_ip = '$_SERVER[REMOTE_ADDR]'
-                                 WHERE id = $sid");                                
-                list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment WHERE id = $id"));                
+                                 WHERE id = $sid");
+                list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment WHERE id = $id"));
                         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY,
                                 array('id' => $sid,
                                     'title' => $title,
-                                    'grade' => $grade, 
+                                    'grade' => $grade,
                                     'comments' => $comment));
                 if ($email) {
                        grade_email_notify($id, $sid, $grade, $comment);
@@ -1223,7 +1223,7 @@ function submit_grades($grades_id, $grades, $email = false)
                 foreach ($grades as $sid => $grade) {
                         $sid = intval($sid);
 			$val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = $sid"));
-			if ($val[0] != $grade) {                                
+			if ($val[0] != $grade) {
                                 db_query("UPDATE assignment_submit
                                                  SET grade = ".quote($grade).",
                                                      grade_submission_date = NOW(),

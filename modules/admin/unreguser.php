@@ -58,7 +58,7 @@ if (!$doit) {
                 $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
         }
         $tool_content .= ";</div>
-                
+
                 <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>
                 <div class='right'> <a href='edituser.php?u=$u'>$langBack</a></div>
                 ";
@@ -89,7 +89,7 @@ if (!$doit) {
                                                 //display list
                                                 $tool_content .= "$langUnregFirst <br/ ><br />";
                                                 $sql = db_query("SELECT a.code, a.title, b.statut, a.id
-                                                                        FROM course AS a 
+                                                                        FROM course AS a
                                                                         JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
                                                                         LEFT JOIN course_user AS b ON a.id = b.course_id
@@ -125,7 +125,7 @@ if (!$doit) {
                                         } else {
                                                 $tool_content .= "$langUnregTeacher<br />";
                                                 $sql = db_query("SELECT a.code, a.title, b.statut, a.id
-                                                                        FROM course AS a 
+                                                                        FROM course AS a
                                                                         JOIN course_department ON a.id = course_department.course
                                                                         JOIN hierarchy ON course_department.department = hierarchy.id
                                                                         LEFT JOIN course_user AS b ON a.id = b.course_id
@@ -151,7 +151,7 @@ if (!$doit) {
                                         // display list
                                         $tool_content .= "$langUnregFirst <br /><br />";
                                         $sql = db_query("SELECT a.code, a.title, b.statut, a.id
-                                                                FROM course AS a 
+                                                                FROM course AS a
                                                                 JOIN course_department ON a.id = course_department.course
                                                                 JOIN hierarchy ON course_department.department = hierarchy.id
                                                                 LEFT JOIN course_user AS b ON a.id = b.course_id

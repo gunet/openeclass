@@ -83,7 +83,7 @@ if (isset($c)) {
 		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
 	$result = db_query($sql);
 	$row = mysql_fetch_array($result);
-        
+
         if ($row === false) {
             // Print an error message
             $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
@@ -92,13 +92,13 @@ if (isset($c)) {
             draw($tool_content, 3);
             exit();
         }
-        
+
 	// Display course information and link to edit
 	$tool_content .= "<fieldset>
                 <legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">
                 <img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
-        
+
         $departments = $course->getDepartmentIds(course_code_to_id($_GET['c']));
         $i = 1;
         foreach ($departments as $dep) {
@@ -110,7 +110,7 @@ if (isset($c)) {
             </tr>";
             $i++;
         }
-	
+
         $tool_content .= "
         <tr>
 	  <th>$langCode:</th>
@@ -179,10 +179,10 @@ if (isset($c)) {
                         break;
                 case COURSE_REGISTRATION:
                         $tool_content .= $langRegCourse;
-                        break;	
+                        break;
                 case COURSE_INACTIVE:
                         $tool_content .= $langCourseInactive;
-                        break;	
+                        break;
 	}
 	$tool_content .= "</td></tr></table></fieldset>";
 	// Display other available choices

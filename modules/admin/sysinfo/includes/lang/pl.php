@@ -66,7 +66,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'brak';
 
-$text['capacity']       = 'Rozmiar'; 
+$text['capacity']       = 'Rozmiar';
 
 $text['template']       = 'Szablon';
 $text['language']       = 'JĂŞzyk';

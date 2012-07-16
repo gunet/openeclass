@@ -23,7 +23,7 @@
 	@last update: 10-01-2010 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
-    @Description: 
+    @Description:
 
     @Comments:
 ==============================================================================
@@ -41,12 +41,12 @@ session_start();
 if (isset($_GET['id']) && isset($_SESSION[BETACMSREPO])) {
 	$repo = $_SESSION[BETACMSREPO];
 	$coId = $_GET['id'];
-	
+
 	$co = getLesson($repo, $coId);
 	$tool_content .= objectTable($co);
-	
-	
-	// DEBUG 
+
+
+	// DEBUG
 	// $tool_content .= $_GET['id'];
 	// $tool_content .= "<pre>";
 	// $tool_content .= print_r($_SESSION[BETACMSREPO], true);
@@ -105,7 +105,7 @@ function objectTable($obj) {
 	<th width='220'>&nbsp;</th>
 	<td><b>".$GLOBALS['langBetaCMSUnits']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$obj[KEY_UNITS_SIZE].")</b></td>
 	</tr>";
-	
+
 	foreach ($obj[KEY_UNITS] as $key => $unit) {
 		$ret .= "<tr>
 			<th class='left'><b>".$GLOBALS['langBetaCMSUnitTitle'].$key."</b></th>
@@ -115,16 +115,16 @@ function objectTable($obj) {
 			<th class='left'><b>".$GLOBALS['langBetaCMSUnitDescription'].$key."</b></th>
 			<td>".$unit[KEY_DESCRIPTION]."</td>
 			</tr>";
-		
+
 		$ret .= filesTableRows($GLOBALS['langBetaCMSUnitScormFiles'], $unit[KEY_SCORMFILES_SIZE], $unit[KEY_SCORMFILES]);
-		
+
 		$ret .= filesTableRows($GLOBALS['langBetaCMSUnitDocumentFiles'], $unit[KEY_DOCUMENTFILES_SIZE], $unit[KEY_DOCUMENTFILES]);
-		
+
 		$ret .= "<tr>
 		<th width='220'>&nbsp;</th>
 		<td><b>".$GLOBALS['langBetaCMSUnitTexts']." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$unit[KEY_TEXTS_SIZE].")</b></td>
 		</tr>";
-		
+
 		foreach ($unit[KEY_TEXTS] as $unittextkey => $unittext) {
 			$ret .= "<tr>
 				<th class='left'><b>".$GLOBALS['langBetaCMSText'].$unittextkey."</b></th>
@@ -132,18 +132,18 @@ function objectTable($obj) {
 				</tr>";
 		}
 	}
-	
+
 	$ret .= "<tr><td></td></tr>";
 	$ret .= filesTableRows($GLOBALS['langBetaCMSScormFiles'], $obj[KEY_SCORMFILES_SIZE], $obj[KEY_SCORMFILES]);
 	$ret .= "<tr><td></td></tr>";
 	$ret .= filesTableRows($GLOBALS['langBetaCMSDocumentFiles'], $obj[KEY_DOCUMENTFILES_SIZE], $obj[KEY_DOCUMENTFILES]);
-	
+
 	$ret .= "</tbody>
 	</table>
 	<br />
 	<p align='right'><a href='importlesson.php?id=".$obj[KEY_ID]."'>[import]</a>
 	<a href='browserepo.php'>".$GLOBALS['langBack']."</p>";
-	
+
 	return $ret;
 }
 
@@ -152,7 +152,7 @@ function filesTableRows($localizedMessage, $size, $objects) {
 	<th width='220'>&nbsp;</th>
 	<td><b>".$localizedMessage." (".$GLOBALS['langBetaCMSTotalNumber'].": ".$size.")</b></td>
 	</tr>";
-	
+
 	foreach ($objects as $key => $obj) {
 		$ret .= "<tr>
 			<th class='left'><b>".$GLOBALS['langBetaCMSSourceFilename'].$key."</b></th>
@@ -167,7 +167,7 @@ function filesTableRows($localizedMessage, $size, $objects) {
 			<td>".$obj[KEY_CALCULATEDSIZE]."</td>
 			</tr>";
 	}
-	
+
 	return $ret;
 }
 ?>

@@ -75,7 +75,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                                 ON poll_answer_record.aid = poll_question_answer.pqaid
                                 WHERE qid = $theQuestion[pqid] GROUP BY aid", $mysqlMainDb);
                         $answer_counts = array();
-                        $answer_text = array();                        
+                        $answer_text = array();
                         while ($theAnswer = mysql_fetch_array($answers)) {
                                 $answer_counts[] = $theAnswer['count'];
                                 $answer_total += $theAnswer['count'];
@@ -86,7 +86,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                                 }
                         }
                         $chart = new PieChart(500, 300);
-                        $dataSet = new XYDataSet();                        
+                        $dataSet = new XYDataSet();
                         $chart->setTitle('');
                         foreach ($answer_counts as $i => $count) {
                                 $percentage = 100 * ($count / $answer_total);
@@ -105,9 +105,9 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                         while ($theAnswer = mysql_fetch_array($answers)) {
                                 $tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
                         }
-                        $tool_content .= '</dl><br />';                        
+                        $tool_content .= '</dl><br />';
                 }
-                $tool_content .= "</td></tr>";                
+                $tool_content .= "</td></tr>";
          }
         $tool_content .= "<tr><th colspan='2'>$langPollTotalAnswers: $answer_total</th></tr>
 	</table>";

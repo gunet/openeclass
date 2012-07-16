@@ -70,7 +70,7 @@ $status = array();
 $sql = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.statut statut
                 FROM course JOIN course_user ON course.id = course_user.course_id
-                WHERE course_user.user_id = $uid        
+                WHERE course_user.user_id = $uid
                 ORDER BY statut, course.title, course.prof_names";
 $sql2 = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.statut statut

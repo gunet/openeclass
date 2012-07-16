@@ -20,9 +20,9 @@
 
 /*
  * User mail verification
- * 
+ *
  * @author Kapetanakis Giannis <bilias@edu.physics.uoc.gr>
- * 
+ *
  * @abstract This component sends email verification code and can change user's email address
  *
  */
@@ -43,8 +43,8 @@ if (empty($uid)) {
 }
 
 // user might already verified mail account or verification is no more needed
-if (!get_config('email_verification_required') or 
-     get_mail_ver_status($uid) == EMAIL_VERIFIED) {        
+if (!get_config('email_verification_required') or
+     get_mail_ver_status($uid) == EMAIL_VERIFIED) {
 	if (isset($_SESSION['mail_verification_required'])) {
 		unset($_SESSION['mail_verification_required']);
 	}
@@ -62,7 +62,7 @@ if (!empty($_POST['submit'])) {
 		}
 		//send new code
                 $hmac = token_generate($_SESSION['uname'].$email.$uid);
-		
+
 		$subject = $langMailChangeVerificationSubject;
 		$MailMessage = sprintf($mailbody1.$langMailVerificationChangeBody, $urlServer.'modules/auth/mail_verify.php?h='.$hmac.'&id='.$uid);
                 $emailhelpdesk = get_config('email_helpdesk');
@@ -83,7 +83,7 @@ if (!empty($_POST['submit'])) {
 elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required']===1) ) {
 	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
-	
+
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
 $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
@@ -108,7 +108,7 @@ $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'
 if (isset($_GET['from_profile'])) {
         draw($tool_content, 1);
 } else {
-draw($tool_content, 0);        
+draw($tool_content, 0);
 }
 
 exit;

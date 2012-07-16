@@ -24,24 +24,24 @@
 	scromAPI.inc.php
 	@last update: 28-08-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: scormAPI.inc.php Revision: 1.12.2.2
-	      
+
 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
                       Lederer Guillaume <led@cerdecam.be>
-==============================================================================        
-    @Description: This file must be included when the module browsed is SCORM 
-                  conformant. This script supplies the SCORM API 
-                  implementation in javascript for browsers like NS and 
-                  Mozilla. This script is the client side API javascript 
+==============================================================================
+    @Description: This file must be included when the module browsed is SCORM
+                  conformant. This script supplies the SCORM API
+                  implementation in javascript for browsers like NS and
+                  Mozilla. This script is the client side API javascript
                   generated for user with browser like NS and Mozilla.
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -62,7 +62,7 @@ if($uid)
               FROM `".$TABLEUSERS."` AS U
              WHERE U.`user_id` = ". (int)$uid;
     $userDetails = db_query_get_single_row($sql);
-    
+
     // Get general information to generate the right API inmplementation
     $sql = "SELECT *
               FROM `".$TABLEUSERMODULEPROGRESS."` AS UMP,
@@ -189,7 +189,7 @@ $sco['session_time'] = "0000:00:00.00";
                     this.APIError("101");
                     return "false";
                 }
-                
+
                 this.APIError("0");
                 APIInitialized = true;
 
@@ -207,9 +207,9 @@ $sco['session_time'] = "0000:00:00.00";
                                 return "false";
                         }
                         this.APIError("0");
-                        
+
                         do_commit();
-                      
+
                         APIInitialized = false; //
                         return "true";
                 } else {
@@ -299,42 +299,42 @@ $sco['session_time'] = "0000:00:00.00";
 								if (myres = ele.match(/cmi.objectives.(\d+).(id|score|status|_children)(.*)/)) {
 									var obj_id = myres[1];
 									var req_type = myres[2];
-									
+
 									if (item_objectives[obj_id] == null) {
 										if (req_type == 'id') {
 											APIError("0");
 											return "";
-										} 
+										}
 										else if (req_type == '_children') {
 											APIError("0");
 											return "id,score,status";
-										} 
+										}
 										else if (req_type == 'score') {
 											if (myres[3]==null) {
 												APIError("401"); // not implemented
 												return "";
-											} 
+											}
 											else if (myres[3] == '._children') {
 												APIError("0");
 												return "raw,min,max"; //non-standard, added for NetG
-											} 
+											}
 											else if (myres[3] == '.raw') {
 												APIError("0");
 												return "";
-											} 
+											}
 											else if (myres[3] == '.max') {
 												APIError("0");
 												return "";
-											} 
+											}
 											else if (myres[3] == '.min') {
 												APIError("0");
 												return "";
-											} 
+											}
 											else {
 												APIError("401"); // not implemented
 												return "";
 											}
-										} 
+										}
 										else if (req_type == 'status') {
 											APIError("0");
 											return "not attempted";
@@ -345,60 +345,60 @@ $sco['session_time'] = "0000:00:00.00";
 										if (req_type == 'id') {
 											APIError("0");
 											return item_objectives[obj_id][0];
-										} 
+										}
 										else if (req_type == '_children') {
 											APIError("0");
 											return "id,score,status";
-										} 
+										}
 										else if (req_type == 'score') {
 											if (myres[3] == null) {
 												APIError("401"); // not implemented
 												return "";
-											} 
+											}
 											else if (myres[3] == '._children') {
 												APIError("0");
 												return "raw,min,max"; //non-standard, added for NetG
-											} 
+											}
 											else if (myres[3] == '.raw') {
 												if (item_objectives[obj_id][2] != null) {
 													APIError("0");
 													return item_objectives[obj_id][2];
-												} 
+												}
 												else {
 													APIError("0");
 													return "";
 												}
-											} 
+											}
 											else if (myres[3] == '.max') {
 												if (item_objectives[obj_id][3] != null) {
 													APIError("0");
 													return item_objectives[obj_id][3];
-												} 
+												}
 												else {
 													APIError("0");
 													return "";
 												}
-											} 
+											}
 											else if (myres[3] == '.min'){
 												if (item_objectives[obj_id][4] != null) {
 													APIError("0");
 													return item_objectives[obj_id][4];
-												} 
+												}
 												else {
 													APIError("0");
 													return "";
 												}
-											} 
+											}
 											else {
 												APIError("401"); // not implemented
 												return "";
 											}
-										} 
+										}
 										else if(req_type == 'status') {
 											if(item_objectives[obj_id][1] != null) {
 												APIError("0");
 												return item_objectives[obj_id][1];
-											} 
+											}
 											else {
 												APIError("0");
 												return "not attempted";
@@ -609,7 +609,7 @@ $sco['session_time'] = "0000:00:00.00";
 											return "false";
 										}
 									  }
-									  
+
                                       values[i] = val;
                                       APIError("0");
                                       return "true";
@@ -636,7 +636,7 @@ $sco['session_time'] = "0000:00:00.00";
 											return "false";
 										}
 									  }
-									  
+
                                       values[11] = val; // SCORM 2004, use together with the old element
                                       values[i] = val;
                                       APIError("0");
@@ -667,7 +667,7 @@ $sco['session_time'] = "0000:00:00.00";
 	                   			elem_id = myres[1];
 	                   			if (elem_id > interactions.length) { //interactions setting should start at 0
 									interactions[0] = ['0','','','','','','',''];
-	                   			}			
+	                   			}
 	                   			if(interactions[elem_id] == null) {
                    					interactions[elem_id] = ['','','','','','','',''];
                    					interactions[elem_id][4] = new Array();
@@ -720,12 +720,12 @@ $sco['session_time'] = "0000:00:00.00";
                                     	return "false";
 	                   			}
 	                   		} // end of interactions
-	                   		
+
                             // cmi.objectives
                             if (ele.substring(0,15) == 'cmi.objectives.') {
                     			var myres = '';
                     			updatetable_to_list['objectives'] = 'true';
-                    			
+
                     			if (myres = ele.match(/cmi.objectives.(\d+).(id|score|status)(.*)/)) {
                     				obj_id = myres[1];
                     				if (obj_id > item_objectives.length) { //objectives setting should start at 0
@@ -746,37 +746,37 @@ $sco['session_time'] = "0000:00:00.00";
                     								item_objectives[obj_id][0] = val;
                     								APIError("0");
                                                     return "true";
-                    						} 
+                    						}
                     						else if ( req_type == "score" ) {
                     								if (myres[3] == '._children') {
                     									APIError("402"); // invalid set value
                                                         return "";
-                    								} 
+                    								}
                     								else if (myres[3] == '.raw') {
                     									item_objectives[obj_id][2] = val;
                     									APIError("0");
                                                         return "true";
-                    								} 
+                    								}
                     								else if (myres[3] == '.max') {
                     									item_objectives[obj_id][3] = val;
                     									APIError("0");
                                                         return "true";
-                    								} 
+                    								}
                     								else if (myres[3] == '.min') {
                     									item_objectives[obj_id][4] = val;
                     									APIError("0");
                                                         return "true";
-                    								} 
+                    								}
                     								else {
                     									APIError("401"); // not implemented
                                                         return "";
                     								}
-                    						} 
+                    						}
                     						else if ( req_type == "status" ) {
                     								item_objectives[obj_id][1] = val;
                     								APIError("0");
                                                     return "true";
-                    						} 
+                    						}
                     						else {
                     							APIError("401"); // not implemented
                                                 return "false";
@@ -785,14 +785,14 @@ $sco['session_time'] = "0000:00:00.00";
                     				}
                     			}
                     		} // end of cmi.objectives
-                            
+
                     	    // ignore cmi.core.none
                     	    var pos = ele.indexOf("cmi.core.none");
                     	    if (pos >= 0) {
                         	    APIError("201");
                         	    return "false";
                     	    }
-                    	    
+
                             // not implemented error
                             APIError("401");
                             return "false";
@@ -815,7 +815,7 @@ $sco['session_time'] = "0000:00:00.00";
                                 return "false";
                         } else {
                                 this.APIError("0");
-                                
+
                                 do_commit();
 
                                 return "true";
@@ -832,8 +832,8 @@ $sco['session_time'] = "0000:00:00.00";
         //
         function LMSGetLastError() {
                 if(debug_) alert ("LMSGetLastError : " + APILastError);
-                
-                return APILastError;               
+
+                return APILastError;
         }
 
         function LMSGetErrorString(num) {
@@ -846,7 +846,7 @@ $sco['session_time'] = "0000:00:00.00";
 
         function LMSGetDiagnostic(num) {
                 if(debug_) alert ("LMSGetDiagnostic("+num+") = " + errDiagn[num] );
-                
+
                 if (num == "") num = APILastError;
                 if (num == "") return "";
                 if (errDiagn[num] == null) return "";
@@ -921,7 +921,7 @@ $sco['session_time'] = "0000:00:00.00";
         errDiagn["404"] = "Element is write only";
         errDiagn["405"] = "Incorrect Data Type";
         errDiagn["407"] = "Data Model Element Value Out Of Range";
-        
+
 
 
 
@@ -992,7 +992,7 @@ $sco['session_time'] = "0000:00:00.00";
 
 
         // ====================================================
-        // 
+        //
         //
         function do_commit()
         {
@@ -1004,7 +1004,7 @@ $sco['session_time'] = "0000:00:00.00";
               cmiform.lesson_location.value = values[3];
               cmiform.lesson_status.value = values[4];
               cmiform.credit.value = values[5];
-              cmiform.entry.value = values[6];              
+              cmiform.entry.value = values[6];
               cmiform.raw.value = values[8];
               cmiform.total_time.value = values[9];
               cmiform.session_time.value = values[11];

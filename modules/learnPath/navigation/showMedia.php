@@ -29,7 +29,7 @@ if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $videoPath = $urlServer ."video/". $course_code . $id;
     $videoURL = $urlServer ."modules/video/index.php?course=$course_code&amp;action=download&amp;id=". $id;
- 
+
     if (strpos($videoPath, '/../') === FALSE)
     {
         echo media_html_object($videoPath, $videoURL, '#ffffff', '#000000');

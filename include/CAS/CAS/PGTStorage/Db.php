@@ -182,7 +182,7 @@ class CAS_PGTStorage_Db extends CAS_PGTStorage_AbstractStorage
 				phpCAS::error('Database connection error: ' . $e->getMessage());
 			}
 		}
-		
+
 		phpCAS::traceEnd();
 	}
 

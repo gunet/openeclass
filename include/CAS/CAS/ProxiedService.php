@@ -31,7 +31,7 @@
 /**
  * This interface defines methods that allow proxy-authenticated service handlers
  * to interact with phpCAS.
- * 
+ *
  * Proxy service handlers must implement this interface as well as call
  * phpCAS::initializeProxiedService($this) at some point in their implementation.
  *
@@ -39,23 +39,23 @@
  * implement the CAS_ProxiedService_Testable interface to facilitate unit testing.
  */
 interface CAS_ProxiedService {
-		
+
 	/**
 	 * Answer a service identifier (URL) for whom we should fetch a proxy ticket.
-	 * 
+	 *
 	 * @return string
 	 * @throws Exception If no service url is available.
 	 */
 	public function getServiceUrl ();
-	
+
 	/**
 	 * Register a proxy ticket with the ProxiedService that it can use when making requests.
-	 * 
+	 *
 	 * @param string $proxyTicket
 	 * @return void
 	 * @throws InvalidArgumentException If the $proxyTicket is invalid.
 	 * @throws CAS_OutOfSequenceException If called after a proxy ticket has already been initialized/set.
 	 */
 	public function setProxyTicket ($proxyTicket);
-	
+
 }

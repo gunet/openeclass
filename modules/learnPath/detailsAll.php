@@ -85,11 +85,11 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
             <li><a href='detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
             <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
-        </div>";        
+        </div>";
         $tool_content .= "
         <div class='info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
-                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
+                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
           </div>";
 } else {
         $tool_content .= "
@@ -101,7 +101,7 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
           </div>";
 }
 
-	
+
 // display tab header
 $tool_content .= "
   <table width='99%' class='tbl_alt'>

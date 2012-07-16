@@ -141,7 +141,7 @@ if (!file_exists("courses/temp")) {
 //check if there are statistics to show
 if ($chart_content) {
     $chart_path = '/courses/temp/chart_'.md5(serialize($chart)).'.png';
-    $chart->render($webDir.$chart_path);    
+    $chart->render($webDir.$chart_path);
     $tool_content .= '
       <table class="FormData" width="99%" align="left">
       <tbody>

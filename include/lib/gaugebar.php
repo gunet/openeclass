@@ -21,7 +21,7 @@
 /*===========================================================================
 	gaugebar.php
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
+==============================================================================
     @Description: The script contains a class which function returns HTML code
     			  of a graphic gauge bar with custom values.
 

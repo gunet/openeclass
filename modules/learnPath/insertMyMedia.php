@@ -85,7 +85,7 @@ while ($iterator <= $_POST['maxMediaForm'])
             $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
             $style = "success";
         }
-        else 
+        else
         {
             // check if this is this LP that used this media as a module
             $sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
@@ -101,20 +101,20 @@ while ($iterator <= $_POST['maxMediaForm'])
             if ($num == 0)
             { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     $thisLinkModule = mysql_fetch_array($query0);
-                    
+
                     reuse_module($thisLinkModule['module_id']);
-                    
+
                     $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
                     $style = "success";
             }
-            else 
+            else
             {
                 $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
                 $style = "caution";
             }
         }
     }
-        
+
     if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMediaLink_'.$iterator]))
     {
         // get from DB everything related to the medialink
@@ -138,7 +138,7 @@ while ($iterator <= $_POST['maxMediaForm'])
             $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
             $style = "success";
         }
-        else 
+        else
         {
             // check if this is this LP that used this medialink as a module
             $sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
@@ -154,13 +154,13 @@ while ($iterator <= $_POST['maxMediaForm'])
             if ($num == 0)
             { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     $thisLinkModule = mysql_fetch_array($query0);
-                    
+
                     reuse_module($thisLinkModule['module_id']);
-                    
+
                     $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
                     $style = "success";
             }
-            else 
+            else
             {
                 $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
                 $style = "caution";
@@ -194,7 +194,7 @@ function showmedia()
 
     $sqlMedia = "SELECT * FROM video ORDER BY title";
     $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY title";
-    
+
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);
 
@@ -205,12 +205,12 @@ function showmedia()
                <th width='50'>$langSelection</th>
                </tr>
                <tbody>";
-    
+
     $i=1;
     while ($myrow = mysql_fetch_array($resultMedia))
     {
         list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
-                                                    
+
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
                     <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."
@@ -219,7 +219,7 @@ function showmedia()
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
         $i++;
     }
-    
+
     $j=1;
     while($myrow = mysql_fetch_array($resultMediaLinks))
     {
@@ -248,7 +248,7 @@ function showmedia()
 function create_new_module($title, $description, $path, $contentType)
 {
     global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $course_id;
-    
+
     // create new module
     $sql = "INSERT INTO `".$TABLEMODULE."`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
@@ -290,7 +290,7 @@ function create_new_module($title, $description, $path, $contentType)
 function reuse_module($module_id)
 {
     global $TABLELEARNPATHMODULE;
-    
+
     // determine the default order of this Learning path
     $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
     $result = db_query($sql);

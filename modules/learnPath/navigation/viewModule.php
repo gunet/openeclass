@@ -26,11 +26,11 @@
 ==============================================================================
     @Description: Auto to script praktika oloklhrwnei ton kyklo
                   zwhs ths html selidas otan perihgoumaste sta scorm paketa.
-                  Dhladh: o xrhsths zhtaei na paei se allo scorm. Opote 
+                  Dhladh: o xrhsths zhtaei na paei se allo scorm. Opote
                   prwta fortwnoume auto to dummy html kai meta h javascript
-                  autou tou script leei sto mainFrame na paei ekei pou o 
+                  autou tou script leei sto mainFrame na paei ekei pou o
                   xrhsths zhthse na paei. Etsi, glitwnoume apo to bug opou
-                  o javascript kwdikas sthn onunloadpage twn scorm den 
+                  o javascript kwdikas sthn onunloadpage twn scorm den
                   etrexe epeidh den prolabaine, epeidh ananewname kateu8eian
                   to mainFrame. Apla pros8esame auth th "stash" edw kai ola
                   kylane pleon mia xara.
@@ -75,7 +75,7 @@ if (isset($_GET['go']) && strlen($_GET['go']) > 0) {
 } else {
 	echo "parent.parent.mainFrame.location.href=\"".$redirect."\";"."\n";
 }
-echo "    //--> 
+echo "    //-->
     </script>
 </head>
 <body>

@@ -76,7 +76,7 @@ function list_docs()
                          "<table class='tbl_alt' width='99%'>" .
                          "<tr>".
                          "<th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
-                                   $parenthtml . 
+                                   $parenthtml .
                          "</tr>" .
                          "<tr>" .
                          "<th>$langType</th>" .
@@ -107,7 +107,7 @@ function list_docs()
 						$link_text = $entry['title'];
 					}
 				}
-				if ($entry['visible'] == 'i') { 
+				if ($entry['visible'] == 'i') {
 					$vis = 'invisible';
 				} else {
 					if ($counter % 2 == 0) {
@@ -119,7 +119,7 @@ function list_docs()
 				$tool_content .= "\n    <tr class='$vis'>";
 				$tool_content .= "\n      <td width='1' class='center'><a href='$file_url'$link_extra><img src='$image' border='0' /></a></td>";
 				$tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
-	
+
 				/*** comments ***/
 				if (!empty($entry['comment'])) {
 					$tool_content .= "<br /><div class='comment'>" .

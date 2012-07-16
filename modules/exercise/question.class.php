@@ -64,9 +64,9 @@ class Question
 	function read($id)
 	{
 		global $TBL_QUESTION, $TBL_EXERCISE_QUESTION, $mysqlMainDb, $course_id;
-		
+
 		mysql_select_db($mysqlMainDb);
-		$sql = "SELECT question, description, weight, q_position, type 
+		$sql = "SELECT question, description, weight, q_position, type
                         FROM `$TBL_QUESTION` WHERE course_id = $course_id AND id = '$id'";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
 
@@ -141,13 +141,13 @@ class Question
 
         // return the total weighting of an exercise
         function selectTotalWeighting()
-        {                               
+        {
                 mysql_select_db($course_code);
                 $result = db_query("SELECT SUM(questions.ponderation)
                                 FROM questions, exercise_question
                                 WHERE questions.id = exercise_question.question_id
                                 AND exercise_question.exercise_id = $id");
-                
+
                 list($totalweighting) = mysql_fetch_array($result);
                 if (isset($totalweighting)) {
                        return $this->totalweighting;
@@ -155,7 +155,7 @@ class Question
 		// total weighting not found
 		return false;
         }
-        
+
 	/**
 	 * returns the question position
 	 *
@@ -283,7 +283,7 @@ class Question
 	function uploadPicture($picture, $type)
 	{
 		global $picturePath;
-                
+
                 if($this->id) {
                         $filename_final = $picturePath . '/quiz-' . $this->id;
 			if (!copy_resized_image($picture, $type, 760, 512, $filename_final)) {
@@ -364,7 +364,7 @@ class Question
 	function save($exerciseId=0)
 	{
 		global $TBL_QUESTION, $mysqlMainDb, $course_id;
-		
+
 		mysql_select_db($mysqlMainDb);
 
 		$id = $this->id;
@@ -449,7 +449,7 @@ class Question
 			unset($this->exerciseList[$pos]);
 
 			$sql="DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id' AND exercise_id = '$exerciseId'";
-			db_query($sql); 
+			db_query($sql);
 			return true;
 		}
 	}
@@ -467,15 +467,15 @@ class Question
 		global $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $TBL_ANSWER, $course_id;
 
 		$id = $this->id;
-		
+
 	// if the question must be removed from all exercises
 		//if($deleteFromEx === 0)
 		if(!$deleteFromEx)
 		{
 			$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE question_id = '$id'";
-			db_query($sql); 
+			db_query($sql);
 			$sql = "DELETE FROM `$TBL_QUESTION` WHERE course_id = $course_id AND id = '$id'";
-			db_query($sql); 
+			db_query($sql);
 			$sql = "DELETE FROM `$TBL_ANSWER` WHERE question_id = '$id'";
 			db_query($sql);
 			$this->removePicture();
@@ -505,7 +505,7 @@ class Question
 		$position = $this->position;
 		$type = $this->type;
 
-		$sql = "INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type) 
+		$sql = "INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type)
 						VALUES ($course_id, '$question', '$description', '$weighting', '$position', '$type')";
 		db_query($sql, $mysqlMainDb);
 

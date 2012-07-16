@@ -23,7 +23,7 @@
 	contactadmin.php
 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
 		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================        
+==============================================================================
   @Description: Contact the admin with an e-mail message
   when an account has been deactivated
 
@@ -49,7 +49,7 @@ if ($userid and isset($_GET['h']) and
         } else {
                 $firstname = $lastname = $email = '';
         }
-	
+
         if (isset($_POST['submit'])) {
                 $body = isset($_POST['body'])? $_POST['body']: '';
                 $tool_content .= "<table width='99%'><tbody><tr><td>";

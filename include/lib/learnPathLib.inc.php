@@ -145,7 +145,7 @@ function commentBox($type, $mode)
             $oldComment = db_query_get_single_value($sql);
 
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                ".rich_text_editor('insertCommentBox', 1, 50, $oldComment)." 
+                ".rich_text_editor('insertCommentBox', 1, 50, $oldComment)."
                 <input type='hidden' name='cmd' value='update$col_name' />
                 <input type='submit' value=$langSubmit /></form>";
         }
@@ -232,8 +232,8 @@ function nameBox($type, $mode, $formlabel = FALSE)
     $tbl_lp_module               = "lp_module";
 
     // globals
-    global $is_editor, $themeimg, $urlAppend, $langLearningPath1, 
-           $langModify, $langOk, $langErrorNameAlreadyExists, $course_code, 
+    global $is_editor, $themeimg, $urlAppend, $langLearningPath1,
+           $langModify, $langOk, $langErrorNameAlreadyExists, $course_code,
            $mysqlMainDb, $course_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
@@ -676,8 +676,8 @@ function display_my_exercises($dialogBox, $style)
                        $style = 'class="even"';
                    } else {
                        $style = 'class="odd"';
-                   }  
-              
+                   }
+
 	        $output .= '    <tr '.$style.'>'."\n"
 	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
@@ -859,10 +859,10 @@ function display_my_documents($dialogBox, $style)
             }
 
             if ($fileList['type'][$fileKey] == A_FILE)
-            {                    
+            {
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
-                $date        = format_date($fileList['date'][$fileKey]);                
+                $date        = format_date($fileList['date'][$fileKey]);
                 $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = choose_media_ahref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
@@ -1700,7 +1700,7 @@ function prepare_option_tags($elementList, $deepness = 0)
 function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNextPage)
 {
 	global $course_code;
-	
+
 	$totalnum = mysql_num_rows(db_query($sql));
 	$firstpage = 1;
 	$lastpage = ceil($totalnum / $limiter);
@@ -1803,12 +1803,12 @@ function get_limited_list($sql, $limiter)
 
 
 /*
- * This function checks whether a Learning Path Module exists and is visible 
- * for a non-teacher user. If requested, the same check can be made for a 
+ * This function checks whether a Learning Path Module exists and is visible
+ * for a non-teacher user. If requested, the same check can be made for a
  * Learning Path, not just the module. Because the Learning Path and Learning
- * Path Module can be chosen via GET arguments, we are in danger of people 
+ * Path Module can be chosen via GET arguments, we are in danger of people
  * accessing stuff they shouldn't by guessing ids.
- * 
+ *
  * @param boolean $is_editor contains whether the current user is admin of the current course
  * @param string $course_code contains the current course id
  * @param boolean $extraQuery contains whether the extra check will be made or not
@@ -1819,22 +1819,22 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 {
 	global $course_id;
 	$depth = ($extraDepth) ? "../" : "./" ;
-	
+
 	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
 		header("Location: ".$depth."index.php?course=$course_code");
 		exit();
 	}
-	
+
 	if ($extraQuery) {
 		$q = db_query("SELECT visible FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND `course_id` = $course_id");
 		$lp = mysql_fetch_array($q);
-		
+
 		if (!$is_editor && $lp['visible'] == 0 ) {
 			// if the learning path is invisible, don't allow users in it
 			header("Location: ".$depth."index.php?course=$course_code");
 			exit();
 		}
-		
+
 		if (!$is_editor) {
 			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `course_id` = $course_id ORDER BY `rank`");
 			if ($lps != false) {
@@ -1855,7 +1855,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 			}
 		}
 	}
-		
+
 	$q2 = db_query("SELECT visible FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'");
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visible'] == 0)) {
@@ -1863,7 +1863,7 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
 		header("Location: ".$depth."index.php?course=$course_code");
 		exit();
 	}
-	
+
 	if (!$is_editor) {
 		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`");
 		if ($lpms != false) {

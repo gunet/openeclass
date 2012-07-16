@@ -43,8 +43,8 @@
  *
  */
     // --------------------------------------------------------------------------------------------------
-    // adjust this to match your system configuration    
-    $picture_cache_path = "/opt/eclass/claroline/latexrender/pictures";	
+    // adjust this to match your system configuration
+    $picture_cache_path = "/opt/eclass/claroline/latexrender/pictures";
     $picture_cache_httpd_path = "pictures";
 
     // --------------------------------------------------------------------------------------------------

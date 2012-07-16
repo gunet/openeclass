@@ -68,7 +68,7 @@ $text['gb']             = 'GB';
 
 $text['none']           = 'κανένα';
 
-$text['capacity']       = 'Χωρητικότητα'; 
+$text['capacity']       = 'Χωρητικότητα';
 
 $text['template']       = 'Template';
 $text['language']       = 'Γλώσσα';

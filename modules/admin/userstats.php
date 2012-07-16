@@ -40,14 +40,14 @@ $navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
 $u = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
 
-if(!empty($u))	
+if(!empty($u))
 {
 	$sql = db_query("SELECT username FROM user WHERE user_id = $u");
 	$info = mysql_fetch_array($sql);
     	$tool_content .= "<p class='title1'>$langUserStats: <b>$info[username]</b></p>
 		<p><b>$langStudentParticipation</b></p>";
         $sql = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
-                           FROM course AS a 
+                           FROM course AS a
                            JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
                       LEFT JOIN course_user AS b ON a.id = b.course_id
@@ -88,7 +88,7 @@ if(!empty($u))
 			}
 			$tool_content .= "</div></td></tr></table>\n";
 		} else {
-			$tool_content .= "<p>$langNoStudentParticipation </p>";	
+			$tool_content .= "<p>$langNoStudentParticipation </p>";
 		}
 	$tool_content .= "<p><b>$langTotalVisits</b>: ";
 	// Chart display added - haniotak
@@ -97,7 +97,7 @@ if(!empty($u))
 	} else {
 		$totalHits = 0;
                 $result = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
-                                      FROM course AS a 
+                                      FROM course AS a
                                       JOIN course_department ON a.id = course_department.course
                                       JOIN hierarchy ON course_department.department = hierarchy.id
                                  LEFT JOIN course_user AS b ON a.id = b.course_id
@@ -121,7 +121,7 @@ if(!empty($u))
 				mysql_free_result($result);
 			}
 		}
-               
+
 		$tool_content .= "<b>$totalHits</b></p>";
 		$chart = new PieChart(600, 300);
 		$dataSet = new XYDataSet();
@@ -139,7 +139,7 @@ if(!empty($u))
 	}
 	// End of chart display; chart unlinked at end of script.
 	$sql = "SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15";
-	
+
 	$result = db_query($sql);
 	$tool_content .= "<p>$langLastUserVisits $info[username]</p>\n";
 	$tool_content .= "
@@ -150,7 +150,7 @@ if(!empty($u))
 	      </tr>";
 	$i = 0;
 	$Action["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
-	$Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";	
+	$Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
 	while ($r = mysql_fetch_array($result)) {
 		$when = $r["when"];
 		$action = $r["action"];
@@ -166,7 +166,7 @@ if(!empty($u))
 		$i++;
 	}
 	$tool_content .= "</table>";
-} else {    
+} else {
     $tool_content .= "<p class='caution'>$langNoUserSelected</p>
                 <p align='right'><a href='index.php'>$langBack</p>";
     draw($tool_content, 3);

@@ -20,7 +20,7 @@
 
 
 function showQuestion($questionId, $onlyAnswers = false) {
-	global $tool_content, $picturePath, $langNoAnswer, 
+	global $tool_content, $picturePath, $langNoAnswer,
                 $langColumnA, $langColumnB, $langMakeCorrespond;
 
         // construction of the Question object
@@ -34,7 +34,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 
 	if(!$onlyAnswers) {
 		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();	
+		$questionDescription=$objQuestionTmp->selectDescription();
 		$questionDescription_temp = standard_text_escape($questionDescription);
 		$tool_content .= "
                   <tr class='even'>
@@ -114,7 +114,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			</tr>";
 		}
 		// matching
-		elseif($answerType == MATCHING) { 
+		elseif($answerType == MATCHING) {
 			if(!$answerCorrect) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;

@@ -212,12 +212,12 @@ function showlinks()
     $output = "
 <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                       <table width='100%' class='tbl_alt'>
-                    
+
                       <tr>
                         <th colspan='2'>$langName</th>
                         <th width='50'>$langSelection</th>
                       </tr>
-                      
+
                       <tbody>";
 	$i=1;
 	while ($myrow = mysql_fetch_array($result))

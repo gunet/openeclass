@@ -53,7 +53,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $navigation[] = array ('url' => 'group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
 	$navigation[] = array ('url' => "index.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
 } elseif (defined('EBOOK_DOCUMENTS')) {
-	if (isset($_REQUEST['ebook_id'])) {    
+	if (isset($_REQUEST['ebook_id'])) {
             $ebook_id = intval($_REQUEST['ebook_id']);
         }
 	$subsystem = EBOOK;

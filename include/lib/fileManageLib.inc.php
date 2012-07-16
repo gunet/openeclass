@@ -23,18 +23,18 @@
 	fileManageLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.3 licensed under GPL
 	     and Claroline version 1.7 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: fileManageLib.inc.php Revision: 1.3
      extra porting from: fileManage.lib.php Revision 1.49.2.3
-	      
+
 	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
                       Hugues Peeters    <peeters@ipm.ucl.ac.be>
                       Christophe Gesche <gesche@ipm.ucl.ac.be>
-==============================================================================        
+==============================================================================
 */
 
 /*
@@ -49,9 +49,9 @@
  */
 
 function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
-{        
+{
         global $course_id;
-        
+
 	if ($action == "delete") {
 		db_query("DELETE FROM ".$dbTable."
 			WHERE path LIKE \"".$oldPath."%\"");
@@ -60,10 +60,10 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
 	} elseif ($action == "update") {
 		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
                                 WHERE path LIKE '$oldPath%'");
-                list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath')) 
+                list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath'))
                                 FROM $dbTable WHERE path='$newPath'"));
                 list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
-                                        WHERE path = '$newencodepath'"));                                                                               
+                                        WHERE path = '$newencodepath'"));
                 Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
                                                               'newencpath' => $newPath,
                                                               'newpath' => $newpath,
@@ -88,11 +88,11 @@ function check_name_exist($filePath)
 
 
 /*
- * Delete a file or a directory 
+ * Delete a file or a directory
  *
  * @author - Hugues Peeters
  * @param  - $file (String) - the path of file or directory to delete
- * @return - bolean - true if the delete succeed 
+ * @return - bolean - true if the delete succeed
  *           bolean - false otherwise.
  * @see    - delete() uses check_name_exist() and removeDir() functions
  */
@@ -117,14 +117,14 @@ function my_delete($file)
 	{
 		return false; // no file or directory to delete
 	}
-	
+
 }
 
 
 
 /*
  * Rename a file or a directory
- * 
+ *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $filePath (string) - complete path of the file or the directory
  * @param  - $newFileName (string) - new name for the file or the directory
@@ -151,7 +151,7 @@ function my_rename($filePath, $newFileName)
 		{
 			$newFileName .= '.' . $extension[1];
 		}
-		
+
 		/*** Prevent file name with php extension ***/
 		$newFileName = php2phps($newFileName);
 		$newFileName = replace_dangerous_char($newFileName);
@@ -168,7 +168,7 @@ function my_rename($filePath, $newFileName)
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $source (String) - the path of file or directory to move
  * @param  - $target (String) - the path of the new area
- * @return - bolean - true if the move succeed 
+ * @return - bolean - true if the move succeed
  *           bolean - false otherwise.
  * @see    - move() uses check_name_exist() and copyDirTo() functions
  */
@@ -180,11 +180,11 @@ function move($source, $target)
 		$fileName = my_basename($source);
 		if (check_name_exist($target."/".$fileName))
 		{
-			return false; 
+			return false;
 		}
 		else
 		{	/*** File case ***/
-			if (is_file($source)) 
+			if (is_file($source))
 			{
 				copy($source , $target."/".$fileName);
 				unlink($source);
@@ -210,7 +210,7 @@ function move($source, $target)
 	{
 		return false;
 	}
-	
+
 }
 
 
@@ -344,7 +344,7 @@ function directory_selection($source_value, $command, $entryToExclude)
         if ($entryToExclude != '/') {
                 $dialogBox .= "<option value=''>$langParentDir</option>\n";
         }
-	
+
 	/* build html form inputs */
         foreach ($dirList as $path => $filename) {
                 $depth = substr_count($path, '/');
@@ -631,7 +631,7 @@ function claro_mkdir($pathName, $mode = 0777, $recursive = false)
         {
             $dirTrail .= empty($dirTrail) ? $thisDir : '/'.$thisDir;
 
-            if ( file_exists($dirTrail) ) 
+            if ( file_exists($dirTrail) )
             {
                 if ( is_dir($dirTrail) ) continue;
                 else                     return false;

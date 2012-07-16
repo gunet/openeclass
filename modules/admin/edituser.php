@@ -72,8 +72,8 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
-        $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone, 
-                        user.registered_at, user.expires_at, user.statut, user.am, verified_mail 
+        $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone,
+                        user.registered_at, user.expires_at, user.statut, user.am, verified_mail
                         FROM user WHERE user.user_id = $u");
         $info = mysql_fetch_assoc($q);
         if (isset($_POST['submit_editauth'])) {
@@ -96,7 +96,7 @@ if ($u)	{
                 $current_auth = 1;
                 $auth_names[1] = get_auth_info(1);
                 foreach (get_auth_active_methods() as $auth) {
-                        $auth_names[$auth] = get_auth_info($auth); 
+                        $auth_names[$auth] = get_auth_info($auth);
                         if ($info['password'] == $auth_ids[$auth]) {
                                 $current_auth = $auth;
                         }
@@ -166,7 +166,7 @@ if ($u)	{
                         case "shibboleth": $auth=6;break;
                         case "cas": $auth=7;break;
                         default: $auth=1;break;
-                }		  
+                }
                 $auth_text = get_auth_info($auth);
                 $tool_content .= "
                 <tr>
@@ -273,7 +273,7 @@ $tool_content .= "
      </form>";
 
 	$sql = db_query("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.statut
-                                FROM course AS a 
+                                FROM course AS a
                                 JOIN course_department ON a.id = course_department.course
                                 JOIN hierarchy ON course_department.department = hierarchy.id
                                 LEFT JOIN course_user AS b ON a.id = b.course_id
@@ -284,7 +284,7 @@ $tool_content .= "
 			$tool_content .= "
                         <p class='title1'>$langStudentParticipation</p>
 			<table class='tbl_alt' width='100%'>
-			<tr>                        
+			<tr>
 			<th colspan='2'><div align='left'>$langCode</div></th>
 			<th><div align='left'>$langLessonName</div></th>
 			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
@@ -332,7 +332,7 @@ $tool_content .= "
 						break;
 				}
                                 $k++;
-			}                          
+			}
 			$tool_content .= "</table>";
 		} else {
 			$tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";
@@ -395,10 +395,10 @@ $tool_content .= "
 				$verified_mail=2;
 			}
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-                                       username = $username, email = ".autoquote($email).", 
+                                       username = $username, email = ".autoquote($email).",
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        expires_at=".$expires_at.",
-                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ." 
+                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ."
                                        WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
                         $userObj->refresh(intval($u), $departments);

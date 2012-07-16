@@ -103,9 +103,9 @@ if ($is_editor) {
                 } else {
                         $category_id = intval($_POST['category_id']);
                 }
-                        
+
                 if (isset($_POST['id'])) {
-                        $id = intval($_POST['id']);                        
+                        $id = intval($_POST['id']);
                         $q = db_query("UPDATE glossary
                                               SET term = " . autoquote($_POST['term']) . ",
                                                   definition = " . autoquote($_POST['definition']) . ",
@@ -126,7 +126,7 @@ if ($is_editor) {
                                                   course_id = $course_id,
                                                   `order` = " . findorder($course_id));
                         $success_message = $langGlossaryAdded;
-                } 
+                }
                 if ($q and mysql_affected_rows()) {
                         invalidate_glossary_cache();
                         $tool_content .= "<div class='success'>$success_message</div><br />";
@@ -137,7 +137,7 @@ if ($is_editor) {
                 $q = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $course_id");
                 invalidate_glossary_cache();
                 if ($q and mysql_affected_rows()) {
-                        $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
+                        $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";
                 }
         }
 
@@ -148,7 +148,7 @@ if ($is_editor) {
            <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
            <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
-           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>  
+           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$course_code'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$course_code&amp;enc=1253'>Windows 1253</a>)</li>
          </ul>
        </div>";
 
@@ -177,7 +177,7 @@ if ($is_editor) {
                  </tr>
                  </table>
                </fieldset>
-              </form>\n";    
+              </form>\n";
         }
 
         // display form for adding or editing a glossary term
@@ -251,7 +251,7 @@ if ($is_editor) {
                  </tr>
                  </table>
                </fieldset>
-             </form>\n";    
+             </form>\n";
         }
         list($total_glossary_terms) =
                 mysql_fetch_row(db_query("SELECT COUNT(*) FROM glossary
@@ -312,7 +312,7 @@ $sql = db_query("SELECT id, term, definition, url, notes, category_id
                         FROM glossary WHERE course_id = $course_id $where
                         GROUP BY term
                         ORDER BY term");
-if (mysql_num_rows($sql) > 0) { 
+if (mysql_num_rows($sql) > 0) {
         $tool_content .= "
 	       <script type='text/javascript' src='../auth/sorttable.js'></script>
                <table class='sortable' id='t2' width='100%'>";
@@ -361,7 +361,7 @@ if (mysql_num_rows($sql) > 0) {
 
 	    $tool_content .= "
 	       <tr $rowClass>
-		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a> <div class='invisible'>$cat_descr</div></th> 
+		 <th width='150'><a href='$base_url&amp;id=$g[id]'>" . q($g['term']) . "</a> <div class='invisible'>$cat_descr</div></th>
                  <td><em>$definition_data</em>$urllink</td>";
 	    if ($is_editor) {
 		$tool_content .= "
@@ -378,7 +378,7 @@ if (mysql_num_rows($sql) > 0) {
 	}
 	$tool_content .= "
 	       </table>
-	     
+
 	       <br />\n";
 
 } else {
@@ -399,5 +399,5 @@ function findorder($course_id)
         } else {
                 $maxorder = 1;
                 return $maxorder;
-        }                         
+        }
 }

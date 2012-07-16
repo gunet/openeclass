@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Pie chart.
      *
@@ -25,7 +25,7 @@
     class PieChart extends Chart {
         protected $pieCenterX;
         protected $pieCenterY;
-    
+
         /**
          * Constructor of a pie chart.
          *
@@ -43,7 +43,7 @@
         protected function computeLayout() {
             $this->plot->setHasCaption(true);
             $this->plot->computeLayout();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
 
@@ -55,7 +55,7 @@
             $this->pieHeight = round(($graphArea->y2 - $graphArea->y1) * 3.7 / 5);
             $this->pieDepth = round($this->pieWidth * 0.05);
         }
-        
+
         /**
          * Compare two sampling point values, order from biggest to lowest value.
          *
@@ -68,7 +68,7 @@
                 $v1[0] > $v2[0] ? -1 :
                 1;
         }
-        
+
         /**
          * Compute pie values in percentage and sort them.
          */
@@ -103,7 +103,7 @@
             $img = $this->plot->getImg();
             $palette = $this->plot->getPalette();
             $primitive = $this->plot->getPrimitive();
-            
+
             // Get the graph area
             $graphArea = $this->plot->getGraphArea();
 
@@ -126,15 +126,15 @@
             foreach($this->percent as $percent) {
                 list($percent, $point) = $percent;
                 $label = $point->getX();
-                
+
                 array_push($labelList, $label);
             }
-            
+
             // Create the caption
             $caption = new Caption();
             $caption->setPlot($this->plot);
             $caption->setLabelList($labelList);
-            
+
             $palette = $this->plot->getPalette();
             $pieColorSet = $palette->pieColorSet;
             $caption->setColorSet($pieColorSet);
@@ -165,7 +165,7 @@
                 if ($percent <= 0) {
                     continue;
                 }
-                
+
                 $color = $colorArray[$i % count($colorArray)];
 
                 $percentTotal += $percent;
@@ -191,7 +191,7 @@
             $palette = $this->plot->getPalette();
             $text = $this->plot->getText();
             $primitive = $this->plot->getPrimitive();
-            
+
             $angle1 = 0;
             $percentTotal = 0;
 

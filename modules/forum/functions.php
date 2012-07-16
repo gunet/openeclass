@@ -23,20 +23,20 @@
 function get_total_topics($forum_id) {
 
         global $langError;
-        
+
 	$sql = "SELECT COUNT(*) AS total FROM forum_topic
                         WHERE forum_id = $forum_id";
 	if(!$result = db_query($sql))
 		return($langError);
 	if(!$myrow = mysql_fetch_array($result))
 		return($langError);
-	
+
 	return($myrow["total"]);
 }
 
 /*
  * Return the total number of posts in forum or topic
- */ 
+ */
 function get_total_posts($id, $type) {
 
     switch($type) {
@@ -62,21 +62,21 @@ function get_total_posts($id, $type) {
  * Return the most recent post in a forum
  */
 function get_last_post($topic_id, $forum_id) {
-   
+
     global $langError, $langNoPosts;
-    
+
      $sql = "SELECT post_time FROM forum_post
                 WHERE topic_id = $topic_id
                 AND forum_id = $forum_id
                 ORDER BY post_time DESC LIMIT 1";
-    
+
     if(!$result = db_query($sql)) {
         return($langError);
     }
     if(!$myrow = mysql_fetch_array($result)) {
         return($langNoPosts);
     }
-    
+
     $val = $myrow["post_time"];
     return($val);
 }
@@ -87,12 +87,12 @@ function get_last_post($topic_id, $forum_id) {
  * users from simply editing the URL to post to a non-existant forum or topic
  */
 function does_exists($id, $type) {
-        
+
         global $course_id;
 	switch($type) {
 		case 'forum':
 			$sql = "SELECT id FROM forum
-                                WHERE id = $id 
+                                WHERE id = $id
                                 AND course_id = $course_id";
 		break;
 		case 'topic':
@@ -102,7 +102,7 @@ function does_exists($id, $type) {
 	}
 	if(!$result = db_query($sql))
 		return(0);
-	if(!$myrow = mysql_fetch_array($result)) 
+	if(!$myrow = mysql_fetch_array($result))
 		return(0);
 	return(1);
 }
@@ -112,7 +112,7 @@ function does_exists($id, $type) {
  */
 
 function is_first_post($topic_id, $post_id) {
-    
+
     $sql = "SELECT id FROM forum_post
                 WHERE topic_id = $topic_id
                 ORDER BY id LIMIT 1";
@@ -132,9 +132,9 @@ function is_first_post($topic_id, $post_id) {
 
 
 function sync($id, $type) {
-        
+
    global $course_id;
-   
+
    switch($type) {
    	case 'forum':
    		$sql = "SELECT MAX(id) AS last_post FROM forum_post
@@ -190,7 +190,7 @@ function sync($id, $type) {
 
 // display notification status of link
 function toggle_link($notify) {
-	
+
 	if ($notify == TRUE) {
 		return FALSE;
 	} elseif ($notify == FALSE) {
@@ -199,8 +199,8 @@ function toggle_link($notify) {
 }
 
 // display notification status of link and icon
-function toggle_icon($notify) {	
-	
+function toggle_icon($notify) {
+
 	if ($notify == TRUE) {
 		return '_on';
 	} elseif ($notify == FALSE) {
@@ -210,11 +210,11 @@ function toggle_icon($notify) {
 
 // returns a category id from a forum id
 function forum_category($id) {
-	
+
 	global $course_id;
-	
+
 	if ($r = mysql_fetch_row(db_query("SELECT cat_id FROM forum
-                    WHERE id = $id 
+                    WHERE id = $id
                     AND course_id = $course_id"))) {
 		return $r[0];
 	} else {
@@ -224,9 +224,9 @@ function forum_category($id) {
 
 // returns a category name from a category id
 function category_name($id) {
-	
+
 	global $course_id;
-	
+
 	if ($r = mysql_fetch_row(db_query("SELECT cat_title FROM forum_category
                     WHERE id = $id
                     AND course_id = $course_id"))) {
@@ -259,9 +259,9 @@ function init_forum_group_info($forum_id)
 
 
 function add_topic_link($pagenr, $total_reply_pages) {
-        
+
         global $pagination, $posts_per_page, $topiclink;
-        
+
         $start = $pagenr * $posts_per_page;
         $pagenr++;
         $pagination .= "<a href='$topiclink&amp;start=$start'>$pagenr</a>" .

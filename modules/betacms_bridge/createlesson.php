@@ -23,7 +23,7 @@
 	@last update: 09-12-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
-    @Description: 
+    @Description:
 
     @Comments:
 ==============================================================================
@@ -40,10 +40,10 @@ session_start();
 
 if (!isset($_POST['submit'])) {
 	// print form
-	$tool_content .= repoForm(); 
+	$tool_content .= repoForm();
 }
 else {
-	if (empty($_POST[KEY_TITLE]) || empty($_POST[KEY_DESCRIPTION]) || empty($_POST[KEY_KEYWORDS]) 
+	if (empty($_POST[KEY_TITLE]) || empty($_POST[KEY_DESCRIPTION]) || empty($_POST[KEY_KEYWORDS])
 		|| empty($_POST[KEY_AUTHORS]) ) {
 		$tool_content .= "<p class=\"caution_small\">$langFieldsMissing</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>";
@@ -58,9 +58,9 @@ else {
 			KEY_PROJECT => $_POST[KEY_PROJECT],
 			KEY_COMMENTS => $_POST[KEY_COMMENTS]
 			);
-			
+
 		$flag = putLesson($_SESSION[BETACMSREPO], $lesson);
-		
+
 		if ($flag == true) {
 			$tool_content .= "<p>".$GLOBALS['langBetaCMSLessonCreatedOK']."</p>
 			<br/><br/><p align=\"right\"><a href='browserepo.php'>$langBack</a></p>";

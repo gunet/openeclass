@@ -111,20 +111,20 @@ if (extension_loaded('zlib')) {
 
     	$htmldir = $archivedir . '/html';
 	$tool_content .= "<li>$langBUCourseDataOfMainBase  $course_code</li>\n";
-	       
+
         // create zip file
 	$zipCourse = new PclZip($zipfile);
-        $result = $zipCourse->create($archivedir, 
+        $result = $zipCourse->create($archivedir,
                                 PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/archive");
-        $result = $zipCourse->add("$webDir/courses/$course_code", 
-                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/$course_code", 
+        $result = $zipCourse->add("$webDir/courses/$course_code",
+                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/$course_code",
                                 PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
-        $result = $zipCourse->add("${webDir}video/$course_code", 
-                                PCLZIP_OPT_REMOVE_PATH, "${webDir}video/$course_code", 
-                                PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");        
-        
+        $result = $zipCourse->add("${webDir}video/$course_code",
+                                PCLZIP_OPT_REMOVE_PATH, "${webDir}video/$course_code",
+                                PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
+
         removeDir($archivedir);
-        
+
         $tool_content .= "<li>$langBackupOfDataBase $course_code</li></ol></th>
                           <td>&nbsp;</td></tr></tbody></table>";
 	if (!$result) {

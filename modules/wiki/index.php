@@ -423,7 +423,7 @@ switch ( $action )
                        $tool_content .= "        <tr class='even'>\n";
                     } else {
                        $tool_content .= "        <tr class='odd'>\n";
-                    } 
+                    }
 
                     // display title for all users
                     //modify style if the wiki is recently added or modified since last login

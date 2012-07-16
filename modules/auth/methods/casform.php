@@ -101,7 +101,7 @@ $tool_content .= "    </td>
     <tr>
       <th class='left'>$langcas_altauth:</th>
       <td>";
-		
+
 $cas_altauth_data = array();
 $cas_altauth_data[0] = '-';
 $cas_altauth_data[1] = 'eClass';

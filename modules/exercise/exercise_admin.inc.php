@@ -89,20 +89,20 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
         <tr>
         <th>".$langExerciseType.":</th>
         <td>"."<input type='radio' name='exerciseType' value='1'";
-	
+
 	if ($exerciseType <= 1) {
 		$tool_content .= " checked='checked'";
 	}
 	$tool_content .= "> ".$langSimpleExercise."
 	  <br />
 	  <input type='radio' name='exerciseType' value='2'";
-	
+
 	if ($exerciseType >= 2) {
 		$tool_content .= 'checked="checked"';
 	}
 	$tool_content .= "> ".$langSequentialExercise."</td>
 	</tr>";
-	
+
 	if (isset($exerciseStartDate)) {
 		$start_cal_Excercise = jscal_html('exerciseStartDate', $exerciseStartDate);
 	} else {
@@ -121,20 +121,20 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
         <tr>
 	  <th>".$langExerciseEnd.":</th>
 	  <td>$end_cal_Excercise</td>
-	</tr>	
+	</tr>
 	<tr>
 	  <th>".$langExerciseConstrain.":</th>
 	  <td><input type=\"text\" name=\"exerciseTimeConstraint\" size=\"3\" maxlength=\"3\" ".
 	  "value=\"".htmlspecialchars($exerciseTimeConstraint)."\">&nbsp;&nbsp;".
 	  $langExerciseConstrainUnit." &nbsp;&nbsp;&nbsp;&nbsp;(".$langExerciseConstrainExplanation.")</td>
-	</tr>	
+	</tr>
 	<tr>
 	  <th>".$langExerciseAttemptsAllowed.":</th>
 	  <td><input type='text' name='exerciseAttemptsAllowed' size='3' maxlength='2'".
 	"value=\"".htmlspecialchars($exerciseAttemptsAllowed)."\">&nbsp;&nbsp;".
 	$langExerciseAttemptsAllowedUnit." &nbsp;&nbsp;&nbsp;(".$langExerciseAttemptsAllowedExplanation.")</td>
 	</tr>";
-        
+
         // Random Questions
         $tool_content .= "<tr><th>". $langRandomQuestions .":</th>".
                          "<td>". $langSelection ."&nbsp;".
@@ -175,7 +175,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	if (isset($_GET['NewExercise'])) {
 		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;";
 	} else {
-		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;";	
+		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;";
 	}
 	$tool_content .= "<input type='submit' name='cancelExercise' value='$langCancel'></td>
 	</tr>
@@ -208,7 +208,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	<tr>
 	  <th>$langExerciseDescription :</th>
 	  <td>";
-	
+
 	$exerciseDescription = standard_text_escape($exerciseDescription);
         $tool_content       .= $exerciseDescription;
         $exerciseStartDate   = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);

@@ -62,7 +62,7 @@ if (isset($_REQUEST['username'])) {
         } else {
                 $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
         }
-} 
+}
 
 $tool_content .= "<legend><form action='$_SERVER[SCRIPT_NAME]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
 draw($tool_content, 3);

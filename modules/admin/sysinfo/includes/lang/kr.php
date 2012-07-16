@@ -67,7 +67,7 @@ $text['gb']             = '기가바이트(GB)';
 
 $text['none']           = '없음';
 
-$text['capacity']       = '용량'; 
+$text['capacity']       = '용량';
 
 $text['template']       = '템플릿';
 $text['language']       = '언어';

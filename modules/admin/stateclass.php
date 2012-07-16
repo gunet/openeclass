@@ -91,10 +91,10 @@ if (isset($_GET['stats'])) {
 				$course_codes[] = $row['code'];
 			}
 			mysql_free_result($result);
-	
+
 			$first_date_time = time();
 			$totalHits = 0;
-		
+
 			foreach ($course_codes as $course_code) {
 				$sql = "SELECT COUNT(*) AS cnt FROM actions
                                         WHERE course_id = ". course_code_to_id($course_code);
@@ -103,8 +103,8 @@ if (isset($_GET['stats'])) {
 					$totalHits += $row['cnt'];
 				}
 				mysql_free_result($result);
-				
-				$sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first 
+
+				$sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first
                                         FROM actions
                                         WHERE course_id = ". course_code_to_id($course_code);
 				$result = db_query($sql);
@@ -119,29 +119,29 @@ if (isset($_GET['stats'])) {
 				mysql_free_result($result);
 			}
 			$uptime = date("d-m-Y", $first_date_time);
-	
+
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr>
 			<th colspan='2'>$langNbLogin</th>
 			</tr>
 			<tr>
 			<td>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</td>
-			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM loginout 
+			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM loginout
 				WHERE loginout.action ='LOGIN'")."</b></td>
 			</tr>
 			<tr>
 			<td>$langLast30Days</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout 
+			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td>
 			</tr>
 			<tr>
 			<td>$langLast7Days</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout 
+			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")."</b></td>
 			</tr>
 			<tr>
 			<td>$langToday</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout 
+			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > curdate())")."</b></td>
 			</tr>
 			<tr>
@@ -191,18 +191,18 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*) 
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT visible, COUNT(*)
 				FROM course GROUP BY visible "))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachCourse</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*) 
-				FROM course, course_department, hierarchy 
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*)
+				FROM course, course_department, hierarchy
                                 WHERE course.id = course_department.course
                                   AND hierarchy.id = course_department.department GROUP BY hierarchy.id"))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course 
-					GROUP BY lang DESC"))."			
+			</tr>".tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course
+					GROUP BY lang DESC"))."
 			<th class='left' colspan='2'><b>$langAnnouncements</b></th>
 			</tr>
 			<tr>
@@ -254,7 +254,7 @@ if (isset($_GET['stats'])) {
 			$tool_content .= "</tr>".tablize($cu)."</table>";
 		break;
 		case 'memail':
-			$sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email 
+			$sqlLoginDouble = "SELECT DISTINCT email, COUNT(*) AS nb FROM user GROUP BY email
 				HAVING nb > 1 ORDER BY nb DESC";
 			$loginDouble = list_ManyResult($sqlLoginDouble);
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
@@ -329,7 +329,7 @@ $tool_content .= "<br /><p class='right'><a href='index.php' class=mainpage>$lan
 
 function tablize($table) {
 
-	global $langClosed, $langTypesRegistration, $langOpen, $langPre, $langPost, $langOther, 
+	global $langClosed, $langTypesRegistration, $langOpen, $langPre, $langPost, $langOther,
 			$langEnglish, $langGreek, $langSpanish;
 
 	$ret = "";

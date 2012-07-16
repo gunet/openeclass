@@ -75,7 +75,7 @@ if($nbrQuestions) {
 	      <th colspan='2' class='left'>$langQuestionList</th>
 	      <th colspan='4' class='center'>$langActions</th>
 	    </tr>";
-	    
+
 	foreach($questionList as $id) {
 		$objQuestionTmp=new Question();
 		$objQuestionTmp->read($id);

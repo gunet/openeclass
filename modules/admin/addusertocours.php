@@ -78,7 +78,7 @@ else {
 
 	// Registered users not registered in the selected course
 	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
-		LEFT JOIN course_user cu ON u.user_id = cu.user_id 
+		LEFT JOIN course_user cu ON u.user_id = cu.user_id
                      AND cu.course_id = $cid
 		WHERE cu.user_id IS NULL ORDER BY nom";
 

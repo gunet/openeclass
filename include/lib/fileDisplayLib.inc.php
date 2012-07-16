@@ -22,21 +22,21 @@
 	fileDisplayLib.inc.php
 	@last update: 30-06-2006 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.3 licensed under GPL
 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: fileDisplayLib.inc.php Revision: 1.2
-	      
+
 	Claroline authors: Thomas Depraetere <depraetere@ipm.ucl.ac.be>
                       Hugues Peeters    <peeters@ipm.ucl.ac.be>
                       Christophe Gesche <gesche@ipm.ucl.ac.be>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -127,7 +127,7 @@ function choose_image($fileName)
 
 /*
  * Transform the file size in a human readable format
- * 
+ *
  * @author - ???
  * @param  - fileSize (int) - size of the file in bytes
  */
@@ -159,7 +159,7 @@ function format_file_size($fileSize)
  * Transform a UNIX time stamp in human readable format date
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param - date - UNIX time stamp 
+ * @param - date - UNIX time stamp
  */
 
 function format_date($fileDate)
@@ -170,7 +170,7 @@ function format_date($fileDate)
 
 /*
  * Transform the file path in a url
- * 
+ *
  * @param - filePaht (string) - relative local path of the file on the Hard disk
  * @return - relative url
  */
@@ -239,7 +239,7 @@ function file_url($path, $filename = null, $courseCode = null)
 {
 	global $course_code, $urlServer, $group_id, $ebook_id;
         $courseCode = ($courseCode == null) ? $course_code : $courseCode;
-        
+
 	if (defined('EBOOK_DOCUMENTS')) {
 		return htmlspecialchars($urlServer .
 						"modules/ebook/show.php/$courseCode/$ebook_id/_" .
@@ -247,7 +247,7 @@ function file_url($path, $filename = null, $courseCode = null)
 					ENT_QUOTES);
 	} else {
 		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
-		
+
 		return htmlspecialchars($urlServer .
 						"modules/document/file.php/$courseCode$gid" .
 	                                        public_file_path($path, $filename),

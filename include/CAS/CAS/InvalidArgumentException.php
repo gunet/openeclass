@@ -31,7 +31,7 @@
 require_once(dirname(__FILE__).'/Exception.php');
 
 /**
- * Exception that denotes invalid arguments were passed. 
+ * Exception that denotes invalid arguments were passed.
  */
 class CAS_InvalidArgumentException
 	extends InvalidArgumentException

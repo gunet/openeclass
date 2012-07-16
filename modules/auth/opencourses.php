@@ -81,7 +81,7 @@ $result = db_query("SELECT course.code k,
                            course.prof_names t
                       FROM course, course_department
                      WHERE course.id = course_department.course
-                       AND course_department.department = $fc 
+                       AND course_department.department = $fc
                        AND course.visible != ".COURSE_INACTIVE."
                   ORDER BY course.title, course.prof_names");
 
@@ -111,18 +111,18 @@ while ($mycours = mysql_fetch_array($result)) {
     } else {
         $tool_content .= "\n<tr class='odd'>";
     }
-    
+
     $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
     $tool_content .= "\n<td>". $codelink ."</td>";
     $tool_content .= "\n<td>". $mycours['t'] ."</td>";
     $tool_content .= "\n<td align='center'>";
-    
+
     // show the necessary access icon
     foreach ($icons as $visible => $image) {
         if ($visible == $mycours['visible']) {
             $tool_content .= $image;
         }
-    }   
+    }
     $tool_content .= "</td>\n";
     $tool_content .= "</tr>";
     $k++;

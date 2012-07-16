@@ -190,7 +190,7 @@ $tool_content .= "</td>
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td colspan='2' class='right'>     
+    <td colspan='2' class='right'>
       <input type='submit' value='$langSearch'>
     </td>
   </tr>

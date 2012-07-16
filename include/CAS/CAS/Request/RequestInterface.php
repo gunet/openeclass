@@ -137,7 +137,7 @@ interface CAS_RequestInterface {
 	 * @throws CAS_OutOfSequenceException If called before the Request has been sent.
 	 */
 	public function getResponseHeaders ();
-	
+
 	/**
 	 * Answer HTTP status code of the response
 	 *
@@ -145,7 +145,7 @@ interface CAS_RequestInterface {
 	 * @throws CAS_OutOfSequenceException If called before the Request has been sent.
 	 */
 	public function getResponseStatusCode ();
-	
+
 	/**
 	 * Answer the body of response.
 	 *

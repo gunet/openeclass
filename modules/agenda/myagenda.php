@@ -82,34 +82,34 @@ if (isset($uid)) {
  */
 function get_agendaitems($query, $month, $year) {
 	global $urlServer, $mysqlMainDb;
-	
+
         $items = array();
 	// get agenda-items for every course
-	while ($mycours = mysql_fetch_array($query)) {                      
-                $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ." 
-                                        AND MONTH(DAY)='$month' 
-                                        AND YEAR(DAY)='$year' 
+	while ($mycours = mysql_fetch_array($query)) {
+                $result = db_query("SELECT * FROM agenda WHERE course_id = ". $mycours['id'] ."
+                                        AND MONTH(DAY)='$month'
+                                        AND YEAR(DAY)='$year'
                                         AND visible = 1");
 
                 while ($item = mysql_fetch_array($result)) {
                         $URL = $urlServer."modules/agenda/index.php?course=".$mycours['k'];
-                        $agendadate = explode("-", $item['day']);                            
+                        $agendadate = explode("-", $item['day']);
                         $agendatime = explode(":", $item['hour']);
                         $time = $agendatime[0].":".$agendatime[1];
-                        $agendaday = intval($agendadate[2]);                                                
+                        $agendaday = intval($agendadate[2]);
                         $items[$agendaday][$item['hour']] = "<br /><small>($time) <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[title]</small>";
                 }
-	}        
+	}
 
 	// sorting by hour for every day
-	$agendaitems = array();        
+	$agendaitems = array();
 	while (list($agendaday, $tmpitems) = each($items)) {
 		sort($tmpitems);
                 $agendaitems[$agendaday] = '';
-		while (list($key,$val) = each($tmpitems)) {                        
+		while (list($key,$val) = each($tmpitems)) {
 			$agendaitems[$agendaday] .= $val;
 		}
-	} 
+	}
 	return $agendaitems;
 }
 
@@ -127,7 +127,7 @@ function get_agendaitems($query, $month, $year) {
  */
 function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $monthName, $langToday) {
         global $tool_content;
-        
+
 	//Handle leap year
 	$numberofdays = array(0,31,28,31,30,31,30,31,31,30,31,30,31);
 	if (($year%400 == 0) or ($year%4 == 0 and $year%100 <> 0)) {
@@ -156,10 +156,10 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 	$tool_content .= "</tr>";
 	$curday = -1;
 	$today = getdate();
-    
+
 	while ($curday <= $numberofdays[$month]) {
   		$tool_content .= "<tr>";
-                
+
                 for ($ii=0; $ii<7; $ii++) {
 	  		if (($curday == -1) && ($ii==$startdayofweek)) {
                                 $curday = 1;
@@ -171,7 +171,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
 		  		if (($curday==$today['mday']) && ($year ==$today['year']) && ($month == $today['mon']))
 				{
 		  			$dayheader = "<b>$curday</b> <small>($langToday)</small>";
-		  			$class_style = "class='today'";		  			
+		  			$class_style = "class='today'";
 				}
                                 $tool_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
                                 if (!empty($agendaitems[$curday])) {

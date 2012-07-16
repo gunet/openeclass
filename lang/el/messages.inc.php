@@ -560,16 +560,16 @@ $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
-$langLinkUnsubscribe = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br /> 
+$langLinkUnsubscribe = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails από το συγκεκριμένο μάθημα κάντε κλικ";
-$langLinkUnsubscribeFromPlatform = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στην πλατφόρμα '%s'.<br /> 
+$langLinkUnsubscribeFromPlatform = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στην πλατφόρμα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails κάντε κλικ";
 $langEmailUnsubscribe = "Ειδοποιήσεις μαθήματος";
-$langInfoUnsubscribe = "Μπορείτε να ρυθμίσετε τη λήψη ειδοποιήσεων από τα παρακάτων μαθήματα. Αν δεν επιθυμείτε 
+$langInfoUnsubscribe = "Μπορείτε να ρυθμίσετε τη λήψη ειδοποιήσεων από τα παρακάτων μαθήματα. Αν δεν επιθυμείτε
         να δέχεστε e-mails από κάποιο μάθημα, αποεπιλέξτε το και κάντε κλικ στο 'Ύποβολή'. <br />(Σημείωση: Δεν απεγγράφεστε από το μάθημα).";
 $langEmailUnsubSuccess = "Δεν θα λαμβάνετε πλέον e-mails από το μάθημα '%s'";
 $langEmailFromCourses = "Λήψη e-mails από τα μαθήματά μου";
-$langEmailUnsubscribeWarning = "Έχετε απενεργοποιήσει τη λήψη μηνυμάτων από την πλατφόρμα. 
+$langEmailUnsubscribeWarning = "Έχετε απενεργοποιήσει τη λήψη μηνυμάτων από την πλατφόρμα.
 Δεν μπορείτε να ρυθμίσετε τη λήψη από συγκεκριμένα μαθήματα πριν την επανενεργοποιήσετε.";
 
 /*******************************************
@@ -967,9 +967,9 @@ $langCopyrightHelp = "Δώστε στοιχεία για τα πνευματικ
 $langIntentedEndUserRoleHelp = "Σημειώστε ποιός είναι ο κύριος χρήστης ή η ομάδα χρηστών για τους οποίους σχεδιάστηκε αυτό το μαθησιακό αντικείμενο.";
 
 $langMetaOther = "Άλλο";
-// "narrative text", "photo", "image", "figure", "diagram", "graph", "table", "sound", "music", 
+// "narrative text", "photo", "image", "figure", "diagram", "graph", "table", "sound", "music",
 //	     "narration", "video", "animation", "3danimation", "slide", "presentation", "lecture", "textbook", "learningscenario",
-//	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame", 
+//	     "simulation", "experiment", "microexperiment", "map", "interactivemap", "exploration", "interactivegame",
 //	     "conceptualmap", "index", "problem statement", "self assessment", "questionnaire", "quiz", "exam", "exercise"
 $langMetaNarrativetext = "Κείμενο";
 $langMetaPhoto = "Φωτογραφία";
@@ -1487,7 +1487,7 @@ $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δ
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
 $langAccountInactive2 = "Παρακαλώ επικοινωνήστε με τον διαχειριστή για την ενεργοποίηση του λογαριασμού σας";
 $langAccountActivate = 'Ενεργοποίηση λογαριασμού χρήστη';
-$langAccountActivateMessage = 'Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την 
+$langAccountActivateMessage = 'Ο φοιτητής με τα παρακάτω στοιχεία επιθυμεί την
 επανενεργοποίηση του λογαριασμού του:';
 $langMyCoursesProf="Τα μαθήματα που υποστηρίζω";
 $langMyCoursesUser="Τα μαθήματα που παρακολουθώ";
@@ -1612,9 +1612,9 @@ $langphpMyAdminURL = "URL του phpMyAdmin";
 $langSystemInfoURL = "URL του System Info";
 $langAddOnStreaming = "Επιπρόσθετη λειτουργικότητα";
 $langAddOnExpl = "Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server.";
-$langWarningInstall1 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>register_globals</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη. 
+$langWarningInstall1 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>register_globals</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη.
                         Για την ομαλή λειτουργία της πλατφόρμας και για λόγους ασφάλειας θα πρέπει να την απενεργοποιήσετε.";
-$langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>short_open_tag</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη. 
+$langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>short_open_tag</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη.
                         Προτείνεται να την απενεργοποιήσετε.";
 $langWarningInstall3 = "<b>Προσοχή!</b> Φαίνεται πως ο οδηγός εγκατάστασης δεν έχει δικαιώματα δημιουργίας του κατάλογου <b>%s</b>.<br/>Χωρίς δικαιώματα δημιουργίας, ο οδηγός εγκατάστασης δεν μπορεί να συνεχίσει. Παρακαλούμε διορθώστε τα δικαιώματα.<br/>";
 $langWarnInstallNotice1 = "Πιθανόν επίσης να χρειάζονται και κάποιες άλλες αλλαγές. Διαβάστε τις οδηγίες εγκατάστασης στο αρχείο";
@@ -2531,8 +2531,8 @@ $langMailVerificationClick = "Παρακαλούμε πατήστε στη πα�
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
 $langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την email διεύθυνση σας.";
-$langMailVerificationSuccess2="Για το σκοπό αυτό, ελέγξτε άμεσα το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. 
-                                <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, 
+$langMailVerificationSuccess2="Για το σκοπό αυτό, ελέγξτε άμεσα το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης.
+                                <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
                         με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
 $langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.\n\n$langMailVerificationClick\n%s";
@@ -2662,9 +2662,9 @@ $langUpgMan = "οδηγίες αναβάθμισης";
 $langUpgLastStep = "πριν προχωρήσετε στο παρακάτω βήμα.";
 $langUpgToSee = "Για να δείτε τις αλλαγές-βελτιώσεις της καινούριας έκδοσης του eClass κάντε κλικ";
 $langUpgRead = "Αν δεν το έχετε κάνει ήδη, παρακαλούμε διαβάσετε και ακολουθήστε τις";
-$langUpgTooOld = 'Η έκδοση του Open eClass από την οποία γίνεται αναβάθμιση 
-   είναι πολύ παλιά. Αναβάθμιση στην έκδοση 3.x υποστηρίζεται από την 
-   έκδοση 2.2 και μετά. Παρακαλούμε αναβαθμίστε την εγκατάστασή σας πρώτα 
+$langUpgTooOld = 'Η έκδοση του Open eClass από την οποία γίνεται αναβάθμιση
+   είναι πολύ παλιά. Αναβάθμιση στην έκδοση 3.x υποστηρίζεται από την
+   έκδοση 2.2 και μετά. Παρακαλούμε αναβαθμίστε την εγκατάστασή σας πρώτα
    στην έκδοση 2.2 και στη συνέχεια στην τελευταία έκδοση.';
 $langSuccessOk = "Επιτυχία";
 $langSuccessBad = "Σφάλμα ή δεν χρειάζεται τροποποίηση";
@@ -2903,10 +2903,10 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langCodeUTF = "κωδικοποίηση UTF-8";
  $langCodeWin= "κωδικοποίηση Windows-1253";
  $langNoUserSelected = "Δεν επιλέξατε χρήστη";
- 
+
 /*************************************************
 * log.php
-* ************************************************/  
+* ************************************************/
  $langUsersLog = "Ενέργειες χρηστών";
  $langUserLog = "Ενέργειες χρήστη";
  $langLogTypes = "Είδος Ενεργειών";

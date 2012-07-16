@@ -38,7 +38,7 @@ exit();
 function appendToolsDom($dom, $domRoot, $toolsArr) {
 
     if (isset($toolsArr) && count($toolsArr) > 0) {
-        
+
         $root = $domRoot->appendChild($dom->createElement('tools'));
 
         foreach($toolsArr as $tool) {
@@ -59,46 +59,46 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 
 function populateTools() {
     global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langModifyProfile, $langRegCourses, $langMyAgenda;
-    
+
     $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
     $baseurl = $urlMobile .'modules/mobile/mlogin.php'. $profile .'redirect=';
-    
+
     $toolsArr = array();
-    
+
     $tool = new stdClass();
     $tool->name = $langMyAnnouncements;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/announcements/myannouncements.php');
     $tool->type = 'myannouncements';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langMyPersoDeadlines;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/work/mydeadlines.php');
     $tool->type = 'mydeadlines';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langMyAgenda;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/agenda/myagenda.php');
     $tool->type = 'myagenda';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langModifyProfile;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/profile/profile.php');
     $tool->type = 'myprofile';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     $tool = new stdClass();
     $tool->name = $langRegCourses;
     $tool->link = $baseurl . urlencode($urlMobile .'modules/auth/courses.php');
     $tool->type = 'coursesubscribe';
     $tool->active = "true";
     $toolsArr[] = $tool;
-    
+
     return $toolsArr;
 }

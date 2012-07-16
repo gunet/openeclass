@@ -42,17 +42,17 @@ mysql_select_db($course_code);
 
 if (isset($_POST) && isset($_POST['selectedDocument'])) {
 	require_once("./importLearningPathLib.php");
-	
+
 	$filename = basename($_POST['selectedDocument']);
 	$srcFile = "../../courses/".$course_code."/document/".$_POST['selectedDocument'];
 	$destFile = "../../courses/".$course_code."/temp/".$filename;
-	
+
 	copy($srcFile, $destFile);
-	
+
 	list($messages, $lpid) = doImport($course_code, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
 	$tool_content .= $messages;
 	$tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$course_code\">$langBack</a></p>";
-	
+
 	unlink($destFile);
 }
 else {

@@ -53,7 +53,7 @@ $group_id = init_forum_group_info($forum_id);
 
 $result = db_query("SELECT id, name FROM forum WHERE id = $forum_id AND course_id = $course_id");
 $myrow = mysql_fetch_array($result);
- 
+
 $forum_name = $myrow['name'];
 $forum_id = $myrow['id'];
 
@@ -64,14 +64,14 @@ if (isset($_GET['empty'])) { // if we come from newtopic.php
 }
 
 if ($can_post) {
-	$tool_content .= " 	        
+	$tool_content .= "
 	<div id='operations_container'>
 	<ul id='opslist'>
 	<li>
 	<a href='newtopic.php?course=$course_code&amp;forum=$forum_id'>$langNewTopic</a>
 	</li>
-	</ul> 	         
-	</div>"; 	         
+	</ul>
+	</div>";
 }
 
 /*
@@ -83,7 +83,7 @@ $topic_count = mysql_fetch_row(db_query("SELECT num_topics FROM forum
                 AND course_id = $course_id"));
 $total_topics = $topic_count[0];
 
-if ($total_topics > $topics_per_page) { 
+if ($total_topics > $topics_per_page) {
 	$pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
 }
 
@@ -98,32 +98,32 @@ if ($total_topics > $topics_per_page) { // navigation
 	$tool_content .= "<table width='100%'><tr>";
 	$tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
-	$current_page = $first_topic / $topics_per_page + 1; // current page 
+	$current_page = $first_topic / $topics_per_page + 1; // current page
 	for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
 		if ($current_page == $x) {
 			$tool_content .= "$x";
-		} else { 
+		} else {
 			$start = ($x-1)*$topics_per_page;
 			$tool_content .= "<a href='$base_url&amp;start=$start'>$x</a>";
 		}
 	}
 	$tool_content .= "</span></strong></span></td>";
 	$tool_content .= "<td colspan='4' align='right'>";
-	
+
 	$next = $first_topic + $topics_per_page;
 	$prev = $first_topic - $topics_per_page;
 	if ($prev < 0) {
 		$prev = 0;
 	}
-	
+
 	if ($first_topic == 0) { // beginning
 		$tool_content .= "<a href='$base_url$next'>$langNextPage</a>";
-	} elseif ($first_topic + $topics_per_page < $total_topics) { 
+	} elseif ($first_topic + $topics_per_page < $total_topics) {
 		$tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>&nbsp|&nbsp;
-		<a href='$base_url$next'>$langNextPage</a>";	
+		<a href='$base_url$next'>$langNextPage</a>";
 	} elseif ($start - $topics_per_page < $total_topics) { // end
 		$tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
-	} 
+	}
 	$tool_content .= "</td></tr></table>";
 }
 
@@ -131,33 +131,33 @@ if ($total_topics > $topics_per_page) { // navigation
 if (($is_editor) and isset($_GET['topicdel'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
-	}	
+	}
 	$sql = db_query("SELECT id FROM forum_post
                                 WHERE topic_id = $topic_id AND
                                       forum_id = $forum_id");
-        
+
 	while ($r = mysql_fetch_array($sql)) {
 		db_query("DELETE FROM forum_post WHERE id = $r[id]");
 	}
 	db_query("DELETE FROM forum_topic WHERE id = $topic_id AND forum_id = $forum_id");
-        
+
         $number_of_posts = get_total_posts($topic_id, "topic");
 	db_query("UPDATE forum SET num_topics = num_topics-1,
-                                num_posts = num_posts-$number_of_posts        
-                            WHERE id = $forum_id 
+                                num_posts = num_posts-$number_of_posts
+                            WHERE id = $forum_id
                                 AND course_id = $course_id");
         db_query("DELETE FROM forum_notify WHERE topic_id = $topic_id AND course_id = $course_id");
 }
 
 // modify topic notification
-if(isset($_GET['topicnotify'])) { 
+if(isset($_GET['topicnotify'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
-	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
+	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify
 		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $course_id"));
 	if ($rows > 0) {
-		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['topicnotify']) . " 
+		db_query("UPDATE forum_notify SET notify_sent = " . intval($_GET['topicnotify']) . "
 			WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $course_id");
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
@@ -191,7 +191,7 @@ if (mysql_num_rows($result) > 0) { // topics found
                 } else {
                         $tool_content .= "<tr class='even'>";
                 }
-		$replies = 1 + $myrow['num_replies'];                
+		$replies = 1 + $myrow['num_replies'];
                 $topic_id = $myrow['id'];
 		$last_post_datetime = $myrow['post_time'];
 		list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
@@ -234,7 +234,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td class='center'>".q(uid_to_name($myrow['poster_id']))."</td>";
 		$tool_content .= "<td class='center'>$myrow[num_views]</td>";
 		$tool_content .= "<td class='center'>".q(uid_to_name($myrow['poster_id']))."<br />$last_post_datetime</td>";
-		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
+		list($topic_action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify
 			WHERE user_id = $uid AND topic_id = $myrow[id] AND course_id = $course_id", $mysqlMainDb));
 		if (!isset($topic_action_notify)) {
 			$topic_link_notify = FALSE;

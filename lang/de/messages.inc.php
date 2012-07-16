@@ -2732,7 +2732,7 @@ $langOtherOptions = "Other Options";
 $langDefaultQuota = "Default Quota for New Courses";
 $langCreateBackup = "Create configuration backup";
 $langInvalidMail = "have invalid email address or there is no email address at all";
-$langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br /> 
+$langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br />
                 If you don't wish to receive any more email messages from course click";
 $langEmailUnsubscribe = "Course notifications";
 $langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, uncheck it and click 'Submit'. <br />(Note: you won't be unregistered from the course).";
@@ -2824,7 +2824,7 @@ $langManageUser = "Users administrator";
 $langHelpAdministrator = "Administrator can administrate platform";
 $langHelpPowerUser = "Co-administrator can administrate users and courses";
 $langHelpManageUser = "Users administrator can administrate only users";
-$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered in platform '%s'.<br /> 
+$langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered in platform '%s'.<br />
                 If you don't wish to receive any more email messages click";
 $langEmailUnsubscribeWarning = "You have deactivated email messages from platform. You cannot modify course email setting before re-activation.";
 $langCourseInactive = "Course access is allowed only to $langsTeachers of course";

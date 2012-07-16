@@ -67,7 +67,7 @@ function list_ebooks()
                                         document.subsystem = ".EBOOK."
                                         ORDER BY CONVERT(psid, UNSIGNED), psid,
                                                  CONVERT(pssid, UNSIGNED), pssid");
-                                
+
                                 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow[id]/";
                                 $old_sid = false;
                                 $class = 'odd';
@@ -95,7 +95,7 @@ function list_ebooks()
                                     </tr>";
                                     $old_sid = $sid;
                             }
-                }                 
+                }
 		$tool_content .= "\n  <tr>" .
                                  "\n    <th colspan='2'><div align='right'>" .
                                  "<input type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></th>" .

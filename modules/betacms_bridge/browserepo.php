@@ -23,7 +23,7 @@
 	@last update: 28-11-2009 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 ==============================================================================
-    @Description: 
+    @Description:
 
     @Comments:
 ==============================================================================
@@ -70,11 +70,11 @@ if (isset($_SESSION[BETACMSREPO])) {
 
 if (!isset($_POST['submit'])) {
 	// print form
-	$tool_content .= repoForm(); 
+	$tool_content .= repoForm();
 }
 else {
-	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_CONTEXT]) 
-		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO]) 
+	if (empty($_POST[BRIDGE_HOST]) || empty($_POST[BRIDGE_CONTEXT])
+		|| empty($_POST[BCMS_HOST]) || empty($_POST[BCMS_REPO])
 		|| empty($_POST[BCMS_USER]) || empty($_POST[BCMS_PASS]) ) {
 		$tool_content .= "<p class=\"caution\">$langFieldsMissing</p>
 			<br/><br/><p align=\"right\"><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>";
@@ -88,7 +88,7 @@ else {
 			BCMS_USER => $_POST[BCMS_USER],
 			BCMS_PASS => $_POST[BCMS_PASS]
 		);
-		
+
 		if (!checkConnectivityToRepo($repo)) {
 			$tool_content .= "<p class=\"caution\">".
 				$GLOBALS['langFailConnectBetaCMSBridge'].
@@ -97,11 +97,11 @@ else {
 			draw($tool_content,3);
 			die();
 		}
-		
+
 		// Fetch the list of Lessons from Beta CMS
 		$lessonList = getLessonsList($repo);
-		
-		
+
+
 		// Construct course list table
 		$tool_content .= "<table class=\"FormData\" width=\"99%\" align=\"left\">
 			<tbody><tr>
@@ -116,7 +116,7 @@ else {
 			<th scope=\"col\">".$GLOBALS['langBetaCMSProject']."</th>
 			<th scope=\"col\">".$GLOBALS['langBetaCMSActions']."</th>
 			</tr>";
-		
+
 		$k = 0;
 		for ($j = 0; $j < count($lessonList); $j++) {
 			if ($k%2 == 0) {
@@ -124,7 +124,7 @@ else {
 			} else {
 				$tool_content .= "<tr class=\"odd\">";
 			}
-			
+
 			$tool_content .= "<td>".$lessonList[$j][KEY_TITLE]."</td>
 				<td>".$lessonList[$j][KEY_KEYWORDS]."</td>
 				<td>".$lessonList[$j][KEY_COPYRIGHT]."</td>
@@ -133,12 +133,12 @@ else {
 				<td><a href='viewlesson.php?id=".$lessonList[$j][KEY_ID]."'>[show]</a>
 				<a href='importlesson.php?id=".$lessonList[$j][KEY_ID]."'>[import]</a>";
 		}
-		
+
 		// Close table correctly
 		$tool_content .= "</tr></tbody></table>";
 		// Display link to index.php
 		$tool_content .= "<br/><p align=\"right\"><a href=\"../admin/index.php\">".$langBack."</a></p>";
-		
+
 		$_SESSION[BETACMSREPO] = $repo;
 	}
 }

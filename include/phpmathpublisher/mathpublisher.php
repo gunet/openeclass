@@ -21,7 +21,7 @@ $size is the size of the police used for the formulas.
 $pathtoimg is the relative path between the html pages and the images directory.
 With a simple "echo mathfilter($text,$size,$pathtoimg);", you can display text with mathematical formulas.
 The mathfilter function will replace all the math tags (<m>formula</m>) in $text by <img src=the formula image >.
-Example : 
+Example :
 mathfilter("A math formula : <m>f(x)=sqrt{x}</m>,12,"img/") will return :
 "A math formula : <img src=\"img/math_988.5_903b2b36fc716cfb87ff76a65911a6f0.png\" style=\"vertical-align:-11.5px; display: inline-block ;\" alt=\"f(x)=sqrt{x}\" title=\"f(x)=sqrt{x}\">"
 The image corresponding to a formula is created only once. Then the image is stocked into the image directories.
@@ -320,7 +320,7 @@ $fontesmath = array(
 'tanh'=>'cmr10'
 );
 
-function est_nombre($str) 
+function est_nombre($str)
 {
 return preg_match('/^[0-9]/', $str);
 }
@@ -435,7 +435,7 @@ switch($texte)
 				$toutblanc=false;
 				if ($sy == -1) $sy = $y;
 				else $ey = $y;
-	
+
 				if ($sx == -1) $sx = $x;
 				else
 				{
@@ -479,7 +479,7 @@ switch($texte)
 				$toutblanc=false;
 				if ($sy == -1) $sy = $y;
 				else $ey = $y;
-	
+
 				if ($sx == -1) $sx = $x;
 				else
 				{
@@ -531,7 +531,7 @@ switch($texte)
 				$toutblanc=false;
 				if ($sy == -1) $sy = $y;
 				else $ey = $y;
-	
+
 				if ($sx == -1) $sx = $x;
 				else
 				{
@@ -593,7 +593,7 @@ switch($texte)
 				$toutblanc=false;
 				if ($sy == -1) $sy = $y;
 				else $ey = $y;
-	
+
 				if ($sx == -1) $sx = $x;
 				else
 				{
@@ -635,7 +635,7 @@ $texte=stripslashes($texte);
 $font = $dirfonts."/cmr10.ttf";
 $htexte = 'dg'.$texte;
 $hdim = ImageTTFBBox($taille, 0, $font, $htexte);
-$wdim = ImageTTFBBox($taille, 0, $font, $texte); 
+$wdim = ImageTTFBBox($taille, 0, $font, $texte);
 $dx = max($wdim[2], $wdim[4]) - min($wdim[0], $wdim[6])+ceil($taille /8);
 $dy = max($hdim[1], $hdim[3]) - min($hdim[5], $hdim[7])+ ceil($taille /8);
 $img = ImageCreate(max($dx,1), max($dy,1));
@@ -660,7 +660,7 @@ else $font = $dirfonts."/cmr10.ttf";
 if(isset($symboles[$texte])) $texte = $symboles[$texte];
 $htexte = 'dg'.$texte;
 $hdim = ImageTTFBBox($taille, 0, $font, $htexte);
-$wdim = ImageTTFBBox($taille, 0, $font, $texte); 
+$wdim = ImageTTFBBox($taille, 0, $font, $texte);
 $dx = max($wdim[2], $wdim[4]) - min($wdim[0], $wdim[6])+ceil($taille /8);
 $dy = max($hdim[1], $hdim[3]) - min($hdim[5], $hdim[7])+ ceil($taille /8);
 $img = ImageCreate(max($dx,1), max($dy,1));
@@ -769,7 +769,7 @@ for($i = 0; $i < count($this->noeuds); $i++)
 		if(count($parentheses) == 0)
 			{
 			$sub = array_slice($this->noeuds, $pos + 1, $i - $pos - 1);
-			if($this->noeuds[$i]->texte == ')') 
+			if($this->noeuds[$i]->texte == ')')
 				{
 				$ret[] = new expression_math(array(new expression_texte("("), new expression_math($sub), new expression_texte(")")));
 				}
@@ -886,11 +886,11 @@ case 2:
 		}
 	break;
 case 3:
-	if ($this->noeuds[0]->texte=="lim") 
+	if ($this->noeuds[0]->texte=="lim")
 		{
 		$this->dessine_limite($taille);
 		}
-	elseif ($this->noeuds[0]->texte=="root") 
+	elseif ($this->noeuds[0]->texte=="root")
 		{
 		$this->dessine_root($taille);
 		}
@@ -1017,7 +1017,7 @@ for($i = 0; $i < count($img); $i++)
 $this->image=$result;
 }
 
-function dessine_fraction($taille) 
+function dessine_fraction($taille)
 {
 $this->noeuds[0]->dessine($taille*0.9);
 $img1=$this->noeuds[0]->image;
@@ -1043,7 +1043,7 @@ ImageCopy($result, $img2, ($largeur - $largeur2)/2,$hauteur1+4, 0, 0,$largeur2,$
 $this->image=$result;
 }
 
-function dessine_exposant($taille) 
+function dessine_exposant($taille)
 {
 $this->noeuds[0]->dessine($taille);
 $img1=$this->noeuds[0]->image;
@@ -1068,7 +1068,7 @@ if ($hauteur1 >= $hauteur2)
 	ImageCopy($result, $img1, 0, ceil($hauteur2/2), 0, 0, $largeur1, $hauteur1);
 	ImageCopy($result, $img2, $largeur1, 0, 0, 0, $largeur2,$hauteur2);
 	}
-else 
+else
 	{
 	$hauteur = ceil($hauteur1/2+$hauteur2);
 	$this->base_verticale=$hauteur2-$base1+$hauteur1/2;
@@ -1083,7 +1083,7 @@ else
 $this->image=$result;
 }
 
-function dessine_indice($taille) 
+function dessine_indice($taille)
 {
 $this->noeuds[0]->dessine($taille);
 $img1=$this->noeuds[0]->image;
@@ -1108,7 +1108,7 @@ if ($hauteur1 >= $hauteur2)
 	ImageCopy($result, $img1, 0, 0, 0, 0, $largeur1, $hauteur1);
 	ImageCopy($result, $img2, $largeur1,ceil($hauteur1-$hauteur2/2) , 0, 0, $largeur2,$hauteur2);
 	}
-else 
+else
 	{
 	$hauteur = ceil($hauteur1/2+$hauteur2);
 	$this->base_verticale=$base1;
@@ -1123,7 +1123,7 @@ else
 $this->image=$result;
 }
 
-function dessine_racine($taille) 
+function dessine_racine($taille)
 {
 $this->noeuds[1]->dessine($taille);
 $imgexp=$this->noeuds[1]->image;
@@ -1148,10 +1148,10 @@ ImageCopy($result, $imgexp,$largeurrac,$hauteur-$hauteurexp, 0, 0,$largeurexp,$h
 imagesetthickness($result,1);
 imageline($result, $largeurrac-2,2, $largeurrac+$largeurexp+2,2, $noir);
 $this->base_verticale=$hauteur-$hauteurexp+$baseexp;
-$this->image=$result;	
+$this->image=$result;
 }
 
-function dessine_root($taille) 
+function dessine_root($taille)
 {
 $this->noeuds[1]->dessine($taille*0.6);
 $imgroot=$this->noeuds[1]->image;
@@ -1181,12 +1181,12 @@ ImageCopy($result, $imgrac,0,0, 0, 0,$largeurrac,$hauteurrac);
 ImageCopy($result, $imgexp,$largeurrac,$hauteur-$hauteurexp, 0, 0,$largeurexp,$hauteurexp);
 imagesetthickness($result,1);
 imageline($result, $largeurrac-2,2, $largeurrac+$largeurexp+2,2, $noir);
-ImageCopy($result, $imgroot,0,0, 0, 0,$largeurroot,$hauteurroot); 
+ImageCopy($result, $imgroot,0,0, 0, 0,$largeurroot,$hauteurroot);
 $this->base_verticale=$hauteur-$hauteurexp+$baseexp;
-$this->image=$result;	
+$this->image=$result;
 }
 
-function dessine_grandoperateur($taille,$caractere) 
+function dessine_grandoperateur($taille,$caractere)
 {
 $this->noeuds[1]->dessine($taille*0.8);
 $img1=$this->noeuds[1]->image;
@@ -1227,7 +1227,7 @@ $this->image=$imgfin;
 $this->base_verticale=max($basesymbole+$hauteur2,$baseexp+$hauteur2);
 }
 
-function dessine_dessus($taille) 
+function dessine_dessus($taille)
 {
 $this->noeuds[2]->dessine($taille*0.8);
 $imgsup=$this->noeuds[2]->image;
@@ -1255,7 +1255,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp+$hauteursup;
 }
 
-function dessine_dessous($taille) 
+function dessine_dessous($taille)
 {
 $this->noeuds[2]->dessine($taille*0.8);
 $imginf=$this->noeuds[2]->image;
@@ -1283,7 +1283,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp;
 }
 
-function dessine_matrice($taille) 
+function dessine_matrice($taille)
 {
 $padding=8;
 $nbligne=$this->noeuds[1]->noeuds[0]->texte;
@@ -1359,7 +1359,7 @@ $this->image=$imgfin;
 $this->base_verticale=imagesy($imgfin)/2;
 }
 
-function dessine_tableau($taille) 
+function dessine_tableau($taille)
 {
 $padding=8;
 $typeligne=$this->noeuds[1]->noeuds[0]->texte;
@@ -1437,7 +1437,7 @@ $this->image=$imgfin;
 $this->base_verticale=imagesy($imgfin)/2;
 }
 
-function dessine_vecteur($taille) 
+function dessine_vecteur($taille)
 {
 //expression
 $this->noeuds[1]->dessine($taille);
@@ -1465,7 +1465,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp+$hauteursup;
 }
 
-function dessine_overline($taille) 
+function dessine_overline($taille)
 {
 //expression
 $this->noeuds[1]->dessine($taille);
@@ -1488,7 +1488,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp+2;
 }
 
-function dessine_underline($taille) 
+function dessine_underline($taille)
 {
 //expression
 $this->noeuds[1]->dessine($taille);
@@ -1511,7 +1511,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp;
 }
 
-function dessine_chapeau($taille) 
+function dessine_chapeau($taille)
 {
 
 $imgsup=affiche_symbol("_hat",$taille);
@@ -1539,7 +1539,7 @@ $this->image=$imgfin;
 $this->base_verticale=$baseexp+$hauteursup;
 }
 
-function dessine_limite($taille) 
+function dessine_limite($taille)
 {
 $imglim=affiche_math("_lim",$taille);
 $largeurlim=imagesx($imglim);
@@ -1572,7 +1572,7 @@ $this->image=alignement2($imgfin,$baselim,$imgexp,$baseexp);
 $this->base_verticale=max($baselim,$baseexp);
 }
 
-function dessine_delimiteur($taille) 
+function dessine_delimiteur($taille)
 {
 $this->noeuds[2]->dessine($taille);
 $imgexp=$this->noeuds[2]->image;
@@ -1593,7 +1593,7 @@ $this->base_verticale=max($basegauche,$baseexp,$basedroit);
 function detectimg($n)
 {
 /*
-Detects if the formula image already exists in the $dirimg cache directory. 
+Detects if the formula image already exists in the $dirimg cache directory.
 In that case, the function returns a parameter (recorded in the name of the image file) which allows to align correctly the image with the text.
 */
 global $dirimg;
@@ -1604,7 +1604,7 @@ while ($fi = readdir($handle))
 	$info=pathinfo($fi);
 	if ($fi!="." && $fi!=".." && $info["extension"]=="png" && preg_match('/^math/', $fi)) {
 		list($math,$v,$name)=explode("_",$fi);
-		if ($name==$n) 
+		if ($name==$n)
 			{
 			$ret=$v;
 			break;
@@ -1637,7 +1637,7 @@ return '<img src="'.$pathtoimg."math_".$v."_".$nameimg.'" style="vertical-align:
 }
 
 
-function mathfilter($text,$size,$pathtoimg) 
+function mathfilter($text,$size,$pathtoimg)
 {
 /* THE MAIN FUNCTION
 1) the content of the math tags (<m></m>) are extracted in the $t variable (you can replace <m></m> by your own tag).
@@ -1655,14 +1655,14 @@ $size=max($size,10);
 $size=min($size,24);
 //preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);
 preg_match_all("#(<m>.*?</m>|\\[m].*?\\[/m])#", $text, $regs, PREG_SET_ORDER);
-foreach ($regs as $math) 
+foreach ($regs as $math)
 	{
 //	$t=str_replace('<m>','',$math[0]);
 //	$t=str_replace('</m>','',$t);
         $t=str_replace(array('<m>','</m>','[m]','[/m]'), '',$math[0]);
 	$code=mathimage(trim($t),$size,$pathtoimg);
 	$text = str_replace($math[0], $code, $text);
-	}	
+	}
 return $text;
 }
 

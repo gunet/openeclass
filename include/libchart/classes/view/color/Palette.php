@@ -1,12 +1,12 @@
 <?php
     /* Libchart - PHP chart library
      * Copyright (C) 2005-2011 Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
-     * 
+     *
      * This program is free software: you can redistribute it and/or modify
      * it under the terms of the GNU General Public License as published by
      * the Free Software Foundation, either version 3 of the License, or
      * (at your option) any later version.
-     * 
+     *
      * This program is distributed in the hope that it will be useful,
      * but WITHOUT ANY WARRANTY; without even the implied warranty of
      * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14,9 +14,9 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     * 
+     *
      */
-    
+
     /**
      * Color palette shared by all chart types.
      *
@@ -28,18 +28,18 @@
         public $red;
         public $axisColor;
         public $backgroundColor;
-        
+
         // Specific chart attributes
         public $barColorSet;
         public $lineColorSet;
         public $pieColorSet;
-    
+
         /**
          * Palette constructor.
          */
         public function Palette() {
             $this->red = new Color(255, 0, 0);
-        
+
             // Set the colors for the horizontal and vertical axis
             $this->setAxisColor(array(
                     new Color(201, 201, 201),
@@ -53,7 +53,7 @@
                     new Color(239, 239, 239),
                     new Color(253, 253, 253)
             ));
-            
+
             // Set the colors for the bars
             $this->setBarColor(array(
                     new Color(42, 71, 181),
@@ -107,7 +107,7 @@
                     new Color(93, 129, 1)
             ));
         }
-        
+
         /**
          * Set the colors for the axis.
          *
@@ -116,7 +116,7 @@
         public function setAxisColor($colors) {
             $this->axisColor = $colors;
         }
-        
+
         /**
          * Set the colors for the background.
          *
@@ -125,7 +125,7 @@
         public function setBackgroundColor($colors) {
             $this->backgroundColor = $colors;
         }
-        
+
         /**
          * Set the colors for the bar charts.
          *
@@ -134,7 +134,7 @@
         public function setBarColor($colors) {
             $this->barColorSet = new ColorSet($colors, 0.75);
         }
-        
+
         /**
          * Set the colors for the line charts.
          *
@@ -143,7 +143,7 @@
         public function setLineColor($colors) {
             $this->lineColorSet = new ColorSet($colors, 0.75);
         }
-        
+
         /**
          * Set the colors for the pie charts.
          *

@@ -42,11 +42,11 @@
  */
 function getUserDocuments($param)
 {
-	
+
 	$last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
 	// get user documents newer than one month
-	$new_docs = docsHtmlInterface($last_month);	
-	
+	$new_docs = docsHtmlInterface($last_month);
+
         return $new_docs;
 }
 
@@ -65,8 +65,8 @@ function docsHtmlInterface($date)
 	global $langNoDocsExist, $uid;
 	global $mysqlMainDb, $group_sql;
 
-	$q = db_query("SELECT document.path, document.course_id, document.filename, 
-                          document.title, document.date_modified, 
+	$q = db_query("SELECT document.path, document.course_id, document.filename,
+                          document.title, document.date_modified,
                           course.title, course.code
                    FROM document, course_user, course
                    WHERE document.course_id = course_user.course_id AND
@@ -80,22 +80,22 @@ function docsHtmlInterface($date)
 
 	if ($q and mysql_num_rows($q) > 0) {
 		$group_courses = array();
-                
+
 		$content = '<table width="100%">';
 		while ($row = mysql_fetch_array($q)) {
-                        if (isset($group_courses[$row['course_id']])) {  
+                        if (isset($group_courses[$row['course_id']])) {
                                 array_push($group_courses[$row['course_id']],$row);
                         }
                         else $group_courses[$row['course_id']] = array($row);
-		}                
+		}
 		foreach($group_courses as $group_courses_member) {
 			$first_check = 0;
 			foreach($group_courses_member as $course_file) {
 				if($first_check == 0){
-					$content.= "<tr><td class='sub_title1'>" . q($course_file['title']) . "</td></tr>";                                        
+					$content.= "<tr><td class='sub_title1'>" . q($course_file['title']) . "</td></tr>";
 					$first_check = 1;
-				}                               
-                                $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;                                                              
+				}
+                                $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;
 				$url = file_url($course_file['path'], null, $course_file['code']);
 				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
 				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
@@ -104,11 +104,11 @@ function docsHtmlInterface($date)
 				nice_format(date('Y-m-d', strtotime($course_file['date_modified']))) .
 				")</li></ul></td></tr>";
 			}
-		} 
+		}
 		unset($group_courses);
 		$content .= "</table>";
 		return $content;
-		
+
 	} else {
 		return "\n<p class='alert1'>$langNoDocsExist</p>\n";
 	}

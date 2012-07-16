@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -120,11 +120,11 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion'])) {
 	    }
     }
 }
-    
+
 if (isset($_SESSION['objQuestion'][$exerciseId])) {
     $objQuestion = $_SESSION['objQuestion'][$exerciseId];
-}    
-    
+}
+
 if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
 	// checks if the object exists
 	if(is_object($objQuestion)) {
@@ -202,7 +202,7 @@ if (isset($_POST['modifyIn']) and $_POST['modifyIn'] == 'thisExercise') {
 		$noPHP_SELF = true;
 	}
 }
-   
+
 if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	// statement management
 	include('statement_admin.inc.php');
@@ -232,7 +232,7 @@ draw($tool_content, 2, null, $head_content);
 // function for displaying jscalendar
 // -----------------------------------------------
 function jscal_html($name, $u_date) {
-	
+
 	global $jscalendar;
 	if (!$u_date) {
 		$u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
@@ -245,6 +245,6 @@ function jscal_html($name, $u_date) {
        array('style' => 'width: 15em; color: #840; background-color: #fff; border: 1px dotted #000; text-align: center',
                  'name'  => $name,
                  'value' => $u_date));
-	
+
 	return $cal;
 }

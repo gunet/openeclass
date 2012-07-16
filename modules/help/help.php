@@ -32,7 +32,7 @@ if (isset($_SESSION['theme'])) {
 }
 $themeimg = '../../template/' . $theme . '/img';
 
-if (file_exists("../../lang/$language/help.inc.php")) {        
+if (file_exists("../../lang/$language/help.inc.php")) {
         $siteName = '';
 	include "../../lang/$language/common.inc.php";
 	include "../../lang/$language/help.inc.php";

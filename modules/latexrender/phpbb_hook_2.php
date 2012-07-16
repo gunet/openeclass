@@ -41,11 +41,11 @@
  * @version v0.6
  * @package latexrender
  *
- */   
+ */
     // --------------------------------------------------------------------------------------------------
-    // adjust this to match your system configuration    
+    // adjust this to match your system configuration
     $latexrender_path = "/var/www/phpbb/latexrender";
-    $latexrender_path_http = "/phpbb/latexrender";    
+    $latexrender_path_http = "/phpbb/latexrender";
 
     // --------------------------------------------------------------------------------------------------
     include_once($latexrender_path."/class.latexrender.php");
@@ -66,5 +66,5 @@
             $text = substr_replace($text, "[unparseable or potentially dangerous latex formula]",$pos,strlen($tex_matches[0][$i]));
         }
     }
-    
+
 ?>

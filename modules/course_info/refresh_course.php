@@ -38,7 +38,7 @@ require_once 'include/jscalendar/calendar.php';
 $nameTools = $langRefreshCourse;
 
 if(isset($_POST['submit'])) {
-	$output = array();	
+	$output = array();
 	if (isset($_POST['delusers'])) {
 		if (isset($_POST['before_date'])) {
 			$output[] = delete_users(q($_POST['before_date']));
@@ -73,7 +73,7 @@ if(isset($_POST['submit'])) {
         $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
         $head_content .= $jscalendar->get_load_files_code();
         $datetoday = date("Y-n-j",time());
-	
+
 	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
 	<table width='100%' class=\"FormData\">
 	<tbody>
@@ -110,7 +110,7 @@ if(isset($_POST['submit'])) {
 	</tr>
 	</tbody>
 	</table>
-	</form>";	
+	</form>";
 	$tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
 }
 
@@ -124,13 +124,13 @@ function delete_users($date = '') {
                                  WHERE course_id = $course_id AND
                                        statut <> 1 AND
                                        statut <> 10 AND
-                                       reg_date < '$date'");	  
+                                       reg_date < '$date'");
 	} else {
 		db_query("DELETE FROM course_user WHERE course_id = $course_id AND statut <> 1 AND statut <> 10");
 	}
         db_query("DELETE FROM group_members
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
-                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)"); 
+                               user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)");
 	return "<p>$langUsersDeleted</p>";
 }
 
@@ -163,9 +163,9 @@ function hide_work()  {
 }
 
 function make_calendar($name) {
-	
+
 	global $datetoday, $jscalendar, $langBeforeRegDate;
-	
+
 	return "$langBeforeRegDate ".
 		$jscalendar->make_input_field(
 		array('showOthers' => true,

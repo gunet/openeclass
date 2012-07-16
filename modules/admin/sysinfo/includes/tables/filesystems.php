@@ -35,7 +35,7 @@ $fs = $sysinfo->filesystems();
 for ($i=0; $i<sizeof($fs); $i++) {
     $sum['size'] += $fs[$i]['size'];
     $sum['used'] += $fs[$i]['used'];
-    $sum['free'] += $fs[$i]['free']; 
+    $sum['free'] += $fs[$i]['free'];
 
     $_text .= "\t<tr>\n";
     $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">" . $fs[$i]['mount'] . "</font></td>\n";

@@ -20,11 +20,11 @@
 
 /*
  * Password reset component
- * 
+ *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
- * 
- * @abstract This component resets the user's password after verifying 
+ *
+ * @abstract This component resets the user's password after verifying
  * his/hers  information through a challenge/response system.
  *
  */

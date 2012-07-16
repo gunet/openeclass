@@ -58,7 +58,7 @@ function list_links()
                                                 q(($linkcatrow['title'] == '')? $linkcatrow['url']: $linkcatrow['title']) . "</a></td>";
 					$tool_content .= "\n    <td>" . standard_text_escape($linkcatrow['description']) . "</td>";
 					$tool_content .= "\n    <td align='center'><input type='checkbox' name='link[]' value='$linkcatrow[id]' /></td>";
-					$tool_content .= "\n  </tr>";	
+					$tool_content .= "\n  </tr>";
 				}
 			}
 		}
@@ -76,7 +76,7 @@ function list_links()
 			$tool_content .= "\n  <tr class='odd'>" .
                                          "\n    <td colspan='3' class='bold'>$langNoCategory</td>" .
                                          "\n  </tr>";
-			foreach ($linkinfo as $entry) { 
+			foreach ($linkinfo as $entry) {
 				$tool_content .= "\n  <tr class='even'>" .
                                                  "\n    <td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a></td>" .
 				                 "\n  <td>" . standard_text_escape($entry['comment']) . "</td>" .

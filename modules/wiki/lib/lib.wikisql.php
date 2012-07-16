@@ -24,19 +24,19 @@
 	lib.wikisql.php
 	@last update: 15-05-2007 by Thanos Kyritsis
 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-	               
+
 	based on Claroline version 1.7.9 licensed under GPL
 	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
-	      
+
 	      original file: lib.wikisql Revision: 1.12.2.2
-	      
+
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================        
-    @Description: 
+==============================================================================
+    @Description:
 
     @Comments:
- 
-    @todo: 
+
+    @todo:
 ==============================================================================
 */
 
@@ -51,7 +51,7 @@
         $tblWikiPages = 'wiki_pages';
         $tblWikiPagesContent = 'wiki_pages_content';
         $tblWikiAcls = 'wiki_acls';
-        
+
         $con->connect();
 
         // drop tables
@@ -66,12 +66,12 @@
 
             $sql = "DROP TABLE IF EXISTS `$tblWikiProperties`";
             $con->executeQuery( $sql );
-            
+
             $sql = "DROP TABLE IF EXISTS `$tblWikiAcls`";
             $con->executeQuery( $sql );
         }
 
-        // init page table	
+        // init page table
         // set default storage engine
         mysql_query("SET storage_engine=MYISAM");
         $sql = "CREATE TABLE IF NOT EXISTS `$tblWikiPages` (
@@ -113,7 +113,7 @@
             ;
 
         $con->executeQuery( $sql );
-        
+
         $sql = "CREATE TABLE IF NOT EXISTS `$tblWikiAcls` (
                     `wiki_id` INT(11) UNSIGNED NOT NULL,
                     `flag` VARCHAR(255) NOT NULL,
@@ -122,7 +122,7 @@
                 ;
         $con->executeQuery( $sql );
     }
-    
+
     /**
      * create wiki MainPage
      * @param DatabaseConnection con database connection
@@ -133,21 +133,21 @@
     function init_wiki_main_page( &$con, $wikiId, $creatorId, $wikiTitle )
     {
         global $langWikiMainPageContent;
-        
+
         $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle = '' );
-        
+
         $config = array();
         $config["tbl_wiki_pages"] = "wiki_pages";
         $config["tbl_wiki_pages_content"] = "wiki_pages_content";
-        
+
         $wikiPage = new WikiPage( $con, $config, $wikiId );
-        
+
         $wikiPage->create( $creatorId, '__MainPage__'
             , $mainPageContent, date( "Y-m-d H:i:s" ), true );
-            
+
         return (! ( $wikiPage->hasError() ));
     }
-    
+
 #    /**
 #     * Create a sample wiki in a given course or group
 #     * Not used at this time
@@ -159,7 +159,7 @@
 #    function create_sample_wiki( &$con, $creatorId, $groupId = 0 )
 #    {
 #        global $langWikiSampleTitle, $langWikiSampleDescription;
-#        
+#
 #        $config = array();
 #        // use claro functions
 #        $tblList = claro_sql_get_course_tbl();
@@ -167,13 +167,13 @@
 #        $config["tbl_wiki_pages_content"] = $tblList[ "wiki_pages_content" ];
 #        $config["tbl_wiki_properties"] = $tblList[ "wiki_properties" ];
 #        $config["tbl_wiki_acls"] = $tblList[ "wiki_acls" ];
-#        
+#
 #        $wiki = new Wiki( $con, $config );
-#        
+#
 #        $wiki->setTitle( $langWikiSampleTitle );
 #        $wiki->setDescription( $langWikiSampleDescription );
 #        $wiki->setGroupId( $groupId );
-#        
+#
 #        if ( $groupId != 0 )
 #        {
 #            $acl = array(
@@ -187,7 +187,7 @@
 #                'other_edit' => false,
 #                'other_create' => false
 #            );
-#            
+#
 #        }
 #        else
 #        {
@@ -203,10 +203,10 @@
 #                'other_create' => false
 #            );
 #        }
-#        
+#
 #        $wiki->setACL( $acl );
 #        $wikiId = $wiki->save();
-#        
+#
 #        return init_wiki_main_page( $con, $wikiId, $creatorId );
 #    }
 ?>

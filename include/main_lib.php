@@ -765,9 +765,9 @@ function parse_tex($textext)
 
 // Returns the code of a faculty given its name
 function find_faculty_by_name($name) {
-    
+
 	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =". quote($name) ));
-	
+
 	if (!$code) {
 		return false;
 	} else {
@@ -777,9 +777,9 @@ function find_faculty_by_name($name) {
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
-    
+
 	$req = db_query("SELECT name FROM hierarchy WHERE id = ". intval($id) );
-	
+
 	if ($req and mysql_num_rows($req)) {
 		$fac = mysql_fetch_row($req);
 		return $fac[0];
@@ -790,7 +790,7 @@ function find_faculty_by_id($id) {
 			return $fac[0];
 		}
 	}
-	
+
 	return false;
 }
 
@@ -800,7 +800,7 @@ function new_code($fac) {
 
 	mysql_select_db($mysqlMainDb);
 	$gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = ". intval($fac) ));
-	
+
 	do {
 		$code = $gencode[0].$gencode[1];
 		$gencode[1] += 1;
@@ -2375,7 +2375,7 @@ function removeDir($dirPath)
 
 /**
  * Generate a token verifying some info
- * 
+ *
  * @param  string  $info           - The info that will be verified by the token
  * @param  boolean $need_timestamp - Whether the token will include a timestamp
  * @return string  $ret            - The new token
@@ -2393,7 +2393,7 @@ function token_generate($info, $need_timestamp=false)
 
 /**
  * Validate a token verifying some info
- * 
+ *
  * @param  string  $info           - The info that will be verified by the token
  * @param  string  $token          - The token to verify
  * @param  int     $ts_valid_time  - Period of validity of token in seconds, if token includes a timestamp

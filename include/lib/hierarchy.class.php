@@ -20,7 +20,7 @@
 
 /**
  * Eclass Hierarchy Coordinating Object.
- * 
+ *
  * This class does not represent a hierarchy node or tree entity, but a core logic coordinating object
  * responsible for handling hierarchy and hierarchy node related tasks.
  */
@@ -31,12 +31,12 @@ class hierarchy {
     private $view;
     /*private $ordering_copy;
     private $ordermap;*/
-    
+
     /**
      * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
      *
      * @param string $dbtable - Name of table with tree nodes
-     */    
+     */
     public function hierarchy($dbtable = 'hierarchy')
     {
         $this->dbtable = $dbtable;
@@ -48,10 +48,10 @@ class hierarchy {
                     GROUP BY node.id
                     ORDER BY node.lft) AS tmp ";
     }
-    
+
     /**
      * Add a node to the tree.
-     * 
+     *
      * @param  string $name           - The new node name
      * @param  int    $parentlft      - The new node's parent lft
      * @param  string $code           - The new node code
@@ -63,7 +63,7 @@ class hierarchy {
     public function addNode($name, $parentlft, $code, $allow_course, $allow_user, $order_priority)
     {
         $ret = null;
-        
+
         if ($this->useProcedures())
         {
             db_query("CALL add_node(". quote($name) .", $parentlft, ". quote($code) .", $allow_course, $allow_user, $order_priority)");
@@ -81,13 +81,13 @@ class hierarchy {
             db_query($query);
             $ret = mysql_insert_id();
         }
-        
+
         return $ret;
     }
-    
+
     /**
      * Add a node to the tree requiring extra arguments (number and generator).
-     * 
+     *
      * @param  string $name           - The new node name
      * @param  int    $parentlft      - The new node's parent lft
      * @param  string $code           - The new node code
@@ -101,7 +101,7 @@ class hierarchy {
     public function addNodeExt($name, $parentlft, $code, $number, $generator, $allow_course, $allow_user, $order_priority)
     {
         $ret = null;
-        
+
         if ($this->useProcedures())
         {
             db_query("CALL add_node_ext(". quote($name) .", $parentlft, ". quote($code) .", $number, $generator, $allow_course, $allow_user, $order_priority)");
@@ -119,13 +119,13 @@ class hierarchy {
             db_query($query);
             $ret = mysql_insert_id();
         }
-        
+
         return $ret;
     }
-    
+
     /**
      * Update a tree node.
-     * 
+     *
      * @param int    $id             - The id of the node to update
      * @param string $name           - The new name for the node
      * @param int    $nodelft        - The new parent lft value
@@ -156,10 +156,10 @@ class hierarchy {
             }
         }
     }
-    
+
     /**
      * Delete a node from the tree.
-     * 
+     *
      * @param int $id - The id of the node to delete
      */
     public function deleteNode($id)
@@ -182,34 +182,34 @@ class hierarchy {
             $this->delete($lft, $rgt);
         }
     }
-    
+
     /**
      * Shift tree nodes to the right.
      *
      * @param int $node   - This is the lft of the node after which we want to shift
      * @param int $shift  - Length of shift
-     * @param int $maxrgt - Maximum rgt value in the tree                       
-     */    
+     * @param int $maxrgt - Maximum rgt value in the tree
+     */
     public function shiftRight($node, $shift = 2, $maxrgt = 0)
     {
-        $this->shift('+', $node, $shift, $maxrgt);     
+        $this->shift('+', $node, $shift, $maxrgt);
     }
-      
+
     /**
      * Shift tree nodes to the left.
-     * 
+     *
      * @param int $node   - This is the lft of the node after which we want to shift
      * @param int $shift  - Length of shift
      * @param int $maxrgt - Maximum rgt value in the tree
-     */    
+     */
     public function shiftLeft($node, $shift = 2, $maxrgt = 0)
     {
-        $this->shift('-', $node, $shift, $maxrgt);     
+        $this->shift('-', $node, $shift, $maxrgt);
     }
-    
+
     /**
      * Shift a subtree to the end of the tree.
-     * 
+     *
      * @param int $lft    - The subtree current lft value
      * @param int $rgt    - The subtree current rgt value
      * @param int $maxrgt - Maximum rgt value in the tree
@@ -219,10 +219,10 @@ class hierarchy {
         $query = "UPDATE ". $this->dbtable ." SET  lft = (lft - ". ($lft-1) .")+". $maxrgt .", rgt = (rgt - ". ($lft-1) .")+". $maxrgt ." WHERE lft BETWEEN ". $lft ." AND ". $rgt;
         db_query($query);
     }
-    
+
     /**
      * Shift tree nodes.
-     * 
+     *
      * @param string $action - '+' for shift to the right, '-' for shift to the left
      * @param int    $node   - This is the lft of the node after which we want to shift
      * @param int    $shift  - Length of shift
@@ -232,24 +232,24 @@ class hierarchy {
     {
         $query = "UPDATE ". $this->dbtable ." SET rgt = rgt ". $action ." ". $shift ." WHERE rgt > ". $node . ($maxrgt>0 ? " AND rgt<=" . $maxrgt : '');
         db_query($query);
-      
+
         $query = "UPDATE ". $this->dbtable ." SET lft = lft ". $action ." ". $shift ." WHERE lft > ". $node . ($maxrgt>0 ? " AND lft<=" . $maxrgt : '');
         db_query($query);
-    } 
-    
+    }
+
     /**
      * Get maximum rgt value in the tree.
-     * 
-     * @return int 
+     *
+     * @return int
      */
     public function getMaxRgt()
     {
         $result = db_query("SELECT rgt FROM ". $this->dbtable ." ORDER BY rgt desc limit 1");
         $row = mysql_fetch_assoc($result);
-        
+
         return $row['rgt'];
     }
-    
+
     /**
      * Get a child node's parent.
      *
@@ -261,13 +261,13 @@ class hierarchy {
     {
         $query = "SELECT * FROM ". $this->dbtable ." WHERE lft < ". $lft ." AND rgt > ". $rgt ." ORDER BY lft DESC LIMIT 1";
         $result = db_query($query);
-        
+
         return mysql_fetch_assoc($result);
     }
-    
+
     /**
      * Get a node's lft value.
-     * 
+     *
      * @param  int $id - The id of the node
      * @return int
      */
@@ -275,48 +275,48 @@ class hierarchy {
     {
         $query = "SELECT lft FROM ". $this->dbtable ." WHERE id = ". $id;
         $res = mysql_fetch_assoc(db_query($query));
-        
+
         return intval($res['lft']);
     }
-    
+
     /**
      * Get a node's (unserialized) name value.
-     * 
+     *
      * @param  string $key    - The db query search pattern
      * @param  string $useKey - Match against either the id or the lft during the db query
-     * @return string         - The (unserialized) node's name 
+     * @return string         - The (unserialized) node's name
      */
     public function getNodeName($key, $useKey = 'id')
     {
         $query = "SELECT name FROM ". $this->dbtable ." WHERE ". $useKey ." = ". $key;
         $res = mysql_fetch_assoc(db_query($query));
-        
+
         return self::unserializeLangField($res['name']);
     }
-    
+
     /**
      * Delete a subtree.
-     * 
+     *
      * @param int $lft - The subtree node lft value
      * @param int $rgt - The subtree node rgt value
      */
     public function delete($lft, $rgt)
     {
         $nodeWidth = $rgt - $lft + 1;
-              
+
         $query = "DELETE FROM ". $this->dbtable ."  WHERE lft BETWEEN ". $lft ." AND ". $rgt;
         db_query($query);
-        
+
         $query = "UPDATE ". $this->dbtable ."  SET rgt = rgt - ". $nodeWidth ." WHERE rgt > ". $rgt;
         db_query($query);
-        
+
         $query = "UPDATE ". $this->dbtable ."  SET lft = lft - ". $nodeWidth ." WHERE lft > ". $lft;
         db_query($query);
     }
-    
+
     /**
      * Move a subtree to a different tree position.
-     * 
+     *
      * @param int $nodelft - The new subtree parent lft value
      * @param int $lft     - The subtree node current lft value
      * @param int $rgt     - The subtree node current rgt value
@@ -325,9 +325,9 @@ class hierarchy {
     {
         $nodeWidth = $rgt - $lft + 1;
         $maxrgt = $this->getMaxRgt();
-        
+
         $this->shiftEnd($lft, $rgt, $maxrgt);
-        
+
         if($nodelft==0)
         {
             $this->shiftLeft($rgt, $nodeWidth);
@@ -335,22 +335,22 @@ class hierarchy {
         else
         {
             $this->shiftLeft($rgt, $nodeWidth, $maxrgt);
-          
+
             if($lft<$nodelft)
             {
                 $nodelft = $nodelft - $nodeWidth;
             }
-          
+
             $this->shiftRight($nodelft, $nodeWidth, $maxrgt);
-          
+
             $query = "UPDATE ". $this->dbtable ." SET rgt = (rgt - ". $maxrgt .") + ". $nodelft ." WHERE rgt > ". $maxrgt;
             db_query($query);
-        
+
             $query = "UPDATE ". $this->dbtable ." SET lft = (lft - ". $maxrgt .") + ". $nodelft ." WHERE lft > ". $maxrgt;
             db_query($query);
-        }    
+        }
     }
-    
+
     /**
      * Build an ArrayMap containing the tree nodes (ordered by the lft value).
      *
@@ -359,46 +359,46 @@ class hierarchy {
      * @param  int    $exclude     - The id of the subtree parent node we want to exclude from the result
      * @param  string $where       - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap, orderingMap>. 
-     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, 
+     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap, orderingMap>.
+     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>,
      *                               <node key, node depth>, <node key, node code>, <node key, allow_course>, <node key, allow_user> and <node key, order_priority>.
-     */       
+     */
     public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = false)
     {
         if ($exclude != null)
         {
             $result = db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude");
             $row = mysql_fetch_assoc($result);
-            
-            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user, 
+
+            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user,
                              node.order_priority, COUNT(parent.id) - 1 AS depth
-                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
                     AND (node.lft < ". $row['lft'] ." OR node.lft > ". $row['rgt'] .")
                     $where
-                    GROUP BY node.id 
+                    GROUP BY node.id
                     ORDER BY node.lft";
         }
         else
         {
-            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user, 
+            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user,
                              node.order_priority, COUNT(parent.id) - 1 AS depth
-                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+                     FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent
+                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
                     $where
-                    GROUP BY node.id 
+                    GROUP BY node.id
                     ORDER BY node.lft";
         }
-        
+
         $result = db_query($query);
-        
+
         $idmap = array();
         $depthmap = array();
         $codemap = array();
         $allowcoursemap = array();
         $allowusermap = array();
         $orderingmap = array();
-        
+
         // necessary to avoid php notices for undefined offset
         $idmap[0] = 0;
         $depthmap[0] = 0;
@@ -406,14 +406,14 @@ class hierarchy {
         $allowcoursemap[0] = 1;
         $allowusermap[0] = 1;
         $orderingmap[0] = 999999;
-              
+
         while($row = mysql_fetch_assoc($result))
         {
             $prefix = '';
             if ($dashprefix)
                 for ($i = 0; $i < $row['depth']; $i++)
                     $prefix .= '&nbsp;-&nbsp;';
-            
+
             $tree_array[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
             $idmap[$row[$useKey]] = $row['id'];
             $depthmap[$row[$useKey]] = $row['depth'];
@@ -421,26 +421,26 @@ class hierarchy {
             $allowcoursemap[$row[$useKey]] = $row['allow_course'];
             $allowusermap[$row[$useKey]] = $row['allow_user'];
             $orderingmap[$row[$useKey]] = intval($row['order_priority']);
-        }  
-        
+        }
+
         return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap);
     }
-    
+
     /**
      * DEPRECATED due to performance loss, sorting moved to jstree
-     * Build an ArrayMap containing the tree nodes (customly ordered per depth level). 
-     * 
-     * This is the entry-point method for building ordered ArrayMaps using recursion (each depth level is a different recursion step). 
-     * See also the utilized recursive method appendOrdered(). For each recursion step, the nodes are ordered and appended to the 
+     * Build an ArrayMap containing the tree nodes (customly ordered per depth level).
+     *
+     * This is the entry-point method for building ordered ArrayMaps using recursion (each depth level is a different recursion step).
+     * See also the utilized recursive method appendOrdered(). For each recursion step, the nodes are ordered and appended to the
      * tree ArrayMap.
-     * 
+     *
      * @param  array   $tree_array - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
      * @param  string  $useKey     - Key for return array, can be 'lft' or 'id'
      * @param  int     $exclude    - The id of the subtree parent node we want to exclude from the result
      * @param  string  $where      - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap>. 
-     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>, 
+     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap>.
+     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>,
      *                               <node key, node depth>, <node key, node code>, <node key, allow_course> and <node key, allow_user>.
      */
     /*public function buildOrdered($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = true)
@@ -457,19 +457,19 @@ class hierarchy {
         $this->ordermap = array();
         $level = array();
         $mindepth = array();
-        
+
         if (strstr($where, 'allow_course') !== false)
             $swhere = ' WHERE allow_course = true ';
         else if (strstr($where, 'allow_user') !== false)
             $swhere = ' WHERE allow_user  = true ';
-        
+
         if ($exclude != null)
         {
             $excnode = mysql_fetch_array(db_query("SELECT * FROM ". $this->dbtable ." WHERE id = $exclude"));
             $excwhere = ' AND (lft < '. $excnode['lft'] .' OR lft > '. $excnode['rgt'] .') ';
             $excnwhere = ' AND (node.lft < '. $excnode['lft'] .' OR node.lft > '. $excnode['rgt'] .') ';
         }
-        
+
         if ($this->useProcedures())
         {
             $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->dbdepth . $swhere));
@@ -480,14 +480,14 @@ class hierarchy {
             $mindepth = mysql_fetch_array(db_query("SELECT min(depth) FROM ". $this->view . $swhere));
             $res = db_query("SELECT id, lft, name, depth, code, allow_course, allow_user, order_priority FROM ". $this->view ." WHERE depth = ". $mindepth[0] . $excwhere);
         }
-        
+
         while ($row = mysql_fetch_assoc($res))
         {
             $prefix = '';
             if ($dashprefix)
                 for ($i = 0; $i < $mindepth[0]; $i++)
                     $prefix .= '&nbsp;-&nbsp;';
-            
+
             $level[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
             $idmap[$row[$useKey]] = $row['id'];
             $depthmap[$row[$useKey]] = $row['depth'];
@@ -500,16 +500,16 @@ class hierarchy {
         uksort($level, array($this, 'orderCmp'));
 
         $this->appendOrdered($tree_array, $level, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $mindepth[0]+1, $useKey, $where, $excnwhere, $dashprefix);
-        
+
         return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap);
     }*/
-    
+
     /**
      * DEPRECATED due to performance loss, sorting moved to jstree
-     * Recursively append customly ordered entries to an existing tree ArrayMap. 
-     * 
+     * Recursively append customly ordered entries to an existing tree ArrayMap.
+     *
      * Designed to be used in combination with special entry-point methods such as buildOrdered().
-     * 
+     *
      * It requires as input the byproducts of buildOrdered(), passed by reference. The extra arguments are mainly for excluding
      * parts of the subtree already excluded at a previous recursion step (or the entry-point itself).
      */
@@ -520,9 +520,9 @@ class hierarchy {
             $final[$key] = $value;
 
             $res = db_query("SELECT node.* FROM ". $this->dbtable ." AS node
-                    LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft = 
-                                    (SELECT MAX(S.lft) 
-                                       FROM ". $this->dbtable ." AS S 
+                    LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft =
+                                    (SELECT MAX(S.lft)
+                                       FROM ". $this->dbtable ." AS S
                                       WHERE node.lft > S.lft
                                         AND node.lft < S.rgt)
                               WHERE parent.id = ". $idmap[$key] ." ". $where . $excwhere);
@@ -538,7 +538,7 @@ class hierarchy {
                     if ($dashprefix)
                         for ($i = 0; $i < $depth; $i++)
                             $prefix .= '&nbsp;-&nbsp;';
-            
+
                     $tmp[$row[$useKey]] = $prefix . self::unserializeLangField($row['name']);
                     $idmap[$row[$useKey]] = $row['id'];
                     $depthmap[$row[$useKey]] = $depth;
@@ -555,12 +555,12 @@ class hierarchy {
                 continue;
         }
     }*/
-    
+
     /**
      * DEPRECATED due to performance loss, sorting moved to jstree
      * Custom comparison function for ordering/sorting the tree nodes primarily according to their order priority
      * and secondarily alphabetically. To be used in conjustion with uksort()
-     * 
+     *
      * @param  int $a - arraymap key of node a
      * @param  int $b - arraymap key of node b
      * @return int    - < 0 if node a is less than node b, > 0 if node a is greater than node b, and 0 if they are equal.
@@ -577,7 +577,7 @@ class hierarchy {
             return ($this->ordering_copy[$a] > $this->ordering_copy[$b]) ? -1 : 1;
         }
     }*/
-    
+
     /**
      * Represent the tree using HTML unordered list tags (<ul> and <li>). Extremely useful for JSTree representation (GUI).
      *
@@ -594,7 +594,7 @@ class hierarchy {
      * 'codesuffix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
-     * 
+     *
      * @return string  $html - HTML output
      */
     public function buildHtmlUl($options = array())
@@ -610,12 +610,12 @@ class hierarchy {
         $allow_only_defaults = (array_key_exists('allow_only_defaults', $options)) ? $options['allow_only_defaults'] : false;
         $mark_allow_user     = (strstr($where, 'allow_user')   !== false) ? true : false;
         $mark_allow_course   = (strstr($where, 'allow_course') !== false) ? true : false;
-        
+
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
         $subdefs   = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
         $suballowed = ($allowables != null) ? $this->buildSubtrees($allowables) : null;
         $html = '<ul>' . "\n";
-        
+
         list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
         $i = 0;
         $current_depth = null;
@@ -633,7 +633,7 @@ class hierarchy {
 
                     $current_depth = $depthmap[$key];
                 }
-                
+
                 if ($depthmap[$key] < $current_depth)
                 {
                     for($i = $current_depth; $i > $depthmap[$key]; $i--)
@@ -644,82 +644,82 @@ class hierarchy {
                     $current_depth = $depthmap[$key];
                 }
             }
-            
+
             $rel = '';
             $class = '';
-            if ( ($mark_allow_course && !$allowcoursemap[$key]) || 
+            if ( ($mark_allow_course && !$allowcoursemap[$key]) ||
                  ($mark_allow_user && !$allowusermap[$key]) ||
                  ($allow_only_defaults && !in_array($idmap[$key], $subdefs) ) ||
-                 ($suballowed != null && !in_array($idmap[$key], $suballowed) ) 
+                 ($suballowed != null && !in_array($idmap[$key], $suballowed) )
                )
                 $rel = 'nosel';
             if (!empty($rel)) {
                 $rel = 'rel="'. $rel .'"';
                 $class = 'class="nosel"';
             }
-            
+
             $valcode = '';
             if ($codesuffix && strlen($codemap[$key]) > 0)
                 $valcode = ' ('. $codemap[$key] .')';
-            
+
             // valid HTML requires ids starting with letters.
-            // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2) 
+            // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
             $html .= '<li id="nd'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value . $valcode .'</a></li>' . "\n";
-            
+
             $i++;
         }
 
         $html .= '</ul>';
-        
+
         return $html;
     }
-    
+
     /**
-     * Compile a comma seperated list with node ids. Used for setting JSTree initially_open core 
+     * Compile a comma seperated list with node ids. Used for setting JSTree initially_open core
      * configuration option
-     * 
+     *
      * @return string $initopen - The returned comma seperated list
      */
     public function buildJSTreeInitOpen()
     {
         // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
         $initopen = '';
-        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0") 
+        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0")
                                         : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
         while ($row = mysql_fetch_assoc($res))
             $initopen .= $row['id'].',';
-        
+
         return $initopen;
     }
-    
+
     /**
      * Build the necessary Javascript code for the Node Picker UI element. This is a private method
      * utilized by the entry-point buildNodePicker(), buildCourseNodePicker() and buildUserNodePicker() methods.
-     * 
+     *
      * @param  string $params - Extra html tag parameters for the form's input elements (such as name)
      * @param  int    $offset - The number of the parent's that the editing child already belongs to (mainly for edit forms)
-     * @return string $js     - The returned JS code 
+     * @return string $js     - The returned JS code
      */
     private function buildJSNodePicker($params, $offset = 0)
     {
         global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode;
-                
+
         $initopen = $this->buildJSTreeInitOpen();
-        
+
         if ($offset > 0)
             $offset -=1 ;
-        
+
         $js = <<<jContent
 <script type="text/javascript">
 
 var countnd = $offset;
 
 $(function() {
-        
+
     $( "#ndAdd" ).click(function() {
         $( "#dialog-form" ).dialog( "open" );
     });
-    
+
     $( "#dialog-form" ).dialog({
         autoOpen: false,
         height: 600,
@@ -727,9 +727,9 @@ $(function() {
         modal: true,
         buttons: {
             "$langSelect": function() {
-            
+
                 var newnode = $( "#js-tree" ).jstree("get_selected");
-        
+
                 if (!newnode.length)
                     alert("$langEmptyNodeSelect");
                 else
@@ -740,11 +740,11 @@ $(function() {
                                          + newnode.children("a").text()
                                          + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png"/><\/a>'
                                          + '<\/p>');
-                    
+
                     $( "#dialog-set-value" ).val( newnode.children("a").text() );
                     $( "#dialog-set-key" ).val(newnode.attr("id").substring(2));
                     document.getElementById('dialog-set-key').onchange();
-        
+
                     $( this ).dialog( "close" );
                 }
             },
@@ -753,7 +753,7 @@ $(function() {
             }
         }
     });
-    
+
     $( "#js-tree" ).jstree({
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
         "core" : {
@@ -776,21 +776,21 @@ $(function() {
                 }
             }
         },
-        "sort" : function (a, b) { 
+        "sort" : function (a, b) {
             priorityA = this._get_node(a).attr("tabindex");
             priorityB = this._get_node(b).attr("tabindex");
-            
+
             if (priorityA == priorityB)
                 return this.get_text(a) > this.get_text(b) ? 1 : -1;
             else
                 return priorityA < priorityB ? 1 : -1;
         }
     });
-    
+
 });
 
 function validateNodePickerForm() {
-    
+
     var nodeContainer = $( "#nodCnt" ).text();
     var inputKey = $( "#dialog-set-key" ).val();
     var inputVal = $( "#dialog-set-value" ).val();
@@ -804,10 +804,10 @@ function validateNodePickerForm() {
 }
 </script>
 jContent;
-        
+
         return $js;
     }
-    
+
     /**
      * Build the necessary HTML code for the Node Picker UI element. This is a private method
      * utilized by the entry-point buildNodePicker(), buildCourseNodePicker() and buildUserNodePicker() methods.
@@ -823,13 +823,13 @@ jContent;
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * This method uses default values, but you should at least provide 'params'.
-     * 
+     *
      * @return string  $html - The returned HTML code
      */
     private function buildHtmlNodePicker($options)
     {
         global $themeimg, $langNodeAdd;
-        
+
         $params     = (array_key_exists('params',   $options)) ? $options['params']   : '';
         $defaults   = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
         $exclude    = (array_key_exists('exclude',  $options)) ? $options['exclude']  : null;
@@ -837,15 +837,15 @@ jContent;
         $useKey     = (array_key_exists('useKey',   $options)) ? $options['useKey']   : 'lft';
         $where      = (array_key_exists('where',    $options)) ? $options['where']    : '';
         $multiple   = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
-        
-        
+
+
         $html = '';
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
-        
+
         if ($multiple)
         {
             $html .= '<div id="nodCnt">';
-            
+
             if (is_array($defaults))
             {
                 $i = 0;
@@ -859,10 +859,10 @@ jContent;
                     $i++;
                 }
             }
-            
+
             $html .= '</div>';
             $html .= '<div><p><a id="ndAdd" href="#add"><img src="'.$themeimg.'/add.png" title="'.$langNodeAdd.'" alt="'.$langNodeAdd.'"/></a></p></div>';
-            
+
             // Unused for multi usecase, however present to use a unique generic JS event function
             $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';
             $html .= '<input id="dialog-set-value" type="hidden" />';
@@ -875,29 +875,29 @@ jContent;
                     $def = $tree_array[$defs[0]];
                 else
                     $def = $this->getNodeName($defs[0], $useKey);
-            } 
+            }
             else
             {
                 $defs[0] = '';
                 $def = '';
             }
-            
+
             // satisfy JS code: getElementById().onchange()
             if (stristr($params, 'onchange') === false)
                 $params .= ' onchange="" ';
-            
+
             $html .= '<input id="dialog-set-key" type="hidden" '. $params .' value="'. $defs[0] .'" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#'. $defs[0] .'\', true, null);' : '';
             $html .= '<input id="dialog-set-value" type="text" onclick="'. $onclick .' $( \'#dialog-form\' ).dialog( \'open\' );" value="'. $def .'" />&nbsp;';
         }
-        
+
         $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
         $html .= $this->buildHtmlUl($options);
         $html .= '</div></fieldset></div>';
-        
+
         return $html;
     }
-    
+
     /**
      * Build a Tree Node Picker (UI). The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -905,7 +905,7 @@ jContent;
      * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
-     * 
+     *
      * @param  array $options           - Options array for construction of the Node picker. Possible key value pairs are:
      * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
@@ -917,18 +917,18 @@ jContent;
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You must provide at least 'params' because this method does not use any default values.
-     * 
-     * @return array - Return array containing (<js, html>) all necessary JS and HTML code 
+     *
+     * @return array - Return array containing (<js, html>) all necessary JS and HTML code
      */
     public function buildNodePicker($options)
     {
         $c = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0;
         $js = $this->buildJSNodePicker($options['params'], $c);
         $html = $this->buildHtmlNodePicker($options);
-        
+
         return array($js, $html);
     }
-    
+
     /**
      * Build a Tree Node Picker (UI) for attaching courses under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -936,7 +936,7 @@ jContent;
      * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
-     * 
+     *
      * @param  array $options           - Options array for construction of the Course Node picker. Possible key value pairs are:
      * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
@@ -948,8 +948,8 @@ jContent;
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
-     * 
-     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
+     *
+     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code
      */
     public function buildCourseNodePicker($options = array())
     {
@@ -959,10 +959,10 @@ jContent;
                           'where' => 'AND node.allow_course = true',
                           'multiple' => get_config('course_multidep'));
         $this->populateOptions($options, $defaults);
-        
+
         return $this->buildNodePicker($options);
     }
-    
+
     /**
      * Build a Tree Node Picker (UI) for attaching users under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -970,7 +970,7 @@ jContent;
      * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
-     * 
+     *
      * @param  array $options           - Options array for construction of the User Node picker. Possible key value pairs are:
      * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
@@ -982,8 +982,8 @@ jContent;
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
      * You can omit all of the above since this method uses default values.
-     * 
-     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code 
+     *
+     * @return array            - Return array containing (<js, html>) all necessary JS and HTML code
      */
     public function buildUserNodePicker($options = array())
     {
@@ -993,10 +993,10 @@ jContent;
                           'where' => 'AND node.allow_course = true',
                           'multiple' => get_config('user_multidep'));
         $this->populateOptions($options, $defaults);
-        
+
         return $this->buildNodePicker($options);
     }
-    
+
     /**
      * Build simple tree ArrayMap
      *
@@ -1006,20 +1006,20 @@ jContent;
     public function buildSimple($where = null)
     {
         $result = db_query("SELECT id, name FROM $this->dbtable ". $where ." order by id");
-        
+
         $nodes = array();
-        
+
         while($row = mysql_fetch_assoc($result))
         {
             $nodes[$row['id']] = self::unserializeLangField($row['name']);
-        }  
-        
-        return $nodes;  
+        }
+
+        return $nodes;
     }
-    
+
     /**
      * Get a node's full breadcrump-style path
-     * 
+     *
      * @param  int     $nodeid    - the node's id whose full path we want
      * @param  boolean $skipfirst - whether the first parent is ommited from the resulted full path or not
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
@@ -1028,16 +1028,16 @@ jContent;
     public function getFullPath($nodeid, $skipfirst = true, $href = '')
     {
         $ret = "";
-        
+
         if ($nodeid == null)
             return $ret;
-        
+
         $node = mysql_fetch_assoc(db_query("SELECT * FROM $this->dbtable WHERE id = ". $nodeid));
         if (!$node)
             return $ret;
-        
+
         $result = db_query("SELECT * FROM $this->dbtable WHERE lft < ". $node['lft'] ." AND rgt > ". $node['rgt'] ." ORDER BY lft ASC");
-        
+
         $c = 0;
         $skip = 0;
         while ($parent = mysql_fetch_assoc($result))
@@ -1047,32 +1047,32 @@ jContent;
                 $skip++;
                 continue;
             }
-            
+
             $ret .= ($c == 0) ? '' : '» ';
             $ret .= (empty($href)) ? self::unserializeLangField($parent['name']) .' ' : "<a href='". $href . $parent['id'] ."'>". self::unserializeLangField($parent['name']) ."</a> ";
             $c++;
         }
-        
+
         $ret .= ($c == 0) ? '' : '» ';
         $ret .= self::unserializeLangField($node['name']) .' ';
-        
+
         return $ret;
     }
-    
+
     /**
      * Unserialize the given value and detect the proper localized string to returned.
      * Nodes' name field is stored as a serialized arraymap of the form <lang_code, value>, this method
      * fetches the proper value from such a serialized/localized string.
-     * 
+     *
      * @param  string $value - The value to act upon
      * @return string $value - The final unserialized/delocalized value
      */
     public static function unserializeLangField($value)
     {
         global $language;
-        
+
         $values = @unserialize($value);
-        
+
         if ($values !== false)
         {
             if (isset($values[$language]) && !empty($values[$language]))
@@ -1085,10 +1085,10 @@ jContent;
             return $value;
         }
     }
-    
+
     /**
      * Populate an existing options array with default values.
-     * 
+     *
      * @param array $options  - Array containing options
      * @param array $defaults - Array containing default values
      */
@@ -1102,10 +1102,10 @@ jContent;
             }
         }
     }
-    
+
     /**
      * Builds an array containing all the subtree nodes of the (parent) nodes given
-     * 
+     *
      * @param  array $nodes - Array containing the (parent) nodes whose subtree nodes we want
      * @return array $subs  - Array containing the returned subtree nodes
      */
@@ -1113,32 +1113,32 @@ jContent;
     {
         $subs = array();
         $ids = '';
-        
+
         foreach ($nodes as $key => $id)
         {
             $ids .= $id .',';
         }
         // remove last ',' from $ids
         $q = substr($ids , 0, -1);
-        
+
         $sql = "SELECT node.id
-                  FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent 
-                 WHERE node.lft BETWEEN parent.lft AND parent.rgt 
+                  FROM ". $this->dbtable ." AS node, ". $this->dbtable ." AS parent
+                 WHERE node.lft BETWEEN parent.lft AND parent.rgt
                    AND parent.id IN ($q)
-                 GROUP BY node.id 
+                 GROUP BY node.id
                  ORDER BY node.lft";
-        
+
         $result = db_query($sql);
         while($row = mysql_fetch_assoc($result))
             $subs[] = $row['id'];
-        
+
         return $subs;
     }
-    
+
     /**
      * Check if we can use Stored Procedures. Nothing more than a regular mysql version check for 5.0 or above/below.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     private function useProcedures() {
         if (version_compare(mysql_get_server_info(), '5.0') >= 0)
@@ -1146,6 +1146,6 @@ jContent;
         else
             return false;
     }
-    
+
 }
 ?>

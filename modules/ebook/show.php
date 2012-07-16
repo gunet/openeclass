@@ -22,7 +22,7 @@ $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
 $uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '',
-                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) : 
+                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) :
                             preg_replace('/\?[^?]*$/', '',
                     strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
 $path_components = explode('/', $uri);
@@ -77,13 +77,13 @@ if ($show_orphan_file and $file_path) {
         send_file_by_url_file_path($file_path);
     else {
         require_once 'modules/video/video_functions.php';
-        
+
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
-        
+
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/ebook/document.php?course='. $course_code .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
-        
+
         echo media_html_object($mediaPath, $mediaURL);
         exit();
     }

@@ -63,21 +63,21 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
                 db_query("DELETE FROM group_members WHERE user_id = $uid");
                  // finally delete user
 		db_query("DELETE from user WHERE user_id = $uid");
-              
+
 		if (mysql_affected_rows() > 0) {
                         db_query("DELETE FROM user_department WHERE user = $uid");
 			$tool_content .=  "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
 			$tool_content .=  "$langThanks\n";
 			$tool_content .=  "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
                         /*Log::record(0, 0, LOG_PROFILE, array('uid' => $uid,
-                                                             'deleteuser' => 1, 
+                                                             'deleteuser' => 1,
                                                              'username' => $un,
                                                              'name' => $n)); */
 			unset($_SESSION['uid']);
 		} else {
 			$tool_content .=  "<p>$langError</p>\n";
 			$tool_content .=  "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n        <br />\n";
-                        $tool_content .=  "</div>\n";			
+                        $tool_content .=  "</div>\n";
 		}
 	}
 }

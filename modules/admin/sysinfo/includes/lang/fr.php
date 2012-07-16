@@ -67,7 +67,7 @@ $text['gb']             = 'Go';
 $text['none']           = 'aucun';
 
 $text['capacity']       = 'Capacité';
-  
+
 $text['template']       = 'Modèle ';
 $text['language']       = 'Langue ';
 $text['submit']         = 'Valider';

@@ -67,7 +67,7 @@ $text['gb']             = 'GB';
 $text['none']           = 'geen';
 
 $text['capacity']       = 'Capaciteit';
-  
+
 $text['template']       = 'Model';
 $text['language']       = 'Language';
 $text['submit']         = 'Toepassen';

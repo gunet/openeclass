@@ -34,12 +34,12 @@ $nameTools = $langSelectFac;
 $tool_content .= "<table class='tbl_border' width=\"100%\">";
 
 $initopen = $tree->buildJSTreeInitOpen();
-                
+
                 $head_content .= <<<hContent
 <script type="text/javascript">
 
 $(function() {
-        
+
     $( "#js-tree" ).jstree({
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
         "core" : {
@@ -65,10 +65,10 @@ $(function() {
                 }
             }
         },
-        "sort" : function (a, b) { 
+        "sort" : function (a, b) {
             priorityA = this._get_node(a).attr("tabindex");
             priorityB = this._get_node(b).attr("tabindex");
-            
+
             if (priorityA == priorityB)
                 return this.get_text(a) > this.get_text(b) ? 1 : -1;
             else
@@ -76,12 +76,12 @@ $(function() {
         }
     })
     .bind("select_node.jstree", function (event, data) { document.location.href='opencourses.php?fc=' + data.rslt.obj.attr("id").substring(2); });
-    
+
 });
 
 </script>
 hContent;
-                
+
 $tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array('where' => 'AND node.allow_course = true', 'codesuffix' => true)) ."</div></td></tr>";
 
 $tool_content .= "</table>";

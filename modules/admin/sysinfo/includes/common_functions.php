@@ -27,7 +27,7 @@ error_reporting(5);
 // print out the bar graph
 function create_bargraph ($percent, $a, $b, $type = "")
 {
-    if ($percent == 0) { 
+    if ($percent == 0) {
         return '<img height="' . BAR_HEIGHT . '" src="templates/' . TEMPLATE_SET . '/images/bar_left.gif" alt="">'
               . '<img src="templates/' . TEMPLATE_SET . '/images/bar_middle.gif" height="' . BAR_HEIGHT . '" width="1" alt="">'
               . '<img src="templates/' . TEMPLATE_SET . '/images/bar_right.gif" height="' . BAR_HEIGHT . '" alt="">';

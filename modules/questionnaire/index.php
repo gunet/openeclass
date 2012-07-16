@@ -95,7 +95,7 @@ function printPolls() {
                $langPollsActive, $langTitle, $langPollCreator, $langPollCreation,
                $langPollStart, $langPollEnd, $langPollNone, $is_editor,
                $themeimg, $mysqlMainDb, $langEdit, $langDelete, $langActions,
-               $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate, 
+               $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
                $langParticipate, $langVisible, $user_id, $langHasParticipated,
                $langHasNotParticipated, $uid, $langConfirmDelete;
 
@@ -116,7 +116,7 @@ function printPolls() {
 			<th width='120' class='center'>$langPollCreation</th>
 			<th width='110' class='center'>$langPollStart</th>
 			<th width='110' class='center'>$langPollEnd</th>";
-		
+
                 if ($is_editor) {
                         $tool_content .= "<th width='70' class='center'>$langActions</th>";
                 } else {
@@ -128,7 +128,7 @@ function printPolls() {
                 $k =0;
                 while ($thepoll = mysql_fetch_array($active_polls)) {
                         $visibility = $thepoll["active"];
-		
+
                         if (($visibility) or ($is_editor)) {
                                 if ($visibility) {
                                         if ($k%2 == 0) {
@@ -151,7 +151,7 @@ function printPolls() {
                                         $tool_content .= "<tr $visibility_css>";
                                 } else {
                                         $tool_content .= "<tr $visibility_css>";
-                                }			
+                                }
                                 $temp_CurrentDate = date("Y-m-d H:i");
                                 $temp_StartDate = $thepoll["start_date"];
                                 $temp_EndDate = $thepoll["end_date"];

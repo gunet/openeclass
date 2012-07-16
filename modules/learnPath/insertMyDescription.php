@@ -45,7 +45,7 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
-        
+
 $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyDescToolName;
@@ -58,7 +58,7 @@ $nameTools = $langInsertMyDescToolName;
 // SQL Checks
 // check if a module of this course already used the same document
 $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
-	WHERE A.`module_id` = M.`module_id` 
+	WHERE A.`module_id` = M.`module_id`
 	AND M.`course_id` = $course_id
 	AND M.`contentType` = \"".CTCOURSE_DESCRIPTION_."\"";
 $query = db_query($sql);

@@ -25,13 +25,13 @@ eMail: eclassadmin@gunet.gr
 /*
 
 /**
- * function make_clickable($text) 
+ * function make_clickable($text)
  *
  * @desc   completes url contained in the text with "<a href ...".
- *         However the function simply returns the submitted text without any 
+ *         However the function simply returns the submitted text without any
  *         transformation if it already contains some "<a href:" or "<img src=".
  * @params string $text text to be converted
- * @return text after conversion 
+ * @return text after conversion
  * @author Rewritten by Nathan Codding - Feb 6, 2001.
  *         completed by Hugues Peeters - July 22, 2002
  *         Regex fixes by Alexandros Diamantidis - Jan 22, 2008
@@ -40,7 +40,7 @@ eMail: eclassadmin@gunet.gr
  * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
  * 	to that URL
  * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
- * 	to http://www.xxxx.yyyy[/zzzz] 
+ * 	to http://www.xxxx.yyyy[/zzzz]
  * - Goes through the given string, and replaces xxxx@yyyy with an HTML mailto: tag linking
  *		to that email address
  */
@@ -56,13 +56,13 @@ function make_clickable($text)
 	{
 		return $text;
 	}
-	
+
 	// matches an "xxxx://yyyy" URL
 	// xxxx can only be alphanumeric characters
 	// yyyy is anything up to the first space, newline, ()<>
 
-	$text = preg_replace("#\b([a-z0-9]+?://[^, \n\r()<>]+)#i", 
-			"<a href='$1'>$1</a>", 
+	$text = preg_replace("#\b([a-z0-9]+?://[^, \n\r()<>]+)#i",
+			"<a href='$1'>$1</a>",
 			$text);
 
 	// matches a "www.xxxx.yyyy[/zzzz]" kinda lazy URL thing
@@ -72,16 +72,16 @@ function make_clickable($text)
 	// This is slightly restrictive - it's not going to match stuff like "forums.foo.com"
 	// This is to keep it from getting annoying and matching stuff that's not meant to be a link.
 
-	$text = preg_replace("#\b((?<!://)www\.([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}(/[^, \n\r()<>]*)?)#i", 
-			"<a href='http://$1'>$1</a>", 
+	$text = preg_replace("#\b((?<!://)www\.([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}(/[^, \n\r()<>]*)?)#i",
+			"<a href='http://$1'>$1</a>",
 			$text);
-	
+
 	// matches an email@domain type address
 
-	$text = preg_replace("#\b([0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,})\b#i", 
-			"<a href='mailto:$1'>$1</a>", 
+	$text = preg_replace("#\b([0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,})\b#i",
+			"<a href='mailto:$1'>$1</a>",
 			$text);
-	
+
 	return($text);
 }
 
@@ -101,9 +101,9 @@ function make_clickable($text)
 
 function claro_format_locale_date($dateFormat, $timeStamp = -1)
 {
-	// Retrieve $langMonthNames and $langDay_of_weekNames 
+	// Retrieve $langMonthNames and $langDay_of_weekNames
 
-	$langMonthNames	= $GLOBALS['langMonthNames']; 
+	$langMonthNames	= $GLOBALS['langMonthNames'];
 	$langDay_of_weekNames = $GLOBALS['langDay_of_weekNames'];
 
 	if ($timeStamp == -1) $timeStamp = time();

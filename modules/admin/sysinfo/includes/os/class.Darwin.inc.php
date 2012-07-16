@@ -37,7 +37,7 @@ class sysinfo extends bsd_common
         $this->scsi_regexp = "^(.*): <(.*)> .*SCSI.*device";
     }
 
-    function grab_key ($key) 
+    function grab_key ($key)
     {
         $s = execute_program('sysctl', $key);
         $s = preg_replace('/' . $key . ': /', '', $s);

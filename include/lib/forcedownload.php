@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,25 +22,25 @@
 	forcedownload.php
 	@last update: 18-07-2006 by Sakis Agorastos
 	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================        
+==============================================================================
     @Description: Support functions used by document, document_upgrade, video/index.php
 
     This script contains the function that forces the web browser to donwload
     a file instead of just opening it. This happens for security reasons.
-    
+
     The function's arguments go as follow:
-    
+
     $real_filename : the real path and filename that the file uses in the
     actual filesystem
-    
+
     $filename : the filename the user sees in his browser (in the download file
     window)
 
     $send_inline : if true, sends file with Content-Disposition: inline, else
     as attachment, for certain MIME types
-    
+
     If the file does not exist the function returns FALSE
-    
+
 ==============================================================================*/
 
 function send_file_to_client($real_filename, $filename, $disposition = null, $send_name = false, $delete = false)
@@ -97,8 +97,8 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                 stop_output_buffering();
                 readfile($real_filename);
         }
-	
-	if ($delete) { 
+
+	if ($delete) {
 		unlink($real_filename);
 	}
         return true;
@@ -113,22 +113,22 @@ function get_mime_type($filename)
                 'application' => 'application/x-ms-application',
                 'deploy' => 'application/octet-stream',
                 'xbap' => 'application/x-ms-xbap',
-                'docm' => 'application/vnd.ms-word.document.macroEnabled.12', 
-                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
-                'dotm' => 'application/vnd.ms-word.template.macroEnabled.12', 
-                'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template', 
-                'potm' => 'application/vnd.ms-powerpoint.template.macroEnabled.12', 
-                'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template', 
-                'ppam' => 'application/vnd.ms-powerpoint.addin.macroEnabled.12', 
-                'ppsm' => 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12', 
-                'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow', 
-                'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12', 
-                'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation', 
-                'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12', 
-                'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12', 
-                'xlsm' => 'application/vnd.ms-excel.sheet.macroEnabled.12', 
-                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-                'xltm' => 'application/vnd.ms-excel.template.macroEnabled.12', 
+                'docm' => 'application/vnd.ms-word.document.macroEnabled.12',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'dotm' => 'application/vnd.ms-word.template.macroEnabled.12',
+                'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+                'potm' => 'application/vnd.ms-powerpoint.template.macroEnabled.12',
+                'potx' => 'application/vnd.openxmlformats-officedocument.presentationml.template',
+                'ppam' => 'application/vnd.ms-powerpoint.addin.macroEnabled.12',
+                'ppsm' => 'application/vnd.ms-powerpoint.slideshow.macroEnabled.12',
+                'ppsx' => 'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
+                'pptm' => 'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
+                'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'xlam' => 'application/vnd.ms-excel.addin.macroEnabled.12',
+                'xlsb' => 'application/vnd.ms-excel.sheet.binary.macroEnabled.12',
+                'xlsm' => 'application/vnd.ms-excel.sheet.macroEnabled.12',
+                'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'xltm' => 'application/vnd.ms-excel.template.macroEnabled.12',
                 'xltx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
                 'vsd' => 'application/vnd.visio',
                 'vss' => 'application/vnd.visio',

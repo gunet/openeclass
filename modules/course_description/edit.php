@@ -59,9 +59,9 @@ if (isset($_POST['edIdBloc'])) {
                 $title = q($titreBloc[$numBloc]);
         }
         if (isset($title) and @!$titreBlocNotEditable[$numBloc]) {
-               $edit_title = " value='$title'"; 
+               $edit_title = " value='$title'";
         } else {
-               $edit_title = false; 
+               $edit_title = false;
         }
         if (isset($_POST['add']) and @!$titreBlocNotEditable[$numBloc]) {
                 $numBloc = new_description_res_id(description_unit_id($course_id));
@@ -73,7 +73,7 @@ if (isset($_POST['edIdBloc'])) {
                 if ($q and mysql_num_rows($q)) {
                         list($title, $contentBloc) = mysql_fetch_row($q);
                         if ($edit_title) {
-                               $edit_title = " value='$title'"; 
+                               $edit_title = " value='$title'";
                         }
                 } else {
                         $contentBloc = '';
@@ -83,7 +83,7 @@ if (isset($_POST['edIdBloc'])) {
       <form method='post' action='index.php?course=$course_code'>
       <input type='hidden' name='edIdBloc' value='$numBloc' />
         <fieldset>
-        
+
         <table class='tbl'>
         <tr>
            <th width='100'>$langTitle:</th>";
@@ -155,6 +155,6 @@ function display_add_block_form()
             <td><input type='submit' name='add' value='$langAdd' /></td>
           </tr>
           </table>
-        </fieldset>  
+        </fieldset>
         </form>\n";
 }

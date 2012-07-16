@@ -30,7 +30,7 @@
 
 		1.) draw($tool_content, 2, '', $local_head, '');
 		2.) $tool_content .=  "<form method=\"post\"><tr><td>ΗΜΕΡΟΜΗΝΙΑ</td><td>".$start_cal."</td></tr></form>";
- 
+
 
 ==============================================================================*/
 
@@ -57,7 +57,7 @@ $end_cal_Work = $jscalendar->make_input_field(
 
 function getJsDeadline($deadline) {
 	global $language, $lang, $jscalendar, $local_head;
-	
+
 	$end_cal_Work_db = $jscalendar->make_input_field(
   	array('showsTime'      => true,
     	'showOthers'     => true,
@@ -66,7 +66,7 @@ function getJsDeadline($deadline) {
     array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
     	'name'        => 'WorkEnd',
       'value'       => $deadline));
-	
+
 	return $end_cal_Work_db;
-	
-}               
+
+}

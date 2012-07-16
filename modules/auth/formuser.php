@@ -104,7 +104,7 @@ if (get_config("display_captcha")) {
         if ($securimage->check($captcha_code) == false) {
                 $errors[] = $langCaptchaWrong;
                 $all_set = false;
-        }	
+        }
 }
 
 if (isset($_POST['submit'])) {
@@ -155,7 +155,7 @@ if ($all_set) {
 		$dep_body = $tree->getFullPath($department);
 		$subject = $prof? $mailsubject: $mailsubject2;
 		$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
-			$mailbody3 . $mailbody4 . $mailbody5 . 
+			$mailbody3 . $mailbody4 . $mailbody5 .
 			($prof? $mailbody6: $mailbody8) .
 			"\n\n$langFaculty: $dep_body\n$langComments: $usercomment\n" .
 			"$langAm: $am\n" .
@@ -184,7 +184,7 @@ if ($all_set) {
 			$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$usermail,$urlServer."modules/auth/registration.php",
 				"<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</p>");
 			$tool_content .= $mail_ver_error;
-				
+
 			draw($tool_content, 0);
 			exit;
 		}

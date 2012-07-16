@@ -468,13 +468,13 @@ class phpCAS {
 				}
 				$filename = $debugDir . 'phpCAS.log';
 			}
-			
+
 			if (empty ($PHPCAS_DEBUG['unique_id'])) {
 				$PHPCAS_DEBUG['unique_id'] = substr(strtoupper(md5(uniqid(''))), 0, 4);
 			}
-			
+
 			$PHPCAS_DEBUG['filename'] = $filename;
-			
+
 			phpCAS :: trace('START phpCAS-' . PHPCAS_VERSION . ' ******************');
 		}
 	}
@@ -593,7 +593,7 @@ class phpCAS {
 		}else{
 			$str .= '<= ' . str_replace(array("\r\n", "\n", "\r"), "", var_export($res, TRUE));
 		}
-		
+
 		phpCAS :: log($str);
 	}
 
@@ -766,7 +766,7 @@ class phpCAS {
 		$PHPCAS_CLIENT->setPGTStorageDb($dsn_or_pdo, $username, $password, $table, $driver_options);
 		phpCAS :: traceEnd();
 	}
-	
+
 	/**
 	 * This method is used to tell phpCAS to store the response of the
 	 * CAS server to PGT requests onto the filesystem.
@@ -795,7 +795,7 @@ class phpCAS {
 		$PHPCAS_CLIENT->setPGTStorageFile($path);
 		phpCAS :: traceEnd();
 	}
-	
+
 	/** @} */
 	// ########################################################################
 	// ACCESS TO EXTERNAL SERVICES
@@ -804,16 +804,16 @@ class phpCAS {
 	 * @addtogroup publicServices
 	 * @{
 	 */
-	
+
 	/**
 	 * Answer a proxy-authenticated service handler.
-	 * 
+	 *
 	 * @param string $type The service type. One of:
 	 *			PHPCAS_PROXIED_SERVICE_HTTP_GET
 	 *			PHPCAS_PROXIED_SERVICE_HTTP_POST
 	 *			PHPCAS_PROXIED_SERVICE_IMAP
-	 *			
-	 *		
+	 *
+	 *
 	 * @return CAS_ProxiedService
 	 * @throws InvalidArgumentException If the service type is unknown.
 	 */
@@ -842,15 +842,15 @@ class phpCAS {
 		phpCAS :: traceEnd();
 		return $res;
 	}
-	
+
 	/**
 	 * Initialize a proxied-service handler with the proxy-ticket it should use.
-	 * 
+	 *
 	 * @param CAS_ProxiedService $proxiedService
 	 * @return void
 	 * @throws CAS_ProxyTicketException If there is a proxy-ticket failure.
-	 *		The code of the Exception will be one of: 
-	 *			PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE 
+	 *		The code of the Exception will be one of:
+	 *			PHPCAS_SERVICE_PT_NO_SERVER_RESPONSE
 	 *			PHPCAS_SERVICE_PT_BAD_SERVER_RESPONSE
 	 *			PHPCAS_SERVICE_PT_FAILURE
 	 */
@@ -872,7 +872,7 @@ class phpCAS {
 
 		$PHPCAS_CLIENT->initializeProxiedService($proxiedService);
 	}
-	
+
 	/**
 	 * This method is used to access an HTTP[S] service.
 	 *
@@ -986,21 +986,21 @@ class phpCAS {
 		}
 		$PHPCAS_CLIENT->setCacheTimesForAuthRecheck($n);
 	}
-	
+
 	/**
 	 * Set a callback function to be run when a user authenticates.
 	 *
 	 * The callback function will be passed a $logoutTicket as its first parameter,
 	 * followed by any $additionalArgs you pass. The $logoutTicket parameter is an
 	 * opaque string that can be used to map the session-id to logout request in order
-	 * to support single-signout in applications that manage their own sessions 
+	 * to support single-signout in applications that manage their own sessions
 	 * (rather than letting phpCAS start the session).
 	 *
 	 * phpCAS::forceAuthentication() will always exit and forward client unless
 	 * they are already authenticated. To perform an action at the moment the user
 	 * logs in (such as registering an account, performing logging, etc), register
 	 * a callback function here.
-	 * 
+	 *
 	 * @param callback $function
 	 * @param optional array $additionalArgs
 	 * @return void
@@ -1010,19 +1010,19 @@ class phpCAS {
 		if (!is_object($PHPCAS_CLIENT)) {
 			phpCAS :: error('this method should not be called before ' . __CLASS__ . '::client() or ' . __CLASS__ . '::proxy()');
 		}
-		
+
 		$PHPCAS_CLIENT->setPostAuthenticateCallback($function, $additionalArgs);
 	}
-	
+
 	/**
 	 * Set a callback function to be run when a single-signout request is received.
 	 *
 	 * The callback function will be passed a $logoutTicket as its first parameter,
 	 * followed by any $additionalArgs you pass. The $logoutTicket parameter is an
 	 * opaque string that can be used to map a session-id to the logout request in order
-	 * to support single-signout in applications that manage their own sessions 
+	 * to support single-signout in applications that manage their own sessions
 	 * (rather than letting phpCAS start and destroy the session).
-	 * 
+	 *
 	 * @param callback $function
 	 * @param optional array $additionalArgs
 	 * @return void
@@ -1032,7 +1032,7 @@ class phpCAS {
 		if (!is_object($PHPCAS_CLIENT)) {
 			phpCAS :: error('this method should not be called before ' . __CLASS__ . '::client() or ' . __CLASS__ . '::proxy()');
 		}
-		
+
 		$PHPCAS_CLIENT->setSingleSignoutCallback($function, $additionalArgs);
 	}
 
@@ -1212,7 +1212,7 @@ class phpCAS {
 		}
 		return $PHPCAS_CLIENT->getAttributes();
 	}
-	
+
 	/**
 	 * Answer true if there are attributes for the authenticated user.
 	 *
@@ -1234,7 +1234,7 @@ class phpCAS {
 		}
 		return $PHPCAS_CLIENT->hasAttributes();
 	}
-	
+
 	/**
 	 * Answer true if an attribute exists for the authenticated user.
 	 *
@@ -1257,7 +1257,7 @@ class phpCAS {
 		}
 		return $PHPCAS_CLIENT->hasAttribute($key);
 	}
-	
+
 	/**
 	 * Answer an attribute for the authenticated user.
 	 *
@@ -1280,7 +1280,7 @@ class phpCAS {
 		}
 		return $PHPCAS_CLIENT->getAttribute($key);
 	}
-	
+
 	/**
 	 * Handle logout requests.
 	 */
@@ -1618,8 +1618,8 @@ class phpCAS {
 		$PHPCAS_CLIENT->setNoCasServerValidation();
 		phpCAS :: traceEnd();
 	}
-	
-	
+
+
 	/**
 	 * Disable the removal of a CAS-Ticket from the URL when authenticating
 	 * DISABLING POSES A SECURITY RISK:
@@ -1653,14 +1653,14 @@ class phpCAS {
 		$PHPCAS_CLIENT->setExtraCurlOption($key, $value);
 		phpCAS :: traceEnd();
 	}
-	
-			
+
+
 	/**
 	 * Answer an array of proxies that are sitting in front of this application.
 	 *
 	 * This method will only return a non-empty array if we have received and validated
 	 * a Proxy Ticket.
-	 * 
+	 *
 	 * @return array
 	 * @access public
 	 * @since 6/25/09
@@ -1669,8 +1669,8 @@ class phpCAS {
 		global $PHPCAS_CLIENT;
 		if ( !is_object($PHPCAS_CLIENT) ) {
 			phpCAS::error('this method should only be called after '.__CLASS__.'::client()');
-		}  
-		
+		}
+
 		return($PHPCAS_CLIENT->getProxies());
 	}
 

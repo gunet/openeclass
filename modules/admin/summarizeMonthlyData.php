@@ -109,7 +109,7 @@ $langPleaseWait</div>
 		<th>".$langNbUsers."</th></tr>";
 
         $sql = "SELECT course.title AS name,
-                       course.visible AS visible,                       
+                       course.visible AS visible,
                        hierarchy.name AS dept,
                        course.prof_names AS proff,
                        COUNT(user_id) AS cnt
@@ -118,7 +118,7 @@ $langPleaseWait</div>
                            LEFT JOIN course_user ON course.id = course_user.course_id
                 GROUP BY course.id ";
         $result = db_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {            
+        while ($row = mysql_fetch_assoc($result)) {
             //declare visibility
             if ($row['visible'] == 0) {
               $cvisible = $langTypeClosed;

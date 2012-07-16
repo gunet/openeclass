@@ -105,17 +105,17 @@ if (!extension_loaded('gd')) {
     $u_date_start = mysql_real_escape_string($u_date_start);
     $u_date_end = mysql_real_escape_string($u_date_end);
     $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-    $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits 
-                        FROM loginout_summary 
-                        WHERE $date_where 
+    $query = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(login_sum) AS visits
+                        FROM loginout_summary
+                        WHERE $date_where
                         GROUP BY MONTH(start_date)";
 
     $result = db_query($query);
-    
+
     if (mysql_num_rows($result) > 0) {
             $chart = new VerticalBarChart();
             $dataSet = new XYDataSet();
-    
+
             //add points to chart
             while ($row = mysql_fetch_assoc($result)) {
                 $mont = $langMonths[$row['month']];
@@ -124,9 +124,9 @@ if (!extension_loaded('gd')) {
                 $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
-    
+
         $chart->setTitle($langOldStats);
-    
+
         mysql_free_result($result);
         if (!file_exists("courses/temp")) {
             mkdir("courses/temp", 0777);
@@ -134,7 +134,7 @@ if (!extension_loaded('gd')) {
         $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
         $chart->render($webDir.'/'.$chart_path);
     }
-    
+
 //check if there are statistics to show
 if ($chart_content) {
     $tool_content .= '
