@@ -731,6 +731,7 @@ function login($user_info_array, $posted_uname, $pass)
 				$password_encrypted = $hasher->HashPassword($pass);
 				$user_info_array['password'] = $password_encrypted;
 				
+                                db_query('SET sql_mode = TRADITIONAL');
 				$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE user_id = ". intval($user_info_array['user_id']);
 				db_query($sql, $mysqlMainDb);
 			}

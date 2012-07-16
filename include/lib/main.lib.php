@@ -83,7 +83,7 @@ function db_query($sql, $db_name = null)
 	$r = mysql_query($sql);
         $printed_sql = false;
         if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-                echo '<hr /><pre>', $f_sql, '</pre><i>runtime: ',
+                echo '<hr /><pre>', q($f_sql), '</pre><i>runtime: ',
 		     sprintf('%0.3f', 1000 * (microtime(true) - $start_time)),
                      'ms</i><hr />';
                 $printed_sql = true;
@@ -91,7 +91,7 @@ function db_query($sql, $db_name = null)
         if (mysql_errno()) {
                 if ((isset($GLOBALS['is_admin']) and $GLOBALS['is_admin']) or
                     (defined('DEBUG_MYSQL') and DEBUG_MYSQL)) {
-                        echo '<hr />' . mysql_errno() . ': ' . mysql_error();
+                        echo '<hr />' . mysql_errno() . ': ' . q(mysql_error());
                         if (!$printed_sql) {
                                 echo '<br /><pre>', q($sql), '</pre><hr />';
                         }
