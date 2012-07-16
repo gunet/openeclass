@@ -52,6 +52,24 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
+load_js('jquery');
+$head_content .= <<<EOF
+<script type='text/javascript'>
+$(document).ready(function() {
+
+    $('#uown').click(function(event) {
+    
+        if (!this.checked)
+            $('#town').attr('checked', false);
+        
+        $('#town').attr('disabled', !this.checked);
+        
+    });
+
+});
+</script>
+EOF;
+
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 define('MONTHS', 30 * 24 * 60 * 60);
@@ -90,36 +108,42 @@ if (isset($_POST['submit']))  {
         set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
         set_config('min_password_len', intval($_POST['min_password_len']));
 
-	$config_vars = array('email_required' => true,
-		'email_verification_required' => true,
-		'dont_mail_unverified_mails' => true,
-                'email_from' => true,
-		'am_required' => true,
-		'dont_display_login_form' => true,
-		'dropbox_allow_student_to_student' => true,
-		'block_username_change' => true,
-                'close_user_registration' => true,
-		'display_captcha' => true,
-		'insert_xml_metadata' => true,
-		'betacms' => true,
-		'enable_mobileapi' => true,
-		'doc_quota' => true,
-		'group_quota' => true,
-		'video_quota' => true,
-		'dropbox_quota' => true,
-		'max_glossary_terms' => true,
-		'theme' => true,
-		'alt_auth_student_req' => true,
-		'disable_eclass_stud_reg' => true,
-		'disable_eclass_prof_reg' => true,
-                'case_insensitive_usernames' => true,
-		'course_multidep' => true,
-		'user_multidep' => true,
-		'restrict_teacher_owndep' => true,
-                'disable_log_user_actions' => true);
+        $config_vars = array('email_required' => true,
+                        'email_verification_required' => true,
+                        'dont_mail_unverified_mails' => true,
+                        'email_from' => true,
+                        'am_required' => true,
+                        'dont_display_login_form' => true,
+                        'dropbox_allow_student_to_student' => true,
+                        'block_username_change' => true,
+                        'close_user_registration' => true,
+                        'display_captcha' => true,
+                        'insert_xml_metadata' => true,
+                        'betacms' => true,
+                        'enable_mobileapi' => true,
+                        'doc_quota' => true,
+                        'group_quota' => true,
+                        'video_quota' => true,
+                        'dropbox_quota' => true,
+                        'max_glossary_terms' => true,
+                        'theme' => true,
+                        'alt_auth_student_req' => true,
+                        'disable_eclass_stud_reg' => true,
+                        'disable_eclass_prof_reg' => true,
+                        'case_insensitive_usernames' => true,
+                        'course_multidep' => true,
+                        'user_multidep' => true,
+                        'restrict_owndep' => true,
+                        'restrict_teacher_owndep' => true,
+                        'disable_log_user_actions' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
+        
+        // restrict_owndep and restrict_teacher_owndep are interdependent
+        if ($GLOBALS['restrict_owndep'] == 0) {
+            $GLOBALS['restrict_teacher_owndep'] = 0;
+        }
 
         // update table `config`
         foreach ($config_vars as $varname => $what) {
@@ -316,7 +340,9 @@ else {
 
         $cbox_course_multidep = get_config('course_multidep')?'checked':'';
         $cbox_user_multidep = get_config('user_multidep')?'checked':'';
+        $cbox_restrict_owndep = get_config('restrict_owndep') ? 'checked' : '';
         $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
+        $town_dis = get_config('restrict_owndep') ? '' : 'disabled';
 
         $tool_content .= "<fieldset>
         <legend>$langCourseSettings</legend>
@@ -330,8 +356,12 @@ else {
 		<td><input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep />&nbsp;$lang_user_multidep</td>
 	  </tr>
 	  <tr>
+		<th class='left'><b>restrict_owndep</b></th>
+		<td><input id='uown' type='checkbox' name='restrict_owndep' value='1' $cbox_restrict_owndep />&nbsp;$lang_restrict_owndep</td>
+	  </tr>
+	  <tr>
 		<th class='left'><b>restrict_teacher_owndep</b></th>
-		<td><input type='checkbox' name='restrict_teacher_owndep' value='1' $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
+		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
         </table></fieldset>";
 
@@ -407,5 +437,5 @@ else {
 	}
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 

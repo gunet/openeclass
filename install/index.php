@@ -131,49 +131,50 @@ if (isset($_POST['welcomeScreen'])) {
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = $enable_mobileapi = '';
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = '';
-        $course_multidep = $user_multidep = $restrict_teacher_owndep = $disable_log_user_actions = '';
-        $email_from = 1;
-        $close_user_registration = '';
+	$course_multidep = $user_multidep = $restrict_owndep = $restrict_teacher_owndep = $disable_log_user_actions = '';
+	$email_from = 1;
+	$close_user_registration = '';
 } else {
-	register_posted_variables(array(
-                'lang' => true,
-                'dbHostForm' => true,
-                'dbUsernameForm' => true,
-                'dbNameForm' => true,
-                'phpMyAdminURL' => true,
-                'dbPassForm' => true,
-                'phpSysInfoURL' => true,
-                'urlForm' => true,
-                'emailForm' => true,
-                'nameForm' => true,
-                'loginForm' => true,
-                'passForm' => true,
-                'campusForm' => true,
-                'helpdeskForm' => true,
-                'helpdeskmail' => true,
-                'faxForm' => true,
-                'postaddressForm' => true,
-                'institutionForm' => true,
-                'institutionUrlForm' => true,
-		'email_required' => true,
-		'email_verification_required' => true,
-		'dont_mail_unverified_mails' => true,
-                'email_from' => true,
-		'am_required' => true,
-		'dropbox_allow_student_to_student' => true,
-		'dont_display_login_form' => true,
-		'block_username_change' => true,
-		'display_captcha' => true,
-		'insert_xml_metadata' => true,
-		'betacms' => true,
-		'enable_mobileapi' => true,
-		'disable_eclass_stud_reg' => true,
-		'disable_eclass_prof_reg' => true,
-                'close_user_registration' => true,
-                'course_multidep' => true,
-                'user_multidep' => true,
-                'restrict_teacher_owndep' => true,
-                'disable_log_user_actions' => true));
+    register_posted_variables(array(
+                    'lang' => true,
+                    'dbHostForm' => true,
+                    'dbUsernameForm' => true,
+                    'dbNameForm' => true,
+                    'phpMyAdminURL' => true,
+                    'dbPassForm' => true,
+                    'phpSysInfoURL' => true,
+                    'urlForm' => true,
+                    'emailForm' => true,
+                    'nameForm' => true,
+                    'loginForm' => true,
+                    'passForm' => true,
+                    'campusForm' => true,
+                    'helpdeskForm' => true,
+                    'helpdeskmail' => true,
+                    'faxForm' => true,
+                    'postaddressForm' => true,
+                    'institutionForm' => true,
+                    'institutionUrlForm' => true,
+                    'email_required' => true,
+                    'email_verification_required' => true,
+                    'dont_mail_unverified_mails' => true,
+                    'email_from' => true,
+                    'am_required' => true,
+                    'dropbox_allow_student_to_student' => true,
+                    'dont_display_login_form' => true,
+                    'block_username_change' => true,
+                    'display_captcha' => true,
+                    'insert_xml_metadata' => true,
+                    'betacms' => true,
+                    'enable_mobileapi' => true,
+                    'disable_eclass_stud_reg' => true,
+                    'disable_eclass_prof_reg' => true,
+                    'close_user_registration' => true,
+                    'course_multidep' => true,
+                    'user_multidep' => true,
+                    'restrict_owndep' => true,
+                    'restrict_teacher_owndep' => true,
+                    'disable_log_user_actions' => true));
 
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -225,7 +226,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
                   'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
-                  'disable_log_user_actions', 'restrict_teacher_owndep', 'lang');
+                  'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -414,6 +415,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left'><b>$lang_user_multidep</b></th>
 		<td>".checkbox_input('user_multidep')."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$lang_restrict_owndep</b></th>
+		<td>".checkbox_input('restrict_owndep')."</td>
 	  </tr>
 	  <tr>
 		<th class='left'><b>$lang_restrict_teacher_owndep</b></th>

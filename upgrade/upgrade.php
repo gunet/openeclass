@@ -212,22 +212,23 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
         }
         $oldversion = get_config('version');
         db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
-  			('dont_display_login_form', '0'),
-			('email_required', '0'),
+                        ('dont_display_login_form', '0'),
+                        ('email_required', '0'),
                         ('email_from', '1'),
-			('am_required', '0'),
-			('dropbox_allow_student_to_student', '0'),
-			('block_username_change', '0'),
-			('betacms', '0'),
-			('enable_mobileapi', '0'),
-			('display_captcha', '0'),
-			('insert_xml_metadata', '0'),
-			('doc_quota', '200'),
-			('dropbox_quota', '100'),
-			('video_quota', '100'),
-			('group_quota', '100'),
-			('course_multidep', '0'),
-			('user_multidep', '0'),
+                        ('am_required', '0'),
+                        ('dropbox_allow_student_to_student', '0'),
+                        ('block_username_change', '0'),
+                        ('betacms', '0'),
+                        ('enable_mobileapi', '0'),
+                        ('display_captcha', '0'),
+                        ('insert_xml_metadata', '0'),
+                        ('doc_quota', '200'),
+                        ('dropbox_quota', '100'),
+                        ('video_quota', '100'),
+                        ('group_quota', '100'),
+                        ('course_multidep', '0'),
+                        ('user_multidep', '0'),
+                        ('restrict_owndep', '0'),
                         ('restrict_teacher_owndep', '0')");
 
         if ($oldversion < '2.1.3') {

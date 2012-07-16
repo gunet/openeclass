@@ -104,11 +104,13 @@ if (isset($_POST['submit'])) {
                 'phone_public' => false,
                 'am_public' => false), 'all');
 
-        if (!isset($_POST['department']) and !$is_admin) {
-            $all_ok = false;
-            $departments = array();
-        } else
-            $departments = $_POST['department'];
+        $departments = null;
+        if (!get_config('restrict_owndep')) {
+            if (!isset($_POST['department']) and !$is_admin)
+                $all_ok = false;
+            else
+                $departments = $_POST['department'];
+        }
 
         $email_public = valid_access($email_public);
         $phone_public = valid_access($phone_public);
@@ -389,15 +391,13 @@ if (get_config('email_verification_required')) {
         $tool_content .= "<tr><th>$langVerifiedMail</th><td>$message</td>";
 }
 
-$tool_content .= "
-        <tr>
-          <th>$langFaculty:</th>
-          <td>";
-list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
-$head_content .= $js;
-$tool_content .= $html;
-$tool_content .= "</td>
-        </tr>";
+if (!get_config('restrict_owndep')) {
+    $tool_content .= "<tr><th>$langFaculty:</th><td>";
+    list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
+    $head_content .= $js;
+    $tool_content .= $html;
+    $tool_content .= "</td></tr>";
+}
 
 
 ##[END personalisation modification]############
