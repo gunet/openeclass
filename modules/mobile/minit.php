@@ -53,8 +53,11 @@ if (isset($require_mcourse) && $require_mcourse) {
     if (!isset($_REQUEST['course'])) {
         echo RESPONSE_FAILED;
         exit();
-    } else
+    } else {
         $require_current_course = true;
+        if (!isset($_GET['course']))
+            $_GET['course'] = $_REQUEST['course'];
+    }
 }
 require_once ('../../include/init.php');
 
