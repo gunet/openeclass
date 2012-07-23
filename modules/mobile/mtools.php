@@ -23,7 +23,7 @@ $require_mlogin = true;
 $require_mcourse = true;
 $require_noerrors = true;
 require_once('minit.php');
-require_once('../../include/tools.php');
+require_once('include/tools.php');
 
 
 $toolArr = getSideMenu(2);
