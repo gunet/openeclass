@@ -52,10 +52,10 @@ class user {
     {
         if ($departments != null)
         {
-            db_query("DELETE FROM $this->departmenttable WHERE user = '$id'");
+            db_query("DELETE FROM ". $this->departmenttable ." WHERE user = ". intval($id));
             foreach (array_unique($departments) as $key => $department)
             {
-                db_query("INSERT INTO $this->departmenttable (user, department) VALUES ($id, $department)");
+                db_query("INSERT INTO ". $this->departmenttable ." (user, department) VALUES (". intval($id) .",". intval($department) .")");
             }
         }
     }

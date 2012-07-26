@@ -28,7 +28,7 @@
 
 function validateNode($id, $checkOwn)
 {
-	global $tool_content, $head_content, $is_admin, $tree, $user, $uid,
+	global $tool_content, $head_content, $tree, $user, $uid,
 	       $langBack, $langNotAllowed;
 
 	$notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
@@ -55,7 +55,7 @@ function validateNode($id, $checkOwn)
 
 function validateParentLft($nodelft, $checkOwn)
 {
-	global $tool_content, $head_content, $is_admin, $tree, $user, $uid,
+	global $tool_content, $head_content, $tree, $user, $uid,
 	       $langBack, $langNotAllowed;
 
 	$notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
@@ -77,6 +77,39 @@ function validateParentLft($nodelft, $checkOwn)
 		if (!in_array($parentid, $subtrees))
 			exitWithError($notallowed);
 	}
+}
+
+
+
+function validateUserNodes($userId, $checkOwn)
+{
+    global $tool_content, $head_content, $tree, $user, $uid,
+           $langBack, $langNotAllowed;
+    
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    
+    if ($userId <= 0)
+        exitWithError($notallowed);
+    
+    $deps = $user->getDepartmentIds(intval($userId));
+    
+    if (empty($deps))
+        exitWithError($notallowed);
+    
+    if ($checkOwn)
+    {
+        $atleastone = false;
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        
+        foreach ($deps as $depId)
+        {
+            if (in_array($depId, $subtrees))
+                $atleastone = true;
+        }
+        
+        if (!$atleastone)
+            exitWithError($notallowed);
+    }
 }
 
 

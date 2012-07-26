@@ -38,12 +38,12 @@ require_once '../../include/baseTheme.php';
 require_once 'admin.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/jscalendar/calendar.php';
-
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
-$userObj = new user();
+$user = new user();
 
 if (isset($_REQUEST['u'])) {
 	$u = intval($_REQUEST['u']);
@@ -72,6 +72,10 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
+        
+        if (isDepartmentAdmin())
+            validateUserNodes(intval($u), true);
+        
         $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone,
                         user.registered_at, user.expires_at, user.statut, user.am, verified_mail
                         FROM user WHERE user.user_id = $u");
@@ -206,7 +210,10 @@ $tool_content .= "
    <tr>
      <th class='left'>$langFaculty:</th>
    <td>";
-        list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($u)));
+        if (isDepartmentAdmin())
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
+        else
+            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>
@@ -389,31 +396,48 @@ $tool_content .= "
 		if($registered_at>$expires_at) {
 			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
 		} else {
-			if ($u == 1) $departments = array();
-			// email cannot be verified if there is no mail saved
-			if (empty($email) && $verified_mail==1) {
-				$verified_mail=2;
-			}
+		    if ($u == 1) $departments = array();
+		    
+		    // email cannot be verified if there is no mail saved
+		    if (empty($email) && $verified_mail==1) {
+		        $verified_mail=2;
+		    }
+		    
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
                                        username = $username, email = ".autoquote($email).",
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ."
                                        WHERE user_id = ".intval($u);
+			
 			$qry = db_query($sql);
-                        $userObj->refresh(intval($u), $departments);
-                        if (!$qry) {
-                                $tool_content .= "$langNoUpdate: $u!";
-                        } else {
-                                $num_update = mysql_affected_rows();
-                                if ($num_update == 1) {
-                                        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
-                                } else {
-                                        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
-                                }
-                        }
-                        $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
-                }
+			
+			// if depadmin then diff new/old deps and if new deps are out of juristinction, then error
+			if (isDepartmentAdmin())
+			{
+			    $olddeps = $user->getDepartmentIds(intval($u));
+			    
+			    foreach ($departments as $depId)
+			    {
+			        if (!in_array($depId, $olddeps))
+			            validateNode(intval($depId), true);
+			    }
+			}
+			
+			$user->refresh(intval($u), $departments);
+			
+			if (!$qry) {
+			    $tool_content .= "$langNoUpdate: $u!";
+			} else {
+			    $num_update = mysql_affected_rows();
+			    if ($num_update == 1) {
+			        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
+			    } else {
+			        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
+			    }
+			}
+			$tool_content .= "<a href='listusers.php'>$langBack</a></center>";
+		}
 	}
 }
 else

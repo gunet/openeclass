@@ -42,9 +42,9 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'admin.inc.php';
 require_once 'include/jscalendar/calendar.php';
-
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
 $user = new user();
 
@@ -80,7 +80,7 @@ if (isset($_GET['department'])) {
         $depts_defaults = array();
 }
 
-if ($is_departmentmanage_user)
+if (isDepartmentAdmin())
 {
     $allowables = array('allowables' => $user->getDepartmentIds($uid));
     $depts_defaults = array_merge($depts_defaults, $allowables);

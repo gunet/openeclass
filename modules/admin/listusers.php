@@ -155,17 +155,26 @@ if ($search == 'inactive') {
 	$criteria[] = 'expires_at < '.time().' AND user_id <> 1';
         add_param('search', 'inactive');
 }
+
 // Department search
 $depqryadd = '';
-if (isset($_GET['department']) and count($_GET['department'])) {
-        $depqryadd = ', user_department';
+if ( (isset($_GET['department']) and count($_GET['department'])) or (isDepartmentAdmin()) )
+{
+    $depqryadd = ', user_department';
+
+    $deps = array();
+    if ( isset($_GET['department']) and count($_GET['department']) )
         $deps = array_map('intval', $_GET['department']);
-        $criteria[] = 'user.user_id = user_department.user';
-        $criteria[] = 'department IN (' . implode(', ', $deps) . ')';
-        foreach ($deps as $dep_id) {
-                add_param('department[]', $dep_id);
-                validateNode($dep_id, isDepartmentAdmin());
-        }
+    else if (isDepartmentAdmin())
+        $deps = $user->getDepartmentIds($uid);
+
+    $criteria[] = 'user.user_id = user_department.user';
+    $criteria[] = 'department IN (' . implode(', ', $deps) . ')';
+
+    foreach ($deps as $dep_id) {
+        add_param('department[]', $dep_id);
+        validateNode($dep_id, isDepartmentAdmin());
+    }
 }
 
 if (count($criteria)) {
@@ -198,9 +207,9 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT count(*) AS num, b.statut AS user_type " .
+        $count_qry = "SELECT count(DISTINCT a.user_id) AS num, b.statut AS user_type " .
                      $qry_base;
-        $qry = "SELECT a.user_id,a.nom, a.prenom, a.username, a.email,
+        $qry = "SELECT DISTINCT a.user_id,a.nom, a.prenom, a.username, a.email,
                        a.verified_mail, b.statut " . $qry_base;
         add_param('c');
 } elseif ($search == 'no_login') { // users who have never logged in
@@ -212,8 +221,8 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT count(*) AS num, statut AS user_type " . $qry_base;
-        $qry = "SELECT user_id, nom, prenom, username, email, verified_mail, statut " .
+        $count_qry = "SELECT count(DISTINCT user_id) AS num, statut AS user_type " . $qry_base;
+        $qry = "SELECT DISTINCT user_id, nom, prenom, username, email, verified_mail, statut " .
                $qry_base;
         add_param('search', 'no_login');
 } else {
@@ -222,9 +231,9 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' WHERE ' . $qry_criteria;
         }
-        $count_qry = 'SELECT count(*) AS num, statut AS user_type' .
+        $count_qry = 'SELECT count(DISTINCT user_id) AS num, statut AS user_type' .
                 $qry_base;
-        $qry = 'SELECT user_id, nom, prenom, username, email, statut, verified_mail' .
+        $qry = 'SELECT DISTINCT user_id, nom, prenom, username, email, statut, verified_mail' .
                 $qry_base;
 }
 
