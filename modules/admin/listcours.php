@@ -45,7 +45,7 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'admin.inc.php';
 require_once 'include/lib/hierarchy.class.php';
