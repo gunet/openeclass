@@ -687,7 +687,7 @@ class hierarchy {
         $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0")
                                         : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
         while ($row = mysql_fetch_assoc($res))
-            $initopen .= $row['id'].',';
+            $initopen .= '"nd'. $row['id'].'",';
 
         return $initopen;
     }
