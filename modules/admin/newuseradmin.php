@@ -85,7 +85,7 @@ if($submit) {
                 $tool_content .= "<p class='caution_small'>$langEmailWrong.</p>
                         <br /><br /><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } else {
-                validateNode(intval($depid));
+                validateNode(intval($depid), isDepartmentAdmin());
                 $registered_at = time();
                 $expires_at = time() + get_config('account_duration');
                 $hasher = new PasswordHash(8, false);

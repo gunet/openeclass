@@ -26,7 +26,7 @@
 ==============================================================================*/
  
 
-function validateNode($id)
+function validateNode($id, $checkOwn)
 {
 	global $tool_content, $head_content, $is_admin, $tree, $user, $uid,
 	       $langBack, $langNotAllowed;
@@ -41,7 +41,7 @@ function validateNode($id)
 	if (mysql_num_rows($result) < 1)
 		exitWithError($notallowed);
 
-	if (!$is_admin)
+	if ($checkOwn)
 	{
 		$subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
@@ -53,7 +53,7 @@ function validateNode($id)
 
 
 
-function validateParentLft($nodelft)
+function validateParentLft($nodelft, $checkOwn)
 {
 	global $tool_content, $head_content, $is_admin, $tree, $user, $uid,
 	       $langBack, $langNotAllowed;
@@ -68,7 +68,7 @@ function validateParentLft($nodelft)
 	if (mysql_num_rows($result) < 1)
 		exitWithError($notallowed);
 
-	if (!$is_admin)
+	if ($checkOwn)
 	{
 		$row = mysql_fetch_assoc($result);
 		$parentid = $row['id'];
@@ -88,6 +88,21 @@ function exitWithError($message)
 	$tool_content .= $message;
 	draw($tool_content, 3, null, $head_content);
 	exit();
+}
+
+
+
+function isDepartmentAdmin()
+{
+    global $is_departmentmanage_user, $is_usermanage_user, $is_power_user, $is_admin;
+    
+    $checkOwn = false;
+    
+    // check if department manager
+    if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin)
+    	$checkOwn = true;
+    
+    return $checkOwn;
 }
 
 

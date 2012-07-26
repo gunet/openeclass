@@ -44,6 +44,9 @@ require_once 'admin.inc.php';
 require_once 'include/jscalendar/calendar.php';
 
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+
+$user = new user();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -70,10 +73,17 @@ $email = isset($_GET['email'])? mb_strtolower(trim($_GET['email'])): '';
 $reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
 $hour = isset($_GET['hour'])? intval($_GET['hour']): 0;
 $minute = isset($_GET['minute'])? intval($_GET['minute']): 0;
+
 if (isset($_GET['department'])) {
         $depts_defaults = array('defaults' => array_map('intval', $_GET['department']));
 } else {
         $depts_defaults = array();
+}
+
+if ($is_departmentmanage_user)
+{
+    $allowables = array('allowables' => $user->getDepartmentIds($uid));
+    $depts_defaults = array_merge($depts_defaults, $allowables);
 }
 
 // Display Actions Toolbar

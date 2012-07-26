@@ -210,7 +210,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
             $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
         } else {
             // OK Create the new node
-            validateParentLft(intval($_POST['nodelft']));
+            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
             $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<p class='success'>".$langAddSuccess."</p>";
         }
@@ -269,7 +269,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
     $id = intval($_GET['id']);
-    validateNode($id);
+    validateNode($id, isDepartmentAdmin());
 
     // locate the lft and rgt of the node we want to delete
     $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
@@ -302,7 +302,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $id = intval($_REQUEST['id']);
-    validateNode($id);
+    validateNode($id, isDepartmentAdmin());
 
     if (isset($_POST['edit'])) {
         // Check for empty fields
@@ -326,7 +326,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
             $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
         } else {
             // OK Update the node
-            validateParentLft(intval($_POST['nodelft']));
+            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
             $tree->updateNode($id, $name, intval($_POST['nodelft']),
                 intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']),
                 $code, $allow_course, $allow_user, $order_priority);

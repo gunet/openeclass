@@ -28,6 +28,12 @@ $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'admin.inc.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$user = new user();
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langListUsersActions;
@@ -158,6 +164,7 @@ if (isset($_GET['department']) and count($_GET['department'])) {
         $criteria[] = 'department IN (' . implode(', ', $deps) . ')';
         foreach ($deps as $dep_id) {
                 add_param('department[]', $dep_id);
+                validateNode($dep_id, isDepartmentAdmin());
         }
 }
 
