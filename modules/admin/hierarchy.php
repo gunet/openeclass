@@ -30,14 +30,15 @@
 ==============================================================================*/
 
 $require_departmentmanage_user = true;
+
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
 $TBL_HIERARCHY         = 'hierarchy';
 $TBL_USER_DEPARTMENT   = 'user_department';
 $TBL_COURSE_DEPARTMENT = 'course_department';
-
-require_once 'include/lib/hierarchy.class.php';
-require_once 'include/lib/user.class.php';
 
 $tree = new hierarchy();
 $user = new user();
@@ -209,7 +210,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
             $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">".$langReturnToAddNode."</a></p>";
         } else {
             // OK Create the new node
-            validate_parent(intval($_POST['nodelft']));
+            validateParentLft(intval($_POST['nodelft']));
             $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<p class='success'>".$langAddSuccess."</p>";
         }
@@ -268,7 +269,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
     $id = intval($_GET['id']);
-    validate($id);
+    validateNode($id);
 
     // locate the lft and rgt of the node we want to delete
     $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
@@ -301,7 +302,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete')  {
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
     $id = intval($_REQUEST['id']);
-    validate($id);
+    validateNode($id);
 
     if (isset($_POST['edit'])) {
         // Check for empty fields
@@ -325,7 +326,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
             $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
         } else {
             // OK Update the node
-            validate_parent(intval($_POST['nodelft']));
+            validateParentLft(intval($_POST['nodelft']));
             $tree->updateNode($id, $name, intval($_POST['nodelft']),
                 intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']),
                 $code, $allow_course, $allow_user, $order_priority);
@@ -410,61 +411,3 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit')  {
 
 draw($tool_content, 3, null, $head_content);
 
-
-// HELPER FUNCTIONS
-
-function validate($id) {
-    global $tool_content, $head_content, $is_admin, $tree, $user, $TBL_HIERARCHY, $uid,
-           $langBack, $langNotAllowed;
-
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
-
-    if ($id <= 0)
-        exit_with_error($notallowed);
-
-    $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE id = ". intval($id) );
-
-    if (mysql_num_rows($result) < 1)
-        exit_with_error($notallowed);
-
-    if (!$is_admin) {
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-
-        if (!in_array($id, $subtrees))
-            exit_with_error($notallowed);
-    }
-
-}
-
-function validate_parent($nodelft) {
-    global $tool_content, $head_content, $is_admin, $tree, $user, $TBL_HIERARCHY, $uid,
-           $langBack, $langNotAllowed;
-    
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
-    
-    if ($nodelft <= 0)
-        exit_with_error($notallowed);
-    
-    $result = db_query("SELECT * FROM $TBL_HIERARCHY WHERE lft = ". intval($nodelft) );
-    
-    if (mysql_num_rows($result) < 1)
-        exit_with_error($notallowed);
-    
-    if (!$is_admin)
-    {
-        $row = mysql_fetch_assoc($result);
-        $parentid = $row['id'];
-        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-        
-        if (!in_array($parentid, $subtrees))
-            exit_with_error($notallowed);
-    }
-}
-
-function exit_with_error($message) {
-    global $tool_content, $head_content;
-    
-    $tool_content .= $message;
-    draw($tool_content, 3, null, $head_content);
-    exit();
-}

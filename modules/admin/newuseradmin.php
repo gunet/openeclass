@@ -20,14 +20,16 @@
 
 
 $require_usermanage_user = TRUE;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/phpass/PasswordHash.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
-$userObj = new user();
+$user = new user();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -83,6 +85,7 @@ if($submit) {
                 $tool_content .= "<p class='caution_small'>$langEmailWrong.</p>
                         <br /><br /><p align='right'><a href='$backlink'>$langAgain</a></p>";
         } else {
+                validateNode(intval($depid));
                 $registered_at = time();
                 $expires_at = time() + get_config('account_duration');
                 $hasher = new PasswordHash(8, false);
@@ -96,7 +99,7 @@ if($submit) {
                                 autoquote($email_form) .
                                 ", $pstatut, ".autoquote($phone).", ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail)");
                 $uid = mysql_insert_id();
-                $userObj->refresh($uid, array(intval($depid)));
+                $user->refresh($uid, array(intval($depid)));
 
                 // close request if needed
                 if (!empty($rid)) {
@@ -203,7 +206,10 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
         $depid = (isset($pt)) ? $pt : null;
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        if ($is_departmentmanage_user)
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid) ));
+        else
+            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>

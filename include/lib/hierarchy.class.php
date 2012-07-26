@@ -1146,6 +1146,15 @@ jContent;
         else
             return false;
     }
+    
+    /**
+     * Returns Hierarchy DB table
+     * 
+     * @return string
+     */
+    public function getDbtable() {
+        return $this->dbtable;
+    }
 
 }
 ?>
