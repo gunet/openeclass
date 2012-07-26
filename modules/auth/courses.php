@@ -32,14 +32,15 @@ $tree = new hierarchy();
 load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
+load_js('tools.js');
 
 $nameTools = $langChoiceLesson;
-$navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
+$navigation[] = array ('url' => 'courses.php', 'name' => $langChoiceDepartment);
 
 $icons = array(
-        2 => "<img src='$themeimg/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
-        1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
-        0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
+        COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
+        COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
+        COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
 );
 
 if (isset($_REQUEST['fc'])) {
@@ -63,7 +64,7 @@ if (isset($_POST['selectCourse']) and is_array($_POST['selectCourse'])) {
         $selectCourse = array();
 }
 
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) {
         foreach ($changeCourse as $key => $value) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
@@ -189,6 +190,8 @@ hContent;
 		$tool_content .= "\n    </form>";
 	} // end of else (department exists)
 }
+$tool_content .= "<script type='text/javascript'>$(course_list_init);
+var themeimg = '".js_escape($themeimg)."';</script>";
 
 draw($tool_content, 1, null, $head_content);
 

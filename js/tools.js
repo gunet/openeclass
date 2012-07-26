@@ -148,3 +148,45 @@ function course_log_controls_init() {
                 }
         })
 }
+
+
+// Course registration UI
+
+function course_checkbox_disabled(id, state)
+{
+        $('input[type=checkbox][value='+id+']').prop('disabled', state);
+}
+
+function course_list_init()
+{
+        $('input[type=submit]').remove();
+        $('input[type=checkbox]').change(course_list_handler);
+        $('input[type=password]').each(function () {
+                var id = $(this).attr('name').replace('pass', '');
+                course_checkbox_disabled(id, true);
+                $(this).change(function () {
+                        course_checkbox_disabled(id, false);
+                });
+        });
+}
+
+function course_list_handler()
+{
+        var cid = $(this).attr('value');
+        var td = $(this).parent().next();
+        $('#res'+cid).remove();
+        if (!$('#ind'+cid).length) {
+                td.append('&nbsp;<img id="ind'+cid+'" src="'+themeimg+'/ajax_loader.gif" alt="">');
+        }
+        $.post('course_submit.php',
+               { cid: cid,
+                 state: $(this).prop('checked') },
+               function (result) {
+                       $('#ind'+cid).remove();
+                       if (result == 'registered') {
+                               td.append('&nbsp;<img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');
+                       }
+               },
+               'text');
+}
+
