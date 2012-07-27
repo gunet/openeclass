@@ -161,10 +161,10 @@ function course_list_init()
 {
         $('input[type=submit]').remove();
         $('input[type=checkbox]').change(course_list_handler);
-        $('input[type=password]').each(function () {
+        $('input[type=password][value=]').each(function () {
                 var id = $(this).attr('name').replace('pass', '');
                 course_checkbox_disabled(id, true);
-                $(this).change(function () {
+                $(this).on('keypress change paste', function () {
                         course_checkbox_disabled(id, false);
                 });
         });
@@ -185,6 +185,7 @@ function course_list_handler()
                        $('#ind'+cid).remove();
                        if (result == 'registered') {
                                td.append('&nbsp;<img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');
+                       } else {
                        }
                },
                'text');

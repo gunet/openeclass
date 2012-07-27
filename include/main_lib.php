@@ -266,8 +266,7 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend;
 
         if ($file == 'jquery') {
-                //$file = 'jquery-1.4.3.min.js';
-		$file = 'jquery-1.6.4.min.js';
+		$file = 'jquery-1.7.2.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
