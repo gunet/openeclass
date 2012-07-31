@@ -120,7 +120,9 @@ $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours", 'name' =
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
 	if (isset($_POST['grade_comments'])) {
-		$nameTools = $m['WorkView'];
+		$work_title = db_query_get_single_value("SELECT titleFROM assignment WHERE id = $_POST[assignment]", $currentCourseID);
+		$nameTools = $work_title;
+		$nameTools = $langWorks;
 		$navigation[] = $works_url;
                 submit_grade_comments($_POST['assignment'], $_POST['submission'],
                                       $_POST['grade'], $_POST['comments'], $email_notify);
@@ -134,7 +136,7 @@ if ($is_editor) {
 		add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
 		show_assignments();
 	} elseif (isset($_POST['grades'])) {
-		$nameTools = $m['WorkView'];
+		$nameTools = $langWorks;
 		$navigation[] = $works_url;
                 submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
         } elseif (isset($_REQUEST['id'])) {
@@ -173,7 +175,7 @@ if ($is_editor) {
                                 $navigation[] = $work_id_url;
                                 show_edit_assignment($id);
                         } elseif ($choice == 'do_edit') {
-                                $nameTools = $m['WorkView'];
+                                $nameTools = $langWorks;
                                 $navigation[] = $works_url;
                                 $navigation[] = $work_id_url;
                                 edit_assignment($id);
@@ -187,7 +189,6 @@ if ($is_editor) {
                         }
                 } else {
                         $nameTools = $work_title;
-                        $navigation[] = $works_url;
                         if (isset($_GET['disp_results'])) {
                                 show_assignment($id, false, true);
                         } else {
@@ -195,7 +196,7 @@ if ($is_editor) {
                         }
                 }
 	} else {
-		$nameTools = $m['WorkView'];
+		$nameTools = $langWorks;
 		show_assignments();
 	}
 } else {
@@ -204,10 +205,11 @@ if ($is_editor) {
                 if (isset($_POST['work_submit'])) {
                         $nameTools = $m['SubmissionStatusWorkInfo'];
                         $navigation[] = $works_url;
-                        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id", 'name' => $m['WorkView']);
+                        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id", 'name' => $langWorks);
                         submit_work($id);
                 } else {
-                        $nameTools = $m['WorkView'];
+                        $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $id", $currentCourseID);
+                        $nameTools = $work_title;
                         $navigation[] = $works_url;
                         show_student_assignment($id);
                 }

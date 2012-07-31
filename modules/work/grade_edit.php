@@ -38,8 +38,8 @@ mysql_select_db($currentCourseID);
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
 		$assign = get_assignment_details($_GET['assignment']);
-		$navigation[] = array("url"=>"work.php?course=$code_cours", "name"=>$langWorks);
-		$navigation[] = array("url"=>"work.php?course=$code_cours&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
+		$navigation[] = array("url"=>"work.php?course=$code_cours&amp;id=$_GET[assignment]", "name"=>$langWorks);
+		$navigation[] = array("url"=>"work.php?course=$code_cours", "name"=>$assign['title']);
 		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
 		draw($tool_content, 2);
 } else {
