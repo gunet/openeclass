@@ -49,7 +49,9 @@ hContent;
 $displayAnnouncementList = true;
 $displayForm = true;
 
-foreach (array('title', 'newContent', 'lang_admin_ann') as $var) {
+$newContent = isset($_POST['newContent'])?$_POST['newContent']:'';
+
+foreach (array('title', 'lang_admin_ann') as $var) {
         if (isset($_POST[$var])) {
                 $GLOBALS[$var] = q($_POST[$var]);
         } else {

@@ -27,9 +27,9 @@ require_once 'modules/group/group_functions.php';
 $nameTools = $m['grades'];
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
-		$assign = get_assignment_details($_GET['assignment']);
-		$navigation[] = array("url"=>"index.php?course=$course_code", "name"=>$langWorks);
-		$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$m['WorkView']);
+		$assign = get_assignment_details($_GET['assignment']);                
+		$navigation[] = array("url"=>"index.php?course=$course_code", "name"=>$langWorks);                
+		$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$assign['title']);
 		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
 		draw($tool_content, 2);
 } else {
@@ -62,27 +62,27 @@ function show_edit_form($id, $sid, $assign)
                         $group_submission = '';
                 }
                 $tool_content .= "
-        <form method='post' action='index.php?course=$course_code'>
-          <input type='hidden' name='assignment' value='$id'>
-          <input type='hidden' name='submission' value='$sid'>
-          <fieldset>
-            <legend>$m[addgradecomments]</legend>
-            <table width='99%' class='tbl'>
-              <tr><th class='left' width='180'>${m['username']}:</th>
-                  <td>${uid_2_name} $group_submission</td></tr>
-              <tr><th class='left'>${m['sub_date']}:</th>
-                  <td>${sub['submission_date']}</td></tr>
-              <tr><th class='left'>${m['filename']}:</th>
-                  <td><a href='index.php?course=$course_code&amp;get=${sub['id']}'>${sub['file_name']}</a></td></tr>
-              <tr><th class='left'>$m[grade]:</th>
-                  <td><input type='text' name='grade' maxlength='3' size='3' value='$sub[grade]'></td></tr>
-              <tr><th class='left'>$m[gradecomments]:</th>
-                  <td><textarea cols='60' rows='3' name='comments'>$sub[grade_comments]</textarea></td></tr>
-              <tr><th class='left'>&nbsp;</th>
-                  <td><input type='submit' name='grade_comments' value='$langGradeOk'></td></tr>
-            </table>
-          </fieldset>
-        </form><br>";
+                <form method='post' action='index.php?course=$course_code'>
+                <input type='hidden' name='assignment' value='$id'>
+                <input type='hidden' name='submission' value='$sid'>
+                <fieldset>
+                <legend>$m[addgradecomments]</legend>
+                <table width='99%' class='tbl'>
+                <tr><th class='left' width='180'>${m['username']}:</th>
+                        <td>${uid_2_name} $group_submission</td></tr>
+                <tr><th class='left'>${m['sub_date']}:</th>
+                        <td>${sub['submission_date']}</td></tr>
+                <tr><th class='left'>${m['filename']}:</th>
+                        <td><a href='index.php?course=$course_code&amp;get=${sub['id']}'>${sub['file_name']}</a></td></tr>
+                <tr><th class='left'>$m[grade]:</th>
+                        <td><input type='text' name='grade' maxlength='3' size='3' value='$sub[grade]'></td></tr>
+                <tr><th class='left'>$m[gradecomments]:</th>
+                        <td><textarea cols='60' rows='3' name='comments'>$sub[grade_comments]</textarea></td></tr>
+                <tr><th class='left'>&nbsp;</th>
+                        <td><input type='submit' name='grade_comments' value='$langGradeOk'></td></tr>
+                </table>
+                </fieldset>
+                </form><br>";
         } else {
                 $tool_content .= "<p class='caution'>$langSubmissionError</p>";
         }

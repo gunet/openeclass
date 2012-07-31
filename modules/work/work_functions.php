@@ -223,7 +223,7 @@ function show_submission_details($id)
 	$tool_content .= "
         <fieldset>
         <legend>$m[SubmissionWorkInfo]</legend>
-        <table width=\"99%\" class=\"tbl\">
+        <table class='tbl'>
 	<tr>
 	  <th width='150'>$m[SubmissionStatusWorkInfo]:</th>
 	  <td valign='top'>$notice</td>

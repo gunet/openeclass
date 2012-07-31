@@ -116,8 +116,9 @@ $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' 
 
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
-	if (isset($_POST['grade_comments'])) {
-		$nameTools = $m['WorkView'];
+	if (isset($_POST['grade_comments'])) {                
+                $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $_POST[assignment]");
+		$nameTools = $work_title;
 		$navigation[] = $works_url;
                 submit_grade_comments($_POST['assignment'], $_POST['submission'],
                                       $_POST['grade'], $_POST['comments'], $email_notify);
@@ -131,7 +132,7 @@ if ($is_editor) {
 		add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
 		show_assignments();
 	} elseif (isset($_POST['grades'])) {
-		$nameTools = $m['WorkView'];
+		$nameTools = $langWorks;
 		$navigation[] = $works_url;
                 submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
         } elseif (isset($_REQUEST['id'])) {
@@ -170,7 +171,7 @@ if ($is_editor) {
                                 $navigation[] = $work_id_url;
                                 show_edit_assignment($id);
                         } elseif ($choice == 'do_edit') {
-                                $nameTools = $m['WorkView'];
+                                $nameTools = $langWorks;
                                 $navigation[] = $works_url;
                                 $navigation[] = $work_id_url;
                                 edit_assignment($id);
@@ -192,7 +193,7 @@ if ($is_editor) {
                         }
                 }
 	} else {
-		$nameTools = $m['WorkView'];
+		$nameTools = $langWorks;
 		show_assignments();
 	}
 } else {
@@ -201,10 +202,11 @@ if ($is_editor) {
                 if (isset($_POST['work_submit'])) {
                         $nameTools = $m['SubmissionStatusWorkInfo'];
                         $navigation[] = $works_url;
-                        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $m['WorkView']);
+                        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
                         submit_work($id);
                 } else {
-                        $nameTools = $m['WorkView'];
+                        $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $id");
+                        $nameTools = $work_title;                        
                         $navigation[] = $works_url;
                         show_student_assignment($id);
                 }
@@ -492,10 +494,10 @@ cData;
 	$comments = trim($row['comments']);
         if (!empty($comments)) {
                 $tool_content .= "
-    <tr>
-      <th>$m[comments]:</th>
-      <td>" .  rich_text_editor('comments', 5, 65, $comments) .  "</td>
-    </tr>";
+                <tr>
+                <th>$m[comments]:</th>
+                <td>" .  rich_text_editor('comments', 5, 65, $comments) .  "</td>
+                </tr>";
         }
 
 	if ($row['group_submissions'] == '0') {
@@ -525,7 +527,7 @@ cData;
     </fieldset>
     </form>";
 
-    $tool_content .= "\n   <br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</ul></div>";
+    $tool_content .= "<br /><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</ul></div>";
 }
 
 // edit assignment
@@ -575,7 +577,7 @@ function edit_assignment($id)
 //delete assignment
 function delete_assignment($id) {
 
-	global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $currentCourseID, $course_id;
+	global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
 
 	$secret = work_secret($id);
         $q = db_query("SELECT title FROM assignment WHERE course_id = ". quote($course_id) ." AND id = ". quote($id));
@@ -596,8 +598,7 @@ function delete_assignment($id) {
 // show assignment - student
 function show_student_assignment($id)
 {
-	global $tool_content, $m, $uid, $langSubmitted, $langSubmittedAndGraded, $langNotice3,
-               $works_url, $langUserOnly, $langBack, $langWorkGrade, $langGradeComments,
+	global $tool_content, $m, $uid, $langUserOnly, $langBack,
                $course_code, $course_id, $course_code;
 
         $user_group_info = user_group_info($uid, $course_id);
@@ -605,9 +606,7 @@ function show_student_assignment($id)
                                  FROM assignment WHERE course_id = $course_id AND id = $id");
 
 	$row = mysql_fetch_array($res);
-
-	$nav[] = $works_url;
-
+	
 	assignment_details($id, $row);
 
         $submit_ok = ($row['time'] > 0);
@@ -630,8 +629,7 @@ function show_student_assignment($id)
 	if ($submit_ok) {
 		show_submission_form($id, $user_group_info);
 	}
-	$tool_content .= "<br/>
-            <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+	$tool_content .= "<br/><p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
 
@@ -723,8 +721,7 @@ function assignment_details($id, $row, $message = null)
 	}
 
 	if (isset($message)) {
-		$tool_content .="
-                <p class=\"success\">$langSaved</p>";
+		$tool_content .= "<p class='success'>$langSaved</p>";
         }
 	$tool_content .= "
         <fieldset>
@@ -817,8 +814,9 @@ function show_assignment($id, $message = false, $display_graph_results = false)
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
                $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
                $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
-               $nameTools, $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id;
-
+               $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id;
+       
+        
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignment
                                  WHERE course_id = $course_id AND id = $id");
@@ -893,12 +891,12 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                                      ORDER BY $order $rev");
 
                         $tool_content .= "
-                  <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                    <input type='hidden' name='grades_id' value='$id' />
-                    <p><div class='sub_title1'>$langSubmissions:</div><p>
-                    <p>$num_of_submissions</p>
-                    <table width='100%' class='sortable'>
-                    <tr>
+                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+                        <input type='hidden' name='grades_id' value='$id' />
+                        <p><div class='sub_title1'>$langSubmissions:</div><p>
+                        <p>$num_of_submissions</p>
+                        <table width='100%' class='sortable'>
+                        <tr>
                       <th width='3'>&nbsp;</th>";
                         sort_link($m['username'], 'nom');
                         sort_link($m['am'], 'am');
@@ -929,19 +927,19 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row[id]'>" .
                                          q($row['file_name']) . "</a>");
                                 $tool_content .= "
-		  <tr $row_color>
-		    <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-		    <td>${uid_2_name}</td>
-		    <td width='85'>" . q($stud_am[0]) . "</td>
-		    <td width='180'>$filelink</a></td>
-		    <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
-		    <td width='5'>
-		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
-		    </td>
-		  </tr>
-		  <tr $row_color>
-		    <td colspan='5'>
-		      <div>$subContentGroup</div>";
+                                <tr $row_color>
+                                <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
+                                <td>${uid_2_name}</td>
+                                <td width='85'>" . q($stud_am[0]) . "</td>
+                                <td width='180'>$filelink</a></td>
+                                <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
+                                <td width='5'>
+                                <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
+                                </td>
+                                </tr>
+                                <tr $row_color>
+                                <td colspan='5'>
+                                <div>$subContentGroup</div>";
                                 if (trim($row['comments'] != '')) {
                                         $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
                                                 q($row['comments']) . '</div>';
@@ -964,17 +962,16 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 $tool_content .= "<div style='padding-top: .5em;'><a href='$gradelink'><b>$label</b></a>
 				  <a href='$gradelink'><img src='$themeimg/$icon'></a>
 				  $comments
-		    </td>
-		  </tr>";
+                                </td>
+                                </tr>";
                                 $i++;
                         } //END of While
 
                         $tool_content .= "</table>
-                  <p class='smaller right'><img src='$themeimg/email.png' alt='' >
-                        $m[email_users]: <input type='checkbox' value='1' name='email'></p>
-
-		  <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
-		  </form>";
+                        <p class='smaller right'><img src='$themeimg/email.png' alt='' >
+                                $m[email_users]: <input type='checkbox' value='1' name='email'></p>
+                        <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
+                        </form>";
                 }
 
                 if ($display_graph_results) { // display pie chart with grades results
@@ -986,15 +983,15 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                         $percentage = 100.0 * $gradeOccurance / $graded_submissions_count;
                                         $dataSet->addPoint(new Point("$gradeValue ($percentage)", $percentage));
                                 }
-                                $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
+                                $chart_path = '/courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
                                 $chart->setDataSet($dataSet);
                                 $chart->render($webDir.$chart_path);
                                 $tool_content .= "
-		  <table width='100%' class='tbl'>
-		  <tr>
-		    <td><img src='$urlServer$chart_path' /></td>
-		  </tr>
-		  </table>";
+                                <table width='100%' class='tbl'>
+                                <tr>
+                                <td><img src='$urlServer$chart_path' /></td>
+                                </tr>
+                                </table>";
                         }
                 }
         } else {
@@ -1250,8 +1247,8 @@ function submit_grades($grades_id, $grades, $email = false)
 // functions for downloading
 function send_file($id)
 {
-        global $tool_content, $course_code, $uid, $is_editor;
-        mysql_select_db($course_code);
+        global $course_code, $uid, $is_editor;
+                
         $q = db_query("SELECT * FROM assignment_submit WHERE id = $id");
         if (!$q or !mysql_num_rows($q)) {
                 return false;
@@ -1271,7 +1268,7 @@ function send_file($id)
 // Zip submissions to assignment $id and send it to user
 function download_assignments($id)
 {
-	global $tool_content, $workPath;
+	global $workPath;
 
 	$secret = work_secret($id);
 	$filename = "$GLOBALS[currentCourseID]_work_$id.zip";
@@ -1293,7 +1290,7 @@ function download_assignments($id)
 // index.html works for the zip file
 function create_zip_index($path, $id, $online = FALSE)
 {
-	global $tool_content, $charset, $m;
+	global $charset, $m;
 
 	$fp = fopen($path, "w");
 	if (!$fp) {
@@ -1360,7 +1357,8 @@ function create_zip_index($path, $id, $online = FALSE)
 // Show a simple html page with grades and submissions
 function show_plain_view($id)
 {
-	global $tool_content, $workPath, $charset;
+	global $workPath, $charset;
+        
 	$secret = work_secret($id);
 	create_zip_index("$secret/index.html", $id, TRUE);
 	header("Content-Type: text/html; charset=$charset");
