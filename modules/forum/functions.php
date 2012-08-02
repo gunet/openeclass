@@ -18,67 +18,41 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 /*
- * Return the total number of topics in a form
+ * Return the total number of topics in a forum
  */
 function get_total_topics($forum_id) {
 
-        global $langError;
-
-	$sql = "SELECT COUNT(*) AS total FROM forum_topic
-                        WHERE forum_id = $forum_id";
-	if(!$result = db_query($sql))
-		return($langError);
-	if(!$myrow = mysql_fetch_array($result))
-		return($langError);
-
-	return($myrow["total"]);
+	$sql = db_query("SELECT COUNT(*) AS total FROM forum_topic
+                        WHERE forum_id = $forum_id");
+        $myrow = mysql_fetch_array($sql);
+        
+	return $myrow["total"];
 }
 
 /*
  * Return the total number of posts in forum or topic
  */
-function get_total_posts($id, $type) {
+function get_total_posts($id) {
 
-    switch($type) {
-        case 'forum':
-          $sql = "SELECT COUNT(*) AS total FROM forum_post
-                    WHERE forum_id = $id";
-          break;
-        case 'topic':
-          $sql = "SELECT COUNT(*) AS total FROM forum_post
-                    WHERE topic_id = $id";
-          break;
-    }
-    if(!$result = db_query($sql)) {
-        return("error!");
-    }
-    if(!$myrow = mysql_fetch_array($result)) {
-        return("0");
-    }
-   return($myrow["total"]);
+        $sql = db_query("SELECT COUNT(*) AS total FROM forum_post
+                WHERE topic_id = $id");
+        $myrow = mysql_fetch_array($sql);
+
+        return $myrow["total"];
 }
 
 /*
  * Return the most recent post in a forum
  */
-function get_last_post($topic_id, $forum_id) {
-
-    global $langError, $langNoPosts;
-
+function get_last_post($topic_id) {
+    
      $sql = "SELECT post_time FROM forum_post
-                WHERE topic_id = $topic_id
-                AND forum_id = $forum_id
+                WHERE topic_id = $topic_id                
                 ORDER BY post_time DESC LIMIT 1";
 
-    if(!$result = db_query($sql)) {
-        return($langError);
-    }
-    if(!$myrow = mysql_fetch_array($result)) {
-        return($langNoPosts);
-    }
-
-    $val = $myrow["post_time"];
-    return($val);
+     $val = db_query_get_single_value($sql);
+             
+     return $val;
 }
 
 
@@ -129,64 +103,6 @@ function is_first_post($topic_id, $post_id) {
     }
 }
 
-
-
-function sync($id, $type) {
-
-   global $course_id;
-
-   switch($type) {
-   	case 'forum':
-   		$sql = "SELECT MAX(id) AS last_post FROM forum_post
-                            WHERE forum_id = $id";
-   		$result = db_query($sql);
-   		if($row = mysql_fetch_array($result)) {
-   			$last_post = $row["last_post"];
-   		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_post
-                                WHERE forum_id = $id";
-   		$result = db_query($sql);
-   		if($row = mysql_fetch_array($result)) {
-   			$total_posts = $row["total"];
-   		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_topic
-                            WHERE forum_id = $id";
-   		$result = db_query($sql);
-   		if($row = mysql_fetch_array($result)) {
-   			$total_topics = $row["total"];
-   		}
-   		$sql = "UPDATE forum
-			SET num_topics = $total_topics,
-                            num_posts = $total_posts,
-                            last_post_id = $last_post
-                        WHERE id = $id
-                        AND course_id = $course_id";
-   		$result = db_query($sql);
-   	break;
-
-   	case 'topic':
-   		$sql = "SELECT MAX(id) AS last_post FROM forum_post
-                            WHERE topic_id = $id";
-		$result = db_query($sql);
-   		if($row = mysql_fetch_array($result)) {
-   			$last_post = $row["last_post"];
-   		}
-   		$sql = "SELECT COUNT(id) AS total FROM forum_post
-                               WHERE topic_id = $id";
-   		$result = db_query($sql);
-   		if($row = mysql_fetch_array($result)) {
-   			$total_posts = $row["total"];
-   		}
-   		$total_posts -= 1;
-                $sql = "UPDATE forum_topic
-                               SET num_replies = $total_posts,
-                                   last_post_id = $last_post
-                               WHERE forum_id = $id";
-   		$result = db_query($sql);
-   	break;
-   }
-   return;
-}
 
 // display notification status of link
 function toggle_link($notify) {

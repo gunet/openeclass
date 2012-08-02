@@ -65,8 +65,7 @@ if (!does_exists($forum, "forum") || !does_exists($topic, "topic")) {
 }
 
 if (isset($_POST['submit'])) {
-	$message = $_POST['message'];
-	$quote = $_POST['quote'];
+	$message = $_POST['message'];	
         $poster_ip = $_SERVER['REMOTE_ADDR'];
 	if (trim($message) == '') {
                 $tool_content .= "
@@ -75,19 +74,14 @@ if (isset($_POST['submit'])) {
                 draw($tool_content, 2, null, $head_content);
 		exit();
 	}
-
-        if (isset($quote) && $quote) {
-                // If it's been edited more than once, there might be old "edited by" strings with
-                // escaped HTML code in them. We want to fix this up right here:
-                $message = preg_replace("#&lt;font\ size\=-1&gt;\[\ $langEditedBy(.*?)\ \]&lt;/font&gt;#si", '[ ' . $langEditedBy . '\1 ]', $message);
-        }
+        
 
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
 
-	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
-			VALUES ($topic, $forum_id, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
+	$sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
+			VALUES ($topic, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 	$this_post = mysql_insert_id();
         $sql = "UPDATE forum_topic SET topic_time = '$time',
@@ -98,7 +92,7 @@ if (isset($_POST['submit'])) {
 	$sql = "UPDATE forum SET num_posts = num_posts+1,
                     last_post_id = $this_post
 		WHERE id = $forum_id
-                    AND course_id = $cours_id";
+                    AND course_id = $course_id";
 	$result = db_query($sql);
 	if (!$result) {
 		$tool_content .= $langErrorUpadatePostCount;
@@ -114,7 +108,7 @@ if (isset($_POST['submit'])) {
 	$cat_name = category_name($category_id);
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify
 			WHERE (topic_id = $topic OR forum_id = $forum_id OR cat_id = $category_id)
-			AND notify_sent = 1 AND course_id = $coursε_id AND user_id != $uid", $mysqlMainDb);
+			AND notify_sent = 1 AND course_id = $course_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
 	$forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
@@ -133,7 +127,7 @@ if (isset($_POST['submit'])) {
 	}
 	// end of notification
 
-	$total_posts = get_total_posts($topic, "topic");
+	$total_posts = get_total_posts($topic);
 	if ($total_posts > $posts_per_page) {
 		$page = '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
 	} else {
@@ -158,36 +152,17 @@ if (isset($_POST['submit'])) {
         <legend>$langTopicAnswer: ".q($topic_title)."</legend>
 	<table class='tbl' width='100%'>
         <tr>
-        <td>$langBodyMessage:";
-	if (isset($quote) && $quote) {
-		$sql = "SELECT post_text, post_time FROM forum_post WHERE id = $post";
-		if ($r = db_query($sql)) {
-			$m = mysql_fetch_array($r);
-			$text = $m["post_text"];
-			$text = str_replace("<BR>", "\n", $text);
-			$text = stripslashes($text);
-			$text = str_replace("[addsig]", "", $text);
-			eval("\$reply = \"$langQuoteMsg\";");
-		} else {
-			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2, null, $head_content);
-			exit();
-		}
-	}
+        <td>$langBodyMessage:";	
 	if (!isset($reply)) {
 		$reply = "";
-	}
-	if (!isset($quote)) {
-		$quote = "";
-	}
+	}	
 	$tool_content .= "</td>
         </tr>
 	<tr>
           <td>".rich_text_editor('message', 15, 70, $reply, "")."</td>
         </tr>
 	<tr>
-	  <td class='right'>
-	    <input type='hidden' name='quote' value='$quote'>
+	  <td class='right'>	 
 	    <input type='submit' name='submit' value='$langSubmit'>&nbsp;
 	    <input type='submit' name='cancel' value='$langCancelPost'>
  	  </td>

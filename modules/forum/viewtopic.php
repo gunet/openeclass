@@ -29,17 +29,10 @@ require_once 'functions.php';
 require_once 'modules/video/video_functions.php';
 
 load_modal_box();
-$head_content .= '
-<script type="text/javascript">
-function confirmation()
-{
-    if (confirm("'.$langConfirmDelete.'"))
-        {return true;}
-    else
-        {return false;}
+
+if ($is_editor) {
+        load_js('tools.js');
 }
-</script>
-';
 
 if (isset($_GET['all'])) {
         $paging = false;
@@ -68,45 +61,53 @@ if (!$myrow = mysql_fetch_array($result)) {
 }
 $forum_name = $myrow['name'];
 $forum = $myrow['id'];
+$total = get_total_posts($topic);
 
-if (isset($_GET['delete']) && $is_editor) {
+if (isset($_GET['delete']) && $is_editor) {        
 	$post_id = intval($_GET['post_id']);
-	$last_post_in_thread = get_last_post($topic, $forum);
+	$last_post_in_thread = get_last_post($topic);
 
 	$result = db_query("SELECT post_time FROM forum_post
                             WHERE id = $post_id");
 
 	$myrow = mysql_fetch_array($result);
-	$this_post_time = $myrow["post_time"];
-	list($day, $time) = explode(' ', $this_post_time);
+	$this_post_time = $myrow["post_time"];	
 
 	db_query("DELETE FROM forum_post WHERE id = $post_id");
-	db_query("UPDATE forum SET num_posts = num_posts - 1 WHERE id = $forum");
+        
+        if ($total == 1) { // if exists one post in topic
+		db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
+		db_query("UPDATE forum SET num_topics = 0,
+                            num_posts = 0
+                            WHERE id = $forum
+                            AND course_id = $course_id");
+		header("Location: viewforum.php?course=$course_code&forum=$forum");
+	} else {
+                $sql = "SELECT MAX(id) AS last_post FROM forum_post
+                                WHERE topic_id = $topic";
+                $last_post = db_query_get_single_value($sql);                
+
+                db_query("UPDATE forum SET
+                        `num_posts` = `num_posts`-1,
+                        last_post_id = $last_post
+                        WHERE id = $forum
+                        AND course_id = $course_id");        
+
+                db_query("UPDATE forum_topic SET
+                                `num_replies` = `num_replies`-1,
+                                last_post_id = $last_post
+                        WHERE id = $topic");        
+        }
 	if ($last_post_in_thread == $this_post_time) {
 		$topic_time_fixed = $last_post_in_thread;
 		$sql = "UPDATE forum_topic
 			SET topic_time = '$topic_time_fixed'
-			WHERE id = $topic AND forum_id = $forum";
-		if (!$r = db_query($sql)) {
-			$tool_content .= $langPostRemoved;
-			draw($tool_content, 2, null, $head_content);
-			exit();
-		}
-	}
-	$total = get_total_posts($topic, "topic");
-	if ($total == 0) {
-		db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
-		db_query("UPDATE forum SET num_topics = num_topics-1
-                            WHERE id = $forum
-                            AND course_id = $cours_id");
-		header("Location: viewforum.php?course=$course_code&forum=$forum");
-	}
-	sync($forum, 'forum');
-	sync($topic, 'topic');
+			WHERE id = $topic";		
+	}        			
 	$tool_content .= "<p class='success'>$langDeletedMessage</p>";
 }
 
-$total = get_total_posts($topic, "topic");
+
 
 if ($paging and $total > $posts_per_page) {
 	$times = 0;
@@ -250,7 +251,7 @@ do {
 		$tool_content .= "<td width='40' valign='top'>
                     <a href='editpost.php?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>
                     <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
+		$tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick=\"return confirmation('$langConfirmDelete');\">
                     <img src='$themeimg/delete.png' title='$langDelete' /></a></td>";
 	}
 	$tool_content .= "</tr>";
@@ -265,7 +266,7 @@ $tool_content .= "</table>";
 
 if ($paging and $total > $posts_per_page) {
 	$times = 1;
-	$tool_content .= "<table width='100%' class='tbl'>
+	$tool_content .= "<table class='tbl'>
 	<tr>
 	<td width='50%'>
 	<span class='row'><strong class='pagination'><span>";
@@ -301,7 +302,7 @@ if ($paging and $total > $posts_per_page) {
 	</span>
 	</td></tr></table>";
 } else {
-	$tool_content .= "<table width='100%' class='tbl'>
+	$tool_content .= "<table class='tbl'>
 	<tr>
 	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong>

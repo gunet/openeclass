@@ -48,11 +48,6 @@ $forum_id = $myrow["id"];
 
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
-if ($private_forum and !($is_member or $is_editor)) {
-	$tool_content .= "<div class='caution'>$langPrivateForum</div>";
-	draw($tool_content, 2);
-	exit;
-}
 
 $nameTools = $langNewTopic;
 $navigation[]= array('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -80,8 +75,8 @@ if (isset($_POST['submit'])) {
 	$result = db_query($sql);
 
 	$topic_id = mysql_insert_id();
-	$sql = "INSERT INTO forum_post (topic_id, forum_id, post_text, poster_id, post_time, poster_ip)
-			VALUES ($topic_id, $forum_id, ".autoquote($message).", $uid, '$time', '$poster_ip')";
+	$sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
+			VALUES ($topic_id, ".autoquote($message).", $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 
         $post_id = mysql_insert_id();
@@ -98,7 +93,7 @@ if (isset($_POST['submit'])) {
 
 	$topic = $topic_id;
 	$total_forum = get_total_topics($forum_id);
-	$total_topic = get_total_posts($topic, "topic")-1;
+	$total_topic = get_total_posts($topic)-1;
 	// subtract 1 because we want the number of replies, not the number of posts.
 
 	// --------------------------------
@@ -109,7 +104,7 @@ if (isset($_POST['submit'])) {
 	$cat_name = category_name($category_id);
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify
 			WHERE (forum_id = $forum_id OR cat_id = $category_id)
-			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
+			AND notify_sent = 1 AND course_id = $course_id AND user_id != $uid");
 	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
 	$forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";

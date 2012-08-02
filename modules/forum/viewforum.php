@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,24 +29,15 @@ if (!add_units_navigation(true)) {
 	$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
 
-$paging = true;
-$next = 0;
-
 require_once 'config.php';
 require_once 'functions.php';
 
-$local_head = '
-<script type="text/javascript">
-function confirmation()
-{
-    if (confirm("'.$langConfirmDelete.'"))
-        {return true;}
-    else
-        {return false;}
+if ($is_editor) {
+        load_js('tools.js');
 }
-</script>
-';
 
+$paging = true;
+$next = 0;
 $forum_id = intval($_GET['forum']);
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
@@ -132,17 +123,18 @@ if (($is_editor) and isset($_GET['topicdel'])) {
 	if (isset($_GET['topic_id'])) {
 		$topic_id = intval($_GET['topic_id']);
 	}
-	$sql = db_query("SELECT id FROM forum_post
-                                WHERE topic_id = $topic_id AND
-                                      forum_id = $forum_id");
-
-	while ($r = mysql_fetch_array($sql)) {
+	$sql = db_query("SELECT id FROM forum_post WHERE topic_id = $topic_id");
+        $number_of_posts = get_total_posts($topic_id);        
+	while ($r = mysql_fetch_array($sql)) {  
 		db_query("DELETE FROM forum_post WHERE id = $r[id]");
-	}
-	db_query("DELETE FROM forum_topic WHERE id = $topic_id AND forum_id = $forum_id");
-
-        $number_of_posts = get_total_posts($topic_id, "topic");
-	db_query("UPDATE forum SET num_topics = num_topics-1,
+	}        
+        $number_of_topics = get_total_topics($forum_id);
+        $num_topics = $number_of_topics-1;
+        if ($number_of_topics < 0) {
+                $num_topics = 0;
+        }
+	db_query("DELETE FROM forum_topic WHERE id = $topic_id AND forum_id = $forum_id");                        
+	db_query("UPDATE forum SET num_topics = $num_topics,
                                 num_posts = num_posts-$number_of_posts
                             WHERE id = $forum_id
                                 AND course_id = $course_id");
@@ -191,7 +183,7 @@ if (mysql_num_rows($result) > 0) { // topics found
                 } else {
                         $tool_content .= "<tr class='even'>";
                 }
-		$replies = 1 + $myrow['num_replies'];
+		$replies = $myrow['num_replies'];
                 $topic_id = $myrow['id'];
 		$last_post_datetime = $myrow['post_time'];
 		list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
@@ -246,7 +238,7 @@ if (mysql_num_rows($result) > 0) { // topics found
 		$tool_content .= "<td class='center'>";
 		if ($is_editor) {
 			$tool_content .= "
-			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick='return confirmation()'>
+			<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow[id]&amp;topicdel=yes' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' />
 			</a>";
 		}
@@ -267,4 +259,4 @@ if (mysql_num_rows($result) > 0) { // topics found
 } else {
 	$tool_content .= "<div class='alert1'>$langNoTopics</div>";
 }
-draw($tool_content, 2, null, $local_head);
+draw($tool_content, 2, null, $head_content);
