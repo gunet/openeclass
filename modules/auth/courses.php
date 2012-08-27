@@ -193,8 +193,12 @@ hContent;
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
 var themeimg = '".js_escape($themeimg)."';
 var lang = {
+        unCourse: '".js_escape($langUnCourse)."',
+        cancel: '".js_escape($langCancel)."',
+        close: '".js_escape($langClose)."',
         unregCourse: '".js_escape($langUnregCourse)."',
-        reregisterImpossible: '".js_escape("$langConfirmUnregCours $m[unsub]")."'
+        reregisterImpossible: '".js_escape("$langConfirmUnregCours $m[unsub]")."',
+        invalidCode: '".js_escape($langInvalidCode)."',
 };</script>";
 
 draw($tool_content, 1, null, $head_content);

@@ -166,14 +166,14 @@ function course_list_init()
                                 autoOpen: false,
                                 title: lang.unregCourse,
                                 buttons: [
-                                    { text: 'Ok',
+                                    { text: lang.unCourse,
                                       click: function() {
                                                       $.trigger_checkbox
                                                                 .prop('checked', false).change();
                                                       $(this).dialog('close');
                                              }
                                     },
-                                    { text: 'Cancel',
+                                    { text: lang.cancel,
                                       click: function() { $(this).dialog('close'); }
                                     } ]
                         });
@@ -229,6 +229,16 @@ function course_list_handler()
                                $('input[type=checkbox][value='+cid+']').prop('checked', false);
                                if ($.course_closed[cid]) {
                                        course_checkbox_disabled(cid, true);
+                               }
+                               if (passfield.length && result == 'unauthorized') {
+                                       $('<div></div>').html(lang.invalidCode)
+                                                       .dialog({
+                                                                buttons: [ { text: lang.close,
+                                                                             click: function() {
+                                                                                     $(this).dialog('close'); }
+                                                                         } ]
+                                                       });
+
                                }
                        }
                },
