@@ -191,7 +191,11 @@ hContent;
 	} // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
-var themeimg = '".js_escape($themeimg)."';</script>";
+var themeimg = '".js_escape($themeimg)."';
+var lang = {
+        unregCourse: '".js_escape($langUnregCourse)."',
+        reregisterImpossible: '".js_escape("$langConfirmUnregCours $m[unsub]")."'
+};</script>";
 
 draw($tool_content, 1, null, $head_content);
 
@@ -293,6 +297,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
         $retString .= "<td align='center'>";
         $requirepassword = '';
+        $vis_class = ($mycours['visible'] == 0)? 'class="reg_closed"': '';
 
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]['statut'] != 1) { // display registered courses
@@ -302,7 +307,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 } else {
                     $requirepassword = '';
                 }
-                $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' />";
+                $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
                 if ($mycours['visible'] == 0) {
                     $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                 }
@@ -316,20 +321,13 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 $requirepassword = '';
             }
 
-            if ($mycours['visible'] == 0) {
-                $retString .= "<input type='checkbox' disabled />";
-            }
-
-            if (($mycours['visible'] == 1) or ($mycours['visible'] == 2)) {
-                $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' />";
-            }
+            $disabled = ($mycours['visible'] == 0)? 'disabled': '';
+            $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
-
-        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
-        $retString .= "</td>";
-        $retString .= "\n      <td>$codelink (" . q($mycours['public_code']) .")$requirepassword</td>";
-        $retString .= "\n      <td>". q($mycours['t']) ."</td>";
-        $retString .= "\n      <td align='center'>";
+        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
+                   <td>$codelink (" . q($mycours['public_code']) .")$requirepassword</td>
+                   <td>". q($mycours['t']) ."</td>
+                   <td align='center'>";
 
         // show the necessary access icon
         foreach ($icons as $visible => $image) {
