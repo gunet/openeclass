@@ -1691,6 +1691,7 @@ function description_unit_id($cours_id)
                 db_query('INSERT INTO course_units SET `order` = -1,
                                 `title` = ' . quote($langCourseDescription) . ',
                                 `visibility` = "i",
+                                `description` = "",
                                 `course_id` = ' . $cours_id);
                 return mysql_insert_id();
         }
