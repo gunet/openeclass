@@ -33,12 +33,21 @@
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/libchart/classes/libchart.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$user = new user();
 
 $nameTools = $langUserStats;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $navigation[]= array ("url"=>"listusers.php", "name"=> $langListUsers);
 
 $u = isset($_REQUEST['u'])?intval($_REQUEST['u']):'';
+
+if (isDepartmentAdmin())
+	validateUserNodes(intval($u), true);
 
 if(!empty($u))
 {

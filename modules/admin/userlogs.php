@@ -23,6 +23,12 @@ $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/log.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$user = new user();
 
 $nameTools = $langUserLog;
 $navigation[]= array('url' => 'index.php', 'name' => $langAdmin);
@@ -43,6 +49,9 @@ $u_date_end = isset($_GET['u_date_end'])? $_GET['u_date_end']: strftime('%Y-%m-%
 $logtype = isset($_GET['logtype'])? intval($_GET['logtype']): '0';
 $u_course_id = isset($_GET['u_course_id'])? intval($_GET['u_course_id']): '-1';
 $u_module_id = isset($_GET['u_module_id'])? intval($_GET['u_module_id']): '-1';
+
+if (isDepartmentAdmin())
+	validateUserNodes(intval($u), true);
 
 // display logs
 if (isset($_GET['submit'])) {

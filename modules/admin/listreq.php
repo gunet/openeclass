@@ -22,6 +22,12 @@ $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$user = new user();
 
 $head_content = '
 <script type="text/javascript">
@@ -55,6 +61,24 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
 $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
+
+// id validation
+if (intval($id) > 0)
+{
+    $sql = db_query("SELECT faculty_id FROM user_request WHERE id = ". intval($id));
+    if (mysql_num_rows($sql) < 1)
+    	exitWithError("<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>");
+    $req = mysql_fetch_assoc($sql);
+    validateNode($req['faculty_id'], isDepartmentAdmin());
+}
+
+// department admin additional query where clause
+$depqryadd = '';
+if (isDepartmentAdmin())
+{
+	$deps = $user->getDepartmentIds($uid);
+	$depqryadd = ' AND faculty_id IN (' . implode(', ', $deps) . ')';
+}
 
 // Deal with navigation
 switch ($show) {
@@ -92,7 +116,7 @@ if (!empty($show) and $show == 'closed') {
  		$sql = db_query("SELECT id, name, surname, uname, email, faculty_id,
                                         phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut) ORDER BY date_open DESC");
+                                        WHERE (status = 2 AND statut = $list_statut $depqryadd) ORDER BY date_open DESC");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
@@ -131,7 +155,7 @@ if (!empty($show) and $show == 'closed') {
  		$sql = db_query("SELECT id, name, surname, uname, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 3 AND statut = $list_statut) ORDER BY date_open DESC");
+                                        WHERE (status = 3 AND statut = $list_statut $depqryadd) ORDER BY date_open DESC");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2==0) {
@@ -241,7 +265,7 @@ else
 
 	// show username as well (useful)
  	$sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
-                                WHERE (status = 1 AND statut = $list_statut)");
+                                WHERE (status = 1 AND statut = $list_statut $depqryadd)");
         if (mysql_num_rows($sql) > 0) {
                 $tool_content .= "<table class='tbl_alt' width='100%'>";
                 $tool_content .= table_header();

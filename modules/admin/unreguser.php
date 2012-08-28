@@ -37,6 +37,12 @@
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$user = new user();
 
 $nameTools = $langUnregUser;
 $navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
@@ -45,6 +51,9 @@ $navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
 $u = isset($_GET['u'])? intval($_GET['u']): false;
 $c = isset($_GET['c'])? intval($_GET['c']): false;
 $doit = isset($_GET['doit']);
+
+if (isDepartmentAdmin())
+	validateUserNodes(intval($u), true);
 
 $u_account = $u? q(uid_to_username($u)): '';
 $u_realname = $u? q(uid_to_name($u)): '';
@@ -112,11 +121,11 @@ if (!$doit) {
                                                                                 break;
                                                                         case '0':
                                                                                 $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['id']) ."'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                         default:
                                                                                 $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
+                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['id']) ."'>$langDelete</a></td></tr>\n";
                                                                                 break;
                                                                 }
                                                         }
@@ -173,11 +182,11 @@ if (!$doit) {
                                                                         break;
                                                                 case 5:
                                                                         $tool_content .= $langStudent;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['id']) ."'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                                 default:
                                                                         $tool_content .= $langVisitor;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['course_id']) ."'>$langDelete</a></td></tr>\n";
+                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['id']) ."'>$langDelete</a></td></tr>\n";
                                                                         break;
                                                         }
                                                 }

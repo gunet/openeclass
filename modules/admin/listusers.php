@@ -168,7 +168,8 @@ if ( (isset($_GET['department']) and count($_GET['department'])) or (isDepartmen
     else if (isDepartmentAdmin())
         $deps = $user->getDepartmentIds($uid);
 
-    $criteria[] = 'user.user_id = user_department.user';
+    $pref = ($c) ? 'a' : 'user';
+    $criteria[] = $pref . '.user_id = user_department.user';
     $criteria[] = 'department IN (' . implode(', ', $deps) . ')';
 
     foreach ($deps as $dep_id) {
@@ -352,13 +353,15 @@ if($countUser > 0) {
                                 $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $changetip = q("$langChangeUserAs $logs[username]");
-                                $tool_content .= "<td width='100'>
+                                $width = (!isDepartmentAdmin()) ? 100 : 80;
+                                $tool_content .= "<td width='". $width ."'>
                                         <a href='edituser.php?u=$logs[user_id]'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
                                         <a href='unreguser.php?u=$logs[user_id]'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
                                         <a href='userstats.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langStat' alt='$langStat'></a>
-                                        <a href='userlogs.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langActions' alt='$langActions'></a>
-                                        <a href='change_user.php?username=".urlencode($logs['username'])."'><img src='$themeimg/log_as.png' title='$changetip' alt='$changetip'></a>
-                                </td>\n";
+                                        <a href='userlogs.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langActions' alt='$langActions'></a>";
+                                if (!isDepartmentAdmin())
+                                        $tool_content .= "<a href='change_user.php?username=".urlencode($logs['username'])."'><img src='$themeimg/log_as.png' title='$changetip' alt='$changetip'></a>";
+                                $tool_content .= "</td>\n";
                         }
                         $tool_content .= "</tr>";
                         $k++;

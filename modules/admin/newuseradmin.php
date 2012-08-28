@@ -142,13 +142,7 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         $ps = $pn = $pu = $pe = $pt = $pam = $pphone = $pcom = $language = '';
         if (isset($_GET['id'])) { // if we come from prof request
                 $id = intval($_GET['id']);
-                // display actions toolbar
-                $tool_content .= "<div id='operations_container'>
-                    <ul id='opslist'>
-                        <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-                        <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
-                        <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
-                    </ul></div>";
+                
                 $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
                         comment, lang, date_open, statut, verified_mail FROM user_request WHERE id = $id"));
                 $ps = $res['surname'];
@@ -163,6 +157,17 @@ $langEmail : ".get_config('email_helpdesk')."\n";
                 $language = $res['lang'];
                 $pstatut = intval($res['statut']);
                 $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
+
+                // faculty id validation
+                validateNode($pt, isDepartmentAdmin());
+                
+                // display actions toolbar
+                $tool_content .= "<div id='operations_container'>
+                <ul id='opslist'>
+                <li><a href='listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
+                <li><a href='listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>
+                <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
+                </ul></div>";
         } elseif (@$_GET['type'] == 'user') {
                 $pstatut = 5;
         } else {
@@ -206,7 +211,7 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         <tr><th class='left'><b>$langFaculty:</b></th>
             <td>";
         $depid = (isset($pt)) ? $pt : null;
-        if ($is_departmentmanage_user)
+        if (isDepartmentAdmin())
             list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid) ));
         else
             list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
