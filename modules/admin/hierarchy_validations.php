@@ -26,6 +26,14 @@
 ==============================================================================*/
  
 
+/**
+ * Validate a tree node's existence (and proper integer) based on its id value.
+ * Optionally, validate that the current user has proper access for this node
+ * (the node must be within the nodes subtree that this user belongs to).
+ *
+ * @param int     $id       - The node's id value
+ * @param boolean $checkOwn - Optional validation (if true) of current user's node access
+ */
 function validateNode($id, $checkOwn)
 {
 	global $tool_content, $head_content, $tree, $user, $uid,
@@ -52,7 +60,14 @@ function validateNode($id, $checkOwn)
 }
 
 
-
+/**
+ * Validate a tree node's existence (and proper integer) based on its lft value.
+ * Optionally, validate that the current user has proper access for this node 
+ * (the node must be within the nodes subtree that this user belongs to).
+ * 
+ * @param int     $nodelft  - The node's lft value
+ * @param boolean $checkOwn - Optional validation (if true) of current user's node access
+ */
 function validateParentLft($nodelft, $checkOwn)
 {
 	global $tool_content, $head_content, $tree, $user, $uid,
@@ -80,7 +95,14 @@ function validateParentLft($nodelft, $checkOwn)
 }
 
 
-
+/**
+ * Validate a user's existence (and proper integer) based on its userId value.
+ * Optionally, validate that the current user has proper access for this given user
+ * (the given user must be within the nodes subtree that the current user belongs to).
+ *
+ * @param int     $nodelft  - The node's lft value
+ * @param boolean $checkOwn - Optional validation (if true) of current user's node access
+ */
 function validateUserNodes($userId, $checkOwn)
 {
     global $tool_content, $head_content, $tree, $user, $uid,
@@ -113,7 +135,11 @@ function validateUserNodes($userId, $checkOwn)
 }
 
 
-
+/**
+ * Terminate execution and display an (optional) error message.
+ * 
+ * @param string $message - The optional error message to display 
+ */
 function exitWithError($message)
 {
 	global $tool_content, $head_content;
@@ -124,7 +150,13 @@ function exitWithError($message)
 }
 
 
-
+/**
+ * Checks if the current user's role is Department Admin.
+ * The role is defined by having specific permissions (dep/user manage)
+ * and lacking specific permissions (power and admin).
+ * 
+ * @return boolean $checkOwn
+ */
 function isDepartmentAdmin()
 {
     global $is_departmentmanage_user, $is_usermanage_user, $is_power_user, $is_admin;
