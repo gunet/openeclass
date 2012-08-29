@@ -41,7 +41,8 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
+
 require_once '../../include/baseTheme.php';
 
 if(isset($_GET['c'])) {
@@ -49,6 +50,18 @@ if(isset($_GET['c'])) {
 } else {
 	$course_id = 0;
 }
+
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$course = new course();
+$user = new user();
+
+// validate course Id
+validateCourseNodes($course_id, isDepartmentAdmin());
 
 $nameTools = $langCourseDel;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

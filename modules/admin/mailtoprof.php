@@ -45,6 +45,10 @@ $require_usermanage_user = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$user = new user();
 
 $nameTools = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -54,17 +58,36 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 ******************************************************************************/
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
-	// Where to send the email
-	if ($_POST['sendTo'] == '0') {
-		// All users
-		$sql = db_query("SELECT email, user_id FROM user");
-	} elseif ($_POST['sendTo'] == "1") {
-		// Only professors
-		$sql = db_query("SELECT email, user_id FROM user where statut='1'");
-	}  elseif ($_POST['sendTo'] == "2") {
-		// Only students
-		$sql = db_query("SELECT email, user_id FROM user where statut='5'");
-	} else { die(); } // invalid sendTo var
+    
+    if (isDepartmentAdmin())
+        $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid) ) . ') ';
+        
+    // Where to send the email
+    if ($_POST['sendTo'] == '0') // All users
+    {
+        if (isDepartmentAdmin())
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND ". $depwh);
+        else
+            $sql = db_query("SELECT email, user_id FROM user");
+    }
+    elseif ($_POST['sendTo'] == "1") // Only professors
+    {
+        if (isDepartmentAdmin())
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='1' AND ". $depwh);
+        else
+            $sql = db_query("SELECT email, user_id FROM user where statut='1'");
+    }
+    elseif ($_POST['sendTo'] == "2") // Only students
+    {
+        if (isDepartmentAdmin())
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='5' AND ". $depwh);
+        else
+            $sql = db_query("SELECT email, user_id FROM user where statut='5'");
+    }
+    else // invalid sendTo var
+    {
+        die();
+    }
 
         $recipients = array();
         $emailsubject = $langInfoAboutEclass;

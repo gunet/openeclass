@@ -42,12 +42,15 @@
 
 ==============================================================================*/
 
-$require_admin = TRUE;
+$require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
+$user = new user();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -121,7 +124,12 @@ $tool_content .= "
       </tr>";
 
 $tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th><td>";
-list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false));
+
+if (isDepartmentAdmin())
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+else
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false));
+
 $head_content .= $js;
 $tool_content .= $html;
 $tool_content .= "</td></tr>";

@@ -28,9 +28,10 @@ require_once 'include/phpass/PasswordHash.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
-$userObj = new user();
+$user = new user();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -53,9 +54,10 @@ if (isset($_POST['submit'])) {
         $unparsed_lines = '';
         $new_users_info = array();
         $newstatut = ($_POST['type'] == 'prof')? 1: 5;
-        $departments = isset($_POST['facid']) ? $_POST['facid'] : array();;
+        $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
         $am = $_POST['am'];
         $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+        
         foreach ($fields as $field) {
                 if (!in_array($field, $acceptable_fields)) {
                         $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
@@ -63,16 +65,23 @@ if (isset($_POST['submit'])) {
                         exit;
                 }
         }
+        
+        // validation for departments
+        foreach ($departments as $dep)
+        {
+            validateNode($dep, isDepartmentAdmin());
+        }
+        
         $numfields = count($fields);
         $line = strtok($_POST['user_info'], "\n");
         while ($line !== false) {
                 $line = preg_replace('/#.*/', '', trim($line));
                 if (!empty($line)) {
-                        $user = preg_split('/[ \t]+/', $line);
-                        if (count($user) >= $numfields) {
+                        $userl = preg_split('/[ \t]+/', $line);
+                        if (count($userl) >= $numfields) {
                                 $info = array();
                                 foreach ($fields as $field) {
-                                        $info[$field] = array_shift($user);
+                                        $info[$field] = array_shift($userl);
                                 }
 
                                 if (!isset($info['email']) or
@@ -116,8 +125,8 @@ if (isset($_POST['submit'])) {
                                 } else {
                                         $new_users_info[] = $new;
 
-                                        // Now, the $user array should contain only course codes
-                                        foreach ($user as $ccode) {
+                                        // Now, the $userl array should contain only course codes
+                                        foreach ($userl as $ccode) {
                                                 if (!register($new[0], $ccode)) {
                                                         $unparsed_lines .=
                                                                 sprintf($langMultiRegCourseInvalid . "\n",
@@ -170,7 +179,10 @@ if (isset($_POST['submit'])) {
         </tr>
         <tr><th>$langFaculty:</th>
         <td>";
-                list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
+                if (isDepartmentAdmin())
+                    list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"', 'allowables' => $user->getDepartmentIds($uid)));
+                else
+                  list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
                 $head_content .= $js;
                 $tool_content .= $html;
                 $tool_content .= "</td>
@@ -213,7 +225,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
                $langProblem, $administratorName, $administratorSurname,
                $langManager, $langTel, $langEmail,
                $emailhelpdesk, $profsuccess, $usersuccess,
-               $userObj;
+               $user;
 
         if ($statut == 1) {
                 $message = $profsuccess;
@@ -248,7 +260,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
                                 quote($am) . ', ' .
                                 quote($phone) . ", $email_public, $phone_public, $am_public, '$perso')");
         $id = mysql_insert_id();
-        $userObj->refresh($id, $departments);
+        $user->refresh($id, $departments);
         $telephone = get_config('phone');
 
         $emailsubject = "$langYourReg $siteName $type_message";

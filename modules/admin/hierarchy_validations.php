@@ -100,7 +100,7 @@ function validateParentLft($nodelft, $checkOwn)
  * Optionally, validate that the current user has proper access for this given user
  * (the given user must be within the nodes subtree that the current user belongs to).
  *
- * @param int     $nodelft  - The node's lft value
+ * @param int     $userId   - The user's id
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateUserNodes($userId, $checkOwn)
@@ -114,6 +114,45 @@ function validateUserNodes($userId, $checkOwn)
         exitWithError($notallowed);
     
     $deps = $user->getDepartmentIds(intval($userId));
+    
+    if (empty($deps))
+        exitWithError($notallowed);
+    
+    if ($checkOwn)
+    {
+        $atleastone = false;
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        
+        foreach ($deps as $depId)
+        {
+            if (in_array($depId, $subtrees))
+                $atleastone = true;
+        }
+        
+        if (!$atleastone)
+            exitWithError($notallowed);
+    }
+}
+
+
+/**
+ * Validate a course's existence (and proper integer) based on its courseId value.
+ * Optionally, validate that the current user has proper access for this given course
+ * (the given course must be within the nodes subtree that the current user belongs to).
+ *
+ * @param int     $courseId - The course's id
+ * @param boolean $checkOwn - Optional validation (if true) of current user's node access
+ */
+function validateCourseNodes($courseId, $checkOwn)
+{
+    global $tool_content, $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
+    
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    
+    if ($courseId <= 0)
+        exitWithError($notallowed);
+    
+    $deps = $course->getDepartmentIds(intval($courseId));
     
     if (empty($deps))
         exitWithError($notallowed);

@@ -41,10 +41,24 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
+
 require_once '../../include/baseTheme.php';
 
 if(!isset($_GET['c'])) { die(); }
+
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
+
+$tree = new hierarchy();
+$course = new course();
+$user = new user();
+
+// validate course Id
+$cId = course_code_to_id($_GET['c']);
+validateCourseNodes($cId, isDepartmentAdmin());
 
 $nameTools = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

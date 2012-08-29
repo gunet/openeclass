@@ -403,6 +403,24 @@ $tool_content .= "
 		        $verified_mail=2;
 		    }
 		    
+		    // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
+		    if (isDepartmentAdmin())
+		    {
+		    	$olddeps = $user->getDepartmentIds(intval($u));
+		    	 
+		    	foreach ($departments as $depId)
+		    	{
+		    		if (!in_array($depId, $olddeps))
+		    			validateNode(intval($depId), true);
+		    	}
+		    	
+		    	foreach ($olddeps as $depId)
+		    	{
+		    	    if (!in_array($depId, $departments))
+		    	        validateNode($depId, true);
+		    	}
+		    }
+		    
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
                                        username = $username, email = ".autoquote($email).",
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
@@ -411,19 +429,6 @@ $tool_content .= "
                                        WHERE user_id = ".intval($u);
 			
 			$qry = db_query($sql);
-			
-			// if depadmin then diff new/old deps and if new deps are out of juristinction, then error
-			if (isDepartmentAdmin())
-			{
-			    $olddeps = $user->getDepartmentIds(intval($u));
-			    
-			    foreach ($departments as $depId)
-			    {
-			        if (!in_array($depId, $olddeps))
-			            validateNode(intval($depId), true);
-			    }
-			}
-			
 			$user->refresh(intval($u), $departments);
 			
 			if (!$qry) {

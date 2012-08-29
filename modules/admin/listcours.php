@@ -46,13 +46,17 @@
 ==============================================================================*/
 
 $require_departmentmanage_user = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'admin.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
 $course = new course();
+$user = new user();
 
 $nameTools = $langListCours;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -60,8 +64,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $caption = '';
 $searchurl = '';
 
+$depwh = (isDepartmentAdmin()) ? ' course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid) ) . ') ' : '';
+$depq  = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course AND ". $depwh : '';
+
 // Manage list limits
-$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course"));
+$countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course". $depq));
 $fulllistsize = $countcourses['cnt'];
 
 define('COURSES_PER_PAGE', 15);
@@ -112,7 +119,8 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
                 $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
-                                    AND hierarchy.id = course_department.department AND $query
+                                    AND hierarchy.id = course_department.department AND $query 
+                                    AND ". $depwh ." 
                                ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
@@ -120,17 +128,20 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department
+                                    AND ". $depwh ." 
                                ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}
 }
 // Normal list, no search, select all courses
 else {
-	$a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM course"));
-	$caption .= $langManyExist.": <b>".$a[0]." $langCourses</b>";
-        $sql = db_query("SELECT code, title, prof_names, visible, id
-                           FROM course
-                       ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
+    
+    $a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM course". $depq));
+    $caption .= $langManyExist.": <b>".$a[0]." $langCourses</b>";
+    
+    $sql = db_query("SELECT course.code, course.title, course.prof_names, course.visible, course.id
+                       FROM course". $depq ." 
+                   ORDER BY code LIMIT $limit, " . COURSES_PER_PAGE);
 
 	if ($fulllistsize > COURSES_PER_PAGE ) {
 		// Display navigation in pages
@@ -142,6 +153,7 @@ $key = mysql_num_rows($sql);
 if ($key == 0) {
         $tool_content .= "<p class='alert1'>$langNoCourses</p>";
 } else {
+        $width = (!isDepartmentAdmin()) ? 100 : 80;
         // Construct course list table
         $tool_content .= "<table class='tbl_alt' width='100%'>
         <tr>
@@ -154,7 +166,7 @@ if ($key == 0) {
         <th scope='col' class='odd'><div align='left'>".$langCourseCode."</div></th>
         <th scope='col' width='1' class='odd'>".$langGroupAccess."</th>
         <th scope='col' width='260' class='odd'><div align='left'>".$langFaculty."</div></th>
-        <th scope='col' width='100' class='odd'>".$langActions."</th>
+        <th scope='col' width='".$width."' class='odd'>".$langActions."</th>
         </tr>";
         $k = 0;
         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -196,10 +208,13 @@ if ($key == 0) {
                 $tool_content .= "</td>";
                 // Add links to course users, delete course and course edit
                 $tool_content .= "
-                <td align='center' width='40'>
-                        <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
-                        <a href='../usage/displaylog.php?c=".$logs['code']."'><img src='$themeimg/user_list.png' title='$langUsersLog' /></a>&nbsp;
-                        <a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
+                <td align='center'>
+                        <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;";
+                
+                if (!isDepartmentAdmin())
+                    $tool_content .= "<a href='../usage/displaylog.php?c=".$logs['code']."'><img src='$themeimg/user_list.png' title='$langUsersLog' /></a>&nbsp;";
+                
+                $tool_content .= "<a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
                         <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>
                 </td>";
                 $k++;

@@ -42,17 +42,24 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 
 if(!isset($_GET['c'])) { die(); }
 
-require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
-$course = new course();
 $tree = new hierarchy();
+$course = new course();
+$user = new user();
+
+// validate course Id
+$cId = course_code_to_id($_GET['c']);
+validateCourseNodes($cId, isDepartmentAdmin());
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -65,13 +72,34 @@ $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 $navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
 
 // Update cours basic information
-if (isset($_POST['submit']))  {
-        $departments = isset($_POST['department']) ? $_POST['department'] : array();
-	// Update query
-	db_query("UPDATE course SET title = ". quote($_POST['title']) .",
-                                   prof_names = ". quote($_POST['prof_names']) ."
-                               WHERE code = ". quote($_GET['c']));
-        $course->refresh(course_code_to_id($_GET['c']), null, $departments);
+if (isset($_POST['submit']))
+{
+    $departments = isset($_POST['department']) ? $_POST['department'] : array();
+    
+    // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
+    if (isDepartmentAdmin())
+    {
+    	$olddeps = $course->getDepartmentIds($cId);
+    	 
+    	foreach ($departments as $depId)
+    	{
+    		if (!in_array($depId, $olddeps))
+    			validateNode(intval($depId), true);
+    	}
+    	
+    	foreach ($olddeps as $depId)
+    	{
+    	    if (!in_array($depId, $departments))
+    	        validateNode($depId, true);
+    	}
+    }
+    
+    // Update query
+    db_query("UPDATE course SET title = ". quote($_POST['title']) .",
+                    prof_names = ". quote($_POST['prof_names']) ."
+                    WHERE code = ". quote($_GET['c']));
+    
+    $course->refresh($cId, $departments);
 
 	$tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
@@ -87,7 +115,12 @@ else {
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['course_id'])));
+        
+	    if (isDepartmentAdmin())
+	        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id']), 'allowables' => $user->getDepartmentIds($uid) ));
+	    else
+	        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id'])));
+	    
         $head_content .= $js;
         $tool_content .= $html;
 	$tool_content .= "</td></tr>

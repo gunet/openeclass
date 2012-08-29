@@ -44,15 +44,18 @@
 
 ==============================================================================*/
 
-$require_power_user = true;
+$require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'hierarchy_validations.php';
 
 $tree = new hierarchy();
 $course = new course();
+$user = new user();
 
 if (isset($_GET['c'])) {
 	$c = q($_GET['c']);
@@ -62,6 +65,10 @@ if (isset($_GET['c'])) {
 if(!isset($c)) {
 	$c = $_SESSION['c_temp'];
 }
+
+// validate course Id
+$cId = course_code_to_id($c);
+validateCourseNodes($cId, isDepartmentAdmin());
 
 // Define $nameTools
 $nameTools = $langCourseEdit;
@@ -99,7 +106,7 @@ if (isset($c)) {
                 <img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
 	<table class='tbl' width='100%'>";
 
-        $departments = $course->getDepartmentIds(course_code_to_id($_GET['c']));
+        $departments = $course->getDepartmentIds($cId);
         $i = 1;
         foreach ($departments as $dep) {
             $thtitle = ($i == 1) ? $langFaculty .':' : '';
@@ -193,7 +200,7 @@ if (isset($c)) {
 	// Users list
 	$tool_content .= "
 	<tr>
-	  <td><a href=\"listusers.php?c=".course_code_to_id($c)."\">".$langListUsersActions."</a></td>
+	  <td><a href=\"listusers.php?c=".$cId."\">".$langListUsersActions."</a></td>
 	</tr>";
   // Register unregister users
 	$tool_content .= "
@@ -207,7 +214,7 @@ if (isset($c)) {
   // Delete course
 	$tool_content .= "
 	<tr>
-	  <td><a href=\"delcours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langCourseDel."</a></td>
+	  <td><a href=\"delcours.php?c=".$cId."".$searchurl."\">".$langCourseDel."</a></td>
 	</tr>";
 	$tool_content .= "</table></fieldset>";
 
