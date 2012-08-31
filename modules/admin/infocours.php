@@ -111,7 +111,7 @@ else {
 		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
         $row = mysql_fetch_array(db_query($sql));
 	$tool_content .= "
-	<form action=".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])." method='post' onsubmit='return validateNodePickerForm();'>
+	<form action='".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])."' method='post' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>".$langCourseInfoEdit."</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
@@ -129,7 +129,7 @@ else {
 	  <td><i>".$row['code']."</i></td>
 	</tr>
 	<tr>
-	  <th>".$langTitle.":</b></th>
+	  <th>".$langTitle.":</th>
 	  <td><input type='text' name='title' value='". q($row['title']) ."' size='60'></td>
 	</tr>
 	<tr>

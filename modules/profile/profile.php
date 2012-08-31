@@ -253,11 +253,11 @@ $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
 
 if ($myrow['perso'] == 'yes')  {
-	$checkedClassic = " checked='yes'";
+	$checkedClassic = " checked='checked'";
 	$checkedPerso = '';
 } else {
 	$checkedClassic = '';
-	$checkedPerso = " checked='yes'";
+	$checkedPerso = " checked='checked'";
 }
 
 $sec = $urlSecure . 'modules/profile/profile.php';

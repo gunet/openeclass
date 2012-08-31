@@ -33,15 +33,21 @@ $nameTools = $langSelectFac;
 
 $tool_content .= "<table class='tbl_border' width=\"100%\">";
 
+$xmldata = $tree->buildTreeDataSource(array('where' => 'AND node.allow_course = true', 'codesuffix' => true));
 $initopen = $tree->buildJSTreeInitOpen();
 
                 $head_content .= <<<hContent
 <script type="text/javascript">
+/* <![CDATA[ */
 
 $(function() {
 
     $( "#js-tree" ).jstree({
-        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
+        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort"],
+        "xml_data" : {
+            "data" : "$xmldata",
+            "xsl" : "nest"
+        },
         "core" : {
             "animation": 300,
             "initially_open" : [$initopen]
@@ -79,10 +85,11 @@ $(function() {
 
 });
 
+/* ]]> */
 </script>
 hContent;
 
-$tool_content .= "<tr><td><div id='js-tree'>". $tree->buildHtmlUl(array('where' => 'AND node.allow_course = true', 'codesuffix' => true)) ."</div></td></tr>";
+$tool_content .= "<tr><td><div id='js-tree'></div></td></tr>";
 
 $tool_content .= "</table>";
 

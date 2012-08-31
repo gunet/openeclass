@@ -111,7 +111,7 @@ switch (@$searchcode) {
 
 $tool_content .= "
       <tr>
-        <th class='left'><b>$langCourseVis:</b></td>
+        <th class='left'><b>$langCourseVis:</b></th>
         <td>
           <select name=\"formsearchtype\">
            <option value='-1' ".$typeSel[-1].">$langAllTypes</option>

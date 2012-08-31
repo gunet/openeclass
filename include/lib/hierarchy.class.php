@@ -579,9 +579,9 @@ class hierarchy {
     }*/
 
     /**
-     * Represent the tree using HTML unordered list tags (<ul> and <li>). Extremely useful for JSTree representation (GUI).
+     * Represent the tree using XML or HTML unordered list tags (<ul> and <li>) data source. Used for JSTree representation (GUI).
      *
-     * @param  array $options           - Options array for construction of the HTML unordered tree representation. Possible key value pairs are:
+     * @param array $options           - Options array for construction of the HTML unordered tree representation. Possible key value pairs are:
      * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
@@ -593,11 +593,12 @@ class hierarchy {
      * 'dashprefix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
      * 'codesuffix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You can omit all of the above since this method uses default values.
      *
-     * @return string  $html - HTML output
+     * @return string $out - XML or HTML output
      */
-    public function buildHtmlUl($options = array())
+    public function buildTreeDataSource($options = array())
     {
         $tree_array          = (array_key_exists('tree'      , $options)) ? $options['tree']       : array();
         $useKey              = (array_key_exists('useKey'    , $options)) ? $options['useKey']     : 'id';
@@ -610,26 +611,28 @@ class hierarchy {
         $allow_only_defaults = (array_key_exists('allow_only_defaults', $options)) ? $options['allow_only_defaults'] : false;
         $mark_allow_user     = (strstr($where, 'allow_user')   !== false) ? true : false;
         $mark_allow_course   = (strstr($where, 'allow_course') !== false) ? true : false;
+        $xmlout              = (array_key_exists('xmlout'    , $options)) ? $options['xmlout']     : true;
 
         $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
         $subdefs   = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
         $suballowed = ($allowables != null) ? $this->buildSubtrees($allowables) : null;
-        $html = '<ul>' . "\n";
+        $out = ($xmlout) ? '<root>' : '<ul>' . "\n";
 
         list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
         $i = 0;
         $current_depth = null;
+        $start_depth = null;
 
         foreach($tree_array as $key => $value)
         {
             if ($i == 0)
-                $current_depth = ($key != 0) ? $depthmap[$key] : 0;
+                $start_depth = $current_depth = ($key != 0) ? $depthmap[$key] : 0;
             else
             {
                 if ($depthmap[$key] > $current_depth)
                 {
-                    $html = substr($html,0,-6);
-                    $html .= '<ul>' . "\n";
+                    $out = ($xmlout) ? substr($out,0,-8) : substr($out,0,-6);
+                    $out .= ($xmlout) ? '' : '<ul>' . "\n";
 
                     $current_depth = $depthmap[$key];
                 }
@@ -638,7 +641,7 @@ class hierarchy {
                 {
                     for($i = $current_depth; $i > $depthmap[$key]; $i--)
                     {
-                        $html .= '</ul></li>' . "\n";
+                        $out .= ($xmlout) ? '<\/item>' : '</ul></li>' . "\n";
                     }
 
                     $current_depth = $depthmap[$key];
@@ -654,8 +657,8 @@ class hierarchy {
                )
                 $rel = 'nosel';
             if (!empty($rel)) {
-                $rel = 'rel="'. $rel .'"';
-                $class = 'class="nosel"';
+                $rel = "rel='". $rel ."'";
+                $class = "class='nosel'";
             }
 
             $valcode = '';
@@ -664,14 +667,27 @@ class hierarchy {
 
             // valid HTML requires ids starting with letters.
             // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
-            $html .= '<li id="nd'. $key .'" '. $rel .' tabindex="'. $orderingmap[$key] .'"><a href="#" '. $class .'>'. $value . $valcode .'</a></li>' . "\n";
+            if ($xmlout)
+                $out .= "<item id='nd". $key ."' ". $rel ." tabindex='". $orderingmap[$key] ."'><content><name ". $class .">". $value . $valcode .'<\/name><\/content><\/item>';
+            else
+                $out .= "<li id='nd". $key ."' ". $rel ." tabindex='". $orderingmap[$key] ."'><a href='#' ". $class .">". $value . $valcode ."</a></li>" . "\n";
 
             $i++;
         }
+        
+        if (!$xmlout)
+            $out .= '</ul>';
+        
+        // close remaining open tags
+        $remain_depth = $current_depth - $start_depth;
+        if ($remain_depth > 0)
+        	for ($j = 0; $j < $remain_depth; $j++)
+        		$out .= ($xmlout) ? '<\/item>' : '</li></ul>';
+        
+        if ($xmlout)
+            $out .= '<\/root>';
 
-        $html .= '</ul>';
-
-        return $html;
+        return $out;
     }
 
     /**
@@ -696,14 +712,31 @@ class hierarchy {
      * Build the necessary Javascript code for the Node Picker UI element. This is a private method
      * utilized by the entry-point buildNodePicker(), buildCourseNodePicker() and buildUserNodePicker() methods.
      *
-     * @param  string $params - Extra html tag parameters for the form's input elements (such as name)
-     * @param  int    $offset - The number of the parent's that the editing child already belongs to (mainly for edit forms)
-     * @return string $js     - The returned JS code
+     * @param array $options           - Options array for construction of the HTML code for the Node picker. Possible key value pairs are:
+     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
+     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
+     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
+     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
+     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
+     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
+     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
+     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
+     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
+     *
+     * @return string $js              - The returned JS code
      */
-    private function buildJSNodePicker($params, $offset = 0)
+    private function buildJSNodePicker($options)
     {
-        global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode;
+        global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        
+        $params = $options['params'];
+        $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
+        $xmlout = (isset($options['xmlout']) && is_bool($options['xmlout'])) ? $options['xmlout'] : true;
 
+        $xmldata = '';
+        if ($xmlout)
+            $xmldata = $this->buildTreeDataSource($options);
         $initopen = $this->buildJSTreeInitOpen();
 
         if ($offset > 0)
@@ -711,6 +744,7 @@ class hierarchy {
 
         $js = <<<jContent
 <script type="text/javascript">
+/* <![CDATA[ */
 
 var countnd = $offset;
 
@@ -738,7 +772,7 @@ $(function() {
                     $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                          + '<input type="hidden" $params value="' + newnode.attr("id").substring(2) + '" />'
                                          + newnode.children("a").text()
-                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png"/><\/a>'
+                                         + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="$themeimg/delete.png" title="$langNodeDel" alt="$langNodeDel"/><\/a>'
                                          + '<\/p>');
 
                     $( "#dialog-set-value" ).val( newnode.children("a").text() );
@@ -755,7 +789,23 @@ $(function() {
     });
 
     $( "#js-tree" ).jstree({
+
+jContent;
+
+        if ($xmlout)
+            $js .= <<<jContent
+        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort"],
+        "xml_data" : {
+            "data" : "$xmldata",
+            "xsl" : "nest"
+        },
+jContent;
+        else 
+            $js .= <<<jContent
         "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
+jContent;
+        
+        $js .= <<<jContent
         "core" : {
             "animation": 300,
             "initially_open" : [$initopen]
@@ -802,6 +852,8 @@ function validateNodePickerForm() {
         return false;
     }
 }
+
+/* ]]> */
 </script>
 jContent;
 
@@ -822,13 +874,14 @@ jContent;
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * This method uses default values, but you should at least provide 'params'.
      *
      * @return string  $html - The returned HTML code
      */
     private function buildHtmlNodePicker($options)
     {
-        global $themeimg, $langNodeAdd;
+        global $themeimg, $langNodeAdd, $langNodeDel;
 
         $params     = (array_key_exists('params',   $options)) ? $options['params']   : '';
         $defaults   = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
@@ -837,6 +890,7 @@ jContent;
         $useKey     = (array_key_exists('useKey',   $options)) ? $options['useKey']   : 'lft';
         $where      = (array_key_exists('where',    $options)) ? $options['where']    : '';
         $multiple   = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
+        $xmlout     = (array_key_exists('xmlout',   $options)) ? $options['xmlout']   : true;
 
 
         $html = '';
@@ -854,7 +908,7 @@ jContent;
                     $html .= '<p id="nd_'. $i .'">';
                     $html .= '<input type="hidden" '. $params .' value="'. $def .'" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_'. $i .'\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="'.$themeimg.'/delete.png"/></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_'. $i .'\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><img src="'.$themeimg.'/delete.png" title="'.$langNodeDel.'" alt="'.$langNodeDel.'"/></a></p>';
                     $html .= '</p>';
                     $i++;
                 }
@@ -892,7 +946,8 @@ jContent;
         }
 
         $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
-        $html .= $this->buildHtmlUl($options);
+        if (!$xmlout)
+            $html .= $this->buildTreeDataSource($options);
         $html .= '</div></fieldset></div>';
 
         return $html;
@@ -916,14 +971,14 @@ jContent;
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You must provide at least 'params' because this method does not use any default values.
      *
      * @return array - Return array containing (<js, html>) all necessary JS and HTML code
      */
     public function buildNodePicker($options)
     {
-        $c = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0;
-        $js = $this->buildJSNodePicker($options['params'], $c);
+        $js = $this->buildJSNodePicker($options);
         $html = $this->buildHtmlNodePicker($options);
 
         return array($js, $html);
@@ -947,6 +1002,7 @@ jContent;
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You can omit all of the above since this method uses default values.
      *
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code
@@ -981,6 +1037,7 @@ jContent;
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
+     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You can omit all of the above since this method uses default values.
      *
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code

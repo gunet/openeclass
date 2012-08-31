@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
 	$c = mysql_fetch_array($result);
 	$title = q($c['title']);
 	$visible = $c['visible'];
-	$visibleChecked[$visible] = " checked='1'";
+	$visibleChecked[$visible] = " checked='checked'";
 	$public_code = q($c['public_code']);
 	$titulary = q($c['prof_names']);
 	$languageCourse	= $c['lang'];

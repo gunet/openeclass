@@ -98,15 +98,21 @@ if (!isset($_GET['action'])) {
     </td>
     </tr>";
 
+    $xmldata = $tree->buildTreeDataSource(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin) ));
     $initopen = $tree->buildJSTreeInitOpen();
 
     $head_content .= <<<hContent
 <script type="text/javascript">
+/* <![CDATA[ */
 
 $(function() {
 
     $( "#js-tree" ).jstree({
-        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
+        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
+        "xml_data" : {
+            "data" : "$xmldata",
+            "xsl" : "nest"
+        },
         "core" : {
             "animation": 300,
             "initially_open" : [$initopen]
@@ -170,11 +176,11 @@ function customMenu(node) {
     return items;
 }
 
-
+/* ]]> */
 </script>
 hContent;
 
-    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'>". $tree->buildHtmlUl(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin) )) ."</div></td></tr>";
+    $tool_content .= "<tr><td colspan='". ($maxdepth[0] + 4) ."'><div id='js-tree'></div></td></tr>";
 
     // Close table correctly
     $tool_content .= "</table>\n";
@@ -246,11 +252,11 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add')  {
       </tr>
       <tr>
         <th class='left'>".$langNodeAllowCourse.":</th>
-        <td><input type='checkbox' name='allow_course' value='1' checked=1 /> <i>".$langNodeAllowCourse2."</i></td>
+        <td><input type='checkbox' name='allow_course' value='1' checked='checked' /> <i>".$langNodeAllowCourse2."</i></td>
       </tr>
       <tr>
         <th class='left'>".$langNodeAllowUser.":</th>
-        <td><input type='checkbox' name='allow_user' value='1' checked=1 /> <i>".$langNodeAllowUser2."</i></td>
+        <td><input type='checkbox' name='allow_user' value='1' checked='checked' /> <i>".$langNodeAllowUser2."</i></td>
       </tr>
       <tr>
         <th class='left'>".$langNodeOrderPriority.":</th>
