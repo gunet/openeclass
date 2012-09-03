@@ -36,7 +36,6 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$pid = intval($_GET['pid']);
 	$current_poll = db_query("SELECT * FROM poll WHERE pid='$pid' ORDER BY pid", $currentCourse);
 	$thePoll = mysql_fetch_array($current_poll);
-
 	$tool_content .= "
         <p class='sub_title1'>$langSurvey</p>
 	<table class='tbl_border'>
@@ -63,13 +62,13 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 	$questions = db_query("SELECT * FROM poll_question WHERE pid=$pid");
 	while ($theQuestion = mysql_fetch_array($questions)) {
 		$tool_content .= "
-        <tr>
-	  <td width=\"50\"><b>$langQuestion:</b></td>
-	  <td>$theQuestion[question_text]</td>
-	</tr>
-	<tr>
-	  <td>&nbsp;</td>
-          <td>";
+                <tr>
+                <td width='50'><b>$langQuestion:</b></td>
+                <td>$theQuestion[question_text]</td>
+                </tr>
+                <tr>
+                <td>&nbsp;</td>
+                <td>";
 		if ($theQuestion['qtype'] == 'multiple') {
 			$answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
 				FROM poll_answer_record LEFT JOIN poll_question_answer
@@ -91,7 +90,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                         $chart->setTitle('');
                         foreach ($answer_counts as $i => $count) {
                                 $percentage = 100 * ($count / $answer_total);
-                                $label = sprintf("$answer_text[$i] (%2.1f%%)", $percentage);
+                                $label = $answer_text[$i];                                
                                 $dataSet->addPoint(new Point($label, $percentage));
                         }
                         $chart->setDataSet($dataSet);
@@ -103,15 +102,14 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
 					WHERE qid = $theQuestion[pqid]", $currentCourseID);
 			$tool_content .= '<dl>';
 			$answer_total = mysql_num_rows($answers);
-			while ($theAnswer = mysql_fetch_array($answers)) {
-				$tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
-			}
+                        while ($theAnswer = mysql_fetch_array($answers)) {
+                                $tool_content .= "<dt><u>$langUser</u>: <dd>" . q(uid_to_name($theAnswer['user_id'])) . "</dd></dt> <dt><u>$langAnswer</u>: <dd>$theAnswer[answer_text]</dd></dt>";
+                        }
 			$tool_content .= '</dl> <br />';
-		}
-		$tool_content .= "
-           </td>
-         </tr>";}
-		$tool_content .= "
+                }
+		$tool_content .= "</td></tr>";                
+        }
+        $tool_content .= "
 	<tr>
 	  <th colspan='2'>$langPollTotalAnswers: $answer_total</th>
 	</tr>
