@@ -42,6 +42,24 @@ if ($cours_id === false) {
 	exit;
 }
 
+if (!visible_module(7)) {
+        $toolContent_ErrorExists = caution($langCheckPublicTools);
+	$_SESSION['errMessage'] = $toolContent_ErrorExists;
+	session_write_close();
+        if (!$uid) {
+                $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+                header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        } else {
+                header("Location:" . $urlServer . "index.php");
+        }	        
+        if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
+                $extraMessage = $_SESSION['errMessage'];
+                unset($_SESSION['errMessage']);
+        }        
+        $errorMessagePath = "../../";
+        exit;
+ }
+ 
 list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'"));
 $intitule = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
