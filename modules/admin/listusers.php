@@ -165,7 +165,7 @@ if (!empty($c)) { // users per course
          $qry = $no_login_qry;
 } else {
 	// Count users, with or without criteria/filters
-	$qry = "SELECT user_id, nom, prenom, username, email, statut FROM user";
+	$qry = "SELECT user_id, nom, prenom, username, email, statut, verified_mail FROM user";
 	if (count($criteria)) {
                 $qry .= " WHERE " . implode(' AND ', $criteria);
         }
