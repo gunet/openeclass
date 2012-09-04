@@ -200,7 +200,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	$tool_content .= "
         <fieldset>
         <legend>$langInfoExercise&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyExercise=yes'>
-              <img src='$themeimg/edit.png' align='middle' title='$langModify' /></a></legend>
+              <img src='$themeimg/edit.png' align='middle' title='$langModify' alt='$langModify' /></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>

@@ -175,7 +175,7 @@ $q = db_query("SELECT id, title FROM course_units
                      $visibility_check
                ORDER BY `order`", $mysqlMainDb);
 while ($info = mysql_fetch_array($q)) {
-        $selected = ($info['id'] == $id)? ' selected="1" ': '';
+        $selected = ($info['id'] == $id)? ' selected ': '';
         $tool_content .= "<option value='$info[id]'$selected>" .
                          htmlspecialchars(ellipsize($info['title'], 40)) .
                          '</option>';

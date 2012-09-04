@@ -286,8 +286,7 @@ do {
 	if ($is_editor) { // course admin
 		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
 		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
-		<img src='$themeimg/delete.png' title='$langDelete' /></a>";
+		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a>";
 	}
 	$tool_content .= "</td>\n</tr>";
 	$count++;

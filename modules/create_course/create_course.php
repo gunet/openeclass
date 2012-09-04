@@ -181,7 +181,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       <legend>$langCreateCourseStep2Title</legend>
       <table class='tbl' width='100%'>
       <tr>
-        <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, q($description))."</td>
+        <td>$langDescrInfo&nbsp;:<br /> ".  rich_text_editor('description', 4, 20, $description)."</td>
       </tr>
       <tr>
 	<td>$langCourseKeywords&nbsp;<br />

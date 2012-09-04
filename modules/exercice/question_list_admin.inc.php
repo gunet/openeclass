@@ -90,9 +90,9 @@ if($nbrQuestions) {
 			<td> ".$objQuestionTmp->selectTitle()."<br />
 			".$aType[$objQuestionTmp->selectType()-1]."</td>
 			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;editQuestion=".$id."\">".
-			"<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>".
+			"<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>".
 			" <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-			"<img src='$themeimg/delete.png' align='middle' title='$langDelete' /></a></td>
+			"<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a></td>
 		<td width='20'>";
 		if($i != 1) {
 			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveUp=".$id."\">

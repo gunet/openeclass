@@ -201,8 +201,6 @@ if ($is_editor) {
                                 $html_id = "<input type = 'hidden' name='id' value='$id'>";
                                 $html_term = " value='" . q($data['term']) . "'";
                                 $html_url = " value='" . q($data['url']) . "'";
-                                $definition = q($data['definition']);
-                                $notes = q($data['notes']);
                                 $category_id = is_null($data['category_id'])? 'none': $data['category_id'];
                         }
                         $submit_value = $langModify;
@@ -234,7 +232,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langGlossaryDefinition:</th>
-                   <td valign='top'>" . text_area('definition', 4, 60, $definition) . "
+                   <td valign='top'>" . text_area('definition', 4, 60, $data['definition']) . "
                    </td>
                  </tr>
                  <tr>
@@ -243,7 +241,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langCategoryNotes:</th>
-                   <td valign='top'>" . rich_text_editor('notes', 4, 60, $notes) . "
+                   <td valign='top'>" . rich_text_editor('notes', 4, 60, $data['notes']) . "
                    </td>
                  </tr>
                  $category_selection
@@ -368,10 +366,10 @@ if (mysql_num_rows($sql) > 0) {
 	    if ($is_editor) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
-		    <img src='$themeimg/edit.png' /></a>
+		    <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit'></a>
                     <a href='$base_url&amp;delete=$g[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) . "');\">
-		    <img src='$themeimg/delete.png'></a>
+		    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete'></a>
 		 </td>";
 	    }
 	    $tool_content .= "

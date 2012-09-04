@@ -88,8 +88,8 @@ if (isset($_GET['delete'])) {
         }
 } elseif (isset($_POST['submitAnnouncement'])) {
         // submit announcement command
-        $start_sql = 'begin = ' . (isset($_POST['start_date_active'])? autoquote($_POST['start_date']): 'NULL');
-        $end_sql = 'end = ' . (isset($_POST['end_date_active'])? autoquote($_POST['end_date']): 'NULL');
+        $start_sql = 'begin = ' . ((isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date'])? autoquote($_POST['start_date']): 'NULL');
+        $end_sql = 'end = ' . ((isset($_POST['end_date_active']) and isset($_POST['end_date']) and $_POST['end_date'])? autoquote($_POST['end_date']): 'NULL');
         if (isset($_POST['id'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
@@ -133,10 +133,10 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 	$nameTools = $titleform;
 	
 	if (!isset($contentToModify)) {
-		$contentToModify = "";
+		$contentToModify = '';
 	}
         if (!isset($titleToModify)) {
-		$titleToModify = "";
+		$titleToModify = '';
 	}
 
         $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>";
@@ -148,7 +148,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $tool_content .= "<tr><td><b>$langTitle:</b>
 		<input type='text' name='title' value='$titleToModify' size='50' /></td></tr>
 		<tr><td><b>$langAnnouncement:</b><br />".
-		rich_text_editor('newContent', 5, 40, q($contentToModify))
+		rich_text_editor('newContent', 5, 40, $contentToModify)
 		."</td></tr>";
 	$tool_content .= "<tr><td><b>$langLanguage:</b><br />";
 	if (isset($_GET['modify'])) {

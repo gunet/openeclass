@@ -1670,9 +1670,11 @@ function text_area($name, $rows, $cols, $text, $extra = '')
 	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),
 			                      $text));
-        $extra .= ' class="mceNoEditor"';
+        if (strpos($extra, 'class=') === false) {
+                $extra .= ' class="mceNoEditor"';
+        }
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
-	       str_replace('{','&#123;', $text) .
+               q(str_replace('{','&#123;', $text)) .
 	       "</textarea>\n";
 }
 

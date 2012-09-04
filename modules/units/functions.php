@@ -191,7 +191,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
         }
         return "
         <tr$class_vis>
-          <td width='1'>$link<img src='$image' /></a></td>
+          <td width='1'>$link<img src='$image' alt=''></a></td>
           <td align='left'>$link$title</a>$comment</td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>';
@@ -814,24 +814,24 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 
         if ($status != 'del') {
                 $content = "<td width='3'><a href='$edit_link'>" .
-                           "<img src='$themeimg/edit.png' title='$langEdit' /></a></td>";
+                           "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a></td>";
         } else {
                 $content = "<td width='3'>&nbsp;</td>";
         }
         $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;del=$resource_id'" .
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='$themeimg/delete.png' " .
-                    "title='$langDelete'></a></td>";
+                    "title='$langDelete' alt='$langDelete'></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
                                     "title='$langVisibility'></a></td>";
-		} elseif(in_array($res_type, array('description'))) { 
+		} elseif (in_array($res_type, array('description'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
-                                    "title='$langAddToCourseHome'></a></td>";
+                                    "title='$langAddToCourseHome' alt='$langAddToCourseHome'></a></td>";
 		} else {
 			
 			$content .= "\n          <td width='3'>&nbsp;</td>";
@@ -841,13 +841,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
                 $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;down=$resource_id'>" .
-                            "<img src='$themeimg/down.png' title='$langDown'></a></div></td>";
+                            "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a></div></td>";
 	} else {
 		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;up=$resource_id'>" .
-                            "<img src='$themeimg/up.png' title='$langUp'></a></div></td>";
+                            "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></div></td>";
         } else {
                 $content .= "\n          <td width='12'>&nbsp;</td>";
         }
@@ -885,7 +885,7 @@ function edit_res($resource_id)
 	}
         $tool_content .= "\n    <tr>" .
                          "\n      <th>$message:</th>" .
-                         "\n      <td>" .  rich_text_editor('rescomments', 4, 20, q($rescomments)) . "      </td>" .
+                         "\n      <td>" .  rich_text_editor('rescomments', 4, 20, $rescomments) . "      </td>" .
                          "\n    </tr>" .
                          "\n    <tr>" .
                          "\n      <th>&nbsp;</th>" .

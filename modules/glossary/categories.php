@@ -92,7 +92,7 @@ if ($is_editor) {
                                 $data = mysql_fetch_assoc($q);
                                 $html_name = " value='" . q($data['name']) . "'";
                                 $html_id = "<input type = 'hidden' name='category_id' value='$cat_id'>";
-                                $description = q($data['description']);
+                                $description = $data['description'];
                         }
                         $submit_value = $langModify;
                 }
@@ -153,9 +153,9 @@ if ($q and mysql_num_rows($q)) {
                         $desc = '';
                 }
                 if ($is_editor) {
-                        $actions = "
-                 <td class='center'><a href='$cat_url&amp;edit=$cat[id]' alt='$langCategoryMod'
-                        title='$langCategoryMod'><img src='$themeimg/edit.png'></a>&nbsp;
+                        $actions = "<td class='center'>
+                     <a href='$cat_url&amp;edit=$cat[id]' title='$langCategoryMod'>
+                        <img src='$themeimg/edit.png' alt='$langCategoryMod'></a>&nbsp;
                      <a href='$cat_url&amp;delete=$cat[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) .
                         "');\"><img src='$themeimg/delete.png' alt='$langCategoryDel'

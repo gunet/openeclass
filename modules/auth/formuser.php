@@ -244,7 +244,7 @@ if ($all_set) {
         $deps = db_query("SELECT id, name FROM faculte order by name");
         while ($dep = mysql_fetch_array($deps)) {
                 if ($dep['id'] == $department) {
-                        $selected = ' selected="1"';
+                        $selected = ' selected';
                 } else {
                         $selected = '';
                 }

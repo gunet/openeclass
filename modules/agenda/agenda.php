@@ -258,7 +258,7 @@ if ($is_editor) {
                     <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($contenu)) {
-			$contenu = "";
+			$contenu = '';
 		}
 		$tool_content .= "
                   <tr>

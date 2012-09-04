@@ -213,7 +213,7 @@ if (isset($_POST['submit'])) {
 	  </tr>
 	  <tr>
             <th valign='top'>$langBodyMessage:</th>
-            <td>".  rich_text_editor('message', 14, 50, '', "") ."</td>
+            <td>".  rich_text_editor('message', 14, 50, '', '') ."</td>
           </tr>
 	  <tr>
             <th>&nbsp;</th>
