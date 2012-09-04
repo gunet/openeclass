@@ -2,7 +2,7 @@
 *   Open eClass 2.5
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2011  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -45,6 +45,8 @@ Also Special Credits to:
  Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
  Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
 
+************************************************************************/
+
 Also Credits to:
  Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
  Victoria Daskalou <daskalou@upnet.gr> (University of Patras)
@@ -66,6 +68,7 @@ Also Credits to:
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
  Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
  Apostolos Kechagias <apkech@gmail.com>
+ Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
 
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
@@ -132,6 +135,8 @@ jQuery UI 1.8.1 - Copyright (c) 2010 (http://jqueryui.com/about)
 jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
+
+flowplayer 3.2.7 - Copyright 2009-2011 Flowplayer Oy
 
 HTML Purify: (include/htmlpurifier-4.3.0-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
