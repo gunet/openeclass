@@ -41,6 +41,23 @@ if ($course_id === false) {
 	     '" does not exist.</p></body></html>';
 	exit;
 }
+ if (!visible_module(MODULE_ID_ANNOUNCE)) {
+        $toolContent_ErrorExists = caution($langCheckPublicTools);
+	$_SESSION['errMessage'] = $toolContent_ErrorExists;
+	session_write_close();
+        if (!$uid) {
+                $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+                header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        } else {
+                header("Location:" . $urlServer . "index.php");
+        }	        
+        if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
+                $extraMessage = $_SESSION['errMessage'];
+                unset($_SESSION['errMessage']);
+        }        
+        $errorMessagePath = "../../";
+        exit;
+ }
 
 list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE id = $course_id"));
 $title = htmlspecialchars($title, ENT_NOQUOTES);

@@ -90,7 +90,7 @@ if(!isset($_GET['pid']) || !is_numeric($_GET['pid'])) die();
                         $chart->setTitle('');
                         foreach ($answer_counts as $i => $count) {
                                 $percentage = 100 * ($count / $answer_total);
-                                $label = sprintf("$answer_text[$i] (%2.1f%%)", $percentage);
+                                $label = $answer_text[$i];
                                 $dataSet->addPoint(new Point($label, $percentage));
                         }
                         $chart->setDataSet($dataSet);
