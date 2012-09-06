@@ -1245,7 +1245,6 @@ $langResults="Αποτελέσματα";
 $langResultsFailed="Αποτυχία";
 $langYourTotalScore2="Συνολική βαθμολογία";
 $langExerciseScores1="HTML";
-$langExerciseScores2="Ποσοστιαία";
 $langExerciseScores3="CSV";
 $langNotRecorded = "μη καταγεγραμμένη";
 
@@ -2802,8 +2801,7 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langModule = "Υποσύστημα";
  $langAllModules = "Όλα τα Υποσυστήματα";
  $langValueType = "Είδος Στατιστικών";
- $langQuantity = "Ποσοτικά";
- $langProportion = "Ποσοστιαία";
+ $langQuantity = "Ποσοτικά"; 
  $langStatsType = "Είδος Στατιστικών";
  $langTotalVisits = "Συνολικές Eπισκέψεις";
  $langVisits = "Αριθμός Επισκέψεων";
