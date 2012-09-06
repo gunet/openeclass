@@ -19,13 +19,12 @@
  * ======================================================================== */
 
 $require_current_course = TRUE;
+$require_editor = TRUE;
 
 include '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/group/group_functions.php';
 
-// IF PROF ONLY
-if($is_editor) {
 
 	if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 		$charset = 'Windows-1253';
@@ -72,4 +71,3 @@ if($is_editor) {
 		";".$total."%";
 	}
 	echo "$crlf";
-}  // end of initial if

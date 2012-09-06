@@ -47,7 +47,7 @@ $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
-
+$TABLELEARNPATH         = "lp_learnPath";
 $TABLECOURSUSER	        = "course_user";
 $TABLEUSER              = "user";
 $TABLEMODULE            = "lp_module";
@@ -85,12 +85,7 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
             <li><a href='detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
             <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
-        </div>";
-        $tool_content .= "
-        <div class='info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
-                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
-          </div>";
+        </div>";                
 } else {
         $tool_content .= "
           <div id='operations_container'>
@@ -101,6 +96,18 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
           </div>";
 }
 
+// check if there are learning paths available
+$l = db_query("SELECT * FROM `$TABLELEARNPATH` WHERE course_id = $course_id");
+if ((mysql_num_rows($l) == 0)) {        
+	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
+	draw($tool_content, 2, null, $head_content);
+	exit;
+} else {
+        $tool_content .= "<div class='info'>
+           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
+                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
+          </div>";
+}
 
 // display tab header
 $tool_content .= "
@@ -140,13 +147,7 @@ foreach ($usersList as $user)
 			$globalprog += $prog;
 		}
 		$iterator++;
-	}
-	if($iterator == 1)
-	{
-		$tool_content .= '    <td class="center" colspan="8">'.$langNoLearningPath.'</td>'."\n".'  </tr>'."\n";
-	}
-	else
-	{
+	}	
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
 		.'    <td><a href="detailsUser.php?course='.$course_code.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
@@ -156,11 +157,10 @@ foreach ($usersList as $user)
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"
 		.'    <td align="left" width=\'10\'>'.$total.'%</td>'."\n"
-		.'</tr>'."\n";
-	}
+		.'</tr>'."\n";	
 	$k++;
 }
 // foot of table
-$tool_content .= '  </table>'."\n\n";
+$tool_content .= '</table>'."\n\n";
 
 draw($tool_content, 2, null, $head_content);
