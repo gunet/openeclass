@@ -29,7 +29,12 @@ if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
         $charset = 'UTF-8';
 }
 $crlf="\r\n";
-$pid = $_GET['pid'];
+
+if(!isset($_GET['pid'])) {
+	header("Location: $urlServer");
+} else {
+        $pid = intval($_GET['pid']);
+}
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
