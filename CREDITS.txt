@@ -1,8 +1,8 @@
 /*========================================================================
-*   Open eClass 2.5
+*   Open eClass 3.0
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2011  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -44,6 +44,9 @@ Also Special Credits to:
  Stevy Georgiadi <stevy@gunet.gr> (University of Athens)
  Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras)
  Yannis Kapetanakis <bilias@edu.physics.uoc.gr> (Technological Education of Crete)
+ Panayotis Katsaloulis <panayotis@panayotis.com>
+
+************************************************************************/
 
 Also Credits to:
  Dimitra Kralli <d.kralli@di.uoa.gr> (University of Athens)
@@ -66,6 +69,7 @@ Also Credits to:
  Kostantinos Tsakaloglou <tsakf@yahoo.com>
  Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
  Apostolos Kechagias <apkech@gmail.com>
+ Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
 
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
@@ -93,8 +97,8 @@ JSCalendar: Copyright Mihai Bazon, 2002-2005
 
 POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
-Libchart - PHP chart library: Copyright 2005-2010 Jean Marc Tr?meaux <jm.tremeaux@gmail.com>
-	http://naku.dohcrew.com/libchart/pages/introduction/
+Libchart 1.3 - PHP chart library: Copyright 2005-2011 Jean Marc Tremeaux <jm.tremeaux@gmail.com>
+	http://naku.dohcrew.com/libchart/
 
 Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
@@ -126,12 +130,14 @@ jQuery JavaScript Library v1.6 - Copyright 2010, John Resig
   Released under the MIT, BSD, and GPL Licenses.
   http://sizzlejs.com/
 
-jQuery UI 1.8.1 - Copyright (c) 2010 (http://jqueryui.com/about)
+jQuery UI 1.8.21 - Copyright (c) 2010 (http://jqueryui.com/about)
   Dual licensed under the MIT and GPL licenses.
 
 jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
+
+flowplayer 3.2.7 - Copyright 2009-2011 Flowplayer Oy
 
 HTML Purify: (include/htmlpurifier-4.3.0-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
@@ -143,7 +149,7 @@ Tiny MCE Editor
   Copyright © 2003-2011 Moxiecode Systems AB. All rights Reserved.
   Licensed under LGPL
   http:/tinymce.moxiecode.com
-  version 3.4.9
+  version 3.5.6
 
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
