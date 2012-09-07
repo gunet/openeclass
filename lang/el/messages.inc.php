@@ -246,7 +246,7 @@ $langFaculteDel = "Διαγραφή $langOfFaculty";
 $langFaculteEdit = "Επεξεργασία στοιχείων $langOfFaculty";
 $langFaculteIns = "Εισαγωγή Στοιχείων $langOfFaculty";
 $langAcceptChanges = "Επικύρωση Αλλαγών";
-$langEditFacSucces = "Η επεξεργασία του μαθήματος ολοκληρώθηκε με επιτυχία!";
+$langEditFacSucces = "Η επεξεργασία της σχολής ολοκληρώθηκε με επιτυχία!";
 
 // addusertocours
 $langQuickAddDelUserToCoursSuccess = "Η διαχείριση χρηστών ολοκληρώθηκε με επιτυχία!";
