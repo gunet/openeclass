@@ -75,7 +75,7 @@ $tool_content .= "
       <th valign='top'>$langUnitDescr:</th>
     </tr>
     <tr>
-      <td>".rich_text_editor('unitdescr', 4, 20, q($unitdescr))."</td>
+      <td>".rich_text_editor('unitdescr', 4, 20, $unitdescr)."</td>
     </tr>
     <tr>
       <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>

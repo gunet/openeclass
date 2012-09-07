@@ -219,7 +219,7 @@ if($is_editor) {
 				  <a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
 				</td>
 				<td width='3'><div align='center'><a href=\"admin.php?course=$course_code&amp;editQuestion=".$row['id']."\">
-				  <img src='$themeimg/edit.png' title='$langModify' /></a></div>
+				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a></div>
 				</td>";
 			} else {
 				$tool_content .= "
@@ -238,7 +238,7 @@ if($is_editor) {
 				<td width='3' align='center'>
 				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"".
 				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' /></a>
+				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
 				</td>";
 			}
 			$tool_content .= "</tr>";

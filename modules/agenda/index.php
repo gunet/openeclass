@@ -209,7 +209,7 @@ if ($is_editor) {
                                 'name' => 'date',
                                 'value' => $dayAncient));
         } else {
-                $id = "";
+                $id = '';
         }
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
@@ -241,7 +241,7 @@ if ($is_editor) {
                     <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($content)) {
-			$content = "";
+                        $content = '';
 		}
 		$tool_content .= "
                   <tr>
@@ -274,8 +274,8 @@ if ($is_editor) {
 
 if (mysql_num_rows($result) > 0) {
 	$numLine = 0;
-	$barMonth = "";
-	$nowBarShowed = FALSE;
+	$barMonth = '';
+	$nowBarShowed = false;
         $tool_content .= "
         <table width='100%' class='tbl_alt'>
         <tr>
@@ -367,7 +367,7 @@ if (mysql_num_rows($result) > 0) {
                         <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
                         <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
-                        if ($myrow["visible"] == 1) {
+                        if ($myrow['visible'] == 1) {
                                 $tool_content .= "
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
                                 <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
@@ -380,7 +380,7 @@ if (mysql_num_rows($result) > 0) {
 		}
 		$tool_content .= "</tr>";
 		$numLine++;
-	} 	// while
+	}
 	$tool_content .= "</table>";
 } else {
 	$tool_content .= "<p class='alert1'>$langNoEvents</p>";

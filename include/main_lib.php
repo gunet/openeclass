@@ -1639,7 +1639,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $mysqlMainDb;
+	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor;
 
         $filebrowser = '';
         $activemodule = 'document/index.php';
@@ -1654,7 +1654,7 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                       AND (module_id =".MODULE_ID_DOCS." OR module_id =".MODULE_ID_VIDEO." OR module_id =".MODULE_ID_LINKS.")
                       AND VISIBLE = 1 ORDER BY module_id";
 
-                $result = db_query($sql, $mysqlMainDb);
+                $result = db_query($sql);
                 $module = mysql_fetch_assoc($result);
 
                 if ($module === false)
@@ -1678,22 +1678,20 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
             }
         }
 
-	$lang_editor = langname_to_code($language);
-
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
         plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
         themes : 'advanced',
-        languages : '$lang_editor',
+        languages : '$language',
         disk_cache : true,
         debug : false
 });
 
 tinyMCE.init({
 	// General options
-		language : '$lang_editor',
+		language : '$language',
 		mode : 'specific_textareas',
                 editor_deselector : 'mceNoEditor',
 		theme : 'advanced',
@@ -1753,7 +1751,7 @@ function openDocsPicker(field_name, url, type, win) {
 			                      $text); */
 
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
-	       str_replace('{','&#123;', $text) .
+	       q(str_replace('{','&#123;', $text)) .
 	       "</textarea>\n";
 }
 
@@ -1768,9 +1766,11 @@ function text_area($name, $rows, $cols, $text, $extra = '')
 	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
 			                      array('[m]', '[/m]', '[m]', '[/m]'),
 			                      $text));
-        $extra .= ' class="mceNoEditor"';
+        if (strpos($extra, 'class=') === false) {
+                $extra .= ' class="mceNoEditor"';
+        }
 	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
-	       str_replace('{','&#123;', $text) .
+               q(str_replace('{','&#123;', $text)) .
 	       "</textarea>\n";
 }
 
@@ -2140,8 +2140,9 @@ function profile_image($uid, $size, $default = false)
 
 	if (!$default) {
 		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".q(uid_to_name($uid))."'>";
-	} else {
-		return "<img src='$themeimg/default_$size.jpg' title='".q(uid_to_name($uid))."' />";
+        } else {
+                $name = q(uid_to_name($uid));
+		return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
 	}
 }
 

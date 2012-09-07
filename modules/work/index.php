@@ -473,7 +473,6 @@ function show_edit_assignment($id)
 
 	$deadline = $row['deadline'];
 
-	$description = q($row['description']);
         $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 	$tool_content .= <<<cData
     <form action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" onsubmit="return checkrequired(this, 'title');">

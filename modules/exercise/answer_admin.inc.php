@@ -19,7 +19,6 @@
  * ======================================================================== */
 
 
-
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
 $questionId = $objQuestion->selectId();
@@ -89,7 +88,7 @@ if(isset($submitAnswers) || isset($buttonBack)) {
 			$weighting[$i]=$weighting[$i];
 
 			if($answerType == UNIQUE_ANSWER) {
-				$goodAnswer=($correct == $i)?1:0;
+				$goodAnswer=@($correct == $i)?1:0;
 			} else {
                                 $goodAnswer=@($correct[$i])?1:0;
 			}
@@ -521,7 +520,7 @@ if(isset($_GET['modifyAnswers'])) {
 			if($okPicture) {
 				$tool_content .= "
 				<tr>
-				  <td colspan='5' align='center'><img src='../../$picturePath/quiz-$questionId' /></td>
+				  <td colspan='5' align='center'><img src='../../$picturePath/quiz-$questionId' alt=''></td>
 				</tr>";
 			}
 
@@ -617,7 +616,7 @@ if(isset($_GET['modifyAnswers'])) {
 				 <b>$questionName</b>
 				 <br />";
 				if($okPicture) {
-					$tool_content .= "<div align='center'><img src='../../$picturePath/quiz-$questionId'></div>";
+					$tool_content .= "<div align='center'><img src='../../$picturePath/quiz-$questionId' alt=''></div>";
 				}
 				$tool_content .= "</fieldset>";
 				$tool_content .= "
@@ -709,7 +708,7 @@ if(isset($_GET['modifyAnswers'])) {
 		if($okPicture) {
 			$tool_content .= "
 			<tr>
-			  <td colspan='4' class='center'><img src='../../$picturePath/quiz-$questionId' /></td>
+			  <td colspan='4' class='center'><img src='../../$picturePath/quiz-$questionId' alt=''></td>
 			</tr>";
 		}
 
@@ -827,7 +826,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			// if there is a picture, display this
 			if($okPicture) {
 				$tool_content .= "
-				<div align='center'><img src='../../$picturePath/quiz-$questionId' /></div>";
+				<div align='center'><img src='../../$picturePath/quiz-$questionId' alt=''></div>";
 			}
 			$tool_content .="
 			</fieldset>
@@ -902,4 +901,3 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 		}
 	}
 }
-?>

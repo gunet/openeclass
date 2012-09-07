@@ -248,7 +248,7 @@ $username_form = q($myrow['username']);
 $email_form = q($myrow['email']);
 $am_form = q($myrow['am']);
 $phone_form = q($myrow['phone']);
-$desc_form = q($myrow['description']);
+$desc_form = $myrow['description'];
 $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
 

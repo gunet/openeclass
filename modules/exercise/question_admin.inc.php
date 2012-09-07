@@ -19,7 +19,6 @@
  * ======================================================================== */
 
 
-
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
 	@$tool_content .= "
@@ -101,7 +100,7 @@ if(isset($usedInSeveralExercises)) {
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
                 $tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;modifyQuestion=".$questionId."\">
-                <img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
+                <img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a>";
         }
 
         $tool_content .= "</legend>
@@ -122,7 +121,7 @@ if(isset($usedInSeveralExercises)) {
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyAnswers=$questionId'>
-		<img src='$themeimg/edit.png' align='middle' title='$langModify' /></a>";
+		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify'></a>";
 	}
         $tool_content .= "<br/></th>
 	</tr>

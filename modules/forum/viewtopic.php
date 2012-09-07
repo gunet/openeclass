@@ -248,11 +248,12 @@ do {
 	  <br />$message<br />
 	</td>";
 	if ($is_editor) {
-		$tool_content .= "<td width='40' valign='top'>
-                    <a href='editpost.php?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>
-                    <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick=\"return confirmation('$langConfirmDelete');\">
-                    <img src='$themeimg/delete.png' title='$langDelete' /></a></td>";
+                $tool_content .= "<td width='40' valign='top'>
+                    <a href='editpost.php?course=$course_code&amp;post_id=".$myrow["id"]."&amp;topic=$topic&amp;forum=$forum'>" .
+                    "<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>" .
+                    "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;post_id=".$myrow['id'].
+                    "&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick=\"return confirmation('$langConfirmDelete');\">" .
+                    "<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a></td>";
 	}
 	$tool_content .= "</tr>";
 	$count++;
