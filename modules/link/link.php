@@ -344,7 +344,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		} else {
 			$tool_content .=  "
 		<tr>
-		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' /></th>
+		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' alt='$showall'></th>
 		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .= $tinymce_params ."'>" . q($myrow['name']) . "</a>";
@@ -356,9 +356,8 @@ if (mysql_num_rows($resultcategories) > 0) {
 			if ($is_editor && !$is_in_tinymce) {
 			showcategoryadmintools($myrow["id"]);
                         } else {
-                                $tool_content .=  "
-                </tr>";
-			}
+                                $tool_content .=  "</tr>";
+                        }
 		}
 		// displaying the link of the category
 		$i++;

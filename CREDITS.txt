@@ -70,10 +70,10 @@ Also Credits to:
  Apostolos Kechagias <apkech@gmail.com>
  Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
 
-Messages translated to spanish language by: 
+Messages translated to Spanish by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
 
-Messages translated to german language by: 
+Messages translated to German by: 
 George Nikolaidis <nikolage@noc.uoa.gr>
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
