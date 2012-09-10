@@ -32,7 +32,7 @@
 
 require_once("functions.php");
 include "../../include/lib/forcedownload.php";
-include '../../include/sendMail.inc.php';
+include "../../include/sendMail.inc.php";
 $nameTools = $dropbox_lang["dropbox"];
 
 /**
@@ -196,9 +196,9 @@ if (isset($_POST["submitWork"]))
  * - DELETE ALL SENT FILES
  * - DELETE 1 SENT FILE
  */
-if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
-{
-	$dropbox_person = new Dropbox_Person( $uid, $is_editor, $is_editor);
+if (isset($_GET['deleteReceived']) or isset($_GET['deleteSent'])) {
+	
+        $dropbox_person = new Dropbox_Person($uid, $is_editor, $is_editor);
 	if (isset($_SESSION["sentOrder"]))
 	{
 		$dropbox_person->orderSentWork ($_SESSION["sentOrder"]);
@@ -207,7 +207,6 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 	{
 		$dropbox_person->orderReceivedWork ($_SESSION["receivedOrder"]);
 	}
-
 	if (isset($_GET['deleteReceived']))
 	{
 		if ($_GET["deleteReceived"] == "all")
@@ -215,7 +214,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 			$dropbox_person->deleteAllReceivedWork( );
 		} elseif (is_numeric( $_GET["deleteReceived"]))
 		{
-			$dropbox_person->deleteReceivedWork( $_GET['deleteReceived']);
+			$dropbox_person->deleteReceivedWork($_GET['deleteReceived']);
 		}
 		else
 		{
@@ -229,14 +228,22 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
 			$dropbox_person->deleteAllSentWork( );
 		}elseif ( is_numeric( $_GET["deleteSent"]))
 		{
-			$dropbox_person->deleteSentWork( $_GET['deleteSent']);
+			$dropbox_person->deleteSentWork($_GET['deleteSent']);
 		}
 		else
 		{
 			die($dropbox_lang["generalError"]);
 		}
 	}
-	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
+        
+        $tool_content .= "<p class='success'>".$dropbox_lang["fileDeleted"]."<br />
+	<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
+	
+} elseif (isset($_GET['AdminDeleteSent'])) {        
+        $dropbox_person = new Dropbox_Person($uid, $is_editor, $is_editor);
+        $dropbox_person ->deleteWork($_GET['AdminDeleteSent']);        
+
+        $tool_content .= "<p class='success'>".$dropbox_lang["fileDeleted"]."<br />
 	<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 }
 

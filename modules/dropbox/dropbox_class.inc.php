@@ -260,7 +260,8 @@ class Dropbox_SentWork extends Dropbox_Work {
 		}
 		elseif ( count($recipientIds) == 0)  // RH: Just Upload
 		{
-			$justSubmit = TRUE; $recipientIds = array($uploaderId);
+			$justSubmit = TRUE; 
+                        $recipientIds = array($uploaderId);
 		}
 		if (! is_array($recipientIds) || count($recipientIds) == 0) die($dropbox_lang["generalError"]);
 		foreach ($recipientIds as $rec) {
@@ -328,6 +329,7 @@ class Dropbox_SentWork extends Dropbox_Work {
 class Dropbox_Person {
 	var $receivedWork;	//array of Dropbox_Work objects
 	var $sentWork;		//array of Dropbox_SentWork objects
+        var $allsentWork;        
 	var $userId = 0;
 	var $isCourseAdmin = FALSE;
 	var $isCourseTutor = FALSE;
@@ -348,9 +350,8 @@ class Dropbox_Person {
 		$this->isCourseTutor = $isCourseTutor;	
 		$this->receivedWork = array();
 		$this->sentWork = array();
-
-		//Note: perhaps include an ex coursemember check to delete old files
-		
+                $this->allsentWork = array();
+				
 		/*
 		* find all entries where this person is the recipient 
 		*/
@@ -372,11 +373,27 @@ class Dropbox_Person {
 				WHERE f.uploaderId = '".addslashes($this->userId)."'
 				AND f.uploaderId = p.personId
 				AND f.id = p.fileId";
-        $result = db_query($sql, $currentCourseID);
+                $result = db_query($sql, $currentCourseID);
 		while ($res = mysql_fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);
 		}
-	}
+
+                /*
+		* find all uploader entries 
+		*/
+                
+                $sql = "SELECT DISTINCT f.id FROM dropbox_file f, dropbox_person p, dropbox_post r
+				WHERE f.uploaderId = p.personId
+                                AND f.uploaderId != $this->userId
+				AND f.id = p.fileId
+                                AND r.recipientId != $this->userId
+                                AND r.fileId = f.id";
+		
+                $result = db_query($sql, $currentCourseID);
+                while ($res = mysql_fetch_array($result)) {
+                        $this->allsentWork[] = new Dropbox_SentWork($res["id"]);
+                }
+        }
 	
 	
 	function _cmpWork ($a, $b) {
@@ -537,5 +554,19 @@ class Dropbox_Person {
 				WHERE personId='".$this->userId."' AND fileId='".$id."'", $currentCourseID);
 		removeUnusedFiles();	//check for unused files
 	}
+        
+        // delete file from users dropbox
+        function deleteWork($id) {
+                
+                global $dropbox_cnf, $currentCourseID;
+                
+                db_query("DELETE FROM dropbox_post WHERE fileId = $id", $currentCourseID);
+                db_query("DELETE FROM dropbox_person WHERE fileId = $id", $currentCourseID);
+                
+                $filename = db_query_get_single_value("SELECT filename FROM dropbox_file WHERE id = $id", $currentCourseID);
+                db_query("DELETE FROM dropbox_file WHERE id = $id", $currentCourseID);
+                
+                //delete file
+                unlink($dropbox_cnf["sysPath"] . "/" . $filename);
+        }
 }
-?>

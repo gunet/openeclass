@@ -25,6 +25,7 @@ $require_help = TRUE;
 $helpTopic = 'Dropbox';
 include '../../include/baseTheme.php';
 include "../../include/lib/fileUploadLib.inc.php";
+include "../../include/lib/fileDisplayLib.inc.php";
 
 // javascript functions
 $head_content ='<script type="text/javascript">
@@ -45,7 +46,14 @@ $head_content ='<script type="text/javascript">
                 }
                 return true;
                 }
-	
+			function confirmationpurge () {
+                        if (confirm("'.$langPurgeFile.'" )) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                        return true;
+                }
 		function checkForm (frm) {
                 if (frm.elements["recipients[]"].selectedIndex < 0) {
                         alert("'.$dropbox_lang['noUserSelected'].'");
@@ -115,4 +123,3 @@ function removeUnusedFiles()
         unlink($dropbox_cnf["sysPath"] . "/" . $res["filename"]);
     }
 }
-?>
