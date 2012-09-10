@@ -1693,7 +1693,7 @@ function description_unit_id($cours_id)
                 db_query('INSERT INTO course_units SET `order` = -1,
                                 `title` = ' . quote($langCourseDescription) . ',
                                 `visibility` = "i",
-                                `description` = "",
+                                `comments` = "",
                                 `course_id` = ' . $cours_id);
                 return mysql_insert_id();
         }
@@ -1720,7 +1720,7 @@ function new_description_res_id($unit_id)
 
 
 function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibility = 'i', $date = false)
-{
+{        
         if (!$date) {
                 $date = 'NOW()';
         } else {
