@@ -49,8 +49,6 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	draw($tool_content, 2);
 	exit;
 }
-
-
 $tool_content .="
 <div id='operations_container'>
   <ul id='opslist'>
@@ -59,42 +57,10 @@ $tool_content .="
   </ul>
 </div>";
 
-/*
-* get order status of sent list.
-* The sessionvar sentOrder keeps preference of user to by what field to order the sent files list by
-*/
-
-if (isset($_GET['sentOrder']) && in_array($_GET['sentOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'recipient'))) {
-	$sentOrder = $_GET["sentOrder"];
-} else {
-	if (isset($_SESSION['sentOrder']) && in_array($_SESSION['sentOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'recipient'))) {
-		$sentOrder = $_SESSION['sentOrder'];
-	} else {
-		$sentOrder = 'lastDate'; //default sortorder value if nothing is specified
-	}
-}
-$_SESSION['sentOrder'] = $sentOrder;
-
-/*
-* get order status of received list.
-* The sessionvar receivedOrder keeps preference of user to by what field to order the received files list by
-*/
-if (isset($_GET['receivedOrder']) && in_array($_GET['receivedOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'sender'))) {
-	$receivedOrder = $_GET['receivedOrder'];
-} else {
-	if (isset($_SESSION['receivedOrder']) && in_array($_SESSION['receivedOrder'], array('lastDate', 'firstDate', 'title', 'size', 'author', 'sender'))) {
-		$receivedOrder = $_SESSION['receivedOrder'];
-	} else {
-		$receivedOrder = 'lastDate'; //default sortorder value if nothing is specified
-	}
-}
-$_SESSION['receivedOrder'] = $receivedOrder;
 
 require_once('dropbox_class.inc.php');
 
 $dropbox_person = new Dropbox_Person($uid, $is_editor, $is_editor);
-$dropbox_person->orderReceivedWork($receivedOrder);
-$dropbox_person->orderSentWork($sentOrder);
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
                                                 //page request. This is to prevent resubmiting data
 
@@ -134,8 +100,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	/*
 	*  if current user is a teacher then show all users of current course
 	*/
-	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin
-		|| $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
+	if ($dropbox_person -> isCourseAdmin or $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
 	{
 		// select all users except yourself
 		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
@@ -165,11 +130,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	{
 		$tool_content .= "<option value=".$res['user_id'].">".q($res['name'])."</option>";
 	}
-	
-	if ($dropbox_cnf["allowJustUpload"])  // RH
-	{
-		$tool_content .= '<option value="0">'.$dropbox_lang["justUploadInSelect"].'</option>';
-	}
+		
 	$tool_content .= "</select></td></tr>
 	<tr>
 	  <th>&nbsp;</th>
