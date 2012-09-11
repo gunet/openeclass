@@ -18,34 +18,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * handles downloads of files. Direct downloading is prevented because of an .htaccess file in the
- * dropbox directory. So everything goes through this script.
- *
- * 1. Initialising vars
- * 2. Authorisation
- * 3. Sanity check of get data & file
- * 4. Send headers
- * 5. Send file
- *
- */
+/*
+ * ======================================================================== */
+
+$require_login = TRUE;
+$require_current_course = TRUE;
 
 include 'functions.php';
 include 'dropbox_class.inc.php';
 include 'include/lib/forcedownload.php';
 
-if (!isset($uid)) {
-    exit();
+if (isset($_GET['id'])) {
+        $id = intval($_GET['id']);
+} else {
+        header("Location: $urlServer");
 }
 
-/**
- * ========================================
- * SANITY CHECKS OF GET DATA & FILE
- * ========================================
- */
-if (!isset( $_GET['id']) || ! is_numeric( $_GET['id'])) die($dropbox_lang["generalError"]);
-
-$work = new Dropbox_work($_GET['id']);
+$work = new Dropbox_work($id);
 
 $path = $dropbox_cnf["sysPath"] . "/" . $work -> filename; //path to file as stored on server
 $file = $work->title;

@@ -36,7 +36,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/sendMail.inc.php';
 
-$nameTools = $dropbox_lang['dropbox'];
+$nameTools = $langDropBox;
 
 /**
  * ========================================
@@ -55,7 +55,7 @@ if (isset($_POST['dropbox_unid'])) {
 {
 	$dropbox_unid = $_GET['dropbox_unid'];
 } else {
-	die($dropbox_lang['badFormData']);
+	header("Location: $urlServer");
 }
 
 if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dropbox_unid == $_SESSION["dropbox_uniqueid"]) {
@@ -78,43 +78,13 @@ require_once("dropbox_class.inc.php");
 /*
  form submission
 */
-if (isset($_POST["submitWork"]))
-{
+if (isset($_POST["submitWork"])) {
 	$error = FALSE;
 	$errormsg = '';
-
-	if (!isset($_POST['authors']) || !isset($_POST['description']))
-	{
+	if (!isset($_POST['authors']) or !isset($_POST['description'])) {
 		$error = TRUE;
-		$errormsg = $dropbox_lang["badFormData"];
+		$errormsg = $langBadFormData;
 	}
-	elseif (!isset( $_POST['recipients']) || count( $_POST['recipients']) <= 0)
-	{
-		$error = TRUE;
-		$errormsg = $dropbox_lang["noUserSelected"];
-	}
-	else
-	{
-		$thisIsJustUpload = FALSE;  // RH
-		foreach($_POST['recipients'] as $rec)
-		{
-			if ($rec == 0)
-			{
-				$thisIsJustUpload = TRUE;
-			}
-		}
-		if ($thisIsJustUpload && ( count($_POST['recipients']) != 1))
-		{
-			$error = TRUE;
-			$errormsg = $dropbox_lang["mailingJustUploadNoOther"];
-		}
-		elseif (empty( $_FILES['file']['name']))
-		{
-			$error = TRUE;
-			$errormsg = $dropbox_lang["noFileSpecified"];
-		}
-	}
-
      /*
      * --------------------------------------
      *     FORM SUBMIT : UPLOAD NEW FILE
@@ -132,11 +102,11 @@ if (isset($_POST["submitWork"]))
 
 		if ($dropbox_filesize + $dropbox_space > $diskQuotaDropbox)
 		{
-			$errormsg = $dropbox_lang["quotaError"];
+			$errormsg = $langNoSpace;
 			$error = TRUE;
 		} elseif (!is_uploaded_file($dropbox_filetmpname)) // check user found : no clean error msg.
 		{
-			die ($dropbox_lang["badFormData"]);
+			die ($langBadFormData);
 		}
 
 		// set title
@@ -144,24 +114,18 @@ if (isset($_POST["submitWork"]))
 		$format = get_file_extension($dropbox_filename);
 		$dropbox_filename = safe_filename($format);
 		// set author
-		if ($_POST['authors'] == '')
-		{
+		if ($_POST['authors'] == '') {
 			$_POST['authors'] = uid_to_name($uid);
-		}
-		if ($error) {}
-		elseif ($thisIsJustUpload)  // RH: $newWorkRecipients is empty array
-		{
-			$newWorkRecipients = array();
-		} else {
-			$newWorkRecipients = $_POST["recipients"];
-		}
+		}		
+		$newWorkRecipients = $_POST["recipients"];
+		
 		//After uploading the file, create the db entries
 		if (!$error) {
-			$subject_dropbox = "$logo - $dropbox_lang[newDropboxFile]";
+			$subject_dropbox = "$logo - $langNewDropboxFile";
 			$c = course_code_to_title($course_code);
 			$filename_final = $dropbox_cnf['sysPath'] . '/' . $dropbox_filename;
 			move_uploaded_file($dropbox_filetmpname, $filename_final)
-				or die($dropbox_lang["uploadError"]);
+				or die($langUploadError);
 			@chmod($filename_final, 0644);
 			new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 			if (isset($_POST['mailing']) and $_POST['mailing']) {	// send mail to recipients of dropbox file
@@ -169,8 +133,8 @@ if (isset($_POST["submitWork"]))
                                         if (get_user_email_notification($userid, $course_id)) {
                                                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
                                                 $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
-                                                $body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
-                                                $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
+                                                $body_dropbox_message = "$langInCourses '$c' $langDropboxMailNotify <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
+                                                $plain_body_dropbox_message = "$langInCourses '$c' $langDropboxMailNotify \n\n$gunet\n<a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
                                                 $emailaddr = uid_to_email($userid);
                                                 send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
                                         }
@@ -180,13 +144,13 @@ if (isset($_POST["submitWork"]))
 		chdir ($cwd);
 	} //end if(!$error)
 	if (!$error) {
-		$tool_content .= "<p class=\"success\">".$dropbox_lang["docAdd"]."<br />
-		<a href='index.php?course=$course_code'>".$dropbox_lang['backList']."</a></p><br/>";
+		$tool_content .= "<p class='success'>$langdocAdd<br />
+		<a href='index.php?course=$course_code'>$langBack</a></p><br/>";
 	}
 	else
 	{
-		$tool_content .= "<p class=\"caution\">".$errormsg."<br /><br />
-		<a href='index.php?course=$course_code'>".$dropbox_lang['backList']."</a><br/>";
+		$tool_content .= "<p class='caution'>$errormsg<br /><br />
+		<a href='index.php?course=$course_code'>$langBack</a><br/>";
 	}
 }
 
@@ -199,48 +163,32 @@ if (isset($_POST["submitWork"]))
  * - DELETE ALL SENT FILES
  * - DELETE 1 SENT FILE
  */
-if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent']))
-{
-	$dropbox_person = new Dropbox_Person( $uid, $is_editor, $is_editor);
-	if (isset($_SESSION["sentOrder"]))
-	{
-		$dropbox_person->orderSentWork ($_SESSION["sentOrder"]);
-	}
-	if (isset($_SESSION["receivedOrder"]))
-	{
-		$dropbox_person->orderReceivedWork ($_SESSION["receivedOrder"]);
-	}
-
+if (isset($_GET['deleteReceived']) or isset($_GET['deleteSent'])) {
+	
+        $dropbox_person = new Dropbox_Person($uid, $is_editor);	
 	if (isset($_GET['deleteReceived']))
 	{
-		if ($_GET["deleteReceived"] == "all")
-		{
+		if ($_GET["deleteReceived"] == "all") {
 			$dropbox_person->deleteAllReceivedWork( );
-		} elseif (is_numeric( $_GET["deleteReceived"]))
-		{
-			$dropbox_person->deleteReceivedWork( $_GET['deleteReceived']);
-		}
-		else
-		{
-			die($dropbox_lang["generalError"]);
-		}
-	}
-	else
-	{
-		if ($_GET["deleteSent"] == "all")
-		{
+		} elseif (is_numeric( $_GET["deleteReceived"])) {
+			$dropbox_person->deleteReceivedWork($_GET['deleteReceived']);
+		}		
+	} else {
+		if ($_GET["deleteSent"] == "all") {
 			$dropbox_person->deleteAllSentWork( );
-		}elseif ( is_numeric( $_GET["deleteSent"]))
-		{
-			$dropbox_person->deleteSentWork( $_GET['deleteSent']);
-		}
-		else
-		{
-			die($dropbox_lang["generalError"]);
-		}
-	}
-	$tool_content .= "<p class=\"success\">".$dropbox_lang["fileDeleted"]."<br />
-	<a href='index.php?course=$course_code'>".$dropbox_lang['backList']."</a></p><br/>";
+		} elseif (is_numeric($_GET["deleteSent"])) {
+			$dropbox_person->deleteSentWork($_GET['deleteSent']);
+		}		
+	}        
+        $tool_content .= "<p class='success'>$langDelF<br />
+	<a href='index.php?course=$course_code'>$langBack</a></p><br/>";
+	
+} elseif (isset($_GET['AdminDeleteSent'])) {        
+        $dropbox_person = new Dropbox_Person($uid, $is_editor);
+        $dropbox_person ->deleteWork($_GET['AdminDeleteSent']);        
+
+        $tool_content .= "<p class='success'>$langDelF<br />
+	<a href='index.php?course=$course_code'>$langBack</a></p><br/>";
 }
 
 draw($tool_content, 2, null, $head_content);
