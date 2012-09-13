@@ -117,14 +117,15 @@ if ($u)	{
         if (!$u_submitted) { // if the form was not submitted
 		$tool_content .= "
                     <div id='operations_container'>
-                     <ul id='opslist'>";
+                     <ul id='opslist'>
+                       <li><a href='mergeuser.php?u=$u'>$langUserMerge</a></li>\n";
                 if (!in_array($info['password'], $auth_ids)) {
                         $tool_content .= "
-                        <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
+                        <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>\n";
                 }
                 $tool_content .= "
-              <li><a href='./edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
-              <li><a href='./listusers.php'>$langBack</a></li>";
+              <li><a href='edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
+              <li><a href='listusers.php'>$langBack</a></li>";
                 $tool_content .= "</ul></div>";
                    $tool_content .= "
                     <form name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]'>

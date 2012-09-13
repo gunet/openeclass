@@ -256,13 +256,13 @@ if($countUser > 0) {
                         if ($mail_ver_required) {
                                 switch($logs['verified_mail']) {
                                         case EMAIL_VERIFICATION_REQUIRED:
-                                                $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' />";
+                                                $tool_content .= " <img align='right' src='$themeimg/pending.png' title='$langMailVerificationPendingU' alt='$langMailVerificationPendingU'>";
                                                 break;
                                         case EMAIL_VERIFIED:
-                                                $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+                                                $tool_content .= " <img align='right' src='$themeimg/tick_1.png' title='$langMailVerificationYesU' alt='$langMailVerificationYesU'>";
                                                 break;
                                         case EMAIL_UNVERIFIED:
-                                                $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' />";
+                                                $tool_content .= " <img align='right' src='$themeimg/not_confirmed.png' title='$langMailVerificationNoU' alt='$langMailVerificationNoU'>";
                                                 break;
                                 }
                         }
@@ -270,9 +270,9 @@ if($countUser > 0) {
                         <td align='center'>";
                         switch ($logs['statut'])
                         {
-                                case 1:	$tool_content .= "<img src='$themeimg/teacher.png' title='$langTeacher' />";break;
-                                case 5:	$tool_content .= "<img src='$themeimg/student.png' title='$langStudent' />";break;
-                                case 10: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' />";break;
+                                case 1:	$tool_content .= "<img src='$themeimg/teacher.png' title='$langTeacher' alt='$langTeacher'>";break;
+                                case 5:	$tool_content .= "<img src='$themeimg/student.png' title='$langStudent' alt='$langStudent'>";break;
+                                case 10: $tool_content .= "<img src='$themeimg/guest.png' title='$langVisitor' alt='$langVisitor'>";break;
                                 default: $tool_content .= "$langOther (".q($logs[6]).")";break;
                         }
                         $tool_content .= "</td>";
@@ -280,16 +280,17 @@ if($countUser > 0) {
                                 $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $tool_content .= "<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
-                                <img src='$themeimg/edit.png' title='$langEdit' /></a>
+                                <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
                                 <a href='unreguser.php?u=".$logs['user_id']."'>
-                                <img src='$themeimg/delete.png' title='$langDelete' />
+                                <img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'>
                                 </a>
                                 <a href='userstats.php?u=".$logs['user_id']."'>
-                                <img src='$themeimg/platform_stats.png' title='$langStat' /></a>
+                                <img src='$themeimg/platform_stats.png' title='$langStat' alt='$langStat'></a>
 
                                 <a href='change_user.php?username=".urlencode($logs['username'])."'>
                                 <img src='$themeimg/log_as.png' title='$langChangeUserAs ".
-                                        q($logs['username'])."' /></a>
+                                     q($logs['username'])."' alt='$langChangeUserAs ".
+                                     q($logs['username'])."'></a>
                                 </td>\n";
                         }
                         $tool_content .= "</tr>";
