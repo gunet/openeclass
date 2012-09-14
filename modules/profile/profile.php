@@ -24,6 +24,7 @@ $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
 include '../auth/auth.inc.php';
+require_once '../../include/lib/fileUploadLib.inc.php';
 $require_valid_uid = TRUE;
 
 check_uid();
@@ -98,6 +99,9 @@ if (isset($_POST['submit'])) {
 	
 	// upload user picture
 	if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
+	    
+	    validateUploadedFile($_FILES['userimage']['name'], 1);
+	    
 		$type = $_FILES['userimage']['type'];
 		$image_file = $_FILES['userimage']['tmp_name'];
 

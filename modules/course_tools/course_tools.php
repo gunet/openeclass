@@ -187,6 +187,9 @@ if (isset($_POST['submit'])) {
                 $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
                 $size = "20971520"; //file size is 20M (1024x1024x20)
                 if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+                        
+                        validateUploadedFile($_FILES['file']['name'], 2);
+                    
                         if (unwanted_file($_FILES['file']['name'])) {
                                 $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
                                                    q($_FILES['file']['name']) . "</p>";

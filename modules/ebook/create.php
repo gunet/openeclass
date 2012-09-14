@@ -43,6 +43,9 @@ if (!$is_editor) {
                 $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
                                  q($_FILES['file']['name']) . "</p>";
         }
+        
+        validateUploadedFile($_FILES['file']['name'], 2);
+        
         if (!empty($tool_content)) {
                 draw($tool_content, 2);
                 exit;

@@ -33,6 +33,7 @@
 require_once("functions.php");
 include "../../include/lib/forcedownload.php";
 include "../../include/sendMail.inc.php";
+require_once '../../include/lib/fileUploadLib.inc.php';
 $nameTools = $dropbox_lang["dropbox"];
 
 /**
@@ -126,6 +127,8 @@ if (isset($_POST["submitWork"]))
 		$dropbox_filesize = $_FILES['file']['size'];
 		$dropbox_filetype = $_FILES['file']['type'];
 		$dropbox_filetmpname = $_FILES['file']['tmp_name'];
+		
+		validateUploadedFile($_FILES['file']['name'], 1);
 
 		if ($dropbox_filesize + $dropbox_space > $diskQuotaDropbox)
 		{

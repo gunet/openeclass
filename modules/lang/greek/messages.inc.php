@@ -443,6 +443,10 @@ $langThemes = "Επιλογή θέματος";
 $langOtherOptions = "Άλλες ρυθμίσεις";
 $langDefaultQuota = "Αποθηκευτικός χώρος νέων μαθημάτων";
 $langCreateBackup = "Δημουργία αντιγράφου ασφαλείας των ρυθμίσεων";
+$langUploadWhitelist = "Upload Whitelist";
+$langStudentUploadWhitelist = "Whitelist Φοιτητών";
+$langTeacherUploadWhitelist = "Whitelist Καθηγητών";
+$langUploadedFileNotAllowed = "Το αρχείο που επιχειρείτε να ανεβάσετε δεν είναι επιτρεπτό. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -2482,6 +2486,7 @@ $langPlease = "Παρακαλούμε";
 $langOtherDepartments = "Εγγραφή σε μαθήματα άλλων τμημάτων/σχολών";
 $langNoLessonsAvailable = "Δεν υπάρχουν Διαθέσιμα Μαθήματα.";
 $langUserPermitions = "Δικαιώματα";
+$langUserWhitelist = "Whitelist Χρήστη";
 
 // formuser.php
 $langUserRequest = "Αίτηση Δημιουργίας Λογαριασμού $langOfStudent";

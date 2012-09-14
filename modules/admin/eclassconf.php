@@ -136,29 +136,32 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 
 	// Save new config.php
 	fwrite($fd, $stringConfig);
+	
+	set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
+	set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
 
 	$config_vars = array('email_required' => true,
-		'email_verification_required' => true,
-		'dont_mail_unverified_mails' => true,
-                'email_from' => true,
-		'am_required' => true,
-		'dont_display_login_form' => true,
-		'dropbox_allow_student_to_student' => true,
-		'block_username_change' => true,
-                'close_user_registration' => true,
-		'display_captcha' => true,
-		'insert_xml_metadata' => true,
-		'betacms' => true,
-		'enable_mobileapi' => true,
-		'doc_quota' => true,
-		'group_quota' => true,
-		'video_quota' => true,
-		'dropbox_quota' => true,
-		'max_glossary_terms' => true,
-		'theme' => true,
-		'alt_auth_student_req' => true,
-		'disable_eclass_stud_reg' => true,
-		'disable_eclass_prof_reg' => true);
+	                'email_verification_required' => true,
+	                'dont_mail_unverified_mails' => true,
+	                'email_from' => true,
+	                'am_required' => true,
+	                'dont_display_login_form' => true,
+	                'dropbox_allow_student_to_student' => true,
+	                'block_username_change' => true,
+	                'close_user_registration' => true,
+	                'display_captcha' => true,
+	                'insert_xml_metadata' => true,
+	                'betacms' => true,
+	                'enable_mobileapi' => true,
+	                'doc_quota' => true,
+	                'group_quota' => true,
+	                'video_quota' => true,
+	                'dropbox_quota' => true,
+	                'max_glossary_terms' => true,
+	                'theme' => true,
+	                'alt_auth_student_req' => true,
+	                'disable_eclass_stud_reg' => true,
+	                'disable_eclass_prof_reg' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -444,6 +447,19 @@ else {
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr></table>	  
 	  </fieldset>";
+        
+        $tool_content .= "<fieldset><legend>$langUploadWhitelist</legend>
+        <table class='tbl' width='100%'>
+        <tr>
+        <th class='left'>$langStudentUploadWhitelist</th>
+        <td><textarea rows='6' cols='60' name='student_upload_whitelist'>".get_config('student_upload_whitelist')."</textarea></td>
+        </tr>
+        <tr>
+        <th class='left'>$langTeacherUploadWhitelist</th>
+        <td><textarea rows='6' cols='60' name='teacher_upload_whitelist'>".get_config('teacher_upload_whitelist')."</textarea></td>
+        </tr>
+        </table>
+        </fieldset>";
         
         $tool_content .= "<fieldset><legend>$langCreateBackup</legend>
           <table class='tbl' width='100%'>	

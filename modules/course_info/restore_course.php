@@ -34,6 +34,9 @@ $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 $version = 1;
 $encoding = 'ISO-8859-7';
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
+    
+    validateUploadedFile($_FILES['archiveZipped']['name'], 3);
+    
         $tool_content .= "<fieldset>
 	<legend>".$langFileSent."</legend>
 	<table class='tbl' width='100%'>

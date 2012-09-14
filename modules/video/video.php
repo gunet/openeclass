@@ -284,6 +284,9 @@ if (isset($_POST['add_submit'])) {  // add
 			$tool_content .= "<p class='success'>$langLinkAdded</p><br />";
 		} else {  // add video
 			if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
+			    
+			    validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
+			    
 				if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
 					$tool_content .= "<p class='caution'>$langNoSpace<br />
 						<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p><br />";

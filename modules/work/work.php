@@ -335,6 +335,8 @@ function submit_work($id, $on_behalf_of=null)
                         $no_files = false;
                 }
 
+                validateUploadedFile($_FILES['userfile']['name'], 2);
+                
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
                         $tool_content .= "<div class='caution'>$langUnwantedFiletype: ".q($_FILES['userfile']['name']).
                                 "</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBack</a></p></div>";

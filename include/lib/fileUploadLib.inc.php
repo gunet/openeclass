@@ -612,3 +612,79 @@ function make_path($path, $path_components)
         }
         return $path;
 }
+
+
+
+/**
+ * Validate a given uploaded filename against the whitelist and error if necessary.
+ * 
+ * @param string  $filename
+ * @param integer $menuTypeID
+ */
+function validateUploadedFile($filename, $menuTypeID = 2)
+{
+    global $code_cours, $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed;
+
+    if (!isWhitelistAllowed($filename)) {
+        $tool_content .= "<p class='caution'>$langUploadedFileNotAllowed<br/><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p><br/>";
+        draw($tool_content, $menuTypeID, null, $head_content);
+        exit;
+    }
+}
+
+
+/**
+ * Check whether a filename is allowed by the whitelist or not.
+ * 
+ * @param  string  $filename - The filename to check against the whitelist.
+ * @return boolean           - Whether the whitelist allows the specific filename extension or not.
+ */
+function isWhitelistAllowed($filename)
+{
+    global $is_editor, $uid;
+
+    $wh  = get_config('student_upload_whitelist');
+    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
+    $wh3 = fetchUserWhitelist($uid);
+    
+    $wh .= (strlen($wh2) > 0) ? ', '. $wh2 : '';
+    $wh .= (strlen($wh3) > 0) ? ', '. $wh3 : '';
+    
+    $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
+
+    if (in_array('*', $whitelist))
+        return true;
+
+    $ext = getPureFileExtension($filename);
+    return in_array($ext, $whitelist);
+}
+
+
+/**
+ * Fetch a user's whitelist.
+ * 
+ * @param  integer $uid - The userId whose whitelist we want.
+ * @return string       - The given user's whitelist.
+ */
+function fetchUserWhitelist($uid)
+{
+    $q = db_query("SELECT whitelist from user where user_id = ". intval($uid));
+    $r = mysql_fetch_array($q);
+    return $r['whitelist'];
+}
+
+
+/**
+ * Mimic get_file_extension from main lib.
+ * 
+ * @param  string $filename - The filename whose extension we want. 
+ * @return string           - The given filename's extension. 
+ */
+function getPureFileExtension($filename)
+{
+    $matches = array();
+    if (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/i', $filename, $matches))
+        return strtolower($matches[1]);
+    else
+        return '';
+}

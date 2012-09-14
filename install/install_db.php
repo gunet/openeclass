@@ -211,6 +211,7 @@ db_query("CREATE TABLE user (
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
+      whitelist TEXT,
       PRIMARY KEY (user_id),
       KEY `user_username` (`username`)) $charset_spec");
 
@@ -356,8 +357,8 @@ db_query("CREATE TABLE IF NOT EXISTS ebook_subsection (
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
 $exp_time = time() + 140000000;
-db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
-	VALUES (".quote($nameForm).", ".quote($surnameForm).", ".quote($loginForm).",".quote($password_encrypted).",".quote($emailForm).",'1',".time().", $exp_time, 1)");
+db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`, `whitelist`)
+	VALUES (".quote($nameForm).", ".quote($surnameForm).", ".quote($loginForm).",".quote($password_encrypted).",".quote($emailForm).",'1',".time().", $exp_time, 1, '*')");
 $idOfAdmin = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 	 VALUES ($idOfAdmin, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -484,31 +485,33 @@ $disable_eclass_prof_reg = intval($disable_eclass_prof_reg);
 
 db_query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
-                 `value` VARCHAR(255) NOT NULL,
+                 `value` TEXT NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
-		('dont_display_login_form', $dont_display_login_form),
-		('email_required', $email_required),
+                ('dont_display_login_form', $dont_display_login_form),
+                ('email_required', $email_required),
                 ('email_from', $email_from),
-		('email_verification_required', $email_verification_required),
-		('dont_mail_unverified_mails', $dont_mail_unverified_mails),
-		('am_required', $am_required),
-		('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
-		('block_username_change', $block_username_change),
-		('betacms', $betacms),
-		('enable_mobileapi', $enable_mobileapi),
-		('code_key', '" . generate_secret_key(32) . "'),
-		('display_captcha', $display_captcha),
-		('insert_xml_metadata', $insert_xml_metadata),
-		('doc_quota', $doc_quota),
-		('video_quota', $video_quota),
-		('group_quota', $group_quota),
-		('dropbox_quota', $dropbox_quota),
+                ('email_verification_required', $email_verification_required),
+                ('dont_mail_unverified_mails', $dont_mail_unverified_mails),
+                ('am_required', $am_required),
+                ('dropbox_allow_student_to_student', $dropbox_allow_student_to_student),
+                ('block_username_change', $block_username_change),
+                ('betacms', $betacms),
+                ('enable_mobileapi', $enable_mobileapi),
+                ('code_key', '" . generate_secret_key(32) . "'),
+                ('display_captcha', $display_captcha),
+                ('insert_xml_metadata', $insert_xml_metadata),
+                ('doc_quota', $doc_quota),
+                ('video_quota', $video_quota),
+                ('group_quota', $group_quota),
+                ('dropbox_quota', $dropbox_quota),
                 ('close_user_registration', $close_user_registration),
-		('disable_eclass_stud_reg', $disable_eclass_stud_reg),
-		('disable_eclass_prof_reg', $disable_eclass_prof_reg),
+                ('disable_eclass_stud_reg', $disable_eclass_stud_reg),
+                ('disable_eclass_prof_reg', $disable_eclass_prof_reg),
                 ('max_glossary_terms', '250'),
-		('version', '" . ECLASS_VERSION ."')");
+                ('student_upload_whitelist', 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst'),
+                ('teacher_upload_whitelist', 'php3, php4, php5, phps, phtml, html, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm'),
+                ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module
 db_query("CREATE TABLE `course_units` (
