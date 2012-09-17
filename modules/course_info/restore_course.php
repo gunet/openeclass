@@ -46,6 +46,9 @@ $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 $version = 1;
 $encoding = 'ISO-8859-7';
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
+    
+    validateUploadedFile($_FILES['archiveZipped']['name'], 3);
+    
         $tool_content .= "<fieldset>
 	<legend>".$langFileSent."</legend>
 	<table class='tbl' width='100%'>
@@ -888,10 +891,11 @@ function unpack_zip_show_files($zipfile)
 	global $webDir, $uid, $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
 	$retString = '';
+	$zip = new pclZip($zipfile);
+	validateUploadedZipFile($zip->listContent(), 3);
 
 	$destdir = $webDir.'courses/tmpUnzipping/'.$uid;
 	mkpath($destdir);
-	$zip = new pclZip($zipfile);
 	chdir($destdir);
 	$state = $zip->extract(PCLZIP_CB_PRE_EXTRACT, 'fix_old_backup_names');
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound

@@ -77,7 +77,7 @@ if ($u)	{
             validateUserNodes(intval($u), true);
         
         $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone,
-                        user.registered_at, user.expires_at, user.statut, user.am, verified_mail
+                        user.registered_at, user.expires_at, user.statut, user.am, user.verified_mail, user.whitelist
                         FROM user WHERE user.user_id = $u");
         $info = mysql_fetch_assoc($q);
         if (isset($_POST['submit_editauth'])) {
@@ -267,6 +267,10 @@ $tool_content .= "
        <td>$u</td>
      </tr>
      <tr>
+       <th>$langUserWhitelist</th>
+       <td><textarea rows='6' cols='60' name='user_upload_whitelist'>".q($info['whitelist'])."</textarea></td>
+     </tr>
+     <tr>
        <th>&nbsp;</th>
        <td class='right'>
 	    <input type='hidden' name='u' value='$u' />
@@ -370,6 +374,7 @@ $tool_content .= "
 	$year=$date[2];
 	$month=$date[1];
 	$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
+	$user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
 	$user_exist= FALSE;
 	// check if username is free
 	$username_check = db_query("SELECT username FROM user WHERE
@@ -425,7 +430,8 @@ $tool_content .= "
                                        username = $username, email = ".autoquote($email).",
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        expires_at=".$expires_at.",
-                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) ."
+                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) .",
+                                       whitelist = ". quote($user_upload_whitelist) ."
                                        WHERE user_id = ".intval($u);
 			
 			$qry = db_query($sql);

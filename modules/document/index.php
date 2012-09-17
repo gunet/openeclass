@@ -181,6 +181,7 @@ if ($can_upload) {
 
 	$action_message = $dialogBox = '';
 	if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
+	    validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
                 $userFile = $_FILES['userFile']['tmp_name'];
 		// check for disk quotas
 		$diskUsed = dir_total_space($basedir);
@@ -196,6 +197,7 @@ if ($can_upload) {
                                   and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
                                 /*** Unzipping stage ***/
                                 $zipFile = new pclZip($userFile);
+                                validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
                                 $realFileSize = 0;
                                 $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
                                 if ($diskUsed + $realFileSize > $diskQuotaDocument) {
@@ -506,6 +508,7 @@ if ($can_upload) {
         if (isset($_POST['replacePath']) and
             isset($_FILES['newFile']) and
             is_uploaded_file($_FILES['newFile']['tmp_name'])) {
+            validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
                 $replacePath = $_POST['replacePath'];
 		// Check if file actually exists
                 $result = db_query("SELECT path, format FROM document WHERE

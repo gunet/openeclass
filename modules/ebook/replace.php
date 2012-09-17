@@ -6,6 +6,7 @@ $helpTopic = 'EBook';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/pclzip/pclzip.lib.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 mysql_select_db($mysqlMainDb);
 
@@ -24,9 +25,13 @@ $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id
 if (!$is_editor or mysql_num_rows($r) == 0) {
         redirect_to_home_page();
 } elseif (isset($_FILES['file'])) {
+        
+        validateUploadedFile($_FILES['file']['name'], 2);
+        $zip = new pclZip($_FILES['file']['tmp_name']);
+        validateUploadedZipFile($zip->listContent(), 2);
+        
         $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
         chdir($basedir);
-        $zip = new pclZip($_FILES['file']['tmp_name']);
         if ($zip->extract()) {
                 $tool_content .= "<p class='success'>$langEBookReplaceDoneZip</p>\n";
         } else {

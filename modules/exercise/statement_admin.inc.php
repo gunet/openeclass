@@ -61,6 +61,10 @@ if(isset($_POST['submitQuestion'])) {
 	if (isset($_POST['deletePicture'])) {
 		$objQuestion->removePicture();
 	} elseif (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+	    
+	    require_once 'include/lib/fileUploadLib.inc.php';
+	    validateUploadedFile($_FILES['imageUpload']['name'], 2);
+	    
 		$type = $_FILES['imageUpload']['type'];
 		if (!$objQuestion->uploadPicture($_FILES['imageUpload']['tmp_name'], $type)) {
 			$tool_content .= "<div class='caution'>$langInvalidPicture</div>";

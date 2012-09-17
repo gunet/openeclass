@@ -43,10 +43,16 @@ if (!$is_editor) {
                 $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
                                  q($_FILES['file']['name']) . "</p>";
         }
+        
+        validateUploadedFile($_FILES['file']['name'], 2);
+        
         if (!empty($tool_content)) {
                 draw($tool_content, 2);
                 exit;
         }
+        
+        $zipFile = new pclZip($_FILES['file']['tmp_name']);
+        validateUploadedZipFile($zipFile->listContent(), 2);
 
         list($order) = mysql_fetch_row(db_query("SELECT MAX(`order`) FROM ebook WHERE course_id = $course_id"));
         if (!$order) {
@@ -69,7 +75,6 @@ if (!$is_editor) {
         }
 
         chdir($basedir);
-        $zipFile = new pclZip($_FILES['file']['tmp_name']);
         $realFileSize = 0;
         $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
         header("Location: {$urlAppend}modules/ebook/edit.php?course=$course_code&id=$ebook_id");

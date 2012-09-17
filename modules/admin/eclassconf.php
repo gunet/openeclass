@@ -107,6 +107,8 @@ if (isset($_POST['submit']))  {
         set_config('fax', $_POST['formfax']);
         set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
         set_config('min_password_len', intval($_POST['min_password_len']));
+        set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
+        set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
 
         $config_vars = array('email_required' => true,
                         'email_verification_required' => true,
@@ -425,6 +427,18 @@ else {
 		<th class='left'><b>$langDropboxQuota</b></th>
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr></table>
+	  </fieldset>
+	  <fieldset><legend>$langUploadWhitelist</legend>
+	  <table class='tbl' width='100%'>
+	  <tr>
+	  <th class='left'>$langStudentUploadWhitelist</th>
+	  <td><textarea rows='6' cols='60' name='student_upload_whitelist'>".get_config('student_upload_whitelist')."</textarea></td>
+	  </tr>
+	  <tr>
+	  <th class='left'>$langTeacherUploadWhitelist</th>
+	  <td><textarea rows='6' cols='60' name='teacher_upload_whitelist'>".get_config('teacher_upload_whitelist')."</textarea></td>
+	  </tr>
+	  </table>
 	  </fieldset>
 	    <input type='submit' name='submit' value='$langModify'>
         </form>";

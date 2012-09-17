@@ -196,6 +196,7 @@ db_query("CREATE TABLE user (
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
+      whitelist TEXT,
       PRIMARY KEY (user_id),
       KEY `user_username` (`username`)) $charset_spec");
 
@@ -879,10 +880,10 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
 $exp_time = time() + 140000000;
-db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`)
+db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`, `whitelist`)
                  VALUES (" . quote($nameForm) . ", '', " .
                              quote($loginForm) . ", '$password_encrypted', " .
-                             quote($emailForm) . ", 1, " . time() . ", $exp_time, 1)");
+                             quote($emailForm) . ", 1, " . time() . ", $exp_time, 1, '*,,')");
 $admin_uid = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                  VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -960,7 +961,7 @@ if ($restrict_owndep == 0) {
 
 db_query("CREATE TABLE `config`
                 (`key` VARCHAR(32) NOT NULL,
-                 `value` VARCHAR(255) NOT NULL,
+                 `value` TEXT NOT NULL,
                  PRIMARY KEY (`key`))");
 db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('base_url', ".quote($urlForm)."),
@@ -1004,6 +1005,8 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('account_duration', '126144000'),
                 ('language', ".quote($lang)."),
                 ('active_ui_languages', ".quote($active_ui_languages)."),
+                ('student_upload_whitelist', 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst'),
+                ('teacher_upload_whitelist', 'php3, php4, php5, phps, phtml, html, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm'),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module
