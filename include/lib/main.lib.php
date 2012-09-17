@@ -1667,9 +1667,6 @@ function text_area($name, $rows, $cols, $text, $extra = '')
 
 	global $purifier;
 
-	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
-			                      array('[m]', '[/m]', '[m]', '[/m]'),
-			                      $text));
         if (strpos($extra, 'class=') === false) {
                 $extra .= ' class="mceNoEditor"';
         }

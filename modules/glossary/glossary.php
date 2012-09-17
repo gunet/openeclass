@@ -191,6 +191,7 @@ if ($is_editor) {
                 if (isset($_GET['add'])) {
                         $nameTools = $langAddGlossaryTerm;
                         $submit_value = $langSubmit;
+                        $data['notes'] = $data['definition'] = '';
                 } else {
                         $nameTools = $langEditGlossaryTerm;
                         $id = intval($_GET['edit']);
