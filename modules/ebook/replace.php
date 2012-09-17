@@ -27,10 +27,12 @@ if (!$is_editor or mysql_num_rows($r) == 0) {
 } elseif (isset($_FILES['file'])) {
     
         validateUploadedFile($_FILES['file']['name'], 2);
+        $zip = new pclZip($_FILES['file']['tmp_name']);
+        validateUploadedZipFile($zip->listContent(), 2);
+        
     
         $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $id;
         chdir($basedir);
-        $zip = new pclZip($_FILES['file']['tmp_name']);
         if ($zip->extract()) {
                 $tool_content .= "<p class='success'>$langEBookReplaceDoneZip</p>\n";
         } else {

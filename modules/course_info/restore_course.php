@@ -719,10 +719,12 @@ function unpack_zip_show_files($zipfile)
 	global $webDir, $uid, $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
 	$retString = '';
+	
+	$zip = new pclZip($zipfile);
+	validateUploadedZipFile($zip->listContent(), 3);
 
 	$destdir = $webDir.'courses/tmpUnzipping/'.$uid;
 	mkpath($destdir);
-	$zip = new pclZip($zipfile);
 	chdir($destdir);	
 	$state = $zip->extract();
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound

@@ -618,17 +618,45 @@ function make_path($path, $path_components)
 /**
  * Validate a given uploaded filename against the whitelist and error if necessary.
  * 
- * @param string  $filename
- * @param integer $menuTypeID
+ * @param string  $filename   - The given filename.
+ * @param integer $menuTypeID - The menu type to display in case of error.
  */
 function validateUploadedFile($filename, $menuTypeID = 2)
 {
-    global $code_cours, $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed;
+    global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed;
 
-    if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<p class='caution'>$langUploadedFileNotAllowed<br/><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p><br/>";
+    if (!isWhitelistAllowed($filename))
+    {
+        $tool_content .= "<p class='caution'>$langUploadedFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
+    }
+}
+
+
+/**
+ * Validate a given uploaded zip archive contents against the whitelist and error if necessary.
+ * 
+ * @param array   $listContent - The list contents of the zip arhive, preferably by directly wiring PclZip::listContent().
+ * @param integer $menuTypeID  - The menu type to display in case of error.
+ */
+function validateUploadedZipFile($listContent, $menuTypeID = 2)
+{
+    global $tool_content, $head_content, $langBack, $langUploadedZipFileNotAllowed;
+    
+    foreach ($listContent as $key => $entry)
+    {
+        if ($entry['folder'] == 1)
+            continue;
+        
+        $filename = basename($entry['filename']);
+        
+        if (!isWhitelistAllowed($filename))
+        {
+            $tool_content .= "<p class='caution'>$langUploadedZipFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
+            draw($tool_content, $menuTypeID, null, $head_content);
+            exit;
+        }
     }
 }
 

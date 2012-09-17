@@ -447,6 +447,7 @@ $langUploadWhitelist = "Upload Whitelist";
 $langStudentUploadWhitelist = "Whitelist Φοιτητών";
 $langTeacherUploadWhitelist = "Whitelist Καθηγητών";
 $langUploadedFileNotAllowed = "Το αρχείο που επιχειρείτε να ανεβάσετε δεν είναι επιτρεπτό. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
+$langUploadedZipFileNotAllowed = "Το zip αρχείο που επιχειρείτε να ανεβάσετε και αποσυμπιέσετε περιέχει μη επιτρεπτά αρχεία. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
