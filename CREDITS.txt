@@ -71,11 +71,30 @@ Also Credits to:
  Apostolos Kechagias <apkech@gmail.com>
  Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
 
+Also we would like to thank:
+ Aristotelis Glentis <arisg@noc.uoa.gr> (University of Athens)
+ Aggelos Kiayias <aggelos@di.uoa.gr> (Associate Professor, Department of Informatics, University of Athens) and his students 
+   Kyriakos Lesgidis
+   Demetris Procopiou
+   Spyridon Smparounis
+   Georgios Lestaris
+   Georgios Papakyriakopoulos
+   Konstantinos Ferles
+   George Tsolkas
+   Lykourgos Papaevgeniou
+   Ioannis Constantinou
+   George Argyros
+   Ioannis Stais
+   Nikolaos Karvelas
+for their contribution in security issues. 
+
+************************************************************************/
 Messages translated to spanish language by: 
 Ana Serrado Bayes <ana.serrado@uca.es>
 
 Messages translated to german language by: 
 George Nikolaidis <nikolage@noc.uoa.gr>
+************************************************************************/
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
 
