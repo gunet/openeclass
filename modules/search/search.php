@@ -31,6 +31,11 @@ $require_current_course = FALSE;
 
 $nameTools = $langSearch;
 
+if (!get_config('enable_search')) {
+        $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+        draw($tool_content, 0);
+        exit;
+}
 
 if (!register_posted_variables(array('search_terms' => false,
                                     'search_terms_title' => false,

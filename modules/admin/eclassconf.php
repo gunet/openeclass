@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -161,7 +161,8 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 	                'theme' => true,
 	                'alt_auth_student_req' => true,
 	                'disable_eclass_stud_reg' => true,
-	                'disable_eclass_prof_reg' => true);
+	                'disable_eclass_prof_reg' => true,
+					'enable_search' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -299,39 +300,33 @@ else {
 	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
 	$tool_content .= "
 	<tr>
-	  <th class='left'>disable_eclass_stud_reg</th>
 	  <td><input type='checkbox' name='disable_eclass_stud_reg' value='1'
 	    $cbox_disable_eclass_stud_reg>&nbsp;$langDisableEclassStudReg</td>
 	</tr>";
 
 	$cbox_disable_eclass_prof_reg = get_config('disable_eclass_prof_reg')? 'checked': '';
 	$tool_content .= "
-	<tr>
-	  <th class='left'>disable_eclass_prof_reg</th>
+	<tr>	  
 	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
 	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
 	</tr>";
         
         $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';	
 	$tool_content .= "
-	<tr>
-	  <th class='left'>close_user_registration</th>
+	<tr>	  
           <td>
 	  <input type=checkbox name='close_user_registration' value='1'
         $cbox_close_user_registration>&nbsp;$langViaReq</td>
 	</tr>";
         
         $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
-	$tool_content .= "<tr>
-	  <th class='left'>alt_auth_student_req</th>
+	$tool_content .= "<tr>	  
 	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
 	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
 	</tr>
+        <tr>        
+        <td>$langUserDurationAccount&nbsp;&nbsp;<input type='text' name='formdurationAccount' size='15' value='$durationAccount'></td></tr>
         <tr>
-        <td class='left'><b>\$durationAccount:</b></td>
-        <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'>&nbsp;&nbsp;$langUserDurationAccount</td></tr>
-        <tr>
-	    <th class=\"left\"><b>\$encryptedPasswd:</b></th>
 	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
 	  </tr>";
         $tool_content .= "</table></fieldset>";
@@ -368,63 +363,54 @@ else {
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
-        $max_glossary_terms = get_config('max_glossary_terms');
+    $max_glossary_terms = get_config('max_glossary_terms');
+    $cbox_enable_search = get_config('enable_search')?'checked':'';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
         <table class='tbl' width='100%'>	
-	  <tr>
-		<th class='left'><b>max_glossary_terms</b></th>
-		<td><input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' />&nbsp;$lang_max_glossary_terms</td>
+	  <tr>	
+		<td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>email_required</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>email_verification_required</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>dont_mail_unverified_mails</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails />&nbsp;$lang_dont_mail_unverified_mails</td>
 	  </tr>
-          <tr>
-		<th class='left'><b>email_from</b></th>
+          <tr>		
 		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>am_required</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>dropbox_allow_student_to_student</b></th>
+	  </tr>	  
+	  <tr>		
 		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>dont_display_login_form</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>block_username_change</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>display_captcha</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>insert_xml_metadata</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>betacms</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
 	  </tr>
-	  <tr>
-		<th class='left'><b>enable_mobileapi</b></th>
+	  <tr>		
 		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
 	  </tr>
+          <tr>
+                <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
+          </tr>
         </table></fieldset>";
         
         $tool_content .= "<fieldset>

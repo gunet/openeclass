@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,6 +37,12 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 $nameTools = $langSearch;
+if (!get_config('enable_search')) {
+        $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+        draw($tool_content, 2);
+        exit;
+}
+
 $found = false;
 register_posted_variables(array('announcements' => true,
 				'agenda' => true,
