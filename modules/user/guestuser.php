@@ -23,11 +23,11 @@ $require_course_admin = true;
 $require_help = TRUE;
 $helpTopic = 'Guest';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
 $nameTools = $langAddGuest;
-$navigation[] = array('url' => "user.php?course=$course_code", 'name' => $langAdminUsers);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 $default_guest_username = $langGuestUserName . $course_code;
 
@@ -35,13 +35,11 @@ if (isset($_POST['submit'])) {
         $password = autounquote($_POST['guestpassword']);
         createguest($default_guest_username, $course_id, $password);
         $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-                         "<a href='user.php?course=$course_code'>$langBackUser</a>";
+                         "<a href='index.php?course=$course_code'>$langBack</a>";
 } else {
         $guest_info = guestinfo($course_id);
         if ($guest_info) {
-                $tool_content .= "
-                        <p class='caution'>$langGuestExist<br />
-                        <a href='user.php?course=$course_code'>$langBackUser</a></p>";
+                $tool_content .= "<p class='caution'>$langGuestExist</p>";
                 $submit_label = $langModify;
         } else {
                 $guest_info = array('nom' => $langGuestSurname,
@@ -90,9 +88,8 @@ draw($tool_content, 2);
 // Create guest account or update password if it already exists
 function createguest($username, $course_id, $password)
 {
-	global $langGuestName, $langGuestSurname, $mysqlMainDb;
-
-	mysql_select_db($mysqlMainDb);
+	global $langGuestName, $langGuestSurname;
+	
 	$hasher = new PasswordHash(8, false);
 	$password = $hasher->HashPassword($password);
 
@@ -113,7 +110,6 @@ function createguest($username, $course_id, $password)
 }
 
 // Check if guest account exists and return account information
-
 function guestinfo($course_id) {
 
 	$q = db_query("SELECT nom, prenom, username FROM user, course_user

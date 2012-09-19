@@ -26,11 +26,11 @@ $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'User';
 
-include '../../include/baseTheme.php';
-include 'include/sendMail.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 
 $nameTools = $langAddUser;
-$navigation[] = array ('url' => "user.php?course=$course_code", 'name' => $langAdminUsers);
+$navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);

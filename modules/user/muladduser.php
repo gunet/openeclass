@@ -23,10 +23,10 @@ $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'User';
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 $nameTools = $langAddManyUsers;
-$navigation[] = array ("url"=>"user.php?course=$course_code", "name"=> $langAdminUsers);
+$navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langAdminUsers);
 
 if (isset($_POST['submit'])) {
         $ok = array();

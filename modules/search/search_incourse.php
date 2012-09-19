@@ -34,9 +34,17 @@
 
 $require_current_course = TRUE;
 $guest_allowed = true;
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 $nameTools = $langSearch;
+
+if (!get_config('enable_search')) {
+        $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+        draw($tool_content, 2);
+        exit;
+}
+
 $found = false;
 register_posted_variables(array('announcements' => true,
 				'agenda' => true,

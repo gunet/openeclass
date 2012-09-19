@@ -174,7 +174,8 @@ if (isset($_POST['welcomeScreen'])) {
                     'user_multidep' => true,
                     'restrict_owndep' => true,
                     'restrict_teacher_owndep' => true,
-                    'disable_log_user_actions' => true));
+                    'disable_log_user_actions' => true,
+                    'enable_search' => true));
 
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -226,7 +227,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
                   'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
-                  'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang');
+                  'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -338,7 +339,7 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 			<td>".checkbox_input('close_user_registration')."</td></tr>
 		<tr><th class='left'>$langDisableEclassStudReg</th>
 			<td>".checkbox_input('disable_eclass_stud_reg')."</td></tr>
-		<tr><th class='left'>$langDisableEclassProfReg</th>
+		<tr><th class='left'>$langDisableEclassProfReg</th>     
 			<td>".checkbox_input('disable_eclass_prof_reg')."</td></tr>
 	<tr><td colspan='2' class='right'>
 	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
@@ -427,6 +428,10 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
           <tr>
 		<th class='left'><b>$lang_disable_log_user_actions</b></th>
 		<td>".checkbox_input('disable_log_user_actions')."</td>
+	  </tr>
+          <tr>
+		<th class='left'><b>$langEnableSearch</b></th>
+		<td>".checkbox_input('enable_search')."</td>
 	  </tr>
 	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />

@@ -501,7 +501,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
             db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst'),
-                            ('teacher_upload_whitelist', 'php3, php4, php5, phps, phtml, html, html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm')");
+                            ('teacher_upload_whitelist', 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store')");
         }
 
         if ($oldversion < '3') {

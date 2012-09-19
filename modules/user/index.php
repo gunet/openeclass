@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,8 +24,8 @@ $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'User';
 
-include '../../include/baseTheme.php';
-include 'modules/admin/admin.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/admin/admin.inc.php';
 
 define ('COURSE_USERS_PER_PAGE', 15);
 
@@ -37,7 +37,7 @@ $head_content = '
 <script type="text/javascript">
 function confirmation (name)
 {
-    if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.' ?"))
+    if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.';"))
         {return true;}
     else
         {return false;}
@@ -47,16 +47,25 @@ function confirmation (name)
 
 $sql = "SELECT user.user_id, course_user.statut FROM course_user, user
 	WHERE course_user.course_id = $course_id AND course_user.user_id = user.user_id";
-$result_numb = db_query($sql, $mysqlMainDb);
+$result_numb = db_query($sql);
 $countUser = mysql_num_rows($result_numb);
 
 $teachers = $students = $visitors = 0;
 
 while ($numrows = mysql_fetch_array($result_numb)) {
 	switch ($numrows['statut']) {
-		case 1:	 $teachers++; break;
-		case 5:	 $students++; break;
-		case 10: $visitors++; break;
+		case USER_TEACHER: {
+                                $teachers++;
+                                break;                
+                }                        
+		case USER_STUDENT: {
+                        $students++;
+                        break;
+                }
+		case USER_GUEST: {
+                        $visitors++; 
+                        break;
+                }
 		default: break;
 	}
 }
@@ -67,12 +76,12 @@ if (isset($_GET['giveAdmin'])) {
         $new_admin_gid = intval($_GET['giveAdmin']);
         db_query("UPDATE course_user SET statut = 1
                         WHERE user_id = $new_admin_gid
-                        AND course_id = $course_id", $mysqlMainDb);
+                        AND course_id = $course_id");
 } elseif (isset($_GET['giveTutor'])) {
         $new_tutor_gid = intval($_GET['giveTutor']);
         db_query("UPDATE course_user SET tutor = 1
                         WHERE user_id = $new_tutor_gid
-                        AND course_id = $course_id", $mysqlMainDb);
+                        AND course_id = $course_id");
         db_query("UPDATE group_members, `group` SET is_tutor = 0
                         WHERE `group`.id = group_members.group_id AND
                               `group`.course_id = $course_id AND
@@ -81,23 +90,23 @@ if (isset($_GET['giveAdmin'])) {
         $new_editor_gid = intval($_GET['giveEditor']);
         db_query("UPDATE course_user SET editor = 1
                         WHERE user_id = $new_editor_gid
-                        AND course_id = $course_id", $mysqlMainDb);
+                        AND course_id = $course_id");
 } elseif (isset($_GET['removeAdmin'])) {
         $removed_admin_gid = intval($_GET['removeAdmin']);
         db_query("UPDATE course_user SET statut = 5
                         WHERE user_id <> $uid AND
                               user_id = $removed_admin_gid AND
-                              course_id = $course_id", $mysqlMainDb);
+                              course_id = $course_id");
 } elseif (isset($_GET['removeTutor'])) {
         $removed_tutor_gid = intval($_GET['removeTutor']);
         db_query("UPDATE course_user SET tutor = 0
                         WHERE user_id = $removed_tutor_gid
-                              AND course_id = $course_id", $mysqlMainDb);
+                              AND course_id = $course_id");
 } elseif (isset($_GET['removeEditor'])) {
         $removed_editor_gid = intval($_GET['removeEditor']);
         db_query("UPDATE course_user SET editor = 0
                         WHERE user_id = $removed_editor_gid
-                        AND course_id = $course_id", $mysqlMainDb);
+                        AND course_id = $course_id");
 } elseif (isset($_GET['unregister'])) {
         $unregister_gid = intval($_GET['unregister']);
         $unregister_ok = true;
@@ -107,7 +116,7 @@ if (isset($_GET['giveAdmin'])) {
                                         WHERE course_id = $course_id AND
                                               statut = 1 AND
                                               user_id != $uid
-                                        LIMIT 1", $mysqlMainDb);
+                                        LIMIT 1");
                 if (mysql_num_rows($result) == 0) {
                         $unregister_ok = false;
                 }

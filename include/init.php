@@ -389,7 +389,8 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
                              'usage' => MODULE_ID_UNITS,
                              'course_info' => MODULE_ID_COURSEINFO,
                              'course_tools' => MODULE_ID_TOOLADMIN,
-                             'units' => MODULE_ID_UNITS);
+                             'units' => MODULE_ID_UNITS,
+                             'search' => MODULE_ID_SEARCH);
 
 // the system admin has rights to all courses
 if ($is_admin) {

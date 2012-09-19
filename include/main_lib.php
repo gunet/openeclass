@@ -88,6 +88,7 @@ define('MODULE_ID_USAGE', 24);
 define('MODULE_ID_TOOLADMIN', 25);
 define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
+define('MODULE_ID_SEARCH', 28);
 
 // exercise answer types
 define('UNIQUE_ANSWER',   1);
