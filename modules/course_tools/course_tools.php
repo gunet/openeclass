@@ -1,9 +1,9 @@
-<?php
+<?php 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,23 +17,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
-
-/*
- * Course Tools Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component offers several operations regarding a course's tools.
- * The course administrator can:
- * 1. Activate/De-activate tools
- * 2. Upload external html page
- * 3. Add external links
- * 4. Delete the last two
- *
- */
 
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
@@ -52,9 +35,8 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 
 if (isset($_GET['action'])) {
         $action = intval($_GET['action']);
-} else {
-        $action = 0;
 }
+
 if (isset($_REQUEST['toolStatus']) ) {
         if (isset($_POST['toolStatActive'])) {
                 $tool_stat_active = $_POST['toolStatActive'];
@@ -164,112 +146,30 @@ if (isset($_POST['delete'])) {
 }
 
 if (isset($_POST['submit'])) {
-        // Add external link
-        if ($action == 2) {
-                $link = isset($_POST['link'])?$_POST['link']:'';
-                $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
-                if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
-                                or empty($link) or empty($name_link))  {
-                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=2'>$langHome</a></p><br />";
-                        draw($tool_content, 2, null, $head_content);
-                        exit();
-                }
-
-                $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
-                list($mID) = mysql_fetch_row($res);
-                if ($mID < 101) $mID = 101;
-                else $mID = $mID + 1;
-                $link = autoquote($link);
-                $name_link = autoquote($name_link);
-                db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
-                $tool_content .= "<p class='success'>$langLinkAdded</p>";
-        } elseif ($action == 1) {
-                $updir = "$webDir/courses/$currentCourseID/page"; //path to upload directory
-                $size = "20971520"; //file size is 20M (1024x1024x20)
-                if (isset($_FILES['file']['name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
-                        
-                        validateUploadedFile($_FILES['file']['name'], 2);
-                    
-                        if (unwanted_file($_FILES['file']['name'])) {
-                                $tool_content .= "<p class='caution'>$langUnwantedFiletype: " .
-                                                   q($_FILES['file']['name']) . "</p>";
-                                draw($tool_content, 2, null, $head_content);
-                                exit;
-                        } elseif ($_FILES['file']['size'] > "$size") {
-                                $tool_content .= "<p class='caution'>$langTooBig<br />\n";
-                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?action=1'>$langHome</a></p><br />";
-                                draw($tool_content, 2, null, $head_content);
-                        } else {
-                                $tmpfile = $_FILES['file']['tmp_name'];
-                                $file_name = $_FILES['file']['name'];
-                                $file_name = php2phps(add_ext_on_mime($file_name));
-                                @copy("$tmpfile", "$updir/$file_name")
-                                        or die("<p>$langCouldNot</p></tr>");
-
-                                $sql = 'SELECT MAX(`id`) FROM `accueil` ';
-                                $res = db_query($sql,$dbname);
-                                while ($maxID = mysql_fetch_row($res)) {
-                                        $mID = $maxID[0];
-                                }
-
-                                if($mID < 101) $mID = 101;
-                                else $mID = $mID+1;
-
-                                $link_name = quote($_POST['link_name']);
-                                $lien = quote("../../courses/$currentCourse/page/$file_name");
-                                db_query("INSERT INTO accueil VALUES (
-                                                $mID,
-                                                $link_name,
-                                                $lien,
-                                                'external_link',
-                                                '1',
-                                                '0',
-                                                '',
-                                                'HTML_PAGE'
-                                                )", $currentCourse);
-                                $tool_content .= "  <p class='success'>$langOkSent</p>\n";                
-                        }
-                }
+        // Add external link        
+        $link = isset($_POST['link'])?$_POST['link']:'';
+        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
+        if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
+                        or empty($link) or empty($name_link))  {
+                $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=true'>$langHome</a></p><br />";
+                draw($tool_content, 2, null, $head_content);
+                exit();
         }
-} elseif ($action == 1) { // upload html file
-        $nameTools = $langUploadPage;
-        $navigation[]= array ("url"=>"course_tools.php?course=$code_cours", "name"=> $langToolManagement);
-        $helpTopic = 'Import';
-
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;submit=yes&action=1' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'link_name');\">
-              <div class='info'><p>$langExplanation_0</p>
-              <p>$langExplanation_3</p></div>
-
-              <fieldset>
-              <legend>$langExplanation_1</legend> 
-                                <table class='tbl'>
-              <tr>
-                <th width='170'>$langSendPage</th>
-                <td><input type='file' name='file' size='35' accept='text/html'></td>
-                <td class='right'>&nbsp;</td>
-              </tr>
-              <tr>
-                <th>$langPgTitle</th>
-                <td><input type='text' name='link_name' size='40'></td>
-                <td class='right smaller'>$langExplanation_2</td>
-              </tr>
-              <tr>
-                <th>&nbsp;</th>
-                <td colspan='2' class='right'><input type='Submit' name='submit' value='$langAdd'></td>
-              </tr>
-              </table>
-              </fieldset>
-
-            </form>
-            <div class='right smaller'>$langNoticeExpl</div>'";
-        draw($tool_content, 2, null, $head_content);
-        exit();
-} elseif ($action == 2) { // add external link
+        $res = db_query('SELECT MAX(`id`) FROM `accueil`', $dbname);
+        list($mID) = mysql_fetch_row($res);
+        if ($mID < 101) $mID = 101;
+        else $mID = $mID + 1;
+        $link = autoquote($link);
+        $name_link = autoquote($name_link);
+        db_query("INSERT INTO accueil VALUES ($mID, $name_link, $link, 'external_link', 1, 0, $link, '')");
+        $tool_content .= "<p class='success'>$langLinkAdded</p>";
+        
+} elseif (isset($_GET['action'])) { // add external link
         $nameTools = $langAddExtLink;
         $navigation[]= array ('url' => 'course_tools.php?course='.$code_cours, 'name' => $langToolManagement);
         $helpTopic = 'Module';
         $tool_content .=  "
-          <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=2'>
+          <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=true'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -322,9 +222,8 @@ if (is_array($toolArr)) {
 //output tool content
 $tool_content .= "
 <div id='operations_container'>
-  <ul id='opslist'>
-    <li><a href='course_tools.php?course=$code_cours&amp;action=1'>$langUploadPage</a></li>
-    <li><a href='course_tools.php?course=$code_cours&amp;action=2'>$langAddExtLink</a></li>
+  <ul id='opslist'>    
+    <li><a href='course_tools.php?course=$code_cours&amp;action=true'>$langAddExtLink</a></li>
   </ul>
 </div>";
 
@@ -362,8 +261,7 @@ tForm;
 $extToolsCount = count($externalLinks) ;
 if ($extToolsCount > 0)  {
         // show table to edit/delete external links
-        $tool_content .= "
-        <br/>
+        $tool_content .= "<br/>
                 <table class='tbl_alt' width='100%'>
                 <tr>
                   <th>&nbsp;</th>
@@ -373,14 +271,14 @@ if ($extToolsCount > 0)  {
                   <th>&nbsp;</th>
                   <th><div align='left'>$langTitle</div></th>
                   <th width='20'>$langDelete</th>
-                </tr>\n";
+                </tr>";
         for ($i=0; $i < $extToolsCount; $i++) {
-                if ($i % 2==0) {
-                        $tool_content .= "                        <tr class='even'>\n";
-                } elseif ($i % 2 == 1) {
-                        $tool_content .= "                        <tr class='odd'>\n";
+                if ($i%2 == 0) {
+                        $tool_content .= "<tr class='even'>";
+                } elseif ($i%2 == 1) {
+                        $tool_content .= "<tr class='odd'>";
                 }
-                $tool_content .= "                          <th width='1'>
+                $tool_content .= "<th width='1'>
                         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
                         <td class='left'>{$externalLinks[$i]['text']}</td>
                         <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
@@ -389,9 +287,8 @@ if ($extToolsCount > 0)  {
                                   onClick=\"return confirmation('" .
                                             js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
                                        "');\" title='$langDelete' /></form></td>
-                     </tr>\n";
+                     </tr>";
         }
-        $tool_content .= "                        </table>\n";
+        $tool_content .= "</table>";
 }
 draw($tool_content, 2, null, $head_content);
-
