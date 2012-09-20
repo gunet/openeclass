@@ -46,6 +46,9 @@ if (extension_loaded('zlib')) {
 	$zipfile = $basedir . "/archive.$currentCourseID.$backup_date_short.zip";
 	$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'><ol>\n";
 
+        // Allow unlimited time for creating the archive
+        set_time_limit(0);
+
 	// creation of the sql queries will all the data dumped
 	create_backup_file($archivedir . '/backup.php');
 
