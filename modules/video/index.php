@@ -112,6 +112,7 @@ EOF;
 
 $filterv = '';
 $filterl = '';
+$eclplugin = true;
 if (isset($_REQUEST['docsfilter'])) {
 
     switch ($_REQUEST['docsfilter']) {
@@ -135,6 +136,9 @@ if (isset($_REQUEST['docsfilter'])) {
             $filterv = $filterl = "AND false";
             break;
         case 'media':
+            $eclplugin = false;
+            break;
+        case 'eclmedia':
         case 'file':
         default:
             break;
@@ -566,7 +570,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 					}
 
                                         if ($is_in_tinymce) {
-                                            $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
+                                            $furl = (is_supported_media($myrow['path'], true) && $eclplugin) ? $mediaPlay : $mediaURL;
                                             $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                         } else {
                                             $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
@@ -658,7 +662,7 @@ else {
 						}
 
                                                 if ($is_in_tinymce) {
-                                                   $furl = (is_supported_media($myrow['path'], true)) ? $mediaPlay : $mediaURL;
+                                                   $furl = (is_supported_media($myrow['path'], true) && $eclplugin) ? $mediaPlay : $mediaURL;
                                                     $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                                 } else {
                                                     $link_href = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
