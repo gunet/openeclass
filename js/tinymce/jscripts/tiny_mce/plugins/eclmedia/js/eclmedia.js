@@ -12,7 +12,7 @@ var MediaDialog = {
 		var f = document.forms[0], ed = tinyMCEPopup.editor;
 
 		// Setup browse button
-		document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser', 'href', 'media', 'eclmedia');
+		document.getElementById('hrefbrowsercontainer').innerHTML = getBrowserHTML('hrefbrowser', 'href', 'eclmedia', 'eclmedia');
 		if (isVisible('hrefbrowser'))
 			document.getElementById('href').style.width = '230px';
 
