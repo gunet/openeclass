@@ -102,6 +102,8 @@ if (isset($_GET['get'])) {
 if ($is_editor) {
         if (isset($_GET['download'])) {
                 include 'include/pclzip/pclzip.lib.php';
+                // Allow unlimited time for creating the archive
+                set_time_limit(0);
                 download_assignments(intval($_GET['download']));
         }
 }

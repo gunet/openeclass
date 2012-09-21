@@ -89,11 +89,10 @@ Also we would like to thank:
 for their contribution in security issues. 
 
 ************************************************************************/
-Messages translated to spanish language by: 
-Ana Serrado Bayes <ana.serrado@uca.es>
-
-Messages translated to german language by: 
-George Nikolaidis <nikolage@noc.uoa.gr>
+Messages translated to:
+        Spanish by Ana Serrado Bayes <ana.serrado@uca.es>
+        German by George Nikolaidis <nikolage@noc.uoa.gr>
+        Italian by Harris Kalligeros <hariskal@noc.uoa.gr>
 ************************************************************************/
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp
