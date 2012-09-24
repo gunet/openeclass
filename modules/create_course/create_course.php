@@ -209,12 +209,12 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	<td>
 	  <table class='tbl' width='100%'>
 	  <tr class='smaller'>
-	    <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' width='16' height='16' /> ".$m['legopen']."</th>
+	    <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' alt='".$m['legopen']."'width='16' height='16' /> ".$m['legopen']."</th>
 	    <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
 	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
+	    <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' alt='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
 	    <td>
               $langPrivOpen<br />
@@ -222,13 +222,13 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
             </td>
           </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
+	    <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' alt='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
 	    <td>$langPrivate</td>
 	  </tr>
           <tr class='smaller'>
-	    <th valign='top'><img src=\"$themeimg/lock_inactive.png\" title=\"".$m['linactive']."\" width=\"16\" height=\"16\" /> ".$m['linactive']."</th>
-	    <td valign='top'><input name=\"formvisible\" type=\"radio\" value='3' /></td>
+	    <th valign='top'><img src='$themeimg/lock_inactive.png' title='".$m['linactive']."' alt='".$m['linactive']."' width='16' height='16' /> ".$m['linactive']."</th>
+	    <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
 	    <td>$langCourseInactive</td>
 	  </tr>
 	  </table>      
