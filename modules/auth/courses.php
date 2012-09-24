@@ -21,13 +21,18 @@
 
 $require_login = TRUE;
 include '../../include/baseTheme.php';
+
+load_js('jquery');
+load_js('jquery-ui');
+load_js('tools.js');
+
 $nameTools = $langChoiceLesson;
-$navigation[] = array ("url"=>"courses.php", "name"=> $langChoiceDepartment);
+$navigation[] = array ('url' => 'courses.php', 'name' => $langChoiceDepartment);
 
 $icons = array(
-        2 => "<img src='$themeimg/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
-        1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
-        0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
+        COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' />",
+        COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' />",
+        COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' />"
 );
 
 if (isset($_REQUEST['fc'])) {
@@ -51,7 +56,7 @@ if (isset($_POST['selectCourse']) and is_array($_POST['selectCourse'])) {
         $selectCourse = array();
 }
 
-if (isset($_POST["submit"])) {
+if (isset($_POST['submit'])) {
         foreach ($changeCourse as $key => $value) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
@@ -154,8 +159,18 @@ if (isset($_POST["submit"])) {
 		$tool_content .= "\n    </form>";
 	} // end of else (department exists)
 }
+$tool_content .= "<script type='text/javascript'>$(course_list_init);
+var themeimg = '".js_escape($themeimg)."';
+var lang = {
+        unCourse: '".js_escape($langUnCourse)."',
+        cancel: '".js_escape($langCancel)."',
+        close: '".js_escape($langClose)."',
+        unregCourse: '".js_escape($langUnregCourse)."',
+        reregisterImpossible: '".js_escape("$langConfirmUnregCours $m[unsub]")."',
+        invalidCode: '".js_escape($langInvalidCode)."',
+};</script>";
 
-draw($tool_content, 1);
+draw($tool_content, 1, null, $head_content);
 
 
 function getfacfromfc($dep_id) {
@@ -305,6 +320,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         }
                         $retString .= "<td align='center'>";
                         $requirepassword = '';
+                        $vis_class = ($mycours['visible'] == 0)? 'class="reg_closed"': '';
+
                         if (isset($myCourses[$cid])) {
                                 if ($myCourses[$cid]['statut'] != 1) { // display registered courses
                                         // password needed
@@ -314,7 +331,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                         } else {
                                                 $requirepassword = '';
                                         }
-                                        $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' />";
+                                        $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
 					if ($mycours['visible'] == 0) {
 						$codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
 					}
@@ -327,19 +344,14 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                 } else {
                                         $requirepassword = '';
                                 }
-				if ($mycours['visible'] == 0) {
-					$retString .= "<input type='checkbox' disabled />";
-				}
-                                if (($mycours['visible'] == 1) or ($mycours['visible'] == 2)) {
-                                        $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' />";
-                                }
+                                $disabled = ($mycours['visible'] == 0)? 'disabled': '';
+                                $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
                         }
-                        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />";
-                        $retString .= "</td>";
-                        $retString .= "\n      <td>$codelink (" . q($mycours['fake_code']) .
-                                ")$requirepassword</td>";
-                        $retString .= "\n      <td>" . q($mycours['t']) . "</td>";
-                        $retString .= "\n      <td align='center'>";
+
+                        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
+                                   <td>$codelink (" . q($mycours['fake_code']) .")$requirepassword</td>
+                                   <td>". q($mycours['t']) ."</td>
+                                   <td align='center'>";
                         // show the necessary access icon
                         foreach ($icons as $visible => $image) {
                                 if ($visible == $mycours['visible']) {
