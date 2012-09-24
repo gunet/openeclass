@@ -132,6 +132,8 @@ if (isset($_POST['welcomeScreen'])) {
 	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = $enable_search = '';
         $email_from = 1;
         $close_user_registration = '';
+    $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
+    $teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';        
 } else {
 	register_posted_variables(array(
                 'dbHostForm' => true,
@@ -170,7 +172,9 @@ if (isset($_POST['welcomeScreen'])) {
 		'disable_eclass_stud_reg' => true,
 		'disable_eclass_prof_reg' => true,
                 'close_user_registration' => true,
-                'enable_search' => true));
+                'enable_search' => true,
+		'student_upload_whitelist' => true,
+		'teacher_upload_whitelist' => true));
 	
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -222,7 +226,7 @@ $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', '
                   'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required', 
                   'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
 		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg', 
-                  'disable_eclass_prof_reg', 'close_user_registration', 'enable_search');
+                  'disable_eclass_prof_reg', 'close_user_registration', 'enable_search', 'student_upload_whitelist', 'teacher_upload_whitelist');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
@@ -413,8 +417,17 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 		<th class='left'><b>$lang_enable_mobileapi</b></th>
 		<td>".checkbox_input('enable_mobileapi')."</td>
 	  </tr>
-          <tr><th class='left'>$langEnableSearch</th>
-		<td>".checkbox_input('enable_search')."</td></tr>
+	  </tr>
+	  <tr><th class='left'>$langEnableSearch</th>
+		<td>".checkbox_input('enable_search')."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langStudentUploadWhitelist</b></th>
+		<td>".textarea_input('student_upload_whitelist', 6, 60)."</td>
+	  </tr>
+	  <tr>
+		<th class='left'><b>$langTeacherUploadWhitelist</b></th>
+		<td>".textarea_input('teacher_upload_whitelist', 6, 60)."</td>
 	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
 	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
