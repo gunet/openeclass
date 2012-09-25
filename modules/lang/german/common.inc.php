@@ -1,28 +1,28 @@
 <?php
 
 // Message file for language de
-// Generated 2011-12-14 15:34:10
+// Generated 2012-09-19 07:37:54
 
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
 $langYes = "Ja";
 $langNo = "Nein";
-$langTeacher = "Dozent";
-$langOfTeacher = "Dozenten";
-$langTeachers = "Dozent";
-$langOfTeachers = "Dozent";
-$langsTeacher = "dozent";
-$langsOfTeacher = "dozenten";
-$langsTeachers = "dozenten";
-$langsOfTeachers = "dozenten";
+$langTeacher = "Lehrer";
+$langOfTeacher = "Lehrers";
+$langTeachers = "Lehrer";
+$langOfTeachers = "Lehrer";
+$langsTeacher = "Lehrer";
+$langsOfTeacher = "Lehrers";
+$langsTeachers = "Lehrer";
+$langsOfTeachers = "Lehrer";
 $langStudent = "Student";
 $langOfStudent = "Studenten";
 $langStudents = "Studenten";
 $langOfStudents = "Studenten";
-$langsStudent = "student";
-$langsOfStudent = "studenten";
-$langsStudents = "studenten";
-$langsOfStudents = "studenten";
-$langsOfStudentss = "studenten";
+$langsStudent = "Student";
+$langsOfStudent = "Studenten";
+$langsStudents = "Studenten";
+$langsOfStudents = "Studenten";
+$langsOfStudentss = "Studenten";
 $langsstudent_acc = "Student";
 $langGuest = "Gast Benutzer";
 $langGuests = "Gast Benutzer";

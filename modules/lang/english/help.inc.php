@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2011-12-14 15:34:03
+// Generated 2012-09-19 07:37:53
 
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
@@ -56,9 +56,10 @@ $langGuestContent = "<p>By clicking in 'Add guest account'you can create an acco
 $langHQuestionnaire = "Questionnaire";
 $langHQuestionnaire_student = $langHQuestionnaire ;
 $langQuestionnaireContent = "<p>With this tool can create and manage questionnaires.</p>
-<p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choise question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire'
+<p>To create a questionnaire click on 'Create Questionnaire'. In the next form fill the title and the start / end date of the questionnaire. You can choose the question type by clicking in the corresponing buttons ('New mulitple choice question' and 'New text fill question'. After completing the questions and their answers click on 'Create Questionnaire'
 </p>
-<p>Questionnaire results can accessed by the questionnaire admin page.</p>";
+<p>Questionnaire results can accessed by the questionnaire admin page.</p>"
+;
 $langQuestionnaire_studentContent = "<p>Questionnaire is a new module providing interaction between teachers and students. Course teacher create poll questionnaires about the course in order to have feedback from the students.
 </p>" ;
 $langHExercise = "Exercises";

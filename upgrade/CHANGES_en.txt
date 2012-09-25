@@ -3,7 +3,21 @@ Open eClass Platform - CHANGES
 ****************************************
 
 ********************************************************************
-Open eClass 2.5 - Changes List
+Open eClass 2.6 - List of changes
+********************************************************************
+-- User course registration has been improved.
+-- Various security fixes.
+-- Strict check during file uploading via list of safe extensions (whitelist).
+        Whitelist can be modified per user.
+-- Added administrator tool for merging user accounts.
+-- 'Search' module can be enabled / disabled.
+-- Display all dropbox files in 'Dropbox' only in course admin.
+-- Added Italian translation.
+-- Added French translation.
+
+
+********************************************************************
+Open eClass 2.5 - List of changes
 ********************************************************************
 -- New administrator user roles. Course and user administrator role. Users administrator role.        
 -- New course user role. Assistant professor role.
@@ -19,7 +33,7 @@ Open eClass 2.5 - Changes List
 
 
 ********************************************************************
-Open eClass 2.4.1 - Changes List
+Open eClass 2.4.1 - List of changes
 ********************************************************************
 
 -- Code reorganization and bug fixes for alternative authentication methods
@@ -29,7 +43,7 @@ students logging-in via alternative methods when registration is closed
 -- Minor bug fixes for the glossary and video modules
 
 ********************************************************************
-Open eClass 2.4 - Changes List
+Open eClass 2.4 - List of changes
 ********************************************************************
 
 -- Changed in Template and creation of new themes.
@@ -57,7 +71,7 @@ Open eClass 2.4 - Changes List
 -- Works in Mysql Strict Mode.
 
 ********************************************************************
-Open eClass 2.3 - Changes List
+Open eClass 2.3 - List of changes
 ********************************************************************
 -- Support for user authentication via Shibboleth
 -- Add "Student view" in Course Home module.
@@ -67,7 +81,7 @@ Open eClass 2.3 - Changes List
 -- Define optional course password while creating a course.
 
 ********************************************************************
-Open eClass 2.2 - Changes List
+Open eClass 2.2 - List of changes
 ********************************************************************
 -- Creation of subsystem "Course units". The trainer may organize his course according to learning resources.
 -- Various corrections in "Learning Path".
@@ -77,7 +91,7 @@ Open eClass 2.2 - Changes List
 -- Added support for Spanish Language
 
 ********************************************************************
-Open eClass 2.1.3 - Changes List
+Open eClass 2.1.3 - List of changes
 ********************************************************************
 -- Fix bug in "Learning Path"
 -- In "Announcements" mails are submitted per 50 users. Also in config.php if 
@@ -96,7 +110,7 @@ Open eClass 2.1.3 - Changes List
    Preserve extension .tar.gz in assignment submission.
 
 ********************************************************************
-Open eClass 2.1.2 - Changes List
+Open eClass 2.1.2 - List of changes
 ********************************************************************
 
 -- Fix bug in user authentication
@@ -106,7 +120,7 @@ Open eClass 2.1.2 - Changes List
 
 
 ********************************************************************
-Open eClass 2.1.1 - Changes List
+Open eClass 2.1.1 - List of changes
 ********************************************************************
 
 -- Fix bug in "Show old statistics".
@@ -118,7 +132,7 @@ Open eClass 2.1.1 - Changes List
 
 
 ********************************************************************
-Open eClass 2.1 - Changes List
+Open eClass 2.1 - List of changes
 ********************************************************************
 
 -- New Graphical User Interface

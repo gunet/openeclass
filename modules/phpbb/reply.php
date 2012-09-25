@@ -262,26 +262,7 @@ if (isset($_POST['submit'])) {
         <legend>$langTopicAnswer: ".q($topic_title)."</legend>
 	<table class='tbl' width='100%'>
         <tr>
-        <td>$langBodyMessage:";
-	if (isset($quote) && $quote) {
-		$sql = "SELECT pt.post_text, p.post_time, u.username 
-			FROM posts p, posts_text pt 
-			WHERE p.post_id = '$post' AND pt.post_id = p.post_id";
-		if ($r = db_query($sql, $currentCourseID)) {
-			$m = mysql_fetch_array($r);
-			$text = $m["post_text"];
-			$text = str_replace("<BR>", "\n", $text);
-			$text = stripslashes($text);
-			$text = bbdecode($text);
-			$text = undo_make_clickable($text);
-			$text = str_replace("[addsig]", "", $text);
-			eval("\$reply = \"$langQuoteMsg\";");
-		} else {
-			$tool_content .= $langErrorConnectForumDatabase;
-			draw($tool_content, 2, null, $head_content);
-			exit();
-		}
-	}
+        <td>$langBodyMessage:";	
 	if (!isset($reply)) {
 		$reply = "";
 	}

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,139 +18,82 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * eClass manuals Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component offers  the platform's manuals.
- *
- */
-
 $path2add=2;
 $mail_ver_excluded = true;
 include '../include/baseTheme.php';
 $nameTools = $langManuals;
 
-$urlServerTemp = strrev(substr(strrev($urlServer),1));
-
-$ext = langname_to_code($language);
-
-
-function manlink($basename, $langext, $desc)
-{
-        global $urlServerTemp, $langFormatPDF;
-
-        if (file_exists($basename . '_' . $langext . '.pdf')) {
-                $url = $urlServerTemp . '/manuals/' . $basename . '_' . $langext . '.pdf';
-        } else {
-                $url = $urlServerTemp . '/manuals/' . $basename . '_en.pdf';
-        }
-        return "<a href='$url' target='_blank' class='mainpage'>$desc</a>";
-}
-
-if (isset($language) and $language == 'greek') {
-	$rowspan = 5;
-} else {
-	$rowspan = 1;
-}
-
-
-
+$lang = langname_to_code($language);
 
 $tool_content .= "<table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td>". manlink('OpeneClass25', $ext, $langFinalDesc) ."</td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langFinalDesc, 'detail_descr', $lang) ."</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> ". manlink('OpeneClass25_short', $ext, $langShortDesc) ."</td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td> ". manlink($langShortDesc, 'short_descr', $lang) ."</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td>". manlink('manT/OpeneClass25_ManT', $ext, $langManT) ."</td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langManT, 'mant',  $lang) ."</td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> ". manlink('manS/OpeneClass25_ManS', $ext, $langManS) ."</td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td> ". manlink($langManS, 'mans', $lang) ."</td>
   </tr>
-</table>
-";
+</table>";
 
-if (isset($language) and $language == 'greek') {
 
-$tool_content .= "
-
-<p class='tool_title'>$langTutorials $langOfTeacher</p>
+$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfTeacher</p>
 
 <table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/create_teacher_account.pdf' target='_blank'>$langCreateAccount</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langCreateAccount, 'create_account', $lang)  ."</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/create_course.pdf' target='_blank'>$langCourseCreate</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langCourseCreate, 'create_course', $lang) ."</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/teacher_portfolio.pdf' target='_blank'>$langPersonalisedBriefcase</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langPersonalisedBriefcase, 'portfolio_management', $lang) ."</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/manage_course.pdf' target='_blank'>$langAdministratorCourse</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorCourse, 'course_management', $lang). "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/forum_teacher_view.pdf' target='_blank'>$langAdministratorForum</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorForum, 'forum_management', $lang). "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td> <a href='http://www.openeclass.org/guides/pdf/manage_groups.pdf' target='_blank'>$langAdministratorGroup</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorGroup, 'group_management', $lang). "</a></td>
   </tr>
+</table>";
 
-</table>
-
-
-
-
-
-<p class='tool_title'>$langTutorials $langOfStudent</p>
-
+$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent</p>
 
 <table width='100%' class='tbl_alt'>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/course_registration.pdf' target='_blank'>$langRegCourses</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langRegCourses, 'register_course', $lang) ."</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-   <td><a href='http://www.openeclass.org/guides/pdf/student_portfolio.pdf' target='_blank'>$langPersonalisedBriefcase</a></td>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+   <td>". manlink($langPersonalisedBriefcase, 'personal_portfolio', $lang). "</a></td>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/view_course.pdf' target='_blank'>$langIntroToCourse</a>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langIntroToCourse, 'ecourse', $lang) ."</a>
   </tr>
   <tr>
-    <th width='16'><img src='$themeimg/pdf.png' width='16' height='16' alt='icon'></th>
-    <td><a href='http://www.openeclass.org/guides/pdf/forum_student_view.pdf' target='_blank'>$langForumParticipation</a>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langForumParticipation, 'forum', $lang) ."</a>
   </tr>
-
-</table>
-";
-
-
-}
-
-$tool_content .= '<br><p class="smaller right">' .
-                 sprintf($langAcrobat, 
-                         '<a href="http://get.adobe.com/reader/" target="_blank">',
-                         '</a>',
-                         '<a href="http://pdfreaders.org/" target="_blank">',
-                         '</a>') . '</p>';
+</table>";
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
@@ -158,3 +101,10 @@ if (isset($uid) and $uid) {
         draw($tool_content, 0);
 }
 
+
+// create link
+function manlink($desc, $link, $lang)
+{                
+        $url = 'http://wiki.openeclass.org/doku.php';
+        return "<a href='$url?id=$lang:$link' target='_blank' class='mainpage'>$desc</a>";
+}
