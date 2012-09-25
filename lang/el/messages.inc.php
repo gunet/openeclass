@@ -1515,7 +1515,6 @@ $langLogout="Έξοδος";
 $langSupportForum="Περιοχή Υποστήριξης";
 $langInvalidAuth = "Λάθος τρόπος πιστοποίησης";
 $langContact = 'Επικοινωνία';
-$langInfoPlat = 'Ταυτότητα Πλατφόρμας';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
 $langNewAnnounce = "Νέα!";
 $langUnregUser = "Διαγραφή λογαριασμού";
