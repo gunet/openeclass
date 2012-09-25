@@ -34,21 +34,21 @@ if (isset($_POST['cid']) and isset($_POST['state'])) {
 } else {
         die('invalid');
 }
-
-$q = db_query("SELECT visible, password FROM course WHERE id = $cid");
+define('DEBUG_MYSQL', true);
+$q = db_query("SELECT visible, password FROM cours WHERE cours_id = $cid");
 if ($q and mysql_num_rows($q)) {
         list($visible, $course_password) = mysql_fetch_row($q);
         if ($state == 'true') {
                 if ($visible == COURSE_OPEN or
                     ($visible == COURSE_REGISTRATION and $password == $course_password)) {
-                        db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
+                        db_query("INSERT IGNORE INTO `cours_user` (`cours_id`, `user_id`, `statut`, `reg_date`)
                                          VALUES ($cid, $uid, 5, CURDATE())");
                         die('registered');
                 } else {
                         die('unauthorized');
                 }
         } else {
-                db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
+                db_query("DELETE FROM `cours_user` WHERE cours_id = $cid AND user_id = $uid");
                 die('unregistered');
         }
 } else {

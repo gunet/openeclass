@@ -166,9 +166,11 @@ var lang = {
         cancel: '".js_escape($langCancel)."',
         close: '".js_escape($langClose)."',
         unregCourse: '".js_escape($langUnregCourse)."',
-        reregisterImpossible: '".js_escape("$langConfirmUnregCours $m[unsub]")."',
+        reregisterImpossible: '".js_escape(langReregisterImpossible)."',
         invalidCode: '".js_escape($langInvalidCode)."',
 };</script>";
+
+$head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
 
 draw($tool_content, 1, null, $head_content);
 
@@ -308,7 +310,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
-                                $codelink = "<a href='../contact/index.php?from_reg=true&cours_id=$cid'>$course_title</a>";
+                                $codelink = "<a href='../contact/index.php?from_reg=true&amp;cours_id=$cid'>$course_title</a>";
                         } else {
                                 $codelink = $course_title;
                         }
