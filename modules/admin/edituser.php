@@ -127,6 +127,7 @@ if ($u)	{
                 }
                 $tool_content .= "
               <li><a href='edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
+              <li><a href='deluser.php?u=$u'>$langDelUser</a></li>
               <li><a href='listusers.php'>$langBack</a></li>";
                 $tool_content .= "</ul></div>";
                    $tool_content .= "
@@ -322,14 +323,14 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a></td>
+						<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></img></a></td></tr>\n";
+						<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></img></a></td></tr>\n";
 						break;
 				}
                                 $k++;

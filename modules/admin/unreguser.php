@@ -29,7 +29,6 @@
         @Description: Delete user from platform and from courses (eclass version)
 
  	This script allows the admin to :
- 	- permanently delete a user account
  	- delete a user from participating into a course
 
 ==============================================================================
@@ -51,182 +50,37 @@ $u_statut = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
-    $tool_content .= "<p class='title1'>$langConfirmDelete</p>
-        <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>";
-        if ($c) {
-                $tool_content .= " $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>";
-        }
-        $tool_content .= ";</div>
-                
-                <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>
-                <div class='right'> <a href='edituser.php?u=$u'>$langBack</a></div>
-                ";
+    
+    if ($u_account && $c) {
+        $tool_content .= "<p class='title1'>$langConfirmDelete</p>
+            <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
+            $langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>
+            </div>
+            <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>";
+    } else {
+        $tool_content .= "<p>$langErrorUnreguser</p>";
+    }
+    
+    $tool_content .= "<div class='right'><a href='edituser.php?u=$u'>$langBack</a></div><br/>";
+    
 } else {
-        if (!$c) {
-                if ($u == 1) {
-                        $tool_content .= $langTryDeleteAdmin;
-                } else {
-                        // now check if the user has registered courses...
-                        $q1 = db_query("SELECT * FROM cours_user WHERE user_id = $u");
-                        $total = mysql_num_rows($q1);
-                        if ($total>0) {
-                                // user has courses, so not allowed to delete
-                                $tool_content .= "$langUnregForbidden <em>$u_realname ($u_account)</em><br />";
-                                $v = 0;	$s = 0;
-                                for ($p = 0; $p < mysql_num_rows($q1); $p++) {
-                                        $l1 = mysql_fetch_array($q1);
-                                        $tutor = $l1[5];
-                                        if ($tutor == '1') {
-                                                $v++;
-                                        } else {
-                                                $s++;
-                                        }
-                                }
-
-                                if ($v > 0) {
-                                        if ($s > 0) {
-                                                //display list
-                                                $tool_content .= "$langUnregFirst <br/ ><br />";
-                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                             WHERE b.user_id = $u AND b.tutor = 0
-                                                                        ORDER BY b.statut, faculte.name");
-                                                // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-                                                if (mysql_num_rows($sql) > 0) {
-                                                        $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
-                                                                "<th>$langProperty</th><th>$langActions</th></tr>";
-                                                        for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-                                                                $logs = mysql_fetch_array($sql);
-                                                                $tool_content .= "<tr><td>".q($logs['code'])."</td><td>".
-                                                                        q($logs['intitule'])."</td><td align='center'>";
-                                                                switch ($logs[4])
-                                                                {
-                                                                        case '1':
-                                                                                $tool_content .= $langTeacher;
-                                                                                $tool_content .= "</td><td align='center'>---</td></tr>\n";
-                                                                                break;
-                                                                        case '0':
-                                                                                $tool_content .= $langStudent;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['cours_id']) ."'>$langDelete</a></td></tr>\n";
-                                                                                break;
-                                                                        default:
-                                                                                $tool_content .= $langVisitor;
-                                                                                $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['cours_id']) ."'>$langDelete</a></td></tr>\n";
-                                                                                break;
-                                                                }
-                                                        }
-                                                        $tool_content .= "</table>\n";
-                                                }
-                                        } else {
-                                                $tool_content .= "$langUnregTeacher<br />";
-                                                $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                        FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                             LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                             WHERE b.user_id = $u AND b.statut = 1
-                                                                        ORDER BY b.statut, faculte.name");
-                                                // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-                                                if (mysql_num_rows($sql) > 0) {
-                                                        $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                                "<table border=\"1\">\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
-                                                                "<th>$langProperty</th><th>$langActions</th></tr>";
-                                                        for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-                                                                $logs = mysql_fetch_array($sql);
-                                                                $tool_content .= "<tr><td>".q($logs[0])."</td><td>".
-                                                                        q($logs[1])."</td><td align=\"center\">";
-                                                                $tool_content .= $langTeacher;
-                                                                $tool_content .= "</td><td align=\"center\">---</td></tr>\n";
-                                                        }
-                                                }
-                                                $tool_content .= "</table>\n";
-
-                                        }
-                                } else {
-                                        // display list
-                                        $tool_content .= "$langUnregFirst <br /><br />";
-                                        $sql = db_query("SELECT a.code, a.intitule, b.statut, a.cours_id
-                                                                FROM cours AS a JOIN faculte ON a.faculteid = faculte.id
-                                                                     LEFT JOIN cours_user AS b ON a.cours_id = b.cours_id
-                                                                     WHERE b.user_id = $u
-                                                                ORDER BY b.statut, faculte.name");
-                                        // αν ο χρήστης συμμετέχει σε μαθήματα τότε παρουσίασε τη λίστα
-                                        if (mysql_num_rows($sql) > 0) {
-                                                $tool_content .= "<h4>$langStudentParticipation</h4>\n".
-                                                        "<table border='1'>\n<tr><th>$langCourseCode</th><th>$langLessonName</th>".
-                                                        "<th>$langProperty</th><th>$langActions</th></tr>";
-                                                for ($j = 0; $j < mysql_num_rows($sql); $j++) {
-                                                        $logs = mysql_fetch_array($sql);
-                                                        $tool_content .= "<tr><td>".q($logs['code'])."</td><td>".
-                                                                q($logs['intitule'])."</td><td align=\"center\">";
-                                                        switch ($logs['statut']) {
-                                                                case 1:
-                                                                        $tool_content .= $langTeacher;
-                                                                        $tool_content .= "</td><td align='center'>---</td></tr>\n";
-                                                                        break;
-                                                                case 5:
-                                                                        $tool_content .= $langStudent;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['cours_id']) ."'>$langDelete</a></td></tr>\n";
-                                                                        break;
-                                                                default:
-                                                                        $tool_content .= $langVisitor;
-                                                                        $tool_content .= "</td><td align='center'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=". q($logs['cours_id']) ."'>$langDelete</a></td></tr>\n";
-                                                                        break;
-                                                        }
-                                                }
-                                                $tool_content .= "</table>\n";
-                                        }
-                                }
-                                $t = 1;
-                        } else {
-                                $q = db_query("DELETE from user WHERE user_id = " . intval($u));
-                                if ($q and mysql_affected_rows() > 0) {
-                                        $t = 2;
-                                } else {
-                                        $t = 3;
-                                }
-                        }
-
-                        switch($t)
-                        {
-                                case '1': $tool_content .= "";	$m = 1; break;
-                                case '2': $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n"; $m = 0; break;
-                                case '3': $tool_content .= "$langErrorDelete"; $m = 1; break;
-                                default: $m = 0; break;
-                        }
-
-                        if ($u != 1) {
-                                db_query("DELETE from admin WHERE idUser = '".mysql_real_escape_string($u)."'");
-                        }
-                        if (mysql_affected_rows() > 0) {
-                                $tool_content .= "<p>$langUserWithId ".q($u)." $langWasAdmin.</p>\n";
-                        }
-
-                        // delete guest user from cours_user
-                        if ($u_statut == '10') {
-                                $sql = db_query("DELETE from cours_user WHERE user_id = $u");
-                        }
-                }
-
-        } elseif ($c and $u) {
-                $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
-                if (mysql_affected_rows() > 0) {
-                        db_query("DELETE FROM group_members
-                                         WHERE user_id = $u AND
-                                               group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
-                        $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
-                        $m = 1;
-                }
+    if ($c and $u) {
+        $q = db_query("DELETE from cours_user WHERE user_id = $u AND cours_id = $c");
+        if (mysql_affected_rows() > 0) {
+            db_query("DELETE FROM group_members
+                            WHERE user_id = $u AND
+                            group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
+            $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
+            $m = 1;
         }
-        else
-        {
-                $tool_content .= "$langErrorDelete";
-        }
-        $tool_content .= "<br />&nbsp;";
-        if((isset($m)) && (!empty($m))) {
-                $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
-        }
-        $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
+    } else {
+        $tool_content .= "$langErrorDelete";
+    }
+    $tool_content .= "<br />&nbsp;";
+    if((isset($m)) && (!empty($m))) {
+        $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
+    }
+    $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
 }
 
 function get_uid_statut($u)

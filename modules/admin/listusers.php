@@ -281,7 +281,7 @@ if($countUser > 0) {
                         } else {
                                 $tool_content .= "<td width='80'><a href=\"edituser.php?u=".$logs['user_id']."\">
                                 <img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
-                                <a href='unreguser.php?u=".$logs['user_id']."'>
+                                <a href='deluser.php?u=".$logs['user_id']."'>
                                 <img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'>
                                 </a>
                                 <a href='userstats.php?u=".$logs['user_id']."'>
