@@ -109,8 +109,8 @@ function add_bookmark() {
 }
 
 function control_deactivate_off() {
-        $("div#unsubscontrols input").attr('disabled', '1');
-        $("div#unsubscontrols").addClass('inactive');
+        $("#unsubscontrols input").attr('disabled', 'disabled');
+        $("#unsubscontrols").addClass('inactive');
 }
 
 // Deactivate course e-mail subscription controls
@@ -119,10 +119,106 @@ function control_deactivate() {
         $("#unsub").change(function () {
                 checkState = $(this).is(':checked');
                 if (checkState) {
-                        $("div#unsubscontrols input").removeAttr('disabled');
-                        $("div#unsubscontrols").removeClass('inactive');
+                        $("#unsubscontrols input").removeAttr('disabled');
+                        $("#unsubscontrols").removeClass('inactive');
                 } else {
                         control_deactivate_off();
                 }
         });
 }
+
+// Course registration UI
+
+function course_checkbox_disabled(id, state)
+{
+        $('input[type=checkbox][value='+id+']').prop('disabled', state);
+}
+
+function course_list_init()
+{
+        $.course_closed = [];
+        var $dialog = $('<div></div>')
+                        .html(lang.reregisterImpossible)
+                        .dialog({
+                                autoOpen: false,
+                                title: lang.unregCourse,
+                                buttons: [
+                                    { text: lang.unCourse,
+                                      click: function() {
+                                                      $.trigger_checkbox
+                                                                .prop('checked', false).change();
+                                                      $(this).dialog('close');
+                                             }
+                                    },
+                                    { text: lang.cancel,
+                                      click: function() { $(this).dialog('close'); }
+                                    } ]
+                        });
+        $('input[type=submit]').remove();
+        $('input[type=checkbox]').change(course_list_handler).each(function () {
+                var cid = $(this).val();
+                $.course_closed[cid] = $(this).hasClass('reg_closed');
+        });
+        $('input.reg_closed[type=checkbox]:checked').click(function() {
+                $.trigger_checkbox = $(this);
+                $dialog.dialog('open');
+                return false;
+        });
+        $('input[type=password][value=]').each(function () {
+                var id = $(this).attr('name').replace('pass', '');
+                course_checkbox_disabled(id, true);
+                $(this).on('keypress change paste', function () {
+                        course_checkbox_disabled(id, false);
+                });
+                $(this).keydown(function(event) {
+                        if (event.which == 13) {
+                                if ($(this).val() != '') {
+                                        $('input[type=checkbox][value='+id+']:not(:checked)')
+                                                .prop('checked', true).change();
+                                }
+                                return false;
+                        }
+                });
+
+        });
+}
+
+function course_list_handler()
+{
+        var cid = $(this).attr('value');
+        var td = $(this).parent().next();
+        $('#res'+cid).remove();
+        if (!$('#ind'+cid).length) {
+                td.append(' <img id="ind'+cid+'" src="'+themeimg+'/ajax_loader.gif" alt="">');
+        }
+        var submit_info = { cid: cid, state: $(this).prop('checked') };
+        var passfield = $('input[name=pass'+cid+']');
+        if (passfield.length) {
+                submit_info.password = passfield.val();
+        }
+        $.post('course_submit.php',
+               submit_info,
+               function (result) {
+                       $('#ind'+cid).remove();
+                       if (result == 'registered') {
+                               td.append(' <img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');
+                       } else {
+                               $('input[type=checkbox][value='+cid+']').prop('checked', false);
+                               if ($.course_closed[cid]) {
+                                       course_checkbox_disabled(cid, true);
+                               }
+                               if (passfield.length && result == 'unauthorized') {
+                                       $('<div></div>').html(lang.invalidCode)
+                                                       .dialog({
+                                                                buttons: [ { text: lang.close,
+                                                                             click: function() {
+                                                                                     $(this).dialog('close'); }
+                                                                         } ]
+                                                       });
+
+                               }
+                       }
+               },
+               'text');
+}
+

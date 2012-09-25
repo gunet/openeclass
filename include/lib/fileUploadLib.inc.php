@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -631,6 +631,25 @@ function validateUploadedFile($filename, $menuTypeID = 2)
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
+}
+
+
+/**
+ * Validate a given renamed filename against the whitelist and error if necessary.
+ *
+ * @param string  $filename   - The given filename.
+ * @param integer $menuTypeID - The menu type to display in case of error.
+ */
+function validateRenamedFile($filename, $menuTypeID = 2)
+{
+	global $tool_content, $head_content, $langBack, $langRenamedFileNotAllowed;
+
+	if (!isWhitelistAllowed($filename))
+	{
+		$tool_content .= "<p class='caution'>$langRenamedFileNotAllowed<br/><a href='javascript:history.go(-1)'>$langBack</a></p><br/>";
+		draw($tool_content, $menuTypeID, null, $head_content);
+		exit;
+	}
 }
 
 

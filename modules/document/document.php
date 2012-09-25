@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -346,6 +346,12 @@ if ($can_upload) {
 	******************************************/
 	// Step 2: Rename file by updating record in database
 	if (isset($_POST['renameTo'])) {
+	    $result = db_query("SELECT format FROM document WHERE $group_sql AND path =". quote($_POST['sourceFile']) );
+	    if (mysql_num_rows($result)) {
+	        $row = mysql_fetch_assoc($result);
+	        if ($row['format'] != '.dir')
+	            validateRenamedFile($_POST['renameTo'], $menuTypeID);
+	    }
 		db_query("UPDATE document SET filename=" .
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()

@@ -1,7 +1,7 @@
 <?php
 // $Id$
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet

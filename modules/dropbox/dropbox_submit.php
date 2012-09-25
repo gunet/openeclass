@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.5.2
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
