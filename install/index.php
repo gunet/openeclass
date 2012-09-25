@@ -417,7 +417,6 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 		<th class='left'><b>$lang_enable_mobileapi</b></th>
 		<td>".checkbox_input('enable_mobileapi')."</td>
 	  </tr>
-	  </tr>
 	  <tr><th class='left'>$langEnableSearch</th>
 		<td>".checkbox_input('enable_search')."</td>
 	  </tr>
@@ -428,6 +427,7 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	  <tr>
 		<th class='left'><b>$langTeacherUploadWhitelist</b></th>
 		<td>".textarea_input('teacher_upload_whitelist', 6, 60)."</td>
+	  </tr>
 	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
 	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
