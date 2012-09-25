@@ -953,6 +953,8 @@ $course_multidep = intval($course_multidep);
 $user_multidep = intval($user_multidep);
 $restrict_owndep = intval($restrict_owndep);
 $restrict_teacher_owndep = intval($restrict_teacher_owndep);
+$student_upload_whitelist = quote($student_upload_whitelist);
+$teacher_upload_whitelist = quote($teacher_upload_whitelist);
 
 // restrict_owndep and restrict_teacher_owndep are interdependent
 if ($restrict_owndep == 0) {
@@ -1005,8 +1007,8 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('account_duration', '126144000'),
                 ('language', ".quote($lang)."),
                 ('active_ui_languages', ".quote($active_ui_languages)."),
-                ('student_upload_whitelist', 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst'),
-                ('teacher_upload_whitelist', html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store'),
+                ('student_upload_whitelist', $student_upload_whitelist),
+                ('teacher_upload_whitelist', $teacher_upload_whitelist),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module

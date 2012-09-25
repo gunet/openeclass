@@ -134,6 +134,8 @@ if (isset($_POST['welcomeScreen'])) {
 	$course_multidep = $user_multidep = $restrict_owndep = $restrict_teacher_owndep = $disable_log_user_actions = '';
 	$email_from = 1;
 	$close_user_registration = '';
+    $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
+    $teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 } else {
     register_posted_variables(array(
                     'lang' => true,
@@ -175,7 +177,9 @@ if (isset($_POST['welcomeScreen'])) {
                     'restrict_owndep' => true,
                     'restrict_teacher_owndep' => true,
                     'disable_log_user_actions' => true,
-                    'enable_search' => true));
+                    'enable_search' => true,
+                    'student_upload_whitelist' => true,
+                    'teacher_upload_whitelist' => true));
 
 	register_posted_variables(array(
 		'doc_quota' => true,
@@ -432,6 +436,14 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
           <tr>
 		<th class='left'><b>$langEnableSearch</b></th>
 		<td>".checkbox_input('enable_search')."</td>
+	  </tr>
+	  <tr>
+	      <th class='left'><b>$langStudentUploadWhitelist</b></th>
+	      <td>".textarea_input('student_upload_whitelist', 6, 60)."</td>
+	  </tr>
+	  <tr>
+	      <th class='left'><b>$langTeacherUploadWhitelist</b></th>
+	      <td>".textarea_input('teacher_upload_whitelist', 6, 60)."</td>
 	  </tr>
 	  <tr><td colspan='2' class='right'>
 	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
