@@ -357,7 +357,12 @@ if ($can_upload) {
 	******************************************/
 	// Step 2: Rename file by updating record in database
 	if (isset($_POST['renameTo'])) {
-                $r = mysql_fetch_array(db_query("SELECT filename FROM document WHERE path = ".autoquote($_POST['sourceFile']).""));
+        
+	    $r = mysql_fetch_array(db_query("SELECT filename, format FROM document WHERE $group_sql AND path = ". quote($_POST['sourceFile']) ));
+        
+        if ($r['format'] != '.dir')
+            validateRenamedFile($_POST['renameTo'], $menuTypeID);
+		
 		db_query("UPDATE document SET filename=" .
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
