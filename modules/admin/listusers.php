@@ -356,7 +356,7 @@ if($countUser > 0) {
                                 $width = (!isDepartmentAdmin()) ? 100 : 80;
                                 $tool_content .= "<td width='". $width ."'>
                                         <a href='edituser.php?u=$logs[user_id]'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
-                                        <a href='unreguser.php?u=$logs[user_id]'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
+                                        <a href='deluser.php?u=$logs[user_id]'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
                                         <a href='userstats.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langStat' alt='$langStat'></a>
                                         <a href='userlogs.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langActions' alt='$langActions'></a>";
                                 if (!isDepartmentAdmin())
