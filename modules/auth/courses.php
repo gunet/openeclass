@@ -166,7 +166,7 @@ var lang = {
         cancel: '".js_escape($langCancel)."',
         close: '".js_escape($langClose)."',
         unregCourse: '".js_escape($langUnregCourse)."',
-        reregisterImpossible: '".js_escape(langReregisterImpossible)."',
+        reregisterImpossible: '".js_escape($langReregisterImpossible)."',
         invalidCode: '".js_escape($langInvalidCode)."',
 };</script>";
 
