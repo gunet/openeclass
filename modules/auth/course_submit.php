@@ -34,7 +34,7 @@ if (isset($_POST['cid']) and isset($_POST['state'])) {
 } else {
         die('invalid');
 }
-define('DEBUG_MYSQL', true);
+
 $q = db_query("SELECT visible, password FROM cours WHERE cours_id = $cid");
 if ($q and mysql_num_rows($q)) {
         list($visible, $course_password) = mysql_fetch_row($q);
