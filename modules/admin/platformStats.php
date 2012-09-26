@@ -52,11 +52,8 @@ $tool_content .= "
 
 // jscalendar is used in order to select the time period for the statistics
 include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
+
+$lang = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();

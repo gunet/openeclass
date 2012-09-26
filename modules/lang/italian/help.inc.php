@@ -1,35 +1,37 @@
 <?php
 
 // Message file for language it
-// Generated 2012-09-19 07:37:54
+// Generated 2012-09-26 13:29:19
 
 $langWindowClose = 'Chiudi finestra';
 $langHDefault = 'Guida non disponibile';
 $langDefaultContent = '<p>Non è disponibile alcun testo di aiuto per la pagina della piattaforma che stai visualizzando ora.</p>';
 $langPHPMathPublisher = "<p><b>Supporto di simboli matematici</b></p> 
-<p>Per inserire dei simboli matematici nei tuoi documenti, puoi utilizzare i < a href = '../../manuals/PhpMathPublisherHelp.pdf' target = _blank>comandi< /a >(simboli) che fornisce il PhpMathPublisher. 
-Più dettagliatamente, utilizza l' editor di testo per inserire il tuo contenuto. Se nel contenuto che inserisci ci sono dei simboli matematici che desideri visualizzare, quindi:</p> 
+
+<p>Per inserire dei simboli matematici nei tuoi documenti, puoi utilizzare i
+<a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blanκ'>comandi</a>
+  (simboli) che fornisce il PhpMathPublisher. 
+  Più dettagliatamente, utilizza l' editor di testo per inserire il tuo contenuto.
+  Se nel contenuto che inserisci ci sono dei simboli matematici che desideri visualizzare, quindi:</p> 
 <ol> 
-<li> Clicca sull' icona 'Visualizza il codice HTML'.</li> 
-<li> Inserisci i simboli matematici tra i tag &lt;m>...... &lt;/m></li>
+<li>Clicca sull' icona 'Visualizza il codice HTML'.</li> 
+<li>Inserisci i simboli matematici tra i tag [m]...... [/m]</li>
 </ol>
-<p>Ad esempio per inserire la radice quadrata di 'a' digita &lt;m>sqrt{a}&lt;/m></p>"
-;
+<p>Ad esempio per inserire la radice quadrata di 'a' digita [m]sqrt{a}[/m]</p>";
 $langHFor = "Forum";
 $langHFor_student = $langHFor;
-$langForContent = "<p>Il modulo 'Forum' permette la comunicazione scritta asincrona tra gli studenti e gli insegnanti. I sopradetti utenti possono porre un nuovo argomento da discutere, oppure rispondere o modificare un argomento già posto. Così si effettua uno scambio grande di informazioni sulla materia del corso.</p>
+$langForContent = "<p>Il modulo \"Forum\" permette la comunicazione scritta asincrona tra gli studenti e gli insegnanti. I sopradetti utenti possono porre un nuovo argomento da discutere, oppure rispondere o modificare un argomento già posto. Così si effettua uno scambio grande di informazioni sulla materia del corso.</p>
 <p>Per creare un nuovo Forum, devi prima classificarlo in una categoria. Cliccando sul link 'Aggiungi Categoria' puoi inserire una nuova categoria. In seguito, compila il suo titolo e clicca sul tasto 'Aggiungere'. La nuova categoria viene quindi attivata.  Per inserire un nuovo forum a una certa categoria devi cliccare sul tasto (<img src='$themeimg/add.png' width=16 height=16>) che si trova a destra della categoria selezionata. Per concludere la procedura, compila il titolo e una descrizione del forum e premi dunque il tasto 'Aggiungere'.</p>
 <hr>
 <p><b>Operazioni supportate ai forum</b><br><br>
 Le operazioni che sono supportate dalla piattaforma rispetto al modulo 'Forum' sono: 
 <ul>
-  <li>Aggiungere un nuovo forum. Cliccando sul tasto  (<img src='$themeimg/add.png' width=16 height=16>) puoi inserire un nuovo forum.</li>
+  <li>Aggiungere un nuovo forum. Cliccando sul tasto (<img src='$themeimg/add.png' width=16 height=16>) puoi inserire un nuovo forum.</li>
   <li>Modificare un forum. Cliccando sul tasto (<img src='$themeimg/edit.png' width=16 height=16>) puoi modificare un forum esistente.</li>
   <li>Eliminare un forum. Cliccando sul tasto (<img src='$themeimg/delete.png' width=16 height=16>) puoi eliminare un forum esistente.</li>
-  <li>Notificazione tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notificazione tramite e-mail quando una risposta  al forum della propria categoria viene apposta.</li> 
+  <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando una risposta  al forum della propria categoria viene apposta.</li> 
   </ul>
 ";
-$langForContent_student = "<p>La piattaforma permette la creazione di forum, dove tutti gli utenti registrati al corso, entrambi studenti ed educatori, possono partecipare. </p>";
 $langHInit = "Home Page";
 $langInitContent = "<p class='helptopic'>Stai visualizzando la home page della piattaforma Open eClass. Inserisci il tuo nome utente e password per accedere alla piattaforma. Nel caso che hai dimenticato i tuoi dati di accesso, clicca su 'Hai dimenticato la password?' ed inserisci il tuo indirizzo e-mail che hai dichiarato alla tua registrazione, nel modulo che appare, per recuperare duqnue il username e la password.</p>
 
@@ -48,21 +50,43 @@ $langPortfolio_studentContent = $langPortfolioContent;
 $langHcourse_home = 'Pagina principale del corso';
 $langHcourse_home_student = $langHcourse_home;
 $langcourse_home_studentContent = '<p>Stai visualizzando la pagina principale del corso on-line. Dalle opzioni del menu laterale di sinistra, puoi entrare ai moduli del corso attivati dai suoi insegnanti.</p>';
-$langcourse_homeContent = "<p class='helptopic'>Stai vilualizzando la pagina principale del corso on-line. Dalle opzioni del menu laterale, puoi entrare a qualsiasi modulo del corso, dove puoi aggiungere il proprio contenuto. Gli strumenti attivi sono disponibili agli ospiti e agli studenti del corso, mentre gli strumenti inattivi sono solo visibili e accessibili all' insegnante.</p>
-<p class='helptopic'>Utilizzando gli strumenti di gestione puoi attivare o disattivare i moduli del corso desiderati, riconsiderare e gestire gli utenti registrati, modificare varie opzioni del corso (come il titolo del corso, il controllo dell' accesso, ecc.), e visualizzare le statistiche di utilizzo del corso.</p>
-<p class='helptopic'>Per aggiungere/modificare i dati del corso, utilizzi l' icona (<img src='$themeimg/edit.png' width=10 height=10 align=basename></img>) ed in seguito un modulo apparirà da compilare/modificare i dati.</p>
-<p class='helptopic'>Il corso si può dividere in sezioni tematiche, riuscendo così un' organizzazione migliore. Per creare una sezione tematica, clicca sul link 'Aggiungere sezione tematica'. Se ulteriori sezioni tematiche vi sono già aggiunte, saranno presenti sotto il titolo 'Sezioni tematiche' e accompagnate da una serie di icone: 'modifica', 'elimina' , 'cambia visibilità (visibile/invisibile)'. Se in tutto sono più di una, vengono presenti anche delle frecce che permettono il cambio della loro ordine di presenza. Il contenuto di ogni sezione tematica, è definito da un' altro display, che verrà presente con la sua selezione.</p>";
+$langcourse_homeContent = "<p class='helptopic'>Stai vilualizzando la pagina principale del corso
+on-line. Dalle opzioni del menu laterale, puoi entrare a qualsiasi modulo del
+corso, dove puoi aggiungere il proprio contenuto. Gli strumenti attivi sono
+disponibili agli ospiti e agli studenti del corso, mentre gli strumenti
+inattivi sono solo visibili e accessibili all' insegnante.</p>
+<p class='helptopic'>Utilizzando gli strumenti di gestione puoi attivare o
+disattivare i moduli del corso desiderati, riconsiderare e gestire gli utenti
+registrati, modificare varie opzioni del corso (come il titolo del corso, il
+controllo dell' accesso, ecc.), e visualizzare le statistiche di utilizzo del
+corso.</p>
+<p class='helptopic'>Per aggiungere/modificare i dati del corso, utilizzi l'
+icona (<img src='$themeimg/edit.png' width=10 height=10>)
+ed in seguito un modulo apparirà da compilare/modificare i dati.</p>
+<p class='helptopic'>Il corso si può dividere in sezioni tematiche, riuscendo
+così un' organizzazione migliore. Per creare una sezione tematica, clicca sul
+link 'Aggiungere sezione tematica'. Se ulteriori sezioni tematiche vi sono già
+aggiunte, saranno presenti sotto il titolo 'Sezioni tematiche' e accompagnate
+da una serie di icone: 'modifica', 'elimina' , 'cambia visibilità
+(visibile/invisibile)'. Se in tutto sono più di una, vengono presenti anche
+delle frecce che permettono il cambio della loro ordine di presenza. Il
+contenuto di ogni sezione tematica, è definito da un' altro display, che verrà
+presente con la sua selezione.</p>";
 $langHDoc = 'Documenti';
 $langHDoc_student = $langHDoc;
-$langDocContent = "<p>Il modulo 'Documenti' è uno strumento importante che aiuta notevolmente lo studente alla comprensione della materia del corso, siccome gli fornisce del materiale didattico.
-Puoi caricare file di qualsiasi tipo (HTML, Word, Powerpoint,
-Excel, Acrobat, Flash, Quicktime, ecc.). L'unica limitazione è l' applicazione adatta deve essere installata per poter legere i documenti.</ p>
-<p>Certe operazioni fondamentali vengono fornite dal modulo 'Documenti'. </ p>
-<h4>Caricare un file</ h4>
+$langDocContent = "<p>Il modulo 'Documenti' è uno strumento importante che aiuta notevolmente lo
+studente alla comprensione della materia del corso, siccome gli fornisce del
+materiale didattico.  Puoi caricare file di qualsiasi tipo (HTML, Word,
+Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.). L'unica limitazione è l'
+applicazione adatta deve essere installata per poter legere i documenti.</p>
+<p>Certe operazioni fondamentali vengono fornite dal modulo 'Documenti'. </p>
+
+<h4>Caricare un file</h4>
 <ul>
-  <li>Clicca  sul link 'Caricare file al server.' Poi, al modulo che viene visualizzato, utilizza il pulsante 'Sfoglia' per selezionare il file sul tuo computer
-   </li>
-<li>Esegui il caricamento cliccando sul pulsante 'Caricare'.</li>
+  <li>Clicca  sul link 'Caricare file al server.' Poi, al modulo che viene
+      visualizzato, utilizza il pulsante 'Sfoglia' per selezionare il file sul tuo
+      computer</li>
+  <li>Esegui il caricamento cliccando sul pulsante 'Caricare'.</li>
 </ul>
 <h4>Eliminare un file (o cartella)</h4>
 <ul>
@@ -70,104 +94,176 @@ Excel, Acrobat, Flash, Quicktime, ecc.). L'unica limitazione è l' applicazione 
 </ul>
 <h4>Scaricare una cartella intera</h4>
 <ul>
-  <li>Se si desideri salvare sul computer la cartella intera dei documenti, puoi premere il pulsante (<img src='$themeimg/save_s.png' width=16 height=16>) che si trova proprio sulla destra della cartella root. Per salvare solo una cartella specifica, clicca su un pulsante simile, che questa volta si trova a destra della cartella che desideri.</li>
-  </ul>
-  </ul>
-<h4>Spostare un file (o cartella)</h4>
-    <ul>
-      <li>Clicca sull'icona 'Spostare' (<img src = '$themeimg / move.png' width=10 height=10 align=basename>)
-        </li>
-      <li>Seleziona la cartella in cui desideri spostare il documento (o la cartella) (nota: la definizione 'root directory' (cartella root) significa che non puoi andare sopra di questo livello nella struttura alberata del file server).</ li>
-      <li>Convalida l' operazione facendo clic su 'Spostare'.</li>
-    </ul>
+  <li>Se si desideri salvare sul computer la cartella intera dei documenti,
+      puoi premere il pulsante (<img src='$themeimg/save_s.png' width=16 height=16>)
+      che si trova proprio sulla destra della cartella root. Per salvare solo una
+      cartella specifica, clicca su un pulsante simile, che questa volta si trova a
+      destra della cartella che desideri.</li>
+</ul>
 
-<h4> Rinominare un file (o cartella) </ h4>
+<h4>Spostare un file (o cartella)</h4>
 <ul>
-  <li>Clicca sull icona 'Rinominare' (<img src='$themeimg/rename.png' width=16 height=16
->) </li>
-  <li> Digita il nuovo nome nella casella (in alto a sinistra ).</ li>
+  <li>Clicca sull'icona 'Spostare' (<img src='$themeimg/move.png' width=10 height=10>)</li>
+  <li>Seleziona la cartella in cui desideri spostare il documento (o la
+      cartella) (nota: la definizione 'root directory' (cartella root) significa che
+      non puoi andare sopra di questo livello nella struttura alberata del file
+      server).</li>
+  <li>Convalida l' operazione facendo clic su 'Spostare'.</li>
+</ul>
+
+<h4> Rinominare un file (o cartella) </h4>
+<ul>
+  <li>Clicca sull' icona 'Rinominare' (<img src='$themeimg/rename.png' width=16 height=16
+>)</li>
+  <li> Digita il nuovo nome nella casella (in alto a sinistra ).</li>
   <li> Convalida facendo clic su 'Rinominare' </li>
 </ul>
-     <h4>Aggiungere o modificare un commento ad un file (o una cartella)</h4>
-    <ul>
-  <li> Fare clic sull icona  'Commento' (<img src='$themeimg/comment_edit.png' width=16
- height=16>)
-    alla colonna</li>
-      <li>Inserisci un nuovo commento nella casella corrispondente (in alto a destra).</li>
-      </ul>
-    <h4>Rendere un file (o cartella) invisibile dagli studenti</h4>
-    <ul>
-  <li>Clicca sull icona 'Visibile/Invisibile' (<img src='$themeimg/visible.png' width=10 height=10>)
-</li>
-   <li>Dopo questa operazione, il file (o la cartella) esiste ma non sarà visibile dagli studenti.</li>
-  <li>Per recuperare la sua visibilità, clicca su 'Visibile/Invisibile' (<img src='$themeimg/invisible.png' width=14 height=10>)
-  </li>
-    </ul>
-    <hr>
-    <h4><b>Creare una cartella</b></h4>
+<h4>Aggiungere o modificare un commento ad un file (o una cartella)</h4>
+<ul>
+  <li>Fare clic sull'icona  'Commento' (<img src='$themeimg/comment_edit.png' width=16  height=16>)
+      alla colonna</li>
+  <li>Inserisci un nuovo commento nella casella corrispondente (in alto a destra).</li>
+</ul>
+<h4>Rendere un file (o cartella) invisibile dagli studenti</h4>
+<ul>
+  <li>Clicca sull'icona 'Visibile/Invisibile' (<img src='$themeimg/visible.png' width=10 height=10>)</li>
+  <li>Dopo questa operazione, il file (o la cartella) esiste ma non sarà visibile dagli studenti.</li>
+  <li>Per recuperare la sua visibilità, clicca su 'Visibile/Invisibile'
+      (<img src='$themeimg/invisible.png' width=14 height=10>)</li>
+</ul>
+<hr>
+
+<h4>Creare una cartella</h4>
 <p>Puoi organizzare il tuo contenuto in cartelle. Per creare una cartella: </p>
-    <ul>
-     <li>Clicca  sul link 'Creare una cartella'</li>
-      <li>Inserisci il nome della nuova cartella nella casella corrispondente.</li>
-      <li>In seguito clicca su 'Creare cartella'. </li>
-    </ul>
-    <hr>
+<ul>
+  <li>Clicca  sul link 'Creare una cartella'</li>
+  <li>Inserisci il nome della nuova cartella nella casella corrispondente.</li>
+  <li>In seguito clicca su 'Creare cartella'.</li>
+</ul>
+<hr>
+
 <h4><b>Visualizzare lo spazio sul server disponibile</b></h4>
 <p>Puoi vedere il tuo spazio sul server disponibile</p>
-    <ul>
-      <li>Fai clic sul link 'Visualizza Spazio Server'</li>
-      <li>Sul panello che appare, vengono visualizzati lo spazio utilizzato, il tasso di utilizzo, e lo spazio totale disponibile. </li>
-    </ul>
-      </p>
-    <p>Il link 'Attivare/Disattivare' raggiunge il trasferimento dei documenti dagli strumenti attivi a quelli inattivi e vice versa.</p>
+<ul>
+  <li>Fai clic sul link 'Visualizza Spazio Server'</li>
+  <li>Sul panello che appare, vengono visualizzati lo spazio utilizzato, il tasso di utilizzo, e lo spazio totale disponibile.</li>
+</ul>
+<p>Il link 'Attivare/Disattivare' raggiunge il trasferimento dei documenti dagli strumenti attivi a quelli inattivi e vice versa.</p>
 ";
+$langDoc_studentContent = "<p>il modulo 'Documenti' è uno strumento importante che ti aiuta alla
+<b>comprensione</b> della materia del corso attraverso la fornitura di
+materiale didattico. Puoi 'scaricare' archivi o cartelle o in qualsiasi formato
+(HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.). L' unica
+<b>limitazione</b> è che è necessario aver installato sul tuo computer l'
+applicazione adatta per poter leggere/riprodurre i file corrispondenti. In
+questo modulo si puoi 'scaricare' pure i file del modulo 'Collaborazione
+remota' che sono del tipo chat.2011-11-24-573.txt e contengono tutti i messaggi
+scambiati tra l' insegnante e gli studenti. Questa operazione deve essere fatta
+dall' insegnante del corso e risulta molto utile se non hai partecipato alla
+'Collaborazione remota' della data corrispondente.</p> 
 
-$langDoc_studentContent = "<p>il modulo 'Documenti' è uno strumento importante che ti aiuta alla <b>comprensione</b> della materia del corso attraverso la fornitura di materiale didattico. Puoi 'scaricare' archivi o cartelle o in qualsiasi formato (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.). L' unica <b>limitazione</b> è che è necessario aver installato sul tuo computer l' applicazione adatta per poter leggere/riprodurre i file corrispondenti. In questo modulo si puoi 'scaricare' pure i file del modulo 'Collaborazione remota' che sono del tipo chat.2011-11-24-573.txt e contengono tutti i messaggi scambiati tra l' insegnante e gli studenti. Questa operazione deve essere fatta dall' insegnante del corso e risulta molto utile se non hai partecipato alla 'Collaborazione remota' della data corrispondente.</p> 
 <h4>Scaricare la cartella intera</h4> 
 
-<p>Se si desideri salvare nel tuo computer l'elenco <b>interο</b> dei documenti del corso, puoi premere il pulsante (<img src = '$ themeimg/save_s. png' width=16 height=16>) che si trova a destra della cartella iniziale. Per salvare solo una cartella particolare, premi un tale pulsante, quale si trova a destra della cartella che desideri.</p>";
+<p>Se si desideri salvare nel tuo computer l'elenco <b>interο</b> dei documenti
+del corso, puoi premere il pulsante (<img src='$themeimg/save_s.png'
+width=16 height=16>) che si trova a destra della cartella iniziale. Per salvare
+solo una cartella particolare, premi un tale pulsante, quale si trova a destra
+della cartella che desideri.</p>
+";
 $langHUser = "Gestione Utenti";
-$langUserContent = "
-<p>Questo modulo permette la <b>gestione</b> di tutti gli utenti registrati alla piattaforma. Inoltre fornisce una serie di informazioni su: il numero totale degli utenti registrati alla piattaforma, il numero degli insegnanti, il numero degli studenti e il numero degli ospiti.</p>
-<p>Cliccando su 'Aggiungere' hai alla tua disposizione una serie di opzioni come: </p>
+$langUserContent = "<p>Questo modulo permette la <b>gestione</b> di tutti gli utenti registrati
+alla piattaforma. Inoltre fornisce una serie di informazioni su: il numero
+totale degli utenti registrati alla piattaforma, il numero degli insegnanti, il
+numero degli studenti e il numero degli ospiti.</p>
+<p>Cliccando su 'Aggiungere' hai alla tua disposizione una serie di opzioni
+come:</p>
 <ul>
-<li><b>Aggiungere un utente.</b> Puoi aggiungere un utente compilando il suo nome e cognome o il username.</li>
-<li> <b>Aggiungere più utenti.</b> Con questa opzione è possibile aggiungere 'di massa degli utenti. </li>
-<li> <b>Aggiungere degli utenti ospiti.</b> Se desideri aggiungere un utente ospite, compila semplicemente la password che avrà per accedere alla piattaforma. </li>
-<li> <b>Cerca Utenti.</b> È possibile cercare un utente registrato compilando il suo nome e cognome o il suo username. </li>
-<li> <b>Gestione di Gruppi di Utenti.</b> Una serie di operazioni (creare, eliminare, aggiungere tutti, eliminare tutti) che riguardano ai gruppi di utenti sono disponibili selezionando l' opzione specifica. </li>
-</ui>
+  <li><b>Aggiungere un utente.</b> Puoi aggiungere un utente compilando
+  il suo nome e cognome o il username.</li>
+  <li><b>Aggiungere più utenti.</b> Con questa opzione è possibile aggiungere 'di
+        massa' degli utenti. </li>
+  <li><b>Aggiungere degli utenti ospiti.</b>
+      Se desideri aggiungere un utente ospite, compila semplicemente la
+      password che avrà per accedere alla piattaforma.</li>
+  <li><b>Cerca Utenti.</b> È possibile cercare un utente registrato compilando
+      il suo nome e cognome o il suo username.</li>
+  <li><b>Gestione di Gruppi di Utenti.</b> Una serie di operazioni (creare,
+      eliminare, aggiungere tutti, eliminare tutti) che riguardano ai gruppi
+      di utenti sono disponibili selezionando l' opzione specifica.</li>
+</ul>
 <hr>
 <p><b>Gestione di ruoli</b></p>
-<p>Un  numero di <b>autorizzazioni</b> sono forniti dalla piattaforma sulla gestione degli utenti, come segue: </p>
+<p>Un numero di <b>autorizzazioni</b> sono forniti dalla piattaforma sulla
+gestione degli utenti, come segue: </p>
 <ul>
- <li> <img src='$themeimg/teacher_add.png' width=24 height=16>Aggiungere  l' autorizzazione dell' insegnante. Come insegnante del corso, puoi specificare le autorizzazioni degli altri utenti e dei vari parametri del corso. </li>
- <li> <img src='$themeimg/assistant_add.png' width=24 height=16>Aggiungere l' autorizzazione dell' assistente dell' insegnante. La sua responsabilità principale è quella di attivare / disattivare degli strumenti e 'caricare' tutti i documenti necessari del corso. La concessione di una tale autorizzazione funziona come supporto al insegnante del corso.</li>
- <li> <img src='$themeimg/group_manager.png' width=16 height=16> Aggiungere l' autorizzazione del responsabile del gruppo. Come responsabile del gruppo puoi specificare gli utenti che compongono il gruppo e una serie di parametri ad esso associati. </li>
-</ui>
+  <li><img src='$themeimg/teacher_add.png' width=24 height=16>Aggiungere
+      l' autorizzazione dell' insegnante. Come insegnante del corso,
+      puoi specificare le autorizzazioni degli altri utenti e dei
+      vari parametri del corso. </li>
+  <li><img src='$themeimg/assistant_add.png' width=24 height=16>Aggiungere
+      l' autorizzazione dell' insegnante di sostegno. La sua
+      responsabilità principale è quella di attivare / disattivare
+      degli strumenti e 'caricare' tutti i documenti necessari del
+      corso. La concessione di una tale autorizzazione funziona come
+      supporto al insegnante del corso.</li>
+  <li><img src='$themeimg/group_manager.png' width=16 height=16>
+      Aggiungere l' autorizzazione del manager del gruppo. Come
+      manager del gruppo puoi specificare gli utenti che compongono
+      il gruppo e una serie di parametri ad esso associati. </li>
+</ul>
 <hr>
-<p> Questo modulo offre la possibilità di 'Cancellarsi' da un corso. Per il processo della 'Cancellazione' dal corso premi il pulsante <img lezione src='$themeimg/cunregister.png' width=16 height=16>.</p>";
+<p>Questo modulo offre la possibilità di
+'Cancellarsi' da un corso. Per il processo della
+'Cancellazione' dal corso premi il pulsante lezione
+<img src='$themeimg/cunregister.png' width=16 height=16>.</p>
+";
 $langHGuest = "Utente Ospite";
 $langGuestContent = "<p>Selezionando 'Aggiungere utente ospite' puoi aggiungere un nuovo utente ospite, i cui dati verranno resi noti a tutti gli utenti che sono iscritti al corso (o alla piattaforma). Un utente ospite, ha la possibilità di vedere la Home Page del corso in cui si è iscritto e tutti gli strumenti attivati, tuttavia non può eseguire altre operazioni, come caricare dei compiti.</p>";
 $langHQuestionnaire = "Questionario";
 $langHQuestionnaire_student = $langHQuestionnaire;
-$langQuestionnaireContent = "<p>Lo strumento 'Questionario' ti permette di <b>creare</b> sia delle domande  a 'Scelta multipla' che domande a 'Compilazione'. Per creare un questionario, clicca sul link 'Creare Questionario'. Nel display che appare, compila il titolo e il periodo per cui rimarrà attivo il tuo questionario. Poi seleziona il tipo di domanda desiderato cliccando su uno dei link 'Nuova domanda a scelta multipla' o 'Nuova domanda a compilazione'. Il processo viene completato facendo clic su 'Creare Questionario'. </p> 
-<p><img src='$themeimg/warning.png' width=18 height=18> <b> Avviso</b>: Se in un questionario attivo, qualche studente ha risposto almeno una domanda, il processo della correzione del questionario si realizza con la creazione di un 'nuovo' (del corretto). Questo processo si effettua automaticamente dalla piattaforma e garantisce la massima affidabilità dei risultati dei questionari.
+$langQuestionnaireContent = "<p>Lo strumento 'Questionario' ti permette di <b>creare</b> sia delle domande
+a 'Scelta multipla' che domande a 'Compilazione'. Per creare un questionario,
+clicca sul link 'Creare Questionario'. Nel display che appare, compila il
+titolo e il periodo per cui rimarrà attivo il tuo questionario. Poi seleziona
+il tipo di domanda desiderato cliccando su uno dei link 'Nuova domanda a scelta
+multipla' o 'Nuova domanda a compilazione'. Il processo viene completato
+facendo clic su 'Creare Questionario'. </p> 
+<p><img src='$themeimg/warning.png' width=18 height=18> <b> Avviso</b>: Se in
+un questionario attivo, qualche studente ha risposto almeno una domanda, il
+processo della correzione del questionario si realizza con la creazione di un
+'nuovo' (del corretto). Questo processo si effettua automaticamente dalla
+piattaforma e garantisce la massima affidabilità dei risultati dei questionari.
 </p>
 
 <hr> 
-<p><b>Operazioni supportate dal modulo 'Questionario'</b> <br><br> 
-Le azioni che sono supportati dalla piattaforma sul modulo 'Questionario' sono: <ul> 
-<li>Modificare questionario. Per modificare un questionario, clicca su <img src='$themeimg/edit.png' width=16 height=16> che si trova a destra</li>
-<li>Eliminare questionario. Per eliminare un questionario, basta fare clic sul pulsante (<img src='$themeimg/delete. png' width=16 height=16 >) che si trova a destra</li> 
-<li>Visibile/Invisibile. Per cambiare la visibilità del tuo questionario clicca su <img src='$themeimg/visibile.png' width=16 height=16> che si trova a destra.  
-</li>
-</ul>";
-$langQuestionnaire_studentContent = "<p>Lo strumento dei questionari permette l' <b>invio</b> di risposte sia a domande a 'Scelta multipla' che a domande a 'Compilazione'. Per rispondere a un questionario clicca sul suo titolo. Al display che appare, vengono presenti i dati che riguardano il medesimo questionario come: il suo titolo, la data della sua creazione, il suo inizio e la sua fine e se ci hai partecipato o no. Rispondi a tutte le domande nel questionario e clicca su 'Invio' da concludere la procedura.</br> 
-<img src = '$themeimg/warning. png' width=18 height=18>Se in un questionario attivo, qualche studente ha risposto almeno una domanda, il processo della correzione del questionario si realizza con la creazione di un 'nuovo' (del corretto). Questo processo si effettua automaticamente dalla piattaforma e garantisce la massima affidabilità dei risultati dei questionari.
-</p>" ;
+<p><b>Operazioni supportate dal modulo 'Questionario'</b></p>
+<p>Le azioni che sono supportati dalla piattaforma sul modulo 'Questionario'
+sono:</p>
+<ul> 
+  <li>Modificare questionario. Per modificare un questionario, clicca su
+      <img src='$themeimg/edit.png' width=16 height=16> che si trova a destra.</li>
+  <li>Eliminare questionario. Per eliminare un questionario, basta fare clic sul
+      pulsante (<img src='$themeimg/delete. png' width=16 height=16 >) che si trova
+      a destra.</li> 
+  <li>Visibile/Invisibile. Per cambiare la visibilità del tuo questionario clicca
+      su <img src='$themeimg/visibile.png' width=16 height=16> che si trova a destra.</li>
+</ul>
+";
+$langQuestionnaire_studentContent = "<p>Lo strumento dei questionari permette l' <b>invio</b> di risposte sia a
+domande a 'Scelta multipla' che a domande a 'Compilazione'. Per rispondere a un
+questionario clicca sul suo titolo. Al display che appare, vengono presenti i
+dati che riguardano il medesimo questionario come: il suo titolo, la data della
+sua creazione, il suo inizio e la sua fine e se ci hai partecipato o no.
+Rispondi a tutte le domande nel questionario e clicca su 'Invio' da concludere
+la procedura.</p> 
+<p><img src='$themeimg/warning. png' width=18 height=18>Se in un questionario
+attivo, qualche studente ha risposto almeno una domanda, il processo della
+correzione del questionario si realizza con la creazione di un 'nuovo' (del
+corretto). Questo processo si effettua automaticamente dalla piattaforma e
+garantisce la massima affidabilità dei risultati dei questionari.
+</p>";
 $langHExercise = "Esercizi";
-$langHExercise_student = $langHExercise ;
+$langHExercise_student = $langHExercise;
 $langExerciseContent = "<p>Il modulo 'Esercizi'  aiuta alla autovalutazione degli studenti in una serie di esercizi che sono stati creati dall' insegnante del corso. Nella home page degli esercizi vengono visualizzati tutti gli esercizi del corso e una serie di operazioni è fornita per la loro gestione (Modificare, Eliminare , Cambiare Visibilità). <br>
 <br>I tipi di domande che puoi includere in un esercizio sono i seguenti: <br>
 <ul>
@@ -206,7 +302,10 @@ Le operazioni che sono supportate dalla piattaforma riguardante al modulo degli 
  <hr>
  <p><b>Valutazione degli Esercizi</b> <br><br>
  Sulla destra di ogni domanda che viene creata, c' è un 'peso' che corrisponde alla sua valutazione. I valori supportati dalla piattaforma per la valutazione delle domande sono: valutazione positiva, valutazione negativa e valutazione zero. Il voto negativo ha un senso solo alle categorie 'Scelta multipla (risposta singola)' e 'Scelta multipla (risposte multiple) '. La somma delle risposte corrette potenziali  (cioè di tutti i pesi positivi), ci dà il 'perfetto'.
- </p>";
+
+ </p>
+
+";
 $langExercise_studentContent = "<p>Il modulo 'Esercizi'  aiuta alla tua autovalutazione in una serie di esercizi che sono stati creati dall' insegnante del corso. Nella home page degli esercizi vengono visualizzati tutti gli esercizi del corso, e occorre essere particolarmente attenti a:   le date di inizio e fine dell' esercizio, il suo limite di tempo e il numero di tentativi che lo puoi eseguire. Per eseguire un esercizio <b>clicca</b> sul suo nome.<br>
 <br>I tipi di domande che puoi rispondere in un esercizio sono i seguenti: <br>
 <ul>
@@ -243,9 +342,9 @@ Sulla destra di ogni domanda c'è un 'peso' che corrisponde alla sua valutazione
 </p>
 ";
 $langHWork = "Compiti";
-$langHWork_student = $langHWork ;
+$langHWork_student = $langHWork;
 $langWorkContent = "<p>Il modulo 'Compiti'  è un sistema integrato per creare e gestire dei compiti.</p> 
-<p>Come un insegnante, puoi creare un compito facendo clic sul link <b>'Creare compito'</b>.
+<p>Come un insegnante, puoi creare un compito facendo clic sul link <b>Creare compito'</b>.
 Compila il titolo del compito e specifica la data del suo invio. Facoltativamente puoi aggiungere un commento. Questo modulo contiene due tipi di compiti: 'Individuale', 'Collettivo'. Se selezioni 'Collettivo' come tipo di compito,  devi avere attivato il modulo  'Gruppi di utenti' in anticipo.</p> 
 <p>Dopo la creazione del compito, non dimenticare di attivarlo premendo l'icona <img src='$themeimg/invisible.png' border='0' align='absmiddle'>. Il compito sarà visibile e accessibile agli studenti, poiché sia attivato. Puoi in qualsiasi momento modificare il compito cliccando sull' icona <img src='$themeimg/edit.png' border='0' align='middle'> o eliminarlo cliccando sull'icona  (<img src='$themeimg/delete.png' border='0' align='middle'>).
 Cliccando sul titolo del compito, visualizzi i compiti già inviati dagli studenti.
@@ -255,9 +354,9 @@ Per dare i voti a un compito compila il punteggio rispettivo accanto al nome del
 Per inviare il compito, basta premere sul suo titolo. Nel caso in cui lo studente ha già inviato un compito e lo vuole modificare, dovrebbe inviare di nuovo il compito modificato. Così la piattaforma rimuove automaticamente il 'vecchio'  e lo sostituisce con il nuovo.</br></br>. 
 <img src='$themeimg/warning.png' width=18 height=18>. Tieni presente che dopo la <b>data finale</b> dell' invio di un compito, lo studente non lo può più inviare.
 </p> 
-<hr>"; 
-
-$langWork_studentContent = "<p>Il modulo 'Compiti' è uno strumento utile del corso elettronico che permette l' <b>invio</b> e la <b>valutazione</b> elettronica dei compiti del corso. In particolare, gli studenti hanno la possibilità di caricare sulla piattaforma i loro compiti fino alla data finale, e poi, poiché l' insegnante abbia dato il voto, essi lo possono vedere. Tutti i compiti del corso sono visibili nella cartella dei compiti. La suddetta cartella  contiene oltre al titolo del compito: la data finale dell' invio,  il punteggio dall' insegnante e un' indicazione di se lo studente ha inviato il compito o non. Per inviare il compito,  basta   cliccare sul proprio titolo. Se lo studente ha già inviato un compito e lo vuole modificare, dovrebbe inviare di nuovo il compito corretto.  Così la piattaforma automaticamente elimina il 'vecchio' compito e lo sostituisce con il 'nuovo'.</p> <p><img src='$themeimg/warning. png' width=18 height=18>Nota che dopo la data finale dell' invio di un compito, un eventuale invio in posticipo non è possibile.</br>&nbsp;&nbsp;  Se un compito è di gruppo, devi iscriverti a un gruppo, prima di inviarlo.";
+<hr> 
+$langPHPMathPublisher";
+$langWork_studentContent = "<p>Il modulo 'Compiti'  è uno strumento utile del corso elettronico che permette l' <b>invio</b> e la <b>valutazione</b> elettronica dei compiti del corso. In particolare, gli studenti hanno la possibilità di caricare sulla piattaforma i loro compiti fino alla data finale, e poi, poiché l' insegnante abbia dato il voto, essi lo possono vedere. Tutti i compiti del corso sono visibili nella cartella dei compiti. La suddetta cartella  contiene oltre al titolo del compito: la data finale dell' invio,  il punteggio dall' insegnante e un' indicazione di se lo studente ha inviato il compito o non. Per inviare il compito, basta  cliccare sul proprio titolo. Se lo studente ha già inviato un compito e lo vuole modificare, dovrebbe inviare di nuovo il compito corretto.  Così la piattaforma automaticamente elimina il 'vecchio' compito e lo sostituisce con il 'nuovo'.</p> <p><img src='$themeimg/warning.png' width=18 height=18>Nota che dopo la data finale dell' invio di un compito, un eventuale invio in posticipo non è possibile.</br>&nbsp;&nbsp;  Se un compito è di gruppo, devi iscriverti a un gruppo, prima di inviarlo.";
 $langHGroup = "Gruppi di Utenti";
 $langHGroup_student = $langHGroup;
 $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazione e l'interazione degli studenti con la loro organizzazione in gruppi. In questo modo si rinforza l'apprendimento collaborativo, si risolvono varie domande, e si scambiano dei pareri su argomenti particolari del corso. Ordinando in categorie le operazioni che si possono eseguire nel modulo 'Gruppi di utenti', si possono citare le seguenti:</p>
@@ -271,9 +370,8 @@ $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazion
 <p><b><a name='syn1'>Operazioni fondamentali dei gruppi di utenti</a> </b> </p>
 <p>Le funzioni fondamentali del gruppo di utenti sono:</p>
 <p><b>a) Creare un gruppo di utenti.</b> Per creare un gruppo di utenti compila il numero del gruppo o dei gruppi di utenti da creare e il numero dei propri membri. Poi fai clic su 'Creare'. </p>
-<p><b> b) Modificare i parametri di un gruppo di utenti.</b> Per modificare alcuni parametri di un gruppo di utenti basta fare clic su <img src='$themeimg/edit.png' width=16 height=16> che sta a destra. Puoi modificare i parametri del gruppo, come il suo nome, il capo del gruppo e il numero massimo dei partecipanti. Comunque, l' operazione più importante è lo spostamento dei partecipanti dentro e fuori dal gruppo, facendo clic sui pulsanti <img src='$themeimg/next.png' width=13 height=13> e <img src='$themeimg/back.png' width=13 height=13> rispettivamente. Il processo si completa premendo il pulsante 'Modificare'. </p>
+<p><b> b) Modificare i parametri di un gruppo di utenti.</b> Per modificare alcuni parametri di un gruppo di utenti basta fare clic su <img src='$themeimg/edit.png' width=16 height=16> che sta a destra. Puoi modificare i parametri del gruppo, come il suo nome, il manager del gruppo e il numero massimo dei partecipanti. Comunque, l' operazione più importante è lo spostamento dei partecipanti dentro e fuori dal gruppo, facendo clic sui pulsanti <img src='$themeimg/next.png' width=13 height=13> e <img src='$themeimg/back.png' width=13 height=13> rispettivamente. Il processo si completa premendo il pulsante 'Modificare'. </p>
 <p><b> c) Eliminazione di un gruppo di utenti.</b> Per eliminare un gruppo di utenti, fai clic sul pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sulla destra. </p>
-
 <hr noshade size=1>
 <p><b> <a name='syn2'>Impostazioni dei gruppi di utenti </a></b></p>
 <p>Una serie di impostazioni dei gruppi di utenti ti permette di personalizzare il funzionamento del gruppo, sia alle vostre esigenze che alle necessità del corso. Tra gli altri, puoi stabilire se gli studenti potranno <b>iscriversi</b> da soli ai gruppi di utenti, oppure se occorre il consenso da parte dell' insegnante. Basta segnalare una delle due opzioni nella casella di spunta appropriata per abilitare l' impostazione corrispondente. Inoltre puoi scegliere se il gruppo avrà <b>forum</b> o non, segnalando le caselle di controllo corrispondenti. Se desideri che l'accesso al forum sia <b>chiuso</b> (la partecipazione al forum si permette solo ai membri del gruppo) o <b>aperto</b> (ogni studente sarà in grado di leggere e scrivere dei messaggi), basta segnalare una delle due opzioni del modulo disponibili. Infine, dipende da te se nel gruppo particolare ci sono i <b>documenti</b> o non, seleziona la casella appropriata. In questo punto va notato che questi documenti riguardano al gruppo di utenti attuale e <b>non</b> sono associati al sistema globale dei 'documenti' sulla Home Page della piattaforma. </p>
@@ -285,23 +383,19 @@ $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazion
 <li><b>Completatare</b> tutti i gruppi di utenti. Rendendo conto tutti gli utenti registrati al corso,  la piattaforma aiuta l' insegnante creare in modo casuale dei gruppi di utenti (studenti), con lo strumento 'Riempire tutti i gruppi'.</li>
 <li><b>Svuotare</b> tutti i gruppi. Con questa operazione l' insegnante può rimuovere gli utenti da tutti i gruppi.</li>
 </ul>
-
-
 <hr noshade size=1>
 <p><b><a name='syn4'>Modificare un gruppo di utenti</a></b></p>
 <p>Per modificare un gruppo di utenti, questo modulo ti offre due operazioni fondamentali: In particolare: </p>
-<p><b>a) Area per il gruppo di utenti.</b>Una serie di informazioni utili (nome del gruppo di utenti, capo del gruppo,  membri del gruppo) sul gruppo attuale sono alla tua disposizione attraverso questo modulo. Inoltre, questa operazione fornisce una serie di link: </p>
+<p><b>a) Area per il gruppo di utenti.</b>Una serie di informazioni utili (nome del gruppo di utenti, manager del gruppo,  membri del gruppo) sul gruppo attuale sono alla tua disposizione attraverso questo modulo. Inoltre, questa operazione fornisce una serie di link: </p>
 <ul>
 <li>Modificare un gruppo di utenti. Si tratta proprio di un link alla  gestione dei dati del gruppo. </li>
 <li>Forum. Puoi creare un nuovo argomento da discutere che riguarda il gruppo attuale. Le operazioni supportate sono le seguenti: 'Nuovo Argomento', 'Eliminare Argomento' e la 'Notificare via e-mail per, le eventuali risposte inviate'. In questo punto va sottolineato che il post di un argomento sarà visualizzato anche dal modulo 'Forum' della Home Page della piattaforma. </li>
 <li>Documenti del Gruppo. Puoi aggiungere o rimuovere,  attraverso i link rispettivi, i documenti che si riferiscono al gruppo attuale. Anche in questo punto, va sottolineato che i documenti caricati riguardano il ​​gruppo attuale e non hanno rapporto con il modulo 'Documenti' della Home Page della piattaforma. È inoltre possibile creare delle cartelle in cui puoi sistemare i documenti del gruppo caricati,  facendo clic sul link 'Creare Cartella'. Una caratteristica molto utile che riguarda lo spazio al server che hai alla tua disposizione, è raggiungibile tramite il link 'Visualizzare lo spazio al server'. </li>
 </ul>
-<p><b>b) Gestione della lista degli utenti.</b> In questo modulo è possibile gestire la lista degli utenti nel corso. È possibile aggiungere uno o più utenti attraverso il link 'Aggiungere un utente' e 'Aggiungere molti utenti. Puoi anche aggiungere un utente ospite, cliccando sul link 'Aggiungere un utente ospite'. Per cercare un utente fai clic su 'Cercare utente' e compila il suo nome e cognome o il username. Per cancellare un utente basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sul lato destro dei dati dell'utente. </p>
-";
-
-$langGroup_studentContent = "<p>Un gruppo di utenti è una <b>collezione</b> di utenti registrati che condividono lo stesso forum e lo stesso spazio sul server di file e compiti caricati. Il modulo 'Gruppi di utenti' permette la collaborazione e l'interazione degli studenti attraverso la loro organizzazione in gruppi. In questo modo si rinforza l' apprendimento collaborativo, si sono risposte varie domande e scambiate delle opinioni su certe questioni del corso. I dati di un gruppo come: l' ufficiale del gruppo, il numero degli utenti registrati, il numero massimo degli utenti autorizzati nel gruppo è alla tua disposizione, per il tuo migliore aggiornamento riguardante al gruppo.</p>";
+<p><b>b) Gestione della lista degli utenti.</b> In questo modulo è possibile gestire la lista degli utenti nel corso. È possibile aggiungere uno o più utenti attraverso il link 'Aggiungere un utente' e 'Aggiungere molti utenti'. Puoi anche aggiungere un utente ospite, cliccando sul link 'Aggiungere un utente ospite'. Per cercare un utente fai clic su 'Cercare utente' e compila il suo nome e cognome o il username. Per cancellare un utente basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sul lato destro dei dati dell'utente. </p>";
+$langGroup_studentContent = "<p>Un gruppo di utenti è una <b>collezione</b> di utenti registrati che condividono lo stesso forum e lo stesso spazio sul server di file e compiti caricati. Il modulo 'Gruppi di utenti' permette la collaborazione e l'interazione degli studenti attraverso la loro organizzazione in gruppi. In questo modo si rinforza l' apprendimento collaborativo, si sono risposte varie domande e scambiate delle opinioni su certe questioni del corso. I dati di un gruppo come: il manager del gruppo, il numero degli utenti registrati, il numero massimo degli utenti autorizzati nel gruppo è alla tua disposizione, per il tuo migliore aggiornamento riguardante al gruppo.</p>.";
 $langHAgenda = "Agenda";
-$langHAgenda_student = $langHAgenda ;
+$langHAgenda_student = $langHAgenda;
 $langAgendaContent = "<p>Il modulo 'Agenda' ha l' obbiettivo  di <b>aggiornare</b> e <b>organizzare</b> il tempo degli insegnanti e degli studenti sui processi che hanno luogo in un certo corso. La specificazione dei capitoli (materia didattica), la specificazione del tempo quando avranno luogo la presentazioni del corso e dei soggetti che tratterà il corso, sono alcuni degli usi di questo modulo. Per aggiungere un evento all' agenda del corso, clicca sul link 'Aggiungere un evento '. Imposta il titolo, la descrizione, la data, l'ora e la durata che questo fatto venga postato. Per inserire dei simboli matematici segui le istruzioni che seguono. Il  processo viene completato premendo il link 'Aggiungere / Modificare'. </p> 
 <p><b>Operazioni supportate dal modulo 'Agenda'</b><br><br> 
 Le operazioni che sono supportate dalla piattaforma sul modulo 'Agenda' sono le seguenti: 
@@ -317,7 +411,7 @@ Le operazioni che sono supportate dalla piattaforma sul modulo 'Agenda' sono le 
 $langAgenda_studentContent = "
 <p>Il modulo 'Agenda' ha l' obbiettivo  di <b>aggiornare</b> e <b>organizzare</b> il tempo degli studenti sui processi che hanno luogo in un certo corso. La specificazione dei capitoli (materia didattica), la specificazione del tempo quando avranno luogo la presentazioni del corso, dei soggetti che tratterà il corso, sono alcuni degli usi di questo modulo. Usando la 'barra di scorrimento' sul lato destro del tuo browser, si possono vedere i vari eventi che si svolgono in un certo corso. È importante notare che oltre alla data programmata  di un evento, si riferisce ancora  l'ora esatta della sua realizzazione. L'utilità di questo modulo è evidente soprattutto in caso di emergenze o del cambiamento dell' orario della realizzazione di un corso.
 </p> 
-" ;
+";
 $langHLink = "Links";
 $langHLink_student = $langHLink;
 $langLinkContent = "<p>Via il modulo 'Link' puoi raccogliere tutti i link che sono utili per il corso. La piattaforma offre la possibilità di sistemare i link in categorie per facilitare il loro accesso. Le caratteristiche di questo modulo sono:</p>
@@ -328,18 +422,18 @@ $langLinkContent = "<p>Via il modulo 'Link' puoi raccogliere tutti i link che so
 <li>Modificare un link. Per modificare un link, basta cliccare il pulsante <img src='$themeimg/edit.png' width=16 height=16> che si trova a destra</li> 
 <li> Elimina un link. Per eliminare un link, basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova a destra</li> 
 <li> Spostare un link. Per cambiare l' organizzazione dei link in categorie, utilizza i pulsanti (<img src='$themeimg/up.png' width=16 height=16>) e (<img src='$themeimg/down.png' width=16 height=16>) che si trovano sulla destra</li> 
-</ul>";
-
-$langLink_studentContent = "<p>Il modulo link ti dà la possibilità di accedere a risorse utili su Internet raggruppate in categorie correlate al corso. Questi link sono scelti dall' insegnante del corso. Ogni link ha un titolo, una descrizione, con ulteriori informazioni. La piattaforma favorisce la <b>classificazione</b> dei link, rendendoli più facili da accederli.</p>";
+</ul> 
+";
+$langLink_studentContent = "<p>Il modulo link ti dà la possibilità di accedere a risorse utili su Internet raggruppate in categorie correlate al corso. Questi link sono scelti dall' insegnante del corso. Ogni link ha un titolo, una descrizione, con ulteriori informazioni. La piattaforma favorisce la <b>classificazione</b> dei link, rendendoli più facili da accederli. </p>";
 $langHAnnounce = "Annunci";
-$langHAnnounce_student = $langHAnnounce ;
+$langHAnnounce_student = $langHAnnounce;
 $langAnnounceContent = "<p>Puoi aggiungere degli annunci nella pagina del corso cliccando sul link 'Aggiungere Annuncio'. Compila nel modulo visualizzato il titolo e il corpo dell' annuncio. Per inserire dei simboli matematici effettua le operazioni che seguono:
 <p>Attraverso le icone <img src='$themeimg/edit.png' width=16 height=16> (Modificare) e <img src='$themeimg/delete.png' width=16 height=16> (Eliminare) puoi raggiungere le funzioni corrispondenti di un annuncio. L' attivazione-disattivazione del modulo degli annunci si realizza cliccando sui link 'Attivazione' - 'Disattivazione'  che stanno a destra del titolo del modulo.</p> 
 <p>L' icona <img src='$themeimg/feed.png' width=16 height=16> abilita il ricevimento automatico degli annunci del corso attraverso il RSS (Really Simple Syndication) sia da un telefono cellulare che da un computer. Basta premere sull' icona e se hai un computer o telefono cellulare, fornito di un lettore RSS, sarai in grado di approfittarti dei vantaggi di questo servizio. </p>
 <hr noshade size=1>
 <p> $langPHPMathPublisher </p>
-<p><a name='syn6'></a>";
-
+<p><a name='syn6'></a>
+";
 $langAnnounce_studentContent = "<p>Il modulo 'Annunci' permette l' <b>aggiornamento</b> degli studenti su temi che riguardano il corso. La piattaforma supporta il tuo aggiornamento con gli annunci del corso in tre modi: 
 </p> 
 <ol> 
@@ -349,7 +443,6 @@ $langAnnounce_studentContent = "<p>Il modulo 'Annunci' permette l' <b>aggiorname
 </ol>
 <p>
 </p>";
-
 $langHProfile = "Modificare profilo";
 $langProfileContent = "<p>Con questo modulo puoi <b>modificare</b> i dati di in un utente della piattaforma. È possibile modificare il nome/cognome dell'utente e il username. Inoltre è possibile modificare l' indirizzo email di un utente ed optare se sarà privato, apparirà a tutti o solo agli insegnanti. Il numero di immatricolazione e il numero telefono si possono pure modificare o cambiare la visibilità. Se ti interessa l' aspetto del tuo corso, puoi specificare il modo di visualizzazione,  selezionando 'Dettagliato' o 'Abbreviato'. Se desideri o non ricevere e-mail dai tuoi corsi, semplicemente seleziona la corrispondente casella di spunta. È possibile anche specificare la facoltà – dipartimento tramite una lista. Da raggiungere una forma completa del profilo è possibile aggiungere una foto e una breve descrizione. Il processo si conclude facendo clic su 'Modificare'.</p>
 ";
@@ -371,10 +464,8 @@ Le operazioni supportate dalla piattaforma sul modulo dell' attivazione degli st
 <li> <b>Aggiungere un link esterno sul menu laterale di sinistra</b>. Se desideri inserire un link esterno, compila l' indirizzo del link e premi il pulsante 'Aggiungere'. </li> 
  </ul> 
 </p>";
-
 $langHInfocours = "Gestione di Corso";
-$langInfocoursContent = "
-<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
+$langInfocoursContent = "<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
 <hr>
 <p> <b>Identità del corso</b></p>
 <p>Questa categoria riguarda gli elementi dell'identità del corso. Qui puoi <b>digitare</b> il codice e il titolo di un corso, e l' insegnante-insegnanti che gestiranno il corso. Tramite una casella di riepilogo puoi selezionare la Scuola-Faccoltà che appartiene questo corso, ed ancora il tipo del corso  - ad es. corso post-laurea. Questa categoria si conclude compilando alcune parole-chiave  che si usano dagli studenti affinché loro <b>si concentrino</b> al meglio sui concetti rispettivi. </p>
@@ -395,7 +486,7 @@ $langCourseAccessHelp
 </ul> 
 </p> ";
 $langHConference = "Collaborazione remota";
-$langHConference_student = $langHConference ;
+$langHConference_student = $langHConference;
 $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 <ul>
 <li><b>Svuotare</b>. Cliccando su questo link si puoi <b>svuotare</b> l'area di messaggi della 'Collaborazione Remota', sia quando il volume dei messaggi è molto grande, che quando inizi un nuovo tema di 'Collaborazione Remota'</li>
@@ -405,7 +496,7 @@ $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplic
 $langConference_studentContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 ";
 $langHVideo = "Multimedia";
-$langHVideo_student = $langHVideo ;
+$langHVideo_student = $langHVideo;
 $langVideoContent = "<p>
 Una parte del materiale dei corsi potrebbe essere del materiale audiovisivo.
 Il modulo 'Multimedia' può servire a migliorare il process dell'insegnamento e dell' apprendimento. Attraverso l' animazione e il suono che offre un file multimediale lo studente può sviluppare le abilità che sono difficili da creare attraverso un materiale stampato. Per pubblicare un file multimediale la piattaforma impiega due modi: </p> 
@@ -432,7 +523,7 @@ Se desideri scaricare un file multimediale sul tuo computer da salvarlo, clicca 
 Combinando il modulo 'Multimedia' con il modulo 'Documenti' risulta uno 'strumento di apprendimento' <b>potente</b> che è disponibile allo studente.
 </p> ";
 $langHCoursedescription = "Descrizione del corso";
-$langHCoursedescription_student = $langHCoursedescription ;
+$langHCoursedescription_student = $langHCoursedescription;
 $langCoursedescriptionContent = "<p>Attraverso il modulo 'Descrizione del Corso' puoi aggiungere delle informazioni cliccando sul link 'Creare e Modificare'. Le aree in cui puoi aggiungere delle informazioni si dividono nelle categorie seguenti: 
 <ul>
    <li>Contenuto del corso</li>
@@ -466,6 +557,7 @@ Le operazioni che sono supportate dalla piattaforma sul modulo  'Descrizione del
 $langPHPMathPublisher";
 $langCoursedescription_studentContent = "<p>Se il responsabile insegnante  <b>crea</b> la descrizione del corso, allora in questo modulo si possono trovare delle informazioni utili riguardanti l'identità del corso. In questo modo attraverso il modulo 'Descrizione del corso', uno può conoscere le diverse zone del corso. Categorizzando queste zone, ci sono: </p>
 <ul>
+   
    <li>Contenuto del corso</li>
    <li>Attività formative</li>
    <li>Ausiliari</li>
@@ -473,10 +565,9 @@ $langCoursedescription_studentContent = "<p>Se il responsabile insegnante  <b>cr
    <li>Modi di valutazione / esame </ li>
    <li>Informazioni aggiuntive</li>
 </ ul>
-<p>Tutte queste zone sono state progettate per raggiungere il tuo migliore aggiornamento e la tua migliore organizzazione ai corsi che stai attualmente seguendo.</p>";
-
+<p>Tutte queste zone sono state progettate per raggiungere il tuo migliore aggiornamento e la tua migliore organizzazione ai corsi che stai attualmente seguendo.</p";
 $langHPath = "Guida - Linea d' apprendimento";
-$langHPath_student = $langHPath ;
+$langHPath_student = $langHPath;
 $langPathContent = "<p>Lo strumento 'Percorso di apprendimento' (learning path) supporta quattro operazioni principali:</p>
 <ul>
 <li>Creare percorso di apprendimento</li>
@@ -572,8 +663,8 @@ href='http://www.trivantis.com/'>http://www.trivantis.com</a></li>
 <p>Il settore Lista di percorsi di apprendimento visualizza tutti i percorsi di apprendimento
 che <i>sono stati creati attraverso l' Open eClass</i> e tutti i percorsi di apprendimento importati e 
 <i>compatibile con il modello SCORM</i>.</p>
-<p>Il link 'Attivare / Disattivare' rende il percorso di apprendimento selezionato uno strumento attivo o inattivo  e viceversa.</p>";
-
+<p>Il link 'Attivare / Disattivare' rende il percorso di apprendimento selezionato uno strumento attivo o inattivo  e viceversa.</p>
+";
 $langPath_studentContent = "<p>Il percorso di apprendimento (learning path) è una sequenza di passi di apprendimento divisi in sezioni.
 Può essere basata sia al contenuto (assomiglia a un sommario),
 che ad azioni (assomigliando a un' agenda) o a un programma di azioni che vanno realizzate dallo studente, affinché lui comprenda un certo soggetto.
@@ -584,7 +675,7 @@ l'altro). Tutti gli oggetti del percorso di apprendimento hanno uno stato: compl
 quindi il progresso degli studenti è sempre disponibile attraverso lo 
 strumento speciale 'Monitorizzare i percorsi dell'apprendimento'. Per monitorizzare un oggetto didattico di un percorso di apprendimento, clicca sul titolo del percorso. Scegli tra gli oggetti visualizzati quale vuoi monitorizzare (attenzione: ad alcuni ha un ruolo la loro classifica). A seconda delle azioni che si svolgono (monitoraggio delle diapositive) si cambiano le percentuali dell' indice di progresso (a destra). Cliccando sul pulsante<img src='$themeimg/monitor.png'width=16 height=16> puoi visualizzare le informazioni dettagliate dell' Oggetto Didattico come: il Titolo, i Commenti, il Tipo della sezione, il tempo totale ecc.</p>";
 $langHDropbox = "Area di Condivisione di File";
-$langHDropbox_student = $langHDropbox ;
+$langHDropbox_student = $langHDropbox;
 $langDropboxContent = "<p>Il modulo 'Dropbox' (Area di Scambio File) è uno strumento che serve allo scambio di file tra insegnante e studente. Puoi scambiare qualsiasi tipo di file conosciuti (doc, docx, odt, pdf, ecc).</p> 
 <p>Il modulo include due cartelle condivise:</p> 
 <p><b><u>File in arrivo</u></b>. In questa cartella si visualizzano tutti i file che hai ricevuto dagli studenti con alcune informazioni ulteriori sul file, come: il nome dell' utente, la dimensione del file e la data d' invio. Per eliminare un file in arrivo, basta cliccare sull'icona (<img src='$themeimg/delete.png' width=10 height=10>) che sta sulla stessa riga con il file che vuoi rimuovere.</p> 
@@ -595,8 +686,8 @@ $langDropboxContent = "<p>Il modulo 'Dropbox' (Area di Scambio File) è uno stru
 <li>Per motivi di sicurezza i file eseguibili del formato *.exe non vanno 'caricati' sulla piattaforma</li> 
 <li>Quando si elimina un file, ciò non viene eliminato dalla database della piattaforma, ma solo dalla cartella attuale</li> 
 </ul> 
-</p> ";
-
+</p> 
+";
 $langDropbox_studentContent = "<p>Il 'Dropbox' (Area di Scambio File) è uno strumento che serve allo scambio di file tra insegnante e studente. Puoi scambiare qualsiasi tipo di file conosciuti (doc, docx, odt, pdf, ecc).</p><p>Il modulo include due cartelle condivise:</p> 
 <p><b><u>File in arrivo</u></b>. In questa cartella si visualizzano tutti i file che hai ricevuto dall' insegnante o da un altro studenti registrato nel corso. Alcune informazioni ulteriori sul file, come: il nome dell' utente, la dimensione del file e la data d' invio, sono dei dati molto utili per il tuo aggiornamento. Per eliminare un file in arrivo, basta cliccare sull' icona (<img src='$themeimg/delete.png' width=10 height=10>) che sta sulla stessa riga con il file che vuoi rimuovere.</p> 
 <p><b><u>File inviati</u></b>. In questa cartella si visualizzano i file che hai inviato a tutti gli utenti registrati nel corso (studenti, insegnanti) della piattaforma insieme con le informazioni corrispondenti. Per inviare un file ad un utente, devi prima cliccare sul link 'Caricare file'. In questo punto devi specificare il percorso dove il file si trova sul tuo computer scegliendo 'Sfoglia', e i suoi destinatari. Il campo 'Breve Descrizione' è facoltativo e lo puoi omettere. Via la casella di controllo 'Notificare agli utenti via e-mail',  puoi notificare agli utenti l' invio del file specifico tramite una posta elettronica.</p>
@@ -607,7 +698,6 @@ $langDropbox_studentContent = "<p>Il 'Dropbox' (Area di Scambio File) è uno str
 <li>Quando si elimina un file, ciò non viene eliminato dalla database della piattaforma, ma solo dalla cartella attuale</li> 
 </ul> 
 </p>";
-
 $langHUsage = "Statistiche di utilizzo";
 $langUsageContent = "<p>Questo modulo serve a visualizzare le statistiche per quanto riguarda entrambi i corsi e gli utenti. Attraverso diagrammi e liste di valori, hai alla tua disposizione vari <b>utili</b> elementi da cui puoi trarre una conclusione per quanto riguarda il corso. Operazioni come le 'Visite degli utenti a ogni corso' possono risultare molto utili per formulare un parere sull' interesse che suscita un corso agli studenti.</p>
 <p><b>Le <b>categorie</b> delle statistiche che sono supportate dalla piattaforma sono le seguenti:</p>
@@ -621,7 +711,6 @@ $langUsageContent = "<p>Questo modulo serve a visualizzare le statistiche per qu
 <hr>
 <p>Preferenza dei moduli</b></p>
 <p>La preferenza dei moduli<p> è un' operazione che è inclusa in tutte le suddette categorie di statistiche, e permette l' impostazione dei parametri che saranno utilizzati alla ricerca delle statistiche. Prima puoi specificare il tipo delle statistiche, in base al 'Numero di visite' o la 'Durata'. Poi, specifica la data di inizio e di scadenza, e prosegui alla visualizzazione delle statistiche. Se desideri visualizzare le statistiche per un certo utente, digita la prima lettera del suo cognome, altrimenti seleziona 'Tutti gli utenti' dalla lista di valori. Il processo si completa cliccando sul pulsante 'Inviare'.</p>";
-
 $langHCreateCourse = "Creare un corso";
 $langCreateCourseContent = "
 <p>Questo modulo è uno strumento molto importante della piattaforma, perché  l' insegnante lo può utilizzare per creare nuovi corsi. Il processo di creazione è costituito da 3 passi. In particolare:</p> 
@@ -634,7 +723,7 @@ La piattaforma supporta i seguenti modi di accesso da parte degli utenti:</p>
 $langCourseAccessHelp 
 ";
 $langHWiki = "Wiki";
-$langHWiki_student = $langHWiki ;
+$langHWiki_student = $langHWiki;
 $langWikiContent = "<p>Attraverso il modulo <b>Wiki</b> gli studenti e gli insegnanti possono  creare documenti in collaborazione. Questa operazione viene effettuata utilizzando un browser. Per questo motivo,  i <b>Wiki</b> sono uno strumento utile per la collaborazione tra gruppi di studenti nell' ambito del corso.</p>
 <p>Per creare un nuovo <b>Wiki</b> basta fare clic sul link 'Creare un nuovo Wiki'. Nel display visualizzato, compila il titolo del Wiki, inserisci una descrizione e fai clic sul pulsante 'Salvare' o 'Annullare' per procedere all' operazione rispettiva.</p>
 <p>Una serie di operazioni sono alla tua disposizione per quanto riguarda il Wiki. In particolare:</p>
@@ -655,13 +744,13 @@ $langWiki_studentContent = "
 
 $langWikiSyntaxHelp";
 $langHAddCourseUnits = "Aggiungere/Modificare sezione tematica";
-$langAddCourseUnitsContent = "<p class='helptopic'>Per aggiungere una nuova sezione tematica inserisci un titolo e una breve descrizione della sezione. Appena finito clicca su 'Aggiungere' per aggiungere una nuova sezione tematica.</p>";
+$langAddCourseUnitsContent = "<p class='helptopic'>Per aggiungere una nuova sezione tematica inserisci un titolo e una breve descrizione della sezione. Appena finito clicca su 'Aggiungere' per aggiungere una nuova sezione tematica</p>.";
 $langHAddCourseUnitscontent = "Aggiungere contenuto di sezione tematica";
 $langAddCourseUnitscontentContent = "<p class='helptopic'>In questo display dei contenuti o delle risorse vengono aggiunti alla sezione tematica selezionata. Il tipo delle risorse che si possono  aggiungere è scritto accanto alla parola 'Aggiungere:'. Cliccandola vengono visualizzate le risorse disponibili che corrispondono al tipo selezionato. Seleziona le risorse desiderate e quindi fai clic su 'Aggiungere selezionati'. Ogni risorsa che viene aggiunta, appare in un elenco e ha sulla destra le icone 'Modificare' e 'Eliminare'. Nota che qualora ci siano più di una sezioni tematiche in un corso, vengono visualizzati i link alla sezione successiva e precedente. Altrimenti puoi utilizzare  la lista delle opzioni che viene visualizzata nella parte inferiore della pagina,  per andare direttamente a qualsiasi sezione.</p>";
 $langHGlossary = "Glossario";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "
-<p>L' insegnante del corso ha la possibilità di aggiungere e gestire i termini che sono inclusi nel glossario del corso. Dopo aver entrato nel menu del corso, seleziona il link 'Glossario' che si trova sulla parte sinistra della pagina. Puoi optare se desideri, che i termini si visualizzino nelle pagine del corso, cliccando su 'Impostazioni' sulla parte destra del Glossario, e poi cliccando sulla casella con l' etichetta 'Visualizzare le definizioni nelle pagine del corso'.  Clicca su 'Inviare' e il processo viene completato con successo. Sullo schermo viene visualizzato la notificazione rispettiva.</p> 
+<p>L' insegnante del corso ha la possibilità di aggiungere e gestire i termini che sono inclusi nel glossario del corso. Dopo aver entrato nel menu del corso, seleziona il link 'Glossario' che si trova sulla parte sinistra della pagina. Puoi optare se desideri, che i termini si visualizzino nelle pagine del corso, cliccando su 'Impostazioni' sulla parte destra del Glossario, e poi cliccando sulla casella con l' etichetta 'Visualizzare le definizioni nelle pagine del corso'.  Clicca su 'Inviare' e il processo viene completato con successo. Sullo schermo viene visualizzato la notifica rispettiva.</p> 
 <p>Una serie di operazioni è disponibile sul modulo 'Glossario'.</p> 
 <hr> 
 <p><strong>Inserire un termine nel Glossario</strong></br>
@@ -766,20 +855,18 @@ Per <strong>eliminare</strong> un E-book,  dal menu principale (a sinistra), dev
 <h2>&nbsp;&nbsp;Associazione a Sezioni Tematiche</h2>
 <p>Puoi associare una sezione tematica del tuo corso, alla <strong>sezione</strong> corrispondente dell' <strong>E-book</strong>. Perciò, vai alla sezione del corso alla quale vuoi associare l' E-book,  e dalla barra con gli strumenti disponibili, seleziona <strong>'Aggiungere E-book'</strong>. Verrà visualizzata una pagina in cui devi selezionare la sezione dell' E-book desideri associare. In seguito,  premi <strong>'Aggiungere Selezionati'</strong>. </p>
 ";
-$langEBook_studentContent = "<p>L 'e-book' è un insieme di <b>hypertext</b> (ipertesto) che 'simula' il libro stampato. Sostanzialmente un e-book è una struttura flessibile che, oltre al testo in formato digitale, può essere ulteriormente migliorato con elementi multimediali come: foto, video, link esterni, ecc. In più, questo modulo permette l' impostazione dei contenuti in sezioni-sottosezioni. La presentazione dei contenuti avviene mediante una di lista di scelta (casella di riepilogo). La sfogliata di un e-book si svolge con modo amichevole, siccome ci sono pulsanti di controllo di varie operazioni, ad esempio pagina precedente - successiva.</p>.";
+$langEBook_studentContent = "<p>L' e-book è un insieme di <b>hypertext</b> (ipertesto) che 'simula' il libro stampato. Sostanzialmente un e-book è una struttura flessibile che, oltre al testo in formato digitale, può essere ulteriormente migliorato con elementi multimediali come: foto, video, link esterni, ecc. In più, questo modulo permette l' impostazione dei contenuti in sezioni-sottosezioni. La presentazione dei contenuti avviene mediante una di lista di scelta (casella di riepilogo). La sfogliata di un e-book si svolge con modo amichevole, siccome ci sono pulsanti di controllo di varie operazioni, ad esempio pagina precedente - successiva.</p>.";
 $langFor_studentContent = "<p>Il modulo 'Forum' permette la comunicazione scritta <b>asincrona</b> tra gli studenti e gli insegnanti. Ad un argomento già postato puoi dare la tua risposta, partecipando così al forum del corso. Per farlo, clicca sul forum che desideri. In seguito fai clic sul argomento che ti interessa da un certo gruppo e premi il link 'Rispondere'. Inserisci il testo che vuoi postare alla discussione particolare e poi clicca sul pulsante 'Inviare'.
 </p>
 <p>Per ogni forum la piattaforma fornisce una serie di informazioni, come: l' argomento, il numero dei post, l' ultimo (in tempo) post. Una funzione utile di questo modulo  è l'avviso via e-mail dei post inviati. Premendo il pulsante (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare gli avvisi via e-mail dei post inviati al forum della categoria attuale. </p>";
 $langHMyAgenda = "Il mio calendario";
-$langMyAgendaContent = "
-<p>Il modulo 'Mio Calendario' ha come obbiettivo l' <b>aggiornamento</b> e l'
+$langMyAgendaContent = "<p>Il modulo 'Mio Calendario' ha come obbiettivo l' <b>aggiornamento</b> e l'
 <b>organizzazione</b> del tuo tempo rispetto ai processi che si svolgono in
 questo corso. La determinazione dell' orario che avranno luogo le
 presentazione del corso e  gli esami, ed ancora altri e vari
 eventi significativi che riguardano al corso sono disponibili con questo modulo. In maniera grafica, vengono visualizzate le date e
 gli intervalli di tempo degli eventi. Qui si dovrebbe chiarire che questo
-modulo ha un rapporto immediato con il modulo 'Agenda'.</ p>
-";
+modulo ha un rapporto immediato con il modulo 'Agenda'.</ p>";
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
 <li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
@@ -790,8 +877,7 @@ $langCourseAccessHelp = "<ul>
 $langHPersonalStats = 'Le mie statistiche';
 $langPersonalStatsContent = '
 <p>Questo modulo <b>presenta</b> una serie di informazioni utili sui corsi. Ci vengono visualizzati in formato grafico, gli accessi per ogni corso, delle tabelle con gli accessi totali (il tempo e la durata della partecipazione) per ogni corso e il tuo accesso alla piattaforma (data e ora di entrata e di uscita).</p>';
-$langWikiSyntaxHelp = "
-<h4>Sintassi dei comandi</h4>
+$langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>
 <p>Creare pagine wiki e link fra di loro</p>
 <p><strong>Parole  di wiki</strong>: Le parole di Wiki sono parole che sono scritte come <em>Parola</em>. Per creare una pagina wiki o un link a una pagina wiki, modifica una già esistente e compila il titolo della pagina secondo la sintassi, ad esempio <em>La mia pagina</em>, e quindi salvarla. Automaticamente la parola <em>La mia pagina</em> sarà sostituita con un link alla pagina Wiki <em>La mia pagina </em>&nbsp;</p>
 <p><strong><p>Link Wiki </strong>: I link Wiki sono come i link ipertestuali (hyperlink - guarda più avanti), tuttavia non si riferiscono ad un protocollo (ad esempio <em>http://</em> o <em>ftp://</em>) e si trasformano automaticamente in link alle pagine Wiki. Per creare una nuova pagina o un link ad una già esistente, modifica la pagina ed aggiungi <code>[titolo della pagina]</code> o <code>[nome di link | titolo della pagina]</code> al contenuto. Puoi utilizzare la seguente sintassi per rinominare un link Wiki: <code>[Nome del link | parola]</code>.</p>
@@ -804,7 +890,7 @@ Inoltre è possibile utilizzare la sintassi dei link ipertestuali. Per esempio <
 <li>Si tratta di un link ipertestuale, però metti un 1 come quinto parametro per evitare il caricamento dell' immagine, sicché risulti un link a un' immagine. Per esempio <code>[image | image.gif || 0]</code> presenterà un link all' immagine image.gif, anziché l'immagine stessa </li> </ul>
 <p>Impaginazione</p>
 <ul>
-<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>'testo'</code>&nbsp;</li>
+<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>''testo''</code>&nbsp;</li>
 <li><strong>Grassetto</strong>: racchiudi il testo tra tre virgolette singole <code>'''testo'''</code>&nbsp;</li>
 <li><strong>Sottolineato</strong>: racchiudi il testo tra due trattini bassi (underscore) <code>__testo__</code>&nbsp;</li>
 <li><strong>Barrato</strong>: racchiudi il testo tra due trattini <code>--testo--</code>&nbsp;</li>

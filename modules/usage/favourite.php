@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -66,11 +66,8 @@ $local_style = '
 
 
 include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
+
+$lang = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();

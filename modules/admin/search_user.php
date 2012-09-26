@@ -44,7 +44,6 @@ include_once '../../modules/auth/auth.inc.php';
 include 'admin.inc.php';
 include '../../include/jscalendar/calendar.php';
 
-$head_content = "";
 $lang_jscalendar = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);

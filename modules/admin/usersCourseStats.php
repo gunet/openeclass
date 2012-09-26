@@ -53,13 +53,9 @@ $tool_content .= "
     </ul>
   </div>";
 
-
 include('../../include/jscalendar/calendar.php');
-if ($language == 'greek') {
-    $lang = 'el';
-} else if ($language == 'english') {
-    $lang = 'en';
-}
+
+$lang = langname_to_code($language);
 
    if (!extension_loaded('gd')) {
         $tool_content .= "<p>$langGDRequired</p>";
