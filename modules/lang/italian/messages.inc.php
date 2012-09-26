@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-09-26 13:29:19
+// Generated 2012-09-26 13:52:23
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -2553,8 +2553,8 @@ $langBasicCfgSetting = "Impostazioni fondamentali";
 $langOptionalCfgSetting = "Impostazioni opzionali";
 $langWillWriteConfig = "Le seguenti impostazioni verranno archiviate nella tabella <em>config</em> del database della piattaforma";
 $langToReqOpen = "Gli utenti possono registrarsi gratuitamente senza il consenso del gestore";
-$lang_email_required = "L' E-mail $langOfUser è obbligatoria durante la sua registrazione";
-$lang_am_required = "Il numero di matricolazione $langOfUser è obbligatorio durante la sua registrazione";
+$lang_email_required = "L' E-mail $langOfStudent è obbligatoria durante la sua registrazione";
+$lang_am_required = "Il numero di matricolazione $langOfStudent è obbligatorio durante la sua registrazione";
 $lang_dropbox_allow_student_to_student = "Permettere lo scambio di file tra gli $langsStudents al modulo 'Dropbox'";
 $lang_dont_display_login_form = "Disabilitare la visualizzazione del modulo Login sulla home page della piattaforma";
 $lang_block_username_change = "Disabilitare la possibilità degli utenti di cambiare la loro 'username'";
@@ -2850,3 +2850,6 @@ $langRenamedFileNotAllowed = "New filename is not allowed. Contact platform admi
 $langReregisterImpossible = "Registration to this course is closed and you won't be able to re-register. Are you sure you want to unregister?";
 $langInfoPlat = 'Platform Identity';
 $langQuoteMsg = '[quote]\nAt $m[post_time], $m[username] wrote:\n$text\n[/quote]';
+$langConfirmDeleteQuestion3 = "This action will also delete all traces of a user from the platform, such as statistics, participation in forums, etc.";
+$langErrorUnreguser = "Error unregistering user from course";
+$langDelUser = "Delete user";

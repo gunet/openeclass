@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-09-26 13:29:19
+// Generated 2012-09-26 13:52:23
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -2562,7 +2562,7 @@ $langBasicCfgSetting = "Paramètres de base";
 $langOptionalCfgSetting = "Optional Settings";
 $langWillWriteConfig = "Settings below will be written to <em>config</em> table of main database";
 $langToReqOpen = "Les utilisateurs peuvent s'inscrire librement sans autorisation de l'administrateur";
-$lang_email_required = "L'e-mail de $langOfUser est requis lors de l'inscription";
+$lang_email_required = "L'e-mail de $langOfStudent est requis lors de l'inscription";
 $lang_am_required = "Le numéro d'étudiant de $langsOfStudent est requis lors de l'inscription";
 $lang_dropbox_allow_student_to_student = "Autoriser l'échange de fichiers entre $langsOfStudents dans le sous-système 'Échange de fichiers'";
 $lang_dont_display_login_form = "Ne pas afficher l'écran de connexion sur la page d'accueil de la plateforme";
@@ -2786,7 +2786,7 @@ $langHelpManageUser = "L'administrateur d'utilisateurs gère les utilisateurs";
 $langLinkUnsubscribeFromPlatform = "Note: You are receiving this message because you are registered to '%s'.<br /> 
  If you don't wish to receive any more email messages click";
 $langEmailUnsubscribeWarning = "Vous avez désactivé la possibilité de recevoir des e-mails via la plateforme. Vous ne pouvez pas régler les paramètres de réception de messages pour des cours spécifiques avant de l'avoir reactivée.";
-$langCourseInactive = "L'accés au cours est réservé aux $lang Teachers du cours";
+$langCourseInactive = "L'accés au cours est réservé aux $langTeachers du cours";
 $langCourseInactiveShort = "Cours inactif";
 $langSendInfoMail = "Envoyer un e-mail d'information aux $langsTeachers du $siteName";
 $langInfoAboutEclass = "Bulletin d'information de la plateforme $siteName";
@@ -2858,3 +2858,6 @@ $langRenamedFileNotAllowed = "New filename is not allowed. Contact platform admi
 $langReregisterImpossible = "Registration to this course is closed and you won't be able to re-register. Are you sure you want to unregister?";
 $langInfoPlat = 'Platform Identity';
 $langQuoteMsg = '[quote]\nAt $m[post_time], $m[username] wrote:\n$text\n[/quote]';
+$langConfirmDeleteQuestion3 = "This action will also delete all traces of a user from the platform, such as statistics, participation in forums, etc.";
+$langErrorUnreguser = "Error unregistering user from course";
+$langDelUser = "Delete user";

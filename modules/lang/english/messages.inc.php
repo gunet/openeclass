@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-09-26 13:29:16
+// Generated 2012-09-26 13:48:17
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2878,3 +2878,6 @@ $langRenamedFileNotAllowed = "New filename is not allowed. Contact platform admi
 $langReregisterImpossible = "Registration to this course is closed and you won't be able to re-register. Are you sure you want to unregister?";
 $langInfoPlat = 'Platform Identity';
 $langQuoteMsg = '[quote]\nAt $m[post_time], $m[username] wrote:\n$text\n[/quote]';
+$langConfirmDeleteQuestion3 = "This action will also delete all traces of a user from the platform, such as statistics, participation in forums, etc.";
+$langErrorUnreguser = "Error unregistering user from course";
+$langDelUser = "Delete user";
