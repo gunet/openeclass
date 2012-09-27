@@ -297,7 +297,19 @@ if($countUser > 0) {
                         $k++;
                 }
         }
-        $tool_content .= "</table> <br><div class='right smaller'>".$caption."</div>";
+        
+        // caption
+        $tool_content .= "</table> <br/> <div class='right smaller'>".$caption;
+        
+        // delete all function
+        $tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
+        // redirect all request vars towards delete all action
+        foreach ($_REQUEST as $key => $value) {
+            $tool_content .= "<input type='hidden' name='$key' value='$value' />";
+        }
+        $tool_content .= "<input type='submit' name='dellall_submit' value='$langDelList'></form>";
+        $tool_content .= "</div>";
+        
         if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE
                 $tool_content .= show_paging($limit, USERS_PER_PAGE, $countUser, "$_SERVER[SCRIPT_NAME]", "$pagination_link");
         }
