@@ -241,3 +241,57 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
 
 	return $retString;
 }
+
+
+
+/**
+ * Delete a user and all his dependencies.
+ * 
+ * @param  integer $id - the id of the user.
+ * @return boolean     - returns true if deletion was successful, false otherwise.
+ */
+function deleteUser($id) {
+    global $mysqlMainDb;
+    
+    $u = intval($id);
+    
+    if ($u == 1) {
+    	return false;
+    } else {
+    	// validate if this is an existing user
+    	$q = db_query("SELECT * FROM user WHERE user_id = ". $u);
+    
+    	if (mysql_num_rows($q)) {
+    		// delete everything
+    		db_query("DELETE FROM actions WHERE user_id = ". $u);
+    		db_query("DELETE FROM admin WHERE idUser = ". $u);
+    		db_query("DELETE FROM assignment_submit WHERE uid = ". $u);
+    		db_query("DELETE FROM course_user WHERE user_id = ". $u);
+    		db_query("DELETE FROM dropbox_file WHERE uploaderId = ". $u);
+    		db_query("DELETE FROM dropbox_person WHERE personId = ". $u);
+    		db_query("DELETE FROM dropbox_post WHERE recipientId = ". $u);
+    		db_query("DELETE FROM exercise_user_record WHERE uid = ". $u);
+    		db_query("DELETE FROM forum_notify WHERE user_id = ". $u);
+    		db_query("DELETE FROM forum_post WHERE poster_id = ". $u);
+    		db_query("DELETE FROM forum_topic WHERE poster_id = ". $u);
+    		db_query("DELETE FROM group_members WHERE user_id = ". $u);
+    		db_query("DELETE FROM log WHERE user_id = ". $u);
+    		db_query("DELETE FROM loginout WHERE id_user = ". $u);
+    		db_query("DELETE FROM logins WHERE user_id = ". $u);
+    		db_query("DELETE FROM lp_user_module_progress WHERE user_id = ". $u);
+    		db_query("DELETE FROM poll WHERE creator_id = ". $u);
+    		db_query("DELETE FROM poll_answer_record WHERE user_id = ". $u);
+    		db_query("DELETE FROM user_department WHERE user = ". $u);
+    		db_query("DELETE FROM wiki_pages WHERE owner_id = ". $u);
+    		db_query("DELETE FROM wiki_pages_content WHERE editor_id = ". $u);
+    	
+    		db_query("DELETE FROM user WHERE user_id = ". $u);
+    	
+    	
+    		return true;
+    	
+    	} else {
+    		return false;
+    	}
+    }
+}
