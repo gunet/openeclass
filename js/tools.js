@@ -146,7 +146,8 @@ function course_list_init()
                                     { text: lang.unCourse,
                                       click: function() {
                                                       $.trigger_checkbox
-                                                                .prop('checked', false).change();
+                                                       .change(course_list_handler)
+                                                       .prop('checked', false).change();
                                                       $(this).dialog('close');
                                              }
                                     },
@@ -155,10 +156,10 @@ function course_list_init()
                                     } ]
                         });
         $('input[type=submit]').remove();
-        $('input[type=checkbox]').change(course_list_handler).each(function () {
+        $('input[type=checkbox]').each(function () {
                 var cid = $(this).val();
                 $.course_closed[cid] = $(this).hasClass('reg_closed');
-        });
+        }).not('.reg_closed').change(course_list_handler);
         $('input.reg_closed[type=checkbox]:checked').click(function() {
                 $.trigger_checkbox = $(this);
                 $dialog.dialog('open');
