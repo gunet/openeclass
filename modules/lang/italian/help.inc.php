@@ -1,8 +1,58 @@
 <?php
 
 // Message file for language it
-// Generated 2012-09-26 13:52:23
+// Generated 2012-09-27 09:35:10
 
+$langCourseAccessHelp = "<ul> 
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16>Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li> 
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16>Corso inattivo</b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li> 
+</ul>
+";
+$langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>
+<p>Creare pagine wiki e link fra di loro</p>
+<p><strong>Parole  di wiki</strong>: Le parole di Wiki sono parole che sono scritte come <em>Parola</em>. Per creare una pagina wiki o un link a una pagina wiki, modifica una già esistente e compila il titolo della pagina secondo la sintassi, ad esempio <em>La mia pagina</em>, e quindi salvarla. Automaticamente la parola <em>La mia pagina</em> sarà sostituita con un link alla pagina Wiki <em>La mia pagina </em>&nbsp;</p>
+<p><strong><p>Link Wiki </strong>: I link Wiki sono come i link ipertestuali (hyperlink - guarda più avanti), tuttavia non si riferiscono ad un protocollo (ad esempio <em>http://</em> o <em>ftp://</em>) e si trasformano automaticamente in link alle pagine Wiki. Per creare una nuova pagina o un link ad una già esistente, modifica la pagina ed aggiungi <code>[titolo della pagina]</code> o <code>[nome di link | titolo della pagina]</code> al contenuto. Puoi utilizzare la seguente sintassi per rinominare un link Wiki: <code>[Nome del link | parola]</code>.</p>
+<ul>Link ipertestuali
+<li><code>[url]</code>, <code>[nome | url]</code>, <code>[nome | url | lingua]</code> o <code>[nome | url | lingua |. titolo]</code>.&nbsp;</li></ul>
+<ul> Inserire Immagine
+<li><code>((url | alt text ))</code>, <code>((url | alt text | posizione))</code> o <code>((url | alt text | posizione | descrizione ))</code>. <br /> Il parametro di posizione può assumere i seguenti valori: L (sinistra), R (destra) o C (centro).&nbsp;
+Inoltre è possibile utilizzare la sintassi dei link ipertestuali. Per esempio <code>[titolo | image.gif]</code>. Questa sintassi sta per essere abolita, qundi utilizza quella precedente per sicurezza.</li></ul>
+<ul>Link a un' immagine
+<li>Si tratta di un link ipertestuale, però metti un 1 come quinto parametro per evitare il caricamento dell' immagine, sicché risulti un link a un' immagine. Per esempio <code>[image | image.gif || 0]</code> presenterà un link all' immagine image.gif, anziché l'immagine stessa </li> </ul>
+<p>Impaginazione</p>
+<ul>
+<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>''testo''</code>&nbsp;</li>
+<li><strong>Grassetto</strong>: racchiudi il testo tra tre virgolette singole <code>'''testo'''</code>&nbsp;</li>
+<li><strong>Sottolineato</strong>: racchiudi il testo tra due trattini bassi (underscore) <code>__testo__</code>&nbsp;</li>
+<li><strong>Barrato</strong>: racchiudi il testo tra due trattini <code>--testo--</code>&nbsp;</li>
+<li><strong>Titolo</strong>:!!!<code></code>, <code>!!</code>, <code>!</code> per i titoli, sottotitoli, sottotitoli-minori rispettivamente&nbsp;</li>
+<li>Lista</li>
+La linea deve iniziare con <code>*</code> (lista non ordinata) o <code>#</code> (lista ordinata). Puoi disordinare le liste (<code>*#*</code>) per creare delle liste in vari livelli&nbsp;.
+<li>Paragrafo</li>
+Separa i paragrafi separati con una o più linee
+</ul>
+
+<h4>Sintassi avanzata</​​h4>
+<ul>
+<li>Nota a piè</​​li>
+<code>Testo della nota</​​code>&nbsp;
+<li>Testo in formato pronto</li>
+Inizia ogni riga con uno spazio &nbsp;
+<li>Blocco  di riferimento</li>
+<code>&gt;</code> o <code>;:</code> prima di ogni riga&nbsp;
+<li>Linea orizzontale</li>
+<code>----</code>
+<li>Interruzione di riga obbligatoria</li>
+<code>%%%</code>&nbsp;
+<li>Acronimo</li>
+<code>??acronimo??</code> o <code>??acronimo|definizione??</code>&nbsp;
+<li>Riferimento diretto</li>
+<code>{{riferimento}}</code>, <code>{{riferimento|lingua}}</code> o <code>{{riferimento|lingua|url}}</code>&nbsp;
+</ul>
+</ul>
+<p>Il link 'Attivare' / 'Disattivare' muove il sistema Wiki dagli strumenti attivi a quelli inattivi e vice versa.</p>";
 $langWindowClose = 'Chiudi finestra';
 $langHDefault = 'Guida non disponibile';
 $langDefaultContent = '<p>Non è disponibile alcun testo di aiuto per la pagina della piattaforma che stai visualizzando ora.</p>';
@@ -465,26 +515,6 @@ Le operazioni supportate dalla piattaforma sul modulo dell' attivazione degli st
  </ul> 
 </p>";
 $langHInfocours = "Gestione di Corso";
-$langInfocoursContent = "<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
-<hr>
-<p> <b>Identità del corso</b></p>
-<p>Questa categoria riguarda gli elementi dell'identità del corso. Qui puoi <b>digitare</b> il codice e il titolo di un corso, e l' insegnante-insegnanti che gestiranno il corso. Tramite una casella di riepilogo puoi selezionare la Scuola-Faccoltà che appartiene questo corso, ed ancora il tipo del corso  - ad es. corso post-laurea. Questa categoria si conclude compilando alcune parole-chiave  che si usano dagli studenti affinché loro <b>si concentrino</b> al meglio sui concetti rispettivi. </p>
-<hr> 
- <p><b>Accesso al corso</b></p>
-<p>Questa categoria è associata all' accesso degli utenti al corso. La piattaforma supporta i seguenti modi d' <b>accesso</b> da parte degli utenti:</p>
-$langCourseAccessHelp 
-<hr> 
-<p><b>Lingua</b></p>
-<p>Riguarda alla lingua in cui si visualizzano i messaggi del corso.</p> 
-<hr> 
-<p><b>Operazioni supportate dal modulo 'Gestione Corsi'</b></p> 
-<p>Le operazioni che sono supportate dalla piattaforma sul modulo 'Gestione Corsi' sono i seguenti:</p> 
-<ul> 
-<li><b>Backup del corso:</b> Puoi creare una copia di backup del corso e salvarlo sul tuo computer locale. Se desideri recuperare il suo contenuto bisogna contattare il gestore della piattaforma.</li> 
-<li><b>Eliminare un corso:</b> Eliminando un corso, si elimina il suo contenuto e viene cancellata la registrazione dei suoi utenti. (nota che gli utenti non si rimuovono dalla piattaforma).</li> 
-<li><b>Riutilizzare un corso:</b> Puoi eliminare selettivamente alcuni dei dati del corso, per prepararlo per il nuovo anno accademico.</li> 
-</ul> 
-</p> ";
 $langHConference = "Collaborazione remota";
 $langHConference_student = $langHConference;
 $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
@@ -867,56 +897,26 @@ presentazione del corso e  gli esami, ed ancora altri e vari
 eventi significativi che riguardano al corso sono disponibili con questo modulo. In maniera grafica, vengono visualizzate le date e
 gli intervalli di tempo degli eventi. Qui si dovrebbe chiarire che questo
 modulo ha un rapporto immediato con il modulo 'Agenda'.</ p>";
-$langCourseAccessHelp = "<ul> 
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16>Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li> 
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16>Corso inattivo</b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li> 
-</ul>
-";
 $langHPersonalStats = 'Le mie statistiche';
 $langPersonalStatsContent = '
 <p>Questo modulo <b>presenta</b> una serie di informazioni utili sui corsi. Ci vengono visualizzati in formato grafico, gli accessi per ogni corso, delle tabelle con gli accessi totali (il tempo e la durata della partecipazione) per ogni corso e il tuo accesso alla piattaforma (data e ora di entrata e di uscita).</p>';
-$langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>
-<p>Creare pagine wiki e link fra di loro</p>
-<p><strong>Parole  di wiki</strong>: Le parole di Wiki sono parole che sono scritte come <em>Parola</em>. Per creare una pagina wiki o un link a una pagina wiki, modifica una già esistente e compila il titolo della pagina secondo la sintassi, ad esempio <em>La mia pagina</em>, e quindi salvarla. Automaticamente la parola <em>La mia pagina</em> sarà sostituita con un link alla pagina Wiki <em>La mia pagina </em>&nbsp;</p>
-<p><strong><p>Link Wiki </strong>: I link Wiki sono come i link ipertestuali (hyperlink - guarda più avanti), tuttavia non si riferiscono ad un protocollo (ad esempio <em>http://</em> o <em>ftp://</em>) e si trasformano automaticamente in link alle pagine Wiki. Per creare una nuova pagina o un link ad una già esistente, modifica la pagina ed aggiungi <code>[titolo della pagina]</code> o <code>[nome di link | titolo della pagina]</code> al contenuto. Puoi utilizzare la seguente sintassi per rinominare un link Wiki: <code>[Nome del link | parola]</code>.</p>
-<ul>Link ipertestuali
-<li><code>[url]</code>, <code>[nome | url]</code>, <code>[nome | url | lingua]</code> o <code>[nome | url | lingua |. titolo]</code>.&nbsp;</li></ul>
-<ul> Inserire Immagine
-<li><code>((url | alt text ))</code>, <code>((url | alt text | posizione))</code> o <code>((url | alt text | posizione | descrizione ))</code>. <br /> Il parametro di posizione può assumere i seguenti valori: L (sinistra), R (destra) o C (centro).&nbsp;
-Inoltre è possibile utilizzare la sintassi dei link ipertestuali. Per esempio <code>[titolo | image.gif]</code>. Questa sintassi sta per essere abolita, qundi utilizza quella precedente per sicurezza.</li></ul>
-<ul>Link a un' immagine
-<li>Si tratta di un link ipertestuale, però metti un 1 come quinto parametro per evitare il caricamento dell' immagine, sicché risulti un link a un' immagine. Per esempio <code>[image | image.gif || 0]</code> presenterà un link all' immagine image.gif, anziché l'immagine stessa </li> </ul>
-<p>Impaginazione</p>
-<ul>
-<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>''testo''</code>&nbsp;</li>
-<li><strong>Grassetto</strong>: racchiudi il testo tra tre virgolette singole <code>'''testo'''</code>&nbsp;</li>
-<li><strong>Sottolineato</strong>: racchiudi il testo tra due trattini bassi (underscore) <code>__testo__</code>&nbsp;</li>
-<li><strong>Barrato</strong>: racchiudi il testo tra due trattini <code>--testo--</code>&nbsp;</li>
-<li><strong>Titolo</strong>:!!!<code></code>, <code>!!</code>, <code>!</code> per i titoli, sottotitoli, sottotitoli-minori rispettivamente&nbsp;</li>
-<li>Lista</li>
-La linea deve iniziare con <code>*</code> (lista non ordinata) o <code>#</code> (lista ordinata). Puoi disordinare le liste (<code>*#*</code>) per creare delle liste in vari livelli&nbsp;.
-<li>Paragrafo</li>
-Separa i paragrafi separati con una o più linee
-</ul>
-
-<h4>Sintassi avanzata</​​h4>
-<ul>
-<li>Nota a piè</​​li>
-<code>$$Testo della nota$$</​​code>&nbsp;
-<li>Testo in formato pronto</li>
-Inizia ogni riga con uno spazio &nbsp;
-<li>Blocco  di riferimento</li>
-<code>&gt;</code> o <code>;:</code> prima di ogni riga&nbsp;
-<li>Linea orizzontale</li>
-<code>----</code>
-<li>Interruzione di riga obbligatoria</li>
-<code>%%%</code>&nbsp;
-<li>Acronimo</li>
-<code>??acronimo??</code> o <code>??acronimo|definizione??</code>&nbsp;
-<li>Riferimento diretto</li>
-<code>{{riferimento}}</code>, <code>{{riferimento|lingua}}</code> o <code>{{riferimento|lingua|url}}</code>&nbsp;
-</ul>
-</ul>
-<p>Il link 'Attivare' / 'Disattivare' muove il sistema Wiki dagli strumenti attivi a quelli inattivi e vice versa.</p>";
+$langInfocoursContent = "<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
+<hr>
+<p> <b>Identità del corso</b></p>
+<p>Questa categoria riguarda gli elementi dell'identità del corso. Qui puoi <b>digitare</b> il codice e il titolo di un corso, e l' insegnante-insegnanti che gestiranno il corso. Tramite una casella di riepilogo puoi selezionare la Scuola-Faccoltà che appartiene questo corso, ed ancora il tipo del corso  - ad es. corso post-laurea. Questa categoria si conclude compilando alcune parole-chiave  che si usano dagli studenti affinché loro <b>si concentrino</b> al meglio sui concetti rispettivi. </p>
+<hr> 
+ <p><b>Accesso al corso</b></p>
+<p>Questa categoria è associata all' accesso degli utenti al corso. La piattaforma supporta i seguenti modi d' <b>accesso</b> da parte degli utenti:</p>
+$langCourseAccessHelp 
+<hr> 
+<p><b>Lingua</b></p>
+<p>Riguarda alla lingua in cui si visualizzano i messaggi del corso.</p> 
+<hr> 
+<p><b>Operazioni supportate dal modulo 'Gestione Corsi'</b></p> 
+<p>Le operazioni che sono supportate dalla piattaforma sul modulo 'Gestione Corsi' sono i seguenti:</p> 
+<ul> 
+<li><b>Backup del corso:</b> Puoi creare una copia di backup del corso e salvarlo sul tuo computer locale. Se desideri recuperare il suo contenuto bisogna contattare il gestore della piattaforma.</li> 
+<li><b>Eliminare un corso:</b> Eliminando un corso, si elimina il suo contenuto e viene cancellata la registrazione dei suoi utenti. (nota che gli utenti non si rimuovono dalla piattaforma).</li> 
+<li><b>Riutilizzare un corso:</b> Puoi eliminare selettivamente alcuni dei dati del corso, per prepararlo per il nuovo anno accademico.</li> 
+</ul> 
+</p> ";

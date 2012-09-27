@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-09-26 13:52:23
+// Generated 2012-09-27 09:35:10
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -1039,7 +1039,7 @@ $langMenu = "Menu";
 $langLogout = "Uscire";
 $langSupportForum = "Forum di supporto";
 $langInvalidAuth = "Modo di certificazione sbagliato";
-$langContact = "Contatto'";
+$langContact = "Contatto";
 $lang_forgot_pass = "Hai dimenticato la password?";
 $langNewAnnounce = "Nuovo!";
 $langUnregUser = "Eliminare conto";
@@ -2410,7 +2410,7 @@ $langBackExerciseManagement = "Ritornare alla gestione dell' esercizio";
 $langWikis = "Wiki disponibili";
 $langInsertWiki = "wiki";
 $langCourseAnnouncements = "Annunci del corso";
-$langBasicOptions = "Opzioni fondamentali";
+$langBasicOptions = "Opzioni di base";
 $langUserOptions = "Opzioni utente";
 $langTutorials = "Guide";
 $langTut = "Guida";
@@ -2549,7 +2549,7 @@ $langFillGroupsAll = "Completare tutti i gruppi";
 $langGroupPrefs = "Preferenze di gruppi";
 $langGroupPropertiesSum = "Riepilogo impostazioni";
 $langStep7 = "Passo 7 di 7";
-$langBasicCfgSetting = "Impostazioni fondamentali";
+$langBasicCfgSetting = "Impostazioni di base";
 $langOptionalCfgSetting = "Impostazioni opzionali";
 $langWillWriteConfig = "Le seguenti impostazioni verranno archiviate nella tabella <em>config</em> del database della piattaforma";
 $langToReqOpen = "Gli utenti possono registrarsi gratuitamente senza il consenso del gestore";
@@ -2599,7 +2599,7 @@ $langGroupQuota = "Spazio disponibile al server (quota) per i 'Gruppi di Utenti'
 $langAlternateLogin = "Login alternativo";
 $langEnterPlatform = "Per accedere alla piattaforma, clicca qui";
 $langUserAltAuth = "La username con cui hai tentato di connetterti si certifica con una modalità diversa. Prego contatta i gestori della piattaforma";
-$langProfileInfoPrivate = "privato'";
+$langProfileInfoPrivate = "privato";
 $langProfileInfoProfs = "visualizzato agli $langsTeachers";
 $langProfileInfoUsers = "visualizzato a tutti";
 $langMetaOther = "Altro";
@@ -2846,10 +2846,9 @@ $langUserWhitelist = "Lista Bianca di Utente";
 $langEnableSearch = "Attivare il motore di ricerca";
 $langSearchDisabled = "Il motore di ricerca è disabilitato. 
         Per ulteriori informazioni contatta i gestori della piattaforma.";
-$langRenamedFileNotAllowed = "New filename is not allowed. Contact platform admin for more information.";
-$langReregisterImpossible = "Registration to this course is closed and you won't be able to re-register. Are you sure you want to unregister?";
-$langInfoPlat = 'Platform Identity';
-$langQuoteMsg = '[quote]\nAt $m[post_time], $m[username] wrote:\n$text\n[/quote]';
-$langConfirmDeleteQuestion3 = "This action will also delete all traces of a user from the platform, such as statistics, participation in forums, etc.";
-$langErrorUnreguser = "Error unregistering user from course";
-$langDelUser = "Delete user";
+$langRenamedFileNotAllowed = "Il nuovo nome del file che stai tentando di rinominare non è consentito. Per ulteriori informazioni, contatta il gestore della piattaforma.";
+$langReregisterImpossible = "Sei sicuro che vuoi cancellarti dal corso? Il corso è chiuso e non sarai più in grado di registrarti di nuovo.";
+$langInfoPlat = "Identità della Piattaforma";
+$langConfirmDeleteQuestion3 = "Questa operazione eliminerà anche tutte le tracce di un utente sulla piattaforma, come le statistiche, le partecipazione ai forum, ecc.";
+$langErrorUnreguser = "Errore durante la cancellazione la cancellazione dell'utente dal corso";
+$langDelUser = "Eliminare utente";
