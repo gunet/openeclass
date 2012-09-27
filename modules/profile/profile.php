@@ -280,7 +280,7 @@ $tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></
     </ul>
   </div>\n";
 $tool_content .= "
-   <form method='post' enctype='multipart/form-data' action='$sec'>
+   <form method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
    <fieldset>
      <legend>$langUserData</legend>
         <table class='tbl' width='100%'>

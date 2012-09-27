@@ -64,8 +64,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $caption = '';
 $searchurl = '';
 
-$depwh = (isDepartmentAdmin()) ? ' course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid) ) . ') ' : '';
-$depq  = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course AND ". $depwh : '';
+$depwh = (isDepartmentAdmin()) ? ' AND course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid) ) . ') ' : '';
+$depq  = (isDepartmentAdmin()) ? ", course_department WHERE course.id = course_department.course ". $depwh : '';
 
 // Manage list limits
 $countcourses = mysql_fetch_array(db_query("SELECT COUNT(*) AS cnt FROM course". $depq));
@@ -112,23 +112,29 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 		$searchcours[] = "visible = $searchtype";
 	}
 	if ($searchfaculte) {
-		$searchcours[] = "hierarchy.id = $searchfaculte";
+	    $subs = $tree->buildSubtrees(array($searchfaculte));
+	    $ids = '';
+	    foreach ($subs as $key => $id)
+	    {
+	    	$ids .= $id .',';
+	    }
+	    // remove last ',' from $ids
+	    $facs = substr($ids , 0, -1);
+		$searchcours[] = "hierarchy.id IN ($facs)";
 	}
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
                 $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
-                                    AND hierarchy.id = course_department.department AND $query 
-                                    AND ". $depwh ." 
+                                    AND hierarchy.id = course_department.department AND $query $depwh
                                ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	} else {
                 $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
                                    FROM course, course_department, hierarchy
                                   WHERE course.id = course_department.course
-                                    AND hierarchy.id = course_department.department
-                                    AND ". $depwh ." 
+                                    AND hierarchy.id = course_department.department $depwh
                                ORDER BY course.code");
 		$caption .= "$langFound ".mysql_num_rows($sql)." $langCourses ";
 	}

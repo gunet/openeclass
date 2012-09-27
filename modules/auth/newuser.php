@@ -75,7 +75,7 @@ if (!isset($_POST['submit'])) {
 	} else {
 		$am_message = '';
 	}
-	@$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
+	@$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>
         <legend>$langUserData</legend>
 	<table width='100%' class='tbl'>

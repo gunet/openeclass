@@ -75,9 +75,9 @@ $hour = isset($_GET['hour'])? intval($_GET['hour']): 0;
 $minute = isset($_GET['minute'])? intval($_GET['minute']): 0;
 
 if (isset($_GET['department'])) {
-        $depts_defaults = array('defaults' => array_map('intval', $_GET['department']));
+        $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
 } else {
-        $depts_defaults = array();
+        $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false);
 }
 
 if (isDepartmentAdmin())
@@ -193,7 +193,7 @@ $tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail)
     <th>$langFaculty:</th>
     <td>";
 $tree = new hierarchy();
-list($js, $html) = $tree->buildUserNodePicker($depts_defaults);
+list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
 $tool_content .= $html;
 $tool_content .= "</td>

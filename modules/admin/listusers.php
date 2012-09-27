@@ -158,24 +158,30 @@ if ($search == 'inactive') {
 
 // Department search
 $depqryadd = '';
-if ( (isset($_GET['department']) and count($_GET['department'])) or (isDepartmentAdmin()) )
+$dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
+if ( $dep || isDepartmentAdmin() )
 {
     $depqryadd = ', user_department';
 
-    $deps = array();
-    if ( isset($_GET['department']) and count($_GET['department']) )
-        $deps = array_map('intval', $_GET['department']);
-    else if (isDepartmentAdmin())
-        $deps = $user->getDepartmentIds($uid);
+    $subs = array();
+    if ( $dep ) {
+        $subs = $tree->buildSubtrees(array($dep));
+        add_param('department', $dep);
+    } else if (isDepartmentAdmin())
+        $subs = $user->getDepartmentIds($uid);
+    
+    $ids = '';
+    foreach ($subs as $key => $id)
+    {
+    	$ids .= $id .',';
+    	validateNode($id, isDepartmentAdmin());
+    }
+    // remove last ',' from $ids
+    $deps = substr($ids , 0, -1);
 
     $pref = ($c) ? 'a' : 'user';
     $criteria[] = $pref . '.user_id = user_department.user';
-    $criteria[] = 'department IN (' . implode(', ', $deps) . ')';
-
-    foreach ($deps as $dep_id) {
-        add_param('department[]', $dep_id);
-        validateNode($dep_id, isDepartmentAdmin());
-    }
+    $criteria[] = 'department IN ('. $deps .')';
 }
 
 if (count($criteria)) {
