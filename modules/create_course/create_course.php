@@ -34,6 +34,7 @@ if (get_config("betacms")) { // added support for betacms
 }
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
+
 $lang_editor = langname_to_code($language);
 
 $head_content .= <<<hContent
@@ -85,7 +86,7 @@ escape_if_exists('intitule');
 escape_if_exists('faculte');
 escape_if_exists('titulaires');
 escape_if_exists('type');
-escape_if_exists('languageCourse');
+escape_if_exists('localize');
 escape_if_exists('description');
 escape_if_exists('course_keywords');
 escape_if_exists('visit');
@@ -106,7 +107,7 @@ $tool_content .= $intitule_html .
                  $faculte_html .
                  $titulaires_html .
                  $type_html .
-                 $languageCourse_html .
+                 $localize_html .
                  $description_html .
                  $course_keywords_html .
                  $visit_html .
@@ -137,6 +138,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
           <td>&nbsp;</td>
         </tr>";
 	unset($repertoire);
+        //<td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
 	$tool_content .= "
         <tr>
 	  <th>$langTeachers:</th>
@@ -150,7 +152,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </tr>
 	<tr>
 	  <th class='left'>$langLanguage:</th>
-	  <td>" . lang_select_options('languageCourse', '', $languageCourse) . "</td>
+	  <td>" . lang_select_options('localize') . "</td>
           <td>&nbsp;</td>
         </tr>
 	<tr>
@@ -349,7 +351,8 @@ if (isset($_POST['create_course'])) {
         $repertoire = strtoupper(new_code($facid));
         $repertoire = str_replace (' ', '', $repertoire);
 
-        $language = langcode_to_name($_POST['languageCourse']);
+        $language = langcode_to_name($_POST['localize']);        
+        
         // include_messages
         include("${webDir}modules/lang/$language/common.inc.php");
         $extra_messages = "${webDir}/config/$language.inc.php";

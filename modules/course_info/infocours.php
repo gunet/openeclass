@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -78,29 +78,26 @@ if (isset($_POST['submit'])) {
 
                 // update Home Page Menu Titles for new language
                 mysql_select_db($currentCourseID, $db);
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAgenda' WHERE define_var='MODULE_ID_AGENDA'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLinks' WHERE define_var='MODULE_ID_LINKS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDoc' WHERE define_var='MODULE_ID_DOCS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langVideo' WHERE define_var='MODULE_ID_VIDEO'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWorks' WHERE define_var='MODULE_ID_ASSIGN'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAnnouncements' WHERE define_var='MODULE_ID_ANNOUNCE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langAdminUsers' WHERE define_var='MODULE_ID_USERS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langForums' WHERE define_var='MODULE_ID_FORUM'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langExercices' WHERE define_var='MODULE_ID_EXERCISE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langModifyInfo' WHERE define_var='MODULE_ID_COURSEINFO'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGroups' WHERE define_var='MODULE_ID_GROUPS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langDropBox' WHERE define_var='MODULE_ID_DROPBOX'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGlossary' WHERE define_var='MODULE_ID_GLOSSARY'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langConference' WHERE define_var='MODULE_ID_CHAT'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseDescription' WHERE define_var='MODULE_ID_DESCRIPTION'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langQuestionnaire' WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langLearnPath' WHERE define_var='MODULE_ID_LP'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langUsage' WHERE define_var='MODULE_ID_USAGE'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langToolManagement' WHERE define_var='MODULE_ID_TOOLADMIN'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langWiki' WHERE define_var='MODULE_ID_WIKI'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langCourseUnits' WHERE define_var='MODULE_ID_UNITS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langGlossary' WHERE define_var='MODULE_ID_GLOSSARY'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique='$langEBook' WHERE define_var='MODULE_ID_EBOOK'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langAgenda)." WHERE define_var='MODULE_ID_AGENDA'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langLinks)." WHERE define_var='MODULE_ID_LINKS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langDoc)." WHERE define_var='MODULE_ID_DOCS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langVideo)." WHERE define_var='MODULE_ID_VIDEO'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langWorks)." WHERE define_var='MODULE_ID_ASSIGN'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langAnnouncements)." WHERE define_var='MODULE_ID_ANNOUNCE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langAdminUsers)." WHERE define_var='MODULE_ID_USERS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langForums)." WHERE define_var='MODULE_ID_FORUM'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langExercices)." WHERE define_var='MODULE_ID_EXERCISE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langModifyInfo)." WHERE define_var='MODULE_ID_COURSEINFO'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGroups)." WHERE define_var='MODULE_ID_GROUPS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langDropBox)." WHERE define_var='MODULE_ID_DROPBOX'");
+		db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseDescription)." WHERE define_var='MODULE_ID_DESCRIPTION'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langQuestionnaire)." WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langUsage)." WHERE define_var='MODULE_ID_USAGE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langToolManagement)." WHERE define_var='MODULE_ID_TOOLADMIN'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseUnits)." WHERE define_var='MODULE_ID_UNITS'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langEBook)." WHERE define_var='MODULE_ID_EBOOK'");
 
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours'>$langBack</a></p>
