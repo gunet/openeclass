@@ -48,6 +48,9 @@ if ($q and mysql_num_rows($q)) {
                         die('unauthorized');
                 }
         } else {
+                db_query("DELETE FROM group_members
+                                 WHERE user_id = $uid AND
+                                       group_id IN (SELECT id FROM `group` WHERE course_id = $cid)");
                 db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
                 die('unregistered');
         }
