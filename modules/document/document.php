@@ -997,13 +997,13 @@ if ($doc_count == 0) {
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
                                 $link_extra = " class='fileURL' title='$langSave' target='_blank'";
                                 $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);
-                                $link_title_extra = ($entry['copyrighted']) ? " <img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
+                                $link_title_extra = ($entry['copyrighted']) ? "&nbsp;<img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
-                                    $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
-                                    $link_href = "<a href='$furl'$link_extra>".$link_title.$link_title_extra."</a>";
-                                } else {
-                                    $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
+                                        $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
+                                        $link_href = "<a href='$furl'$link_extra>".$link_title."</a>$link_title_extra";
+                                } else {                                    
+                                       $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
                                 }
                         }
                         $img_href = "<img src='$image' />";
@@ -1011,7 +1011,7 @@ if ($doc_count == 0) {
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";
-                        $tool_content .= "\n<td>". $link_href;
+                        $tool_content .= "\n<td>". $link_href ." ".$link_title_extra;
 			
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
