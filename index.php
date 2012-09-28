@@ -151,9 +151,7 @@ if ($uid AND !isset($_GET['logout'])) {
                         draw($tool_content, 0);
                 }
         }
-	$nameTools = $langWelcomeToPortfolio;
-	$require_help = true;
-	$helpTopic = 'Portfolio';
+	$nameTools = $langWelcomeToPortfolio;	
 
         if ($_SESSION['user_perso_active']) {
                 // if the user is not a guest, load personalized view
@@ -164,9 +162,7 @@ if ($uid AND !isset($_GET['logout'])) {
 		include "include/classic.php";
 		draw($tool_content, 1, null, $head_content);
 	}
-} else {
-	$require_help = true;
-        $helpTopic = "Init";
+} else {	
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
                     $urlServer . "rss.php'>";
 	include "include/logged_out_content.php";

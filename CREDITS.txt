@@ -92,6 +92,7 @@ Messages translated to:
         Spanish by Ana Serrado Bayes <ana.serrado@uca.es>
         German by George Nikolaidis <nikolage@noc.uoa.gr>
         Italian by Harris Kalligeros <hariskal@noc.uoa.gr>
+        French by Mavina Pantazara <mavinap@frl.uoa.gr> and her students
 ************************************************************************/
 
 Template Engine: Copyright 1999-2000 NetUSE GmbH Kristian Koehntopp

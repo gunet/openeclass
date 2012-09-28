@@ -29,8 +29,6 @@
  */
 
 $require_current_course = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Group';
 
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';

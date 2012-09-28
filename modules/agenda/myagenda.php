@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -98,7 +98,7 @@ function get_agendaitems($query, $month, $year) {
 			$agendaday = intval($agendadate[2]);
 			$agendatime = explode(":", $item['hour']);
 			$time = $agendatime[0].":".$agendatime[1];
-		        $URL = $urlServer."courses/".$mycours[k];
+		        $URL = $urlServer."courses/".$mycours['k'];
 	    	$items[$agendaday][$item['hour']] .= "<br /><small>($agendatime[0]:$agendatime[1]) <a href=\"$URL\" title=\"$mycours[i]\">$mycours[fc]</a> $item[titre]<small>";
 		}
 	}

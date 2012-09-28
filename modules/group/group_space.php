@@ -27,8 +27,8 @@
 
 $require_login = true;
 $require_current_course = true;
-$require_help = true;
-$helpTopic = 'Group';
+$require_help = TRUE;
+$helpTopic = 'GroupSpace';
 
 include '../../include/baseTheme.php';
 $nameTools = $langGroupSpace;
