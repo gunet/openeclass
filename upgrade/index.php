@@ -43,7 +43,7 @@ $tool_content .= "
 <div class='alert1'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>
 <p> &nbsp; </p>
 <p class='red'>$langExpl2Upgrade</p>";
-set_time_limit(0);
+@set_time_limit(0);
 $max_execution_time = ini_get('max_execution_time');
 if ($max_execution_time != 0 and $max_execution_time < 300) {
 	$tool_content .= "<p>$langExecTimeUpgrade</p>";

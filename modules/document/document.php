@@ -127,7 +127,7 @@ if (isset($_GET['download'])) {
                 list($real_filename, $format) = mysql_fetch_row($q);
         }
         // Allow unlimited time for creating the archive
-        set_time_limit(0);
+        @set_time_limit(0);
         
         if ($format == '.dir') {
                 $real_filename = $real_filename.'.zip';

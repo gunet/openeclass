@@ -34,7 +34,7 @@ db_query("SET storage_engine=MYISAM");
 
 include 'upgrade_functions.php';
 
-set_time_limit(0);
+@set_time_limit(0);
 
 load_global_messages();
 
