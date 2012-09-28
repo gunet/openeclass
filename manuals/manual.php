@@ -24,6 +24,9 @@ include '../include/baseTheme.php';
 $nameTools = $langManuals;
 
 $lang = langname_to_code($language);
+if (!in_array($lang, array('el', 'en'))) {
+        $lang = 'en';
+}
 
 $tool_content .= "<table width='100%' class='tbl_alt'>
   <tr>
