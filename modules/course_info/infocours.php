@@ -91,13 +91,15 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGroups)." WHERE define_var='MODULE_ID_GROUPS'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langDropBox)." WHERE define_var='MODULE_ID_DROPBOX'");
 		db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langEBook)." WHERE define_var='MODULE_ID_EBOOK'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langConference)." WHERE define_var='MODULE_ID_CHAT'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseDescription)." WHERE define_var='MODULE_ID_DESCRIPTION'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langQuestionnaire)." WHERE define_var='MODULE_ID_QUESTIONNAIRE'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langLearningPath)." WHERE define_var='MODULE_ID_LP'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langUsage)." WHERE define_var='MODULE_ID_USAGE'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langToolManagement)." WHERE define_var='MODULE_ID_TOOLADMIN'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseUnits)." WHERE define_var='MODULE_ID_UNITS'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langEBook)." WHERE define_var='MODULE_ID_EBOOK'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langWiki)." WHERE define_var='MODULE_ID_WIKI'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseUnits)." WHERE define_var='MODULE_ID_UNITS'");                                
 
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours'>$langBack</a></p>
