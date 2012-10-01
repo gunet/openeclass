@@ -991,6 +991,7 @@ if ($doc_count == 0) {
 				$link_title = $entry['filename'];
                                 $dload_msg = $langDownloadDir;
                                 $link_href = "<a href='$file_url'>$link_title</a>";
+                                $link_title_extra = '';
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
