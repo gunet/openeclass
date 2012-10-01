@@ -3,7 +3,7 @@
 <html>
 <head>
 <META http-equiv=Content-Type content="text/html; charset=UTF-8">
-<title>Installation Instructions Open eClass 2.5</title>
+<title>Installation Instructions Open eClass 2.6</title>
 <link href="../template/classic/theme.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 p {
@@ -18,11 +18,11 @@ p {
 
 <a href="http://www.openeclass.org/" title="Open eClass" alt="Open eClass" class="logo"></a></div>
 
-  <p class="title1">Installation Instructions Open eClass 2.5</p>
+  <p class="title1">Installation Instructions Open eClass 2.6</p>
 <p>The Open eClass platform is a complete Course Management System. It is the solution offered by the Greek Academic Network GUnet
 to support Asynchronous eLearning Services. It is mainly designed, developed and supported by the GUnet Asynchronous eLearning Group
 and is distributed for free as open-source software.</p>
-    <p>The Asynchronous <b>Open eClass 2.5</b> eLearning platform has been tested and operates well in: 
+    <p>The Asynchronous <b>Open eClass 2.6</b> eLearning platform has been tested and operates well in: 
     </p>
     <ul>
       <li>Ms Windows environments (<b>Windows NT</b>, <b>Windows 2000</b>, <b>Windows XP</b>, <b>Windows 2003</b>, <b>Windows Vista</b>, <b>Windows 7</b>, <b>Windows 2008</b>)
@@ -59,10 +59,10 @@ and is distributed for free as open-source software.</p>
     <p class="sub_title1">
       1. Web Server (<a href="http://httpd.apache.org/" target="_blank">Apache</a>2.x)
     </p>
-    <p>Apache has to be able to control pages of the <em>.php .inc.</em> type.
+    <p>Apache has to be able to control pages of the <em>.php</em> type.
     If you have not set the server yet, adding the following line to the <code>httpd.conf</code> file is enough:  
     </p>
-    <pre>AddType application/x-httpd-php .php .inc</pre>
+    <pre>AddType application/x-httpd-php .php</pre>
 
 <p>You will also have to define that the default charset of pages sent by the Web Server is <em>UTF-8</em>. In Apache, this can be done by placing the following statement in the <code>httpd.conf</code> file:   
 </p>
@@ -94,20 +94,22 @@ Satisfaction of the above is checked during Open eClass installation.
     </p>
 <p>You will also have to define the following parameters on the <code>php.ini</code> file:  
 </p>
-<pre>
-short_open_tag = on
-magic_quotes_gpc = on</pre>
+<ul>
+        <li><code>short_open_tag = off</code></li>
+        <li><code>magic_quotes_gpc = off</code></li>
+        <li><code>magic_quotes_runtime = off</code></li>
+</ul>
     <p>As far as the maximum file size allowed to be uploaded on the platform is concerned, you can adjust it to the following lines in the <code>php.ini</code> file: 
     </p>
     <ul>
       <li>
-        <code>upload_max_filesize = 40M</code> (predefined value is 2M)
+        <code>upload_max_filesize = 80M</code> (predefined value is 2M)
       </li>
       <li>
         <code>memory_limit = 25M</code> (predefined value is 8M)
       </li>
       <li>
-        <code>post_max_size = 45M</code> (predefined value is 8M)
+        <code>post_max_size = 95M</code> (predefined value is 8M)
       </li>
       <li>
         <code>max_execution_time = 100</code> (predefined value is 30 sec)
@@ -159,7 +161,7 @@ and modify it in: </p>
       Installation Process:
     </div>
     <p>
-You can decompress the <b>openeclass-2.5.tar.gz</b> file using the <code>tar xzvf openeclass-2.5.tar.gz</code> command.
+You can decompress the <b>openeclass-2.6.tar.gz</b> file using the <code>tar xzvf openeclass-2.6.tar.gz</code> command.
 The sub-directory created during decompression of the packet includes all the application files and has to be placed in an accessible point by the computer web server. 
     </p>
     <p>
@@ -198,7 +200,7 @@ To give access rights to web server you can type the following commands (e.g. if
     <div class="sub_title1">
       Installation Process
     </div>
-    <p>Decompress the openeclass-2.5.zip file in the root directory of the Apache.
+    <p>Decompress the openeclass-2.6.zip file in the root directory of the Apache.
     The subdirectory created during the decompression of the package includes all files of the application.
     This sub-directory has to be placed in an accessible path by the web server.
     </p>
@@ -271,45 +273,14 @@ square root of x-1 will be drawed. For syntax of all mathematical symbols, read 
 <p>
    You can configure several options of platform. After logging as admin user, 
         click in "Admin Tools" and after that, click in "Configuration File".
-        Basic options are stored in file <em>config.php</em>. 
-        Also you can change the following options below:</p>
-<ul><li><em>Theme</em>: The default theme is «classic». 
-        You can change it with something else (e.g. «modern» or «ocean»). 
-        Theme change will be visible to users in their next login.</li>
-        <li><em>Available languages</em>: Available languages are English, German and Spanish.</li>
-</ul>
-<ul><li><em>disable_eclass_stud_reg</em>: Student registration is disabled</li>
-     <li><em>disable_eclass_prof_reg</em>: Teacher registration is disabled</li>
-     <li><em>close_user_registration</em>: Registration of users with 'student' rights will not be free anymore. 
-             Users will have to follow a process similar to the teacher account creation process, 
-             namely filling in a student account application form, in order to obtain a platform account. 
-             The application will be examined by the administrator who either approves of it and opens an account, 
-             or rejects it.</li>
-     <li><em>durationAccount</em>: Duration of user accounts.</li>
-     <li><em>alt_auth_student_req</em>: Activation of users account request through alternative authentication methods.</li>
-</ul>
-
-<ul>
- <li><em>email_required</em>: During user registration, email is required.</li>
- <li><em>email_verification_required</em>: Email must be verified during registration and if user changes it.</li>
- <li><em>dont_mail_unverified_mails</em>: Don't send emails to users with unverified email address.</li>
- <li><em>email_from</em>: Outgoing messages will originate from the sender's email address. Otherwise, they will come from the platform administrator's email address.</li>
- <li><em>am_required</em>: Student ID is a required field during registration.</li>
- <li><em>dropbox_allow_student_to_student</em>: Users can send files to each other using the dropbox module.</li>
- <li><em>dont_display_login_form</em>: Login form will not be visible in home page. A link to it, will be appeared.</li>
- <li><em>block_username_change</em>: Users will not be able to change their username.</li>
- <li><em>display_captcha</em>: Display a 'CAPTCHA' code during user registration.</li>
- <li><em>insert_xml_metadata</em>: Allow teachers to upload metadata in files in 'Documents'.</li>
-</ul>
-By default none of them is enabled.
-<ul>
- <li><em>doc_quota</em>: Defines the default quota in 'Documents'. 
- <li><em>video_quota</em>: Defines the default quota in 'Video'. 
- <li><em>dropbox_quota</em>: Defines the default quota in 'Dropbox'. 
- <li><em>group_quota</em>: Defines the default quota in 'Groups'. 
-</ul>
-Note that, administrator can modify these settings per course from the admin tool.
+       Among other, you can change the available languages (e.g. greek, italian) etc.       
 </p>
+<p>
+        By default platform supports uploading of all the usual text, audio, video and image file types. 
+        If you desire to add a new file type, type its extension in 'Teacher while list' or 'Student while list' textarea
+         correspondingly.
+</p>       
+
 <div class='sub_title1'><a name="after_other">Other settings</a></div>
 <p> 
 If you want to use the platform with a Web server which has the SSL support activated (e.g. https://eclass.gunet.gr), you can do it by defining the <em>urlSecure</em> variable on <em>config.php</em>. e.g.<code>$urlSecure = "https://eclass.gunet.gr"</code> 
