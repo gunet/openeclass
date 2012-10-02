@@ -350,7 +350,7 @@ $tool_content .= "
 	$fname = isset($_POST['fname'])?$_POST['fname']:'';
 	$lname = isset($_POST['lname'])?$_POST['lname']:'';
 	// trim white spaces in the end and in the beginning of the word
-	$username = isset($_POST['username'])?autoquote($_POST['username']):'';
+	$username = isset($_POST['username'])?$_POST['username']:'';
 	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
 	$phone = isset($_POST['phone'])?$_POST['phone']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';
@@ -369,9 +369,9 @@ $tool_content .= "
 	$user_exist= FALSE;
 	// check if username is free
 	$username_check = db_query("SELECT username FROM user WHERE
-		user_id <> $u AND username = '".escapeSimple($username)."'");
+		user_id <> $u AND username = ".autoquote($username));
 	if (mysql_num_rows($username_check) > 0) {
-		$user_exist = TRUE;
+		$user_exist = true;
 	}
 
   // check if there are empty fields
@@ -398,12 +398,12 @@ $tool_content .= "
 				$verified_mail=2;
 			}
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-                                       username = $username, email = ".autoquote($email).", 
+                                       username = ".autoquote($username).", email = ".autoquote($email).", 
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        department = ".intval($department).", expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) .",
                                        whitelist = ". quote($user_upload_whitelist) ." 
-													WHERE user_id = ".intval($u);
+                                       WHERE user_id = ".intval($u);
 			$qry = db_query($sql);
                         if (!$qry) {
                                 $tool_content .= "$langNoUpdate: $u!";
