@@ -108,7 +108,7 @@ if ($q and mysql_num_rows($q) > 0) {
 	      $tool_content .= "</tr></table><br />\n";
 	}
 } else {
-	$tool_content .= "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(true);

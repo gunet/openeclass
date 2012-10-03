@@ -182,12 +182,13 @@ if ($is_editor) {
                 db_query("DELETE FROM `group` WHERE id = $id");
                 $message = $langGroupDel;
 
-        } elseif (isset($_REQUEST['empty'])) {
+        } elseif (isset($_REQUEST['empty'])) {                                
                 $result = db_query("DELETE FROM group_members
 				   WHERE group_id IN
 				   (SELECT id FROM `group` WHERE course_id = $cours_id)");
+              
                 $message = $langGroupsEmptied;
-
+                
         } elseif (isset($_REQUEST['fill'])) {
                 $resGroups = db_query("SELECT id, max_members -
                                                       (SELECT count(*) from group_members WHERE group_members.group_id = id)
@@ -244,7 +245,7 @@ if ($is_editor) {
             <li><a href='group_creation.php?course=$code_cours' title='$langNewGroupCreate'>$langCreate</a></li>
             <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete_all=yes' onClick=\"return confirmation('delall');\" title='$langDeleteGroups'>$langDelete</a></li>
             <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;fill=yes' title='$langFillGroups'>$langFillGroupsAll</a></li>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;?empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
+            <li><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;empty=yes' onClick=\"return confirmation('emptyall');\" title='$langEmtpyGroups'>$langEmtpyGroupsAll</a></li>
           </ul>
         </div>";
 

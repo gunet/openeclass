@@ -15,7 +15,7 @@
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
- *                  e-mail: info@openeclass.org
+ *                 e-mail: info@openeclass.org
  * ======================================================================== */
 
 /*********************************************
@@ -3226,7 +3226,7 @@ $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
 $langUnknownResType = "Πρόβλημα! Άγνωστος πόρος θεματικής ενότητας";
 $langNoExercises = "Δεν υπάρχουν ασκήσεις";
-$langAddToCourseHome = "Προσθήκη στην κεντρική σελίδα του μαθήματος";
+$langAddToCourseHome = "Εμφάνιση / Απόκρυψη στην κεντρική σελίδα του μαθήματος";
 $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
