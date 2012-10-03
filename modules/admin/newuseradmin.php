@@ -228,7 +228,7 @@ $langEmail : $emailhelpdesk
         }
         $tool_content .= "
         <tr><th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='$langRegistration' />
+            <td class='right'><input type='submit' name='submit' value='".q($langRegistration)."' />
                </td></tr>
         </table>
       </fieldset><div class='right smaller'>$langRequiredFields</div>

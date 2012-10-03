@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -293,7 +293,7 @@ else
 		<tr><th class='left'>$langPass: </th>
 		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".q($test_password)."'></td></tr>";
 	}
-	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>";
+	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='".q($langModify)."'></td></tr>";
 	$tool_content .= "</table></fieldset></form>";
 }
 

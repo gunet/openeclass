@@ -189,7 +189,7 @@ function repoForm() {
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td><input type='submit' name='submit' value='".$GLOBALS['langSubmit']."' >
+	<td><input type='submit' name='submit' value='".q($GLOBALS['langSubmit'])."' >
 		<small>".$GLOBALS['langRequiredFields']."</small></td>
 	</tr>
 	</tbody>
@@ -197,7 +197,7 @@ function repoForm() {
 	<input type='hidden' name='submit' value='submit' >
 	</form>
 	<br />
-	<p align='right'><a href='../admin/index.php'>".$GLOBALS['langBack']."</p>";
+	<p align='right'><a href='../admin/index.php'>".q($GLOBALS['langBack'])."</p>";
 }
 
 ?>

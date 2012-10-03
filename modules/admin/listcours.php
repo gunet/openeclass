@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -176,16 +176,16 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Define course type
 	switch ($logs[4]) {
                 case COURSE_CLOSED:
-			$tool_content .= "<img src='$themeimg/lock_closed.png' title='$langClosedCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_closed.png' title='".q($langClosedCourse)."' />";
 			break;
                 case COURSE_REGISTRATION:
-			$tool_content .= "<img src='$themeimg/lock_registration.png' title='$langRegCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_registration.png' title='".q($langRegCourse)."' />";
 			break;
 		case COURSE_OPEN:
-			$tool_content .= "<img src='$themeimg/lock_open.png' title='$langOpenCourse' />";
+			$tool_content .= "<img src='$themeimg/lock_open.png' title='".q($langOpenCourse)."' />";
 			break;				
                 case COURSE_INACTIVE:
-			$tool_content .= "<img src='$themeimg/lock_inactive.png' title='$langCourseInactiveShort' />";
+			$tool_content .= "<img src='$themeimg/lock_inactive.png' title='".q($langCourseInactiveShort)."' />";
 			break;				
 	}
 	$tool_content .= "
@@ -194,9 +194,9 @@ for ($j = 0; $j < mysql_num_rows($sql); $j++) {
 	// Add links to course users, delete course and course edit
 	$tool_content .= "
       <td align='center' width='40'>
-        <a href='listusers.php?c=$logs[cours_id]'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;
-        <a href='editcours.php?c=$logs[1]$searchurl'><img src='$themeimg/edit.png' title='$langEdit'></a>
-        <a href='delcours.php?c=$logs[cours_id]'><img src='$themeimg/delete.png' title='$langDelete'></a>
+        <a href='listusers.php?c=$logs[cours_id]'><img src='$themeimg/user_list.png' title='".q($langUsers)."' /></a>&nbsp;
+        <a href='editcours.php?c=$logs[1]$searchurl'><img src='$themeimg/edit.png' title='".q($langEdit)."'></a>
+        <a href='delcours.php?c=$logs[cours_id]'><img src='$themeimg/delete.png' title='".q($langDelete)."'></a>
       </td>";
 	$k++;
 }

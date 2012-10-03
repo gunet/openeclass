@@ -67,7 +67,7 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 </tr>
 
 <tr>
-  <td class='right' colspan='2'><input type='submit' name='submit_upgrade2' value='$langUpgrade' /></td>
+  <td class='right' colspan='2'><input type='submit' name='submit_upgrade2' value='".q($langUpgrade)."' /></td>
   </tr>
 
 </table>

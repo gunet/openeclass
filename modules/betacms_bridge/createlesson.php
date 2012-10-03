@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -116,7 +116,7 @@ function repoForm() {
 	</tr>
 	<tr>
 	<th>&nbsp;</th>
-	<td><input type='submit' name='submit' value='".$GLOBALS['langSubmit']."' >
+	<td><input type='submit' name='submit' value='".q($GLOBALS['langSubmit'])."' >
 		<small>".$GLOBALS['langRequiredFields']."</small></td>
 	</tr>
 	</tbody>
@@ -124,7 +124,7 @@ function repoForm() {
 	<input type='hidden' name='submit' value='submit' >
 	</form>
 	<br />
-	<p align='right'><a href='browserepo.php'>".$GLOBALS['langBack']."</p>";
+	<p align='right'><a href='browserepo.php'>".q($GLOBALS['langBack'])."</p>";
 }
 
 ?>

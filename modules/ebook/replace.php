@@ -49,7 +49,7 @@ if (!$is_editor or mysql_num_rows($r) == 0) {
                                    <tr><th>$langZipFile:</th>
                                        <td><input type='file' name='file' size='53' /></td></tr>
                                    <tr><th>&nbsp;</th>
-                                       <td><input type='submit' name='submit' value='$langSend' /></td></tr>
+                                       <td><input type='submit' name='submit' value='".q($langSend)."' /></td></tr>
                                 </table></fieldset></form>";
 }
 

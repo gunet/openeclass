@@ -455,7 +455,7 @@ else {
 	  </tr>
 	  <tr>
 	    <th class='left'>&nbsp;</th>
-	    <td class='right'><input type='submit' name='submit' value='$langModify'></td>
+	    <td class='right'><input type='submit' name='submit' value='".q($langModify)."'></td>
 	  </tr>	  
 	  </table>
 	  </fieldset>

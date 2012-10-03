@@ -240,7 +240,7 @@ if ($is_editor) {
 	  <img src='$themeimg/email.png' title='email' /> $langEmailOption: <input type='checkbox' value='1' name='emailOption' /></td>
         </tr>
 	<tr>
-          <td class='right'><input type='submit' name='submitAnnouncement' value='$langAdd' /></td>
+          <td class='right'><input type='submit' name='submitAnnouncement' value='".q($langAdd)."' /></td>
 	</tr>
 	</table>
 	<input type='hidden' name='id' value='$AnnouncementToModify' />
@@ -330,23 +330,23 @@ if ($is_editor) {
 			$tool_content .= "
 			<td width='70' class='right'>
 			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
-			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
+			      <img src='$themeimg/edit.png' title='" . q($langModify) . "' /></a>&nbsp;
 			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
-			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+			      <img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>&nbsp;
 			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
-			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
+			      <img src='$themeimg/$vis_icon' title='".q($langVisible)."' /></a>
 			</td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
 			if ($iterator != 1)  {
 			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;up=" . $myrow["id"] . "'>
-			    <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
+			    <img class='displayed' src='$themeimg/up.png' title='" . q($langMove) ." ". q($langUp) . "' />
 			    </a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
 			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;down=" . $myrow["id"] . "'>
-			    <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
+			    <img class='displayed' src='$themeimg/down.png' title='" . q($langMove) ." ". q($langDown) . "' />
 			    </a>";
 			}
 			if ($announcementNumber > 1) {

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -159,7 +159,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
           <th>&nbsp;</th>
 	  <td class='right'>&nbsp;</td>
 	  <td class='right'>
-	    <input type='submit' name='create2' value='$langNextStep &raquo;' />
+	    <input type='submit' name='create2' value='".q($langNextStep)." &raquo;' />
 	    <input type='hidden' name='visit' value='true' />
 	  </td>
         </tr>
@@ -191,7 +191,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
         </td>
       </tr>
       <tr>
-	<td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
+	<td class='right'><input type='submit' name='back1' value='&laquo; ".q($langPreviousStep)." ' />&nbsp;
+                <input type='submit' name='create3' value='".q($langNextStep)." &raquo;' /></td>
       </tr>
       </table>
     </fieldset>
@@ -330,8 +331,8 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
       </tr>
       <tr>
 	<td class='right'>
-          <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
-	  <input type='submit' name='create_course' value='$langFinalize' />
+          <input type='submit' name='back2' value='&laquo; ".q($langPreviousStep)."' />&nbsp;
+	  <input type='submit' name='create_course' value='".q($langFinalize)."' />
         </td>
       </tr>
       </table>

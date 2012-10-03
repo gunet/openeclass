@@ -113,7 +113,7 @@ while($row = mysql_fetch_array($r1)) {
         if($row['user_id'] != 1) {
                 $tool_content .= "<td class='center'>
                         <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=".q($row['user_id'])."'>
-                        <img src='$themeimg/delete.png' title='$langDelete' />
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."' />
                         </a>
                         </td>";
         } else {
@@ -160,7 +160,7 @@ function printform ($message) {
         <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
             <span class='smaller'>($langHelpManageUser)</span></td></tr>
         <tr>
-            <td colspan='2' class='right'><input type='submit' name='submit' value='$langAdd'></td>
+            <td colspan='2' class='right'><input type='submit' name='submit' value='".q($langAdd)."'></td>
         </tr>
         </table>
         </fieldset>

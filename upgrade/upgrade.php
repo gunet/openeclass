@@ -143,7 +143,7 @@ if (!isset($_POST['submit2'])) {
                 </tr>
                 </table>
                 </fieldset>
-                <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
+                <div class='right'><input name='submit2' value='".q($langCont)." &raquo;' type='submit'></div>
                 </form>";
 } else {
         // Main part of upgrade starts here

@@ -5,7 +5,7 @@ header('Content-Type: text/html; charset=UTF-8');
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -243,8 +243,8 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
                 <tr><td><img src='../template/classic/img/printer.png' alt='print' />
                         <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td></tr>
                 <tr><td class='right'>
-                        <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
-                        <input type='submit' name='install3' value='$langAccept' /></td></tr>
+                        <input type='submit' name='back1' value='&laquo; ".q($langPreviousStep)."' />
+                        <input type='submit' name='install3' value='".q($langAccept)."' /></td></tr>
              </table>" . hidden_vars($all_vars) . "</form>";
 	draw($tool_content);
 }
@@ -285,8 +285,8 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	<tr>
 	<td colspan='2' class='right'>
-		<input type='submit' name='back2' value='&laquo; $langPreviousStep' />
-		&nbsp;<input type='submit' name='install4' value='$langNextStep &raquo;' />
+		<input type='submit' name='back2' value='&laquo; ".q($langPreviousStep)."' />
+		&nbsp;<input type='submit' name='install4' value='".q($langNextStep)." &raquo;' />
 	</td>
 	</tr>
 	</table>
@@ -350,8 +350,8 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 		<tr><th class='left'>$langDisableEclassProfReg</th>
 			<td>".checkbox_input('disable_eclass_prof_reg')."</td></tr>                
 	<tr><td colspan='2' class='right'>
-	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install5' value='$langNextStep &raquo;' />
+	  <input type='submit' name='back3' value='&laquo; ".q($langPreviousStep)."' />
+	  <input type='submit' name='install5' value='".q($langNextStep)." &raquo;' />
 	  <div class='smaller'>$langRequiredFields.</div>
 	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
 	</tr>
@@ -429,8 +429,8 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 		<td>".textarea_input('teacher_upload_whitelist', 6, 60)."</td>
 	  </tr>
 	  <tr><td colspan='2' class='right'>
-	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
+	  <input type='submit' name='back4' value='&laquo; ".q($langPreviousStep)."' />
+	  <input type='submit' name='install6' value='".q($langNextStep)." &raquo;' />
 	  </td>
 	</tr>
 	</table>" . hidden_vars($all_vars) . "</form>";
@@ -545,8 +545,8 @@ elseif(isset($_REQUEST['install6']))
 	</tr>";
 	$tool_content .= "<tr><td class='right'>&nbsp;</td>
 	<td class='right'>
-		<input type='submit' name='back5' value='&laquo; $langPreviousStep' />
-		<input type='submit' name='install7' value='$langInstall &raquo;' />
+		<input type='submit' name='back5' value='&laquo; ".q($langPreviousStep)."' />
+		<input type='submit' name='install7' value='".q($langInstall)." &raquo;' />
 	</td>
 	</tr>
 	</table>" . hidden_vars($all_vars) . "</form>";
@@ -574,7 +574,7 @@ elseif(isset($_REQUEST['install7']))
 		</ul>
 		<p>$langBackStep3_2</p><br />
 		<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
-		<input type='submit' name='install3' value='&lt; $langBackStep3' />"
+		<input type='submit' name='install3' value='&lt; ".q($langBackStep3)."' />"
 		. hidden_vars($all_vars) .
 		"</form>";
 		draw($tool_content);
@@ -635,7 +635,7 @@ $encryptedPasswd = true;
 	<br />
 	<div>$langProtect</div>
 	<br /><br />
-	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
+	<form action='../'><input type='submit' value='".q($langEnterFirstTime)."' /></form>";
 	draw($tool_content);
 	}
 }	
@@ -700,7 +700,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<li>$langExpPhpMyAdmin</li></ul>
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
 	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
-	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>" .
+	<div class='right'><input type='submit' name='install2' value='".q($langNextStep)." &raquo;' /></div>" .
         hidden_vars($all_vars) . "</form>\n";
 	draw($tool_content);
 } else {
@@ -734,7 +734,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
         <tr>
           <td colspan='2' align='right'><form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>
             <input type='hidden' name='welcomeScreen' value='welcomeScreen' />
-            <input type='submit' name='install1' value='$langNextStep &raquo;' />
+            <input type='submit' name='install1' value='".q($langNextStep)." &raquo;' />
           </form></td>
           </tr>
         </table>

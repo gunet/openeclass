@@ -1,9 +1,9 @@
 <?php
 /*========================================================================
-*   Open eClass 2.5
+*   Open eClass 2.6
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -307,7 +307,7 @@ if($countUser > 0) {
         foreach ($_REQUEST as $key => $value) {
             $tool_content .= "<input type='hidden' name='$key' value='$value' />";
         }
-        $tool_content .= "<input type='submit' name='dellall_submit' value='$langDelList'></form>";
+        $tool_content .= "<input type='submit' name='dellall_submit' value='".q($langDelList)."'></form>";
         $tool_content .= "</div>";
         
         if ($countUser >= USERS_PER_PAGE) { // display navigation links if more than USERS_PER_PAGE

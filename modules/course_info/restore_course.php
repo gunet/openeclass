@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -313,7 +313,7 @@ elseif (isset($_POST['do_restore'])) {
 	  <br /><br />
 	  <form action='".$_SERVER['SCRIPT_NAME']."' method='post' enctype='multipart/form-data'>
 	    <input type='file' name='archiveZipped' />
-	    <input type='submit' name='send_archive' value='".$langSend."' />
+	    <input type='submit' name='send_archive' value='".q($langSend)."' />
             </form>
             <div class='right smaller'>$langMaxFileSize ".
                        ini_get('upload_max_filesize') . "</div>
@@ -332,7 +332,7 @@ elseif (isset($_POST['do_restore'])) {
 	  <br /><br />
 	  <form action='".$_SERVER['SCRIPT_NAME']."' method='post'>
 	    <input type='text' name='pathToArchive' />
-	    <input type='submit' name='send_path' value='".$langSend."' />
+	    <input type='submit' name='send_path' value='".q($langSend)."' />
 	  </form>
 	  </td>
         </tr>
@@ -739,7 +739,7 @@ function unpack_zip_show_files($zipfile)
                         <b>$course</b> ($file)</li>\n";
                 $checked = '';
 	}
-        $retString .= "</ol><br /><input type='submit' name='do_restore' value='$langRestore' /></form>";
+        $retString .= "</ol><br /><input type='submit' name='do_restore' value='".q($langRestore)."' /></form>";
 	chdir($webDir . "modules/course_info");
 	return $retString;
 }
@@ -914,7 +914,7 @@ function course_details_form($code, $title, $fac, $prof, $type, $lang, $vis, $de
                            <label for='create_users'>$langActivate</label></td></tr>
                    <tr><td>&nbsp;</td></tr>
                    <tr><td colspan='2'>
-                      <input type='submit' name='create_restored_course' value='$langOk' />
+                      <input type='submit' name='create_restored_course' value='".q($langOk)."' />
                       <input type='hidden' name='restoreThis' value='$_POST[restoreThis]' /></td></tr>
                 </tbody></table>
                 </form>";

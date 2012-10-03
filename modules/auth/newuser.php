@@ -125,7 +125,7 @@ if (!isset($_POST['submit'])) {
 	$tool_content .= "<tr>
 	<th class='left'>&nbsp;</th>
 	<td colspan='2' class='right'>
-	<input type='submit' name='submit' value='".$langRegistration."' />
+	<input type='submit' name='submit' value='".q($langRegistration)."' />
 	</td>
 	</tr>
 	</table>

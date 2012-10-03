@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -44,12 +44,12 @@ if(isset($_POST['delete'])) {
     <th rowspan='2' class='left' width='220'>$langConfirmDel:</th>
     <td width='52' align='center'>
     <form method='post' action='delete_course.php?course=$code_cours'>
-    <input type='submit' name='delete' value='$langDelete' /></form></td>
+    <input type='submit' name='delete' value='".q($langDelete)."' /></form></td>
     <td><small>$langByDel</small></td>
     </tr>
     <tr>
     <td align='center'><form method='get' action='infocours.php'><input type='hidden' name='course' value='". q($code_cours) ."'/>
-                    <input type='submit' name='dont_delete' value='$langCancel' /></form></td>
+                    <input type='submit' name='dont_delete' value='".q($langCancel)."' /></form></td>
     <td>&nbsp;</td>
     </tr>
     </table>";

@@ -147,7 +147,7 @@ function commentBox($type, $mode)
       <form method="POST" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'">' . "\n"
                 .disp_html_area('insertCommentBox', $oldComment, 1, 50) . "\n"
                 .'        <input type="hidden" name="cmd" value="update' . $col_name . '" />' . "\n"
-                .'        <input type="submit" value="' . $langOk . '" />' . "\n"
+                .'        <input type="submit" value="' . q($langOk) . '" />' . "\n"
                 .'      </form>' . "\n"
             ;
         }
@@ -205,11 +205,11 @@ function commentBox($type, $mode)
             if ( $is_editor )
             {
                 $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmd=update' . $col_name . '">' . "\n"
-                .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
+                .    "<img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."' />"
                 .    '</a>' . "\n"
                 .    '<a href="' . $_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;cmd=del' . $col_name . '" '
                 .    ' onclick="javascript:if(!confirm(\''.clean_str_for_javascript($langConfirmYourChoice).'\')) return false;">' . "\n"
-                .    "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>\n";
+                .    "<img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' /></a>\n";
             }
         }
     }
@@ -302,7 +302,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
              $output .=  '<input type="text" name="newName" size="50" maxlength="255" value="'.htmlspecialchars($oldName).'" / class="FormData_InputText">' ."\n"
              .    '        <input type="hidden" name="cmd" value="updateName" />' ."\n"
-             .    '        <input type="submit" value="' . $langOk . '" />' . "\n"
+             .    '        <input type="submit" value="' . q($langOk) . '" />' . "\n"
              .    '      </form>';
         }
 
@@ -332,7 +332,7 @@ function nameBox($type, $mode, $formlabel = FALSE)
 
         if ($is_editor)
             $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmd=updateName">'
-            .    "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
+            .    "<img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."' /></a>\n";
     }
 
     return $output;
@@ -680,7 +680,7 @@ function display_my_exercises($dialogBox, $style)
 	        $output .= '    <tr '.$style.'>'."\n"
 	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
-	        .    '<img src="' . $themeimg . '/exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
+	        .    '<img src="' . $themeimg . '/exercise_on.png" alt="' . q($langExercise) . '" title="' . q($langExercise) . '" />&nbsp;'
 	        .    $exercise['title']
 	        .    '</label>'
 	        .    '<br />'."\n";
@@ -723,7 +723,7 @@ function display_my_exercises($dialogBox, $style)
     {
         $output .= '    <tr>'."\n"
 		.	 '      <th colspan="2"><div class="right">'
-        .    '<input type="submit" name="insertExercise" value="'.$langAddModulesButton.'" />'
+        .    '<input type="submit" name="insertExercise" value="'.q($langAddModulesButton).'" />'
         .    '</div></th>'."\n"
 		.	 '    </tr>'."\n"
         ;
@@ -805,7 +805,7 @@ function display_my_documents($dialogBox, $style)
     {
         $linkup = "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;openDir=$cmdParentDir'>";
         $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
-                        "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
+                        "hspace='5' alt='".q($langUp)."' title='".q($langUp)."' /></a></td>" .
                    "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
     }
         $output .= '
@@ -924,7 +924,7 @@ function display_my_documents($dialogBox, $style)
       <th colspan="'.$colspan.'"><div class="right">
         <input type="hidden" name="openDir" value="'.$curDirPath.'" />
         <input type="hidden" name="maxDocForm" value ="'.$iterator.'" />
-        <input type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'" /></div>
+        <input type="submit" name="submitInsertedDocument" value="'.q($langAddModulesButton).'" /></div>
       </th>
     </tr>';
     } // end if ( $fileList)

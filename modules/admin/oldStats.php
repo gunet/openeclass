@@ -188,7 +188,7 @@ if ($chart_content) {
     </tr>
     <tr>
       <td>&nbsp;</td>
-      <td class="right"><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+      <td class="right"><input type="submit" name="btnUsage" value="'.q($langSubmit).'"></td>
     </tr>
     </table>
     </form>';

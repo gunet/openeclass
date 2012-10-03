@@ -388,7 +388,7 @@ function directory_selection($source_value, $command, $entryToExclude)
 	$dialogBox .= "
             </select>
           </td>
-          <td class='right'><input type=\"submit\" value=\"$langMove\"></td>
+          <td class='right'><input type='submit' value='".q($langMove)."'></td>
         </tr>
         </table>
         </fieldset>

@@ -185,7 +185,7 @@ if (isset($_POST['submit'])) {
             </tr>
             <tr>
               <th>&nbsp;</th>
-              <td><input type='submit' name='submit' value='$langAdd'></td>
+              <td><input type='submit' name='submit' value='".q($langAdd)."'></td>
               <td>&nbsp;</td>
             </tr>
             </table>
@@ -250,13 +250,14 @@ $tool_content .= <<<tForm
 <tr>
 <td>&nbsp;</td>
 <td class="center">
-<input type=submit value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
+tForm;
+
+$tool_content .= "<input type=submit value='".q($langSubmitChanges)."' name='toolStatus' onClick=\"selectAll('active_box',true)\" />
 </td>
 <td>&nbsp;</td>
 </tr>
 </table>
-</form>
-tForm;
+</form>";
 
 $extToolsCount = count($externalLinks) ;
 if ($extToolsCount > 0)  {
@@ -279,14 +280,14 @@ if ($extToolsCount > 0)  {
                         $tool_content .= "<tr class='odd'>";
                 }
                 $tool_content .= "<th width='1'>
-                        <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
+                        <img src='$themeimg/external_link_on.png' title='".q($langTitle)."' /></th>
                         <td class='left'>{$externalLinks[$i]['text']}</td>
                         <td align='center'><form method='post' action='course_tools.php?course=$code_cours'>
                            <input type='hidden' name='delete' value='{$externalLinks[$i]['id']}' />
                            <input type='image' src='$themeimg/delete.png' name='delete_button' 
                                   onClick=\"return confirmation('" .
                                             js_escape("$langDeleteLink {$externalLinks[$i]['text']}?") .
-                                       "');\" title='$langDelete' /></form></td>
+                                       "');\" title='".q($langDelete)."' /></form></td>
                      </tr>";
         }
         $tool_content .= "</table>";

@@ -109,9 +109,9 @@ if (!isset($_GET['a'])) {
 		// Give administrator a link to delete or edit a faculty
 		$tool_content .= "\n<td width='50' align='center' nowrap>
 		<a href='$_SERVER[SCRIPT_NAME]?a=2&amp;c=".$logs['id']."'>
-		<img src='$themeimg/delete.png' title='$langDelete' /></a>&nbsp;&nbsp;
+		<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>&nbsp;&nbsp;
 		<a href='$_SERVER[SCRIPT_NAME]?a=3&amp;c=".$logs['id']."'>
-		<img src='$themeimg/edit.png' title='$langEdit' /></a></td>
+		<img src='$themeimg/edit.png' title='".q($langEdit)."' /></a></td>
 		</tr>\n";
 		$k++;
 	}
@@ -167,7 +167,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 1)  {
           </tr>
 	  <tr>
 	    <th>&nbsp;</th>
-	    <td class='right'><input type='submit' name='add' value='".$langAdd."' /></td>
+	    <td class='right'><input type='submit' name='add' value='".q($langAdd)."' /></td>
 	  </tr>
 	</table>
         </fieldset>
@@ -236,7 +236,7 @@ elseif (isset($_GET['a']) and $_GET['a'] == 3)  {
 	   <tr>
 		<th>&nbsp;</th>
 		<td class='right'><input type='hidden' name='c' value='$c' />
-		<input type='submit' name='edit' value='$langAcceptChanges' />
+		<input type='submit' name='edit' value='".q($langAcceptChanges)."' />
 		</td>
 	   </tr>
 	   </table>

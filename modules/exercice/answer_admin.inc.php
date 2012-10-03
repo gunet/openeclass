@@ -745,12 +745,13 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 	for($j=1;$j <= $nbrMatches;$i++,$j++) {
 		$tool_content .= "
 		<tr>
-		  <td class='right'><b>".$j."</b></td>
-		  <td><input type='text' name='match[".$i."]' size='58' value=\"";
-		if(!isset($formSent) && !isset($match[$i])) 
-			$tool_content .= q($langDefaultMakeCorrespond.$j);
-		else 
+                <td class='right'><b>".$j."</b></td>
+                <td><input type='text' name='match[".$i."]' size='58' value=\"";
+		if(!isset($formSent) && !isset($match[$i])) {			
+                        $tool_content .= "";
+                } else {
 			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
+                }
 	
 		$tool_content .= "\" /></td>
 		<td><div align='right'><select name=\"sel[".$i."]\">";
@@ -794,11 +795,11 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			  <td class='right'><b>".$val."</b></td>
 			  <td><input type='text' ".
 				"name='option[".$key."]' size='58' value='";
-			if(!isset($formSent) && !isset($option[$key]))
-				$tool_content .= "".q(langDefaultMatchingOpt)."$val";
-			else 
+			if(!isset($formSent) && !isset($option[$key])) {				
+                                $tool_content .= "";
+                        } else {
 				@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
-				
+                        }
 			$tool_content .= "' /></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>

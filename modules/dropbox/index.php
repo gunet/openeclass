@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -191,9 +191,9 @@ if (!isset($_GET['mailing'])) {
                                 $tool_content .= "\n<tr class=\"odd\">";
                         }
                         $tool_content .= "<td width='16'>
-                        <img src='$themeimg/inbox.png' title='$dropbox_lang[receivedTitle]' /></td>
+                        <img src='$themeimg/inbox.png' title='".q($dropbox_lang[receivedTitle])."' /></td>
                         <td>";
-                        $tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";                    
+                        $tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
                         $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
                                          "<small>".q($w->description)."</small></td>" .
                                          "<td>$w->author</td><td>".$w->uploadDate;

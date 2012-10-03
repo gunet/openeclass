@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -80,7 +80,7 @@ if ($is_editor) {
      </tr>
      <tr>
        <th>&nbsp;</th>
-       <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
+       <td class='right'><input type='submit' name='submit' value='".q($langSend)."' /></td>
      </tr>
      </table>
      </fieldset>
@@ -160,21 +160,21 @@ function tools($id, $title, $k, $num, $vis)
                 $num--;
                 return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>\n" .
                        "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$code_cours&amp;id=$id'>" .
-                       "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
+                       "<img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."' />" .
                        "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
-                                         alt='$langDelete' title='$langDelete' name='delete' value='$id'
+                                         alt='".q($langDelete)."' title='".q($langDelete)."' name='delete' value='$id'
                                          onclick=\"javascript:if(!confirm('".
                        js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
                        "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$id'>
-                           <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
+                           <img src='$themeimg/$icon_vis' alt='".q($langVisibility)."' title='".q($langVisibility)."'></a>
                         </form></td><td class='right' width='40'>" .
                        (($k < $num)? "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
-                                           title='$langMove $langDown' alt='$langMove $langDown' /></a>":
+                                           title='".q($langMove)." ".q($langDown)."' alt='".q($langMove)." ".q($langDown)."' /></a>":
                                      '') . 
                        (($k > 0)? "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
-                                        title='$langMove $langUp' alt='$langMove $langUp' /></a>":
+                                        title='".q($langMove)." ".q($langUp)."' alt='".q($langMove)." ".q($langUp)."' /></a>":
                                   '') . "</td>\n";
         }
 }

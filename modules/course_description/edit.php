@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -106,8 +106,8 @@ if (isset($_POST['edIdBloc'])) {
         </tr>
         <tr>
            <td>&nbsp;</td>
-           <td class='right'><input class='Login' type='submit' name='save' value='$langAdd' />&nbsp;&nbsp;
-              <input class='Login' type='submit' name='ignore' value='$langBackAndForget' />
+           <td class='right'><input class='Login' type='submit' name='save' value='".q($langAdd)."' />&nbsp;&nbsp;
+              <input class='Login' type='submit' name='ignore' value='".q($langBackAndForget)."' />
            </td>
         </tr>
         </table>
@@ -147,12 +147,12 @@ function display_add_block_form()
                         $tool_content .= "\n                <option value='$numBloc'>$titreBloc[$numBloc]</option>\n";
                 }
         }
-        $tool_content .= "\n                </select>
+        $tool_content .= "</select>
             </td>
           </tr>
           <tr>
             <th>&nbsp;</th>
-            <td><input type='submit' name='add' value='$langAdd' /></td>
+            <td><input type='submit' name='add' value='".q($langAdd)."' /></td>
           </tr>
           </table>
         </fieldset>  

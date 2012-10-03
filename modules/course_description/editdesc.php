@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,12 +62,12 @@ if ($q and mysql_num_rows($q) > 0) {
 $tool_content = "
  <form method='post' action='index.php?course=$code_cours'>
  <input type='hidden' name='edIdBloc' value='-1' />
- <input type='hidden' name='edTitleBloc' value='$langDescription' />
+ <input type='hidden' name='edTitleBloc' value='".q($langDescription)."' />
    <fieldset>
    <legend>$langDescription</legend>
          " . rich_text_editor('edContentBloc', 4, 20, $description) . "
    <br />
-   <div class='right'><input type='submit' name='submit' value='$langSubmit' /></div>
+   <div class='right'><input type='submit' name='submit' value='".q($langSubmit)."' /></div>
    </fieldset>
  </form>\n";
 

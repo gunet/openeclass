@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -118,7 +118,7 @@ if (!get_config('dont_display_login_form')) {
 	   <input class='Login' name='uname' size='17' /><br />
 	   $langPass <br />
 	   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
-	   <input class='Login' name='submit' type = 'submit' size = '17' value = '$langEnter' /><br />
+	   <input class='Login' name='submit' type = 'submit' size = '17' value = '".q($langEnter)."' /><br />
 	   $warning</td></tr>
 	   <tr><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p>
 	   </td>

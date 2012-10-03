@@ -369,7 +369,7 @@ $tool_content .= '<br />';
     </tr>
     <tr>
       <th class="left">&nbsp;</th>
-      <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+      <td><input type="submit" name="btnUsage" value="'.q($langSubmit).'"></td>
     </tr>
     </tbody>
     </table>

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -222,7 +222,7 @@ $langEmail: $emailhelpdesk";
 			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
 			</td></tr>
 			<tr><th class='left'>&nbsp;</th>
-			<td><input type='submit' name='submit' value='$langRejectRequest'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
+			<td><input type='submit' name='submit' value='".q($langRejectRequest)."'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
 			</tr></table>
 			</form>";
 			}

@@ -175,9 +175,9 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	$tool_content .= lang_select_options('localize');
 	$tool_content .= "</td></tr>";
 
-	$tool_content .= "</td></tr><tr><td colspan=\"2\">".$langRequiredFields."</td></tr>
+	$tool_content .= "</td></tr><tr><td colspan='2'>".$langRequiredFields."</td></tr>
 		<tr><td>&nbsp;</td>
-		<td><input type=\"submit\" name=\"submit\" value=\"".$langSubmit."\" ></td>
+		<td><input type=\"submit\" name='submit' value='".q($langSubmit)."' ></td>
 		</tr></thead></table>
 		<input type='hidden' name='rid' value='".@q($id)."'>
 		</tbody></table></form>";

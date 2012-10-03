@@ -80,9 +80,9 @@ $tool_content .= "<tr>
 <input type='hidden' name='auth' value='$auth'>";
 
 if (($auth != 7) and ($auth != 6)) {
-	$tool_content .= "<input type='submit' name='is_submit' value='$langSubmit'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='".q($langSubmit)."'>";
 } else {
-	$tool_content .= "<input type='submit' name='is_submit' value='$langCheck'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='".q($langCheck)."'>";
 }
 
 $tool_content .= "</td></tr></table></fieldset></form>";
