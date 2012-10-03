@@ -85,7 +85,7 @@ hContent;
 		  </tr>
 		  <tr>
 		    <th>&nbsp;</th>
-		    <td class='right'><input type='submit' value='$langAdd'></td>
+		    <td class='right'><input type='submit' value='".q($langAdd)."'></td>
 		  </tr>
 		  </table>
 		</fieldset>
@@ -128,7 +128,7 @@ hContent;
 		</tr>
 		  <tr>
 		    <th>&nbsp;</th>
-		    <td class='right'><input type='submit' value='$langModify'></td>
+		    <td class='right'><input type='submit' value='".q($langModify)."'></td>
 		  </tr>
 		  </table>
 		</fieldset>
@@ -151,7 +151,7 @@ hContent;
     		</tr>
     		<tr>
       		  <th>&nbsp;</th>
-      		  <td class='right'><input type='submit' value='$langModify'></td>
+      		  <td class='right'><input type='submit' value='".q($langModify)."'></td>
     		</tr>
     		</table>
                 </fieldset>
@@ -258,7 +258,7 @@ hContent;
 		</tr>
 	        <tr>
                   <th>&nbsp;</th>
-		  <td class='right'><input type=submit value='$langAdd'></td>
+		  <td class='right'><input type=submit value='".q($langAdd)."'></td>
 		</tr>
 		</table>
                 </fieldset>

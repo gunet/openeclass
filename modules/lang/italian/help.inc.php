@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-09-27 09:35:10
+// Generated 2012-10-03 12:28:56
 
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
@@ -82,46 +82,8 @@ Le operazioni che sono supportate dalla piattaforma rispetto al modulo 'Forum' s
   <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando una risposta  al forum della propria categoria viene apposta.</li> 
   </ul>
 ";
-$langHInit = "Home Page";
-$langInitContent = "<p class='helptopic'>Stai visualizzando la home page della piattaforma Open eClass. Inserisci il tuo nome utente e password per accedere alla piattaforma. Nel caso che hai dimenticato i tuoi dati di accesso, clicca su 'Hai dimenticato la password?' ed inserisci il tuo indirizzo e-mail che hai dichiarato alla tua registrazione, nel modulo che appare, per recuperare duqnue il username e la password.</p>
-
-<p class='helptopic'>Se sei uno studente e non disponi un conto al sito, clicca sul link 'Registrazione Studente' da ottenere un nuovo conto. Se vuoi ottenere un conto con l' autorizzazione di accesso di un 'insegnante', clicca sul link 'Registrazione Insegnante', e compila la 'Richiesta d' Iscrizione d' Insegnante'</p> 
-
-<p class='helptopic'>Per ulteriori informazioni rispetto alla funzione della piattaforma leggi i rilevanti manuali d' uso.</p>";
 $langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
-$langHPortfolio = 'Portfolio Utente';
-$langPortfolioContent = "<p>Qui puoi trovare tutti i corsi in cui sei registrato (come studente), oppure coloro che hai creato (come professore). Puoi seguire qualunque desideri, facendo click sul proprio titolo.</p>
-
-<p>Utilizzando le opzioni presenti nel menu laterale, puoi iscriverti a corsi ulteriori o abbandonare quelli seguiti, modificare le informazioni del tuo profilo (come il nome, la password e la lingua preferita), o trovare una pagina aggregativa con gli annunci e l' agenda dei tuoi corsi.</p>
-<p>In ogni sezione, accanto a ogni corso, alla colonna 'Azioni', c' è l' icona (<img style='border:0px;' src='template/classic/img/tools.png' width=16 height=16 align=basename></img>). A seconda dei privilegi dell' utente, si permettono varie operazioni.</p>";
-$langHPortfolio_student = $langHPortfolio;
-$langPortfolio_studentContent = $langPortfolioContent;
-$langHcourse_home = 'Pagina principale del corso';
-$langHcourse_home_student = $langHcourse_home;
-$langcourse_home_studentContent = '<p>Stai visualizzando la pagina principale del corso on-line. Dalle opzioni del menu laterale di sinistra, puoi entrare ai moduli del corso attivati dai suoi insegnanti.</p>';
-$langcourse_homeContent = "<p class='helptopic'>Stai vilualizzando la pagina principale del corso
-on-line. Dalle opzioni del menu laterale, puoi entrare a qualsiasi modulo del
-corso, dove puoi aggiungere il proprio contenuto. Gli strumenti attivi sono
-disponibili agli ospiti e agli studenti del corso, mentre gli strumenti
-inattivi sono solo visibili e accessibili all' insegnante.</p>
-<p class='helptopic'>Utilizzando gli strumenti di gestione puoi attivare o
-disattivare i moduli del corso desiderati, riconsiderare e gestire gli utenti
-registrati, modificare varie opzioni del corso (come il titolo del corso, il
-controllo dell' accesso, ecc.), e visualizzare le statistiche di utilizzo del
-corso.</p>
-<p class='helptopic'>Per aggiungere/modificare i dati del corso, utilizzi l'
-icona (<img src='$themeimg/edit.png' width=10 height=10>)
-ed in seguito un modulo apparirà da compilare/modificare i dati.</p>
-<p class='helptopic'>Il corso si può dividere in sezioni tematiche, riuscendo
-così un' organizzazione migliore. Per creare una sezione tematica, clicca sul
-link 'Aggiungere sezione tematica'. Se ulteriori sezioni tematiche vi sono già
-aggiunte, saranno presenti sotto il titolo 'Sezioni tematiche' e accompagnate
-da una serie di icone: 'modifica', 'elimina' , 'cambia visibilità
-(visibile/invisibile)'. Se in tutto sono più di una, vengono presenti anche
-delle frecce che permettono il cambio della loro ordine di presenza. Il
-contenuto di ogni sezione tematica, è definito da un' altro display, che verrà
-presente con la sua selezione.</p>";
 $langHDoc = 'Documenti';
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>Il modulo 'Documenti' è uno strumento importante che aiuta notevolmente lo
@@ -144,7 +106,7 @@ applicazione adatta deve essere installata per poter legere i documenti.</p>
 </ul>
 <h4>Scaricare una cartella intera</h4>
 <ul>
-  <li>Se si desideri salvare sul computer la cartella intera dei documenti,
+  <li>Se desideri salvare sul computer la cartella intera dei documenti,
       puoi premere il pulsante (<img src='$themeimg/save_s.png' width=16 height=16>)
       che si trova proprio sulla destra della cartella root. Per salvare solo una
       cartella specifica, clicca su un pulsante simile, che questa volta si trova a
@@ -214,7 +176,7 @@ dall' insegnante del corso e risulta molto utile se non hai partecipato alla
 
 <h4>Scaricare la cartella intera</h4> 
 
-<p>Se si desideri salvare nel tuo computer l'elenco <b>interο</b> dei documenti
+<p>Se desideri salvare nel tuo computer l'elenco <b>interο</b> dei documenti
 del corso, puoi premere il pulsante (<img src='$themeimg/save_s.png'
 width=16 height=16>) che si trova a destra della cartella iniziale. Per salvare
 solo una cartella particolare, premi un tale pulsante, quale si trova a destra
@@ -496,10 +458,6 @@ $langAnnounce_studentContent = "<p>Il modulo 'Annunci' permette l' <b>aggiorname
 $langHProfile = "Modificare profilo";
 $langProfileContent = "<p>Con questo modulo puoi <b>modificare</b> i dati di in un utente della piattaforma. È possibile modificare il nome/cognome dell'utente e il username. Inoltre è possibile modificare l' indirizzo email di un utente ed optare se sarà privato, apparirà a tutti o solo agli insegnanti. Il numero di immatricolazione e il numero telefono si possono pure modificare o cambiare la visibilità. Se ti interessa l' aspetto del tuo corso, puoi specificare il modo di visualizzazione,  selezionando 'Dettagliato' o 'Abbreviato'. Se desideri o non ricevere e-mail dai tuoi corsi, semplicemente seleziona la corrispondente casella di spunta. È possibile anche specificare la facoltà – dipartimento tramite una lista. Da raggiungere una forma completa del profilo è possibile aggiungere una foto e una breve descrizione. Il processo si conclude facendo clic su 'Modificare'.</p>
 ";
-$langHImport = "Caricare pagina web";
-$langImportContent = "<p>Se desideri, puoi caricare un file che riguarda il tuo corso. Questo file verrà salvato al server di Open eClass. Un link a questo file apparirà nel menu a sinistra di questo corso, che appena cliccandosi, si aprirà in una nuova finestra del browser dell'utente.</p> 
-<p>Per fare questo, premi 'Sfoglia', seleziona il file che si desideri caricare, metti un titolo nella casella 'Titolo della pagina' e premi 'Aggiungere'.</p> 
-<p>Il link del file appena caricato può essere disattivato e cancellato dallo strumento 'Gestione strumenti'. </p>";
 $langHModule = "Aggiungere link esterno";
 $langModuleContent = "<p>Se desideri aggiungere dei link dalla home page del corso a siti che già esistono altrove sulla rete (o anche da qualche parte sul tuo sito) digita il link e il suo titolo e poi premi 'Aggiungere'. Le pagine che aggiungi alla home page possono essere disattivate e cancellate, ma gli strumenti incorporati possono solo essere disattivati, ma non cancellati.</p>";
 $langHcourseTools = "Attivare strumenti";
@@ -741,7 +699,7 @@ $langUsageContent = "<p>Questo modulo serve a visualizzare le statistiche per qu
 <hr>
 <p>Preferenza dei moduli</b></p>
 <p>La preferenza dei moduli<p> è un' operazione che è inclusa in tutte le suddette categorie di statistiche, e permette l' impostazione dei parametri che saranno utilizzati alla ricerca delle statistiche. Prima puoi specificare il tipo delle statistiche, in base al 'Numero di visite' o la 'Durata'. Poi, specifica la data di inizio e di scadenza, e prosegui alla visualizzazione delle statistiche. Se desideri visualizzare le statistiche per un certo utente, digita la prima lettera del suo cognome, altrimenti seleziona 'Tutti gli utenti' dalla lista di valori. Il processo si completa cliccando sul pulsante 'Inviare'.</p>";
-$langHCreateCourse = "Creare un corso";
+$langHCreateCourse = "Creare corso";
 $langCreateCourseContent = "
 <p>Questo modulo è uno strumento molto importante della piattaforma, perché  l' insegnante lo può utilizzare per creare nuovi corsi. Il processo di creazione è costituito da 3 passi. In particolare:</p> 
 <p><b>Passo 1:</b> All' inizio compila i dati fondamentali e le informazioni del corso. Questi riguardano al titolo del corso, la scuola-facoltà a cui appartiene (si sceglie da una lista di valori), l'insegnante del corso, il tipo (laurea / post laurea) e infine la lingua in cui apparirà questo corso.<br><br>
@@ -773,8 +731,6 @@ $langWiki_studentContent = "
 <li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <img src='$themeimg/book.png' align='absmiddle'> la visualizzazione di tutte le pagine , <img src='$themeimg/list.png' align='absmiddle'>la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnits = "Aggiungere/Modificare sezione tematica";
-$langAddCourseUnitsContent = "<p class='helptopic'>Per aggiungere una nuova sezione tematica inserisci un titolo e una breve descrizione della sezione. Appena finito clicca su 'Aggiungere' per aggiungere una nuova sezione tematica</p>.";
 $langHAddCourseUnitscontent = "Aggiungere contenuto di sezione tematica";
 $langAddCourseUnitscontentContent = "<p class='helptopic'>In questo display dei contenuti o delle risorse vengono aggiunti alla sezione tematica selezionata. Il tipo delle risorse che si possono  aggiungere è scritto accanto alla parola 'Aggiungere:'. Cliccandola vengono visualizzate le risorse disponibili che corrispondono al tipo selezionato. Seleziona le risorse desiderate e quindi fai clic su 'Aggiungere selezionati'. Ogni risorsa che viene aggiunta, appare in un elenco e ha sulla destra le icone 'Modificare' e 'Eliminare'. Nota che qualora ci siano più di una sezioni tematiche in un corso, vengono visualizzati i link alla sezione successiva e precedente. Altrimenti puoi utilizzare  la lista delle opzioni che viene visualizzata nella parte inferiore della pagina,  per andare direttamente a qualsiasi sezione.</p>";
 $langHGlossary = "Glossario";
@@ -873,7 +829,7 @@ $langEBookContent = "<p>L' e-book è un insieme di <b>hypertext</b> (ipertesto) 
 Per <strong>eliminare</strong> un E-book,  dal menu principale (a sinistra), devi pure selezionare il modulo 'E-book' per visualizzare l'elenco dei disponibili E-Book del corso e fare clic sull' icona corrispondente <strong>'Eliminare'</strong>.</p>
 <hr>
 <h2>Gestione dei file  (html) </h2>
-<p>Se si desideri gestire i file (html) che hai caricato su un certo E-book, devi:</p>
+<p>Se desideri gestire i file (html) che hai caricato su un certo E-book, devi:</p>
 <ul>
   <li>dal menu principale (a sinistra), fare clic sul modulo 'E-Book' e dall' elenco visualizzato premere sull' icona corrispondente <strong>'Modificare'</strong>,</li>
   <li>selezionare <strong>'Gestione File'</strong>, per visualizzare una cartella (directory) con tutti i file html che hai caricato sull' E-book,</li>
@@ -920,3 +876,9 @@ $langCourseAccessHelp
 <li><b>Riutilizzare un corso:</b> Puoi eliminare selettivamente alcuni dei dati del corso, per prepararlo per il nuovo anno accademico.</li> 
 </ul> 
 </p> ";
+$langHGroupSpace = "Gruppi di utenti";
+$langGroupSpaceContent = "<p>Per modificare gli elementi del gruppo di utenti, fai clic su 'Modificare gruppo di utenti'.
+        Cliccando su 'Forum' la piattaforma ti reindirizza al modulo dei 'Forum', in cui un Forum è stato creato per ogni gruppo di utenti. Cliccando sul 'Documenti del gruppo' puoi aggiungere o rimuovere i documenti del gruppo, attraverso i propri link. 
+        Qui, deve essere addirittura sottolineato che i documenti del gruppo caricati non sono relativi al modulo 'Documenti' della Home Page della piattaforma. 
+        Puoi inviare una e-mail ai membri di un gruppo cliccando su 'Inviare e-mail al gruppo'.
+         Puoi anche vedere alcune statistiche per un gruppo cliccando su 'Statistiche' </p>.";

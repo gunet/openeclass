@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -179,8 +179,8 @@ $prevNextString = "";
 // display previous and next links only if there is more than one module
 if ( $moduleNb > 1 )
 {
-	$imgPrevious = '<img src="'.$themeimg.'/lp/back.png" alt="'.$langPrevious.'" title="'.$langPrevious.'">';
-	$imgNext = '<img src="'.$themeimg.'/lp/next.png" alt="'.$langNext.'" title="'.$langNext.'">';
+	$imgPrevious = '<img src="'.$themeimg.'/lp/back.png" alt="'.q($langPrevious).'" title="'.q($langPrevious).'">';
+	$imgNext = '<img src="'.$themeimg.'/lp/next.png" alt="'.q($langNext).'" title="'.q($langNext).'">';
 
 	if( $previousModule != '' )
 		$prevNextString .= '<a href="navigation/viewModule.php?course='.$code_cours.'&amp;viewModule_id='.$previousModule.'" target="scoFrame">'.$imgPrevious.'</a>';
@@ -204,7 +204,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <div class='header'>
     <div class='tools'>
     <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
-        <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
+        <img src='$themeimg/lp/nofullscreen.png' alt='".q($langQuitViewer)."' title='".q($langQuitViewer)."' /></a></div>
     <div class='lp_left'>
         <a href='$urlAppend/courses/$currentCourseID' target='_top' title='" .
                 q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -415,7 +415,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
           <label for=\"newLabel\">".$langNewLabel.": </label>&nbsp;
           <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" / size=\"30\" >
           <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
-          <input type=\"submit\" value=\"".$langCreate."\" />
+          <input type=\"submit\" value=\"".q($langCreate)."\" />
         </form>
       </td>
     </tr>";

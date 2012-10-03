@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -77,7 +77,7 @@ if( isset($learningPath_module[0]['lock'])
 	.    '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] .'?course='.$code_cours.'">' . "\n"
 	.    '<label for="newRaw">' . $langChangeRaw . '</label>'."\n"
 	.    '<input type="text" value="' . htmlspecialchars($learningPath_module[0]['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
-	.    '<input type="submit" value="' . $langOk . '" />'."\n"
+	.    '<input type="submit" value="' . q($langOk) . '" />'."\n"
 	.    '</form>'."\n\n"
     ;
 }

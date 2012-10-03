@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -98,7 +98,7 @@ if ($is_editor or $is_tutor)  {
 		  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
 		</tr>
 		<tr>
-		  <td><input type='submit' name='submit' value='$langSend'></input></td>
+		  <td><input type='submit' name='submit' value='".q($langSend)."'></input></td>
 		</tr>
 		</thead>
 		</table>

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -247,7 +247,7 @@ if ( $atleastOne )
 {
     $tool_content .= '    <tr>'."\n"
         .'      <th colspan="2"><div align="right">'."\n"
-        .'        <input type="submit" value="'.$langReuse.'" />'."\n"
+        .'        <input type="submit" value="'.q($langReuse).'" />'."\n"
         .'        <input type="hidden" name="cmdglobal" value="add"></div>'."\n"
         .'      </th>'."\n"
         .'    </tr>'."\n";

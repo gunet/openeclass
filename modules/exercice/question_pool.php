@@ -4,7 +4,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -220,7 +220,7 @@ if($is_editor) {
 				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
 				</td>
 				<td width='3'><div align='center'><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."\">
-				  <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a></div>
+				  <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a></div>
 				</td>";
 			} else {
 				$tool_content .= "
@@ -230,7 +230,7 @@ if($is_editor) {
 				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
 				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;recup=".$row['id'].
-				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='$langReuse' /></a>
+				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='".q($langReuse)."' /></a>
 				</td>";
 			}
 			//$tool_content .= "</td>";	
@@ -239,7 +239,7 @@ if($is_editor) {
 				<td width='3' align='center'>
 				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;exerciseId=".$exerciseId."&amp;delete=".$row['id']."\"". 
 				  " onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice)).
-				  "')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a>
+				  "')) return false;\"><img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a>
 				</td>";
 			}
 			$tool_content .= "</tr>";

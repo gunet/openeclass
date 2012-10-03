@@ -243,7 +243,7 @@ $local_head = $jscalendar->get_load_files_code();
      </tr>
      <tr>
        <td>&nbsp;</td>
-       <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
+       <td><input type="submit" name="btnUsage" value="'.q($langSubmit).'">
            <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
        </td>
      </tr>

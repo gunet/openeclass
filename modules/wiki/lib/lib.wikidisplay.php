@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -105,13 +105,13 @@
             ;
 
         $out .= '<input type="submit" name="action[preview]" value="'
-            .$langPreview.'" />' . "\n"
+            .q($langPreview).'" />' . "\n"
             ;
 
         if( ! $forcePreview )
         {
             $out .= '<input type="submit" name="action[save]" value="'
-                .$langSave.'" />' . "\n"
+                .q($langSave).'" />' . "\n"
                 ;
         }
 
@@ -200,10 +200,10 @@
             ;
 
         $out .= '<input type="submit" name="action[save]" value="'
-            . $langSave.'" />' . "\n"
+            . q($langSave).'" />' . "\n"
             ;
         $out .= '<input type="submit" name="action[edit]" value="'
-            . $langEdit . '"/>' . "\n"
+            . q($langEdit) . '"/>' . "\n"
             ;
 
         $location = add_request_variable_to_url( $script, "wikiId", $wikiId );
@@ -371,7 +371,7 @@
                . '        <td>' . "\n";
 
 
-        $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
+        $form .= '        <input type="submit" name="action[exEdit]" value="' . q($langSave) . '" />' . "\n"
             . disp_button ($_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;action=list', $langCancel) . "\n"
             ;
 

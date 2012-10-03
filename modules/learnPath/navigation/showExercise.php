@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -302,13 +302,13 @@ echo ("
 	echo "<br/><table width='99%' class='tbl'><tr>
                <td><div align='center'><input type='submit' value=\"";
                 if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-                        echo "$langCont\" />&nbsp;";
+                        echo "".q($langCont)."\" />&nbsp;";
                 } else {
-                        echo $langNext." &gt;"."\" />";
+                        echo "".q($langNext)." &gt;"."\" />";
                 }
-            echo "<input type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
+            echo "<input type='submit' name='buttonCancel' value='".q($langCancel)."' /></div></td></tr>
               <tr>
-                <td colspan=\"2\">&nbsp;</td>
+                <td colspan='2'>&nbsp;</td>
               </tr>
               </table>";
     }	

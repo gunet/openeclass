@@ -4,7 +4,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -86,7 +86,7 @@ if(isset($usedInSeveralExercises)) {
 	} else	{
 		$tool_content .= "submitAnswers \" ";
 	}
-	$tool_content .= "value='$langOk'>&nbsp;&nbsp;<input type='submit' name='buttonBack' value='$langCancel'>";
+	$tool_content .= "value='".q($langOk)."'>&nbsp;&nbsp;<input type='submit' name='buttonBack' value='".q($langCancel)."'>";
      	$tool_content .= "</td></tr></table></td></tr></table></form>";
 
 } else {
@@ -102,7 +102,7 @@ if(isset($usedInSeveralExercises)) {
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
                 $tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;modifyQuestion=".$questionId."\">
-                <img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
+                <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
         }
 
         $tool_content .= "</legend>
@@ -123,7 +123,7 @@ if(isset($usedInSeveralExercises)) {
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
 		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyAnswers=$questionId'>
-		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
+		<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
 	}
         $tool_content .= "<br/></th>
 	</tr>

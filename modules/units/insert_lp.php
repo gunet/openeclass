@@ -68,7 +68,7 @@ function list_lps()
 			}
 		$tool_content .= "\n  <tr>" .
                                  "\n    <th colspan='3'><div align='right'>";
-		$tool_content .= "<input type='submit' name='submit_lp' value='$langAddModulesButton'></div></th>";
+		$tool_content .= "<input type='submit' name='submit_lp' value='".q($langAddModulesButton)."'></div></th>";
                 $tool_content .= "\n  </tr>\n  </table>\n  </form>\n";
         }
 }

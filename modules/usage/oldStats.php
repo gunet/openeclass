@@ -232,7 +232,7 @@ if (!extension_loaded('gd')) {
 	 </tr>
 	 <tr>
 	   <th>&nbsp;</th>
-	   <td><input type="submit" name="btnUsage" value="'.$langSubmit.'"></td>
+	   <td><input type="submit" name="btnUsage" value="'.q($langSubmit).'"></td>
 	 </tr>
 	 </table>
        </fieldset>

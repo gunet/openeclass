@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -91,15 +91,18 @@ function showlinksofcategory($catid)
                                 $tool_content .=  "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview'>";
                         }
 
-                        $tool_content .= "<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a></td>" .
+                        $tool_content .= "<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview' onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\">
+                                <img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a></td>" .
                                          "<td width='35' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
-                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;up=$myrow[id]'><img src='$themeimg/up.png' title='$langUp' alt='$langUp' /></a>";
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;up=$myrow[id]'>
+                                        <img src='$themeimg/up.png' title='".q($langUp)."' alt='".q($langUp)."' /></a>";
                         }
                         // Display move down command only if it is not the bottom link
                         if ($i < $numberoflinks) {
-                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;down=$myrow[id]'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
+                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;down=$myrow[id]'>
+                                        <img src='$themeimg/down.png' title='".q($langDown)."' alt='".q($langDown)."' /></a>";
                         }
                         $tool_content .= "
                   </td>";
@@ -120,19 +123,21 @@ function showcategoryadmintools($categoryid)
 	$tool_content .=  "
                 <th width='45' valign='top'><div align='right'>
                     <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=editcategory&amp;id=$categoryid&amp;urlview=$urlview'>
-                        <img src='$themeimg/edit.png' title='$langModify' /></a>&nbsp;&nbsp;<a
+                        <img src='$themeimg/edit.png' title='".q($langModify)."' /></a>&nbsp;&nbsp;<a
                             href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=deletecategory&amp;id=$categoryid&amp;urlview=".
                             $urlview."' onclick=\"javascript:if(!confirm('$langCatDel')) return false;\">".
-                            "<img src='$themeimg/delete.png' title='$langDelete' /></a></div></th>";
+                            "<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a></div></th>";
 
 	$tool_content .= "<th width='35' valign='top'><div align='right'>";
 	// Display move up command only if it is not the top link
 	if ($catcounter != 1) {
-		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cup=$categoryid'><img src='$themeimg/up.png' title='$langUp' alt='$$langUp' /></a>";
+		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cup=$categoryid'>
+                        <img src='$themeimg/up.png' title='".q($langUp)."' alt='".q($langUp)."' /></a>";
 	}
 	// Display move down command only if it is not the bottom link
 	if ($catcounter < $aantalcategories) {
-		$tool_content .=  "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cdown=$categoryid'><img src='$themeimg/down.png' title='$langDown' alt='$langDown' /></a>";
+		$tool_content .=  "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cdown=$categoryid'>
+                        <img src='$themeimg/down.png' title='".q($langDown)."' alt='".q($langDown)."' /></a>";
 	}
         $tool_content .=  "</div>
                   </th>";

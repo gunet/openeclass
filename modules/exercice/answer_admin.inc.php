@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -577,8 +577,8 @@ if(isset($_GET['modifyAnswers'])) {
 			<tr>
 			  <td class='left' colspan='2'>&nbsp;</td>
 			  <td><b>$langSurveyAddAnswer :</b>&nbsp;
-			    <input type='submit' name='lessAnswers' value='$langLessAnswers' />&nbsp;
-			    <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
+			    <input type='submit' name='lessAnswers' value='".q($langLessAnswers)."' />&nbsp;
+			    <input type='submit' name='moreAnswers' value='".q($langMoreAnswers)."' />
 			  </td>
 			  <td colspan='3'>&nbsp;</td>
 			</tr>
@@ -587,8 +587,8 @@ if(isset($_GET['modifyAnswers'])) {
 			</tr>
 			<tr>
 			  <td class='right' colspan='5'>
-			    <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-			    <input type='submit' name='cancelAnswers' value='$langCancel' />
+			    <input type='submit' name='submitAnswers' value='".q($langCreate)."' />&nbsp;&nbsp;
+			    <input type='submit' name='cancelAnswers' value='".q($langCancel)."' />
 			  </td>
 			</tr>
 			</table>
@@ -646,8 +646,8 @@ if(isset($_GET['modifyAnswers'])) {
 					</tr>";
 				}
 				$tool_content .= "<tr><td>
-				  <input type='submit' name='submitAnswers' value='$langNext &gt;' />
-				  &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
+				  <input type='submit' name='submitAnswers' value='".q($langNext)." &gt;' />
+				  &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='".q($langCancel)."' />
 				</td>
 				</tr>
 				</table>
@@ -680,9 +680,9 @@ if(isset($_GET['modifyAnswers'])) {
 					<tr>
 					  <td>&nbsp;</td>
 					  <td>
-					    <input type='submit' name='buttonBack' value='&lt; $langBack'' />&nbsp;&nbsp;
-					    <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-					    <input type='submit' name='cancelAnswers' value='$langCancel' />
+					    <input type='submit' name='buttonBack' value='&lt; ".q($langBack)."' />&nbsp;&nbsp;
+					    <input type='submit' name='submitAnswers' value='".q($langCreate)."' />&nbsp;&nbsp;
+					    <input type='submit' name='cancelAnswers' value='".q($langCancel)."' />
 					  </td>
 					</tr>
 					</table>";
@@ -745,10 +745,10 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 	for($j=1;$j <= $nbrMatches;$i++,$j++) {
 		$tool_content .= "
 		<tr>
-		  <td class=\"right\"><b>".$j."</b></td>
-		  <td><input type=\"text\" name=\"match[".$i."]\" size=\"58\" value=\"";
+		  <td class='right'><b>".$j."</b></td>
+		  <td><input type='text' name='match[".$i."]' size='58' value=\"";
 		if(!isset($formSent) && !isset($match[$i])) 
-			$tool_content .= "${langDefaultMakeCorrespond.$j}"; 
+			$tool_content .= q($langDefaultMakeCorrespond.$j);
 		else 
 			@$tool_content .= str_replace('{','&#123;',htmlspecialchars($match[$i]));
 	
@@ -791,15 +791,15 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 		foreach($listeOptions as $key=>$val) {
 			$tool_content .= "
 			<tr>
-			  <td class=\"right\"><b>".$val."</b></td>
-			  <td><input type=\"text\" ".
-				"name=\"option[".$key."]\" size=\"58\" value=\"";
+			  <td class='right'><b>".$val."</b></td>
+			  <td><input type='text' ".
+				"name='option[".$key."]' size='58' value='";
 			if(!isset($formSent) && !isset($option[$key]))
-				$tool_content .= ${"langDefaultMatchingOpt$val"}; 
+				$tool_content .= "".q(langDefaultMatchingOpt)."$val";
 			else 
 				@$tool_content .= str_replace('{','&#123;',htmlspecialchars($option[$key]));
 				
-			$tool_content .= "\" /></td>
+			$tool_content .= "' /></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		      </tr>";
@@ -807,8 +807,8 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			$tool_content .= "
 			<tr>
 			  <td>&nbsp;</td>
-			  <td colspan='3'><input type='submit' name='submitAnswers' value='$langCreate' />
-					    &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='$langCancel' />
+			  <td colspan='3'><input type='submit' name='submitAnswers' value='".q($langCreate)."' />
+					    &nbsp;&nbsp;<input type='submit' name='cancelAnswers' value='".q($langCancel)."' />
 			  </td>
 			</tr>
 			</table>	
@@ -855,7 +855,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			}
 			
 			$tool_content .= "
-      <input type='hidden' name='reponse[1]' value='$langCorrect' />
+      <input type='hidden' name='reponse[1]' value='".q($langCorrect)."' />
       <td>".
 			text_area("comment[1]", 4, 40, @$comment[1], "class=''")
 			."</td>
@@ -876,7 +876,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 				$tool_content .= "></td>";
 			}
 			$tool_content .= "
-			<input type='hidden' name='reponse[2]' value='$langFalse'>
+			<input type='hidden' name='reponse[2]' value='".q($langFalse)."'>
 		      <td>".
 			text_area("comment[2]", 4, 40, @$comment[2], "class=''")
 			."</td>
@@ -891,8 +891,8 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 		<tr>
 		  <td colspan='2'>&nbsp;</td>
 		  <td align='center'>
-		     <input type='submit' name='submitAnswers' value='$langCreate' />&nbsp;&nbsp;
-		     <input type='submit' name='cancelAnswers' value='$langCancel' />
+		     <input type='submit' name='submitAnswers' value='".q($langCreate)."' />&nbsp;&nbsp;
+		     <input type='submit' name='cancelAnswers' value='".q($langCancel)."' />
 		  </td>
 		  <td>&nbsp;</td>
 		</tr>

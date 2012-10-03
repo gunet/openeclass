@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -89,7 +89,7 @@ if (isset($_POST['submit'])) {
                         $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;". q($course_title) ."<br />";
                 }       
         }
-        $tool_content .= "</div><br /><input type='submit' name='submit' value='$langSubmit'>";
+        $tool_content .= "</div><br /><input type='submit' name='submit' value='".q($langSubmit)."'>";
         $tool_content .= "</form>";
 }
 

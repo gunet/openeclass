@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -86,7 +86,7 @@ $checked['private_forum_no'] = $private_forum? '': ' checked="1"';
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td class='right'><input type='submit' name='properties' value='$langModify' /></td>
+      <td class='right'><input type='submit' name='properties' value='".q($langModify)."' /></td>
     </tr>
     </table>
     </fieldset>    

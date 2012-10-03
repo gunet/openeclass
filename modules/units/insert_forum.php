@@ -72,7 +72,7 @@ function list_forums()
 			}
 		}
 		$tool_content .= "\n  <tr>" .
-                                 "\n    <th colspan='3'><div align='right'><input type='submit' name='submit_forum' value='$langAddModulesButton' /></div></th>";
+                                 "\n    <th colspan='3'><div align='right'><input type='submit' name='submit_forum' value='".q($langAddModulesButton)."' /></div></th>";
                 $tool_content .= "\n  </tr>" .
                                  "\n  </table>".
                                  "\n  </form>\n";

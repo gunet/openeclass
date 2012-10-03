@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -301,7 +301,7 @@ if (mysql_num_rows($resultcategories) > 0) {
 		$tool_content .= "\n
 		<table width='100%' class='tbl_alt'>
 		<tr>
-		  <th width='15'><img src='$themeimg/folder_open.png' title='$langNoCategory' alt='$langNoCategory'></th>
+		  <th width='15'><img src='$themeimg/folder_open.png' title='".q($langNoCategory)."' alt='".q($langNoCategory)."'></th>
 		  <th colspan='6'><div align='left'>$langNoCategory</div></th>
 		</tr>";
 		showlinksofcategory(0);
@@ -367,9 +367,9 @@ if (mysql_num_rows($resultcategories) > 0) {
 } else {   // no category
    if (getNumberOfLinks(0) > 0) {
 		$tool_content .=  "
-                <table width=\"100%\">
+                <table width='100%'>
 		<tr>
-		  <td width='1'><img src='$themeimg/folder_open.png' title='$langNoCategory' alt='$langNoCategory'></td>
+		  <td width='1'><img src='$themeimg/folder_open.png' title='".q($langNoCategory)."' alt='".q($langNoCategory)."'></td>
 		  <td colspan='4'><b>$langLinks</b></td>
 		</tr>";
 		showlinksofcategory(0);

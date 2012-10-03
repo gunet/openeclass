@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -447,13 +447,13 @@ function new_assignment()
         </tr>
         <tr>
           <th>&nbsp;</th>
-          <td class='right'><input type='submit' name='new_assign' value='$langAdd' /></td>
+          <td class='right'><input type='submit' name='new_assign' value='".q($langAdd)."' /></td>
         </tr>
         </table>
         </fieldset>
       </form>
       <br />";
-  	$tool_content .= "\n      <p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p>";
+  	$tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>$langBack</a></p>";
 }
 
 
@@ -514,7 +514,7 @@ function show_edit_assignment($id)
     </tr>
     <tr>
       <th>&nbsp;</th>
-      <td><input type='submit' name='do_edit' value='$langEdit' /></td>
+      <td><input type='submit' name='do_edit' value='".q($langEdit)."' /></td>
     </tr>
     </table>
     </fieldset>
@@ -665,7 +665,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
                         $extra
                         <tr>
                           <th>&nbsp;</th>
-                          <td align='right'><input type='submit' value='$langSubmit' name='work_submit' />$notice</td>
+                          <td align='right'><input type='submit' value='".q($langSubmit)."' name='work_submit' />$notice</td>
                         </tr>
                         </table>
                         </fieldset>
@@ -948,7 +948,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                   <p class='smaller right'><img src='$themeimg/email.png' alt='' >
                         $m[email_users]: <input type='checkbox' value='1' name='email'></p>
 
-		  <p><input type='submit' name='submit_grades' value='$langGradeOk'></p>
+		  <p><input type='submit' name='submit_grades' value='".q($langGradeOk)."'></p>
 		  </form>";
                 }
 

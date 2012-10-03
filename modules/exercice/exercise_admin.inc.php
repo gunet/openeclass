@@ -1,10 +1,9 @@
 <?php
-// $Id$
 /* ========================================================================
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -174,11 +173,11 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	<tr>
           <th>&nbsp;</th>";
 	if (isset($_GET['NewExercise'])) {
-		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langCreate'>&nbsp;&nbsp;";
+		$tool_content .= "<td><input type='submit' name='submitExercise' value='".q($langCreate)."'>&nbsp;&nbsp;";
 	} else {
-		$tool_content .= "<td><input type='submit' name='submitExercise' value='$langModify'>&nbsp;&nbsp;";	
+		$tool_content .= "<td><input type='submit' name='submitExercise' value='".q($langModify)."'>&nbsp;&nbsp;";	
 	}
-	$tool_content .= "<input type='submit' name='cancelExercise' value='$langCancel'></td>
+	$tool_content .= "<input type='submit' name='cancelExercise' value='".q($langCancel)."'></td>
 	</tr>
         </table>
 	</fieldset>
@@ -200,7 +199,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	$tool_content .= "
         <fieldset>
         <legend>$langInfoExercise&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyExercise=yes'>
-              <img src='$themeimg/edit.png' align='middle' title='$langModify' alt='$langModify' /></a></legend>
+              <img src='$themeimg/edit.png' align='middle' title='".q($langModify)."' alt='".q($langModify)."' /></a></legend>
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>

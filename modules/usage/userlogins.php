@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -293,7 +293,7 @@ $start_cal = $jscalendar->make_input_field(
   </tr>
   <tr>
     <th>&nbsp;</th>
-    <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
+    <td><input type="submit" name="btnUsage" value="'.q($langSubmit).'">
         <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
     </td>
   </tr>

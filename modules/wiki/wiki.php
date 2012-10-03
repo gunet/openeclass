@@ -4,7 +4,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -441,7 +441,7 @@ switch ( $action )
                     }
 
                     $tool_content .= '          <td>';
-                    $tool_content .= '<img src="' . $themeimg . '/arrow.png" alt="'.$langWiki.'" title="'.$langWiki.'" border="0" />';
+                    $tool_content .= '<img src="' . $themeimg . '/arrow.png" alt="'.q($langWiki).'" title="'.q($langWiki).'" border="0" />';
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '          <td>';
@@ -474,7 +474,7 @@ switch ( $action )
                     $tool_content .= '<a href="page.php?course='.$code_cours.'&amp;wikiId='
                         . $entry['id'].'&amp;action=recent'
                         . '">'
-                        . '<img src="' . $themeimg . '/history.png" border="0" alt="'.$langWikiRecentChanges.'" title="'.$langWikiRecentChanges.'" />'
+                        . '<img src="' . $themeimg . '/history.png" border="0" alt="'.q($langWikiRecentChanges).'" title="'.q($langWikiRecentChanges).'" />'
                         . '</a>'
                         . '</td>' . "\n";
 
@@ -487,7 +487,7 @@ switch ( $action )
                             $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
                             . '">'
-                            . '<img src="'.$themeimg.'/edit.png" border="0" alt="'.$langWikiEditProperties.'" title="'.$langWikiEditProperties.'" />'
+                            . '<img src="'.$themeimg.'/edit.png" alt="'.q($langWikiEditProperties).'" title="'.q($langWikiEditProperties).'" />'
                             . '</a>';
 
                             $tool_content .= '</td>' . "\n";
@@ -498,7 +498,7 @@ switch ( $action )
                             $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;wikiId='
                                     . $entry['id'].'&amp;action=exDelete'
                                     . '">'
-                                    . '<img src="'.$themeimg.'/delete.png" border="0" alt="'.$langDelete.'" title="'.$langDelete.'" onClick="return confirmation();"/>'
+                                    . '<img src="'.$themeimg.'/delete.png" alt="'.q($langDelete).'" title="'.q($langDelete).'" onClick="return confirmation();"/>'
                                     . '</a>'
                                     ;
                             $tool_content .= '</td>' . "\n";

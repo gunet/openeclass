@@ -4,7 +4,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -84,7 +84,7 @@ if( isset($learningPath_module['lock'])
 		.'<label for="newRaw">'.$langChangeRaw.'</label>'."\n"
 		.'<input type="text" value="'.htmlspecialchars( $learningPath_module['raw_to_pass'] ).'" name="newRaw" id="newRaw" size="3" maxlength="3" /> % '."\n"
 		.'<input type="hidden" name="cmd" value="raw" />'."\n"
-		.'<input type="submit" value="'.$langOk.'" />'."\n"
+		.'<input type="submit" value="'.q($langOk).'" />'."\n"
 		.'</form>'."\n\n";
 }
 
@@ -105,7 +105,7 @@ if( $module )
 		.htmlspecialchars($module['name'])
 		.'&nbsp;'."\n"
 		.'<a href="../exercice/admin.php?course='.$code_cours.'&amp;exerciseId='.$module['exerciseId'].'">'
-		.'<img src="'.$imgRepositoryWeb.'edit.png" border="0" alt="'.$langModify.'" title="'.$langModify.'" />'
+		.'<img src="'.$imgRepositoryWeb.'edit.png" alt="'.q($langModify).'" title="'.q($langModify).'" />'
 		.'</a>'."\n"
 		.'</p>'."\n";
 		

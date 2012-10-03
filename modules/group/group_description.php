@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -63,7 +63,7 @@ if (isset($_GET['delete'])) {
 	  <tr>
 	    <th>&nbsp;</th>
 	    <input type='hidden' name='group_id' value='$group_id'>
-	<td><input type='submit' name='submit' value='$langAddModify' /></td>
+	<td><input type='submit' name='submit' value='".q($langAddModify)."' /></td>
 	  </tr>
 	  </tbody>
 	  </table>

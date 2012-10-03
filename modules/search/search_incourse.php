@@ -96,7 +96,7 @@ if(empty($search_terms)) {
 	   </tr>
 	   <tr>
 	     <th>&nbsp;</th>
-	     <td colspan='2' class='right'><input type='submit' name='submit' value='$langDoSearch' /></td>
+	     <td colspan='2' class='right'><input type='submit' name='submit' value='".q($langDoSearch)."' /></td>
 	   </tr>
 	   </table>
 	   </fieldset>

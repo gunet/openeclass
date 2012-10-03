@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -98,7 +98,7 @@ function list_ebooks()
                 }                 
 		$tool_content .= "\n  <tr>" .
                                  "\n    <th colspan='2'><div align='right'>" .
-                                 "<input type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></th>" .
+                                 "<input type='submit' name='submit_ebook' value='".q($langAddModulesButton)."' /></div></th>" .
                                  "\n  </tr>\n  </table>\n  </form>\n";
         }
 }

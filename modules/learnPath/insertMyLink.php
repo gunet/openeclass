@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -238,7 +238,7 @@ function showlinks()
       <th colspan='3'>
         <div align='right'>
           <input type='hidden' name='maxLinkForm' value ='" . ($i-1) ."' />
-          <input type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+          <input type='submit' name='submitInsertedLink' value='".q($langAddModulesButton)."'/>
         </div></th>
       </tr>
     </tbody>

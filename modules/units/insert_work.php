@@ -43,8 +43,8 @@ function list_assignments()
                 $i = 0;
                 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                         $visible = $row['active']?
-                                "<img title='$langActive' src='$themeimg/visible.png' />":
-                                "<img title='$langInactive' src='$themeimg/invisible.png' />";
+                                "<img title='".q($langActive)."' src='$themeimg/visible.png' />":
+                                "<img title='".q($langInactive)."' src='$themeimg/invisible.png' />";
                         $description = empty($row['description'])? '':
                                 "<div>$row[description]</div>";
                         if ($i%2) {
@@ -63,7 +63,7 @@ function list_assignments()
 		}
 		$tool_content .= "\n    <tr>".
                                 "\n        <th colspan='4'><div align='right'>" .
-                                "<input type='submit' name='submit_work' value='$langAddModulesButton' />" .
+                                "<input type='submit' name='submit_work' value='".q($langAddModulesButton)."' />" .
                                 "</div></th>".
                                 "\n    </tr>".
                                 "\n    </table>".

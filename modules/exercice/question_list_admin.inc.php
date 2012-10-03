@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -89,19 +89,19 @@ if($nbrQuestions) {
 			<td align='right' width='1'>".$i.".</td>
 			<td> ".$objQuestionTmp->selectTitle()."<br />
 			".$aType[$objQuestionTmp->selectType()-1]."</td>
-			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;editQuestion=".$id."\">".
-			"<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>".
-			" <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-			"<img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a></td>
+			<td class='right' width='50'><a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;editQuestion=".$id."'>".
+			"<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>".
+			" <a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;deleteQuestion=".$id."' "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
+			"<img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a></td>
 		<td width='20'>";
 		if($i != 1) {
-			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveUp=".$id."\">
-   			<img src='$themeimg/up.png' align='middle' title='$langUp' /></a> ";
+			$tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveUp=".$id."'>
+   			<img src='$themeimg/up.png' align='middle' title='".q($langUp)."' /></a> ";
 		}
 		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
-			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveDown=".$id."\">
-			<img src='$themeimg/down.png' align='middle' title='$langDown' /></a> ";
+			$tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveDown=".$id."'>
+			<img src='$themeimg/down.png' align='middle' title='".q($langDown)."' /></a> ";
 		}
 		$tool_content .= "</td></tr>";
 		$i++;

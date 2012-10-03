@@ -79,7 +79,7 @@ $tool_content .= "
       <td>".rich_text_editor('unitdescr', 4, 20, $unitdescr)."</td>
     </tr>
     <tr>
-      <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>
+      <td class='right'><input type='submit' name='edit_submit' value='".q($langSubmit)."'></td>
     </tr>
     </table>
     </fieldset>

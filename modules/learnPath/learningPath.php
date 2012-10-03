@@ -323,7 +323,8 @@ foreach ($flatElementList as $module)
     {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked ) 
-          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+          $tool_content .= "<td width='18'><a href=\"module.php?course=$code_cours&amp;module_id=".$module['module_id']."\">
+                  <img src='$themeimg/monitor.png' alt='".q($langTracking)."' title='".q($langTracking)."' /></a></td>";
         else
           $tool_content .= "<td></td>";
         if ($is_blocked)
