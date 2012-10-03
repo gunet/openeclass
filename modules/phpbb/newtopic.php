@@ -219,8 +219,8 @@ if (isset($_POST['submit'])) {
 	  <tr>
             <th>&nbsp;</th>
 	    <td class='right'>
-	       <input class='Login' type='submit' name='submit' value='$langSubmit' />&nbsp;
-	       <input class='Login' type='submit' name='cancel' value='$langCancelPost' />
+	       <input class='Login' type='submit' name='submit' value='".q($langSubmit)."' />&nbsp;
+	       <input class='Login' type='submit' name='cancel' value='".q($langCancelPost)."' />
 	    </td>
           </tr>
 	  </table>

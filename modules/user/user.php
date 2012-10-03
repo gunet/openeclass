@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -181,7 +181,7 @@ if (isset($_GET['search'])) {
         </tr>
         <tr>
           <th class='left'>&nbsp;</th>
-          <td class='right'><input type='submit' value='$langSearch'></td>
+          <td class='right'><input type='submit' value='".q($langSearch)."'></td>
         </tr>
         </table>
         </fieldset>
@@ -261,47 +261,47 @@ while ($myrow = mysql_fetch_array($result)) {
         $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
         $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;unregister=$myrow[user_id]$extra_link'
                          onClick=\"return confirmation('" . js_escape($alert_uname) .
-                         "');\"><img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse' /></a>";
+                         "');\"><img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a>";
 
         $tool_content .= "</td>";
         // tutor right
         if ($myrow['tutor'] == '0') {
                 $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveTutor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/group_manager_add.png' title='$langGiveRightTutor' alt='$langGiveRightTutor' /></a></td>";
+                                <img src='$themeimg/group_manager_add.png' title='".q($langGiveRightTutor)."' alt='".q($langGiveRightTutor)."' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRightTutor'>
-                                <img src='$themeimg/group_manager_remove.png' title='$langRemoveRightTutor' alt='$langRemoveRightTutor' /></a></td>";
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeTutor=$myrow[user_id]$extra_link' title='".q($langRemoveRightTutor)."'>
+                                <img src='$themeimg/group_manager_remove.png' title='".q($langRemoveRightTutor)."' alt='".q($langRemoveRightTutor)."' /></a></td>";
         }
         // editor right
         if ($myrow['editor'] == '0') {
             $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/assistant_add.png' title='$langGiveRightΕditor' alt='$langGiveRightΕditor' /></a></td>";
+                                <img src='$themeimg/assistant_add.png' title='".q($langGiveRightΕditor)."' alt='".q($langGiveRightΕditor)."' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
-                                <img src='$themeimg/assistant_remove.png' title ='$langRemoveRightEditor' alt='$langRemoveRightEditor' /></a></td>";
+                                <img src='$themeimg/assistant_remove.png' title ='".q($langRemoveRightEditor)."' alt='".q($langRemoveRightEditor)."' /></a></td>";
         }
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
                         $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRightAdmin'>
-                                        <img src='$themeimg/teacher_remove.png' title='$langRemoveRightAdmin' alt='$langRemoveRightAdmin' /></a></td>";
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='".q($langRemoveRightAdmin)."'>
+                                        <img src='$themeimg/teacher_remove.png' title='".q($langRemoveRightAdmin)."' alt='".q($langRemoveRightAdmin)."' /></a></td>";
                 } else {
                         $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/teacher_add.png' title='$langGiveRightAdmin' alt='$langGiveRightAdmin' /></a></td>";
+                                <img src='$themeimg/teacher_add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
                 }
         } else {
                 if ($myrow['statut']=='1') {
                         $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
-                                        <img src='$themeimg/teacher.png' title='$langTutor' alt='$langTutor' /></td>";
+                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
                 } else {
                         $tool_content .= "<td class='smaller' valign='top' align='center'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                        <img src='$themeimg/add.png' title='$langGiveRightAdmin' alt='$langGiveRightAdmin' /></a></td>";
+                                        <img src='$themeimg/add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
                 }
         }
         $tool_content .= "</tr>";

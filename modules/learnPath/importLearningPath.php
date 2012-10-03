@@ -1222,19 +1222,19 @@ else // if method == 'post'
     <form enctype=\"multipart/form-data\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours\" method=\"post\">
     <fieldset>
     <legend>$langImport</legend>
-    <table width=\"100%\" class=\"tbl\">
+    <table width='100%' class='tbl'>
     <tr>
       <th width=\"120\">$langFileName:</th>
       <td>
-          <input type=\"hidden\" name=\"claroFormId\" value=\"".uniqid('')."\" >
-          <input type=\"file\" name=\"uploadedPackage\">
+          <input type='hidden' name='claroFormId' value=\"".uniqid('')."\" >
+          <input type='file' name='uploadedPackage'>
           <br />
           <span class='smaller'>$langLearningPathUploadFile</span>
       </td>
     </tr>
     <tr>
       <th class=\"left\">&nbsp;</th>
-      <td class='right'><input type=\"submit\" value=\"".$langImport."\"></td>
+      <td class='right'><input type='submit' value='".q($langImport)."'></td>
     </tr>
     <tr>
       <th>&nbsp;</th>
@@ -1340,7 +1340,7 @@ EOF;
         
         $tool_content .=  "\n  <tr class='nobrd'>";
         $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'><input type='submit' value='".$langImport."'></td>";
+        $tool_content .= "\n    <td colspan='3' class='right'><input type='submit' value='".q($langImport)."'></td>";
         $tool_content .=  "\n  </tr>";
     }
     

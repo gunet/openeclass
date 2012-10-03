@@ -154,13 +154,13 @@ if ($q and mysql_num_rows($q)) {
                 }
                 if ($is_editor) {
                         $actions = "<td class='center'>
-                     <a href='$cat_url&amp;edit=$cat[id]' title='$langCategoryMod'>
-                        <img src='$themeimg/edit.png' alt='$langCategoryMod'></a>&nbsp;
+                     <a href='$cat_url&amp;edit=$cat[id]' title='".q($langCategoryMod)."'>
+                        <img src='$themeimg/edit.png' alt='".q($langCategoryMod)."'></a>&nbsp;
                      <a href='$cat_url&amp;delete=$cat[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) .
-                        "');\"><img src='$themeimg/delete.png' alt='$langCategoryDel'
-                        title='$langCategoryDel'></a>
-                 </td>";
+                        "');\"><img src='$themeimg/delete.png' alt='".q($langCategoryDel)."'
+                        title='".q($langCategoryDel)."'></a>
+                        </td>";
                 } else {
                         $actions = '';
                 }

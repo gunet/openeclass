@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -100,7 +100,7 @@ else {
                 <tr><td>$langLegend <b>$langDropBox</b>:</td>
                     <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td></tr>
                 <tr><td>&nbsp;</td>
-                    <td class='right'><input type='submit' name='submit' value='$langModify'></td></tr>
+                    <td class='right'><input type='submit' name='submit' value='".q($langModify)."'></td></tr>
             </table>
 	</fieldset></form>\n";
 }

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -150,11 +150,11 @@ function htmlInterface($data, $lesson_fCode)
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
 				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
-				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
+				<img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."'></a>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "
 				<a href='${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=".$data[2][$i]."'>
-				<img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
+				<img src='$themeimg/tools.png' title='".q($langAdm)."' alt='".q($langAdm)."'></a>";
 			}
 			$lesson_content .= "</td></tr>";
 		}

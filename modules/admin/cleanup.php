@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
 <div class='caution'>$langCleanupInfo</div>
 <div class='center'>
 	     <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-		 <input type='submit' name='submit' value='$langCleanup'>
+		 <input type='submit' name='submit' value='".q($langCleanup)."'>
 	     </form></div>";
 }
 

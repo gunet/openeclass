@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -211,9 +211,9 @@ if(!$nbrExercises) {
 				WHERE eid='$eid'", $currentCourseID));
 	
 			if ($NumOfResults[0]) {
-				$tool_content .= "<td align='center'><a href=\"results.php?course=$code_cours&amp;exerciseId=".$row['id']."\">".
+				$tool_content .= "<td align='center'><a href='results.php?course=$code_cours&amp;exerciseId=".$row['id']."'>".
 				$langExerciseScores1."</a> | 
-				<a href=\"csv.php?course=$code_cours&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
+				<a href='csv.php?course=$code_cours&amp;exerciseId=".$row['id']."' target=_blank>".$langExerciseScores3."</a></td>";
 			} else {
 				$tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 			}
@@ -221,28 +221,29 @@ if(!$nbrExercises) {
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
+			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'>
+                           <img src='$themeimg/edit.png' alt='".q($langModify_temp)."' title='".q($langModify_temp)."' />
 			  </a>
 				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
-			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
+			  <img src='$themeimg/delete.png' alt='".q($langDelete_temp)."' title='".q($langDelete_temp)."' />
 			  </a>";
 		
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
 					$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
-					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				} else {
 					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
-					<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				}
 			} else { // else if not active
 				if (isset($page)) {
 					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;page=${page}&amp;exerciseId=".$row['id']."'>
-					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/invisible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				} else {
 					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=enable&amp;exerciseId=".$row['id']."'>
-					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
+					<img src='$themeimg/invisible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				}
 			}
 			$tool_content .= "</td></tr>";

@@ -284,9 +284,10 @@ do {
 	</td>
 	<td width='40' valign='top'>";
 	if ($is_editor) { // course admin
-		$tool_content .= "<a href=\"editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum\">
-		<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>";
-		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete' /></a>";
+		$tool_content .= "<a href='editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum'>
+		<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
+		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a>";
 	}
 	$tool_content .= "</td>\n</tr>";
 	$count++;

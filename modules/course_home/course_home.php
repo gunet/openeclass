@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -96,13 +96,14 @@ if ($res and mysql_num_rows($res) > 0) {
         }
 }
 if ($is_editor) {
-        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>";
+        $edit_link = "&nbsp;<a href='../../modules/course_description/editdesc.php?course=$code_cours'>
+                <img src='$themeimg/edit.png' title='".q($langEdit)."' alt='".q($langEdit)."' /></a>";
 } else {
         $edit_link = '';
 }
-$main_content .= "\n      <div class='course_info'>";
+$main_content .= "<div class='course_info'>";
 if (!empty($description)) {
-        $main_content .= "\n      <div class='descr_title'>$langDescription$edit_link</div>\n$description";
+        $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";
 
 } else {
         $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
@@ -149,7 +150,8 @@ if ($is_editor) {
 // add course units
 if ($is_editor) {
         $cunits_content .= "
-    <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'><img src='$themeimg/add.png' width='16' height='16' title='$langAddUnit' alt='$langAddUnit' /></a></p>\n";
+            <p class='descr_title'>$langCourseUnits: <a href='{$urlServer}modules/units/info.php?course=$code_cours'>
+            <img src='$themeimg/add.png' width='16' height='16' title='".q($langAddUnit)."' alt='".q($langAddUnit)."' /></a></p>\n";
 
 } else {
         $cunits_content .= "\n  <p class='descr_title'>$langCourseUnits</p>";
@@ -193,24 +195,25 @@ while ($cu = mysql_fetch_array($sql)) {
         }
 
         if ($is_editor) { // display actions
-                $cunits_content .= "\n        <th width='70' class='center'>".
+                $cunits_content .= "<th width='70' class='center'>".
                         "<a href='../../modules/units/info.php?course=$code_cours&amp;edit=$cu[id]'>" .
-                        "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a>" .
-                        "\n        <a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
+                        "<img src='$themeimg/edit.png' title='".q($langEdit)."' alt='".q($langEdit)."' /></a>" .
+                        "<a href='$_SERVER[SCRIPT_NAME]?del=$cu[id]' " .
                         "onClick=\"return confirmation('$langConfirmDelete');\">" .
                         "<img src='$themeimg/delete.png' " .
-                        "title='$langDelete' alt='$langDelete' /></a>" .
+                        "title='".q($langDelete)."' alt='".q($langDelete)."' /></a>" .
                         "\n        <a href='$_SERVER[SCRIPT_NAME]?vis=$cu[id]'>" .
                         "<img src='$themeimg/$icon_vis' " .
-                        "title='$langVisibility' alt='$langVisibility' /></a></th>";
+                        "title='".q($langVisibility)."' alt='".q($langVisibility)."' /></a></th>";
                 if ($cu['id'] != $last_id) {
                         $cunits_content .= "\n        <th width='40' class='right'><a href='$_SERVER[SCRIPT_NAME]?down=$cu[id]'>" .
-                        "<img src='$themeimg/down.png' title='$langDown' /></a>";
+                        "<img src='$themeimg/down.png' title='".q($langDown)."' /></a>";
                 } else {
                         $cunits_content .= "\n        <th width='40' class='right'>&nbsp;&nbsp;&nbsp;&nbsp;";
                 }
                 if (!$first) {
-                        $cunits_content .= "\n        <a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'><img src='$themeimg/up.png' title='$langUp' /></a></th>";
+                        $cunits_content .= "\n        <a href='$_SERVER[SCRIPT_NAME]?up=$cu[id]'>
+                                <img src='$themeimg/up.png' title='".q($langUp)."' /></a></th>";
                 } else {
                         $cunits_content .= "\n        &nbsp;&nbsp;&nbsp;&nbsp;</th>";
                 }
@@ -330,9 +333,12 @@ $tool_content .= "
         <tr class='title1'>
           <td class='title1'>$langTools</td>
           <td class='left'>$toggle_student_view
-             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>&nbsp;&nbsp;
-             <a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close           
+             <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'>
+              <img src='$themeimg/email.png' alt='".q($langContactProf)."' title='".q($langContactProf)."' /></a>&nbsp;&nbsp;
+             <a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'>
+              <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='".q($langAddAsBookmark)."' /></a>&nbsp;&nbsp;
+            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'>
+              <img src='$themeimg/feed.png' alt='".q($langRSSFeed)."' title='".q($langRSSFeed)."' /></a></span>&nbsp;$toggle_student_view_close           
             </td>                     
         </tr>        
         </table>

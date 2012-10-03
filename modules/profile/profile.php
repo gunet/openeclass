@@ -358,7 +358,7 @@ if (get_config('email_verification_required')) {
                         $message = "<div class='alert1'>$langMailNotVerified $link</div>";                        
                         break;
                 case EMAIL_VERIFIED: 
-                        $message = "<img src='$themeimg/tick_1.png' title='$langMailVerificationYesU' />";
+                        $message = "<img src='$themeimg/tick_1.png' title='".q($langMailVerificationYesU)."' />";
                         break;
                 case EMAIL_UNVERIFIED:                        
                         $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
@@ -409,7 +409,7 @@ $tool_content .= "
         </tr>
         <tr> 
           <td>&nbsp;</td>
-          <td class='right'><input type='submit' name='submit' value='$langModify' /></td>
+          <td class='right'><input type='submit' name='submit' value='".q($langModify)."' /></td>
         </tr>
         </table>
         </fieldset>

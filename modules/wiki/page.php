@@ -744,7 +744,7 @@ switch( $action )
 	$tool_content .= '<div>' . "\n";
 	$tool_content .= '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n";
 	$tool_content .= '<input type="hidden" name="title" value="'.$title.'" />' . "\n";
-	$tool_content .= '<input type="submit" name="action[edit]" value="'.$langWikiEditLastVersion.'" />' . "\n";
+	$tool_content .= '<input type="submit" name="action[edit]" value="'.q($langWikiEditLastVersion).'" />' . "\n";
 	$url = $_SERVER['SCRIPT_NAME']
 	    . '?course='.$code_cours
 	    . '&amp;wikiId=' . $wikiId
@@ -1020,7 +1020,7 @@ switch( $action )
 	    . '<input type="hidden" name="course" value="'.$code_cours.'" />' . "\n"
 	    . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
 	    . '<input type="hidden" name="title" value="'.$title.'" />' . "\n"
-	    . '<input type="submit" name="action[diff]" value="'.$langWikiShowDifferences.'" />' . "\n"
+	    . '<input type="submit" name="action[diff]" value="'.q($langWikiShowDifferences).'" />' . "\n"
 	    . '</div>' . "\n"
 	    ;
 

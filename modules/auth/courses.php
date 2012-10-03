@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -145,7 +145,8 @@ if (isset($_POST['submit'])) {
 		if ($numofcourses > 0) {
 			$tool_content .= expanded_faculte($fac, $fc, $uid);
 			$tool_content .= "<br />
-				<div align='right'><input class='Login' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
+				<div align='right'>
+                                <input class='login' type='submit' name='submit' value='".q($langRegistration)."' />&nbsp;&nbsp;</div>";
 		} else {
 			if ($fac) {
 				$tool_content .= "<table width='100%' class='tbl_border'>
@@ -338,7 +339,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 						$codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
 					}
                                 } else {
-                                        $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
+                                        $retString .= "<img src='$themeimg/teacher.png' alt='".q($langTutor)."' title='".q($langTutor)."' />";
                                 }
                         } else { // display unregistered courses
                                 if (!empty($password) and $mycours['visible'] == 1) {

@@ -814,24 +814,24 @@ function actions($res_type, $resource_id, $status, $res_id = false)
 
         if ($status != 'del') {
                 $content = "<td width='3'><a href='$edit_link'>" .
-                           "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit' /></a></td>";
+                           "<img src='$themeimg/edit.png' title='".q($langEdit)."' alt='".q($langEdit)."' /></a></td>";
         } else {
                 $content = "<td width='3'>&nbsp;</td>";
         }
         $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;del=$resource_id'" .
                     " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
                     "<img src='$themeimg/delete.png' " .
-                    "title='$langDelete' alt='$langDelete'></a></td>";
+                    "title='".q($langDelete)."' alt='".q($langDelete)."'></a></td>";
 	 
 	if ($status != 'del') {
 		if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
-                                    "title='$langVisibility'></a></td>";
+                                    "title='".q($langVisibility)."'></a></td>";
 		} elseif (in_array($res_type, array('description'))) { 
 			$content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vis=$resource_id'>" .
                                     "<img src='$themeimg/$icon_vis' " .
-                                    "title='$langAddToCourseHome' alt='$langAddToCourseHome'></a></td>";
+                                    "title='".q($langAddToCourseHome)."' alt='".q($langAddToCourseHome)."'></a></td>";
 		} else {
 			
 			$content .= "\n          <td width='3'>&nbsp;</td>";
@@ -841,13 +841,13 @@ function actions($res_type, $resource_id, $status, $res_id = false)
         }
         if ($resource_id != $GLOBALS['max_resource_id']) {
                 $content .= "\n          <td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;down=$resource_id'>" .
-                            "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a></div></td>";
+                            "<img src='$themeimg/down.png' title='".q($langDown)."' alt='".q($langDown)."'></a></div></td>";
 	} else {
 		$content .= "\n          <td width='12'>&nbsp;</td>";
 	}
         if (!$first) {
                 $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;up=$resource_id'>" .
-                            "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></div></td>";
+                            "<img src='$themeimg/up.png' title='".q($langUp)."' alt='".q($langUp)."'></a></div></td>";
         } else {
                 $content .= "\n          <td width='12'>&nbsp;</td>";
         }
@@ -889,7 +889,7 @@ function edit_res($resource_id)
                          "\n    </tr>" .
                          "\n    <tr>" .
                          "\n      <th>&nbsp;</th>" .
-                         "\n      <td><input type='submit' name='edit_res_submit' value='$langModify'></td>" .
+                         "\n      <td><input type='submit' name='edit_res_submit' value='".q($langModify)."'></td>" .
                          "\n    </tr> " .
                          "\n    </table>" .
                          "\n  </fieldset>" .

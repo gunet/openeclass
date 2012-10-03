@@ -154,14 +154,14 @@ if ($total_categories) {
 		<th width='80' class='right'>";
 		if ($is_editor) {
 			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/add.png' title='$langNewForum' alt='$langNewForum' /></a>
+			<img src='$themeimg/add.png' title='".q($langNewForum)."' alt='".q($langNewForum)."' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/edit.png' title='$langModify' alt='$langModify' /></a>
+			<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>
 			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
-			<img src='$themeimg/delete.png' title='$langDelete' /></a>";
+			<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
 		}
 		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
-		<img src='$themeimg/email$icon.png' title='$langNotify' alt='$langNotify' />
+		<img src='$themeimg/email$icon.png' title='".q($langNotify)."' alt='".q($langNotify)."' />
 		</a></th>
 		</tr>\n";
 		$tool_content .= "<tr class='sub_title1'>
@@ -251,13 +251,13 @@ if ($total_categories) {
 					$tool_content .= "<td class='right'>";
 					if ($is_editor) { // admin actions
 						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
-						<img src='$themeimg/edit.png' title='$langModify' />
+						<img src='$themeimg/edit.png' title='".q($langModify)."' />
 						</a>
 						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
-						 <img src='$themeimg/delete.png' title='$langDelete' /></a>";
+						 <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
 					}
 					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
-					<img src='$themeimg/email$forum_icon.png' title='$langNotify' alt='$langNotify' /></a>
+					<img src='$themeimg/email$forum_icon.png' title='".q($langNotify)."' alt='".q($langNotify)."' /></a>
 					</td></tr>\n";
 				}
 			} else {

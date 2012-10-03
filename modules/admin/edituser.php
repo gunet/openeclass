@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -105,7 +105,7 @@ if ($u)	{
                           <th>&nbsp;</th>
                           <td class='right'>
                             <input type='hidden' name='u' value='$u'>
-                            <input type='submit' name='submit_editauth' value='$langModify'>
+                            <input type='submit' name='submit_editauth' value='".q($langModify)."'>
                           </td>
                         </tr>
                         </table>
@@ -269,7 +269,7 @@ $tool_content .= "
 	    <input type='hidden' name='u' value='$u' />
 	    <input type='hidden' name='u_submitted' value='1' />
 	    <input type='hidden' name='registered_at' value='".$info['registered_at']."' />
-	    <input type='submit' name='submit_edituser' value='$langModify' />
+	    <input type='submit' name='submit_edituser' value='".q($langModify)."' />
        </td>
      </tr>
      </table>
@@ -323,14 +323,15 @@ $tool_content .= "
 						$tool_content .= $langStudent;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a></td>
+						<img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a></td>
   						</tr>\n";
 						break;
 					default:
 						$tool_content .= $langVisitor;
 						$tool_content .= "</td><td align='center'>
 						<a href='unreguser.php?u=$u&amp;c=$logs[cours_id]'>
-						<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></img></a></td></tr>\n";
+						<img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."' /></a></td>
+  						</tr>\n";
 						break;
 				}
                                 $k++;

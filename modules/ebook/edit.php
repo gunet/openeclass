@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -134,7 +134,7 @@ if (mysql_num_rows($q) == 0) {
          <input type='text' name='ebook_title' size='53' value='" . q($info['title']) . "' />
         </td>
         <td width='75' class='center'>
-         <input name='title_submit' type='submit' value='$langModify' />
+         <input name='title_submit' type='submit' value='".q($langModify)."' />
         </td>
       </tr>
       </table>
@@ -173,11 +173,14 @@ if (mysql_num_rows($q) == 0) {
                                       "<input type='text size='3' name='new_section_id' value='$qsid' />";
                         $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
                         $section_editing = true;
-                        $section_tools = "<input type='submit' name='new_section_submit' value='$langModify' />";
+                        $section_tools = "<input type='submit' name='new_section_submit' value='".q($langModify)."' />";
                 } else {
                         $section_id = $qsid;
                         $section_title = $qstitle;
-                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\"><img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>&nbsp;<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>";
+                        $section_tools = "<a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;delete=$sid' onclick=\"javascript:if(!confirm('".js_escape(sprintf($langEBookSectionDelConfirm, $section['title']))."')) return false;\">
+                                <img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' /></a>&nbsp;
+                                <a href='edit.php?course=$currentCourseID&amp;id=$ebook_id&amp;s=$sid'>
+                                <img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."' /></a>";
                 }
                 $class = odd_even($k);
                 $tool_content .= "
@@ -193,7 +196,7 @@ if (mysql_num_rows($q) == 0) {
       <tr>
         <td><input type='text' size='2' name='new_section_id' /></td>
         <td><input type='text' size='35' name='new_section_title' /></td>
-        <td class='center'><input type='submit' name='new_section_submit' value='$langAdd' /></td>
+        <td class='center'><input type='submit' name='new_section_submit' value='".q($langAdd)."' /></td>
       </tr>";
         }
         $tool_content .= "
@@ -258,7 +261,7 @@ if (mysql_num_rows($q) == 0) {
         $tool_content .= "
      <tr>
        <td colspan='4'>&nbsp;</td>
-       <td><input type='submit' name='submit' value='$langSubmit' /></td>
+       <td><input type='submit' name='submit' value='".q($langSubmit)."' /></td>
      </table>
      </fieldset>
      </form>\n";

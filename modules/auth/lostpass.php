@@ -95,7 +95,7 @@ if (isset($_REQUEST['u']) and
         </tr>
         <tr>
            <th>&nbsp;</th>
-           <td><input type='submit' name='submit' value='$langModify'></td>
+           <td><input type='submit' name='submit' value='".q($langModify)."'></td>
         </tr>
         </table>
         </fieldset>
@@ -173,7 +173,7 @@ if (isset($_REQUEST['u']) and
           </tr>
           <tr>
             <td>&nbsp;</td>
-            <td class='right'><input type='submit' name='send_link' value='$lang_pass_submit'></td>
+            <td class='right'><input type='submit' name='send_link' value='".q($lang_pass_submit)."'></td>
           </tr>
 	  </table>
         </fieldset>

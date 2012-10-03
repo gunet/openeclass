@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -387,7 +387,7 @@ if (isset($_POST['add_submit'])) {  // add
 		</tr>
 		<tr>
 		  <th>&nbsp;</th>
-		  <td class='right'><input type='submit' name='add_submit' value='$dropbox_lang[uploadFile]'></td>
+		  <td class='right'><input type='submit' name='add_submit' value='".q($dropbox_lang[uploadFile])."'></td>
 		</tr>
 
 		</table>
@@ -430,7 +430,7 @@ if (isset($_POST['add_submit'])) {  // add
 		</tr>
 		<tr>
 		  <th>&nbsp;</th>
-		  <td class='right'><input type='submit' name='add_submit' value='$langAdd'></td>
+		  <td class='right'><input type='submit' name='add_submit' value='".q($langAdd)."'></td>
 		</tr>
 		</table>
                 </fieldset>
@@ -497,7 +497,7 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	       </tr>
 	       <tr>
 		 <th>&nbsp;</th>
-		 <td class='right'><input type='submit' name='edit_submit' value='$langModify'>
+		 <td class='right'><input type='submit' name='edit_submit' value='".q($langModify)."'>
 		     <input type='hidden' name='id' value='".$id."'>
 		     <input type='hidden' name='table' value='".$table_edit."'>
 		 </td>
@@ -570,7 +570,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                             $link_to_add .= "<td>" . q($myrow[5]) . "</td><td>" . q($myrow[6]) . "</td>";
                                         
                                         $link_to_add .= "<td align='center'>". nice_format(date('Y-m-d', strtotime($myrow[7])))."</td>";
-                                        $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='".q($langSave)."' title='".q($langSave)."'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
                                         $aclass = ($is_in_tinymce) ? 'fileURL' : null;
@@ -582,7 +582,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                             $link_to_add .= "<td>" . q($myrow[4]) . "</td><td>" . q($myrow[5]) . "</td>";
                                         
                                         $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow[6]))) . "</td>";
-                                        $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;&nbsp;";
 					break;
 				default:
 					exit;
@@ -602,7 +602,10 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                         {
                             $tool_content .= "
                                    <td align='right'>
-                                      $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'><img src='$themeimg/edit.png' title='$langModify'></a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\"><img src='$themeimg/delete.png' title='$langDelete'></a>
+                                      $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'>
+                                      <img src='$themeimg/edit.png' title='".q($langModify)."'>
+                                      </a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\">
+                                      <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>
                                    </td>";
                         }
                         $tool_content .= "</tr>";
@@ -657,7 +660,8 @@ else {
                                                 }
 
                                                 $link_to_add = "<td>". $link_href . "</td>";
-                                                $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='$mediaURL'>
+                                                        <img src='$themeimg/save_s.png' alt='".q($langSave)."' title='".q($langSave)."'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
                                                 $aclass = ($is_in_tinymce) ? 'fileURL' : null;
@@ -665,7 +669,8 @@ else {
                                                 
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow[3]) . "</td>";
                                                 
-                                                $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='".q($myrow[1])."' target='_blank'>
+                                                        <img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;&nbsp;";
 						break;
 					default:
 						exit;

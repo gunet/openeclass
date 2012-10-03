@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -267,7 +267,7 @@ if ($is_editor) {
                   </tr>
 		  <tr>
                     <th>&nbsp;</th>
-                    <td class='right'><input type='submit' name='submit' value='$langAddModify' /></td>
+                    <td class='right'><input type='submit' name='submit' value='".q($langAddModify)."' /></td>
                   </tr>
 		  </table>
                 </fieldset>
@@ -383,17 +383,17 @@ if (mysql_num_rows($result) > 0) {
                         $tool_content .=  "
                         <td class='right' width='70'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow['id']."&amp;edit=true'>
-                        <img src='$themeimg/edit.png' border='0' title='".$langModify."'></a>&nbsp;
+                        <img src='$themeimg/edit.png' title='".q($langModify)."'></a>&nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;delete=yes' onClick='return confirmation();'>
-                        <img src='$themeimg/delete.png' border='0' title='".$langDelete."'></a>&nbsp;";
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>&nbsp;";
                         if ($myrow["visibility"] == 'v') {
                                 $tool_content .= "
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkInvisibl=true'>
-                                <img src='$themeimg/visible.png' border='0' title='".$langVisible."'></a>";
+                                <img src='$themeimg/visible.png' title='".q($langVisible)."'></a>";
                         } else {
                                 $tool_content .= "
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=".$myrow[0]."&amp;mkVisibl=true'>
-                                <img src='$themeimg/invisible.png' border='0' title='".$langVisible."'></a>";
+                                <img src='$themeimg/invisible.png' title='".q($langVisible)."'></a>";
                         }
                         $tool_content .= "</td>";
 		}

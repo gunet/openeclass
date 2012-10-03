@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -137,20 +137,20 @@ switch( $cmd )
 			$list = mysql_fetch_array($result);
 
 			$tool_content .= disp_message_box("
-   <form method=\"post\" name=\"rename\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours\">
-   
-   <table width=\"100%\" class=\"tbl\">
-   <tr>
-     <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
-     <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
-        <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
-        <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
-	<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
-     </td>
-   </tr>
-   </table>
-   </form>
-   <br />")."";
+                        <form method=\"post\" name=\"rename\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours\">
+
+                        <table width=\"100%\" class=\"tbl\">
+                        <tr>
+                          <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
+                          <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+                             <input type=\"submit\" value=\"".q($langImport)."\" name=\"submit\">
+                             <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
+                             <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
+                          </td>
+                        </tr>
+                        </table>
+                        </form>
+                        <br />")."";
         }
         break;
 
@@ -210,7 +210,7 @@ switch( $cmd )
                     .disp_html_area('comment', $comment['comment'], 2, 40)
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."</td><td><input type=\"submit\" value=\"".$langImport."\">\n"
+                    ."</td><td><input type=\"submit\" value=\"".q($langImport)."\">\n"
                     ."</td></tr></table>\n"
                     ."</form><br />\n";
 
@@ -226,7 +226,7 @@ switch( $cmd )
                     ."</td></tr></table>\n"
                     ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
                     ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."<input type=\"submit\" value=\"".$langOk."\">\n"
+                    ."<input type=\"submit\" value=\"".q($langOk)."\">\n"
                     ."<br /><br />\n"
                     ."</form>\n";
 
@@ -303,7 +303,12 @@ while ($list = mysql_fetch_array($result))
     }
 
     $tool_content .= "</td>
-      <td><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\"><img src=\"".$themeimg."/delete.png\" border=\"0\" alt=\"".$langDelete."\" title=\"".$langDelete."\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\"><img src=\"".$themeimg."/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
+              <td><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=eraseModule&amp;cmdid=".$list['module_id']."\" onClick=\"return confirmation('".clean_str_for_javascript($list['name'] . ': ' . $langUsedInLearningPaths . $list['timesUsed'])."');\">
+              <img src='".$themeimg."/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' />
+              </a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqRename&amp;module_id=".$list['module_id']."\">
+              <img src='".$themeimg."/rename.png' alt='".q($langRename)."' title='".q($langRename)."' />
+              </a>&nbsp;&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=rqComment&amp;module_id=".$list['module_id']."\">
+              <img src='".$themeimg."/comment_edit.png' alt='".q($langComment)."' title='".q($langComment)."' /></a></td>";
     $tool_content .= "    </tr>";
 
     $atleastOne = true;

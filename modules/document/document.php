@@ -386,7 +386,7 @@ if ($can_upload) {
                 <tr>
 		  <td>$langRename: &nbsp;&nbsp;&nbsp;<b>".q($fileName)."</b>&nbsp;&nbsp;&nbsp; $langIn:
 		  <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
-		  <td class='right'><input type='submit' value='$langRename' /></td>
+		  <td class='right'><input type='submit' value='".q($langRename)."' /></td>
 		</tr>
 		</table>
             </fieldset>
@@ -420,7 +420,7 @@ if ($can_upload) {
 				<tr>
 					<th>$langNameDir</th>
 					<td width='1'><input type='text' name='newDirName' /></td>
-					<td><input type='submit' value='$langCreateDir' /></td>
+					<td><input type='submit' value='".q($langCreateDir)."' /></td>
 				</tr>
 				</table>
            </fieldset>
@@ -560,7 +560,7 @@ if ($can_upload) {
 					<tr>
 						<td>$replacemessage</td>
 						<td><input type='file' name='newFile' size='35' /></td>
-						<td><input type='submit' value='$langReplace' /></td>
+						<td><input type='submit' value='".q($langReplace)."' /></td>
 					</tr>
 					</table>
 				</fieldset>
@@ -666,7 +666,7 @@ if ($can_upload) {
           </tr>
           <tr>
             <th>&nbsp;</th>
-            <td class='right'><input type='submit' value='$langOkComment' /></td>
+            <td class='right'><input type='submit' value='".q($langOkComment)."' /></td>
           </tr>
           <tr>
             <th>&nbsp;</th>
@@ -910,7 +910,8 @@ if ($doc_count == 0) {
         }
 
         $download_path = empty($curDirPath)? '/': $curDirPath;
-        $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
+        $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'>
+                <img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='".q($langDownloadDir)."' title='".q($langDownloadDir)."'></a>";
 	$tool_content .= "
     <tr>
       <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
@@ -1047,48 +1048,48 @@ if ($doc_count == 0) {
                                 	/*** replace/overwrite command, only applies to files ***/
                                 	$tool_content .= "<a href='{$base_url}replace=$cmdDirName'>" .
                                 	                 "<img src='$themeimg/replace.png' " .
-                                	                 "title='$langReplace' alt='$langReplace' /></a>&nbsp;";
+                                	                 "title='".q($langReplace)."' alt='".q($langReplace)."' /></a>&nbsp;";
                                 }
                                 /*** delete command ***/
-                                $tool_content .= "<input type='image' src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' name='delete' value='1' onClick=\"return confirmation('".js_escape($langConfirmDelete.' '.$entry['filename'])."');\" />&nbsp;" . $padding2;
+                                $tool_content .= "<input type='image' src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' name='delete' value='1' onClick=\"return confirmation('".js_escape($langConfirmDelete.' '.$entry['filename'])."');\" />&nbsp;" . $padding2;
                                 if ($entry['format'] != '.meta') {
                                 	/*** copy command ***/
                                 	$tool_content .= "<a href='{$base_url}move=$cmdDirName'>" .
                                 	                 "<img src='$themeimg/move.png' " .
-                                	                 "title='$langMove' alt='$langMove' /></a>&nbsp;";
+                                	                 "title='".q($langMove)."' alt='".q($langMove)."' /></a>&nbsp;";
                                 	/*** rename command ***/
                                 	$tool_content .= "<a href='{$base_url}rename=$cmdDirName'>" .
                                                          "<img src='$themeimg/rename.png' " .
-                                                         "title='$langRename' alt='$langRename' /></a>&nbsp;";
+                                                         "title='".q($langRename)."' alt='".q($langRename)."' /></a>&nbsp;";
                                 	/*** comment command ***/
                                 	$tool_content .= "<a href='{$base_url}comment=$cmdDirName'>" .
                                                          "<img src='$themeimg/comment_edit.png' " .
-                                                         "title='$langComment' alt='$langComment' /></a>&nbsp;";
+                                                         "title='".q($langComment)."' alt='".q($langComment)."' /></a>&nbsp;";
                                 }
                                 /*** metadata command ***/
                                 if (get_config("insert_xml_metadata")) {
                                 	$xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
 	                                $tool_content .= "<a href='{$base_url}metadata=$xmlCmdDirName'>";
 	                                $tool_content .= "<img src='$themeimg/lom.png' " .
-	                                                 "title='$langMetadata' alt='$langMetadata' /></a>&nbsp;";
+	                                                 "title='".q($langMetadata)."' alt='".q($langMetadata)."' /></a>&nbsp;";
                                 }
                                 /*** visibility command ***/
                                 if ($is_editor) {
 					if ($entry['visible']) {
 						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
 								 "<img src='$themeimg/visible.png' " .
-								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
+								 "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
 	                                } else {
 	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
 								 "<img src='$themeimg/invisible.png' " .
-								 "title='$langVisible' alt='$langVisible' /></a>&nbsp;";
+								 "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
 	                                }
 				}
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
 							 "<img src='$themeimg/book.png' " .
-							 "title='$langGroupSubmit' alt='$langGroupSubmit' /></a>";			
+							 "title='".q($langGroupSubmit)."' alt='".q($langGroupSubmit)."' /></a>";			
 				}
                                 $tool_content .= "</form></td>";
                                 $tool_content .= "\n    </tr>";

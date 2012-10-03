@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -272,25 +272,26 @@ if ($is_editor) {
 					$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
-    <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='POST'>
-    <fieldset>
-    <legend>$langLearningPathData</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
-      <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
-    </tr>
-    <tr>
-      <th><label for='newComment'>$langComment</label>:</th>
-      <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
-    </tr>
-    <tr>
-      <th>&nbsp;</th>
-      <td><input type='hidden' name='cmd' value='create'><input type='submit' value='$langCreate'></input></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+                                        <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='POST'>
+                                        <fieldset>
+                                        <legend>$langLearningPathData</legend>
+                                        <table width='100%' class='tbl'>
+                                        <tr>
+                                          <th width='200'><label for='newPathName'>$langLearningPathName</label>:</th>
+                                          <td><input type='text' name='newPathName' id='newPathName' size='33' maxlength='255'></input></td>
+                                        </tr>
+                                        <tr>
+                                          <th><label for='newComment'>$langComment</label>:</th>
+                                          <td><textarea id='newComment' name='newComment' rows='2' cols='30'></textarea></td>
+                                        </tr>
+                                        <tr>
+                                          <th>&nbsp;</th>
+                                          <td><input type='hidden' name='cmd' value='create'>
+                                          <input type='submit' value='".q($langCreate)."'></input></td>
+                                        </tr>
+                                        </table>
+                                        </fieldset>
+                                        </form>";
 					}
 				break;
 			default:
@@ -553,34 +554,36 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
 
         // LOCK link
 
-        $tool_content .= "      <td class='center' width='1'>";
+        $tool_content .= "<td class='center' width='1'>";
 
         if ($list['lock'] == 'OPEN') {
             $tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=mkBlock&amp;cmdid=".$list['learnPath_id']."'>"
-                  ."<img src='$themeimg/bullet_unblock.png' alt='$langBlock' title='$langBlock' />"
+                  ."<img src='$themeimg/bullet_unblock.png' alt='".q($langBlock)."' title='".q($langBlock)."' />"
                   ."</a>";
         } else {
             $tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=mkUnblock&amp;cmdid=".$list['learnPath_id']."'>"
-            ."<img src='$themeimg/bullet_block.png' alt='$langAltMakeNotBlocking' title='$langAltMakeNotBlocking' />"
+            ."<img src='$themeimg/bullet_block.png' alt='".q($langAltMakeNotBlocking)."' title='".q($langAltMakeNotBlocking)."' />"
             ."</a>";
         }
         $tool_content .= "</td>\n";
 
         // EXPORT links
-        $tool_content .= '      <td class="center" width="50"><a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="'.$themeimg.'/export.png" alt="'.$langExport2004.'" title="'.$langExport2004.'" /></a>' .""
+        $tool_content .= '<td class="center" width="50"><a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;cmd=export&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="'.$themeimg.'/export.png" alt="'.q($langExport2004).'" title="'.q($langExport2004).'" /></a>' .""
             .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
-            .'<img src="'.$themeimg.'/export.png" alt="'.$langExport12.'" title="'.$langExport12.'" /></a>' .""
+            .'<img src="'.$themeimg.'/export.png" alt="'.q($langExport12).'" title="'.q($langExport12).'" /></a>' .""
             .'</td>' . "\n";
 
         // statistics links
-        $tool_content .= "      <td class='center' width='1'><a href='details.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>\n";
+        $tool_content .= "<td class='center' width='1'>
+                <a href='details.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>
+                <img src='$themeimg/monitor.png' alt='".q($langTracking)."' title='".q($langTracking)."' /></a></td>\n";
 
         // VISIBILITY link
-        $tool_content .= "      <td class='center' width='60'>";
+        $tool_content .= "<td class='center' width='60'>";
         if ( $list['visibility'] == 'HIDE') {
             $tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=mkVisibl&amp;visibility_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' />"
+                  ."<img src='$themeimg/invisible.png' alt='".q($langVisible)."' title='".q($langVisible)."' />"
                   ."</a>";
         } else {
             if ($list['lock']=='CLOSE') {
@@ -591,13 +594,13 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             }
 
             $tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=mkInvisibl&amp;visibility_path_id=".$list['learnPath_id']."' ".$onclick. " >"
-                 ."<img src='$themeimg/visible.png' alt='$langVisible' title='$langVisible' />"
+                 ."<img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' />"
                  ."</a>";
         }
 
         // Modify command / go to other page
         $tool_content .= "&nbsp;&nbsp;<a href='learningPathAdmin.php?course=$code_cours&amp;path_id=".$list['learnPath_id']."'>"
-             ."<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
+             ."<img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."' />"
              ."</a>\n";
 
         // DELETE link
@@ -608,7 +611,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             $tool_content .=  
                    "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return scormConfirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
+                  ."<img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' />"
                   ."</a>"
                   ."</td>\n";
 
@@ -616,7 +619,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             $tool_content .=  
                    "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=delete&amp;del_path_id=".$list['learnPath_id']."' "
                   ."onClick=\"return confirmation('".clean_str_for_javascript($list['name'])."');\">"
-                  ."<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' />"
+                  ."<img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' />"
                   ."</a>"
                   ."</td>\n";
         }
@@ -626,7 +629,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if ($iterator != 1) {
             $tool_content .= "      <td class='right' width='1'>"
                   ."<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=moveUp&amp;move_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='$themeimg/up.png' alt='$langUp' title='$langUp' />"
+                  ."<img src='$themeimg/up.png' alt='".q($langUp)."' title='".q($langUp)."' />"
                   ."</a>"
                   ."</td>\n";
         }
@@ -638,7 +641,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         if($iterator < $LPNumber) {
             $tool_content .= "      <td width='1'>"
                   ."<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;cmd=moveDown&amp;move_path_id=".$list['learnPath_id']."'>"
-                  ."<img src='$themeimg/down.png' alt='$langDown' title='$langDown' />"
+                  ."<img src='$themeimg/down.png' alt='".q($langDown)."' title='".q($langDown)."' />"
                   ."</a>"
                   ."</td>";
         }

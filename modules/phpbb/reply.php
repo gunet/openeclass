@@ -231,7 +231,7 @@ if (isset($_POST['submit'])) {
 			<input type='hidden' name='topic' value='$topic'>
 			<input type='hidden' name='post' value='$post'>
 			<input type='hidden' name='quote' value='$quote'>
-			<input type='SUBMIT' name='logging_in' value='$langEnter'>
+			<input type='submit' name='logging_in' value='".q($langEnter)."'>
 			</td></tr></table>
 			</td></tr></table>
 		</fieldset>
@@ -277,8 +277,8 @@ if (isset($_POST['submit'])) {
 	<tr>
 	  <td class='right'>
 	    <input type='hidden' name='quote' value='$quote'>
-	    <input type='submit' name='submit' value='$langSubmit'>&nbsp;
-	    <input type='submit' name='cancel' value='$langCancelPost'>
+	    <input type='submit' name='submit' value='".q($langSubmit)."'>&nbsp;
+	    <input type='submit' name='cancel' value='".q($langCancelPost)."'>
  	  </td>
 	</tr>
 	</table>

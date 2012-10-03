@@ -153,18 +153,18 @@ function printPollCreationForm() {
 	}
 	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post'>";
 	$tool_content .= "
-        <div id=\"operations_container\">
-          <ul id=\"opslist\">
+        <div id='operations_container'>
+          <ul id='opslist'>
            <li>$langSelection:&nbsp;
-               <input type='submit' name='MoreMultiple' value='$langPollAddMultiple' />&nbsp;&nbsp;
-	       <input type='submit' size=\"5\" name='MoreFill' value='$langPollAddFill' />
+               <input type='submit' name='MoreMultiple' value='".q($langPollAddMultiple)."' />&nbsp;&nbsp;
+	       <input type='submit' size='5' name='MoreFill' value='".q($langPollAddFill)."' />
            </li>
 	  </ul>
 	</div>
 
         <fieldset>
         <legend>$langSurvey</legend>
-	<table width=\"100%\" class='tbl'>
+	<table width='100%' class='tbl'>
 	<tr>
 	  <th width='100'>$langTitle:</th>
 	  <td><input type='text' size='50' name='PollName' value='$PollName'></td>
@@ -345,15 +345,15 @@ function add_multiple_choice_question($i, $text)
         <tr>
           <td width='80'><b>$langAnswers:</b></td>
           <td>
-          $langPollAddAnswer: <input type='submit' name='MoreAnswers$i' value='$langPollMoreAnswers' /></td>
+          $langPollAddAnswer: <input type='submit' name='MoreAnswers$i' value='".q($langPollMoreAnswers)."' /></td>
         </tr>
         <tr>
           <td>&nbsp;</td>
           <td>";
 	foreach ($answers as $j => $answertext) {
-	    $tool_content .= "<img src='$themeimg/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
+	    $tool_content .= "<img src='$themeimg/arrow.png' title='".q($langPollNumAnswers)."'>&nbsp;&nbsp;<input type='text' name='answer${i}[]' value='$answertext' size='50'><br /><br />";
 	}
-	$tool_content .= "<img src='$themeimg/arrow.png' title='$langPollNumAnswers'>&nbsp;&nbsp;$langPollUnknown
+	$tool_content .= "<img src='$themeimg/arrow.png' title='".q($langPollNumAnswers)."'>&nbsp;&nbsp;$langPollUnknown
           </td>
           <td>&nbsp;</td>
         </tr>";

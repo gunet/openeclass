@@ -175,7 +175,7 @@ if ($is_editor) {
                    <th>$langGlossaryExpand:
                      <input type='checkbox' name='expand' value='yes'$checked_expand>
                    </th>
-                   <td class='right' width='10'><input type='submit' name='submit_config' value='$langSubmit'></td>
+                   <td class='right' width='10'><input type='submit' name='submit_config' value='".q($langSubmit)."'></td>
                  </tr>
                  </table>
                </fieldset>
@@ -367,20 +367,16 @@ if (mysql_num_rows($sql) > 0) {
 	    if ($is_editor) {
 		$tool_content .= "
 		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
-		    <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit'></a>
+		    <img src='$themeimg/edit.png' alt='".q($langEdit)."' title='".q($langEdit)."'></a>
                     <a href='$base_url&amp;delete=$g[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) . "');\">
-		    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete'></a>
+		    <img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."'></a>
 		 </td>";
 	    }
-	    $tool_content .= "
-	       </tr>";
+	    $tool_content .= "</tr>";
 	    $i++;
 	}
-	$tool_content .= "
-	       </table>
-	     
-	       <br />\n";
+	$tool_content .= "</table><br />";
 
 } else {
 	$tool_content .= "<p class='alert1'>$langNoResult</p>";

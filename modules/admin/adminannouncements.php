@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -195,7 +195,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }
         $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
                          make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) .
-                         "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
+                         "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='".q($langSubmit)."' />" .
                          "</td></tr></table></fieldset></form>";
 }
 
@@ -279,23 +279,23 @@ if ($displayAnnouncementList == true) {
 			$tool_content .= "<td>" . standard_text_escape($myrow['body']) . "</td>\n";
 			$tool_content .= "<td width='60'>
 			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow[id]'>
-			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
+			<img src='$themeimg/edit.png' title='".q($langModify)."' style='vertical-align:middle;' />
 			</a> 
 			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick='return confirmation();'>
-			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
+			<img src='$themeimg/delete.png' title='".q($langDelete)."' style='vertical-align:middle;' /></a>
 			
 			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow[id]&amp;vis=$visibility'>
-			<img src='$themeimg/$icon' title='$langVisibility'/></a>";
+			<img src='$themeimg/$icon' title='".q($langVisibility)."'/></a>";
 			if ($announcementNumber > 1) {
 				$tool_content .= "<td align='right' width='40'>";
 			}
 			if ($iterator != 1) {
 				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?up=" . $myrow["id"] . "'>
-				<img class='displayed' src='$themeimg/up.png' title='" . $langUp . "' /></a>";
+				<img class='displayed' src='$themeimg/up.png' title='" . q($langUp) . "' /></a>";
 			}
 			if ($iterator < $bottomAnnouncement) {
 				$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow["id"] . "'>
-				<img class='displayed' src='$themeimg/down.png' title='" . $langDown . "' /></a>";
+				<img class='displayed' src='$themeimg/down.png' title='" . q($langDown) . "' /></a>";
 			}
 			$tool_content .= "</td>\n</tr>\n";
 			$iterator ++;

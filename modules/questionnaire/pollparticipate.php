@@ -87,28 +87,25 @@ function printPollForm() {
 			$pqid = $theQuestion["pqid"];
 			$qtype = $theQuestion["qtype"];
 			$tool_content .= "
-        <p class=\"sub_title1\"><b>".$theQuestion["question_text"]."</b></p>
-        <p>
-	<input type='hidden' name='question[$pqid]' value='$qtype' />";
+                <p class=\"sub_title1\"><b>".$theQuestion["question_text"]."</b></p>
+                <p>
+                <input type='hidden' name='question[$pqid]' value='$qtype' />";
 			if ($qtype == 'multiple') {
 				$answers = db_query("SELECT * FROM poll_question_answer 
 					WHERE pqid=$pqid ORDER BY pqaid", $currentCourse);
 				while ($theAnswer = mysql_fetch_array($answers)) {
-					$tool_content .= "
-        <label><input type='radio' name='answer[$pqid]' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
+					$tool_content .= "<label><input type='radio' name='answer[$pqid]' value='$theAnswer[pqaid]' />$theAnswer[answer_text] </label><br />\n";
 				}
-				$tool_content .= "
-        <label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
+				$tool_content .= "<label><input type='radio' name='answer[$pqid]' value='-1' checked='checked' />$langPollUnknown</label>\n";
 			} else {
-				$tool_content .= "
-        <label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
+				$tool_content .= "<label><textarea cols='40' rows='3' name='answer[$pqid]'></textarea></label>\n";
 			}
 			$tool_content .= "<br /><br />";
 		}
 		$tool_content .= "
-        <input name='submit' type='submit' value='$langSubmit' />
-        </p>
-        </form>";
+                <input name='submit' type='submit' value='".q($langSubmit)."' />
+                </p>
+                </form>";
 	} else {
 		$tool_content .= $langPollInactive;
 	}	

@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -252,8 +252,9 @@ if ($is_editor) {
 	$tool_content .= "
         <table class='tbl_courseid' width='100%'>
 	<tr>
-	  <td class='title1' colspan='2'><a href='group_properties.php?course=$code_cours' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php?course=$code_cours' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
+	  <td class='title1' colspan='2'><a href='group_properties.php?course=$code_cours' title='".q($langPropModify)."'>$langGroupProperties</a>&nbsp;
+              <a href='group_properties.php?course=$code_cours' title='".q($langPropModify)."'>
+                      <img src='$themeimg/edit.png' align='middle' alt='".q($langPropModify)."' title='".q($langPropModify)."' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'>$langGroupUsersList</td>
@@ -380,28 +381,23 @@ if ($is_editor) {
                   <td>" . display_user($tutors) . "</td>" . "
                   <td class='center'>$member_count</td>";
                         if ($max_members == 0) {
-                                $tool_content .= "
-                  <td>-</td>";
+                                $tool_content .= "<td>-</td>";
                         } else {
-                                $tool_content .= "
-                  <td class='center'>$max_members</td>";
+                                $tool_content .= "<td class='center'>$max_members</td>";
                         }
-                        $tool_content .= "
-                  <td class='center'>
+                        $tool_content .= "<td class='center'>
                         <a href='group_edit.php?course=$code_cours&amp;group_id=$group[id]'>
-                        <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
+                        <img src='$themeimg/edit.png' alt='".q($langEdit)."' title='".q($langEdit)."' /></a>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
-                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
-                </tr>";
+                        <img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' /></a></td>
+                        </tr>";
                         $totalRegistered += $member_count;
                         $myIterator++;
                 }
-                $tool_content .= "
-              </table><br />\n";
+                $tool_content .= "</table><br />\n";
 	} else {
-		$tool_content .= "
-              <p class='alert1'>$langNoGroup</p>";
+		$tool_content .= "<p class='alert1'>$langNoGroup</p>";
 	}
 
 
@@ -442,9 +438,9 @@ if ($is_editor) {
 			if ($user_group_description) {
 				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
 					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'>
-						<img src='$themeimg/edit.png' title='$langModify' /></a>
+						<img src='$themeimg/edit.png' title='".q($langModify)."' /></a>
 					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
-						<img src='$themeimg/delete.png' title='$langDelete' /></a>";
+						<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
 			} elseif ($is_member) {
 				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}

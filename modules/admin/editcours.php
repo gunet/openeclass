@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -88,7 +88,8 @@ if (isset($c)) {
 	// Display course information and link to edit
         $faculte = find_faculty_by_id($row['faculteid']);
 	$tool_content .= "<fieldset>
-	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\"><img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
+	<legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">
+                <img src='$themeimg/edit.png' alt='' title='".q($langModify)."'></a></legend>
 	<table class='tbl' width='100%'>";
 	$tool_content .= "
 	<tr>
@@ -111,7 +112,8 @@ if (isset($c)) {
 	</fieldset>";
 	// Display course quota and link to edit
 	$tool_content .= "<fieldset>
-	<legend>".$langQuota." <a href=\"quotacours.php?c=".q($c).$searchurl."\"><img src='$themeimg/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
+	<legend>".$langQuota." <a href=\"quotacours.php?c=".q($c).$searchurl."\">
+                <img src='$themeimg/edit.png' alt='' title='".q($langModify)."'></a></legend>
 <table width='100%' class='tbl'>
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['intitule']) . " $langMaxQuota</div></td>
@@ -149,7 +151,7 @@ if (isset($c)) {
 	$tool_content .= "<fieldset>
                 <legend>$langCourseStatus
                         <a href='statuscours.php?c=".q($c).
-                                "$searchurl'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify'></a>
+                                "$searchurl'><img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."'></a>
                 </legend>
                 <table width='100%' class='tbl'>";
 	$tool_content .= "<tr><th width='250'>".$langCurrentStatus.":</th><td>";
