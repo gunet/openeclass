@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-03 12:28:55
+// Generated 2012-10-04 11:20:11
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -805,10 +805,6 @@ $langUseTagForBlank = "utilisez des crochets [...] pour indiquer un ou plusieurs
 $langQuestionWeighting = "Poids";
 $langTypeTextBelow = "Saisissez votre texte ci-dessous";
 $langDefaultTextInBlanks = "La capitale de la Grèce est [Athènes].";
-$langDefaultMatchingOptA = "riche";
-$langDefaultMatchingOptB = "belle";
-$langDefaultMakeCorrespond1 = "Ton père est";
-$langDefaultMakeCorrespond2 = "Ta mère est";
 $langDefineOptions = "Définissez les options";
 $langMakeCorrespond = "Faites la correspondance";
 $langFillLists = "Complétez les deux listes qui suivent";
@@ -1376,13 +1372,13 @@ $langEmptyLinkURL = "Vous n'avez pas saisi le url du lien";
 $lang_remind_pass = 'Créer un nouveau mot de passe';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
-(<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
+(<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instructions on how to reset your password.</p>';
 $lang_pass_submit = 'Envoyer';
 $langPassResetIntro = "
 Someone has asked to reset your access password on the $siteName platform.
 If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
 $langHowToResetTitle = " =============================================================================== Instructions pour créer un nouveau mot de passe =============================================================================== ";
-$langPassResetGoHere = "To reset your password go to the following address through your web browser.
+$langPassResetGoHere = "To reset your password go to the following address.
 If you cannot click on the address, copy & paste it on your browser's address bar.
 This address is valid for one (1) hour. Beyond this time limit, you will need
 to repeat the password reset request from the beginning.
@@ -1491,7 +1487,7 @@ $langBodyTopicNotify = "Vous êtes informé(e) qu'un nouveau message a été ajo
 $langBodyCatNotify = "Un nouveau forum a été ajouté";
 $langOfForum = "du forum";
 $langSubjects = "Sujets";
-$langPosts = "Postgraduate";
+$langPosts = "Posts";
 $langMessage = "Message";
 $langMessages = "Messages";
 $langAllOfThem = "tout";
@@ -1658,8 +1654,8 @@ $langAndP = "et son mot de passe";
 $langDereg = "a été supprimé de ce cours";
 $langAddAU = "Ajoutez un utilisateur";
 $langAdmR = "Droits d'administrateur";
-$langAddHereSomeCourses = "<p>To register / unregister to / from a lesson,
-choose the faculty and then select / unselect the desired lesson.</p>
+$langAddHereSomeCourses = "<p>To register / unregister to / from a course,
+select the faculty and then select / unselect the desired course.</p>
 <p>To save your preferences click on 'Submit changes'</p><br>";
 $langDeleteUser = "Êtes-vous sûr de vouloir supprimer l'utilisateur";
 $langDeleteUser2 = "de ce cours";
@@ -1688,11 +1684,10 @@ $langUserRights = "Droits des utilisateurs";
 $langNow = "maintenant";
 $langOneByOne = "Ajouter un utilisateur";
 $langUserMany = "Importer une liste d'utilisateurs via des fichiers texte";
-$langUserAddExplanation = "every line of file to send will necessarily an only
-        include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
-        Login&nbsp;&nbsp;&nbsp;Password&nbsp;
+$langUserAddExplanation = "every line of the file to send will necessarily and only include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
+        Login username&nbsp;&nbsp;&nbsp;Password&nbsp;
         &nbsp;&nbsp;Email</b> separated by tabs and in this order.
-        Users will recieve email confirmation with login/password.";
+        Users will receive an email confirmation with login username/password info.";
 $langDownloadUserList = "Téléversement de la liste";
 $langUserNumber = "nombre";
 $langRemoveRight = "Retirer ce droit";
@@ -1837,13 +1832,14 @@ $langUserOpenRequests = "Demandes ouvertes $langOfStudents";
 $langWarnReject = "Vous allez rejeter la demande $langsOfStudent";
 $langWithDetails = "with details";
 $langNewUserDetails = "Détails du compte d'utilisateur-$langOfStudent";
-$langInfoProfReq = "If you wish to access the platform as a $langsTeacher, please complete the form below. Your request will be sent to an administrator who will create your account and send you an informational email.";
+$langInfoProfReq = "If you wish to access the platform as a $langsTeacher, please fill the form below. Your request will be sent to the platfrom administrator who will create your account and send you an email with the account details.";
 $langInfoStudReg = "If you wish to access the platform as a $langsStudent, please complete the form below. Your account will be created automatically.";
 $langReason = "Déterminez les raisons pour lesquelles vous utilisez la plateforme";
-$langInfoStudReq = "If you wish to access the platform as a $langsStudent, please complete the form below. Your request will be sent to an administrator who will create your account and send you an informational email.";
+$langInfoStudReq = "If you wish to access the platform as a $langsStudent, please fill the form below. Your request will be sent to the platfrom administrator who will create your account and send you an email with the account details.";
 $langInfoProf = "Un e-mail vous sera bientôt envoyé par l'Équipe de Gestion de la Plateforme d'Enseignement Asynchrone en Ligne $siteName, avec les détails de votre compte";
 $langDearUser = "Cher utilisateur";
-$langMailErrorMessage = "There was an error during sending message - your request could not be sent.";
+$langMailErrorMessage = "There was an error sending the message.<br/>
+Your request has been stored in the platform, but no email notification was sent to the platform administrator. <br/> Please contact the administrator at: ";
 $langUserSuccess = "Nouveau compte $langOfStudent";
 $usersuccess = "La création du nouveau compte ".$langsOfStudent."a été effectuée avec succès !";
 $langAsUser = "(Compte $langOfStudent)";
@@ -1920,18 +1916,18 @@ $langAlreadySubscribe = "Vous êtes déjà inscrit";
 $langAs = "en tant que";
 $langUpgrade = "Mise à niveau des bases de données";
 $langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>.
-   Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
+   Please make sure that the web server has access to <em>config.php</em>. For security reasons, current configuration settings of <em>config.php</em> will be stored in file <em>config_backup.php</em>.";
 $langExpl2Upgrade = "De plus, pour des raisons de sécurité assurez-vous que vous avez gardé des copies de sauvegarde des bases de données.";
 $langWarnUpgrade = "ATTENTION !";
-$langExecTimeUpgrade = "WARNING! For the upgrade script to run successfully make sure that php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> is larger than 300 (= 5 minutes). Modify variable and restart the upgrade process";
-$langUpgradeCont = "Tο continue upgrade process, please enter platform administrator username / password:";
+$langExecTimeUpgrade = "WARNING! For the upgrade script to run successfully make sure that the value of php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> file is larger than 300 (= 5 minutes). Modify the variable and restart the upgrade process";
+$langUpgradeCont = "Tο continue with the upgrade process, please enter the platform administrator username / password:";
 $langUpgDetails = "Détails de connexion (nom d'utilisateur / mot de passe)";
 $langUpgMan = "instructions sur la mise à niveau";
 $langUpgLastStep = "avant de passer à l'étape suivante.";
-$langUpgToSee = "To review all the new features and changes of eClass new version click ";
+$langUpgToSee = "To review all the new features and changes of the new version of eClass click";
 $langUpgRead = "Si vous ne l'avez pas encore fait, veuillez lire et suivre les";
 $langSuccessOk = "Succès";
-$langSuccessBad = "Error or not needed modification";
+$langSuccessBad = "Error or no modification needed";
 $langUpgAdminError = "Les données que vous avez fournies ne correspondent pas à l'administrateur du système! Veuillez revenir à la page précédente et réessayer.";
 $langUpgNoVideoDir = "Le sous-répertoire 'vidéo' n'existe pas et n'a pas été créé. Veuillez vérifier les droits d'accès.";
 $langUpgNoVideoDir2 = "Il y a un fichier nommé 'video' qui entrave! Il faut le supprimer.";
@@ -2001,20 +1997,24 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<p class="caution"><b>The page you tried to access requires a valid username and password.</b><br/>
-The system has automatically redirected you to the start page to login. This could have been caused
-by a mistyped URL or due to session timeout.</p>';
-$langLoginRequired = '<p class="caution"><b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).</p>
-';
-$langSessionIsLost = "<p class='alert1'><b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.</p>";
-$langCheckProf = "<p class='caution'><b>Your action requires $langsTeacher privileges. </b><br/> The system has
-automatically redirect you to the start page to login. If you are the lesson's $langsTeacher you will be 
-allowed access to the course administration tools.</p>";
-$langLessonDoesNotExist = "<p class='caution'><b>The lesson you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform error.</p>";
-$langCheckAdmin = "<p class='caution'><b>Your action requires administrator privileges. </b><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.</p>";
-$langCheckGuest = "<p class='caution'><b>The action you attempted to execute is not possible with guest user privileges. </b><br/> For security reasons the system has automatically redirected you to the start page to login again.</p>";
-$langCheckPublicTools = "<p class='caution'><b>You tried to access an inactive module.</b><br/> For security reasons the system has automatically redirected you to the start page to login again.</p>";
-$langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
+$langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
+The system has automatically redirected you to the start page to login. 
+This could have been caused by a mistyped URL or due to session timeout.';
+$langLoginRequired = '
+        <b>You are not registered to the course and therefore you cannot use the corresponding module.</b>
+        <br>The system has automatically redirected you to the start page to register to the course (if registration is open).';
+$langSessionIsLost = "<b>Your session has timed-out.</b>
+<br>The system has automatically redirected you to the start page to login again.";
+$langCheckProf = "<b>Your action requires $langsTeacher privileges. </b>
+<br> The system has automatically redirected you to the start page to login again.";
+$langLessonDoesNotExist = "<b>The course you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform technical error.";
+$langCheckAdmin = "<b>Your action requires administrator privileges. </b>
+<br> The system has automatically redirected you to the start page to login again. ";
+$langCheckGuest = "<b>The action you attempted to execute is not possible with guest user rights.</b>
+<br> For security reasons the system has automatically redirected you to the start page to login again.";
+$langCheckPublicTools = "<b>You tried to access an inactive module.</b>
+<br> For security reasons the system has automatically redirected you to the start page to login again.";
+$langWarnShibUser = "<b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.";
 $langUserBriefcase = "Portfolio d'utilisateur";
 $langPersonalisedBriefcase = "Portfolio personnel";
 $langCopyrightFooter = "Copyright &copy;2003-2011 GUnet";
@@ -2144,9 +2144,9 @@ $langWikiAccessControl = "Gestion du contrôle des accès";
 $langWikiAccessControlText = "Vous pouvez définir les droits d'accès pour les utilisateurs en utilisant la grille suivante :";
 $langWikiAllPages = "Toutes les pages";
 $langWikiBackToPage = "Retour à la page";
-$langWikiConflictHowTo = "<p><strong>Edit conflict</strong> : The page you try to save seems to have been changed since you modify it.<br /><br />
-What to do now ?<ul>
-<li>You can copy/paste your modification to a text editor (like notepad) and click on 'edit last version' to try to add your modification to the new version of the page.</li>
+$langWikiConflictHowTo = "<p><strong>Edit conflict</strong> : The page you are editing seems to have been changed since the last time you modified it.<br /><br />
+What should be done now?<ul>
+<li>You can copy/paste your modifications in a text editor (like notepad), click on 'edit last version' option and try to add your modifications to the new version of the page.</li>
 <li>You can also click on cancel to cancel your changes.</li>
 </ul></p>";
 $langWikiContentEmpty = "Cette page est vide. Cliquez sur 'Modifier la page' pour y ajouter du contenu";
@@ -2154,8 +2154,6 @@ $langWikiCourseMembers = "Membres du cours";
 $langWikiCreateNewWiki = "Créez un nouveau Wiki";
 $langWikiCreatePrivilege = "Créer des pages";
 $langWikiCreationSucceed = "Le Wiki a été créé avec succès";
-$langWikiDefaultDescription = "Entrez la description de votre nouveau wiki ici";
-$langWikiDefaultTitle = "Nouveau Wiki";
 $langWikiDeleteWiki = "Supprimer le Wiki";
 $langWikiDeleteWikiWarning = "WARNING : you are going to delete this wiki and all its pages. Are you sure to want to continue ?";
 $langWikiDeletionSucceed = "Le Wiki a été supprimé avec succès";
@@ -2270,11 +2268,9 @@ $m['WorkEdit'] = 'Modifier le devoir';
 $m['SubmissionWorkInfo'] = 'Informations de la soumission du devoir';
 $m['SubmissionStatusWorkInfo'] = 'État de la soumission du devoir';
 $langGroupWorkIntro = '
-	Assignments available in this course are displayed. Please select
-	an assignment, to submit the file as group work and
-	add any comments you would like. Please note, when a file has been already been 
-        submitted by you or a member of your team, if you submit a new
-	file, the old file will be deleted and replaced by it.
+	Assignments available in this course are displayed below. Please select
+	the assignment you wish to submit on behalf of your group and
+	add any comments you want to be read by the course teacher. Please note that, when a submission has already been made by you or another member of your group, and you submit a new file for the same assignment, this file will replace the old file in the system (the old file will be deleted).
 	Furthermore, no new submissions are allowed when the assignment has
 	been graded.';
 $langGroupWorkSubmitted = "a été&nbsp;envoyé";
@@ -2859,3 +2855,4 @@ $langMultiDelUser = 'Bulk user account deletion';
 $langMultiDelUserConfirm = "This will also delete all users' trace data, such as statistics, forums participation, etc.";
 $langMultiDelUserData = "Usernames";
 $langMultiDelUserInfo = 'Please enter a list of usernames (one line per user) you wish to delete. Lines beginning with # are ignored.';
+$langWikiUrlImage = "Image URL";

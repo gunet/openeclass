@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-03 12:28:56
+// Generated 2012-10-04 11:20:11
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -803,10 +803,6 @@ $langUseTagForBlank = "utilizza le parentesi quadre [...] per impostare uno o pi
 $langQuestionWeighting = "Peso";
 $langTypeTextBelow = "Digita il tuo testo quaggiù";
 $langDefaultTextInBlanks = "[Atene] è la capitale della Grecia.";
-$langDefaultMatchingOptA = "buono";
-$langDefaultMatchingOptB = "bella";
-$langDefaultMakeCorrespond1 = "Tuo padre è";
-$langDefaultMakeCorrespond2 = "Tua madre è";
 $langDefineOptions = "Specifica le opzioni";
 $langMakeCorrespond = "Fai la corrispondenza";
 $langFillLists = "Compila le due liste che seguono";
@@ -2155,8 +2151,6 @@ $langWikiCourseMembers = "Membri del corso ";
 $langWikiCreateNewWiki = "Creare un nuovo Wiki";
 $langWikiCreatePrivilege = "Creare pagine ";
 $langWikiCreationSucceed = "Il Wiki è creato con successo";
-$langWikiDefaultDescription = "Inserisci una descrizione del tuo nuovo wiki qui";
-$langWikiDefaultTitle = "Nuovo Wiki";
 $langWikiDeleteWiki = "Eliminare Wiki";
 $langWikiDeleteWikiWarning = "ATTENZIONE: stai per eliminare questo wiki e tutte le sue pagine. Sei sicuro che vuoi continuare?";
 $langWikiDeletionSucceed = "Il Wiki è eliminato con successo";
@@ -2856,3 +2850,4 @@ $langMultiDelUser = "Eliminare molti conti di utenti";
 $langMultiDelUserConfirm = "Con questa operazione eliminerai tutte le tracce degli utenti sulla piattaforma, come le loro statistiche, le loro partecipazioni ai forum, ecc.";
 $langMultiDelUserData = "Username";
 $langMultiDelUserInfo = "Prego, compila nell' area qui sotto, un elenco dei username - una riga per ogni utente - che desideri eliminare. Le righe che iniziano con # verranno ignorate.";
+$langWikiUrlImage = "Image URL";

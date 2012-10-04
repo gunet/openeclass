@@ -524,7 +524,8 @@ if ($can_upload) {
                                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or
                                     !db_query("UPDATE document SET path = " . quote($newpath) . ",
                                                                    format = " . quote($newformat) . ",
-                                                                   filename = " . autoquote($_FILES['newFile']['name']) . "
+                                                                   filename = " . autoquote($_FILES['newFile']['name']) . ",
+                                                                   date_modified = NOW()
                                                               WHERE $group_sql AND
 							       path = " . quote($oldpath))) {
                                         $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
@@ -850,9 +851,8 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'visible' => ($row['visibility'] == 'v'),
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
-                'date' => strtotime($row['date_modified']));
+                'date' => $row['date_modified']);
 }
-
 // end of common to teachers and students
 
 // ----------------------------------------------
@@ -1024,20 +1024,19 @@ if ($doc_count == 0) {
                         $tool_content .= "</td>";
                         $padding = '&nbsp;';
                         $padding2 = '';
-                        if ($is_dir) {
-                                // skip display of date and time for directories
-                                $tool_content .= "\n<td>&nbsp;</td>\n<td>&nbsp;</td>";
+                        $date = nice_format($entry['date'], true, true);
+                        $date_with_time = nice_format($entry['date'], true);
+                        if ($is_dir) {                         
+                                $tool_content .= "\n<td>&nbsp;</td>\n<td class='center' title='$date_with_time'>$date</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         } else if ($entry['format'] == ".meta") {
-                                $size = format_file_size($entry['size']);
-                                $date = format_date($entry['date']);
+                                $size = format_file_size($entry['size']);                            
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                 $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                        } else {
-                                $size = format_file_size($entry['size']);
-                                $date = format_date($entry['date']);
-                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
+                        } else {                                
+                                $size = format_file_size($entry['size']);                               
+                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
                         }
                         if (!$is_in_tinymce) {
                             if ($can_upload) {

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-03 12:28:55
+// Generated 2012-10-04 11:20:11
 
 $langCourseAccessHelp = "
 <ul>
@@ -91,7 +91,7 @@ $langDoc_studentContent = "<p>You can download documents or a directory by click
 $langHUser = "Gestion des Utilisateurs";
 $langUserContent = "<p>Τhis section allows user management and presents information on course users (e.g. the total number of registered users, the number of teachers, etc.).</p>
         <p>To add a user to your course click on 'Add: one user'. In the form presented enter a name or username and click on 'Search'. Then click on 'Register user to course' to register him/her in your course.</p>
-         <p>To add multiple users click 'Add: many users', enter their usernames and click on 'Add" to register them to the course.</p>
+         <p>To add multiple users click 'Add: many users', enter their usernames and click on 'Add' to register them to the course.</p>
         <p>To add a guest account click on 'Add: guest user'.
         In the form presented enter a password for the guest account and click on 'Add'.
         <p>To search for a registered user click on 'User Search'. Enter a name or username and click on 'Search'.</p>
@@ -108,7 +108,7 @@ $langQuestionnaireContent = "<p>You can create questionnaires with either 'Multi
 Click on 'Create Questionnaire' in order to create a new questionnaire. Type a title for the questionnaire and the time interval during which you want this questionnaire to be active.
 Then select the type of questions you wish to include, by selecting one of the 'New multiple choice question' or 'New gap fill question' links. 
 Click on 'Create Questionnaire' in order to complete the creation procedure.</br>
-<p><img src='$themeimg/warning.png' width=18 height=18> <b>Warning</b>: If within an active questionnaire, at least one question has been answered by a student, then the procedure of correction of this questionnaire is accomplished through the creation of a "new" questionnaire (the corrected one). This automatic procedure reassures the questionnaire results reliability.</p>
+<p><img src='$themeimg/warning.png' width=18 height=18> <b>Warning</b>: If within an active questionnaire, at least one question has been answered by a student, then the procedure of correction of this questionnaire is accomplished through the creation of a 'new' questionnaire (the corrected one). This automatic procedure reassures the questionnaire results reliability.</p>
 </p>
 <hr>
 <p><b>Other actions</b><br>
@@ -116,7 +116,8 @@ Click on 'Create Questionnaire' in order to complete the creation procedure.</br
   <li>Questionnaire modification. Click on the (<img src='$themeimg/edit.png' width=16 height=16>) button in order to modify the contents of a questionnaire.</li>
   <li>Questionnaire deletion. Click on the (<img src='$themeimg/delete.png' width=16 height=16>) button in order to delete a questionnaire.</li>
   <li>Visible/invisible. Click on the (<img src='$themeimg/visible.png' width=16 height=16>) in order to make the questionnaire visible or invisible.</li> 
-  </ul>";
+  </ul>"
+;
 $langQuestionnaire_studentContent = "<p>Questionnaire is a new module providing interaction between teachers and students. Course teacher create poll questionnaires about the course in order to have feedback from the students.</p>
 <p>You will be asked to submit your answers to 'Multiple-choice' and 'Gap-fill' questions. The questionnaire first page displays data such as: the title, creator and creation date, the start and end date, and whether you have already participated in it or not.
 To enter the questionnaire and provide answers to it click on its' title.
@@ -274,19 +275,31 @@ Click on 'Add link' to add a new link. Type the URL, the name and (optionally) a
 $langLink_studentContent = "<p>Le sous-système Liens donne la possibilité d'accéder à une liste de ressources utiles relatives au cours, tirées d'Internet et regroupées en catégories. Ces liens ont été sélectionnés par l'enseignant responsable du cours. Chaque lien comporte un intitulé, une description, ainsi que nombre d'informations supplémentaires. La plateforme accorde la possibilité de <b>catégoriser</b> les liens afin d'y accéder plus facilement. </p>";
 $langHAnnounce = "Annonces";
 $langHAnnounce_student = $langHAnnounce;
-$langAnnounceContent = "<p>You can add announcements in a course by clicking in the link 'Add announcement'.</p><p>
-Also, you can change the announcement clicking on the icon 'Modify' or delete an announcement clicking on the icon 'Delete'. If you want to mail your announcement to the registered students in your lesson, just check 'Send announcement (via email) to registered students'</p>$langPHPMathPublisher";
+$langAnnounceContent = "<p>You can add announcements in your course by clicking on the 'Add announcement' link. 
+ Then you can type a title and a text body for the announcement at the form displayed.
+ If you want to  send the announcement (via email) to all registered students, tick the corresponding box.
+ The procedure is completed by clicking on 'Add'.</p>
+        <p>
+        <ul>
+        <li>Click on the 'Modification' icon (<img src='$themeimg/edit.png' width=16 height=16>) to modify the announcement contents.</li>
+        <li>Click on <img src='$themeimg/delete.png' width=16 height=16> icon to delete an announcement.</li>
+        <li>Click on the 'Visible/invisible' icon (<img src='$themeimg/visible.png' width=16 height=16>) to define whether an announcement will be displayed or not to students.</li> 
+        </ul>
+        </p>
+<p>Clicking on the <img src='$themeimg/feed.png' width=16 height=16> icon allows you to receive automatically the course announcements through RSS (Really Simple Syndication) not only via a computer but also via a mobile phone, as long as an RSS reader is installed.</p>
+<hr noshade size=1>
+<p> $langPHPMathPublisher</p>";
 $langAnnounce_studentContent = "<p>All announcements added by the course teacher are presented here.</p>
         <p>Clicking on the <img src='$themeimg/feed.png' width=16 height=16> icon allows you to receive automatically the course announcements through RSS (Really Simple Syndication) not only via a computer but also via a mobile phone, as long as an RSS reader is installed.</p>";
 $langHProfile = "Modifier mon profil";
-$langProfileContent = "
-<p>You can modify your profile data through this module. 
+$langProfileContent = "<p>You can modify your profile data through this module. 
 More specifically, you can modify your name, username, e-mail address, StudentID, etc. 
 You can also modify your portfolio view by selecting either the 'Advanced' or the 'Brief' option.
-You can select to receive or not e-mails from your courses and you can also upload a profile picture by clicking on "Add Picture". Click on 'Modification' to complete with all your changes.</p>
+You can select to receive or not e-mails from your courses and you can also upload a profile picture by clicking on 'Add Picture'. Click on 'Modification' to complete with all your changes.</p>
  <p>If you wish to change your password, select the 'Modify password' option.
  Select the 'Course notifications' option in order to select the courses you wish to receive emails from. 
- Click on 'Unregister User' to delete your account.";
+ Click on 'Unregister User' to delete your account."
+;
 $langHModule = "Ajouter un lien externe";
 $langModuleContent = "<p>If you want to add an external link presented in the course home page, just type the title and the URL address of the link and click on 'Add'. These links can be deactivated and deleted.</p>";
 $langHcourseTools = "Activer les outils";
@@ -329,70 +342,58 @@ $langCoursedescription_studentContent = "<p>Course description is a module provi
 $langHPath = "Aide – Parcours d'apprentissage";
 $langHPath_student = $langHPath;
 $langPathContent = "
-The Learning Path tool has four functions:
+The Learning Path tool supports four basic functionalities:
 <ul>
-<li>Create a learning Path</li>
-<li>Import a Scorm or IMS format Learning path</li>
-<li>Export a Scorm 2004 or 1.2 compliant Learning path</li>
-<li>Track the progress of the students following the Learning paths</li>
+<li>Create a Learning Path</li>
+<li>Import a Scorm or IMS format Learning Path</li>
+<li>Export a Scorm 2004 or 1.2 compliant Learning Path</li>
+<li>Track the progress of the students following the Learning Paths</li>
 </ul>
 
-<p><b>What is a Learning Path ?</b></p>
-
+<p><b>What is a Learning Path?</b></p>
 <p>A Learning Path is a sequence of learning steps included in modules. It can be
 content-based (looking like a table of contents) or activities-based, looking like
 an agenda or a programme of what you need to do in order to understand and practice a
 certain knowledge or know-how.</p>
-
 <p>In addition to being structured, a learning path can
 also be sequenced. This means that some steps will constitute pre-requisites for the steps
 after them (\"you cannot go to step 2 before step 1\"). Your sequence can only be suggestive
-(you show steps one after the other).</p>
+(steps are displayed one after the other).</p>
 
-<p><b>How to create our own Learning Path ?</b></p>
+<p><b>How to create your own Learning Path?</b></p>
+<p>The first step is to access the Learning Path module. In
+the Learning Path entry page, you can select the <i>'Create a new learning path'</i> opion in order to create as many Learning Paths as you like. In this way new Learning Paths are created, that are empty till you add modules and steps to them.</p>
 
-<p>The first step is to arrive to Learning Path List section. In
-the Learning Path List screen, there is a link to it. There you can create
-many paths by clicking onto <i>Create a new learning path</i>. But they are
-empty, till you add modules and steps to them.</p>
-
-<p><b>What are the steps for these paths ? (What are the items that can be added ?)</b></p>
-
+<p><b>What are the steps for these paths? (What are the objects that can be added?)</b></p>
 <p>Some of the Eclass tools, activities and contents that you consider to be useful
-and connected to your imagined path can be added:</p>
-
+and appropriate for your Learning Path can be added:</p>
 <ul>
 <li>Separate documents (texts, pictures, Office docs, ...)</li>
 <li>Labels</li>
 <li>Links</li>
-<li>Eclass Tests</li>
+<li>Eclass Exercises</li>
 <li>Eclass Course Description</li>
 </ul>
 
-<p><b>Other features of Learning Path</b></p>
-
+<p><b>Other Learning Path features</b></p>
 <p>Students can be asked to follow (read) your path in a given order. This means
 that for example students cannot go to Quiz 2 till they have read Document 1.
 All items have a status: completed or incomplete, so the progress of students is
 clearly available through the <i>Tracking</i> tool.</p>
 
-<p>If you alter the original title of a step, the new title will appear in
+<p>If you modify the original title of a step, the new title will appear in
 the path, but the original title will not be deleted. So if you want
 test8.doc to appear as 'Final Exam' in the path, you do not have to rename
 the file, you can use the new title in the path. It is also useful
 to give new titles to links as they are too long.</p>
 <br>
 
-
-<p><b>What is a Scorm or IMS format Learning path and how to upload (import) it ?</b></p>
-
+<p><b>What is a Scorm or IMS format Learning path and how to upload (import) it?</b></p>
 <p>The learning path tool allows you to upload SCORM and IMS compliant course
 contents.</p>
-
 <p>SCORM (<i>Sharable Content Object Reference Model</i>) is a public standard
 followed by major e-Learning actors like NETg, Macromedia, Microsoft, Skillsoft,
 etc. and acting at three levels:</p>
-
 <ul>
 <li><b>Economy</b>: Scorm allows whole courses or small content
 units to be reusable on different Learning Management Systems (LMS)
@@ -404,19 +405,17 @@ cannot go to chapter 2 before passing Quiz 1\"),</li>
 an abstraction layer situated outside content and outside the LMS. It
 helps content and LMS communicate with each
 other. What is communicated is mainly <i>bookmarks</i> (\"Where is John in the
-course ?\"), <i>scoring</i> (\"How did John pass the test ?\") and <i>time</i> (\"How much
-time did John spent in chapter 1 ?\").</li>
+course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much
+time did John spent in chapter 1?\").</li>
 </ul>
 
-<p><b>How to create a SCORM compliant learning path ?</b></p>
-
-<p>The most natural way is to use the Eclass Learning Path Builder. However, you may want to
-create complete Scorm compliant websites locally on your own computer before uploading it
+<p><b>How to create a SCORM compliant learning path?</b></p>
+<p>The most natural way is to use the Eclass Learning Path Builder and export it through selection of the corresponding button. 
+However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it
 onto your eclass platform. In this case, we recommend the use of a sophisticated tool like
 Lectora&reg; or Reload&reg;</p>
 
 <p><b>Useful links</b></p>
-
 <ul>
 <li>Adlnet: authority responsible for Scorm normalisation, <a
 href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
@@ -427,12 +426,17 @@ href=\"http://www.trivantis.com/\">http://www.trivantis.com</a></li>
 </ul>
 
 <p><b>Note:</b></p>
-
 <p>The Learning Path section lists all the <i>self-built Learning Paths</i>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
+
+<p>Selection of the 'Activation' / 'Inactivation' link moves the Learning Path to the 'Active' or 'Inactive Tools' correspondingly.</p>
 ";
-$langPath_studentContent = "<p>This module offers the opportunity to the course teacher to create a sequence of steps (learning path) as learning activities, which should be followed by the students.
-</p>";
+$langPath_studentContent =  "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
+In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute <b>pre-requisites</b> for the steps
+after them (you cannot go to step 2 before step 1). That sequence can only be suggestive (steps are displayed one after the other).
+All learning objects have a status: completed or incomplete and the students progress is available through the <i>Tracking</i> tool at any time. 
+To attend a learning object within a learning path click on its title. Select the one you want to attend/read from the displayed list of objects (notice: it is essential that some learning paths are followed in a given order). The progress meter bar (on the right) adjusts its rate according to the actions taking place (e.g. watching presentation slides online). 
+Selection of button <img src='$themeimg/monitor.png' width=16 height=16> allows you to see the details of a learning object such as: Title, Comments, Module type, Total time, etc.</p>";
 $langHDropbox = "DropBox : Échange de fichiers";
 $langHDropbox_student = $langHDropbox;
 $langDropboxContent = "<p>Dropbox is a tool exchange file between professors and students. You can exchange various file types (e.g. Word files, Excel, PDF etc.)</p>
@@ -606,11 +610,10 @@ $langEBook_studentContent = "
 <h2>&nbsp;&nbsp;Browse</h2>
 <p>Click from left menu 'Ebook'. A list of ebook will be displayed. To browse an ebook just click in it.</p>
 ";
-$langFor_studentContent = 
-"
-<p>The platform allows you to communicate with all other course students.</p>
-You can either create a new discussion topic by clicking "New topic" (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
-Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>";
+$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
+You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
+Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
+;
 $langHMyAgenda = "Mon calendrier";
 $langMyAgendaContent = "$langAgenda_studentContent";
 $langHPersonalStats = 'Mes statistiques';
