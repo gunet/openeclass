@@ -202,7 +202,7 @@ switch ($module['contentType'])
                 
                 if (is_embeddable_medialink($assetPath))
                 {
-                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".urlencode(make_embeddable_medialink($assetPath));
+                    $moduleStartAssetPage = "showMediaLink.php?course=$code_cours&amp;id=".make_embeddable_medialink($assetPath);
                 }
                 else
                 {

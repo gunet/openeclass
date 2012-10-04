@@ -162,7 +162,7 @@ function choose_medialink_ahref($mediaURL, $title, $class = null)
     
     if (is_embeddable_medialink($mediaURL))
     {
-        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". urlencode(make_embeddable_medialink($mediaURL));
+        $linkPlay = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=playlink&amp;id=". make_embeddable_medialink($mediaURL);
         
         if (file_exists(get_shadowbox_dir()))
             $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox$bclass' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
@@ -494,8 +494,8 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
-            $medialink = 'http://www.youtube.com/embed/'. $sanitized .'?hl=en&amp;fs=1&amp;rel=0&amp;autoplay=1&amp;wmode=transparent';
+            $sanitized = strip_tags($matches[1]);
+            $medialink = 'http://www.youtube.com/embed/'. $sanitized .'?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
         }
     }
     
@@ -503,8 +503,8 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
-            $medialink = 'http://player.vimeo.com/video/'. $sanitized .'?color=00ADEF&amp;fullscreen=1&amp;autoplay=1';
+            $sanitized = strip_tags($matches[1]);
+            $medialink = 'http://player.vimeo.com/video/'. $sanitized .'?color=00ADEF&fullscreen=1&autoplay=1';
         }
     }
     
@@ -512,8 +512,8 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
-            $medialink = 'http://video.google.com/googleplayer.swf?docid='. $sanitized .'&amp;hl=en&amp;fs=true&amp;autoplay=true';
+            $sanitized = strip_tags($matches[1]);
+            $medialink = 'http://video.google.com/googleplayer.swf?docid='. $sanitized .'&hl=en&fs=true&autoplay=true';
         }
     }
     
@@ -521,7 +521,7 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1])) ."/". urlencode(strip_tags($matches[2]));
+            $sanitized = strip_tags($matches[1]) ."/". urlencode(strip_tags($matches[2]));
             $medialink = 'http://www.metacafe.com/fplayer/'. $sanitized .'.swf';
         }
     }
@@ -530,7 +530,7 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
+            $sanitized = strip_tags($matches[1]);
             $medialink = 'http://mediaservices.myspace.com/services/media/embed.aspx/m='. $sanitized .',t=1,mt=video,ap=1';
         }
     }
@@ -539,12 +539,12 @@ function make_embeddable_medialink($medialink)
     {
         if (preg_match($pattern, $medialink, $matches))
         {
-            $sanitized = urlencode(strip_tags($matches[1]));
+            $sanitized = strip_tags($matches[1]);
             $medialink = 'http://www.dailymotion.com/embed/video/'. $sanitized .'?autoPlay=1';
         }
     }
     
-    return $medialink;
+    return urlencode($medialink);
 }
 
 
