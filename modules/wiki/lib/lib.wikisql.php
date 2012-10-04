@@ -137,7 +137,7 @@
         
         $tblList = claro_sql_get_course_tbl();
 
-        $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle = '' );
+        $mainPageContent = $langWikiMainPageContent;
         
         $config = array();
         // use claro functions

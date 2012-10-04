@@ -111,10 +111,7 @@ $creatorId = $uid;
 if ($action == 'exEdit') {
         $wikiTitle = ( isset( $_POST['title'] ) ) ? strip_tags( $_POST['title'] ) : '';
         $wikiDesc = ( isset( $_POST['desc'] ) ) ? strip_tags( $_POST['desc'] ) : '';
-
-        if ($wikiDesc == $langWikiDefaultDescription) {
-                $wikiDesc = '';
-        }
+        
 
         $acl = ( isset( $_POST['acl'] ) ) ? $_POST['acl'] : null;
 
@@ -233,7 +230,7 @@ switch ( $action )
                 $wiki->setGroupId( $groupId );
                 $wikiId = $wiki->save();
 
-                $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle );
+                $mainPageContent = $langWikiMainPageContent;
 
                 $wikiPage = new WikiPage( $con, $config, $wikiId );
                 $wikiPage->create( $creatorId, '__MainPage__',
@@ -482,7 +479,6 @@ switch ( $action )
 
                     if ( $is_allowedToAdmin ) {
                             // edit link
-
                             $tool_content .= '          <td width="5" style="text-align: center;">';
                             $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;wikiId='
                             . $entry['id'].'&amp;action=rqEdit'
@@ -493,21 +489,16 @@ switch ( $action )
                             $tool_content .= '</td>' . "\n";
 
                             // delete link
-
                             $tool_content .= '<td width="5" style="text-align: center;">';
-                            $tool_content .= '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$code_cours.'&amp;wikiId='
-                                    . $entry['id'].'&amp;action=exDelete'
-                                    . '">'
-                                    . '<img src="'.$themeimg.'/delete.png" alt="'.q($langDelete).'" title="'.q($langDelete).'" onClick="return confirmation();"/>'
-                                    . '</a>'
-                                    ;
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;wikiId=$entry[id]&amp;action=exDelete'>
+                                    <img src='$themeimg/delete.png' alt='".q($langDelete)."' title='".q($langDelete)."' 
+                                            onClick=\"return confirmation('$langConfirmDelete');\" /></a>";
                             $tool_content .= '</td>' . "\n";
                     }
-
-                    $tool_content .= '        </tr>' . "\n";
+                    $tool_content .= "</tr>";
                     $k++;
                     }
-                    $tool_content .= '        </table>' . "\n" . "\n";
+                    $tool_content .= "</table>";
             }
             // wiki list empty
             else {
