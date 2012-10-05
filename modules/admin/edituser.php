@@ -338,12 +338,7 @@ $tool_content .= "
 			}                          
 			$tool_content .= "</table>";
 		} else {
-			$tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";
-			if ($u > 1) {
-                                $tool_content .= "<p class='eclass_button'><a href='unreguser.php?u=$u'>$langDelete</a></p>";
-			} else {
-				$tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
-			}
+			$tool_content .= "<p class='caution'>$langNoStudentParticipation</p>";			
 		}
 	} else { // if the form was submitted then update user
 

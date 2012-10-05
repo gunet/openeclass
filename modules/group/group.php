@@ -455,7 +455,9 @@ if ($is_editor) {
 			    (!$user_groups or $multi_reg) and
 			    !$is_member and
 			    (!$max_members or $member_count < $max_members)) {
-                                        $tool_content .= "<a href='group_space.php?course=$code_cours&amp;selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
+                                        $tool_content .= "<a href='group_space.php?course=$code_cours&amp;selfReg=1&amp;group_id=$row[0]'>
+                                        <img src='$themeimg/group_manager_add.png' title='".q($langRegistration)."' alt='".q($langRegistration)."' />
+                                        </a>";
 			} else {
                                         $tool_content .= "-";
 			}

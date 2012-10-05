@@ -191,7 +191,7 @@ if (!isset($_GET['mailing'])) {
                                 $tool_content .= "\n<tr class=\"odd\">";
                         }
                         $tool_content .= "<td width='16'>
-                        <img src='$themeimg/inbox.png' title='".q($dropbox_lang[receivedTitle])."' /></td>
+                        <img src='$themeimg/inbox.png' title='".q($dropbox_lang['receivedTitle'])."' /></td>
                         <td>";
                         $tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
                         $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .

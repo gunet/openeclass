@@ -65,22 +65,22 @@ if ($userid and isset($_GET['h']) and
                 $tool_content .= "</td></tr><tbody></table><br />";
         } else {
                 $tool_content .= "
-                <form action='contactadmin.php?userid=$userid&amp;h=$_GET[h]' method='post'>
-          <fieldset>
-            <legend>$langForm</legend>
-            <table width='99%'>
-              <tbody>
-                <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>".q($firstname)."</td></tr>
-                <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>".q($lastname)."</td></tr>
-                <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>".q($email)."</td></tr>
-                <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td>
-                    <td><textarea rows='6' cols='40' name='body'>$langActivateAccount</textarea></td></tr>
-                <tr><td width='3%' nowrap valign='top'>&nbsp;</td>
-                    <td><input type='submit' name='submit' value='".q(($langSend)."'></td></tr>
-              </tbody>
-            </table>
-          </fieldset>
-        </form>";
+                <form action='$_SERVER[PHP_SCRIPT]?userid=$userid&amp;h=$_GET[h]' method='post'>
+                <fieldset>
+                  <legend>$langForm</legend>
+                  <table width='99%'>
+                    <tbody>
+                      <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>".q($firstname)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>".q($lastname)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>".q($email)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td>
+                          <td><textarea rows='6' cols='40' name='body'>$langActivateAccount</textarea></td></tr>
+                      <tr><td width='3%' nowrap valign='top'>&nbsp;</td>
+                          <td><input type='submit' name='submit' value='".q($langSend)."'></td></tr>
+                    </tbody>
+                  </table>
+                </fieldset>
+              </form>";
 	}
 }
 
