@@ -858,10 +858,10 @@ function display_my_documents($dialogBox, $style)
             }
 
             if ($fileList['type'][$fileKey] == A_FILE)
-            {
+            {                    
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
-                $date        = format_date($fileList['date'][$fileKey]);
+                $date        = nice_format($fileList['date'][$fileKey]);
                 //$doc_url = $cmdFileName;
                 //$urlFileName = "../../".$courseDir.$doc_url;
                 $file_url = file_url($fileList['path'][$fileKey], $dspFileName);

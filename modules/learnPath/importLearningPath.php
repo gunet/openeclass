@@ -1311,7 +1311,7 @@ EOF;
             $copyright_icon = '';
             $image = '../document/img/' . choose_image('.' . $entry['format']);
             $size = format_file_size($entry['size']);
-                $date = format_date($entry['date']);
+            $date = nice_format($entry['date']);
 
                 if ($entry['visible'])
                         $style = '';
@@ -1320,7 +1320,7 @@ EOF;
 
                 if (empty($entry['title']))
                         $link_text = $entry['filename'];
-            else
+                else
                         $link_text = $entry['title'];
 
                 if ($entry['copyrighted'])

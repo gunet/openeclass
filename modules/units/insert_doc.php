@@ -54,7 +54,7 @@ function list_docs()
                         'visible' => $row['visibility'],
                         'comment' => $row['comment'],
                         'copyrighted' => $row['copyrighted'],
-                        'date' => strtotime($row['date_modified']));
+                        'date' => $row['date_modified']);
         }
         if (count($fileinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoDocuments</p>\n";
@@ -133,7 +133,7 @@ function list_docs()
 					$tool_content .= "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
 				} else {
 					$size = format_file_size($entry['size']);
-					$date = format_date($entry['date']);
+					$date = nice_format($entry['date'], true, true);
 					$tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
 				}
 					$tool_content .= "\n      <td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
