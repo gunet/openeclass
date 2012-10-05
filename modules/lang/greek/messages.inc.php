@@ -1683,7 +1683,7 @@ $langInstructions = "Οδηγίες";
 $langModuleComment_inCurrentLP = "<u>Μόνο</u> για τη συγκεκριμένη γρ. μάθησης";
 $langModuleComment_inCourse = "Εμφανίζεται με την <u>επαναχρησιμοποίηση</u> του αντικειμένου σε άλλη γραμμή μάθησης";
 $langDescriptionCours = "Περιγραφή μαθήματος";
-$langDocInsertedAsModule = "έχει προστεθεί σαν ενότητα";
+$langDocInsertedAsModule = "έχει προστεθεί ως ενότητα";
 $langDocumentAlreadyUsed = "Αυτό το έγγραφο έχει ήδη χρησιμοποιηθεί ως ενότητα σε αυτή τη γραμμή μάθησης";
 $langDocumentAsModule = "Χρήση Εγγράφου";
 $langDocumentAsModuleLabel = "Εγγράφου";
@@ -2523,7 +2523,7 @@ $langHere = "εδώ";
 $langMailVerificationClick = "Παρακαλούμε πατήστε στη παρακάτω διεύθυνση:";
 $langMailVerificationSubject = "Επιβεβαίωση Αίτησης Δημιουργίας Λογαριασμού $siteName";
 $langMailChangeVerificationSubject = "Επιβεβαίωση e-mail λογαριασμού $siteName";
-$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την email διεύθυνση σας.";
+$langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδικασία της εγγραφής σας θα πρέπει να επιβεβαιώσετε την ηλεκτρονική σας διεύθυνση.";
 $langMailVerificationSuccess2="Για το σκοπό αυτό, ελέγξτε άμεσα το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης. 
                                 <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, 
                         με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
@@ -3136,7 +3136,7 @@ $langGradeComments = "Τα σχόλια του βαθμολογητή ήταν:"
 $langGradeOk = "Καταχώρηση αλλαγών";
 $langGroupSubmit = "Αποστολή ομαδικής εργασίας";
 $langGradeWork = "Σχόλια βαθμολογίας";
-$langUserOnly="Για να υποβάλλετε μια εργασία πρέπει να κάνετε login στην πλατφόρμα.";
+$langUserOnly="Για να υποβάλετε μια εργασία πρέπει να κάνετε login στην πλατφόρμα.";
 $langNoSubmissions = "Δεν έχουν υποβληθεί εργασίες";
 $langNoAssign = "Δεν υπάρχουν εργασίες";
 $langWorkWrongInput = 'Ο βαθμός πρέπει να είναι νούμερο. Παρακαλώ επιστρέψτε και ξανασυμπληρώστε το πεδίο.';

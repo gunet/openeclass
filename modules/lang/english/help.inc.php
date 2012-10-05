@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-04 11:20:07
+// Generated 2012-10-05 09:35:59
 
 $langCourseAccessHelp = "
 <ul>
@@ -440,13 +440,17 @@ To attend a learning object within a learning path click on its title. Select th
 Selection of button <img src='$themeimg/monitor.png' width=16 height=16> allows you to see the details of a learning object such as: Title, Comments, Module type, Total time, etc.</p>";
 $langHDropbox = "DropBox";
 $langHDropbox_student = $langHDropbox;
-$langDropboxContent = "<p>Dropbox is a tool exchange file between professors and students. You can exchange various file types (e.g. Word files, Excel, PDF etc.)</p>
-<p>There are two folders. In folder <b>Received Files</b>
-there are all files you have recieved from other users of the platform with some additional info such as username, file size and file recieved date. In folder <b>Sent files</b> there are files you have sent in other users of platform with similar info.</p>
-<p>Note that if you delete a file, file doesn't delete from the platform database but only from this folder.</p>
-<p>If you wish to send a file to another user, first select the file from your computer by clicking on 'File Upload'. Optionally you can type a short description. Then select the recipient from the users list and click on 'Send'  You can select more recipients with your mouse and pressing <b>CTRL (Control)</b>.
-</p>";
-$langDropbox_studentContent = "<p>The Dropbox module is a collaboration tool used by teachers and students to exchange course files. You can send and receive any type of text files, pictures or presentations.
+$langDropboxContent = "<p>Dropbox is a tool for exchanging files with other course users.Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description.
+Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure. </p>
+<p>Two Dropbox folders are displayed: </p>
+<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file. </p>
+<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed, along with additional information on the files exchange. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
+</p>
+<p>Finally, a list with other Dropbox files is presented along with additional information on the files exchange.</p>";
+$langDropbox_studentContent = "<p>Dropbox is a tool for exchanging files with the users registered to the course. Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure.</p>
+<p>Two Dropbox folders are displayed:</p>
+<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file.</p>
+<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed along with additional information on the files. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
 </p>";
 $langHUsage = "Usage Statistics";
 $langUsageContent = "<p>This module presents course usage statistics information. More specifically,</p>
@@ -460,7 +464,15 @@ $langUsageContent = "<p>This module presents course usage statistics information
 </ul>
 </p>";
 $langHCreateCourse = "Create Course";
-$langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.</p><p>The wizards consist of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.</p><p>In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue with the next step.</p>";
+$langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.<br>
+The wizard consists of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.<br>
+In case the user enters invalid data in a field, the system informs the user and prompts him to correct the error so as to be able to continue with the next step.</p>
+<p>To create a new course enter a title for the course, select the faculty from the selection list, enter the name of the course teacher, define the course type (undergraduate – postgraduate) and the course language. Click on 'Next Step' to continue.</p>
+<p>In the next page you can optionally type a brief description for the course or / and keywords and click on 'Next Step' to proceed.</p>
+<p>Select the course access type.
+$langCourseAccessHelp.
+<p>Select the modules you want to enable for your course and click on 'Create Course' to finish with the course creation.</p>
+<p>Please note that all information entered above can be modified at a later stage through the 'Course Administration' tool.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
 $langWikiContent = "<p>To create a new Wiki</p> <ul> <li>Click on the 'Create a new Wiki' link. Then enter the Wiki properties:</li> <br>
@@ -522,95 +534,98 @@ $langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add conte
 $langHGlossary = "Glossary";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "<p>
-With module 'glossary' course administrator can define definitions for various keywords in his course.
-</p>
-<p>You can choose if you want to display term definitions in course pages, clicking in 'Settings' and choose 'Display defintions in course pages'. After that clicking in 'submit'. An informative message is displayed<br />
-  <br />
-  <strong><u>Add glossary term</u></strong><br />
-To add a new glossary term</p>
 <ul>
-  <li>Click in 'Add term'. A form is displayed.  </li>
-  <li>Fill in the term, definition and (optionally) a url </li>
-  <li>Click in 'Submit' </li>
-</ul>
-<p>An informative message is displayed.<br />
-  <br />
-  <u><strong>Delete term</strong></u><br />
-  You can delete a term by clicking in icon with symbol red 'X'. Confirmation is required.<br />
-  <br />
-  <strong><u>Download glossary terms in </u></strong><strong><u>csv</u>format</strong><br />
- Course administrator can download glossary terms in csv (comma seperated values) format. <br />
+  <li>To add a glossary term for your course click on the 'Add new term' option. In the 'Add new term' form, type the term, the term definition, optionally a reference URL or/and some additional notes. Click on 'Submit' to complete with the process.</li>
+  <li>To add a new category (for term classification) click on 'Add category'. Type the category name and optionally a description in the next page and click on 'Submit'.</li>
+ <li>Extra configuration settings for the glossary can be found at the 'Config settings' page.</li>
+ <li>Selection of the 'Terms in csv form' allows you to select the appropriate encoding and download all terms in csv format.</li>
+ </ul>
 </p>
-";
+ <p>
+ <ul>
+ <li>Click on the <img src='$themeimg/edit.png' width=16 height=16> icon to edit a term.</li>
+ <li>Click on <img src='$themeimg/delete.png' width=16 height=16> to delete a term.</li>
+</ul>
+</p>";
 $langGlossary_studentContent = "
 <p>Glossary displays terms and / or definitions for various keywords in course.</p>
 <p>Glossary terms are displayed by hovering the mouse over a term. Also, sometimes, glossary term includes a hyperlink.</p>";
 $langHEBook = "E-Book";
 $langHEBook_student = $langHEBook;
-$langEBookContent = "<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
-<p>To create an ebook, you must create some html pages. But you must keep in mind the following rules</p>
+$langEBookContent = "
+<p>The 'E-Book' is a set of hypertex content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format, can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box.</p>
+<hr>
+<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
+<p>To create a new e-book, you must create some html pages (files) that will be the e-book contents. But you must keep in mind the following rules (specifications):</p>
 <ol>
-  <li>Every html page must include a subsection of ebook.</li>
-  <li>Html page title must be the title of section</li>
-  <li>All html files with pictures and css must be stored in a zip file file.</li>
+  <li>Every html page must include one of the e-book subsections (this relates with the e-book navigation).</li>
+  <li>The title of every html page should include the exact title of the included subsection (the titles will be used by the system for the creation of navigation links within the e-book).</li>
+  <li>All html files along with their corresponding pictures and css files must be stored in a zip file.</li>
 </ol>
+<hr>
 <h2>&nbsp;&nbsp;E-Book creation (Step 2)</h2>
 
 <ol>
-  <li>Enter the course as administrator </li>
-  <li>From the right menu, click in <strong>E-Book</strong></li>
-  <li>Choose <strong>Create</strong> and in the displaying form
+  <li>Enter the platform as course administrator. </li>
+  <li>Select the <strong>'E-Book'</strong> module</li>
+  <li>Click on <strong>'Create'</strong>'
     <ul>
-      <li>fill in the <strong>Title</strong> of E-Book and</li>
-      <li>browse the zip file of html files.</li>
+
+      <li>Fill in the <strong>Title</strong> of the E-Book and</li>
+      <li>Browse your computer and locate the zip file with the html pages/files you have created.</li>
     </ul>
   </li>
-    <li>Click in <strong>Submit</strong>.</li>
- <br />
+    <li>Click on <strong>'Submit'</strong>.</li>
+  <li>If the e-Book module is not activated (within the active tools), <strong>activate</strong> it through the 'Activation' link. <br />
 
   </li>
 </ol>
-
+<hr>
 <h2>&nbsp;&nbsp;Structure of E-Book (Step 3)</h2>
 
-<p>After step 2 a form is displayed with a table of html files found in zip file. Here we'll define the sctructure of E-Book:</p>
+<p>The previous step (Step 2) displays a screen with options and a table with the html page-files you uploaded within the zip file. You can define the structure of the electronic book, as follows:</p>
 
 <ol>
-  <li>First define <strong>sections</strong> of E-Book. You can add as many as you need. Define an <strong>incremental number</strong> and <strong>name</strong> of each section in field <strong>ID</strong> and <strong>Title</strong> correspondingly. </li>
+  <li>First define <strong>sections</strong> for the E-Book. You can add as many as you need. Define an <strong>incremental number</strong> and a <strong>name</strong> for each section in fields <strong>ID</strong> and <strong>Title</strong> correspondingly.</li>
 
-  <li>After that you must format  <strong>subsections</strong> of E-Book. You must
+  <li>After that you have to define the E-Book <strong>subsections</strong>. To do that you have to:
     <ul>
-      <li><strong>correspond</strong> each uploaded file with the previous defined sections.</li>
-      <li> define in each subsection the incremental number of each subsection in section<br />
-</li>
+      <li><strong>map</strong> each uploaded page-file with the previously defined sections and</li>
+      <li>define for each subsection the incremental number of the subsection within the parent section. <br />
+
+      <em><u>Note</u>: the platform automatically suggests as title for each subsection the title of the corresponding files (these names can be modified at a later stage).</em></li>
     </ul>  
 </li>
-  <li>After that click in <strong>Submit</strong>. </li>
-  <li>An informative message will be displayed.</li>
+  <li>After the pagefile and section/subsection pairing is complete click on <strong>'Submit'</strong>. </li>
+  <li>The system informs you on the successful update and the e-Book is now available in the specified structure.</li>
 </ol>
+
+<hr>
 <h2>&nbsp;&nbsp;E-Book browsing</h2>
 
-<p>Click in the desired E-Book name</p> 
+<p>Select the E-Book module from the left menu and within the presented list, click on the name of the E-Book you wish to open.</p> 
 
-<h2>&nbsp;&nbsp;Modify - Delete of E-Book</h2>
-<p>If you want to modify an E-Book click in icon <strong> Modify </strong>. <br />
-<br />
-In order to <strong>delete</strong> an E-Book click in icon <strong>Delete</strong>.</p>
+<hr>
+
+<h2>&nbsp;&nbsp;Modify - Delete E-Book</h2>
+<p>If you want to modify an E-Book click on the <strong>'Modification'</strong>icon. <br />
+Click on icon <strong>Delete</strong> to <strong>delete</strong> an E-Book.</p>
+<hr>
 <h2>&nbsp;&nbsp;Administration of html files</h2>
-<p>If you want to administrate the uploaded html files in an E-Book then  </p>
+<p>If you want to administrate the uploaded html files in an E-Book,</p>
 <ul>
-  <li>click in icon <strong> Modification </strong>,</li>
-  <li>choose <strong>File administration</strong>. A page with all uploaded html files will be displayed</li>
-  <li>you can administrate files and directories as in module 'Documents'.</li>
-
+  <li>click on icon <strong>Modification</strong>,</li>
+  <li>select the <strong>File administration</strong> option. A page with all uploaded html files for this E-Book will be displayed,</li>
+  <li>you can manage files and directories in this module as in module 'Documents'.</li>
 </ul>
+<hr>
 <h2>&nbsp;&nbsp;Linking E-Book with course units</h2>
-<p>You can link a course unit with a <strong>section</strong> of <strong>E-Book</strong>. For accomplishing this click in course unit and from the available tools choose <strong>Add E-Book</strong>. From the displaying form choose the desired E-Book section. After that click in <strong>Add selection</strong>. </p>
-";
-$langEBook_studentContent = "
-<h2>&nbsp;&nbsp;Browse</h2>
-<p>Click from left menu 'Ebook'. A list of ebook will be displayed. To browse an ebook just click in it.</p>
-";
+<p>You can link a specific course unit with the corresponding <strong>section</strong> of the <strong>E-Book</strong>. 
+For accomplishing this, click on the course unit you want to link and from the available tools select <strong>'Add e-book'</strong>.
+From the displaying form select the desired E-Book section.
+After that click on <strong>'Add selection'</strong>.</p>";
+$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertex</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format, can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections . The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
+<p>Click from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
 $langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
 You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
 Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"

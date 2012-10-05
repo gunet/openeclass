@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-04 11:20:07
+// Generated 2012-10-05 09:35:59
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -473,7 +473,7 @@ $langIdentity = "About";
 $langCourseS = "course";
 $langCourseIden = "Course Info";
 $langBackupCourse = "Archive this course";
-$langModifInfo = "Course Admin";
+$langModifInfo = "Course Administration";
 $langModifDone = "The information has been modified";
 $langHome = "Back to Home Page";
 $langCode = "Course code";
@@ -2605,14 +2605,14 @@ $langRegistrationDateShort = "Registration <br />date";
 $langUserDurationAccount = "User Account Duration";
 $langWikiNoContent = "Wiki page has no content yet. Use editor to add text.";
 $langWrongWikiPageTitle = "Wrong Wiki Page Title";
-$langInsertEBook = "ebook";
+$langInsertEBook = "e-book";
 $langAddToCourseHome = "Display / Don't display in course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
 $langGlossaryToCsv = "Terms in csv form";
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';
-$langJQNoneSelected = 'Choose';
+$langJQNoneSelected = 'Select';
 $langJQCheckAll = 'Select all';
 $langJQUncheckAll = 'Unselect All';
 $langcas_logout = "CAS logout page";

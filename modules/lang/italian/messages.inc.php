@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-04 11:20:11
+// Generated 2012-10-05 09:36:03
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -2850,4 +2850,4 @@ $langMultiDelUser = "Eliminare molti conti di utenti";
 $langMultiDelUserConfirm = "Con questa operazione eliminerai tutte le tracce degli utenti sulla piattaforma, come le loro statistiche, le loro partecipazioni ai forum, ecc.";
 $langMultiDelUserData = "Username";
 $langMultiDelUserInfo = "Prego, compila nell' area qui sotto, un elenco dei username - una riga per ogni utente - che desideri eliminare. Le righe che iniziano con # verranno ignorate.";
-$langWikiUrlImage = "Image URL";
+$langWikiUrlImage = "URL immagine";
