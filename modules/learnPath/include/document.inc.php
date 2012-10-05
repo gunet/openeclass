@@ -69,7 +69,7 @@ $courseDir = "courses/".$course_code."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $file = $baseWorkDir.$assetPath;
 $fileSize = format_file_size(filesize($file));
-$fileDate = format_date(filectime($file));
+$fileDate = nice_format(date('Y-m-d', filectime($file)));
 
 
 //####################################################################################\\

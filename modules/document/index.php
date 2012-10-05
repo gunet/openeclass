@@ -539,7 +539,8 @@ if ($can_upload) {
                                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or
                                     !db_query("UPDATE document SET path = " . quote($newpath) . ",
                                                                    format = " . quote($newformat) . ",
-                                                                   filename = " . autoquote($_FILES['newFile']['name']) . "
+                                                                   filename = " . autoquote($_FILES['newFile']['name']) . ",
+                                                                   date_modified = NOW()
                                                               WHERE $group_sql AND
 							       path = " . quote($oldpath))) {
                                         $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
@@ -868,7 +869,7 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'visible' => ($row['visible'] == 1),
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
-                'date' => strtotime($row['date_modified']));
+                'date' => $row['date_modified']);
 }
 
 // end of common to teachers and students
@@ -1007,6 +1008,7 @@ if ($doc_count == 0) {
 				$link_title = q($entry['filename']);
                                 $dload_msg = $langDownloadDir;
                                 $link_href = "<a href='$file_url'>$link_title</a>";
+                                $link_title_extra = '';
                         } else {
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 $file_url = file_url($cmdDirName, $entry['filename']);
@@ -1014,21 +1016,21 @@ if ($doc_count == 0) {
                                 $link_extra = " class='fileURL' title='$langSave' target='_blank'";
                                 $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
                                 $link_title_extra = ($entry['copyrighted'])?
-                                        " <img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
+                                        "&nbsp;<img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
                                         $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
-                                        $link_href = "<a href='$furl'$link_extra>$link_title$link_title_extra</a>";
+                                        $link_href = "<a href='$furl'$link_extra>$link_title</a>$link_title_extra";
                                 } else {
-                                        $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title.$link_title_extra, $link_extra);
+                                        $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";
                         $download_url = $base_url . "download=$cmdDirName";
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
-                        $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";
-                        $tool_content .= "\n<td>". $link_href;
+                        $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";                        
+                        $tool_content .= "\n<td>". $link_href ." ".$link_title_extra;
 
                         /*** comments ***/
                         if (!empty($entry['comment'])) {
@@ -1039,20 +1041,19 @@ if ($doc_count == 0) {
                         $tool_content .= "</td>";
                         $padding = '&nbsp;';
                         $padding2 = '';
-                        if ($is_dir) {
-                                // skip display of date and time for directories
-                                $tool_content .= "\n<td>&nbsp;</td>\n<td>&nbsp;</td>";
-                                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                        $date = nice_format($entry['date'], true, true);
+                        $date_with_time = nice_format($entry['date'], true);
+                        if ($is_dir) {                         
+                                $tool_content .= "\n<td>&nbsp;</td>\n<td class='center'>$date</td>";
+                                $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';                                
                         } else if ($entry['format'] == ".meta") {
-                                $size = format_file_size($entry['size']);
-                                $date = format_date($entry['date']);
+                                $size = format_file_size($entry['size']);                                
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
                                 $padding = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                                 $padding2 = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         } else {
-                                $size = format_file_size($entry['size']);
-                                $date = format_date($entry['date']);
-                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center'>$date</td>";
+                                $size = format_file_size($entry['size']);                                                                
+                                $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
                         }
                         if (!$is_in_tinymce) {
                             if ($can_upload) {

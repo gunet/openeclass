@@ -129,8 +129,8 @@
 		tb.btList('".$wiki_toolbar['Unorderedlist']."','ul');
 		tb.btList('".$wiki_toolbar['Orderedlist']."','ol');
 		tb.addSpace(10);
-        	tb.btLink('".$wiki_toolbar['Link']."','".$langWikiUrl."','".$langWikiUrlLang."','gr');
-        	tb.btImgLink('".$wiki_toolbar['Externalimage']."','".$langWikiUrl."');
+        	tb.btLink('".$wiki_toolbar['Link']."','".$langWikiUrl."');
+        	tb.btImgLink('".$wiki_toolbar['Externalimage']."','".$langWikiUrlImage."');
 		tb.draw('');
 	}
 	</script>\n";

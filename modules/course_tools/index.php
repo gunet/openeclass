@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <th>$langName:</th>
+              <th>$langLinkName:</th>
               <td><input type='Text' name='name_link' size='50'></td>
               <td>&nbsp;</td>
             </tr>

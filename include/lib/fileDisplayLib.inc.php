@@ -154,20 +154,6 @@ function format_file_size($fileSize)
 	return $fileSize;
 }
 
-
-/*
- * Transform a UNIX time stamp in human readable format date
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param - date - UNIX time stamp
- */
-
-function format_date($fileDate)
-{
-	return date("d.m.Y", $fileDate);
-}
-
-
 /*
  * Transform the file path in a url
  *

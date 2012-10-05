@@ -293,16 +293,16 @@ function dcToolBar(textarea,format,img_path)
 			var href = window.prompt(msg_url,'');
 			if (!href) { return; }
 			
-			var hreflang = window.prompt(msg_lang,default_lang);
+		//	var hreflang = window.prompt(msg_lang,default_lang);
 			
 			if (getFormat() == 'wiki') {
 				stag = '[';
 				var etag = href;
-				if (hreflang) { etag = etag+'|'+hreflang; }
+			//	if (hreflang) { etag = etag+'|'+hreflang; }
 				etag = etag+']';
 			} else {
 				var stag = '<a href="'+href+'"';
-				if (hreflang) { stag = stag+' hreflang="'+hreflang+'"'; }
+			//	if (hreflang) { stag = stag+' hreflang="'+hreflang+'"'; }
 				stag = stag+'>';
 				etag = '</a>';
 			}

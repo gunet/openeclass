@@ -48,7 +48,7 @@ define('MESSAGE_LINE_NB',  40);
 // (the rest are in the current chat file)
 define('MAX_LINE_IN_FILE', 80);
 
-if ($GLOBALS['language'] == 'greek') {
+if ($GLOBALS['language'] == 'el') {
 	$timeNow = date("d-m-Y / H:i",time());
 } else {
 	$timeNow = date("Y-m-d / H:i",time());
@@ -113,7 +113,7 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
 foreach ($fileReverse as $thisLine) {
-	$newline = preg_replace('/ : /', '</span> : ', q($thisLine));
+	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
 	if (strpos($newline, '</span>') === false) {
 		$newline .= '</span>';
 	}

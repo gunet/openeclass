@@ -69,8 +69,8 @@
 
         // display title
         $out = '<div class="wikiTitle">' . "\n";
-        $out .= '<h1>'.$localtitle.'</h1>' . "\n";
-        $out .= '</div>' . "\n";
+        $out .= '<h2>'.$localtitle.'</h2>' . "\n";
+        $out .= '</div>' . "<br />";
 
                 // display editor
         $out .= '<form method="POST" action="'.$script.'"'
@@ -236,13 +236,12 @@
             , $langWikiDescription, $langWikiAccessControl, $langWikiAccessControlText
             , $langWikiCourseMembers, $langWikiGroupMembers, $langWikiOtherUsers
             , $langWikiOtherUsersText, $langWikiReadPrivilege, $langWikiEditPrivilege
-            , $langWikiCreatePrivilege, $langCancel, $langSave, $langWikiDefaultTitle
-            , $langWikiDefaultDescription, $course_code
-            ;
+            , $langWikiCreatePrivilege, $langCancel, $langSave
+            , $course_code;
 
-        $title = ( $title != '' ) ? $title : $langWikiDefaultTitle;
+        $title = ( $title != '' ) ? $title : '';
 
-        $desc = ( $desc != '' ) ? $desc : $langWikiDefaultDescription;
+        $desc = ( $desc != '' ) ? $desc : '';
 
         if ( is_null ( $acl ) && $groupId == 0 )
         {

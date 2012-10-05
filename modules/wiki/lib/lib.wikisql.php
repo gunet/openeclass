@@ -134,7 +134,7 @@
     {
         global $langWikiMainPageContent;
 
-        $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle = '' );
+        $mainPageContent = $langWikiMainPageContent;
 
         $config = array();
         $config["tbl_wiki_pages"] = "wiki_pages";

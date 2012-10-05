@@ -509,13 +509,10 @@ function adminMenu(){
 	    array_push($sideMenuImg, "arrow.png");
 	    array_push($sideMenuText, $GLOBALS['langAdminManual']);
 	    
-	    if ($language == 'greek')
-	    {
-	        array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass25_ManA_el.pdf");
-	    }
-	    else
-	    {
-	        array_push($sideMenuLink, $urlServer . "manuals/manA/OpeneClass25_ManA_en.pdf");
+	    if ($language == 'el') {
+	        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=el:admin_doc");
+	    } else {
+	        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=en:admin_doc");
 	    }
 	    array_push($sideMenuImg, "arrow.png");
 

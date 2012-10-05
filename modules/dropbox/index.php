@@ -130,7 +130,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	$tool_content .= "</select></td></tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td class='left'><input type='submit' name='submitWork' value='$langSend' />&nbsp;
+	  <td class='left'><input type='submit' name='submitWork' value='".q($langSend)."' />&nbsp;
 	  $langMailToUsers<input type='checkbox' name='mailing' value='1' /></td>
 	</tr>
         </table>
@@ -152,7 +152,7 @@ if (!isset($_GET['mailing'])) {
         $dr_unid = urlencode($dropbox_unid);
         if ($numberDisplayed > 0) {                
                 $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
-                <img src='$themeimg/delete.png' title='$langDelete' /></a>";
+                <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
         }
         $tool_content .= "</p>";
 
@@ -187,7 +187,7 @@ if (!isset($_GET['mailing'])) {
                                 $tool_content .= "<tr class='odd'>";
                         }
                         $tool_content .= "<td width='16'>
-                        <img src='$themeimg/inbox.png' title='$langReceivedFiles' /></td>
+                        <img src='$themeimg/inbox.png' title='".q($langReceivedFiles)."' /></td>
                         <td>";
                         $tool_content .= "<a href='dropbox_download.php?course=$course_code&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";                        
                         $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
@@ -199,7 +199,7 @@ if (!isset($_GET['mailing'])) {
                         $tool_content .= "</td><td class='center'>";
                         $tool_content .= "
                         <a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."' onClick='return confirmation(\"$w->title\");'>
-                        <img src='$themeimg/delete.png' title='$langDelete' /></a>";
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</td></tr>";
                         $i++;
                 } //end of foreach
@@ -219,7 +219,9 @@ $tool_content .= $langSentFiles;
 // if the user has sent files then display the icon delete all
 if ($numSent > 0) {
         $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
-        onClick=\"return confirmationall();\"><img src='$themeimg/delete.png' title='$langDelete' /></a>";
+        onClick=\"return confirmationall();\">
+        <img src='$themeimg/delete.png' title='".q($langDelete)."' />
+                </a>";
 }
 $tool_content .= "</p>";
 
@@ -274,7 +276,7 @@ if ($numSent == 0) {
                 $tool_content .= "
                 <a href='dropbox_submit.php?course=$course_code&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."'
                         onClick=\"return confirmation('".js_escape($w->title)."');\">
-                        <img src='$themeimg/delete.png' title='$langDelete' /></a>";
+                        <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                 $tool_content .= "</div></td></tr>";
 
                 // RH: Mailing: clickable images for examine and send
@@ -340,7 +342,7 @@ if ($is_editor) {
                         $tool_content .= "
                         <a href='dropbox_submit.php?course=$course_code&amp;AdminDeleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."'
                                 onClick='return confirmationpurge();'>
-                                <img src='$themeimg/delete.png' title='$langDelete' /></a>";
+                                <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</div></td></tr>";
 
                         // RH: Mailing: clickable images for examine and send

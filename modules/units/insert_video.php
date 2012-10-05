@@ -65,7 +65,7 @@ function list_videos()
 
                         $tool_content .= "\n    <td>&nbsp;<img src='$themeimg/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>".
                                          "\n    <td>" . htmlspecialchars($row['description']) . "</td>".
-                                         "\n    <td class='center'>" . format_date(strtotime($row['date'])) . "</td>" .
+                                         "\n    <td class='center'>" . nice_format($row['date'], true, true) . "</td>" .
                                          "\n    <td class='center'><input type='checkbox' name='video[]' value='$table:$row[id]' /></td>\n" .
                                          "\n  </tr>";
                 $numLine++;

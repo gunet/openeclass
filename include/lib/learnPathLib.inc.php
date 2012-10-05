@@ -862,7 +862,7 @@ function display_my_documents($dialogBox, $style)
             {
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
-                $date        = format_date($fileList['date'][$fileKey]);
+                $date        = nice_format($fileList['date'][$fileKey]);
                 $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = choose_media_ahref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
@@ -1722,20 +1722,20 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
 
 	switch($_SERVER['argc']) {
 		case 0:
-			$url .= "?page=";
+			$url .= "&amp;page=";
 			break;
 		case 1:
 			$arguments = preg_replace('/[&|?]page=.*$/', '', '?'.$_SERVER['argv'][0]);
 
 			if (!strcmp($arguments, NULL)) {
-				$url .= "?page=";
+				$url .= "&amp;page=";
 			}
 			else {
 				$url .= $arguments."&amp;page=";
 			}
 			break;
 		default:
-			$url .= "?page=";
+			$url .= "&amp;page=";
 			break;
 	}
 

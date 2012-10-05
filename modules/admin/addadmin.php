@@ -32,8 +32,7 @@ if(isset($_POST['submit']) and !empty($username)) {
 
     $res = db_query("SELECT user_id FROM user WHERE username=". quote($username));
 
-    if (mysql_num_rows($res) == 1)
-    {
+    if (mysql_num_rows($res) == 1) {
         list($user_id) = mysql_fetch_array($res);
         switch ($_POST['adminrights']) {
             case 'admin': $privilege = '0'; // platform admin user
@@ -46,22 +45,23 @@ if(isset($_POST['submit']) and !empty($username)) {
             break;
         }
 
-        if (isset($privilege))
-        {
-            $sql = db_query("INSERT INTO admin VALUES(". intval($user_id) .", $privilege)");
-            if ($sql)
-            {
-                $tool_content .= "<p class='success'>
-                $langTheUser ". q($username) ." $langWith id=$user_id $langDone</p>";
+        if (isset($privilege)) {
+            $user_id = intval($user_id);
+            $s = db_query("SELECT * FROM admin WHERE idUser = $user_id");
+            if (mysql_num_rows($s) > 0) {
+                    db_query("UPDATE admin SET privilege = $privilege 
+                                WHERE idUser = $user_id");
+            } else {
+                $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");
             }
-        }
-        else
-        {
+            if (isset($sql) or mysql_affected_rows() > 0) {
+                    $tool_content .= "<p class='success'>
+                    $langTheUser ". q($username) ." $langWith id=".q($user_id) ." $langDone</p>";
+             }
+        } else {
             $tool_content .= "<p class='caution'>$langError</p>";
         }
-    }
-    else
-    {
+    } else {
         $tool_content .= "<p class='caution'>$langTheUser ". q($username) ." $langNotFound.</p>";
     }
 

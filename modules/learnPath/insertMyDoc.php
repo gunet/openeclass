@@ -313,7 +313,7 @@ while ($file = readdir($handle))
     {
         $fileList['type'][] = A_FILE;
         $fileList['size'][] = filesize($file);
-        $fileList['date'][] = filectime($file);
+        $fileList['date'][] = date('Y-m-d', filectime($file));
     }
 
     /*

@@ -230,7 +230,7 @@ switch ( $action )
                 $wiki->setGroupId( $groupId );
                 $wikiId = $wiki->save();
 
-                $mainPageContent = sprintf( $langWikiMainPageContent, $wikiTitle );
+                $mainPageContent = $langWikiMainPageContent;
 
                 $wikiPage = new WikiPage( $con, $config, $wikiId );
                 $wikiPage->create( $creatorId, '__MainPage__',
