@@ -1706,7 +1706,7 @@ tinyMCE.init({
 
 		// Theme options
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
-		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,media,eclmedia,emotions,charmap,|,insertdate,inserttime',
+		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,media,emotions,charmap,|,insertdate,inserttime',
 		theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
 		theme_advanced_toolbar_location : 'top',
 		theme_advanced_toolbar_align : 'left',
