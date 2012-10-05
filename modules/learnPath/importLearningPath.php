@@ -1311,7 +1311,7 @@ EOF;
             $copyright_icon = '';
             $image = '../document/img/' . choose_image('.' . $entry['format']);
             $size = format_file_size($entry['size']);
-            $date = nice_format($entry['date']);
+            $date = nice_format($entry['date'], true, true);
 
                 if ($entry['visible'])
                         $style = '';
