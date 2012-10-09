@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,22 +65,22 @@ if ($userid and isset($_GET['h']) and
                 $tool_content .= "</td></tr><tbody></table><br />";
         } else {
                 $tool_content .= "
-    <form action='contactadmin.php?userid=$userid&amp;h=$_GET[h]' method='post'>
-      <fieldset>
-        <legend>$langForm</legend>
-        <table width='99%'>
-          <tbody>
-            <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>".q($firstname)."</td></tr>
-            <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>".q($lastname)."</td></tr>
-            <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>".q($email)."</td></tr>
-            <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td>
-                <td><textarea rows='6' cols='40' name='body'>$langActivateAccount</textarea></td></tr>
-            <tr><td width='3%' nowrap valign='top'>&nbsp;</td>
-                <td><input type='submit' name='submit' value='$langSend'></td></tr>
-          </tbody>
-        </table>
-      </fieldset>
-    </form>";
+                 <form action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>   
+                <fieldset>
+                  <legend>$langForm</legend>
+                  <table width='99%'>
+                    <tbody>
+                      <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>".q($firstname)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>".q($lastname)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>".q($email)."</td></tr>
+                      <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td>
+                          <td><textarea rows='6' cols='40' name='body'>$langActivateAccount</textarea></td></tr>
+                      <tr><td width='3%' nowrap valign='top'>&nbsp;</td>
+                          <td><input type='submit' name='submit' value='$langSend'></td></tr>
+                    </tbody>
+                  </table>
+                </fieldset>
+              </form>";
 	}
 }
 

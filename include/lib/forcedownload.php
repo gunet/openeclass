@@ -95,12 +95,12 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                 header("HTTP/1.0 304 Not Modified");
         } else {
                 stop_output_buffering();
+                if ($delete) { 
+                        register_shutdown_function('unlink', $real_filename);
+                }
                 readfile($real_filename);
         }
 
-	if ($delete) {
-		unlink($real_filename);
-	}
         return true;
 }
 
