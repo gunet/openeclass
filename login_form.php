@@ -8,6 +8,7 @@ $tool_content = '';
 $warning = '';
 $login_user = FALSE;
 
+// do we need this ???
 process_login();
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));

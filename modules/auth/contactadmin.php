@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,7 +65,7 @@ if ($userid and isset($_GET['h']) and
                 $tool_content .= "</td></tr><tbody></table><br />";
         } else {
                 $tool_content .= "
-                <form action='$_SERVER[PHP_SCRIPT]?userid=$userid&amp;h=$_GET[h]' method='post'>
+                <form action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
                 <fieldset>
                   <legend>$langForm</legend>
                   <table width='99%'>
