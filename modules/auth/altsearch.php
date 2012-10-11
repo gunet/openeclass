@@ -240,7 +240,8 @@ if ($is_valid) {
                           lang = '$lang',
                           verified_mail = $verified_mail,
                           perso = 'yes',
-                          description = ''";
+                          description = '',
+                          whitelist = ''";
 
         $inscr_user = db_query($q1);
         $last_id = mysql_insert_id();

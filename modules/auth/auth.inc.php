@@ -957,7 +957,8 @@ function shib_cas_login($type)
 							statut = 5, lang = 'el', perso = 'yes',
 							registered_at = $registered_at,
 							verified_mail = $verified_mail,
-							expires_at = $expires_at");
+							expires_at = $expires_at,
+                                                        whitelist = ''");
 			$_SESSION['uid'] = mysql_insert_id();
 			$userPerso = 'yes';
 			$language = $_SESSION['langswitch'] = langcode_to_name('el');

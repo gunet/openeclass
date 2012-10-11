@@ -102,8 +102,8 @@ function createguest($username, $cours_id, $password)
 	} else {
                 $regtime = time();
                 $exptime = 126144000 + $regtime;
-                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at)
-                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', 10, $regtime, $exptime)");
+                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at, whitelist)
+                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', 10, $regtime, $exptime, '')");
                 $guest_id = mysql_insert_id();
 	}
         db_query("INSERT IGNORE INTO cours_user (cours_id, user_id, statut, reg_date)
