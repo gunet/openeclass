@@ -223,15 +223,16 @@ function textarea_input($name, $rows, $cols)
 }
 
 $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
-                  'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'loginForm',
-                  'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
-                  'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
-		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
-                  'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
-                  'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-		  'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
-                  'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
-                  'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search');
+                'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'loginForm',
+                'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
+                'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
+                'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
+                'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
+                'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
+                'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
+                'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
+                'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search',
+                'student_upload_whitelist', 'teacher_upload_whitelist');
 
 // step 2 license
 if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
