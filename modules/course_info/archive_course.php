@@ -158,7 +158,7 @@ function create_backup_file($file) {
 
 	$f = fopen($file,"w");
 	if (!$f) {
-		die("Error! Unable to open output file: '$f'\n");
+		die("Error! Unable to open output file: '".q($file)."'\n");
 	}
 	list($ver) = mysql_fetch_array(db_query("SELECT `value` FROM `$mysqlMainDb`.config WHERE `key`='version'"));
 	fputs($f, "<?php\n\$eclass_version = '$ver';\n\$version = 2;\n\$encoding = 'UTF-8';\n");
