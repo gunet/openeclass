@@ -122,7 +122,7 @@ $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours", 'name' =
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
 	if (isset($_POST['grade_comments'])) {
-		$work_title = db_query_get_single_value("SELECT titleFROM assignment WHERE id = $_POST[assignment]", $currentCourseID);
+		$work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = $_POST[assignment]", $currentCourseID);
 		$nameTools = $work_title;
 		$nameTools = $langWorks;
 		$navigation[] = $works_url;
@@ -210,7 +210,7 @@ if ($is_editor) {
                         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id", 'name' => $langWorks);
                         submit_work($id);
                 } else {
-                        $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $id", $currentCourseID);
+                        $work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = $id", $currentCourseID);
                         $nameTools = $work_title;
                         $navigation[] = $works_url;
                         show_student_assignment($id);
