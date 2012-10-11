@@ -827,7 +827,7 @@ function my_basename($path) {
  * if argument time is defined then
  * transform date time format from "year-month-day time" to "to "day-month-year time"
  */
-function greek_format($date, $time = FALSE, $dont_display_time = FALSE) {
+function greek_format($date, $time = FALSE, $dont_display_time = FALSE)
 {
         if ($time) {
         	$datetime = explode(' ', $date);
