@@ -20,7 +20,7 @@
 
 			// Register buttons
 			ed.addButton('eclmedia', {
-				title : 'media.desc',
+				title : 'eclmedia.desc',
 				cmd : 'mceEclMedia',
                                 image : url + '/img/video.gif'
 			});
