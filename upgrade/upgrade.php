@@ -548,6 +548,13 @@ if (!isset($_POST['submit2'])) {
             db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', ". quote($_POST['student_upload_whitelist']) ."),
                             ('teacher_upload_whitelist', ". quote($_POST['teacher_upload_whitelist']) .")");
+            db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
+            db_query("CREATE TABLE login_failure (
+                id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                ip varchar(15) NOT NULL,
+                count tinyint(4) unsigned NOT NULL default '0',
+                last_fail datetime NOT NULL,
+                UNIQUE KEY ip (ip)) $charset_spec");
         }
 
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or

@@ -110,9 +110,12 @@ if (isset($_REQUEST['u']) and
 	$email = isset($_POST['email'])? mb_strtolower(trim($_POST['email'])): '';
 	$userName = isset($_POST['userName'])? canonicalize_whitespace($_POST['userName']): '';
 	/***** If valid e-mail address was entered, find user and send email *****/
-	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
-                                WHERE email = " . quote($email) . " AND
-                                      BINARY username = " . quote($userName));
+	$res = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.password, u.statut FROM user u
+	                LEFT JOIN admin a ON (a.idUser = u.user_id)
+	                WHERE u.email = " . quote($email) . " AND
+	                BINARY u.username = " . quote($userName) ." AND 
+	                a.idUser IS NULL AND  
+	                (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)"); //exclude admins and currently pending requests
 
         $found_editable_password = false;
 	if (mysql_num_rows($res) == 1) {
@@ -125,6 +128,8 @@ if (isset($_REQUEST['u']) and
 				$text .= $langPassResetGoHere;
                                 $text .= $urlServer . "modules/auth/lostpass.php?u=$s[user_id]&h=" .
                                          token_generate('password'.$s['user_id'], true);
+                // store the timestamp of this action (password reminding and token generation)
+                db_query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE user_id = ". $s['user_id']);
 
 			} else { //other type of auth...
                                 $auth = array_search($s['password'], $auth_ids) or 1;

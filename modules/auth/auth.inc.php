@@ -622,7 +622,7 @@ function process_login()
         global $warning, $nom, $prenom, $email, $statut, $is_admin, $language,
                $langInvalidId, $langAccountInactive1, $langAccountInactive2,
                $langNoCookies, $langEnterPlatform, $urlServer, $urlAppend, $langHere,
-               $auth_ids, $inactive_uid;;
+               $auth_ids, $inactive_uid, $langTooManyFails;
 
 	if (isset($_POST['uname'])) {
 		$posted_uname = autounquote(canonicalize_whitespace($_POST['uname']));
@@ -637,38 +637,47 @@ function process_login()
 	if (isset($_POST['submit'])) {
 		unset($_SESSION['uid']);
 		$_SESSION['user_perso_active'] = false;
-		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-                                    FROM user 
-                                    WHERE username COLLATE utf8_bin = " . quote($posted_uname);
-		$result = db_query($sqlLogin);
-		// cas might have alternative authentication defined
 		$auth_allow = 0;
-		$exists = 0;
-		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
-			// Disallow login when cookies are disabled
-			$auth_allow = 5;
-		} elseif ($pass === '') {
-			// Disallow login with empty password
-			$auth_allow = 4;
+		
+		$r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > 15 and DATE_SUB(CURRENT_TIMESTAMP, interval 5 minute) < last_fail");
+		if (mysql_num_rows($r) > 0) {
+		    $auth_allow = 8;
+		    sleep(5); // penalize
 		} else {
-			while ($myrow = mysql_fetch_assoc($result)) {
-				$exists = 1;
-				if(!empty($auth)) {
-					if (in_array($myrow['password'], $auth_ids)) {
-						// alternate methods login
-						$auth_allow = alt_login($myrow, $posted_uname, $pass);
-					} else {
-						// eclass login
-						$auth_allow = login($myrow, $posted_uname, $pass);
-					}
-				} else {
-					$tool_content .= "<br>$langInvalidAuth<br>";
-				}
-			}
+		
+    		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
+                                        FROM user 
+                                        WHERE username COLLATE utf8_bin = " . quote($posted_uname);
+    		$result = db_query($sqlLogin);
+    		// cas might have alternative authentication defined
+    		$exists = 0;
+    		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
+    			// Disallow login when cookies are disabled
+    			$auth_allow = 5;
+    		} elseif ($pass === '') {
+    			// Disallow login with empty password
+    			$auth_allow = 4;
+    		} else {
+    			while ($myrow = mysql_fetch_assoc($result)) {
+    				$exists = 1;
+    				if(!empty($auth)) {
+    					if (in_array($myrow['password'], $auth_ids)) {
+    						// alternate methods login
+    						$auth_allow = alt_login($myrow, $posted_uname, $pass);
+    					} else {
+    						// eclass login
+    						$auth_allow = login($myrow, $posted_uname, $pass);
+    					}
+    				} else {
+    					$tool_content .= "<br>$langInvalidAuth<br>";
+    				}
+    			}
+    		}
+    		if (!$exists and !$auth_allow) {
+    			$auth_allow = 4;
+    		}
 		}
-		if (!$exists and !$auth_allow) {
-			$auth_allow = 4;
-		}
+		
 		if (!isset($_SESSION['uid'])) {
 			switch($auth_allow) {
 				case 1: $warning .= ""; 
@@ -679,7 +688,8 @@ function process_login()
                                         "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=".
                                         token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>";
 					break;
-				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>"; 
+				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
+				    increaseLoginFailure();
 					break;
 				case 5: $warning .= "<p class='alert1'>$langNoCookies</p>"; 
 					break;
@@ -687,6 +697,8 @@ function process_login()
 					break;
 				case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
 					break;
+				case 8: $warning .= "<p class='alert1'>$langTooManyFails</p>";
+				    break;
 				default:
 					break;
 			}
@@ -705,7 +717,8 @@ function process_login()
 				$next = autounquote($_POST['next']);
 			} else {
 				$next = '';
-			}                        
+			}
+			resetLoginFailure();
 			redirect_to_home_page($next);	
 		}                
 	}  // end of user authentication
@@ -995,3 +1008,21 @@ function shib_cas_login($type)
 		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
 	}
 }
+
+
+function increaseLoginFailure()
+{
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $ip ."'");
+    
+    if (mysql_num_rows($r) > 0 )
+    	db_query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '". $ip ."'");
+    else
+    	db_query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '". $ip ."', 1, CURRENT_TIMESTAMP)");
+}
+
+function resetLoginFailure()
+{
+    db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY) >= last_fail"); // de-penalize only after 24 hours
+}
+

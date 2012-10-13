@@ -212,6 +212,7 @@ db_query("CREATE TABLE user (
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
       whitelist TEXT,
+      last_passreminder DATETIME DEFAULT NULL,
       PRIMARY KEY (user_id),
       KEY `user_username` (`username`)) $charset_spec");
 
@@ -219,6 +220,13 @@ db_query("CREATE TABLE admin (
       idUser mediumint unsigned  NOT NULL default '0',
       `privilege` int(11) NOT NULL default '0',
       UNIQUE KEY idUser (idUser)) $charset_spec");
+
+db_query("CREATE TABLE login_failure (
+    id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ip varchar(15) NOT NULL,
+    count tinyint(4) unsigned NOT NULL default '0',
+    last_fail datetime NOT NULL,
+    UNIQUE KEY ip (ip)) $charset_spec");
 
 db_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
