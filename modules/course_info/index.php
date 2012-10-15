@@ -41,6 +41,29 @@ $tree = new hierarchy();
 load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
 
 $nameTools = $langModifInfo;
 
@@ -178,7 +201,7 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    <tr>
 		<td>&nbsp;</td>
-		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' /></td>
+		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' id='password' />&nbsp;<span id='result'></span></td>
 	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>

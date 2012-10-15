@@ -50,9 +50,11 @@ $lang_editor = langname_to_code($language);
 load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
+load_js('pwstrength.js');
 
 $head_content .= <<<hContent
 <script type="text/javascript">
+/* <![CDATA[ */
 
 function checkrequired(which, entry, entry2) {
 	var pass=true;
@@ -75,12 +77,31 @@ function checkrequired(which, entry, entry2) {
 	}
 }
 
+    var lang = {
+hContent;
+    $head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+    $head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+    $head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+    $head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+    
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
 </script>
 hContent;
 
 $titulaire_probable = "$_SESSION[prenom] $_SESSION[nom]";
 
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'titulaires');\">";
+if (isset($_POST['back1']) or !isset($_POST['visit']))
+    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'titulaires');\">";
+else
+    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"checkrequired(this, 'title', 'titulaires');\">";
 
 if (get_config("betacms")) { // added support for betacms
 	// Import from BetaCMS Bridge
@@ -234,7 +255,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
                 <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
                 <td>
                 $langPrivOpen<br />
-                <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' /></div>
+                <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
                 </td>
                 </tr>
                 <tr class='smaller'>
