@@ -27,6 +27,7 @@ require_once 'include/baseTheme.php';
 $nameTools = $langCheckTools;
 
 load_js('jquery');
+load_js('check.js');
 $head_content .= <<<hContent
 <style type="text/css">
 
@@ -181,7 +182,6 @@ li.mpdf {
 
 </style>
 
-<script type="text/javascript" src="$urlAppend/js/check.js"></script>
 <script type="text/javascript">
 /* <![CDATA[ */
 
