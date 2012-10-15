@@ -25,6 +25,32 @@ include '../../include/sendMail.inc.php';
 require_once '../../include/phpass/PasswordHash.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
+
 $reqtype = '';
 $all_set = register_posted_variables(array(
         'auth' => true,
@@ -179,7 +205,7 @@ $langEmail : $emailhelpdesk
         <tr><th class='left'><b>$langUsername:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langPass:</b></th>
-            <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' /></td></tr>
+            <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' id='password' />&nbsp;<span id='result'></span></td></tr>
         <tr><th class='left'><b>$langEmail:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langEmailVerified:</b></th>
@@ -244,4 +270,4 @@ $langEmail : $emailhelpdesk
         $tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

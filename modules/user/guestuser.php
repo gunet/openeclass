@@ -28,6 +28,32 @@ include '../../include/baseTheme.php';
 $nameTools = $langAddGuest;
 $navigation[] = array ("url" => "user.php?course=$code_cours", "name" => $langAdminUsers);
 
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
+
 $default_guest_username = $langGuestUserName . $currentCourseID;
 
 if (isset($_POST['submit'])) {
@@ -69,8 +95,12 @@ if (isset($_POST['submit'])) {
         </tr>
         <tr>
         <th class='left'>$langPass:</th>
-        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' /></td>
+        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' id='password' /></td>
         <td class='smaller'>$langAskGuest</td>
+        </tr>
+        <tr>
+        <th class='left'></th>
+        <td colspan='2'><span id='result'></span></td>
         </tr>
         <tr>
         <th>&nbsp;</th>
@@ -83,7 +113,7 @@ if (isset($_POST['submit'])) {
         </fieldset>
         </form>";
 }
-draw($tool_content, 2);
+draw($tool_content, 2, null, $head_content);
 
 
 // Create guest account or update password if it already exists

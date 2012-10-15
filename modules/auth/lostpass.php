@@ -36,6 +36,32 @@ include('../../include/sendMail.inc.php');
 require_once '../../include/phpass/PasswordHash.php';
 $nameTools = $lang_remind_pass;
 
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
+
 // Password reset link is valid for 1 hour = 3600 sec
 define('TOKEN_VALID_TIME', 3600);
 
@@ -87,7 +113,7 @@ if (isset($_REQUEST['u']) and
         <table class='tbl'>
         <tr>
            <th>$langNewPass1</th>
-           <td><input type='password' size='40' name='newpass' value=''></td>
+           <td><input type='password' size='40' name='newpass' value='' id='password'/>&nbsp;<span id='result'></span></td>
         </tr>
         <tr>
            <th>$langNewPass2</th>
@@ -185,4 +211,4 @@ if (isset($_REQUEST['u']) and
 	</form>";
 }
 
-draw($tool_content, 0);
+draw($tool_content, 0, null, $head_content);

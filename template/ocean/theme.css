@@ -1404,3 +1404,46 @@ dt {
 .gaugebar_fg {
         background-color: #4F76A3;
 }
+
+/* -- Gauge bar colors -- */
+.gaugebar_bg {
+        background-color: #E6E6E6;
+}
+.gaugebar_fg {
+        background-color: #4F76A3;
+}
+
+/* -- Password strength indicator -- */
+.pwstrength {
+	font-weight: bold;
+	font-size: 13px;
+	color: #666;
+	padding: 3px;
+	margin-left: 4px;
+}
+
+.pwstrength span {
+	padding: 6px;
+	margin: 0px;
+}
+
+.pwstrengthShort {
+	background: #edabab;
+	border: 1px solid #bc0000;
+}
+
+.pwstrengthWeak {
+	background: #edabab;
+	border: 1px solid #bc0000;
+}
+
+.pwstrengthGood {
+	background: #ede3ab;
+	border: 1px solid #bc9f00;
+}
+
+.pwstrengthStrong {
+	background: #d3edab;
+	border: 1px solid #73bc00;
+}
+

@@ -52,6 +52,32 @@ if (get_config('close_user_registration')) {
 	draw($tool_content,0);
 	exit;
 }
+
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
  
 $lang = langname_to_code($language);
 
@@ -85,7 +111,7 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>
-	<td colspan='2'><input type='password' name='password1' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='password' name='password1' size='30' maxlength='30' autocomplete='off' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span>&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langConfirmation:</th>
@@ -299,4 +325,4 @@ if (!isset($_POST['submit'])) {
 	}
 } // end of registration
 
-draw($tool_content,0);
+draw($tool_content,0, null, $head_content);

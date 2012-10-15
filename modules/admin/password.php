@@ -40,6 +40,32 @@ $nameTools = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array ('url' => 'edituser.php', 'name'=> $langEditUser);
 
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
+
 check_uid();
 $tool_content = "";
 
@@ -62,7 +88,7 @@ if (!isset($_POST['changePass'])) {
   <table class='tbl' width='100%'>
   <tr>
     <th class='left' width='160'>$langNewPass1:</th>
-    <td><input type='password' size='40' name='password_form' value='' /></td>
+    <td><input type='password' size='40' name='password_form' value='' id='password' />&nbsp;<span id='result'></span></td>
   </tr>
   <tr>
     <th class='left'>$langNewPass2:</th>
@@ -97,7 +123,7 @@ if (!isset($_POST['changePass'])) {
 	exit();
 }
 
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);
 
 // display message
 function mes($message, $urlText, $type) {

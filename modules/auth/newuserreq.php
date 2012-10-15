@@ -26,6 +26,32 @@ require_once '../../include/phpass/PasswordHash.php';
 $nameTools = $langNewUser;
 $navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
 
+// javascript
+load_js('jquery');
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+<script type="text/javascript">
+/* <![CDATA[ */
+
+    var lang = {
+hContent;
+$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
+$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
+$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
+$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= <<<hContent
+    };
+
+    $(document).ready(function() {
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+    });
+
+/* ]]> */
+</script>
+hContent;
+
 // Initialise $tool_content
 $tool_content = "";
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
@@ -150,7 +176,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langPass&nbsp;:</th>
-	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass()."></td>
+	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass()." id='password'/>&nbsp;<span id='result'></span></td>
 	  </tr>
 	  <tr>
     	<th class='left'>$langEmail</th>
@@ -185,7 +211,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 
 } // end of if 
 
-draw($tool_content,3, 'auth');
+draw($tool_content,3, 'auth', $head_content);
 
 // -----------------
 // functions
