@@ -53,7 +53,7 @@ if ($userid and isset($_GET['h']) and
         if (isset($_POST['submit'])) {
                 $body = isset($_POST['body'])? $_POST['body']: '';
                 $tool_content .= "<table width='99%'><tbody><tr><td>";
-                $to = get_config('email_helpdesk');
+                $to = $GLOBALS['emailhelpdesk'];                
                 $emailsubject = $langAccountActivate;
                 $emailbody = "$langAccountActivateMessage\n\n$firstname $lastname\ne-mail: $email\n" .
                         "{$urlServer}modules/admin/edituser.php?u=$userid\n\n$m[comments]: $body\n";
