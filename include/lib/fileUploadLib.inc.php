@@ -715,7 +715,8 @@ function isWhitelistAllowed($filename)
  */
 function fetchUserWhitelist($uid)
 {
-    $q = db_query("SELECT whitelist from user where user_id = ". intval($uid));
+    global $mysqlMainDb;
+    $q = db_query("SELECT whitelist FROM `$mysqlMainDb`.user WHERE user_id = ". intval($uid));
     $r = mysql_fetch_array($q);
     return $r['whitelist'];
 }
