@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-05 09:35:59
+// Generated 2012-10-16 09:32:00
 
 $langCourseAccessHelp = "
 <ul>
@@ -39,8 +39,8 @@ Separate paragraphs with one or more new lines&nbsp;
 <ul>
 <li>Footnote</li>
 <code>$$ footnote text$$</code>&nbsp;
-<li>Preformated text</li>
-Begin each line of preformated text with a blank space &nbsp;
+<li>Preformatted text</li>
+Begin each line of preformatted text with a blank space &nbsp;
 <li>Cite block</li>
 <code>&gt;</code> or <code>;:</code> before each line &nbsp;
 <li>Horizontal line</li>
@@ -84,10 +84,72 @@ $langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc;
-$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p><p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p> <p>Documents are presented in alphabetical order.<br><b>Tip : </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p> <p>You can :</p> <h4>Upload a document</h4> <ul> <li>Select the file on your computer by clicking on 'Upload file'.</li> <li>In the following form use 'Browse'button to search for the file in your computer.</li> <li>Launch the upload with the 'Upload'button  </li> </ul> <h4>Rename a document (a directory)</h4> <ul> <li> Click on the icon 'Rename'(<img src='../../template/classic/img/edit.gif'width=10 height=10 align=baseline>). </li> <li> Type the new name in the field (top left) </li> <li> Validate by clicking 'Rename'button. </li> </ul> <h4> Delete a document (or a directory) </h4> <ul> <li> Click on the icon 'Delete'(<img src='../../template/classic/img/delete.gif'width=10 height=10 align=baseline>)</li> </ul> <h4> Make a document (or directory) invisible to students </h4> <ul> <li> Click on the icon 'Visible/invisible'(<img src='../../template/classic/img/visible.gif'width=10 height=10 align=baseline>)  </li> <li> After that the document (or directory) still exists but it is not visible by students anymore. </li> <li> To make it invisible back again, click on the icon 'Visible/invisible'(<img src='../../template/classic/img/invisible.gif'width=14 height=10 align=baseline>  </li> </ul> <h4> Add or modify a comment to a document (or a directory) </h4> <ul> <li> Click on the 'Comment'icon *(<img src='../../template/classic/img/information.gif'width=10 height=10 align=baseline>)</li> <li> Type new comment in the corresponding field (top right). </li> </ul> <hr> <p> You can organise your content through filing. For this: </p> <h4> <b> Create a directory </b> </h4> <ul> <li> Click on the link 'Create a directory'. </li> <li> Type the name of your new directory in the corresponding field (top left) </li> <li> Validate by clicking 'Create directory'button. </li> </ul> <h4> Move a document (or directory) </h4> <ul> <li> Click on the icon 'Move'(<img src='../../template/classic/img/move_doc.gif'width=10 height=10 align=basename>) </li> <li> Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word 'root'means you cannot go upper than that level in the document tree of the server). </li> <li> Validate by clicking on 'Move'</li> </ul> </p>";
+$langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p>
+<p>You can upload files of any type (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern must be that your students have the corresponding software to read them. Some file types may contain viruses, it is your responsibilty not to upload virus contaminated files. It is a worthwhile precaution to check documents with antivirus software before uploading them.</p>
+<p>Documents are presented in alphabetical order.<br><b>Tip: </b>If you want to present them in a different order, numerate them: 01, 02, 03...</p>
+<p>You can:</p>
+
+<h4>Upload a document</h4>
+<ul> 
+<li>Select the file on your computer by clicking on the 'Upload file' link.</li> 
+<li>In the form displayed click on 'Browse' to search for the file in your computer.</li> 
+<li>Launch the upload with the 'Upload' button.</li> 
+</ul> 
+
+<h4> Delete a document (or a directory)</h4> 
+<ul> 
+<li>Click on the 'Delete'(<img src='../../template/classic/img/delete.gif'width=10 height=10 align=baseline>) icon.</li> 
+</ul> 
+
+<h4>Download a directory</h4>
+<ul>
+<li>Click on the 'Download directory'(<img src='$themeimg/save_s.png' width=16 height=16>) icon, in order to download to your computer one of the documents' directories of your course.</li>
+</ul>  
+
+<h4> Move a document (or a directory)</h4> 
+<ul> 
+<li>Click on the 'Move'(<img src='../../template/classic/img/move_doc.gif'width=10 height=10 align=basename>) icon.</li> 
+<li>Choose the directory into which you want to move the document (or directory) from the corresponding selection list (top left) (note: 'Root directory' means you cannot go upper than that level in the document tree of the server.</li> 
+<li>Confirm action by clicking on 'Move'.</li> 
+</ul> 
+
+<h4>Rename a document (or a directory)</h4> 
+<ul> 
+<li>Click on the icon 'Rename'(<img src='../../template/classic/img/edit.gif'width=10 height=10 align=baseline>).</li> 
+<li>Type the new name in the field (top left).</li> 
+<li>Confirm action by clicking 'Rename' button. </li> 
+</ul>
+
+<h4> Add or modify a comment to a document (or a directory) </h4> 
+<ul> 
+<li>Click on the 'Comment' icon *(<img src='../../template/classic/img/information.gif'width=10 height=10 align=baseline>).</li> 
+<li>Type a new comment in the corresponding field and click on 'Add/Modify Comment'.</li> 
+</ul>
+
+<h4> Make a document (or directory) invisible to students </h4> 
+<ul> 
+<li>Click on the icon 'Visible/invisible'(<img src='../../template/classic/img/visible.gif'width=10 height=10 align=baseline>).</li> 
+<li>After this action the document (or directory) still exists but it is not visible by students anymore. </li> 
+<li>To make it visible back again, click on the icon 'Visible/invisible'(<img src='../../template/classic/img/invisible.gif'width=14 height=10 align=baseline>.</li> 
+</ul> 
+
+<h4><b>Create a directory</b></h4>
+<p>You can organise your content in directories. To create a new directory: </p>
+<ul>
+<li>Click on the 'Create directory' link</li>
+<li>Type a name for the new directory.</li>
+<li>Click on 'Create directory'.</li>
+</ul>
+
+<h4><b>View the available disk space</b></h4>
+<ul>
+<li>Click on 'View available disk space'</li>
+<li>Information on the used disk space, the usage percentage, as well as the total available disk space is presented in this section.</li>
+</ul>    
+</p>";
 $langDoc_studentContent = "<p>You can download documents or a directory by clicking on the document/directory name.</p> 
         <h4>Directory download</h4>
-        <p>If you wish to dowload the entire documents' directory of a course on your computer, you may click on the <img src='$themeimg/save_s.png' width=16 height=16> icon.</p>";
+        <p>If you wish to download the entire documents' directory of a course on your computer, you may click on the <img src='$themeimg/save_s.png' width=16 height=16> icon.</p>";
 $langHUser = "Users Administration";
 $langUserContent = "<p>Τhis section allows user management and presents information on course users (e.g. the total number of registered users, the number of teachers, etc.).</p>
         <p>To add a user to your course click on 'Add: one user'. In the form presented enter a name or username and click on 'Search'. Then click on 'Register user to course' to register him/her in your course.</p>
@@ -124,101 +186,60 @@ To enter the questionnaire and provide answers to it click on its' title.
 Once you have answered all questions click 'Submit' to complete the process.</p>";
 $langHExercise = "Exercises";
 $langHExercise_student = $langHExercise;
-$langExerciseContent = "<p>The exercise tool allows you to create exercises that will contains as many questions as
-you l
-ike.<br><br>
-There are various types of answers available for the creation of your questions :<br><br>
+$langExerciseContent = "
+<p>The exercise tool allows presentation and management of all course exercises.</p>
+<p>To create an exercise click on the 'New exercise' option. Type the exercise title and description in the displayed form. You can select the exercise type of display (questions in one page or one question per page), the time interval that the exercise will be active (start and end date) and the number of repetitions the student is allowed to make. Other actions include: select to display the exercise questions in a random order through the 'Random questions' selection, as well as select whether correct answers and scoring  will be displayed or hidden after the exercise.
+Click on 'Create' when you finish with all your modifications.</p>
+<p>To set the exercise questions, click on 'New Question'. You can create one of the following types of questions
 <ul>
-  <li>Multiple choice (Unique answer)</li>
-  <li>Multiple choice (multiple answers)</li>
+  <li>Multiple Choice (Single Answer)</li>
+  <li>Multiple Choice (Multiple Answers)</li>
   <li>Matching</li>
   <li>Fill in the blanks</li>
-</ul>
-An exercise gathers a certain number of questions under a common theme.</p>
-<hr>
-<b>Exercise creation</b>
-<p>In order to create an exercise, click on the link &quot;New exercise&quot;.<br><br>
-Type the exercise name, as well as an optional description of it.<br><br>
-You can also choose between 2 exercise types :<br><br>
-<ul>
-  <li>Questions on an unique page</li>
-  <li>One question per page (sequential)</li>
-</ul>
-and tell if you want or not questions to be randomly sorted at the time of the exercise running.<br><br>
-Then, save your exercise. You will go to to the question administration for this exercise.</p>
-<hr>
-<b>Question adding</b>
-<p>You can now add a question into the exercise previously created. The description is optional, as well as the
-picture
- that you have the possibility of linking to your question.</p>
+  <li>True / False</li>
+</ul></p>
+<p>Type the question title and optionally enter a description and an image. Click on 'Ok' when you finish.</p>
 <hr>
 <b>Multiple choice</b>
 <p>This is the famous MAQ (multiple answer question) / MCQ (multiple choice question).<br><br>
-In order to create a MAQ / MCQ :<br><br>
+In order to create a MAQ / MCQ :<br>
 <ul>
-  <li>Define answers for your question. You can add or delete an answer by clicking on the right button</li>
-  <li>Check via the left box the correct answer(s)</li>
-  <li>Add an optional comment. This comment won't be seen by the student till this one has replied to the
-question</li>
-  <li>Give a weighting to each answer. The weighting can be any positive or negatif integer, or zero</li>
-  <li>Save your answers</li>
+  <li>Define answers for your question. You can add or delete an answer by clicking on the right button ('+answer', '-answer')</li>
+<li>Type the answer text</li>  
+<li>Check via the left box the correct answer(s)</li>
+  <li>Add an optional comment. This comment won't be seen by the student till the moment he replies to the question</li>
+  <li>Give a weighting to each answer. The weighting can be any positive or negative integer, or zero</li>
+  <li>Click on 'Create' to save your answers</li>
 </ul></p>
 <hr>
 <b>Fill in the blanks</b>
-
-<p>This allows you to create a text with gaps. The aim is to let student find words that you have removed from
-the text.<br><br>
-To remove a word from the text, and so to create a blank, put this word between brackets [like this].<br><br>
-Once the text has been typed and blanks defined, you can add a comment that will be seen by the student when it
-replies to the question.<br><br>
-Save your text, and you will enter the next step that will allow you to give a weighting to each blank. For
-example, if the question worths 10 points and you have 5 blanks, you can give a weighting of 2 points to each
-blank.</p>
+<p>This allows you to create a text with gaps. The aim is to let student find words that you have removed from the text.<br>
+To remove a word from the text, and so to create a blank, put this word between brackets [like this].<br>
+Click on 'Next' to save your text, and you will enter the next step that allows you to give a weighting to each blank. For example, if the question worths 10 points and you have 5 blanks, you can give a weighting of 2 points to each blank.<br>
+Click on 'Create' to finish.</p>
 <hr>
 <b>Matching</b>
-<p>This answer type can be chosen so as to create a question where the student will have to connect elements from
-an unit U1 with elements from an unit U2.<br><br>
-It can also be used to ask students to sort elements in a certain order.<br><br>
-First define the options among which the student will be able to choose the good answer. Then, define the
-questions which will have to be linked to one of the options previously defined. Finally, connect via the drop-down menu
-elements from the first unit with those of the second one.<br><br>
-Notice: Several elements from the first unit can point to the same element in the second unit.<br><br>
+<p>This answer type can be chosen so as to create a question where the student will have to connect elements from one unit U1 with elements from another unit U2.<br>
+It can also be used to ask students to sort elements in a certain order.<br>
+First define the options among which the student will be able to choose the correct answer. Then, define the questions which will have to be linked to one of the options previously defined. Finally, connect via the drop-down menu elements from the first unit with those of the second one.<br>
+Notice: Several elements from the first unit can point to the same element in the second unit.<br>
 Give a weighting to each correct matching, and save your answer.</p>
 <hr>
-<b>Exercise modification</b>
-<p>In order to modify an exercise, the principle is the same as for the creation. Just click on the picture <img
-src=\"
-../../template/classic/img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to modify, and follow instructions
-above.</p>
+<b>True / False</b>
+<p>A student is given only two choices for an answer in this kind of question: True or False.<br>
+Check via the left box whether the Question text is true or false<br>
+Add an optional comment. This comment won't be seen by the student till the moment he replies to the question<br>
+Give a weighting to the answer. The weighting can be any positive or negative integer, or zero<br>
+Click on 'Create' to save your answers.</p>
 <hr>
-<b>Exercise deleting</b>
-<p>In order to delete an exercise, click on the picture <img src=\"../../template/classic/img/delete.gif\" border=\"0\"
-align=\"absmiddle\"> beside the exercise to delete.</p>
-<hr>
-<b>Exercise enabling</b>
-<p>So as for an exercise to be used, you have to enable it by clicking on the picture
-<img src=\"../../template/classic/img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the exercise to enable.</p>
-<hr>
-<b>Exercise running</b>
-<p>You can test your exercise by clicking on its name in the exercise list.</p>
-<hr>
-<b>Random exercises</b>
-
-<p>At the time of an exercise creation / modification, you can tell if you want questions to be drawn in a random
-order among all questions of the exercise.<br><br>
-That means that, by enabling this option, questions will be drawn in a different order each time students will
-run the exercise.<br><br>
-If you have got a big number of questions, you can also choose to randomly draw only X questions among all
-questions available in that exercise.</p>
-<hr>
-<b>Question pool</b>
-<p>When you delete an exercise, questions of its own are not removed from the data base, and can be reused into a
-new exercise, via the question pool.<br><br>
-The question pool also allows to reuse a same questions into several exercises.<br><br>
-By default, all questions of your course are shown. You can show the questions related to an exercise, by chosing
-this one in the drop-down menu &quot;Filter&quot;.<br><br>
-Orphan questions are questions that don't belong to any exercise.</p>";
-$langExercise_studentContent = "<p>The excercises first page displays all available exercises. To take an exercise click on the exercise title. After completing it, you will be presented with your score, along with info on the maximum number of attempts allowed or any time limit set for the exercise.";
+<p>You can import questions from another exercise through the 'Get Existing Question' link. Select the question you want to reuse and click on the <img src='$themeimg/enroll.png' width=16 height=16> icon.</p>
+<p>Click on <img src='$themeimg/edit.png' width=16 height=16> icon in order to modify an exercise. 
+Click on <img src='$themeimg/delete.png' width=16 height=16> icon in order to delete an exercise.
+Click on <img src='$themeimg/visible.png' width=16 height=16> icon to make an exercise visible or invisible to students.
+Click on 'Question Pool' to list all questions (from all exercises).
+Finally, you can see the results for each exercise in HTML or CSV format by clicking on the corresponding link.
+</p>";
+$langExercise_studentContent = "<p>The exercises first page displays all available exercises. To take an exercise click on the exercise title. After completing it, you will be presented with your score, along with info on the maximum number of attempts allowed or any time limit set for the exercise.";
 $langHWork = "Assignments";
 $langHWork_student = $langHWork;
 $langWorkContent = "<p>Selecting the 'New assignment' option allows you to create an assignment. Type the assignment title, define the submission deadline and optionally add a comment. Then select the assignment type: either 'Individual submissions' (single user assignment) or 'Group submissions' (group assignment). Note that before  you select the 'Group submissions' option, you have to activate the 'Groups' module first.</p>
@@ -262,7 +283,7 @@ $langAgendaContent = "<p>You can add an event in the Agenda, by clicking on the 
 $langAgenda_studentContent = "<p>The Agenda module informs you about the most important events of the course set by the teacher in a chronological order (conferences, meetings, evaluations, etc).</p>";
 $langHLink = "Links";
 $langHLink_student = $langHLink;
-$langLinkContent = "<p>Within this section all links added to your coure are displayed. 
+$langLinkContent = "<p>Within this section the links added to your course, are displayed. 
 Click on 'Add link' to add a new link. Type the URL, the name and (optionally) a small description for the link. You can also select the category that the link will belong to. Click on the 'Add' button to add the link.</p>
 <p>You can organize your links by grouping them in categories. You can add a category by clicking on 'Add category'. Type a name and a description for the category and click on 'Add category' to submit your input.</p>
 <hr>
@@ -271,14 +292,14 @@ Click on 'Add link' to add a new link. Type the URL, the name and (optionally) a
   <li>Click on the <img src='$themeimg/edit.png' width=16 height=16> icon to modify a link.</li>
   <li>Click on the <img src='$themeimg/delete.png' width=16 height=16> icon to delete a link.</li>
   <li>Click on the <img src='$themeimg/up.png' width=16 height=16> and 
-          <img src='$themeimg/down.png' width=16 height=16> icons to alter the order of the links' presentation. </li>.
+          <img src='$themeimg/down.png' width=16 height=16> icons to alter the order of the links' presentation.</li>
  </ul>";
 $langLink_studentContent = "<p>All useful Internet resources - links defined by the course teacher are presented here.</p>";
 $langHAnnounce = "Announcements";
 $langHAnnounce_student = $langHAnnounce;
 $langAnnounceContent = "<p>You can add announcements in your course by clicking on the 'Add announcement' link. 
  Then you can type a title and a text body for the announcement at the form displayed.
- If you want to  send the announcement (via email) to all registered students, tick the corresponding box.
+ If you want to send the announcement (via email) to all registered students, tick the corresponding box.
  The procedure is completed by clicking on 'Add'.</p>
         <p>
         <ul>
@@ -318,11 +339,17 @@ $langConference_studentContent = "<p>Though this module you can communicate in r
 Type your message and click on <img src='$themeimg/arrow.png' width=16 height=16>.</p>";
 $langHVideo = "Multimedia";
 $langHVideo_student = $langHVideo;
-$langVideoContent = "
-<p>Courses might contain multimedia files. Multimedia files can be distributed either via downloading or streaming. When distributed via downloading there is a significant amount of time for waiting until downloading finishes in order to playback the file. When distributed via streaming there is no wait time and playback starts immediately.</p>
-<p><b><u>Instructor Options</u></b></p>
+$langVideoContent = "<p>Courses might contain multimedia files. You can upload multimedia files in several formats like mpeg, avi, flv, etc.<br>
+To add a multimedia file in your course, click on the 'Multimedia' tool on the left menu and then select the 'Add multimedia file' option.
+Browse your computer for the file to upload, type a title and optionally a description and click on 'File Upload'.</p>
+<p>Select the 'Add video link' option to add video links to your courses. Type the link URL (file on the streaming server you want to add), the title and optionally a description and click on 'Add'.</p>        
 <p>
-You can upload multimedia files in several formats like mpeg, avi, flv etc. Choose \"Add\" and type the path to the video file you want or click on \"Browse\" to locate it visually. Optionally you can fill in the \"Title\" & \"Description\" fields. Click on \"Add\" in order to upload the file to the platform. Additionally you can add video links to your courses. Choose \"Add video link\" and then type the link to the file on the streaming server you want to add in the \"URL\" field. Optionally you can fill in the \"Title\" & \"Description\" fields. When finished click on \"Add\". Once added you can modify any of the fields by choosing \"Modify\" or you can delete a file or link by choosing \"Delete\". If there is a streaming server integrated with the platform the process of video files addition is transparent. There is no extra care or action to be done in order the files to be streamed from the streaming server. Keep in mind that video files and links will be available all the time if someone uses the direct url to them.
+    <ul>
+	<li>Click on <img src='$themeimg/save.png' width=16 height=16> icon to save a multimedia file.</li>
+        <li>Click on <img src='$themeimg/edit.png' width=16 height=16> icon to modify a multimedia file.</li>
+        <li>Click on <img src='$themeimg/delete.png' width=16 height=16> icon to delete a multimedia file.</li>
+        <li>Click on <img src='$themeimg/links_on.png' width=16 height=16> icon to open a multimedia file in a pop-up window.</li>
+    </ul>
 </p>";
 $langVideo_studentContent = "<p>It is a module presenting multimedia educational material. There are two choices, multimedia file or link to video that is stored in a VOD Server (Video on Demand) Server. These two choices are transparent for the students. Every video has a title and a short description.
 </p>";
@@ -475,58 +502,21 @@ $langCourseAccessHelp.
 <p>Please note that all information entered above can be modified at a later stage through the 'Course Administration' tool.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
-$langWikiContent = "<p>To create a new Wiki</p> <ul> <li>Click on the 'Create a new Wiki' link. Then enter the Wiki properties:</li> <br>
-<li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p>  <p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p>  <p>To get the list of the last modified pages click on the link 'Recent changes'.</p>
-
-<h4>Basic syntax</h4>
-<p>Creating wiki pages and links between them</p>
-<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or to create a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. Automatically the Wiki Word <em>MyPage</em> will be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;;</p>
-<p><strong>Wiki links</strong> : Wiki links are like Hyperlinks (see below) except that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
-<ul>Hyperlinks
-<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
-<ul>Image inclusion
-<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
-You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one &nbsp;</li></ul>
-<ul>Link to an image
-<li>same as Hyperlinks but put a 1 in fifth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the image itself</li></ul>
-<p>Layout</p>
+$langWikiContent = "
+<p>To create a new Wiki click on the 'Create a new Wiki' link. Then enter a title and description for the Wiki and click on 'Save'.</p>
+<p>A series of actions is provided to you. More specifically: </p>
 <ul>
-<li><strong>Italic</strong>: surround your text with two single quotes <code>\'\'text\'\'</code>&nbsp;</li>
-<li><strong>Bold</strong>: surround your text with three single quotes underscores <code>\'\'\'text\'\'\'</code>&nbsp;</li>
-<li><strong>Underline</strong>: surround your text with two underscores <code>__text__</code>&nbsp;</li>
-<li><strong>Stroke</strong>: surround your text with two minus symbols <code>--text--</code>&nbsp;</li>
-<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
-<li>List</li>
-line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
-<li>Paragraph</li>
-Separate paragraphs with one or more new lines&nbsp;
+<li><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, 
+you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis for the current course.</li>
+<li><b>Edit properties</b> (<img src='$themeimg/edit.png' align='absmiddle'>). Allows you to change the title and description details of a Wiki.</li>
+<li><b>Delete.</b> To delete a Wiki, click on icon (<img src='$themeimg/delete.png' width=16 height=16>) next to its name.</li>
 </ul>
+For each Wiki page you can select to edit the page content or see a list of the page previous revisions.</p>
 
-<h4>Advanced syntax</h4>
-<ul>
-<li>Footnote</li>
-<code>$$ footnote text$$</code>&nbsp;
-<li>Preformated text</li>
-begin each line of preformated text with a blank space&nbsp;
-<li>Cite block</li>
-<code>&gt;</code> or <code>;:</code> before each line&nbsp;
-<li>Horizontal line</li>
-<code>----</code>&nbsp;
-<li>Forced line break</li>
-<code>%%%</code>&nbsp;
-<li>Acronym</li>
-<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
-<li>Inline cite</li>
-<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
-</ul>
-</ul>";
+$langWikiSyntaxHelp";
 $langWiki_studentContent = "The Wiki module is a new collaboration tool that allows registered users (teachers and students) to create and edit Web page content.
 <p>A series of actions is provided to you. More specifically: </p>
-<p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 
-<img src='$themeimg/wiki.png' align='absmiddle'> 'Main page' to view the Wiki main page, you can click on 
-<img src='$themeimg/book.png' align='absmiddle'> 'All pages' to view a list of all Wiki pages, 
-or click on <img src='$themeimg/list.png' align='absmiddle'> 'List of Wiki' to view a list with all Wikis.</p>
-<p>You can also select to edit the current wiki page you are viewing or see a list of the page's previous revisions.</p>
+<p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis.</p>
 
 $langWikiSyntaxHelp";
 $langHAddCourseUnitscontent = "Add course unit content";
@@ -624,8 +614,8 @@ Click on icon <strong>Delete</strong> to <strong>delete</strong> an E-Book.</p>
 For accomplishing this, click on the course unit you want to link and from the available tools select <strong>'Add e-book'</strong>.
 From the displaying form select the desired E-Book section.
 After that click on <strong>'Add selection'</strong>.</p>";
-$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertex</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format, can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections . The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
-<p>Click from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
+$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
+<p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
 $langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
 You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
 Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
@@ -640,7 +630,7 @@ $langInfocoursContent = "
 $langCourseAccessHelp
 </p>
 <p>You can select the language in which the course messages will be presented.</p>
-<p>Click on  'Submit' when you finish with all modifications.</p>
+<p>Click on 'Submit' when you finish with all modifications.</p>
 <p>Other actions:
 <ul>
 <li><b>Archive this course:</b> You can create a backup file for the course and then download it and save it locally on your computer. In case you want to recover the course content you have to contact the platform administrator.</li>
