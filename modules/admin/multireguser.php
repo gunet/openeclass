@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
                                         }
                                 }
                                 $nom = isset($info['last'])? $info['last']: '';
-                                $prenom = isset($info['first'])? $info['last']: '';
+                                $prenom = isset($info['first'])? $info['first']: '';
                                 if (!isset($info['username'])) {
                                         $info['username'] = create_username($newstatut,
                                                                             $facid,
