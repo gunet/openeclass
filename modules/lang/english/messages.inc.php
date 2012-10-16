@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-16 09:32:00
+// Generated 2012-10-16 10:18:34
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1454,9 +1454,9 @@ $m['prof'] = "$langTeacher";
 $m['mailprof'] = "To register to this course you need to send an email to the ".$langsTeacher." by clicking ";
 $m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
-$titreBloc = array("Course Content", "Educational Activities", "Books",
-"Human Resources", "Evaluation Methods / Exams", "Supplementary Information");
-$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
+$titreBloc = array("Course Content (Syllabus)", "Objectives / Overall Aims", "Study Materials / Reading List", 
+    "Education and Teaching Methods", "Assessment Methods / Exams", "Recommended Prerequisites", "Supplementary Information");
+$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modify portfolio view";
 $langMyPersoLessons = "MY COURSES";
 $langMyPersoDeadlines = "MY DEADLINES";
@@ -2876,3 +2876,8 @@ $langMultiDelUserConfirm = "This will also delete all users' trace data, such as
 $langMultiDelUserData = "Usernames";
 $langMultiDelUserInfo = 'Please enter a list of usernames (one line per user) you wish to delete. Lines beginning with # are ignored.';
 $langWikiUrlImage = "Image URL";
+$langTooManyFails = "You have made too many failed attempts. You must wait 5 minutes till the next attempt.";
+$langPwStrengthTooShort = "Too short";
+$langPwStrengthWeak = "Weak";
+$langPwStrengthGood = "Good";
+$langPwStrengthStrong = "Strong";
