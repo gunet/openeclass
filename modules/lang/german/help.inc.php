@@ -1,8 +1,59 @@
 <?php
 
 // Message file for language de
-// Generated 2012-09-26 13:29:18
+// Generated 2012-10-17 09:14:02
 
+$langCourseAccessHelp = "
+<ul>
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
+</ul>
+";
+$langWikiSyntaxHelp = "
+<h4>Basic syntax</h4>
+<p>Creating wiki pages and links between them</p>
+<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. The Wiki Word <em>MyPage</em> will automatically be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;</p>
+<p><strong>Wiki links</strong>: Wiki links are like Hyperlinks (see below) apart from the fact that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
+<ul>Hyperlinks
+<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
+<ul>Image inclusion
+<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
+You can also use the syntax of Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, so it is better to consider using the preceding one &nbsp;</li></ul>
+<ul>Link to an image
+<li>same as Hyperlinks but put a 1 as the fifth argument to avoid uploading an image and get a hyperlink to the image instead. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of displaying the image itself</li></ul>
+<p>Layout</p>
+<ul>
+<li><strong>Italic</strong>: enclose your text in two straight single quotes <code>\'\'text\'\'</code>&nbsp;</li>
+<li><strong>Bold</strong>: enclose your text in three straight single quotes <code>\'\'\'text\'\'\'</code>&nbsp;</li>
+<li><strong>Underline</strong>: enclose your text in two underscores <code>__text__</code>&nbsp;</li>
+<li><strong>Stroke</strong>: enclose your text in two minus symbols <code>--text--</code>&nbsp;</li>
+<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
+<li>List</li>
+line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
+<li>Paragraph</li>
+Separate paragraphs with one or more new lines&nbsp;
+</ul>
+<h4>Advanced syntax</h4>
+<ul>
+<li>Footnote</li>
+<code>$$ footnote text$$</code>&nbsp;
+<li>Preformatted text</li>
+Begin each line of preformatted text with a blank space &nbsp;
+<li>Cite block</li>
+<code>&gt;</code> or <code>;:</code> before each line &nbsp;
+<li>Horizontal line</li>
+<code>----</code>&nbsp;
+<li>Forced line break</li>
+<code>%%%</code>&nbsp;
+<li>Acronym</li>
+<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
+<li>Inline cite</li>
+<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
+</ul>
+</ul>
+<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langWindowClose = "Fenster schließen";
 $langHDefault = 'Hilfe ist nicht verfügbar';
 $langDefaultContent = '<p>Es ist kein Hilfe-Text verfügbar für die Seite der Plattform, die Sie 
@@ -45,60 +96,8 @@ nicht angezeigt werden wird.</p>
 <p>Die Beschreibung eines Forums kann die Liste der Mitglieder, dessen Zweck, eine Tätigkeit oder 
 ein Thema usw beinhalten.</p><p>Der Link 'Deaktiviereng' / 'Aktivierung' verschiebt die Foren 
 von den aktiven zu den inaktiven Werkzeugen und umgekehrt.</p>";
-$langHInit = "Startseite";
-$langInitContent = "<p class='helptopic'>Sie befinden sich auf der Startseite der Plattform 
-Open eClass. Um die Plattform zu benutzen, geben Sie ihren Benutzernamen und ihr Passwort ein. Falls 
-Sie sich nicht an ihre persönlichen Daten erinnern können, klicken Sie auf den Link 'Haben Sie ihr Passwort vergessen?' 
-und geben Sie in dem Formular, welches erscheinen wird, ihre e-mail Adresse an (welche Sie bei der 
-Registriereung an der Plattform angegeben hatten), so dass Ihnen diese Daten geschickt werden 
-können.</p>
-<p class='helptopic'>Falls Sie Student sind und kein Benutzerkonto haben, klicken Sie auf den Link 
-'Studenten Registrierung', um ein Benutzerkonto zu erhalten. Falls Sie ein Benutzerkonto mit Rechten 
-von 'Dozent' erhalten möchten, klicken Sie auf 'Dozenten Registrierung', um den Antrag auf 
-Registrierung eines Dozenten auszufüllen.</p>
-<p class='helptopic'>Für weitere Informationen bzgl der Funktionalität der Plattform konsultieren 
-Sie die entsprechenden Benutzerhandbücher.</p>";
 $langHInit_student = $langHInit;
 $langInit_studentContent = $langInitContent;
-$langHPortfolio = "Benutzer Portfolio";
-$langPortfolioContent = "<p>Auf dieser Seite werden die Kurse angezeigt, bei denen Sie sich 
-registriert haben (als Student) oder die Sie erzeugt haben (als Dozent). Sie können an dem von 
-Ihnen gewählten Kurs teilnehmen, indem Sie den entsprechenden Titel auswählen.</p>
-
-<p>Mittels der Links des Menus können Sie sich registrieren oder deregistrieren von anderen Kursen, 
-welche Sie belegt haben. Sie können die Daten ihres Profils wie Name, Passwort und bevorzugte 
-Sprache ändern sowie sich die Ankündigungen und den Kalender der Kurse ansehen.</p>
-<p> In jeder Einheit, neben jedem Kurs in der Spalte Aktionen gibt es das 
-Icon (<img style='border:0px;' src='template/classic/img/tools.png' width=16 height=16 align=basename border='0'></img>)
-. Je nach Zugriffsrechten des Benutzers sind unterschiedliche Funktionen erlaubt.";
-$langHPortfolio_student = $langHPortfolio;
-$langPortfolio_studentContent = $langPortfolioContent;
-$langHcourse_home = 'Hauptseite des Kurses';
-$langHcourse_home_student = $langHcourse_home;
-$langcourse_home_studentContent = '<p>Sie befinden sich auf der Hauptseite des Kurses. Von den 
-Menupunkten auf der linken Seite des Bildschirms, können Sie übergehen auf diejenigen Subsysteme, 
-welche von den Dozenten des Kurses aktiviert wurden.</p>';
-$langcourse_homeContent = '<p class="helptopic">Sie befinden sich auf der Hauptseite des Kurses. 
-Von den Menupunkten auf der linken Seite des Bildschirms, können Sie übergehen auf diejenigen 
-Subsysteme, zu denen Sie die Lehrmaterialien des Kurses hinzufügen können. Die aktiven Werkzeuge 
-stehen auch den Studenten / Besuchern zur Verfügung, jedoch die inaktiven Werkzeuge sind nur für 
-die Dozenten sichtbar.</p>
-<p class="helptopic">Von den Werkzeugen des Administrators können Sie die von Ihnen gewünschten 
-Subsysteme aktivieren oder deaktivieren, die registrierten Benutzer verwalten, unterschiedliche 
-Optionen der Kurse ändern (wie Titel, Zugangskontrolle usw) sowie Statistiken zur Benutzung des 
-Kurses erhalten.</p>
-<p class="helptopic">Damit die Elemente (Detaildaten) des Kurses geändert / hinzugefügt werden 
-können, wird das Icon (<img src="../../template/classic/img/edit.png" width=10 height=10 align=basename></img>)
-verwendet und danach erscheint eine Bildschirmmaske zur Eingabe / Änderung der Daten.</p>
-
-<p class="helptopic"> Der Kurs kann zur besseren Strukturierung in Kurseinheiten eingeteilt werden. 
-Damit Sie eine Kurseinheit erzeugen, klicken Sie auf den Link "Kurseinheit hinzufügen". Falls schon 
-Kurseinheiten hinzugefügt worden sind, werden diese unter dem Titel "Kurseinheiten" angezeigt und 
-neben Ihnen befinden sich die Icons Korrektur, Löschen und Ändern der Sichtbarkeit (sichtbar / 
-unsichtbar). Falls mehr als eine Kurseinheit vorhanden ist, dann erscheinen kleine Pfeile zum 
-Ändern der Reihenfolge. Die Inhalte jeder Kurseinheit werden in einer getrennten Bildschirmmaske 
-festgelegt, welche erst nach der Auswahl der entsprechenden Kurseinheit erscheint.</p>
-';
 $langHDoc = "Dokumente";
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>Das Subsystem 'Dokumente'ist in seiner Funktionalität ähnlich dem 
@@ -522,15 +521,6 @@ der Plattform verwenden, zu verändern.</p>
 <li>Falls Sie es wünschen, können Sie den Benutzernamen und das Passwort ändern.</li>
 <li>Zum Schluß klicken Sie auf die Schaltfläche 'Ändern', damit die Änderungen in der Datenbank 
 abgespeichert werden.</li>";
-$langHImport = "Webseite Hochladen";
-$langImportContent = "<p>Sie können bei Bedarf eine zum Kurs relevante Datei hochladen. Diese Datei 
-wird auf dem Server von Open eClass abgespeichert. Es wird ein Link auf diese Datei erzeugt werden 
-im Linken Menu des Kurses und dieser Link wird ein neues Fnster im Web-Browser des Benutzers öffnen.</p>
-<p>Um das zu erreichen müssen Sie auf die Schaltfläche 'Lokalisierung' (Browse) klicken, danach 
-die Datei aussuchen, welche Sie hochladen möchten, daraufhin einen Titel im Eingabefeld 
-'Titel der Seite' eingeben und schließlich auf 'Hinzufügen' klicken.</p>
-<p>Der Link auf diese Datei kann deaktiviert und gelöscht werden durch das Werkzeug 
-'Verwaltung von Werkzeugen'.</p>";
 $langHModule = "Einen externen Link hinzufügen";
 $langModuleContent = "<p>Falls Sie einen Link von der Startseite des Kurses auf andere (im Internet 
 vorhandene) Webseiten (oder auf Ihre persönlichen Webseiten) hinzufügen möchten, dann geben Sie den 
@@ -551,22 +541,6 @@ des Links 'Webseite hochladen'. Falls es einen externen Weblink mit für die Pla
 Inhalten gibt, dann kann dieser festgelegt werden mit Hilfe des Links 
 'Hinzufügen eines externen Links im linken Menu'.</p>";
 $langHInfocours = "Administration des Kurses";
-$langInfocoursContent = "<p>Sie können einige der Detailinformationen des Kurses ändern, wie den 
-Namen des Dozenten, den Titel und den Zugriff auf den Kurs. Nach Vollendung der Änderungen klicken 
-Sie auf 'Änderungen abschicken'.
-</p>
-<p><u>Zugang zum Kurs:</u></p>
-<p><b>Offener Kurs :</b>jeder kann Zugang zum Kurs haben auch ohne Benutzerkonto.</p>
-<p><b>Registrierung erforderlich :</b>nur Benutzer mit Benutzerkonto auf der Plattform haben Zugang.</p>
-<p><b>Geschlossener Kurs :</b>nur die Benutzer haben Zugang zum Kurs, die in der Liste der Benutzer des Kurses sind</p>
-<p><u>Andere Aktionen :</u></p>
-<p><b>Sicherheitskopie des Kurses:</b>Sie können eine Sicherheitskopie des Kurses erzeugen und 
-diese lokal auf Ihrem Rechner speichern. Für den Fall, dass Sie den Inhalt wiederherstellen möchten, 
-müssen Sie sich an den Administrator der Plattform wenden.</p>
-<p><b>Löschen des Kurses :</b> Beim Löschen des Kurses wird dessen Inhalt und die Benutzer des 
-Kurses gelöscht (aber die Benutzer werden nicht von der Plattform gelöscht).</p>
-<p><b>Erneuerung des Kurses :</b>Sie können selektiv einige der Daten des Kurses löschen, um den 
-Kurs für ein neues akademisches Jahr vorzubereiten.</p>";
 $langHConference = "Telearbeit";
 $langHConference_student = $langHConference;
 $langConferenceContent = "<p>Sie können Nachrichten mit allen am Kurs registrierten Benutzern 
@@ -904,10 +878,6 @@ $langWiki_studentContent = "<p>Das Wiki-System ist ein Kollaborationswerkzeug zu
 der aktuellen Version der Open eClass Plattform integriert ist. Es bietet den Teilnehmern des 
 Kurses (Dozenten und Studenten) die Möglichkeit, gemeinsam den Inhalt von unterschiedlichen Texten 
 zu bearbeiten.</p>";
-$langHAddCourseUnits = "Kurseinheit hinzufügen / bearbeiten";
-$langAddCourseUnitsContent = "<p class='helptopic'>Um eine neue Kurseinheit einzufügen, geben Sie 
-einen Titel und eine kurze Beschreibung der Kurseinheit ein. Sobald Sie dieses abgeschlossen haben, 
-klicken Sie auf die Schaltfläche 'Hinzufügen', damit eine neue Kurseinheit hinzugefügt wird.</p>";
 $langHAddCourseUnitscontent = "Inhalt einer Kurseinheit hinzufügen";
 $langAddCourseUnitscontentContent = "<p class='helptopic'>Auf dieser Bildschirmseite werden Inhalt 
 oder Ressourcen der Kurseinheit hinzugefügt. Die Art der Ressourcen, die hinzugefügt werden können, 
@@ -922,156 +892,124 @@ benutzt werden.</p>";
 $langHGlossary = "Glossary";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "<p>
-With module 'glossary' course administrator can define definitions for various keywords in his course.
-</p>
-<p>You can choose if you want to display term definitions in course pages, clicking in 'Settings' and choose 'Display defintions in course pages'. After that clicking in 'submit'. An informative message is displayed<br />
-  <br />
-  <strong><u>Add glossary term</u></strong><br />
-To add a new glossary term</p>
 <ul>
-  <li>Click in 'Add term'. A form is displayed.  </li>
-  <li>Fill in the term, definition and (optionally) a url </li>
-  <li>Click in 'Submit' </li>
-</ul>
-<p>An informative message is displayed.<br />
-  <br />
-  <u><strong>Delete term</strong></u><br />
-  You can delete a term by clicking in icon with symbol red 'X'. Confirmation is required.<br />
-  <br />
-  <strong><u>Download glossary terms in </u></strong><strong><u>csv</u>format</strong><br />
- Course administrator can download glossary terms in csv (comma seperated values) format. <br />
+  <li>To add a glossary term for your course click on the 'Add new term' option. In the 'Add new term' form, type the term, the term definition, optionally a reference URL or/and some additional notes. Click on 'Submit' to complete with the process.</li>
+  <li>To add a new category (for term classification) click on 'Add category'. Type the category name and optionally a description in the next page and click on 'Submit'.</li>
+ <li>Extra configuration settings for the glossary can be found at the 'Config settings' page.</li>
+ <li>Selection of the 'Terms in csv form' allows you to select the appropriate encoding and download all terms in csv format.</li>
+ </ul>
 </p>
-";
+ <p>
+ <ul>
+ <li>Click on the <img src='$themeimg/edit.png' width=16 height=16> icon to edit a term.</li>
+ <li>Click on <img src='$themeimg/delete.png' width=16 height=16> to delete a term.</li>
+</ul>
+</p>";
 $langGlossary_studentContent = "
 <p>Glossary displays terms and / or definitions for various keywords in course.</p>
 <p>Glossary terms are displayed by hovering the mouse over a term. Also, sometimes, glossary term includes a hyperlink.</p>";
-$langHEBook = "Ebook";
+$langHEBook = "E-Book";
 $langHEBook_student = $langHEBook;
-$langEBookContent = "<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
-<p>To create an ebook, you must create some html pages. But you must keep in mind the following rules</p>
+$langEBookContent = "
+<p>The 'E-Book' is a set of hypertex content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format, can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box.</p>
+<hr>
+<h2>&nbsp;&nbsp;E-Book prerequisites (Step 1)</h2>
+<p>To create a new e-book, you must create some html pages (files) that will be the e-book contents. But you must keep in mind the following rules (specifications):</p>
 <ol>
-  <li>Every html page must include a subsection of ebook.</li>
-  <li>Html page title must be the title of section</li>
-  <li>All html files with pictures and css must be stored in a zip file file.</li>
+  <li>Every html page must include one of the e-book subsections (this relates with the e-book navigation).</li>
+  <li>The title of every html page should include the exact title of the included subsection (the titles will be used by the system for the creation of navigation links within the e-book).</li>
+  <li>All html files along with their corresponding pictures and css files must be stored in a zip file.</li>
 </ol>
+<hr>
 <h2>&nbsp;&nbsp;E-Book creation (Step 2)</h2>
 
 <ol>
-  <li>Enter the course as administrator </li>
-  <li>From the right menu, click in <strong>E-Book</strong></li>
-  <li>Choose <strong>Create</strong> and in the displaying form
+  <li>Enter the platform as course administrator. </li>
+  <li>Select the <strong>'E-Book'</strong> module</li>
+  <li>Click on <strong>'Create'</strong>'
     <ul>
-      <li>fill in the <strong>Title</strong> of E-Book and</li>
-      <li>browse the zip file of html files.</li>
+
+      <li>Fill in the <strong>Title</strong> of the E-Book and</li>
+      <li>Browse your computer and locate the zip file with the html pages/files you have created.</li>
     </ul>
   </li>
-    <li>Click in <strong>Submit</strong>.</li>
- <br />
+    <li>Click on <strong>'Submit'</strong>.</li>
+  <li>If the e-Book module is not activated (within the active tools), <strong>activate</strong> it through the 'Activation' link. <br />
 
   </li>
 </ol>
-
+<hr>
 <h2>&nbsp;&nbsp;Structure of E-Book (Step 3)</h2>
 
-<p>After step 2 a form is displayed with a table of html files found in zip file. Here we'll define the sctructure of E-Book:</p>
+<p>The previous step (Step 2) displays a screen with options and a table with the html page-files you uploaded within the zip file. You can define the structure of the electronic book, as follows:</p>
 
 <ol>
-  <li>First define <strong>sections</strong> of E-Book. You can add as many as you need. Define an <strong>incremental number</strong> and <strong>name</strong> of each section in field <strong>ID</strong> and <strong>Title</strong> correspondingly. </li>
+  <li>First define <strong>sections</strong> for the E-Book. You can add as many as you need. Define an <strong>incremental number</strong> and a <strong>name</strong> for each section in fields <strong>ID</strong> and <strong>Title</strong> correspondingly.</li>
 
-  <li>After that you must format  <strong>subsections</strong> of E-Book. You must
+  <li>After that you have to define the E-Book <strong>subsections</strong>. To do that you have to:
     <ul>
-      <li><strong>correspond</strong> each uploaded file with the previous defined sections.</li>
-      <li> define in each subsection the incremental number of each subsection in section<br />
-</li>
+      <li><strong>map</strong> each uploaded page-file with the previously defined sections and</li>
+      <li>define for each subsection the incremental number of the subsection within the parent section. <br />
+
+      <em><u>Note</u>: the platform automatically suggests as title for each subsection the title of the corresponding files (these names can be modified at a later stage).</em></li>
     </ul>  
 </li>
-  <li>After that click in <strong>Submit</strong>. </li>
-  <li>An informative message will be displayed.</li>
+  <li>After the pagefile and section/subsection pairing is complete click on <strong>'Submit'</strong>. </li>
+  <li>The system informs you on the successful update and the e-Book is now available in the specified structure.</li>
 </ol>
+
+<hr>
 <h2>&nbsp;&nbsp;E-Book browsing</h2>
 
-<p>Click in the desired E-Book name</p> 
+<p>Select the E-Book module from the left menu and within the presented list, click on the name of the E-Book you wish to open.</p> 
 
-<h2>&nbsp;&nbsp;Modify - Delete of E-Book</h2>
-<p>If you want to modify an E-Book click in icon <strong> Modify </strong>. <br />
-<br />
-In order to <strong>delete</strong> an E-Book click in icon <strong>Delete</strong>.</p>
+<hr>
+
+<h2>&nbsp;&nbsp;Modify - Delete E-Book</h2>
+<p>If you want to modify an E-Book click on the <strong>'Modification'</strong>icon. <br />
+Click on icon <strong>Delete</strong> to <strong>delete</strong> an E-Book.</p>
+<hr>
 <h2>&nbsp;&nbsp;Administration of html files</h2>
-<p>If you want to administrate the uploaded html files in an E-Book then  </p>
+<p>If you want to administrate the uploaded html files in an E-Book,</p>
 <ul>
-  <li>click in icon <strong> Modification </strong>,</li>
-  <li>choose <strong>File administration</strong>. A page with all uploaded html files will be displayed</li>
-  <li>you can administrate files and directories as in module 'Documents'.</li>
-
+  <li>click on icon <strong>Modification</strong>,</li>
+  <li>select the <strong>File administration</strong> option. A page with all uploaded html files for this E-Book will be displayed,</li>
+  <li>you can manage files and directories in this module as in module 'Documents'.</li>
 </ul>
+<hr>
 <h2>&nbsp;&nbsp;Linking E-Book with course units</h2>
-<p>You can link a course unit with a <strong>section</strong> of <strong>E-Book</strong>. For accomplishing this click in course unit and from the available tools choose <strong>Add E-Book</strong>. From the displaying form choose the desired E-Book section. After that click in <strong>Add selection</strong>. </p>
-";
-$langEBook_studentContent = "
-<h2>&nbsp;&nbsp;Browse</h2>
-<p>Click from left menu 'Ebook'. A list of ebook will be displayed. To browse an ebook just click in it.</p>
-";
-$langFor_studentContent = "
-<p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p> If you want to participate in a forum just click at its title. Then choose the desired topic by clicking into it. If you want to reply to a post click in 'Reply'. Type your message and then click in 'Submit'.
-</p>
-<p>If you want to be notified by email for new posts in a specific topic or forum or forum category then click in (<img src='$themeimg/email.png' width=16 height=16>) . </p>";
+<p>You can link a specific course unit with the corresponding <strong>section</strong> of the <strong>E-Book</strong>. 
+For accomplishing this, click on the course unit you want to link and from the available tools select <strong>'Add e-book'</strong>.
+From the displaying form select the desired E-Book section.
+After that click on <strong>'Add selection'</strong>.</p>";
+$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
+<p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
+$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
+You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
+Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
+;
 $langHMyAgenda = "My Agenda";
-$langMyAgendaContent = "<p>In 'My agenda' all events taken from 'Agenda' are displayed in a graphical calendar.</p>
-";
-$langCourseAccessHelp = "
-<ul>
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add to or remove users from the course.</li>
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Course is visible and accessible <b>only</b> to its administrators, while it is not listed for other users even if they are in the course's users list.</li>
-</ul>
-";
+$langMyAgendaContent = "$langAgenda_studentContent";
 $langHPersonalStats = 'Personal Statistics';
-$langPersonalStatsContent = '
-<p>This module presents a number of useful information related to <b>course access statistics</b>. You can see the number of visits to each course in graph form, a table with total number and duration of visits per course, as well as a list of your logins and logouts from the platform with the date and time of each one.</p>';
-$langWikiSyntaxHelp = "<p>To create a new Wiki</p> <ul> <li>Click on the  'Create a new Wiki' link. Then enter the Wiki properties:</li> <br>
-<li><b>Wiki Title</b>: choose a title for the Wiki</li> <li><b>Wiki Description</b>: choose a description for the Wiki</li> <li><b>Access control management</b>: set the Wiki access control by checking/uncheking the box (see below)</li> </ul> <p>To enter a Wiki click on the Wiki title from the list.</p> <p>To change the properties of a Wiki click on the icon <img src='../../template/classic/img/edit.gif' align='absmiddle' border='0'>.</p>  <p>To delete a Wiki click on the icon <img src='../../template/classic/img/delete.gif' align='absmiddle' border='0'></p>  <p>To get the list of the last modified pages click on the link 'Recent changes'.</p>
-
-<h4>Basic syntax</h4>
-<p>Creating wiki pages and links between them</p>
-<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or to create a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. Automatically the Wiki Word <em>MyPage</em> will be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;;</p>
-<p><strong>Wiki links</strong> : Wiki links are like Hyperlinks (see below) except that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
-<ul>Hyperlinks
-<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
-<ul>Image inclusion
-<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
-You can use the syntax as Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, consider to use the preceding one &nbsp;</li></ul>
-<ul>Link to an image
-<li>same as Hyperlinks but put a 1 in fifth argument to avoid image recognition and get an hyperlink to an image. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of display the image itself</li></ul>
-<p>Layout</p>
-<ul>
-<li><strong>Italic</strong>: surround your text with two single quotes <code>\'\'text\'\'</code>&nbsp;</li>
-<li><strong>Bold</strong>: surround your text with three single quotes underscores <code>\'\'\'text\'\'\'</code>&nbsp;</li>
-<li><strong>Underline</strong>: surround your text with two underscores <code>__text__</code>&nbsp;</li>
-<li><strong>Stroke</strong>: surround your text with two minus symbols <code>--text--</code>&nbsp;</li>
-<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
-<li>List</li>
-line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
-<li>Paragraph</li>
-Separate paragraphs with one or more new lines&nbsp;
-</ul>
-
-<h4>Advanced syntax</h4>
-<ul>
-<li>Footnote</li>
-<code>$$ footnote text$$</code>&nbsp;
-<li>Preformated text</li>
-begin each line of preformated text with a blank space&nbsp;
-<li>Cite block</li>
-<code>&gt;</code> or <code>;:</code> before each line&nbsp;
-<li>Horizontal line</li>
-<code>----</code>&nbsp;
-<li>Forced line break</li>
-<code>%%%</code>&nbsp;
-<li>Acronym</li>
-<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
-<li>Inline cite</li>
-<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
-</ul>
-</ul>
-";
+$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
+$langInfocoursContent = "<p>Sie können einige der Detailinformationen des Kurses ändern, wie den 
+Namen des Dozenten, den Titel und den Zugriff auf den Kurs. Nach Vollendung der Änderungen klicken 
+Sie auf 'Änderungen abschicken'.
+</p>
+<p><u>Zugang zum Kurs:</u></p>
+<p><b>Offener Kurs :</b>jeder kann Zugang zum Kurs haben auch ohne Benutzerkonto.</p>
+<p><b>Registrierung erforderlich :</b>nur Benutzer mit Benutzerkonto auf der Plattform haben Zugang.</p>
+<p><b>Geschlossener Kurs :</b>nur die Benutzer haben Zugang zum Kurs, die in der Liste der Benutzer des Kurses sind</p>
+<p><u>Andere Aktionen :</u></p>
+<p><b>Sicherheitskopie des Kurses:</b>Sie können eine Sicherheitskopie des Kurses erzeugen und 
+diese lokal auf Ihrem Rechner speichern. Für den Fall, dass Sie den Inhalt wiederherstellen möchten, 
+müssen Sie sich an den Administrator der Plattform wenden.</p>
+<p><b>Löschen des Kurses :</b> Beim Löschen des Kurses wird dessen Inhalt und die Benutzer des 
+Kurses gelöscht (aber die Benutzer werden nicht von der Plattform gelöscht).</p>
+<p><b>Erneuerung des Kurses :</b>Sie können selektiv einige der Daten des Kurses löschen, um den 
+Kurs für ein neues akademisches Jahr vorzubereiten.</p>";
+$langHGroupSpace = "User Groups";
+$langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this group'.
+        Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
+        You may send an email to all users within a group by clicking on 'Email to group' selection.
+         You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
