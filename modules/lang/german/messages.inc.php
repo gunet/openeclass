@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2012-10-17 09:14:02
+// Generated 2012-10-17 12:14:47
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -1408,7 +1408,7 @@ $m['mailprof'] = "Um sich für diesen Kurs einzuschreiben, müssen Sie eine e-ma
 $m['here'] = "hier";
 $m['unsub'] = "Der Kurs ist geschlossen und Sie können sich nicht abmelden";
 $titreBloc = array("Kursinhalt", "Objektive Zielsetzungen", "Empfohlene Literatur", "Pädagogische- und Lehrmethodik", "Evaluierungsmethoden / Prüfungen", "Voraussetzungen", "ergänzende Angaben");
-$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
+$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Ändern der Darstellung des Portfolios";
 $langMyPersoLessons = "MEINE KURSE";
 $langMyPersoDeadlines = "MEINE ABGABEFRISTEN";
