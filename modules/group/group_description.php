@@ -20,6 +20,7 @@
 
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
