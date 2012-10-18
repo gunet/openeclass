@@ -205,7 +205,7 @@ function printPolls() {
                                         <td class='center'><a href='addpoll.php?course=$code_cours&amp;edit=yes&amp;pid=$pid'>
                                         <img src='$themeimg/edit.png' title='".q($langEdit)."' />
                                                 </a>&nbsp
-                                                ;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\">
+                                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=yes&amp;pid=$pid' onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "');\">
                                                         <img src='$themeimg/delete.png' title='".q($langDelete)."' />
                                                                 </a>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;visibility=$visibility_func&amp;pid={$pid}'>
                                                                         <img src='$themeimg/".$visibility_gif.".png' title='".q($langVisible)."' /></a></td>
