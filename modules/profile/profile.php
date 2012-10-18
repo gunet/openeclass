@@ -25,6 +25,7 @@ $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
 include '../auth/auth.inc.php';
 require_once '../../include/lib/fileUploadLib.inc.php';
+require_once '../../include/lib/pwgen.inc.php';
 $require_valid_uid = TRUE;
 
 check_uid();
@@ -196,7 +197,7 @@ if (isset($_GET['msg'])) {
                 $type = "success";
                 break;
             case 3: //pass too easy
-                $message = $langPassTooEasy.": <strong>" . create_pass() . "</strong>";
+                $message = $langPassTooEasy.": <strong>" . genPass() . "</strong>";
                 break;
             case 4: // empty fields check
                 $message = $langFieldsMissing;

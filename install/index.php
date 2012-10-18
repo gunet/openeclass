@@ -55,6 +55,7 @@ if ($lang == 'english') {
 }
 
 include "../include/lib/main.lib.php";
+require_once '../include/lib/pwgen.inc.php';
 include "install_functions.php";
 // include_messages
 include("../modules/lang/$lang/common.inc.php");
@@ -117,7 +118,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$nameForm = $langDefaultAdminName;
 	$surnameForm = $langDefaultAdminSurname;
 	$loginForm = 'admin';
-	$passForm = create_pass();
+	$passForm = genPass();
 	$campusForm = 'Open eClass';
 	$helpdeskForm = '+30 2xx xxxx xxx';
 	$institutionForm = $langDefaultInstitutionName;

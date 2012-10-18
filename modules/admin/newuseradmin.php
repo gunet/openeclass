@@ -23,6 +23,7 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once '../../include/phpass/PasswordHash.php';
+require_once '../../include/lib/pwgen.inc.php';
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 
 // javascript
@@ -205,7 +206,7 @@ $langEmail : $emailhelpdesk
         <tr><th class='left'><b>$langUsername:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langPass:</b></th>
-            <td><input class='FormData_InputText' type='text' name='password' value='".create_pass()."' id='password' />&nbsp;<span id='result'></span></td></tr>
+            <td><input class='FormData_InputText' type='text' name='password' value='".genPass()."' id='password' />&nbsp;<span id='result'></span></td></tr>
         <tr><th class='left'><b>$langEmail:</b></th>
             <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='".q($pe)."' />&nbsp;(*)</td></tr>
         <tr><th class='left'><b>$langEmailVerified:</b></th>

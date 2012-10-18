@@ -25,6 +25,7 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once '../../include/phpass/PasswordHash.php';
+require_once '../../include/lib/pwgen.inc.php';
 
 $nameTools = $langMultiRegUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
@@ -81,7 +82,7 @@ if (isset($_POST['submit'])) {
                                                                             $_POST['prefix']);
                                 }
                                 if (!isset($info['password'])) {
-                                        $info['password'] = create_pass();
+                                        $info['password'] = genPass();
                                 }
                                 $new = create_user($newstatut,
                                                    $info['username'],

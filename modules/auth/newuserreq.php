@@ -22,6 +22,7 @@ $require_admin = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once '../../include/phpass/PasswordHash.php';
+require_once '../../include/lib/pwgen.inc.php';
 
 $nameTools = $langNewUser;
 $navigation[] = array ('url' => '../admin/', 'name' => $langAdmin);
@@ -176,7 +177,7 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langPass&nbsp;:</th>
-	  <td><input type='text' class=auth_input_admin name='password' value=".create_pass()." id='password'/>&nbsp;<span id='result'></span></td>
+	  <td><input type='text' class=auth_input_admin name='password' value=".genPass()." id='password'/>&nbsp;<span id='result'></span></td>
 	  </tr>
 	  <tr>
     	<th class='left'>$langEmail</th>
