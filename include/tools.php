@@ -464,7 +464,7 @@ function adminMenu(){
 	        array_push($sideMenuImg, "arrow.png");
 	    }
 	    array_push($sideMenuText, $GLOBALS['langPHPInfo']);
-	    array_push($sideMenuLink, "../admin/phpInfo.php?to=phpinfo");
+	    array_push($sideMenuLink, "../admin/phpInfo.php");
 	    array_push($sideMenuImg, "arrow.png");
 
 	    if (isset($phpMyAdminURL))
