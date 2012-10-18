@@ -25,6 +25,7 @@ $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/phpass/PasswordHash.php';
+require_once 'include/lib/pwgen.inc.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -106,7 +107,7 @@ if (isset($_POST['submit'])) {
                                                                             $_POST['prefix']);
                                 }
                                 if (!isset($info['password'])) {
-                                        $info['password'] = create_pass();
+                                        $info['password'] = genPass();
                                 }
                                 $new = create_user($newstatut,
                                                    $info['username'],

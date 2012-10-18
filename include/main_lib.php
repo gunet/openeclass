@@ -852,22 +852,6 @@ function nice_format($date, $time = FALSE, $dont_display_time = FALSE)
         }
 }
 
-// Create a random password
-function create_pass()
-{
-	$parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
-                       'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
-                       'i', 'bi', 'fi', 'gi', 'ki', 'li', 'mi', 'xi',
-                       'o', 'bo', 'fo', 'go', 'ko', 'lo', 'mo', 'xo',
-                       'u', 'bu', 'fu', 'gu', 'ku', 'lu', 'mu', 'xu',
-                       'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
-                       'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
-        $max = count($parts) - 1;
-        $num = rand(10,499);
-        return $parts[rand(0,$max)] . $parts[rand(0,$max)] . $num;
-}
-
-
 // Returns user's previous login date, or today's date if no previous login
 function last_login($uid)
 {

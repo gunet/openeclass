@@ -31,6 +31,7 @@ header('Content-Type: text/html; charset=UTF-8');
  */
 
 require_once '../include/main_lib.php';
+require_once '../include/lib/pwgen.inc.php';
 require_once 'install_functions.php';
 
 $tool_content = '';
@@ -118,7 +119,7 @@ if (isset($_POST['welcomeScreen'])) {
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$nameForm = $langDefaultAdminName;
 	$loginForm = 'admin';
-	$passForm = create_pass();
+	$passForm = genPass();
 	$campusForm = 'Open eClass';
 	$helpdeskForm = '+30 2xx xxxx xxx';
 	$institutionForm = $langDefaultInstitutionName;
