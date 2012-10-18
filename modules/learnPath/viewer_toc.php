@@ -38,6 +38,7 @@
 */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 require_once("../../config/config.php");
 require_once("../../include/init.php");

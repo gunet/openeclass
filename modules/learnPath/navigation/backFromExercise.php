@@ -23,6 +23,7 @@
 // to click next after finishing an exercise.
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 $TOCurl = "../viewer_toc.php?course=$code_cours";

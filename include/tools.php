@@ -94,21 +94,20 @@ function getToolsArray($cat) {
 		case 'Public':
 			if (!check_guest()) {
 				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-					$result = db_query("
-                    SELECT * FROM accueil
-                    WHERE visible=1
-                    ORDER BY rubrique", $currentCourse);
+					$result = db_query("SELECT * FROM accueil
+                                                        WHERE visible=1
+                                                        ORDER BY rubrique", $currentCourse);
 				} else {
-					$result = db_query("
-                    SELECT * FROM accueil
-                    WHERE visible=1 AND lien NOT LIKE '%/user.php'
-                    AND lien NOT LIKE '%/conference/conference.php'
-                    AND lien NOT LIKE '%/work/work.php'
-			AND lien NOT LIKE '%/dropbox/index.php'
-			AND lien NOT LIKE '%/questionnaire/questionnaire.php'
-			AND lien NOT LIKE '%/phpbb/index.php'
-			AND lien NOT LIKE '%/learnPath/learningPathList.php'
-                    ORDER BY rubrique", $currentCourse);
+					$result = db_query("SELECT * FROM accueil
+                                        WHERE visible=1 AND lien NOT LIKE '%/user.php'
+                                        AND lien NOT LIKE '%/conference/conference.php'
+                                        AND lien NOT LIKE '%/work/work.php'
+                                            AND lien NOT LIKE '%/dropbox/index.php'
+                                            AND lien NOT LIKE '%/questionnaire/questionnaire.php'
+                                            AND lien NOT LIKE '%/phpbb/index.php'
+                                            AND lien NOT LIKE '%/learnPath/learningPathList.php'
+                                            AND lien NOT LIKE '%/group/group.php'
+                                        ORDER BY rubrique", $currentCourse);
 				}
 			} else {
 				$result = db_query("

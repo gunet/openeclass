@@ -54,6 +54,7 @@ require_once("../../include/lib/fileManageLib.inc.php");
 
 $require_current_course = TRUE;
 $require_help           = TRUE;
+$require_login          = TRUE;
 $helpTopic              = "Path";
 
 $TABLELEARNPATH         = "lp_learnPath";

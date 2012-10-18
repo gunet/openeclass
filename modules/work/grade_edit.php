@@ -28,6 +28,7 @@
 */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 include '../../include/baseTheme.php';
 include 'work_functions.php';

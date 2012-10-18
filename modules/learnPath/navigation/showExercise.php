@@ -32,6 +32,7 @@ require_once('../../exercice/question.class.php');
 require_once('../../exercice/answer.class.php');
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 $path2add = 3;
 include("../../../include/init.php");

@@ -44,6 +44,7 @@
 
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $path2add = 3;
 include("../../../include/init.php");
 

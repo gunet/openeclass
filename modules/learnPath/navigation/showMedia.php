@@ -20,6 +20,7 @@
 
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $path2add = 3;
 
 require_once "../../../include/init.php";

@@ -39,12 +39,10 @@
 */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 require_once("../../include/baseTheme.php");
 require_once("../../include/lib/learnPathLib.inc.php");
-
-$head_content = "";
-$tool_content = "";
 
 // the following constant defines the default display of the learning path browser
 // 0 : display eclass header and footer and table of content, and content

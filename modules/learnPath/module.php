@@ -45,6 +45,7 @@ require_once("../../include/lib/fileManageLib.inc.php");
 require_once("../../include/lib/fileUploadLib.inc.php");
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 $TABLELEARNPATH         = "lp_learnPath";
 $TABLEMODULE            = "lp_module";

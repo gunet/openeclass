@@ -55,6 +55,7 @@ require_once("../../include/lib/learnPathLib.inc.php");
 require_once("../../include/lib/fileDisplayLib.inc.php");
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 $TABLELEARNPATH         = 'lp_learnPath';
 $TABLEMODULE            = 'lp_module';

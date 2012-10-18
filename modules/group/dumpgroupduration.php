@@ -19,6 +19,7 @@
  * ======================================================================== */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 
 include '../../include/init.php';
 include 'group_functions.php';

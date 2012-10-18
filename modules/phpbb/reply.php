@@ -49,6 +49,7 @@
  * Open eClass 2.x standard stuff
  */
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 include '../../include/baseTheme.php';

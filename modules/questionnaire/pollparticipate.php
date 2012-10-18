@@ -26,6 +26,7 @@
 */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 

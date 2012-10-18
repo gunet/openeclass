@@ -20,6 +20,7 @@
 
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Conference';
 $tool_content = "";
@@ -41,11 +42,6 @@ $nameTools = $langConference;
 if (check_guest()) {
 	$tool_content .= "<p class='caution'>$langNoGuest</p>";
 	draw($tool_content, 2, 'conference');
-}
-
-if (!($uid) or !($_SESSION['uid'])) {
-	$tool_content .= "<p class=\"alert1\">$langNoAliens</p>";
-	draw($tool_content, 2);
 }
 
 $head_content = '<script type="text/javascript">
