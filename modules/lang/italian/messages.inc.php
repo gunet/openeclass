@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-05 09:36:03
+// Generated 2012-10-19 13:31:16
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -1436,8 +1436,8 @@ $m['prof'] = "$langTeacher";
 $m['mailprof'] = "Per iscriversi nel corso dovresti inviare una e-mail all' $langsTeacher cliccando su";
 $m['here'] = "qui.";
 $m['unsub'] = "Il corso è chiuso e non potrai registrarti di nuovo.";
-$titreBloc = array("Contenuto del Corso", "Attività Didattiche", "Ausiliari", "Risorse Umane", "Metodi di valutazione / esame", "Informazioni Supplementari");
-$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
+$titreBloc = array("Contenuto del Corso (Syllabus)", "Obiettivi", "Bibliografia suggerita", "Metodi di didattica e di apprendimento", "Metodi di valutazione / esame", "Prerequisiti", "Informazioni Supplementari");
+$titreBlocNotEditable = array (TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modificare la visualizzazione del portfolio";
 $langMyPersoLessons = "I MIEI CORSI";
 $langMyPersoDeadlines = "LE MIE SCADENZE";
@@ -2576,7 +2576,7 @@ $langUserDurationAccount = "Durata dei Conti degli Utenti";
 $langWikiNoContent = "La pagina Wiki non ha ancora nessun contenuto. Utilizza l'editor per aggiungere contenuto.";
 $langWrongWikiPageTitle = "Il titolo di pagina Wiki è sbagliato";
 $langInsertEBook = "e-Book";
-$langAddToCourseHome = "Aggiungere alla home page del corso";
+$langAddToCourseHome = "Visualizzato / nascosto alla home page del corso";
 $langGlossaryExpand = "Visualizzare le definizioni dei termini nelle pagine del corso";
 $langConfig = "Impostazioni";
 $langGlossaryToCsv = "Termini in formato csv";
@@ -2851,3 +2851,9 @@ $langMultiDelUserConfirm = "Con questa operazione eliminerai tutte le tracce deg
 $langMultiDelUserData = "Username";
 $langMultiDelUserInfo = "Prego, compila nell' area qui sotto, un elenco dei username - una riga per ogni utente - che desideri eliminare. Le righe che iniziano con # verranno ignorate.";
 $langWikiUrlImage = "URL immagine";
+$langTooManyFails = "Hai fatto molti tentativi non riusciti. Devi aspettare 5 minuti fino al prossimo tentativo.";
+$langPwStrengthTooShort = "Molto breve";
+$langPwStrengthWeak = "Debole";
+$langPwStrengthGood = "Buona";
+$langPwStrengthStrong = "Forte";
+$langOnlyInEnglish = "Solo in inglese";

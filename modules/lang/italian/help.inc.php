@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-05 09:36:03
+// Generated 2012-10-19 13:31:16
 
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
@@ -162,26 +162,11 @@ applicazione adatta deve essere installata per poter legere i documenti.</p>
 </ul>
 <p>Il link 'Attivare/Disattivare' raggiunge il trasferimento dei documenti dagli strumenti attivi a quelli inattivi e vice versa.</p>
 ";
-$langDoc_studentContent = "<p>il modulo 'Documenti' è uno strumento importante che ti aiuta alla
-<b>comprensione</b> della materia del corso attraverso la fornitura di
-materiale didattico. Puoi 'scaricare' archivi o cartelle o in qualsiasi formato
-(HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, ecc.). L' unica
-<b>limitazione</b> è che è necessario aver installato sul tuo computer l'
-applicazione adatta per poter leggere/riprodurre i file corrispondenti. In
-questo modulo si puoi 'scaricare' pure i file del modulo 'Collaborazione
-remota' che sono del tipo chat.2011-11-24-573.txt e contengono tutti i messaggi
-scambiati tra l' insegnante e gli studenti. Questa operazione deve essere fatta
-dall' insegnante del corso e risulta molto utile se non hai partecipato alla
-'Collaborazione remota' della data corrispondente.</p> 
-
+$langDoc_studentContent = "<p>Puoi scaricare dei file o delle cartelle cliccando sul proprio titolo.
 <h4>Scaricare la cartella intera</h4> 
-
-<p>Se desideri salvare nel tuo computer l'elenco <b>interο</b> dei documenti
-del corso, puoi premere il pulsante (<img src='$themeimg/save_s.png'
-width=16 height=16>) che si trova a destra della cartella iniziale. Per salvare
-solo una cartella particolare, premi un tale pulsante, quale si trova a destra
-della cartella che desideri.</p>
-";
+<p>Se desideri salvare nel tuo computer l'elenco interο dei documenti
+del corso, clicca sull' icona (<img src='$themeimg/save_s.png'
+width=16 height=16>).</p>";
 $langHUser = "Gestione Utenti";
 $langUserContent = "<p>Questo modulo permette la <b>gestione</b> di tutti gli utenti registrati
 alla piattaforma. Inoltre fornisce una serie di informazioni su: il numero
@@ -230,7 +215,7 @@ gestione degli utenti, come segue: </p>
 <img src='$themeimg/cunregister.png' width=16 height=16>.</p>
 ";
 $langHGuest = "Utente Ospite";
-$langGuestContent = "<p>Selezionando 'Aggiungere utente ospite' puoi aggiungere un nuovo utente ospite, i cui dati verranno resi noti a tutti gli utenti che sono iscritti al corso (o alla piattaforma). Un utente ospite, ha la possibilità di vedere la Home Page del corso in cui si è iscritto e tutti gli strumenti attivati, tuttavia non può eseguire altre operazioni, come caricare dei compiti.</p>";
+$langGuestContent = "<p>Selezionando 'Aggiungere utente ospite' puoi aggiungere un nuovo utente ospite.</p>";
 $langHQuestionnaire = "Questionario";
 $langHQuestionnaire_student = $langHQuestionnaire;
 $langQuestionnaireContent = "<p>Lo strumento 'Questionario' ti permette di <b>creare</b> sia delle domande

@@ -1964,6 +1964,7 @@ $langAdministratorForum = 'Διαχείριση Περιοχών Συζητήσ�
 $langAdministratorGroup = 'Διαχείριση Ομάδων Εκπαιδευόμενων';
 $langCreateAccount = "Δημιουργία Λογαριασμού";
 $langAllTutorials = "Γενικοί οδηγοί";
+$langOnlyInEnglish = "Μόνο στα Αγγλικά";
 
 /*********************************************************
 * opencours.php

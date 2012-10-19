@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-16 10:18:34
+// Generated 2012-10-19 13:31:12
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2881,3 +2881,4 @@ $langPwStrengthTooShort = "Too short";
 $langPwStrengthWeak = "Weak";
 $langPwStrengthGood = "Good";
 $langPwStrengthStrong = "Strong";
+$langOnlyInEnglish = "In English only";
