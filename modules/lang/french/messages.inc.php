@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-16 10:18:38
+// Generated 2012-10-19 08:18:23
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -1558,8 +1558,8 @@ $m['mailprof'] = "Pour vous inscrire au cours vous devez envoyer un mail à l'en
 $m['here'] = "ici.";
 $m['unsub'] = "Le cours est fermé et vous n'avez plus le droit de vous en désinscrire"
 ;
-$titreBloc = array("Contenu du cours", "Activités éducatives", "Supports/Manuels", "Ressources Humaines", "Modes d'évaluation / Examens", "Informations supplémentaires");
-$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
+$titreBloc = array("Contenu du cours (Syllabus)", "Objectifs", "Bibliographie à étudier", "Méthodes didactiques et pédagogiques", "Méthodes d’évaluation / Examens", "Pré-requis recommandés", "Informations supplémentaires");
+$titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modifier l'apparence du portfolio";
 $langMyPersoLessons = "MES COURS";
 $langMyPersoDeadlines = "MES DÉLAIS";
