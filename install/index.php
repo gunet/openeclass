@@ -38,8 +38,9 @@ $tool_content = "";
 if (!isset($siteName)) $siteName = "";
 if (!isset($InstitutionUrl)) $InstitutionUrl = "";
 if (!isset($Institution)) $Institution = "";
+
 // greek is the default language
-if (!isset($lang)) {
+if (!isset($_SESSION['lang'])) {
 	$_SESSION['lang'] = 'greek';
 }
 // get installation language
@@ -48,10 +49,11 @@ if (isset($_POST['lang'])) {
 }
 
 $lang = $_SESSION['lang'];
+
 if ($lang == 'english') {
-	$install_info_file = "install_info_en.php";
+	$install_info_file = "http://wiki.openeclass.org/doku.php?id=en:install_doc";
 } else {
-	$install_info_file = "install_info.php";
+	$install_info_file = "http://wiki.openeclass.org/doku.php?id=el:install_doc";
 }
 
 include "../include/lib/main.lib.php";
