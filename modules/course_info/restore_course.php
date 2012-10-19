@@ -968,7 +968,7 @@ function restore_users($course_id, $users, $cours_user)
                                              department = ".quote($data['department']).",
                                              registered_at = ".quote($data['registered_at']).",
                                              expires_at = ". quote($data['registered_at']+ $durationAccount));
-                        $userid_map[$data['userid']] = mysql_insert_id();
+                        $userid_map[$data['user_id']] = mysql_insert_id();
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserNew,
                                                  '<b>' . q($data['username']) . '</b>',
