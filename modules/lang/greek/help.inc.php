@@ -312,7 +312,7 @@ $langAgendaContent = "<p>Για την προσθήκη ενός γεγονότ�
 $langAgenda_studentContent= "<p>Παρουσιάζονται όλα τα γεγονότα του μαθήματος σας που έχουν οριστεί από τον εκπαιδευτή</p>";
 
 $langHMyAgenda = "Το ημερολόγιό μου";
-$langMyAgendaContent = "$langAgenda_studentContent";
+$langMyAgendaContent = $langAgenda_studentContent;
 
 
 // link
