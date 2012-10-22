@@ -543,13 +543,17 @@ if (!isset($_POST['submit2'])) {
         
         if ($oldversion < '2.6') {
             db_query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
-            db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
-            db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+            if (!mysql_field_exists($mysqlMainDb, 'user', 'whitelist')) {
+                    db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
+                    db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+            }
             db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', ". quote($_POST['student_upload_whitelist']) ."),
                             ('teacher_upload_whitelist', ". quote($_POST['teacher_upload_whitelist']) .")");
-            db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
-            db_query("CREATE TABLE login_failure (
+            if (!mysql_field_exists($mysqlMainDb, 'user', 'last_passreminder')) {
+                    db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
+            }
+            db_query("CREATE TABLE IF NOT EXISTS login_failure (
                 id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 ip varchar(15) NOT NULL,
                 count tinyint(4) unsigned NOT NULL default '0',
