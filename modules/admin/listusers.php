@@ -47,13 +47,13 @@ $user_type = isset($_REQUEST['user_type'])?$_REQUEST['user_type']:'';
 $auth_type = isset($_REQUEST['auth_type']) ? intval($_REQUEST['auth_type']) : '';
 $user_email = isset($_REQUEST['user_email'])?mb_strtolower(trim($_REQUEST['user_email'])):'';
 $user_registered_at_flag = isset($_REQUEST['user_registered_at_flag'])?$_REQUEST['user_registered_at_flag']:'';
+$user_registered_at = isset($_REQUEST['user_registered_at'])?$_REQUEST['user_registered_at']:'';
 $hour = isset($_REQUEST['hour'])?$_REQUEST['hour']:0;
 $minute = isset($_REQUEST['minute'])?$_REQUEST['minute']:0;
 $ord = isset($_GET['ord'])?$_GET['ord']:'';
 $limit = isset($_GET['limit'])?$_GET['limit']:0;
 $mail_ver_required = get_config('email_verification_required');
 
-$user_registered_at = '';
 if ($search == 'yes')	{ // coming from search_user.php (search with criteria)
         if (isset($_POST['date'])) {
                 $date = explode('-',  $_POST['date']);
@@ -212,6 +212,7 @@ if($countUser > 0) {
                         "&amp;user_type=".urlencode($user_type).
                         "&amp;auth_type=".urlencode($auth_type).
                         "&amp;user_registered_at_flag=".urlencode($user_registered_at_flag).
+                        "&amp;user_registered_at=".urlencode($user_registered_at).
                         "&amp;verified_mail=$verified_mail";
 
                 $qry = "SELECT user_id, nom, prenom, username, email, statut, verified_mail FROM user";
