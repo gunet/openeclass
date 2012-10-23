@@ -322,7 +322,7 @@ if ($is_editor) {
 			$nameTools = q($myrow['title']);
 			$tool_content .= $content;
 		} else {
-			$tool_content .= standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
+			$tool_content .= standard_text_escape(ellipsize($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
 		}
 		$tool_content .= "</td>";
 		

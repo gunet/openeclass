@@ -81,7 +81,7 @@ if (mysql_num_rows($result) > 0) {
           <td>
 	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
     &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
-		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
+		".standard_text_escape(ellipsize($announceArr[$i]['body'], 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
 	  </td>
 	</tr>";
 	}
