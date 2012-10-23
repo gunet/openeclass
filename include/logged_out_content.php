@@ -53,8 +53,8 @@ $qlang = ($language == "greek")? 'el': 'en';
 $sql = "SELECT `id`, `date`, `title`, `body`, `ordre` FROM `admin_announcements`
         WHERE `visible` = 'V'
 		AND lang='$qlang'
-		AND (`begin` <= CURDATE() or `begin` IS null)
-		AND (CURDATE() <= `end` or `end` IS null)
+		AND (`begin` <= NOW() or `begin` IS null)
+		AND (NOW() <= `end` or `end` IS null)
 	ORDER BY `ordre` DESC";
 $result = db_query($sql, $mysqlMainDb);
 if (mysql_num_rows($result) > 0) {
