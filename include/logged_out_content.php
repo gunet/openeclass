@@ -52,8 +52,8 @@ lCont;
 $sql = "SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
         WHERE `visible` = 1
 		AND lang='$language'
-		AND (`begin` <= CURDATE() or `begin` IS null)
-		AND (CURDATE() <= `end` or `end` IS null)
+		AND (`begin` <= NOW() or `begin` IS null)
+		AND (NOW() <= `end` or `end` IS null)
 	ORDER BY `order` DESC";
 $result = db_query($sql);
 if (mysql_num_rows($result) > 0) {
@@ -80,7 +80,7 @@ if (mysql_num_rows($result) > 0) {
           <td>
 	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
     &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
-		".standard_text_escape(ellipsize($announceArr[$i]['body'], 150, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
+		".standard_text_escape(ellipsize($announceArr[$i]['body'], 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
 	  </td>
 	</tr>";
 	}
@@ -117,7 +117,7 @@ if (!get_config('dont_display_login_form')) {
 	   <input class='Login' name='uname' size='17' /><br />
 	   $langPass <br />
 	   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
-	   <input class='Login' name='submit' type = 'submit' size = '17' value = '$langEnter' /><br />
+	   <input class='Login' name='submit' type = 'submit' size = '17' value = '".q($langEnter)."' /><br />
 	   $warning</td></tr>
 	   <tr><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p>
 	   </td>
