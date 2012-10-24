@@ -484,12 +484,12 @@ function show_edit_assignment($id)
       <th valign='top'>$m[description]:</th>
       <td>$textarea</td>
     </tr>";
-	$comments = q(trim($row['comments']));
+	$comments = trim($row['comments']);
         if (!empty($comments)) {
                 $tool_content .= "
     <tr>
       <th>$m[comments]:</th>
-      <td>" .  rich_text_editor('comments', 5, 65, $comments) .  "</td>
+      <td>" . text_area('comments', 5, 65, $comments) .  "</td>
     </tr>";
         }
 
@@ -531,7 +531,7 @@ function edit_assignment($id)
                $code_cours, $works_url, $navigation;
 
 	$navigation[] = $works_url;
-	$navigation[] = array("url"=>"$_SERVER[SCRIPT_NAME]?id=$id", "name"=> $_POST['title']);
+	$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $_POST['title']);
 
         if (!isset($_POST['comments'])) {
                 $comments = "''";
@@ -725,7 +725,7 @@ function assignment_details($id, $row, $message = null)
 		$tool_content .= "
                 <tr>
                   <th class='left'>$m[comments]:</th>
-                  <td>".q($row['comments'])."</td>
+                  <td>".nl2br(q($row['comments']))."</td>
                 </tr>";
 	}
 	$tool_content .= "
@@ -870,7 +870,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                         $tool_content .= "
                   <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>
                     <input type='hidden' name='grades_id' value='$id' />
-                    <p><div class='sub_title1'>$langSubmissions:</div><p>
+                    <div class='sub_title1'>$langSubmissions:</div>
                     <p>$num_of_submissions</p>
                     <table width='100%' class='sortable'>
                     <tr>
@@ -886,9 +886,9 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                         while ($row = mysql_fetch_array($result)) {
                                 //is it a group assignment?
                                 if (!empty($row['group_id'])) {
-                                        $subContentGroup = "$m[groupsubmit] ".
+                                        $subContentGroup = "<div>$m[groupsubmit] ".
                                           "<a href='../group/group_space.php?course=$code_cours&amp;group_id=$row[group_id]'>".
-                                          "$m[ofgroup] ".gid_to_name($row['group_id'])."</a>";
+                                          "$m[ofgroup] ".gid_to_name($row['group_id'])."</a></div>";
                                 } else {
                                         $subContentGroup = '';
                                 }
@@ -908,15 +908,14 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		    <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
 		    <td>${uid_2_name}</td>
 		    <td width='85'>" . q($stud_am[0]) . "</td>
-		    <td width='180'>$filelink</a></td>
+		    <td width='180'>$filelink</td>
 		    <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
 		    <td width='5'>
 		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
 		    </td>
 		  </tr>
 		  <tr $row_color>
-		    <td colspan='5'>
-		      <div>$subContentGroup</div>";
+		    <td colspan='5'>$subContentGroup";
                                 if (trim($row['comments'] != '')) {
                                         $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
                                                 q($row['comments']) . '</div>';
@@ -937,7 +936,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                                      nice_format($row['grade_submission_date']) . ")</i></div>";
                                 }
                                 $tool_content .= "<div style='padding-top: .5em;'><a href='$gradelink'><b>$label</b></a>
-				  <a href='$gradelink'><img src='$themeimg/$icon'></a>
+				  <a href='$gradelink'><img src='$themeimg/$icon' alt=''></a></div>
 				  $comments
 		    </td>
 		  </tr>";
