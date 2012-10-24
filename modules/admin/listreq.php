@@ -22,6 +22,9 @@ $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 include '../auth/auth.inc.php';
+include 'admin.inc.php';
+
+define('REQUESTS_PER_PAGE', 15);
 
 $head_content = '
 <script type="text/javascript">
@@ -55,12 +58,14 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
 $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
+$limit = isset($_GET['limit'])?$_GET['limit']:0;
 
 // Deal with navigation
 switch ($show) {
 	case "closed":
 		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveClosed;
+                $pagination_link = "&amp;show=closed";
 		break;
 	case "rejected":
 		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
@@ -81,24 +86,34 @@ switch ($show) {
 // -----------------------------------
 // display closed requests 
 // ----------------------------------
-if (!empty($show) and $show == 'closed') {
+if (!empty($show) and $show == 'closed') {        
 	if (!empty($id) and $id > 0) {
 		// restore request
 		$sql = db_query("UPDATE user_request set status = 1, date_closed = NULL WHERE id = $id");
 		$tool_content = "<p class='success'>$langReintroductionApplication</p>";
-	} else {
-		$tool_content .= "<table class='tbl_alt' width='100%'>";
-		$tool_content .= table_header(1, $langDateClosed_small);
- 		$sql = db_query("SELECT id, name, surname, uname, email, faculty_id,
+	} else {        
+                $result = mysql_query("SELECT * FROM user_request WHERE (status = 2 AND statut = $list_statut)");
+                $count_req = mysql_num_rows($result);
+                		
+ 		$q = "SELECT id, name, surname, uname, email, faculty_id,
                                         phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut) ORDER BY date_open DESC");
+                                        WHERE (status = 2 AND statut = $list_statut)";
+                
+                if ($count_req > REQUESTS_PER_PAGE) { // display navigation links if needed
+                        $tool_content .= show_paging($limit, REQUESTS_PER_PAGE, $count_req, $_SERVER['SCRIPT_NAME'], $pagination_link);
+                }
+                $q .= "ORDER BY date_open DESC LIMIT $limit, ".REQUESTS_PER_PAGE."";
+                
+                $sql = db_query($q);
+                $tool_content .= "<table class='tbl_alt' width='100%'>";
+		$tool_content .= table_header(1, $langDateClosed_small);
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
-	              		$tool_content .= "\n  <tr class='even'>";
+	              		$tool_content .= "<tr class='even'>";
 	            	} else {
-	              		$tool_content .= "\n  <tr class='odd'>";
+	              		$tool_content .= "<tr class='odd'>";
 	            	}
 	        	$tool_content .= "<td width='1'>
 			<img style='border:0px;' src='$themeimg/arrow.png' alt=''></td>";
@@ -114,7 +129,7 @@ if (!empty($show) and $show == 'closed') {
 			$k++;
 		}
 	}
-	$tool_content .= "\n  </table>\n";
+	$tool_content .= "</table>";
 
 // -----------------------------------
 // display rejected requests 
