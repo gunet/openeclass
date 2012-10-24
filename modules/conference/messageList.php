@@ -118,7 +118,7 @@ foreach ($fileReverse as $thisLine) {
 	if (strpos($newline, '</span>') === false) {
 		$newline .= '</span>';
 	}
- 	echo '<div><span>', $newline, "</div>\n";
+ 	echo '<div><span>'. q($newline) ."</div>\n";
 }
 echo "</body></html>\n";
 
