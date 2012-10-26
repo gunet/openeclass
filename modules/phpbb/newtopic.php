@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	$message = format_message($message);
+	$message = standard_text_escape(format_message($message));
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
@@ -144,7 +144,7 @@ if (isset($_POST['submit'])) {
 			VALUES ('$topic_id', '$forum', '$uid', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
 		$tool_content .= $langErrorEnterPost;
-		draw($tool_content, 2, '', $head_content);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	} else {
 		$post_id = mysql_insert_id();
@@ -174,7 +174,7 @@ if (isset($_POST['submit'])) {
 	// --------------------------------
 	$subject_notify = "$logo - $langNewForumNotify";
 	$category_id = forum_category($forum);
-	$cat_name = category_name($category_id);
+	$cat_name = q(category_name($category_id));
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 			WHERE (forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);

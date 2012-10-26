@@ -65,7 +65,7 @@ function checkrequired(which, entry) {
 hContent;
 		// forum go
 	if (isset($_GET['forumgo'])) {
-		$ctg = category_name($cat_id);
+		$ctg = q(category_name($cat_id));
 		$tool_content .= "
 		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
 		<fieldset>
@@ -118,9 +118,9 @@ hContent;
 		$result = db_query("SELECT cat_id, cat_title FROM catagories", $currentCourseID);
 		while(list($cat_id, $cat_title) = mysql_fetch_row($result)) {
 		if ($cat_id == $cat_id_1) {
-				$tool_content .= "\n<option value='$cat_id' selected>$cat_title</option>"; 
+				$tool_content .= "\n<option value='$cat_id' selected>".q($cat_title)."</option>"; 
 			} else {
-				$tool_content .= "\n<option value='$cat_id'>$cat_title</option>";
+				$tool_content .= "\n<option value='$cat_id'>".q($cat_title)."</option>";
 			}
 		}
 		$tool_content .= "\n</select>
@@ -137,7 +137,7 @@ hContent;
 
 	// edit forum category
 	elseif (isset($_GET['forumcatedit'])) {
-		$result = db_query("select cat_id, cat_title from catagories where cat_id='$cat_id'", $currentCourseID);
+		$result = db_query("select cat_id, cat_title from catagories where cat_id = $cat_id", $currentCourseID);
 		list($cat_id, $cat_title) = mysql_fetch_row($result);
 		$tool_content .= "
   		<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatsave=yes' method='post' onsubmit=\"return checkrequired(this,'cat_title');\">
@@ -147,7 +147,7 @@ hContent;
     		<table class='tbl' width='100%'>
     		<tr>
       		  <th>$langCat</th>
-      		  <td><input type='text' name='cat_title' size='55' value='$cat_title' /></td>
+      		  <td><input type='text' name='cat_title' size='55' value='".q($cat_title)."' /></td>
     		</tr>
     		<tr>
       		  <th>&nbsp;</th>
@@ -195,7 +195,7 @@ hContent;
 		$nameTools = $langAdd;
                 $navigation[] = array('url' => "../forum_admin/forum_admin.php?course=$code_cours",
                                       'name' => $langCatForumAdmin);
-		$ctg = category_name($cat_id);
+		$ctg = q(category_name($cat_id));
 		db_query("INSERT INTO forums (forum_name, forum_desc, forum_access, forum_moderator, cat_id)
                                  VALUES (" . autoquote($_POST['forum_name']) . ",
                                          " . autoquote($_POST['forum_desc']) . ",

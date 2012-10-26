@@ -254,13 +254,13 @@ if (mysql_num_rows($result) > 0) { // topics found
 				$image = $locked_image;
 			}
 		}
-		$tool_content .= "\n       <td width='1'><img src='$image' /></td>";
+		$tool_content .= "\n       <td width='1'><img src='$image' alt=''></td>";
 		$topic_title = own_stripslashes($myrow["topic_title"]);
                 $pagination = '';
                 $topiclink = "viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum_id";
 		if ($replies > $posts_per_page) {
                         $total_reply_pages = ceil($replies / $posts_per_page);
-			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' />";
+			$pagination .= "\n<strong class='pagination'><span>\n<img src='$posticon_more' alt=''>";
                         add_topic_link(0, $total_reply_pages);
                         if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
                                 $pagination .= "&nbsp;...&nbsp;";
@@ -284,24 +284,14 @@ if (mysql_num_rows($result) > 0) { // topics found
 			$topic_link_notify = toggle_link($topic_action_notify);
 			$topic_icon = toggle_icon($topic_action_notify);
 		}
+                $baselink = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[topic_id]&amp;";
 		$tool_content .= "\n<td class='center'>";
 		if ($is_editor) {
-			$tool_content .= "
-			<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forum=$forum_id&amp;topic_id=$myrow[topic_id]&amp;topicdel=yes' onClick='return confirmation()'>
-			<img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' />
-			</a>";
+                        $tool_content .= icon('delete', $langDelete, $baselink . 'topicdel=yes',
+                                              "onClick='return confirmation()'") . '&nbsp;';
 		}
-		if (isset($_GET['start']) and $_GET['start'] > 0) {
-			$tool_content .= "
-			<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='$themeimg/email$topic_icon.png' title='".q($langNotify)."' />
-			</a>";
-		} else {
-			$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow[topic_id]'>
-			<img src='$themeimg/email$topic_icon.png' title='".q($langNotify)."' />
-			</a>";
-		}
-		$tool_content .= "</td>\n</tr>";
+                $tool_content .= icon("email$topic_icon", $langNotify, $baselink . "topicnotify=$topic_link_notify") .
+		                 "</td>\n</tr>";
                 $i++;
 	} // end of while
 	$tool_content .= "</table>";

@@ -282,12 +282,13 @@ do {
 	  </div>
 	  <br />$message<br />
 	</td>
-	<td width='40' valign='top'>";
+	<td width='40' valign='top' class='center'>";
 	if ($is_editor) { // course admin
-		$tool_content .= "<a href='editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum'>
-		<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
-		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on' onClick='return confirmation()'>
-                        <img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a>";
+                $tool_content .= icon('edit', $langModify,
+                                "editpost.php?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum") .
+		        '&nbsp;' . icon('delete', $langDelete,
+                                "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;post_id=".$myrow["post_id"]."&amp;topic=$topic&amp;forum=$forum&amp;delete=on",
+                                "onClick='return confirmation()'");
 	}
 	$tool_content .= "</td>\n</tr>";
 	$count++;

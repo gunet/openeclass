@@ -2021,6 +2021,30 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 	}
 }
 
+// Produce HTML source for an icon
+function icon($name, $title=null, $link=null, $attrs=null, $format='png')
+{
+	global $themeimg;
+
+        if (isset($title)) {
+                $title = q($title);
+                $extra = "alt='$title' title='$title'";
+        } else {
+                $extra = "alt=''";
+        }
+
+        if (isset($attrs)) {
+                $extra .= ' ' . $attrs;
+        }
+
+        $img = "<img src='$themeimg/$name.$format' $extra>";
+	if (isset($link)) {
+		return "<a href='$link'>$img</a>";
+        } else {
+                return $img;
+	}
+}
+
 // Link for displaying user profile
 function profile_image($uid, $size, $default = FALSE)
 {

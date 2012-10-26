@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	$message = format_message($message);
+	$message = standard_text_escape(format_message($message));
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);
@@ -183,7 +183,7 @@ if (isset($_POST['submit'])) {
 	// --------------------------------
 	$subject_notify = "$logo - $langSubjectNotify";
 	$category_id = forum_category($forum);
-	$cat_name = category_name($category_id);
+	$cat_name = q(category_name($category_id));
 	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
 			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);

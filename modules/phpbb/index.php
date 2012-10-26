@@ -137,8 +137,8 @@ if ($total_categories) {
 		$forum_row[] = $forum_data;
 	}
 	for($i=0; $i < $total_categories; $i++) {
-		$title = stripslashes($categories[$i]["cat_title"]);
-		$catNum = $categories[$i]["cat_id"];
+		$title = q($categories[$i]['cat_title']);
+		$catNum = $categories[$i]['cat_id'];
 		list($action_notify) = mysql_fetch_row(db_query("SELECT notify_sent FROM forum_notify 
 				WHERE user_id = $uid AND cat_id = $catNum AND course_id = $cours_id", $mysqlMainDb));
 		if (!isset($action_notify)) {
@@ -148,29 +148,27 @@ if ($total_categories) {
 			$link_notify = toggle_link($action_notify);
 			$icon = toggle_icon($action_notify);
 		}
-		$tool_content .= "<table width='100%' class='tbl_alt'  style='margin-bottom: 20px;'>";
-		$tool_content .= "<tr class='odd'>
-		<th colspan='5'><b>$title</b></th>
-		<th width='80' class='right'>";
-		if ($is_editor) {
-			$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgo=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/add.png' title='".q($langNewForum)."' alt='".q($langNewForum)."' /></a>
-			<a href='forum_admin.php?course=$code_cours&amp;forumcatedit=yes&amp;cat_id=$catNum'>
-			<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>
-			<a href='forum_admin.php?course=$code_cours&amp;forumcatdel=yes&amp;cat_id=$catNum' onClick='return confirmation();'>
-			<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                $baselink = "forum_admin.php?course=$code_cours&amp;cat_id=$catNum&amp;";
+		$tool_content .= "<table width='100%' class='tbl_alt'  style='margin-bottom: 20px;'>" .
+                        "<tr class='odd'>
+                            <th colspan='5'><b>$title</b></th>
+                            <th width='80' class='right'>";
+                if ($is_editor) {
+                        $tool_content .= icon('add', $langNewForum, $baselink . 'forumgo=yes') . '&nbsp;' .
+                                         icon('edit', $langModify, $baselink . 'forumcatedit=yes') . '&nbsp;' .
+                                         icon('delete', $langDelete, $baselink . 'forumcatdel=yes',
+                                              "onClick='return confirmation();'") . '&nbsp;';
 		}
-		$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum'>
-		<img src='$themeimg/email$icon.png' title='".q($langNotify)."' alt='".q($langNotify)."' />
-		</a></th>
-		</tr>\n";
-		$tool_content .= "<tr class='sub_title1'>
-		<td colspan='2' width='150'>$langForums</td>
-		<td class='center'>$langSubjects</td>
-		<td class='center'>$langPosts</td>
-		<td class='center'>$langLastPost</td>
-		<td class='center'>$langActions</td>
-		</tr>";
+                $notifylink = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum";
+                $tool_content .= icon('email' . $icon, $langNotify, $notifylink) .
+                        "</th></tr>
+                         <tr class='sub_title1'>
+                            <td colspan='2' width='150'>$langForums</td>
+                            <td class='center'>$langSubjects</td>
+                            <td class='center'>$langPosts</td>
+                            <td class='center'>$langLastPost</td>
+                            <td class='center'>$langActions</td>
+                         </tr>";
 		
 		@reset($forum_row);
 		// display forum topics
@@ -197,9 +195,9 @@ if ($total_categories) {
 						$last_visit = 0;
 					}
 					if(@$last_post_time > $last_visit && $last_post != $langNoPosts) {
-						$tool_content .= "<td width='1'><img src='$newposts_image' /></td>\n";
+						$tool_content .= "<td width='1'><img src='$newposts_image' alt=''></td>\n";
 					} else {
-						$tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
+						$tool_content .= "<td width='2'><img src='$folder_image' alt=''></td>\n";
 					}
 					$forum_name = q($forum_row[$x]['forum_name']);
 					$last_post_nom = q($forum_row[$x]['nom']);
@@ -230,9 +228,7 @@ if ($total_categories) {
 					$tool_content .= "<td width='65' class='center'>$total_posts</td>\n";
 					$tool_content .= "<td width='200' class='center'>";
 					if ($total_topics > 0 && $total_posts > 0) {
-						$tool_content .= "<span class='smaller'>$last_post_prenom $last_post_nom &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
-						<img src='$icon_topic_latest' />
-						</a>
+						$tool_content .= "<span class='smaller'>$last_post_prenom $last_post_nom &nbsp;<a href='viewtopic.php?course=$code_cours&amp;topic=$last_post_topic_id&amp;forum=$forum_id'><img src='$icon_topic_latest' alt=''></a>
 						<br />$human_last_post_time</span></td>\n";
 					} else {
 						$tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
@@ -247,18 +243,17 @@ if ($total_categories) {
 					} else {
 						$forum_link_notify = toggle_link($forum_action_notify);
 						$forum_icon = toggle_icon($forum_action_notify);
-					}
-					$tool_content .= "<td class='right'>";
+                                        }
+                                        $notifylink = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id";
+                                        $baselink = "forum_admin.php?course=$code_cours&amp;forum_id=$forum_id&amp;cat_id=$catNum&amp;";
+                                        $tool_content .= "<td class='right'>";
 					if ($is_editor) { // admin actions
-						$tool_content .= "<a href='forum_admin.php?course=$code_cours&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum'>
-						<img src='$themeimg/edit.png' title='".q($langModify)."' />
-						</a>
-						<a href='forum_admin.php?course=$code_cours&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum' onClick='return confirmation();'>
-						 <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                                                $tool_content .= icon('edit', $langModify, $baselink . 'forumgoedit=yes') . '&nbsp;' .
+						                 icon('delete', $langDelete, $baselink . 'forumgodel=yes',
+                                                                      "onClick='return confirmation();'") . '&nbsp;';
 					}
-					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id'>
-					<img src='$themeimg/email$forum_icon.png' title='".q($langNotify)."' alt='".q($langNotify)."' /></a>
-					</td></tr>\n";
+                                        $tool_content .= icon("email$forum_icon", $langNotify, $notifylink) .
+                                                         "</td></tr>\n";
 				}
 			} else {
 				$tool_content .= "<tr>";

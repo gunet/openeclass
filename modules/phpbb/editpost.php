@@ -119,7 +119,7 @@ if ($is_editor) { // course admin
 		$forward = 1;
 		$topic = $topic_id;
 		$forum = $forum_id;
-		$sql = "UPDATE posts_text SET post_text = " . autoquote($message) . "
+		$sql = "UPDATE posts_text SET post_text = " . autoquote(standard_text_escape($message)) . "
 			WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableUpadatePost;
@@ -250,20 +250,16 @@ if ($is_editor) { // course admin
  <table width='100%' class='tbl'>
 		";
 		$first_post = is_first_post($topic, $post_id, $currentCourseID);
-		if($first_post) {
-			$tool_content .= "<tr><td><b>$langSubject:</b><br /><br />
-			<input type='text' name='subject' size='53' maxlength='100' value='" . stripslashes($myrow["topic_title"]) . "'  class='FormData_InputText' /></th>
-			</tr>";
+		if ($first_post) {
+                        $tool_content .= "<tr><th>$langSubject:</th></tr>
+			        <tr><td><input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow['topic_title']) . "' class='FormData_InputText'></td></tr>";
 		}
-		$tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />".
-		rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
-		."	
-		</td></tr>
-		<tr><td class='right'>";
-		$tool_content .= "<input class='Login' type='submit' name='submit' value='".q($langSubmit)."' />
-		</td></tr>
-		</table>
-       </fieldset></form>";
+		$tool_content .= "<tr><th>$langBodyMessage:<th></tr><tr><td>" .
+                        rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'") .
+                        "</td></tr>
+                         <tr><td class='right'><input class='Login' type='submit' name='submit' value='".q($langSubmit)."'></td></tr>
+                      </table>
+                   </fieldset></form>";
 	}
 } else {
 	$tool_content .= $langForbidden;
