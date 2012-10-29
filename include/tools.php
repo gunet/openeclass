@@ -334,10 +334,8 @@ function adminMenu(){
 	array_push($sideMenuText, $GLOBALS['langProfOpen']);
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "arrow.png");
-        
-        
-	// check for close user registration
-	if (get_config('close_user_registration')) {
+                	
+	if (get_config('eclass_stud_reg') == 1) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "arrow.png");

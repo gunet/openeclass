@@ -25,7 +25,7 @@ require_once 'auth.inc.php';
 
 $user_registration = get_config('user_registration');
 $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
-$alt_auth_prof_reg = get_config('alt_auth_prof_reg');
+$alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
 	$tool_content .= "<div class='info'>$langCannotRegister</div>";
@@ -61,6 +61,8 @@ $phone_required = $prof;
 //$autoregister = !($prof || (get_config('close_user_registration') && get_config('alt_auth_student_req')));
 if (!$prof and $alt_auth_stud_reg == 2) {
          $autoregister = TRUE;
+} else {
+         $autoregister = FALSE;
 }
 $comment_required = !$autoregister;
 $email_required = !$autoregister || get_config('email_required');
@@ -387,8 +389,8 @@ if ($is_valid) {
                                 // User Message
                                 $tool_content .= "<div class='success'>" .
                                         ($prof? $langDearProf: $langDearUser) .
-                                        "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
-                                        <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer'
+                                        "<br />$langMailVerificationSuccess: <strong>$email</strong></div>
+                                        <p>$langMailVerificationSuccess4<br /><br />$click <a href='$urlServer'
                                         class='mainpage'>$langHere</a> $langBackPage</p>";
                         }
         }

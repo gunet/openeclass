@@ -872,8 +872,15 @@ function shib_cas_login($type)
 	global $nom, $prenom, $email, $statut, $language, $durationAccount, $urlServer,
 		$is_admin, $is_power_user, $is_usermanage_user, $langUserAltAuth;
 
-	$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
+        $alt_auth_stud_reg = get_config('alt_auth_stud_reg');        
+	//$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
 
+        if ($alt_auth_stud_reg == 2) {
+                $autoregister = TRUE;
+        } else {
+                $autoregister = FALSE;
+        }
+        
 	$_SESSION['user_perso_active'] = false;
 	if ($type == 'shibboleth') {
 		$uname = $_SESSION['shib_uname'];

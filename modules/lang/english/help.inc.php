@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-19 13:31:12
+// Generated 2012-10-29 13:44:18
 
 $langCourseAccessHelp = "
 <ul>
