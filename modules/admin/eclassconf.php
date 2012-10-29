@@ -93,7 +93,7 @@ if (isset($_POST['submit']))  {
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
- *   Open eClass 2.4
+ *   Open eClass 2.6
  *   E-learning and Course Management System
  *===========================================================================
 
@@ -147,8 +147,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 	                'am_required' => true,
 	                'dont_display_login_form' => true,
 	                'dropbox_allow_student_to_student' => true,
-	                'block_username_change' => true,
-	                'close_user_registration' => true,
+	                'block_username_change' => true,	                
 	                'display_captcha' => true,
 	                'insert_xml_metadata' => true,
 	                'betacms' => true,
@@ -159,10 +158,12 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 	                'dropbox_quota' => true,
 	                'max_glossary_terms' => true,
 	                'theme' => true,
-	                'alt_auth_student_req' => true,
-	                'disable_eclass_stud_reg' => true,
-	                'disable_eclass_prof_reg' => true,
-					'enable_search' => true);
+                        'user_registration' => true,	                
+	                'eclass_stud_reg' => true,
+                        'alt_auth_stud_reg' => true,
+	                'eclass_prof_reg' => true,
+                        'alt_auth_prof_reg' => true,
+                        'enable_search' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -201,82 +202,82 @@ else {
         $tool_content .= "<form action=\"".$_SERVER['SCRIPT_NAME']."\" method=\"post\">";
 	$tool_content .= "<fieldset><legend>$langFileEdit</legend>";	
 	$tool_content .= "
-	<table class='tbl' width=\"100%\">
-	<tr>
-	  <th width='200' class=\"left\"><b>\$urlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
+        <table class='tbl' width='100%'>
+        <tr>
+          <th width='200' class='left'><b>\$urlServer:</b></th>
+          <td><input class='FormData_InputText' type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$urlAppend:</th>
+          <td><input class='FormData_InputText' type='text' name=\"formurlAppend\" size='40' value=\"".$urlAppend."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$webDir:</th>
+          <td><input class='FormData_InputText' type='text' name=\"formwebDir\" size='40' value=\"".$webDir."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$mysqlServer:</th>
+          <td><input class='FormData_InputText' type='text' name=\"formmysqlServer\" size='40' value=\"".$mysqlServer."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$mysqlUser:</th>
+          <td><input class='FormData_InputText' type='text' name=\"formmysqlUser\" size='40' value=\"".$mysqlUser."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$mysqlPassword:</th>
+          <td><input class='FormData_InputText' type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\"></td>
+        </tr>
+        <tr>
+          <th class='left'>\$mysqlMainDb:</th>
+          <td><input class='FormData_InputText' type='text' name=\"formmysqlMainDb\" size='40' value=\"".$mysqlMainDb."\"></td>
+        </tr>";
+        $tool_content .= "<tr>
+        <th class='left'>\$phpMyAdminURL:</th>
+        <td><input class='FormData_InputText' type='text' name=\"formphpMyAdminURL\" size='40' value=\"".$phpMyAdminURL."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$urlAppend:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formurlAppend\" size='40' value=\"".$urlAppend."\"></td>
+	  <th class='left'>\$phpSysInfoURL:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formphpSysInfoURL\" size='40' value=\"".$phpSysInfoURL."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$webDir:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formwebDir\" size='40' value=\"".$webDir."\"></td>
+	  <th class='left'>\$emailAdministrator:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formemailAdministrator\" size='40' value=\"".$emailAdministrator."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlServer:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlServer\" size='40' value=\"".$mysqlServer."\"></td>
+	  <th class='left'>\$administratorName:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formadministratorName\" size='40' value=\"".$administratorName."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlUser:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlUser\" size='40' value=\"".$mysqlUser."\"></td>
+	  <th class='left'>\$administratorSurname:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formadministratorSurname\" size='40' value=\"".$administratorSurname."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlPassword:</b></th>
-	  <td><input class=\"FormData_InputText\" type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\"></td>
+	  <th class='left'>\$siteName:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formsiteName\" size='40' value=\"".$siteName."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$mysqlMainDb:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formmysqlMainDb\" size='40' value=\"".$mysqlMainDb."\"></td>
-	</tr>";
-	      $tool_content .= "  <tr>
-	  <th class=\"left\"><b>\$phpMyAdminURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpMyAdminURL\" size='40' value=\"".$phpMyAdminURL."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$phpSysInfoURL:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formphpSysInfoURL\" size='40' value=\"".$phpSysInfoURL."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$emailAdministrator:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailAdministrator\" size='40' value=\"".$emailAdministrator."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$administratorName:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorName\" size='40' value=\"".$administratorName."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$administratorSurname:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formadministratorSurname\" size='40' value=\"".$administratorSurname."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$siteName:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formsiteName\" size='40' value=\"".$siteName."\"></td>
-	</tr>
-	<tr>
-	  <th class=\"left\"><b>\$postaddress:</b></th>
+	  <th class='left'>\$postaddress:</th>
 	      <td><textarea rows='3' cols='40' name='formpostaddress'>$postaddress</textarea></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$telephone:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formtelephone\" size='40' value=\"".$telephone."\"></td>
+	  <th class='left'>\$telephone:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formtelephone\" size='40' value=\"".$telephone."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$fax:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formfax\" size='40' value=\"".$fax."\"></td>
+	  <th class='left'>\$fax:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formfax\" size='40' value=\"".$fax."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$emailhelpdesk:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formemailhelpdesk\" size='40' value=\"".$emailhelpdesk."\"></td>
+	  <th class='left'>\$emailhelpdesk:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formemailhelpdesk\" size='40' value=\"".$emailhelpdesk."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$Institution:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitution\" size='40' value=\"".$Institution."\"></td>
+	  <th class='left'>\$Institution:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formInstitution\" size='40' value=\"".$Institution."\"></td>
 	</tr>
 	<tr>
-	  <th class=\"left\"><b>\$InstitutionUrl:</b></th>
-	  <td><input class=\"FormData_InputText\" type='text' name=\"formInstitutionUrl\" size='40' value=\"".$InstitutionUrl."\"></td>
+	  <th class='left'>\$InstitutionUrl:</th>
+	  <td><input class='FormData_InputText' type='text' name=\"formInstitutionUrl\" size='40' value=\"".$InstitutionUrl."\"></td>
 	</tr>";
 	if ($language=="greek") {
 		$grSel = "selected";
@@ -287,7 +288,7 @@ else {
 	}
 	$tool_content .= "
 	<tr>
-	  <th class='left'><b>\$language:</b></th>
+	  <th class='left'>\$language:</th>
 	  <td><select name='formlanguage'>
 	    <option value='greek' ".$grSel.">greek</option>
 	    <option value='english' ".$enSel.">english</option>
@@ -295,41 +296,37 @@ else {
 	</tr></table></fieldset>";
         
         $tool_content .= "<fieldset>
-        <legend>$langUserAuthentication</legend>
-        <table class='tbl' width='100%'>";              
-	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
-	$tool_content .= "
-	<tr>
-	  <td><input type='checkbox' name='disable_eclass_stud_reg' value='1'
-	    $cbox_disable_eclass_stud_reg>&nbsp;$langDisableEclassStudReg</td>
-	</tr>";
-
-	$cbox_disable_eclass_prof_reg = get_config('disable_eclass_prof_reg')? 'checked': '';
-	$tool_content .= "
-	<tr>	  
-	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
-	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
-	</tr>";
+        <legend>$langUpgReg</legend>
+        <table class='tbl' width='100%'>";
+        $tool_content .= "<tr><th width='300' class='left'>$langUserRegistration</th><td>";
+        $tool_content .= selection(array('1' => $langActivate, 
+                                         '0' => $langDeactivate), 'user_registration', get_config('user_registration'));
+        $tool_content .= "</td></tr>";
+        $tool_content .= "<tr><th class='left'>$langUserAccount $langViaeClass</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassStudReg, 
+                                         '1' => $langReqRegUser,
+                                         '2' => $langDisableEclassStudRegType), 'eclass_stud_reg', get_config('eclass_stud_reg'));
+        $tool_content .= "</td></tr>";
+        $tool_content .= "<tr><th class='left'>$langUserAccount $langViaAltAuthMethods</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassStudReg, 
+                                         '1' => $langReqRegUser,
+                                         '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'));
+        $tool_content .= "</td></tr>";
         
-        $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';	
-	$tool_content .= "
-	<tr>	  
-          <td>
-	  <input type=checkbox name='close_user_registration' value='1'
-        $cbox_close_user_registration>&nbsp;$langViaReq</td>
-	</tr>";
+        $tool_content .= "<tr><th class='left'>$langProfAccount $langViaeClass</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassProfReg, 
+                                         '1' => $langReqRegProf), 'eclass_prof_reg', get_config('eclass_prof_reg'));
+        $tool_content .= "</td></tr>";
         
-        $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
-	$tool_content .= "<tr>	  
-	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
-	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
-	</tr>
-        <tr>        
-        <td>$langUserDurationAccount&nbsp;&nbsp;<input type='text' name='formdurationAccount' size='15' value='$durationAccount'></td></tr>
-        <tr>
-	    <td><input type=\"checkbox\" checked disabled> ".$langencryptedPasswd."</td>
-	  </tr>";
+        $tool_content .= "<tr><th class='left'>$langProfAccount $langViaAltAuthMethods</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassProfReg, 
+                                         '1' => $langReqRegProf), 'alt_auth_prof_reg', get_config('alt_auth_prof_reg'));
+        $tool_content .= "</td></tr>";
+        	
+        $tool_content .= "<tr><th class='left'>$langUserDurationAccount&nbsp;&nbsp;</th>
+                <td><input type='text' name='formdurationAccount' size='15' value='$durationAccount'></td></tr>";
         $tool_content .= "</table></fieldset>";
+        
         $tool_content .= "<fieldset>
         <legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>";              
@@ -346,7 +343,7 @@ else {
 	    <td>" . implode(' ', $sel) . "</td></tr>";                
         
 	$tool_content .= "
-	  <tr><td class='left'><b>$langThemes:</b></td>
+	  <tr><th class='left'>$langThemes:</th>
 	    <td>" . selection($available_themes, 'theme',
 		 array_search($theme, $available_themes)) . "</td></tr>";
 	$tool_content .= "</table></fieldset>";
@@ -363,8 +360,8 @@ else {
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
-    $max_glossary_terms = get_config('max_glossary_terms');
-    $cbox_enable_search = get_config('enable_search')?'checked':'';
+        $max_glossary_terms = get_config('max_glossary_terms');
+        $cbox_enable_search = get_config('enable_search')?'checked':'';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
@@ -417,19 +414,19 @@ else {
         <legend>$langDefaultQuota</legend>
         <table class='tbl' width='100%'>              
 	  <tr>
-		<th class='left'><b>$langDocQuota</b></th>
+		<th class='left'>$langDocQuota</th>
 		<td><input class='FormData_InputText' type='text' name='doc_quota' value='".get_config('doc_quota')."' size='5'/>&nbsp;(Mb)</td>
 	  </tr>
 	  <tr>
-		<th class='left'><b>$langVideoQuota</b></th>
+		<th class='left'>$langVideoQuota</th>
 		<td><input class='FormData_InputText' type='text' name='video_quota' value='".get_config('video_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr>
 	  <tr>
-		<th class='left'><b>$langGroupQuota</b></th>
+		<th class='left'>$langGroupQuota</th>
 		<td><input class='FormData_InputText' type='text' name='group_quota' value='".get_config('group_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr>
 	  <tr>
-		<th class='left'><b>$langDropboxQuota</b></th>
+		<th class='left'>$langDropboxQuota</th>
 		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='".get_config('dropbox_quota')."' size='5' />&nbsp;(Mb)</td>
 	  </tr></table>	  
 	  </fieldset>";

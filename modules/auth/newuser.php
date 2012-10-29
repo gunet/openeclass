@@ -3,7 +3,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,20 +19,6 @@
  * ======================================================================== */
 
 
-
-/*===========================================================================
-	newuser.php
-* @version $Id$
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================
-
- 	Purpose: The file displays the form that that the candidate user must fill
- 	in with all the basic information.
-
-==============================================================================
-*/
-
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php';
 require_once '../../include/phpass/PasswordHash.php';
@@ -40,19 +26,15 @@ require_once '../../include/phpass/PasswordHash.php';
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
-$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
-if ($disable_eclass_stud_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div>";
+$user_registration = get_config('user_registration');
+$eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
+
+if (!$user_registration or $eclass_stud_reg != 2) {
+	$tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
 	draw($tool_content,0);
 	exit;
 }
 	
-if (get_config('close_user_registration')) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div>";
-	draw($tool_content,0);
-	exit;
-}
-
 // javascript
 load_js('jquery');
 load_js('pwstrength.js');

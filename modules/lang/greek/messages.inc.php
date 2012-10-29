@@ -197,14 +197,15 @@ $langSupportedLanguages = "Υποστηριζόμενες Γλώσσες";
 $langAvailLanguages = "Διαθέσιμες";
 $langTipLangAdminAnn = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται οι ανακοινώσεις του διαχειριστή";
 $langAltAuthStudentReq = "Ενεργοποίηση αίτησης $langsOfStudent που συνδέεται με εναλλακτικό τρόπο πιστοποίησης";
-$langDisableEclassStudReg = "Απενεργοποίηση εγγραφής $langsOfStudent μέσω πλατφόρμας";
-$langDisableEclassProfReg = "Απενεργοποίηση εγγραφής $langsOfTeacher μέσω πλατφόρμας";
-$langDisableEclassStudRegType = "Δυνατότητα Εγγραφής $langsOfStudents μέσω πλατφόρμας";
-$langDisableEclassProfRegType = "Δυνατότητα Εγγραφής $langsOfTeachers μέσω πλατφόρμας";
+$langDisableEclassStudReg = "Απενεργοποίηση εγγραφής $langsOfStudent";
+$langDisableEclassProfReg = "Απενεργοποίηση εγγραφής $langsOfTeacher";
+$langDisableEclassStudRegType = "Δυνατότητα εγγραφής $langsOfStudents";
+$langDisableEclassProfRegType = "Δυνατότητα εγγραφής $langsOfTeachers";
 $langDisableEclassStudRegYes = "Οι $langsStudents δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
 $langDisableEclassProfRegYes = "Οι $langsTeachers δεν μπορούν να εγγραφούν μέσω πλατφόρμας";
 $langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγραφούν μέσω πλατφόρμας";
-$langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω πλατφόρμας";
+$langDisableEclassStudRegViaReq = "Οι $langsStudents μπορούν να εγγραφούν μέσω αίτησης";
+$langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω αίτησης";
 $langUserNotLogin = "Χρήστες που δεν έχουν εισέλθει";
 
 // listusers
@@ -456,6 +457,11 @@ $langUploadedFileNotAllowed = "Το αρχείο που επιχειρείτε �
 $langRenamedFileNotAllowed = "Το καινούριο όνομα του αρχείου που επιχειρείτε να μετονομάσετε δεν είναι επιτρεπτό. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 $langUploadedZipFileNotAllowed = "Το zip αρχείο που επιχειρείτε να ανεβάσετε και αποσυμπιέσετε περιέχει μη επιτρεπτά αρχεία. Επικοινωνήστε με το διαχειριστή της πλατφόρμας για περισσότερες πληροφορίες.";
 $langEnableSearch = "Ενεργοποίηση μηχανής αναζήτησης";
+$langUserRegistration = "Δυνατότητα εγγραφής χρηστών";
+$langUserAccount = "Λογαριασμός $langOfStudent";
+$langProfAccount = "Λογαριασμός $langOfTeacher";
+$langReqRegUser = "Αίτηση εγγραφής $langsOfStudent";
+$langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πιστοποίησης";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -2362,7 +2368,7 @@ $langcsvenc2="κωδικοποίηση unicode (UTF-8)";
 $langFieldsMissing="Αφήσατε κάποια από τα υποχρεωτικά πεδία κενά!";
 $langFillAgain="Παρακαλούμε ξανασυμπληρώστε την";
 $langFillAgainLink="αίτηση";
-$langReqRegProf="Αίτηση Εγγραφής $langOfTeacher";
+$langReqRegProf="Αίτηση εγγραφής $langsOfTeacher";
 $langProfUname="Επιθυμητό Όνομα Χρήστη (Username)";
 $profreason="Αναφέρατε τους λόγους χρήσης της πλατφόρμας";
 $langProfEmail="e-mail Χρήστη";

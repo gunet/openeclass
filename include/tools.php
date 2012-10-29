@@ -286,9 +286,11 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langNewUser']);
-	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
-	array_push($sideMenuImg, "arrow.png");
+        if (get_config('user_registration')) {
+                array_push($sideMenuText, $GLOBALS['langNewUser']);
+                array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
+                array_push($sideMenuImg, "arrow.png");
+        }	
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 	array_push($sideMenuImg, "arrow.png");

@@ -27,35 +27,33 @@ $lang = langname_to_code($language);
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
+$am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
 $nameTools = $prof? $langReqRegProf: $langUserRequest;
 
-$am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
+$user_registration = get_config('user_registration');
+$eclass_prof_reg = get_config('eclass_prof_reg');
+$eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
-// eclass native registration method disabled for students
-$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
-if (!$prof and $disable_eclass_stud_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+// security check
+if (!$user_registration) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content, 0);
+	exit;
+}
+if ($prof and !$eclass_prof_reg) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content, 0);
 	exit;
 }
 
-// eclass native registration method disabled for profs
-$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
-if ($prof and $disable_eclass_prof_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+if (!$prof and $eclass_stud_reg != 1) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content, 0);
 	exit;
 }
 
 $am_required = !$prof && get_config('am_required');
 $errors = array();
-
-// security - show error instead of form if user registration is open
-if (!$prof and (!get_config('close_user_registration'))) {
-        $tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-        draw($tool_content, 0);
-        exit;
-}
 
 $all_set = register_posted_variables(array(
                 'usercomment' => true,
