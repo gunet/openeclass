@@ -94,7 +94,7 @@ if ($submit)  {
 
     $sql = db_query("INSERT INTO `$mysqlMainDb`.user
                     (nom, prenom, username, password, email, statut, department,
-                    am, registered_at, expires_at, lang, verified_mail)
+                    am, registered_at, expires_at, whitelist, lang, verified_mail)
                     VALUES (" .
                     quote($ps) .', '.
                     quote($pn) .', '.
@@ -102,7 +102,7 @@ if ($submit)  {
                     quote($password) .', '.
                     quote($pe) .', 1, '.
                     quote($department) .', '.
-                    quote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
+                    quote($comment) . ", $registered_at, $expires_at, '', $lang', $verified_mail)");
 
     // Close user request
     $rid = intval($_POST['rid']);
