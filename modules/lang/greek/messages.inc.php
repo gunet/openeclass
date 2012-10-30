@@ -1628,6 +1628,7 @@ $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
 $langWithPHP = "με υποστήριξη PHP";
 $lang_max_glossary_terms = 'Δεν επιτρέπεται η εμφάνιση ορισμών όρων στις σελίδες μαθημάτων, εφόσον ο συνολικός αριθμός όρων στο γλωσσάριο είναι μεγαλύτερος από:';
+$lang_case_insensitive_usernames = "Χωρίς διάκριση πεζών/κεφαλαίων στο όνομα χρήστη";
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfStudent";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την ηλεκτρονική τους διεύθυνση";

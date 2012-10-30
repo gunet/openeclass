@@ -163,6 +163,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
                         'alt_auth_stud_reg' => true,
 	                'eclass_prof_reg' => true,
                         'alt_auth_prof_reg' => true,
+			'case_insensitive_usernames' => true,
                         'enable_search' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
@@ -348,6 +349,7 @@ else {
 		 array_search($theme, $available_themes)) . "</td></tr>";
 	$tool_content .= "</table></fieldset>";
         
+        $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames')?'checked':'';
         $cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
 	$cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
@@ -368,6 +370,9 @@ else {
         <table class='tbl' width='100%'>	
 	  <tr>	
 		<td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
+	  </tr>
+	  <tr>		
+		<td><input type='checkbox' name='case_insensitive_usernames' value='1' $cbox_case_insensitive_usernames />&nbsp;$lang_case_insensitive_usernames</td>
 	  </tr>
 	  <tr>		
 		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>

@@ -284,7 +284,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
         $testauth = false;
         switch($auth) {
 	case '1':
-			$sql = "SELECT password FROM user WHERE username COLLATE utf8_bin = ". quote($test_username);
+			$sql = "SELECT password FROM user WHERE username ";
+			if (get_config('case_insensitive_usernames')) {
+				$sql .= "= ".quote($test_username);
+			} else {
+				$sql .= "COLLATE utf8_bin = ".quote($test_username);
+			}
 			$result = db_query($sql);
 			
 			if (mysql_num_rows($result) == 1) {
@@ -300,7 +305,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 					// password is in old md5 format, update transparently
 					$password_encrypted = $hasher->HashPassword($test_password);
 					
-					$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE username COLLATE utf8_bin = ". quote($test_username);
+					$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE username ";
+					if (get_config('case_insensitive_usernames')) {
+						$sql .= "= ".quote($test_username);
+					} else {
+						$sql .= "COLLATE utf8_bin = ".quote($test_username);
+					}
 					db_query($sql, $mysqlMainDb);
 				}
 			}
@@ -647,7 +657,13 @@ function process_login()
 		
     		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
                                         FROM user 
-                                        WHERE username COLLATE utf8_bin = " . quote($posted_uname);
+                                        WHERE username ";
+			if (get_config('case_insensitive_usernames')) {
+				$sqlLogin .= "= " . quote($posted_uname);
+			} else {
+				$sqlLogin .= "COLLATE utf8_bin = " . quote($posted_uname);
+			}
+
     		$result = db_query($sqlLogin);
     		// cas might have alternative authentication defined
     		$exists = 0;
@@ -734,7 +750,7 @@ function login($user_info_array, $posted_uname, $pass)
 		$pass_match = false;
 		$hasher = new PasswordHash(8, false);
 		
-		if ($posted_uname == $user_info_array['username']) {
+		if (check_username_sensitivity($posted_uname, $user_info_array['username'])) {
 			if ($hasher->CheckPassword($pass, $user_info_array['password'])) {
 				$pass_match = true;
 			} else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
@@ -903,7 +919,13 @@ function shib_cas_login($type)
 	}
 	// user is authenticated, now let's see if he is registered also in db
 	$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-						FROM user WHERE username COLLATE utf8_bin = " . quote($uname);
+						FROM user WHERE username ";
+	if (get_config('case_insensitive_usernames')) {
+		$sqlLogin .= "= " . quote($uname);
+	} else {
+		$sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
+	}
+
 	$r = db_query($sqlLogin);      
 
 	if (mysql_num_rows($r) > 0) {

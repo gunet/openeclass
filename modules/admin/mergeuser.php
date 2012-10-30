@@ -49,7 +49,14 @@ if (isset($_REQUEST['u'])) {
                 $status_names = array(10 => $langGuest, 1 => $langTeacher, 5 => $langStudent);
                 $target = false;
                 if (isset($_POST['target'])) {
-                        $q1 = db_query("SELECT * FROM user WHERE username COLLATE utf8_bin = " . quote($_POST['target']));
+								$sql = "SELECT * FROM user WHERE username ";
+								if (get_config('case_insensitive_usernames')) {
+									$sql .= "= " . quote($_POST['target']);	
+								} else {
+									$sql .= "COLLATE utf8_bin = " . quote($_POST['target']);
+								}
+								$q1 = db_query($sql);
+
                         if ($q1 and mysql_num_rows($q1)) {
                                 $target = mysql_fetch_assoc($q1);
                         }

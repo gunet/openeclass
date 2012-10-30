@@ -82,7 +82,13 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     
     $sqlLogin = "SELECT *
                    FROM user 
-                  WHERE username COLLATE utf8_bin = " . quote($uname);
+                  WHERE username ";
+    if (get_config('case_insensitive_usernames')) {
+	 	$sqlLogin .= "= " . quote($uname);
+    } else {
+	 	$sqlLogin .= "COLLATE utf8_bin = " . quote($uname);
+	 }
+
     $result = db_query($sqlLogin);
     
     while ($myrow = mysql_fetch_assoc($result)) 
