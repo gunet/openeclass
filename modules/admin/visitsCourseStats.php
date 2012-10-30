@@ -79,7 +79,7 @@ if (!extension_loaded('gd')) {
 
     $date_fmt = '%Y-%m-%d';
     $date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-    $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
+    $date_what  = "";
 
 
     #see if chart has content
@@ -91,20 +91,20 @@ if (!extension_loaded('gd')) {
                 $date_group = '';
             break;
             case "daily":
-                $date_what .= ", DATE_FORMAT(date_time, '$date_fmt') AS date, ";
+                $date_what .= "DATE_FORMAT(date_time, '$date_fmt') AS date, ";
                 $date_group = "GROUP BY DATE(date_time) ";
             break;
             case "weekly":
-                $date_what .= ", DATE_FORMAT(date_time - INTERVAL WEEKDAY(date_time) DAY, '$date_fmt') AS week_start ".
+                $date_what .= "DATE_FORMAT(date_time - INTERVAL WEEKDAY(date_time) DAY, '$date_fmt') AS week_start ".
                       ", DATE_FORMAT(date_time + INTERVAL (6 - WEEKDAY(date_time)) DAY, '$date_fmt') AS week_end, ";
                 $date_group = "GROUP BY WEEK(date_time)";
             break;
             case "monthly":
-                $date_what .= ", MONTH(date_time) AS month, ";
+                $date_what .= "MONTH(date_time) AS month, ";
                 $date_group = "GROUP BY MONTH(date_time)";
             break;
             case "yearly":
-                $date_what .= ", YEAR(date_time) AS year, ";
+                $date_what .= "YEAR(date_time) AS year, ";
                 $date_group = "GROUP BY YEAR(date_time) ";
             break;
             default:

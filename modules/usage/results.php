@@ -54,28 +54,28 @@ if ($u_module_id != -1) {
 
 $date_fmt = '%d-%m-%Y';
 $date_where = "(`date_time` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-$date_what  = "DATE_FORMAT(MIN(`date_time`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`date_time`), '$date_fmt') AS date_end ";
+$date_what  = "";
 
 switch ($u_interval) {
     case "summary":
         $date_group = '1';
-        $date_what ='1';
+        $date_what = '1';
     break;
     case "daily":
-        $date_what .= ", DATE_FORMAT(`date_time`, '$date_fmt') AS `date` ";
+        $date_what .= "DATE_FORMAT(`date_time`, '$date_fmt') AS `date` ";
         $date_group = " DATE(`date_time`) ";
     break;
     case "weekly":
-        $date_what .= ", DATE_FORMAT(`date_time` - INTERVAL WEEKDAY(`date_time`) DAY, '$date_fmt') AS week_start ".
+        $date_what .= "DATE_FORMAT(`date_time` - INTERVAL WEEKDAY(`date_time`) DAY, '$date_fmt') AS week_start ".
                       ", DATE_FORMAT(`date_time` + INTERVAL (6 - WEEKDAY(`date_time`)) DAY, '$date_fmt') AS week_end ";
         $date_group = " WEEK(`date_time`)";
     break;
     case "monthly":
-        $date_what .= ", MONTH(`date_time`) AS `month` ";
+        $date_what .= "MONTH(`date_time`) AS `month` ";
         $date_group = " MONTH(`date_time`)";
     break;
     case "yearly":
-        $date_what .= ", YEAR(`date_time`) AS `year` ";
+        $date_what .= "YEAR(`date_time`) AS `year` ";
         $date_group = " YEAR(`date_time`) ";
     break;
 }
