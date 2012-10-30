@@ -193,7 +193,7 @@ if($countUser > 0) {
         if($search == 'inactive') {  // inactive users
                 $caption .= "&nbsp;$langAsInactive<br />";
                 $caption .= "<a href='updatetheinactive.php?activate=1'>".$langAddSixMonths."</a><br />";
-                $header_link = $pagination_link = '';
+                $header_link = $pagination_link = '&amp;search=inactive';
         } elseif ($search == 'no_login') {
                 $qry = $no_login_qry;
                 $header_link = $pagination_link = "&amp;search=no_login";
