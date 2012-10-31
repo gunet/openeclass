@@ -1623,6 +1623,7 @@ $langToReqOpen = "Οι χρήστες εγγράφονται ελεύθερα χ
 $langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
 $langChooseLang = "Επιλογή Γλώσσας";
 $langExpPhpMyAdmin = "Η διανομή του Open eClass δεν περιλαμβάνει πλέον το διαχειριστικό εργαλείο βάσεων δεδομένων MySQL μέσω web <a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>. Μπορείτε να το εγκαταστήσετε εσείς αν επιθυμείτε.";
+$langphpMyAdminURL = "URL του phpMyAdmin";
 $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις ";
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
@@ -1645,7 +1646,7 @@ $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής';
 $langDefaultAdminSurname = 'Πλατφόρμας';
-$langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
+$langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUnet';
 
 
 /********************************************************

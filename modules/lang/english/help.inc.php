@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-29 13:44:18
+// Generated 2012-10-31 12:32:31
 
 $langCourseAccessHelp = "
 <ul>
@@ -58,7 +58,7 @@ $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
 $langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';
 $langPHPMathPublisher = "<p><b>Mathematic symbols support</b></p>
-<p>For the incorporation of mathematic symbols in your texts, you can use the <a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blank'>commands</a> (symbolisms) provided by PhpMathPublisher.
+<p>For the incorporation of mathematic symbols in your texts, you can use the <a href='http://wiki.openeclass.org/doku.php?id=mathp'>commands</a> (symbolisms) provided by PhpMathPublisher.
 More specifically, you may use the text editor in order to insert your content. If the content you import contains mathematic symbols you wish to present, then:</p>
 <ol>
   <li>Click the 'Toggle HTML Source' icon.</li>

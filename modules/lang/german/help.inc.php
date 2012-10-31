@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2012-10-19 13:42:17
+// Generated 2012-10-31 12:55:14
 
 $langCourseAccessHelp = "
 <ul>
@@ -61,7 +61,7 @@ gerade besucht haben.</p>';
 $langPHPMathPublisher = "<p><u>Unterstützung für mathematische Symbole:</u>
 <br />
 Für die Eingliederung von mathematischen Symbolen in Ihren Texten, 
-können Sie die <a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blank'>Befehle</a> 
+können Sie die <a href='http://wiki.openeclass.org/doku.php?id=mathp'>Befehle</a> 
 (Symbole) verwenden, die PhpMathPublisher bereitstellt.<br />
 Genauer gesagt, benutzen Sie ihren Text-Editor um Ihren Inhalt einzugeben.
 Falls in dem von Ihnen eingegebenen Text mathematische Symbole vorkommen und diese dargestellt 

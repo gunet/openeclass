@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-29 13:44:19
+// Generated 2012-10-31 12:32:31
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2688,10 +2688,10 @@ $langAddManageUser = "Add user administrator";
 $langNotAdmin = "User is not administrator anymore";
 $langPowerUser = "Co-administrator";
 $langLastStudNone = "No registrations";
-$langDisableEclassStudReg = "Disable registration of $langsOfStudent via platform";
-$langDisableEclassProfReg = "Disable registration of $langsOfTeacher via platform";
-$langDisableEclassStudRegType = "Registration of $langsOfStudents via platform";
-$langDisableEclassProfRegType = "Registration of $langsOfTeachers via platform";
+$langDisableEclassStudReg = "Disable registration of $langsOfStudent";
+$langDisableEclassProfReg = "Disable registration of $langsOfTeacher";
+$langDisableEclassStudRegType = "Registration of $langsOfStudents";
+$langDisableEclassProfRegType = "Registration of $langsOfTeachers";
 $langDisableEclassStudRegYes = "$langStudents cannot register via platform";
 $langDisableEclassProfRegYes = "$langsTeachers cannot register via platform";
 $langDisableEclassStudRegNo = "$langsStudents can registered via platform";
@@ -2886,3 +2886,4 @@ $langDisableEclassStudRegViaReq = "$langsStudents may register via request";
 $langUserRegistration = "User registration pptions";
 $langReqRegUser = "$langOfStudent request registration";
 $langViaAltAuthMethods = "via alternative authentication methods";
+$lang_case_insensitive_usernames = "Case insensitive user names";

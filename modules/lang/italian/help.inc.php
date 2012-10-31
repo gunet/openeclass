@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-19 13:31:16
+// Generated 2012-10-31 12:32:35
 
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
@@ -70,16 +70,15 @@ $langPHPMathPublisher = "<p><b>Supporto di simboli matematici</b></p>
 <p>Ad esempio per inserire la radice quadrata di 'a' digita [m]sqrt{a}[/m]</p>";
 $langHFor = "Forum";
 $langHFor_student = $langHFor;
-$langForContent = "<p>Il modulo \"Forum\" permette la comunicazione scritta asincrona tra gli studenti e gli insegnanti. I sopradetti utenti possono porre un nuovo argomento da discutere, oppure rispondere o modificare un argomento già posto. Così si effettua uno scambio grande di informazioni sulla materia del corso.</p>
-<p>Per creare un nuovo Forum, devi prima classificarlo in una categoria. Cliccando sul link 'Aggiungi Categoria' puoi inserire una nuova categoria. In seguito, compila il suo titolo e clicca sul tasto 'Aggiungere'. La nuova categoria viene quindi attivata.  Per inserire un nuovo forum a una certa categoria devi cliccare sul tasto (<img src='$themeimg/add.png' width=16 height=16>) che si trova a destra della categoria selezionata. Per concludere la procedura, compila il titolo e una descrizione del forum e premi dunque il tasto 'Aggiungere'.</p>
+$langForContent = "<p>Puoi comunicare con tutti gli utenti del corso.</p>
+<p>Per creare un nuovo Forum, devi prima associarlo a una categoria. Cliccando sul link 'Aggiungi Categoria' puoi inserire una nuova categoria. Per associare un Forum a una certa categoria devi cliccare sul pulsante (<img src='$themeimg/add.png' width=16 height=16>) che si trova a destra della categoria selezionata. Compila il titolo e una descrizione del forum e premi dunque sul pulsante 'Aggiungere'.</p>
 <hr>
-<p><b>Operazioni supportate ai forum</b><br><br>
-Le operazioni che sono supportate dalla piattaforma rispetto al modulo 'Forum' sono: 
+<p><b>Operazioni:</b><br><br>
 <ul>
   <li>Aggiungere un nuovo forum. Cliccando sul tasto (<img src='$themeimg/add.png' width=16 height=16>) puoi inserire un nuovo forum.</li>
   <li>Modificare un forum. Cliccando sul tasto (<img src='$themeimg/edit.png' width=16 height=16>) puoi modificare un forum esistente.</li>
   <li>Eliminare un forum. Cliccando sul tasto (<img src='$themeimg/delete.png' width=16 height=16>) puoi eliminare un forum esistente.</li>
-  <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando una risposta  al forum della propria categoria viene apposta.</li> 
+  <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando un post o una risposta al forum della propria categoria viene apposta.</li> 
   </ul>
 ";
 $langHInit_student = $langHInit;

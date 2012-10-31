@@ -27,7 +27,7 @@ $langDefaultContent='<p>Δεν υπάρχει κείμενο βοήθειας γ
 // PHP Math Publisher
 $langPHPMathPublisher="<p><b>Υποστήριξη μαθηματικών συμβόλων</b></p>
 <p>Για την ενσωμάτωση μαθηματικών συμβόλων στα κείμενα σας, μπορείτε να χρησιμοποιείτε τις 
-<a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blank'>εντολές</a> (συμβολισμούς) του PhpMathPublisher.
+<a href='http://wiki.openeclass.org/doku.php?id=mathp'>εντολές</a> (συμβολισμούς) του PhpMathPublisher.
 Συγκεκριμένα χρησιμοποιήστε τον συντάκτη κειμένου για να εισάγετε το περιεχόμενό σας. Αν στο περιεχόμενο 
 υπάρχουν μαθηματικά σύμβολα που επιθυμείτε να εμφανίσετε τότε:</p>
 <ol>

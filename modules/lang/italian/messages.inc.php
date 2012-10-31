@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-19 13:31:16
+// Generated 2012-10-31 12:32:35
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -1132,7 +1132,7 @@ $langReviewSettings = "Le tue impostazioni sono sottoscritte: (se vuoi ricordare
 $langToReq = "La registrazione degli utenti sarà realizzata con una richiesta al gestore della piattaforma";
 $langLDAPBaseDn = "LDAP Server Base DN";
 $langChooseLang = "Scegliere lingua";
-$langExpPhpMyAdmin = "L' Open eClass installerà il proprio strumento di gestione tramite web delle   MySQL database (<a href=\"http://www.phpmyadmin.net\"target=_blank>phpMyAdmin</a>), però puo utilizzare il tuo strumento preferito.";
+$langExpPhpMyAdmin = "L' Open eClass installerà il proprio strumento di gestione tramite web delle MySQL database (<a href=\"http://www.phpmyadmin.net\"target=_blank>phpMyAdmin</a>), però puo utilizzare il tuo strumento preferito.";
 $langBeforeInstall1 = "Prima dell'installazione leggi attentamente e stampa le ";
 $langBeforeInstall2 = "Inoltre, istruzioni generali per la piattaforma puoi leggere ";
 $langInstallInstr = "Istruzioni per l'installazione";
@@ -2658,14 +2658,14 @@ $langAddManageUser = "Aggiungere gestore di utenti";
 $langNotAdmin = "L'utente non è più gestore della piattaforma";
 $langPowerUser = "Assistente gestore";
 $langLastStudNone = "Non ci sono registrazioni";
-$langDisableEclassStudReg = "Disabilitare la registrazione da parte $langOfStudents attraverso la piattaforma";
-$langDisableEclassProfReg = "Disabilitare la registrazione da parte $langsOfTeacher attraverso la piattaforma";
+$langDisableEclassStudReg = "Disabilitare la registrazione da parte $langOfStudents";
+$langDisableEclassProfReg = "Disabilitare la registrazione da parte $langsOfTeacher";
 $langDisableEclassStudRegType = "Possibilità di registrazione da parte $langOfStudents attraverso la piattaforma";
-$langDisableEclassProfRegType = "Possibilità di registrazione da parte $langsOfTeachers attraverso la piattaforma";
+$langDisableEclassProfRegType = "Possibilità di registrazione da parte $langsOfTeachers";
 $langDisableEclassStudRegYes = "Gli $langsStudents non possono registrarsi attraverso la piattaforma";
 $langDisableEclassProfRegYes = "Gli $langsTeachers non possono registrarsi attraverso la piattaforma";
 $langDisableEclassStudRegNo = "Gli $langsStudents  possono registrarsi attraverso la piattaforma";
-$langDisableEclassProfRegNo = "Gli $langsTeachers  possono registrarsi attraverso la piattaforma";
+$langDisableEclassProfRegNo = "Gli $langsTeachers  possono registrarsi";
 $langcas_ssout = "Attivare CAS Single Sign Out";
 $langEclassThemes = "Tema della Piattaforma";
 $langThemes = "Scegliere tema";
@@ -2857,3 +2857,8 @@ $langPwStrengthWeak = "Debole";
 $langPwStrengthGood = "Buona";
 $langPwStrengthStrong = "Forte";
 $langOnlyInEnglish = "Solo in inglese";
+$langDisableEclassStudRegViaReq = "Gli $langsStudents possono registrarsi tramite una richiesta";
+$langUserRegistration = "Possibilità agli utenti di registrarsi";
+$langReqRegUser = "Richiesta di registrazione $langsOfStudent";
+$langViaAltAuthMethods = "tramite modalità di certificazione alternative";
+$lang_case_insensitive_usernames = "Senza nome utente tra maiuscole e minuscole";

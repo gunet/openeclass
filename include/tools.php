@@ -434,7 +434,7 @@ function adminMenu(){
                 array_push($sideMenuLink, "../admin/phpInfo.php");
                 array_push($sideMenuImg, "arrow.png");
 
-                if (isset($phpMyAdminURL)){
+                if (isset($phpMyAdminURL) and $phpMyAdminURL){
                     array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
                     array_push($sideMenuLink, $phpMyAdminURL);
                     array_push($sideMenuImg, "arrow.png");

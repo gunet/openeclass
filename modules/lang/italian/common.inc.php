@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-19 13:31:16
+// Generated 2012-10-31 12:32:35
 
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
 $langYes = "Sì";

@@ -285,7 +285,7 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langphpMyAdminURL</th>
-	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
+	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langUncompulsory</td>
 	</tr>
 	<tr>
 	<td colspan='2' class='right'>
