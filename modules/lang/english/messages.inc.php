@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2012-10-31 12:32:31
+// Generated 2012-10-31 14:35:31
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1149,7 +1149,7 @@ $langReviewSettings = "Your settings are: (You can print them if you want to rem
 $langToReq = "User registration via request to platform administrator";
 $langLDAPBaseDn = "LDAP Server Base DN";
 $langChooseLang = "Choose language";
-$langExpPhpMyAdmin = "Open eClass doesn't include any more a copy of the <a href=\"http://www.phpmyadmin.net\"target=_blank>phpMyAdmin</a> web-based MySQL database administration tool. Please install it yourself if required.";
+$langExpPhpMyAdmin = "Open eClass <b><u>DOESN'T</u></b> include any more a copy of the <a href=\"http://www.phpmyadmin.net\"target=_blank>phpMyAdmin</a> web-based MySQL database administration tool. Please install it yourself if required.";
 $langBeforeInstall1 = "Before you proceed with the installation please print and read carefully the ";
 $langBeforeInstall2 = "In addition, some general instructions about the platform can be found ";
 $langInstallInstr = "Installation Instructions";
@@ -1936,10 +1936,11 @@ $langAs = "as";
 $langUpgrade = "Database upgrade";
 $langExplUpgrade = "The upgrade script will modify configuration file <em>config.php</em>.
    Please make sure that the web server has access to <em>config.php</em>. For security reasons, current configuration settings of <em>config.php</em> will be stored in file <em>config_backup.php</em>.";
-$langExpl2Upgrade = "Also for security reasons make sure to backup all databases.";
+$langExpl2Upgrade = "<ul><li>Also for security reasons make sure to backup all databases.</il>
+ <li>Current version of Open eClass <b><u>DOESN'T</u></b> include database administration tool phpMyAdmin. If you wish, you can copy folder (path του eclass)/modules/admin/mysql/ in a temporary folder (e.g. /tmp). After upgrade has completed you can restore it to its previous location. Otherwise you can download latest version from <a href=\"http://www.phpmyadmin.net\" target=_blank>here</a>.</li></ul>";
 $langWarnUpgrade = "WARNING!";
 $langExecTimeUpgrade = "WARNING! For the upgrade script to run successfully make sure that the value of php variable <em>max_execution_time</em> which is defined in <em>php.ini</em> file is larger than 300 (= 5 minutes). Modify the variable and restart the upgrade process";
-$langUpgradeCont = "Tο continue with the upgrade process, please enter the platform administrator username / password:";
+$langUpgradeCont = "Tο continue with the upgrade process, please enter the platform administrator username / password.";
 $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgLastStep = "before continue.";
