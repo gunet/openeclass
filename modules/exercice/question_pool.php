@@ -220,7 +220,7 @@ if($is_editor) {
 				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
 				</td>
 				<td width='3'><div align='center'><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."\">
-				  <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a></div>
+				  <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."'></a></div>
 				</td>";
 			} else {
 				$tool_content .= "

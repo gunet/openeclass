@@ -241,34 +241,33 @@ class Answer
 	{
 		global $TBL_REPONSES, $currentCourseID;
 
-		$questionId=$this->questionId;
+		$questionId = intval($this->questionId);
 		// removes old answers before inserting of new ones
-		$sql="DELETE FROM `$TBL_REPONSES` WHERE question_id='$questionId'";
+		$sql = "DELETE FROM `$TBL_REPONSES` WHERE question_id = $questionId";
 		db_query($sql, $currentCourseID);
 		// inserts new answers into data base
-		$sql="INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
+		$sql = "INSERT INTO `$TBL_REPONSES`(id,question_id,reponse,correct,comment,ponderation,r_position) VALUES";
 
-		for($i=1;$i <= $this->new_nbrAnswers;$i++)
-		{
-			$answer=addslashes($this->new_answer[$i]);
-			$correct=$this->new_correct[$i];
-			$comment=addslashes($this->new_comment[$i]);
-			$weighting=$this->new_weighting[$i];
-			$position=$this->new_position[$i];
-			$sql.="('$i','$questionId','$answer','$correct','$comment','$weighting','$position'),";
+		for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
+			$answer = quote($this->new_answer[$i]);
+			$correct = intval($this->new_correct[$i]);
+			$comment = quote(standard_text_escape($this->new_comment[$i]));
+			$weighting = floatval($this->new_weighting[$i]);
+			$position = intval($this->new_position[$i]);
+			$sql .= "($i, $questionId, $answer, $correct, $comment, $weighting, $position),";
 		}
 
-		$sql=substr($sql,0,-1);
+		$sql = substr($sql, 0, -1); // Remove final comma
 		db_query($sql);
 
 		// moves $new_* arrays
-		$this->answer=$this->new_answer;
-		$this->correct=$this->new_correct;
-		$this->comment=$this->new_comment;
-		$this->weighting=$this->new_weighting;
-		$this->position=$this->new_position;
+		$this->answer = $this->new_answer;
+		$this->correct = $this->new_correct;
+		$this->comment = $this->new_comment;
+		$this->weighting = $this->new_weighting;
+		$this->position = $this->new_position;
 
-		$this->nbrAnswers=$this->new_nbrAnswers;
+		$this->nbrAnswers = $this->new_nbrAnswers;
 
 		// clears $new_* arrays
 		$this->cancel();
@@ -304,4 +303,4 @@ class Answer
 	}
 }
 endif;
-?>
+

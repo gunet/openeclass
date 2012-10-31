@@ -221,21 +221,15 @@ if(!$nbrExercises) {
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'>
-                           <img src='$themeimg/edit.png' alt='".q($langModify_temp)."' title='".q($langModify_temp)."' />
-			  </a>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>          
-			  <img src='$themeimg/delete.png' alt='".q($langDelete_temp)."' title='".q($langDelete_temp)."' />
-			  </a>";
+			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='".q($langModify_temp)."' title='".q($langModify_temp)."'></a>
+				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'><img src='$themeimg/delete.png' alt='".q($langDelete_temp)."' title='".q($langDelete_temp)."'></a>&nbsp;";
 		
 			// if active
 			if($row['active']) {
 				if (isset($page)) {
-					$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\">
-					<img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
+					$tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;page=${page}&amp;exerciseId=".$row['id']."\"><img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				} else {
-					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'>
-					<img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
+					$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=disable&amp;exerciseId=".$row['id']."'><img src='$themeimg/visible.png' alt='".q($langVisible)."' title='".q($langVisible)."'></a>&nbsp;";
 				}
 			} else { // else if not active
 				if (isset($page)) {

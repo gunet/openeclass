@@ -23,7 +23,7 @@
 // the question form has been submitted
 if(isset($_POST['submitQuestion'])) {
 	$questionName = trim($questionName);
-	$questionDescription = trim($questionDescription);
+	$questionDescription = standard_text_escape(trim($questionDescription));
 	// no name given
 	if(empty($questionName))
 	{
@@ -111,8 +111,8 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>
 	  <tr>
-	    <th>".$langQuestion." :</th>
-	    <td><input type='text' name=\"questionName\"" ."size='50' value=\"".htmlspecialchars($questionName)."\"></td>
+	    <th>".q($langQuestion).":</th>
+	    <td><input type='text' name=\"questionName\"" ."size='50' value=\"".q($questionName)."\"></td>
 	  </tr>
 	  <tr>
 	    <th valign='top'>$langQuestionDescription:</th>
@@ -124,13 +124,12 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	    <th valign='top'>";
 
 	if ($okPicture) {
-		$tool_content .= "$langReplacePicture";
+		$tool_content .= "$langReplacePicture:";
 	} else { 
-		$tool_content .= "$langAddPicture";
+		$tool_content .= "$langAddPicture:";
 	}	
 
-	$tool_content .= " :</th>
-        <td>";
+	$tool_content .= "</th><td>";
 	if($okPicture) {
 		$tool_content .= "<img src='$picturePath/quiz-$questionId'><br/><br/>";
 	}
@@ -138,7 +137,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 
 	if ($okPicture) {
 		$tool_content .= "<tr>
-		<th>$langDeletePicture :</th>
+		<th>$langDeletePicture:</th>
 		<td><input type=\"checkbox\" name=\"deletePicture\" value=\"1\" ";
 		if(isset($_POST['deletePicture'])) {
 			$tool_content .= 'checked="checked"'; 
@@ -147,7 +146,7 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 		$tool_content .= "</td></tr>";
 	}
 	$tool_content .= "<tr>
-        <th valign='top'>$langAnswerType :</th>
+        <th valign='top'>$langAnswerType:</th>
 	<td><input type='radio' name='answerType' value='1' ";
         if ($answerType == 1) {
                 $tool_content .= 'checked="checked"';

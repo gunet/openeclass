@@ -101,8 +101,7 @@ if(isset($usedInSeveralExercises)) {
         <legend>$langQuestion &nbsp;";
         // doesn't show the edit link if we come from the question pool to pick a question for an exercise
         if(!isset($fromExercise)) {
-                $tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;modifyQuestion=".$questionId."\">
-                <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
+                $tool_content .= "&nbsp;<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;modifyQuestion=".$questionId."\"><img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."'></a>";
         }
 
         $tool_content .= "</legend>
@@ -122,8 +121,7 @@ if(isset($usedInSeveralExercises)) {
 
 	// doesn't show the edit link if we come from the question pool to pick a question for an exercise
 	if(!isset($fromExercise)) {
-		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyAnswers=$questionId'>
-		<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>";
+		$tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyAnswers=$questionId'><img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."'></a>";
 	}
         $tool_content .= "<br/></th>
 	</tr>

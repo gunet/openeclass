@@ -85,23 +85,24 @@ if($nbrQuestions) {
                        $tool_content .= "\n    <tr class='even'>";
                     }
 
-		$tool_content .= "
-			<td align='right' width='1'>".$i.".</td>
-			<td> ".$objQuestionTmp->selectTitle()."<br />
-			".$aType[$objQuestionTmp->selectType()-1]."</td>
-			<td class='right' width='50'><a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;editQuestion=".$id."'>".
-			"<img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."' /></a>".
-			" <a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;deleteQuestion=".$id."' "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-			"<img src='$themeimg/delete.png' title='".q($langDelete)."' alt='".q($langDelete)."' /></a></td>
-		<td width='20'>";
+                $tool_content .= "<td align='right' width='1'>$i</td><td> " .
+                        q($objQuestionTmp->selectTitle()) . "<br />" .
+                        $aType[$objQuestionTmp->selectType()-1] .
+                        "</td><td class='right' width='50'>" .
+                        icon('edit', $langModify,
+                             $_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;editQuestion=$id") . "&nbsp;" .
+                        icon('delete', $langDelete,
+                             $_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;deleteQuestion=$id",
+                             "onclick=\"if(!confirm('".js_escape($langConfirmYourChoice)."')) return false;\"") .
+			"</td><td width='20'>";
 		if($i != 1) {
-			$tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveUp=".$id."'>
-   			<img src='$themeimg/up.png' align='middle' title='".q($langUp)."' /></a> ";
+                        $tool_content .= icon('up', $langUp,
+                                              $_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveUp=$id");
 		}
 		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
-			$tool_content .= "<a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveDown=".$id."'>
-			<img src='$themeimg/down.png' align='middle' title='".q($langDown)."' /></a> ";
+                        $tool_content .= icon('down', $langDown,
+                                              $_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;moveDown=$id");
 		}
 		$tool_content .= "</td></tr>";
 		$i++;

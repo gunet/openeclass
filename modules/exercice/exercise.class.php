@@ -416,7 +416,7 @@ class Exercise
 
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
-		$description=addslashes($this->description);
+		$description = autoquote(standard_text_escape($this->description));
 		$type=$this->type;
 		$StartDate=$this->StartDate;
 		$EndDate=$this->EndDate;
@@ -431,11 +431,11 @@ class Exercise
 		if($id)
 		{
 			mysql_select_db($currentCourseID);
-			$sql="UPDATE `$TBL_EXERCICES` 
-				SET titre='$exercise',description='$description',type='$type',".
-				"StartDate='$StartDate',EndDate='$EndDate',TimeConstrain='$TimeConstrain',".
-				"AttemptsAllowed='$AttemptsAllowed', random='$random',
-				active='$active', results='$results', score='$score' WHERE id='$id'";
+			$sql = "UPDATE `$TBL_EXERCICES` 
+				SET titre = '$exercise', description = $description, type = '$type', ".
+				"StartDate = '$StartDate', EndDate = '$EndDate', TimeConstrain = '$TimeConstrain', ".
+				"AttemptsAllowed = '$AttemptsAllowed',  random = '$random', 
+				active = '$active',  results = '$results',  score = '$score' WHERE id = '$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
@@ -443,8 +443,8 @@ class Exercise
 		{
 			mysql_select_db($currentCourseID);
 			$sql="INSERT INTO `$TBL_EXERCICES`
-				VALUES (NULL, '$exercise','$description',$type,'$StartDate','$EndDate',
-					$TimeConstrain, $AttemptsAllowed, $random, $active, $results, $score)";
+				VALUES (NULL,  '$exercise', $description, $type, '$StartDate', '$EndDate', 
+					$TimeConstrain,  $AttemptsAllowed,  $random,  $active,  $results,  $score)";
 			db_query($sql);
 			$this->id=mysql_insert_id();
 		}
@@ -597,4 +597,3 @@ class Exercise
 
 endif;
 
-?>
