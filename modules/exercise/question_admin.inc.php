@@ -22,7 +22,7 @@
 // if the question we are modifying is used in several exercises
 if(isset($usedInSeveralExercises)) {
 	@$tool_content .= "
-	<h3>$questionName</h3>
+	<h3>". q($questionName) ."</h3>
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyQuestion=$_GET[modifyQuestion]&amp;modifyAnswers=$_GET[modifyAnswers]'>
 	<table class='tbl' width='100%'><tr><td>";
 
@@ -104,7 +104,7 @@ if(isset($usedInSeveralExercises)) {
         }
 
         $tool_content .= "</legend>
-	<b>".nl2br($questionName)."</b>&nbsp;&nbsp;";
+	<b>".nl2br(q($questionName))."</b>&nbsp;&nbsp;";
 
 	$questionDescription = standard_text_escape($questionDescription);
 	$tool_content .= "<br/><i>$questionDescription</i>";

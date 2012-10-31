@@ -39,7 +39,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$tool_content .= "
                   <tr class='even'>
                     <td colspan='2'>
-		<b>$questionName</b><br />
+		<b>". q($questionName) ."</b><br />
 		$questionDescription_temp
                 </td>
               </tr>";
@@ -93,7 +93,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td class='center' width='1'>
 			    <input type='radio' name='choice[${questionId}]' value='${answerId}' />
 			  </td>
-			  <td>${answer}</td>
+			  <td>". standard_text_escape($answer) ."</td>
 			</tr>";
 		}
 		// multiple answers
@@ -103,14 +103,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
 			  <td width='1' align='center'>
 			    <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
 			  </td>
-			  <td>${answer}</td>
+			  <td>". standard_text_escape($answer) ."</td>
 			</tr>";
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
 			$tool_content .= "
 			<tr class='even'>
-			  <td colspan='2'>${answer}</td>
+			  <td colspan='2'>". standard_text_escape($answer) ."</td>
 			</tr>";
 		}
 		// matching
@@ -119,7 +119,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
-				$Select[$answerId]['Reponse']=$answer;
+				$Select[$answerId]['Reponse'] = standard_text_escape($answer);
 			}
 			else
 			{
@@ -128,7 +128,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				  <td colspan='2'>
 				    <table class='tbl'>
 				    <tr>
-				      <td width='200'><b>${cpt2}.</b> ${answer}</td>
+				      <td width='200'><b>${cpt2}.</b> ". standard_text_escape($answer) ."</td>
 				      <td width='130'><div align='center'>
 				       <select name='choice[${questionId}][${answerId}]'>
 					 <option value='0'>--</option>";
@@ -182,7 +182,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                             <td width='1' align='center'>
                               <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                             </td>
-                            <td>$answer</td>
+                            <td>". standard_text_escape($answer) ."</td>
                           </tr>";
 		}
 	}	// end for()

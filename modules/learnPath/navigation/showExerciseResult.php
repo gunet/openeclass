@@ -96,8 +96,8 @@ $displayScore             = $objExercise->selectScore();
 
 echo "<table class='tbl_border' width='99%'>
   <tr class='odd'>
-    <td colspan='2'><b>".stripslashes($exerciseTitle)."</b>
-    <br/>".stripslashes($exerciseDescription_temp)."
+    <td colspan='2'><b>". q(stripslashes($exerciseTitle)) ."</b>
+    <br/>". standard_text_escape(stripslashes($exerciseDescription_temp)) ."
     </td>
   </tr>
   </table>";
@@ -119,9 +119,7 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	$objQuestionTmp->read($questionId);
 
         $questionName             = $objQuestionTmp->selectTitle();
-        $questionName             = $questionName;
         $questionDescription      = $objQuestionTmp->selectDescription();
-        $questionDescription      = $questionDescription;
         $questionDescription_temp = nl2br(make_clickable($questionDescription));
         $questionDescription_temp = mathfilter($questionDescription_temp, 12, "$webDir/courses/mathimg/");
         $questionWeighting        = $objQuestionTmp->selectWeighting();
@@ -151,10 +149,10 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
         </tr>
         <tr>
         <td class='even' colspan='${colspan}'>
-        <b>$questionName</b>
-        <br />
-        $questionDescription_temp
-        <br/><br/>
+        <b>". q($questionName) ."</b>
+        <br />".
+        standard_text_escape($questionDescription_temp)
+        ."<br/><br/>
         </td>
         </tr>";
 
@@ -317,10 +315,10 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 					}
 					echo (".png\" /></div>");
 					echo ("</td>
-                                              <td>${answer}</td>
+                                              <td>". standard_text_escape($answer) ."</td>
                                               <td>");
 					if ($studentChoice) {
-						echo nl2br(make_clickable($answerComment));
+						echo standard_text_escape(nl2br(make_clickable($answerComment)));
 					} else {
 						echo ('&nbsp;');
 					}
@@ -328,12 +326,12 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 				} elseif($answerType == FILL_IN_BLANKS) {
 					echo ("
                                         <tr class='even'>
-                                          <td>".nl2br($answer)."</td>
+                                          <td>". standard_text_escape(nl2br($answer)) ."</td>
                                         </tr>");
 				} else {
 					echo ("
                                         <tr class='even'>
-                                          <td>${answer}</td>
+                                          <td>". standard_text_escape($answer) ."</td>
                                           <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
                                         </tr>");
 				}

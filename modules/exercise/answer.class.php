@@ -250,9 +250,9 @@ class Answer
 
 		for($i = 1; $i <= $this->new_nbrAnswers; $i++)
 		{
-			$answer    = addslashes($this->new_answer[$i]);
+			$answer    = addslashes(standard_text_escape($this->new_answer[$i]));
 			$correct   = $this->new_correct[$i];
-			$comment   = addslashes($this->new_comment[$i]);
+			$comment   = addslashes(standard_text_escape($this->new_comment[$i]));
 			$weighting = $this->new_weighting[$i];
 			$position  = $this->new_position[$i];
 			$sql .= "('$i', '$questionId', '$answer', '$correct', '$comment', '$weighting', '$position'),";

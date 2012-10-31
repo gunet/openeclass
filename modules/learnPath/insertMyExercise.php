@@ -176,10 +176,10 @@ while ($listex = mysql_fetch_array($resultex) )
 
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
-                $messBox .= "<tr>". disp_message_box($exercise['title']." : ".$langExInsertedAsModule."<br>", "success") ."</td></tr>";
+                $messBox .= "<tr>". disp_message_box(q($exercise['title']) ." : ".$langExInsertedAsModule."<br>", "success") ."</td></tr>";
             }
             else {
-                $messBox .= "<tr>". disp_message_box($listex['title']." : ".$langExAlreadyUsed."<br>", "caution") ."</td></tr>";
+                $messBox .= "<tr>". disp_message_box(q($listex['title']) ." : ".$langExAlreadyUsed."<br>", "caution") ."</td></tr>";
             }
         }
     } // end if request

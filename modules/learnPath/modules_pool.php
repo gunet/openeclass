@@ -141,7 +141,7 @@ switch( $cmd )
                         <table width='100%' class='tbl'>
                         <tr>
                         <td class=\"odd\" width=\"160\"><label for=\"newName\">".$langInsertNewModuleName."</label> :</td>
-                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"".htmlspecialchars($list['name'])."\"></input>
+                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"". q($list['name']) ."\"></input>
                                 <input type=\"submit\" value=\"".$langImport."\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">
@@ -290,7 +290,7 @@ while ($list = mysql_fetch_array($result))
     $tool_content .= "
     <tr $style>
       <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"".$themeimg.'/'.$contentType_img."\" alt=\"".$contentType_alt."\" title=\"".$contentType_alt."\" /></td>
-      <td align=\"left\"><b>".$list['name']."</b>";
+      <td align=\"left\"><b>". q($list['name']) ."</b>";
 
     if ( $list['comment'] )
     {
