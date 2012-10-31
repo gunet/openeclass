@@ -174,7 +174,7 @@ foreach ($flatElementList as $module)
 	//-- if chapter head
 	if ( $module['contentType'] == CTLABEL_ )
 	{
-		$tool_content .= '      <b>'.$module['name'].'</b>';
+		$tool_content .= '      <b>'. q($module['name']) .'</b>';
 	}
 	//-- if user can access module
 	else
@@ -190,7 +190,7 @@ foreach ($flatElementList as $module)
 		else
 		$moduleImg = choose_image(basename($module['path']));
 		$contentType_alt = selectAlt($module['contentType']);
-		$tool_content .= '<img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'.$module['name'].'</small>';
+		$tool_content .= '<img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'. q($module['name']) .'</small>';
 	}
 
 		$tool_content .= '</td>'."\n";

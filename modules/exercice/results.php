@@ -66,10 +66,10 @@ $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $tool_content .= "
     <table class=\"tbl_border\" width=\"100%\">
     <tr>
-    <th>$exerciseTitle</th>
+    <th>". q($exerciseTitle) ."</th>
     </tr>
     <tr>
-    <td>${exerciseDescription_temp}</td>
+    <td>". standard_text_escape($exerciseDescription_temp) ."</td>
     </tr>
     </table>
     <br/>";

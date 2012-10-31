@@ -500,7 +500,7 @@ if(isset($_GET['modifyAnswers'])) {
 		     
 			<fieldset>
 			<legend>$langQuestion</legend>
-			  <b>".nl2br($questionName)."</b>
+			  <b>".nl2br(q($questionName))."</b>
 			</fieldset>
 		     
 			<fieldset>
@@ -614,7 +614,7 @@ if(isset($_GET['modifyAnswers'])) {
 				$tool_content .= "
 				<fieldset>
 				<legend>$langQuestion</legend>
-				 <b>$questionName</b>
+				 <b>". q($questionName) ."</b>
 				 <br />";
 				if($okPicture) {
 					$tool_content .= "<div align=\"center\"><img src=\"".$picturePath."/quiz-".$questionId."\" alt=''></div>";
@@ -699,7 +699,7 @@ if(isset($_GET['modifyAnswers'])) {
 			
 		    <fieldset>
 		    <legend>$langQuestion</legend>
-		    $questionName
+		    ". q($questionName) ."
 		    </fieldset>	
 		    
 		    <fieldset>
@@ -824,7 +824,7 @@ $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
 			<input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
 			<fieldset>
 			 <legend>$langQuestion</legend>
-			   <b>".nl2br($questionName)."</b>";
+			   <b>".nl2br(q($questionName))."</b>";
 			// if there is a picture, display this
 			if($okPicture) {
 				$tool_content .= "

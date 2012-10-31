@@ -232,7 +232,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
 echo ("
   <table width='99%' class='tbl_border'>
   <tr class='odd'>
-    <td colspan=\"2\"><b>$exerciseTitle</b>
+    <td colspan=\"2\"><b>". q($exerciseTitle) ."</b>
     <br/>
     $exerciseDescription_temp</td>
   </tr>
@@ -267,7 +267,7 @@ echo ("
                                     $questionName=$objQuestionTmp->selectTitle();
                                     // destruction of the Question object
                                     unset($objQuestionTmp);
-                                    echo '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>';
+                                    echo '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'. q($questionName) .'&quot;</div>';
                                     break;
                             }
                     }
@@ -342,7 +342,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		$questionDescription=$objQuestionTmp->selectDescription();	
 		$questionDescription_temp = standard_text_escape($questionDescription);
 		echo "<tr class='even'>
-                    <td colspan='2'><b>$questionName</b><br />
+                    <td colspan='2'><b>". q($questionName) ."</b><br />
                     $questionDescription_temp
                     </td>
                     </tr>";
@@ -378,7 +378,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 	}
 
 	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer = standard_text_escape($objAnswerTmp->selectAnswer($answerId));
+		$answer = $objAnswerTmp->selectAnswer($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		if($answerType == FILL_IN_BLANKS) {
 			// splits text and weightings that are joined with the character '::'
@@ -395,7 +395,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                         <td class='center' width='1'>
                           <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                         </td>
-                        <td>${answer}</td>
+                        <td>". standard_text_escape($answer) ."</td>
                       </tr>";
 		}
 		// multiple answers
@@ -405,14 +405,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
                         <td width='1' align='center'>
                           <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
                         </td>
-                        <td>${answer}</td>
+                        <td>". standard_text_escape($answer) ."</td>
                       </tr>");
 		}
 		// fill in blanks
 		elseif($answerType == FILL_IN_BLANKS) {
 			echo ("
                       <tr class='even'>
-                        <td colspan='2'>${answer}</td>
+                        <td colspan='2'>". standard_text_escape($answer) ."</td>
                       </tr>");
 		}
 		// matching
@@ -421,7 +421,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
-				$Select[$answerId]['Reponse']=$answer;
+				$Select[$answerId]['Reponse']= standard_text_escape($answer);
 			}
 			else
 			{
@@ -430,7 +430,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                                 <td colspan='2'>
                                   <table class='tbl'>
                                   <tr>
-                                    <td width='200'><b>${cpt2}.</b> ${answer}</td>
+                                    <td width='200'><b>${cpt2}.</b> ". standard_text_escape($answer) ."</td>
                                     <td width='130'><div align='center'>
                                      <select name='choice[${questionId}][${answerId}]'>
                                        <option value='0'>--</option>");

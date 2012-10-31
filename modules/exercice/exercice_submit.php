@@ -232,7 +232,7 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <th colspan=\"2\">$exerciseTitle</th>
+    <th colspan=\"2\">". q($exerciseTitle) ."</th>
   </tr>
   <tr class='even'>
     <td colspan=\"2\">$exerciseDescription_temp</td>
@@ -269,7 +269,7 @@ foreach($questionList as $questionId) {
 				$questionName=$objQuestionTmp->selectTitle();
 				// destruction of the Question object
 				unset($objQuestionTmp);
-				$tool_content .= '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'.$questionName.'&quot;</div>';
+				$tool_content .= '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'. q($questionName) .'&quot;</div>';
 				break;
 			}
 		}

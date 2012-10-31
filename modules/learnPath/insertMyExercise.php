@@ -37,7 +37,6 @@
 
     @Comments:
 
-    @todo:
 ==============================================================================
 */
 
@@ -195,7 +194,7 @@ while ($listex = mysql_fetch_array($resultex) )
 
                 $result = db_query($sql);
                 $exercise = mysql_fetch_array($result);
-                $MessBox .= $exercise['titre']." : ".$langExInsertedAsModule."<br>";
+                $MessBox .= q($exercise['titre'])." : ".$langExInsertedAsModule."<br>";
                 $style = "success";
                 $tool_content .= "<table width=\"100%\" class=\"tbl_alt\"><tr>";
                 $tool_content .= disp_message_box($MessBox, $style);
@@ -204,7 +203,7 @@ while ($listex = mysql_fetch_array($resultex) )
             }
             else
             {
-                $MessBox .= $listex['titre']." : ".$langExAlreadyUsed."<br>";
+                $MessBox .= q($listex['titre']) ." : ".$langExAlreadyUsed."<br>";
                 $style = "caution";
                 $tool_content .= "<table width=\"100%\" class=\"tbl_alt\"><tr>";
                 $tool_content .= disp_message_box($MessBox, $style);

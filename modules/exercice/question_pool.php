@@ -146,7 +146,7 @@ if($is_editor) {
 		if(isset($exerciseId) && $exerciseId == $row['id']) {
 			$tool_content .= "selected=\"selected\"";
 		}
-		$tool_content .= ">".$row['titre']."</option>\n";
+		$tool_content .= ">". q($row['titre']) ."</option>\n";
 	}
 	$tool_content .= "</select></div></td></tr>\n";
 
@@ -217,7 +217,7 @@ if($is_editor) {
 				  <img src='$themeimg/arrow.png' alt='bullet'></div>
 				</td>
 				<td>
-				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">".$row['question']."</a><br/>".$answerType."
+				  <a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=\">". q($row['question']) ."</a><br/>".$answerType."
 				</td>
 				<td width='3'><div align='center'><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."\">
 				  <img src='$themeimg/edit.png' title='".q($langModify)."' alt='".q($langModify)."'></a></div>
@@ -227,7 +227,7 @@ if($is_editor) {
 				<td width='1'><div style='padding-top:4px;'>
 				  <img src='$themeimg/arrow.png'></div>
 				</td>
-				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">".$row['question']."</a><br/>".$answerType."</td>
+				<td><a href=\"admin.php?course=$code_cours&amp;editQuestion=".$row['id']."&amp;fromExercise=".$fromExercise."\">". q($row['question']) ."</a><br/>".$answerType."</td>
 				<td class='center'><div align='center'>
 				  <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$code_cours&amp;recup=".$row['id'].
 				"&amp;fromExercise=".$fromExercise."\"><img src='$themeimg/enroll.png' title='".q($langReuse)."' /></a>

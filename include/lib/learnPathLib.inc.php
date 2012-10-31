@@ -681,13 +681,13 @@ function display_my_exercises($dialogBox, $style)
 	        .    '      <td align="left">'
 	        .    '<label for="check_'.$exercise['id'].'" >'
 	        .    '<img src="' . $themeimg . '/exercise_on.png" alt="' . q($langExercise) . '" title="' . q($langExercise) . '" />&nbsp;'
-	        .    $exercise['title']
+	        .    q($exercise['title'])
 	        .    '</label>'
 	        .    '<br />'."\n";
 	        // COMMENT
 	        if( !empty($exercise['description']) )
 	        {
-	            $output .= '      <span class="comments">' . $exercise['description'] . '</span>'
+	            $output .= '      <span class="comments">' . standard_text_escape($exercise['description']) . '</span>'
 	            .    '</td>'."\n"
 	            ;
 	        } else {

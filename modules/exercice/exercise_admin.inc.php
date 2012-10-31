@@ -80,7 +80,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
 	$tool_content .= "
 	<tr>
           <th width='180'>".$langExerciseName.":</th>
-	  <td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"".htmlspecialchars($exerciseTitle)."\" style=\"width:400px;\"></td>
+	  <td><input type=\"text\" name=\"exerciseTitle\" "."size=\"50\" maxlength=\"200\" value=\"". q($exerciseTitle) ."\" style=\"width:400px;\"></td>
 	</tr>
 	<tr>
           <th>".$langExerciseDescription.":</th>
@@ -202,7 +202,7 @@ if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POS
         <table width='99%' class='tbl'>
 	<tr>
 	  <th width='180'>$langExerciseName :</th>
-	  <td>$exerciseTitle</td>
+	  <td>". q($exerciseTitle) ."</td>
 	</tr>
 	<tr>
 	  <th>$langExerciseDescription :</th>
