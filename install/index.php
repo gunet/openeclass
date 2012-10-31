@@ -104,14 +104,14 @@ if (file_exists("../config/config.php")) {
 
 // Input fields that have already been included in the form, either as hidden or as normal inputs
 $input_fields = array();
+$phpSysInfoURL = '../admin/sysinfo/';
 
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
 	$dbHostForm = 'localhost';
 	$dbUsernameForm = 'root';
 	$dbNameForm = 'eclass';
-	$dbMyAdmin = '../admin/mysql/';
-	$phpSysInfoURL = '../admin/sysinfo/';
+	$dbMyAdmin = '';
 	// extract the path to append to the url if it is not installed on the web root directory
 	$urlAppendPath = str_replace('/install/index.php', '', $_SERVER['SCRIPT_NAME']);
 	$urlForm = "http://".$_SERVER['SERVER_NAME']."$urlAppendPath/";
@@ -145,7 +145,6 @@ if (isset($_POST['welcomeScreen'])) {
                 'dbNameForm' => true,
                 'dbMyAdmin' => true,
                 'dbPassForm' => true,        
-                'phpSysInfoURL' => true,
                 'urlAppendPath' => true,
                 'urlForm' => true,
                 'pathForm' => true,
@@ -229,7 +228,7 @@ function selection_input($entries, $name)
 
 $all_vars = array('pathForm', 'urlAppendPath', 'dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
                   'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'surnameForm', 'loginForm',
-                  'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
+                  'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                   'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
 		  'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                   'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required', 
@@ -285,12 +284,8 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<td>".text_input('dbNameForm', 25)."&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
 	<tr>
-	<th class='left'>URL του phpMyAdmin</th>
+	<th class='left'>$langphpMyAdminURL</th>
 	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
-	</tr>
-	<tr>
-	<th class='left'>URL του System info</th>
-	<td>".text_input('phpSysInfoURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td>
 	</tr>
 	<tr>
 	<td colspan='2' class='right'>

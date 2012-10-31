@@ -1622,7 +1622,7 @@ $langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτη
 $langToReqOpen = "Οι χρήστες εγγράφονται ελεύθερα χωρίς έγκριση του διαχειριστή";
 $langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
 $langChooseLang = "Επιλογή Γλώσσας";
-$langExpPhpMyAdmin = "Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά μπορείτε να χρησιμοποιήσετε και το δικό σας.";
+$langExpPhpMyAdmin = "Η διανομή του Open eClass δεν περιλαμβάνει πλέον το διαχειριστικό εργαλείο βάσεων δεδομένων MySQL μέσω web <a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>. Μπορείτε να το εγκαταστήσετε εσείς αν επιθυμείτε.";
 $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις ";
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
