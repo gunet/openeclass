@@ -70,7 +70,7 @@ function genPassPronouncable() {
  */
 function genPassRandom($length = 8)    {
     
-    $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()";
+    $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 
     mt_srand((double)microtime() * 1000000);
 
