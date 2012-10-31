@@ -90,6 +90,10 @@ if (isset($_POST['submit']))  {
 
 		$string_active_ui_languages = 'array(' . implode(', ', $active_lang_codes) . ');';
 
+                if (isset($emailAnnounce)) {
+                        $string_emailAnnounce = '$emailAnnounce = ' . quote($emailAnnounce) . ";\n";
+                }
+
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
@@ -116,13 +120,13 @@ $emailAdministrator='.autoquote($_POST['formemailAdministrator']).';
 $administratorName='.autoquote($_POST['formadministratorName']).';
 $administratorSurname='.autoquote($_POST['formadministratorSurname']).';
 $siteName='.autoquote($_POST['formsiteName']).';
+' . $string_emailAnnounce . '
 
 $telephone='.autoquote($_POST['formtelephone']).';
 $emailhelpdesk='.autoquote($_POST['formemailhelpdesk']).';
 $Institution='.autoquote($_POST['formInstitution']).';
 $InstitutionUrl='.autoquote($_POST['formInstitutionUrl']).';
 
-// available: greek and english
 $language = "'.$_POST['formlanguage'].'";
 
 $postaddress = '.autoquote($_POST['formpostaddress']).';
