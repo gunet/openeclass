@@ -544,10 +544,6 @@ if (!isset($_POST['submit2'])) {
         if ($oldversion < '2.6') {
             db_query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
             $old_close_user_registration = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'close_user_registration'");
-            /* $old_disable_eclass_stud_reg = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_stud_reg'");
-            if ($old_disable_eclass_reg == 0) {
-                    $eclass_stud_reg = 0;
-            } else*/
             if ($old_close_user_registration == 0) {
                     $eclass_stud_reg = 2;
             } else  {
@@ -557,15 +553,24 @@ if (!isset($_POST['submit2'])) {
                                           `value`= $eclass_stud_reg
                                       WHERE `key` = 'close_user_registration'");
             
-            $old_disable_eclass_prof_reg = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'");
+            $old_disable_eclass_prof_reg = !(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'"));
             db_query("UPDATE `config` SET `key` = 'eclass_prof_reg',
                                            `value` = $old_disable_eclass_prof_reg
                                       WHERE `key` = 'disable_eclass_prof_reg'");
-            db_query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");            
+            db_query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");
+            db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
+            $old_alt_auth_stud_req = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'alt_auth_student_req'");
+            if ($old_alt_auth_stud_req == 1) {                    
+                    $alt_auth_stud_req = 1;
+            } else {
+                    $alt_auth_stud_req = 2;
+            }
             db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('user_registration', 1),
                                         ('alt_auth_prof_reg', 1),
-                                        ('alt_auth_stud_reg', 2)");
+                                        ('alt_auth_stud_reg', $alt_auth_stud_req)");
+            
+            db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
             
             if (!mysql_field_exists($mysqlMainDb, 'user', 'whitelist')) {
                     db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
