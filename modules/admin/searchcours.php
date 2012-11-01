@@ -42,7 +42,7 @@
 
 ==============================================================================*/
 
-$require_admin = TRUE;
+$require_power_user = true;
 // Include baseTheme
 include '../../include/baseTheme.php';
 // Define $nameTools
