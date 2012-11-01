@@ -335,7 +335,7 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "arrow.png");
                 	
-	if ((get_config('eclass_stud_reg') == 1) or get_config('eclass_auth_stud_reg') == 0) {
+	if ((get_config('eclass_stud_reg') == 1) or get_config('alt_auth_stud_reg') == 0) {
 		array_push($sideMenuText, $GLOBALS['langUserOpen']);
 		array_push($sideMenuLink, "../admin/listreq.php?type=user");
 		array_push($sideMenuImg, "arrow.png");
