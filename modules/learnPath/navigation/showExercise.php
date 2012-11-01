@@ -412,7 +412,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		elseif($answerType == FILL_IN_BLANKS) {
 			echo ("
                       <tr class='even'>
-                        <td colspan='2'>". standard_text_escape($answer) ."</td>
+                        <td colspan='2'>". $answer ."</td>
                       </tr>");
 		}
 		// matching
