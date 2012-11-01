@@ -298,8 +298,8 @@ if (isset($require_current_course) and $require_current_course) {
 
 		// Check for course visibility by current user
 		$statut = 0;
-		// The admin can see all courses as adminOfCourse
-		if ($is_admin) {
+		// The admin and poser users can see all courses as adminOfCourse
+		if ($is_admin or $is_power_user) {
 			$statut = 1;
 		} else {
 			$res2 = db_query("SELECT statut FROM cours_user
@@ -347,8 +347,8 @@ if (isset($require_current_course) and $require_current_course) {
 }
 
 // actually a prof has $status 1 
-// the system admin has rights to all courses
-if ($is_admin) {
+// the system admin and power user has rights to all courses
+if ($is_admin or $is_power_user) {
 	$is_course_admin = TRUE;
 	if (isset($currentCourse)) {
 		$_SESSION['status'][$currentCourse] = 1;
