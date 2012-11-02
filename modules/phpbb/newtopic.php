@@ -58,7 +58,7 @@ include '../../include/sendMail.inc.php';
 include '../group/group_functions.php';
 
 include_once("./config.php");
-include("functions.php"); 
+include("functions.php");
 
 /******************************************************************************
  * Actual code starts here
@@ -110,13 +110,13 @@ if (isset($_POST['submit'])) {
 		header("Location: viewforum.php?course=$code_cours&forum=$forum&empty=true");
 		exit;
 	}
-	
+
 	// Check that, if this is a private forum, the current user can post here.
 	if (!$can_post) {
 		$tool_content .= "<div class='caution'>$langPrivateForum $langNoPost</div>";
 		draw($tool_content, 2);
 		exit();
-		
+
 	}
 	$is_html_disabled = false;
 	if ((isset($allow_html) && $allow_html == 0) || isset($html)) {
@@ -162,42 +162,50 @@ if (isset($_POST['submit'])) {
 		SET forum_posts = forum_posts+1, forum_topics = forum_topics+1, forum_last_post_id = $post_id
 		WHERE forum_id = '$forum'";
 	$result = db_query($sql, $currentCourseID);
-	
+
 	$topic = $topic_id;
 	$total_forum = get_total_topics($forum, $currentCourseID);
-	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;  
+	$total_topic = get_total_posts($topic, $currentCourseID, "topic")-1;
 	// subtract 1 because we want the number of replies, not the number of posts.
 	$forward = 1;
 
 	// --------------------------------
-	// notify users 
+	// notify users
 	// --------------------------------
 	$subject_notify = "$logo - $langNewForumNotify";
 	$category_id = forum_category($forum);
-	$cat_name = q(category_name($category_id));
-	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify 
-			WHERE (forum_id = $forum OR cat_id = $category_id) 
+	$cat_name = category_name($category_id);
+	$sql = db_query("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (forum_id = $forum OR cat_id = $category_id)
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
-	$forum_message = "-------- $langBodyMessage ($langSender: $prenom $nom)\n$message--------";
-	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' <br /><br />". q($forum_message) ."<br /><br />$gunet<br /><a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";
-	$plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$currentCourseID'>{$urlServer}courses/$currentCourseID</a>";
+        $linkhere = "${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id";
+        $unsubscribe = sprintf($langLinkUnsubscribe, $intitule);
+
+        $body_topic_notify = "<br>$langBodyForumNotify $langInForums '" . q($forum_name) .
+                "' $langInCat '". q($cat_name) . "' $langTo $langCourseS '" .
+                "<a href='{$urlServer}courses/$currentCourseID'>" . q($intitule) . "</a>" .
+                "' <hr>". "<b>$langSender:</b> " . q("$prenom $nom") .
+                "<br><b>$langBodyMessage:</b><br>" .  "\n" . $message . "<hr>$gunet<br>" .
+                $unsubscribe . " <a href='$linkhere'>$langHere</a>\n";
+
+        $plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat " .
+                "'$cat_name' $langTo $langCourseS '$c'\n\n" .
+                "------ $langBodyMessage ($langSender:$prenom $nom) ------\n" .
+                html2text($message) .
+                "\n\n$gunet\n{$urlServer}courses/$currentCourseID\n" .
+                $unsubscribe . "\n" . $linkhere . "\n";
 	while ($r = mysql_fetch_array($sql)) {
                 if (get_user_email_notification($r['user_id'], $cours_id)) {
-                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-                        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
-                        $plain_body_topic_notify .= $unsubscribe.$linkhere;
-                        $body_topic_notify .= $unsubscribe.$linkhere;
                         $emailaddr = uid_to_email($r['user_id']);
                         send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
                 }
 	}
 	// end of notification
-	
+
 	$tool_content .= "<p class='success'>$langStored</p>
 		<p class='back'>&laquo; <a href='viewtopic.php?course=$code_cours&amp;topic=$topic_id&amp;forum=$forum&amp;$total_topic'>$langReturnMessages</a></p>
-		<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>"; 
+		<p class='back'>&laquo; <a href='viewforum.php?course=$code_cours&amp;forum=$forum_id'>$langReturnTopic</a></p>";
 } elseif (isset($_POST['cancel'])) {
 	header("Location: viewforum.php?course=$code_cours&forum=$forum");
 	exit;

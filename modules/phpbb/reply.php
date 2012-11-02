@@ -188,16 +188,25 @@ if (isset($_POST['submit'])) {
 			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
-	$forum_message = "-------- $langBodyMessage ($langSender: $prenom $nom)\n$message--------";
-	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />". q($forum_message) ."<br /><br />$gunet<br /><a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
-	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$currentCourseID'>{$urlServer}$currentCourseID</a>";
+        $linkhere = "${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id";
+        $unsubscribe = sprintf($langLinkUnsubscribe, $intitule);
+
+        $body_topic_notify = "<br>$langBodyForumNotify $langInForum '" . q($topic_title) .
+                "' $langInCat '". q($cat_name) . "' $langTo $langCourseS '" .
+                "<a href='{$urlServer}courses/$currentCourseID'>" . q($intitule) . "</a>" .
+                "' <hr>". "<b>$langSender:</b> " . q("$prenom $nom") .
+                "<br><b>$langBodyMessage:</b><br>" .  "\n" . $message . "<hr>$gunet<br>" .
+                $unsubscribe . " <a href='$linkhere'>$langHere</a>\n";
+
+        $plain_body_topic_notify = "$langBodyForumNotify $langInForum '$topic_title' " .
+                "$langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'" .
+                "------ $langBodyMessage ($langSender:$prenom $nom) ------\n" .
+                html2text($message) .
+                "\n\n$gunet\n{$urlServer}courses/$currentCourseID\n" .
+                $unsubscribe . "\n" . $linkhere . "\n";
+
 	while ($r = mysql_fetch_array($sql)) {
                 if (get_user_email_notification($r['user_id'], $cours_id)) {
-                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-                        $unsubscribe = "\n" . sprintf($langLinkUnsubscribe, q($intitule));
-                        $plain_body_topic_notify .= $unsubscribe . $linkhere;
-                        $body_topic_notify .= '<br><br>' . $unsubscribe . $linkhere;
                         $emailaddr = uid_to_email($r['user_id']);
                         send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
                 }
