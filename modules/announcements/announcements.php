@@ -56,12 +56,12 @@ if ($is_editor) {
 	load_js('tools.js');
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
-	
+
 	$result = db_query("SELECT count(*) FROM annonces WHERE cours_id = $cours_id", $mysqlMainDb);
-	
+
 	list($announcementNumber) = mysql_fetch_row($result);
 	mysql_free_result($result);
-	
+
 	$displayForm = true;
 	/* up and down commands */
 	if (isset($_GET['down'])) {
@@ -89,7 +89,7 @@ if ($is_editor) {
 			    $thisAnnouncementOrder = $announcementOrder;
 			    $thisAnnouncementOrderFound = true;
 			}
-		}	
+		}
 	}
 
     /* modify visibility */
@@ -120,7 +120,7 @@ if ($is_editor) {
             $titleToModify = q($myrow['title']);
         }
     }
-    
+
     /* submit */
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
@@ -144,7 +144,7 @@ if ($is_editor) {
                             visibility = 'v'");
         }
 
-        // send email 
+        // send email
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {
             $emailContent = "$professorMessage: $_SESSION[prenom] $_SESSION[nom]<br>\n<br>\n".
 			     autounquote($_POST['antitle']) .
@@ -153,50 +153,50 @@ if ($is_editor) {
             $emailSubject = "$intitule ($fake_code)";
             // select students email list
             $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
-                                WHERE cours_id = $cours_id 
+                                WHERE cours_id = $cours_id
                                 AND cours_user.user_id = user.user_id";
-            $result = db_query($sqlUserOfCourse, $mysqlMainDb);            
+            $result = db_query($sqlUserOfCourse, $mysqlMainDb);
 
             $countEmail = mysql_num_rows($result); // number of mail recipients
-            
+
             $invalid = 0;
 	    $recipients = array();
-            $emailBody = html2text($emailContent);            
+            $emailBody = html2text($emailContent);
             $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
-            $emailContent .= $unsubscribe.$linkhere;            
+            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, q($intitule));
+            $emailContent .= $unsubscribe.$linkhere;
             $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {
-                    $emailTo = $myrow["email"]; 
+                    $emailTo = $myrow["email"];
                     $user_id = $myrow["user_id"];
                     // check email syntax validity
                     if (!email_seems_valid($emailTo)) {
                             $invalid++;
-                    } elseif (get_user_email_notification($user_id, $cours_id)) {                                    
+                    } elseif (get_user_email_notification($user_id, $cours_id)) {
                             // checks if user is notified by email
                             array_push($recipients, $emailTo);
-                    }                    
+                    }
                     // send mail message per 50 recipients
-                    if (count($recipients) >= 50) {                                                        
+                    if (count($recipients) >= 50) {
                             send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'],
                                                 $general_to,
                                             $recipients, $emailSubject,
-                                            $emailBody, $emailContent, $charset);                            
+                                            $emailBody, $emailContent, $charset);
                             $recipients = array();
                     }
             }
-            if (count($recipients) > 0)  {                    
+            if (count($recipients) > 0)  {
                 send_mail_multipart("$_SESSION[prenom] $_SESSION[nom]", $_SESSION['email'], $general_to,
                             $recipients, $emailSubject,
-                            $emailBody, $emailContent, $charset);                    
-            }                        
-            $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";                
+                            $emailBody, $emailContent, $charset);
+            }
+            $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
             $message = "<p class='success'>$langAnnAdd $langEmailSent<br />$messageInvalid</p>";
         } // if $emailOption==1
         else {
             $message = "<p class='success'>$langAnnAdd</p>";
         }
-    } // end of if $submit 
+    } // end of if $submit
 
 
     // teacher display
@@ -273,7 +273,7 @@ if ($is_editor) {
 	}
         $iterator = 1;
         $bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
- 
+
 	$tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
         <table width='100%' class='sortable' id='t1'>";
@@ -322,10 +322,10 @@ if ($is_editor) {
 			$nameTools = q($myrow['title']);
 			$tool_content .= $content;
 		} else {
-			$tool_content .= standard_text_escape(ellipsize($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));		
+			$tool_content .= standard_text_escape(ellipsize($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
 		}
 		$tool_content .= "</td>";
-		
+
 		if ($is_editor) {
 			$tool_content .= "
 			<td width='70' class='right'>
@@ -356,9 +356,9 @@ if ($is_editor) {
 		$tool_content .= "</tr>";
 		$iterator ++;
 		$k++;
-        } // end of while 
+        } // end of while
         $tool_content .= "</table>\n";
-    
+
     if ($announcementNumber < 1) {
         $no_content = true;
         if (isset($_GET['addAnnounce'])) {
