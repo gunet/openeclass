@@ -190,8 +190,7 @@ if (isset($_POST['submit'])) {
                         $plain_body_topic_notify .= $unsubscribe.$linkhere;
                         $body_topic_notify .= $unsubscribe.$linkhere;
                         $emailaddr = uid_to_email($r['user_id']);
-                        echo "          send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
-                        <br>";
+                        send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
                 }
 	}
 	// end of notification
