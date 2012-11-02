@@ -191,14 +191,14 @@ if (isset($_POST['submit'])) {
         $linkhere = "${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id";
         $unsubscribe = sprintf($langLinkUnsubscribe, $intitule);
 
-        $body_topic_notify = "<br>$langBodyForumNotify $langInForum '" . q($topic_title) .
+        $body_topic_notify = "<br>$langBodyTopicNotify $langInForum '" . q($topic_title) .
                 "' $langInCat '". q($cat_name) . "' $langTo $langCourseS '" .
                 "<a href='{$urlServer}courses/$currentCourseID'>" . q($intitule) . "</a>" .
                 "' <hr>". "<b>$langSender:</b> " . q("$prenom $nom") .
                 "<br><b>$langBodyMessage:</b><br>" .  "\n" . $message . "<hr>$gunet<br>" .
                 $unsubscribe . " <a href='$linkhere'>$langHere</a>\n";
 
-        $plain_body_topic_notify = "$langBodyForumNotify $langInForum '$topic_title' " .
+        $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' " .
                 "$langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'" .
                 "------ $langBodyMessage ($langSender:$prenom $nom) ------\n" .
                 html2text($message) .
