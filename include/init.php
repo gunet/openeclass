@@ -165,11 +165,11 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = false;
 } elseif (isset($_SESSION['is_usermanage_user']) and $_SESSION['is_usermanage_user']) {
         $is_usermanage_user = true;
-        $is_power_user = false;        
+        $is_power_user = false;
 	$is_admin = false;
 } else {
 	$is_admin = false;
-	$is_power_user = false;              
+	$is_power_user = false;
         $is_usermanage_user = false;
 }
 
@@ -187,25 +187,25 @@ if (isset($require_login) and $require_login and !$uid) {
 	$errorMessagePath = "../../";
 }
 
-if (isset($require_admin) && $require_admin) {	
-	if (!($is_admin)) {    
+if (isset($require_admin) && $require_admin) {
+	if (!($is_admin)) {
 		$toolContent_ErrorExists = caution($langCheckAdmin);
 		$errorMessagePath = "../../";
 	}
 }
 
-if (isset($require_power_user) && $require_power_user) {        
+if (isset($require_power_user) && $require_power_user) {
 	if (!($is_admin or $is_power_user)) {
 		$toolContent_ErrorExists = caution($langCheckPowerUser);
 		$errorMessagePath = "../../";
-	} 
+	}
 }
 
-if (isset($require_usermanage_user) && $require_usermanage_user) {        
+if (isset($require_usermanage_user) && $require_usermanage_user) {
 	if (!($is_admin or $is_power_user or $is_usermanage_user)) {
 		$toolContent_ErrorExists = caution($langCheckUserManageUser);
 		$errorMessagePath = "../../";
-	} 
+	}
 }
 
 if (!isset($guest_allowed) || $guest_allowed != true) {
@@ -219,7 +219,7 @@ if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)
 	// don't redirect to mail verification on logout
 	if (!isset($_GET['logout'])) {
 		header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
-	} 
+	}
 }
 
 // Restore saved old_dbname function
@@ -249,7 +249,7 @@ if (isset($require_current_course) and $require_current_course) {
 		$errorMessagePath = "../../";
 	} else {
 		$currentCourse = $dbname = $_SESSION['dbname'];
-		$result = db_query("SELECT cours_id, cours.code, 
+		$result = db_query("SELECT cours_id, cours.code,
                                         fake_code, intitule, faculte.name AS faculte,
                                         titulaires, languageCourse, departmentUrlName, departmentUrl, visible
                                         FROM cours, faculte
@@ -309,19 +309,21 @@ if (isset($require_current_course) and $require_current_course) {
 				list($statut) = mysql_fetch_row($res2);
 			}
 		}
-                
-		if ($visible != COURSE_OPEN) {                                                                        
+
+		if ($visible != COURSE_OPEN) {
 			if (!$uid) {
 				$toolContent_ErrorExists = caution($langNoAdminAccess);
 				$errorMessagePath = "../../";
 			} elseif ($statut == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
 				$toolContent_ErrorExists = caution($langLoginRequired);
 				$errorMessagePath = "../../";
-			} elseif ($statut == 5 and $visible == COURSE_INACTIVE) {                                
+			} elseif ($statut == 5 and $visible == COURSE_INACTIVE) {
                                 $toolContent_ErrorExists = caution($langCheckProf);
 				$errorMessagePath = "../../";
                         }
-		}
+                }
+
+                $_SESSION['status'][$code_cours] = $status[$code_cours] = $statut;
 	}
 	# force a specific interface language
 	if (!empty($currentCourseLanguage)) {
@@ -346,7 +348,7 @@ if (isset($require_current_course) and $require_current_course) {
 	}
 }
 
-// actually a prof has $status 1 
+// actually a prof has $status 1
 // the system admin and power user has rights to all courses
 if ($is_admin or $is_power_user) {
 	$is_course_admin = TRUE;
@@ -367,7 +369,7 @@ if (isset($_SESSION['status'])) {
 		if (@$status[$currentCourse] == 1) { // check if user is admin of course
 			$is_course_admin = TRUE;
 			$is_editor = TRUE;
-		}            	
+		}
 	}
 } else {
 	unset($status);
@@ -386,7 +388,7 @@ if (isset($require_editor) and $require_editor) {
 		$errorMessagePath = "../../";
 	}
 }
-    
+
 // Temporary student view
 if (isset($_SESSION['saved_statut'])) {
 	$statut = 5;
@@ -399,7 +401,7 @@ if (isset($_SESSION['saved_statut'])) {
 
 //Security check:: Users that do not have Professor access for a course must not
 //be able to access inactive tools.
-if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php") 
+if (isset($currentCourse) && file_exists($module_ini_dir = getcwd() . "/module.ini.php")
         && !$is_editor && @$ignore_module_ini != true) {
 	include($module_ini_dir);
 
