@@ -22,9 +22,12 @@ $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'admin.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
+
+define('REQUESTS_PER_PAGE', 15);
 
 $tree = new hierarchy();
 $user = new user();
@@ -61,6 +64,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
 $id = isset($_GET['id'])?$_GET['id']:(isset($_POST['id'])?$_POST['id']:'');
 $show = isset($_GET['show'])?$_GET['show']:(isset($_POST['show'])?$_POST['show']:'');
+$limit = isset($_GET['limit'])?$_GET['limit']:0;
 
 // id validation
 if (intval($id) > 0)
@@ -85,6 +89,7 @@ switch ($show) {
 	case "closed":
 		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
 		$nameTools = $langReqHaveClosed;
+        $pagination_link = "&amp;show=closed";
 		break;
 	case "rejected":
 		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
@@ -110,19 +115,31 @@ if (!empty($show) and $show == 'closed') {
 		// restore request
 		$sql = db_query("UPDATE user_request set status = 1, date_closed = NULL WHERE id = $id");
 		$tool_content = "<p class='success'>$langReintroductionApplication</p>";
-	} else {
-		$tool_content .= "<table class='tbl_alt' width='100%'>";
-		$tool_content .= table_header(1, $langDateClosed_small);
- 		$sql = db_query("SELECT id, name, surname, uname, email, faculty_id,
+	} else {		                                
+ 		$result = db_query("SELECT * FROM user_request
+                                        WHERE (status = 2 AND statut = $list_statut)");
+                                        
+                $count_req = mysql_num_rows($result);
+                
+                $q = "SELECT id, name, surname, uname, email, faculty_id,
                                         phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut $depqryadd) ORDER BY date_open DESC");
+                                        WHERE (status = 2 AND statut = $list_statut)";
+                
+                if ($count_req > REQUESTS_PER_PAGE) { // display navigation links if needed
+                        $tool_content .= show_paging($limit, REQUESTS_PER_PAGE, $count_req, $_SERVER['SCRIPT_NAME'], $pagination_link);
+                }
+                $q .= "ORDER BY date_open DESC LIMIT $limit, ".REQUESTS_PER_PAGE."";
+                
+                $sql = db_query($q);
+                $tool_content .= "<table class='tbl_alt' width='100%'>";
+		$tool_content .= table_header(1, $langDateClosed_small);
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2 == 0) {
-	              		$tool_content .= "\n  <tr class='even'>";
+	              		$tool_content .= "<tr class='even'>";
 	            	} else {
-	              		$tool_content .= "\n  <tr class='odd'>";
+	              		$tool_content .= "<tr class='odd'>";
 	            	}
 	        	$tool_content .= "<td width='1'>
 			<img style='border:0px;' src='$themeimg/arrow.png' title='bullet'></td>";
@@ -138,10 +155,10 @@ if (!empty($show) and $show == 'closed') {
 			$k++;
 		}
 	}
-	$tool_content .= "\n  </table>\n";
+	$tool_content .= "</table>";
 
 // -----------------------------------
-// display rejected requests
+// display rejected requests 
 // ----------------------------------
 } elseif (!empty($show) && ($show == 'rejected')) {
 	if (!empty($id) && ($id > 0)) {
@@ -247,7 +264,7 @@ $langEmail: $emailhelpdesk";
 			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
 			</td></tr>
 			<tr><th class='left'>&nbsp;</th>
-			<td><input type='submit' name='submit' value='$langRejectRequest'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
+			<td><input type='submit' name='submit' value='".q($langRejectRequest)."'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
 			</tr></table>
 			</form>";
 			}
@@ -261,8 +278,7 @@ $langEmail: $emailhelpdesk";
 // display all the requests
 // -----------------------------------
 else
-{
-
+{	
 	// show username as well (useful)
  	$sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
                                 WHERE (status = 1 AND statut = $list_statut $depqryadd)");
@@ -317,7 +333,7 @@ else
                         $tool_content .= "</td></tr>\n";
                         $k++;
                 }
-                $tool_content .= "\n  </table>\n";
+                $tool_content .= "</table>";
         } else {
                 $tool_content .= "<p class='alert1'>$langUserNoRequests</p>";
         }

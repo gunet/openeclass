@@ -107,14 +107,15 @@ $langEmail : $emailhelpdesk
                         array_push($recipients, $emailTo);
                 }
                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
-                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);
-                $emailcontent = $emailbody.$unsubscribe.$linkhere;
-                if (count($recipients) >= 50) {
-                        send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset);
+                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);            
+                $emailcontent = $emailbody.$unsubscribe.$linkhere;            
+                if (count($recipients) >= 50) {                
+                      send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
+                      $recipients = array();
                 }
-        }
-        if (count($recipients) > 0)  {
-                send_mail_multipart('', '', '', $emailTo, $emailsubject, $emailbody, $emailcontent, $charset);
+        } 
+        if (count($recipients) > 0)  {                
+                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset); 
         }
 	// Display result and close table correctly
 	$tool_content .= "<p class='success'>$emailsuccess</p>";
@@ -137,7 +138,7 @@ $langEmail : $emailhelpdesk
 	      </select>	    </td>
 	  </tr>
 	<tr>
-	  <td class='right'><input type='submit' name='submit' value='$langSend' /></td>
+	  <td class='right'><input type='submit' name='submit' value='".q($langSend)."' /></td>
 	  </tr>
 	</table>
         </fieldset>

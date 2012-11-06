@@ -56,7 +56,8 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 } else {
   if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
             db_query("DELETE from course_user
-		    WHERE course_id = (SELECT course_id FROM cours WHERE code = " . quote($cid) . ") AND user_id='$_GET[u]'");
+                        WHERE course_id =  ".course_code_to_id($cid)." 
+                        AND user_id='$_GET[u]'");
                 if (mysql_affected_rows() > 0) {
                         // clear session access to lesson
                         unset($_SESSION['dbname']);

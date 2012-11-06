@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,10 +29,10 @@ if ($urlAppend[strlen($urlAppend)-1] != '/') {
 $nameTools = $langUpgrade;
 
 if ($language == 'el') {
-	$upgrade_info_file = 'upgrade_info.php';
+	$upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';
 	$link_changes_file = 'CHANGES_el.txt';
 } else {
- 	$upgrade_info_file = 'upgrade_info_en.php';
+ 	$upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
 	$link_changes_file = 'CHANGES_en.txt';
 }
 

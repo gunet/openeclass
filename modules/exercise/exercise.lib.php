@@ -66,7 +66,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                       <table class='tbl_border' width='100%'>
                       <tr>
                         <th width='200'>$langColumnA</th>
-                        <th width='130'>$langMakeCorrespond</th>
+                        <th width='100'>$langMakeCorrespond</th>
                         <th width='200'>$langColumnB</th>
                       </tr>
                       </table>
@@ -120,16 +120,13 @@ function showQuestion($questionId, $onlyAnswers = false) {
 				$Select[$answerId]['Lettre']=$cpt1++;
 				// answers that will be shown at the right side
 				$Select[$answerId]['Reponse'] = standard_text_escape($answer);
-			}
-			else
-			{
-				$tool_content .= "
-				<tr class='even'>
+			} else {
+				$tool_content .= "<tr class='even'>
 				  <td colspan='2'>
-				    <table class='tbl'>
+				    <table class='tbl' width='100%'>
 				    <tr>
 				      <td width='200'><b>${cpt2}.</b> ". standard_text_escape($answer) ."</td>
-				      <td width='130'><div align='center'>
+				      <td width='100'><div align='left'>
 				       <select name='choice[${questionId}][${answerId}]'>
 					 <option value='0'>--</option>";
 
@@ -138,21 +135,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
 					 $tool_content .= "
 					<option value=\"${key}\">${val['Lettre']}</option>";
 				 }
-				 $tool_content .= "
-				</select></div>
-			       </td>
-			       <td width='200'>";
-				 if(isset($Select[$cpt2]))
+				 $tool_content .= "</select></div></td><td width='200'>";
+				 if(isset($Select[$cpt2])) {
 				       $tool_content .= '<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-				 else
+                                 } else {
 				       $tool_content .= '&nbsp;';
+                                 }
 
-				$tool_content .= "
-                                        </td>
-                                      </tr>
-                                      </table>
-                                    </td>
-                                  </tr>";
+				$tool_content .= "</td></tr></table></td></tr>";
 				$cpt2++;
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers) {
@@ -161,11 +151,13 @@ function showQuestion($questionId, $onlyAnswers = false) {
 						$tool_content .= "
                                               <tr class='even'>
                                                 <td colspan='2'>
-                                                  <table>
+                                                  <table width='100%'>
                                                   <tr>
-                                                    <td width='60%' colspan='2'>&nbsp;</td>
-                                                    <td width='40%' align='right' valign='top'>".
-                                                      "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."</td>
+                                                  <td width='200'>&nbsp;</td>
+                                                  <td width='100'>&nbsp;</td>
+                                                  <td width='200' valign='top'>".
+                                                      "<b>".$Select[$cpt2]['Lettre'].".</b> ".$Select[$cpt2]['Reponse']."
+                                                  </td>
                                                   </tr>
                                                   </table>
                                                 </td>

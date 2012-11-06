@@ -56,9 +56,9 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-	$install_info_file = 'install_info.php';
+	$install_info_file = "http://wiki.openeclass.org/doku.php?id=el:install_doc";
 } else {
-	$install_info_file = 'install_info_en.php';
+	$install_info_file = "http://wiki.openeclass.org/doku.php?id=en:install_doc";
 }
 
 // include_messages
