@@ -954,9 +954,8 @@ $display_captcha = intval($display_captcha);
 $insert_xml_metadata = intval($insert_xml_metadata);
 $betacms = intval($betacms);
 $enable_mobileapi = intval($enable_mobileapi);
-$close_user_registration = intval($close_user_registration);
-$disable_eclass_stud_reg = intval($disable_eclass_stud_reg);
-$disable_eclass_prof_reg = intval($disable_eclass_prof_reg);
+$eclass_stud_reg = intval($eclass_stud_reg);
+$eclass_prof_reg = intval($eclass_prof_reg);
 $course_multidep = intval($course_multidep);
 $user_multidep = intval($user_multidep);
 $restrict_owndep = intval($restrict_owndep);
@@ -993,15 +992,16 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('video_quota', $video_quota),
                 ('group_quota', $group_quota),
                 ('dropbox_quota', $dropbox_quota),
-                ('close_user_registration', $close_user_registration),
-                ('disable_eclass_stud_reg', $disable_eclass_stud_reg),
-                ('disable_eclass_prof_reg', $disable_eclass_prof_reg),
+                ('user_registration', 1),
+                ('alt_auth_stud_reg', 2),
+                ('alt_auth_prof_reg', 2),
+                ('eclass_stud_reg', $eclass_stud_reg),
+                ('eclass_prof_reg', $eclass_prof_reg),
                 ('course_multidep', $course_multidep),
                 ('user_multidep', $user_multidep),
                 ('restrict_owndep', $restrict_owndep),
                 ('restrict_teacher_owndep', $restrict_teacher_owndep),
-                ('max_glossary_terms', '250'),
-                ('phpMyAdminURL', ".quote($phpMyAdminURL)."),
+                ('max_glossary_terms', '250'),                
                 ('phpSysInfoURL', ".quote($phpSysInfoURL)."),
                 ('email_sender', ".quote($emailForm)."),
                 ('admin_name', ".quote($nameForm)."),

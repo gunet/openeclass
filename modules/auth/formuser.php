@@ -31,7 +31,30 @@ load_js('jstree');
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
+$am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
 $nameTools = $prof? $langReqRegProf: $langUserRequest;
+
+$user_registration = get_config('user_registration');
+$eclass_prof_reg = get_config('eclass_prof_reg');
+$eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
+
+// security check
+if (!$user_registration) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content, 0);
+	exit;
+}
+if ($prof and !$eclass_prof_reg) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content, 0);
+	exit;
+}
+
+if (!$prof and $eclass_stud_reg != 1) {
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content, 0);
+	exit;
+}
 
 $am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
 
@@ -262,7 +285,7 @@ if ($all_set) {
 	}
         $tool_content .= "<tr>
         <td>&nbsp;</td>
-        <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='$langSubmitNew' /></td>
+        <td class='right'><input type='submit' class='ButtonSubmit' name='submit' value='".q($langSubmitNew)."' /></td>
         </tr>
         </table>
         </fieldset>

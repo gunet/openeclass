@@ -355,16 +355,16 @@ if (isset($_POST['create_course'])) {
 
         // create directories
         umask(0);
-        if (!(mkdir("courses/$code", 0777) and
-              mkdir("courses/$code/image", 0777) and
-              mkdir("courses/$code/document", 0777) and
-              mkdir("courses/$code/dropbox", 0777) and
-              mkdir("courses/$code/page", 0777) and
-              mkdir("courses/$code/work", 0777) and
-              mkdir("courses/$code/group", 0777) and
-              mkdir("courses/$code/temp", 0777) and
-              mkdir("courses/$code/scormPackages", 0777) and
-              mkdir("video/$code", 0777))) {
+        if (!(mkdir("courses/$code", 0775) and
+              mkdir("courses/$code/image", 0775) and
+              mkdir("courses/$code/document", 0775) and
+              mkdir("courses/$code/dropbox", 0775) and
+              mkdir("courses/$code/page", 0775) and
+              mkdir("courses/$code/work", 0775) and
+              mkdir("courses/$code/group", 0775) and
+              mkdir("courses/$code/temp", 0775) and
+              mkdir("courses/$code/scormPackages", 0775) and
+              mkdir("video/$code", 0775))) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;

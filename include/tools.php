@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -301,9 +301,11 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langNewUser']);
-	array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
-	array_push($sideMenuImg, "arrow.png");
+        if (get_config('user_registration')) {
+                array_push($sideMenuText, $GLOBALS['langNewUser']);
+                array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
+                array_push($sideMenuImg, "arrow.png");
+        }
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
 	array_push($sideMenuImg, "arrow.png");
@@ -348,32 +350,27 @@ function adminMenu(){
 	array_push($sideMenuLink, "../admin/listreq.php");
 	array_push($sideMenuImg, "arrow.png");
 
-
 	// check for close user registration
-	if (get_config('close_user_registration'))
-	{
-	    array_push($sideMenuText, $GLOBALS['langUserOpen']);
-	    array_push($sideMenuLink, "../admin/listreq.php?type=user");
-	    array_push($sideMenuImg, "arrow.png");
-	}
-	else
-	{
-	    array_push($sideMenuText, $GLOBALS['langUserDetails']);
-	    array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
-	    array_push($sideMenuImg, "arrow.png");
+	if ((get_config('eclass_stud_reg') == 1) or get_config('alt_auth_stud_reg') == 0) {	
+                array_push($sideMenuText, $GLOBALS['langUserOpen']);
+                array_push($sideMenuLink, "../admin/listreq.php?type=user");
+                array_push($sideMenuImg, "arrow.png");
+	} else {
+                array_push($sideMenuText, $GLOBALS['langUserDetails']);
+                array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
+                array_push($sideMenuImg, "arrow.png");
 	}
 
-	if (isset($is_admin) and $is_admin)
-	{
-	    array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
-	    array_push($sideMenuLink, "../admin/auth.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langMailVerification']);
-	    array_push($sideMenuLink, "../admin/mail_ver_settings.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langChangeUser']);
-	    array_push($sideMenuLink, "../admin/change_user.php");
-	    array_push($sideMenuImg, "arrow.png");
+	if (isset($is_admin) and $is_admin) {
+                array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
+                array_push($sideMenuLink, "../admin/auth.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langMailVerification']);
+                array_push($sideMenuLink, "../admin/mail_ver_settings.php");
+                array_push($sideMenuImg, "arrow.png");
+                array_push($sideMenuText, $GLOBALS['langChangeUser']);
+                array_push($sideMenuLink, "../admin/change_user.php");
+                array_push($sideMenuImg, "arrow.png");
 	}
 	
 	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);

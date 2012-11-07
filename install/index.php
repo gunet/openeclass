@@ -106,13 +106,13 @@ if (file_exists("../config/config.php")) {
 
 // Input fields that have already been included in the form, either as hidden or as normal inputs
 $input_fields = array();
+$phpSysInfoURL = '../admin/sysinfo/';
 // step 0 initialise variables
 if (isset($_POST['welcomeScreen'])) {
 	$dbHostForm = 'localhost';
 	$dbUsernameForm = 'root';
 	$dbNameForm = 'eclass';
-	$phpMyAdminURL = '../admin/mysql/';
-	$phpSysInfoURL = '../admin/sysinfo/';
+        $dbMyAdmin = '';	
         $urlForm = ((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS'])? 'https://': 'http://') .
                    $_SERVER['SERVER_NAME'] .
                    str_replace('/install/index.php', '/', $_SERVER['SCRIPT_NAME']);
@@ -131,21 +131,21 @@ if (isset($_POST['welcomeScreen'])) {
         $dbPassForm = $helpdeskmail = $faxForm = $postaddressForm = '';
 	$email_required = $am_required = $dropbox_allow_student_to_student = $dont_display_login_form = '';
 	$display_captcha = $block_username_change = $insert_xml_metadata = $betacms = $enable_mobileapi = '';
-	$disable_eclass_stud_reg = $disable_eclass_prof_reg = $email_verification_required = $dont_mail_unverified_mails = '';
+	$email_verification_required = $dont_mail_unverified_mails = '';
 	$course_multidep = $user_multidep = $restrict_owndep = $restrict_teacher_owndep = $disable_log_user_actions = '';
 	$email_from = 1;
-	$close_user_registration = '';
-    $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
-    $teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
+	$eclass_stud_reg = 2;
+        $eclass_prof_reg = 1;
+        $student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
+        $teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 } else {
     register_posted_variables(array(
                     'lang' => true,
                     'dbHostForm' => true,
                     'dbUsernameForm' => true,
-                    'dbNameForm' => true,
-                    'phpMyAdminURL' => true,
+                    'dbNameForm' => true,                    
                     'dbPassForm' => true,
-                    'phpSysInfoURL' => true,
+                    'dbMyAdmin' => true,
                     'urlForm' => true,
                     'emailForm' => true,
                     'nameForm' => true,
@@ -170,9 +170,8 @@ if (isset($_POST['welcomeScreen'])) {
                     'insert_xml_metadata' => true,
                     'betacms' => true,
                     'enable_mobileapi' => true,
-                    'disable_eclass_stud_reg' => true,
-                    'disable_eclass_prof_reg' => true,
-                    'close_user_registration' => true,
+                    'eclass_stud_reg' => true,
+                    'eclass_prof_reg' => true,
                     'course_multidep' => true,
                     'user_multidep' => true,
                     'restrict_owndep' => true,
@@ -223,15 +222,22 @@ function textarea_input($name, $rows, $cols)
                q($GLOBALS[$name]) . "</textarea>";
 }
 
-$all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'phpMyAdminURL',
+function selection_input($entries, $name)
+{
+        $GLOBALS['input_fields'][$name] = true;
+        return selection($entries, $name, q($GLOBALS[$name]));
+}
+
+$all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
                 'dbPassForm', 'urlForm', 'emailForm', 'nameForm', 'loginForm',
-                'passForm', 'phpSysInfoURL', 'campusForm', 'helpdeskForm', 'helpdeskmail',
+                'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
                 'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm',
                 'doc_quota', 'video_quota', 'group_quota', 'dropbox_quota',
                 'email_required', 'email_verification_required', 'dont_mail_unverified_mails', 'email_from', 'am_required',
                 'dropbox_allow_student_to_student', 'dont_display_login_form', 'block_username_change', 'display_captcha',
-                'insert_xml_metadata', 'betacms', 'enable_mobileapi', 'disable_eclass_stud_reg',
-                'disable_eclass_prof_reg', 'close_user_registration', 'course_multidep', 'user_multidep',
+                'insert_xml_metadata', 'betacms', 'enable_mobileapi',
+                'course_multidep', 'user_multidep',
+                'eclass_stud_reg', 'eclass_prof_reg',
                 'disable_log_user_actions', 'restrict_owndep', 'restrict_teacher_owndep', 'lang', 'enable_search',
                 'student_upload_whitelist', 'teacher_upload_whitelist');
 
@@ -282,6 +288,10 @@ elseif(isset($_REQUEST['install3']) OR isset($_REQUEST['back3'])) {
 	<th class='left'>$langMainDB</th>
 	<td>".text_input('dbNameForm', 25)."&nbsp;&nbsp;($langNeedChangeDB)</td>
 	</tr>
+        <tr>
+	<th class='left'>$langphpMyAdminURL</th>
+	<td>".text_input('dbMyAdmin', 25)."&nbsp;&nbsp;$langUncompulsory</td>
+	</tr>
 	<td colspan='2' class='right'>
 		<input type='submit' name='back2' value='&laquo; $langPreviousStep' />
 		&nbsp;<input type='submit' name='install4' value='$langNextStep &raquo;' />
@@ -328,11 +338,7 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
                 <tr><th class='left'>$langInstituteName</th>
                     <td>".text_input('institutionUrlForm', 40)."</td></tr>
                 <tr><th class='left'>$langInstitutePostAddress</th>
-                    <td>".textarea_input('postaddressForm', 3, 40)."</td></tr>
-	        <tr><th class='left'>$langphpMyAdminURL</th>
-                    <td>".text_input('phpMyAdminURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td></tr>
-                <tr><th class='left'>$langSystemInfoURL</th>
-                    <td>".text_input('phpSysInfoURL', 25)."&nbsp;&nbsp;$langNotNeedChange</td></tr>
+                    <td>".textarea_input('postaddressForm', 3, 40)."</td></tr>	        
 		<tr><th class='left'>$langDocQuota</th>
 			<td>".text_input('doc_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langVideoQuota</th>
@@ -341,15 +347,18 @@ elseif(isset($_REQUEST['install4']) OR isset($_REQUEST['back4']))
 			<td>".text_input('group_quota', 5)."&nbsp;(Mb)</td></tr>
 		<tr><th class='left'>$langDropboxQuota</th>
 			<td>".text_input('dropbox_quota', 5)."&nbsp;(Mb)</td></tr>
-		<tr><th class='left'>$langViaReq</th>
-			<td>".checkbox_input('close_user_registration')."</td></tr>
-		<tr><th class='left'>$langDisableEclassStudReg</th>
-			<td>".checkbox_input('disable_eclass_stud_reg')."</td></tr>
-		<tr><th class='left'>$langDisableEclassProfReg</th>     
-			<td>".checkbox_input('disable_eclass_prof_reg')."</td></tr>
+		<tr><th class='left'>$langUserAccount $langViaeClass</th>
+                        <td>".selection_input(array('2' => $langDisableEclassStudRegType,
+                                                    '1' => $langReqRegUser,
+                                                    '0' => $langDisableEclassStudReg),
+                                                        'eclass_stud_reg')."</td></tr>
+		<tr><th class='left'>$langProfAccount $langViaeClass</th>
+			<td>".selection_input(array('1' => $langReqRegProf,
+                                                    '0' => $langDisableEclassProfReg), 
+                                                        'eclass_prof_reg')."</td></tr>
 	<tr><td colspan='2' class='right'>
-	  <input type='submit' name='back3' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install5' value='$langNextStep &raquo;' />
+	  <input type='submit' name='back3' value='&laquo; ".q($langPreviousStep)."' />
+	  <input type='submit' name='install5' value='".q($langNextStep)." &raquo;' />
 	  <div class='smaller'>$langRequiredFields.</div>
 	  <div class='smaller'>(**) $langWarnHelpDesk</div></td>
 	</tr>
@@ -448,8 +457,8 @@ elseif(isset($_REQUEST['install5']) OR isset($_REQUEST['back5']))
 	      <td>".textarea_input('teacher_upload_whitelist', 6, 60)."</td>
 	  </tr>
 	  <tr><td colspan='2' class='right'>
-	  <input type='submit' name='back4' value='&laquo; $langPreviousStep' />
-	  <input type='submit' name='install6' value='$langNextStep &raquo;' />
+	  <input type='submit' name='back4' value='&laquo; ".q($langPreviousStep)."' />
+	  <input type='submit' name='install6' value='".q($langNextStep)." &raquo;' />
 	  </td>
 	</tr>
 	</table>" . hidden_vars($all_vars) . "</form>";
@@ -462,20 +471,19 @@ elseif(isset($_REQUEST['install6']))
 	$langStepTitle = $langLastCheck;
 	$langStep = $langStep6;
 	$_SESSION['step'] = 6;
-	if (!$close_user_registration) {
-      		$mes_add = $langToReqOpen;
-  	} else {
-      		$mes_add = $langToReq;
-  	}
-	if (!$disable_eclass_stud_reg) {
-		$disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
-	} else {
-		$disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
-	}
-	if (!$disable_eclass_prof_reg) {
-		$disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
-	} else {
+	
+        switch ($eclass_stud_reg) {
+                case '0': $disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
+                        break;
+                case '1': $disable_eclass_stud_reg_info = $langDisableEclassStudRegViaReq;
+                        break;
+                case '2': $disable_eclass_stud_reg_info = $langDisableEclassStudRegNo;
+                        break;
+        }
+	if (!$eclass_prof_reg) {
 		$disable_eclass_prof_reg_info = $langDisableEclassProfRegYes;
+	} else {
+		$disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
 	}
 
 	$tool_content .= "
@@ -496,7 +504,7 @@ elseif(isset($_REQUEST['install6']))
 	</tr>
 	<tr>
 	<th class='left'>PHPMyAdmin URL:</th>
-	<td>".q($phpMyAdminURL)."</td>
+	<td>".q($dbMyAdmin)."</td>
 	</tr>
 	<tr>
 	<th class='left'>$langSiteUrl:</th>

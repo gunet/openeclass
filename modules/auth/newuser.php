@@ -73,15 +73,11 @@ hContent;
 $nameTools = $langUserDetails;
 $navigation[] = array("url"=>"registration.php", "name"=> $langNewUser);
 
-$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
-if ($disable_eclass_stud_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div>";
-	draw($tool_content,0);
-	exit;
-}
+$user_registration = get_config('user_registration');
+$eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
-if (get_config('close_user_registration')) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div>";
+if (!$user_registration or $eclass_stud_reg != 2) {
+	$tool_content .= "<div class='info'>$langStudentCannotRegister</div>";
 	draw($tool_content,0);
 	exit;
 }
@@ -158,7 +154,7 @@ if (!isset($_POST['submit'])) {
 	$tool_content .= "<tr>
 	<th class='left'>&nbsp;</th>
 	<td colspan='2' class='right'>
-	<input type='submit' name='submit' value='".$langRegistration."' />
+	<input type='submit' name='submit' value='".q($langRegistration)."' />
 	</td>
 	</tr>
 	</table>
@@ -240,18 +236,20 @@ if (!isset($_POST['submit'])) {
 		$password_encrypted = $hasher->HashPassword($password);
 
 		$q1 = "INSERT INTO user
-			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail)
+			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail, white_listl)
 			VALUES (". quote($nom_form) .",
 				". quote($prenom_form) .",
 				". quote($uname) .",
 				'$password_encrypted',
 				". quote($email) .",
-				5,
+				".USER_STUDENT.",
 				". quote($am) .",
                                 ". quote($phone) .",
-				$registered_at, $expires_at,
+				$registered_at, 
+                                $expires_at,
                                 " . quote($language) . ",
-                                $verified_mail)";
+                                $verified_mail,
+                                '')";
 		$inscr_user = db_query($q1);
 		$last_id = mysql_insert_id();
                 $userObj->refresh($last_id, $departments);

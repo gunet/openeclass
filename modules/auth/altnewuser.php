@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -37,6 +37,16 @@ include 'auth.inc.php';
 
 $navigation[] = array ('url' => 'registration.php', 'name'=> $langNewUser);
 
+$user_registration = get_config('user_registration');
+$alt_auth_prof_reg = get_config('alt_auth_prof_reg');
+$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
+
+if (!$user_registration) {
+	$tool_content .= "<div class='info'>$langCannotRegister</div>";
+	draw($tool_content,0);
+	exit;
+}
+
 if (isset($_REQUEST['auth'])) {
 	$auth = intval($_REQUEST['auth']);
 	$_SESSION['u_tmp'] = $auth;
@@ -52,18 +62,36 @@ $authmethods = get_auth_active_methods();
 
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
-if(!empty($msg)) $nameTools = "$langConfirmUser ($msg)";
 
-$tool_content .= "<form method='post' action='altsearch.php'>";
+if(!empty($msg)) {
+        $nameTools = "$langConfirmUser ($msg)";
+}
+
 if (isset($_GET['p']) and $_GET['p']) {
 	$_SESSION['u_prof'] = 1;
-	$tool_content .= "<input type='hidden' name='p' value='1'>";
-}
-else {
+} else {
 	$_SESSION['u_prof'] = 0;
 }
+
+if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
+if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
+$tool_content .= "<form method='post' action='altsearch.php'>";
 $tool_content .= "<fieldset><legend>".q($settings['auth_instructions'])."</legend>
 <table class='tbl' width='100%'>";
+
+if (isset($_SESSION['prof']) and $_SESSION['prof']) {
+        $tool_content .= "<input type='hidden' name='p' value='1'>";
+}
 
 if (($auth != 7) and ($auth != 6)) {
         $set_uname = isset($_GET['uname'])? (" value='".q(canonicalize_whitespace($_GET['uname']))."'"): '';
@@ -80,9 +108,9 @@ $tool_content .= "<tr>
 <input type='hidden' name='auth' value='$auth'>";
 
 if (($auth != 7) and ($auth != 6)) {
-	$tool_content .= "<input type='submit' name='is_submit' value='$langSubmit'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='".q($langSubmit)."'>";
 } else {
-	$tool_content .= "<input type='submit' name='is_submit' value='$langCheck'>";
+	$tool_content .= "<input type='submit' name='is_submit' value='".q($langCheck)."'>";
 }
 
 $tool_content .= "</td></tr></table></fieldset></form>";

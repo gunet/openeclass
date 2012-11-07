@@ -461,6 +461,9 @@ $langUserAccount = "Λογαριασμός $langOfStudent";
 $langProfAccount = "Λογαριασμός $langOfTeacher";
 $langReqRegUser = "Αίτηση εγγραφής $langsOfStudent";
 $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πιστοποίησης";
+$langMonthsUnit = "σε μήνες";
+$langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού";
+$langCourseSettings = "Ρυθμίσεις μαθημάτων";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";

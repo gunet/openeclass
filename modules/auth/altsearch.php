@@ -43,6 +43,16 @@ load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
 
+$user_registration = get_config('user_registration');
+$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
+$alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
+
+if (!$user_registration) {
+	$tool_content .= "<div class='info'>$langCannotRegister</div>";
+	draw($tool_content,0);
+	exit;
+}
+
 if (isset($_POST['auth'])) {
 	$auth = intval($_POST['auth']);
 	$_SESSION['u_tmp'] = $auth;
@@ -54,9 +64,24 @@ if (isset($_SESSION['u_prof'])) {
 	$prof = intval($_SESSION['u_prof']);
 }
 
-//$prof = isset($_REQUEST['p'])? intval($_REQUEST['p']): 0;
+if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
+if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
 $phone_required = $prof;
-$autoregister = !($prof || (get_config('close_user_registration') && get_config('alt_auth_student_req')));
+if (!$prof and $alt_auth_stud_reg == 2) {
+         $autoregister = TRUE;
+} else {
+         $autoregister = FALSE;
+}
 $comment_required = !$autoregister;
 $email_required = !$autoregister || get_config('email_required');
 $am_required = !$prof && get_config('am_required');
@@ -494,7 +519,7 @@ function user_info_form()
            </tr>
            <tr>
              <th class='left'>&nbsp;</th>
-             <td colspan='2'><input type='submit' name='submit' value='$langRegistration' />
+             <td colspan='2'><input type='submit' name='submit' value='".q($langRegistration)."' />
                  <input type='hidden' name='p' value='$prof'>";
         if (isset($_SESSION['shib_uname'])) {
                 $tool_content .= "<input type='hidden' name='uname' value='".q($_SESSION['shib_uname'])."' />";

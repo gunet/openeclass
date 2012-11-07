@@ -880,7 +880,13 @@ function shib_cas_login($type)
 	global $nom, $prenom, $email, $statut, $language, $urlServer,
 		$is_admin, $is_power_user, $is_usermanage_user, $is_departmentmanage_user, $langUserAltAuth;
 
-	$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
+	$alt_auth_stud_reg = get_config('alt_auth_stud_reg');
+
+        if ($alt_auth_stud_reg == 2) {
+                $autoregister = TRUE;
+        } else {
+                $autoregister = FALSE;
+        }
 
 	$_SESSION['user_perso_active'] = false;
 	if ($type == 'shibboleth') {
@@ -983,10 +989,13 @@ function shib_cas_login($type)
 							password = '$type',
 							username = ".quote($uname).",
 							email = ".quote($email).",
-							statut = 5, lang = 'el', perso = 'yes',
+							statut = ".USER_STUDENT.", 
+                                                        lang = 'el', 
+                                                        perso = 'yes',
 							registered_at = $registered_at,
 							verified_mail = $verified_mail,
-							expires_at = $expires_at");
+							expires_at = $expires_at,
+                                                        whitelist = ''");
 			$_SESSION['uid'] = mysql_insert_id();
 			$userPerso = 'yes';
 			$language = $_SESSION['langswitch'] = 'el';

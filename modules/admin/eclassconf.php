@@ -91,8 +91,7 @@ if (isset($_POST['submit']))  {
                         'am_required' => true,
                         'dont_display_login_form' => true,
                         'dropbox_allow_student_to_student' => true,
-                        'block_username_change' => true,
-                        'close_user_registration' => true,
+                        'block_username_change' => true,                        
                         'display_captcha' => true,
                         'insert_xml_metadata' => true,
                         'betacms' => true,
@@ -102,16 +101,18 @@ if (isset($_POST['submit']))  {
                         'video_quota' => true,
                         'dropbox_quota' => true,
                         'max_glossary_terms' => true,
-                        'theme' => true,
-                        'alt_auth_student_req' => true,
-                        'disable_eclass_stud_reg' => true,
-                        'disable_eclass_prof_reg' => true,
+                        'theme' => true,                                                
                         'case_insensitive_usernames' => true,
                         'course_multidep' => true,
                         'user_multidep' => true,
                         'restrict_owndep' => true,
                         'restrict_teacher_owndep' => true,
                         'disable_log_user_actions' => true,
+                        'user_registration' => true,
+	                'eclass_stud_reg' => true,
+                        'alt_auth_stud_reg' => true,
+	                'eclass_prof_reg' => true,
+                        'alt_auth_prof_reg' => true,
                         'enable_search' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
@@ -198,65 +199,37 @@ else {
         $tool_content .= "<fieldset>
         <legend>$langUpgReg</legend>
         <table class='tbl' width='100%'>";
-	$cbox_disable_eclass_stud_reg = get_config('disable_eclass_stud_reg')? 'checked': '';
-	$tool_content .= "
-	<tr>	  
-	  <td><input type='checkbox' name='disable_eclass_stud_reg' value='1'
-	    $cbox_disable_eclass_stud_reg>&nbsp;$langDisableEclassStudReg</td>
-	</tr>";
-
-	$cbox_disable_eclass_prof_reg = get_config('disable_eclass_prof_reg')? 'checked': '';
-	$tool_content .= "
-	<tr>	  
-	  <td><input type='checkbox' name='disable_eclass_prof_reg' value='1'
-	    $cbox_disable_eclass_prof_reg>&nbsp;$langDisableEclassProfReg</td>
-	</tr>";
-
-        $cbox_close_user_registration = get_config('close_user_registration')? 'checked': '';
-	$tool_content .= "
-	<tr>	  
-          <td>
-	  <input type=checkbox name='close_user_registration' value='1'
-        $cbox_close_user_registration>&nbsp;$langViaReq</td>
-	</tr>";
-
-        $cbox_alt_auth_student_req = get_config('alt_auth_student_req')? 'checked': '';
-	$tool_content .= "<tr>	  
-	  <td><input type='checkbox' name='alt_auth_student_req' value='1'
-	    $cbox_alt_auth_student_req>&nbsp;$langAltAuthStudentReq</td>
-	</tr>";
-
-        $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames')? 'checked': '';
-	$tool_content .= "<tr>	  
-	  <td><input type='checkbox' name='case_insensitive_usernames' value='1'
-	    $cbox_case_insensitive_usernames>&nbsp;$langCaseInsensitiveUsername</td>
-	</tr>";
-        $cbox_email_required = get_config('email_required')?'checked':'';
-	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
-        $tool_content .= "<tr>		
-		<td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
-	  </tr>
-	  <tr>	
-		<td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
-	  </tr>";
-          $cbox_am_required = get_config('am_required')?'checked':'';
-          $tool_content .= "<tr>		
-		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
-	  </tr>";
-          $cbox_display_captcha = get_config('display_captcha')?'checked':'';
-          $tool_content .= "<tr>		
-		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
-	  </tr>";
-
-	$tool_content .= "
-                <tr>        
-                <td>$langUserDurationAccount&nbsp;($langIn $langMonthsUnit)&nbsp;&nbsp;<input type='text' name='formdurationAccount' size='3' maxlength='3' value='".intval(get_config('account_duration') / MONTHS)."'></td>
-                </tr>
-        <tr>        
-        <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='".intval(get_config('min_password_len'))."'></td></tr>
-        </table></fieldset>
+	$tool_content .= "<tr><th width='300' class='left'>$langUserRegistration</th><td>";
+        $tool_content .= selection(array('1' => $langActivate, 
+                                         '0' => $langDeactivate), 'user_registration', get_config('user_registration'));
+        $tool_content .= "</td></tr>";
+        $tool_content .= "<tr><th class='left'>$langUserAccount $langViaeClass</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassStudReg, 
+                                         '1' => $langReqRegUser,
+                                         '2' => $langDisableEclassStudRegType), 'eclass_stud_reg', get_config('eclass_stud_reg'));
+        $tool_content .= "</td></tr>";
+        $tool_content .= "<tr><th class='left'>$langUserAccount $langViaAltAuthMethods</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassStudReg, 
+                                         '1' => $langReqRegUser,
+                                         '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'));
+        $tool_content .= "</td></tr>";
         
-        <fieldset><legend>$langEclassThemes</legend>
+        $tool_content .= "<tr><th class='left'>$langProfAccount $langViaeClass</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassProfReg, 
+                                         '1' => $langReqRegProf), 'eclass_prof_reg', get_config('eclass_prof_reg'));
+        $tool_content .= "</td></tr>";
+        
+        $tool_content .= "<tr><th class='left'>$langProfAccount $langViaAltAuthMethods</th><td>";
+        $tool_content .= selection(array('0' => $langDisableEclassProfReg, 
+                                         '1' => $langReqRegProf), 'alt_auth_prof_reg', get_config('alt_auth_prof_reg'));
+        $tool_content .= "</td></tr>";
+
+        $tool_content .= "<tr>        
+                <td>$langUserDurationAccount&nbsp;($langMonthsUnit)&nbsp;&nbsp;<input type='text' name='formdurationAccount' size='3' maxlength='3' value='".intval(get_config('account_duration') / MONTHS)."'></td>
+                </tr>";        
+        $tool_content .= "</table></fieldset>";
+        
+        $tool_content .= "<fieldset><legend>$langEclassThemes</legend>
         <table class='tbl' width='100%'>
         <tr>
 	  <th class='left'><b>$langMainLang</b></th>
@@ -286,7 +259,7 @@ else {
 		<td colspan='2'><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
 	  </tr>";
 	$tool_content .= "</table></fieldset>";
-
+        
         $cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
         $cbox_email_from = get_config('email_from')?'checked':'';
         $tool_content .= "<fieldset>
@@ -298,8 +271,8 @@ else {
           <tr>	
 		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
 	  </tr>
-        </table></fieldset>";
-
+        </table></fieldset>";                                
+                
         $cbox_course_multidep = get_config('course_multidep')?'checked':'';
         $cbox_user_multidep = get_config('user_multidep')?'checked':'';
         $cbox_restrict_owndep = get_config('restrict_owndep') ? 'checked' : '';
@@ -322,7 +295,12 @@ else {
 		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
         </table></fieldset>";
-
+        
+        $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames')? 'checked': '';
+        $cbox_email_required = get_config('email_required')?'checked':'';
+	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
+        $cbox_am_required = get_config('am_required')?'checked':'';
+	$cbox_display_captcha = get_config('display_captcha')?'checked':'';                                
         $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
 	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
 	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
@@ -333,32 +311,50 @@ else {
         $cbox_disable_log_user_actions = get_config('disable_log_user_actions')?'checked':'';
 
         $tool_content .= "<fieldset>
+        
         <legend>$langOtherOptions</legend>
         <table class='tbl' width='100%'>
-           <tr>
+        <tr>
+                <td><input type='checkbox' name='case_insensitive_usernames' value='1' $cbox_case_insensitive_usernames>&nbsp;$langCaseInsensitiveUsername</td>
+        </tr>
+        <tr>
+                <td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
+        </tr>
+        <tr>	
+                <td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
+        </tr>
+        <tr>        
+                <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='".intval(get_config('min_password_len'))."'></td></tr>        
+        <tr>
                 <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
                 <td><input type='checkbox' name='disable_log_user_actions' value='1' $cbox_disable_log_user_actions />&nbsp;$lang_disable_log_user_actions</td>
-          </tr>
-	  <tr>		
-		<td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
-	  </tr>
-	  <tr>		
-		<td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
-	  </tr>
-	  <tr>		
-		<td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-	  </tr>
-	  <tr>		
-		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
-	  </tr>
-	  <tr>		
-		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
-	  </tr>
-	  <tr>		
-		<td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
-	  </tr>
+        </tr>
+        <tr>		
+                <td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
+        </tr>
+        <tr>		
+                <td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
+        </tr>
         </table></fieldset>";
 
         $tool_content .= "<fieldset>
