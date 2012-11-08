@@ -502,20 +502,54 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("UPDATE `user` SET `email`=LOWER(TRIM(`email`))");
                 db_query("UPDATE `user` SET `username`=TRIM(`username`)");
         }
-
+        
         if ($oldversion < '2.5.2') {
         	db_query("ALTER TABLE `user` MODIFY `password` VARCHAR(60) DEFAULT 'empty'");
+                db_query("DROP TABLE IF EXISTS passwd_reset");
         }
         
         if ($oldversion < '2.6') {
             db_query("ALTER TABLE `config` CHANGE `value` `value` TEXT NOT NULL");
-            db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
-            db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+            $old_close_user_registration = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'close_user_registration'");
+            if ($old_close_user_registration == 0) {
+                    $eclass_stud_reg = 2;
+            } else  {
+                    $eclass_stud_reg = 1;
+            }
+            db_query("UPDATE `config` SET `key` = 'eclass_stud_reg', 
+                                          `value`= $eclass_stud_reg
+                                      WHERE `key` = 'close_user_registration'");
+            
+            $old_disable_eclass_prof_reg = !(db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'disable_eclass_prof_reg'"));
+            db_query("UPDATE `config` SET `key` = 'eclass_prof_reg',
+                                           `value` = $old_disable_eclass_prof_reg
+                                      WHERE `key` = 'disable_eclass_prof_reg'");
+            db_query("DELETE FROM `config` WHERE `key` = 'disable_eclass_stud_reg'");
+            db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
+            $old_alt_auth_stud_req = db_query_get_single_value("SELECT `value` FROM config WHERE `key` = 'alt_auth_student_req'");
+            if ($old_alt_auth_stud_req == 1) {                    
+                    $alt_auth_stud_req = 1;
+            } else {
+                    $alt_auth_stud_req = 2;
+            }
+            db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                                        ('user_registration', 1),
+                                        ('alt_auth_prof_reg', 1),
+                                        ('alt_auth_stud_reg', $alt_auth_stud_req)");
+            
+            db_query("DELETE FROM `config` WHERE `key` = 'alt_auth_student_req'");
+            
+            if (!mysql_field_exists($mysqlMainDb, 'user', 'whitelist')) {
+                    db_query("ALTER TABLE `user` ADD `whitelist` TEXT AFTER `am_public`");
+                    db_query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+            }
             db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                             ('student_upload_whitelist', ". quote($_POST['student_upload_whitelist']) ."),
                             ('teacher_upload_whitelist', ". quote($_POST['teacher_upload_whitelist']) .")");
-            db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
-            db_query("CREATE TABLE login_failure (
+            if (!mysql_field_exists($mysqlMainDb, 'user', 'last_passreminder')) {
+                    db_query("ALTER TABLE `user` ADD `last_passreminder` DATETIME DEFAULT NULL AFTER `whitelist`");
+            }
+            db_query("CREATE TABLE IF NOT EXISTS login_failure (
                 id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 ip varchar(15) NOT NULL,
                 count tinyint(4) unsigned NOT NULL default '0',
