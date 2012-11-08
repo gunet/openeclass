@@ -102,7 +102,7 @@ if ($submit)  {
                     quote($password) .', '.
                     quote($pe) .', 1, '.
                     quote($department) .', '.
-                    quote($comment) . ", $registered_at, $expires_at, '', $lang', $verified_mail)");
+                    quote($comment) . ", $registered_at, $expires_at, '', '$lang', $verified_mail)");
 
     // Close user request
     $rid = intval($_POST['rid']);
