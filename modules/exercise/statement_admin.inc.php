@@ -110,8 +110,8 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>
 	  <tr>
-	    <th>".$langQuestion.":</th>
-	    <td><input type='text' name='questionName'" ."size='50' value='".htmlspecialchars($questionName)."'></td>
+	    <th>".q($langQuestion).":</th>
+	    <td><input type='text' name='questionName'" ."size='50' value='".q($questionName)."'></td>
 	  </tr>
 	  <tr>
 	    <th valign='top'>$langQuestionDescription:</th>
@@ -123,12 +123,12 @@ if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
 	    <th valign='top'>";
 
 	if ($okPicture) {
-		$tool_content .= "$langReplacePicture";
+		$tool_content .= "$langReplacePicture:";
 	} else {
-		$tool_content .= "$langAddPicture";
+		$tool_content .= "$langAddPicture:";
 	}
 
-	$tool_content .= ":</th><td>";
+	$tool_content .= "</th><td>";
 	if($okPicture) {
 		$tool_content .= "<img src='../../$picturePath/quiz-$questionId'><br/><br/>";
 	}

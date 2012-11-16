@@ -100,10 +100,10 @@ class Answer
 	 */
 	function read()
 	{
-		global $TBL_ANSWER, $mysqlMainDb;
+		global $TBL_ANSWER;
 
 		$questionId = $this->questionId;
-		mysql_select_db($mysqlMainDb);
+		
 		$sql = "SELECT answer, correct, comment, weight, r_position
 			FROM `$TBL_ANSWER` WHERE question_id = '$questionId' ORDER BY r_position";
 		$result = db_query($sql) or die("Error : SELECT in file ".__FILE__." at line ".__LINE__);
@@ -239,23 +239,23 @@ class Answer
 	 */
 	function save()
 	{
-		global $TBL_ANSWER, $mysqlMainDb;
+		global $TBL_ANSWER;
 
-		$questionId=$this->questionId;
+		$questionId=intval($this->questionId);
 		// removes old answers before inserting of new ones
-		$sql="DELETE FROM `$TBL_ANSWER` WHERE question_id = '$questionId'";
-		db_query($sql, $mysqlMainDb);
+		$sql="DELETE FROM `$TBL_ANSWER` WHERE question_id = $questionId";
+		db_query($sql);
 		// inserts new answers into data base
 		$sql="INSERT INTO `$TBL_ANSWER` (id, question_id, answer, correct, comment, weight, r_position) VALUES ";
 
 		for($i = 1; $i <= $this->new_nbrAnswers; $i++)
 		{
-			$answer    = addslashes(standard_text_escape($this->new_answer[$i]));
-			$correct   = $this->new_correct[$i];
-			$comment   = addslashes(standard_text_escape($this->new_comment[$i]));
-			$weighting = $this->new_weighting[$i];
-			$position  = $this->new_position[$i];
-			$sql .= "('$i', '$questionId', '$answer', '$correct', '$comment', '$weighting', '$position'),";
+			$answer    = quote(standard_text_escape($this->new_answer[$i]));
+			$correct   = intval($this->new_correct[$i]);
+			$comment   = quote(standard_text_escape($this->new_comment[$i]));
+			$weighting = floatval($this->new_weighting[$i]);
+			$position  = intval($this->new_position[$i]);
+			$sql .= "('$i', $questionId, $answer, $correct, $comment, $weighting, $position),";
 		}
 
 		$sql = substr($sql, 0, -1);
@@ -296,7 +296,7 @@ class Answer
 				$comment   = addslashes($this->comment[$i]);
 				$weighting = $this->weighting[$i];
 				$position  = $this->position[$i];
-				$sql .= "('$i', '$newQuestionId', '$answer', '$correct', '$comment', '$weighting', '$position'),";
+				$sql .= "('$i', $newQuestionId, '$answer', '$correct', '$comment', '$weighting', '$position'),";
 			}
 
 			$sql = substr($sql, 0, -1);

@@ -112,15 +112,18 @@ if (isset($_POST['submit'])) {
 	$c = course_code_to_title($course_code);
         $name = uid_to_name($uid);
 	$forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
-	$plain_forum_message = html2text($forum_message);
-	$body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c'  <br /><br />". q($forum_message) ."<br /><br />$gunet<br /><a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
+	$plain_forum_message = html2text($forum_message);        
+	$body_topic_notify = "<br>$langBodyTopicNotify $langInForum '".q($topic_title)."' $langOfForum '".q($forum_name)."' 
+                                $langInCat '".q($cat_name)."' $langTo $langCourseS '$c'  <br />
+                                <br />". q($forum_message) ."<br /><br />$gunet<br />
+                                <a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
 	$plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' $langOfForum '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
+        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
+        $plain_body_topic_notify .= $unsubscribe.$linkhere;
+        $body_topic_notify .= $unsubscribe.$linkhere;
 	while ($r = mysql_fetch_array($sql)) {
-                if (get_user_email_notification($r['user_id'], $course_id)) {
-                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-                        $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
-                        $plain_body_topic_notify .= $unsubscribe.$linkhere;
-                        $body_topic_notify .= $unsubscribe.$linkhere;
+                if (get_user_email_notification($r['user_id'], $course_id)) {                      
                         $emailaddr = uid_to_email($r['user_id']);
                         send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
                 }

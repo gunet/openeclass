@@ -87,21 +87,21 @@ if($nbrQuestions) {
 
 		$tool_content .= "
 			<td align='right' width='1'>".$i.".</td>
-			<td> ".$objQuestionTmp->selectTitle()."<br />
+			<td> ".q($objQuestionTmp->selectTitle())."<br />
 			".$aType[$objQuestionTmp->selectType()-1]."</td>
-			<td class=\"right\" width=\"50\"><a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;editQuestion=".$id."\">".
-			"<img src='$themeimg/edit.png' title='$langModify' /></a>".
-			" <a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;deleteQuestion=".$id."\" "."onclick=\"javascript:if(!confirm('".addslashes(htmlspecialchars($langConfirmYourChoice))."')) return false;\">".
-			"<img src='$themeimg/delete.png' title='$langDelete' /></a></td>
-		<td width='20'>";
+			<td class='right' width='50'>".
+                        icon('edit', $langModify,
+                             $_SERVER['SCRIPT_NAME']."?course=$course_code&amp;editQuestion=$id") . "&nbsp;" .
+                        icon('delete', $langDelete,
+                             $_SERVER['SCRIPT_NAME']."?course=$course_code&amp;deleteQuestion=$id",
+                             "onclick=\"if(!confirm('".js_escape($langConfirmYourChoice)."')) return false;\"").
+			"</td><td width='20'>";
 		if($i != 1) {
-			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveUp=".$id."\">
-   			<img src='$themeimg/up.png' align='middle' title='$langUp' /></a> ";
+                        $tool_content .= icon('up', $langUp, $_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveUp=$id");			
 		}
 		$tool_content .= "</td><td width='20'>";
 		if($i != $nbrQuestions)	{
-			$tool_content .= "<a href=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveDown=".$id."\">
-			<img src='$themeimg/down.png' align='middle' title='$langDown' /></a> ";
+                         $tool_content .= icon('down', $langDown, $_SERVER['SCRIPT_NAME']."?course=$course_code&amp;moveDown=$id");			
 		}
 		$tool_content .= "</td></tr>";
 		$i++;

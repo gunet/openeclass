@@ -142,47 +142,43 @@ if (count($status) > 0) {
         </tr>\n";
 
         $logindate = last_login($uid);
+        $table_begin = true;                
+        $result = db_query("SELECT announcement.id, content, `date`, title
+                        FROM announcement, course_module
+                        WHERE announcement.course_id IN (SELECT course_id from course_user WHERE user_id = $uid)
+                        AND announcement.visible = 1
+                        AND announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
+                        AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
+                        AND course_module.visible = 1
+                        AND course_module.course_id IN (SELECT course_id from course_user WHERE user_id = $uid)
+                        ORDER BY announcement.`date` DESC");
 
-        $table_begin = true;
-        foreach ($status as $code => $code_statut) {
-                $cid = $course_id_map[$code];
-                $result = db_query("SELECT announcement.id, content, `date`, title
-                                FROM announcement, course_module
-                                WHERE announcement.course_id = $cid
-				AND announcement.visible = 1
-                                AND announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
-                                AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
-                                AND course_module.visible = 1
-                                AND course_module.course_id = $cid
-                                ORDER BY announcement.`date` DESC");
-
-                if ($result and mysql_num_rows($result) > 0) {
-                        if ($table_begin) {
-                                $table_begin = false;
-                                $tool_content .= $announce_table_header;
-                        }
-                        $la = 0;
-                        while ($ann = mysql_fetch_array($result)) {
-                                        $content = standard_text_escape($ann['content']);
-                                        if ($la%2 == 0) {
-                                                $tool_content .= "<tr class='even'>\n";
-                                        } else {
-                                                $tool_content .= "<tr class='odd'>\n";
-                                        }
-                                        $tool_content .= "
-					<td width='16'>
-					    <img src='$themeimg/arrow.png' alt='' /></td><td>
-						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
-						<br>" . "<span class='smaller'>" .
-					    claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
-					    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
-					    q($profs[$code]) . "</b></span>)<br />".
-					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
-						<span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
-                                        $la++;
+        if ($result and mysql_num_rows($result) > 0) {
+                if ($table_begin) {
+                        $table_begin = false;
+                        $tool_content .= $announce_table_header;
+                }
+                $la = 0;
+                while ($ann = mysql_fetch_array($result)) {
+                                $content = standard_text_escape($ann['content']);
+                                if ($la%2 == 0) {
+                                        $tool_content .= "<tr class='even'>\n";
+                                } else {
+                                        $tool_content .= "<tr class='odd'>\n";
                                 }
+                                $tool_content .= "
+                                <td width='16'>
+                                    <img src='$themeimg/arrow.png' alt='' /></td><td>
+                                        <b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
+                                        <br>" . "<span class='smaller'>" .
+                                    claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
+                                    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
+                                    q($profs[$code]) . "</b></span>)<br />".
+                                    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
+                                        <span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
+                                $la++;
                         }
-        }
+                }        
         if (!$table_begin) {
                 $tool_content .= "\n</table>";
         }

@@ -326,6 +326,7 @@ if (isset($require_current_course) and $require_current_course) {
 				$errorMessagePath = "../../";
                         }
 		}
+                $_SESSION['status'][$course_code] = $status[$course_code] = $statut;
 	}
 
 	# force a specific interface language

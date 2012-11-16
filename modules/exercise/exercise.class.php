@@ -414,11 +414,11 @@ class Exercise
 	 */
 	function save()
 	{
-		global $TBL_EXERCISE, $TBL_QUESTION, $mysqlMainDb, $course_id;
+		global $TBL_EXERCISE, $TBL_QUESTION, $course_id;
 
 		$id              = $this->id;
 		$exercise        = addslashes($this->exercise);
-		$description     = addslashes($this->description);
+		$description     = autoquote(standard_text_escape($this->description));
 		$type            = $this->type;
 		$startDate       = $this->startDate;
 		$endDate         = $this->endDate;
@@ -428,12 +428,9 @@ class Exercise
 		$active          = $this->active;
 		$results         = $this->results;
 		$score           = $this->score;
-
-		mysql_select_db($mysqlMainDb);
-
+		
 		// exercise already exists
-		if($id)
-		{
+		if($id) {
 			$sql = "UPDATE `$TBL_EXERCISE`
 				SET title = '$exercise', description = '$description', type = '$type',".
 				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
@@ -442,8 +439,7 @@ class Exercise
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise
-		else
-		{
+		else {
 			$sql="INSERT INTO `$TBL_EXERCISE`
 				VALUES (NULL, $course_id, '$exercise', '$description', $type, '$startDate', '$endDate',
 					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
