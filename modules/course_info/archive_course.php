@@ -32,9 +32,9 @@ if (extension_loaded('zlib')) {
 
 
         // Remove previous back-ups older than 10 minutes
-        cleanup("${webDir}courses/archive", 600);
+        cleanup("$webDir/courses/archive", 600);
 
-        $basedir = "${webDir}courses/archive/$course_code";
+        $basedir = "$webDir/courses/archive/$course_code";
 	mkpath($basedir);
 
 	$backup_date = date('Y-m-d-H-i-(B)-s');
@@ -115,12 +115,12 @@ if (extension_loaded('zlib')) {
         // create zip file
 	$zipCourse = new PclZip($zipfile);
         $result = $zipCourse->create($archivedir,
-                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/archive");
+                                PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
         $result = $zipCourse->add("$webDir/courses/$course_code",
-                                PCLZIP_OPT_REMOVE_PATH, "${webDir}courses/$course_code",
+                                PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code",
                                 PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
-        $result = $zipCourse->add("${webDir}video/$course_code",
-                                PCLZIP_OPT_REMOVE_PATH, "${webDir}video/$course_code",
+        $result = $zipCourse->add("$webDir/video/$course_code",
+                                PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code",
                                 PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
 
         removeDir($archivedir);
