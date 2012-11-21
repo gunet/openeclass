@@ -130,6 +130,9 @@ if ($u)	{
 		$tool_content .= "
                     <div id='operations_container'>
                      <ul id='opslist'>";
+                if ($u != 1 and get_admin_rights($u) < 0) {
+                        $tool_content .= "<li><a href='mergeuser.php?u=$u'>$langUserMerge</a></li>\n";
+                }
                 if (!in_array($info['password'], $auth_ids)) {
                         $tool_content .= "
                         <li><a href='password.php?userid=$u'>".$langChangePass."</a></li>";
