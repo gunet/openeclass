@@ -213,14 +213,14 @@ $tool_content .= "
    </tr>
    <tr>
      <th class='left'>$langFaculty:</th>
-   <td>";
+   <td>\n";
         if (isDepartmentAdmin())
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
         else
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
         $head_content .= $js;
         $tool_content .= $html;
-	$tool_content .= "</td></tr>
+	$tool_content .= "\n</td></tr>
     <tr>
       <th class='left'>$langProperty:</th>
       <td>";

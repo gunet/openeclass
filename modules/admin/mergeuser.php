@@ -27,8 +27,8 @@ mergeuser.php
 */
 
 $require_usermanage_user = true;
-include '../../include/baseTheme.php';
-include '../auth/auth.inc.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/auth/auth.inc.php';
 $nameTools = $langUserMerge;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
@@ -115,45 +115,43 @@ function do_user_merge($source, $target)
         $source_id = $source['user_id'];
         $target_id = $target['user_id'];
         $courses = array();
-        $q_course = db_query("SELECT code FROM cours_user, cours
-                                     WHERE cours.cours_id = cours_user.cours_id AND
+        $q_course = db_query("SELECT code FROM course_user, course
+                                     WHERE course.id = course_user.course_id AND
                                            user_id = $target_id");
         while (list($code) = mysql_fetch_row($q_course)) {
                 $courses[] = $code;
         }
         $tmp_table = "user_merge_{$source_id}_{$target_id}";
         $q = db_query("CREATE TEMPORARY TABLE `$tmp_table` AS
-                              SELECT cours_id, $target_id AS user_id,
+                              SELECT course_id, $target_id AS user_id,
                                      MIN(statut) AS statut, MAX(team) AS team, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail
-                                 FROM cours_user
+                                 FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
-                                 GROUP BY cours_id");
+                                 GROUP BY course_id");
         if ($q) {
                 db_query("DELETE FROM user WHERE user_id = $source_id");
-                db_query("DELETE FROM cours_user WHERE user_id IN ($source_id, $target_id)");
-                db_query("INSERT INTO cours_user SELECT * FROM `$tmp_table`");
+                db_query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
+                db_query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
                 db_query("DROP TEMPORARY TABLE `$tmp_table`");
                 fix_table('forum_notify', 'user_id', $source_id, $target_id);
                 fix_table('loginout', 'id_user', $source_id, $target_id);
-                foreach ($courses as $code) {
-                        mysql_select_db($code);
-                        fix_table('actions', 'user_id', $source_id, $target_id);
-                        fix_table('assignment_submit', 'uid', $source_id, $target_id);
-                        fix_table('dropbox_file', 'uploaderId', $source_id, $target_id);
-                        fix_table('dropbox_person', 'personId', $source_id, $target_id);
-                        fix_table('dropbox_post', 'recipientId', $source_id, $target_id);
-                        fix_table('exercise_user_record', 'uid', $source_id, $target_id);
-                        fix_table('logins', 'user_id', $source_id, $target_id);
-                        fix_table('lp_user_module_progress', 'user_id', $source_id, $target_id);
-                        fix_table('poll', 'creator_id', $source_id, $target_id);
-                        fix_table('poll_answer_record', 'user_id', $source_id, $target_id);
-                        fix_table('posts', 'poster_id', $source_id, $target_id);
-                        fix_table('topics', 'topic_poster', $source_id, $target_id);
-                        fix_table('wiki_pages', 'owner_id', $source_id, $target_id);
-                        fix_table('wiki_pages_content', 'editor_id', $source_id, $target_id);
-                }
+                fix_table('log', 'user_id', $source_id, $target_id);
+                fix_table('assignment_submit', 'uid', $source_id, $target_id);
+                fix_table('dropbox_file', 'uploaderId', $source_id, $target_id);
+                fix_table('dropbox_person', 'personId', $source_id, $target_id);
+                fix_table('dropbox_post', 'recipientId', $source_id, $target_id);
+                fix_table('exercise_user_record', 'uid', $source_id, $target_id);
+                fix_table('logins', 'user_id', $source_id, $target_id);
+                fix_table('lp_user_module_progress', 'user_id', $source_id, $target_id);
+                fix_table('poll', 'creator_id', $source_id, $target_id);
+                fix_table('poll_answer_record', 'user_id', $source_id, $target_id);
+                fix_table('forum_post', 'poster_id', $source_id, $target_id);
+                fix_table('forum_topic', 'poster_id', $source_id, $target_id);
+                fix_table('wiki_pages', 'owner_id', $source_id, $target_id);
+                fix_table('wiki_pages_content', 'editor_id', $source_id, $target_id);
+
                 $tool_content = sprintf('<p class="success">'.$langUserMergeSuccess.'</p>',
                                         '<b>'.q($source['username']).'</b>',
                                         '<b>'.q($target['username']).'</b>') .

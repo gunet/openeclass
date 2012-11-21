@@ -293,11 +293,11 @@ if($countUser > 0) {
         <table class='tbl_alt' width='100%'>
         <tr>
           <th colspan='2' width='150'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=n$header_link'>$langSurname</a></div></th>
-          <th width='100'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=p$header_link'>$langName</a></div></th>
-          <th width='170'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?ord=u$header_link'>$langUsername</a></div></th>
+          <th width='100' class='left'><a href='$_SERVER[SCRIPT_NAME]?ord=p$header_link'>$langName</a></th>
+          <th width='170' class='left'><a href='$_SERVER[SCRIPT_NAME]?ord=u$header_link'>$langUsername</a></th>
           <th scope='col'>$langEmail</th>
           <th scope='col'><a href='$_SERVER[SCRIPT_NAME]?ord=s$header_link'>$langProperty</a></th>
-          <th scope='col'>$langActions</th>
+          <th scope='col' width='100' class='center'>$langActions</th>
         </tr>";
         $k = 0;
         for ($j = 0; $j < mysql_num_rows($sql); $j++) {
@@ -328,8 +328,7 @@ if($countUser > 0) {
                                         $tip = $langMailVerificationNoU;
                                         break;
                                 }
-                                $tool_content .= " <img align='right' src='$themeimg/$icon.png' " .
-                                        "title='$tip' alt='$tip'>";
+                                $tool_content .= ' ' . icon($icon, $tip);
                         }
 
                         switch ($logs['statut']) {
@@ -352,21 +351,23 @@ if($countUser > 0) {
                                 break;
                         }
                         if ($icon) {
-                                $tool_content .= "</td><td class='center'><img src='$themeimg/" .
-                                        "$icon.png' title='$tip' alt='$tip'></td>";
+                                $tool_content .= "</td><td class='center'>" .
+                                        icon($icon, $tip) . "</td>";
                         }
                         if ($logs['user_id'] == 1) { // don't display actions for admin user
                                 $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $changetip = q("$langChangeUserAs $logs[username]");
                                 $width = (!isDepartmentAdmin()) ? 100 : 80;
-                                $tool_content .= "<td width='". $width ."'>
-                                        <a href='edituser.php?u=$logs[user_id]'><img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a>
-                                        <a href='deluser.php?u=$logs[user_id]'><img src='$themeimg/delete.png' title='$langDelete' alt='$langDelete'></a>
-                                        <a href='userstats.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langStat' alt='$langStat'></a>
-                                        <a href='userlogs.php?u=$logs[user_id]'><img src='$themeimg/platform_stats.png' title='$langActions' alt='$langActions'></a>";
-                                if (!isDepartmentAdmin())
-                                        $tool_content .= "<a href='change_user.php?username=".urlencode($logs['username'])."'><img src='$themeimg/log_as.png' title='$changetip' alt='$changetip'></a>";
+                                $tool_content .= "<td width='$width'>" .
+                                        icon('edit', $langEdit, "edituser.php?u=$logs[user_id]") . '&nbsp;' .
+                                        icon('delete', $langDelete, "deluser.php?u=$logs[user_id]") . '&nbsp;' .
+                                        icon('platform_stats', $langStat, "userstats.php?u=$logs[user_id]") . '&nbsp;' .
+                                        icon('platform_stats', $langActions, "userlogs.php?u=$logs[user_id]");
+                                if (!isDepartmentAdmin()) {
+                                        $tool_content .= '&nbsp;' . icon('log_as', $changetip,
+                                                                         'change_user.php?username='.urlencode($logs['username']));
+                                }
                                 $tool_content .= "</td>\n";
                         }
                         $tool_content .= "</tr>";
