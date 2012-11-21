@@ -143,12 +143,12 @@ if (count($status) > 0) {
 
         $logindate = last_login($uid);
 
-        $table_begin = true;
-        foreach ($status as $code => $code_statut) {
-                $cid = $cours_id_map[$code];
-                $result = db_query("SELECT annonces.id, contenu, temps, title
+        $table_begin = true;        
+        
+                
+                $result = db_query("SELECT annonces.id, contenu, temps, title, cours_id
                                 FROM `$mysqlMainDb`.annonces, `$code`.accueil
-                                WHERE cours_id = $cid
+                                WHERE cours_id IN (SELECT cours_id from cours_user WHERE user_id = $uid)
 				AND `$mysqlMainDb`.annonces.visibility = 'v'
                                 AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
                                 AND `$code`.accueil.visible = 1
@@ -162,6 +162,8 @@ if (count($status) > 0) {
                         }
                         $la = 0;
                         while ($ann = mysql_fetch_array($result)) {
+                                        $course_title = course_id_to_title($ann['cours_id']);
+                                        $code = course_id_to_code($ann['cours_id']);
                                         $content = standard_text_escape($ann['contenu'], 'courses/mathimg/');
                                         if ($la%2 == 0) {
                                                 $tool_content .= "<tr class='even'>\n";
@@ -174,14 +176,13 @@ if (count($status) > 0) {
 						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
 						<br>" . "<span class='smaller'>" .
 					    claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
-					    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
+					    "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
 					    q($profs[$code]) . "</b></span>)<br />".
 					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
 						<span class='smaller'>[$langMore]</span></a></strong>"), 'courses/mathimg/')."</td></tr>\n";
                                         $la++;
                                 }
-                        }
-        }
+                        }        
         if (!$table_begin) {
                 $tool_content .= "\n</table>";
         }
