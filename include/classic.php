@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -128,10 +128,10 @@ if ($result2 and mysql_num_rows($result2) > 0) {
         course_table_end();
 }  elseif ($_SESSION['statut'] == '5') {
         // if are loging in for the first time as student...
-	$tool_content .= "\n        <p class='success'>$langWelcomeStud</p>\n";
+	$tool_content .= "<p class='success'>$langWelcomeStud</p>\n";
 }  elseif ($_SESSION['statut'] == '1') {
         // ...or as professor
-        $tool_content .= "\n<p class='success'>$langWelcomeProf</p>\n";
+        $tool_content .= "<p class='success'>$langWelcomeProf</p>\n";
 }
 
 if (count($status) > 0) {
@@ -142,16 +142,18 @@ if (count($status) > 0) {
         </tr>\n";
 
         $logindate = last_login($uid);
-        $table_begin = true;                
-        $result = db_query("SELECT announcement.id, content, `date`, title
-                        FROM announcement, course_module
-                        WHERE announcement.course_id IN (SELECT course_id from course_user WHERE user_id = $uid)
-                        AND announcement.visible = 1
-                        AND announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
-                        AND course_module.module_id = ".MODULE_ID_ANNOUNCE."
-                        AND course_module.visible = 1
-                        AND course_module.course_id IN (SELECT course_id from course_user WHERE user_id = $uid)
+        $table_begin = true;
+        $result = db_query("SELECT announcement.id, announcement.content, announcement.`date`, announcement.title, announcement.course_id
+                        FROM announcement, course_module, course_user
+                        WHERE course_user.course_id = announcement.course_id AND
+                              course_module.course_id = announcement.course_id AND
+                              course_user.user_id = $uid AND
+                              announcement.visible = 1 AND
+                              course_module.visible = 1 AND
+                              course_module.module_id = ".MODULE_ID_ANNOUNCE." AND
+                              announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
                         ORDER BY announcement.`date` DESC");
+        
 
         if ($result and mysql_num_rows($result) > 0) {
                 if ($table_begin) {
@@ -159,28 +161,30 @@ if (count($status) > 0) {
                         $tool_content .= $announce_table_header;
                 }
                 $la = 0;
-                while ($ann = mysql_fetch_array($result)) {
-                                $content = standard_text_escape($ann['content']);
-                                if ($la%2 == 0) {
-                                        $tool_content .= "<tr class='even'>\n";
-                                } else {
-                                        $tool_content .= "<tr class='odd'>\n";
-                                }
-                                $tool_content .= "
-                                <td width='16'>
-                                    <img src='$themeimg/arrow.png' alt='' /></td><td>
-                                        <b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
-                                        <br>" . "<span class='smaller'>" .
-                                    claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
-                                    "&nbsp;($langCourse: <b>" . q($titles[$code]) . "</b>, $langTutor: <b>" .
-                                    q($profs[$code]) . "</b></span>)<br />".
-                                    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
-                                        <span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
-                                $la++;
+                while ($ann = mysql_fetch_array($result)) {                        
+                        $course_title = course_id_to_title($ann['course_id']);
+                        $code = course_id_to_code($ann['course_id']);
+                        $content = standard_text_escape($ann['content']);
+                        if ($la % 2 == 0) {
+                                $tool_content .= "<tr class='even'>\n";
+                        } else {
+                                $tool_content .= "<tr class='odd'>\n";
                         }
-                }        
+                        $tool_content .= "
+                        <td width='16'>
+                            <img src='$themeimg/arrow.png' alt='' /></td><td>
+                                <b><a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
+                                <br>" . "<span class='smaller'>" .
+                            claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
+                            "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
+                            q($profs[$code]) . "</b></span>)<br />".
+                            standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/index.php.php?course=$code&amp;an_id=$ann[id]'>
+                                <span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
+                        $la++;
+                }
+        }
         if (!$table_begin) {
-                $tool_content .= "\n</table>";
+                $tool_content .= "</table>";
         }
 }
 if (isset($status)) {
