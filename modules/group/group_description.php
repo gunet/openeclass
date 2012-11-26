@@ -37,7 +37,7 @@ if (isset($_GET['delete'])) {
 	}
 	$tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else if (isset($_POST['submit'])) {
-		$sql = db_query("UPDATE group_members SET description = '".q($_POST['group_desc'])."'
+		$sql = db_query("UPDATE group_members SET description = ".autoquote($_POST['group_desc'])."
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
 		if (mysql_affected_rows() > 0) {
 			$tool_content .= "<div class='success'>$langRegDone<br /><br />";
@@ -49,7 +49,6 @@ if (isset($_GET['delete'])) {
 	$sql = db_query("SELECT description FROM group_members
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
 	list($description) = mysql_fetch_array($sql);
-
 	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	  <table class='FormData' width='99%' align='left'>
 	  <tbody>
@@ -64,7 +63,7 @@ if (isset($_GET['delete'])) {
 	  <tr>
 	    <th>&nbsp;</th>
 	    <input type='hidden' name='group_id' value='$group_id'>
-	<td><input type='submit' name='submit' value='$langAddModify' /></td>
+	<td><input type='submit' name='submit' value='".q($langAddModify)."' /></td>
 	  </tr>
 	  </tbody>
 	  </table>
