@@ -74,15 +74,18 @@ if (isset($_POST['modify'])) {
                 $maxStudent = $student_members;
                 $message .= "<p class='alert1'>$langGroupMembersUnchanged</p>";
         }
-        $updateStudentGroup = db_query("UPDATE `group` SET name = $name, description = $description,
-                                                           max_members = $maxStudent
-                                                       WHERE id = $group_id");
+        $updateStudentGroup = db_query("UPDATE `$mysqlMainDb`.`group`
+                                               SET name = $name,
+                                                   description = $description,
+                                                   max_members = $maxStudent
+                                               WHERE id = $group_id");
 
         db_query("UPDATE `$currentCourseID`.forums SET forum_name = $name WHERE forum_id =
-                        (SELECT forum_id FROM `group` WHERE id = $group_id)");
+                        (SELECT forum_id FROM `$mysqlMainDb`.`group` WHERE id = $group_id)");
 
-        db_query("DELETE FROM group_members WHERE group_id = $group_id AND is_tutor = 1");
-        if (isset($_POST['tutor'])) {
+        if ($is_editor and isset($_POST['tutor'])) {
+                db_query("DELETE FROM `$mysqlMainDb`.group_members
+                                 WHERE group_id = $group_id AND is_tutor = 1");
                 foreach ($_POST['tutor'] as $tutor_id) {
                         $tutor_id = intval($tutor_id);
                         db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
@@ -98,11 +101,12 @@ if (isset($_POST['modify'])) {
 		$message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
 	} else {
                 // Delete all members of this group
-                $delGroupUsers = db_query("DELETE FROM group_members WHERE group_id = $group_id AND is_tutor = 0");
+                $delGroupUsers = db_query("DELETE FROM `$mysqlMainDb`.group_members
+                                                  WHERE group_id = $group_id AND is_tutor = 0");
                 $numberMembers--;
 
                 for ($i = 0; $i <= $numberMembers; $i++) {
-                        db_query("INSERT IGNORE INTO group_members (user_id, group_id)
+                        db_query("INSERT IGNORE INTO `$mysqlMainDb`.group_members (user_id, group_id)
                                   VALUES (" . intval($_POST['ingroup'][$i]) . ", $group_id)");
                 }
 
@@ -114,7 +118,7 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
-        $tool_content_tutor = "<select name='tutor[]' multiple='multiple' id='select-tutor'>\n";
+        $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>\n";
         $q = db_query("SELECT user.user_id, nom, prenom,
                                    user.user_id IN (SELECT user_id FROM group_members
                                                                    WHERE group_id = $group_id AND
@@ -228,7 +232,7 @@ $tool_content .="
           </tr>
           <tr>
             <td>
-              <select id='users_box' name='nogroup[]' size='15' multiple='1'>
+              <select id='users_box' name='nogroup[]' size='15' multiple>
                 $tool_content_not_Member
               </select>
             </td>
@@ -236,7 +240,7 @@ $tool_content .="
               <input type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
             </td>
             <td class='right'>
-              <select id='members_box' name='ingroup[]' size='15' multiple='1'>
+              <select id='members_box' name='ingroup[]' size='15' multiple>
                 $tool_content_group_members
               </select>
             </td>

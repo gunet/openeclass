@@ -438,11 +438,12 @@ if ($is_editor) {
 				$tool_content .= q($group_name);
 			}
 			if ($user_group_description) {
-				$tool_content .= "<br />".q($user_group_description)."&nbsp;&nbsp;
-					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'>
-						<img src='$themeimg/edit.png' title='".q($langModify)."' /></a>
-					<a href='group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true' onClick=\"return confirm_delete();\">
-						<img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                                $tool_content .= "<br />".q($user_group_description) . "&nbsp;&nbsp;" .
+                                        icon('edit', $langModify,
+                                             "group_description.php?course=$code_cours&amp;group_id=$row[0]") . "&nbsp;" .
+                                        icon('delete', $langDelete,
+                                             "group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true",
+                                             'onClick="return confirm_delete();"');
 			} elseif ($is_member) {
 				$tool_content .= "<br /><a href='group_description.php?course=$code_cours&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}
