@@ -323,7 +323,20 @@ function loggedOutMenu(){
 	array_push($sideMenuGroup, $sideMenuSubGroup);
 	return $sideMenuGroup;
 }
-
+/**
+ * Creates the administrator menu
+ * 
+ * @global type $urlAppend
+ * @global type $language
+ * @global type $phpSysInfoURL
+ * @global type $phpMyAdminURL
+ * @global type $siteName
+ * @global type $urlServer
+ * @global type $is_admin
+ * @global type $is_power_user
+ * @global type $is_departmentmanage_user
+ * @return array
+ */
 function adminMenu(){
 
     global $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
@@ -501,10 +514,14 @@ function adminMenu(){
 	    array_push($sideMenuText, $GLOBALS['langStats']);
 	    array_push($sideMenuLink, "../admin/stateclass.php");
 	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langAdminAn']);
+	    array_push($sideMenuText, $GLOBALS['langCommonDocs']);
+	    array_push($sideMenuLink, "../admin/commondocs.php");
+	    array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langAdminAn']);
 	    array_push($sideMenuLink, "../admin/adminannouncements.php");
 	    array_push($sideMenuImg, "arrow.png");
 	    array_push($sideMenuText, $GLOBALS['langAdminManual']);
+            
 	    
 	    if ($language == 'el') {
 	        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=el:admin_doc");

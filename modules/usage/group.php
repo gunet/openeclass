@@ -44,7 +44,7 @@ $tool_content .= "
 </div>\n";
 
 
-$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';

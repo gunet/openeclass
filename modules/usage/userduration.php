@@ -64,7 +64,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         $format = 'html';
 
         $nameTools = $langUserDuration;
-        $navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
+        $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 
         $tool_content .= "
         <div id='operations_container'>

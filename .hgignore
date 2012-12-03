@@ -2,3 +2,4 @@ syntax: regexp
 ^courses/
 ^video/
 ^config/.*\.php
+^html/

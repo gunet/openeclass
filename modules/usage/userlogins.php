@@ -56,7 +56,7 @@ $tool_content .= "
 
 
 $nameTools = $langUserLogins;
-$navigation[] = array('url' => 'usage.php?course='.$course_code, 'name' => $langUsage);
+$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }

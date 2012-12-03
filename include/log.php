@@ -27,7 +27,14 @@ define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
 
 class Log {
-        // log users actions
+        /**
+         * record users actions
+         * @param type $course_id
+         * @param type $module_id
+         * @param type $action_type
+         * @param type $details
+         * @return none;
+         */
         public static function record($course_id, $module_id, $action_type, $details) {
 
                 if (get_config('disable_log_user_actions')) {
@@ -44,16 +51,18 @@ class Log {
                                 ip = '$_SERVER[SERVER_ADDR]'");
                 return;
         }
-
-        //-------------------------------------------------------------
-        // display users logging
-        //
-        // $module_id = -1 means all modules
-        // $logtype = -1 means logtypes
-        // $user_id = -1 means all users
-        // $course_id = -1 means all courses
-        // $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
-        //-------------------------------------------------------------
+        
+        /**
+         * display users logging        
+         * Note: $module_id = $course_id = 0 means other logging (e.g. modify user profile, course creation etc.)
+         * @param int $course_id (-1 means all courses)
+         * @param type $user_id (-1 means all users)
+         * @param int $module_id (-1 means all modules)
+         * @param type $logtype (-1 means logtypes)
+         * @param type $date_from
+         * @param type $date_now
+         * @return none        
+         */        
         public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
 
                 global $tool_content, $modules;
@@ -296,7 +305,7 @@ class Log {
                 return $content;
 
         }
-
+        // return details of actions in links
         private function link_action_details($details) {
 
                 global $langTitle, $langDescription, $langCategoryName;
@@ -317,7 +326,7 @@ class Log {
                 }
                 return $content;
         }
-
+        // return details of actions in documents
         private function document_action_details($details) {
 
                 global $langFileName, $langComments, $langTitle, $langRename, $langMove, $langTo, $langIn;

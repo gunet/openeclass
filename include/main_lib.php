@@ -1,4 +1,8 @@
 <?php
+/* \file main_lib.php
+ * \brief General useful functions for eClass
+ */
+
 /*
 * ========================================================================
 * Open eClass 3.0 - E-learning and Course Management System
@@ -24,23 +28,23 @@ Panepistimiopolis Ilissia, 15784, Athens, Greece
 eMail: eclassadmin@gunet.gr
 /*
 
-/*
-----------------------------------------------------------------------
-General useful functions for eClass
-Standard header included by all eClass files
-Defines standard functions and validates variables
----------------------------------------------------------------------
+
+/**
+ * @file main.lib.php
+ * @brief General useful functions for eClass
+ * Standard header included by all eClass files
+ * Defines standard functions and validates variables
 */
 
 define('ECLASS_VERSION', '2.99');
 
-// course status
+/* course status */
 define('COURSE_OPEN', 2);
 define('COURSE_REGISTRATION', 1);
 define('COURSE_CLOSED', 0);
 define('COURSE_INACTIVE', 3);
 
-// user status
+/* user status */
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
 define('USER_GUEST', 10);
@@ -61,7 +65,7 @@ define('USERMANAGE_USER', 2); // usermanage user can admin only users
 define('DEPARTMENTMANAGE_USER', 3); // departmentmanage user can admin departments
 
 // user email status
-define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User cannot login.
+define('EMAIL_VERIFICATION_REQUIRED', 0);  /* email verification required. User cannot login */
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
 
@@ -213,8 +217,9 @@ function db_query_fetch_all($sqlQuery, $db = false) {
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------
 
-
-// Quote string for SQL query
+/*
+ * Quote string for SQL query 
+ */
 function quote($s) {
 	return "'".mysql_real_escape_string(canonicalize_whitespace($s))."'";
 }
@@ -2151,8 +2156,13 @@ function icon($name, $title=null, $link=null, $attrs=null, $format='png')
 	}
 }
 
-
-// Link for displaying user profile
+/**
+ * Link for displaying user profile 
+ * @param type $uid
+ * @param type $size
+ * @param type $default = false
+ * @return type
+ */
 function profile_image($uid, $size, $default = false)
 {
 	global $urlServer, $themeimg;
@@ -2251,8 +2261,11 @@ function check_inactive_course($course_id)
         return false;
 }
 
-
-// get user email verification status
+/**
+ * get user email verification status
+ * @param type $uid
+ * @return verified mail or no
+ */
 function get_mail_ver_status($uid) {
 
         $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
@@ -2434,5 +2447,3 @@ function token_validate($info, $token, $ts_valid_time=0)
         $code_key = get_config('code_key');
         return $token == hash_hmac('ripemd160', $ts.$info, $code_key);
 }
-
-
