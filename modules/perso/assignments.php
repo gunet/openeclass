@@ -145,7 +145,7 @@ aCont;
                                 $assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url'><b>" .
                                         q($data[$i][2][$j][1]) .
                                         "</b></a><div class='smaller'>$langGroupWorkDeadline_of_Submission: <b>" .
-                                        nice_format($data[$i][2][$j][3]) . "</b><div class='grey'>" .
+                                        nice_format($data[$i][2][$j][3], true) . "</b><div class='grey'>" .
                                         $submit_status . "</div></div></li></ul></td></tr>";
 			}
 			//if ($i+1 <$max_repeat_val) $assign_content .= "<br>";
