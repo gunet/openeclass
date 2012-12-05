@@ -101,6 +101,13 @@ define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
 define('TRUE_FALSE',      5);
 //
+
+// Subsystem types (used in documents)
+define('MAIN', 0);
+define('GROUP', 1);
+define('EBOOK', 2);
+define('COMMON', 3);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false)
 {
@@ -1153,8 +1160,11 @@ function cp737_to_utf8($s)
         }
 }
 
-
-// Return a new random filename, with the given extension
+/**
+ * Return a new random filename, with the given extension
+ * @param type $extension
+ * @return string
+ */
 function safe_filename($extension = '')
 {
         $prefix = sprintf('%08x', time()) . randomkeys(4);

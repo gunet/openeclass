@@ -18,9 +18,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$guest_allowed = true;
+if (!defined('COMMON_DOCUMENTS')) {
+        $require_current_course = TRUE;
+        $menuTypeID = 2;
+} else {
+        $require_admin = TRUE;
+        $menuTypeID = 3;
+}
 
+$guest_allowed = true;
 require_once '../../include/baseTheme.php';
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
@@ -42,7 +48,7 @@ $require_help = TRUE;
 $helpTopic = 'Doc';
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
-$menuTypeID = ($is_in_tinymce) ? 5: 2;
+$menuTypeID = ($is_in_tinymce) ? 5: $menuTypeID;
 
 if ($is_in_tinymce) {
 
@@ -88,7 +94,12 @@ EOF;
 $diskUsed = dir_total_space($basedir);
 $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
 $d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $course_id"));
-$diskQuotaDocument = $d[0];
+if (defined('COMMON_DOCUMENTS')) {
+        $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
+} else {
+        $diskQuotaDocument = $d[0];
+}
+
 
 if (isset($_GET['showQuota'])) {
         $nameTools = $langQuotaBar;
@@ -96,6 +107,8 @@ if (isset($_GET['showQuota'])) {
         	$navigation[] = array ('url' => 'index.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => $langDoc);
         } elseif ($subsystem == EBOOK) {
 		$navigation[] = array ('url' => 'index.php?course='.$course_code.'&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
+        } elseif ($subsystem == COMMON) {
+                $navigation[] = array ('url' => 'commondocs.php', 'name' => $langCommonDocs);
 	} else {
         	$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langDoc);
         }

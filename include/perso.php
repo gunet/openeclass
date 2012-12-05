@@ -34,7 +34,6 @@
 if (!defined('INDEX_START')) {
 	die("Action not allowed!");
 }
-define('MAIN', 0);
 
 require_once 'include/redirector.php';
 $status = array();

@@ -646,11 +646,12 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
 
-	// create config, courses and video catalogs
+	// create config, courses directories etc.
         mkdir_or_error('config');
 	mkdir_or_error('courses');
 	mkdir_or_error('courses/temp');
 	mkdir_or_error('courses/userimg');
+        mkdir_or_error('courses/commondocs');
         mkdir_or_error('video');
 
 	if($configErrorExists) {
