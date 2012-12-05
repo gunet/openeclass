@@ -273,6 +273,7 @@ if ($is_valid) {
                           lang = '$lang',
                           verified_mail = $verified_mail,
                           perso = 'yes',
+                          whitelist='',
                           description = ''";
 
         $inscr_user = db_query($q1);
@@ -285,7 +286,7 @@ if ($is_valid) {
 
         // Register a new user
         $password = $auth_ids[$auth];
-
+        $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName";
         $emailbody = "$langDestination $prenom_form $nom_form\n" .
                      "$langYouAreReg $siteName $langSettings $uname\n" .
