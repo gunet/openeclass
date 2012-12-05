@@ -109,7 +109,7 @@ function announceHtmlInterface($data) {
 		if ($iterator > 0) {
 			$announceExist = true;
 			$assign_content .= "<tr><td class='sub_title1'>".q(ellipsize($data[$i][0], 70))."</td></tr>";
-			$url = $urlAppend . "/modules/announcements/announcements.php?course=".$data[$i][1]."&amp;an_id=";
+			$url = "modules/announcements/index.php?course=".$data[$i][1]."&amp;an_id=";
 			for ($j=0; $j < $iterator; $j++) {
 				$an_id = $data[$i][2][$j][3];
 				$assign_content .= "<tr><td><ul class='custom_list'><li><a href='$url$an_id'>" .
