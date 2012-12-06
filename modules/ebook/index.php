@@ -24,8 +24,6 @@ $require_help = true;
 $helpTopic = 'EBook';
 $guest_allowed = true;
 
-define('EBOOK', 2);
-
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 

@@ -18,9 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*===========================================================================
-file.php
- * @version $Id$
+/**
+@file file.php
+@brief serve files for subsystem documents
 */
 
 // playmode is used in order to re-use this script's logic via play.php
@@ -57,27 +57,31 @@ $path_components = explode('/', $uri);
 // temporary course change
 $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
-$_SESSION['course_code'] = $cinfo_components[0];
-
-if (isset($cinfo_components[1])) {
-        $group_id = intval($cinfo_components[1]);
-        define('GROUP_DOCUMENTS', true);
+if ($cinfo_components[0] == 'common') {
+        define('COMMON_DOCUMENTS', true);
 } else {
-        unset($group_id);
+        $require_current_course = true;
+        $_SESSION['course_code'] = $cinfo_components[0];
+        if (isset($cinfo_components[1])) {
+                $group_id = intval($cinfo_components[1]);
+                define('GROUP_DOCUMENTS', true);
+        } else {
+                unset($group_id);
+        }
 }
 
-$require_current_course = true;
 $guest_allowed = true;
 
 require_once '../../include/init.php';
 require_once 'include/action.php';
 
-// check user's access to cours
-check_cours_access();
-
-// record file access
-$action = new action();
-$action->record(MODULE_ID_DOCS);
+if (!defined('COMMON_DOCUMENTS')) {
+        // check user's access to cours
+        check_cours_access();
+        // record file access
+        $action = new action();
+        $action->record(MODULE_ID_DOCS);
+}
 
 require_once 'doc_init.php';
 require_once 'include/lib/forcedownload.php';
@@ -89,8 +93,6 @@ if (defined('GROUP_DOCUMENTS')) {
         if (!($is_editor or $is_member)) {
                 error($langNoRead);
         }
-} else {
-        $basedir = "$webDir/courses/$course_code/document";
 }
 
 $file_info = public_path_to_disk_path($path_components);
@@ -99,9 +101,9 @@ if (!$file_info['visible'] and !$is_editor) {
 }
 
 if (file_exists($basedir . $file_info['path'])) {
-    if (!$is_in_playmode)
+    if (!$is_in_playmode) {
         send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
-    else {
+    } else {
         require_once 'modules/video/video_functions.php';
         require_once 'include/lib/fileDisplayLib.inc.php';
 
@@ -115,7 +117,7 @@ if (file_exists($basedir . $file_info['path'])) {
         exit();
     }
 } else {
-        not_found(preg_replace('/^.*file\.php/', '', $uri));
+    not_found(preg_replace('/^.*file\.php/', '', $uri));
 }
 
 function check_cours_access() {

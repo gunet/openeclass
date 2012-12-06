@@ -659,7 +659,7 @@ function pickerMenu() {
 
 	global $urlServer, $course_code, $course_id, $is_editor, $modules;
 
-        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';
+        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';        
         $params = "?course=$course_code&embedtype=tinymce". $docsfilter;
 
 	$sideMenuGroup = array();
@@ -674,23 +674,29 @@ function pickerMenu() {
 	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-        $visible = ($is_editor) ? '' : 'AND visible = 1';
-        $sql = "SELECT * FROM course_module
-                       WHERE course_id = $course_id AND
-                             module_id IN (".MODULE_ID_DOCS.', '.MODULE_ID_VIDEO.', '.MODULE_ID_LINKS.")
-                             $visible
-                       ORDER BY module_id";
+        if (isset($course_id) and $course_id >= 1) {
+                $visible = ($is_editor) ? '' : 'AND visible = 1';
+                $sql = "SELECT * FROM course_module
+                               WHERE course_id = $course_id AND
+                                     module_id IN (".MODULE_ID_DOCS.', '.MODULE_ID_VIDEO.', '.MODULE_ID_LINKS.")
+                                     $visible
+                               ORDER BY module_id";
 
-        $result = db_query($sql);
+                $result = db_query($sql);
 
-        while($module = mysql_fetch_assoc($result)) {
-                $mid = $module['module_id'];
-                array_push($sideMenuText, q($modules[$mid]['title']));
-                array_push($sideMenuLink, q($urlServer . 'modules/' .
-                                            $modules[$mid]['link'] . '/' . $params));
-                array_push($sideMenuImg , $modules[$mid]['image']."_on.png");
+                while($module = mysql_fetch_assoc($result)) {
+                        $mid = $module['module_id'];
+                        array_push($sideMenuText, q($modules[$mid]['title']));
+                        array_push($sideMenuLink, q($urlServer . 'modules/' .
+                                                    $modules[$mid]['link'] . '/' . $params));
+                        array_push($sideMenuImg , $modules[$mid]['image']."_on.png");
+                }
         }
-
+        /* link for common documents */
+        array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
+        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
+        array_push($sideMenuImg, 'docs.png');
+        
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);

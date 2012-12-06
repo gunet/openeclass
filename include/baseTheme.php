@@ -322,7 +322,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $course_code . '/index.php' );
 			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );
-			if ($statut == 10)
+			if ($statut == USER_GUEST)
 				$t->set_var ( 'BREAD_ARROW', '' );
 			$t->set_var ( 'BREAD_HREF_END', '</a>' );
 			$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );

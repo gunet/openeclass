@@ -18,12 +18,18 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+
 if (!defined('COMMON_DOCUMENTS')) {
         $require_current_course = TRUE;
-        $menuTypeID = 2;
+        $menuTypeID = ($is_in_tinymce) ? 5: 2;
 } else {
-        $require_admin = TRUE;
-        $menuTypeID = 3;
+        if ($is_in_tinymce) {
+                $menuTypeID = 5;
+        } else {
+                $require_admin = TRUE;
+                $menuTypeID = 3;
+        }
 }
 
 $guest_allowed = true;
@@ -46,9 +52,6 @@ load_modal_box(true);
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
-
-$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
-$menuTypeID = ($is_in_tinymce) ? 5: $menuTypeID;
 
 if ($is_in_tinymce) {
 
@@ -92,11 +95,11 @@ EOF;
 
 // check for quotas
 $diskUsed = dir_total_space($basedir);
-$type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
-$d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $course_id"));
 if (defined('COMMON_DOCUMENTS')) {
         $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
 } else {
+        $type = ($subsystem == GROUP)? 'group_quota': 'doc_quota';
+        $d = mysql_fetch_row(db_query("SELECT $type FROM course WHERE id = $course_id"));
         $diskQuotaDocument = $d[0];
 }
 
@@ -833,15 +836,14 @@ if (isset($_GET['rev'])) {
 
 $filter = '';
 $eclplugin = true;
-if (isset($_REQUEST['docsfilter'])) {
-
+if (isset($_REQUEST['docsfilter'])) {        
     switch ($_REQUEST['docsfilter']) {
         case 'image':
-            $ors = '';
-            foreach (get_supported_images() as $imgfmt)
-                $ors .= " OR format LIKE '$imgfmt'";
-            $filter = "AND (format LIKE '.dir' $ors)";
-            break;
+                $ors = '';
+                foreach (get_supported_images() as $imgfmt)
+                    $ors .= " OR format LIKE '$imgfmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
         case 'eclmedia':
         	$ors = '';
         	foreach (get_supported_media() as $mediafmt)
@@ -849,16 +851,18 @@ if (isset($_REQUEST['docsfilter'])) {
         	$filter = "AND (format LIKE '.dir' $ors)";
         	break;
         case 'media':
-            $eclplugin = false;
-            $ors = '';
-            foreach (get_supported_media() as $mediafmt)
-                $ors .= " OR format LIKE '$mediafmt'";
-            $filter = "AND (format LIKE '.dir' $ors)";
-            break;
+                $eclplugin = false;
+                $ors = '';
+                foreach (get_supported_media() as $mediafmt)
+                    $ors .= " OR format LIKE '$mediafmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
         case 'zip':
-            $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
-            break;
+                $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
+                break;
         case 'file':
+                $filter = '';
+                break;
         default:
             break;
     }
@@ -1134,6 +1138,10 @@ if ($doc_count == 0) {
 		$tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
 	}
         $tool_content .= "\n    <br />";
+}
+if (defined('SAVED_COURSE_CODE')) {
+        $course_code = SAVED_COURSE_CODE;
+        $course_id = SAVED_COURSE_ID;
 }
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);
