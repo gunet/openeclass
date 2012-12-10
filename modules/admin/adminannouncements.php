@@ -104,9 +104,16 @@ if (isset($_GET['delete'])) {
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
                 db_query("INSERT INTO admin_announcement
-                        SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
-                        visible = 1, lang = ". autoquote($lang_admin_ann) .",
-                        `date` = NOW(), `order` = $order, $start_sql, $end_sql");
+                        SET title = ". quote($title) .", 
+                        body = ". quote($newContent) .",
+                        visible = 1, 
+                        visible_t = 1,
+                        visible_s = 1,
+                        lang = ". quote($lang_admin_ann) .",
+                        `date` = NOW(), 
+                        `order` = $order, 
+                        $start_sql, 
+                        $end_sql");
                 $message = $langAdminAnnAdd;
         }
 }

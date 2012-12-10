@@ -1644,49 +1644,67 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 }
 
 
-// Display a textarea with name $name using the rich text editor
-// Apply automatically various fixes for the text to be edited
+/**
+ * Display a textarea with name $name using the rich text editor
+ * Apply automatically various fixes for the text to be edited
+ * @global type $head_content
+ * @global type $language
+ * @global type $purifier
+ * @global type $urlAppend
+ * @global type $course_code
+ * @global type $langPopUp
+ * @global type $langPopUpFrame
+ * @global type $is_editor
+ * @global type $is_admin
+ * @param type $name
+ * @param type $rows
+ * @param type $cols
+ * @param type $text
+ * @param type $extra
+ * @return type
+ */
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor;
+	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
 
-        $filebrowser = '';
+        $filebrowser = $url = '';
         $activemodule = 'document/index.php';
-        if (isset($course_code) && !empty($course_code))
-        {
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
-            if (!$is_editor)
-            {
-                $cid = course_code_to_id($course_code);
-                $sql = "SELECT * FROM course_module
-                    WHERE course_id = $cid
-                      AND (module_id =".MODULE_ID_DOCS." OR module_id =".MODULE_ID_VIDEO." OR module_id =".MODULE_ID_LINKS.")
-                      AND VISIBLE = 1 ORDER BY module_id";
+        if (isset($course_code) && !empty($course_code)) {
+                $filebrowser = "file_browser_callback : 'openDocsPicker',";
+                if (!$is_editor) {
+                        $cid = course_code_to_id($course_code);
+                        $sql = "SELECT * FROM course_module
+                            WHERE course_id = $cid
+                              AND (module_id =".MODULE_ID_DOCS." OR module_id =".MODULE_ID_VIDEO." OR module_id =".MODULE_ID_LINKS.")
+                              AND VISIBLE = 1 ORDER BY module_id";
 
-                $result = db_query($sql);
-                $module = mysql_fetch_assoc($result);
+                        $result = db_query($sql);
+                        $module = mysql_fetch_assoc($result);
 
-                if ($module === false)
-                    $filebrowser = '';
-                else {
-                    switch ($module['module_id']) {
-                        case MODULE_ID_LINKS:
-                            $activemodule  = 'link/index.php';
-                            break;
-                        case MODULE_ID_DOCS:
-                            $activemodule  = 'document/index.php';
-                            break;
-                        case MODULE_ID_VIDEO:
-                            $activemodule  = 'video/index.php';
-                            break;
-                        default:
+                        if ($module === false)
                             $filebrowser = '';
-                            break;
-                    }
+                        else {
+                            switch ($module['module_id']) {
+                                case MODULE_ID_LINKS:
+                                    $activemodule  = 'link/index.php';
+                                    break;
+                                case MODULE_ID_DOCS:
+                                    $activemodule  = 'document/index.php';
+                                    break;
+                                case MODULE_ID_VIDEO:
+                                    $activemodule  = 'video/index.php';
+                                    break;
+                                default:
+                                    $filebrowser = '';
+                                    break;
+                            }
+                        }
                 }
-            }
+                $url = $urlAppend."modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
+        } elseif ($is_admin) { /* special case for admin announcements */
+                $filebrowser = "file_browser_callback : 'openDocsPicker',";
+                $url = $urlAppend."modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-
 	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
 	$head_content .= "
 <script type='text/javascript'>
@@ -1739,7 +1757,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '{$urlAppend}modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=' + type,
+        file: '$url' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,
