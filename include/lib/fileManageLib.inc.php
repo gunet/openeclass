@@ -522,7 +522,7 @@ function claro_rename_file($oldFilePath, $newFilePath)
 
     /* PREVENT FILE NAME WITH PHP EXTENSION */
 
-    $newFilePath = get_secure_file_name($newFilePath);
+    $newFilePath = php2phps($newFilePath);
 
     /* REPLACE CHARACTER POTENTIALY DANGEROUS FOR THE SYSTEM */
 

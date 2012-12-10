@@ -315,24 +315,6 @@ if (!function_exists('str_ireplace')) {
 }
 
 /*
- * change the file named .htacess in htacess.txt
- * Useful to secure a site working on Apache.
- *
- * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @param  - fileName (string) name of a file
- * @return - string innocuous filename
- * @see    - htaccess2txt and php2phps
- */
-
-
-function get_secure_file_name($fileName)
-{
-    $fileName = php2phps($fileName);
-    $fileName = htaccess2txt($fileName);
-    return $fileName;
-}
-
-/*
  * Check if there is enough place to add a file on a directory
  * on the base of a maximum directory size allowed
  *
