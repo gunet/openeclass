@@ -24,8 +24,6 @@ $nameTools = $langManuals;
 
 $addon = '';
 
-$display = ($language == 'el')?true:false;
-
 if (!in_array($language, array('el', 'en'))) {
         $language = 'en';
         $addon = "($langOnlyInEnglish)";        
@@ -50,57 +48,56 @@ $tool_content .= "<table width='100%' class='tbl_alt'>
   </tr>
 </table>";
 
-if ($display) {
-        $tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfTeacher $addon";
+$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfTeacher $addon";
 
-        $tool_content .= "</p><table width='100%' class='tbl_alt'>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langCreateAccount, 'create_account', $language)  ."</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langCourseCreate, 'create_course', $language) ."</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langPersonalisedBriefcase, 'portfolio_management', $language) ."</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langAdministratorCourse, 'course_management', $language). "</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langAdministratorForum, 'forum_management', $language). "</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langAdministratorGroup, 'group_management', $language). "</a></td>
-          </tr>
-        </table>";
-        
-        $tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent $addon</p>
+$tool_content .= "</p><table width='100%' class='tbl_alt'>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langCreateAccount, 'create_account', $language)  ."</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langCourseCreate, 'create_course', $language) ."</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langPersonalisedBriefcase, 'portfolio_management', $language) ."</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorCourse, 'course_management', $language). "</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorForum, 'forum_management', $language). "</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langAdministratorGroup, 'group_management', $language). "</a></td>
+  </tr>
+</table>";
 
-        <table width='100%' class='tbl_alt'>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langRegCourses, 'register_course', $language) ."</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-           <td>". manlink($langPersonalisedBriefcase, 'personal_portfolio', $language). "</a></td>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langIntroToCourse, 'ecourse', $language) ."</a>
-          </tr>
-          <tr>
-            <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
-            <td>". manlink($langForumParticipation, 'forum', $language) ."</a>
-          </tr>
-        </table>";
-}
+$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent $addon</p>
+
+<table width='100%' class='tbl_alt'>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langRegCourses, 'register_course', $language) ."</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+   <td>". manlink($langPersonalisedBriefcase, 'personal_portfolio', $language). "</a></td>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langIntroToCourse, 'ecourse', $language) ."</a>
+  </tr>
+  <tr>
+    <th width='16'><img src='$themeimg/wiki.png' alt='icon'></th>
+    <td>". manlink($langForumParticipation, 'forum', $language) ."</a>
+  </tr>
+</table>";
+
 
 if (isset($uid) and $uid) {
         draw($tool_content, 1);
