@@ -292,7 +292,7 @@ function uid_to_username($uid)
 // Return HTML for a user - first parameter is either a user id (so that the 
 // user's info is fetched from the DB) or a hash with user_id, prenom, nom, 
 // email, or an array of user ids or user info arrays
-function display_user($user, $print_email = false)
+function display_user($user, $print_icon = true, $print_email = false)
 {
         global $mysqlMainDb, $langAnonymous, $langAm, $urlAppend;
 
@@ -323,11 +323,15 @@ function display_user($user, $print_email = false)
                 $email = trim($user['email']);
                 $print_email = $print_email && !empty($email);
         }
-	if ($user['has_icon']) {
-		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
-	} else {
-		$icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
-	}
+        if($print_icon == true) {
+                if ($user['has_icon']) {
+                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
+                } else {
+                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
+                }
+        } else {
+                $icon = '';
+        }
         return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
