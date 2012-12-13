@@ -196,7 +196,7 @@ if (!isset($_GET['mailing'])) {
                         $tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
                         $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
                                          "<small>".q($w->description)."</small></td>" .
-                                         "<td>".display_user($w->uploaderId, false)."</td><td>".$w->uploadDate;
+                                         "<td>".display_user($w->uploaderId, false, false)."</td><td>".$w->uploadDate;
                         if ($w->uploadDate != $w->lastUploadDate) {
                                 $tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
                         }
@@ -265,9 +265,9 @@ if ($numSent == 0) {
                                 <small>".q($w->description)."</small></td>";
 
                 $tool_content .= "<td>";
-                $recipients_names = '';
+                $recipients_names = '';                
                 foreach($w -> recipients as $r) {
-                        $recipients_names .= display_user($r['id'], false) . " <br />";
+                        $recipients_names .= display_user($r['id'], false, false) . " <br />";
                 }
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
                         $tool_content .= $recipients_names;
@@ -331,11 +331,11 @@ if ($is_editor) {
                                         <td><a href='$ahref' target='_blank'>".q($w->title)."</a>
                                         <small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />
                                         <small>".q($w->description)."</small></td>";                        
-                        $tool_content .= "<td>".display_user($w->uploaderId, false)."</td>";                        
+                        $tool_content .= "<td>".display_user($w->uploaderId, false, false)."</td>";                        
                         $tool_content .= "<td>";
                         $recipients_names = '';                
                         foreach($w -> recipients as $r) {                                
-                                $recipients_names .= display_user($r['id'], false) . " <br />";
+                                $recipients_names .= display_user($r['id'], false, false) . " <br />";
                         }
                         if (isset($_GET['d']) and $_GET['d'] == 'all') {
                                 $tool_content .= $recipients_names;
