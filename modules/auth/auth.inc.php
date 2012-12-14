@@ -640,8 +640,9 @@ function process_login()
 		$_SESSION['user_perso_active'] = false;
 		$auth_allow = 0;
 		
-		$r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > 15 and DATE_SUB(CURRENT_TIMESTAMP, interval 5 minute) < last_fail");
-		if (mysql_num_rows($r) > 0) {
+                if (get_config('login_fail_check'))
+                    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > ". intval(get_config('login_fail_threshold')) . " and DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
+		if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
 		    $auth_allow = 8;
 		    sleep(5); // penalize
 		} else {
@@ -694,7 +695,7 @@ function process_login()
                                                 token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>";
 					break;
 				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
-				    increaseLoginFailure();
+                                        increaseLoginFailure();
 					break;
 				case 5: $warning .= "<p class='alert1'>$langNoCookies</p>";
 					break;
@@ -1063,17 +1064,23 @@ function acceptable_password($pass1, $pass2)
 
 function increaseLoginFailure()
 {
-	$ip = $_SERVER['REMOTE_ADDR'];
-	$r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $ip ."'");
+    if (!get_config('login_fail_check'))
+        return;
 
-	if (mysql_num_rows($r) > 0 )
-		db_query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '". $ip ."'");
-	else
-		db_query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '". $ip ."', 1, CURRENT_TIMESTAMP)");
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $ip ."'");
+
+    if (mysql_num_rows($r) > 0 )
+        db_query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '". $ip ."'");
+    else
+        db_query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '". $ip ."', 1, CURRENT_TIMESTAMP)");
 }
 
 function resetLoginFailure()
 {
-	db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY) >= last_fail"); // de-penalize only after 24 hours
+    if (!get_config('login_fail_check'))
+        return;
+    
+    db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL ". intval(get_config('login_fail_forgive_interval')) ." HOUR) >= last_fail"); // de-penalize only after 24 hours
 }
 

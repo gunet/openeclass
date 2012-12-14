@@ -556,6 +556,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 last_fail datetime NOT NULL,
                 UNIQUE KEY ip (ip)) $charset_spec");
         }
+        
+        if ($oldversion < '2.6.1') {
+            db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                                        ('login_fail_check', 1),
+                                        ('login_fail_threshold', 15),
+                                        ('login_fail_deny_interval', 5),
+                                        ('login_fail_forgive_interval', 24)");
+        }
 
         if ($oldversion < '3') {
 

@@ -29,6 +29,28 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('jquery');
 $head_content .= <<<EOF
 <script type='text/javascript'>
+/* <![CDATA[ */
+
+function loginFailPanel(e) {
+    
+    duration = null;
+    if (e)
+        duration = 400;
+        
+    if ($('#login_fail_check').is(":checked"))
+    {
+        $('#login_fail_threshold').show(duration);
+        $('#login_fail_deny_interval').show(duration);
+        $('#login_fail_forgive_interval').show(duration);
+    }
+    else
+    {
+        $('#login_fail_threshold').hide(duration);
+        $('#login_fail_deny_interval').hide(duration);
+        $('#login_fail_forgive_interval').hide(duration);
+    }
+}
+
 $(document).ready(function() {
 
     $('#uown').click(function(event) {
@@ -39,8 +61,16 @@ $(document).ready(function() {
         $('#town').attr('disabled', !this.checked);
         
     });
+    
+    loginFailPanel();
+
+    $('#login_fail_check').click(function(event) {
+        loginFailPanel(true);
+    });
 
 });
+
+/* ]]> */
 </script>
 EOF;
 
@@ -113,7 +143,11 @@ if (isset($_POST['submit']))  {
                         'alt_auth_stud_reg' => true,
 	                'eclass_prof_reg' => true,
                         'alt_auth_prof_reg' => true,
-                        'enable_search' => true);
+                        'enable_search' => true,
+                        'login_fail_check' => true,
+                        'login_fail_threshold' => true,
+                        'login_fail_deny_interval' => true,
+                        'login_fail_forgive_interval' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -309,6 +343,7 @@ else {
         $max_glossary_terms = get_config('max_glossary_terms');
         $cbox_enable_search = get_config('enable_search')?'checked':'';
         $cbox_disable_log_user_actions = get_config('disable_log_user_actions')?'checked':'';
+        $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
         
@@ -389,6 +424,25 @@ else {
 	  </tr>
 	  </table>
 	  </fieldset>
+          <fieldset><legend>$langLoginFailCheck</legend>
+          <table class='tbl' width='100%'>
+          <tr>
+          <td><input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' $cbox_login_fail_check />&nbsp;$langEnableLoginFailCheck</td>
+          </tr>
+          <tr id='login_fail_threshold'>
+          <th class='left'>$langLoginFailThreshold</th>
+          <td><input class='FormData_InputText' type='text' name='login_fail_threshold' value='".get_config('login_fail_threshold')."' size='5' /></td>
+          </tr>
+          <tr id='login_fail_deny_interval'>
+          <th class='left'>$langLoginFailDenyInterval</th>
+          <td><input class='FormData_InputText' type='text' name='login_fail_deny_interval' value='".get_config('login_fail_deny_interval')."' size='5' />&nbsp;($langMinute)</td>
+          </tr>
+          <tr id='login_fail_forgive_interval'>
+          <th class='left'>$langLoginFailForgiveInterval</th>
+          <td><input class='FormData_InputText' type='text' name='login_fail_forgive_interval' value='".get_config('login_fail_forgive_interval')."' size='5' />&nbsp;($langHours)</td>
+          </tr>
+          </table>
+          </fieldset>
 	    <input type='submit' name='submit' value='$langModify'>
         </form>";
 	// Display link to index.php
