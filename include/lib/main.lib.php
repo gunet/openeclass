@@ -255,7 +255,7 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend;
 
         if ($file == 'jquery') {
-		$file = 'jquery-1.8.2.min.js';
+		$file = 'jquery-1.8.3.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.23.custom.min.js';
         } elseif ($file == 'shadowbox') {
