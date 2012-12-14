@@ -462,6 +462,11 @@ $langUserAccount = "Λογαριασμός $langOfStudent";
 $langProfAccount = "Λογαριασμός $langOfTeacher";
 $langReqRegUser = "Αίτηση εγγραφής $langsOfStudent";
 $langViaAltAuthMethods = "μέσω εναλλακτικών τρόπων πιστοποίησης";
+$langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
+$langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
+$langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημένων εισόδων";
+$langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
+$langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -1527,7 +1532,7 @@ $langUserOptions = "Επιλογές Χρήστη";
 $langAdminOptions = "Επιλογές Διαχείρισης";
 $langCourseOptions = "Επιλογές Μαθήματος";
 $langAlternateLogin = "Εναλλακτική σύνδεση";
-$langTooManyFails = "Έχετε κάνει πολλές αποτυχημένες προσπάθειες. Πρέπει να περιμένετε 5 λεπτά μέχρι την επόμενη προσπάθεια.";
+$langTooManyFails = "Έχετε κάνει πολλές αποτυχημένες προσπάθειες. Πρέπει να περιμένετε για ένα μικρό διάστημα μέχρι την επόμενη προσπάθεια.";
 
 /***********************************************************
 * install.php

@@ -522,6 +522,10 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('max_glossary_terms', '250'),
                 ('student_upload_whitelist', $student_upload_whitelist),
                 ('teacher_upload_whitelist', $teacher_upload_whitelist),
+                ('login_fail_check', 1),
+                ('login_fail_threshold', 15),
+                ('login_fail_deny_interval', 5),
+                ('login_fail_forgive_interval', 24),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module

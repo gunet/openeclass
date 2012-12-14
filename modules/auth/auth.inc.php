@@ -649,8 +649,9 @@ function process_login()
 		$_SESSION['user_perso_active'] = false;
 		$auth_allow = 0;
 		
-		$r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > 15 and DATE_SUB(CURRENT_TIMESTAMP, interval 5 minute) < last_fail");
-		if (mysql_num_rows($r) > 0) {
+                if (get_config('login_fail_check'))
+                    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > ". intval(get_config('login_fail_threshold')) . " and DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
+		if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
 		    $auth_allow = 8;
 		    sleep(5); // penalize
 		} else {
@@ -705,7 +706,7 @@ function process_login()
                                         token_generate("userid=$inactive_uid")."'>$langAccountInactive2</a></p>";
 					break;
 				case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
-				    increaseLoginFailure();
+                                        increaseLoginFailure();
 					break;
 				case 5: $warning .= "<p class='alert1'>$langNoCookies</p>"; 
 					break;
@@ -734,7 +735,7 @@ function process_login()
 			} else {
 				$next = '';
 			}
-			resetLoginFailure();
+                        resetLoginFailure();
 			redirect_to_home_page($next);	
 		}                
 	}  // end of user authentication
@@ -1041,6 +1042,9 @@ function shib_cas_login($type)
 
 function increaseLoginFailure()
 {
+    if (!get_config('login_fail_check'))
+        return;
+    
     $ip = $_SERVER['REMOTE_ADDR'];
     $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $ip ."'");
     
@@ -1052,6 +1056,9 @@ function increaseLoginFailure()
 
 function resetLoginFailure()
 {
-    db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY) >= last_fail"); // de-penalize only after 24 hours
+    if (!get_config('login_fail_check'))
+        return;
+    
+    db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL ". intval(get_config('login_fail_forgive_interval')) ." HOUR) >= last_fail"); // de-penalize only after 24 hours
 }
 
