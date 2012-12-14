@@ -279,15 +279,15 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend, $theme;
 
         if ($file == 'jquery') {
-		$file = 'jquery-1.7.2.min.js';
+		$file = 'jquery-1.8.3.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
                 if ($theme == 'modern' || $theme == 'ocean')
-                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/redmond/jquery-ui-1.9.1.custom.min.css'>\n";
+                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/redmond/jquery-ui-1.9.2.custom.min.css'>\n";
                 else
-                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/smoothness/jquery-ui-1.9.1.custom.min.css'>\n";
-                $file = 'jquery-ui-1.9.1.full.min.js';
+                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/smoothness/jquery-ui-1.9.2.custom.min.css'>\n";
+                $file = 'jquery-ui-1.9.2.custom.min.js';
         } elseif ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
