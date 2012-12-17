@@ -62,19 +62,19 @@ $menuTypeID = ($is_in_tinymce) ? 5: 2;
 $tinymce_params = '';
 
 if ($is_in_tinymce) {
-    
+
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. $_REQUEST['docsfilter'] : '';
     $tinymce_params = '&amp;embedtype=tinymce'. $docsfilter;
-    
+
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-    
+
     $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {
 
-    $("a.fileURL").click(function() { 
+    $("a.fileURL").click(function() {
         var URL = $(this).attr('href');
         var win = tinyMCEPopup.getWindowArg("window");
 
@@ -157,7 +157,7 @@ if ($is_editor) {
                 submit_category();
         }
         switch ($action) {
-                case 'deletelink': 
+                case 'deletelink':
                         delete_link($id);
                         break;
                 case 'deletecategory':
@@ -202,7 +202,7 @@ if ($is_editor) {
                         $form_url = $form_title = $form_description = '';
                         $form_legend = $langLinkAdd;
                         $submit_label = $langAdd;
-                } 
+                }
 
                 $tool_content .= "
                       <fieldset>
@@ -245,7 +245,7 @@ if ($is_editor) {
                 } else {
                         $form_name = $form_description = '';
                         $form_legend = $langCategoryAdd;
-                } 
+                }
                 $tool_content .=  "<fieldset><legend>$form_legend</legend>
                                    <table width='100%' class='tbl'>
                                    <tr><th>$langCategoryName:</th>
@@ -330,28 +330,26 @@ if (mysql_num_rows($resultcategories) > 0) {
 			$tool_content .= "
                 <tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_open.png' title='$shownone' alt='$shownone'></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$newurlview$tinymce_params'>".q($myrow['name'])."</a>";
+		  <th colspan='2' valign='top' class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$newurlview$tinymce_params'>".q($myrow['name'])."</a>";
                         if (!empty($description)) {
-                                $tool_content .= "<br />$description</div></th>";
+                                $tool_content .= "<br />$description</th>";
                         }
                         if ($is_editor && !$is_in_tinymce) {
                                 showcategoryadmintools($myrow["id"]);
                         } else {
-                                $tool_content .=  "
-                </tr>";
+                                $tool_content .=  "</tr>";
                         }
 			showlinksofcategory($myrow["id"]);
 		} else {
 			$tool_content .=  "
 		<tr>
 		  <th width='15' valign='top'><img src='$themeimg/folder_closed.png' title='$showall' alt='$showall'></th>
-		  <th colspan='2' valign='top'><div class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=";
+		  <th colspan='2' valign='top' class='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=";
 			$tool_content .=  is_array($view)?implode('',$view):$view;
 			$tool_content .= $tinymce_params ."'>" . q($myrow['name']) . "</a>";
 		        $description = standard_text_escape($myrow['description']);
                         if (!empty($description)) {
-                                $tool_content .= "<br />$description</div>
-                  </th>";
+                                $tool_content .= "<br />$description</th>";
                         }
 			if ($is_editor && !$is_in_tinymce) {
 			showcategoryadmintools($myrow["id"]);
@@ -398,7 +396,7 @@ function link_form_defaults($id)
         if ($myrow = mysql_fetch_array($result)) {
                 $form_url = ' value="' . q($myrow['url']) . '"';
                 $form_title = ' value="' . q($myrow['title']) . '"';
-                $form_description = q(purify($myrow['description']));
+                $form_description = purify(trim($myrow['description']));
                 $category = $myrow['category'];
         } else {
                 $form_url = $form_title = $form_description = '';
@@ -418,7 +416,7 @@ function submit_link()
 	$urllink = canonicalize_url($urllink);
         $set_sql = "SET url = " . autoquote($urllink) . ",
                         title = " . autoquote($title) . ",
-                        description = " . autoquote($description) . ",
+                        description = " . autoquote(purify($description)) . ",
                         category = " . intval($selectcategory);
 
         if (isset($_POST['id'])) {
@@ -457,7 +455,7 @@ function submit_category()
         register_posted_variables(array('categoryname' => true,
                                         'description' => true), 'all', 'trim');
         $set_sql = "SET name = " . autoquote($categoryname) . ",
-                        description = " . autoquote($description);
+                        description = " . autoquote(purify($description));
 
         if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
