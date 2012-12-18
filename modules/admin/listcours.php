@@ -218,7 +218,7 @@ if ($key == 0) {
                         <a href='listusers.php?c=".$logs['id']."'><img src='$themeimg/user_list.png' title='$langUsers' /></a>&nbsp;";
                 
                 if (!isDepartmentAdmin())
-                    $tool_content .= "<a href='../usage/displaylog.php?c=".$logs['code']."'><img src='$themeimg/user_list.png' title='$langUsersLog' /></a>&nbsp;";
+                    $tool_content .= "<a href='../usage/displaylog.php?c=".$logs['id']."&amp;from_admin=TRUE'><img src='$themeimg/user_list.png' title='$langUsersLog' /></a>&nbsp;";
                 
                 $tool_content .= "<a href='editcours.php?c=".$logs['code'].$searchurl."'><img src='$themeimg/edit.png' title='$langEdit'></a>
                         <a href='delcours.php?c=".$logs['id']."'><img src='$themeimg/delete.png' title='$langDelete'></a>

@@ -19,13 +19,21 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = true;
-$require_course_admin = true;
-$require_login = true;
+if (isset($_GET['from_admin'])) {
+        $course_id = $_GET['c'];        
+} else {
+        $require_current_course = true;
+        $require_login = true;
+}
 
+$require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/log.php';
+
+if (!isset($_REQUEST['course_code'])) {
+        $course_code = course_id_to_code($course_id);
+}
 
 $nameTools = $langUsersLog;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
@@ -68,7 +76,7 @@ $result = db_query($qry);
 
 $letterlinks = '';
 while ($row = mysql_fetch_assoc($result)) {
-        $first_letter = $row['first_letter'];
+        $first_letter = $row['first_letter'];        
         $letterlinks .= '<a href="?course='.$course_code.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
 }
 
@@ -144,4 +152,8 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         </fieldset>
         </form>";
 
-draw($tool_content, 2, null, $local_head);
+if (isset($_GET['from_admin'])) {
+        draw($tool_content, 3, null, $local_head);
+} else {
+        draw($tool_content, 2, null, $local_head);
+}
