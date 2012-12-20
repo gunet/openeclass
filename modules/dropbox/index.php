@@ -18,34 +18,94 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * File exchange Component
+/**
  *
+ * File exchange Component
+ * @file index.php
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  * @version $Id$
  *
  * @abstract This is responsible for exchanging files between the users of a course
  *
- * Based on code by Jan Bols
- *
+ * Based on code by Jan Bols <<jan@ivpv.ugent.be>
  */
 
-include 'functions.php';
-$nameTools = $langDropBox;
-$diskUsed = dir_total_space($basedir);
+$require_login = TRUE;
+$require_current_course = TRUE;
+$guest_allowed = FALSE;
+$require_help = TRUE;
+$helpTopic = 'Dropbox';
+
+include '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DROPBOX);
 /**************************************/
-require_once('dropbox_class.inc.php');
 
-if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
-	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $langDropBox);
-	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
-	draw($tool_content, 2);
-	exit;
+$dropbox_dir = $webDir."/courses/".$course_code."/dropbox";
+if (!is_dir($dropbox_dir)) {
+	mkdir($dropbox_dir);
+}
+
+// get dropbox quotas from database
+$d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code = '$course_code'"));
+$diskQuotaDropbox = $d['dropbox_quota'];
+$diskUsed = dir_total_space($dropbox_dir);
+
+require_once 'include/log.php';
+require_once 'dropbox_class.inc.php';
+
+// javascript functions
+$head_content ='<script type="text/javascript">
+                function confirmation (name) {
+                        if (confirm("'.$langConfirmDelete1.'" + name + "'.$langConfirmDelete2.'" )) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                        return true;
+                }
+
+                function confirmationall () {
+                        if (confirm("'.$langConfirmDeleteAll.'" )) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                        return true;
+                }
+                
+                function confirmationpurge () {
+                        if (confirm("'.$langPurgeFile.'" )) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                        return true;
+                }
+
+		function checkForm (frm) {
+                        if (frm.elements["recipients[]"].selectedIndex < 0) {
+                                alert("'.$langNoUserSelected.'");
+                                return false;
+                        } else if (frm.file.value == "") {
+                                alert("'.$langNoFileSpecified.'");
+                                return false;
+                        } else {
+                                return true;
+                        }
+                }
+        </script>';
+
+$nameTools = $langDropBox;
+
+if (get_config('dropbox_allow_student_to_student') == true) {
+	$allowStudentToStudent = true;
+} else {
+	$allowStudentToStudent = false;
 }
 
 $tool_content .="
@@ -56,8 +116,15 @@ $tool_content .="
   </ul>
 </div>";
 
+if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
+	$nameTools = $langQuotaBar;
+	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $langDropBox);
+	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
+	draw($tool_content, 2);
+	exit;
+}
 
-$dropbox_person = new Dropbox_Person($uid, $is_editor);
+$dropbox_person = new Dropbox_Person($uid);
 $dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
                                                 //page request. This is to prevent resubmiting data
 /*
@@ -96,7 +163,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	/*
 	*  if current user is a teacher then show all users of current course
 	*/
-	if ($dropbox_person -> isCourseAdmin or $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
+	if ($is_editor or $allowStudentToStudent)
 	{
 		// select all users except yourself
 		$sql = "SELECT DISTINCT u.user_id user_id, CONCAT(u.nom,' ', u.prenom) AS name
@@ -134,8 +201,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	  $langMailToUsers<input type='checkbox' name='mailing' value='1' /></td>
 	</tr>
         </table>
-        </fieldset>
-	<input type='hidden' name='authors' value='".q(uid_to_name($uid))."' />
+        </fieldset>	
         </form>
 	<p class='right smaller'>$langMaxFileSize ".ini_get('upload_max_filesize')."</p>";
 }
@@ -186,13 +252,13 @@ if (!isset($_GET['mailing'])) {
                         } else {
                                 $tool_content .= "<tr class='odd'>";
                         }
-                        $tool_content .= "<td width='16'>
-                        <img src='$themeimg/inbox.png' title='".q($langReceivedFiles)."' /></td>
-                        <td>";
+                        $tool_content .= "<td width='16'><img src='$themeimg/inbox.png' title='".q($langReceivedFiles)."' /></td>
+                                <td>";
                         $tool_content .= "<a href='dropbox_download.php?course=$course_code&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
                         $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
                                          "<small>".q($w->description)."</small></td>" .
-                                         "<td>$w->author</td><td>".$w->uploadDate;
+                                         "<td>".display_user($w->uploaderId, false, false)."</td>
+                                          <td>".$w->uploadDate;
                         if ($w->uploadDate != $w->lastUploadDate) {
                                 $tool_content .= " (".$langlastUpdated." $w->lastUploadDate)";
                         }
@@ -239,7 +305,7 @@ if ($numSent == 0) {
         <table width=100% class='sortable' id='t2'>
         <tr>
         <th colspan='2' class='left'>$langFileName</th>
-        <th width='130'>$langDestination</th>
+        <th width='130'>$langRecipient</th>
         <th width='130'>$langDate</th>
         <th width='20'>$langDelete</th>
         </tr>";
@@ -262,8 +328,8 @@ if ($numSent == 0) {
                 $tool_content .= "<td>";
                 $recipients_names = '';
                 foreach($w -> recipients as $r) {
-                        $recipients_names .= q($r['name']) . " <br />";
-                }
+                        $recipients_names .= display_user($r['id'], false, false) . " <br />";
+                }                
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
                         $tool_content .= $recipients_names;
                 } else {
@@ -328,7 +394,7 @@ if ($is_editor) {
                         $tool_content .= "<td>";
                         $recipients_names = '';                
                         foreach($w -> recipients as $r) {
-                                $recipients_names .= q($r['name']) . " <br />";
+                                $recipients_names .= display_user($r['id'], false, false) . " <br />";
                         }
                         if (isset($_GET['d']) and $_GET['d'] == 'all') {
                                 $tool_content .= $recipients_names;

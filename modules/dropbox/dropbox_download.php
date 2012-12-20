@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,16 +17,19 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-/*
- * ======================================================================== */
+/**
+ * @file dropbox_download.php
+ * @brief Download files from dropbox
+ */
 
 $require_login = TRUE;
 $require_current_course = TRUE;
 
-include 'functions.php';
-include 'dropbox_class.inc.php';
-include 'include/lib/forcedownload.php';
+include '../../include/baseTheme.php';
+require_once 'dropbox_class.inc.php';
+require_once 'include/lib/forcedownload.php';
+
+$dropbox_dir = $webDir."/courses/".$course_code."/dropbox";
 
 if (isset($_GET['id'])) {
         $id = intval($_GET['id']);
@@ -36,7 +39,7 @@ if (isset($_GET['id'])) {
 
 $work = new Dropbox_work($id);
 
-$path = $dropbox_cnf["sysPath"] . "/" . $work -> filename; //path to file as stored on server
+$path = $dropbox_dir . "/" . $work -> filename; //path to file as stored on server
 $file = $work->title;
 
 send_file_to_client($path, $file, null, true);

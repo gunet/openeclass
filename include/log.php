@@ -19,6 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file log.php
+ * @author Yannis Exidaridis <jexi@noc.uoa.gr>
+ * @brief defines class Log for logging actions
+ */
+
 define('LOG_INSERT', 1);
 define('LOG_MODIFY', 2);
 define('LOG_DELETE', 3);
@@ -166,6 +172,8 @@ class Log {
                                 break;
                         case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
                                 break;
+                        case MODULE_ID_DROPBOX: $content = $this->dropbox_action_details($details);
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
                         }
@@ -244,7 +252,14 @@ class Log {
 
                 return $content;
         }
-
+        
+        /**
+         * display action details in video
+         * @global type $langTitle
+         * @global type $langDescription
+         * @param type $details
+         * @return string
+         */
         private function video_action_details($details) {
 
                 global $langTitle, $langDescription;
@@ -259,7 +274,15 @@ class Log {
                 }
                 return $content;
         }
-
+        
+        /**
+         * display action details in assignments
+         * @global type $langTitle
+         * @global type $langDescription
+         * @global type $m
+         * @param type $details
+         * @return string
+         */
         private function assignment_action_details($details) {
 
                 global $langTitle, $langDescription, $m;
@@ -280,7 +303,14 @@ class Log {
                 }
                 return $content;
         }
-
+        
+        /**
+         * display action details in announcements
+         * @global type $langTitle
+         * @global type $langContent
+         * @param type $details
+         * @return string
+         */
         private function announcement_action_details($details) {
 
                 global $langTitle, $langContent;
@@ -290,7 +320,17 @@ class Log {
                             "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo".$details['content']."&raquo";
                 return $content;
         }
-
+        
+        /**
+         * display action details in agenda
+         * @global type $langTitle
+         * @global type $langContent
+         * @global type $langDuration
+         * @global type $langhours
+         * @global type $langDate
+         * @param type $details
+         * @return string
+         */
         private function agenda_action_details($details) {
 
                 global $langTitle, $langContent, $langDuration, $langhours, $langDate;
@@ -305,7 +345,14 @@ class Log {
                 return $content;
 
         }
-        // return details of actions in links
+        /**
+         * display action details in link
+         * @global type $langTitle
+         * @global type $langDescription
+         * @global type $langCategoryName
+         * @param type $details
+         * @return string
+         */
         private function link_action_details($details) {
 
                 global $langTitle, $langDescription, $langCategoryName;
@@ -326,7 +373,19 @@ class Log {
                 }
                 return $content;
         }
-        // return details of actions in documents
+        
+        /**
+         * display action details in documents
+         * @global type $langFileName
+         * @global type $langComments
+         * @global type $langTitle
+         * @global type $langRename
+         * @global type $langMove
+         * @global type $langTo
+         * @global type $langIn
+         * @param type $details
+         * @return string         
+         */
         private function document_action_details($details) {
 
                 global $langFileName, $langComments, $langTitle, $langRename, $langMove, $langTo, $langIn;
@@ -348,8 +407,39 @@ class Log {
                 }
                 return $content;
         }
-
-        // return the real action names
+        
+        /**
+         * display action details in dropbox
+         * @param type $details
+         * @return string
+         */
+        private function dropbox_action_details($details) {
+                
+                global $langFileName, $langTitle, $langComments;
+        
+                $details = unserialize($details);
+                
+                $content = "$langTitle &laquo".$details['title']."&raquo";
+                if (!empty($details['filename'])) {
+                        $content .= "&nbsp;&mdash;&nbsp;$langFileName &laquo".$details['filename']."&raquo";
+                }                                
+                if (!empty($details['comment'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo".$details['comment']."&raquo";
+                }
+                return $content;
+        }
+       
+        /**         
+         * @global type $langInsert
+         * @global type $langModify
+         * @global type $langDelete
+         * @global type $langModProfile
+         * @global type $langFinalize
+         * @global type $langCourseDel
+         * @global type $langUnknownAction
+         * @param type $action_type
+         * @return type (real action names)
+         */
         private function get_action_names($action_type) {
 
                 global $langInsert, $langModify, $langDelete, $langModProfile,

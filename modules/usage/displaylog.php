@@ -19,6 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file displaylog.php
+ * @author Yannis Exidaridis <jexi@noc.uoa.gr>
+ * @brief display form for displaying course actions
+ */
 if (isset($_GET['from_admin'])) {
         $course_id = $_GET['c'];        
 } else {

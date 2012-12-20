@@ -19,6 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file userlogs.php
+ * @author Yannis Exidaridis <jexi@noc.uoa.gr>
+ * @brief display form in admin menu for displaying user actions
+ */
+
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
