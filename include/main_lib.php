@@ -348,7 +348,10 @@ function display_user($user, $print_email = false, $icon = true)
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
-                        return $langAnonymous;
+                        if ($icon)
+                            return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;'. $langAnonymous;
+                        else
+                            return $langAnonymous;
                 }
         }
 

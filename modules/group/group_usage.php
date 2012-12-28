@@ -98,7 +98,7 @@ if ($type == 'duration') {
                                          'calendar-blue2', false);
         $head_content .= $jscalendar->get_load_files_code();
 
-        list($min_date) = mysql_fetch_row(db_query('SELECT MIN(date_time) FROM actions', $course_code));
+        list($min_date) = mysql_fetch_row(db_query('SELECT MIN(day) FROM actions_daily', $course_code));
 
         if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
@@ -189,10 +189,6 @@ if ($result) {
                 $tool_content .= "<td width='30%'>".q($name)."</td><td width='30%'>".q($am)."</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
         }
         $tool_content .= "</tbody></table>";
-}
-
-if ($type == 'duration') {
-        user_duration_query_end();
 }
 
 draw($tool_content, 2, null, $head_content);

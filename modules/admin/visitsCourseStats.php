@@ -78,7 +78,7 @@ if (!extension_loaded('gd')) {
     }
 
     $date_fmt = '%Y-%m-%d';
-    $date_where = "(date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+    $date_where = "(day BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
     $date_what  = "";
 
 
@@ -91,21 +91,21 @@ if (!extension_loaded('gd')) {
                 $date_group = '';
             break;
             case "daily":
-                $date_what .= "DATE_FORMAT(date_time, '$date_fmt') AS date, ";
-                $date_group = "GROUP BY DATE(date_time) ";
+                $date_what .= " DATE_FORMAT(day, '$date_fmt') AS date, ";
+                $date_group = " GROUP BY day ";
             break;
             case "weekly":
-                $date_what .= "DATE_FORMAT(date_time - INTERVAL WEEKDAY(date_time) DAY, '$date_fmt') AS week_start ".
-                      ", DATE_FORMAT(date_time + INTERVAL (6 - WEEKDAY(date_time)) DAY, '$date_fmt') AS week_end, ";
-                $date_group = "GROUP BY WEEK(date_time)";
+                $date_what .= " DATE_FORMAT(day - INTERVAL WEEKDAY(day) DAY, '$date_fmt') AS week_start ".
+                      ", DATE_FORMAT(day + INTERVAL (6 - WEEKDAY(day)) DAY, '$date_fmt') AS week_end, ";
+                $date_group = " GROUP BY WEEK(day) ";
             break;
             case "monthly":
-                $date_what .= "MONTH(date_time) AS month, ";
-                $date_group = "GROUP BY MONTH(date_time)";
+                $date_what .= " MONTH(day) AS month, ";
+                $date_group = " GROUP BY MONTH(day) ";
             break;
             case "yearly":
-                $date_what .= "YEAR(date_time) AS year, ";
-                $date_group = "GROUP BY YEAR(date_time) ";
+                $date_what .= " YEAR(day) AS year, ";
+                $date_group = " GROUP BY YEAR(day) ";
             break;
             default:
                 $date_what = '';
@@ -122,9 +122,9 @@ if (!extension_loaded('gd')) {
            $point = array();
            while ($row1 = mysql_fetch_assoc($res1)) {
                 $cid = $row1['id'];
-                $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
+                $query = "SELECT ".$date_what." SUM(hits) AS cnt FROM actions_daily
                         WHERE course_id = $cid AND $date_where $date_group
-                        ORDER BY date_time ASC";
+                        ORDER BY day ASC";
                 $result = db_query($query);
 
                 switch ($u_interval) {
@@ -166,6 +166,16 @@ if (!extension_loaded('gd')) {
                               }
                         }
                     break;
+                    case "yearly":
+                        while ($row = mysql_fetch_assoc($result)) {
+                            $year = $row['year'];
+                            if (array_key_exists($year, $point)) {
+                                $point[$year] += $row['cnt'];
+                            } else {
+                                $point[$year] = $row['cnt'];
+                            }
+                        }
+                    break;
             }
             if ($result !== false)
                 mysql_free_result($result);
@@ -191,8 +201,8 @@ if (!extension_loaded('gd')) {
 
 } else {    //show chart for a specific course
         $cid = course_code_to_id($u_course_id);
-        $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM actions
-                WHERE course_id = $cid AND $date_where $date_group ORDER BY date_time ASC";
+        $query = "SELECT ".$date_what." SUM(hits) AS cnt FROM actions_daily
+                WHERE course_id = $cid AND $date_where $date_group ORDER BY day ASC";
         $result = db_query($query);
 
         $chart = new VerticalBarChart();

@@ -92,8 +92,7 @@ $local_head = $jscalendar->get_load_files_code();
         }
 
     $date_fmt = '%Y-%m-%d';
-    $date_where = " (date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-    $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
+    $date_where = " (day BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 
     if ($u_user_id != -1) {
         $user_where = " (user_id = '$u_user_id') ";
@@ -106,7 +105,7 @@ $local_head = $jscalendar->get_load_files_code();
 
     switch ($u_stats_value) {
         case "visits":
-            $query = "SELECT module_id, COUNT(*) AS cnt FROM actions
+            $query = "SELECT module_id, SUM(hits) AS cnt FROM actions_daily
                         WHERE $date_where
                         AND course_id = $course_id
                         AND $user_where GROUP BY module_id";
@@ -130,7 +129,7 @@ $local_head = $jscalendar->get_load_files_code();
         break;
 
         case "duration":
-            $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions
+            $query = "SELECT module_id, SUM(duration) AS tot_dur FROM actions_daily
                         WHERE $date_where
                         AND course_id = $course_id
                         AND $user_where GROUP BY module_id";
@@ -213,6 +212,7 @@ $local_head = $jscalendar->get_load_files_code();
     }
 
     $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
+    $user_opts .= '<option value="0">'.$langAnonymous."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
     while ($row = mysql_fetch_assoc($result)) {
         if ($u_user_id == $row['user_id']) { $selected = 'selected'; } else { $selected = ''; }

@@ -263,7 +263,7 @@ function deleteUser($id) {
     
     	if (mysql_num_rows($q)) {
     		// delete everything
-    		db_query("DELETE FROM actions WHERE user_id = ". $u);
+    		db_query("DELETE FROM actions_daily WHERE user_id = ". $u);
     		db_query("DELETE FROM admin WHERE idUser = ". $u);
     		db_query("DELETE FROM assignment_submit WHERE uid = ". $u);
     		db_query("DELETE FROM course_user WHERE user_id = ". $u);

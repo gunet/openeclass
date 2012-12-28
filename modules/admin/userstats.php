@@ -120,7 +120,7 @@ if(!empty($u))
 			}
 			mysql_free_result($result);
 			foreach ($course_codes as $code) {
-				$sql = "SELECT COUNT(*) AS cnt FROM actions
+				$sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                         WHERE user_id = $u AND course_id = " . course_code_to_id($code);
 				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {

@@ -1021,6 +1021,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('login_fail_threshold', 15),
                 ('login_fail_deny_interval', 5),
                 ('login_fail_forgive_interval', 24),
+                ('actions_expire_interval', 12),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module
@@ -1043,16 +1044,17 @@ db_query("CREATE TABLE `course_units` (
 	`order` INT(11) NOT NULL DEFAULT 0,
 	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS `actions` (
+db_query("CREATE TABLE `actions_daily` (
         `id` int(11) NOT NULL auto_increment,
         `user_id` int(11) NOT NULL,
         `module_id` int(11) NOT NULL,
-        `action_type_id` int(11) NOT NULL,
-        `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-        `duration` int(11) NOT NULL default '900',
-        `course_id` INT(11) NOT NULL,
-        PRIMARY KEY  (`id`),
-        KEY `actionsindex` (`module_id`,`date_time`))");
+        `course_id` int(11) NOT NULL,
+        `hits` int(11) NOT NULL,
+        `duration` int(11) NOT NULL,
+        `day` date NOT NULL,
+        `last_update` DATETIME NOT NULL,
+        PRIMARY KEY (`id`),
+        KEY `actionsdailyindex` (`module_id`, `day`) )");
 
 db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
         `id` int(11) NOT NULL auto_increment,

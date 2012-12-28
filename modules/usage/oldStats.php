@@ -51,7 +51,7 @@ $tool_content .= "
       <li><a href='userlogins.php?course=$course_code&amp;first='>".$langUserLogins."</a></li>
     </ul>
   </div>";
-$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $course_id";
+$query = "SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = $course_id";
 $result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
@@ -60,12 +60,12 @@ while ($row = mysql_fetch_assoc($result)) {
     }
 
 mysql_free_result($result);
- if ($min_time + 243*24*3600 < time()) { #actions more than eight months old
+ if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) { // actions more than eight months old
     $action = new action();
-    $action->summarize();     #move data to action_summary
+    $action->summarize();     // move data to action_summary
 }
 
-$query = "SELECT MIN(date_time) as min_time FROM actions WHERE course_id = $course_id";
+$query = "SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = $course_id";
 $result = db_query($query);
 while ($row = mysql_fetch_assoc($result)) {
 	if (!empty($row['min_time'])) {
@@ -176,7 +176,7 @@ if (!extension_loaded('gd')) {
    } elseif (isset($btnUsage) and $chart_content == 0) {
 	$tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
    }
-   //make form
+   // make form
    $start_cal = $jscalendar->make_input_field(
 	  array('showsTime'      => false,
 		'showOthers'     => true,

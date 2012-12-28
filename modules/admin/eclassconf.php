@@ -139,15 +139,16 @@ if (isset($_POST['submit']))  {
                         'restrict_teacher_owndep' => true,
                         'disable_log_user_actions' => true,
                         'user_registration' => true,
-	                'eclass_stud_reg' => true,
+                        'eclass_stud_reg' => true,
                         'alt_auth_stud_reg' => true,
-	                'eclass_prof_reg' => true,
+                        'eclass_prof_reg' => true,
                         'alt_auth_prof_reg' => true,
                         'enable_search' => true,
                         'login_fail_check' => true,
                         'login_fail_threshold' => true,
                         'login_fail_deny_interval' => true,
-                        'login_fail_forgive_interval' => true);
+                        'login_fail_forgive_interval' => true,
+                        'actions_expire_interval' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -389,6 +390,9 @@ else {
         </tr>
         <tr>		
                 <td><input type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
+        </tr>
+        <tr>
+                <td>$langActionsExpireInterval&nbsp;<input type='text' name='actions_expire_interval' value='".get_config('actions_expire_interval')."' size='5' />&nbsp;($langMonthsUnit)</td>
         </tr>
         </table></fieldset>";
 

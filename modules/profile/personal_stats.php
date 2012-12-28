@@ -52,7 +52,7 @@ if (!extension_loaded('gd')) {
 		mysql_free_result($result);
 		foreach ($course_codes as $code) {
                         $cid = course_code_to_id($code);
-			$sql = "SELECT COUNT(*) AS cnt FROM actions
+			$sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                 WHERE user_id = $uid
                                 AND course_id = $cid";
 			$result = db_query($sql);
@@ -61,7 +61,7 @@ if (!extension_loaded('gd')) {
 				$hits[$code] = $row['cnt'];
 			}
 			mysql_free_result($result);
-			$sql = "SELECT SUM(duration) FROM actions
+			$sql = "SELECT SUM(duration) FROM actions_daily
                                         WHERE user_id = $uid
                                         AND course_id = $cid";
 			$result = db_query($sql);

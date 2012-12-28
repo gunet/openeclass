@@ -128,8 +128,6 @@ if ($result) {
         }
 }
 
-user_duration_query_end();
-
 if ($format == 'html') {
         draw($tool_content, 2);
 }

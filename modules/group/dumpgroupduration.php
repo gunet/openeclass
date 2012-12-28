@@ -48,7 +48,7 @@ if($is_editor) {
                 $u_date_end = autounquote($_REQUEST['u_date_end']);
 	} else {
 		list($min_date) = mysql_fetch_row(db_query(
-                                'SELECT MIN(date_time) FROM actions', $course_code));
+                                'SELECT MIN(day) FROM actions_daily', $course_code));
 		$u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
 	}
@@ -76,4 +76,4 @@ if($is_editor) {
                 echo $crlf;
         }
 }
-user_duration_query_end();
+

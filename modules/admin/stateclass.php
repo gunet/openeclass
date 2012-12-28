@@ -96,7 +96,7 @@ if (isset($_GET['stats'])) {
 			$totalHits = 0;
 
 			foreach ($course_codes as $course_code) {
-				$sql = "SELECT COUNT(*) AS cnt FROM actions
+				$sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                         WHERE course_id = ". course_code_to_id($course_code);
 				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {
@@ -104,8 +104,8 @@ if (isset($_GET['stats'])) {
 				}
 				mysql_free_result($result);
 
-				$sql = "SELECT UNIX_TIMESTAMP(MIN(date_time)) AS first
-                                        FROM actions
+				$sql = "SELECT UNIX_TIMESTAMP(MIN(day)) AS first
+                                        FROM actions_daily
                                         WHERE course_id = ". course_code_to_id($course_code);
 				$result = db_query($sql);
 				while ($row = mysql_fetch_assoc($result)) {

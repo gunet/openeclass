@@ -469,6 +469,7 @@ $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυ�
 $langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημένων εισόδων";
 $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
+$langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
