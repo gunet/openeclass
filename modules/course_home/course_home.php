@@ -305,34 +305,38 @@ if ($uid and $statut != USER_GUEST and !get_user_email_notification($uid, $cours
 
 $tool_content .= "
 <div id='content_course'>
-
-   <table width='100%'>
-   <tr>
-      <td valign='top'>$main_content</td>
-      <td width='200' valign='top'>
-        <table class='tbl_courseid' width='200'>
-        <tr class='title1'>
-          <td  class='title1'>$langIdentity</td>
-        </tr>
-        <tr>
-          <td class='smaller'>$bar_content</td>
-        </tr>
-        </table>
-        <br />
-        <table class='tbl_courseid' width='200'>
-        <tr class='title1'>
-          <td class='title1'>$langTools</td>
-          <td class='left'>$toggle_student_view";
-          if ($statut != USER_GUEST) {
-                $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'><img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
-          }
-          $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'><img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;
-            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'><img src='$themeimg/feed.png' alt='$langRSSFeed' title='$langRSSFeed' /></a></span>&nbsp;$toggle_student_view_close
-            </td>
-        </tr>
-        </table>
-        $emailnotification
-        <br />\n";
+<table width='100%'>
+<tr>
+<td valign='top'>$main_content</td>
+<td width='200' valign='top'>
+  <table class='tbl_courseid' width='200'>
+  <tr class='title1'>
+    <td  class='title1'>$langIdentity</td>
+  </tr>
+  <tr>
+    <td class='smaller'>$bar_content</td>
+  </tr>
+  </table>
+  <br />
+  <table class='tbl_courseid' width='200'>
+  <tr class='title1'>
+    <td class='title1'>$langTools</td>
+    <td class='left'>$toggle_student_view";
+    if ($statut != USER_GUEST) {
+          $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
+                  <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
+    }
+    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
+            <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
+    if (visible_module(MODULE_ID_ANNOUNCE)) {
+            $tool_content .= "<span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$course_code'>
+                          <img src='$themeimg/feed.png' alt='".q($langRSSFeed)."' title='".q($langRSSFeed)."' /></a></span>&nbsp;$toggle_student_view_close";
+    }
+$tool_content .= "</td>
+      </tr>
+      </table>
+      $emailnotification
+      <br />\n";
 
 $tool_content .= "
       </td>
