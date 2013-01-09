@@ -549,11 +549,7 @@ elseif(isset($_REQUEST['install6']))
 	<tr>
 	<th class='left'>$langInstitutePostAddress:</th>
 	<td>".nl2br(q($postaddressForm))."</td>
-	</tr>
-	<tr>
-	<th class='left'>$langGroupStudentRegistrationType</th>
-	<td>".q($mes_add)."</td>
-	</tr>
+	</tr>	
 	<tr>
 	<th class='left'>$langDisableEclassStudRegType</th>
 	<td>".q($disable_eclass_stud_reg_info)."</td>
@@ -691,10 +687,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	<ul class='installBullet'>
 	<li>$langInstallBullet1</li>
 	<li>$langInstallBullet3</li>
-	</ul>
-	<p class='sub_title1'>$langAddOnStreaming:</p>
-	<ul class='installBullet'>
-	<li>$langExpPhpMyAdmin</li></ul>
+	</ul>	
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
 	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
 	<div class='right'><input type='submit' name='install2' value='$langNextStep &raquo;' /></div>" .

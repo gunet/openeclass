@@ -1649,7 +1649,6 @@ $langInstall = "Eγκατάσταση του Open eClass";
 $langphpMyAdminURL = "URL του phpMyAdmin";
 $langSystemInfoURL = "URL του System Info";
 $langAddOnStreaming = "Επιπρόσθετη λειτουργικότητα";
-$langAddOnExpl = "Εάν επιθυμείτε να υποστηρίζετε streaming για τα αρχεία video που θα αποτελούν μέρος του υλικού των αποθηκευμένων μαθημάτων θα πρέπει να υπάρχει εγκατεστημένος streaming server.";
 $langWarningInstall1 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>register_globals</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη.
                         Για την ομαλή λειτουργία της πλατφόρμας και για λόγους ασφάλειας θα πρέπει να την απενεργοποιήσετε.";
 $langWarningInstall2 = "<b>Προσοχή!</b> Φαίνεται πως η επιλογή <em>short_open_tag</em> στο αρχείο <em>php.ini</em> είναι ενεργοποιημένη.
@@ -1663,7 +1662,6 @@ $langToReq = "Η εγγραφή χρηστών θα γίνεται με αίτη
 $langToReqOpen = "Οι χρήστες εγγράφονται ελεύθερα χωρίς έγκριση του διαχειριστή";
 $langLDAPBaseDn = "Base DN του LDAP Εξυπηρέτη";
 $langChooseLang = "Επιλογή Γλώσσας";
-$langExpPhpMyAdmin = "Το Open eClass θα εγκαταστήσει το δικό του διαχειριστικό εργαλείο μέσω web των βάσεων δεδομένων MySQL (<a href=\"http://www.phpmyadmin.net\" target=_blank>phpMyAdmin</a>) αλλά μπορείτε να χρησιμοποιήσετε και το δικό σας.";
 $langBeforeInstall1 = "Πριν προχωρήσετε στην εγκατάσταση τυπώστε και διαβάστε προσεκτικά τις ";
 $langBeforeInstall2 = "Επίσης, γενικές οδηγίες για την πλατφόρμα μπορείτε να διαβάσετε ";
 $langInstallInstr = "Οδηγίες Εγκατάστασης";
