@@ -336,10 +336,13 @@ $tool_content .= "
              <a href='../../modules/contact/index.php?course=$code_cours' id='email_btn'>
               <img src='$themeimg/email.png' alt='".q($langContactProf)."' title='".q($langContactProf)."' /></a>&nbsp;&nbsp;
              <a href='$_SERVER[SCRIPT_NAME]' title='" . q($intitule) . "' class='jqbookmark'>
-              <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='".q($langAddAsBookmark)."' /></a>&nbsp;&nbsp;
-            <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'>
-              <img src='$themeimg/feed.png' alt='".q($langRSSFeed)."' title='".q($langRSSFeed)."' /></a></span>&nbsp;$toggle_student_view_close           
-            </td>                     
+              <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='".q($langAddAsBookmark)."' /></a>&nbsp;&nbsp;";
+                if (visible_module(7)) {
+                       $tool_content .= "
+                        <span class='feed'><a href='${urlServer}modules/announcements/rss.php?c=$currentCourseID'>
+                        <img src='$themeimg/feed.png' alt='".q($langRSSFeed)."' title='".q($langRSSFeed)."' /></a></span>&nbsp;$toggle_student_view_close";
+                }
+            $tool_content .= "</td>
         </tr>        
         </table>
         $emailnotification

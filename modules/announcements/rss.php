@@ -28,6 +28,7 @@ include '../../include/init.php';
 if (isset($_GET['c'])) {
 	$code = $_GET['c'];
 	$cours_id = course_code_to_id(escapeSimple($code));
+        $currentCourseID = escapeSimple($code); 
 } else {
 	$code = '';
 	$cours_id = false;
@@ -60,7 +61,7 @@ if (!visible_module(7)) {
         exit;
  }
  
-list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'"));
+list($intitule) = mysql_fetch_row(db_query("SELECT intitule FROM cours WHERE code = '$code'", $mysqlMainDb)); 
 $intitule = htmlspecialchars($intitule, ENT_NOQUOTES); 
 
 $result = db_query("SELECT DATE_FORMAT(temps,'%a, %d %b %Y %T +0300') AS dateformat 
