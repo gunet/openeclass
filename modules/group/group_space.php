@@ -31,18 +31,26 @@ $require_help = true;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
+
 $nameTools = $langGroupSpace;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langGroups);
-
 require_once 'group_functions.php';
-mysql_select_db($mysqlMainDb);
+
 initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-	if (isset($uid) and !$is_member and $statut != 10) {
+	if (isset($uid) and !$is_member and $statut != USER_GUEST) {
 		if ($max_members == 0 or $member_count < $max_members) {
 			$sqlReg = db_query("INSERT INTO group_members SET user_id = $uid, group_id = $group_id, description = ''");
+                        
+                        $id = mysql_insert_id();                        
+                        $group = gid_to_name($group_id);
+                        Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
+                                                                                    'uid' => $uid,
+                                                                                    'name' => $group));
+                                
 			$message = "<font color=red>$langGroupNowMember</font>";
 			$regDone = $is_member = true;
 		}
@@ -137,27 +145,22 @@ $myIndex = 0;
 	foreach ($members as $member){
 		$user_group_description = $member['description'];
                 if ($myIndex % 2 == 0) {
-                    $tool_content .= "
-        <tr class='even'>";
+                    $tool_content .= "<tr class='even'>";
                 } else {
-                    $tool_content .= "
-        <tr class='odd'>";
+                    $tool_content .= "<tr class='odd'>";
                 }
 
-		$tool_content .= "
-          <td>" . display_user($member);
+		$tool_content .= "<td>" . display_user($member);
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
 		}
-                $tool_content .= "</td>
-          <td class='center'>";
+                $tool_content .= "</td><td class='center'>";
 		if (!empty($member['am'])) {
 			$tool_content .=  q($member['am']);
 		} else {
 			$tool_content .= '-';
 		}
-                $tool_content .= "</td>
-          <td class='center'>";
+                $tool_content .= "</td><td class='center'>";
                 $email = q(trim($member['email']));
                 if (!empty($email)) {
                         $tool_content .= "<a href='mailto:$email'>$email</a>";
@@ -169,37 +172,28 @@ $myIndex = 0;
         $myIndex++;
 	}
 } else {
-	$tool_content .= "
-        <tr>
-          <td colspan='3'>$langGroupNoneMasc</td>
-        </tr>";
+	$tool_content .= "<tr><td colspan='3'>$langGroupNoneMasc</td></tr>";
 }
 
-$tool_content .=  "
-        </table>";
-$tool_content .= "
-      </td>
-    </tr>
-    </table>
-    </fieldset>";
+$tool_content .=  "</table>";
+$tool_content .= "</td></tr></table></fieldset>";
 draw($tool_content, 2);
 
 
 function loadGroupTools(){
-        global $self_reg, $has_forum, $forum_id, $documents, $secret_directory, $langForums,
+        global $has_forum, $forum_id, $documents, $langForums,
                $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,
                $langUsage, $course_code;
 
 	$group_tools = '';
-        if (!$self_reg) {
-        }
+
         // Drive members into their own forum
         if ($has_forum and $forum_id <> 0) {
                 $group_tools .= "<li><a href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>$langForums</a></li>";
         }
         // Drive members into their own File Manager
         if ($documents) {
-                $group_tools .=  "<li><a href='index.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
+                $group_tools .=  "<li><a href='document.php?course=$course_code&amp;group_id=$group_id'>$langGroupDocumentsLink</a></li>";
         }
 
         if ($is_editor or $is_tutor) {

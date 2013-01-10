@@ -1386,6 +1386,8 @@ $langNoChanges = "Δεν πραγματοποιήθηκαν αλλαγές";
 $langGroupMembersUnchanged = "Τα μέλη της ομάδας είναι περισσότερα από τον μέγιστο αριθμό που δώσατε. Ο αριθμός ορίστηκε ίσος με το τρέχον πλήθος μελών.";
 $langGroupPrefs = "Λειτουργικά Χαρακτηριστικά Ομάδων";
 $langGroupPropertiesSum = "Σύνοψη Ρυθμίσεων";
+$langGroup = "Ομάδα Χρηστών";
+$langInGroup = "στην ομάδα χρηστών";
 
 // Group Properties
 $langGroupProperties="Ρυθμίσεις Ομάδων Χρηστών";

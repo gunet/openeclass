@@ -34,7 +34,7 @@ $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
 require_once 'group_functions.php';
-
+require_once 'include/log.php';
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();
@@ -79,7 +79,6 @@ END;
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
-mysql_select_db($mysqlMainDb);
 initialize_group_info();
 $user_groups = user_group_info($uid, $course_id);
 
@@ -94,13 +93,13 @@ if ($is_editor) {
                 list($group_num) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM `group` WHERE course_id = $course_id"));
 
                 // Create a hidden category for group forums
-                $req = db_query("SELECT id FROM forum_categories
+                $req = db_query("SELECT id FROM forum_category
                                 WHERE cat_order = -1
                                 AND course_id = $course_id");
                 if ($req and mysql_num_rows($req) > 0) {
                         list($cat_id) = mysql_fetch_row($req);
                 } else {
-                        db_query("INSERT INTO forum_categories (cat_title,  cat_order, course_id)
+                        db_query("INSERT INTO forum_category (cat_title,  cat_order, course_id)
                                          VALUES ('$langCatagoryGroup', -1, $course_id)");
                         $cat_id = mysql_insert_id();
                 }
@@ -118,7 +117,7 @@ if ($is_editor) {
                         // Create a unique path to group documents to try (!)
                         // avoiding groups entering other groups area
                         $secretDirectory = uniqid('');
-                        mkdir("../../courses/$course_code/group/$secretDirectory", 0777, true);
+                        mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
 
                         db_query("INSERT INTO `group` (max_members, secret_directory)
                                 VALUES ($group_max, '$secretDirectory')");
@@ -129,6 +128,12 @@ if ($is_editor) {
                                          forum_id =  $forum_id,
                                          max_members = $group_max,
                                          secret_directory = '$secretDirectory'");
+                        $id = mysql_insert_id();
+                        
+                        Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' =>$id,
+                                                                                    'name' => "$langGroup $group_num",
+                                                                                    'max_members' => $group_max,
+                                                                                    'secret_directory' => $secretDirectory));
                 }
                 if ($group_quantity == 1) {
                         $message = "$group_quantity $langGroupAdded";
@@ -171,15 +176,19 @@ if ($is_editor) {
 
                 // Move group directory to garbage collector
                 $groupGarbage = uniqid(20);
-                $sqlDir = db_query("SELECT secret_directory, forum_id FROM `group` WHERE id = $id");
+                $sqlDir = db_query("SELECT secret_directory, forum_id, name FROM `group` WHERE id = $id");
                 $myDir = mysql_fetch_array($sqlDir);
-                rename("../../courses/$course_code/group/$myDir[secret_directory]",
-                       "../../courses/garbage/$groupGarbage");
+                rename("courses/$course_code/group/$myDir[secret_directory]",
+                       "courses/garbage/$groupGarbage");
                 // FIXME db_query("DELETE FROM forums WHERE forum_id = $myDir[forum_id]");
 
                 db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1 AND subsystem_id = $id");
                 db_query("DELETE FROM group_members WHERE group_id = $id");
                 db_query("DELETE FROM `group` WHERE id = $id");
+                
+                Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
+                                                                            'name' => $myDir['name']));
+                
                 $message = $langGroupDel;
 
         } elseif (isset($_REQUEST['empty'])) {

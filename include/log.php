@@ -174,6 +174,8 @@ class Log {
                                 break;
                         case MODULE_ID_DROPBOX: $content = $this->dropbox_action_details($details);
                                 break;
+                        case MODULE_ID_GROUPS: $content = $this->group_action_details($details);
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
                         }
@@ -427,6 +429,30 @@ class Log {
                         $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo".$details['comment']."&raquo";
                 }
                 return $content;
+        }
+        
+        /**
+         * display action details in groups
+         * @global type $langGroup
+         * @global type $langNewUser
+         * @global type $langInGroup
+         * @param type $details
+         * @return string
+         */
+        private function group_action_details($details) {
+                
+                global $langGroup, $langNewUser, $langInGroup;
+                
+                $details = unserialize($details);
+                                
+                if (!empty($details['uid'])) {
+                        $content = "$langNewUser &laquo".display_user($details['uid'], false, false)."&raquo $langInGroup &laquo".$details['name']."&raquo";
+                } else {
+                        $content = "$langGroup &laquo".$details['name']."&raquo";
+                }
+                        
+                return $content;
+                
         }
        
         /**         
