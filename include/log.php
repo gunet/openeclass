@@ -176,6 +176,8 @@ class Log {
                                 break;
                         case MODULE_ID_GROUPS: $content = $this->group_action_details($details);
                                 break;
+                        case MODULE_ID_DESCRIPTION: $content = $this->description_action_details($details);
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
                         }
@@ -453,6 +455,18 @@ class Log {
                         
                 return $content;
                 
+        }
+        
+        private function description_action_details($details) {
+                
+                global $langTitle, $langContent;
+                
+                $details = unserialize($details);
+                
+                $content = "$langTitle  &laquo".$details['title']."&raquo";
+                $content .= "&nbsp;&mdash;&nbsp; $langContent &laquo".ellipsize($details['content'], 100)."&raquo";                
+                
+                return $content;
         }
        
         /**         

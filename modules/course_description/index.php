@@ -39,7 +39,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/units/functions.php';
 require_once 'modules/video/video_functions.php';
-
+require_once 'include/log.php';
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();
@@ -47,31 +47,18 @@ $action->record(MODULE_ID_DESCRIPTION);
 /**************************************/
 $nameTools = $langCourseDescription;
 
-mysql_select_db($mysqlMainDb);
-
 $unit_id = description_unit_id($course_id);
 
 load_modal_box();
 if ($is_editor) {
+        load_js('tools.js');
 	$tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
 		<li><a href='edit.php?course=$course_code'>$langEditCourseProgram</a></li>
 	  </ul>
 	</div>";
-
-        $head_content .= <<<hCont
-<script type="text/javascript">
-function confirmation ()
-{
-    if (confirm('$langConfirmDelete'))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-hCont;
-
+        
         process_actions();
 
         if (isset($_POST['edIdBloc'])) {
@@ -80,6 +67,11 @@ hCont;
                 add_unit_resource($unit_id, 'description', $res_id,
                                   autounquote($_POST['edTitleBloc']),
                                   autounquote($_POST['edContentBloc']));
+                $id = mysql_insert_id();
+                $log_action = ($id > 0)?LOG_INSERT:LOG_MODIFY;                
+                Log::record($course_id, MODULE_ID_DESCRIPTION, $log_action, array('id' => $id,
+                                                                                 'title' => $_POST['edTitleBloc'],
+                                                                                 'content' => $_POST['edContentBloc']));
                 if ($res_id == -1) {
                         header("Location: {$urlServer}courses/$course_code");
                         exit;
@@ -93,22 +85,22 @@ if ($q and mysql_num_rows($q) > 0) {
         list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 	while ($row = mysql_fetch_array($q)) {
-		$tool_content .= "
-		<table width='100%' class='tbl_border'>
-		<tr class='odd'>
-		 <td class='bold'>" . q($row['title']) . "</td>\n" .
-		 actions('description', $row['id'], $row['visible'], $row['res_id']) . "
-		</tr>
-		<tr>";
-	      if ($is_editor) {
-		 $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
-	      } else {
-		 $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
-	      }
-	      $tool_content .= "</tr></table><br />\n";
+                $tool_content .= "
+                <table width='100%' class='tbl_border'>
+                <tr class='odd'>
+                 <td class='bold'>" . q($row['title']) . "</td>\n" .
+                 actions('description', $row['id'], $row['visible'], $row['res_id']) . "
+                </tr>
+                <tr>";
+                if ($is_editor) {
+                        $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+                } else {
+                        $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+                }
+                $tool_content .= "</tr></table><br />\n";
 	}
 } else {
-	$tool_content .= "   <p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(true);

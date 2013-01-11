@@ -588,7 +588,7 @@ function delete_assignment($id) {
         $title = $row[0];
 	db_query("DELETE FROM assignment WHERE course_id = $course_id AND id = $id");
 	db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
-	move_dir("$workPath/$secret", "$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
+	move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                                                         'title' => $title));
