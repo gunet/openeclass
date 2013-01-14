@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
 </tr>
 <tr><th>$langMultiRegType:</th>
     <td><select name='type'>
-        <option value='stud'>$langsOfStudents</option>
+        <option value='stud'>$langOfStudents</option>
         <option value='prof'>$langOfTeachers</option></select></td>
 </tr>
 <tr><th>$langMultiRegPrefix:</th>
