@@ -131,6 +131,8 @@ if (isset($_POST['submit']))  {
 
                 if (isset($emailAnnounce)) {
                         $string_emailAnnounce = '$emailAnnounce = ' . quote($emailAnnounce) . ";\n";
+                } else {
+                        $string_emailAnnounce = '';
                 }
 
 		// Prepare config.php content
@@ -146,6 +148,7 @@ if (isset($_POST['submit']))  {
 
 '.$utf8define.'
 $urlServer	=	'.autoquote($_POST['formurlServer']).';
+$urlSecure	=	'.autoquote($_POST['formurlSecure']).';
 $urlAppend	=	'.autoquote($_POST['formurlAppend']).';
 $webDir		=	"'.str_replace("\\","/",realpath($_POST['formwebDir'])."/").'" ;
 
@@ -254,6 +257,10 @@ else {
         <tr>
           <th width='200' class='left'><b>\$urlServer:</b></th>
           <td><input class='FormData_InputText' type='text' name=\"formurlServer\" size='40' value=\"".$urlServer."\"></td>
+        </tr>
+        <tr>
+          <th width='200' class='left'><b>\$urlSecure:</b></th>
+          <td><input class='FormData_InputText' type='text' name=\"formurlSecure\" size='40' value=\"".$urlSecure."\"></td>
         </tr>
         <tr>
           <th class='left'>\$urlAppend:</th>
