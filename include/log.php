@@ -154,7 +154,14 @@ class Log {
                 return;
         }
 
-
+        /**
+         * 
+         * @global type $langUnknownModule
+         * @param type $module_id
+         * @param type $details
+         * @return type
+         * jump to appropriate subsystem for displaying details
+         */
         private function course_action_details($module_id, $details) {
 
                 global $langUnknownModule;
@@ -177,6 +184,8 @@ class Log {
                         case MODULE_ID_GROUPS: $content = $this->group_action_details($details);
                                 break;
                         case MODULE_ID_DESCRIPTION: $content = $this->description_action_details($details);
+                                break;
+                        case MODULE_ID_GLOSSARY: $content = $this->glossary_action_details($details);
                                 break;
                         default: $content = $langUnknownModule;
                                 break;
@@ -464,7 +473,27 @@ class Log {
                 $details = unserialize($details);
                 
                 $content = "$langTitle  &laquo".$details['title']."&raquo";
-                $content .= "&nbsp;&mdash;&nbsp; $langContent &laquo".ellipsize($details['content'], 100)."&raquo";                
+                $content .= "&nbsp;&mdash;&nbsp; $langContent &laquo".ellipsize($details['content'], 100)."&raquo";
+                
+                return $content;
+        }
+        
+        private function glossary_action_details($details) {
+                
+                global $langGlossaryTerm, $langGlossaryDefinition, $langGlossaryURL, $langCategoryNotes;
+                
+                $details = unserialize($details);
+                
+                $content = "$langGlossaryTerm &laquo".$details['term']."&raquo";
+                if (!empty($details['definition'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langGlossaryDefinition &laquo".ellipsize($details['definition'], 100)."&raquo";
+                }
+                if (!empty($details['url'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langGlossaryURL &laquo".$details['url']."&raquo";
+                }
+                if (!empty($details['notes'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langCategoryNotes &laquo".$details['notes']."&raquo";
+                }                
                 
                 return $content;
         }

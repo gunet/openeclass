@@ -25,6 +25,7 @@ $helpTopic = 'Glossary';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/video/video_functions.php';
+require_once 'include/log.php';
 
 load_modal_box();
 
@@ -114,6 +115,7 @@ if ($is_editor) {
                                                   category_id = $category_id,
                                                   datestamp = NOW()
                                               WHERE id = $id AND course_id = $course_id");
+                        $log_action = LOG_MODIFY;
                         $success_message = $langGlossaryUpdated;
                 } else {
                         $q = db_query("INSERT INTO glossary
@@ -125,8 +127,16 @@ if ($is_editor) {
                                                   datestamp = NOW(),
                                                   course_id = $course_id,
                                                   `order` = " . findorder($course_id));
+                        $log_action = LOG_INSERT;
                         $success_message = $langGlossaryAdded;
                 }
+                $id = mysql_insert_id();
+                Log::record($course_id, MODULE_ID_GLOSSARY, $log_action, array('id' => $id,
+                                                                               'term' => $_POST['term'],
+                                                                               'definition' => $_POST['definition'],
+                                                                               'url' => $url,
+                                                                               'notes' => purify($_POST['notes'])));
+                
                 if ($q and mysql_affected_rows()) {
                         invalidate_glossary_cache();
                         $tool_content .= "<div class='success'>$success_message</div><br />";
@@ -134,8 +144,12 @@ if ($is_editor) {
         }
 
         if (isset($_GET['delete'])) {
-                $q = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $course_id");
+                $id = $_GET['delete'];
+                $term = db_query_get_single_value("SELECT term FROM glossary WHERE ID = $id");
+                $q = db_query("DELETE FROM glossary WHERE id = $id AND course_id = $course_id");
                 invalidate_glossary_cache();
+                Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
+                                                                              'term' => $term));
                 if ($q and mysql_affected_rows()) {
                         $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";
                 }
@@ -230,7 +244,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langGlossaryDefinition:</th>
-                   <td valign='top'>" . text_area('definition', 4, 60, $data['definition']) . "
+                   <td valign='top'>" . @text_area('definition', 4, 60, $data['definition']) . "
                    </td>
                  </tr>
                  <tr>
@@ -239,7 +253,7 @@ if ($is_editor) {
                  </tr>
                  <tr>
                    <th valign='top'>$langCategoryNotes:</th>
-                   <td valign='top'>" . rich_text_editor('notes', 4, 60, $data['notes']) . "
+                   <td valign='top'>" . @rich_text_editor('notes', 4, 60, $data['notes']) . "
                    </td>
                  </tr>
                  $category_selection
