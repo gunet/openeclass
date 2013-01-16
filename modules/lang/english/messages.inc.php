@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-01-16 14:29:25
+// Generated 2013-01-16 15:26:04
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "version";
@@ -32,7 +32,7 @@ $langUsersS = "users";
 $langUser = "User";
 $langUserHeader = "User:";
 $langUserS = "user";
-$langSupportUser = "In charge of Support:";
+$langSupportUser = "Support:";
 $langAdminUsers = "Users Administration";
 $langDeleteAdmin = "Deletion of the administrator by id:";
 $langNotFeasible = "is not feasible";
