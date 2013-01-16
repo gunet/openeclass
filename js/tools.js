@@ -246,3 +246,16 @@ function course_list_handler()
                'text');
 }
 
+// User profile UI
+
+function profile_init()
+{
+        $('#delete').live('click', function() {
+                if (confirm(lang.confirmDelete)) {
+                        var tr = $(this).closest('tr');
+                        tr.children('th').html(lang.addPicture);
+                        tr.find('span').remove();
+                        $.post('profile.php', { delimage: true });
+                }
+        });
+}

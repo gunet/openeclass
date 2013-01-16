@@ -75,6 +75,16 @@ function redirect_to_message($id) {
         exit();
 }
 
+// Handle AJAX profile image delete
+if (isset($_POST['delimage'])) {
+        @unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
+        @unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
+        db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
+        Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                             'deleteimage' => 1));
+        exit;
+}
+
 if (isset($_POST['submit'])) {
         // First do personalization and language changes
 	if (!file_exists($webDir.'/courses/userimg/')) {
@@ -138,13 +148,6 @@ if (isset($_POST['submit'])) {
                 Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                                       'addimage' => 1,
                                                       'imagetype' => $type));
-	}
-	if (isset($_POST['delimage'])) {
-		@unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
-		@unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
-		db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
-                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-                                                      'deleteimage' => 1));
 	}
 
 	// check if email is valid
@@ -414,11 +417,7 @@ $tool_content .= "
 if ($icon) {
 	$message_pic = $langReplacePicture;
 	$picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-	$delete = "
-        <tr>
-          <th>$langDeletePicture</th>
-          <td><input type='checkbox' name='delimage'></td>
-        </tr>";
+        $delete = '&nbsp;' . icon('delete', $langDelete, null, 'id="delete"') . '&nbsp;';
 } else {
 	$picture = $delete = '';
 	$message_pic = $langAddPicture;
@@ -426,9 +425,8 @@ if ($icon) {
 $tool_content .= "
         <tr>
           <th>$message_pic</th>
-          <td>$picture<input type='file' name='userimage' size='30'></td>
+          <td><span>$picture$delete</span><input type='file' name='userimage' size='30'></td>
         </tr>
-        $delete
         <tr>
           <th>$langDescription:</th>
           <td>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</td>
@@ -440,6 +438,14 @@ $tool_content .= "
         </table>
         </fieldset>
         </form>";
+
+load_js('jquery');
+load_js('tools.js');
+$head_content .= "<script type='text/javascript'>
+var lang = { 
+        addPicture: '".js_escape($langAddPicture)."',
+        confirmDelete: '".js_escape($langConfirmDelete)."'}; 
+$(profile_init);</script>";
 
 draw($tool_content, 1, null, $head_content);
 
