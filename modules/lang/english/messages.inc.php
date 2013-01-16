@@ -1,10 +1,10 @@
 <?php
 
 // Message file for language en
-// Generated 2013-01-16 15:26:04
+// Generated 2013-01-16 16:02:28
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
-$langVersion = "version";
+$langVersion = "Version";
 $langAboutText = "The platform version is";
 $langHostName = "Host Name is";
 $langWebVersion = "uses";
@@ -1457,7 +1457,7 @@ $m['unsub'] = "Course is closed. Unregistration is not allowed";
 $titreBloc = array("Course Content (Syllabus)", "Objectives / Overall Aims", "Study Materials / Reading List", 
     "Education and Teaching Methods", "Assessment Methods / Exams", "Recommended Prerequisites", "Supplementary Information");
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
-$langPerso = "Modify portfolio view";
+$langPerso = "Portfolio view";
 $langMyPersoLessons = "MY COURSES";
 $langMyPersoDeadlines = "MY DEADLINES";
 $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
@@ -1476,7 +1476,7 @@ $langMore = "More";
 $langSender = "Sender";
 $langUnknown = "not defined";
 $langDuration = "Duration";
-$langClassic = "Brief";
+$langClassic = "Basic";
 $langModern = "Advanced";
 $langAdm = "Administer";
 $langEditDel = "Edit/delete";
