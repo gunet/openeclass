@@ -1,8 +1,9 @@
 <?php
 
 // Message file for language en
-// Generated 2013-01-17 10:48:54
+// Generated 2013-01-17 16:42:40
 
+$langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
 $langAboutText = "The platform version is";
@@ -1626,12 +1627,12 @@ $langPassTwice = "You typed two different passwords";
 $langUserFree = "This username is already in use. Use your browser's back button and enter another username.";
 $langYourReg = "Your registration on";
 $langDear = "Dear";
-$langYouAreReg = "You are registered on";
-$langSettings = "Settings";
+$langYouAreReg = "\nYour account on";
+$langSettings = "was created successfully!\n\nAccount information:\nUsername:";
 $langAddressOf = "\n\nPlatform Address";
 $langProblem = "In case of problems, contact us.";
 $langFormula = "Yours sincerely";
-$langManager = "Manager";
+$langManager = "Administrator of";
 $langPersonalSettings = "Your personal settings have been stored and an email has been sent to help you remember your username and password.</p>";
 $langPersonalSettingsMore = "Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
 You can also:<ul><li>navigate the platform and your personal selections,</li><li>select 'Courses List' to review the available courses.</li><ul>";
@@ -1722,7 +1723,6 @@ $langCoursesRegistered = "You were successfully registered to the selected cours
 $langNoCoursesRegistered = "<p>You didn't register to any course.</p><p> You can always register the next time you enter the platform.</p>";
 $langIfYouWantToAddManyUsers = "If you want to add a list of users in
             your course, please contact your web administrator.";
-$langCourse = "Course";
 $langLastVisits = "My last visits";
 $langLastUserVisits = "Last Visits of User ";
 $langDumpUser = "User List:";
@@ -1770,7 +1770,7 @@ $typeyourmessage = "Type your message below";
 $emailsuccess = "E-mail has been sent!";
 $langTheTeacher = 'The ".$langsTeacher."';
 $langTheUser = 'The user';
-$langDestination = 'Destination:';
+$langDestination = 'Recipient:';
 $langAsProf = "as a ".$langsTeacher;
 $langTel = 'Phone';
 $langPassSameAuth = "Your password is the same of the account authentication service.";

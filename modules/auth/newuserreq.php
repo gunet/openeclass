@@ -103,15 +103,16 @@ if($submit) {
       $emailbody = "
 $langDestination $prenom_form $nom_form
 
-$langYouAreReg$siteName, $langSettings $uname
-$langPass : $password
-$langAddress $siteName $langIs: $urlServer
+$langYouAreReg $siteName $langSettings $uname
+$langPass: $password
+$siteName URL: $urlServer
+
 $langProblem
 
 $administratorName $administratorSurname
-$langManager $siteName
-$langTel $telephone
-$langEmail : $emailhelpdesk
+$siteName
+$langTel: $telephone
+$langEmail: $emailhelpdesk
 ";
 
 send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
