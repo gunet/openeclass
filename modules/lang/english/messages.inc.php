@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-01-16 16:02:28
+// Generated 2013-01-17 10:48:54
 
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -646,7 +646,7 @@ $langGroupSpace = "Group area";
 $langGroupSpaceLink = "Group area";
 $langGroupForumLink = "Group forum";
 $langZipNoPhp = "The zip file cannot contain .php files";
-$langUncompress = "uncompress zipped (.zip) file on the server";
+$langUncompress = "Uncompress zip file on the server";
 $langDownloadAndZipEnd = "Zip file uploaded and uncompressed";
 $langParentDir = "parent directory";
 $langInvalidDir = "Error! Invalid Directory or Directory not exists!";
@@ -931,7 +931,7 @@ $langFillGroups = "Fill groups";
 $langGroupsProperties = "Groups settings";
 $langStudentRegAllowed = "".$langStudents." are allowed to self-register in groups";
 $langStudentRegNotAllowed = "".$langStudents." are not allowed to self-register in groups";
-$langTools = "$langCourse tools";
+$langTools = "Tools";
 $langExistingGroups = "Groups";
 $langEdit = "Edit";
 $langDeleteGroupWarn = "Are you sure you want to delete this group";
@@ -2417,7 +2417,7 @@ $langBetaCMSRedirectHere = "here";
 $langBetaCMSEclassLessonObjectView = "eClass Lesson Object View";
 $langBetaCMSTotalNumber = "total number";
 $langBetaCMSUnits = "Units";
-$langBetaCMSUnitTitle = "Unit Title";
+$langBetaCMSUnitTitle = "$langCourse unit Title";
 $langBetaCMSUnitDescription = "Unit Description";
 $langBetaCMSScormFiles = "Scorm Files";
 $langBetaCMSSourceFilename = "Source Filename";
@@ -2500,7 +2500,7 @@ $langUserProfile = 'User profile';
 $langDisplayProfile = "Public Profile View";
 $langNotifyRegUser1 = "You have been registered to the course ";
 $langNotifyRegUser2 = "by the course administrator.";
-$langDescription_Descr = 'about course description, course units and related resources';
+$langDescription_Descr = 'about $langCourseS description, $langCourseS units and related resources';
 $langCheck = "Check";
 $m['group_assignment_publish'] = 'You can publish an existing file from
         <a href="%s">your group documents area</a> by choosing "Publish" from the file list.';
@@ -2808,7 +2808,7 @@ $langInsertMyMediaToolName = "Insert Multimedia";
 $langMediaAlreadyUsed = "This media file is already used in this learning path";
 $langMediaAsModule = "Use Media File";
 $langMediaAsModuleLabel = "Multimedia";
-$langMediaInsertedAsModule = "Has been added as course unit of this learning path";
+$langMediaInsertedAsModule = "Has been added as $langCourseS unit of this learning path";
 $langMediaTypeDesc = "Multimedia";
 $m['linactive'] = 'Inactive Course';
 $langAddRole = "Add Role";
