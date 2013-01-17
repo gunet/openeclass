@@ -100,7 +100,9 @@ define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS',  3);
 define('MATCHING',        4);
 define('TRUE_FALSE',      5);
-//
+// for fill in blanks questions
+define('TEXTFIELD_FILL', 1);
+define('LISTBOX_FILL',	2);//
 
 // Subsystem types (used in documents)
 define('MAIN', 0);

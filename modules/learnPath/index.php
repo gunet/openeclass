@@ -18,35 +18,29 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-	learningPathList.php
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
-
-	      original file: learningPathList Revision: 1.56
-
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-==============================================================================
-    @Description: This file displays the list of all learning paths available
-                  for the course.
-
-                  Display :
-                  - Name of tool
-                  - Introduction text for learning paths
-                  - (admin of course) link to create new empty learning path
-                  - (admin of course) link to import (upload) a learning path
-                  - list of available learning paths
-                  - (student) only visible learning paths
-                  - (student) the % of progression into each learning path
-                  - (admin of course) all learning paths with
-                  - modify, delete, statistics, visibility and order, options
-
-    @Comments:
-==============================================================================
+/**
+*      @file index.php
+* 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+*	based on Claroline version 1.7 licensed under GPL
+*	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+*
+*	      original file: learningPathList Revision: 1.56
+*
+*	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+*                     Lederer Guillaume <led@cerdecam.be>
+*      @description: This file displays the list of all learning paths available
+*                 for the course.
+*
+*                 Display :
+*                  - Name of tool
+*                  - Introduction text for learning paths
+*                  - (admin of course) link to create new empty learning path
+*                  - (admin of course) link to import (upload) a learning path
+*                  - list of available learning paths
+*                 - (student) only visible learning paths
+*                  - (student) the % of progression into each learning path
+*                  - (admin of course) all learning paths with
+*                  - modify, delete, statistics, visibility and order, options
 */
 
 
@@ -65,12 +59,17 @@ define('CLARO_FILE_PERMISSIONS', 0777);
 include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+
+
+
 
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /**************************************/
+require_once 'include/log.php';
 
 $style = "";
 
@@ -78,45 +77,45 @@ if (!add_units_navigation(TRUE)) {
 	$nameTools = $langLearningPaths;
 }
 
-if (isset($_GET['cmd']) && $_GET['cmd'] == 'export'
-	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor)
-{
-      mysql_select_db($mysqlMainDb);
-      require_once("include/scormExport.inc.php");
-      $scorm = new ScormExport((int)$_GET['path_id']);
-      if (!$scorm->export())
-      {
-          $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
-          foreach( $scorm->getError() as $error)
-          {
-              $dialogBox .= '<li>' . $error . '</li>'."\n";
-          }
-          $dialogBox .= '<ul>'."\n";
-      }
+if (isset($_GET['cmd']) and $_GET['cmd'] == 'export'
+	and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {
+      
+        require_once "include/scormExport.inc.php";
+      
+        $scorm = new ScormExport(intval($_GET['path_id']));
+        if (!$scorm->export())
+        {
+            $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
+            foreach( $scorm->getError() as $error)
+            {
+                $dialogBox .= '<li>' . $error . '</li>'."\n";
+            }
+            $dialogBox .= '<ul>'."\n";
+        }
 } // endif $cmd == export
 
-if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
-	&& isset($_GET['path_id']) && is_numeric($_GET['path_id']) && $is_editor )
-{
-      mysql_select_db($mysqlMainDb);
-      require_once("include/scormExport12.inc.php");
-      $scorm = new ScormExport((int)$_GET['path_id']);
-      if (!$scorm->export())
-      {
-          $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
-          foreach( $scorm->getError() as $error)
-          {
-              $dialogBox .= '<li>' . $error . '</li>'."\n";
-          }
-          $dialogBox .= '<ul>'."\n";
-      }
+if ( isset($_GET['cmd']) and $_GET['cmd'] == 'export12'
+	and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor ) {
+                
+        require_once "include/scormExport12.inc.php";
+        
+        $scorm = new ScormExport(intval($_GET['path_id']));
+        if (!$scorm->export())
+        {
+            $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
+            foreach( $scorm->getError() as $error)
+            {
+                $dialogBox .= '<li>' . $error . '</li>'."\n";
+            }
+            $dialogBox .= '<ul>'."\n";
+        }
 } // endif $cmd == export12
 
 if ($is_editor) {
 	$head_content .= "<script type='text/javascript'>
           function confirmation (name)
           {
-              if (confirm('". clean_str_for_javascript($langConfirmDelete) . " ' + name + '? " . $langModuleStillInPool . "'))
+              if (confirm('". clean_str_for_javascript($langConfirmDelete) . "' + name + '. ' + '" . $langModuleStillInPool . "'))
                   {return true;}
               else
                   {return false;}
@@ -125,7 +124,7 @@ if ($is_editor) {
 	$head_content .= "<script type='text/javascript'>
           function scormConfirmation (name)
           {
-              if (confirm('". clean_str_for_javascript($langAreYouSureToDeleteScorm) .  "' + name + '?'))
+              if (confirm('". clean_str_for_javascript($langAreYouSureToDeleteScorm) .  "' + name + ''))
                   {return true;}
               else
                   {return false;}
@@ -196,23 +195,27 @@ if ($is_editor) {
 					$query = db_query($delLabelModuleSql);
 				}
 
-				// delete everything for this path (common to normal and scorm paths) concerning modules, progression and path
+				// delete everything for this path (common to normal and scorm paths) concerning modules, progress and path
 
 				// delete all user progression
 				$sql1 = "DELETE FROM `".$TABLEUSERMODULEPROGRESS."`
 					WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql1);
-
 				// delete all relation between modules and the deleted learning path
 				$sql2 = "DELETE FROM `".$TABLELEARNPATHMODULE."`
 						WHERE `learnPath_id` = ". (int)$_GET['del_path_id'];
 				$query = db_query($sql2);
-
+                                
 				// delete the learning path
-				$sql3 = "DELETE FROM `".$TABLELEARNPATH."` WHERE `learnPath_id` = ". (int)$_GET['del_path_id'] ." AND `course_id` = $course_id";
-
+                                $lp_name = db_query_get_single_value("SELECT name FROM `".$TABLELEARNPATH."` 
+                                                                WHERE `learnPath_id` = ". intval($_GET['del_path_id'])."
+                                                                AND `course_id` = $course_id");
+				$sql3 = "DELETE FROM `".$TABLELEARNPATH."` 
+                                                WHERE `learnPath_id` = ". intval($_GET['del_path_id']) ." 
+                                                AND `course_id` = $course_id";
 				$query = db_query($sql3);
-
+                                Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
+                                
 				break;
 		// ACCESSIBILITY COMMAND
 			case "mkBlock" :
@@ -230,18 +233,18 @@ if ($is_editor) {
 				$_REQUEST['cmd'] == "mkVisibl" ? $visibility = 1 : $visibility = 0;
 				$sql = "UPDATE `".$TABLELEARNPATH."`
 					SET `visible` = '$visibility'
-					WHERE `learnPath_id` = ". (int)$_GET['visibility_path_id']."
+					WHERE `learnPath_id` = ". intval($_GET['visibility_path_id'])."
 					AND `visible` != '$visibility'
-					AND `course_id` = $cours_id";
+					AND `course_id` = $course_id";
 				$query = db_query ($sql);
 				break;
 			// ORDER COMMAND
 			case "moveUp" :
-				$thisLearningPathId = (int)$_GET['move_path_id'];
+				$thisLearningPathId = intval($_GET['move_path_id']);
 				$sortDirection = "DESC";
 				break;
 			case "moveDown" :
-				$thisLearningPathId = (int)$_GET['move_path_id'];
+				$thisLearningPathId = intval($_GET['move_path_id']);
 				$sortDirection = "ASC";
 				break;
 			// CREATE COMMAND
@@ -250,7 +253,7 @@ if ($is_editor) {
 				if( isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
 					// check if name already exists
 					$sql = "SELECT `name` FROM `".$TABLELEARNPATH."`
-						WHERE `name` = '". mysql_real_escape_string($_POST['newPathName']) ."'
+						WHERE `name` = ". quote($_POST['newPathName']) ."
 						AND `course_id` = $course_id";
 					$query = db_query($sql);
 					$num = mysql_num_rows($query);
@@ -261,8 +264,11 @@ if ($is_editor) {
 						$order = $orderMax + 1;
 						// create new learning path
 						$sql = "INSERT INTO `".$TABLELEARNPATH."` (`course_id`, `name`, `comment`, `rank`)
-							VALUES ($course_id, '". mysql_real_escape_string($_POST['newPathName']) ."','" . mysql_real_escape_string(trim($_POST['newComment']))."',".(int)$order.")";
+							VALUES ($course_id, ". quote($_POST['newPathName']) ."," . quote($_POST['newComment']).",".intval($order).")";
 						$lp_id = db_query($sql);
+                                                Log::record($course_id, MODULE_ID_LP, LOG_INSERT, array('id' => $lp_id,
+                                                                                                        'name' => $_POST['newPathName'],
+                                                                                                        'comment' => $_POST['newComment']));
 					} else {
 						// display error message
 						$dialogBox = $langErrorNameAlreadyExists;
@@ -270,7 +276,7 @@ if ($is_editor) {
 					}
 				}
 				else { // create form requested
-					$navigation[] = array("url"=>"learningPathList.php?course=$course_code", "name"=> $langLearningPaths);
+					$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 					$nameTools = $langCreateNewLearningPath;
 					$dialogBox = "
                                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
@@ -662,8 +668,7 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
         $tool_content .= "<td class='right' width='120'>".disp_progress_bar($prog, 1)."</td>\n";
         $tool_content .= "<td class='left' width='10'>".$prog."% </td>";
     }
-    $tool_content .= "
-    </tr>\n";
+    $tool_content .= "</tr>\n";
     $iterator++;
     $ind++;
 } // end while

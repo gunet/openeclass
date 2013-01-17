@@ -42,10 +42,7 @@
 ==============================================================================
 */
 
-require_once("../../include/lib/learnPathLib.inc.php");
-require_once("../../include/lib/fileManageLib.inc.php");
-require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("../../include/lib/fileDisplayLib.inc.php");
+
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
@@ -59,13 +56,16 @@ $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 define('CLARO_FILE_PERMISSIONS', 0777);
 
 require_once("../../include/baseTheme.php");
-$tool_content = "";
+
+require_once "include/lib/learnPathLib.inc.php";
+require_once "include/lib/fileManageLib.inc.php";
+require_once "include/lib/fileUploadLib.inc.php";
+require_once "include/lib/fileDisplayLib.inc.php";
+
 $pwd = getcwd();
 
 $navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
 $nameTools = $langimportLearningPath;
-
-mysql_select_db($course_code);
 
 // error handling
 $errorFound = false;
@@ -515,7 +515,7 @@ $errorMsgs = array();
 $maxFilledSpace = 100000000;
 
 $courseDir   = "courses/".$course_code."/scormPackages/";
-$baseWorkDir = $webDir.$courseDir; // path_id
+$baseWorkDir = $webDir."/".$courseDir; // path_id
 
 if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
 
@@ -536,14 +536,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     // this line will be removed if an error occurs
     $sql = "SELECT MAX(`rank`)
             FROM `".$TABLELEARNPATH."` WHERE `course_id` = $course_id";
-    $result = db_query($sql, $mysqlMainDb);
+    $result = db_query($sql);
 
     list($rankMax) = mysql_fetch_row($result);
 
     $sql = "INSERT INTO `".$TABLELEARNPATH."`
             (`course_id`, `name`,`visible`,`rank`,`comment`)
             VALUES ($course_id, '". addslashes($lpName) ."', 0,".($rankMax+1).",'')";
-    db_query($sql, $mysqlMainDb);
+    db_query($sql);
 
 
     $tempPathId = mysql_insert_id();
@@ -552,7 +552,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if (!is_dir($baseWorkDir)) claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS );
 
     // unzip package
-    require_once("../../include/pclzip/pclzip.lib.php");
+    require_once "include/pclzip/pclzip.lib.php";
 
     /*
      * Check if the file is valid (not to big and exists)
@@ -560,7 +560,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     if( !isset($_FILES['uploadedPackage']) || !is_uploaded_file($_FILES['uploadedPackage']['tmp_name']))
     {
         $errorFound = true;
-        array_push ($errorMsgs, $langFileScormError.'<br />'.$langNotice.':<br /> '.$langMaxFileSize.' '.ini_get('upload_max_filesize') );
+        array_push ($errorMsgs, $langFileScormError);
     }
 
     /*
@@ -571,7 +571,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
     elseif ( ! enough_size($_FILES['uploadedPackage']['size'], $baseWorkDir, $maxFilledSpace))
     {
         $errorFound = true;
-        array_push ($errorMsgs, $langNoSpace ) ;
+        array_push ($errorMsgs, $langNoSpace) ;
     }
 
     /*
@@ -1199,7 +1199,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST) )
 
     foreach ( $errorMsgs as $msg)
     {
-        $tool_content .= "\n<span class=\"error\">$langError</span>;".$msg."<br />";
+        $tool_content .= "<span class='error'>$langError</span>".$msg."<br />";
     }
 
     $tool_content .= "\n<!-- End messages -->\n";

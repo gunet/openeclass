@@ -196,6 +196,7 @@ switch( $cmd )
     case "rqComment" :
         if (isset($_GET['module_id']) && is_numeric($_GET['module_id']) )
         {
+            $module_id = intval($_GET['module_id']);
             //get current comment from DB
             $query="SELECT `comment`
                     FROM `".$TABLEMODULE."`
@@ -203,28 +204,28 @@ switch( $cmd )
                     AND `course_id` = $course_id";
             $result = db_query($query);
             $comment = mysql_fetch_array($result);
-
-            if( isset($comment['comment']) )
-            {
-
-                $tool_content .= "<form method=\"post\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code\">\n"
-                    .'<table width="99%" class="tbl"><tr><th class="left" width="160">'.$langComments.' :</th><td width="100">'."\n"
-                    .disp_html_area('comment', $comment['comment'], 2, 40)
-                    ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
-                    ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."</td><td><input type=\"submit\" value=\"".$langImport."\">\n"
-                    ."</td></tr></table>\n"
-                    ."</form><br />\n";
+            if(isset($comment['comment']) )
+            {                    
+                $tool_content .= "<form method='post' action='".$_SERVER['SCRIPT_NAME']."?course=$course_code'>
+                    <table width='99%' class='tbl'>
+                    <tr><th class='left' colspan='2'>$langComments:</th></tr>
+                    <tr><td colspan='2'>" . rich_text_editor('comment', 2, 60, $comment['comment']) . "
+                    <input type='hidden' name='cmd' value='exComment'>
+                    <input type='hidden' name='module_id' value='$module_id'>
+                    </td></tr>
+                    <tr><td><input type='submit' value='$langImport'>
+                    </td></tr></table>
+                    </form><br />";
             }
             else
             {
-            	$tool_content .= "<form method=\"post\" action=\"".$_SERVER['SCRIPT_NAME']."?course=$course_code\">\n"
+            	$tool_content .= "<form method='post' action='".$_SERVER['SCRIPT_NAME']."?course=$course_code'>\n"
                     .'<table><tr><td valign="top">'."\n"
-                    .disp_html_area('comment', '', 2, 60)
+                    .  rich_text_editor('comment', 2, 30, '')
                     ."</td></tr></table>\n"
-                    ."<input type=\"hidden\" name=\"cmd\" value=\"exComment\">\n"
-                    ."<input type=\"hidden\" name=\"module_id\" value=\"".(int)$_GET['module_id']."\">\n"
-                    ."<input type=\"submit\" value=\"".$langOk."\">\n"
+                    ."<input type='hidden' name='cmd' value='exComment'>\n"
+                    ."<input type='hidden' name='module_id' value='$module_id'>\n"
+                    ."<input type='submit' value='$langOk'>\n"
                     ."<br /><br />\n"
                     ."</form>\n";
             }
@@ -244,8 +245,6 @@ switch( $cmd )
         }
         break;
 }
-
-
 
 
 $sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
@@ -277,11 +276,11 @@ if (!$num_results == 0) {
 $ind=1;
 while ($list = mysql_fetch_array($result))
 {
-                   if ($ind%2 == 0) {
-                       $style = 'class="odd"';
-                   } else {
-                       $style = 'class="even"';
-                   }
+        if ($ind%2 == 0) {
+            $style = 'class="odd"';
+        } else {
+            $style = 'class="even"';
+        }
 
     //DELETE , RENAME, COMMENT
 

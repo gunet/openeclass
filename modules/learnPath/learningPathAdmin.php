@@ -62,6 +62,7 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/log.php';
 
 $body_action = '';
 $dialogBox = '';
@@ -74,7 +75,7 @@ if (!add_units_navigation()) {
 // $_SESSION
 if ( isset($_GET['path_id']) && $_GET['path_id'] > 0 )
 {
-      $_SESSION['path_id'] = (int) $_GET['path_id'];
+      $_SESSION['path_id'] = intval($_GET['path_id']);
 }
 
 // get user out of here if he is not allowed to edit
@@ -360,31 +361,23 @@ $sql = "SELECT *
 $query = db_query($sql);
 $LPDetails = mysql_fetch_array($query);
 
-$tool_content .="
-
-  <fieldset>
-  <legend>$langLearningPathData</legend>
-    <table width=\"100%\" class=\"tbl\">";
+$tool_content .="<fieldset><legend>$langLearningPathData</legend><table width='100%' class='tbl'>";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
-$tool_content .="
-    <tr>
-      <th width=\"70\">$langTitle:</th>";
+$tool_content .="<tr><th width='70'>$langTitle:</th>";
 
-if ($cmd == "updateName")
-{
+if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
-}
-else
-{
-    $tool_content .= "
-      <td>".nameBox(LEARNINGPATH_, DISPLAY_);
+    $id = mysql_insert_id();
+    $lp_name = db_query_get_single_row("SELECT name FROM `".$TABLELEARNPATH."` 
+                                WHERE `learnPath_id` = ". intval($_SESSION['path_id']) ." 
+                                AND `course_id` = $course_id");    
+} else {
+    $tool_content .= "<td>".nameBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "
-      </td>
-    </tr>";
+$tool_content .= "</td></tr>";
 
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="
@@ -404,11 +397,9 @@ $tool_content .= "</td>
     </tr>
     </table>
     </fieldset>
-
-
     <fieldset>
     <legend>$langLearningPathConfigure</legend>
-    <table width=\"100%\" class=\"tbl\">";
+    <table width='100%' class='tbl'>";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
@@ -426,8 +417,6 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm)
       </td>
     </tr>";
 }
-
-
 
 
 // --------------- learning path course admin links ------------------------------
@@ -677,7 +666,7 @@ foreach ($flatElementList as $module)
     else
         $tool_content .= clean_str_for_javascript($langAreYouSureToRemoveStd);
 
-    $tool_content .=   "');\"><img src=\"".$themeimg."/delete.png\" border=0 alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
+    $tool_content .=   "');\"><img src=\"".$themeimg."/delete.png\" alt=\"".$langRemove."\" title=\"".$langRemove."\" /></a></td>";
 
     // VISIBILITY
     $tool_content .= "<td width='10'>";

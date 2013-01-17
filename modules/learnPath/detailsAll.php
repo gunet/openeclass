@@ -55,7 +55,7 @@ $TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
 $TABLEASSET             = "lp_asset";
 $TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
 
- require_once 'include/lib/learnPathLib.inc.php';
+require_once 'include/lib/learnPathLib.inc.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
         $navigation[] = array('url' => '../usage/?course='.$course_code, 'name' => $langUsage);
@@ -86,14 +86,6 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
             <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
         </div>";                
-} else {
-        $tool_content .= "
-          <div id='operations_container'>
-            <ul id='opslist'>
-              <li>$langDumpUserDurationToFile: <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a></li>
-              <li><a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a></li>
-            </ul>
-          </div>";
 }
 
 // check if there are learning paths available
@@ -120,10 +112,9 @@ $tool_content .= "
     <th colspan='2'>$langProgress&nbsp;&nbsp;</th>
   </tr>\n";
 
-mysql_select_db($mysqlMainDb);
 
 // display tab content
-$k=0;
+$k = 0;
 foreach ($usersList as $user)
 {
 	// list available learning paths

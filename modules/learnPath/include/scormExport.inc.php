@@ -61,30 +61,18 @@
 
 if(!class_exists('ScormExport')):
 
-require_once("../../include/lib/fileManageLib.inc.php");
-require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("../../include/pclzip/pclzip.lib.php");
-require_once('../../include/lib/textLib.inc.php');
+require_once 'include/pclzip/pclzip.lib.php';
+require_once 'include/lib/textLib.inc.php';
 
 $TBL_EXERCISE           = 'exercise';
 $TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
 $TBL_QUESTION           = 'exercise_question';
 $TBL_ANSWER             = 'exercise_answer';
 
-require_once('../exercise/exercise.class.php');
-require_once('../exercise/question.class.php');
-require_once('../exercise/answer.class.php');
-require_once('../exercise/exercise.lib.php');
-
-define('UNIQUE_ANSWER',   1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS',  3);
-define('MATCHING',        4);
-define('TRUEFALSE',       5);
-
-// for fill in blanks questions
-define('TEXTFIELD_FILL', 1);
-define('LISTBOX_FILL',	2);
+require_once 'modules/exercise/exercise.class.php';
+require_once 'modules/exercise/question.class.php';
+require_once 'modules/exercise/answer.class.php';
+require_once 'modules/exercise/exercise.lib.php';
 
 /**
  * Exports a Learning Path to a SCORM package.
@@ -179,12 +167,12 @@ class ScormExport
         /* Build various directories' names */
 
         // Replace ',' too, because pclzip doesn't support it.
-        $this->destDir = $webDir . "courses/" . $course_code . '/temp/'
+        $this->destDir = $webDir . "/courses/" . $course_code . '/temp/'
             . str_replace(',', '_', replace_dangerous_char($this->name));
-        $this->srcDirDocument = $webDir . "courses/" . $course_code . "/document";
-        $this->srcDirExercise  = $webDir . "courses/" . $course_code . "/exercise";
-        $this->srcDirScorm    = $webDir . "courses/" . $course_code . "/scormPackages/path_".$this->id;
-        $this->srcDirVideo = $webDir . "video/" . $course_code;
+        $this->srcDirDocument = $webDir . "/courses/" . $course_code . "/document";
+        $this->srcDirExercise  = $webDir . "/courses/" . $course_code . "/exercise";
+        $this->srcDirScorm    = $webDir . "/courses/" . $course_code . "/scormPackages/path_".$this->id;
+        $this->srcDirVideo = $webDir . "/video/" . $course_code;
 
         /* Now, get the complete list of modules, etc... */
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`,
@@ -200,7 +188,7 @@ class ScormExport
                 ORDER BY LPM.`parent`, LPM.`rank`
                ';
 
-        $result = db_query($sql, $mysqlMainDb);
+        $result = db_query($sql);
         if ( empty($result) )
         {
             $this->error = $langLearningPathEmpty;
@@ -419,53 +407,48 @@ class ScormExport
                     // get the scorings as a list
                     $fillScoreList = explode(',', $weighting);
                     $fillScoreCounter = 0;
+                     //listbox
+                    if( $fillType == LISTBOX_FILL) {
+                        // get the list of propositions (good and wrong) to display in lists
+                            // add wrongAnswers in the list
+                            $answerList = $wrongAnswers;
+                            // add good answers in the list
 
-                    if( $fillType == LISTBOX_FILL )// listbox
-					{
-			            // get the list of propositions (good and wrong) to display in lists
-						// add wrongAnswers in the list
-						$answerList = $wrongAnswers;
-						// add good answers in the list
-
-						// we save the answer because it will be modified
-						$temp = $phrase;
-						while(1)
-						{
-							// quits the loop if there are no more blanks
-							if(($pos = strpos($temp,'[')) === false)
-							{
-								break;
-							}
-							// removes characters till '['
-							$temp = substr($temp,$pos+1);
-							// quits the loop if there are no more blanks
-							if(($pos = strpos($temp,']')) === false)
-							{
-								break;
-							}
-							// stores the found blank into the array
-							$answerList[] = substr($temp,0,$pos);
-			                // removes the character ']'
-							$temp = substr($temp,$pos+1);
-						}
-						// alphabetical sort of the array
-						natcasesort($answerList);
-					}
+                            // we save the answer because it will be modified
+                            $temp = $phrase;
+                            while(1) {
+                                    // quits the loop if there are no more blanks
+                                    if(($pos = strpos($temp,'[')) === false)
+                                    {
+                                            break;
+                                    }
+                                    // removes characters till '['
+                                    $temp = substr($temp,$pos+1);
+                                    // quits the loop if there are no more blanks
+                                    if(($pos = strpos($temp,']')) === false)
+                                    {
+                                            break;
+                                    }
+                                    // stores the found blank into the array
+                                    $answerList[] = substr($temp,0,$pos);
+                    // removes the character ']'
+                                    $temp = substr($temp,$pos+1);
+                            }
+                            // alphabetical sort of the array
+                            natcasesort($answerList);
+                    }
                     // Split after each blank
                     $responsePart = explode(']', $phrase);
                     $acount = 0;
                     foreach ( $responsePart as $part )
                     {
                         // Split between text and (possible) blank
-                        if( strpos($part,'[') !== false )
-                        {
+                        if( strpos($part,'[') !== false ) {
                         	list($rawtext, $blankText) = explode('[', $part);
-						}
-						else
-						{
-							$rawtext = $part;
-							$blankText = "";
-						}
+                        } else {
+                                $rawtext = $part;
+                                $blankText = "";
+                        }
 
                         $pageBody .= $rawtext;
 
@@ -481,26 +464,22 @@ class ScormExport
                               	$pageBody .= '<select name="' . $name . '" id="scorm_' . $idCounter . '">'."\n"
 								            .'<option value="">&nbsp;</option>';
 
-								foreach($answerList as $answer)
-								{
-									$pageBody .= '<option value="'.htmlspecialchars($answer).'">'.$answer.'</option>'."\n";
-								}
+                                foreach($answerList as $answer)
+                                {
+                                        $pageBody .= '<option value="'.htmlspecialchars($answer).'">'.$answer.'</option>'."\n";
+                                }
 
-								$pageBody .= '</select>'."\n";
-							}
-							else
-							{
-                            	$pageBody .= '<input type="text" name="' . $name . '" size="10" id="scorm_' . $idCounter . '">';
-							}
+                                $pageBody .= '</select>'."\n";
+                                }
+                                else { 
+                                        $pageBody .= '<input type="text" name="' . $name . '" size="10" id="scorm_' . $idCounter . '">';
+                                }
                             $fillScoreCounter++;
                             $idCounter++;
                         }
-
                         $acount++;
                     }
-
                     $pageBody .= '</td></tr>' . "\n";
-
                 }
                 // Matching
                 elseif ( $qtype == MATCHING )
@@ -679,6 +658,7 @@ class ScormExport
         global $clarolineRepositorySys, $claro_stylesheet;
         global $langErrorCopyScormFiles, $langErrorCreatingDirectory, $langErrorCopyingScorm, $langErrorCopyAttachedFile;
         // (re)create fresh directory
+        
         claro_delete_file($this->destDir);
         if (
                !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true)
@@ -694,44 +674,44 @@ class ScormExport
 
         // Copy usual files (.css, .js, .xsd, etc)
         if (
-               !claro_copy_file('export/APIWrapper.js', $this->destDir)
-            || !claro_copy_file('export/XMLSchema.dtd', $this->destDir)
-            || !claro_copy_file('export/adlcp_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/adlnav_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/adlseq_v1p3.xsd', $this->destDir)
-            || !claro_copy_file('export/datatypes.dtd', $this->destDir)
-            || !claro_copy_file('export/ims_xml.xsd', $this->destDir)
-            || !claro_copy_file('export/imscp_v1p1.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0auxresource.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0control.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0delivery.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0limit.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0objective.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0random.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0rollup.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0seqrule.xsd', $this->destDir)
-            || !claro_copy_file('export/imsss_v1p0util.xsd', $this->destDir)
-            || !claro_copy_file('export/lom.xsd', $this->destDir)
-            || !claro_copy_file('export/lomCustom.xsd', $this->destDir)
-            || !claro_copy_file('export/lomLoose.xsd', $this->destDir)
-            || !claro_copy_file('export/lomStrict.xsd', $this->destDir)
-            || !claro_copy_file('export/scores.js', $this->destDir)
-            || !claro_copy_file('export/xml.xsd', $this->destDir)
-            || !claro_copy_file('export/common/anyElement.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/dataTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/elementNames.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/elementTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/rootElement.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/vocabTypes.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/common/vocabValues.xsd', $this->destDir."/common")
-            || !claro_copy_file('export/extend/custom.xsd', $this->destDir."/extend")
-            || !claro_copy_file('export/extend/strict.xsd', $this->destDir."/extend")
-            || !claro_copy_file('export/unique/loose.xsd', $this->destDir."/unique")
-            || !claro_copy_file('export/unique/strict.xsd', $this->destDir."/unique")
-            || !claro_copy_file('export/vocab/custom.xsd', $this->destDir."/vocab")
-            || !claro_copy_file('export/vocab/loose.xsd', $this->destDir."/vocab")
-            || !claro_copy_file('export/vocab/strict.xsd', $this->destDir."/vocab")
+               !claro_copy_file('modules/learnPath/export/APIWrapper.js', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/XMLSchema.dtd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/adlcp_v1p3.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/adlnav_v1p3.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/adlseq_v1p3.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/datatypes.dtd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/ims_xml.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imscp_v1p1.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0auxresource.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0control.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0delivery.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0limit.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0objective.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0random.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0rollup.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0seqrule.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/imsss_v1p0util.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/lom.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/lomCustom.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/lomLoose.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/lomStrict.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/scores.js', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/xml.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export/common/anyElement.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/dataTypes.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/elementNames.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/elementTypes.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/rootElement.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/vocabTypes.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/common/vocabValues.xsd', $this->destDir."/common")
+            || !claro_copy_file('modules/learnPath/export/extend/custom.xsd', $this->destDir."/extend")
+            || !claro_copy_file('modules/learnPath/export/extend/strict.xsd', $this->destDir."/extend")
+            || !claro_copy_file('modules/learnPath/export/unique/loose.xsd', $this->destDir."/unique")
+            || !claro_copy_file('modules/learnPath/export/unique/strict.xsd', $this->destDir."/unique")
+            || !claro_copy_file('modules/learnPath/export/vocab/custom.xsd', $this->destDir."/vocab")
+            || !claro_copy_file('modules/learnPath/export/vocab/loose.xsd', $this->destDir."/vocab")
+            || !claro_copy_file('modules/learnPath/export/vocab/strict.xsd', $this->destDir."/vocab")
             )
         {
             $this->error[] = $langErrorCopyScormFiles;

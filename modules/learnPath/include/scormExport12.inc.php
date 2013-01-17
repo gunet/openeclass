@@ -62,31 +62,18 @@
 
 if(!class_exists('ScormExport')):
 
-require_once '../../include/lib/fileManageLib.inc.php';
-require_once("../../include/lib/fileUploadLib.inc.php");
-require_once("../../include/pclzip/pclzip.lib.php");
-require_once('../../include/lib/textLib.inc.php');
-
+require_once 'include/pclzip/pclzip.lib.php';
+require_once 'include/lib/textLib.inc.php';
 
 $TBL_EXERCISE           = 'exercise';
 $TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
 $TBL_QUESTION           = 'exercise_question';
 $TBL_ANSWER             = 'exercise_answer';
 
-require_once('../exercise/exercise.class.php');
-require_once('../exercise/question.class.php');
-require_once('../exercise/answer.class.php');
-require_once('../exercise/exercise.lib.php');
-
-define('UNIQUE_ANSWER',   1);
-define('MULTIPLE_ANSWER', 2);
-define('FILL_IN_BLANKS',  3);
-define('MATCHING',        4);
-define('TRUEFALSE',       5);
-
-// for fill in blanks questions
-define('TEXTFIELD_FILL', 1);
-define('LISTBOX_FILL',	2);
+require_once 'modules/exercise/exercise.class.php';
+require_once 'modules/exercise/question.class.php';
+require_once 'modules/exercise/answer.class.php';
+require_once 'modules/exercise/exercise.lib.php';
 
 /**
  * Exports a Learning Path to a SCORM package.
@@ -181,12 +168,12 @@ class ScormExport
         /* Build various directories' names */
 
         // Replace ',' too, because pclzip doesn't support it.
-        $this->destDir = $webDir . "courses/" . $course_code . '/temp/'
+        $this->destDir = $webDir . "/courses/" . $course_code . '/temp/'
             . str_replace(',', '_', replace_dangerous_char($this->name));
-        $this->srcDirDocument = $webDir . "courses/" . $course_code . "/document";
-        $this->srcDirExercise  = $webDir . "courses/" . $course_code . "/exercise";
-        $this->srcDirScorm    = $webDir . "courses/" . $course_code . "/scormPackages/path_".$this->id;
-        $this->srcDirVideo = $webDir . "video/" . $course_code;
+        $this->srcDirDocument = $webDir . "/courses/" . $course_code . "/document";
+        $this->srcDirExercise  = $webDir . "/courses/" . $course_code . "/exercise";
+        $this->srcDirScorm    = $webDir . "/courses/" . $course_code . "/scormPackages/path_".$this->id;
+        $this->srcDirVideo = $webDir . "/video/" . $course_code;
 
         /* Now, get the complete list of modules, etc... */
         $sql = 'SELECT  LPM.`learnPath_module_id` ID, LPM.`lock`, LPM.`visible`, LPM.`rank`,
@@ -482,26 +469,21 @@ class ScormExport
                               	$pageBody .= '<select name="' . $name . '" id="scorm_' . $idCounter . '">'."\n"
 								            .'<option value="">&nbsp;</option>';
 
-								foreach($answerList as $answer)
-								{
-									$pageBody .= '<option value="'.htmlspecialchars($answer).'">'.$answer.'</option>'."\n";
-								}
+                                foreach($answerList as $answer)
+                                {
+                                        $pageBody .= '<option value="'.htmlspecialchars($answer).'">'.$answer.'</option>'."\n";
+                                }
 
-								$pageBody .= '</select>'."\n";
-							}
-							else
-							{
-                            	$pageBody .= '<input type="text" name="' . $name . '" size="10" id="scorm_' . $idCounter . '">';
-							}
+                                $pageBody .= '</select>'."\n";
+                             } else {
+                                        $pageBody .= '<input type="text" name="' . $name . '" size="10" id="scorm_' . $idCounter . '">';
+                                }
                             $fillScoreCounter++;
                             $idCounter++;
                         }
-
                         $acount++;
                     }
-
                     $pageBody .= '</td></tr>' . "\n";
-
                 }
                 // Matching
                 elseif ( $qtype == MATCHING )
@@ -683,6 +665,7 @@ class ScormExport
     {
         global $clarolineRepositorySys, $claro_stylesheet;
         global $langErrorCopyScormFiles, $langErrorCreatingDirectory, $langErrorCopyingScorm, $langErrorCopyAttachedFile;
+        
         // (re)create fresh directory
         claro_delete_file($this->destDir);
         if ( !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS , true))
@@ -690,15 +673,14 @@ class ScormExport
             $this->error[] = $langErrorCreatingDirectory . $this->destDir;
             return false;
         }
-
         // Copy usual files (.css, .js, .xsd, etc)
         if (
-               !claro_copy_file('export12/APIWrapper.js', $this->destDir)
-            || !claro_copy_file('export12/scores.js', $this->destDir)
-            || !claro_copy_file('export12/ims_xml.xsd', $this->destDir)
-            || !claro_copy_file('export12/imscp_rootv1p1p2.xsd', $this->destDir)
-            || !claro_copy_file('export12/imsmd_rootv1p2p1.xsd', $this->destDir)
-            || !claro_copy_file('export12/adlcp_rootv1p2.xsd', $this->destDir)  )
+               !claro_copy_file('modules/learnPath/export12/APIWrapper.js', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export12/scores.js', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export12/ims_xml.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export12/imscp_rootv1p1p2.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export12/imsmd_rootv1p2p1.xsd', $this->destDir)
+            || !claro_copy_file('modules/learnPath/export12/adlcp_rootv1p2.xsd', $this->destDir)  )
         {
             $this->error[] = $langErrorCopyScormFiles;
             return false;

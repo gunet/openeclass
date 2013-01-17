@@ -187,6 +187,8 @@ class Log {
                                 break;
                         case MODULE_ID_GLOSSARY: $content = $this->glossary_action_details($details);
                                 break;
+                        case MODULE_ID_LP: $content = $this->lp_action_details($details);
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
                         }
@@ -494,6 +496,20 @@ class Log {
                 if (!empty($details['notes'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langCategoryNotes &laquo".$details['notes']."&raquo";
                 }                
+                
+                return $content;
+        }
+        
+        private function lp_action_details($details) {
+                
+                global $langLearnPath, $langComments;
+                
+                $details = unserialize($details);
+                
+                $content = "$langLearnPath &laquo".$details['name']."&raquo";
+                if (!empty($details['comment'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo".ellipsize($details['comment'], 100)."&raquo";
+                }
                 
                 return $content;
         }
