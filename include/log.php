@@ -189,6 +189,8 @@ class Log {
                                 break;
                         case MODULE_ID_LP: $content = $this->lp_action_details($details);
                                 break;
+                        case MODULE_ID_EXERCISE: $content = $this->exercise_action_details($details);
+                                break;
                         default: $content = $langUnknownModule;
                                 break;
                         }
@@ -467,7 +469,13 @@ class Log {
                 return $content;
                 
         }
-        
+        /**
+         * display action details in course description
+         * @global type $langTitle
+         * @global type $langContent
+         * @param type $details
+         * @return string
+         */
         private function description_action_details($details) {
                 
                 global $langTitle, $langContent;
@@ -480,6 +488,15 @@ class Log {
                 return $content;
         }
         
+        /** 
+         * display action details in glossary
+         * @global type $langGlossaryTerm
+         * @global type $langGlossaryDefinition
+         * @global type $langGlossaryURL
+         * @global type $langCategoryNotes
+         * @param type $details
+         * @return string
+         */
         private function glossary_action_details($details) {
                 
                 global $langGlossaryTerm, $langGlossaryDefinition, $langGlossaryURL, $langCategoryNotes;
@@ -500,6 +517,13 @@ class Log {
                 return $content;
         }
         
+        /**
+         * display action details in learning path
+         * @global type $langLearnPath
+         * @global type $langComments
+         * @param type $details
+         * @return string
+         */
         private function lp_action_details($details) {
                 
                 global $langLearnPath, $langComments;
@@ -512,6 +536,20 @@ class Log {
                 }
                 
                 return $content;
+        }
+        
+        private function exercise_action_details($details) {
+                
+                global $langTitle, $langDescription;
+                        
+                $details = unserialize($details);
+                
+                $content = "$langTitle &laquo".$details['title']."&raquo";
+                if (!empty($details['description'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".ellipsize($details['description'], 100)."&raquo";
+                }
+                
+                return $content;                
         }
        
         /**         

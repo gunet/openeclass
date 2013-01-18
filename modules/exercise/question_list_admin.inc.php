@@ -17,13 +17,10 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
- // $Id$
 /**
- * This script allows to manage the question list
- * It is included from the script admin.php
+ * @file question_list_admin.inc.php
  */
+
 
 // moves a question up in the list
 if(isset($_GET['moveUp'])) {

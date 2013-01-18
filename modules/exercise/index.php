@@ -17,12 +17,20 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+/**
+ * @file index.php
+ * @brief main exercise module script
+ */
+
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'exercise_question';
+
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 
-
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
 $require_current_course = TRUE;
 
 $require_help = TRUE;
@@ -49,9 +57,6 @@ if (isset($_SESSION['objAnswer']))      { unset($_SESSION['objAnswer']); }
 if (isset($_SESSION['questionList']))   { unset($_SESSION['questionList']); }
 if (isset($_SESSION['exerciseResult'])) { unset($_SESSION['exerciseResult']); }
 
-$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE = 'exercise';
-$TBL_QUESTION = 'exercise_question';
 
 // maximum number of exercises on a same page
 $limitExPage = 15;
@@ -65,18 +70,8 @@ $from = $page * $limitExPage;
 
 // only for administrator
 if($is_editor) {
-	// delete confirmation
-	$head_content .= '
-	<script type="text/javascript">
-	function confirmation ()
-	{
-	    if (confirm("'.$langConfirmDelete.'"))
-		{return true;}
-	    else
-		{return false;}
-	}
-	</script>';
-
+        load_js('tools.js');
+        
 	if (isset($_GET['exerciseId'])) {
 		$exerciseId = $_GET['exerciseId'];
 	}
@@ -104,28 +99,25 @@ if($is_editor) {
 		unset($objExerciseTmp);
 	}
 	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id LIMIT $from, $limitExPage";
-	$result = db_query($sql, $mysqlMainDb);
+	$result = db_query($sql);
 	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id");
 } else {
     // only for students
 	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
 		"FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
-	$result = db_query($sql, $mysqlMainDb);
-	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = 1", $mysqlMainDb);
+	$result = db_query($sql);
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = 1");
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
 $nbrExercises = mysql_num_rows($result);
 
 if($is_editor) {
-	$tool_content .= "
-    <div align=\"left\" id=\"operations_container\">
-      <ul id=\"opslist\">
+	$tool_content .= "<div align='left' id='operations_container'>
+        <ul id='opslist'>
 	<li><a href='admin.php?course=$course_code&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
 			&nbsp;<a href='question_pool.php?course=$course_code'>$langQuestionPool</a></li>";
-	$tool_content .= "
-      </ul>
-    </div>";
+	$tool_content .= "</ul></div>";
 } else  {
 	$tool_content .= "";
 }
@@ -145,9 +137,7 @@ if(!$nbrExercises) {
 		}
 	}
 
-	$tool_content .= "
-	    <table width='100%' class='tbl_alt'>
-	    <tr>";
+	$tool_content .= "<table width='100%' class='tbl_alt'><tr>";
 
 	// shows the title bar only for the administrator
 	if($is_editor) {
@@ -214,9 +204,10 @@ if(!$nbrExercises) {
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$course_code&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
+                                  <a href='admin.php?course=$course_code&amp;exerciseId=$row[id]'>
+                                  <img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
 			  </a>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'>
+				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick=\"return confirmation('$langConfirmDelete');\">
 			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
 			  </a>";
 

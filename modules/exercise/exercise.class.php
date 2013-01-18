@@ -18,6 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once '../../include/log.php';
 
 if(!class_exists('Exercise')):
 /*>>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<<*/
@@ -73,12 +74,11 @@ class Exercise
 	 */
 	function read($id)
 	{
-		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $mysqlMainDb, $course_id;
-
-		mysql_select_db($mysqlMainDb);
+		global $TBL_EXERCISE, $TBL_EXERCISE_QUESTION, $TBL_QUESTION, $course_id;
+		
 		$sql = "SELECT title, description, type, start_date, end_date, time_constraint,
 			attempts_allowed, random, active, results, score
-			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
+			FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = $id";
 		$result = db_query($sql);
 		// if the exercise has been found
 		if($object = mysql_fetch_object($result))
@@ -97,7 +97,7 @@ class Exercise
 			$this->score           = $object->score;
 
 			$sql = "SELECT question_id, q_position FROM `$TBL_EXERCISE_QUESTION`, `$TBL_QUESTION`
-				WHERE course_id = $course_id AND question_id = id AND exercise_id = '$id' ORDER BY q_position";
+				WHERE course_id = $course_id AND question_id = id AND exercise_id = $id ORDER BY q_position";
 			$result = db_query($sql);
 
 			// fills the array with the question ID for this exercise
@@ -250,12 +250,12 @@ class Exercise
 	}
 
 	/**
-     * selects questions randomly in the question list
+        * selects questions randomly in the question list
 	 *
 	 * @author - Olivier Brouckaert
 	 * @return - array - if the exercise is not set to take questions randomly, returns the question list
 	 *					 without randomizing, otherwise, returns the list with questions selected randomly
-     */
+         */
 	function selectRandomList()
 	{
 		// if the exercise is not a random exercise, or if there are not at least 2 questions
@@ -417,8 +417,8 @@ class Exercise
 		global $TBL_EXERCISE, $TBL_QUESTION, $course_id;
 
 		$id              = $this->id;
-		$exercise        = addslashes($this->exercise);
-		$description     = autoquote(standard_text_escape($this->description));
+		$exercise        = $this->exercise;
+		$description     = standard_text_escape($this->description);
 		$type            = $this->type;
 		$startDate       = $this->startDate;
 		$endDate         = $this->endDate;
@@ -430,51 +430,41 @@ class Exercise
 		$score           = $this->score;
 		
 		// exercise already exists
-		if($id) {
+		if ($id) {
 			$sql = "UPDATE `$TBL_EXERCISE`
-				SET title = '$exercise', description = '$description', type = '$type',".
+				SET title = ".quote($exercise).", description = ".quote($description).", type = '$type',".
 				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
 				"attempts_allowed = '$attemptsAllowed', random = '$random',
-				active = '$active', results = '$results', score = '$score' WHERE course_id = $course_id AND id = '$id'";
-			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
+				active = '$active', results = '$results', score = '$score' 
+                                WHERE course_id = $course_id AND id = $id";
+			db_query($sql);
+                        
+                        Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
+                                                                                      'title' => $exercise,
+                                                                                      'description' => $description));
 		}
 		// creates a new exercise
 		else {
-			$sql="INSERT INTO `$TBL_EXERCISE`
-				VALUES (NULL, $course_id, '$exercise', '$description', $type, '$startDate', '$endDate',
+			$sql="INSERT INTO `$TBL_EXERCISE` (course_id, title, description, `type`, start_date, 
+                                        end_date, time_constraint, attempts_allowed, random, active, results, score) 
+				VALUES ($course_id, ".quote($exercise).", ".quote($description).", $type, '$startDate', '$endDate',
 					$timeConstraint, $attemptsAllowed, $random, $active, $results, $score)";
 			db_query($sql);
 			$this->id = mysql_insert_id();
+                        
+                        Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
+                                                                                       'title' => $exercise,
+                                                                                       'description' => $description));
 		}
 		// updates the question position
 		foreach($this->questionList as $position => $questionId)
 		{
-			$sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' WHERE course_id = $course_id AND id='$questionId'";
+			$sql = "UPDATE `$TBL_QUESTION` SET q_position = '$position' 
+                                WHERE course_id = $course_id AND id='$questionId'";
 			db_query($sql);
 		}
 	}
-
-	/**
-	* check if data are valide
-	*
-	* @author Sebastien Piraux <pir@cerdecam.be>
-	* @return boolean
-	*/
-	function validate() {
-
-	   $title = strip_tags($this->exercise);
-	   if(empty($title)) {
-	       $tool_content .= $langExerciseNoTitle;
-	       return false;
-	   } /*else {
-	       if(!is_null($this->endDate) && $this->endDate <= $this->startDate) {
-			$tool_content .= $langExerciseWrongDates;
-			return false;
-	       }
-	   }*/
-	return true;
-	}
-
+	
 	/**
 	 * moves a question up in the list
 	 *
@@ -483,10 +473,10 @@ class Exercise
 	 */
 	function moveUp($id)
 	{
-		global $TBL_QUESTION, $mysqlMainDb, $course_id;
+		global $TBL_QUESTION, $course_id;
 
 		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
+							WHERE course_id = $course_id AND id = '$id'"));
 
 		if ($pos > 1) {
 			$temp = $this->questionList[$pos-1];
@@ -504,10 +494,10 @@ class Exercise
 	 */
 	function moveDown($id)
 	{
-		global $TBL_QUESTION, $mysqlMainDb, $course_id;
+		global $TBL_QUESTION, $course_id;
 
 		list($pos) = mysql_fetch_array(db_query("SELECT q_position FROM `$TBL_QUESTION`
-							WHERE course_id = $course_id AND id = '$id'", $mysqlMainDb));
+							WHERE course_id = $course_id AND id = '$id'"));
 
 		if ($pos < count($this->questionList)) {
 			$temp = $this->questionList[$pos+1];
@@ -584,12 +574,16 @@ class Exercise
 		global $TBL_EXERCISE_QUESTION, $TBL_EXERCISE, $course_id;
 
 		$id = $this->id;
-
+                                
 		$sql = "DELETE FROM `$TBL_EXERCISE_QUESTION` WHERE exercise_id = '$id'";
-		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+                db_query($sql);
+                
+                $title = db_query_get_single_value("SELECT title FROM `$TBL_EXERCISE` 
+                                                WHERE course_id = $course_id AND id = '$id'");
 
 		$sql = "DELETE FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND id = '$id'";
-		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
+                db_query($sql);
+                Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
 	}
 }
 

@@ -18,6 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file exercise_admin.inc.php
+ * @brief Create new exercise or modify an existing one
+ */
 
 // the exercise form has been submitted
 if(isset($_POST['submitExercise'])) {
@@ -30,7 +34,7 @@ if(isset($_POST['submitExercise'])) {
 	{
 		$msgErr = $langGiveExerciseName;
 	} else {
-		if ((!is_numeric($exerciseTimeConstraint))||(!is_numeric($exerciseAttemptsAllowed))) {
+		if ((!is_numeric($exerciseTimeConstraint)) or (!is_numeric($exerciseAttemptsAllowed))) {
 			$msgErr = $langGiveExerciseInts;
 		} else {
 			$objExercise->updateTitle($exerciseTitle);
@@ -44,7 +48,7 @@ if(isset($_POST['submitExercise'])) {
 			$objExercise->updateResults($dispresults);
 			$objExercise->updateScore($dispscore);
 			$objExercise->save();
-			// reads the exercise ID (only usefull for a new exercise)
+			// reads the exercise ID (only useful for a new exercise)
 			$exerciseId = $objExercise->selectId();
 			unset($_GET['modifyExercise']);
 		}
@@ -65,17 +69,13 @@ else
 }
 
 // shows the form to modify the exercise
-if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POST['submitExercise'])) {
-	//@$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyExercise=$exerciseId'>
+if(isset($_GET['modifyExercise']) or isset($_GET['NewExercise']) or !isset($_POST['submitExercise'])) {	
 	@$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modifyExercise=$_GET[modifyExercise]'>
 	<fieldset>
         <legend>$langInfoExercise </legend>
 	<table width='99%' class='tbl'>";
 	if(!empty($msgErr)) {
-		$tool_content .= "
-		<tr>
-		  <td colspan='2'><p class='caution'>$msgErr</td>
-		</tr>";
+		$tool_content .= "<tr><td colspan='2'><p class='caution'>$msgErr</td></tr>";
 	}
 	$tool_content .= "
         <tr>
