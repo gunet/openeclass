@@ -24,7 +24,6 @@
 // duration, nom, prenom, user_id, am
 function user_duration_query($course_code, $course_id, $start = false, $end = false, $group = false)
 {
-        global $course_id;
 
         if ($start !== false AND $end !== false) {
                 $date_where = 'WHERE c.day BETWEEN ' .
