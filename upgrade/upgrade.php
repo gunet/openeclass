@@ -579,7 +579,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `day` date NOT NULL,
                         `last_update` DATETIME NOT NULL,
                         PRIMARY KEY (`id`),
-                        KEY `actionsdailyindex` (`module_id`, `day`) )");
+                        KEY `actionsdailyindex` (`module_id`, `day`),
+                        KEY `actionsdailyuserindex` (`user_id`) )");
                 
                 db_query("CREATE VIEW `actions_daily_tmpview` AS
                         SELECT
