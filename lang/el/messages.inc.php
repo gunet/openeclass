@@ -2758,6 +2758,7 @@ $langEncryptPass = "Κωδικοποίηση των συνθηματικών τ�
 $langNotEncrypted = "ΠΡΟΣΟΧΗ! Η διαδικασία αναβάθμισης δεν μπόρεσε να κρυπτογραφήσει τα password και η πλατφόρμα δεν μπορεί να λειτουργήσει. Αφαιρέστε τη γραμμή «\$encryptedPasswd = true;» από το αρχείο ρυθμίσεων config.php";
 $langUpgradeStart = 'Έναρξη αναβάθμισης Open eClass';
 $langUpgradeConfig = 'Αναβάθμιση αρχείου ρυθμίσεων (config.php)';
+$langUpgradeCourseDone = "Ολοκληρώθηκε!";
 
 /*******************************************************************
 * course_tools.php

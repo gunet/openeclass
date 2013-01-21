@@ -331,11 +331,11 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 {
         global $langUpgCourse, $mysqlMainDb, $webDir;
 
+        echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
+
         $course_id = course_code_to_id($code);
         mysql_select_db($code);
-        echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
         flush();
-
 
         // move forum tables to central db
         if (mysql_table_exists($code, 'forums')) {
@@ -1061,8 +1061,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 
 
         if ($q1 and $q2) { // if everything ok drop course db
-                echo "Done...";
-                //db_query("DROP DATABASE $code");
+		echo $langUpgradeCourseDone;
+                db_query("DROP DATABASE $code");
         }
 }
 

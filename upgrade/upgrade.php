@@ -690,8 +690,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `poster_id` INT(10) NOT NULL DEFAULT 0,
                         `post_time` DATETIME,
                         `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,
-                        `parent_post_id` INT(10) NOT NULL DEFAULT 0
-                        FULLTEXT KEY `posts_text` (`post_text`)) $charset_spec");
+                        `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
 
                 db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
                         `id` int(10) NOT NULL auto_increment,
