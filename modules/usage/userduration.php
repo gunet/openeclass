@@ -99,7 +99,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
         </tr>\n";
 }
 
-$result = user_duration_query($course_code, $course_id);
+$result = user_duration_query($course_id);
 if ($result) {
         $i = 0;
         while ($row = mysql_fetch_assoc($result)) {

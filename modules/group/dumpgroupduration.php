@@ -64,7 +64,7 @@ if($is_editor) {
 	     $crlf;
 	$totalDuration = 0;
 
-	$result = user_duration_query($course_code, $course_id, $u_date_start, $u_date_end, $group_id);
+	$result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 
 	while ($row = mysql_fetch_assoc($result)) {
                 echo csv_escape($row['nom']) . ";" .

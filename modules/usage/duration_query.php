@@ -22,20 +22,19 @@
 // Do the queries to calculate usage between timestamps $start and $end
 // Returns a MySQL resource, where fetching rows results in:
 // duration, nom, prenom, user_id, am
-function user_duration_query($course_code, $course_id, $start = false, $end = false, $group = false)
+function user_duration_query($course_id, $start = false, $end = false, $group = false)
 {
 
         if ($start !== false AND $end !== false) {
-                $date_where = 'WHERE c.day BETWEEN ' .
+                $date_where = 'AND actions_daily.day BETWEEN ' .
                               quote($start . ' 00:00:00') . ' AND ' .
-                              quote($end . ' 23:59:59') . '
-                              AND course_id = ' . $course_id;
+                              quote($end . ' 23:59:59');
         } elseif ($start !== false) {
-                $date_where = 'WHERE c.date_time > ' . quote($start . ' 00:00:00') . 'AND course_id = ' . $course_id;
+                $date_where = 'AND actions_daily.day > ' . quote($start . ' 00:00:00');
         } elseif ($end !== false) {
-                $date_where = 'WHERE c.date_time < ' . quote($end . ' 23:59:59') . 'AND course_id = ' . $course_id;
+                $date_where = 'AND actions_daily.day < ' . quote($end . ' 23:59:59');
         } else {
-                $date_where = 'WHERE course_id = ' . $course_id;
+                $date_where = '';
         }
 
         if ($group !== false) {
@@ -80,10 +79,10 @@ function user_duration_query($course_code, $course_id, $start = false, $end = fa
                                    user.user_id AS user_id,
                                    user.am AS am
                             FROM $from
-                                      LEFT JOIN course_user ON user.user_id = course_user.user_id
-                                      LEFT JOIN actions_daily ON user.user_id = actions_daily.user_id
-                            WHERE (course_user.course_id = $course_id  $or )
-                                  $and
+                            LEFT JOIN actions_daily ON user.user_id = actions_daily.user_id
+                            WHERE (actions_daily.course_id = $course_id  $or )
+                            $and
+                            $date_where
                             GROUP BY user_id
                             ORDER BY nom, prenom");
 }

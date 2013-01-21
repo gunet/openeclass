@@ -154,7 +154,7 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 
 $i = 0;
 if ($type == 'duration') {
-        $result = user_duration_query($course_code, $course_id, $u_date_start, $u_date_end, $group_id);
+        $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 } else {
         $result = db_query("SELECT user_id FROM group_members WHERE group_id = $group_id", $mysqlMainDb);
 }
