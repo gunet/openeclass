@@ -569,41 +569,6 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
                                         ('actions_expire_interval', 12)");
             
-                db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
-                        `id` int(11) NOT NULL auto_increment,
-                        `user_id` int(11) NOT NULL,
-                        `module_id` int(11) NOT NULL,
-                        `course_id` int(11) NOT NULL,
-                        `hits` int(11) NOT NULL,
-                        `duration` int(11) NOT NULL,
-                        `day` date NOT NULL,
-                        `last_update` DATETIME NOT NULL,
-                        PRIMARY KEY (`id`),
-                        KEY `actionsdailyindex` (`module_id`, `day`),
-                        KEY `actionsdailyuserindex` (`user_id`) )");
-                
-                db_query("CREATE VIEW `actions_daily_tmpview` AS
-                        SELECT
-                        `user_id`,
-                        `module_id`,
-                        `course_id`,
-                        COUNT(`id`) AS `hits`,
-                        SUM(`duration`) AS `duration`,
-                        DATE(`date_time`) AS `day`
-                        FROM `actions`
-                        GROUP BY DATE(`date_time`), `user_id`, `module_id`, `course_id`");
-                
-                $result = db_query("SELECT * FROM `actions_daily_tmpview`");
-                while ($row = mysql_fetch_assoc($result)) {
-                    db_query("INSERT INTO `actions_daily` 
-                                (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
-                                VALUES 
-                                (NULL, ". $row['user_id'] .", ". $row['module_id'] .", ". $row['course_id'] .", ". $row['hits'] .", ". $row['duration'] .", '". $row['day'] ."', NOW())");
-                }
-                
-                db_query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
-                db_query("DROP TABLE IF EXISTS `actions`");
-
                 db_query("DROP TABLE IF EXISTS passwd_reset");
 
                 db_query("CREATE TABLE IF NOT EXISTS `log` (
@@ -1355,6 +1320,44 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
         if ($oldversion < '2.1.3') {
 	        echo "<p>$langChangeDBCharset <b>$mysqlMainDb</b> $langToUTF</p><br>";
                 convert_db_utf8($mysqlMainDb);
+        }
+        
+        if ($oldversion < '3.0') { // special procedure, must execute after course upgrades
+            mysql_select_db($mysqlMainDb);
+            db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
+                        `id` int(11) NOT NULL auto_increment,
+                        `user_id` int(11) NOT NULL,
+                        `module_id` int(11) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                        `hits` int(11) NOT NULL,
+                        `duration` int(11) NOT NULL,
+                        `day` date NOT NULL,
+                        `last_update` DATETIME NOT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `actionsdailyindex` (`module_id`, `day`),
+                        KEY `actionsdailyuserindex` (`user_id`) )");
+                
+            db_query("CREATE VIEW `actions_daily_tmpview` AS
+                        SELECT
+                        `user_id`,
+                        `module_id`,
+                        `course_id`,
+                        COUNT(`id`) AS `hits`,
+                        SUM(`duration`) AS `duration`,
+                        DATE(`date_time`) AS `day`
+                        FROM `actions`
+                        GROUP BY DATE(`date_time`), `user_id`, `module_id`, `course_id`");
+                
+            $result = db_query("SELECT * FROM `actions_daily_tmpview`");
+            while ($row = mysql_fetch_assoc($result)) {
+                db_query("INSERT INTO `actions_daily` 
+                            (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
+                            VALUES 
+                            (NULL, ". $row['user_id'] .", ". $row['module_id'] .", ". $row['course_id'] .", ". $row['hits'] .", ". $row['duration'] .", '". $row['day'] ."', NOW())");
+            }
+
+            db_query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
+            db_query("DROP TABLE IF EXISTS `actions`");
         }
 
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
