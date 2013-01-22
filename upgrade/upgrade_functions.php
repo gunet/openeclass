@@ -1043,13 +1043,13 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
     // -------------------------------------------------------
 
     // external links are moved to table `links` with category = -1
-        $q1 = db_query("INSERT INTO `$mysqlMainDb`.link
+        $q1 = db_query("INSERT IGNORE INTO `$mysqlMainDb`.link
                                (course_id, url, title, category, description)
                                SELECT $course_id, lien, rubrique, -1, '' FROM accueil
                                       WHERE define_var = 'HTML_PAGE' OR
                                             image = 'external_link'", $code);
 
-        $q2 = db_query("INSERT INTO `$mysqlMainDb`.course_module
+        $q2 = db_query("INSERT IGNORE INTO `$mysqlMainDb`.course_module
                         (module_id, visible, course_id)
                 SELECT id, visible, $course_id FROM accueil
                 WHERE define_var NOT IN ('MODULE_ID_TOOLADMIN',
