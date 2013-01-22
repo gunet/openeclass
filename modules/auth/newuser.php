@@ -302,7 +302,7 @@ if (!isset($_POST['submit'])) {
                         '&amp;uname=' . urlencode($uname) .
                         '&amp;email=' . urlencode($email) .
                         '&amp;am=' . urlencode($am) .
-                        '&amp;phone=' . urlencode($phone) .
+                        (isset($phone)? ('&amp;phone=' . urlencode($phone)): '') .
                         "'>$langAgain</a></p>";		
 	}
 } // end of registration
