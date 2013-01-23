@@ -1310,7 +1310,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 			upgrade_course_2_5($code, $lang, "($i / $total)");
                 }
                 if ($oldversion < '3.0') {
-                    upgrade_course_3_0($code, $lang, "($i / $total)");
+                    upgrade_course_3_0($code, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

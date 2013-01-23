@@ -321,15 +321,15 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
-        upgrade_course_3_0($code, $lang);
+        upgrade_course_3_0($code);
 }
 
 // ----------------------------------
 // Upgrade queries for 3.0
 // ----------------------------------
-function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = false)
+function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
 {
-        global $langUpgCourse, $mysqlMainDb, $webDir;
+        global $langUpgCourse, $mysqlMainDb, $webDir, $langUpgradeCourseDone;
 
         echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
 

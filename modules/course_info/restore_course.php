@@ -160,7 +160,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
                 if ($eclass_version < '3.0') {
-                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = upgrade_course_3_0($new_course_code, $course_lang, null, true);
+                    list($video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = upgrade_course_3_0($new_course_code, null, true);
                 }
 	}
         convert_description_to_units($new_course_code, $course_id);
