@@ -1062,7 +1062,8 @@ function upgrade_course_3_0($code, $lang, $extramessage = '', $return_mapping = 
 
         if ($q1 and $q2) { // if everything ok drop course db
 		echo $langUpgradeCourseDone;
-                db_query("DROP DATABASE $code");
+                // Do not drop database yet so we can run upgrade many times
+                //db_query("DROP DATABASE $code");
         }
 }
 
