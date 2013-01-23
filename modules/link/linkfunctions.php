@@ -80,7 +80,7 @@ function showlinksofcategory($catid)
 
                 if ($is_editor && !$is_in_tinymce) {
                         $tool_content .=  "<td width='45' valign='top' align='right'>";
-                        $editlink = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview";
+                        $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow[0]&amp;urlview=$urlview";
                         if (isset($category)) {
                                 $editlink .= "&amp;category=$category";
                         }
@@ -88,18 +88,18 @@ function showlinksofcategory($catid)
                         $tool_content .= icon('edit', $langModify, $editlink) .
                                 "&nbsp;&nbsp;" .
                                 icon('delete', $langDelete,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview",
+                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow[0]&amp;urlview=$urlview",
                                         "onclick=\"javascript:if(!confirm('".$langLinkDelconfirm."')) return false;\"") .
                                         "</td><td width='35' valign='top' align='right'>";
                         // Display move up command only if it is not the top link
                         if ($i != 1) {
                                 $tool_content .= icon('up', $langUp,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;up=$myrow[id]");
+                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow[id]");
                         }
                         // Display move down command only if it is not the bottom link
                         if ($i < $numberoflinks) {
                                 $tool_content .= icon('down', $langDown,
-                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;down=$myrow[id]");
+                                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow[id]");
                         }
                         $tool_content .= "</td>";
                 }
@@ -114,7 +114,7 @@ function showcategoryadmintools($categoryid)
                $langModify, $langUp, $langDown, $langCatDel, $tool_content,
                $course_code, $themeimg;
 
-        $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$categoryid&amp;urlview=$urlview&amp;";
+        $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
         $tool_content .=  "<th width='45' valign='top' class='right'>" .
                           icon('edit', $langModify, $basecaturl . 'action=editcategory') .
                           '&nbsp;&nbsp;' .
@@ -125,31 +125,17 @@ function showcategoryadmintools($categoryid)
 	// Display move up command only if it is not the top link
 	if ($catcounter != 1) {
                 $tool_content .= icon('up', $langUp,
-                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cup=$categoryid");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid");
         }
 	// Display move down command only if it is not the bottom link
 	if ($catcounter < $aantalcategories) {
                 $tool_content .= icon('down', $langDown,
-                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;urlview=$urlview&amp;cdown=$categoryid");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid");
 	}
         $tool_content .= "</th>";
 	$catcounter++;
 }
 
-function link_form_defaults($id)
-{
-	global $course_id, $form_url, $form_title, $form_description, $category;
-
-        $result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND id = $id");
-        if ($myrow = mysql_fetch_array($result)) {
-                $form_url = ' value="' . q($myrow['url']) . '"';
-                $form_title = ' value="' . q($myrow['title']) . '"';
-                $form_description = q(purify($myrow['description']));
-                $category = $myrow['category'];
-        } else {
-                $form_url = $form_title = $form_description = '';
-        }
-}
 
 // Enter the modified info submitted from the link form into the database
 function submit_link()
@@ -207,6 +193,21 @@ function category_form_defaults($id)
                 $form_description = q($myrow['description']);
         } else {
                 $form_name = $form_description = '';
+        }
+}
+
+function link_form_defaults($id)
+{
+	global $cours_id, $form_url, $form_title, $form_description, $category;
+
+        $result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND id = $id");
+        if ($myrow = mysql_fetch_array($result)) {
+                $form_url = ' value="' . q($myrow['url']) . '"';
+                $form_title = ' value="' . q($myrow['title']) . '"';
+                $form_description = purify(trim($myrow['description']));
+                $category = $myrow['category'];
+        } else {
+                $form_url = $form_title = $form_description = '';
         }
 }
 
