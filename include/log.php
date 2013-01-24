@@ -105,11 +105,7 @@ class Log {
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");
-                /*echo "<br />SELECT user_id, course_id, module_id, details, action_type, ts FROM log
-                                WHERE ts BETWEEN '$date_from' AND '$date_now'
-                                $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC<br />";*/
+                                ORDER BY ts DESC");                
 
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id > 0) {
@@ -189,7 +185,9 @@ class Log {
                                 break;
                         case MODULE_ID_LP: $content = $this->lp_action_details($details);
                                 break;
-                        case MODULE_ID_EXERCISE: $content = $this->exercise_action_details($details);
+                        case MODULE_ID_EXERCISE: $content = $this->exercise_action_details($details);                        
+                                break;
+                        case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                                 break;
                         default: $content = $langUnknownModule;
                                 break;
@@ -533,11 +531,17 @@ class Log {
                 $content = "$langLearnPath &laquo".$details['name']."&raquo";
                 if (!empty($details['comment'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langComments &laquo".ellipsize($details['comment'], 100)."&raquo";
-                }
-                
+                }                
                 return $content;
         }
         
+        /**
+         * display action details in exercises
+         * @global type $langTitle
+         * @global type $langDescription
+         * @param type $details
+         * @return string
+         */
         private function exercise_action_details($details) {
                 
                 global $langTitle, $langDescription;
@@ -547,9 +551,27 @@ class Log {
                 $content = "$langTitle &laquo".$details['title']."&raquo";
                 if (!empty($details['description'])) {
                         $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".ellipsize($details['description'], 100)."&raquo";
-                }
+                }                
+                return $content;
+        }
+        /**
+         * display action details in wiki
+         * @global type $langTitle
+         * @global type $langDescription
+         * @param type $details
+         * @return string
+         */
+        private function wiki_action_details($details) {
                 
-                return $content;                
+                global $langTitle, $langDescription;
+                
+                $details = unserialize($details);
+                
+                $content = "$langTitle &laquo".$details['title']."&raquo";
+                if (!empty($details['description'])) {
+                        $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo".ellipsize($details['description'], 100)."&raquo";
+                }                
+                return $content;
         }
        
         /**         

@@ -412,7 +412,7 @@ $langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το 
 $langLessonCode = "Συνθηματικό μαθήματος";
 
 // unregister
-$langConfirmDelete = "Επιβεβαίωση διαγραφής ";
+$langConfirmDelete = "Επιβεβαίωση διαγραφής";
 $langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
 $langConfirmDeleteQuestion2 = "από το μάθημα";
 $langConfirmDeleteQuestion3 = "Η ενέργεια αυτή θα διαγράψει επίσης όλα τα ίχνη του χρήστη στην πλατφόρμα, όπως στατιστικά, συμμετοχές στα forums, κ.α.";
@@ -3056,7 +3056,7 @@ $langWikiOtherUsers = "Άλλοι χρήστες (*)";
 $langWikiOtherUsersText = "(*) ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";
 $langWikiPageHistory = "Ιστορικό σελίδας";
 $langWikiPageSaved = "Η σελίδα αποθηκεύτηκε";
-$langWikiPreviewTitle = "Προεπισκόπηση : ";
+$langWikiPreviewTitle = "Προεπισκόπηση: ";
 $langWikiPreviewWarning = " ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Αυτή η σελίδα είναι προεπισκόπηση!  Οι τροποποιήσεις σας στο wiki δεν έχουν αποθηκευτεί ακόμα! Για να τις αποθηκεύσετε κάντε κλικ στο 'Αποθήκευση'.";
 $langWikiProperties = "Ιδιότητες";
 $langWikiReadPrivilege = "Διάβασε τις σελίδες";
@@ -3076,6 +3076,7 @@ $langWikiUrlLang = "Γλώσσα συνδέσμου";
 $langWikiUrlImage = "URL εικόνας";
 $langWikiNoContent = "Η σελίδα δεν έχει ακόμα περιεχόμενο. Χρησιμοποιήστε τον κειμενογράφο για να προσθέσετε περιεχόμενο.";
 $langWrongWikiPageTitle = "Λάθος τίτλος σελίδας";
+$langWikiPageNotFound = "Η σελίδα του του wiki δεν βρέθηκε";
 $wiki_toolbar['Strongemphasis'] = "Έντονα";
 $wiki_toolbar['Emphasis'] = "Πλαγιαστά";
 $wiki_toolbar['Inserted'] = "Εισαγωγή";

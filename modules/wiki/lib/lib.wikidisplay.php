@@ -228,9 +228,7 @@
      * @param string script callback script url
      * @return string html code of the wiki properties form
      */
-    function claro_disp_wiki_properties_form( $wikiId = 0
-        , $title ='', $desc = '', $groupId = 0, $acl = null
-        , $script = null )
+    function claro_disp_wiki_properties_form( $wikiId = 0, $title ='', $desc = '', $groupId = 0, $acl = null, $script = null )
     {
         global $langWikiDescriptionForm, $langWikiDescriptionFormText,  $langWikiTitle
             , $langWikiDescription, $langWikiAccessControl, $langWikiAccessControlText
@@ -347,12 +345,12 @@
             ;*/
 // atkyritsis
 // hardwiring
-		$form .= '        <input type="hidden" name="acl[course_read]" value="on" />' ."\n";
-		$form .= '        <input type="hidden" name="acl[course_edit]" value="on" />' ."\n";
-		$form .= '        <input type="hidden" name="acl[course_create]" value="on" />' ."\n";
-		$form .= '        <input type="hidden" name="acl[other_read]" value="on" />' ."\n";
-		$form .= '        <input type="hidden" name="acl[other_edit]" value="off" />' ."\n";
-		$form .= '        <input type="hidden" name="acl[other_create]" value="off" />' ."\n";
+		$form .= '<input type="hidden" name="acl[course_read]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[course_edit]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[course_create]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_read]" value="on" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_edit]" value="off" />' ."\n";
+		$form .= '<input type="hidden" name="acl[other_create]" value="off" />' ."\n";
 
 // hardwiring over
 
@@ -360,27 +358,16 @@
 
         if ( $groupId != 0 )
         {
-            $form .= '        <input type="hidden" name="gidReq" value="' . $groupId  . '" />' . "\n";
+            $form .= '<input type="hidden" name="gidReq" value="' . $groupId  . '" />' . "\n";
         }
 
-		$form .= '        </td>' . "\n"
-               . '      </tr>' . "\n"
-               . '      <tr>' . "\n"
-               . '        <th>&nbsp;</th>' . "\n"
-               . '        <td>' . "\n";
+		$form .= '</td></tr><tr><th>&nbsp;</th><td>';
 
-
-        $form .= '        <input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
+        $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
             . disp_button ($_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;action=list', $langCancel) . "\n"
             ;
 
-        $form .= '        </td>' . "\n"
-               . '      </tr>' . "\n"
-               . '      </table>' . "\n"
-            . '      </fieldset>' . "\n"
-            . '      </form>' . "\n"
-            ;
+        $form .= '</td></tr></table></fieldset></form>';
 
         return $form;
     }
-?>

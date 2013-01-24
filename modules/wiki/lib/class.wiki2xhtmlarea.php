@@ -104,7 +104,7 @@
         function getToolbar()
         {
 
-	    global $wiki_toolbar, $langWikiUrl, $langWikiUrlLang;
+	    global $wiki_toolbar, $langWikiUrl, $langWikiUrlImage;
             $toolbar = '';
 
             $toolbar .= '<script type="text/javascript" src="'
@@ -168,4 +168,3 @@
             return $wikiarea;
         }
     }
-?>

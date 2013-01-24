@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /**===========================================================================
 	class.wiki.php
 	@last update: 15-05-2007 by Thanos Kyritsis
@@ -31,17 +30,12 @@
 	      original file: class.wiki Revision: 1.12.2.5
 
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
-    @Description:
-
-    @Comments:
-
-    @todo:
-==============================================================================
+==============================================================================    
 */
 
     require_once dirname(__FILE__) . "/class.dbconnection.php";
     require_once dirname(__FILE__) . "/class.wikipage.php";
+    require_once 'include/log.php';
 
     // Error codes
     !defined( "WIKI_NO_TITLE_ERROR" ) && define( "WIKI_NO_TITLE_ERROR", "Missing title" );
@@ -211,11 +205,7 @@
          */
         function loadProperties( $wikiId )
         {
-            global $course_id;
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             $sql = "SELECT `id`, `title`, `description`, `group_id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
@@ -236,11 +226,7 @@
          * @param int wikiId ID of the Wiki
          */
         function loadACL( $wikiId )
-        {
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             $sql = "SELECT `flag`, `value` "
                 . "FROM `".$this->config['tbl_wiki_acls']."` "
@@ -286,13 +272,7 @@
          * Save the access control list of the Wiki
          */
         function saveACL()
-        {
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
-
+        {            
 
             $sql = "SELECT `wiki_id` FROM `"
                 . $this->config['tbl_wiki_acls']."` "
@@ -348,12 +328,7 @@
          */
         function saveProperties()
         {
-            global $course_id;
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             // new wiki
             if ( $this->getWikiId() === 0 )
@@ -373,13 +348,14 @@
                     ;
 
                 // GET WIKIID
-                $this->con->executeQuery( $sql );
+                $this->con->executeQuery( $sql );               
 
                 if ( ! $this->con->hasError() )
                 {
                     $wikiId = $this->con->getLastInsertId();
                     $this->setWikiId( $wikiId );
                 }
+                $log_action = LOG_INSERT;                
             }
             // Wiki already exists
             else
@@ -394,8 +370,13 @@
                     ." AND `course_id` = $course_id"
                     ;
 
-                $this->con->executeQuery( $sql );
+                $this->con->executeQuery($sql);
+                $log_action = LOG_MODIFY;                
             }
+            //record action                
+            Log::record($course_id, MODULE_ID_WIKI, $log_action, array('wiki_id' => $this->getWikiId(),
+                                                                          'title' => $this->getTitle(),
+                                                                          'description' => $this->getDescription()));
         }
 
         // utility methods
@@ -406,12 +387,7 @@
          * @return boolean
          */
         function pageExists( $title )
-        {
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_pages']."` "
@@ -429,12 +405,7 @@
          */
         function wikiExists( $title )
         {
-            global $course_id;
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
@@ -452,12 +423,7 @@
          */
         function wikiIdExists( $id )
         {
-            global $course_id;
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
@@ -474,12 +440,7 @@
          * @return array containing thes pages
          */
         function allPages()
-        {
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             $sql = "SELECT `title` "
                 . "FROM `".$this->config['tbl_wiki_pages']."` "
@@ -497,12 +458,7 @@
          * @return array recently modified pages (title, last_mtime, editor_id)
          */
         function recentChanges( $offset = 0, $count = 50 )
-        {
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             $limit = ($count == 0 ) ? "" : "LIMIT " . $offset . ", " . $count;
 

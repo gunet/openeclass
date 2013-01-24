@@ -39,7 +39,7 @@
 ==============================================================================
 */
 
-    require_once dirname(__FILE__) . "/class.clarodbconnection.php";
+        require_once dirname(__FILE__) . "/class.clarodbconnection.php";
 	require_once dirname(__FILE__) . "/class.wikiaccesscontrol.php";
 	require_once dirname(__FILE__) . "/class.wikistore.php";
 	require_once dirname(__FILE__) . "/class.wikipage.php";
@@ -47,10 +47,8 @@
 	require_once dirname(__FILE__) . "/lib.wikisql.php";
 
 
-	function create_wiki( $gid = false, $wikiName = 'New wiki' )
-    {
+	function create_wiki( $gid = false, $wikiName = 'New wiki' ) {
 		global $_uid;
-
 		$creatorId = $_uid;
 
 		$tblList = claro_sql_get_course_tbl();
@@ -75,7 +73,7 @@
         }
 
         $wiki = new Wiki( $con, $config );
-		$wiki->setTitle( $wikiName );
+	$wiki->setTitle( $wikiName );
         $wiki->setDescription( 'This is a sample wiki' );
         $wiki->setACL( $acl );
         $wiki->setGroupId( $gid );

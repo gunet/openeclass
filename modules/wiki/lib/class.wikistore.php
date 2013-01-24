@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,17 +31,12 @@
 	      original file: class.wikistore Revision: 1.11.2.3
 
 	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
-    @Description:
-
-    @Comments:
-
-    @todo:
-==============================================================================
+==============================================================================    
 */
 
     require_once dirname(__FILE__) . "/class.dbconnection.php";
     require_once dirname(__FILE__) . "/class.wiki.php";
+    require_once 'include/log.php';
 
     // Error codes
     !defined("WIKI_NO_TITLE_ERROR") && define( "WIKI_NO_TITLE_ERROR", "Missing title" );
@@ -115,12 +110,7 @@
          * @return boolean
          */
         function pageExists( $wikiId, $title )
-        {
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_pages']."` "
@@ -138,12 +128,7 @@
          */
         function wikiIdExists( $wikiId )
         {
-            global $course_id;
-            // reconnect if needed
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;         
 
             $sql = "SELECT `id` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
@@ -195,11 +180,7 @@
          */
         function getGroupWikiList()
         {
-            global $course_id;
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             $sql = "SELECT `id`, `title`, `description` "
                 . "FROM `".$this->config['tbl_wiki_properties']."` "
@@ -212,11 +193,7 @@
         }
 
         function getNumberOfPagesInWiki( $wikiId )
-        {
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+        {            
 
             if ( $this->wikiIdExists( $wikiId ) )
             {
@@ -243,14 +220,12 @@
          */
         function deleteWiki( $wikiId )
         {
-            global $course_id;
-            if ( ! $this->con->isConnected() )
-            {
-                $this->con->connect();
-            }
+            global $course_id;            
 
             if ( $this->wikiIdExists( $wikiId ) )
             {
+                $wiki_title = db_query_get_single_value("SELECT title FROM wiki_properties 
+                                                                WHERE course_id = $course_id AND id = $wikiId");
                 // delete properties
                 $sql = "DELETE FROM `".$this->config['tbl_wiki_properties']."` "
                     . "WHERE `id` = " . $wikiId
@@ -329,6 +304,9 @@
                 {
                     return false;
                 }
+                // record action
+                Log::record($course_id, MODULE_ID_WIKI, LOG_DELETE, array('wiki_id' => $wikiId,
+                                                                          'title' => $wiki_title));
 
                 return true;
             }
@@ -372,4 +350,3 @@
             return ( $this->error != '' ) || $this->con->hasError();
         }
     }
-?>
