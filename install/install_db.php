@@ -1056,7 +1056,10 @@ db_query("CREATE TABLE `actions_daily` (
         `last_update` DATETIME NOT NULL,
         PRIMARY KEY (`id`),
         KEY `actionsdailyindex` (`module_id`, `day`),
-        KEY `actionsdailyuserindex` (`user_id`) )");
+        KEY `actionsdailyuserindex` (`user_id`),
+        KEY `actionsdailydayindex` (`day`),
+        KEY `actionsdailymoduleindex` (`module_id`),
+        KEY `actionsdailycourseindex` (`course_id`) )");
 
 db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
         `id` int(11) NOT NULL auto_increment,

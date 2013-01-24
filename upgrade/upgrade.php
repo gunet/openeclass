@@ -1335,7 +1335,10 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `last_update` DATETIME NOT NULL,
                         PRIMARY KEY (`id`),
                         KEY `actionsdailyindex` (`module_id`, `day`),
-                        KEY `actionsdailyuserindex` (`user_id`) )");
+                        KEY `actionsdailyuserindex` (`user_id`),
+                        KEY `actionsdailydayindex` (`day`),
+                        KEY `actionsdailymoduleindex` (`module_id`),
+                        KEY `actionsdailycourseindex` (`course_id`) )");
                 
             db_query("CREATE VIEW `actions_daily_tmpview` AS
                         SELECT
