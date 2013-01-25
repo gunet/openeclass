@@ -31,8 +31,8 @@
      are deleted from 'loginout'.
 ==============================================================================
 */
-
-    $current_month = date('Y-m-01 00:00:00');
+    $stop_stmp = time() - (get_config('actions_expire_interval')-1) * 30 * 24 * 3600;
+    $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
     $sql_0 = "SELECT min(`when`) as min_date, max(`when`) as max_date FROM loginout";
 
@@ -48,14 +48,14 @@
     $maxstmp = strtotime($max_date);
 
 
-    if ( $minstmp + 243*24*3600 < $maxstmp ) { //data more than eight months old
+    if ( $minstmp + (get_config('actions_expire_interval')-1) *30*24*3600 < $maxstmp ) { //data more than eight months old
 	$stmp = strtotime($min_date);
         $end_stmp = $stmp + 31*24*60*60;  //min time + 1 month
         $start_date = $min_date;
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
 
 
-        while ($end_date < $current_month){
+        while ($end_date < $stop_month){
                 $sql_1 = "SELECT count(idLog) as visits FROM loginout ".
                     " WHERE `when` >= '$start_date' AND `when` < '$end_date' AND action='LOGIN'";
 

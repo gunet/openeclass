@@ -171,7 +171,7 @@ if (!extension_loaded('gd')) {
 
    if ($chart_content) {
 	$chart->render($webDir."/".$chart_path);
-	$tool_content .= "<p>$langOldStatsExpl</p>";
+	$tool_content .= "<p>".sprintf($langOldStatsExpl, get_config('actions_expire_interval'))."</p>";
 	$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
    } elseif (isset($btnUsage) and $chart_content == 0) {
 	$tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';

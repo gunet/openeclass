@@ -80,7 +80,7 @@ if (!extension_loaded('gd')) {
 } else {
     $made_chart = true;
     $tool_content .= '
-    <div class="info">'.$langOldStatsLoginsExpl.'</div>';
+    <div class="info">'.sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')).'</div>';
 
     /*****************************************
       start making chart
