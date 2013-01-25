@@ -106,7 +106,7 @@ class action {
         mysql_free_result($result);
 
 	$stmp = strtotime($start_date);
-        $end_stmp = $stmp + 31*24*60*60;  // min time + 1 month
+        $end_stmp = $stmp + 30*24*60*60;  // min time + 1 month
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
         while ($end_date < $stop_month){
             $result = db_query($sql_1);
@@ -150,7 +150,7 @@ class action {
             // next month
             $start_date = $end_date;
 	    $stmp = $end_stmp;
-            $end_stmp += 31*24*60*60;  // end time + 1 month
+            $end_stmp += 30*24*60*60;  // end time + 1 month
             $end_date = date('Y-m-01 00:00:00', $end_stmp);
 	    $start_date = date('Y-m-01 00:00:00', $stmp);
         }

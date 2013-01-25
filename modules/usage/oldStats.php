@@ -96,7 +96,7 @@ if (!extension_loaded('gd')) {
 	   'u_stats_value' => 'visits',
 	   'u_module_id' => -1,
 	   'u_date_start' => strftime('%Y-%m-%d', strtotime('now -2 year')),
-	   'u_date_end' => strftime('%Y-%m-%d', strtotime('now -8 month')),
+	   'u_date_end' => strftime('%Y-%m-%d', strtotime('now -'. get_config('actions_expire_interval') .' month')),
        );
 
        foreach ($usage_defaults as $key => $val) {
@@ -108,7 +108,7 @@ if (!extension_loaded('gd')) {
        }
 
    $date_fmt = '%Y-%m-%d';
-   $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";   #AUTO PREPEI NA ALLA#EI
+   $date_where = " (start_date BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
 
 
   if ($u_module_id != -1) {
@@ -117,7 +117,7 @@ if (!extension_loaded('gd')) {
 	$mod_where = " (1) ";
   }
 
-   #check if statistics exist
+   // check if statistics exist
    $chart_content = 0;
    switch ($u_stats_value) {
        case "visits":
