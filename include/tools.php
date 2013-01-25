@@ -428,12 +428,12 @@ function adminMenu(){
 	    array_push($sideMenuImg, "arrow.png");
 	    array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
 	    array_push($sideMenuLink, "../course_info/restore_course.php");
-	    //array_push($sideMenuImg, "arrow.png");
-	    //array_push($sideMenuText, $GLOBALS['langListFaculte']);
-	    //array_push($sideMenuLink, "../admin/addfaculte.php");
 	    array_push($sideMenuImg, "arrow.png");
 	    array_push($sideMenuText, $GLOBALS['langHierarchy']);
 	    array_push($sideMenuLink, "../admin/hierarchy.php");
+            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langMultiCourse']);
+            array_push($sideMenuLink, "../admin/multicourse.php");
 	    
 	    // check if we have betacms enabled
 	    if (get_config('betacms') == TRUE)
