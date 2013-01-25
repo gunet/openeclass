@@ -45,7 +45,6 @@ $course = new course();
 $user = new user();
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
-$lang_editor = langname_to_code($language);
 
 load_js('jquery');
 load_js('jquery-ui-new');

@@ -43,7 +43,7 @@ $navigation[]= array('url' => 'listusers.php', 'name' => $langListUsers);
 load_js('jquery');
 load_js('tools.js');
 $head_content .= '<script type="text/javascript">
-        var platform_actions = ["-2", "'.LOG_PROFILE.'", "'.LOG_CREATE_COURSE.'", "'.LOG_DELETE_COURSE.'"];
+        var platform_actions = ["-2", "'.LOG_PROFILE.'", "'.LOG_CREATE_COURSE.'", "'.LOG_DELETE_COURSE.'" , "'.LOG_MODIFY_COURSE.'"];
         $(course_log_controls_init);
 </script>';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
@@ -129,7 +129,8 @@ if (isset($_GET['submit'])) {
                        -2 => $i.$langSystemActions,
                        LOG_PROFILE => $i.$i.$langModProfile,
                        LOG_CREATE_COURSE => $i.$i.$langFinalize,
-                       LOG_DELETE_COURSE => $i.$i.$langCourseDel);
+                       LOG_DELETE_COURSE => $i.$i.$langCourseDel,
+                       LOG_MODIFY_COURSE => $i.$i.$langCourseInfoEdit);
     $tool_content .= "<form method='get' action='$_SERVER[SCRIPT_NAME]'>
     <fieldset>
       <legend>$langUserLog</legend>

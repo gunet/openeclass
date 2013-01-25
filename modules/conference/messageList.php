@@ -18,6 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file messageList.php
+ * @brief Functionality of chat module
+ */
 
 $require_current_course = TRUE;
 $require_login = TRUE;
@@ -79,8 +83,8 @@ if (isset($_GET['store']) && $is_editor) {
 
 	buffer(implode('', file($fileChatName)), $tmpArchiveFile);
 	if (copy($tmpArchiveFile, $basedir . $chat_filename)) {
-                $alert_div = $langSaveMessage;
-                db_query("INSERT INTO $mysqlMainDb.document SET
+                $alert_div = "<div class='info'>$langSaveMessage</div>";
+                db_query("INSERT INTO document SET
                                 course_id = $course_id,
                                 subsystem = $subsystem,
                                 path = '$chat_filename',
@@ -114,11 +118,8 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
 foreach ($fileReverse as $thisLine) {
-	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
-	if (strpos($newline, '</span>') === false) {
-		$newline .= '</span>';
-	}
- 	echo '<div><span>'. q($newline) ."</div>\n";
+        $newline = $thisLine;	
+ 	echo '<div>'. q($newline) ."</div>\n";
 }
 echo "</body></html>\n";
 

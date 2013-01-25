@@ -31,6 +31,7 @@ define('LOG_DELETE', 3);
 define('LOG_PROFILE', 4);
 define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
+define('LOG_MODIFY_COURSE', 7);
 
 class Log {
         /**
@@ -73,7 +74,7 @@ class Log {
 
                 global $tool_content, $modules;
                 global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-                        $langCourse, $langModule, $langAllModules;
+                        $langCourse, $langModule;
 
                 $q1 = $q2 = $q3 = $q4 = '';
 
@@ -156,7 +157,7 @@ class Log {
          * @param type $module_id
          * @param type $details
          * @return type
-         * jump to appropriate subsystem for displaying details
+         * drive to appropriate subsystem for displaying details
          */
         private function course_action_details($module_id, $details) {
 
@@ -194,7 +195,15 @@ class Log {
                         }
                 return $content;
         }
-
+        
+        /**
+         * 
+         * @global type $langUnknownAction
+         * @param type $logtype
+         * @param type $details
+         * @return \type
+         * drive to appropriate subsystems for displaying results
+         */
         private function other_action_details($logtype, $details) {
 
                 global $langUnknownAction;
@@ -204,6 +213,8 @@ class Log {
                                 break;
                         case LOG_DELETE_COURSE: $content = $this->delete_course_action_details($details);
                                 break;
+                        case LOG_MODIFY_COURSE: $content = $this->modify_course_action_details($details);
+                                break;
                         case LOG_PROFILE: $content = $this->profile_action_details($details);
                                 break;
                         default: $content = $langUnknownAction;
@@ -211,7 +222,12 @@ class Log {
                 }
                 return $content;
         }
-
+        /**
+         * display action details while creating course
+         * @global type $langTitle
+         * @param type $details
+         * @return string
+         */
         private function create_course_action_details($details) {
 
                 global $langTitle;
@@ -224,7 +240,12 @@ class Log {
                 return $content;
         }
 
-
+        /**
+         * display action details while deleting course
+         * @global type $langTitle
+         * @param type $details
+         * @return string
+         */
         private function delete_course_action_details($details) {
 
                 global $langTitle;
@@ -237,6 +258,18 @@ class Log {
                 return $content;
         }
 
+        private function modify_course_action_details($details) {
+                
+                global $langTitle;
+
+                $details = unserialize($details);
+
+                $content = "$langTitle &laquo;".$details['title']."&raquo;";
+                $content .= "&nbsp;(".$details['public_code'].")";
+
+                return $content;        
+        }
+        
         private function profile_action_details($details) {
 
                 global $lang_username, $langAm, $langChangePass, $langUpdateImage,
@@ -588,7 +621,7 @@ class Log {
         private function get_action_names($action_type) {
 
                 global $langInsert, $langModify, $langDelete, $langModProfile,
-                       $langFinalize, $langCourseDel, $langUnknownAction;
+                       $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnknownAction;
 
                 switch ($action_type) {
                         case LOG_INSERT: return $langInsert;
@@ -597,6 +630,7 @@ class Log {
                         case LOG_PROFILE: return $langModProfile;
                         case LOG_CREATE_COURSE: return $langFinalize;
                         case LOG_DELETE_COURSE: return $langCourseDel;
+                        case LOG_MODIFY_COURSE: return $langCourseInfoEdit;
                         default: return $langUnknownAction;
                 }
         }

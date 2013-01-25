@@ -29,7 +29,7 @@ $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Infocours';
 require_once '../../include/baseTheme.php';
-
+require_once 'include/log.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -66,8 +66,6 @@ $head_content .= <<<hContent
 hContent;
 
 $nameTools = $langModifInfo;
-
-$lang_editor = langname_to_code($language);
 
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
@@ -120,6 +118,12 @@ if (isset($_POST['submit'])) {
                                         password = ".quote($_POST['password'])."
                                     WHERE id = $course_id");
                     $course->refresh($course_id, $departments);
+                    
+                    Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
+                                                                'public_code' => $_POST['fcode'],
+                                                                'visible' => $_POST['formvisible'],
+                                                                'prof_names' => $_POST['titulary'],
+                                                                'lang' => $language));
 
                     $tool_content .= "<p class='success'>$langModifDone</p>
                             <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code'>$langBack</a></p>
