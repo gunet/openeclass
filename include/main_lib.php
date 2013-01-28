@@ -1205,9 +1205,9 @@ function wrap_each(&$item)
 function canonicalize_whitespace($s)
 {
         return str_replace(array(" \1 ", " \1", "\1 ", "\1"), "\n",
-                  preg_replace('/ +/', ' ',
+                  preg_replace('/[\t ]+/', ' ',
                      str_replace(array("\r\n", "\n", "\r"), "\1",
-                        trim(preg_replace('/[\x00-\x09\x0C\x0E-\x1F\x7F]/', '', $s)))));
+                        trim(preg_replace('/[\x00-\x08\x0C\x0E-\x1F\x7F]/', '', $s)))));
 }
 
 // Remove characters which can't appear in filenames
