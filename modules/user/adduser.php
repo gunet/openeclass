@@ -18,8 +18,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file adduser.php
+ * @brief Course admin can add users to the course. 
+ */
 
-/* This script allows a course admin to add users to the course. */
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -28,15 +31,18 @@ $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/log.php';
 
 $nameTools = $langAddUser;
 $navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 if (isset($_GET['add'])) {
-        $uid_to_add = intval($_GET['add']);
-	mysql_select_db($mysqlMainDb);
+        $uid_to_add = intval($_GET['add']);	
 	$result = db_query("INSERT IGNORE INTO course_user (user_id, course_id, statut, reg_date) ".
-                           "VALUES ($uid_to_add, $course_id, 5, CURDATE())");
+                           "VALUES ($uid_to_add, $course_id, ".USER_STUDENT.", CURDATE())");
+        
+                Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
+                                                                           'right' => '+5'));
 		// notify user via email
 		$email = uid_to_email($uid_to_add);
 		if (!empty($email) and email_seems_valid($email)) {
@@ -78,8 +84,7 @@ if (isset($_GET['add'])) {
         </table>
         </fieldset>
         </form>";
-
-	mysql_select_db($mysqlMainDb);
+	
 	$search = array();
         foreach (array('nom', 'prenom', 'username', 'am') as $term) {
                 $tvar = 'search_'.$term;

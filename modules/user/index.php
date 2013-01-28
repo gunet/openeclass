@@ -26,24 +26,14 @@ $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/admin/admin.inc.php';
+require_once 'include/log.php';
+load_js('tools.js');
 
 define ('COURSE_USERS_PER_PAGE', 15);
 
 $limit = isset($_REQUEST['limit'])? $_REQUEST['limit']: 0;
 
 $nameTools = $langAdminUsers;
-
-$head_content = '
-<script type="text/javascript">
-function confirmation (name)
-{
-    if (confirm("'.$langDeleteUser.' "+ name + " '.$langDeleteUser2.';"))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-';
 
 $sql = "SELECT user.user_id, course_user.statut FROM course_user, user
 	WHERE course_user.course_id = $course_id AND course_user.user_id = user.user_id";
@@ -74,14 +64,18 @@ $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
         $new_admin_gid = intval($_GET['giveAdmin']);
-        db_query("UPDATE course_user SET statut = 1
+        db_query("UPDATE course_user SET statut = ".USER_TEACHER."
                         WHERE user_id = $new_admin_gid
                         AND course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $new_admin_gid,
+                                                                   'right' => '+1'));
 } elseif (isset($_GET['giveTutor'])) {
         $new_tutor_gid = intval($_GET['giveTutor']);
-        db_query("UPDATE course_user SET tutor = 1
+        db_query("UPDATE course_user SET tutor = ".USER_TEACHER."
                         WHERE user_id = $new_tutor_gid
                         AND course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $new_tutor_gid,
+                                                                   'right' => '+3'));
         db_query("UPDATE group_members, `group` SET is_tutor = 0
                         WHERE `group`.id = group_members.group_id AND
                               `group`.course_id = $course_id AND
@@ -91,22 +85,30 @@ if (isset($_GET['giveAdmin'])) {
         db_query("UPDATE course_user SET editor = 1
                         WHERE user_id = $new_editor_gid
                         AND course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $new_editor_gid,
+                                                                   'right' => '+2'));
 } elseif (isset($_GET['removeAdmin'])) {
         $removed_admin_gid = intval($_GET['removeAdmin']);
-        db_query("UPDATE course_user SET statut = 5
+        db_query("UPDATE course_user SET statut = ".USER_STUDENT."
                         WHERE user_id <> $uid AND
                               user_id = $removed_admin_gid AND
                               course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $removed_admin_gid,
+                                                                   'right' => '-1'));
 } elseif (isset($_GET['removeTutor'])) {
         $removed_tutor_gid = intval($_GET['removeTutor']);
         db_query("UPDATE course_user SET tutor = 0
                         WHERE user_id = $removed_tutor_gid
                               AND course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $removed_tutor_gid,
+                                                                   'right' => '-3'));
 } elseif (isset($_GET['removeEditor'])) {
         $removed_editor_gid = intval($_GET['removeEditor']);
         db_query("UPDATE course_user SET editor = 0
                         WHERE user_id = $removed_editor_gid
                         AND course_id = $course_id");
+        Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $removed_editor_gid,
+                                                                   'right' => '-2'));
 } elseif (isset($_GET['unregister'])) {
         $unregister_gid = intval($_GET['unregister']);
         $unregister_ok = true;
@@ -114,7 +116,7 @@ if (isset($_GET['giveAdmin'])) {
         if ($unregister_gid == $uid) {
                 $result = db_query("SELECT user_id FROM course_user
                                         WHERE course_id = $course_id AND
-                                              statut = 1 AND
+                                              statut = ".USER_TEACHER." AND
                                               user_id != $uid
                                         LIMIT 1");
                 if (mysql_num_rows($result) == 0) {
@@ -129,6 +131,8 @@ if (isset($_GET['giveAdmin'])) {
                                 WHERE user_id = $unregister_gid AND
                                       group_id IN (SELECT id FROM `group` WHERE course_id = $course_id)");
         }
+        Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
+                                                                   'right' => 0));
 }
 // show help link and link to Add new user, search new user and management page of groups
 $tool_content .= "
@@ -269,8 +273,8 @@ while ($myrow = mysql_fetch_array($result)) {
         }
         $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
         $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link'
-                         onClick=\"return confirmation('" . js_escape($alert_uname) .
-                         "');\"><img src='$themeimg/cunregister.png' title='$langUnregCourse' /></a>";
+                         onClick=\"return confirmation('" . $langDeleteUser . " &laquo;".$alert_uname."&raquo; ".$langDeleteUser2."');\">
+                         <img src='$themeimg/cunregister.png' title='$langUnregCourse' /></a>";
 
         $tool_content .= "</td>";
         // tutor right

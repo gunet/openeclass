@@ -74,7 +74,7 @@ class Log {
 
                 global $tool_content, $modules;
                 global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-                        $langCourse, $langModule;
+                        $langCourse, $langModule, $langAdminUsers;
 
                 $q1 = $q2 = $q3 = $q4 = '';
 
@@ -113,7 +113,11 @@ class Log {
                                         $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."</div>";
                                 }
                                 if ($module_id > 0) {
-                                        $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
+                                        if ($module_id == MODULE_ID_USERS) {
+                                                $tool_content .= "<div class='info'>$langModule: ".$langAdminUsers."</div>";
+                                        } else {
+                                                $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
+                                        }
                                 }
                                 $tool_content .= "<table class='tbl'>";
                                 $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
@@ -189,6 +193,8 @@ class Log {
                         case MODULE_ID_EXERCISE: $content = $this->exercise_action_details($details);                        
                                 break;
                         case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
+                                break;
+                        case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
                                 break;
                         default: $content = $langUnknownModule;
                                 break;
@@ -607,6 +613,51 @@ class Log {
                 return $content;
         }
        
+        /**
+         * display action details in course users administration
+         * @global type $langUnCourse
+         * @global type $langOfUser
+         * @global type $langToUser
+         * @global type $langOneByOne
+         * @global type $langGiveRightAdmin
+         * @global type $langGiveRightΕditor
+         * @global type $langGiveRightTutor
+         * @global type $langRemoveRightAdmin
+         * @global type $langRemoveRightEditor
+         * @global type $langRemoveRightAdmin
+         * @param type $details
+         * @return string
+         */
+        private function course_user_action_details($details) {
+                
+                global $langUnCourse, $langOfUser, $langToUser, $langOneByOne,
+                        $langGiveRightAdmin, $langGiveRightΕditor, $langGiveRightTutor,
+                        $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
+                
+                $details = unserialize($details);
+                
+                switch ($details['right']) {
+                        case '+5': $content = $langOneByOne;
+                                                break;
+                        case '0': $content = "$langUnCourse $langOfUser";
+                                                break;
+                        case '+1': $content = "$langGiveRightAdmin $langToUser";
+                                                break;
+                        case '+2': $content = "$langGiveRightΕditor $langToUser";
+                                                break;
+                        case '+3': $content = "$langGiveRightTutor $langToUser";
+                                                break;
+                        case '-1': $content = "$langRemoveRightAdmin $langToUser";
+                                                break;
+                        case '-2': $content = "$langRemoveRightEditor $langToUser";
+                                                break;
+                        case '-3': $content = "$langRemoveRightAdmin $langToUser";
+                                                break;
+                }
+                $content .= "&nbsp;&laquo".display_user($details['uid'], false, false)."&raquo";
+                
+                return $content;                
+        }
         /**         
          * @global type $langInsert
          * @global type $langModify
