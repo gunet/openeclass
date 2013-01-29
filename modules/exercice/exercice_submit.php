@@ -49,7 +49,7 @@ $picturePath='../../courses/'.$currentCourseID.'/image';
 require_once '../video/video_functions.php';
 load_modal_box();
 
-if (isset($_GET['exerciseId'])) {
+if (isset($_REQUEST['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
 }
 
@@ -61,6 +61,8 @@ if (isset($exerciseId)) {
 		header('Location: exercice.php?course='.$code_cours);
 		exit();
 	} 
+} else {
+        die('Invalid request');
 }
 
 if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
