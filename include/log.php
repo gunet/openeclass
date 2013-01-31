@@ -74,7 +74,7 @@ class Log {
 
                 global $tool_content, $modules;
                 global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-                        $langCourse, $langModule, $langAdminUsers;
+                        $langCourse, $langModule, $langAdminUsers, $langExternalLinks;
 
                 $q1 = $q2 = $q3 = $q4 = '';
 
@@ -115,6 +115,8 @@ class Log {
                                 if ($module_id > 0) {
                                         if ($module_id == MODULE_ID_USERS) {
                                                 $tool_content .= "<div class='info'>$langModule: ".$langAdminUsers."</div>";
+                                        } elseif ($module_id == MODULE_ID_TOOLADMIN) {
+                                                $tool_content .= "<div class='info'>$langModule: ".$langExternalLinks."</div>";
                                         } else {
                                                 $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
                                         }
@@ -195,6 +197,8 @@ class Log {
                         case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                                 break;
                         case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
+                                break;
+                        case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                                 break;
                         default: $content = $langUnknownModule;
                                 break;
@@ -658,6 +662,25 @@ class Log {
                 
                 return $content;                
         }
+        
+        /**
+         * display action details in external links
+         * @global type $langLinkName
+         * @param type $details
+         * @return string
+         */
+        private function external_link_action_details($details) {
+                
+                global $langLinkName;
+                
+                $details = unserialize($details);
+                                
+                $content = "URL: ".$details['link'];
+                $content .= " &mdash; $langLinkName &laquo".$details['name_link']."&raquo";                
+                                
+                return $content;
+        }
+        
         /**         
          * @global type $langInsert
          * @global type $langModify

@@ -127,7 +127,11 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         if ($u_module_id == MODULE_ID_USERS) {
                 $extra = 'selected';
         }
+        if ($u_module_id == MODULE_ID_TOOLADMIN) {
+                $extra = 'selected';
+        }
         $tool_content .= "<option value = ".MODULE_ID_USERS." $extra>$langAdminUsers</option>";
+        $tool_content .= "<option value = ".MODULE_ID_TOOLADMIN." $extra>$langExternalLinks</option>";
         $tool_content .= "</select></td></tr>
         <tr><th class='left'>$langLogTypes :</th>
          <td>";

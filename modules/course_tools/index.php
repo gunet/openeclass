@@ -25,6 +25,7 @@ $helpTopic = 'courseTools';
 $require_login = true;
 
 include '../../include/baseTheme.php';
+require_once 'include/log.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
 $nameTools = $langToolManagement;
@@ -60,18 +61,18 @@ if (isset($_REQUEST['toolStatus'])) {
         }
         //reset all tools
         db_query("UPDATE course_module SET `visible` = 0
-                         WHERE course_id = ". course_code_to_id($course_code));
+                         WHERE course_id = $course_id");
         //and activate the ones the professor wants active, if any
         if ($loopCount > 0) {
                 db_query("UPDATE course_module SET visible = 1
                                  WHERE $tool_id AND
-                                       course_id = ". course_code_to_id($course_code));
+                                 course_id = $course_id");
         }
 }
 
 if (isset($_POST['delete'])) {
         $delete = intval($_POST['delete']);
-        $r = mysql_fetch_array(db_query("SELECT url, category FROM link WHERE `id` = $delete"));
+        $r = mysql_fetch_array(db_query("SELECT url, title, category FROM link WHERE `id` = $delete"));
         if($r['category'] == -2) { // if we want to delete html page also delete file
                 $link = explode(" ", $r['url']);
                 $path = substr($link[0], 6);
@@ -79,27 +80,33 @@ if (isset($_POST['delete'])) {
                 unlink($file2Delete);
         }
         db_query("DELETE FROM link WHERE `id` = $delete");
+        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
+                                                                        'link' => $r['url'],
+                                                                        'name_link' => $r['title']));
         unset($sql);
         $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
 
-if (isset($_POST['submit'])) {
-        // Add external link
+/**
+ * Add external link
+ */
+if (isset($_POST['submit'])) {                
+        $link = isset($_POST['link'])?$_POST['link']:'';
+        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
+        if ((trim($link) == 'http://') or (trim($link) == 'ftp://') or empty($link) or empty($name_link))  {
+                $tool_content .= "<p class='caution'>$langInvalidLink<br />
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
+                draw($tool_content, 2, null, $head_content);
+                exit();
+        }
         
-                $link = isset($_POST['link'])?$_POST['link']:'';
-                $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
-                if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
-                                or empty($link) or empty($name_link))  {
-                        $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
-                        draw($tool_content, 2, null, $head_content);
-                        exit();
-                }
-                $link = autoquote($link);
-                $name_link = autoquote($name_link);
-                db_query("INSERT INTO link (course_id, url, title, category)
-                                    VALUES (".course_code_to_id($course_code).",
-                                                $link, $name_link, -1)");
-                $tool_content .= "<p class='success'>$langLinkAdded</p>";
+        db_query("INSERT INTO link (course_id, url, title, category)
+                            VALUES (".$course_id.", ".quote($link).", ".quote($name_link).", -1)");
+        $id = mysql_insert_id();
+        $tool_content .= "<p class='success'>$langLinkAdded</p>";
+        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
+                                                                       'link' => $link,
+                                                                       'name_link' => $name_link));
         
 } elseif (isset($_GET['action'])) { // add external link
         $nameTools = $langAddExtLink;
@@ -186,7 +193,7 @@ tForm;
 // ------------------------------------------------
 $sql = db_query("SELECT id, title FROM link
                         WHERE category IN(-1,-2) AND
-                        course_id = ".course_code_to_id($course_code));
+                        course_id = $course_id");
 $tool_content .= "<br/>
 <table class='tbl_alt' width='100%'>
 <tr>
@@ -211,9 +218,7 @@ while ($externalLinks = mysql_fetch_array($sql)) {
         <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks[id]' />
            <input type='image' src='$themeimg/delete.png' name='delete_button'
-                  onClick=\"return confirmation('" .
-                            js_escape("$langDeleteLink {$externalLinks['title']}?") .
-                       "');\" title='$langDelete' /></form></td>
+                  onClick=\"return confirmation('" .js_escape("$langConfirmDeleteLink {$externalLinks['title']}") ."');\" title='$langDelete' /></form></td>
      </tr>\n";
      $i++;
 }
