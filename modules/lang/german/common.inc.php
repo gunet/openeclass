@@ -1,19 +1,19 @@
 <?php
 
 // Message file for language de
-// Generated 2012-10-31 12:55:14
+// Generated 2013-01-31 12:20:12
 
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
 $langYes = "Ja";
 $langNo = "Nein";
-$langTeacher = "Lehrer";
-$langOfTeacher = "Lehrers";
-$langTeachers = "Lehrer";
-$langOfTeachers = "Lehrer";
-$langsTeacher = "Lehrer";
-$langsOfTeacher = "Lehrers";
-$langsTeachers = "Lehrer";
-$langsOfTeachers = "Lehrer";
+$langTeacher = "Dozent";
+$langOfTeacher = "Dozenten";
+$langTeachers = "Dozenten";
+$langOfTeachers = "Dozenten";
+$langsTeacher = "dozent";
+$langsOfTeacher = "dozenten";
+$langsTeachers = "dozenten";
+$langsOfTeachers = "dozenten";
 $langStudent = "Student";
 $langOfStudent = "Studenten";
 $langStudents = "Studenten";
@@ -32,12 +32,12 @@ $langOfFaculties = "Fakultäten";
 $langFaculties = "Fakultäten";
 $langsFaculty = "Fakultät";
 $langsFaculties = "Fakultäten";
-$langpres = "Studium vor Bachelorabschluss (undergraduate)";
-$langposts = "Postgraduiert";
+$langpres = "Typ: Grundstudium";
+$langposts = "Postgraduiertes Studium";
 $langothers = "Andere";
-$langpre = "Studium vor Bachelorabschluss (undergraduate)";
-$langpost = "Postgraduiert";
-$langother = "Postgraduiert";
+$langpre = "Typ: Grundstudium";
+$langpost = "Typ: Postgraduiertes Studium";
+$langother = "Typ: Postgraduiertes Studium";
 $langInfoAbout = "Die Plattform eClass realisiert ein integriertes System für die Verwaltung von elektronischen 
 Unterrichtsfächern (Kursen).
 Der Entwurf orientiert sich an der Unterstützung des konventionellen Unterrichts unter Zuhilfenahme 

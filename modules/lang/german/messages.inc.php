@@ -1,8 +1,9 @@
 <?php
 
 // Message file for language de
-// Generated 2012-10-31 12:55:14
+// Generated 2013-01-31 12:20:12
 
+$langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
 $langAboutText = "Die Plattform Version ist";
@@ -1665,7 +1666,6 @@ $langChoiceDepartment = "Auswahl der Fakultät";
 $langCoursesRegistered = "Sie wurden erfolgreich an dem von Ihnen ausgewählten Kurs registriert";
 $langNoCoursesRegistered = "<p>Sie haben keinen Kurs zur Registrierung ausgewählt.</p><p> Sie können sich beim nächsten Mal an einen anderen Kurs registrieren, wenn Sie sich in die Plattform einwählen.</p>";
 $langIfYouWantToAddManyUsers = "Wenn Sie eine Liste von Benutzern zu ihrem Kurs hinzufügen möchten, wenden Sie sich bitte an Ihren System Administrator";
-$langCourse = "Kurs";
 $langLastVisits = "Meine letzten Besuche";
 $langLastUserVisits = "Die letzten Besuche des Benutzers";
 $langDumpUser = "Liste der Benutzer";
@@ -2785,7 +2785,7 @@ $langPwStrengthGood = "Gut";
 $langPwStrengthStrong = "Stark";
 $langOnlyInEnglish = "Nur in Englisch";
 $langDisableEclassStudRegViaReq = "$langsStudents may register via request";
-$langUserRegistration = "User registration pptions";
+$langUserRegistration = "User registration option";
 $langReqRegUser = "$langOfStudent request registration";
 $langViaAltAuthMethods = "via alternative authentication methods";
 $lang_case_insensitive_usernames = "Case insensitive user names";
