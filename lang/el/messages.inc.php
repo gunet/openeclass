@@ -916,6 +916,7 @@ $langPublicShort="Ελεύθερη (χωρίς εγγραφή)";
 $langPrivate="Πρόσβαση στο μάθημα (για εγγραφή) έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του μαθήματος";
 $langCourseInactive = "Πρόσβαση στο μάθημα έχουν μόνο οι $langsTeachers του μαθήματος";
 $langCourseInactiveShort = "Ανενεργό μάθημα";
+$langsCourseInactiveShort = "Ανενεργά μαθήματα";
 $langPrivateShort="Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του μαθήματος!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του μαθήματος!";
@@ -2675,7 +2676,9 @@ $langCourseCode_Descr = "ο κωδικός του μαθήματος";
 $langDescription_Descr = 'αφορά την περιγραφή του μαθήματος, των θεματικών ενοτήτων και των σχετικών πόρων';
 $langAccessType = "Τύπος Πρόσβασης";
 $langTypeClosed = "Κλειστό";
+$langTypesClosed = "Κλειστά";
 $langTypeOpen = "Ανοικτό";
+$langTypesOpen = "Ανοικτά";
 $langTypeRegistration = "Ανοικτό με εγγραφή";
 $langTypesRegistration = "Ανοικτά με εγγραφή";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
@@ -2967,6 +2970,8 @@ $langConfirmUnregCours = "Θέλετε σίγουρα να απεγγραφεί�
  $langNoUsersLog = "Δεν υπάρχουν καταγεγραμμένες ενέργειες";
  $langModProfile = "Αλλαγή προφίλ";
  $langPersoDetails = "Προσωπικά στοιχεία";
+ $langLoginFailures = "Αποτυχημένες προσπάθειες εισόδου";
+ $langLast15Days = "15 τελευταίων ημερών";
 
 
 /****************************************************************

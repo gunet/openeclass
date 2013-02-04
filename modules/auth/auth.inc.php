@@ -32,6 +32,7 @@
 ==============================================================================
 */
 
+require_once 'include/log.php';
 // pop3 class
 include 'modules/auth/methods/pop3.php';
 
@@ -620,6 +621,7 @@ Process login form submission
 ****************************************************************/
 function process_login()
 {
+        
     global $warning, $nom, $prenom, $email, $statut, $is_admin, $language,
             $langInvalidId, $langAccountInactive1, $langAccountInactive2,
             $langNoCookies, $langEnterPlatform, $urlServer, $urlAppend, $langHere,
@@ -641,47 +643,50 @@ function process_login()
 		$auth_allow = 0;
 		
                 if (get_config('login_fail_check'))
-                    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > ". intval(get_config('login_fail_threshold')) . " and DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
+                    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' 
+                                        AND COUNT > ". intval(get_config('login_fail_threshold')) . " 
+                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
 		if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
 		    $auth_allow = 8;
 		    sleep(5); // penalize
-		} else {
-		
-    		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
-    			FROM user WHERE username ";
-    		if (get_config('case_insensitive_usernames')) {
-    			$sqlLogin .= "= " . quote($posted_uname);
-    		} else {
-    			$sqlLogin .= "COLLATE utf8_bin = " . quote($posted_uname);
-    		}
-    		$result = db_query($sqlLogin);
-    		// cas might have alternative authentication defined
-    		$exists = 0;
-    		if (!isset($_COOKIE) or count($_COOKIE) == 0) {
-    			// Disallow login when cookies are disabled
-    			$auth_allow = 5;
-    		} elseif ($pass === '') {
-    			// Disallow login with empty password
-    			$auth_allow = 4;
-    		} else {
-    			while ($myrow = mysql_fetch_assoc($result)) {
-    				$exists = 1;
-    				if(!empty($auth)) {
-    					if (in_array($myrow['password'], $auth_ids)) {
-    						// alternate methods login
-    						$auth_allow = alt_login($myrow, $posted_uname, $pass);
-    					} else {
-    						// eclass login
-    						$auth_allow = login($myrow, $posted_uname, $pass);
-    					}
-    				} else {
-    					$tool_content .= "<br>$langInvalidAuth<br>";
-    				}
-    			}
-    		}
-    		if (!$exists and !$auth_allow) {
-    			$auth_allow = 4;
-    		}
+		} else {		
+                        $sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
+                                FROM user WHERE username ";
+                        if (get_config('case_insensitive_usernames')) {
+                                $sqlLogin .= "= " . quote($posted_uname);
+                        } else {
+                                $sqlLogin .= "COLLATE utf8_bin = " . quote($posted_uname);
+                        }
+                        $result = db_query($sqlLogin);
+                        // cas might have alternative authentication defined
+                        $exists = 0;                
+                        if (!isset($_COOKIE) or count($_COOKIE) == 0) {
+                                // Disallow login when cookies are disabled
+                                $auth_allow = 5;
+                        } elseif ($pass === '') {
+                                // Disallow login with empty password
+                                $auth_allow = 4;
+                        } else {
+                                while ($myrow = mysql_fetch_assoc($result)) {                        
+                                        $exists = 1;
+                                        if(!empty($auth)) {
+                                                if (in_array($myrow['password'], $auth_ids)) {
+                                                        // alternate methods login
+                                                        $auth_allow = alt_login($myrow, $posted_uname, $pass);
+                                                } else {                                                
+                                                        // eclass login
+                                                        $auth_allow = login($myrow, $posted_uname, $pass);
+                                                }
+                                        } else {
+                                                $tool_content .= "<br>$langInvalidAuth<br>";
+                                        }
+                                }
+                        }
+                        if (!$exists and !$auth_allow) {
+                                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
+                                                                           'pass' => $pass));
+                                $auth_allow = 4;
+                        }
 		}
 		
 		if (!isset($_SESSION['uid'])) {
@@ -732,30 +737,27 @@ function process_login()
 Authenticate user via eclass
 ****************************************************************/
 function login($user_info_array, $posted_uname, $pass)
-{
-		global $mysqlMainDb;
+{        
+        $pass_match = false;
+        $hasher = new PasswordHash(8, false);
 
-		$pass_match = false;
-		$hasher = new PasswordHash(8, false);
+        if (check_username_sensitivity($posted_uname, $user_info_array['username'])) {
+                if ($hasher->CheckPassword($pass, $user_info_array['password'])) {
+                        $pass_match = true;
+                } else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
+                        $pass_match = true;
+                        // password is in old md5 format, update transparently
+                        $password_encrypted = $hasher->HashPassword($pass);
+                        $user_info_array['password'] = $password_encrypted;
 
-		if (check_username_sensitivity($posted_uname, $user_info_array['username'])) {
-			if ($hasher->CheckPassword($pass, $user_info_array['password'])) {
-				$pass_match = true;
-			} else if (strlen($user_info_array['password']) < 60 && md5($pass) == $user_info_array['password']) {
-				$pass_match = true;
+                        db_query('SET sql_mode = TRADITIONAL');
+                        $sql = "UPDATE user SET password = ". quote($password_encrypted) ." 
+                                WHERE user_id = ". intval($user_info_array['user_id']);
+                        db_query($sql);
+                }
+        }
 
-				// password is in old md5 format, update transparently
-				$password_encrypted = $hasher->HashPassword($pass);
-				$user_info_array['password'] = $password_encrypted;
-
-                                db_query('SET sql_mode = TRADITIONAL');
-				$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE user_id = ". intval($user_info_array['user_id']);
-				db_query($sql, $mysqlMainDb);
-			}
-		}
-
-		if ($pass_match) {
-
+        if ($pass_match) {
                 // check if account is active
                 $is_active = check_activity($user_info_array['user_id']);
                 // check for admin privileges
@@ -786,8 +788,11 @@ function login($user_info_array, $posted_uname, $pass)
                         $GLOBALS['inactive_uid'] = $user_info_array['user_id'];
                 }
         } else {
-                $auth_allow = 4; // means wrong username or password
+                $auth_allow = 4; // means wrong password
+                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
+                                                           'pass' => $pass));
         }
+        
         return $auth_allow;
 }
 
@@ -846,6 +851,9 @@ function alt_login($user_info_array, $uname, $pass)
                         }
                 } else {
                         $auth_allow = 2;
+                        // log invalid logins
+                        Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname,
+                                                                   'pass' => $pass));
                 }
                 if ($auth_allow == 1) {
                         //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
@@ -857,17 +865,10 @@ function alt_login($user_info_array, $uname, $pass)
                         $_SESSION['email'] = $user_info_array['email'];
                         $GLOBALS['userPerso'] = $user_info_array['perso'];
                         $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_array['lang'];
-                } elseif ($auth_allow == 2) {
-                        ;
-                } elseif ($auth_allow == 3) {
-                        ;
-                } else {
-                        $tool_content .= $langLoginFatalError . "<br />";
                 }
         } else {
                 $warning .= "<br>$langInvalidAuth<br>";
         }
-
         return $auth_allow;
 }
 

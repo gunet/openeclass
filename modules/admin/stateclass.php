@@ -17,23 +17,17 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-/*===========================================================================
-    stateclass.php
-    @last update: 05-07-2006 by Pitsiougas Vagelis
+/**
+ * 
+    @file.stateclass.php    
     @authors list: Karatzidis Stratos <kstratos@uom.gr>
-               Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Various Statistics
-
+                   Pitsiougas Vagelis <vagpits@uom.gr>
+    @description: Various Statistics
 ==============================================================================*/
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = TRUE;
-
 require_once '../../include/baseTheme.php';
-
+require_once 'include/log.php';
 $nameTools = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
@@ -48,10 +42,21 @@ $tool_content .= "<div id='operations_container'>
 <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
 </ul></div>";
 
+if (isset($_GET['stats']) and $_GET['stats'] == 'failurelogin') {
+        $date_start = date("Y-m-d", strtotime("-15 days"));
+        $date_end = date("Y-m-d", strtotime("+1 days"));        
+        $log = new Log();
+        $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end);
+        $tool_content .= "<br />";
+}
+
 // Actions
 $tool_content .= "<table class='tbl_alt' width='100%'>
 	<tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[SCRIPT_NAME]?stats=login'>$langNbLogin</a></td>
+	</tr>
+        <tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a> <small>($langLast15Days)</small></td>
 	</tr>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[SCRIPT_NAME]?stats=users'>$langUsers</a></td>
@@ -83,8 +88,7 @@ $tool_content .= "<table class='tbl_alt' width='100%'>
 // ---------------------
 if (isset($_GET['stats'])) {
 	switch ($_GET['stats']) {
-		case 'login':
-			mysql_select_db($mysqlMainDb);
+		case 'login':			
 			$result = db_query("SELECT code FROM course");
 			$course_codes = array();
 			while ($row = mysql_fetch_assoc($result)) {
@@ -202,13 +206,8 @@ if (isset($_GET['stats'])) {
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course
-					GROUP BY lang DESC"))."
-			<th class='left' colspan='2'><b>$langAnnouncements</b></th>
-			</tr>
-			<tr>
-			<td class='left'>$langNbAnnoucement</td>
-			<td class='right'><b>".list_1Result("SELECT COUNT(*) FROM announcement;")."</b></td>
-			</tr>
+					GROUP BY lang DESC"))."			
+			</tr>			
 			</table>";
                         /* // list courses per type -- TODO query must be updated
                          <tr>
@@ -242,9 +241,9 @@ if (isset($_GET['stats'])) {
 				$teachers = $students = $visitors = 0;
 				while ($numrows = mysql_fetch_array($result_numb)) {
 					switch ($numrows['statut']) {
-						case 1: $teachers++; break;
-						case 5: $students++; break;
-						case 10: $visitors++; break;
+						case USER_TEACHER: $teachers++; break;
+						case USER_STUDENT: $students++; break;
+						case USER_GUEST: $visitors++; break;
 						default: break;
 					}
 					$cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");
@@ -300,20 +299,15 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 1;") .
-                                        "</b></td></tr>
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFIED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 2;") .
-                                        "</b></td></tr>
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_UNVERIFIED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = 0;") .
-                                        "</b></td></tr>
+                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFICATION_REQUIRED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
-                                    <td class='right'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user;") .
-                                        "</b></td></tr>
+                                    <td class='right'><b>" . list_1Result("SELECT COUNT(*) FROM user;") . "</b></td></tr>
                             </table>";
 		break;
 		default:
@@ -329,23 +323,28 @@ $tool_content .= "<br /><p class='right'><a href='index.php' class=mainpage>$lan
 
 function tablize($table) {
 
-	global $langClosed, $langTypesRegistration, $langOpen, $langPre, $langPost, $langOther,
-			$langEnglish, $langGreek, $langSpanish;
+	global $langTypesClosed, $langTypesRegistration, $langTypesOpen, $langsCourseInactiveShort, 
+                        $langPre, $langPost, $langOther, 
+                        $langEnglish, $langGreek, $langSpanish, $langGerman, $langItalian, $langFrench;
 
 	$ret = "";
 	if (is_array($table)) {
 		while (list($key, $thevalue) = each($table)) {
 			$ret .= "<tr>";
 			switch ($key) {
-				case '0': $key = $langClosed; break;
-				case '1'; $key = $langTypesRegistration; break;
-				case '2': $key = $langOpen; break;
+                                case COURSE_OPEN: $key = $langTypesOpen; break;
+                                case COURSE_REGISTRATION; $key = $langTypesRegistration; break;
+				case COURSE_CLOSED: $key = $langTypesClosed; break;								
+                                case COURSE_INACTIVE: $key = $langsCourseInactiveShort; break;
 				case 'pre': $key = $langPre; break;
 				case 'post': $key = $langPost; break;
 				case 'other': $key = $langOther; break;
-				case 'greek': $key = $langGreek; break;
-				case 'english': $key = $langEnglish; break;
-				case 'spanish': $key = $langSpanish; break;
+				case 'el': $key = $langGreek; break;
+				case 'en': $key = $langEnglish; break;
+				case 'es': $key = $langSpanish; break;
+                                case 'fr': $key = $langFrench; break;
+                                case 'it': $key = $langItalian; break;
+                                case 'ge': $key = $langGerman; break;
 			}
 			$ret .= "<td style='font-size: 90%'>".$key."</td>";
 			$ret .= "<td class='right'><strong>".$thevalue."</strong></td></tr>";

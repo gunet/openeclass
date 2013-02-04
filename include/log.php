@@ -32,6 +32,7 @@ define('LOG_PROFILE', 4);
 define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
 define('LOG_MODIFY_COURSE', 7);
+define('LOG_LOGIN_FAILURE', 8);
 
 class Log {
         /**
@@ -47,9 +48,13 @@ class Log {
                 if (get_config('disable_log_user_actions')) {
                         return;
                 }
-
+                if (!isset($_SESSION['uid'])) { // it is used only when logging login failures
+                        $userid = 0;
+                } else {
+                        $userid = $_SESSION['uid']; // in all other cases
+                }
                 db_query("INSERT INTO log SET
-                                user_id = $_SESSION[uid],
+                                user_id = $userid,
                                 course_id = $course_id,
                                 module_id = $module_id,
                                 details = ".quote(serialize($details)).",
@@ -77,7 +82,7 @@ class Log {
                         $langCourse, $langModule, $langAdminUsers, $langExternalLinks;
 
                 $q1 = $q2 = $q3 = $q4 = '';
-
+                
                 if ($user_id != -1) {
                         $q1 = "AND user_id = $user_id"; // display specific user
                 }
@@ -134,7 +139,11 @@ class Log {
                                 while ($r = mysql_fetch_array($sql)) {
                                         $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
-                                        $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
+                                        if ($r['user_id'] == 0) { // login failures
+                                                $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
+                                        } else {
+                                                $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
+                                        }
                                         if ($course_id == -1) { // all courses
                                                 $tool_content .= "<td>".course_id_to_title($r['course_id'])."</td>";
                                         }
@@ -227,6 +236,8 @@ class Log {
                                 break;
                         case LOG_PROFILE: $content = $this->profile_action_details($details);
                                 break;
+                        case LOG_LOGIN_FAILURE: $content = $this->login_failure_action_details($details);
+                                break;
                         default: $content = $langUnknownAction;
                                 break;
                 }
@@ -308,6 +319,24 @@ class Log {
                         $content .= "$langUnregUser <br />&nbsp;&laquo;$langName".$details['name']."&raquo;&nbsp;$lang_username&nbsp;&laquo;".$details['username']."&raquo;";
                 }*/
 
+                return $content;
+        }
+        
+        /**
+         * display login failures details
+         * @global type $lang_username
+         * @global type $langPassword
+         * @param type $details
+         * @return type
+         */
+        private function login_failure_action_details($details) {
+                                
+                global $lang_username, $langPassword;
+                
+                $details = unserialize($details);
+                
+                $content = "$lang_username&nbsp;&laquo;$details[uname]&raquo;&nbsp;$langPassword&nbsp;&laquo;$details[pass]&raquo;";
+                
                 return $content;
         }
         
@@ -694,7 +723,7 @@ class Log {
          */
         private function get_action_names($action_type) {
 
-                global $langInsert, $langModify, $langDelete, $langModProfile,
+                global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
                        $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnknownAction;
 
                 switch ($action_type) {
@@ -705,6 +734,7 @@ class Log {
                         case LOG_CREATE_COURSE: return $langFinalize;
                         case LOG_DELETE_COURSE: return $langCourseDel;
                         case LOG_MODIFY_COURSE: return $langCourseInfoEdit;
+                        case LOG_LOGIN_FAILURE: return $langLoginFailures;
                         default: return $langUnknownAction;
                 }
         }
