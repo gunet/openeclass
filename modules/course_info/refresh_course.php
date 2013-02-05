@@ -57,6 +57,9 @@ if(isset($_POST['submit'])) {
 	if (isset($_POST['hideworks'])) {
 		$output[] = hide_work();
 	}
+        if (isset($_POST['clearstats'])) {
+                $output[] = clear_stats();
+        }
 
 	if (($count_events = count($output)) > 0 ) {
 		$tool_content .=  "<p class='success_small'>$langRefreshSuccess
@@ -66,7 +69,7 @@ if(isset($_POST['submit'])) {
 		}
 		$tool_content .= "\n</ul>\n</p><br />";
 	}
-	$tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
 
 } else {
 	$lang_jscalendar = langname_to_code($language);
@@ -104,6 +107,11 @@ if(isset($_POST['submit'])) {
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
+        <tr>
+	  <th class='left'><img src=\"$themeimg/usage_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langStats</th>
+	  <td><input type='checkbox' name='clearstats'></td>
+	  <td>$langClearStats</td>
+	</tr>
 	<tr>
 	  <th>&nbsp;</th>
 	  <td colspan='2'><input type='submit' value='$langSubmitActions' name='submit'></td>
@@ -111,7 +119,7 @@ if(isset($_POST['submit'])) {
 	</tbody>
 	</table>
 	</form>";
-	$tool_content .= "<p align='right'><a href='infocours.php?course=$course_code'>$langBack</a></p>";
+	$tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
 }
 
 draw($tool_content, 2, null, $head_content);
@@ -160,6 +168,16 @@ function hide_work()  {
 
 	db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
 	return "<p>$langWorksDeleted</p>";
+}
+
+function clear_stats() {
+    global $langStatsCleared;
+    
+    require_once 'include/action.php';
+    $action = new action();
+    $action->summarizeAll();
+    
+    return "<p>$langStatsCleared</p>";
 }
 
 function make_calendar($name) {

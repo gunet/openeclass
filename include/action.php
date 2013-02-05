@@ -82,78 +82,107 @@ class action {
 
 // ophelia 2006-08-02: per month and per course
     function summarize() {
-        global $course_id;
-
-        //// edw ftia3e tis hmeromhnies
-        $stop_stmp = time() - (get_config('actions_expire_interval')-1) * 30 * 24 * 3600;
+        // set start/stop dates
+        $now = time();
+        $stop_stmp = mktime(0, 0, 0, date("m", $now)- (get_config('actions_expire_interval')-1), 1, date("Y", $now)); // minus proper amount of months
         $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
+        $start_date = $this->calcSumStartDate();
+	$stmp = strtotime($start_date);
+        $end_stmp = mktime(0, 0, 0, date("m", $stmp)+1, 1, date("Y", $stmp)); // min time + 1 month
+        $end_date = date('Y-m-01 00:00:00', $end_stmp);
+        
+        while ($end_date < $stop_month)
+            list($start_date, $end_date, $end_stmp) = $this->doSummarize($start_date, $end_date, $end_stmp);
+    }
+    
+    /**
+     * Summarize All statitics of current course: from its start up to (and including) the current month.
+     */
+    function summarizeAll() {
+        // set start/stop dates
+        $now = time();
+        $stop_stmp = mktime(0, 0, 0, date("m", $now)+1, 1, date("Y", $now)); // + 1 month offset
+        $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
+
+        $start_date = $this->calcSumStartDate();
+	$stmp = strtotime($start_date);
+        $end_stmp = mktime(0, 0, 0, date("m", $stmp)+1, 1, date("Y", $stmp)); // min time + 1 month
+        $end_date = date('Y-m-01 00:00:00', $end_stmp);
+        
+        while ($end_date <= $stop_month)
+            list($start_date, $end_date, $end_stmp) = $this->doSummarize($start_date, $end_date, $end_stmp);
+    }
+    
+    private function calcSumStartDate() {
+        global $course_id;
+        
         $sql_0 = "SELECT min(day) as min_date
-                FROM actions_daily
-                WHERE course_id = $course_id";   // gia na doume
-        $sql_1 = "SELECT DISTINCT module_id
-                FROM actions_daily
-                WHERE course_id = $course_id";  // arkei gia twra.
-
-
+                    FROM actions_daily
+                   WHERE course_id = $course_id";
+        
         $result = db_query($sql_0);
-        while ($row = mysql_fetch_assoc($result)) {
+        while ($row = mysql_fetch_assoc($result))
             $start_date = $row['min_date'];
+	if (empty($start_date))
+            $start_date = '2003-01-01 00:00:00';
+        mysql_free_result($result);
+        
+        return $start_date;
+    }
+    
+    private function doSummarize($start_date, $end_date, $end_stmp) {
+        global $course_id;
+        
+        $sql_1 = "SELECT DISTINCT module_id
+                    FROM actions_daily
+                   WHERE course_id = $course_id";
+        
+        $result = db_query($sql_1);
+        while ($row = mysql_fetch_assoc($result)) {
+            // edw kanoume douleia gia ka8e module
+            $module_id = $row['module_id'];
+
+            $sql_2 = "SELECT SUM(hits) AS visits, sum(duration) AS total_dur 
+                        FROM actions_daily
+                       WHERE module_id = $module_id 
+                         AND course_id = $course_id 
+                         AND day >= '$start_date' 
+                         AND day < '$end_date' ";
+
+            $result_2  = db_query($sql_2);
+            $row2      = mysql_fetch_assoc($result_2);
+            $visits    = $row2['visits'];
+            $total_dur = intval($row2['total_dur']);
+            mysql_free_result($result_2);
+
+            $sql_3 = "INSERT INTO actions_summary SET 
+                        module_id  = $module_id, 
+                        course_id  = $course_id, 
+                        visits     = $visits, 
+                        start_date = '$start_date', 
+                        end_date   = '$end_date', 
+                        duration   = $total_dur ";
+            $result_3 = db_query($sql_3);
+            @mysql_free_result($result_3);
+
+            $sql_4 = "DELETE FROM actions_daily 
+                            WHERE module_id = $module_id 
+                              AND course_id = $course_id
+                              AND day      >= '$start_date' 
+                              AND day       < '$end_date' ";
+            $result_4 = db_query($sql_4);
+            @mysql_free_result($result_4);
         }
-	if (empty($start_date)) {
-		$start_date = '2003-01-01 00:00:00';
-	}
         mysql_free_result($result);
 
-	$stmp = strtotime($start_date);
-        $end_stmp = $stmp + 30*24*60*60;  // min time + 1 month
-        $end_date = date('Y-m-01 00:00:00', $end_stmp);
-        while ($end_date < $stop_month){
-            $result = db_query($sql_1);
-            while ($row = mysql_fetch_assoc($result)) {
-                // edw kanoume douleia gia ka8e module
-                $module_id = $row['module_id'];
-
-                $sql_2 = "SELECT SUM(hits) AS visits, sum(duration) AS total_dur FROM actions_daily
-                             WHERE module_id = $module_id AND
-                             course_id = $course_id AND
-                             day >= '$start_date' AND
-                             day < '$end_date' ";
-
-                $result_2 = db_query($sql_2);
-                $row2 = mysql_fetch_assoc($result_2);
-                $visits = $row2['visits'];
-                $total_dur = intval($row2['total_dur']);
-                mysql_free_result($result_2);
-
-                $sql_3 = "INSERT INTO actions_summary SET ".
-                    " module_id = $module_id, ".
-                    " course_id = $course_id, ".
-                    " visits = $visits, ".
-                    " start_date = '$start_date', ".
-                    " end_date = '$end_date', ".
-                    " duration = $total_dur";
-                $result_3 = db_query($sql_3);
-                @mysql_free_result($result_3);
-
-                $sql_4 = "DELETE FROM actions_daily ".
-                    " WHERE module_id = $module_id ".
-                    " AND course_id = $course_id".
-                    " AND day >= '$start_date' AND ".
-                    " day < '$end_date'";
-                $result_4 = db_query($sql_4);
-                @mysql_free_result($result_4);
-
-            }
-            mysql_free_result($result);
-
-            // next month
-            $start_date = $end_date;
-	    $stmp = $end_stmp;
-            $end_stmp += 30*24*60*60;  // end time + 1 month
-            $end_date = date('Y-m-01 00:00:00', $end_stmp);
-	    $start_date = date('Y-m-01 00:00:00', $stmp);
-        }
+        // next month
+        $stmp       = $end_stmp;
+        $end_stmp = mktime(0, 0, 0, date("m", $stmp)+1, 1, date("Y", $stmp)); // end time + 1 month
+        $end_date   = date('Y-m-01 00:00:00', $end_stmp);
+        $start_date = date('Y-m-01 00:00:00', $stmp);
+        
+        return array($start_date, $end_date, $end_stmp);
     }
 }
 
