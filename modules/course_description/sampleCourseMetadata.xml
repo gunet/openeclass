@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<course
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xmlns='http://www.openeclass.org'
+    xsi:schemaLocation='http://www.openeclass.org courseMetadata.xsd'>
+    
+    <instructor>
+        <firstName xml:lang="el">Διδάσκων</firstName>
+        <firstName xml:lang="en">Instructor</firstName>
+        
+        <lastName xml:lang="el">Διδάσκων</lastName>
+        <lastName xml:lang="en">Instructor</lastName>
+        
+        <fullName xml:lang="el">Διδάσκων</fullName>
+        <fullName xml:lang="en">Instructor</fullName>
+    </instructor>
+    
+    <title xml:lang="el">Course 1</title>
+    <title xml:lang="en">Μάθημα 1</title>
+    
+    <url>http://eclass</url>
+    
+    <code xml:lang="el">TMA1</code>
+    
+    <level>doctoral</level>
+    
+    <yearOfStudy>3</yearOfStudy>
+    <semester>6</semester>
+    
+    <type>compulsory</type>
+    
+    <credithours>10</credithours>
+    
+    <coTeaching>true</coTeaching>
+    <coTeachingColleagueOpensCourse>true</coTeachingColleagueOpensCourse>
+    <coTeachingAutonomousDepartment>true</coTeachingAutonomousDepartment>
+    <coTeachingDepartmentCreditHours>10</coTeachingDepartmentCreditHours>
+    
+    <language>greek</language>
+    
+    <targetGroup xml:lang="el">Ομάδα στόχος.</targetGroup>
+    <targetGroup xml:lang="en">Just a target group.</targetGroup>
+    
+    <credits>30</credits>
+    
+    <description xml:lang="el">Περιγραφή μαθήματος.</description>
+    <description xml:lang="en">Just a description.</description>
+    <contents xml:lang="el">Περιεχόμενα μαθήματος</contents>
+    <objectives xml:lang="el">Course objectives</objectives>
+    <keywords xml:lang="el">λέξη1, λέξη2</keywords>
+    <keywords xml:lang="en">keyword3, keyword4</keywords>
+    <featuredBooks xml:lang="el">Συγγράματα</featuredBooks>
+    <prerequisites xml:lang="el">Προαπαιτούμενα</prerequisites>
+    <literature xml:lang="el">Βιβλιογραφία</literature>
+    
+    <numberOfUnits>0</numberOfUnits>
+    
+    <thematic xml:lang="el">Θεματική επιστημονική περιοχή</thematic>
+    <thematic xml:lang="en">Thematic scientific area</thematic>
+    
+    <institution xml:lang="el">Ίδρυμα</institution>
+    <institution xml:lang="en">Institution</institution>
+    <institutionDescription xml:lang="el">περιγραφή</institutionDescription>
+    <institutionDescription xml:lang="en">description</institutionDescription>
+    <department xml:lang="el">Τμήμα</department>
+    <department xml:lang="en">Department</department>
+    <sector xml:lang="el">Τομέας</sector>
+    <sector xml:lang="en">Sector</sector>
+    <curriculumTitle xml:lang="el">Τίτλος ΠΣ</curriculumTitle>
+    <curriculumTitle xml:lang="el">title</curriculumTitle>
+    <curriculumDescription xml:lang="el">Περιγραφή ΠΣ</curriculumDescription>
+    <curriculumDescription xml:lang="en">Description</curriculumDescription>
+    <outcomes xml:lang="el">Μαθησιακά αποτελέσματα</outcomes>
+    <outcomes xml:lang="en">Learning Outcomes</outcomes>
+    <curriculumKeywords xml:lang="el">λέξη1, λέξη2</curriculumKeywords>
+    <curriculumKeywords xml:lang="en">keyword3, keyword4</curriculumKeywords>
+    <curriculumLevel>doctoral</curriculumLevel>
+    <curriculumTargetGroup xml:lang="el">Ομάδα Στόχος</curriculumTargetGroup>
+    <curriculumTargetGroup xml:lang="en">Target Group</curriculumTargetGroup>
+</course>
