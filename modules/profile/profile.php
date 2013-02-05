@@ -38,6 +38,13 @@ $userObj = new user();
 load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
+load_js('tools.js');
+$head_content .= "<script type='text/javascript'>
+var lang = { 
+        addPicture: '".js_escape($langAddPicture)."',
+        confirmDelete: '".js_escape($langConfirmDelete)."'}; 
+$(profile_init);</script>";
+
 
 check_uid();
 $nameTools = $langModifyProfile;
@@ -438,14 +445,6 @@ $tool_content .= "
         </table>
         </fieldset>
         </form>";
-
-load_js('jquery');
-load_js('tools.js');
-$head_content .= "<script type='text/javascript'>
-var lang = { 
-        addPicture: '".js_escape($langAddPicture)."',
-        confirmDelete: '".js_escape($langConfirmDelete)."'}; 
-$(profile_init);</script>";
 
 draw($tool_content, 1, null, $head_content);
 
