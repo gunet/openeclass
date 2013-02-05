@@ -73,6 +73,9 @@ $tool_content .= "<table class='tbl_alt' width='100%'>
 	<tr><th><img src='$themeimg/arrow.png' alt=''></th>
 	<td><a href='$_SERVER[SCRIPT_NAME]?stats=vmusers'>$langMailVerification</a></td>
 	</tr>
+         <tr><th><img src='$themeimg/arrow.png' alt=''></th>
+	<td><a href='$_SERVER[SCRIPT_NAME]?stats=unregusers'>$langUnregUsers</a>  <small>($langLastMonth)</small></td></td>
+	</tr>
 	</table>";
 
 // ---------------------
@@ -86,6 +89,13 @@ if (isset($_GET['stats'])) {
                         $date_end = date("Y-m-d", strtotime("+1 days"));
                         $log = new Log();
                         $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end);                        
+                break;
+                case 'unregusers':
+                        $tool_content .= "<br />";
+                        $date_start = date("Y-m-d", strtotime("-1 month"));                       
+                        $date_end = date("Y-m-d", strtotime("+1 days"));                        
+                        $log = new Log();
+                        $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end);                        
                 break;
 		case 'login':			
 			$result = db_query("SELECT code FROM course");

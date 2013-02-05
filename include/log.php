@@ -33,6 +33,7 @@ define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
 define('LOG_MODIFY_COURSE', 7);
 define('LOG_LOGIN_FAILURE', 8);
+define('LOG_DELETE_USER', 9);
 
 class Log {
         /**
@@ -111,7 +112,7 @@ class Log {
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");                
+                                ORDER BY ts DESC");
 
                 if (mysql_num_rows($sql) > 0) {
                                 if ($course_id > 0) {
@@ -139,7 +140,7 @@ class Log {
                                 while ($r = mysql_fetch_array($sql)) {
                                         $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
-                                        if ($r['user_id'] == 0) { // login failures
+                                        if (($r['user_id'] == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
                                                 $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                                         } else {
                                                 $tool_content .= "<td>".display_user($r['user_id'], false, false)."</td>";
@@ -237,6 +238,8 @@ class Log {
                         case LOG_PROFILE: $content = $this->profile_action_details($details);
                                 break;
                         case LOG_LOGIN_FAILURE: $content = $this->login_failure_action_details($details);
+                                break;
+                        case LOG_DELETE_USER: $content = $this->delete_user_action_details($details);
                                 break;
                         default: $content = $langUnknownAction;
                                 break;
@@ -336,6 +339,17 @@ class Log {
                 $details = unserialize($details);
                 
                 $content = "$lang_username&nbsp;&laquo;$details[uname]&raquo;&nbsp;$langPassword&nbsp;&laquo;$details[pass]&raquo;";
+                
+                return $content;
+        }
+        
+        private function delete_user_action_details($details) 
+        {
+                global $lang_username, $langName;
+                
+                $details = unserialize($details);
+                
+                $content = "$lang_username&nbsp;&laquo;$details[username]&raquo;&nbsp;$langName&nbsp;&laquo;$details[name]&raquo;";
                 
                 return $content;
         }
@@ -724,7 +738,7 @@ class Log {
         private function get_action_names($action_type) {
 
                 global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
-                       $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnknownAction;
+                       $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnregUsers, $langUnknownAction;
 
                 switch ($action_type) {
                         case LOG_INSERT: return $langInsert;
@@ -735,6 +749,7 @@ class Log {
                         case LOG_DELETE_COURSE: return $langCourseDel;
                         case LOG_MODIFY_COURSE: return $langCourseInfoEdit;
                         case LOG_LOGIN_FAILURE: return $langLoginFailures;
+                        case LOG_DELETE_USER: return $langUnregUsers;
                         default: return $langUnknownAction;
                 }
         }

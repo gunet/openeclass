@@ -56,8 +56,8 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 	}  //endif is admin
 } else {
 	if (isset($uid)) {
-                //$un = uid_to_username($uid);
-                //$n = uid_to_name($uid);
+                $un = uid_to_username($uid);
+                $n = uid_to_name($uid);
                 // unregister user from inactive courses (if any)
                 db_query("DELETE from course_user WHERE user_id = $uid");
                 db_query("DELETE FROM group_members WHERE user_id = $uid");
@@ -66,13 +66,13 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 
 		if (mysql_affected_rows() > 0) {
                         db_query("DELETE FROM user_department WHERE user = $uid");
-			$tool_content .=  "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
-			$tool_content .=  "$langThanks\n";
-			$tool_content .=  "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
-                        /*Log::record(0, 0, LOG_PROFILE, array('uid' => $uid,
-                                                             'deleteuser' => 1,
+			$tool_content .= "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
+			$tool_content .= "$langThanks\n";
+			$tool_content .= "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
+                        // action logging
+                        Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,                                                             
                                                              'username' => $un,
-                                                             'name' => $n)); */
+                                                             'name' => $n));
 			unset($_SESSION['uid']);
 		} else {
 			$tool_content .=  "<p>$langError</p>\n";
