@@ -42,14 +42,6 @@ $tool_content .= "<div id='operations_container'>
 <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
 </ul></div>";
 
-if (isset($_GET['stats']) and $_GET['stats'] == 'failurelogin') {
-        $date_start = date("Y-m-d", strtotime("-15 days"));
-        $date_end = date("Y-m-d", strtotime("+1 days"));        
-        $log = new Log();
-        $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end);
-        $tool_content .= "<br />";
-}
-
 // Actions
 $tool_content .= "<table class='tbl_alt' width='100%'>
 	<tr><th width='20'><img src='$themeimg/arrow.png' alt=''></th>
@@ -88,6 +80,13 @@ $tool_content .= "<table class='tbl_alt' width='100%'>
 // ---------------------
 if (isset($_GET['stats'])) {
 	switch ($_GET['stats']) {
+                case 'failurelogin':
+                        $tool_content .= "<br />";
+                        $date_start = date("Y-m-d", strtotime("-15 days"));
+                        $date_end = date("Y-m-d", strtotime("+1 days"));
+                        $log = new Log();
+                        $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end);                        
+                break;
 		case 'login':			
 			$result = db_query("SELECT code FROM course");
 			$course_codes = array();
@@ -129,23 +128,23 @@ if (isset($_GET['stats'])) {
 			<th colspan='2'>$langNbLogin</th>
 			</tr>
 			<tr>
-			<td>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</td>
-			<td class='right' width='200'><b>".list_1Result("SELECT count(*) FROM loginout
+			<td>$langFrom ".db_query_get_single_value("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</td>
+			<td class='right' width='200'><b>".db_query_get_single_value("SELECT COUNT(*) FROM loginout
 				WHERE loginout.action ='LOGIN'")."</b></td>
 			</tr>
 			<tr>
 			<td>$langLast30Days</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
+			<td class='right'><b>".db_query_get_single_value("SELECT COUNT(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 30 DAY))")."</b></td>
 			</tr>
 			<tr>
 			<td>$langLast7Days</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
+			<td class='right'><b>".db_query_get_single_value("SELECT COUNT(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > DATE_SUB(CURDATE(),INTERVAL 7 DAY))")."</b></td>
 			</tr>
 			<tr>
 			<td>$langToday</td>
-			<td class='right'><b>".list_1Result("SELECT count(*) FROM loginout
+			<td class='right'><b>".db_query_get_single_value("SELECT COUNT(*) FROM loginout
 				WHERE action ='LOGIN' AND (loginout.when > curdate())")."</b></td>
 			</tr>
 			<tr>
@@ -163,24 +162,24 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td>$langNbProf</td>
                                     <td class='right' width='200'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE statut = 1;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 1;") .
                                         "</b></td></tr>
                                 <tr><td>$langNbStudents</td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE statut = 5;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 5;") .
                                         "</b></td></tr>
                                 <tr><td>$langNumGuest</td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user WHERE statut = 10;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 10;") .
                                         "</b></td></tr>
                                 <tr><td>$langTotal</td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT count(*) FROM user;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user;") .
                                         "</b></td></tr>
                                 <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
-				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom ".list_1Result("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</a></td>
+				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom ".db_query_get_single_value("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1")."</a></td>
                                     <td class='right'><b>" .
-					list_1Result("SELECT count(*) FROM `user` LEFT JOIN `loginout` ON `user`.`user_id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
+					db_query_get_single_value("SELECT COUNT(*) FROM `user` LEFT JOIN `loginout` ON `user`.`user_id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
                                         "</b></td></tr>
                             </table>";
 		break;
@@ -191,7 +190,7 @@ if (isset($_GET['stats'])) {
 			</tr>
 			<tr>
 			<td class='left'>$langNumCourses</td>
-			<td class='right'><b>".list_1Result("SELECT COUNT(*) FROM course")."</b></td>
+			<td class='right'><b>".db_query_get_single_value("SELECT COUNT(*) FROM course")."</b></td>
 			</tr>
 			<tr>
 			<th class='left' colspan='2'><b>$langNunEachAccess</b></th>
@@ -299,52 +298,59 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
                                     <td class='right' width='200'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFIED.";") . "</b></td></tr>
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFIED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_UNVERIFIED.";") . "</b></td></tr>
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_UNVERIFIED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
                                     <td class='right'><b>" .
-                                        list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFICATION_REQUIRED.";") . "</b></td></tr>
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFICATION_REQUIRED.";") . "</b></td></tr>
                                 <tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=yes'>$langTotal</a></td>
-                                    <td class='right'><b>" . list_1Result("SELECT COUNT(*) FROM user;") . "</b></td></tr>
+                                    <td class='right'><b>" . db_query_get_single_value("SELECT COUNT(*) FROM user;") . "</b></td></tr>
                             </table>";
 		break;
 		default:
 		break;
 	}
 }
-
 $tool_content .= "<br /><p class='right'><a href='index.php' class=mainpage>$langBackAdmin</a></p>";
 
-/*
+/**
  * output a <table> with an array
+ * @global type $langTypesClosed
+ * @global type $langTypesRegistration
+ * @global type $langTypesOpen
+ * @global type $langsCourseInactiveShort
+ * @global type $langPre
+ * @global type $langPost
+ * @global type $langOther
+ * @global type $native_language_names_init
+ * @param type $table
+ * @return string
  */
-
 function tablize($table) {
 
 	global $langTypesClosed, $langTypesRegistration, $langTypesOpen, $langsCourseInactiveShort, 
-                        $langPre, $langPost, $langOther, 
-                        $langEnglish, $langGreek, $langSpanish, $langGerman, $langItalian, $langFrench;
+                        $langPre, $langPost, $langOther, $native_language_names_init;
 
 	$ret = "";
 	if (is_array($table)) {
 		while (list($key, $thevalue) = each($table)) {
 			$ret .= "<tr>";
-			switch ($key) {
-                                case COURSE_OPEN: $key = $langTypesOpen; break;
+			switch ($key) {                                
+                                case '0': $key = $langTypesClosed; break;
                                 case COURSE_REGISTRATION; $key = $langTypesRegistration; break;
-				case COURSE_CLOSED: $key = $langTypesClosed; break;								
+				case COURSE_OPEN: $key = $langTypesOpen; break;
                                 case COURSE_INACTIVE: $key = $langsCourseInactiveShort; break;
 				case 'pre': $key = $langPre; break;
 				case 'post': $key = $langPost; break;
 				case 'other': $key = $langOther; break;
-				case 'el': $key = $langGreek; break;
-				case 'en': $key = $langEnglish; break;
-				case 'es': $key = $langSpanish; break;
-                                case 'fr': $key = $langFrench; break;
-                                case 'it': $key = $langItalian; break;
-                                case 'ge': $key = $langGerman; break;
+				case 'el': $key = $native_language_names_init['el']; break;
+				case 'en': $key = $native_language_names_init['en']; break;
+				case 'es': $key = $native_language_names_init['es']; break;
+                                case 'fr': $key = $native_language_names_init['fr']; break;
+                                case 'it': $key = $native_language_names_init['it']; break;
+                                case 'de': $key = $native_language_names_init['de']; break;
 			}
 			$ret .= "<td style='font-size: 90%'>".$key."</td>";
 			$ret .= "<td class='right'><strong>".$thevalue."</strong></td></tr>";
@@ -356,21 +362,13 @@ function tablize($table) {
 function ok_message() {
 	global $langNotExist;
 
-	return "<b><span style=\"color: #00FF00\">$langNotExist</span></b>";
+	return "<b><span style='color: #00FF00'>$langNotExist</span></b>";
 }
 
 function error_message() {
 	global $langExist;
 
-	return "<b><span style=\"color: #FF0000\">$langExist</span></b>";
-}
-
-
-function list_1Result($sql) {
-
-	$res = db_query($sql);
-	$res = mysql_fetch_array($res);
-	return $res[0];
+	return "<b><span style='color: #FF0000'>$langExist</span></b>";
 }
 
 function list_ManyResult($sql) {
