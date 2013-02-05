@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-function departmentChildren($depid, $url = '') {
+function departmentChildren($tree, $depid, $url = '') {
     global $langAvCours, $langAvCourses;
 
     $ret = '';
@@ -32,32 +32,33 @@ function departmentChildren($depid, $url = '') {
                         AND node.allow_course = true");
 
 
-    if (mysql_num_rows($res) > 0)
-    {
+    if (mysql_num_rows($res) > 0) {
         $ret .= "<table width='100%' class='tbl_border'>";
         $nodenames = array();
         $nodecodes = array();
 
-        while ($node = mysql_fetch_array($res))
-        {
+        while ($node = mysql_fetch_array($res)) {
             $nodenames[$node['id']] = hierarchy::unserializeLangField($node['name']);
             $nodecodes[$node['id']] = $node['code'];
         }
         asort($nodenames);
 
-        foreach ($nodenames as $key => $value)
-        {
+        foreach ($nodenames as $key => $value) {
             $ret .= "<tr><td><a href='$url.php?fc=". intval($key) ."'>".
                     q($value) .
                     "</a>&nbsp;&nbsp;<small>(". q($nodecodes[$key]) .")";
 
-            $n = db_query("SELECT COUNT(*)
-                             FROM course, course_department
-                            WHERE course.id = course_department.course
-                              AND course_department.department = ". intval($key));
-            $r = mysql_fetch_array($n);
+            $count = 0;
+            foreach( $tree->buildSubtrees(array(intval($key))) as $subnode ){
+                $n = db_query("SELECT COUNT(*)
+                                 FROM course, course_department
+                                WHERE course.id = course_department.course
+                                  AND course_department.department = ". intval($subnode));
+                $r = mysql_fetch_array($n);
+                $count += $r[0];
+            }
 
-            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". intval($r[0]) ."&nbsp;". ($r[0] == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+            $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". intval($count) ."&nbsp;". ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
         }
 
         $ret .= "</table><br />";

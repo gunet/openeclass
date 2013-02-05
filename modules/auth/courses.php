@@ -188,7 +188,7 @@ hContent;
 				<th><a name='top'></a><b>$langFaculty:</b> ". $tree->getFullPath($fc, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</th>
 				</tr></table><br />";
 
-                                $tool_content .= departmentChildren($fc, 'courses');
+                                $tool_content .= departmentChildren($tree, $fc, 'courses');
 
 				$tool_content .= "<br />
 				<div class=alert1>$langNoCoursesAvailable</div>\n";
@@ -259,7 +259,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                    <tr>
                    <th><a name='top'> </a>$langFaculty: <b>". $tree->getFullPath($facid, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th></tr></table><br/>";
 
-    $retString .= departmentChildren($facid, 'courses');
+    $retString .= departmentChildren($tree, $facid, 'courses');
 
 
     $result = db_query("SELECT

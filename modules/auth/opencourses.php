@@ -72,7 +72,7 @@ $tool_content .= "<table width=100% class='tbl_border'>
                     </tr>
                   </table><br/>\n\n";
 
-$tool_content .= departmentChildren($fc, 'opencourses');
+$tool_content .= departmentChildren($tree, $fc, 'opencourses');
 
 $result = db_query("SELECT course.code k,
                            course.public_code c,
