@@ -75,7 +75,7 @@
   //       Samples :
   // define( 'PCLZIP_TEMPORARY_FILE_RATIO', 0.5 );
   if (!defined('PCLZIP_TEMPORARY_FILE_RATIO')) {
-    define( 'PCLZIP_TEMPORARY_FILE_RATIO', 0.47 );
+    define( 'PCLZIP_TEMPORARY_FILE_RATIO', 0.2 );
   }
 
 // --------------------------------------------------------------------------------
