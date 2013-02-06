@@ -470,6 +470,7 @@ $langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημ�
 $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 $langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
+$langLogActions = "Καταγραφή ενεργειών";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
@@ -1696,7 +1697,9 @@ $lang_course_multidep = "Να επιτρέπεται τα μαθήματα να 
 $lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλά τμήματα-σχολές";
 $lang_restrict_owndep = "Να μην επιτρέπεται η αλλαγή τμήματος από τους χρήστες";
 $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημιουργία μαθημάτων από τους καθηγητές στα τμήματα που δεν ανήκουν";
-$lang_disable_log_user_actions = "Να μη γίνεται αναλυτική καταγραφή των ενεργειών των χρηστών";
+$lang_disable_log_actions = "Απενεργοποίηση καταγραφής ενεργειών";
+$lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα μαθήματα";
+$lang_disable_log_system_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών εκτός μαθημάτων";
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής Πλατφόρμας';

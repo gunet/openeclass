@@ -45,10 +45,18 @@ class Log {
          * @return none;
          */
         public static function record($course_id, $module_id, $action_type, $details) {
-
-                if (get_config('disable_log_user_actions')) {
+                
+                // check `config` values for logging
+                if (get_config('disable_log_actions')) {
                         return;
-                }
+                } else {
+                        if (get_config('disable_log_system_actions') and $module_id == 0) {
+                                return;
+                        } elseif (get_config('disable_log_course_actions')) {
+                                return;
+                        }
+                }                               
+                
                 if (!isset($_SESSION['uid'])) { // it is used only when logging login failures
                         $userid = 0;
                 } else {

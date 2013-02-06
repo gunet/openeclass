@@ -137,7 +137,9 @@ if (isset($_POST['submit']))  {
                         'user_multidep' => true,
                         'restrict_owndep' => true,
                         'restrict_teacher_owndep' => true,
-                        'disable_log_user_actions' => true,
+                        'disable_log_actions' => true,
+                        'disable_log_course_actions' => true,
+                        'disable_log_system_actions' => true,
                         'user_registration' => true,
                         'eclass_stud_reg' => true,
                         'alt_auth_stud_reg' => true,
@@ -342,8 +344,7 @@ else {
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
         $max_glossary_terms = get_config('max_glossary_terms');
-        $cbox_enable_search = get_config('enable_search')?'checked':'';
-        $cbox_disable_log_user_actions = get_config('disable_log_user_actions')?'checked':'';
+        $cbox_enable_search = get_config('enable_search')?'checked':'';        
         $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
@@ -369,10 +370,7 @@ else {
                 <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='".intval(get_config('min_password_len'))."'></td></tr>        
         <tr>
                 <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
-        </tr>
-        <tr>
-                <td><input type='checkbox' name='disable_log_user_actions' value='1' $cbox_disable_log_user_actions />&nbsp;$lang_disable_log_user_actions</td>
-        </tr>
+        </tr>        
         <tr>		
                 <td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
         </tr>
@@ -427,8 +425,27 @@ else {
 	  <td><textarea rows='6' cols='60' name='teacher_upload_whitelist'>".get_config('teacher_upload_whitelist')."</textarea></td>
 	  </tr>
 	  </table>
-	  </fieldset>
-          <fieldset><legend>$langLoginFailCheck</legend>
+	  </fieldset>";
+          
+           $cbox_disable_log_actions = get_config('disable_log_actions')?'checked':'';
+           $cbox_disable_log_course_actions = get_config('disable_log_course_actions')?'checked':'';
+           $cbox_disable_log_system_actions = get_config('disable_log_system_actions')?'checked':'';
+           $tool_content .= "<fieldset>
+                <legend>$langLogActions</legend>
+                <table class='tbl' width='100%'>                    
+                <tr>
+                      <td><input type='checkbox' name='disable_log_actions' value='1' $cbox_disable_log_actions />&nbsp;$lang_disable_log_actions</td>
+                </tr>
+                <tr>
+                      <td><input type='checkbox' name='disable_log_course_actions' value='1' $cbox_disable_log_course_actions />&nbsp;$lang_disable_log_course_actions</td>
+                </tr>
+                <tr>
+                      <td><input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions />&nbsp;$lang_disable_log_system_actions</td>
+                </tr>
+                </table>
+                </fieldset>";
+          
+          $tool_content .= "<fieldset><legend>$langLoginFailCheck</legend>
           <table class='tbl' width='100%'>
           <tr>
           <td><input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' $cbox_login_fail_check />&nbsp;$langEnableLoginFailCheck</td>
