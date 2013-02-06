@@ -38,6 +38,9 @@ eMail: eclassadmin@gunet.gr
 
 define('ECLASS_VERSION', '2.99');
 
+// better performance while downloading very large files
+define( 'PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
+
 /* course status */
 define('COURSE_OPEN', 2);
 define('COURSE_REGISTRATION', 1);
