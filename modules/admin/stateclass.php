@@ -172,15 +172,15 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td>$langNbProf</td>
                                     <td class='right' width='200'><b>" .
-                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 1;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = ".USER_TEACHER.";") .
                                         "</b></td></tr>
                                 <tr><td>$langNbStudents</td>
                                     <td class='right'><b>" .
-                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 5;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = ".USER_STUDENT.";") .
                                         "</b></td></tr>
                                 <tr><td>$langNumGuest</td>
                                     <td class='right'><b>" .
-                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = 10;") .
+                                        db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = ".USER_GUEST.";") .
                                         "</b></td></tr>
                                 <tr><td>$langTotal</td>
                                     <td class='right'><b>" .
@@ -243,11 +243,13 @@ if (isset($_GET['stats'])) {
 		case 'percourse':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 			<tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
+                        $teachers = $students = $visitors = 0;
 			$result = db_query("SELECT id, code, title, prof_names FROM course ORDER BY title");
 			while ($row = mysql_fetch_array($result)) {
 				$result_numb = db_query("SELECT user.user_id, course_user.statut FROM course_user, user, course
-					WHERE course.id = $row[id] AND course_user.user_id = user.user_id");
-				$teachers = $students = $visitors = 0;
+                                                        WHERE course.id = $row[id] 
+                                                        AND course_user.user_id = user.user_id");                                
+                                $cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");                                
 				while ($numrows = mysql_fetch_array($result_numb)) {
 					switch ($numrows['statut']) {
 						case USER_TEACHER: $teachers++; break;
@@ -255,9 +257,8 @@ if (isset($_GET['stats'])) {
 						case USER_GUEST: $visitors++; break;
 						default: break;
 					}
-					$cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");
-					$cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
 				}
+                                $cu[$cu_key] = "<small>$teachers $langTeachers | $students $langStudents | $visitors $langGuests </small>";
 			}
 			$tool_content .= "</tr>".tablize($cu)."</table>";
 		break;
