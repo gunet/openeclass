@@ -216,19 +216,13 @@ if (isset($_GET['stats'])) {
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT hierarchy.name AS faculte, COUNT(*)
 				FROM course, course_department, hierarchy
                                 WHERE course.id = course_department.course
-                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id"))."
+                                  AND hierarchy.id = course_department.department GROUP BY hierarchy.id", true))."
 			<tr>
 			<th class='left' colspan='2'><b>$langNumEachLang</b></th>
 			</tr>".tablize(list_ManyResult("SELECT DISTINCT lang, COUNT(*) FROM course
 					GROUP BY lang DESC"))."			
-			</tr>			
+			</tr>
 			</table>";
-                        /* // list courses per type -- TODO query must be updated
-                         <tr>
-			<th class='left' colspan='2'><b>$langNumEachCat</b></th>
-			</tr>".tablize(list_ManyResult("SELECT DISTINCT type, COUNT(*) FROM course
-					GROUP BY type"))."
-			<tr> */
 		break;
 		case 'musers':
 			$tool_content .= "<table width='100%' class='tbl_1' style='margin-top: 20px;'>";
@@ -387,14 +381,18 @@ function error_message() {
 	return "<b><span style='color: #FF0000'>$langExist</span></b>";
 }
 
-function list_ManyResult($sql) {
-
+function list_ManyResult($sql, $deserialize = false) {
+        // require hierarchy
+        if ($deserialize)
+            require_once 'include/lib/hierarchy.class.php';
+        
 	$resu=array();
 
 	$res = db_query($sql);
 	while ($resA = mysql_fetch_array($res))
 	{
-		$resu[$resA[0]]=$resA[1];
+                $name = ($deserialize) ? hierarchy::unserializeLangField($resA[0]) : $resA[0];
+		$resu[$name]=$resA[1];
 	}
 	return $resu;
 }
