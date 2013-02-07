@@ -24,6 +24,7 @@
  * @author Yannis Exidaridis <jexi@noc.uoa.gr>
  * @brief display form for displaying course actions
  */
+
 if (isset($_GET['from_admin'])) {
         $course_id = $_GET['c'];        
 } else {
@@ -34,6 +35,7 @@ if (isset($_GET['from_admin'])) {
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
+require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 
 if (!isset($_REQUEST['course_code'])) {
@@ -43,15 +45,17 @@ if (!isset($_REQUEST['course_code'])) {
 $nameTools = $langUsersLog;
 $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
 
-$logtype = isset($_POST['logtype'])? intval($_POST['logtype']): '0';
+$logtype = isset($_REQUEST['logtype'])? intval($_REQUEST['logtype']): '0';
 $u_user_id = isset($_REQUEST['u_user_id'])?intval($_REQUEST['u_user_id']):'-1';
-$u_module_id = isset($_POST['u_module_id'])? intval($_POST['u_module_id']): '-1';
-$u_date_start = isset($_POST['u_date_start'])? $_POST['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
-$u_date_end = isset($_POST['u_date_end'])? $_POST['u_date_end']: strftime('%Y-%m-%d', strtotime('now +1 day'));
+$u_module_id = isset($_REQUEST['u_module_id'])? intval($_REQUEST['u_module_id']): '-1';
+$u_date_start = isset($_REQUEST['u_date_start'])? $_REQUEST['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
+$u_date_end = isset($_REQUEST['u_date_end'])? $_REQUEST['u_date_end']: strftime('%Y-%m-%d', strtotime('now +1 day'));
+$limit = isset($_GET['limit'])?$_GET['limit']:0;
 
-if (isset($_POST['submit'])) {
-    $log = new Log();
-    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end);
+if (isset($_REQUEST['submit'])) {
+    $page_link = "&amp;logtype=$logtype&amp;u_date_start=$u_date_start&amp;u_date_end=$u_date_end&amp;u_module_id=$u_module_id&amp;u_user_id=$u_user_id&amp;submit=1";
+    $log = new Log();    
+    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
 }
 
 //----------------------- jscalendar -----------------------------

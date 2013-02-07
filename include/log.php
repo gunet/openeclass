@@ -35,6 +35,8 @@ define('LOG_MODIFY_COURSE', 7);
 define('LOG_LOGIN_FAILURE', 8);
 define('LOG_DELETE_USER', 9);
 
+define('LOGS_PER_PAGE', 15);
+
 class Log {
         /**
          * record users actions
@@ -82,9 +84,12 @@ class Log {
          * @param type $logtype (-1 means logtypes)
          * @param type $date_from
          * @param type $date_now
+         * @param type script_page
+         * @param type $limit (used for paging)
+         * @param type $page_link (used for paging)
          * @return none        
          */        
-        public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now) {
+        public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page, $limit, $page_link) {
 
                 global $tool_content, $modules;
                 global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
@@ -117,12 +122,14 @@ class Log {
                 } elseif ($course_id == -1) { // display all course logging
                         $q4 = "AND course_id > 0"; // but exclude system logging
                 }
+                // count logs
+                $num_of_logs = mysql_num_rows(db_query("SELECT * FROM log WHERE ts BETWEEN '$date_from' AND '$date_now' $q1 $q2 $q3 $q4"));
+                // fetch logs
                 $sql = db_query("SELECT user_id, course_id, module_id, details, action_type, ts FROM log
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
-                                ORDER BY ts DESC");
-
-                if (mysql_num_rows($sql) > 0) {
+                                ORDER BY ts DESC LIMIT $limit, ".LOGS_PER_PAGE."");                
+                if ($num_of_logs > 0) {                        
                                 if ($course_id > 0) {
                                         $tool_content .= "<div class='info'>$langCourse: ".course_id_to_title($course_id)."</div>";
                                 }
@@ -135,7 +142,12 @@ class Log {
                                                 $tool_content .= "<div class='info'>$langModule: ".$modules[$module_id]['title']."</div>";
                                         }
                                 }
+                                // log paging
+                                if ($num_of_logs > LOGS_PER_PAGE) {                                        
+                                        $tool_content .= show_paging($limit, LOGS_PER_PAGE, $num_of_logs, $script_page, $page_link);
+                                }                                
                                 $tool_content .= "<table class='tbl'>";
+                                // log header
                                 $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
                                 if ($course_id == -1) {
                                         $tool_content .= "<th>$langCourse</th>";
@@ -144,7 +156,8 @@ class Log {
                                         $tool_content .= "<th>$langModule</th>";
                                 }
                                 $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
-                                $tool_content .= "</tr>";
+                                $tool_content .= "</tr>";                                
+                                // display logs
                                 while ($r = mysql_fetch_array($sql)) {
                                         $tool_content .= "<tr>";
                                         $tool_content .= "<td>".nice_format($r['ts'], true)."</td>";
@@ -156,9 +169,15 @@ class Log {
                                         if ($course_id == -1) { // all courses
                                                 $tool_content .= "<td>".course_id_to_title($r['course_id'])."</td>";
                                         }
-                                        if ($module_id == -1) { // all modules
-                                               $mid = $r['module_id'];
-                                               $tool_content .= "<td>".$modules[$mid]['title']."</td>";
+                                        if ($module_id == -1) { // all modules                                                
+                                                $mid = $r['module_id'];                                               
+                                                if ($mid == MODULE_ID_USERS) {
+                                                        $tool_content .= "<td>".$langAdminUsers."</td>";
+                                                } elseif ($mid == MODULE_ID_TOOLADMIN) {
+                                                        $tool_content .= "<td>".$langExternalLinks."</td>";
+                                                } else {
+                                                        $tool_content .= "<td>".$modules[$mid]['title']."</td>";                                               
+                                                }
                                         }
                                         $tool_content .= "<td>".$this->get_action_names($r['action_type'])."</td>";
                                         if ($course_id == 0 or $module_id == 0) { // system logging

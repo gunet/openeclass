@@ -18,22 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-	admin.inc.php
-	@last update: 31-05-2006 by Stratos Karatzidis
-	              11-07-2006 by Vagelis Pitsiougas
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================
-        @Description: Functions Library for admin purposes
-
- 	This library includes all the functions that admin is using
-	and their settings.
-
-==============================================================================
-*/
-
+/**
+ * @file admin.inc.php	
+ * @authors :Karatzidis Stratos <kstratos@uom.gr>
+ *           Vagelis Pitsioygas <vagpits@uom.gr>
+ * @brief: library of functions for admin purposes
+ */
 
 /**************************************************************
 Purpose: covert the difference ($seconds) between 2 unix timestamps
