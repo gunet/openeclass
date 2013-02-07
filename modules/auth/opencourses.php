@@ -30,7 +30,6 @@
  */
 
 include '../../include/baseTheme.php';
-require_once 'hierarchy.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 
 $tree = new hierarchy();
@@ -53,7 +52,7 @@ if (!isset($fc))
     $fc = $_SESSION['fc_memo'];
 
 
-$fac = mysql_fetch_row(db_query("SELECT name FROM hierarchy WHERE allow_course = true AND id = " . $fc));
+$fac = mysql_fetch_row(db_query("SELECT name FROM hierarchy WHERE id = " . $fc));
 if (!($fac = $fac[0]))
     die("ERROR: no faculty with id $fc");
 
@@ -65,14 +64,16 @@ $icons = array(
     0 => "<img src='$themeimg/lock_closed.png'       alt='". $m['legclosed']     ."' title='". $m['legclosed']     ."' width='16' height='16' />"
 );
 
+if (count($tree->buildRootsArray()) > 1)
+    $tool_content .= $tree->buildRootsSelectForm();
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>
-                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, true, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th>
+                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th>
                     </tr>
                   </table><br/>\n\n";
 
-$tool_content .= departmentChildren($tree, $fc, 'opencourses');
+$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses');
 
 $result = db_query("SELECT course.code k,
                            course.public_code c,

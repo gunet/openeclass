@@ -689,6 +689,20 @@ class hierarchy {
 
         return $out;
     }
+    
+    /**
+     * Compile an array with the root node ids (nodes of 0 depth).
+     * 
+     * @return array
+     */
+    public function buildRootsArray() {
+        $ret = array();
+        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0")
+                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
+        while ($row = mysql_fetch_assoc($res))
+            $ret[] = $row['id'];
+        return $ret;
+    }
 
     /**
      * Compile a comma seperated list with node ids. Used for setting JSTree initially_open core
@@ -696,15 +710,11 @@ class hierarchy {
      *
      * @return string $initopen - The returned comma seperated list
      */
-    public function buildJSTreeInitOpen()
-    {
+    public function buildJSTreeInitOpen() {
         // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
         $initopen = '';
-        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0")
-                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
-        while ($row = mysql_fetch_assoc($res))
-            $initopen .= '"nd'. $row['id'].'",';
-
+        foreach($this->buildRootsArray() as $id)
+            $initopen .= '"nd'. $id.'",';
         return $initopen;
     }
 
@@ -726,8 +736,7 @@ class hierarchy {
      *
      * @return string $js              - The returned JS code
      */
-    private function buildJSNodePicker($options)
-    {
+    private function buildJSNodePicker($options) {
         global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
         
         $params = $options['params'];
@@ -1211,6 +1220,129 @@ jContent;
      */
     public function getDbtable() {
         return $this->dbtable;
+    }
+    
+    /**
+     * Build an HTML table containing navigation code for the given nodes
+     * 
+     * @param  array  $nodes - The node ids whose children we want to navigate to
+     * @param  string $url   - The php script to call in the navigational URLs
+     * @return string $ret   - The returned HTML output
+     */
+    public function buildNodesNavigationHtml($nodes, $url) {
+        global $langAvCours, $langAvCourses;
+        
+        $ret = '';
+        $res = db_query("SELECT node.id, node.code, node.name 
+                          FROM ". $this->dbtable ." AS node
+                         WHERE node.id IN (". implode(', ', $nodes) .")");
+        
+        if (mysql_num_rows($res) > 0) {
+            $ret .= "<table width='100%' class='tbl_border'>";
+            $nodenames = array();
+            $nodecodes = array();
+
+            while ($node = mysql_fetch_array($res)) {
+                $nodenames[$node['id']] = self::unserializeLangField($node['name']);
+                $nodecodes[$node['id']] = $node['code'];
+            }
+            asort($nodenames);
+
+            foreach ($nodenames as $key => $value) {
+                $ret .= "<tr><td><a href='$url.php?fc=". intval($key) ."'>".
+                        q($value) . "</a>&nbsp;&nbsp;<small>";
+                if ( strlen(q($nodecodes[$key])) > 0 )
+                    $ret .= "(". q($nodecodes[$key]) .")";
+
+                $count = 0;
+                foreach( $this->buildSubtrees(array(intval($key))) as $subnode ){
+                    $n = db_query("SELECT COUNT(*)
+                                     FROM course, course_department
+                                    WHERE course.id = course_department.course
+                                      AND course_department.department = ". intval($subnode));
+                    $r = mysql_fetch_array($n);
+                    $count += $r[0];
+                }
+
+                $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". intval($count) ."&nbsp;". ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+            }
+
+            $ret .= "</table><br />";
+        }
+
+        return $ret;
+    }
+    
+    /**
+     * Build an HTML table containing navigation code for a node's children nodes
+     * 
+     * @param  int    $depid - The node's id whose children we want to navigate to
+     * @param  string $url   - The php script to call in the navigational URLs
+     * @return string $ret   - The returned HTML output
+     */
+    public function buildDepartmentChildrenNavigationHtml($depid, $url) {
+        // select subnodes of the next depth level
+        $res = db_query("SELECT node.id FROM ". $this->dbtable ." AS node
+                LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft =
+                                (SELECT MAX(S.lft)
+                                FROM ". $this->dbtable ." AS S WHERE node.lft > S.lft
+                                    AND node.lft < S.rgt)
+                          WHERE parent.id = ". intval($depid) );
+
+        if (mysql_num_rows($res) > 0) {
+            $nodes = array();
+            while ($node = mysql_fetch_assoc($res))
+                $nodes[] = $node['id'];
+            
+            return $this->buildNodesNavigationHtml($nodes, $url);
+        } else
+            return "";
+    }
+    
+    /**
+     * Build an HTML Select box for selecting among the root nodes.
+     * 
+     * @return string $ret - The returned HTML output
+     */
+    public function buildRootsSelection($params = '') {
+        // select root nodes
+        $res = db_query("SELECT node.id, node.name 
+                          FROM ". $this->dbtable ." AS node
+                         WHERE node.id IN (". implode(', ', $this->buildRootsArray()) .")");
+        
+        $ret = '';
+        if (mysql_num_rows($res) > 0) {
+            // construct array with names
+            $nodenames = array();
+            while ($node = mysql_fetch_array($res))
+                $nodenames[$node['id']] = self::unserializeLangField($node['name']);
+            asort($nodenames);
+            
+            $ret .= "<select $params>";
+            $ret .= "<option value='' selected=''></option>";
+            foreach ($nodenames as $id => $name)
+                $ret .= "<option value='". intval($id) ."'>". q($name) ."</option>";
+            $ret .= "</select>";
+        }
+        
+        return $ret;
+    }
+    
+    /**
+     * Build an HTML Form/Header box for selecting among the root nodes.
+     * 
+     * @return string $ret - The returned HTML output
+     */
+    public function buildRootsSelectForm() {
+        global $langSelectFac;
+        
+        $ret  = "<form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>
+                 <div id='operations_container'><ul id='opslist'>
+                 <li>$langSelectFac:&nbsp;";
+        $ret .= $this->buildRootsSelection("name='fc' onChange='document.depform.submit();'");
+	$ret .= "</li></ul></div></form>";
+        
+        return $ret;
     }
 
 }

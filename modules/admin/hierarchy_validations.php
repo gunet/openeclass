@@ -34,29 +34,26 @@
  * @param int     $id       - The node's id value
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
-function validateNode($id, $checkOwn)
-{
-	global $tool_content, $head_content, $tree, $user, $uid,
-	       $langBack, $langNotAllowed;
+function validateNode($id, $checkOwn) {
+    global $tool_content, $head_content, $tree, $user, $uid,
+           $langBack, $langNotAllowed;
 
-	$notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 
-	if ($id <= 0)
-		exitWithError($notallowed);
+    if ($id <= 0)
+        exitWithError($notallowed);
 
-	$result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE id = ". intval($id) );
+    $result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE id = ". intval($id) );
 
-	if (mysql_num_rows($result) < 1)
-		exitWithError($notallowed);
+    if (mysql_num_rows($result) < 1)
+        exitWithError($notallowed);
 
-	if ($checkOwn)
-	{
-		$subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-
-		if (!in_array($id, $subtrees))
-			exitWithError($notallowed);
-	}
-
+    if ($checkOwn) {
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        
+        if (!in_array($id, $subtrees))
+            exitWithError($notallowed);
+    }
 }
 
 
@@ -68,30 +65,28 @@ function validateNode($id, $checkOwn)
  * @param int     $nodelft  - The node's lft value
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
-function validateParentLft($nodelft, $checkOwn)
-{
-	global $tool_content, $head_content, $tree, $user, $uid,
-	       $langBack, $langNotAllowed;
+function validateParentLft($nodelft, $checkOwn) {
+    global $tool_content, $head_content, $tree, $user, $uid,
+           $langBack, $langNotAllowed;
 
-	$notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
 
-	if ($nodelft <= 0)
-		exitWithError($notallowed);
+    if ( (!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0) )
+        exitWithError($notallowed);
 
-	$result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE lft = ". intval($nodelft) );
+    $result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE lft = ". intval($nodelft) );
 
-	if (mysql_num_rows($result) < 1)
-		exitWithError($notallowed);
+    if (mysql_num_rows($result) < 1 && $nodelft > 0)
+        exitWithError($notallowed);
 
-	if ($checkOwn)
-	{
-		$row = mysql_fetch_assoc($result);
-		$parentid = $row['id'];
-		$subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+    if ($checkOwn) {
+        $row = mysql_fetch_assoc($result);
+        $parentid = $row['id'];
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
-		if (!in_array($parentid, $subtrees))
-			exitWithError($notallowed);
-	}
+        if (!in_array($parentid, $subtrees))
+            exitWithError($notallowed);
+    }
 }
 
 
@@ -103,8 +98,7 @@ function validateParentLft($nodelft, $checkOwn)
  * @param int     $userId   - The user's id
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
-function validateUserNodes($userId, $checkOwn)
-{
+function validateUserNodes($userId, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
            $langBack, $langNotAllowed;
     
@@ -118,13 +112,11 @@ function validateUserNodes($userId, $checkOwn)
     if (empty($deps))
         exitWithError($notallowed);
     
-    if ($checkOwn)
-    {
+    if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
         
-        foreach ($deps as $depId)
-        {
+        foreach ($deps as $depId) {
             if (in_array($depId, $subtrees))
                 $atleastone = true;
         }
@@ -143,8 +135,7 @@ function validateUserNodes($userId, $checkOwn)
  * @param int     $courseId - The course's id
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
-function validateCourseNodes($courseId, $checkOwn)
-{
+function validateCourseNodes($courseId, $checkOwn) {
     global $tool_content, $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
     
     $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
@@ -157,13 +148,11 @@ function validateCourseNodes($courseId, $checkOwn)
     if (empty($deps))
         exitWithError($notallowed);
     
-    if ($checkOwn)
-    {
+    if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
         
-        foreach ($deps as $depId)
-        {
+        foreach ($deps as $depId) {
             if (in_array($depId, $subtrees))
                 $atleastone = true;
         }
@@ -179,13 +168,12 @@ function validateCourseNodes($courseId, $checkOwn)
  * 
  * @param string $message - The optional error message to display 
  */
-function exitWithError($message)
-{
-	global $tool_content, $head_content;
+function exitWithError($message) {
+    global $tool_content, $head_content;
 
-	$tool_content .= $message;
-	draw($tool_content, 3, null, $head_content);
-	exit();
+    $tool_content .= $message;
+    draw($tool_content, 3, null, $head_content);
+    exit();
 }
 
 
@@ -196,8 +184,7 @@ function exitWithError($message)
  * 
  * @return boolean $checkOwn
  */
-function isDepartmentAdmin()
-{
+function isDepartmentAdmin() {
     global $is_departmentmanage_user, $is_usermanage_user, $is_power_user, $is_admin;
     
     $checkOwn = false;
