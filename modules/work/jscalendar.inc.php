@@ -42,7 +42,7 @@ $local_style = '
 require_once 'include/jscalendar/calendar.php';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 
 $u_date_end = strftime('%Y-%m-%d %H:%M', strtotime('now +2 month'));
 
@@ -56,7 +56,7 @@ $end_cal_Work = $jscalendar->make_input_field(
                  'value'       => $u_date_end));
 
 function getJsDeadline($deadline) {
-	global $language, $lang, $jscalendar, $local_head;
+	global $language, $lang, $jscalendar, $head_content;
 
 	$end_cal_Work_db = $jscalendar->make_input_field(
   	array('showsTime'      => true,

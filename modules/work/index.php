@@ -218,7 +218,7 @@ if ($is_editor) {
 }
 
 add_units_navigation(TRUE);
-draw($tool_content, 2, null, $head_content.$local_head);
+draw($tool_content, 2, null, $head_content);
 
 //-------------------------------------
 // end of main program

@@ -34,7 +34,7 @@ $local_style = '
 require_once 'include/jscalendar/calendar.php';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 $nameTools = $langCreatePoll;
@@ -48,7 +48,7 @@ if (isset($_GET['edit']) and isset($pid))  {
 	if (check_poll_participants($pid)) {
 		$tool_content .= "$langThereAreParticipants";
 		$tool_content .= "<br ><br /><div align='right'><a href='index.php?course=$course_code'>$langBack</a></div>";
-		draw($tool_content, 2, null, $local_head);
+		draw($tool_content, 2, null, $head_content);
 		exit();
 	} else {
 		fill_questions($pid);
@@ -62,7 +62,7 @@ if (isset($_POST['PollCreate']))  {
 		} else {
 			createPoll($_POST['question'], $_POST['question_type']);
 		}
-		draw($tool_content, 2, null, $local_head);
+		draw($tool_content, 2, null, $head_content);
 		exit;
 	} else {
 		$tool_content .= "$langPollEmpty<br />";
@@ -70,7 +70,7 @@ if (isset($_POST['PollCreate']))  {
 }
 
 printPollCreationForm();
-draw($tool_content, 2, null, $local_head);
+draw($tool_content, 2, null, $head_content);
 
 /*****************************************************************************
 Fill the appropriate $_POST values from the database as if poll $pid was submitted

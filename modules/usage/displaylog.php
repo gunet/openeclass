@@ -56,7 +56,7 @@ if (isset($_POST['submit'])) {
 
 //----------------------- jscalendar -----------------------------
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 $start_cal = $jscalendar->make_input_field(
            array('showsTime'      => false,
                  'showOthers'     => true,
@@ -166,7 +166,7 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         </form>";
 
 if (isset($_GET['from_admin'])) {
-        draw($tool_content, 3, null, $local_head);
+        draw($tool_content, 3, null, $head_content);
 } else {
-        draw($tool_content, 2, null, $local_head);
+        draw($tool_content, 2, null, $head_content);
 }

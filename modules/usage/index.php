@@ -59,7 +59,7 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";
 } else {
@@ -73,4 +73,4 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     }
 }
 add_units_navigation(true);
-draw($tool_content, 2, null, $local_head);
+draw($tool_content, 2, null, $head_content);

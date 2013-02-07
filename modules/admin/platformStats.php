@@ -53,7 +53,7 @@ $tool_content .= "
 // jscalendar is used in order to select the time period for the statistics
 require_once 'include/jscalendar/calendar.php';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 
 if (!extension_loaded('gd')) {
         $tool_content .= "<p>$langGDRequired</p>";
@@ -65,4 +65,4 @@ if (!extension_loaded('gd')) {
         require_once "modules/admin/statsForm.php";
 }
 
-draw($tool_content, 3, null, $local_head);
+draw($tool_content, 3, null, $head_content);

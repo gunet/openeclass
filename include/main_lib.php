@@ -305,6 +305,12 @@ function load_js($file, $init = '')
         } elseif ($file == 'colorbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>";
             $file = 'colorbox/jquery.colorbox-min.js';
+        } elseif ($file == 'flot') {
+            $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+            $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-1.8.3.min.js'></script>\n";
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
+            $file = 'flot/jquery.flot.categories.min.js';
         }
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
 

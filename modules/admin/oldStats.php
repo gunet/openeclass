@@ -63,7 +63,7 @@ require_once 'include/jscalendar/calendar.php';
 
 $lang = ($language == 'el')? 'el': 'en';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
-$local_head = $jscalendar->get_load_files_code();
+$head_content = $jscalendar->get_load_files_code();
 
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
@@ -195,4 +195,4 @@ if ($chart_content) {
     </form>';
 }
 
-draw($tool_content, 3, null, $local_head);
+draw($tool_content, 3, null, $head_content);
