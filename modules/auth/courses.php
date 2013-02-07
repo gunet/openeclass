@@ -21,11 +21,7 @@
 
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
-
-$TBL_HIERARCHY = 'hierarchy';
-
 require_once 'include/lib/hierarchy.class.php';
-
 $tree = new hierarchy();
 
 $nameTools = $langChoiceLesson;
@@ -117,7 +113,7 @@ if (isset($_POST['submit'])) {
 		// department exists
 		$numofcourses = getdepnumcourses($fc);
                 if (count($tree->buildRootsArray()) > 1)
-                    $tool_content .= $tree->buildRootsSelectForm();
+                    $tool_content .= $tree->buildRootsSelectForm($fc);
 		$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
                 $tool_content .= "<table width='100%' class='tbl_border'>
                                   <tr><th><a name='top'></a>$langFaculty: ". 

@@ -65,7 +65,7 @@ $icons = array(
 );
 
 if (count($tree->buildRootsArray()) > 1)
-    $tool_content .= $tree->buildRootsSelectForm();
+    $tool_content .= $tree->buildRootsSelectForm($fc);
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>

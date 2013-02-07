@@ -257,9 +257,22 @@ class hierarchy {
      * @param  int   $rgt - rgt of child node
      * @return array - the object/array of the mysql query result
      */
-    public function getParent($lft, $rgt)
-    {
+    public function getParent($lft, $rgt) {
         $query = "SELECT * FROM ". $this->dbtable ." WHERE lft < ". $lft ." AND rgt > ". $rgt ." ORDER BY lft DESC LIMIT 1";
+        $result = db_query($query);
+
+        return mysql_fetch_assoc($result);
+    }
+    
+    /**
+     * Get a child node's root parent.
+     *
+     * @param  int   $lft - lft of child node
+     * @param  int   $rgt - rgt of child node
+     * @return array - the object/array of the mysql query result
+     */
+    public function getRootParent($lft, $rgt) {
+        $query = "SELECT * FROM ". $this->dbtable ." WHERE lft < ". $lft ." AND rgt > ". $rgt ." ORDER BY lft ASC LIMIT 1";
         $result = db_query($query);
 
         return mysql_fetch_assoc($result);
@@ -271,12 +284,24 @@ class hierarchy {
      * @param  int $id - The id of the node
      * @return int
      */
-    public function getNodeLft($id)
-    {
+    public function getNodeLft($id) {
         $query = "SELECT lft FROM ". $this->dbtable ." WHERE id = ". $id;
         $res = mysql_fetch_assoc(db_query($query));
 
         return intval($res['lft']);
+    }
+    
+    /**
+     * Get a node's lft and rgt value.
+     *
+     * @param  int $id - The id of the node
+     * @return array
+     */
+    public function getNodeLftRgt($id) {
+        $query = "SELECT lft, rgt FROM ". $this->dbtable ." WHERE id = ". $id;
+        $res = mysql_fetch_assoc(db_query($query));
+
+        return array(intval($res['lft']), intval($res['rgt']));
     }
 
     /**
@@ -1302,9 +1327,10 @@ jContent;
     /**
      * Build an HTML Select box for selecting among the root nodes.
      * 
-     * @return string $ret - The returned HTML output
+     * @param  int    $currentNode - The id of the current node
+     * @return string $ret         - The returned HTML output
      */
-    public function buildRootsSelection($params = '') {
+    public function buildRootsSelection($currentNode, $params = '') {
         // select root nodes
         $res = db_query("SELECT node.id, node.name 
                           FROM ". $this->dbtable ." AS node
@@ -1312,6 +1338,11 @@ jContent;
         
         $ret = '';
         if (mysql_num_rows($res) > 0) {
+            // locate root parent of current Node
+            list($lft, $rgt) = $this->getNodeLftRgt($currentNode);
+            $parent = $this->getRootParent($lft, $rgt);
+            $parentId = ($parent != null) ? $parent['id'] : $currentNode;
+            
             // construct array with names
             $nodenames = array();
             while ($node = mysql_fetch_array($res))
@@ -1319,9 +1350,10 @@ jContent;
             asort($nodenames);
             
             $ret .= "<select $params>";
-            $ret .= "<option value='' selected=''></option>";
-            foreach ($nodenames as $id => $name)
-                $ret .= "<option value='". intval($id) ."'>". q($name) ."</option>";
+            foreach ($nodenames as $id => $name) {
+                $selected = ($id == $parentId) ? "selected=''": '';
+                $ret .= "<option value='". intval($id) ."' $selected>". q($name) ."</option>";
+            }
             $ret .= "</select>";
         }
         
@@ -1331,15 +1363,16 @@ jContent;
     /**
      * Build an HTML Form/Header box for selecting among the root nodes.
      * 
-     * @return string $ret - The returned HTML output
+     * @param  int    $currentNode - The id of the current node
+     * @return string $ret         - The returned HTML output
      */
-    public function buildRootsSelectForm() {
+    public function buildRootsSelectForm($currentNode) {
         global $langSelectFac;
         
         $ret  = "<form name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>
                  <div id='operations_container'><ul id='opslist'>
                  <li>$langSelectFac:&nbsp;";
-        $ret .= $this->buildRootsSelection("name='fc' onChange='document.depform.submit();'");
+        $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'");
 	$ret .= "</li></ul></div></form>";
         
         return $ret;
