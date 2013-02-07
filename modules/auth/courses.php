@@ -145,7 +145,11 @@ var lang = {
         invalidCode: '".js_escape($langInvalidCode)."',
 };</script>";
 
-draw($tool_content, 1);
+load_js('jquery');
+load_js('jquery-ui-new');
+load_js('tools.js');
+
+draw($tool_content, 1, null, $head_content);
 
 
 function getfacfromfc($dep_id) {
