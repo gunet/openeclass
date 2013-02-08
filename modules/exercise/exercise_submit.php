@@ -40,8 +40,9 @@ require_once 'include/lib/textLib.inc.php';
 $nameTools = $langExercicesView;
 $picturePath = "courses/$course_code/image";
 
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);

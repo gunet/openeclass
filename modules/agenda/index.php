@@ -39,9 +39,9 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'include/action.php';
 require_once 'include/log.php';
 require_once 'include/jscalendar/calendar.php';
-
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 $action = new action();
 $action->record(MODULE_ID_AGENDA);

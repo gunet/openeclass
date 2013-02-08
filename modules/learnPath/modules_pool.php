@@ -54,8 +54,9 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
 require_once "include/lib/learnPathLib.inc.php";
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 $body_action = '';
 $head_content .= "

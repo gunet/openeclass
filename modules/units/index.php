@@ -32,6 +32,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 
 $action = new action();
@@ -43,7 +44,7 @@ if (isset($_REQUEST['id'])) {
 
 $lang_editor = $language;
 load_js('tools.js');
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 
 if (isset($_REQUEST['edit_submit'])) {
         units_set_maxorder();

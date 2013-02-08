@@ -38,6 +38,7 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/units/functions.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 require_once 'include/log.php';
 /**** The following is added for statistics purposes ***/
@@ -49,7 +50,7 @@ $nameTools = $langCourseDescription;
 
 $unit_id = description_unit_id($course_id);
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 if ($is_editor) {
         load_js('tools.js');
 	$tool_content .= "

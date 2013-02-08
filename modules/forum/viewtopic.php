@@ -26,9 +26,10 @@ $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'config.php';
 require_once 'functions.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 if ($is_editor) {
         load_js('tools.js');

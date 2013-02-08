@@ -24,9 +24,9 @@ $require_help = true;
 $helpTopic = 'Glossary';
 
 require_once '../../include/baseTheme.php';
-
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox(); 
 
 mysql_select_db($mysqlMainDb);
 

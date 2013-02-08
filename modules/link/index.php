@@ -44,8 +44,9 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'linkfunctions.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 require_once 'include/action.php';
 $action_stats = new action();

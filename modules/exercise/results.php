@@ -31,8 +31,9 @@ $helpTopic = 'Exercise';
 require_once '../../include/baseTheme.php';
 require_once 'exercise.class.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 $nameTools = $langResults;
 $navigation[]=array('url' => "index.php?course=$course_code", 'name' => $langExercices);

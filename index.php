@@ -40,10 +40,11 @@ $guest_allowed = true;
 require_once 'include/baseTheme.php';
 require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 require_once 'include/phpass/PasswordHash.php';
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 // $homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 

@@ -33,6 +33,7 @@ $TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 
 $dialogBox = '';
@@ -41,7 +42,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name'=> $langLe
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {

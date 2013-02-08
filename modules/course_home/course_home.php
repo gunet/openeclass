@@ -34,6 +34,7 @@ $guest_allowed = true;
 define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
@@ -48,7 +49,7 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('jquery');
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 // For statistics: record login

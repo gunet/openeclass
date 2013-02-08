@@ -38,8 +38,9 @@ require_once '../../../include/init.php';
 // exercise_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai
 require_once 'include/lib/textLib.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 $nameTools = $langExercice;
 $picturePath = "courses/$course_code/image";

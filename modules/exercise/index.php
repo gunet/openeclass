@@ -38,9 +38,9 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();

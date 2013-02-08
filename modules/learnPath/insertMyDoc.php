@@ -56,9 +56,10 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/document/doc_init.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {

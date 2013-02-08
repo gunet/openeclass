@@ -18,86 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * Load necessary javascript initialization.
- * Decides which modal box to use based on whether it's installed under js/
- * directory.
- *
- * The priority for choosing is:
- * 1. Shadowbox
- * 2. Fancybox2
- * 3. Colorbox
- *
- * @global string  $langColorboxCurrent
- * @param  boolean $gallery
- */
-function load_modal_box($gallery = false)
-{
-    global $langColorboxCurrent;
-
-    $shadowbox_gallery = ($gallery) ? 'gallery: "gallery"' : '';
-    $shadowbox_init = '<script type="text/javascript">
-                       Shadowbox.init({
-                           overlayOpacity : 0.8,
-                           modal          : false,
-                           continuous     : true
-                       });
-
-                       window.onload = function() {
-                           Shadowbox.setup(".shadowbox", {
-                           '.$shadowbox_gallery.'
-                           });
-                       };
-                       </script>';
-
-    $fancybox2_init = '<script type="text/javascript">
-                       $(document).ready(function() {
-                           $(".fancybox").fancybox({
-                                   width     : '.get_modal_width().',
-                                   height    : '.get_modal_height().',
-                                   padding   : 0,
-                                   margin    : 0,
-                                   scrolling : "no"
-                          });
-                       });
-                       </script>';
-
-    $colorbox_gallery = ($gallery) ? 'rel: "gallery",': '';
-    $colorbox_init = '<script type="text/javascript">
-                      $(document).ready(function() {
-                          $(".colorboxframe").colorbox({
-                                  innerWidth  : '.get_modal_width().',
-                                  innerHeight : '.get_modal_height().',
-                                  iframe      : "true",
-                                  scrolling   : "false",
-                                  opacity     : 0.8,
-                                  '.$colorbox_gallery.'
-                                  current     : "'.$langColorboxCurrent.'"
-                         });
-                         $(".colorbox").colorbox({
-                                  minWidth    : 300,
-                                  minHeight   : 200,
-                                  maxWidth    : "100%",
-                                  maxHeight   : "100%",
-                                  scrolling   : "false",
-                                  opacity     : 0.8,
-                                  photo       : "true",
-                                  '.$colorbox_gallery.'
-                                  current     : "'.$langColorboxCurrent.'"
-                         });
-                      });
-                      </script>';
-
-    if (file_exists(get_shadowbox_dir()))
-        load_js('shadowbox', $shadowbox_init);
-    else if (file_exists(get_fancybox2_dir())) {
-        load_js('jquery');
-        load_js('fancybox2', $fancybox2_init);
-    } else if (file_exists(get_colorbox_dir())) {
-        load_js('jquery');
-        load_js('colorbox', $colorbox_init);
-    }
-}
+require_once 'include/lib/modalboxhelper.class.php';
 
 /**
  * Construct a proper a href html tag because each modal box requires a
@@ -112,27 +33,27 @@ function load_modal_box($gallery = false)
  * @param  string $link_extra
  * @return string
  */
-function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename, $title_extra = '', $link_extra = '')
-{
-    if (empty($title_extra)) $title_extra = $title;
+function choose_media_ahref($mediaDL, $mediaPath, $mediaPlay, $title, $filename, $title_extra = '', $link_extra = '') {
+    if (empty($title_extra)) 
+        $title_extra = $title;
     $ahref = "<a href='$mediaDL' $link_extra>". $title_extra ."</a>";
 
-    if (is_supported_media($filename))
-    {
-        if (file_exists(get_shadowbox_dir()))
-        {
-            $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height().get_shadowbox_player($filename)."' title='$title'>".$title_extra."</a>";
+    if (is_supported_media($filename)) {
+        if (file_exists( ModalBoxHelper::getShadowboxDir() )) {
+            $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=". 
+                    ModalBoxHelper::getShadowboxWidth()
+                    .";height=". 
+                    ModalBoxHelper::getShadowboxHeight() . 
+                    ModalBoxHelper::getShadowboxPlayer($filename) 
+                    ."' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
                 $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox' title='$title'>".$title_extra."</a>";
-        }
-        else if (file_exists(get_fancybox2_dir()))
-        {
+            
+        } else if (file_exists( ModalBoxHelper::getFancybox2Dir() )) {
             $ahref = "<a href='$mediaPlay' class='fancybox iframe' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
                 $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>".$title_extra."</a>";
-        }
-        else if (file_exists(get_colorbox_dir()))
-        {
+        } else if (file_exists( ModalBoxHelper::getColorboxDir() )) {
             $ahref = "<a href='$mediaPlay' class='colorboxframe' title='$title'>".$title_extra."</a>";
             if (is_supported_image($filename))
                 $ahref = "<a href='$mediaPath' class='colorbox' title='$title'>".$title_extra."</a>";
@@ -164,45 +85,21 @@ function choose_medialink_ahref($mediaURL, $title, $class = null)
     {
         $linkPlay = $urlServer ."modules/video/index.php?course=$course_code&amp;action=playlink&amp;id=". make_embeddable_medialink($mediaURL);
 
-        if (file_exists(get_shadowbox_dir()))
-            $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox$bclass' rel='shadowbox;width=".get_shadowbox_width().";height=".get_shadowbox_height()."' title='$title'>$title</a>";
-        else if (file_exists(get_fancybox2_dir()))
+        if (file_exists( ModalBoxHelper::getShadowboxDir() ))
+            $ahref = "<a href='".make_embeddable_medialink($mediaURL)."' class='shadowbox$bclass' rel='shadowbox;width=". 
+                ModalBoxHelper::getShadowboxWidth() 
+                .";height=". 
+                ModalBoxHelper::getShadowboxHeight() 
+                ."' title='$title'>$title</a>";
+        else if (file_exists(ModalBoxHelper::getFancybox2Dir() ))
             $ahref = "<a href='".$linkPlay."' class='fancybox iframe$bclass' title='$title'>$title</a>";
-        else if (file_exists(get_colorbox_dir()))
+        else if (file_exists( ModalBoxHelper::getColorboxDir() ))
             $ahref = "<a href='".$linkPlay."' class='colorboxframe$bclass' title='$title'>$title</a>";
     }
 
     return $ahref;
 }
 
-/**
- * For some file types shadowbox fails to autodetect the necessary player to
- * use, that's why we are helping it a bit.
- *
- * @param  string $filename
- * @return string
- */
-function get_shadowbox_player($filename)
-{
-    $extension = get_file_extension($filename);
-    $ret = "";
-
-    switch($extension)
-    {
-        case "flv":
-        case "m4v":
-        case "mp3":
-            $ret = ";player=flv";
-            break;
-        case "swf":
-            $ret = ";player=swf";
-            break;
-        default:
-            break;
-    }
-
-    return $ret;
-}
 
 /**
  * Construct a proper object html tag for each type of media
@@ -551,52 +448,14 @@ function make_embeddable_medialink($medialink)
 //--- Sizes, dimensions and "statics" ---//
 
 
-function get_shadowbox_dir()
-{
-    global $webDir;
-    return $webDir . "/js/shadowbox";
-}
-
-function get_fancybox2_dir()
-{
-    global $webDir;
-    return $webDir . "/js/fancybox2";
-}
-
-function get_colorbox_dir()
-{
-    global $webDir;
-    return $webDir . "/js/colorbox";
-}
-
-function get_shadowbox_width()
-{
-    return 700;
-}
-
-function get_shadowbox_height()
-{
-    return 350;
-}
-
-function get_modal_width()
-{
-    return 680;
-}
-
-function get_modal_height()
-{
-    return 380;
-}
-
 function get_object_width()
 {
-    return get_modal_width() - 20;
+    return ModalBoxHelper::getModalWidth() - 20;
 }
 
 function get_object_height()
 {
-    return get_modal_height() - 20;
+    return ModalBoxHelper::getModalHeight() - 20;
 }
 
 function get_supported_media()

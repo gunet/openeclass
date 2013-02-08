@@ -36,8 +36,9 @@ require_once 'include/lib/textLib.inc.php';
 $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langExercices);
 
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 
 

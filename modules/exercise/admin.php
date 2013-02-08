@@ -27,11 +27,12 @@ require_once 'exercise.lib.php';
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
+require_once 'include/lib/modalboxhelper.class.php';
 require_once 'modules/video/video_functions.php';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 
 $nameTools = $langExercices;
 $navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $langExercices);
