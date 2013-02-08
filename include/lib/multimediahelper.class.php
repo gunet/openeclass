@@ -18,7 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'include/lib/modalboxhelper.class.php'; // TODO: check correctness
+require_once 'include/lib/modalboxhelper.class.php';
 
 class MultimediaHelper {
 
@@ -31,34 +31,31 @@ class MultimediaHelper {
      * @param  string $mediaPlay - media playback url
      * @param  string $title
      * @param  string $filename
-     * @param  string $titleExtra
      * @param  string $linkExtra
      * @return string
      */
-    public static function chooseMediaAhref($mediaDL, $mediaPath, $mediaPlay, $title, $filename, $titleExtra = '', $linkExtra = '') {
-        if (empty($titleExtra)) 
-            $titleExtra = $title;
-        $ahref = "<a href='$mediaDL' $linkExtra>". $titleExtra ."</a>";
+    public static function chooseMediaAhref($mediaDL, $mediaPath, $mediaPlay, $title, $filename) {
+        $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='$title'>". $title ."</a>";
 
-        if (self::isSupportedMedia($filename)) {
+        if (self::isSupportedFile($filename)) {
             if (file_exists( ModalBoxHelper::getShadowboxDir() )) {
-                $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox;width=". 
+                $ahref = "<a href='$mediaPath' class='shadowbox fileURL' rel='shadowbox;width=". 
                         ModalBoxHelper::getShadowboxWidth()
                         .";height=". 
                         ModalBoxHelper::getShadowboxHeight() . 
                         ModalBoxHelper::getShadowboxPlayer($filename) 
-                        ."' title='$title'>".$titleExtra."</a>";
+                        ."' title='$title'>".$title."</a>";
                 if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='shadowbox' rel='shadowbox' title='$title'>".$titleExtra."</a>";
+                    $ahref = "<a href='$mediaPath' class='shadowbox fileURL' rel='shadowbox' title='$title'>".$title."</a>";
 
             } else if (file_exists( ModalBoxHelper::getFancybox2Dir() )) {
-                $ahref = "<a href='$mediaPlay' class='fancybox iframe' title='$title'>".$titleExtra."</a>";
+                $ahref = "<a href='$mediaPlay' class='fancybox iframe fileURL' title='$title'>".$title."</a>";
                 if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='fancybox' title='$title'>".$titleExtra."</a>";
+                    $ahref = "<a href='$mediaPath' class='fancybox fileURL' title='$title'>".$title."</a>";
             } else if (file_exists( ModalBoxHelper::getColorboxDir() )) {
-                $ahref = "<a href='$mediaPlay' class='colorboxframe' title='$title'>".$titleExtra."</a>";
+                $ahref = "<a href='$mediaPlay' class='colorboxframe fileURL' title='$title'>".$title."</a>";
                 if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='colorbox' title='$title'>".$titleExtra."</a>";
+                    $ahref = "<a href='$mediaPath' class='colorbox fileURL' title='$title'>".$title."</a>";
             }
         }
 
@@ -72,29 +69,25 @@ class MultimediaHelper {
      * @global string $course_code
      * @param  string $mediaURL - should be already urlencoded if possible
      * @param  string $title
-     * @param  string $class
      * @return string
      */
-    public static function chooseMedialinkAhref($mediaURL, $title, $class = null) {
+    public static function chooseMedialinkAhref($mediaURL, $title) {
         global $urlServer, $course_code;
-
-        $aclass = ($class == null) ? '' : " class='$class' ";
-        $bclass = ($class == null) ? '' : " $class";
-        $ahref = "<a href='$mediaURL' $aclass target='_blank'>". $title ."</a>";
+        $ahref = "<a href='$mediaURL' class='fileURL' target='_blank' title='$title'>". $title ."</a>";
 
         if (self::isEmbeddableMedialink($mediaURL)) {
             $linkPlay = $urlServer ."modules/video/index.php?course=$course_code&amp;action=playlink&amp;id=". self::makeEmbeddableMedialink($mediaURL);
 
             if (file_exists( ModalBoxHelper::getShadowboxDir() ))
-                $ahref = "<a href='". self::makeEmbeddableMedialink($mediaURL) ."' class='shadowbox$bclass' rel='shadowbox;width=". 
+                $ahref = "<a href='". self::makeEmbeddableMedialink($mediaURL) ."' class='shadowbox fileURL' rel='shadowbox;width=". 
                     ModalBoxHelper::getShadowboxWidth() 
                     .";height=". 
                     ModalBoxHelper::getShadowboxHeight() 
                     ."' title='$title'>$title</a>";
             else if (file_exists(ModalBoxHelper::getFancybox2Dir() ))
-                $ahref = "<a href='".$linkPlay."' class='fancybox iframe$bclass' title='$title'>$title</a>";
+                $ahref = "<a href='".$linkPlay."' class='fancybox iframe fileURL' title='$title'>$title</a>";
             else if (file_exists( ModalBoxHelper::getColorboxDir() ))
-                $ahref = "<a href='".$linkPlay."' class='colorboxframe$bclass' title='$title'>$title</a>";
+                $ahref = "<a href='".$linkPlay."' class='colorboxframe fileURL' title='$title'>$title</a>";
         }
 
         return $ahref;
@@ -324,18 +317,24 @@ class MultimediaHelper {
     }
 
     /**
-     * Whether the movie is supported or not
+     * Whether the media (video or audio) is supported or not
      *
      * @param  string  $filename
-     * @param  boolean $noImages
      * @return boolean
      */
-    public static function isSupportedMedia($filename, $noImages = false) {
-        $supported = ($noImages) ? self::getSupportedMedia() : array_merge(self::getSupportedMedia(), self::getSupportedImages());
-
-        return in_array(get_file_extension($filename), $supported);
+    public static function isSupportedMedia($filename) {
+        return in_array(get_file_extension($filename), self::getSupportedMedia());
     }
-
+    
+    /**
+     * Whether the file (video or audio or image) is supported or not
+     * 
+     * @param  string  $filename
+     * @return boolean
+     */
+    public static function isSupportedFile($filename) {
+        return (self::isSupportedMedia($filename) || self::isSupportedImage($filename));
+    }
 
     /**
      * Whether the medialink can be embedded in a modal box

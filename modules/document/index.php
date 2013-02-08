@@ -978,10 +978,10 @@ if ($doc_count == 0) {
                                         "&nbsp;<img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
-                                        $furl = (MultimediaHelper::isSupportedMedia($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
+                                        $furl = (MultimediaHelper::isSupportedMedia($entry['path']) && $eclplugin) ? $play_url : $file_url;
                                         $link_href = "<a href='$furl'$link_extra>$link_title</a>";
                                 } else {
-                                        $link_href = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
+                                        $link_href = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $link_title, $entry['path']);
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";

@@ -125,7 +125,7 @@ switch ($module['contentType'])
                 $play_url = file_playurl($assetPath);
 
                 $furl = $file_url;
-                if (MultimediaHelper::isSupportedMedia($module['name'], true)) {
+                if (MultimediaHelper::isSupportedMedia($module['name'])) {
                     $furl = $play_url;
                     $_SESSION['FILE_PHP__LIGHT_STYLE'] = true;
                 }
@@ -177,7 +177,7 @@ switch ($module['contentType'])
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
 
-                if (MultimediaHelper::isSupportedMedia($assetPath))
+                if (MultimediaHelper::isSupportedFile($assetPath))
                 {
                     $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=".$assetPath;
                 }

@@ -511,7 +511,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 					}
 
                                         if ($is_in_tinymce) {
-                                            $furl = (MultimediaHelper::isSupportedMedia($myrow['path'], true) && $eclplugin) ? $mediaPlay : $mediaURL;
+                                            $furl = (MultimediaHelper::isSupportedMedia($myrow['path']) && $eclplugin) ? $mediaPlay : $mediaURL;
                                             $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                         } else {
                                             $link_href = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
@@ -526,8 +526,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $aclass = ($is_in_tinymce) ? 'fileURL' : null;
-                                        $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']), $aclass);
+                                        $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']));
 
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
 
@@ -603,7 +602,7 @@ else {
 						}
 
                                                 if ($is_in_tinymce) {
-                                                   $furl = (MultimediaHelper::isSupportedMedia($myrow['path'], true) && $eclplugin) ? $mediaPlay : $mediaURL;
+                                                   $furl = (MultimediaHelper::isSupportedMedia($myrow['path']) && $eclplugin) ? $mediaPlay : $mediaURL;
                                                     $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
                                                 } else {
                                                     $link_href = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
@@ -613,8 +612,7 @@ else {
                                                 $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $aclass = ($is_in_tinymce) ? 'fileURL' : null;
-                                                $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']), $aclass);
+                                                $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']));
 
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
 
