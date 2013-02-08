@@ -2190,7 +2190,6 @@ $langCoursDelSuccess = "Votre désinscription de ce cours a été effectuée ave
 $langCoursError = "Erreur lors de la désinscription !";
 $langConfirmUnregCours = "Êtes-vous sûr de vouloir vous désinscire du cours";
 $langCreateStatsGraph = "Parameter selection";
-$langGDRequired = "La bibliothèque GD est requise !";
 $langPersonalStats = "Mes statistiques";
 $langUserLogins = "Visites des utilisateurs";
 $langUserDuration = "Participation des utilisateurs";

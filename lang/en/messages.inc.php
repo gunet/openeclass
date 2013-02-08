@@ -2200,7 +2200,6 @@ $langCoursDelSuccess = "Course unregistration was successful";
 $langCoursError = "An error occured";
 $langConfirmUnregCours = "Are you sure you want to unregister from course";
 $langCreateStatsGraph = "Parameter selection";
-$langGDRequired = "The GD library is required!";
 $langPersonalStats = "My statistics";
 $langUserLogins = "User visits";
 $langUserDuration = "User participation";

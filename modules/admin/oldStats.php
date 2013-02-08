@@ -72,10 +72,6 @@ while ($row = mysql_fetch_assoc($result)) {
 $min_w = date("d-m-Y", $min_when);
 
 
-if (!extension_loaded('gd')) {
-    $tool_content .= "<p>$langGDRequired</p>";
-} else {
-    $made_chart = true;
     $tool_content .= '
     <div class="info">'.sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')).'</div>';
 
@@ -161,6 +157,5 @@ if (!extension_loaded('gd')) {
     </tr>
     </table>
     </form>';
-}
 
 draw($tool_content, 3, null, $head_content);

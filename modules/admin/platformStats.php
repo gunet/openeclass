@@ -55,14 +55,9 @@ require_once 'include/jscalendar/calendar.php';
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 
-if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
-} else {
-        $made_chart = true;
         //show chart with statistics
-        require_once "modules/admin/statsResults.php";
-        //show form for determining time period and user
-        require_once "modules/admin/statsForm.php";
-}
+require_once "modules/admin/statsResults.php";
+//show form for determining time period and user
+require_once "modules/admin/statsForm.php";
 
 draw($tool_content, 3, null, $head_content);

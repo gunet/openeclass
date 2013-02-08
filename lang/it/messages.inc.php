@@ -2030,7 +2030,6 @@ $langCoursDelSuccess = "Ti sei cancellato dal corso con successo!";
 $langCoursError = "Si è verificato un errore durante la cancellazione dell' utente dal corso";
 $langConfirmUnregCours = "Sei sicuro che vuoi cancellarti dal corso?";
 $langCreateStatsGraph = "Configurazione dei parametri";
-$langGDRequired = "La libreria GD è necessaria!";
 $langPersonalStats = "Le mie statistiche";
 $langUserLogins = "Visite degli utenti";
 $langUserDuration = "Partecipazione degli utenti";

@@ -2060,7 +2060,6 @@ $langCoursDelSuccess = "Die Deregistrierung vom Kurs war erfolgreich";
 $langCoursError = "Fehler während der Deregistrierung des Benutzers";
 $langConfirmUnregCours = "Wollen Sie sich wirklich von diesem Kurs deregistrieren";
 $langCreateStatsGraph = "Parameter Auswahl";
-$langGDRequired = "Die GD library wird benötigt";
 $langPersonalStats = "Meine Statistiken";
 $langUserLogins = "Besuche von Benutzern bei diesem Kurs";
 $langUserDuration = "Benutzer Partizipierung pro Kurs";
