@@ -56,9 +56,6 @@ $tool_content .= "
 // move data from table 'loginout' to 'loginout_summary' if older than eight months
 require_once 'modules/admin/summarizeLogins.php';
 
-// see if chart has content
-$chart_content = 0;
-
 require_once 'include/jscalendar/calendar.php';
 
 $lang = ($language == 'el')? 'el': 'en';
@@ -85,7 +82,7 @@ if (!extension_loaded('gd')) {
     /*****************************************
       start making chart
      *******************************************/
-     require_once 'include/libchart/classes/libchart.php';
+     require_once 'modules/graphics/plotter.php';
 
      //default values for chart
      $usage_defaults = array (
@@ -113,46 +110,17 @@ if (!extension_loaded('gd')) {
     $result = db_query($query);
 
     if (mysql_num_rows($result) > 0) {
-            $chart = new VerticalBarChart();
-            $dataSet = new XYDataSet();
-
-            //add points to chart
-            while ($row = mysql_fetch_assoc($result)) {
-                $mont = $langMonths[$row['month']];
-                $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content=1;
-            }
-
+        $chart = new Plotter();
         $chart->setTitle($langOldStats);
 
-        mysql_free_result($result);
-        if (!file_exists("courses/temp")) {
-            mkdir("courses/temp", 0777);
+        //add points to chart
+        while ($row = mysql_fetch_assoc($result)) {
+            $mont = $langMonths[$row['month']];
+            $chart->growWithPoint($mont . " - " . $row['year'], $row['visits']);
         }
-        $chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
-        $chart->render($webDir.'/'.$chart_path);
+        mysql_free_result($result);
+        $tool_content .= "<p>" . $langVisits . "</p>\n" . $chart->plot($langNoStatistics);
     }
-
-//check if there are statistics to show
-if ($chart_content) {
-    $tool_content .= '
-    <table width="100%" class="tbl_1">
-    <tr>
-      <th width="220"  class="left">'.$langVisits.':</th>
-      <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-    </tr>
-    </table>';
-} elseif (isset($btnUsage) and $chart_content == 0) {
-    $tool_content .= '
-    <table width="100%" class="tbl_1">
-    <tr>
-      <th width="220"  class="left">'.$langVisits.' :</th>
-      <td valign="top">'.$langNoStatistics.'</td>
-    </tr>
-    </table>';
-}
     $tool_content .= '<br />';
 
     /********************************************************

@@ -29,71 +29,55 @@ check_uid();
 $nameTools = $langPersonalStats;
 check_guest();
 
-// Chart display added - haniotak
-if (!extension_loaded('gd')) {
-	$tool_content .= $langGDRequired;
-} else {
-	$totalHits = 0;
-        $totalDuration = 0;
-	require_once 'include/libchart/classes/libchart.php';
+$totalHits = 0;
+$totalDuration = 0;
+require_once 'modules/graphics/plotter.php';
 
-        $sql = "SELECT a.code code, a.title title
+$sql = "SELECT a.code code, a.title title
                 FROM course AS a LEFT JOIN course_user AS b
                      ON a.id = b.course_id
                 WHERE b.user_id = $uid
-                AND a.visible != ".COURSE_INACTIVE."
+                AND a.visible != " . COURSE_INACTIVE . "
                 ORDER BY a.title";
-	$result = db_query($sql);
-	if (mysql_num_rows($result) > 0) {  // found courses ?
-		while ($row = mysql_fetch_assoc($result)) {
-			$course_codes[] = $row['code'];
-			$course_names[$row['code']]=$row['title'];
-		}
-		mysql_free_result($result);
-		foreach ($course_codes as $code) {
-                        $cid = course_code_to_id($code);
-			$sql = "SELECT SUM(hits) AS cnt FROM actions_daily
+$result = db_query($sql);
+if (mysql_num_rows($result) > 0) {  // found courses ?
+    while ($row = mysql_fetch_assoc($result)) {
+        $course_codes[] = $row['code'];
+        $course_names[$row['code']] = $row['title'];
+    }
+    mysql_free_result($result);
+    foreach ($course_codes as $code) {
+        $cid = course_code_to_id($code);
+        $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                 WHERE user_id = $uid
                                 AND course_id = $cid";
-			$result = db_query($sql);
-			while ($row = mysql_fetch_assoc($result)) {
-				$totalHits += $row['cnt'];
-				$hits[$code] = $row['cnt'];
-			}
-			mysql_free_result($result);
-			$sql = "SELECT SUM(duration) FROM actions_daily
+        $result = db_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $totalHits += $row['cnt'];
+            $hits[$code] = $row['cnt'];
+        }
+        mysql_free_result($result);
+        $sql = "SELECT SUM(duration) FROM actions_daily
                                         WHERE user_id = $uid
                                         AND course_id = $cid";
-			$result = db_query($sql);
-			list($duration[$code]) = mysql_fetch_row($result);
-                        $totalDuration += $duration[$code];
-			mysql_free_result($result);
-		}
+        $result = db_query($sql);
+        list($duration[$code]) = mysql_fetch_row($result);
+        $totalDuration += $duration[$code];
+        mysql_free_result($result);
+    }
 
-		$chart = new PieChart(600, 300);
-		$dataSet = new XYDataSet();
-		$chart_content = 0;
-		foreach ($hits as $code => $count) {
-			if ($count >0 ){
-				$chart_content=5;
-				$dataSet->addPoint(new Point($course_names[$code], $count));
-				$chart->width += 7;
-				$chart->setDataSet($dataSet);
-			}
-		}
-		$chart->setTitle($langCourseVisits);
-		if (!file_exists("courses/temp")) {
-			mkdir("courses/temp", 0777);
-		}
-		$chart_path = '/courses/temp/chart_'.md5(serialize($chart)).'.png';
-		if ($chart_content) {
-			$chart->render($webDir.$chart_path);
-			$tool_content .= '<p><img src="'.$urlServer.$chart_path.'" /></p>';
-		}
-		$made_chart = true;
+    $chart = new Plotter(600, 300);
+    $chart->setTitle($langCourseVisits);
+    foreach ($hits as $code => $count) {
+        if ($count > 0) {
+            $chart->addPoint($course_names[$code], $count);
+            $chart->modDimension(7, 0);
+        }
+    }
+    $tool_content .= $chart->plot();
 
-                $totalDuration = format_time_duration(0 + $totalDuration);
-                $tool_content .= "
+    $totalDuration = format_time_duration(0 + $totalDuration);
+    $tool_content .= "
                 <fieldset>
                 <legend>$langPlatformGenStats</legend>
                 <table width='100%'>
@@ -110,25 +94,24 @@ if (!extension_loaded('gd')) {
                 <td>
                 <table class='tbl_alt' width='550'>
                 <tr>
-                <th colspan='2'>$langCourseTitle</th>
+                <th colspan='2'>$langCourseTitle</th>                   
                 <th width='160'>$langDuration</th>
                 </tr>";
-                $i = 0;
-                foreach ($duration as $code => $time) {
-                        if ($i%2 == 0) {
-                                $tool_content .= "<tr class='even'>";
-                        } else {
-                                $tool_content .= "<tr class='odd'>";
-                        }
-                        $i++;
-                        $tool_content .= "
+    $i = 0;
+    foreach ($duration as $code => $time) {
+        if ($i % 2 == 0) {
+            $tool_content .= "<tr class='even'>";
+        } else {
+            $tool_content .= "<tr class='odd'>";
+        }
+        $i++;
+        $tool_content .= "
                         <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
                         <td>" . q(course_code_to_title($code)) . "</td>
                         <td width='140'>" . format_time_duration(0 + $time) . "</td>
                         </tr>";
-                }
-                $tool_content .= "</table></td></tr>";
-	}
+    }
+    $tool_content .= "</table></td></tr>";
 }
 // End of chart display; chart unlinked at end of script.
 
@@ -163,4 +146,4 @@ while ($leRecord = mysql_fetch_array($leResultat)) {
 $tool_content .= "</table>";
 $tool_content .= "</td></tr></table></fieldset>";
 
-draw($tool_content, 1);
+draw($tool_content, 1, null, $head_content);

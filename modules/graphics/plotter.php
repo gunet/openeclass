@@ -1,7 +1,5 @@
 <?php
 
-require_once 'include/libchart/classes/libchart.php';
-
 class Plotter {
 
     private $width;
@@ -9,8 +7,8 @@ class Plotter {
     private $title;
     private $data;
 
-    public function Plotter() {
-        $this->setDimension(200, 200);
+    public function Plotter($width = 200, $height = 200) {
+        $this->setDimension($width, $height);
         $this->data = array();
     }
 
@@ -37,30 +35,22 @@ class Plotter {
         $this->addPoint($name, $value);
     }
 
-    public function plot($emptyerror) {
-        if (count($this->data) == 0) {
-            return $emptyerror;
-        } else {
-            global $course_code, $urlServer, $webDir;
-
-            $chart_path = 'courses/' . $course_code . '/temp/chart_' . md5(serialize($this)) . '.png';
-
-            $dataset = new XYDataSet();
-            foreach ($this->data as $name => $value) {
-                $dataset->addPoint(new Point($name, $value));
-            }
-
-            $chart = new VerticalBarChart($this->width, $this->height);
-            $chart->setTitle($this->title);
-            $chart->setDataSet($dataset);
-            $chart->render($webDir . '/' . $chart_path);
-
-            return '<p align="center"><img src="' . $urlServer . $chart_path . '" /></p>';
+    public function normalize() {
+        $total = 0;
+        foreach ($this->data as $name => $value) {
+            $total += $value;
+        }
+        foreach ($this->data as $name => $value) {
+            $this->data[$name] = $value * 100 / $total;
         }
     }
 
-    public function plotJS($emptyerror) {
-        if (count($this->data) == 0) {
+    public function isEmpty() {
+        return $this->data == 0;
+    }
+
+    public function plot($emptyerror = "") {
+        if ($this->isEmpty()) {
             return $emptyerror;
         } else {
 

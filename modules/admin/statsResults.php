@@ -19,7 +19,7 @@
  * ======================================================================== */
 
 
-require_once 'include/libchart/classes/libchart.php';
+require_once 'modules/graphics/plotter.php';
 $usage_defaults = array (
     'u_stats_type' => 'visits',
     'u_interval' => 'daily',
@@ -37,7 +37,6 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 #see if chart has content
-$chart_content = 0;
 
 $date_fmt = '%Y-%m-%d';
 $u_date_start = mysql_real_escape_string($u_date_start);
@@ -84,81 +83,38 @@ switch ($u_stats_type) {
     case "visits":
     $query = "SELECT ".$date_what." COUNT(*) AS cnt FROM loginout WHERE $date_where AND $user_where AND action='LOGIN' $date_group ORDER BY `when` ASC";
     $result = db_query($query);
-    $chart = new VerticalBarChart();
-    $dataSet = new XYDataSet();
+    $chart = new Plotter(220, 200);
+    $chart->setTitle($langVisits);
     switch ($u_interval) {
         case "summary":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($langSummary, $row['cnt']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content = 1;
+                $chart->growWithPoint($langSummary, $row['cnt']);
             }
         break;
         case "daily":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['date'], $row['cnt']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content = 1;
+                $chart->growWithPoint($row['date'], $row['cnt']);
             }
         break;
         case "weekly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content = 1;
+               $chart->growWithPoint($row['week_start'].' - '.$row['week_end'], $row['cnt']);
             }
         break;
         case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content=1;
+                $chart->growWithPoint($langMonths[$row['month']], $row['cnt']);
             }
         break;
         case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['year'], $row['cnt']));
-                $chart->width += 25;
-                $chart->setDataSet($dataSet);
-                $chart_content=1;
+                $chart->growWithPoint($row['year'], $row['cnt']);
             }
         break;
     }
-    $chart->setTitle($langVisits);
     break;
 }
 if ($result !== false)
     mysql_free_result($result);
 
-if (!file_exists("courses/temp")) {
-    mkdir("courses/temp", 0777);
-}
-
-//check if there are statistics to show
-if ($chart_content) {
-    $chart_path = '/courses/temp/chart_'.md5(serialize($chart)).'.png';
-    $chart->render($webDir.$chart_path);
-    $tool_content .= '
-      <table class="FormData" width="99%" align="left">
-      <tbody>
-      <tr>
-        <th width="220"  class="left">'.$langVisits.' :</th>
-        <td valign="top"><img src="'.$urlServer.$chart_path.'" /></td>
-      </tr>
-      </tbody>
-      </table>';
-} elseif (isset($_POST['btnUsage']) and $chart_content == 0) {
-    $tool_content .= '
-      <table class="FormData" width="99%" align="left">
-      <tbody>
-      <tr>
-        <th width="220"  class="left">'.$langVisits.' :</th>
-        <td>'.$langNoStatistics.'</td>
-      </tr>
-      </tbody>
-      </table>';
-}
+$tool_content .= $chart->plot($langNoStatistics);

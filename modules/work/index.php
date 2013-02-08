@@ -87,7 +87,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/libchart/classes/libchart.php';
+require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
 
 $workPath = $webDir."/courses/".$course_code."/work";
@@ -979,22 +979,13 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 
                 if ($display_graph_results) { // display pie chart with grades results
                         if ($gradesExists) {
-                                $chart = new PieChart(300, 200);
-                                $dataSet = new XYDataSet();
+                                $chart = new Plotter();
                                 $chart->setTitle("$langGraphResults");
                                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
                                         $percentage = 100.0 * $gradeOccurance / $graded_submissions_count;
-                                        $dataSet->addPoint(new Point("$gradeValue ($percentage)", $percentage));
+                                        $chart->growWithPoint("$gradeValue ($percentage)", $percentage);
                                 }
-                                $chart_path = '/courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
-                                $chart->setDataSet($dataSet);
-                                $chart->render($webDir.$chart_path);
-                                $tool_content .= "
-                                <table width='100%' class='tbl'>
-                                <tr>
-                                <td><img src='$urlServer$chart_path' /></td>
-                                </tr>
-                                </table>";
+                                $tool_content .= $chart->plot();
                         }
                 }
         } else {

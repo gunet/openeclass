@@ -81,8 +81,7 @@ switch ($u_interval) {
 }
 
 
-$chart = new Plotter();
-$chart->setDimension(300, 300);
+$chart = new Plotter(300, 300);
 
 switch ($u_stats_value) {
     case "visits":
@@ -178,4 +177,3 @@ mysql_free_result($result);
 
 $errorMsg = '<p class="alert1">' . $langNoStatistics . '</p>';
 $tool_content .= $chart->plot($errorMsg);
-$tool_content .= $chart->plotJS($errorMsg);

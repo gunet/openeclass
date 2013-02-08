@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,18 +20,18 @@
  * ======================================================================== */
 
 /*
-===========================================================================
-    usage/index.php
-    @version $Id$
-    @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-    @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
-==============================================================================
-    @Description: Main script for the usage statistics module
+  ===========================================================================
+  usage/index.php
+  @version $Id$
+  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
+  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
+  ==============================================================================
+  @Description: Main script for the usage statistics module
 
 
-    @todo: Nothing much; most functionality is already in form.php and results.php
-==============================================================================
-*/
+  @todo: Nothing much; most functionality is already in form.php and results.php
+  ==============================================================================
+ */
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -52,25 +53,21 @@ $tool_content .= "
   </ul>
 </div>\n";
 
-$dateNow = date("d-m-Y / H:i:s",time());
+$dateNow = date("d-m-Y / H:i:s", time());
 $nameTools = $langUsage;
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #edecdf; padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
 
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";
 } else {
-    if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
-    } else {
-        $made_chart = true;
-        ob_start();
-        require_once "results.php";
-        require_once "form.php";
-    }
+    $made_chart = true;
+    ob_start();
+    require_once "results.php";
+    require_once "form.php";
 }
 add_units_navigation(true);
 draw($tool_content, 2, null, $head_content);

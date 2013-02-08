@@ -91,7 +91,7 @@ if (!extension_loaded('gd')) {
 } else {
        $made_chart = true;
        //make chart
-       require_once 'include/libchart/classes/libchart.php';
+       require_once 'modules/graphics/plotter.php';
        $usage_defaults = array (
 	   'u_stats_value' => 'visits',
 	   'u_module_id' => -1,
@@ -117,8 +117,8 @@ if (!extension_loaded('gd')) {
 	$mod_where = " (1) ";
   }
 
-   // check if statistics exist
-   $chart_content = 0;
+   $chart = new Plotter(600, 300);
+   $chart->setTitle("$langOldStats");
    switch ($u_stats_value) {
        case "visits":
 	       $query = "SELECT module_id, MONTH(start_date) AS month,
@@ -131,16 +131,10 @@ if (!extension_loaded('gd')) {
                         GROUP BY MONTH(start_date)";
 
 	       $result = db_query($query);
-	       $chart = new PieChart(600, 300);
-	       $dataSet = new XYDataSet();
 	   while ($row = mysql_fetch_assoc($result)) {
 	       $mont = $langMonths[$row['month']];
-	       $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['visits']));
-	       $chart->width += 20;
-	       $chart->setDataSet($dataSet);
-	       $chart_content = 5;
+               $chart->growWithPoint($mont." - ".$row['year'], $row['visits']);
 	   }
-	   $chart->setTitle("$langOldStats");
        break;
 
        case "duration":
@@ -153,28 +147,19 @@ if (!extension_loaded('gd')) {
                     GROUP BY MONTH(start_date)";
 
 	   $result = db_query($query);
-	       $chart = new PieChart(600, 300);
-	       $dataSet = new XYDataSet();
 	   while ($row = mysql_fetch_assoc($result)) {
 	       $mont = $langMonths[$row['month']];
-	       $dataSet->addPoint(new Point($mont." - ".$row['year'], $row['tot_dur']));
-	       $chart->width += 20;
-	       $chart->setDataSet($dataSet);
-	       $chart_content = 5;
+               $chart->growWithPoint($mont." - ".$row['year'], $row['tot_dur']);
 	   }
-	   $chart->setTitle("$langOldStats");
 	   $tool_content .= "<p>$langDurationExpl</p>";
        break;
    }
    mysql_free_result($result);
    $chart_path = 'courses/'.$course_code.'/temp/chart_'.md5(serialize($chart)).'.png';
 
-   if ($chart_content) {
-	$chart->render($webDir."/".$chart_path);
-	$tool_content .= "<p>".sprintf($langOldStatsExpl, get_config('actions_expire_interval'))."</p>";
-	$tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-   } elseif (isset($btnUsage) and $chart_content == 0) {
-	$tool_content .='<p class="alert1">'.$langNoStatistics.'</p>';
+   if (!$chart->isEmpty()) {
+   	$tool_content .= "<p>".sprintf($langOldStatsExpl, get_config('actions_expire_interval'))."</p>";
+        $tool_content .= $chart->plot($langNoStatistics);
    }
    // make form
    $start_cal = $jscalendar->make_input_field(

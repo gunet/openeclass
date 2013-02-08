@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,15 +21,15 @@
 
 
 /*
-===========================================================================
-    admin/usersCourseStats.php
-    @last update: 23-09-2006
-    @authors list: ophelia neofytou
-==============================================================================
-    @Description: Shows chart with the number of users per course.
+  ===========================================================================
+  admin/usersCourseStats.php
+  @last update: 23-09-2006
+  @authors list: ophelia neofytou
+  ==============================================================================
+  @Description: Shows chart with the number of users per course.
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 $require_admin = true;
 $require_help = true;
@@ -54,33 +55,20 @@ $tool_content .= "
 
 
 require_once 'include/jscalendar/calendar.php';
-$lang = ($language == 'el')? 'el': 'en';
+$lang = ($language == 'el') ? 'el' : 'en';
 
-if (!extension_loaded('gd')) {
-        $tool_content .= "<p>$langGDRequired</p>";
-} else {
-        $made_chart = true;
+//make chart
+require_once 'modules/graphics/plotter.php';
+$query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON " .
+        " course.id = course_user.course_id GROUP BY course.id";
 
-        //make chart
-        require_once 'include/libchart/classes/libchart.php';
-        $query = "SELECT course.title AS name, COUNT(user_id) AS cnt FROM course_user LEFT JOIN course ON ".
-            " course.id = course_user.course_id GROUP BY course.id";
-
-        $result = db_query($query);
-        $chart = new VerticalBarChart(200, 300);
-        while ($row = mysql_fetch_assoc($result)) {
-                $chart->addPoint(new Point($row['name'], $row['cnt']));
-                $chart->width += 25;
-        }
-        $chart->setTitle($langUsersCourse);
-
-        mysql_free_result($result);
-        $chart_path = 'temp/chart_'.md5(serialize($chart)).'.png';
-
-        $chart->render($webDir.'/'.$chart_path);
-
-        $tool_content .= '<img src="'.$urlServer.$chart_path.'" />';
-
+$result = db_query($query);
+$chart = new Plotter();
+$chart->setTitle($langUsersCourse);
+while ($row = mysql_fetch_assoc($result)) {
+    $chart->growWithPoint($row['name'], $row['cnt']);
 }
+mysql_free_result($result);
+$tool_content .= $chart->plot();
 
-draw($tool_content, 3, 'admin');
+draw($tool_content, 3, 'admin', $head_content);
