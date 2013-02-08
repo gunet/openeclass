@@ -21,7 +21,7 @@
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $nameTools = $langMediaTypeDesc;
 
@@ -32,7 +32,7 @@ if (isset($_GET['id'])) {
 
     if (strpos($videoPath, '/../') === FALSE)
     {
-        echo media_html_object($videoPath, $videoURL, '#ffffff', '#000000');
+        echo MultimediaHelper::mediaHtmlObject($videoPath, $videoURL, '#ffffff', '#000000');
     }
 }
 

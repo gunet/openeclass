@@ -48,7 +48,7 @@ $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 // Ksekiname to diko mas html output giati probaloume mesa se iframe

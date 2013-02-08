@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $dialogBox = '';
 
@@ -214,7 +214,7 @@ function showmedia()
 
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
@@ -226,7 +226,7 @@ function showmedia()
     {
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_medialink_ahref(q($myrow['url']), q($myrow['title'])) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title'])) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";

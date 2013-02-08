@@ -28,7 +28,7 @@ $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();

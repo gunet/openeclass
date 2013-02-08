@@ -21,13 +21,13 @@
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    echo medialink_iframe_object(html_entity_decode($id), '#ffffff', '#000000');
+    echo MultimediaHelper::medialinkIframeObject(html_entity_decode($id), '#ffffff', '#000000');
 }
 

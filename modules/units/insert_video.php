@@ -50,11 +50,11 @@ function list_videos()
                         {
                             list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
 
-                            $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
+                            $videolink = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
                         }
                         else
                         {
-                            $videolink = choose_medialink_ahref(q($row['url']), q($row['title']));
+                            $videolink = MultimediaHelper::chooseMedialinkAhref(q($row['url']), q($row['title']));
                         }
 
                           if ($numLine%2 == 0) {

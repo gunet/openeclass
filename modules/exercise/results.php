@@ -32,7 +32,7 @@ require_once '../../include/baseTheme.php';
 require_once 'exercise.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $nameTools = $langResults;

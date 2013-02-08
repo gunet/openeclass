@@ -33,7 +33,7 @@ require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);

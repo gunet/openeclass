@@ -45,7 +45,7 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/pclzip/pclzip.lib.php' ;
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
 
 load_js('tools.js');
@@ -978,10 +978,10 @@ if ($doc_count == 0) {
                                         "&nbsp;<img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
-                                        $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
+                                        $furl = (MultimediaHelper::isSupportedMedia($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
                                         $link_href = "<a href='$furl'$link_extra>$link_title</a>";
                                 } else {
-                                        $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
+                                        $link_href = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";
@@ -1096,20 +1096,20 @@ function select_proper_filters() {
     switch ($_REQUEST['docsfilter']) {
         case 'image':
                 $ors = '';
-                foreach (get_supported_images() as $imgfmt)
+                foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
                     $ors .= " OR format LIKE '$imgfmt'";
                 $filter = "AND (format LIKE '.dir' $ors)";
                 break;
         case 'eclmedia':
         	$ors = '';
-        	foreach (get_supported_media() as $mediafmt)
+        	foreach (MultimediaHelper::getSupportedMedia() as $mediafmt)
         		$ors .= " OR format LIKE '$mediafmt'";
         	$filter = "AND (format LIKE '.dir' $ors)";
         	break;
         case 'media':
                 $eclplugin = false;
                 $ors = '';
-                foreach (get_supported_media() as $mediafmt)
+                foreach (MultimediaHelper::getSupportedMedia() as $mediafmt)
                     $ors .= " OR format LIKE '$mediafmt'";
                 $filter = "AND (format LIKE '.dir' $ors)";
                 break;

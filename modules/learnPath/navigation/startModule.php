@@ -52,7 +52,7 @@ $clarolineRepositoryWeb = $urlServer."courses/".$course_code;
 // lib of this tool
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
@@ -125,7 +125,7 @@ switch ($module['contentType'])
                 $play_url = file_playurl($assetPath);
 
                 $furl = $file_url;
-                if (is_supported_media($module['name'], true)) {
+                if (MultimediaHelper::isSupportedMedia($module['name'], true)) {
                     $furl = $play_url;
                     $_SESSION['FILE_PHP__LIGHT_STYLE'] = true;
                 }
@@ -177,7 +177,7 @@ switch ($module['contentType'])
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
 
-                if (is_supported_media($assetPath))
+                if (MultimediaHelper::isSupportedMedia($assetPath))
                 {
                     $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=".$assetPath;
                 }
@@ -194,9 +194,9 @@ switch ($module['contentType'])
                     directly_pass_lp_module($TABLEUSERMODULEPROGRESS, (int)$uid, (int)$learnPathModuleId);
                 }
 
-                if (is_embeddable_medialink($assetPath))
+                if (MultimediaHelper::isEmbeddableMedialink($assetPath))
                 {
-                    $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=".make_embeddable_medialink($assetPath);
+                    $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=". MultimediaHelper::makeEmbeddableMedialink($assetPath);
                 }
                 else
                 {

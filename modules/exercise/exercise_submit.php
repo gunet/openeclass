@@ -41,7 +41,7 @@ $nameTools = $langExercicesView;
 $picturePath = "courses/$course_code/image";
 
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 if (isset($_GET['exerciseId'])) {

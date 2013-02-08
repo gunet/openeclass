@@ -98,7 +98,7 @@ function docsHtmlInterface($date)
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;
 				$url = file_url($course_file['path'], null, $course_file['code']);
 				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
-				$href = choose_media_ahref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
+				$href = MultimediaHelper::chooseMediaAhref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
 				$href .' - (' .
 				nice_format(date('Y-m-d', strtotime($course_file['date_modified']))) .

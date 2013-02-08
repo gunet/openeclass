@@ -39,7 +39,7 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';

@@ -104,15 +104,15 @@ if (file_exists($basedir . $file_info['path'])) {
     if (!$is_in_playmode) {
         send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
     } else {
-        require_once 'modules/video/video_functions.php';
         require_once 'include/lib/fileDisplayLib.inc.php';
+        require_once 'include/lib/multimediahelper.class.php';
 
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/index.php?course='. $course_code .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
             $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
 
-        $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
+        $htmlout = (!$is_in_lightstyle) ? MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL) : MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;
         exit();
     }

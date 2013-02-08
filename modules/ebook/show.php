@@ -76,7 +76,7 @@ if ($show_orphan_file and $file_path) {
     if (!$is_in_playmode)
         send_file_by_url_file_path($file_path);
     else {
-        require_once 'modules/video/video_functions.php';
+        require_once 'include/lib/multimediahelper.class.php';
 
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
@@ -84,7 +84,7 @@ if ($show_orphan_file and $file_path) {
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/ebook/document.php?course='. $course_code .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
 
-        echo media_html_object($mediaPath, $mediaURL);
+        echo MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL);
         exit();
     }
 }
