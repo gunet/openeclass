@@ -82,41 +82,6 @@ if ($is_in_tinymce) {
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
-$filterv = '';
-$filterl = '';
-$eclplugin = true;
-if (isset($_REQUEST['docsfilter'])) {
-
-    switch ($_REQUEST['docsfilter']) {
-        case 'image':
-            $ors = '';
-            $first = true;
-            foreach (get_supported_images() as $imgfmt)
-            {
-                if ($first)
-                {
-                    $ors .= "path LIKE '%$imgfmt%'";
-                    $first = false;
-                } else
-                    $ors .= " OR path LIKE '%$imgfmt%'";
-            }
-
-            $filterv = "AND ( $ors )";
-            $filterl = "AND false";
-            break;
-        case 'zip':
-            $filterv = $filterl = "AND false";
-            break;
-        case 'media':
-            $eclplugin = false;
-            break;
-        case 'eclmedia':
-        case 'file':
-        default:
-            break;
-    }
-}
-
 // ----------------------
 // download video
 // ----------------------
@@ -505,6 +470,10 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
+list($filterv, $filterl, $eclplugin) = (isset($_REQUEST['docsfilter'])) 
+        ? select_proper_filters($_REQUEST['docsfilter']) 
+        : array('', '', true);
+
 $count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title"));
 $count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl
 				ORDER BY title"));
@@ -690,4 +659,41 @@ function select_table($table)
         } else {
                 return 'video';
         }
+}
+
+function select_proper_filters($requestDocsFilter) {
+    $filterv = '';
+    $filterl = '';
+    $eclplugin = true;
+    
+    switch ($requestDocsFilter) {
+        case 'image':
+            $ors = '';
+            $first = true;
+            foreach (get_supported_images() as $imgfmt)
+            {
+                if ($first)
+                {
+                    $ors .= "path LIKE '%$imgfmt%'";
+                    $first = false;
+                } else
+                    $ors .= " OR path LIKE '%$imgfmt%'";
+            }
+
+            $filterv = "AND ( $ors )";
+            $filterl = "AND false";
+            break;
+        case 'zip':
+            $filterv = $filterl = "AND false";
+            break;
+        case 'media':
+            $eclplugin = false;
+            break;
+        case 'eclmedia':
+        case 'file':
+        default:
+            break;
+    }
+    
+    return array($filterv, $filterl, $eclplugin);
 }

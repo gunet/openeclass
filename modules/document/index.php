@@ -806,39 +806,9 @@ if (isset($_GET['rev'])) {
         $reverse = true;
 }
 
-$filter = '';
-$eclplugin = true;
-if (isset($_REQUEST['docsfilter'])) {        
-    switch ($_REQUEST['docsfilter']) {
-        case 'image':
-                $ors = '';
-                foreach (get_supported_images() as $imgfmt)
-                    $ors .= " OR format LIKE '$imgfmt'";
-                $filter = "AND (format LIKE '.dir' $ors)";
-                break;
-        case 'eclmedia':
-        	$ors = '';
-        	foreach (get_supported_media() as $mediafmt)
-        		$ors .= " OR format LIKE '$mediafmt'";
-        	$filter = "AND (format LIKE '.dir' $ors)";
-        	break;
-        case 'media':
-                $eclplugin = false;
-                $ors = '';
-                foreach (get_supported_media() as $mediafmt)
-                    $ors .= " OR format LIKE '$mediafmt'";
-                $filter = "AND (format LIKE '.dir' $ors)";
-                break;
-        case 'zip':
-                $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
-                break;
-        case 'file':
-                $filter = '';
-                break;
-        default:
-            break;
-    }
-}
+list($filter, $eclplugin) = (isset($_REQUEST['docsfilter'])) 
+        ? select_proper_filters($_REQUEST['docsfilter']) 
+        : array('', true);
 
 /*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM document
@@ -1116,3 +1086,42 @@ if (defined('SAVED_COURSE_CODE')) {
 }
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);
+
+
+
+function select_proper_filters() {
+    $filter = '';
+    $eclplugin = true;
+    
+    switch ($_REQUEST['docsfilter']) {
+        case 'image':
+                $ors = '';
+                foreach (get_supported_images() as $imgfmt)
+                    $ors .= " OR format LIKE '$imgfmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
+        case 'eclmedia':
+        	$ors = '';
+        	foreach (get_supported_media() as $mediafmt)
+        		$ors .= " OR format LIKE '$mediafmt'";
+        	$filter = "AND (format LIKE '.dir' $ors)";
+        	break;
+        case 'media':
+                $eclplugin = false;
+                $ors = '';
+                foreach (get_supported_media() as $mediafmt)
+                    $ors .= " OR format LIKE '$mediafmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
+        case 'zip':
+                $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
+                break;
+        case 'file':
+                $filter = '';
+                break;
+        default:
+            break;
+    }
+
+    return array($filter, $eclplugin);
+}
