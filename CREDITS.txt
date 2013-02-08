@@ -124,8 +124,8 @@ JSCalendar: Copyright Mihai Bazon, 2002-2005
 
 POP3 class : Manuel Lemos (http://www.manuellemos.net)  <WebMaster@E-na.Net>
 
-Libchart 1.3 - PHP chart library: Copyright 2005-2011 Jean Marc Tremeaux <jm.tremeaux@gmail.com>
-	http://naku.dohcrew.com/libchart/
+Flot Javascript plotting library for jQuery: Copyright (c) 2007-2012 IOLA and Ole Laursen.
+Licensed under the MIT license.
 
 Dropbox module: Copyright 2004 Jan Bols <jan@ivpv.UGent.be>
 
