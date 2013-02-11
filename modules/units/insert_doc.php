@@ -21,14 +21,33 @@
 
 require_once 'modules/document/doc_init.php';
 
+/**
+ * list documents while inserting them in course unit
+ * @global type $id
+ * @global type $webDir
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $group_sql
+ * @global type $langDirectory
+ * @global type $langUp
+ * @global type $langName
+ * @global type $langSize
+ * @global type $langDate
+ * @global type $langType
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoDocuments
+ * @global type $course_code
+ * @global type $themeimg
+ */
 function list_docs()
 {
-        global $id, $webDir, $course_code, $course_id, $tool_content,
-               $group_sql, $langDirectory, $langUp, $langName, $langSize,
+        global $id, $webDir, $course_code, $tool_content,
+               $group_sql, $langDirectory, $langUp, $langName, $langSize,       
                $langDate, $langType, $langAddModulesButton, $langChoice,
                $langNoDocuments, $course_code, $themeimg;
 
-        $basedir = $webDir . 'courses/' . $course_code . '/document';
+        $basedir = $webDir . '/courses/' . $course_code . '/document';        
         if (isset($_GET['path'])) {
                 if ($path == '/' or $path == '\\') {
 			$path = '';
@@ -39,7 +58,7 @@ function list_docs()
         $result = db_query("SELECT * FROM document
                             WHERE $group_sql AND
 			          path LIKE " . quote("$path/%") . " AND
-                                  path NOT LIKE " . quote("$path/%/%"));
+                                  path NOT LIKE " . quote("$path/%/%"));        
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(
@@ -133,15 +152,15 @@ function list_docs()
 				} else {
 					$size = format_file_size($entry['size']);
                                         $date = nice_format($entry['date'], true, true);
-					$tool_content .= "\n      <td class='center'>$size</td>\n      <td class='center'>$date</td>";
+					$tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
 				}
-					$tool_content .= "\n      <td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
-					$tool_content .= "\n    </tr>";
+					$tool_content .= "<td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+					$tool_content .= "</tr>";
 				$counter++;
 			}
 		}
-		$tool_content .= "\n    <tr>\n      <th colspan=$colspan><div align='right'>";
+		$tool_content .= "<tr><th colspan=$colspan><div align='right'>";
 		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
-                $tool_content .= "\n    </tr>\n    </table>\n    </form>\n";
+                $tool_content .= "</tr></table></form>\n";
         }
 }

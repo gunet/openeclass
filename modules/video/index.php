@@ -345,7 +345,7 @@ if (isset($_POST['add_submit'])) {  // add
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
-                        <td class='right'><input type='submit' name='add_submit' value='$dropbox_lang[uploadFile]'></td>
+                        <td class='right'><input type='submit' name='add_submit' value='$langDownloadFile'></td>
                         </tr>
                         </table>
                 </fieldset>
