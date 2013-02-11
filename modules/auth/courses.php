@@ -21,6 +21,7 @@
 
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 $tree = new hierarchy();
 
@@ -60,7 +61,11 @@ if (isset($_POST['submit'])) {
                 if (!in_array($cid, $selectCourse)) {
 			db_query("DELETE FROM course_user
 					WHERE statut <> 1 AND statut <> 10
-					AND user_id = $uid AND course_id = $cid");
+					AND user_id = $uid AND course_id = $cid");                        
+                        // logging
+                        Log::record($cid, MODULE_ID_USERS, LOG_DELETE,
+                                                                array('uid' => $uid,
+                                                                      'right' => 0));
                 }
         }
 

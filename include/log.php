@@ -704,14 +704,14 @@ class Log {
          */
         private function course_user_action_details($details) {
                 
-                global $langUnCourse, $langOfUser, $langToUser, $langOneByOne,
+                global $langUnCourse, $langOfUser, $langToUser, $langNewUser,
                         $langGiveRightAdmin, $langGiveRightΕditor, $langGiveRightTutor,
                         $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
                 
                 $details = unserialize($details);
                 
                 switch ($details['right']) {
-                        case '+5': $content = $langOneByOne;
+                        case '+5': $content = $langNewUser;
                                                 break;
                         case '0': $content = "$langUnCourse $langOfUser";
                                                 break;

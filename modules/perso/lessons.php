@@ -42,10 +42,10 @@
  * @return mixed content
  */
 function getUserLessonInfo($uid, $type)
-{
-	global $mysqlMainDb;
+{	
+        
 	//	TODO: add the new fields for memory in the db
-        if ($_SESSION['statut'] == 5) {
+        if ($_SESSION['statut'] == USER_STUDENT) {
                 $user_courses = "SELECT course.id course_id,
                                         course.code code,
                                         course.public_code,
@@ -63,7 +63,7 @@ function getUserLessonInfo($uid, $type)
                                        user.user_id = $uid
                                        AND course.visible != ".COURSE_INACTIVE."
                                  ORDER BY course.title, course.prof_names";
-        } elseif ($_SESSION['statut'] == 1)  {
+        } elseif ($_SESSION['statut'] == USER_TEACHER)  {
                 $user_courses = "SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
@@ -84,7 +84,7 @@ function getUserLessonInfo($uid, $type)
 
 	$lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code =
                          $lesson_professor = $lesson_statut = array();
-	$mysql_query_result = db_query($user_courses, $mysqlMainDb);
+	$mysql_query_result = db_query($user_courses);
 	$repeat_val = 0;
 	//getting user's lesson info
 	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
@@ -98,8 +98,8 @@ function getUserLessonInfo($uid, $type)
 	}
 
 	$memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
-		FROM user WHERE user.user_id = $uid";
-	$memory_result = db_query($memory, $mysqlMainDb);
+                        FROM user WHERE user.user_id = $uid";
+	$memory_result = db_query($memory);
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
 		$lesson_announce_f = str_replace('-', ' ', $my_memory_result[0]);
 		$lesson_doc_f = str_replace('-', ' ', $my_memory_result[1]);
@@ -134,11 +134,11 @@ function getUserLessonInfo($uid, $type)
  */
 function htmlInterface($data, $lesson_code)
 {
-	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
-	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
-	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid, $themeimg;
+	global $statut, $urlServer, $langNotEnrolledToLessons, $langWelcomeProfPerso;
+        global $langWelcomeStudPerso, $langWelcomeSelect;
+	global $langUnregCourse, $langAdm, $uid, $themeimg;
 
-	$lesson_content = '';
+	$lesson_content = '';        
 	if ($data[0] > 0) {
 		$lesson_content .= "<table width='100%' class='tbl_lesson'>";
 		for ($i=0; $i < $data[0]; $i++) {
@@ -147,11 +147,11 @@ function htmlInterface($data, $lesson_code)
 			  <b><a href=\"${urlServer}courses/".$data[2][$i]."/\">".q($data[1][$i])."</a> </b><span class='smaller'>(".q($lesson_code[$i]).")</span>
 			  <div class='smaller'>".q($data[3][$i])."</div></li></ul></td>";
 			  $lesson_content .= "<td align='center'>";
-			if ($data[4][$i] == '5') {
+			if ($data[4][$i] == USER_STUDENT) {
 				$lesson_content .= "
-				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
+				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[8][$i]."&amp;uid=".$uid."'>
 				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
-			} elseif ($data[4][$i] == '1') {
+			} elseif ($data[4][$i] == USER_TEACHER) {
 				$lesson_content .= "
 				<a href='${urlServer}modules/course_info/?from_home=true&amp;cid=".$data[2][$i]."'>
 				<img src='$themeimg/tools.png' title='$langAdm' alt='$langAdm'></a>";
@@ -160,20 +160,16 @@ function htmlInterface($data, $lesson_code)
 		}
 		$lesson_content .= "</table>";
 	} else { // if we are not registered to courses
-		$lesson_content .= "\n    <p class=\"alert1\">$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
-		$lesson_content .= "\n
-		<table width=\"100%\">
-		";
-		$lesson_content .= "\n<tr>";
-		$lesson_content .= "\n<td align='left' width='10'>
-			<img src='$themeimg/arrow.png' alt='' />
-			</td>";
-		if ($statut == 1) {
+		$lesson_content .= "<p class='alert1'>$langNotEnrolledToLessons !</p><p><u>$langWelcomeSelect</u>:</p>";
+		$lesson_content .= "<table width='100%'>";
+		$lesson_content .= "<tr>";
+		$lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";
+		if ($statut == USER_TEACHER) {
 			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";
 		} else {
 			$lesson_content .= "\n<td align='left' >$langWelcomeStudPerso</td>";
 		}
-		$lesson_content .= "\n</tr>";
+		$lesson_content .= "</tr>";
 		$lesson_content .= "</table>";
 	}
 	return $lesson_content;

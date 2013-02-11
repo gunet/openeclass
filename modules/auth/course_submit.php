@@ -21,6 +21,7 @@
 
 $require_login = TRUE;
 require_once '../../include/init.php';
+require_once 'include/log.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
 if (isset($_POST['cid']) and isset($_POST['state'])) {
@@ -43,6 +44,9 @@ if ($q and mysql_num_rows($q)) {
                     ($visible == COURSE_REGISTRATION and $password == $course_password)) {
                         db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
                                          VALUES ($cid, $uid, 5, CURDATE())");
+                        Log::record($cid, MODULE_ID_USERS, LOG_INSERT,
+                                   array('uid' => $uid, 'right' => 5));
+
                         die('registered');
                 } else {
                         die('unauthorized');
@@ -52,6 +56,8 @@ if ($q and mysql_num_rows($q)) {
                                  WHERE user_id = $uid AND
                                        group_id IN (SELECT id FROM `group` WHERE course_id = $cid)");
                 db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
+                Log::record($cid, MODULE_ID_USERS, LOG_DELETE,
+                            array('uid' => $uid, 'right' => 0));
                 die('unregistered');
         }
 } else {

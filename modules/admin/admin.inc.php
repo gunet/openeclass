@@ -26,58 +26,6 @@
  */
 
 /**************************************************************
-Purpose: covert the difference ($seconds) between 2 unix timestamps
-and produce a string ($r), explaining the time
-(e.g. 2 years 2 months 1 day)
-
-$seconds : integer
-return $r
-***************************************************************/
-function convert_time($seconds)
-{
-    $f_minutes = $seconds / 60;
-    $i_minutes = floor($f_minutes);
-    $r_seconds = intval(($f_minutes - $i_minutes) * 60);
-
-    $f_hours = $i_minutes / 60;
-    $i_hours = floor($f_hours);
-    $r_minutes = intval(($f_hours  - $i_hours) * 60);
-
-    $f_days = $i_hours / 24;
-    $i_days = floor($f_days);
-    $r_hours = intval(($f_days - $i_days) * 24);
-    $r = "";
-    if ($i_days > 0)
-    {
-	if($i_days >= 365)
-	{
-	    $i_years = floor($i_days / 365);
-	    $i_days = $i_days % 365;
-	    $r = $i_years;
-	    if($i_years>1)
-	    {
-		$r .= " years ";
-	    }
-	    else
-	    {
-		$r .= " year ";
-	    }
-	    if($i_days!=0)
-	    {
-		$r .= $i_days . " days ";
-	    }
-	}
-	else
-	{
-	    $r .= "$i_days days ";
-	}
-    }
-    if ($r_hours > 0) $r .= "$r_hours hours ";
-    if ($r_minutes > 0) $r .= "$r_minutes min";
-    return $r;
-}
-
-/**************************************************************
 Purpose: display paging navigation
 Parameters: limit - the current limit
             listsize - the size of the list
@@ -240,8 +188,7 @@ function show_paging($limit, $listsize, $fulllistsize, $page, $extra_page = '', 
  * @param  integer $id - the id of the user.
  * @return boolean     - returns true if deletion was successful, false otherwise.
  */
-function deleteUser($id) {
-    global $mysqlMainDb;
+function deleteUser($id) {    
     
     $u = intval($id);
     
