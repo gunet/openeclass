@@ -34,9 +34,9 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$user = new user();
-$course = new course();
-$tree = new hierarchy();
+$user = new User();
+$course = new Course();
+$tree = new Hierarchy();
 
 load_js('jquery');
 load_js('jquery-ui-new');

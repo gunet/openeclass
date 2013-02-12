@@ -23,7 +23,7 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
-$tree = new hierarchy();
+$tree = new Hierarchy();
 
 $nameTools = $langChoiceLesson;
 $navigation[] = array ('url' => 'courses.php', 'name' => $langChoiceDepartment);

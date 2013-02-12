@@ -24,7 +24,7 @@
  * This class does not represent a hierarchy node or tree entity, but a core logic coordinating object
  * responsible for handling hierarchy and hierarchy node related tasks.
  */
-class hierarchy {
+class Hierarchy {
 
     private $dbtable;
     private $dbdepth;
@@ -37,7 +37,7 @@ class hierarchy {
      *
      * @param string $dbtable - Name of table with tree nodes
      */
-    public function hierarchy($dbtable = 'hierarchy')
+    public function __construct($dbtable = 'hierarchy')
     {
         $this->dbtable = $dbtable;
         $this->dbdepth = $dbtable .'_depth';

@@ -40,8 +40,8 @@ $TBL_HIERARCHY         = 'hierarchy';
 $TBL_USER_DEPARTMENT   = 'user_department';
 $TBL_COURSE_DEPARTMENT = 'course_department';
 
-$tree = new hierarchy();
-$user = new user();
+$tree = new Hierarchy();
+$user = new User();
 
 load_js('jquery');
 load_js('jquery-ui-new');

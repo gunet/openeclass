@@ -24,7 +24,7 @@
  * This class does not represent a course entity, but a core logic coordinating object
  * responsible for handling course and hierarchy-to-course related tasks.
  */
-class course {
+class Course {
 
     private $ctable;
     private $departmenttable;
@@ -35,7 +35,7 @@ class course {
      * @param string $ctable    - Name of courses table
      * @param string $deptable  - Name of course <-> department lookup table
      */
-    public function course($ctable = 'course', $deptable = 'course_department')
+    public function __construct($ctable = 'course', $deptable = 'course_department')
     {
         $this->ctable = $ctable;
         $this->departmenttable = $deptable;

@@ -32,7 +32,7 @@
 include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$tree = new hierarchy();
+$tree = new Hierarchy();
 
 $nameTools = $langListCourses;
 $navigation[] = array ('url' => 'listfaculte.php', 'name' => $langSelectFac);

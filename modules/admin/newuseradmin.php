@@ -29,8 +29,8 @@ require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
 require_once 'hierarchy_validations.php';
 
-$tree = new hierarchy();
-$user = new user();
+$tree = new Hierarchy();
+$user = new User();
 
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 

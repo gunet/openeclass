@@ -36,8 +36,8 @@ require_once 'auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$tree = new hierarchy();
-$userObj = new user();
+$tree = new Hierarchy();
+$userObj = new User();
 
 load_js('jquery');
 load_js('jquery-ui-new');

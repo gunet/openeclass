@@ -53,9 +53,9 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$tree = new hierarchy();
-$course = new course();
-$user = new user();
+$tree = new Hierarchy();
+$course = new Course();
+$user = new User();
 
 if (isset($_GET['c'])) {
 	$c = q($_GET['c']);

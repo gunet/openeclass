@@ -46,7 +46,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$user = new user();
+$user = new User();
 
 load_js('jquery');
 load_js('jquery-ui-new');
@@ -192,7 +192,7 @@ $tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail)
   <tr>
     <th>$langFaculty:</th>
     <td>";
-$tree = new hierarchy();
+$tree = new Hierarchy();
 list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
 $tool_content .= $html;

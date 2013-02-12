@@ -29,8 +29,8 @@ require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$treeObj = new hierarchy();
-$courseObj = new course();
+$treeObj = new Hierarchy();
+$courseObj = new Course();
 
 load_js('jquery');
 load_js('jquery-ui-new');

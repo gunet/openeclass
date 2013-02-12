@@ -40,9 +40,9 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
-$tree = new hierarchy();
-$course = new course();
-$user = new user();
+$tree = new Hierarchy();
+$course = new Course();
+$user = new User();
 
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep ." 1 " .$langCreateCourseStep2 . " 3)" ;
 

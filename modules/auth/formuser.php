@@ -22,7 +22,7 @@ include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 include 'include/lib/hierarchy.class.php';
 
-$tree = new hierarchy();
+$tree = new Hierarchy();
 
 load_js('jquery');
 load_js('jquery-ui-new');

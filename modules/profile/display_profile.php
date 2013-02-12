@@ -26,8 +26,8 @@ $require_valid_uid = TRUE;
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 
-$tree = new hierarchy();
-$user = new user();
+$tree = new Hierarchy();
+$user = new User();
 
 $nameTools = $langUserProfile;
 

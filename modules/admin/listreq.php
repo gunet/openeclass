@@ -29,8 +29,8 @@ require_once 'hierarchy_validations.php';
 
 define('REQUESTS_PER_PAGE', 15);
 
-$tree = new hierarchy();
-$user = new user();
+$tree = new Hierarchy();
+$user = new User();
 
 $head_content = '
 <script type="text/javascript">

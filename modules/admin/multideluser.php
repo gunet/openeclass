@@ -26,8 +26,8 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
 
-$tree = new hierarchy();
-$user = new user();
+$tree = new Hierarchy();
+$user = new User();
 
 $nameTools = $langMultiDelUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);

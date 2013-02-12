@@ -22,7 +22,7 @@ require_once '../../include/baseTheme.php';
 
 $TBL_HIERARCHY = 'hierarchy';
 require_once 'include/lib/hierarchy.class.php';
-$tree = new hierarchy();
+$tree = new Hierarchy();
 
 $nameTools = $langSelectFac;
 

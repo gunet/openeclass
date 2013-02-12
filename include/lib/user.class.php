@@ -24,7 +24,7 @@
  * This class does not represent a user entity, but a core logic coordinating object
  * responsible for handling user and hierarchy-to-user related tasks.
  */
-class user {
+class User {
 
     private $utable;
     private $departmenttable;
@@ -35,7 +35,7 @@ class user {
      * @param string  $utable   - Name of users table
      * @param string  $deptable - Name of user <-> department lookup table
      */
-    public function user($utable = 'user', $deptable = 'user_department')
+    public function __construct($utable = 'user', $deptable = 'user_department')
     {
         $this->utable = $utable;
         $this->departmenttable = $deptable;

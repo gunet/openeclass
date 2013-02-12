@@ -39,8 +39,8 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 
-$tree = new hierarchy();
-$course = new course();
+$tree = new Hierarchy();
+$course = new Course();
 
 $nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";

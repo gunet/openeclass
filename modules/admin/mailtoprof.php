@@ -48,7 +48,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$user = new user();
+$user = new User();
 
 $nameTools = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
