@@ -1437,10 +1437,10 @@ function users_with_no_submissions($id)
 // Return a list of groups with no submissions for assignment $id
 function groups_with_no_submissions($id)
 {
-        global $course_code, $course_id;
+        global $course_id;
 
         $groups = user_group_info(null, $course_id);
-        $q = db_query("SELECT group_id FROM `$course_code`.assignment_submit
+        $q = db_query("SELECT group_id FROM assignment_submit
                               WHERE assignment_id = $id");
         while ($row = mysql_fetch_row($q)) {
                 unset($groups[$row[0]]);

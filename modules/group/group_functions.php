@@ -1,9 +1,9 @@
 <?php
 /*========================================================================
-*   Open eClass 2.4
+*   Open eClass 3.0
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2010  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
 */
 
 function initialize_group_id($param = 'group_id')
@@ -82,10 +82,14 @@ function user_group_info($uid, $course_id)
 {
 	$gids = array();
 
+        if ($uid != null) {
+                $extra_sql = "AND group_members.user_id = $uid";
+        } else {
+                $extra_sql = "";
+        }
 	$q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
-			WHERE group_members.user_id = $uid
-			AND group_members.group_id = `group`.id
-			AND `group`.course_id = $course_id");
+			WHERE group_members.group_id = `group`.id
+			AND `group`.course_id = $course_id $extra_sql");
 
 	while ($r = mysql_fetch_array($q)) {
 		$gids[$r['grp_id']] = $r['grp_name'];
