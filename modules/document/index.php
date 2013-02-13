@@ -103,13 +103,20 @@ if ($subsystem == EBOOK) {
 // ---------------------------
 if (isset($_GET['download'])) {
         $downloadDir = $_GET['download'];
+                
         if ($downloadDir == '/') {
                 $format = '.dir';
                 $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
         } else {
-                $q = db_query("SELECT filename, format FROM document
+                if (isset($_GET['cd'])) {
+                        $q = db_query("SELECT filename, format FROM document
+                                      WHERE $group_sql AND 
+                                            extra_path = CONCAT('common:', '$downloadDir')");
+                } else {
+                        $q = db_query("SELECT filename, format FROM document
                                       WHERE $group_sql AND
-                                            path = " . autoquote($downloadDir));
+                                            path = " . quote($downloadDir));
+                }                                                                
                 if (!$q or mysql_num_rows($q) != 1) {
                         not_found($downloadDir);
                 }
@@ -125,7 +132,7 @@ if (isset($_GET['download'])) {
                 $delete = true;
         } elseif (isset($_GET['cd'])) {
                 $basedir = $webDir . '/courses/commondocs';
-                $dload_filename = $basedir . $downloadDir;
+                $dload_filename = $basedir . $downloadDir;                
                 $delete = false;
         } else {
                $dload_filename = $basedir . $downloadDir;
@@ -297,20 +304,26 @@ if ($can_upload) {
                 $sourceXml = $source . '.xml';
 		//check if source and destination are the same
 		if($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
-                        $r = mysql_fetch_array(db_query("SELECT filename FROM document WHERE $group_sql AND path='$source'"));
+                        $r = mysql_fetch_array(db_query("SELECT filename, extra_path FROM document WHERE $group_sql AND path='$source'"));
                         $filename = $r['filename'];
-			if (move($basedir . $source, $basedir . $moveTo)) {
-				if (hasMetaData($source, $basedir, $group_sql))
-					move($basedir . $sourceXml, $basedir . $moveTo);
+                        $extra_path = $r['extra_path'];
+                        if (empty($extra_path)) {
+                                if (move($basedir . $source, $basedir . $moveTo)) {
+                                        if (hasMetaData($source, $basedir, $group_sql)) {
+                                                move($basedir . $sourceXml, $basedir . $moveTo);
+                                        }
+                                        update_db_info('document', 'update', $source, $filename, $moveTo.'/'.my_basename($source));
+                                }
+                        } else {
 				update_db_info('document', 'update', $source, $filename, $moveTo.'/'.my_basename($source));
-				$action_message = "<p class='success'>$langDirMv</p><br />";
-			} else {
-				$action_message = "<p class='caution'>$langImpossible</p><br />";
-				/*** return to step 1 ***/
-				$move = $source;
-				unset ($moveTo);
 			}
-		}
+                        $action_message = "<p class='success'>$langDirMv</p><br />";
+                } else {
+                        $action_message = "<p class='caution'>$langImpossible</p><br />";
+                        /*** return to step 1 ***/
+                        $move = $source;
+                        unset ($moveTo);
+                }		
 	}
 
 	/*-------------------------------------
@@ -828,14 +841,16 @@ $result = db_query("SELECT * FROM document
 
 $fileinfo = array();
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-        if (preg_match('#common:/#', $row['extra_path'])) { 
+        if (preg_match('#common:/#', $row['extra_path'])) { // common docs
                 $dir = $webDir . '/courses/commondocs';
+                $path = preg_replace('#common:#', '',$row['extra_path']);
         } else {
+                $path = $row['path'];
                 $dir = $basedir;
         }
         $fileinfo[] = array(
-                'is_dir' => is_dir($dir . $row['path']),
-                'size' => filesize($dir . $row['path']),
+                'is_dir' => is_dir($dir . $path),
+                'size' => filesize($dir . $path),
                 'title' => $row['title'],
                 'filename' => $row['filename'],
                 'format' => $row['format'],
@@ -980,8 +995,9 @@ if ($doc_count == 0) {
                         } else {                                
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
                                 if (preg_match('#common:/#', $entry['extra_path'])) {
+                                        $cmdDirName = preg_replace('#common:#', '', $entry['extra_path']);
                                         $file_url = file_url($cmdDirName, $entry['filename'], 'common');
-                                } else {
+                                } else {                                        
                                         $file_url = file_url($cmdDirName, $entry['filename']);
                                 }
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
@@ -998,7 +1014,7 @@ if ($doc_count == 0) {
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";
-                        if (preg_match('#common:/#', $entry['extra_path'])) {
+                        if (preg_match('#common:/#', $entry['extra_path'])) {                                
                                 $download_url = $base_url . "download=$cmdDirName&amp;cd=1";
                         } else {
                                 $download_url = $base_url . "download=$cmdDirName";

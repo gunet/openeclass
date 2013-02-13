@@ -61,11 +61,11 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
                                 WHERE path LIKE '".$oldPath."%' AND course_id = $course_id");
                         Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
                                                                           'filename' => $filename));
-                }
-                
-	} elseif ($action == "update") {
-		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-                                WHERE path LIKE '$oldPath%'");
+                }                
+	} elseif ($action == "update") {                
+                db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
+                                WHERE path LIKE '$oldPath%'
+                                AND course_id = $course_id");
                 list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath'))
                                 FROM $dbTable WHERE path='$newPath'"));
                 list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
@@ -73,7 +73,7 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
                 Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
                                                               'newencpath' => $newPath,
                                                               'newpath' => $newpath,
-                                                              'filename' => $filename));
+                                                              'filename' => $filename));                
 	}
 }
 
