@@ -613,6 +613,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 		        db_query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
 		        db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
 		        db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");
+                        db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NULL AFTER `path`"); 
 		}
 
                 // Rename table `annonces` to `announcements`

@@ -71,7 +71,7 @@ if (defined('GROUP_DOCUMENTS')) {
                 define('SAVED_COURSE_ID', course_code_to_id(SAVED_COURSE_CODE));
                 $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . SAVED_COURSE_CODE . '&amp;';
         }
-        $course_id = 0;
+        $course_id = -1;
         $course_code = '';
 } else {
 	$subsystem = MAIN;
@@ -83,4 +83,3 @@ if (defined('GROUP_DOCUMENTS')) {
         $basedir = $webDir . '/courses/' . $course_code . '/document';
         $nameTools = $langDoc;
 }
-mysql_select_db($mysqlMainDb);

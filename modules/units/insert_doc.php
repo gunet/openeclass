@@ -43,22 +43,33 @@ require_once 'modules/document/doc_init.php';
 function list_docs()
 {
         global $id, $webDir, $course_code, $tool_content,
-               $group_sql, $langDirectory, $langUp, $langName, $langSize,       
+               $group_sql, $langDirectory, $langUp, $langName, $langSize,
                $langDate, $langType, $langAddModulesButton, $langChoice,
-               $langNoDocuments, $course_code, $themeimg;
+               $langNoDocuments, $course_code, $themeimg, $langCommonDocs, $nameTools;
 
-        $basedir = $webDir . '/courses/' . $course_code . '/document';        
+        $basedir = $webDir . '/courses/' . $course_code . '/document';
         if (isset($_GET['path'])) {
                 if ($path == '/' or $path == '\\') {
 			$path = '';
 		}
         } else {
                 $path = '';
+        }         
+        if ($id == -1) {
+                $nameTools = $langCommonDocs;                
+                $group_sql = "course_id = -1 AND subsystem = ".COMMON."";
+                $basedir = $webDir . '/courses/commondocs';
+                $result = db_query("SELECT * FROM document
+                                    WHERE $group_sql AND
+                                          visible = 1 AND
+                                          path LIKE " . quote("$path/%") . " AND
+                                          path NOT LIKE " . quote("$path/%/%"));                
+        } else {
+                $result = db_query("SELECT * FROM document
+                                    WHERE $group_sql AND
+                                          path LIKE " . quote("$path/%") . " AND
+                                          path NOT LIKE " . quote("$path/%/%"));
         }
-        $result = db_query("SELECT * FROM document
-                            WHERE $group_sql AND
-			          path LIKE " . quote("$path/%") . " AND
-                                  path NOT LIKE " . quote("$path/%/%"));        
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(

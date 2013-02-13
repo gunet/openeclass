@@ -29,17 +29,18 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox(true);
 
-$lang_editor = langname_to_code($language);
-
 $id = intval($_REQUEST['id']);
-
-// Check that the current unit id belongs to the current course
-$q = db_query("SELECT * FROM course_units
-               WHERE id=$id AND course_id=$course_id");
-if (!$q or mysql_num_rows($q) == 0) {
-        $nameTools = $langUnitUnknown;
-        draw('', 2, null, $head_content);
-        exit;
+if ($id != -1) {
+        // Check that the current unit id belongs to the current course
+        $q = db_query("SELECT * FROM course_units
+                       WHERE id=$id AND course_id=$course_id");
+        if (!$q or mysql_num_rows($q) == 0) {
+                $nameTools = $langUnitUnknown;
+                draw('', 2, null, $head_content);
+                exit;
+        }
+        $info = mysql_fetch_array($q);
+        $navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$id", "name"=> htmlspecialchars($info['title']));
 }
 
 if (isset($_POST['submit_doc'])) {
@@ -65,9 +66,6 @@ if (isset($_POST['submit_doc'])) {
 	insert_ebook($id);
 }
 
-
-$info = mysql_fetch_array($q);
-$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$id", "name"=> htmlspecialchars($info['title']));
 
 switch ($_GET['type']) {
         case 'work': $nameTools = "$langAdd $langInsertWork";
@@ -120,6 +118,31 @@ function insert_docs($id)
 {
 	global $course_id, $course_code;
 
+        if ($id == -1) { // common documents
+                foreach ($_POST['document'] as $file_id) {                        
+                        $file = mysql_fetch_array(db_query("SELECT * FROM document
+                                        WHERE course_id = -1
+                                        AND subsystem = ".COMMON."
+                                        AND id =" . intval($file_id)), MYSQL_ASSOC);                        
+                        $title = (empty($file['title']))? $file['filename']: $file['title'];
+                        $file_date = date("Y\-m\-d G\:i\:s");
+                        db_query("INSERT INTO document SET
+                                        course_id = $course_id,
+                                        subsystem = ".MAIN.",
+                                        path = " . quote($file['path']) . ",
+                                        extra_path = ".quote("common:$file[path]").",
+                                        filename = " . quote($file['filename']) . ",
+                                        visible = 1,
+                                        comment = " . quote($file['comment']) . ",
+                                        title =	'$title',
+                                        date = '$file_date',
+                                        date_modified =	'$file_date',
+                                        format = ".quote($file['format'])."");
+                }
+                header('Location: ../document/index.php?course='.$course_code);
+                exit;
+        }
+        
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
 
 	foreach ($_POST['document'] as $file_id) {

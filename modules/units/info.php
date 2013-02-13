@@ -23,6 +23,7 @@ Units module
 */
 
 $require_current_course = true;
+$require_editor = true;
 $require_help = true;
 $helpTopic = 'AddCourseUnits';
 require_once '../../include/baseTheme.php';
@@ -30,12 +31,6 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langEditUnit;
 
 load_js('tools.js');
-
-if (!$is_editor) { // check teacher status
-        $tool_content .= $langNotAllowed;
-        draw($tool_content, 2, null, $head_content);
-        exit;
-}
 
 if (isset($_GET['edit'])) { // display form for editing course unit
         $id = intval($_GET['edit']);

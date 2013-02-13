@@ -55,7 +55,7 @@ $form = process_actions();
 
 if ($is_editor) {
 	$tool_content .= "&nbsp;<div id='operations_container'>
-		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'><input type='hidden' name='course' value='$course_code'/>
+		<form name='resinsert' action='{$urlServer}modules/units/insert.php' method='get'>
 		<select name='type' onChange='document.resinsert.submit();'>
 			<option>-- $langAdd --</option>
 			<option value='doc'>$langInsertDoc</option>
@@ -82,8 +82,7 @@ if ($is_editor) {
         $visibility_check = "AND visible=1";
 }
 if (isset($id) and $id !== false) {
-	$q = db_query("SELECT * FROM course_units
-		                WHERE id = $id AND course_id=$course_id " . $visibility_check);
+	$q = db_query("SELECT * FROM course_units WHERE id = $id AND course_id=$course_id " . $visibility_check);
 } else {
 	$q = false;
 }
@@ -163,8 +162,7 @@ if (!empty($comments)) {
 
 show_resources($id);
 
-$tool_content .= '
-  <form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get"><input type="hidden" name="course" value="'.$course_code.'"/>';
+$tool_content .= '<form name="unitselect" action="' .  $urlServer . 'modules/units/" method="get">';
 $tool_content .="
     <table width='99%' class='tbl'>
      <tr class='odd'>

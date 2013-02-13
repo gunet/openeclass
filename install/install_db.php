@@ -254,6 +254,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
 		`subsystem` TINYINT(4) NOT NULL,
                 `subsystem_id` INT(11) DEFAULT NULL,
                 `path` VARCHAR(255) NOT NULL,
+                `extra_path` VARCHAR(255),
                 `filename` VARCHAR(255) NOT NULL,
                 `visible` TINYINT(4),
                 `comment` TEXT,

@@ -339,16 +339,8 @@ $tool_content .= "</td>
       $emailnotification
       <br />\n";
 
-$tool_content .= "
-      </td>
-   </tr>
-   </table>
+$tool_content .= "</td></tr></table>
+   <table width='100%' class='tbl'><tr><td>$cunits_content</td>
+   </tr></table></div>";
 
-   <table width='100%' class='tbl'>
-   <tr>
-     <td>$cunits_content</td>
-   </tr>
-  </table>
-</div>
-";
 draw($tool_content, 2, null, $head_content);

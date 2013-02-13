@@ -1918,7 +1918,7 @@ function handle_unit_info_edit()
         } else { // add new course unit
                 $order = $maxorder + 1;
                 db_query("INSERT INTO course_units SET
-                                 title = $title, comments =  $descr,
+                                 title = $title, comments =  $descr, visible = 1,
                                  `order` = $order, course_id = $course_id");
                 return "<p class='success'>$langCourseUnitAdded</p>";
         }

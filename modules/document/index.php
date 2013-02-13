@@ -123,9 +123,13 @@ if (isset($_GET['download'])) {
                 $dload_filename = $webDir . '/courses/temp/'.safe_filename('zip');
                 zip_documents_directory($dload_filename, $downloadDir, $can_upload);
                 $delete = true;
-        } else {
+        } elseif (isset($_GET['cd'])) {
+                $basedir = $webDir . '/courses/commondocs';
                 $dload_filename = $basedir . $downloadDir;
                 $delete = false;
+        } else {
+               $dload_filename = $basedir . $downloadDir;
+               $delete = false;
         }
 
 	send_file_to_client($dload_filename, $real_filename, null, true, $delete);
@@ -133,7 +137,15 @@ if (isset($_GET['download'])) {
 }
 
 
-// Used in documents path navigation bar
+
+/**
+ * Used in documents path navigation bar
+ * @global type $langRoot
+ * @global type $base_url
+ * @global type $group_sql
+ * @param type $path
+ * @return type
+ */
 function make_clickable_path($path)
 {
 	global $langRoot, $base_url, $group_sql;
@@ -152,12 +164,6 @@ function make_clickable_path($path)
 	}
 	return $out;
 }
-
-
-/*** clean information submited by the user from antislash ***/
-// stripSubmitValue($_POST);
-// stripSubmitValue($_GET);
-/*****************************************************************************/
 
 if ($can_upload) {
 	/*********************************************************************
@@ -326,17 +332,22 @@ if ($can_upload) {
         if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
                 $delete = str_replace('..', '', $_POST['filePath']);
 		// Check if file actually exists
-                $result = db_query("SELECT path, format, filename FROM document
+                $result = db_query("SELECT path, extra_path, format, filename FROM document
 					WHERE $group_sql AND path=" . autoquote($delete));
                 $r = mysql_fetch_array($result);
                 $filename = $r['filename'];
                 if (mysql_num_rows($result) > 0) {
-                        if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
-                        		if (hasMetaData($delete, $basedir, $group_sql))
-                                	my_delete($basedir . $delete . ".xml");
+                        if (empty($r['extra_path'])) {                                
+                                if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
+                        		if (hasMetaData($delete, $basedir, $group_sql)) {
+                                                my_delete($basedir . $delete . ".xml");
+                                        }
+                                        update_db_info('document', 'delete', $delete, $filename);
+                                }
+                        } else {
                                 update_db_info('document', 'delete', $delete, $filename);
-                                $action_message = "<p class='success'>$langDocDeleted</p><br />";
                         }
+                        $action_message = "<p class='success'>$langDocDeleted</p><br />";                        
                 }
 	}
 
@@ -380,21 +391,20 @@ if ($can_upload) {
                 $res = mysql_fetch_array($result);
                 $fileName = $res['filename'];
                 $dialogBox .= "
-  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-  <fieldset>
-    <legend>$langRename:</legend>
-    <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
-    $group_hidden_input
-    <table class='tbl' width='100%'>
-      <tr>
-        <td><b>".q($fileName)."</b> $langIn:
-          <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
-        <td class='right'><input type='submit' value='$langRename' /></td>
-      </tr>
-    </table>
-  </fieldset>
-  </form>
-  \n";
+                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                <fieldset>
+                  <legend>$langRename:</legend>
+                  <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
+                  $group_hidden_input
+                  <table class='tbl' width='100%'>
+                    <tr>
+                      <td><b>".q($fileName)."</b> $langIn:
+                        <input type='text' name='renameTo' value='".q($fileName)."' size='50' /></td>
+                      <td class='right'><input type='submit' value='$langRename' /></td>
+                    </tr>
+                  </table>
+                </fieldset>
+                </form>";
 	}
 
 	// create directory
@@ -818,19 +828,24 @@ $result = db_query("SELECT * FROM document
 
 $fileinfo = array();
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        if (preg_match('#common:/#', $row['extra_path'])) { 
+                $dir = $webDir . '/courses/commondocs';
+        } else {
+                $dir = $basedir;
+        }
         $fileinfo[] = array(
-                'is_dir' => is_dir($basedir . $row['path']),
-                'size' => filesize($basedir . $row['path']),
+                'is_dir' => is_dir($dir . $row['path']),
+                'size' => filesize($dir . $row['path']),
                 'title' => $row['title'],
                 'filename' => $row['filename'],
                 'format' => $row['format'],
                 'path' => $row['path'],
+                'extra_path' => $row['extra_path'],
                 'visible' => ($row['visible'] == 1),
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
                 'date' => $row['date_modified']);
 }
-
 // end of common to teachers and students
 
 // ----------------------------------------------
@@ -846,18 +861,12 @@ if($can_upload) {
 	{
 		$tool_content .= "\n" . $action_message . "\n";
 	}
-
-        if (!$is_in_tinymce) {
-            /*----------------------------------------------------------------
-            UPLOAD SECTION (ektypwnei th forma me ta stoixeia gia upload eggrafou + ola ta pedia
-            gia ta metadata symfwna me Dublin Core)
-            ------------------------------------------------------------------*/
-            $tool_content .= "\n  <div id='operations_container'>\n    <ul id='opslist'>";
-            $tool_content .= "\n  <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
-            /*----------------------------------------
-            Create new folder
-            --------------------------------------*/
+        // available actions
+        if (!$is_in_tinymce) {                        
+            $tool_content .= "<div id='operations_container'><ul id='opslist'>";
+            $tool_content .= "<li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
             $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+            $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
             $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
             $tool_content .= "</ul></div>\n";
@@ -874,7 +883,7 @@ if($can_upload) {
 list($doc_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM document WHERE $group_sql $filter" .
 				            ($can_upload? '': " AND visible=1")));
 if ($doc_count == 0) {
-	$tool_content .= "\n    <p class='alert1'>$langNoDocuments</p>";
+	$tool_content .= "<p class='alert1'>$langNoDocuments</p>";
 } else {
 	// Current Directory Line
 	$tool_content .= "<table width='100%' class='tbl'>";
@@ -968,9 +977,13 @@ if ($doc_count == 0) {
                                 $dload_msg = $langDownloadDir;
                                 $link_href = "<a href='$file_url'>$link_title</a>";
                                 $link_title_extra = '';
-                        } else {
+                        } else {                                
                                 $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
-                                $file_url = file_url($cmdDirName, $entry['filename']);
+                                if (preg_match('#common:/#', $entry['extra_path'])) {
+                                        $file_url = file_url($cmdDirName, $entry['filename'], 'common');
+                                } else {
+                                        $file_url = file_url($cmdDirName, $entry['filename']);
+                                }
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
                                 $link_extra = " class='fileURL' title='$langSave' target='_blank'";
                                 $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
@@ -985,7 +998,11 @@ if ($doc_count == 0) {
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";
-                        $download_url = $base_url . "download=$cmdDirName";
+                        if (preg_match('#common:/#', $entry['extra_path'])) {
+                                $download_url = $base_url . "download=$cmdDirName&amp;cd=1";
+                        } else {
+                                $download_url = $base_url . "download=$cmdDirName";
+                        }
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
                         $tool_content .= "\n<td class='center' valign='top'>".$img_href."</td>";                        

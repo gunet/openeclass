@@ -53,10 +53,16 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
         global $course_id;
 
 	if ($action == "delete") {
-		db_query("DELETE FROM ".$dbTable."
-			WHERE path LIKE \"".$oldPath."%\"");
-                Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
-                                                              'filename' => $filename));
+                if ($course_id == -1) { // common docs
+                        db_query("DELETE FROM ".$dbTable."
+                                WHERE path LIKE '".$oldPath."%'");
+                } else {
+                        db_query("DELETE FROM ".$dbTable."
+                                WHERE path LIKE '".$oldPath."%' AND course_id = $course_id");
+                        Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
+                                                                          'filename' => $filename));
+                }
+                
 	} elseif ($action == "update") {
 		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
                                 WHERE path LIKE '$oldPath%'");
