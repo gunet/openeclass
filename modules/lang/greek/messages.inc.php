@@ -2564,6 +2564,7 @@ $langMailVerification = "Επιβεβαίωση E-mail $langUsersOf";
 $langMailVerificationNo = "Χρήστες που δεν έχουν επιβεβαιώσει το e-mail τους";
 $langMailVerificationYes = "Χρήστες που έχουν επιβεβαιώσει το e-mail τους";
 $langMailVerificationPending = "Χρήστες που εκκρεμεί η επιβεβαίωση του e-mail τους";
+$langUsersWithNoMail = "Χρήστες που δεν έχουν δηλώσει e-mail";
 $langMailVerificationNoU = "Δεν έχει επιβεβαιωθεί";
 $langMailVerificationYesU = "Έχει επιβεβαιωθεί";
 $langMailVerificationPendingU = "Εκκρεμεί επιβεβαίωση";

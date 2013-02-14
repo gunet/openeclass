@@ -87,19 +87,25 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 		<tr><td colspan='3'>&nbsp;</td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT count(*) FROM user WHERE verified_mail = 1;") .
+			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFIED.";") .
 			"</b></td><td class='right'><input type='submit' name='submit1' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT count(*) FROM user WHERE verified_mail = 2;") .
+			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_UNVERIFIED.";") .
 			"</b></td><td class='right'><input type='submit' name='submit2' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT count(*) FROM user WHERE verified_mail = 0;") .
-			"</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>
-		<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
+			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFICATION_REQUIRED.";") .
+			"</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
+                        if (!get_config('email_required')) {
+                                $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
+                                <td class='center'><b>" .
+                                list_1Result("SELECT COUNT(*) FROM user WHERE email = '';") .
+                                "</b></td><td class='right'>&nbsp;</td></tr>";
+                        }
+                $tool_content .= "<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT count(*) FROM user;") .
+			list_1Result("SELECT COUNT(*) FROM user;") .
 			"</b></td><td class='right'>&nbsp;</td></tr>
 	</table></form>";
 }
