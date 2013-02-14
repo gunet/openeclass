@@ -440,6 +440,26 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $GLOBALS['map_filenames'] = array_combine($encoded_filenames, $decoded_filenames);
 }
 
+
+/**
+ * Check if a path (from document table extra_path field) points to a common
+ * document and if so return the full path on disk, else return false. 
+ *
+ * @global string $webDir
+ * @param string $extra_path
+ * @return string|boolean
+ */
+function common_doc_path($extra_path)
+{
+        global $webDir;
+        
+        if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
+                return $webDir . '/courses/commondocs' . $matches[1];
+        } else {
+                return false;
+        }
+}
+
 // PclZip callback function to store filenames with real filenames
 function convert_to_real_filename($p_event, &$p_header)
 {

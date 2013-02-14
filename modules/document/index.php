@@ -1014,10 +1014,13 @@ if ($doc_count == 0) {
                                 }
                         }
                         $img_href = "<img src='$image' alt=''>";
-                        if (preg_match('#common:/#', $entry['extra_path'])) {                                
-                                $download_url = $base_url . "download=$cmdDirName&amp;cd=1";
-                        } else {
+                        if (!$entry['extra_path'] or
+                            preg_match('#^common:/#', $entry['extra_path'])) {
+                                // Normal or common document
                                 $download_url = $base_url . "download=$cmdDirName";
+                        } else {
+                                // External document
+                                $download_url = $entry['extra_path'];
                         }
                         $download_icon = "<a href='$download_url'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$dload_msg' title='$dload_msg'></a>";
                         $tool_content .= "\n<tr $style>";
