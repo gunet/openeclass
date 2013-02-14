@@ -118,13 +118,16 @@ if (isset($_GET['download'])) {
                 $format = '.dir';
                 $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
         } else {
-                $q = db_query("SELECT filename, format FROM document
+                $q = db_query("SELECT filename, format, visibility FROM document
                                       WHERE $group_sql AND
                                             path = " . autoquote($downloadDir));
                 if (!$q or mysql_num_rows($q) != 1) {
                         not_found($downloadDir);
                 }
-                list($real_filename, $format) = mysql_fetch_row($q);
+                list($real_filename, $format, $visibility) = mysql_fetch_row($q);
+                if ($visibility != 'v') {
+                        not_found($downloadDir);
+                }
         }
         // Allow unlimited time for creating the archive
         @set_time_limit(0);
