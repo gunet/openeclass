@@ -62,6 +62,7 @@ $action->record(MODULE_ID_VIDEO);
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 
 $nameTools = $langVideo;
@@ -81,60 +82,6 @@ if ($is_in_tinymce) {
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
-
-// ----------------------
-// download video
-// ----------------------
-
-if (isset($_GET['action']) and $_GET['action'] == "download") {
-	$id = q($_GET['id']);
-	$real_file = $webDir."/video/".$course_code."/".$id;
-	if (strpos($real_file, '/../') === FALSE && file_exists($real_file)) {
-                $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = " . quote($id));
-		$row = mysql_fetch_array($result);
-		if (!empty($row['url'])) {
-			$id = $row['url'];
-		}
-		send_file_to_client($real_file, my_basename($id), 'inline', true);
-		exit;
-	} else {
-		header("Refresh: ${urlServer}modules/video/index.php?course=$course_code");
-	}
-}
-
-// ----------------------
-// play video
-// ----------------------
-
-if (isset($_GET['action']) and $_GET['action'] == 'play')
-{
-        $id = q($_GET['id']);
-        $videoPath = $urlServer ."video/". $course_code . $id;
-        $videoURL = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=download&amp;id=". $id;
-
-        $result = db_query("SELECT url FROM video WHERE course_id = $course_id AND path = ". quote($id));
-        $row = mysql_fetch_array($result);
-
-        if (strpos($videoPath, '/../') === FALSE && !empty($row))
-        {
-                echo MultimediaHelper::mediaHtmlObject($videoPath, $videoURL);
-                exit;
-        } else {
-                header("Refresh: ${urlServer}modules/video/index.php?course=$course_code");
-        }
-}
-
-// ----------------------
-// play videolink
-// ----------------------
-
-if (isset($_GET['action']) and $_GET['action'] == 'playlink') {
-        $id = q($_GET['id']);
-
-        echo MultimediaHelper::medialinkIframeObject(urldecode($id));
-        exit;
-}
-
 
 if($is_editor) {
         load_js('tools.js');
@@ -470,7 +417,7 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
-list($filterv, $filterl, $eclplugin) = (isset($_REQUEST['docsfilter'])) 
+list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
         ? select_proper_filters($_REQUEST['docsfilter']) 
         : array('', '', true);
 
@@ -502,37 +449,22 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                 while ($myrow = mysql_fetch_array($result)) {
                         switch($table){
 				case 'video':
-					if (isset($vodServer)) {
-                                            $mediaURL = $vodServer."$course_code/".$myrow['path'];
-                                            $mediaPath = $mediaURL;
-                                            $mediaPlay = $mediaURL;
-					} else {
-                                            list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
-					}
-
-                                        if ($is_in_tinymce) {
-                                            $furl = (MultimediaHelper::isSupportedMedia($myrow['path']) && $eclplugin) ? $mediaPlay : $mediaURL;
-                                            $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
-                                        } else {
-                                            $link_href = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
-                                        }
-
+                                        $vObj = MediaResourceFactory::initFromVideo($myrow);
+                                        if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
+                                            $vObj->setPlayURL($vObj->getAccessURL());
+                                        
+                                        $link_href = MultimediaHelper::chooseMediaAhref($vObj);
+                                        $link_href .= (!$is_in_tinymce) ? "<br/><small>" . q($myrow['description']) . "</small>" : '';
                                         $link_to_add = "<td>". $link_href . "</td>";
-
-                                        if (!$is_in_tinymce)
-                                            $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
-
+                                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>" : '';
                                         $link_to_add .= "<td align='center'>". nice_format(date('Y-m-d', strtotime($myrow['date'])))."</td>";
-                                        $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 					break;
 				case "videolinks":
-                                        $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']));
-
+                                        $vObj = MediaResourceFactory::initFromVideoLink($myrow);
+                                        $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
-
-                                        if (!$is_in_tinymce)
-                                            $link_to_add .= "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>";
-
+                                        $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>" : '';
                                         $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
                                         $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
@@ -593,29 +525,19 @@ else {
 			while ($myrow = mysql_fetch_array($result)) {
 				switch($table){
 					case 'video':
-						if (isset($vodServer)) {
-                                                    $mediaURL = $vodServer."$course_code/".$myrow['path'];
-                                                    $mediaPath = $mediaURL;
-                                                    $mediaPlay = $mediaURL;
-						} else {
-                                                    list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
-						}
-
-                                                if ($is_in_tinymce) {
-                                                   $furl = (MultimediaHelper::isSupportedMedia($myrow['path']) && $eclplugin) ? $mediaPlay : $mediaURL;
-                                                    $link_href = "<a href='$furl' class='fileURL'>". q($myrow['title']) ."</a>";
-                                                } else {
-                                                    $link_href = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."<br/><small>". q($myrow['description']) . "</small>";
-                                                }
-
+                                                $vObj = MediaResourceFactory::initFromVideo($myrow);
+                                                if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
+                                                    $vObj->setPlayURL($vObj->getAccessURL());
+                                                
+                                                $link_href = MultimediaHelper::chooseMediaAhref($vObj);
+                                                $link_href .= (!$is_in_tinymce) ? "<br/><small>". q($myrow['description']) . "</small>" : '';
                                                 $link_to_add = "<td>". $link_href . "</td>";
-                                                $link_to_save = "<a href='$mediaURL'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='" . $vObj->getAccessURL() . "'><img src='$themeimg/save_s.png' alt='$langSave' title='$langSave'></a>&nbsp;&nbsp;";
 						break;
 					case 'videolinks':
-                                                $link_href = MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title']));
-
+                                                $vObj = MediaResourceFactory::initFromVideoLink($myrow);
+                                                $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
-
                                                 $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 						break;
 					default:
@@ -662,7 +584,7 @@ function select_table($table)
 function select_proper_filters($requestDocsFilter) {
     $filterv = '';
     $filterl = '';
-    $eclplugin = true;
+    $compatiblePlugin = true;
     
     switch ($requestDocsFilter) {
         case 'image':
@@ -685,7 +607,7 @@ function select_proper_filters($requestDocsFilter) {
             $filterv = $filterl = "AND false";
             break;
         case 'media':
-            $eclplugin = false;
+            $compatiblePlugin = false;
             break;
         case 'eclmedia':
         case 'file':
@@ -693,5 +615,5 @@ function select_proper_filters($requestDocsFilter) {
             break;
     }
     
-    return array($filterv, $filterl, $eclplugin);
+    return array($filterv, $filterl, $compatiblePlugin);
 }

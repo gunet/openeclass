@@ -18,23 +18,29 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-$require_current_course = true;
-require_once '../../../include/init.php';
-require_once 'include/lib/multimediahelper.class.php';
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/action.php';
 
-$nameTools = $langMediaTypeDesc;
+// ----------------------
+// download video
+// ----------------------
+// TODO: encapsulate access token in db query
+$res = db_query("SELECT video.* 
+                   FROM video 
+                   JOIN course ON video.course_id = course.id 
+                  WHERE course.code = '" . q($_GET['course']) . "' 
+                    AND video.id = " . intval($_GET['id']));
+$row = mysql_fetch_array($res);
 
-if (isset($_GET['id'])) {
-    $id = q($_GET['id']);
-    
-    $res = db_query("SELECT * FROM video WHERE course_id = $course_id AND path = " . quote($id));
-    $row = mysql_fetch_array($res);
-
-    if (!empty($row)) {
-        $vObj = MediaResourceFactory::initFromVideo($row);
-        echo MultimediaHelper::mediaHtmlObject($vObj, '#ffffff', '#000000');
-    }
-}
+if (!empty($row)) {
+    // TODO: needs uid and courseId
+    //$action = new action();
+    //$action->record(MODULE_ID_VIDEO);    
+    $vObj = MediaResourceFactory::initFromVideo($row);
+    $real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());
+    send_file_to_client($real_file, my_basename(q($vObj->getUrl())), null, true);
+} else
+    header("Location: ${urlServer}");
 

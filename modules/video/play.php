@@ -18,23 +18,30 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_current_course = true;
-require_once '../../../include/init.php';
+$guest_allowed = true;
+
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/action.php';
 
-$nameTools = $langMediaTypeDesc;
+$action = new action();
+$action->record(MODULE_ID_VIDEO);
 
-if (isset($_GET['id'])) {
-    $id = q($_GET['id']);
-    
-    $res = db_query("SELECT * FROM video WHERE course_id = $course_id AND path = " . quote($id));
-    $row = mysql_fetch_array($res);
+// ----------------------
+// play video
+// ----------------------
+$res = db_query("SELECT * FROM video WHERE course_id = $course_id AND id = " . intval($_GET['id']));
+$row = mysql_fetch_array($res);
 
-    if (!empty($row)) {
-        $vObj = MediaResourceFactory::initFromVideo($row);
-        echo MultimediaHelper::mediaHtmlObject($vObj, '#ffffff', '#000000');
-    }
-}
-
+if (!empty($row)) {
+    $vObj = MediaResourceFactory::initFromVideo($row);
+    //generate new token
+    //append token to accessurl
+    //store token in db
+        // remove old tokens
+        // add or update
+    echo MultimediaHelper::mediaHtmlObject($vObj);
+} else
+    header("Location: ${urlServer}modules/video/index.php?course=$course_code");

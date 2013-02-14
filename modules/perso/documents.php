@@ -18,6 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 /*
  * Personalised Documents Component, eClass Personalised
@@ -67,7 +69,8 @@ function docsHtmlInterface($date)
 
 	$q = db_query("SELECT document.path, document.course_id, document.filename,
                           document.title, document.date_modified,
-                          course.title, course.code
+                          course.title as course_title, course.code, document.format, document.visible,
+                          document.id
                    FROM document, course_user, course
                    WHERE document.course_id = course_user.course_id AND
                              course_user.user_id = $uid AND
@@ -92,13 +95,17 @@ function docsHtmlInterface($date)
 			$first_check = 0;
 			foreach($group_courses_member as $course_file) {
 				if($first_check == 0){
-					$content.= "<tr><td class='sub_title1'>" . q($course_file['title']) . "</td></tr>";
+					$content.= "<tr><td class='sub_title1'>" . q($course_file['course_title']) . "</td></tr>";
 					$first_check = 1;
 				}
                                 $group_sql = "course_id = ".$course_file['course_id']." AND subsystem = ".MAIN;
 				$url = file_url($course_file['path'], null, $course_file['code']);
-				$play_url = file_playurl($course_file['path'], null, $course_file['code']);
-				$href = MultimediaHelper::chooseMediaAhref($url, $url, $play_url, q($course_file['filename']), q($course_file['filename']));
+                                
+                                $dObj = MediaResourceFactory::initFromDocument($course_file);
+                                $dObj->setAccessURL($url);
+                                $dObj->setPlayURL(file_playurl($course_file['path'], null, $course_file['code']));
+                                $href = MultimediaHelper::chooseMediaAhref($dObj);
+                                
 				$content .= "<tr><td class='smaller'><ul class='custom_list'><li>" .
 				$href .' - (' .
 				nice_format(date('Y-m-d', strtotime($course_file['date_modified']))) .

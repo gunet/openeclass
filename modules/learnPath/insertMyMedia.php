@@ -35,6 +35,7 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/mediaresource.factory.php';
 
 $dialogBox = '';
 
@@ -210,11 +211,11 @@ function showmedia()
     $i=1;
     while ($myrow = mysql_fetch_array($resultMedia))
     {
-        list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
+        $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($myrow['title']), $myrow['path']) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMediaAhref($vObj) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
@@ -224,9 +225,10 @@ function showmedia()
     $j=1;
     while($myrow = mysql_fetch_array($resultMediaLinks))
     {
+        $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". MultimediaHelper::chooseMedialinkAhref(q($myrow['url']), q($myrow['title'])) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMedialinkAhref($vObj) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";

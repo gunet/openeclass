@@ -22,12 +22,18 @@
 $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/mediaresource.factory.php';
 
 $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = q($_GET['id']);
+    
+    $res = db_query("SELECT * FROM videolinks WHERE course_id = $course_id AND url = " . quote($id));
+    $row = mysql_fetch_array($res);
 
-    echo MultimediaHelper::medialinkIframeObject(html_entity_decode($id), '#ffffff', '#000000');
+    if (!empty($row)) {
+        $vObj = MediaResourceFactory::initFromVideoLink($row);
+        echo MultimediaHelper::medialinkIframeObject($vObj, '#ffffff', '#000000');
+    }
 }
-

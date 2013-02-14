@@ -349,7 +349,7 @@ while ($file = readdir($handle))
     {
         $fileList['comment'][] = false;
         $fileList['visible'][] = false;
-        $fileList['filename'  ][] = false;
+        $fileList['filename'][] = false;
     }
 } // end while ($file = readdir($handle))
 

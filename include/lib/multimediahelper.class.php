@@ -23,90 +23,124 @@ require_once 'include/lib/modalboxhelper.class.php';
 class MultimediaHelper {
 
     /**
-     * Construct a proper a href html tag because each modal box requires a
-     * specific calling method.
+     * Construct a proper <a href> html tag for opening media files in a modal box.
      *
-     * @param  string $mediaDL   - force download url
-     * @param  string $mediaPath - http full file path
-     * @param  string $mediaPlay - media playback url
-     * @param  string $title
-     * @param  string $filename
-     * @param  string $linkExtra
+     * @param  MediaResource $mediaRsrc
      * @return string
      */
-    public static function chooseMediaAhref($mediaDL, $mediaPath, $mediaPlay, $title, $filename) {
+    public static function chooseMediaAhref($mediaRsrc) {
+        return self::chooseMediaAhrefRaw(
+                $mediaRsrc->getAccessURL(),
+                $mediaRsrc->getPlayURL(),
+                $mediaRsrc->getTitle(),
+                $mediaRsrc->getPath());
+    }
+    
+    /**
+     * Construct a proper <a href> html tag for opening media files in a modal box.
+     *
+     * @param  string $mediaDL   - access or download url
+     * @param  string $mediaPlay - media playback url
+     * @param  string $title     - media file title
+     * @param  string $filename  - media filename
+     * @return string
+     */
+    public static function chooseMediaAhrefRaw($mediaDL, $mediaPlay, $title, $filename) {
+        $title = q($title);
+        $filename = q($filename);
         $ahref = "<a href='$mediaDL' class='fileURL' target='_blank' title='$title'>". $title ."</a>";
+        $class = '';
+        $extraParams = '';
 
         if (self::isSupportedFile($filename)) {
             if (file_exists( ModalBoxHelper::getShadowboxDir() )) {
-                $ahref = "<a href='$mediaPath' class='shadowbox fileURL' rel='shadowbox;width=". 
+                $class = 'shadowbox';
+                $extraParams = (self::isSupportedImage($filename)) 
+                    ? "rel='shadowbox'"
+                    : "rel='shadowbox;width=". 
                         ModalBoxHelper::getShadowboxWidth()
                         .";height=". 
                         ModalBoxHelper::getShadowboxHeight() . 
-                        ModalBoxHelper::getShadowboxPlayer($filename) 
-                        ."' title='$title'>".$title."</a>";
-                if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='shadowbox fileURL' rel='shadowbox' title='$title'>".$title."</a>";
-
-            } else if (file_exists( ModalBoxHelper::getFancybox2Dir() )) {
-                $ahref = "<a href='$mediaPlay' class='fancybox iframe fileURL' title='$title'>".$title."</a>";
-                if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='fancybox fileURL' title='$title'>".$title."</a>";
-            } else if (file_exists( ModalBoxHelper::getColorboxDir() )) {
-                $ahref = "<a href='$mediaPlay' class='colorboxframe fileURL' title='$title'>".$title."</a>";
-                if (self::isSupportedImage($filename))
-                    $ahref = "<a href='$mediaPath' class='colorbox fileURL' title='$title'>".$title."</a>";
-            }
+                        ModalBoxHelper::getShadowboxPlayer($filename) ."'";
+            } else if (file_exists( ModalBoxHelper::getFancybox2Dir() ))
+                $class = (self::isSupportedImage($filename)) ? 'fancybox' : 'fancybox iframe';
+            else if (file_exists( ModalBoxHelper::getColorboxDir() ))
+                $class = (self::isSupportedImage($filename)) ? 'colorbox' : 'colorboxframe';
+            
+            $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='$title'>".$title."</a>";
+            if (self::isSupportedImage($filename))
+                $ahref = "<a href='$mediaDL' class='$class fileURL' title='$title'>".$title."</a>";
         }
 
         return $ahref;
     }
 
     /**
-     * Construct a proper a href html tag for medialinks
+     * Construct a proper <a href> html tag for opening media links in a modal box.
      *
      * @global string $userServer
      * @global string $course_code
-     * @param  string $mediaURL - should be already urlencoded if possible
-     * @param  string $title
+     * @param  MediaResource $mediaRsrc
      * @return string
      */
-    public static function chooseMedialinkAhref($mediaURL, $title) {
-        global $urlServer, $course_code;
-        $ahref = "<a href='$mediaURL' class='fileURL' target='_blank' title='$title'>". $title ."</a>";
+    public static function chooseMedialinkAhref($mediaRsrc) {
+        $title = q($mediaRsrc->getTitle());
+        $ahref = "<a href='" . q($mediaRsrc->getPath()) . "' class='fileURL' target='_blank' title='$title'>". $title ."</a>";
 
-        if (self::isEmbeddableMedialink($mediaURL)) {
-            $linkPlay = $urlServer ."modules/video/index.php?course=$course_code&amp;action=playlink&amp;id=". self::makeEmbeddableMedialink($mediaURL);
-
-            if (file_exists( ModalBoxHelper::getShadowboxDir() ))
-                $ahref = "<a href='". self::makeEmbeddableMedialink($mediaURL) ."' class='shadowbox fileURL' rel='shadowbox;width=". 
+        if (self::isEmbeddableMedialink($mediaRsrc->getPath())) {
+            $class = '';
+            $extraParams = '';
+            
+            if (file_exists( ModalBoxHelper::getShadowboxDir() )) {
+                $class = 'shadowbox';
+                $extraParams = "rel='shadowbox;width=". 
                     ModalBoxHelper::getShadowboxWidth() 
                     .";height=". 
-                    ModalBoxHelper::getShadowboxHeight() 
-                    ."' title='$title'>$title</a>";
-            else if (file_exists(ModalBoxHelper::getFancybox2Dir() ))
-                $ahref = "<a href='".$linkPlay."' class='fancybox iframe fileURL' title='$title'>$title</a>";
+                    ModalBoxHelper::getShadowboxHeight() ."'";
+            } else if (file_exists(ModalBoxHelper::getFancybox2Dir() ))
+                $class = 'fancybox iframe';
             else if (file_exists( ModalBoxHelper::getColorboxDir() ))
-                $ahref = "<a href='".$linkPlay."' class='colorboxframe fileURL' title='$title'>$title</a>";
+                $class = 'colorboxframe';
+            
+            $ahref = "<a href='" . $mediaRsrc->getPlayURL() . "' class='$class fileURL' $extraParams title='$title'>$title</a>";
         }
 
         return $ahref;
     }
-
-
+    
     /**
-     * Construct a proper object html tag for each type of media
+     * Construct a proper <object> html tag for each type of media.
      *
-     * @global string $urlAppend
-     * @param  string $mediaPath
-     * @param  string $mediaURL
+     * @global MediaResource $mediaRsrc
      * @param  string $bgcolor
      * @param  string $color
      * @return string
      */
-    public static function mediaHtmlObject($mediaPath, $mediaURL, $bgcolor = '#000000', $color = '#ffffff') {
+    public static function mediaHtmlObject($mediaRsrc, $bgcolor = '#000000', $color = '#ffffff') {
+        return self::mediaHtmlObjectRaw(
+                $mediaRsrc->getAccessURL(), 
+                $mediaRsrc->getAccessURL(), 
+                $bgcolor, 
+                $color, 
+                $mediaRsrc->getPath());
+    }
+    
+    /**
+     * Construct a proper <object> html tag for each type of media.
+     *
+     * @global string $urlAppend
+     * @param  string $mediaPlay
+     * @param  string $mediaDL
+     * @param  string $bgcolor
+     * @param  string $color
+     * @param  string $mediaPath
+     * @return string
+     */
+    public static function mediaHtmlObjectRaw($mediaPlay, $mediaDL, $bgcolor = '#000000', $color = '#ffffff', $mediaPath = null) {
         global $urlAppend;
 
+        if ($mediaPath == null)
+            $mediaPath = $mediaPlay;
         $extension = get_file_extension($mediaPath);
 
         $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -126,7 +160,7 @@ class MultimediaHelper {
                 if (self::isUsingIE())
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'"
                                 classid="clsid:6BF52A52-394A-11d3-B153-00C04F79FAA6">
-                                <param name="url" value="'.$mediaPath.'">
+                                <param name="url" value="'.$mediaPlay.'">
                                 <param name="autostart" value="1">
                                 <param name="uimode" value="full">
                                 <param name="wmode" value="transparent">
@@ -134,7 +168,7 @@ class MultimediaHelper {
                 else
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'"
                                 type="video/x-ms-wmv"
-                                data="'.$mediaPath.'">
+                                data="'.$mediaPlay.'">
                                 <param name="autostart" value="1">
                                 <param name="showcontrols" value="1">
                                 <param name="wmode" value="transparent">
@@ -158,7 +192,7 @@ class MultimediaHelper {
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'" kioskmode="true"
                                 classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B"
                                 codebase="http://www.apple.com/qtactivex/qtplugin.cab#version=6,0,2,0">
-                                <param name="src" value="'.$mediaPath.'">
+                                <param name="src" value="'.$mediaPlay.'">
                                 <param name="scale" value="aspect">
                                 <param name="controller" value="true">
                                 <param name="autoplay" value="true">
@@ -167,8 +201,8 @@ class MultimediaHelper {
                 else
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'" kioskmode="true"
                                 type="video/quicktime"
-                                data="'.$mediaPath.'">
-                                <param name="src" value="'.$mediaPath.'">
+                                data="'.$mediaPlay.'">
+                                <param name="src" value="'.$mediaPlay.'">
                                 <param name="scale" value="aspect">
                                 <param name="controller" value="true">
                                 <param name="autoplay" value="true">
@@ -189,7 +223,7 @@ class MultimediaHelper {
                                  wmode: "transparent"
                                  }, {
                                  clip: {
-                                     url: "'.$mediaPath.'",
+                                     url: "'.$mediaPlay.'",
                                      scaling: "fit"
                                  },
                                  canvas: {
@@ -205,7 +239,7 @@ class MultimediaHelper {
                 if (self::isUsingIE())
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'"
                                  classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000">
-                                 <param name="movie" value="'.$mediaPath.'"/>
+                                 <param name="movie" value="'.$mediaPlay.'"/>
                                  <param name="bgcolor" value="#000000">
                                  <param name="allowfullscreen" value="true">
                                  <param name="wmode" value="transparent">
@@ -215,7 +249,7 @@ class MultimediaHelper {
                              </object>';
                 else
                     $ret .= '<object width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'"
-                                 data="'.$mediaPath.'"
+                                 data="'.$mediaPlay.'"
                                  type="application/x-shockwave-flash">
                                  <param name="bgcolor" value="#000000">
                                  <param name="allowfullscreen" value="true">
@@ -228,18 +262,18 @@ class MultimediaHelper {
             case "ogg":
                 $ret .= $startdiv;
                 if (self::isUsingIE())
-                    $ret .= '<a href="'.$mediaURL.'">Download media</a>';
+                    $ret .= '<a href="'.$mediaDL.'">Download media</a>';
                 else
                     $ret .= '<video controls="" autoplay="" width="'. self::getObjectWidth() .'" height="'. self::getObjectHeight() .'"
                                  style="margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;"
                                  name="media"
-                                 src="'.$mediaPath.'">
+                                 src="'.$mediaPlay.'">
                              </video>';
                 $ret .= $enddiv;
                 break;
             default:
                 $ret .= $startdiv;
-                $ret .= '<a href="'.$mediaURL.'">Download media</a>';
+                $ret .= '<a href="'.$mediaDL.'">Download media</a>';
                 $ret .= $enddiv;
                 break;
         }
@@ -250,14 +284,15 @@ class MultimediaHelper {
     }
 
     /**
-     * Construct a proper iframe html tag for each type of medialink
+     * Construct a proper <iframe> html tag for each type of medialink.
      *
-     * @param  string $mediaURL - should be already urldecoded if possible
+     * @param  MediaResource $mediaRsrc
      * @param  string $bgcolor
      * @param  string $color
      * @return string
      */
-    public static function medialinkIframeObject($mediaURL, $bgcolor = '#000000', $color = '#ffffff') {
+    public static function medialinkIframeObject($mediaRsrc, $bgcolor = '#000000', $color = '#ffffff') {
+        $mediaURL = q(urldecode(self::makeEmbeddableMedialink($mediaRsrc->getAccessURL())));
         $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                 <html><head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">

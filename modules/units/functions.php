@@ -1,5 +1,8 @@
 <?php
 
+require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/multimediahelper.class.php';
+
 //
 // Units utility functions
 //
@@ -298,15 +301,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
 
-                if ($table == 'video')
-                {
-                    list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
-
-                    $videolink = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
-                }
-                else
-                {
-                    $videolink = MultimediaHelper::chooseMedialinkAhref(q($row['url']), q($row['title']));
+                if ($table == 'video') {
+                    $vObj = MediaResourceFactory::initFromVideo($row);
+                    $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                } else {
+                    $vObj = MediaResourceFactory::initFromVideoLink($row);
+                    $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 if (!$module_visible) {
 			$videolink .= " <i>($langInactiveModule)</i>";

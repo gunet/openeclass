@@ -112,7 +112,7 @@ if (file_exists($basedir . $file_info['path'])) {
         if (defined('GROUP_DOCUMENTS'))
             $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
 
-        $htmlout = (!$is_in_lightstyle) ? MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL) : MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL, '#ffffff', '#000000');
+        $htmlout = (!$is_in_lightstyle) ? MultimediaHelper::mediaHtmlObjectRaw($mediaPath, $mediaURL) : MultimediaHelper::mediaHtmlObjectRaw($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;
         exit();
     }

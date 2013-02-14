@@ -196,7 +196,7 @@ switch ($module['contentType'])
 
                 if (MultimediaHelper::isEmbeddableMedialink($assetPath))
                 {
-                    $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=". MultimediaHelper::makeEmbeddableMedialink($assetPath);
+                    $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=". $assetPath;
                 }
                 else
                 {

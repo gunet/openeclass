@@ -1348,18 +1348,6 @@ function format_time_duration($sec)
                 (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
 }
 
-// Return the URLs for media files
-function media_url($path)
-{
-	global $urlServer, $course_code, $course_code;
-
-        $mediaURL  = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=download&amp;id='.$path;
-        $mediaPath = $urlServer ."video/". $course_code . $path;
-        $mediaPlay = $urlServer .'modules/video/index.php?course='.$course_code.'&amp;action=play&amp;id='.$path;
-
-        return array($mediaURL, $mediaPath, $mediaPlay);
-}
-
 // Move entry $id in $table to $direction 'up' or 'down', where
 // order is in field $order_field and id in $id_field
 // Use $condition as extra SQL to limit the operation

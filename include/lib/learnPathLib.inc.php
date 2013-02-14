@@ -863,9 +863,9 @@ function display_my_documents($dialogBox, $style)
                 $image       = choose_image($fileName);
                 $size        = format_file_size($fileList['size'][$fileKey]);
                 $date        = nice_format($fileList['date'][$fileKey]);
-                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
-                $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
-                $urlFileName = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
+                $file_url    = file_url($fileList['path'][$fileKey], $dspFileName);
+                $play_url    = file_playurl($fileList['path'][$fileKey], $dspFileName);
+                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
             }
             elseif ($fileList['type'][$fileKey] == A_DIRECTORY)
             {

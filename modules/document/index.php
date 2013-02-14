@@ -46,6 +46,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/pclzip/pclzip.lib.php' ;
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 
 load_js('tools.js');
@@ -829,7 +830,7 @@ if (isset($_GET['rev'])) {
         $reverse = true;
 }
 
-list($filter, $eclplugin) = (isset($_REQUEST['docsfilter'])) 
+list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
         ? select_proper_filters($_REQUEST['docsfilter']) 
         : array('', true);
 
@@ -859,7 +860,8 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'visible' => ($row['visible'] == 1),
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
-                'date' => $row['date_modified']);
+                'date' => $row['date_modified'],
+                'object' => MediaResourceFactory::initFromDocument($row) );
 }
 // end of common to teachers and students
 
@@ -1000,18 +1002,16 @@ if ($doc_count == 0) {
                                 } else {                                        
                                         $file_url = file_url($cmdDirName, $entry['filename']);
                                 }
-                                $play_url = file_playurl($cmdDirName, $entry['filename']);
-                                $link_extra = " class='fileURL' title='$langSave' target='_blank'";
-                                $link_title = q((empty($entry['title']))? $entry['filename']: $entry['title']);
-                                $link_title_extra = ($entry['copyrighted'])?
-                                        "&nbsp;<img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>": '';
+                                $link_title_extra = ($entry['copyrighted']) ? "&nbsp;<img src='{$urlAppend}modules/document/img/copyrighted.png' alt='$langCopyrighted'>" : '';
                                 $dload_msg = $langSave;
-                                if ($is_in_tinymce) {
-                                        $furl = (MultimediaHelper::isSupportedMedia($entry['path']) && $eclplugin) ? $play_url : $file_url;
-                                        $link_href = "<a href='$furl'$link_extra>$link_title</a>";
-                                } else {
-                                        $link_href = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $link_title, $entry['path']);
-                                }
+                                
+                                $dObj = $entry['object'];
+                                $dObj->setAccessURL($file_url);
+                                $dObj->setPlayURL(file_playurl($cmdDirName, $entry['filename']));
+                                if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
+                                    $dObj->setPlayURL($dObj->getAccessURL());
+                                
+                                $link_href = MultimediaHelper::chooseMediaAhref($dObj);
                         }
                         $img_href = "<img src='$image' alt=''>";
                         if (!$entry['extra_path'] or
@@ -1127,7 +1127,7 @@ draw($tool_content, $menuTypeID, null, $head_content);
 
 function select_proper_filters() {
     $filter = '';
-    $eclplugin = true;
+    $compatiblePlugin = true;
     
     switch ($_REQUEST['docsfilter']) {
         case 'image':
@@ -1143,7 +1143,7 @@ function select_proper_filters() {
         	$filter = "AND (format LIKE '.dir' $ors)";
         	break;
         case 'media':
-                $eclplugin = false;
+                $compatiblePlugin = false;
                 $ors = '';
                 foreach (MultimediaHelper::getSupportedMedia() as $mediafmt)
                     $ors .= " OR format LIKE '$mediafmt'";
@@ -1159,5 +1159,5 @@ function select_proper_filters() {
             break;
     }
 
-    return array($filter, $eclplugin);
+    return array($filter, $compatiblePlugin);
 }

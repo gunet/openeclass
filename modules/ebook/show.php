@@ -84,7 +84,7 @@ if ($show_orphan_file and $file_path) {
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/ebook/document.php?course='. $course_code .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
 
-        echo MultimediaHelper::mediaHtmlObject($mediaPath, $mediaURL);
+        echo MultimediaHelper::mediaHtmlObjectRaw($mediaPath, $mediaURL);
         exit();
     }
 }

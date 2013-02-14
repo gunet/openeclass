@@ -18,7 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/multimediahelper.class.php';
 
 function list_videos()
 {
@@ -46,15 +47,12 @@ function list_videos()
                                 $table_started = true;
                         }
 
-                        if ($table == 'video')
-                        {
-                            list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
-
-                            $videolink = MultimediaHelper::chooseMediaAhref($mediaURL, $mediaPath, $mediaPlay, q($row['title']), $row['path']);
-                        }
-                        else
-                        {
-                            $videolink = MultimediaHelper::chooseMedialinkAhref(q($row['url']), q($row['title']));
+                        if ($table == 'video') {
+                            $vObj = MediaResourceFactory::initFromVideo($row);
+                            $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                        } else {
+                            $vObj = MediaResourceFactory::initFromVideoLink($row);
+                            $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                         }
 
                           if ($numLine%2 == 0) {
