@@ -65,6 +65,8 @@ function getUserAgenda($param, $type)
 	}
 	array_walk($tbl_course_ids, 'wrap_each');
 	$tbl_course_ids = implode(",", $tbl_course_ids);
+        if (empty($tbl_course_ids)) // in case there aren't any enabled agenda modules
+            return;
 
 	//mysql version 4.x query
 	$sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, course.code, course.title
