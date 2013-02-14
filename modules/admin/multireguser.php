@@ -102,7 +102,7 @@ if (isset($_POST['submit'])) {
 
                                         // Now, the $user array should contain only course codes
                                         foreach ($user as $course_code) {
-                                                if (!register($new[0], $course_code)) {
+                                                if (!register($new[0], $course_code, $newstatut)) {
                                                         $unparsed_lines .=
                                                                 sprintf($langMultiRegCourseInvalid . "\n",
                                                                         q("$info[last] $info[first] ($info[username])"),
@@ -255,13 +255,13 @@ function create_username($statut, $depid, $nom, $prenom, $prefix)
 }
 
 
-function register($uid, $course_code)
+function register($uid, $course_code, $statut=5)
 {
         $code = autoquote($course_code);
         $req = db_query("SELECT code, cours_id FROM cours WHERE code=$code OR fake_code=$code");
         if ($req and mysql_num_rows($req) > 0) {
                 list($code, $cid) = mysql_fetch_row($req);
-                db_query("INSERT INTO cours_user SET cours_id = $cid, user_id = $uid, statut = 5,
+                db_query("INSERT INTO cours_user SET cours_id = $cid, user_id = $uid, statut = $statut,
                                                      team = 0, tutor = 0, reg_date = NOW()");
                 return true;
         }
