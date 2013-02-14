@@ -37,11 +37,8 @@ $row = mysql_fetch_array($res);
 
 if (!empty($row)) {
     $vObj = MediaResourceFactory::initFromVideo($row);
-    //generate new token
-    //append token to accessurl
-    //store token in db
-        // remove old tokens
-        // add or update
+    $token = token_generate($row['path'], true);                         // generate new token
+    $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
     echo MultimediaHelper::mediaHtmlObject($vObj);
 } else
     header("Location: ${urlServer}modules/video/index.php?course=$course_code");

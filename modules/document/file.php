@@ -76,11 +76,14 @@ require_once '../../include/init.php';
 require_once 'include/action.php';
 
 if (!defined('COMMON_DOCUMENTS')) {
-        // check user's access to cours
-        check_cours_access();
-        // record file access
+    // check user's access to cours
+    check_cours_access();
+    // record file access
+    if ($uid) {
         $action = new action();
         $action->record(MODULE_ID_DOCS);
+    } else
+        $course_id = $_SESSION['course_id']; // anonymous with access token needs course id set
 }
 
 require_once 'doc_init.php';
@@ -102,6 +105,11 @@ if (!$file_info['visible'] and !$is_editor) {
 
 if (file_exists($basedir . $file_info['path'])) {
     if (!$is_in_playmode) {
+        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        if (!$valid) {
+           header("Location: ${urlServer}");
+           exit();
+        }
         send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
     } else {
         require_once 'include/lib/fileDisplayLib.inc.php';
@@ -111,8 +119,12 @@ if (file_exists($basedir . $file_info['path'])) {
         $mediaURL = $urlServer .'modules/document/index.php?course='. $course_code .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
             $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+        $token = token_generate($file_info['path'], true);
+        $mediaAccess = $mediaPath . '?token=' . $token;
 
-        $htmlout = (!$is_in_lightstyle) ? MultimediaHelper::mediaHtmlObjectRaw($mediaPath, $mediaURL) : MultimediaHelper::mediaHtmlObjectRaw($mediaPath, $mediaURL, '#ffffff', '#000000');
+        $htmlout = (!$is_in_lightstyle) 
+            ? MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath)
+            : MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#ffffff', '#000000', $mediaPath);
         echo $htmlout;
         exit();
     }
@@ -121,8 +133,16 @@ if (file_exists($basedir . $file_info['path'])) {
 }
 
 function check_cours_access() {
-	global $course_code;
+	global $course_code, $uid;
 
+        if ( !$uid && !isset($course_code) )
+            $course_code = $_SESSION['course_code'];
+        
+        if ( !$uid && !isset($_GET['token'])) { // anonymous needs access token
+            redirect_to_home_page();
+            exit(0);
+        }
+            
 	$qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
 	$result = db_query($qry);
 
@@ -131,8 +151,13 @@ function check_cours_access() {
 		redirect_to_home_page();
 		exit;
 	}
-
+        
 	$cours = mysql_fetch_array($result);
+        
+        if (!$uid) {
+            $_SESSION['course_id'] = $cours['id'];
+            return; // do not do course check if anonymous with access token
+        }
 
 	switch($cours['visible']) {
 		case '2': return; 	// cours is open

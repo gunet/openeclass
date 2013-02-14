@@ -21,26 +21,44 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'include/action.php';
+
+if ( !isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token'])) )
+    header("Location: ${urlServer}");
+
+// locate course id
+$course_id = null;
+$res1 = db_query("SELECT course.id FROM course WHERE course.code = ". quote(q($_GET['course'])));
+$row1 = mysql_fetch_array($res1);
+if (!empty($row1))
+    $course_id = intval($row1['id']);
+
+if ($course_id != null && $uid) {
+    require_once 'include/action.php';
+    $action = new action();
+    $action->record(MODULE_ID_VIDEO);
+}
+
+if ($course_id == null)
+    header("Location: ${urlServer}");
 
 // ----------------------
 // download video
 // ----------------------
-// TODO: encapsulate access token in db query
-$res = db_query("SELECT video.* 
+$res2 = db_query("SELECT * 
                    FROM video 
-                   JOIN course ON video.course_id = course.id 
-                  WHERE course.code = '" . q($_GET['course']) . "' 
-                    AND video.id = " . intval($_GET['id']));
-$row = mysql_fetch_array($res);
+                  WHERE course_id = $course_id
+                    AND id = " . intval($_GET['id']));
+$row2 = mysql_fetch_array($res2);
 
-if (!empty($row)) {
-    // TODO: needs uid and courseId
-    //$action = new action();
-    //$action->record(MODULE_ID_VIDEO);    
-    $vObj = MediaResourceFactory::initFromVideo($row);
-    $real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());
-    send_file_to_client($real_file, my_basename(q($vObj->getUrl())), null, true);
-} else
+if (empty($row2))
     header("Location: ${urlServer}");
 
+$valid = ($uid) ? true : token_validate($row2['path'], $_GET['token'], 30);
+if (!$valid) {
+   header("Location: ${urlServer}");
+   exit();
+}
+
+$vObj = MediaResourceFactory::initFromVideo($row2);
+$real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());
+send_file_to_client($real_file, my_basename(q($vObj->getUrl())), 'inline', true);
