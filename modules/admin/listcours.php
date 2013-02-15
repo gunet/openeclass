@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,32 +18,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+*	@file: listcours.php	
+*	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+*		       Pitsiougas Vagelis <vagpits@uom.gr>
+*        @brief: List courses. This script allows the administrator list all available courses, 
+*              or some of them if a search is obmitted
+*/ 	
 
-/*===========================================================================
-	listcours.php
-	@last update: 11-07-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: List courses
-
- 	This script allows the administrator list all available courses, or some
- 	of them if a search is obmitted
-
- 	The user can : - See basic information about courses
- 	               - Go to users of a course
- 	               - Go to delete course page
- 	               - Go to edit course page
-                 - Return to main administrator page
-                 - A paging navigation has been added
-
- 	@Comments: The script is organised in three sections.
-
-  1) Select courses from database (all or some of them based on search)
-  2) Display basic information about selected courses
-  3) Display all on an HTML page
-
-==============================================================================*/
 
 $require_departmentmanage_user = true;
 
@@ -120,8 +102,11 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	    }
 	    // remove last ',' from $ids
 	    $facs = substr($ids , 0, -1);
-		$searchcours[] = "hierarchy.id IN ($facs)";
-	}
+            $searchcours[] = "hierarchy.id IN ($facs)";
+	}        
+        if (isset($_POST['reg_flag'])) {
+                $searchcours[] = "created " . (($_POST['reg_flag'] == 1)? '>=': '<=') . " '$_POST[date]'";
+        }
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
                 $sql = db_query("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
@@ -229,13 +214,13 @@ if ($key == 0) {
         $tool_content .= "</tr></table>";
         // If a search is started display link to search page
         if (isset($_GET['search']) && $_GET['search'] == "yes") {
-                $tool_content .= "<p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
+                $tool_content .= "<br /><p align='right'><a href='searchcours.php'>".$langReturnSearch."</a></p>";
         } elseif ($fulllistsize > COURSES_PER_PAGE) {
                 // Display navigation in pages
                 $tool_content .= show_paging($limit, COURSES_PER_PAGE, $fulllistsize, "$_SERVER[SCRIPT_NAME]");
         }
 }
 // Display link to index.php
-$tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
+$tool_content .= "<br /><p align='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content,3);
