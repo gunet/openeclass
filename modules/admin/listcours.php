@@ -103,6 +103,9 @@ if (isset($_GET['search']) && $_GET['search'] == "yes") {
 	if ($searchfaculte) {
 		$searchcours[] = "faculteid = $searchfaculte";
 	}
+        if (isset($_POST['reg_flag'])) {
+                $searchcours[] = "first_create " . (($_POST['reg_flag'] == 1)? '>=': '<=') . " '$_POST[date]'";
+        }
 	$query=join(' AND ',$searchcours);
 	if (!empty($query)) {
                 $sql = db_query("SELECT faculte.name AS faculte, cours.code, intitule, titulaires, visible, cours_id
