@@ -3,7 +3,7 @@
 *   Open eClass 3.0
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2013  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -23,7 +23,10 @@
 *  			Panepistimiopolis Ilissia, 15784, Athens, Greece
 *  			eMail: info@openeclass.org
 * ========================================================================*/
-
+/**
+ * @file listusers.php
+ * @brief display list of users
+ */
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -52,8 +55,7 @@ $user_type = isset($_GET['user_type'])? intval($_GET['user_type']): '';
 $auth_type = isset($_GET['auth_type'])? intval($_GET['auth_type']): '';
 $email = isset($_GET['email'])? mb_strtolower(trim($_GET['email'])): '';
 $reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
-$hour = isset($_GET['hour'])? intval($_GET['hour']): 0;
-$minute = isset($_GET['minute'])? intval($_GET['minute']): 0;
+$user_registered_at = isset($_GET['user_registered_at'])?$_GET['user_registered_at']: '';
 $ord = isset($_GET['ord'])? $_GET['ord']: '';
 $limit = isset($_GET['limit'])? intval($_GET['limit']): 0;
 $mail_ver_required = get_config('email_verification_required');
@@ -74,34 +76,13 @@ Criteria/Filters
 ***************/
 $criteria = array();
 $params = array();
-function add_param($name, $value = null) {
-        global $params;
-        if (!isset($value)) {
-                $value = $GLOBALS[$name];
-        }
-        if ($value !== 0 and $value !== '') {
-                $params[] = $name . '=' . urlencode($value);
-        }
-}
+
 // Registration date/time search
-if (isset($_GET['date']) or $hour or $minute) {
-        $date = explode('-',  $_GET['date']);
-        if (count($date) == 3) {
-                $day = intval($date[0]);
-                $month = intval($date[1]);
-                $year = intval($date[2]);
-                $user_registered_at = mktime($hour, $minute, 0, $month, $day, $year);
-                add_param('date', "$day-$month-$year");
-        } else {
-                $user_registered_at = mktime($hour, $minute, 0, 0, 0, 0);
-        }
-        // join the above with registered at search
-        $criteria[] = 'registered_at ' .
-                      (($reg_flag === 1)? '>=': '<=') .
-                      ' ' . $user_registered_at;
+if (!empty($user_registered_at)) {
         add_param('reg_flag');
-        add_param('hour');
-        add_param('minute');
+        add_param('user_registered_at');
+        // join the above with registered at search
+        $criteria[] = 'registered_at ' . (($reg_flag === 1)? '>=': '<=') . ' UNIX_TIMESTAMP('.  quote($user_registered_at).')';
 }
 // surname search
 if (!empty($lname)) {
@@ -214,7 +195,7 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT count(DISTINCT a.user_id) AS num, b.statut AS user_type " .
+        $count_qry = "SELECT COUNT(DISTINCT a.user_id) AS num, b.statut AS user_type " .
                      $qry_base;
         $qry = "SELECT DISTINCT a.user_id,a.nom, a.prenom, a.username, a.email,
                        a.verified_mail, b.statut " . $qry_base;
@@ -228,7 +209,7 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT count(DISTINCT user_id) AS num, statut AS user_type " . $qry_base;
+        $count_qry = "SELECT COUNT(DISTINCT user_id) AS num, statut AS user_type " . $qry_base;
         $qry = "SELECT DISTINCT user_id, nom, prenom, username, email, verified_mail, statut " .
                $qry_base;
         add_param('search', 'no_login');
@@ -238,10 +219,10 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' WHERE ' . $qry_criteria;
         }
-        $count_qry = 'SELECT count(DISTINCT user_id) AS num, statut AS user_type' .
+        $count_qry = 'SELECT COUNT(DISTINCT user_id) AS num, statut AS user_type' .
                 $qry_base;
         $qry = 'SELECT DISTINCT user_id, nom, prenom, username, email, statut, verified_mail' .
-                $qry_base;
+                $qry_base;        
 }
 
 // User statistics
@@ -396,3 +377,20 @@ if($countUser > 0) {
 $tool_content .= "<p align='right'><a href='search_user.php?$pagination_link'>$langBack</a></p>";
 
 draw($tool_content, 3);
+
+
+/**
+ * make links from one page to another during search results
+ * @global string $params
+ * @param type $name
+ * @param type $value
+ */
+function add_param($name, $value = null) {
+        global $params;
+        if (!isset($value)) {
+                $value = $GLOBALS[$name];
+        }
+        if ($value !== 0 and $value !== '') {
+                $params[] = $name . '=' . urlencode($value);
+        }
+}

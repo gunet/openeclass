@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,24 +18,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*===========================================================================
-	serachuser.php
-	@last update: 16-10-2006 by Karatzidis Stratos
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-  @Description: User Search form based upon criteria/filters
-
- 	This script allows the admin to search for platform users,
- 	specifying certain criteria/filters
-
- 	The admin can : - specify the criteria
- 			- view the list
- 			- select the inactive users
-
-==============================================================================
-*/
+/**
+ * 	@file searchuser.php
+ *	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+                      Pitsiougas Vagelis <vagpits@uom.gr>
+ *      @brief: user search form based upon criteria/filters
+ */
 
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
@@ -56,8 +44,6 @@ $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'c
 $head_content .= $jscalendar->get_load_files_code();
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
-
-// Main body
 
 // get the incoming values
 $inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive')?
@@ -135,7 +121,7 @@ $authtype_data = $auth_ids;
 $authtype_data[0] = $langAllAuthTypes;
 $tool_content .= selection($authtype_data, 'auth_type', 0) . "
     </td>
-  <tr>
+    <tr>
     <th class='left'>$langRegistrationDate:</th>
     <td>";
 $reg_flag_data = array();
@@ -146,33 +132,25 @@ $tool_content .= selection($reg_flag_data,
 
 $start_cal = $jscalendar->make_input_field(
         array('showOthers' => true,
+               'showsTime' => true,
               'align' => 'Tl',
-              'ifFormat' => '%d-%m-%Y'),
+              'ifFormat' => '%Y-%m-%d %H:%M',
+              'timeFormat' => '24'),
         array('style' => 'width: 15em; text-align: center',
-              'name' => 'date',
+              'name' => 'user_registered_at',
               'value' => ' '));
 
-for ($h = 0; $h <= 24; $h++) {
-        $hours[$h] = $h;
-}
-for ($min = 0; $min <= 55; $min = $min+5) {
-        $minutes[$min] = $min;
-}
-$tool_content .= $start_cal . '&nbsp;&nbsp;&nbsp;' .
-                 selection($hours, 'hour', $hour) .
-                 '&nbsp;&nbsp;&nbsp;' .
-                 selection($minutes, 'minute', $minute);
-$tool_content .= "
-    </td>
-  </tr>
+$tool_content .= $start_cal;
+
+$tool_content .= "</td></tr>
   <tr>
     <th class='left'>$langEmailVerified:</th>
     <td>";
 
 $verified_mail_data = array(
-        0 => $m['pending'],
-        1 => $m['yes'],
-        2 => $m['no'],
+        EMAIL_VERIFICATION_REQUIRED => $m['pending'],
+        EMAIL_VERIFIED => $m['yes'],
+        EMAIL_UNVERIFIED => $m['no'],
         3 => $langAllUsers);
 $tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail) . "
     </td>
