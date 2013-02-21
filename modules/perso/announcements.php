@@ -159,7 +159,7 @@ function createQueries($queryParam){
 			$dateVar = $date;
 		}
 
-		$announce_query[$i] = "SELECT title, contenu, temps, annonces.id
+		$announce_query[$i] = "SELECT title, contenu, temps, preview, annonces.id
                         FROM `$mysqlMainDb`.annonces, `$lesson_code[$i]`.accueil
                         WHERE cours_id = $lesson_id[$i]
 				AND visibility = 'v'

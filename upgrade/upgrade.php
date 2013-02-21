@@ -598,6 +598,8 @@ if (!isset($_POST['submit2'])) {
                                         ('login_fail_forgive_interval', 24)");
         }
 
+        mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
+                db_query("ALTER TABLE `annonces` ADD `preview` TEXT NOT NULL DEFAULT ''");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
                 db_query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         mysql_field_exists($mysqlMainDb, 'cours', 'glossary_index') or

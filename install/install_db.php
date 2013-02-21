@@ -67,6 +67,7 @@ db_query("CREATE TABLE annonces (
 	`id` MEDIUMINT(11) NOT NULL auto_increment,
 	`title` VARCHAR(255) DEFAULT NULL,
 	`contenu` TEXT,
+	`preview` TEXT NOT NULL DEFAULT '',
 	`temps` DATE DEFAULT NULL,
 	`cours_id` INT(11) NOT NULL default '0',
 	`ordre` MEDIUMINT(11) NOT NULL,
