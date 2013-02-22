@@ -46,18 +46,7 @@ $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via al
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
-        $tool_content .= "<div class='info'>$langCannotRegister</div>";
-        draw($tool_content, 0);
-        exit;
-}
-if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 2) and !$alt_auth_stud_reg) {
-	$tool_content .= "<div class='caution'>$langForbidden</div>";
-	draw($tool_content,0);
-	exit;
-}
-
-if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 1) and !$alt_auth_prof_reg) {
-	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	$tool_content .= "<div class='info'>$langCannotRegister</div>";
 	draw($tool_content,0);
 	exit;
 }
@@ -69,11 +58,21 @@ if (isset($_POST['auth'])) {
         $auth = isset($_SESSION['u_tmp']) ? $_SESSION['u_tmp'] : 0;
 }
 
-if (isset($_SESSION['user_app']) and $_SESSION['user_app'] == 1) {
-        $prof = TRUE;
-} else {
-        $prof = FALSE;
+if (isset($_SESSION['u_prof'])) {
+	$prof = intval($_SESSION['u_prof']);
 }
+if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
+if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
 $phone_required = $prof;
 
 if (!$prof and $alt_auth_stud_reg == 2) {
@@ -237,14 +236,15 @@ if ($is_valid) {
         } elseif (isset($_SESSION['uname_exists'])) {
                 unset($_SESSION['uname_exists']);
         }
-        if (isset($_SESSION['user_app'])) {                
-                // user already applied for account
-                if (user_app_exists(autounquote($uname))) {
-                        $_SESSION['uname_app_exists'] = 1;
-                } elseif (isset($_SESSION['uname_app_exists'])) {
-                        unset($_SESSION['uname_app_exists']);
-                }
+        // user allready applied for account
+        if (user_app_exists(autounquote($uname))) {
+                $_SESSION['uname_app_exists'] = 1;
         }
+        elseif (isset($_SESSION['uname_app_exists'])) {
+                unset($_SESSION['uname_app_exists']);
+        }
+
+        // register user
         if ($autoregister and empty($_SESSION['uname_exists']) and empty($_SESSION['uname_app_exists'])) {
                 if (get_config('email_verification_required') && !empty($email)) {
                         $verified_mail = 0;
