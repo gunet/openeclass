@@ -59,7 +59,6 @@ if(!isset($_REQUEST['auth'])) {
 unset($_SESSION['was_validated']);
 
 $authmethods = get_auth_active_methods();
-
 $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 
@@ -67,29 +66,32 @@ if(!empty($msg)) {
         $nameTools = "$langConfirmUser ($msg)";
 }
 
-if (isset($_GET['p']) and $_GET['p']) {
-	$_SESSION['u_prof'] = 1;
+if (isset($_GET['p'])) {
+        if ($_GET['p'] == 1) {
+                $_SESSION['user_app'] = 1;
+        } elseif ($_GET['p'] == 2) {
+                $_SESSION['user_app'] = 2;
+        }        	
 } else {
-	$_SESSION['u_prof'] = 0;
+	$_SESSION['user_app'] = 0;
 }
 
-if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
+if (!$_SESSION['user_app'] and !$alt_auth_stud_reg) {
 	$tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content,0);
 	exit;
 }
 
-if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
+if ($_SESSION['user_app'] and !$alt_auth_prof_reg) {
 	$tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content,0);
 	exit;
 }
-
 $tool_content .= "<form method='post' action='altsearch.php'>";
 $tool_content .= "<fieldset><legend>".q($settings['auth_instructions'])."</legend>
 <table class='tbl' width='100%'>";
 
-if (isset($_SESSION['prof']) and $_SESSION['prof']) {
+if (isset($_SESSION['user_app']) and $_SESSION['user_app']) {
         $tool_content .= "<input type='hidden' name='p' value='1'>";
 }
 

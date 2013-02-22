@@ -39,50 +39,25 @@ $eclass_prof_reg = get_config('eclass_prof_reg');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 
 // security check
-if (!$user_registration) {
+if (!$user_registration) {        
         $tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content, 0);
 	exit;
 }
-if ($prof and !$eclass_prof_reg) {
-        $tool_content .= "<div class='caution'>$langForbidden</div>";
-	draw($tool_content, 0);
-	exit;
-}
-
-if (!$prof and $eclass_stud_reg != 1) {
+if ($prof and !$eclass_prof_reg) {        
         $tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content, 0);
 	exit;
 }
 
-$am = !empty($_REQUEST['am'])? intval($_REQUEST['am']): '';
-
-// eclass native registration method disabled for students
-$disable_eclass_stud_reg = get_config('disable_eclass_stud_reg');
-if (!$prof and $disable_eclass_stud_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-	draw($tool_content, 0);
-	exit;
-}
-
-// eclass native registration method disabled for profs
-$disable_eclass_prof_reg = get_config('disable_eclass_prof_reg');
-if ($prof and $disable_eclass_prof_reg) {
-	$tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
+if (!$prof and $eclass_stud_reg != 1) {        
+        $tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content, 0);
 	exit;
 }
 
 $am_required = !$prof && get_config('am_required');
 $errors = array();
-
-// security - show error instead of form if user registration is open
-if (!$prof and (!get_config('close_user_registration'))) {
-        $tool_content .= "<div class='td_main'>$langForbidden</div></td></tr></table>";
-        draw($tool_content, 0);
-        exit;
-}
 
 $all_set = register_posted_variables(array(
                 'usercomment' => true,
@@ -146,7 +121,7 @@ if ($all_set) {
 	}
 
 	// register user request
-	$statut = $prof? 1: 5;
+	$statut = $prof? USER_TEACHER: USER_STUDENT;
 	$res = db_query('INSERT INTO user_request SET
 			name = ' . autoquote($name). ',
 			surname = ' . autoquote($surname). ',
