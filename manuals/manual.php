@@ -111,6 +111,6 @@ function manlink($desc, $link, $language)
 {                
         global $addon;
         
-        $url = 'http://wiki.openeclass.org/doku.php';
+        $url = 'http://wiki.openeclass.org/3.0/doku.php';
         return "<a href='$url?id=$language:$link' target='_blank' class='mainpage'>$desc</a>";
 }
