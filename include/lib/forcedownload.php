@@ -323,7 +323,7 @@ function public_path_to_disk_path($path_components, $path = '')
         $depth = substr_count($path, '/') + 1;
         foreach ($path_components as $component) {
                 $component = urldecode(str_replace(chr(1), '/', $component));
-                $q = db_query("SELECT path, visible, format,
+                $q = db_query("SELECT path, visible, format, extra_path,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
@@ -332,7 +332,7 @@ function public_path_to_disk_path($path_components, $path = '')
                 if (!$q or mysql_num_rows($q) == 0) {
                         not_found('/' . implode('/', $path_components));
                 }
-                $r = mysql_fetch_array($q);
+                $r = mysql_fetch_assoc($q);
                 $path = $r['path'];
                 $depth++;
         }

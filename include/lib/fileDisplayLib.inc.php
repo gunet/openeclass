@@ -233,28 +233,28 @@ function public_file_path($disk_path, $filename = null)
  */
 function file_url($path, $filename = null, $courseCode = null)
 {
-	global $course_code, $urlServer, $group_id, $ebook_id;
+        global $course_code, $urlServer, $group_id, $ebook_id;
         $courseCode = ($courseCode == null) ? $course_code : $courseCode;
 
-	if (defined('EBOOK_DOCUMENTS')) {
-		return htmlspecialchars($urlServer .
-						"modules/ebook/show.php/$courseCode/$ebook_id/_" .
-						public_file_path($path, $filename),
-					ENT_QUOTES);
+        if (defined('EBOOK_DOCUMENTS')) {
+                return htmlspecialchars($urlServer .
+                        "modules/ebook/show.php/$courseCode/$ebook_id/_" .
+                        public_file_path($path, $filename),
+                                ENT_QUOTES);
         } else {
-		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
+                $gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
                 if (defined('COMMON_DOCUMENTS')) {
                         $courseCode = 'common';
                 }
-		return htmlspecialchars($urlServer .
-						"modules/document/file.php/$courseCode$gid" .
-	                                        public_file_path($path, $filename),
-	                                ENT_QUOTES);
-	}
+                return htmlspecialchars($urlServer .
+                        "modules/document/file.php/$courseCode$gid" .
+                        public_file_path($path, $filename),
+                                ENT_QUOTES);
+        }
 }
 
 /**
- * 
+ *
  * @global type $course_code
  * @global type $urlServer
  * @global type $group_id

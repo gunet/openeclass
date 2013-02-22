@@ -447,14 +447,15 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
  *
  * @global string $webDir
  * @param string $extra_path
+ * @param bool $full Return full on-disk path
  * @return string|boolean
  */
-function common_doc_path($extra_path)
+function common_doc_path($extra_path, $full=false)
 {
         global $webDir;
         
         if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
-                return $webDir . '/courses/commondocs' . $matches[1];
+                return ($full? $webDir: '') . '/courses/commondocs' . $matches[1];
         } else {
                 return false;
         }

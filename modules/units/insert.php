@@ -118,31 +118,44 @@ function insert_docs($id)
 {
 	global $course_id, $course_code;
 
-        if ($id == -1) { // common documents
-                foreach ($_POST['document'] as $file_id) {                        
-                        $file = mysql_fetch_array(db_query("SELECT * FROM document
+        if ($id == -1) { // Insert common documents into main documents
+                $target_dir = '';
+                if (isset($_POST['dir']) and !empty($_POST['dir'])) {
+                        // Make sure specified target dir exists in course
+                        $target_dir = db_query_get_single_value("SELECT path FROM document
+                                        WHERE course_id = $course_id AND
+                                              subsystem = ".MAIN." AND
+                                              path = " . quote($_POST['dir']));
+                }
+
+                foreach ($_POST['document'] as $file_id) {
+                        $file = mysql_fetch_assoc(db_query("SELECT * FROM document
                                         WHERE course_id = -1
                                         AND subsystem = ".COMMON."
-                                        AND id =" . intval($file_id)), MYSQL_ASSOC);                        
-                        $title = (empty($file['title']))? $file['filename']: $file['title'];
-                        $file_date = date("Y\-m\-d G\:i\:s");
-                        db_query("INSERT INTO document SET
-                                        course_id = $course_id,
-                                        subsystem = ".MAIN.",
-                                        path = " . quote($file['path']) . ",
-                                        extra_path = ".quote("common:$file[path]").",
-                                        filename = " . quote($file['filename']) . ",
-                                        visible = 1,
-                                        comment = " . quote($file['comment']) . ",
-                                        title =	'$title',
-                                        date = '$file_date',
-                                        date_modified =	'$file_date',
-                                        format = ".quote($file['format'])."");
+                                        AND id = " . intval($file_id)));
+                        if ($file) {
+                                $title = (empty($file['title']))? $file['filename']: $file['title'];
+                                $file_date = date("Y\-m\-d G\:i\:s");
+                                $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
+                                db_query("INSERT INTO document SET
+                                                course_id = $course_id,
+                                                subsystem = ".MAIN.",
+                                                path = " . quote($path) . ",
+                                                extra_path = ".quote("common:$file[path]").",
+                                                filename = " . quote($file['filename']) . ",
+                                                visible = 1,
+                                                comment = " . quote($file['comment']) . ",
+                                                title =	'$title',
+                                                date = '$file_date',
+                                                date_modified =	'$file_date',
+                                                format = ".quote($file['format'])."");
+                        }
                 }
-                header('Location: ../document/index.php?course='.$course_code);
+                header('Location: ../document/index.php?course=' . $course_code .
+                        '&openDir=' . $target_dir);
                 exit;
         }
-        
+
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
 
 	foreach ($_POST['document'] as $file_id) {

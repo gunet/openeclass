@@ -74,6 +74,7 @@ $guest_allowed = true;
 
 require_once '../../include/init.php';
 require_once 'include/action.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 if (!defined('COMMON_DOCUMENTS')) {
     // check user's access to cours
@@ -103,14 +104,27 @@ if (!$file_info['visible'] and !$is_editor) {
         error($langNoRead);
 }
 
-if (file_exists($basedir . $file_info['path'])) {
+if ($file_info['extra_path']) {
+        // $disk_path is set if common file link
+        $disk_path = common_doc_path($file_info['extra_path'], true);
+        if (!$disk_path) {
+                // external file URL
+                header("Location: $file_info[extra_path]");
+                exit;
+        }
+} else {
+        // Normal file
+        $disk_path = $basedir . $file_info['path'];
+}
+
+if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
         $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
         if (!$valid) {
            header("Location: ${urlServer}");
            exit();
         }
-        send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
+        send_file_to_client($disk_path, $file_info['filename']);
     } else {
         require_once 'include/lib/fileDisplayLib.inc.php';
         require_once 'include/lib/multimediahelper.class.php';

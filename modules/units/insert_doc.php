@@ -22,6 +22,25 @@
 require_once 'modules/document/doc_init.php';
 
 /**
+ * helper function to get a file path from get variable
+ * @param string $name
+ * @global array $_GET
+ * @return string
+ */
+function get_dir_path($name)
+{
+        if (isset($_GET[$name])) {
+                $path = q($_GET[$name]);
+                if ($path == '/' or $path == '\\') {
+                        $path = '';
+                }
+        } else {
+                $path = '';
+        }
+        return $path;
+}
+
+/**
  * list documents while inserting them in course unit
  * @global type $id
  * @global type $webDir
@@ -48,29 +67,32 @@ function list_docs()
                $langNoDocuments, $course_code, $themeimg, $langCommonDocs, $nameTools;
 
         $basedir = $webDir . '/courses/' . $course_code . '/document';
-        if (isset($_GET['path'])) {
-                if ($path == '/' or $path == '\\') {
-			$path = '';
-		}
-        } else {
-                $path = '';
-        }         
+        $path = get_dir_path('path');
+        $dir_param = get_dir_path('dir');
+        $dir_setter = $dir_param? ('&amp;dir=' . $dir_param): '';
+        $dir_html = $dir_param? "<input type='hidden' name='dir' value='$dir_param'>": '';
+
         if ($id == -1) {
-                $nameTools = $langCommonDocs;                
+                $common_docs = true;
+                $nameTools = $langCommonDocs;
                 $group_sql = "course_id = -1 AND subsystem = ".COMMON."";
                 $basedir = $webDir . '/courses/commondocs';
                 $result = db_query("SELECT * FROM document
                                     WHERE $group_sql AND
                                           visible = 1 AND
                                           path LIKE " . quote("$path/%") . " AND
-                                          path NOT LIKE " . quote("$path/%/%"));                
+                                          path NOT LIKE " . quote("$path/%/%"));
         } else {
+                $common_docs = false;
                 $result = db_query("SELECT * FROM document
                                     WHERE $group_sql AND
                                           path LIKE " . quote("$path/%") . " AND
                                           path NOT LIKE " . quote("$path/%/%"));
         }
+
         $fileinfo = array();
+        $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
+
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(
 			'id' => $row['id'],
@@ -97,9 +119,9 @@ function list_docs()
                                                                    WHERE $group_sql AND path = " . quote($path)));
 			$parentpath = dirname($path);
                         $dirname = "/".htmlspecialchars($dirname);
-                        $parentlink = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;type=doc&amp;id=$id&amp;path=" . $parentpath;
-                        $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> <a href='$parentlink'>" .
-                                      "<img src='$themeimg/folder_up.png' height='16' width='16' alt='icon' /></a></th>";
+                        $parentlink = $urlbase . $parentpath;
+                        $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> " .
+                                      icon('folder_up', $langUp, $parentlink) . "</th>";
                         $colspan = 4;
                 }
 		$tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
@@ -124,12 +146,13 @@ function list_docs()
 				$dir = $entry['path'];
 				if ($is_dir) {
 					$image = $themeimg.'/folder.png';
-					$file_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;type=doc&amp;id=$id&amp;path=$dir";
+					$file_url = $urlbase . $dir;
 					$link_extra = '';
 					$link_text = $entry['name'];
 				} else {
 					$image = '../document/img/' . choose_image('.' . $entry['format']);
-					$file_url = file_url($entry['path'], $entry['name']);
+                                        $file_url = file_url($entry['path'], $entry['name'],
+                                                             $common_docs? 'common': $course_code);
 					$link_extra = " target='_blank'";
 					if (empty($entry['title'])) {
 						$link_text = $entry['name'];
@@ -147,7 +170,7 @@ function list_docs()
 					}
 				}
 				$tool_content .= "\n    <tr class='$vis'>";
-				$tool_content .= "\n      <td width='1' class='center'><a href='$file_url'$link_extra><img src='$image' border='0' /></a></td>";
+				$tool_content .= "\n      <td width='1' class='center'><a href='$file_url'$link_extra><img src='$image' alt=''></a></td>";
 				$tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
 
 				/*** comments ***/
@@ -172,6 +195,6 @@ function list_docs()
 		}
 		$tool_content .= "<tr><th colspan=$colspan><div align='right'>";
 		$tool_content .= "<input type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
-                $tool_content .= "</tr></table></form>\n";
+                $tool_content .= "</tr></table>$dir_html</form>\n";
         }
 }
