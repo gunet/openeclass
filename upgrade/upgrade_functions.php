@@ -1017,10 +1017,6 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
                    WHERE module.startAsset_id = asset.asset_id AND course_id = $course_id AND contentType = 'EXERCISE'");
     }
 
-    if ($return_mapping) {
-        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
-    }
-
     // move table `actions`, `actions_summary`, `login` in main DB
         db_query("INSERT INTO $mysqlMainDb.actions
                         (user_id, module_id, action_type_id, date_time, duration, course_id)
@@ -1065,6 +1061,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
                 // Do not drop database yet so we can run upgrade many times
                 //db_query("DROP DATABASE $code");
         }
+    
+    // NOTE: no code must occur after this statement or else course upgrade will be broken
+    if ($return_mapping) {
+        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
+    }
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
