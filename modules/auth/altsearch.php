@@ -50,6 +50,17 @@ if (!$user_registration) {
         draw($tool_content, 0);
         exit;
 }
+if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 2) and !$alt_auth_stud_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
+
+if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 1) and !$alt_auth_prof_reg) {
+	$tool_content .= "<div class='caution'>$langForbidden</div>";
+	draw($tool_content,0);
+	exit;
+}
 
 if (isset($_POST['auth'])) {
         $auth = intval($_POST['auth']);
@@ -58,23 +69,13 @@ if (isset($_POST['auth'])) {
         $auth = isset($_SESSION['u_tmp']) ? $_SESSION['u_tmp'] : 0;
 }
 
-if (isset($_SESSION['u_prof'])) {
-        $prof = intval($_SESSION['u_prof']);
+if (isset($_SESSION['user_app']) and $_SESSION['user_app'] == 1) {
+        $prof = TRUE;
+} else {
+        $prof = FALSE;
 }
-
-if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
-        $tool_content .= "<div class='caution'>$langForbidden</div>";
-        draw($tool_content, 0);
-        exit;
-}
-
-if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
-        $tool_content .= "<div class='caution'>$langForbidden</div>";
-        draw($tool_content, 0);
-        exit;
-}
-
 $phone_required = $prof;
+
 if (!$prof and $alt_auth_stud_reg == 2) {
         $autoregister = TRUE;
 } else {
@@ -90,7 +91,6 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 register_posted_variables(array('uname' => true, 'passwd' => true,
     'is_submit' => true, 'submit' => true));
-
 $lastpage = 'altnewuser.php?' . ($prof ? 'p=1&amp;' : '') .
         "auth=$auth&amp;uname=" . urlencode($uname);
 $navigation[] = array('url' => $lastpage, 'name' => $langConfirmUser);
@@ -212,13 +212,13 @@ if ($is_valid) {
         }
 
         $tool_content .= $init_auth ? ("<p class='success'>$langTheUser $ldapfound.</p>") : '';
-        if (!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1) {
+        if (@(!empty($_SESSION['was_validated']['uname_exists']) and $_POST['p'] != 1)) {
                 $tool_content .= "<p class='caution'>$langUserFree<br />
                                 <br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
                 draw($tool_content, 0, null, $head_content);
                 exit();
-        }                
-        if (!$ok) {
+        }
+        if (!$ok) {                
                 user_info_form();
                 draw($tool_content, 0, null, $head_content);
                 exit();
@@ -237,14 +237,14 @@ if ($is_valid) {
         } elseif (isset($_SESSION['uname_exists'])) {
                 unset($_SESSION['uname_exists']);
         }
-
-        // user already applied for account
-        if (user_app_exists(autounquote($uname))) {
-                $_SESSION['uname_app_exists'] = 1;
-        } elseif (isset($_SESSION['uname_app_exists'])) {
-                unset($_SESSION['uname_app_exists']);
+        if (isset($_SESSION['user_app'])) {                
+                // user already applied for account
+                if (user_app_exists(autounquote($uname))) {
+                        $_SESSION['uname_app_exists'] = 1;
+                } elseif (isset($_SESSION['uname_app_exists'])) {
+                        unset($_SESSION['uname_app_exists']);
+                }
         }
-
         if ($autoregister and empty($_SESSION['uname_exists']) and empty($_SESSION['uname_app_exists'])) {
                 if (get_config('email_verification_required') && !empty($email)) {
                         $verified_mail = 0;
@@ -329,7 +329,7 @@ if ($is_valid) {
                                 "!<br />$langMailVerificationSuccess: <strong>$email</strong></div>
                                                 <p>$langMailVerificationSuccess4.<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
                 }
-        } elseif (empty($_SESSION['uname_exists']) and empty($_SESSION['uname_app_exists'])) {
+        } elseif (empty($_SESSION['uname_app_exists'])) {
                 $email_verification_required = get_config('email_verification_required');
                 if (!$email_verification_required) {
                         $verified_mail = 2;
@@ -362,7 +362,7 @@ if ($is_valid) {
                          verified_mail = $verified_mail,
                          date_open = NOW(),
                          comment = " . autoquote($usercomment) . ",
-                         lang = '$lang',
+                         lang = '$language',
                          ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')", $mysqlMainDb);
 
                 $request_id = mysql_insert_id();
@@ -403,8 +403,7 @@ if ($is_valid) {
                                         class='mainpage'>$langHere</a> $langBackPage</p>";
                 }
         } elseif (!empty($_SESSION['uname_app_exists'])) {
-                $tool_content .= "<p class='caution'>$langUserFree3<br /><br />$click <a href='$urlServer'
-				                  class='mainpage'>$langHere</a> $langBackPage</p>";
+                $tool_content .= "<p class='caution'>$langUserFree3<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
         }
 }
 draw($tool_content, 0);
@@ -527,7 +526,7 @@ function user_info_form() {
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
-        $tool_content .= "</td>
+        $tool_content .= "&nbsp;&nbsp;(*)</td>
            </tr>
            <tr>
              <th class='left'>$langLanguage</th>

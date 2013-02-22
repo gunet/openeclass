@@ -72,17 +72,15 @@ if (isset($_GET['p'])) {
         } elseif ($_GET['p'] == 2) {
                 $_SESSION['user_app'] = 2;
         }        	
-} else {
-	$_SESSION['user_app'] = 0;
 }
 
-if (!$_SESSION['user_app'] and !$alt_auth_stud_reg) {
+if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 2) and !$alt_auth_stud_reg) {
 	$tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content,0);
 	exit;
 }
 
-if ($_SESSION['user_app'] and !$alt_auth_prof_reg) {
+if ((isset($_SESSION['user_app']) and $_SESSION['user_app'] == 1) and !$alt_auth_prof_reg) {
 	$tool_content .= "<div class='caution'>$langForbidden</div>";
 	draw($tool_content,0);
 	exit;
