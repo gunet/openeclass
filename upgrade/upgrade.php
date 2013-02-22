@@ -581,6 +581,17 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `ts` DATETIME NOT NULL,
                         `ip` VARCHAR(39) NOT NULL DEFAULT '',
                         PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
+                
+                db_query("CREATE TABLE IF NOT EXISTS `old_log` (
+                        `id` INT(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` INT(11) NOT NULL DEFAULT 0,
+                        `course_id` INT(11) NOT NULL DEFAULT 0,
+                        `module_id` INT(11) NOT NULL default 0,
+                        `details` TEXT NOT NULL,
+                        `action_type` INT(11) NOT NULL DEFAULT 0,
+                        `ts` DATETIME NOT NULL,
+                        `ip` VARCHAR(39) NOT NULL DEFAULT '',
+                        PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
 
 		// add index on `loginout`.`id_user` for performace
 		db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");

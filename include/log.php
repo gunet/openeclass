@@ -193,7 +193,39 @@ class Log {
                 }
                 return;
         }
-
+        
+        /**
+         * @brief move logs from table `log` to table `old_log`
+         * @return none
+         */
+        public function rotate() {
+                
+                $date = get_config('log_rotate_before');
+                // move records in table `old log`
+                $sql = db_query("INSERT INTO old_log (user_id, course_id, module_id, details, action_type, ts, ip)
+                                SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
+                                        WHERE ts < '$date'");
+                // delete previous records from `log`
+                if ($sql) {
+                        db_query("DELETE FROM log WHERE ts < '$date'");
+                }                
+                return;                               
+        }
+        
+        /**
+         * @brief purge logs from table `old_logs`
+         * @return none
+         */
+        public function purge() {
+                
+                $date = get_config('log_purge_before');
+                
+                $sql = db_query("DELETE FROM old_log WHERE ts <'$date'");
+                
+                return;
+        }
+        
+        
         /**
          * 
          * @global type $langUnknownModule

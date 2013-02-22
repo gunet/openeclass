@@ -91,6 +91,17 @@ db_query("CREATE TABLE IF NOT EXISTS `log` (
   `ip` varchar(39) NOT NULL default '0',
   PRIMARY KEY  (`id`)) $charset_spec");
 
+db_query("CREATE TABLE IF NOT EXISTS `old_log` (
+  `id` int(11) NOT NULL auto_increment,
+  `user_id` int(11) NOT NULL default '0',
+  `course_id` int(11) NOT NULL default '0',
+  `module_id` int(11) NOT NULL default '0',
+  `details` text NOT NULL,
+  `action_type` int(11) NOT NULL default '0',
+  `ts` datetime NOT NULL,
+  `ip` varchar(39) NOT NULL default '0',
+  PRIMARY KEY  (`id`)) $charset_spec");
+
 #
 # table `announcement`
 #
