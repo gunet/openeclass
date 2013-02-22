@@ -137,7 +137,6 @@ function insert_docs($id)
                                         AND subsystem = ".COMMON."
                                         AND id = " . intval($file_id)));
                         if ($file) {
-                                $title = (empty($file['title']))? $file['filename']: $file['title'];
                                 $file_date = date("Y\-m\-d G\:i\:s");
                                 $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
                                 db_query("INSERT INTO document SET
@@ -148,7 +147,7 @@ function insert_docs($id)
                                                 filename = " . quote($file['filename']) . ",
                                                 visible = 1,
                                                 comment = " . quote($file['comment']) . ",
-                                                title =	'$title',
+                                                title =	" . quote($file['title']) . ",
                                                 date = '$file_date',
                                                 date_modified =	'$file_date',
                                                 format = ".quote($file['format'])."");
