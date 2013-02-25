@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,15 +18,18 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/** @file index.php
+ *  @brief display form to contact with course prof if course is closed
+ */
 
 if (isset($_REQUEST['from_reg'])) {
 	$from_reg = $_REQUEST['from_reg'];
 	$course_id = $_REQUEST['course_id'];
 }
 
-if (isset($from_reg)) {
+if (isset($from_reg)) {        
 	$require_login = TRUE;
-} else {
+} else {        
 	$require_current_course = TRUE;
 	$require_help = TRUE;
 	$helpTopic = 'Contact';
@@ -40,12 +43,11 @@ if (isset($from_reg)) {
 }
 $nameTools = $langContactProf;
 
-$userdata = mysql_fetch_array(db_query("SELECT nom, prenom, email FROM user WHERE user_id=$uid", $mysqlMainDb));
+$userdata = mysql_fetch_array(db_query("SELECT nom, prenom, email FROM user WHERE user_id=$uid"));
 
 if (empty($userdata['email'])) {
 	if ($uid) {
 		$tool_content .= sprintf('<p>'.$langEmailEmpty.'</p>', $urlServer.'modules/profile/profile.php');
-
 	} else {
 		$tool_content .= sprintf('<p>'.$langNonUserContact.'</p>', $urlServer);
 	}
@@ -70,7 +72,18 @@ if (isset($from_reg)) {
 }
 
 
-// display form
+
+/**
+ * @brief display form
+ * @global type $from_reg
+ * @global type $course_id
+ * @global type $langInfoAboutRegistration
+ * @global type $langContactMessage
+ * @global type $langIntroMessage
+ * @global type $langSendMessage
+ * @global type $course_code
+ * @return type
+ */
 function form()
 {
 	global $from_reg, $course_id, $langInfoAboutRegistration, $langContactMessage, $langIntroMessage, $langSendMessage, $course_code;
@@ -107,7 +120,18 @@ function form()
 return $ret;
 }
 
-// send email
+/**
+ * @brief send emails to course prof
+ * @global type $themeimg
+ * @global type $langSendingMessage
+ * @global type $langHeaderMessage
+ * @global type $langContactIntro
+ * @param type $course_id
+ * @param type $content
+ * @param type $from_name
+ * @param type $from_address
+ * @return type
+ */
 function email_profs($course_id, $content, $from_name, $from_address)
 {
         global $themeimg, $langSendingMessage, $langHeaderMessage, $langContactIntro;

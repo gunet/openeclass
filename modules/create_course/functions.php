@@ -18,7 +18,19 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+/**
+ * @brief create course
+ * @global type $mysqlMainDb
+ * @param type $fake_code
+ * @param type $lang
+ * @param type $title
+ * @param type $fac
+ * @param type $vis
+ * @param type $prof
+ * @param type $type
+ * @param type $password
+ * @return boolean
+ */
 function create_course($fake_code, $lang, $title, $fac, $vis, $prof, $type, $password = '')
 {
         global $mysqlMainDb;
@@ -53,7 +65,13 @@ function create_course($fake_code, $lang, $title, $fac, $vis, $prof, $type, $pas
 }
 
 
-// Create main course index.php
+
+/**
+ * @brief create main course index.php
+ * @global type $webDir
+ * @param type $code
+ * @return boolean
+ */
 function course_index($code)
 {
         global $webDir;
@@ -71,6 +89,12 @@ function course_index($code)
         return true;
 }
 
+/**
+ * @brief create course directories
+ * @global type $webDir
+ * @param type $code
+ * @return boolean
+ */
 function create_course_dirs($code)
 { 
         global $webDir;

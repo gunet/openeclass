@@ -40,10 +40,10 @@ $q = db_query("SELECT visible, password FROM course WHERE id = $cid");
 if ($q and mysql_num_rows($q)) {
         list($visible, $course_password) = mysql_fetch_row($q);
         if ($state == 'true') {
-                if ($visible == COURSE_OPEN or
-                    ($visible == COURSE_REGISTRATION and $password == $course_password)) {
+                if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
+                    $password == $course_password) {
                         db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
-                                         VALUES ($cid, $uid, 5, CURDATE())");
+                                         VALUES ($cid, $uid, ".USER_STUDENT.", CURDATE())");
                         Log::record($cid, MODULE_ID_USERS, LOG_INSERT,
                                    array('uid' => $uid, 'right' => 5));
 

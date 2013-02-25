@@ -141,7 +141,7 @@ if (!$deps_valid) {
     $nameTools = "";
     $tool_content .= "
                 <p class='caution'>$langCreateCourseNotAllowedNode</p>
-                <p class='eclass_button'><a href='create_course.php'>$langBack</a></p>";
+                <p class='eclass_button'><a href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
     draw($tool_content, 1, null, $head_content);
     exit();
 }
@@ -253,24 +253,24 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
                 <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
                 <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
                 <td>
-                $langPrivOpen<br />
-                <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
+                $langPrivOpen<br />                
                 </td>
                 </tr>
                 <tr class='smaller'>
-                <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
+                <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height='16' /> ".$m['legclosed']."</th>
                 <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
                 <td>$langPrivate</td>
                 </tr>
                 <tr class='smaller'>
-                <th valign='top'><img src=\"$themeimg/lock_inactive.png\" title=\"".$m['linactive']."\" width=\"16\" height=\"16\" /> ".$m['linactive']."</th>
-                <td valign='top'><input name=\"formvisible\" type=\"radio\" value='3' /></td>
+                <th valign='top'><img src='$themeimg/lock_inactive.png' title='".$m['linactive']."' width='16' height='16' /> ".$m['linactive']."</th>
+                <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
                 <td>$langCourseInactive</td>
                 </tr>
                 </table>
                 <br />
                 </td>
         </tr>
+        <div style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
         <tr>
                 <td class='sub_title1'>$langSubsystems</td>
         </tr>
@@ -461,9 +461,11 @@ $tool_content .= "</form>";
 
 draw($tool_content, 1, null, $head_content);
 
-// ---------------------------------------------
-// create entries in table `module`
-// ---------------------------------------------
+/**
+ * @brief create entries in table `module`
+ * @param type $cid
+ * @param type $sbsystems
+ */
 function create_modules($cid, $sbsystems) {
 
         db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_AGENDA.", ".$sbsystems[MODULE_ID_AGENDA].", $cid)");
@@ -485,9 +487,14 @@ function create_modules($cid, $sbsystems) {
         db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (".MODULE_ID_WIKI.", ".$sbsystems[MODULE_ID_WIKI].", $cid)");
 }
 
-// ----------------------------------------
-// create <td>....</td> for each module
-// ----------------------------------------
+/**
+ * @brief create <td>....</td> for each module
+ * @global type $themeimg
+ * @param type $m
+ * @param type $value
+ * @param type $selected
+ * @return type
+ */
 function create_td($m, $value, $selected) {
 
         global $themeimg;

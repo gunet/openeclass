@@ -391,7 +391,8 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
                              'course_info' => MODULE_ID_COURSEINFO,
                              'course_tools' => MODULE_ID_TOOLADMIN,
                              'units' => MODULE_ID_UNITS,
-                             'search' => MODULE_ID_SEARCH);
+                             'search' => MODULE_ID_SEARCH,
+                             'contact' => MODULE_ID_CONTACT);
 
 // the system admin adn power users has rights to all courses
 if ($is_admin or $is_power_user) {
@@ -470,8 +471,8 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
 	while ($moduleIDs = mysql_fetch_array($result)) {
 		array_push($publicModules, $moduleIDs["module_id"]);
 	}
-
-        if (!in_array($module_id, $publicModules)) {
+        
+        if (!in_array($module_id, $publicModules)) {                
 		$toolContent_ErrorExists = caution($langCheckPublicTools);
 		$errorMessagePath = "../../";
 	}

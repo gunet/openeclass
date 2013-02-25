@@ -188,25 +188,24 @@ if (isset($_POST['submit'])) {
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-	</fieldset>
-
+	</fieldset>        
 	<fieldset>
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>
+            <tr>		            
+		<th width='170'>$langOptPassword</th>
+                <td colspan='2'><input type='text' name='password' value='$password' id='password' /></td>
+	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
 		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
-		<th rowspan='2' valign='top'><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
+		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
 		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
 		<td class='smaller'>$langPrivOpen</td>
-	    </tr>
-	    <tr>
-		<td>&nbsp;</td>
-		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' id='password' />&nbsp;<span id='result'></span></td>
-	    </tr>
+	    </tr>	    
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
 		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>

@@ -1,14 +1,9 @@
 <?php
-/* \file main_lib.php
- * \brief General useful functions for eClass
- */
-
 /*
 * ========================================================================
 * Open eClass 3.0 - E-learning and Course Management System
 * ========================================================================
-
-Copyright(c) 2003-2012  Greek Universities Network - GUnet
+Copyright(c) 2003-2013  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
 Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -16,24 +11,14 @@ Yannis Exidaridis <jexi@noc.uoa.gr>
 Alexandros Diamantidis <adia@noc.uoa.gr>
 
 For a full list of contributors, see "credits.txt".
-
-This program is a free software under the terms of the GNU
-(General Public License) as published by the Free Software
-Foundation. See the GNU License for more details.
-The full license can be read in "license.txt".
-
-Contact address: GUnet Asynchronous Teleteaching Group,
-Network Operations Center, University of Athens,
-Panepistimiopolis Ilissia, 15784, Athens, Greece
-eMail: eclassadmin@gunet.gr
-/*
-
+ */
 
 /**
- * @file main.lib.php
- * @brief General useful functions for eClass
- * Standard header included by all eClass files
- * Defines standard functions and validates variables
+* @file main.lib.php
+* @brief General useful functions for eClass
+* @authors many...
+* Standard header included by all eClass files
+* Defines standard functions and validates variables
 */
 
 define('ECLASS_VERSION', '2.99');
@@ -96,6 +81,7 @@ define('MODULE_ID_TOOLADMIN', 25);
 define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
+define('MODULE_ID_CONTACT', 29);
 
 // exercise answer types
 define('UNIQUE_ANSWER',   1);

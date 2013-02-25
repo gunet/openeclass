@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
 			db_query("DELETE FROM course_user
-					WHERE statut <> 1 AND statut <> 10
+					WHERE statut <> ".USER_TEACHER." AND statut <> ".USER_GUEST."
 					AND user_id = $uid AND course_id = $cid");                        
                         // logging
                         Log::record($cid, MODULE_ID_USERS, LOG_DELETE,
@@ -72,21 +72,21 @@ if (isset($_POST['submit'])) {
 	$errorExists = false;
         foreach ($selectCourse as $key => $value) {
                 $cid = intval($value);
-                $course_info = db_query("SELECT public_code, password, visible FROM course WHERE id = $cid");
+                $course_info = db_query("SELECT public_code, password, visible FROM course WHERE id = $cid");                
                 if ($course_info) {
-                        $row = mysql_fetch_array($course_info);
-                        if ($row['visible'] == 1 and !empty($row['password']) and
-                            $row['password'] != autounquote($_POST['pass' . $cid])) {
+                        $row = mysql_fetch_array($course_info);                        
+                        if (($row['visible'] == COURSE_REGISTRATION or $row['visible'] == COURSE_OPEN) 
+                                and !empty($row['password']) and $row['password'] != autounquote($_POST['pass' . $cid])) {
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['public_code'];
                                 continue;
-                        }
+                        }                        
                         if (is_restricted($cid) and !in_array($cid, $selectCourse)) { // do not allow registration to restricted course
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['public_code'];
                         } else {
                                 db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
-                                                 VALUES ($cid, $uid, 5, CURDATE())");
+                                                VALUES ($cid, $uid, ".USER_STUDENT.", CURDATE())");
                         }
                 }
         }
@@ -179,6 +179,29 @@ function getdepnumcourses($fac) {
 	return $res[0];
 }
 
+/**
+ * @brief display courses list
+ * @global type $m
+ * @global array $icons
+ * @global type $langTutor
+ * @global type $langBegin
+ * @global type $langRegistration
+ * @global type $mysqlMainDb
+ * @global type $langRegistration
+ * @global type $langCourseCode
+ * @global type $langTeacher
+ * @global type $langType
+ * @global type $langFaculty
+ * @global type $langpres
+ * @global type $langposts
+ * @global type $langothers
+ * @global type $themeimg
+ * @global Hierarchy $tree
+ * @param type $fac_name
+ * @param type $facid
+ * @param type $uid
+ * @return string
+ */
 function expanded_faculte($fac_name, $facid, $uid) {
     global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
            $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
@@ -239,9 +262,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
 
         if ($k%2 == 0) {
-            $retString .= "\n    <tr class='even'>";
+            $retString .= "<tr class='even'>";
         } else {
-            $retString .= "\n    <tr class='odd'>";
+            $retString .= "<tr class='odd'>";
         }
 
         $retString .= "<td align='center'>";
@@ -251,7 +274,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]['statut'] != 1) { // display registered courses
                 // password needed
-                if (!empty($password) and $mycours['visible'] == 1) {
+                if (!empty($password)) {
                     $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='". q($password) ."' />";
                 } else {
                     $requirepassword = '';
@@ -264,7 +287,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
             }
         } else { // display unregistered courses
-            if (!empty($password) and $mycours['visible'] == 1) {
+            if (!empty($password) and ($mycours['visible'] == COURSE_REGISTRATION or $mycours['visible'] == COURSE_OPEN)) {
                 $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' />";
             } else {
                 $requirepassword = '';
@@ -293,7 +316,11 @@ function expanded_faculte($fac_name, $facid, $uid) {
     return $retString;
 }
 
-// check if a course is restricted
+/**
+ * @brief check if a course is restricted
+ * @param type $course_id
+ * @return boolean
+ */
 function is_restricted($course_id)
 {
 	$res = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = $course_id"));
