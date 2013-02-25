@@ -26,7 +26,7 @@ require 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 
 // set default storage engine
-db_query("SET storage_engine=MYISAM");
+db_query("SET storage_engine = InnoDB");
 
 include 'upgrade_functions.php';
 
