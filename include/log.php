@@ -200,16 +200,17 @@ class Log {
          */
         public function rotate() {
                 
-                $date = get_config('log_rotate_before');
+                $date = get_config('log_expire_interval');
                 // move records in table `log_archive`
                 $sql = db_query("INSERT INTO log_archive (user_id, course_id, module_id, details, action_type, ts, ip)
                                 SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
-                                        WHERE ts < '$date'");
+                                WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
+                                
                 // delete previous records from `log`
-                if ($sql) {
-                        db_query("DELETE FROM log WHERE ts < '$date'");
-                }                
-                return;                               
+                if ($sql) {                        
+                        db_query("DELETE FROM log WHERE date_sub(CURDATE(),interval $date month) > ts");
+                }
+                return;
         }
         
         /**
@@ -218,9 +219,8 @@ class Log {
          */
         public function purge() {
                 
-                $date = get_config('log_purge_before');
-                
-                $sql = db_query("DELETE FROM log_archive WHERE ts <'$date'");
+                $date = get_config('log_purge_interval');                
+                $sql = db_query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
                 
                 return;
         }

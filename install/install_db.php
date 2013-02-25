@@ -1035,6 +1035,8 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('login_fail_deny_interval', 5),
                 ('login_fail_forgive_interval', 24),
                 ('actions_expire_interval', 12),
+                ('log_expire_interval', 5),
+                ('log_purge_interval', 12),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module

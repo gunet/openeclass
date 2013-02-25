@@ -150,7 +150,9 @@ if (isset($_POST['submit']))  {
                         'login_fail_threshold' => true,
                         'login_fail_deny_interval' => true,
                         'login_fail_forgive_interval' => true,
-                        'actions_expire_interval' => true);
+                        'actions_expire_interval' => true,
+                        'log_expire_interval' => true,
+                        'log_purge_interval' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -441,6 +443,12 @@ else {
                 </tr>
                 <tr>
                       <td><input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions />&nbsp;$lang_disable_log_system_actions</td>
+                </tr>
+                <tr>
+                        <td>$langLogExpireInterval&nbsp;<input type='text' name='log_expire_interval' value='".get_config('log_expire_interval')."' size='5' />&nbsp;($langMonthsUnit)</td>
+                </tr>
+                <tr>
+                        <td>$langLogPurgeInterval&nbsp;<input type='text' name='log_purge_interval' value='".get_config('log_purge_interval')."' size='5' />&nbsp;($langMonthsUnit)</td>
                 </tr>
                 </table>
                 </fieldset>";
