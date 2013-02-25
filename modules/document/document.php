@@ -124,8 +124,8 @@ if (isset($_GET['download'])) {
                 if (!$q or mysql_num_rows($q) != 1) {
                         not_found($downloadDir);
                 }
-                list($real_filename, $format, $visibility) = mysql_fetch_row($q);
-                if ($visibility != 'v') {
+                list($real_filename, $format, $visibility) = mysql_fetch_row($q);                
+                if (($visibility != 'v') and (isset($statut) and $statut != 1)) {
                         not_found($downloadDir);
                 }
         }
