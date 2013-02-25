@@ -582,7 +582,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `ip` VARCHAR(39) NOT NULL DEFAULT '',
                         PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
                 
-                db_query("CREATE TABLE IF NOT EXISTS `old_log` (
+                db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT,
                         `user_id` INT(11) NOT NULL DEFAULT 0,
                         `course_id` INT(11) NOT NULL DEFAULT 0,

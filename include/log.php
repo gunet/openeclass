@@ -195,14 +195,14 @@ class Log {
         }
         
         /**
-         * @brief move logs from table `log` to table `old_log`
+         * @brief move logs from table `log` to table `log_archive`
          * @return none
          */
         public function rotate() {
                 
                 $date = get_config('log_rotate_before');
-                // move records in table `old log`
-                $sql = db_query("INSERT INTO old_log (user_id, course_id, module_id, details, action_type, ts, ip)
+                // move records in table `log_archive`
+                $sql = db_query("INSERT INTO log_archive (user_id, course_id, module_id, details, action_type, ts, ip)
                                 SELECT user_id, course_id, module_id, details, action_type, ts, ip FROM log
                                         WHERE ts < '$date'");
                 // delete previous records from `log`
@@ -213,14 +213,14 @@ class Log {
         }
         
         /**
-         * @brief purge logs from table `old_logs`
+         * @brief purge logs from table `logs_archive`
          * @return none
          */
         public function purge() {
                 
                 $date = get_config('log_purge_before');
                 
-                $sql = db_query("DELETE FROM old_log WHERE ts <'$date'");
+                $sql = db_query("DELETE FROM log_archive WHERE ts <'$date'");
                 
                 return;
         }
