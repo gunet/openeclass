@@ -134,11 +134,8 @@ class CourseIndexer {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        // get all courses from db
+        // get/index all courses from db
         $res = db_query("SELECT * FROM course");
-        if (mysql_num_rows($res) <= 0)
-            return;
-        
         while ($course = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($course));
         
