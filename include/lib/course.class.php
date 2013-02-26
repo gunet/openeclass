@@ -48,16 +48,17 @@ class Course {
      * @param int   $id          - Id for a given course
      * @param array $departments - Array containing the node ids that the given course should belong to
      */
-    public function refresh($id, $departments)
-    {
-        if ($departments != null)
-        {
+    public function refresh($id, $departments) {
+        if ($departments != null) {
             db_query("DELETE FROM $this->departmenttable WHERE course = '$id'");
             foreach (array_unique($departments) as $key => $department)
-            {
                 db_query("INSERT INTO $this->departmenttable (course, department) VALUES ($id, $department)");
-            }
         }
+        // refresh index
+        global $webDir;
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        $idx->storeCourse($id);
     }
 
     /**

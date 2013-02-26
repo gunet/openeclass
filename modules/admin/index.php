@@ -150,4 +150,46 @@ $tool_content .= "
   </fieldset>
   <br />";
 
+require_once 'modules/search/indexer.class.php';
+$idx = new Indexer();
+
+if (isset($_GET['optimize']))
+    $idx->finalize();
+
+//if (isset($_GET['reindex']))
+//    $idx->reindex(); // TODO: implement reindexing
+
+$numDocs = $idx->getIndex()->numDocs();
+$isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
+
+$tool_content .= "
+  <fieldset>
+  <legend>$langIndexInfo</legend>
+    <table width='100%' class='tbl'>
+    <tr>
+      <th width='260'>$langIndexNumDocs:</th>
+      <td>" . $numDocs . "</td>
+    </tr>
+    <tr>
+      <th>$langIndexIsOptimized</th>
+      <td>" . $isOpt . "</td>
+    </tr>";
+
+if ($idx->getIndex()->hasDeletions()) {
+    $tool_content .= "
+    <tr>
+      <th></th>
+      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></td>
+    </tr>";
+}
+
+$tool_content .= "
+    <tr>
+      <th></th>
+      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
+    </tr>
+    </table>
+  </fieldset>
+  <br />";
+
 draw($tool_content,3);

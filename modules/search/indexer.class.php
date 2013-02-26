@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,8 +18,21 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-class Indexer {
+set_include_path(implode(PATH_SEPARATOR, array(
+    $webDir . '/include',
+    get_include_path(),
+)));
+require_once 'Zend/Search/Exception.php';
+require_once 'Zend/Search/Lucene.php';
+require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
+require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
+require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
 
+class Indexer {
+    
+    private $__index = null;
+    private static $_resultSetLimit = 100;
+    
     private static $lookup = array(
         // Greek doubles
         'αι' => 'e', 'Αι' => 'E', 'ΑΙ' => 'E', 'αί' => 'e', 'Αί' => 'E', 'ει' => 'i', 'Ει' => 'i', 'ΕΙ' => 'i', 'εί' => 'i', 'Εί' => 'i',
@@ -46,15 +58,110 @@ class Indexer {
         'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u',
         'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'ƒ' => 'f'
     );
+    
+    private static $specials = array(
+        '?', '*', '[', ']', '{', '}', '~', '"', '\'', '+', '-', 
+        '&&', '||', '!', '(', ')', '^', ':', '\\', 'not', 'and', 'or'
+    );
+    
+    /**
+     * Convert an input string to its phonetic representation.
+     * 
+     * @param  string $text
+     * @param  int    $ignoreCase
+     * @return string
+     */
+    public static function phonetics($text, $ignoreCase = 1) {
+        $result = strtr($text, self::$lookup);
+        if ($ignoreCase) {
+            $result = strtolower($result);
+        }
+        return $result;
+    }
+    
+    /**
+     * Clear/filter Lucene operators.
+     * 
+     * @param  string $inputStr
+     * @return string
+     */
+    public static function filterQuery($inputStr) {
+        return str_replace(self::$specials, '', self::phonetics($inputStr));
+    }
+    
+    /**
+     * Indexer Constructor.
+     * 
+     * @global type $webDir
+     */
+    public function __construct() {
+        global $webDir;
+        
+        $index_path = $webDir . '/courses/idx';
+        // Give read-writing permissions only for current user and group
+        Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0664);
+        // Utilize UTF-8 compatible text analyzer
+        Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
 
-    public function storeToIndex($text) {
-        // ...
+        if (file_exists($index_path))
+            $this->__index = Zend_Search_Lucene::open($index_path); // Open index
+        else
+            $this->__index = Zend_Search_Lucene::create($index_path); // Create index
+        
+        $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version
+        Zend_Search_Lucene::setResultSetLimit(self::$_resultSetLimit);    // Set Result Set Limit
+    }
+    
+    /**
+     * Return the index object.
+     * 
+     * @return Zend_Search_Lucene_Interface
+     */
+    public function getIndex() {
+        return $this->__index;
+    }
+    
+    /**
+     * Optimize and Commit changes to the index.
+     */
+    public function finalize() {
+        // Finish
+        $this->__index->optimize();
+        $this->__index->commit();
+    }
+    
+    /**
+     * Filtered Search in the index.
+     * 
+     * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
+     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects or null if none found
+     */
+    public function search($inputStr) {
+        $queryStr = self::filterQuery($inputStr);
+        return $this->searchRaw($queryStr);
+    }
+    
+    /**
+     * Raw Search in the index.
+     * 
+     * @param  string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
+     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects or null if none found
+     */
+    public function searchRaw($inputStr) {
+        try {
+            $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
+            return $this->__index->find($query);
+        } catch (Zend_Search_Exception $e) {
+            return null;
+        }
+        return null;
     }
 
-    public function search($text) {
-        // ...
-    }
-
+    /**
+     * Unit test for phonetic conversion.
+     * 
+     * @return int - returns 0 if test failed or 1 if test succeeds, should always return 1
+     */
     public function test() {
         $phtext = "αβγδεζηθικλμνξοπρσςτυφχψω άέίύήόώ ϊΐϋΰ ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ ΆΈΊΎΉΌΏ ΪΫ Αι έννοιαι των Αιρέσεων του Αββαείου";
         if (self::phonetics($phtext, 0) != "abgdeziqiklmnjoprsstifxco aeiiioo iiii ABGDEZIQIKLMNJOPRSTIFXCO AEIIIOO II E enie ton Ereseon tu Abaiu")
@@ -62,18 +169,5 @@ class Indexer {
 
         return 1;
     }
-
-    private static function phonetics($text, $ignoreCase = 1) {
-        $result = strtr($text, self::$lookup);
-        if ($ignoreCase) {
-            $result = strtolower($result);
-        }
-        return $result;
-    }
-
 }
 
-$idx = new Indexer();
-
-echo $idx->test();
-?>

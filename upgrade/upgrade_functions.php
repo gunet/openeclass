@@ -1062,6 +1062,13 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
                 //db_query("DROP DATABASE $code");
         }
     
+    // index all courses
+    mysql_select_db($mysqlMainDb);
+    global $webDir;
+    require_once 'modules/search/courseindexer.class.php';
+    $idx = new CourseIndexer();
+    $idx->storeCourse($course_id);
+    
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);

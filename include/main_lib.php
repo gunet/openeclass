@@ -1545,6 +1545,10 @@ function delete_course($cid)
         }
 	rename("$webDir/courses/$course_code", "$garbage/$course_code");
         removeDir("$webDir/video/$course_code");
+        // refresh index
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        $idx->removeCourse($cid, false);
 }
 
 function csv_escape($string, $force = false)
