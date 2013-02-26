@@ -117,7 +117,7 @@ if ($is_editor) {
         /* modify */
         if (isset($_GET['modify'])) {
                 $modify = intval($_GET['modify']);
-                $result = db_query("SELECT * FROM announcement WHERE id='$modify'", $mysqlMainDb);
+                $result = db_query("SELECT * FROM announcement WHERE id='$modify'");
                 $myrow = mysql_fetch_array($result);
                 if ($myrow) {
                         $AnnouncementToModify = $myrow['id'];
@@ -322,7 +322,7 @@ while ($myrow = mysql_fetch_array($result)) {
         }
         $tool_content .= "</b><div class='smaller'>" . nice_format($myrow["date"]). "</div>";
         if (isset($_GET['an_id'])) {
-                $navigation[] = array("url" => "announcements.php?course=$course_code", "name" => $langAnnouncements);
+                $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
                 $nameTools = q($myrow['title']);
                 $tool_content .= $content;
         } else {
@@ -361,7 +361,7 @@ while ($myrow = mysql_fetch_array($result)) {
         $iterator ++;
         $k++;
 } // end of while
-$tool_content .= "</table>\n";
+$tool_content .= "</table>";
 
 if ($announcementNumber < 1) {
         $no_content = true;
@@ -371,7 +371,9 @@ if ($announcementNumber < 1) {
         if (isset($_GET['modify'])) {
                 $no_content = false;
         }
-        if ($no_content) $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
+        if ($no_content) {
+                $tool_content .= "<p class='alert1'>$langNoAnnounce</p>\n";
+        }
 }
 
 add_units_navigation(TRUE);

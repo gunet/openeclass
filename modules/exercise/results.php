@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,12 +24,13 @@ $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
+require_once 'exercise.class.php';
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 
 require_once '../../include/baseTheme.php';
-require_once 'exercise.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -63,7 +64,7 @@ $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
 $tool_content .= "
-    <table class=\"tbl_border\" width=\"100%\">
+    <table class='tbl_border' width='100%'>
     <tr>
     <th>". q($exerciseTitle) ."</th>
     </tr>
@@ -73,7 +74,6 @@ $tool_content .= "
     </table>
     <br/>";
 
-mysql_select_db($mysqlMainDb);
 $sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $course_id)";
 $result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
@@ -97,12 +97,12 @@ while($row=mysql_fetch_array($result)) {
 			$tool_content .= "<b>$langUser:</b> $theStudent[nom] $theStudent[prenom]  <div class='smaller'>($langAm: $studentam)</div>";
 		}
 		$tool_content .= "</td>
-    </tr>
-    <tr>
-      <th width='150' class='center'>".$langExerciseStart."</td>
-      <th width='150' class='center'>".$langExerciseDuration."</td>
-      <th width='150' class='center'>".$langYourTotalScore2."</td>
-    </tr>";
+                </tr>
+                <tr>
+                  <th width='150' class='center'>".$langExerciseStart."</td>
+                  <th width='150' class='center'>".$langExerciseDuration."</td>
+                  <th width='150' class='center'>".$langYourTotalScore2."</td>
+                </tr>";
 
         $k=0;
         while($row2=mysql_fetch_array($result2)) {

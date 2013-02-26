@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,8 +33,7 @@ if ($is_editor) {
 	$crlf="\r\n";
 	$output =  "$bom$langSurname\t$langName\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
 	$output .=  "$crlf";
-
-	mysql_select_db($mysqlMainDb);
+	
 	$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ".intval($_GET['exerciseId']);
 	$result = db_query($sql);
 
