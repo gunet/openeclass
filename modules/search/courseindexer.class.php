@@ -43,32 +43,14 @@ class CourseIndexer {
     }
     
     /**
-     * Fetch a Course from DB.
+     * Construct a Zend_Search_Lucene_Document object out of a course db row.
      * 
-     * @param  int $courseId
-     * @return array - the mysql fetched row
+     * @global string $urlServer
+     * @param  array  $course
+     * @return Zend_Search_Lucene_Document
      */
-    private function fetchCourse($courseId) {
-        $res = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
-        return mysql_fetch_assoc($res);
-    }
-
-    /**
-     * Store a Course in the Index.
-     * 
-     * @global string  $urlServer
-     * @param  int     $courseId
-     * @param  boolean $finalize
-     */
-    public function storeCourse($courseId, $finalize = true) {
+    private static function makeDoc($course) {
         global $urlServer;
-        
-        $course = $this->fetchCourse($courseId);
-        if (!$course)
-            return;
-        
-        // delete existing course from index
-        $this->removeCourse($courseId, false, false);
         
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id']));
@@ -82,8 +64,39 @@ class CourseIndexer {
         $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code'])));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created']));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code']));
+        
+        return $doc;
+    }
+    
+    /**
+     * Fetch a Course from DB.
+     * 
+     * @param  int $courseId
+     * @return array - the mysql fetched row
+     */
+    private function fetchCourse($courseId) {
+        $res = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
+        return mysql_fetch_assoc($res);
+    }
 
-        $this->__index->addDocument($doc);
+    /**
+     * Store a Course in the Index.
+     * 
+     * @param  int     $courseId
+     * @param  boolean $finalize
+     */
+    public function storeCourse($courseId, $finalize = true) {
+        $course = $this->fetchCourse($courseId);
+        if (!$course)
+            return;
+        
+        // delete existing course from index
+        $this->removeCourse($courseId, false, false);
+
+        // add the course back to the index
+        $this->__index->addDocument(self::makeDoc($course));
+        
+        // commit/optimize unless not wanted
         if ($finalize)
             $this->__indexer->finalize();
     }
@@ -109,6 +122,27 @@ class CourseIndexer {
         
         if ($finalize)
             $this->__indexer->finalize();
+    }
+    
+    /**
+     * Reindex all courses.
+     */
+    public function reindex() {
+        // remove all courses from index
+        $term = new Zend_Search_Lucene_Index_Term('course', 'doctype');
+        $docIds  = $this->__index->termDocs($term);
+        foreach ($docIds as $id)
+            $this->__index->delete($id);
+        
+        // get all courses from db
+        $res = db_query("SELECT * FROM course");
+        if (mysql_num_rows($res) <= 0)
+            return;
+        
+        while ($course = mysql_fetch_assoc($res))
+            $this->__index->addDocument(self::makeDoc($course));
+        
+        $this->__indexer->finalize();
     }
     
     /**
