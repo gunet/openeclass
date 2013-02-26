@@ -128,13 +128,11 @@ if ($is_editor) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
         $newContent = autoquote($_POST['newContent']);
-        $preview = autoquote(standard_text_escape(ellipsize($newContent, PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$id'> <span class='smaller'>[$langMore]</span></a></strong>")));
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             db_query("UPDATE annonces SET contenu = $newContent,
-                             title = $antitle, temps = NOW(),
-                             preview = $preview
-			WHERE id = $id", $mysqlMainDb);
+                             title = $antitle, temps = NOW()
+			WHERE id = $id AND cours_id = $cours_id");
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
             $result = db_query("SELECT MAX(ordre) FROM annonces
@@ -145,9 +143,11 @@ if ($is_editor) {
             db_query("INSERT INTO annonces SET contenu = $newContent,
                                   title = $antitle, temps = NOW(),
                                   cours_id = $cours_id, ordre = $order,
-                                  preview = $preview,
                                   visibility = 'v'");
+            $id = mysql_insert_id();
         }
+        $preview = autoquote(standard_text_escape(ellipsize($_POST['newContent'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$id'> <span class='smaller'>[$langMore]</span></a></strong>")));
+        db_query("UPDATE annonces SET preview = $preview WHERE id = $id AND cours_id = $cours_id");
 
         // send email
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {
@@ -296,7 +296,6 @@ if ($is_editor) {
 	}
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
-                $content = standard_text_escape($myrow['contenu']);
                 $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
 		if ($is_editor) {
 		    if ($myrow['visibility'] == 'i') {
@@ -325,12 +324,12 @@ if ($is_editor) {
 		if (isset($_GET['an_id'])) {
 			$navigation[] = array('url' => "announcements.php?course=$code_cours", 'name' => $langAnnouncements);
 			$nameTools = q($myrow['title']);
-			$tool_content .= $content;
+			$tool_content .= standard_text_escape($myrow['contenu']);
 		} else {
                         if (isset($myrow['preview']) and !empty($myrow['preview'])) {
                                 $tool_content .= $myrow['preview'];
                         } else {
-                                $preview = standard_text_escape(ellipsize($content, PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
+                                $preview = standard_text_escape(ellipsize($myrow['contenu'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
                                 db_query('UPDATE annonces SET preview = ' . autoquote($preview) . '
                                                  WHERE id = ' . $myrow['id']);
                                 $tool_content .= $preview;
