@@ -155,7 +155,7 @@ class Indexer {
      * Filtered Search in the index.
      * 
      * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
-     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects or null if none found
+     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function search($inputStr) {
         $queryStr = self::filterQuery($inputStr);
@@ -166,16 +166,16 @@ class Indexer {
      * Raw Search in the index.
      * 
      * @param  string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
-     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects or null if none found
+     * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
     public function searchRaw($inputStr) {
         try {
             $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
             return $this->__index->find($query);
         } catch (Zend_Search_Exception $e) {
-            return null;
+            return array();
         }
-        return null;
+        return array();
     }
 
     /**
