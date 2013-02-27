@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -29,10 +30,9 @@ require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitiv
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
 
 class Indexer {
-    
+
     private $__index = null;
     private static $_resultSetLimit = 100;
-    
     private static $lookup = array(
         // Greek doubles
         'αι' => 'e', 'Αι' => 'E', 'ΑΙ' => 'E', 'αί' => 'e', 'Αί' => 'E', 'ει' => 'i', 'Ει' => 'i', 'ΕΙ' => 'i', 'εί' => 'i', 'Εί' => 'i',
@@ -49,6 +49,8 @@ class Indexer {
         'ο' => 'o', 'ό' => 'o', 'Ο' => 'O', 'Ό' => 'O', 'π' => 'p', 'Π' => 'P', 'ρ' => 'r', 'Ρ' => 'R', 'σ' => 's', 'ς' => 's', 'Σ' => 'S',
         'τ' => 't', 'Τ' => 'T', 'υ' => 'i', 'ύ' => 'i', 'ϋ' => 'i', 'ΰ' => 'i', 'Υ' => 'I', 'Ύ' => 'I', 'Ϋ' => 'I',
         'φ' => 'f', 'Φ' => 'F', 'χ' => 'x', 'Χ' => 'X', 'ψ' => 'c', 'Ψ' => 'C', 'ω' => 'o', 'ώ' => 'o', 'Ω' => 'O', 'Ώ' => 'O',
+        // Special characters
+        'µ' => 'm', 'µµ' => 'm',
         // Latin
         'Š' => 'S', 'š' => 's', 'Ð' => 'Dj', 'Ž' => 'Z', 'ž' => 'z', 'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I',
@@ -58,12 +60,11 @@ class Indexer {
         'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u',
         'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'ƒ' => 'f'
     );
-    
     private static $specials = array(
-        '?', '*', '[', ']', '{', '}', '~', '"', '\'', '+', '-', 
+        '?', '*', '[', ']', '{', '}', '~', '"', '\'', '+', '-',
         '&&', '||', '!', '(', ')', '^', ':', '\\', 'not', 'and', 'or'
     );
-    
+
     /**
      * Convert an input string to its phonetic representation.
      * 
@@ -78,7 +79,7 @@ class Indexer {
         }
         return $result;
     }
-    
+
     /**
      * Clear/filter Lucene operators.
      * 
@@ -88,7 +89,7 @@ class Indexer {
     public static function filterQuery($inputStr) {
         return str_replace(self::$specials, '', self::phonetics($inputStr));
     }
-    
+
     /**
      * Indexer Constructor.
      * 
@@ -96,7 +97,7 @@ class Indexer {
      */
     public function __construct() {
         global $webDir;
-        
+
         $index_path = $webDir . '/courses/idx';
         // Give read-writing permissions only for current user and group
         Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0664);
@@ -107,11 +108,11 @@ class Indexer {
             $this->__index = Zend_Search_Lucene::open($index_path); // Open index
         else
             $this->__index = Zend_Search_Lucene::create($index_path); // Create index
-        
+
         $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version
         Zend_Search_Lucene::setResultSetLimit(self::$_resultSetLimit);    // Set Result Set Limit
     }
-    
+
     /**
      * Return the index object.
      * 
@@ -120,7 +121,7 @@ class Indexer {
     public function getIndex() {
         return $this->__index;
     }
-    
+
     /**
      * Optimize and Commit changes to the index.
      */
@@ -129,7 +130,7 @@ class Indexer {
         $this->__index->optimize();
         $this->__index->commit();
     }
-    
+
     /**
      * Filtered Search in the index.
      * 
@@ -140,7 +141,7 @@ class Indexer {
         $queryStr = self::filterQuery($inputStr);
         return $this->searchRaw($queryStr);
     }
-    
+
     /**
      * Raw Search in the index.
      * 
@@ -169,5 +170,6 @@ class Indexer {
 
         return 1;
     }
+
 }
 
