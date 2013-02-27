@@ -127,7 +127,7 @@ if ($is_editor) {
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
-        $newContent = autoquote($_POST['newContent']);
+        $newContent = autoquote(purify($_POST['newContent']));
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             db_query("UPDATE annonces SET contenu = $newContent,
@@ -146,7 +146,7 @@ if ($is_editor) {
                                   visibility = 'v'");
             $id = mysql_insert_id();
         }
-        $preview = autoquote(standard_text_escape(ellipsize($_POST['newContent'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$id'> <span class='smaller'>[$langMore]</span></a></strong>")));
+        $preview = autoquote(purify(standard_text_escape(ellipsize($_POST['newContent'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$id'> <span class='smaller'>[$langMore]</span></a></strong>"))));
         db_query("UPDATE annonces SET preview = $preview WHERE id = $id AND cours_id = $cours_id");
 
         // send email

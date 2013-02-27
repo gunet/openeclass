@@ -1766,7 +1766,7 @@ function handle_unit_info_edit()
 {
         global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $cours_id;
         $title = autoquote($_REQUEST['unittitle']);
-        $descr = autoquote($_REQUEST['unitdescr']);
+        $descr = autoquote(purify($_REQUEST['unitdescr']));
         if (isset($_REQUEST['unit_id'])) { // update course unit
                 $unit_id = intval($_REQUEST['unit_id']);
                 $result = db_query("UPDATE course_units SET
@@ -1791,10 +1791,8 @@ function math_unescape($matches)
 // Standard function to prepare some HTML text, possibly with math escapes, for display
 function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
 {
-        global $purifier;
-
         $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $text);
-        $html = $purifier->purify(mathfilter($text, 12, $mathimg));
+        $html = mathfilter($text, 12, $mathimg);
 
         if (!isset($_SESSION['glossary_terms_regexp'])) {
                 return $html;
@@ -1839,6 +1837,7 @@ function dom_save_html($dom, $node)
 function purify($text)
 {
         global $purifier;
+
         return $purifier->purify($text);
 }
 

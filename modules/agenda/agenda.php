@@ -118,7 +118,7 @@ if ($is_editor) {
 	if (isset($_POST['submit'])) {
                 register_posted_variables(array('date' => true, 'titre' => true, 'contenu' => true, 'lasting' => true));
                 $titre = autoquote($titre);
-                $contenu = autoquote($contenu);
+                $contenu = autoquote(purify($contenu));
                 $lasting = autoquote($lasting);        
                 $datetime = explode(' ', $date);
                 $date = autoquote($datetime[0]);      
