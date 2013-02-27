@@ -33,6 +33,7 @@ class Indexer {
 
     private $__index = null;
     private static $_resultSetLimit = 100;
+    
     private static $lookup = array(
         // Greek doubles
         'αι' => 'e', 'Αι' => 'E', 'ΑΙ' => 'E', 'αί' => 'e', 'Αί' => 'E', 'ει' => 'i', 'Ει' => 'i', 'ΕΙ' => 'i', 'εί' => 'i', 'Εί' => 'i',
@@ -60,9 +61,14 @@ class Indexer {
         'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u',
         'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'ƒ' => 'f'
     );
+    
     private static $specials = array(
         '?', '*', '[', ']', '{', '}', '~', '"', '\'', '+', '-',
-        '&&', '||', '!', '(', ')', '^', ':', '\\', 'not', 'and', 'or'
+        '&&', '||', '!', '(', ')', '^', ':', '\\'
+    );
+    
+    private static $specialkeywords = array(
+        'not', 'and', 'or'
     );
 
     /**
@@ -87,7 +93,13 @@ class Indexer {
      * @return string
      */
     public static function filterQuery($inputStr) {
-        return str_replace(self::$specials, '', self::phonetics($inputStr));
+        $terms = explode(' ', str_replace(self::$specials, '', self::phonetics($inputStr)));
+        $clearTerms = array();
+        foreach ($terms as $term) {
+            if (!in_array($term, self::$specialkeywords))
+                $clearTerms[] = $term;
+        }
+        return implode(' ', $clearTerms);
     }
 
     /**

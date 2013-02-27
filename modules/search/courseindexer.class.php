@@ -237,9 +237,9 @@ class CourseIndexer {
         }
         $queryStr .= ' AND doctype:course';
         if ($anonymous)
-            $queryStr .= ' AND (visible:1 OR visible:2)';
+            $queryStr .= ' AND (visible:1 OR visible:2) ';
         else
-            $queryStr .= ' AND (visible:0 OR visible:3)';
+            $queryStr .= ' AND (visible:0 OR visible:3) ';
         return $queryStr;
     }
 
