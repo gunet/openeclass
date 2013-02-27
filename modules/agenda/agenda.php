@@ -284,8 +284,6 @@ if (!isset($sens)) $sens =" ASC";
 if ($is_editor) { 
 	$result = db_query("SELECT id, titre, contenu, day, hour, lasting, visibility FROM agenda ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 } else {       
-        echo "SELECT id, titre, contenu, day, hour, lasting, visibility FROM agenda WHERE visibility = 'v' 
-		ORDER BY day ".$sens.", hour ".$sens;
 	$result = db_query("SELECT id, titre, contenu, day, hour, lasting, visibility FROM agenda WHERE visibility = 'v' 
 		ORDER BY day ".$sens.", hour ".$sens,$currentCourseID);
 }
