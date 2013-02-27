@@ -123,6 +123,14 @@ class Indexer {
 
         $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version
         Zend_Search_Lucene::setResultSetLimit(self::$_resultSetLimit);    // Set Result Set Limit
+        
+        // write an .htaccess to prevent raw access to index files
+        $htaccess = $index_path . '/.htaccess';
+        if (!file_exists($htaccess)) {
+            $fd = fopen($htaccess, "w");
+            fwrite($fd, "deny from all\n");
+            fclose($fd);
+        }
     }
 
     /**
