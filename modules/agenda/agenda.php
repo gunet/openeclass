@@ -195,7 +195,7 @@ if ($is_editor) {
 		$myrow = mysql_fetch_array($result);
 		$id = $myrow['id'];
 		$titre = $myrow['titre'];
-		$contenu = $myrow['contenu'];
+		$contenu = standard_text_escape($myrow['contenu']);
 		$hourAncient = $myrow['hour'];
 		$dayAncient = $myrow['day']. ' '.$hourAncient;
 		$lastingAncient = $myrow['lasting'];

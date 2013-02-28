@@ -169,7 +169,7 @@ if (isset($_POST['submit'])) {
 						email = " . quote($email_form) . ",
 						am = " . quote($am_form) . ",
 						phone = " . quote($phone_form) . ",
-						description = " . quote($desc_form) . ",
+						description = " . quote(purify($desc_form)) . ",
 						department = ". quote($department) .",
 						email_public = ". quote($email_public) .",
 						phone_public = ". quote($phone_public) .",

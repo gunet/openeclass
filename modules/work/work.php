@@ -262,7 +262,7 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
         db_query("INSERT INTO assignments
                 (title, description, comments, deadline, submission_date, secret_directory,
                 group_submissions) VALUES
-                (".autoquote($title).", ".autoquote($desc).", ' ', ".autoquote($deadline).", NOW(), '$secret',
+                (".autoquote($title).", ".autoquote(purify($desc)).", '', ".autoquote($deadline).", NOW(), '$secret',
                         ".autoquote($group_submissions).")");
         mkdir("$workPath/$secret",0777);
 }

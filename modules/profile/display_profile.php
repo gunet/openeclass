@@ -53,7 +53,7 @@ if ($userdata !== false)
 	}
 	$tool_content .= "<b>$langFaculty:</b> " . find_faculty_by_id($userdata['department']) . "<br>";
 	if (!empty($userdata['description'])) {
-	        $tool_content .= standard_text_escape($userdata['description']);
+	        $tool_content .= $userdata['description'];
 	}
 	$tool_content .= "</td></tr></table>";
 }

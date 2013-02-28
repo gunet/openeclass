@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !($_POST['bbcode'])) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	$message = standard_text_escape(format_message($message));
+	$message = purify(format_message($message));
 	$poster_ip = $_SERVER['REMOTE_ADDR'];
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);

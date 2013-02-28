@@ -148,7 +148,7 @@ if (isset($_POST['submit'])) {
 	if ((isset($allow_bbcode) && $allow_bbcode == 1) && !isset($bbcode)) {
 		$message = bbencode($message, $is_html_disabled);
 	}
-	$message = standard_text_escape(format_message($message));
+	$message = purify(format_message($message));
 	$time = date("Y-m-d H:i");
 	$nom = addslashes($_SESSION['nom']);
 	$prenom = addslashes($_SESSION['prenom']);

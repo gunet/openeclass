@@ -119,7 +119,7 @@ if ($is_editor) { // course admin
 		$forward = 1;
 		$topic = $topic_id;
 		$forum = $forum_id;
-		$sql = "UPDATE posts_text SET post_text = " . autoquote(standard_text_escape($message)) . "
+		$sql = "UPDATE posts_text SET post_text = " . autoquote(purify($message)) . "
 			WHERE (post_id = '$post_id')";
 		if (!$result = db_query($sql, $currentCourseID)) {
 			$tool_content .= $langUnableUpadatePost;

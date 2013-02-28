@@ -266,9 +266,8 @@ do {
 		$tool_content .= "\n<tr class='even'>";
 	}
 	$tool_content .= "\n<td valign='top'>".display_user($myrow['poster_id'])."</td>";
-	$message = own_stripslashes($myrow["post_text"]);
-	// support for math symbols
-	$message = mathfilter($message, 12, "../../courses/mathimg/");
+	$message = standard_text_escape($myrow["post_text"]);
+	
 	if ($count == 0) {
 		$postTitle = "<b>$langPostTitle: </b>".q($topic_subject);
 	} else {

@@ -94,7 +94,7 @@ if (isset($_GET['delete'])) {
                 // modify announcement
                 $id = intval($_POST['id']);
                 db_query("UPDATE admin_announcements
-                        SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
+                        SET title = ". autoquote($title) .", body = ". autoquote(purify($newContent)) .",
 			lang = ". autoquote($lang_admin_ann). ", 
 			`date` = NOW(), $start_sql, $end_sql
                         WHERE id = $id", $mysqlMainDb);
@@ -106,7 +106,7 @@ if (isset($_GET['delete'])) {
                 list($orderMax) = mysql_fetch_row($result);
                 $order = $orderMax + 1;
                 db_query("INSERT INTO admin_announcements
-                        SET title = ". autoquote($title) .", body = ". autoquote($newContent) .",
+                        SET title = ". autoquote($title) .", body = ". autoquote(purify($newContent)) .",
                         visible = 'V', lang = ". autoquote($lang_admin_ann) .",
                         `date` = NOW(), ordre = $order, $start_sql, $end_sql");
                 $message = $langAdminAnnAdd;
