@@ -39,6 +39,10 @@ mysql_select_db($mysqlMainDb);
 if (isset($_POST['submit'])) {
         $unit_id = description_unit_id($course_id);
         add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
+        // update index
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        $idx->storeCourse($course_id);
 }
 
 $description = '';
