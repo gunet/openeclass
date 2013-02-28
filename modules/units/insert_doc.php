@@ -20,6 +20,7 @@
 
 
 require_once 'modules/document/doc_init.php';
+require_once 'include/lib/mediaresource.factory.php';
 
 /**
  * helper function to get a file path from get variable
@@ -105,7 +106,8 @@ function list_docs()
                         'visible' => $row['visible'],
                         'comment' => $row['comment'],
                         'copyrighted' => $row['copyrighted'],
-                        'date' => $row['date_modified']);
+                        'date' => $row['date_modified'],
+                        'object' => MediaResourceFactory::initFromDocument($row));
         }
         if (count($fileinfo) == 0) {
                 $tool_content .= "\n  <p class='alert1'>$langNoDocuments</p>\n";
@@ -147,18 +149,20 @@ function list_docs()
 				if ($is_dir) {
 					$image = $themeimg.'/folder.png';
 					$file_url = $urlbase . $dir;
-					$link_extra = '';
 					$link_text = $entry['name'];
+                                        
+                                        $link_href = "<a href='$file_url'>$link_text</a>";
 				} else {
 					$image = '../document/img/' . choose_image('.' . $entry['format']);
                                         $file_url = file_url($entry['path'], $entry['name'],
                                                              $common_docs? 'common': $course_code);
-					$link_extra = " target='_blank'";
-					if (empty($entry['title'])) {
-						$link_text = $entry['name'];
-					} else {
-						$link_text = $entry['title'];
-					}
+                                        
+                                        $dObj = $entry['object'];
+                                        $dObj->setAccessURL($file_url);
+                                        $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'],
+                                                                       $common_docs? 'common': $course_code));
+                                        
+                                        $link_href = MultimediaHelper::chooseMediaAhref($dObj);
 				}
 				if ($entry['visible'] == 'i') {
 					$vis = 'invisible';
@@ -170,8 +174,8 @@ function list_docs()
 					}
 				}
 				$tool_content .= "\n    <tr class='$vis'>";
-				$tool_content .= "\n      <td width='1' class='center'><a href='$file_url'$link_extra><img src='$image' alt=''></a></td>";
-				$tool_content .= "\n      <td><a href='$file_url'$link_extra>$link_text</a>";
+				$tool_content .= "\n      <td width='1' class='center'><img src='$image' alt=''/></td>";
+				$tool_content .= "\n      <td>$link_href";
 
 				/*** comments ***/
 				if (!empty($entry['comment'])) {
