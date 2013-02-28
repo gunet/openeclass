@@ -1737,14 +1737,14 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
                 list($id) = mysql_fetch_row($q);
                 return db_query("UPDATE unit_resources SET
                                         `title` = " . quote($title) . ",
-                                        `comments` = " . quote($content) . ",
+                                        `comments` = " . quote(purify($content)) . ",
                                         `date` = $date
                                  WHERE id = $id");
         }
         return db_query("INSERT INTO unit_resources SET
                                 `unit_id` = $unit_id,
                                 `title` = " . quote($title) . ",
-                                `comments` = " . quote($content) . ",
+                                `comments` = " . quote(purify($content)) . ",
                                 `date` = $date,
                                 `type` = '$type',
                                 `visibility` = '$visibility',
