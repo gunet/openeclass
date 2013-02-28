@@ -105,6 +105,7 @@ class Plotter {
             ,
             xaxis: {
                 mode: "categories",
+                labelAngle: -45,
                 tickLength: 0
             }
         });
