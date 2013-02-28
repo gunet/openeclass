@@ -396,7 +396,7 @@ function link_form_defaults($id)
         if ($myrow = mysql_fetch_array($result)) {
                 $form_url = ' value="' . q($myrow['url']) . '"';
                 $form_title = ' value="' . q($myrow['title']) . '"';
-                $form_description = purify(trim($myrow['description']));
+                $form_description = standard_text_escape($myrow['description']);
                 $category = $myrow['category'];
         } else {
                 $form_url = $form_title = $form_description = '';
@@ -440,7 +440,7 @@ function category_form_defaults($id)
         $result = db_query("SELECT * FROM link_category WHERE course_id = $cours_id AND id = $id");
         if ($myrow = mysql_fetch_array($result)) {
                 $form_name = ' value="' . q($myrow['name']) . '"';
-                $form_description = q($myrow['description']);
+                $form_description = standard_text_escape($myrow['description']);
         } else {
                 $form_name = $form_description = '';
         }

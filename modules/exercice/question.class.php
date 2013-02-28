@@ -371,7 +371,7 @@ class Question
 
 		$id=$this->id;
 		$question=addslashes($this->question);
-		$description=addslashes($this->description);
+		$description=purify($this->description);
 		$weighting=$this->weighting;
 		$position=$this->position;
 		$type=$this->type;

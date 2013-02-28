@@ -416,7 +416,7 @@ class Exercise
 
 		$id=$this->id;
 		$exercise=addslashes($this->exercise);
-		$description = autoquote(standard_text_escape($this->description));
+		$description = autoquote(purify($this->description));
 		$type=$this->type;
 		$StartDate=$this->StartDate;
 		$EndDate=$this->EndDate;

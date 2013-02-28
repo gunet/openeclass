@@ -22,8 +22,8 @@
 
 // the question form has been submitted
 if(isset($_POST['submitQuestion'])) {
-	$questionName = trim($questionName);
-	$questionDescription = standard_text_escape(trim($questionDescription));
+
+	$questionName = trim($questionName);	
 	// no name given
 	if(empty($questionName))
 	{

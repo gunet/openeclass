@@ -63,7 +63,6 @@ if(!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['q
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore(); 
 
@@ -71,7 +70,7 @@ $tool_content .= "
   <table class=\"tbl_border\" width=\"99%\">
   <tr class='odd'>
     <td colspan=\"2\"><b>". q(stripslashes($exerciseTitle)) ."</b>
-    <br/>". standard_text_escape(stripslashes($exerciseDescription_temp)) ."
+    <br/>". standard_text_escape($exerciseDescription_temp) ."
     </td>
   </tr>
   </table>";
