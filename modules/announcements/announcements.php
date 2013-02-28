@@ -41,6 +41,7 @@ include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/sendMail.inc.php';
 require_once '../video/video_functions.php';
+require_once 'preview.php';
 
 // The following is added for statistics purposes
 include('../../include/action.php');
@@ -48,7 +49,6 @@ $action = new action();
 $action->record('MODULE_ID_ANNOUNCE');
 
 define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
-define('PREVIEW_SIZE', 500);
 
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
@@ -146,8 +146,7 @@ if ($is_editor) {
                                   visibility = 'v'");
             $id = mysql_insert_id();
         }
-        $preview = autoquote(purify(standard_text_escape(ellipsize($_POST['newContent'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$id'> <span class='smaller'>[$langMore]</span></a></strong>"))));
-        db_query("UPDATE annonces SET preview = $preview WHERE id = $id AND cours_id = $cours_id");
+        create_preview($_POST['newContent'], false, $id);
 
         // send email
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {

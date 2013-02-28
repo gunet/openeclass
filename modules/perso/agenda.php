@@ -154,10 +154,10 @@ function agendaHtmlInterface($data)
 					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
 				}
         $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-        $data[$i][$j][1] = ellipsize($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
+        $data[$i][$j][1] = ellipsize(q(strip_tags($data[$i][$j][1])), 150, "... <a href=\"$url\">[$langMore]</a>");
         $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
 
-				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1].standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
+				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.": <b>".$data[$i][$j][3]."</b> | $langDuration: <b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1]."</div></li></ul></td></tr>";
 			}
 		}
 		$agenda_content .= "</table>";

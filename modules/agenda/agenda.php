@@ -133,7 +133,7 @@ if ($is_editor) {
                                              lasting = $lasting
                                          WHERE id = $id");
 			##[BEGIN personalisation modification]############
-			db_query("UPDATE $mysqlMainDb.agenda
+			db_query("UPDATE `$mysqlMainDb`.agenda
                                          SET titre = $titre,
                                              contenu = $contenu,
                                              day = $date,

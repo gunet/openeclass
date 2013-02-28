@@ -117,8 +117,8 @@ function announceHtmlInterface($data) {
                                            "</b></a><span class='smaller'><b><br />" .
                                            claro_format_locale_date($dateFormatLong, strtotime($data[$i][2][$j][2])) .
                                            "</b></span><div class='smaller'>".
-                                           standard_text_escape(ellipsize($data[$i][2][$j][1], 250,
-                                                   "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>"), 'courses/mathimg/') .
+                                           ellipsize(q(strip_tags($data[$i][2][$j][1])), 250,
+                                                   "<strong>&nbsp;...<a href='$url$an_id'>[$langMore]</a></strong>") .
 					   "</div></li></ul></td></tr>";
 			}
 		}

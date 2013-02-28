@@ -106,7 +106,7 @@ function forumHtmlInterface($data)
 		$content .= "<table width='100%'>";
 		$numOfLessons = count($data);
 		for ($i=0; $i <$numOfLessons; $i++) {
-			$content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
+			$content .= "<tr><td class='sub_title1'>".q($data[$i][0])."</td></tr>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
 				$url = $urlServer."index.php?perso=5&amp;c=".$data[$i][1]."&amp;t=".$data[$i][2][0][$j][2]."&amp;f=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];
@@ -116,8 +116,8 @@ function forumHtmlInterface($data)
 				<b>".q($data[$i][2][0][$j][3])." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
                                 </a><div class='smaller grey'><b>".q($data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]).
                                 "</b></div><div class='smaller'>" .
-                                standard_text_escape(ellipsize($data[$i][2][0][$j][8], 150,
-                                                     "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
+                                ellipsize(q(strip_tags($data[$i][2][0][$j][8])), 150,
+                                                     "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>") .
                                 "</div></li></ul></td></tr>";
 			}
 		}
