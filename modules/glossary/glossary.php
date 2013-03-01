@@ -112,7 +112,7 @@ if ($is_editor) {
                                               SET term = " . autoquote($_POST['term']) . ",
                                                   definition = " . autoquote($_POST['definition']) . ",
                                                   url = " . autoquote($url) . ",
-                                                  notes = " . autoquote($_POST['notes']) . ",
+                                                  notes = " . autoquote(purify($_POST['notes'])) . ",
                                                   category_id = $category_id,
                                                   datestamp = NOW()
                                               WHERE id = $id AND course_id = $cours_id");
@@ -122,7 +122,7 @@ if ($is_editor) {
                                               SET term = " . autoquote($_POST['term']) . ",
                                                   definition = " . autoquote($_POST['definition']) . ",
                                                   url = " . autoquote($url) . ",
-                                                  notes = " . autoquote($_POST['notes']) . ",
+                                                  notes = " . autoquote(purify($_POST['notes'])) . ",
                                                   category_id = $category_id,
                                                   datestamp = NOW(),
                                                   course_id = $cours_id,
