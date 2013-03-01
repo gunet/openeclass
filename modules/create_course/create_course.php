@@ -55,6 +55,25 @@ $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
+function deactivate_input_password () {
+        $('#coursepassword').attr('disabled', 'disabled');
+        $('#coursepassword').addClass('invisible');
+}
+
+function activate_input_password () {
+        $('#coursepassword').removeAttr('disabled', 'disabled');
+        $('#coursepassword').removeClass('invisible');
+}
+
+function displayCoursePassword() {
+
+        if ($('#courseclose,#courseiactive').is(":checked")) {
+                deactivate_input_password ();
+        } else {
+                activate_input_password ();
+        }
+}
+
 function checkrequired(which, entry, entry2) {
 	var pass=true;
 	if (document.images) {
@@ -88,6 +107,21 @@ $head_content .= <<<hContent
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
+        });
+        
+        displayCoursePassword();
+        
+        $('#courseopen').click(function(event) {
+                activate_input_password();
+        });
+        $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+        });
+        $('#courseclose').click(function(event) {
+                deactivate_input_password();
+        });
+        $('#courseinactive').click(function(event) {
+                deactivate_input_password();
         });
     });
 
@@ -234,43 +268,43 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 
 }  elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
 	$nameTools = $langCreateCourse . " (" . $langCreateCourseStep." 3 " .$langCreateCourseStep2 . " 3 )" ;
-	$tool_content .= "
-        <fieldset>
-        <legend>$langCreateCourseStep3Title</legend>
-         <table class='tbl' width='100%'>
-        <tr>
-        <td class='sub_title1'>$langAvailableTypes<br></td>
-        </tr>
-        <tr>
+	$tool_content .= "<fieldset><legend>$langCreateCourseStep3Title</legend>
+                <div style='padding: 3px;'><em>$langOptPassword</em> 
+                <input id='coursepassword' type='text' name='password' value='".q($password)."' class='FormData_InputText' id='password' />
+                </div>
+                <table class='tbl' width='100%'>
+                <tr>
+                <td class='sub_title1'>$langAvailableTypes<br></td>
+                </tr>
+                <tr>
                 <td>
                 <table class='tbl' width='100%'>
                 <tr class='smaller'>
                 <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' width='16' height='16' /> ".$m['legopen']."</th>
-                <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
+                <td><input id='courseopen' name='formvisible' type='radio' value='2' checked='checked' /></td>
                 <td>$langPublic</td>
                 </tr>
                 <tr class='smaller'>
                 <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
-                <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
+                <td valign='top'><input id='coursewithregistration' name='formvisible' type='radio' value='1' /></td>
                 <td>
                 $langPrivOpen<br />                
                 </td>
                 </tr>
                 <tr class='smaller'>
                 <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' width=\"16\" height='16' /> ".$m['legclosed']."</th>
-                <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
+                <td valign='top'><input id='courseclose' name='formvisible' type='radio' value='0' /></td>
                 <td>$langPrivate</td>
                 </tr>
                 <tr class='smaller'>
                 <th valign='top'><img src='$themeimg/lock_inactive.png' title='".$m['linactive']."' width='16' height='16' /> ".$m['linactive']."</th>
-                <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
+                <td valign='top'><input id='courseinactive' name='formvisible' type='radio' value='3' /></td>
                 <td>$langCourseInactive</td>
                 </tr>
                 </table>
                 <br />
                 </td>
-        </tr>
-        <div style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' value='".q($password)."' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
+        </tr>        
         <tr>
                 <td class='sub_title1'>$langSubsystems</td>
         </tr>

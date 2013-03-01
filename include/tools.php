@@ -94,6 +94,18 @@ function getToolsArray($cat) {
 
 	switch ($cat) {
 		case 'Public':
+                        $sql = "SELECT * FROM course_module
+                                        WHERE visible = 1 AND
+                                        course_id = $cid AND
+                                        module_id NOT IN (".MODULE_ID_CHAT.",
+                                                          ".MODULE_ID_ASSIGN.",
+                                                          ".MODULE_ID_DROPBOX.",
+                                                          ".MODULE_ID_QUESTIONNAIRE.",
+                                                          ".MODULE_ID_FORUM.",
+                                                          ".MODULE_ID_GROUPS.",
+                                                          ".MODULE_ID_WIKI.",
+                                                          ".MODULE_ID_LP.")
+                                        ORDER BY module_id";
 			if (!check_guest()) {
 				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
 					$result = db_query("SELECT * FROM course_module
@@ -101,29 +113,10 @@ function getToolsArray($cat) {
                                                         course_id = $cid
                                                         ORDER BY module_id");
 				} else {
-					$result = db_query("SELECT * FROM course_module
-                                                    WHERE visible = 1 AND
-                                                    course_id = $cid AND
-                                                    module_id NOT IN (".MODULE_ID_CHAT.",
-                                                                        ".MODULE_ID_ASSIGN.",
-                                                                        ".MODULE_ID_DROPBOX.",
-                                                                        ".MODULE_ID_QUESTIONNAIRE.",
-                                                                        ".MODULE_ID_FORUM.",
-                                                                        ".MODULE_ID_LP.")
-                                                    ORDER BY module_id");
+					$result = db_query($sql);
 				}
 			} else {
-				$result = db_query("SELECT * FROM course_module
-                                                WHERE `visible` = 1 AND
-                                                course_id = $cid AND
-                                                module_id IN (".MODULE_ID_AGENDA.",
-                                                        ".MODULE_ID_LINKS.",
-                                                        ".MODULE_ID_DOCS.",
-                                                        ".MODULE_ID_VIDEO.",
-                                                        ".MODULE_ID_ANNOUNCE.",
-                                                        ".MODULE_ID_EXERCISE.",
-                                                        ".MODULE_ID_DESCRIPTION.")
-                                                ORDER BY module_id");
+				$result = db_query($sql);
 			}
 			break;
 		case 'PublicButHide':
