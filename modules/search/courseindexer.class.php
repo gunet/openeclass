@@ -51,20 +51,21 @@ class CourseIndexer {
      */
     private static function makeDoc($course) {
         global $urlServer;
+        $encoding = 'utf-8';
         
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id']));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id']));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course'));
-        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course['code'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course['title'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course['keywords'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course['visible']));
-        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course['prof_names'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics($course['units'])));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created']));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code']));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course['code']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course['title']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course['keywords']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course['visible'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course['prof_names']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course['units'])), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code'], $encoding));
         
         return $doc;
     }
