@@ -478,6 +478,7 @@ $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 $langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
 $langLogActions = "Καταγραφή ενεργειών";
 
+
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
 $langAdminAddAnn = "Προσθήκη ανακοίνωσης διαχειριστή";
