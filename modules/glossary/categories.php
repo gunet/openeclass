@@ -43,7 +43,7 @@ if ($is_editor) {
                         $category_id = intval($_POST['category_id']);
                         $q = db_query("UPDATE glossary_category
                                               SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . "
+                                                  description = " . autoquote(purify($_POST['description'])) . "
                                               WHERE id = $category_id AND course_id = $cours_id");
                         $success_message = $langCategoryModded;
                 } else {
@@ -51,7 +51,7 @@ if ($is_editor) {
                                          FROM glossary_category WHERE course_id = $cours_id");
                         $q = db_query("INSERT INTO glossary_category
                                               SET name = " . autoquote($_POST['name']) . ",
-                                                  description = " . autoquote($_POST['description']) . ",
+                                                  description = " . autoquote(purify($_POST['description'])) . ",
                                                   course_id = $cours_id,
                                                   `order` = @new_order");
                         $category_id = mysql_insert_id();
