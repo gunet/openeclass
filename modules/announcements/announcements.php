@@ -299,11 +299,11 @@ if ($is_editor) {
 		if ($is_editor) {
 		    if ($myrow['visibility'] == 'i') {
 			$visibility = 1;
-			$vis_icon = 'invisible.png';
+			$vis_icon = 'invisible';
 			$tool_content .= "<tr class='invisible'>";
 		    } else {
 			$visibility = 0;
-			$vis_icon = 'visible.png';
+			$vis_icon = 'visible';
 			if ($k%2 == 0) {
 			       $tool_content .= "<tr class='even'>";
 			} else {
@@ -325,27 +325,20 @@ if ($is_editor) {
 			$nameTools = q($myrow['title']);
 			$tool_content .= standard_text_escape($myrow['contenu']);
 		} else {
-                        if (isset($myrow['preview']) and !empty($myrow['preview'])) {
-                                $tool_content .= $myrow['preview'];
-                        } else {
-                                $preview = standard_text_escape(ellipsize($myrow['contenu'], PREVIEW_SIZE, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
-                                db_query('UPDATE annonces SET preview = ' . autoquote($preview) . '
-                                                 WHERE id = ' . $myrow['id']);
-                                $tool_content .= $preview;
-                        }
+                        $tool_content .= create_preview($myrow['contenu'], $myrow['preview'], $myrow['id'], $cours_id, $code_cours);
 		}
 		$tool_content .= "</td>";
 
 		if ($is_editor) {
-			$tool_content .= "
-			<td width='70' class='right'>
-			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;modify=" . $myrow['id'] . "'>
-			      <img src='$themeimg/edit.png' title='" . q($langModify) . "' /></a>&nbsp;
-			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;delete=" . $myrow['id'] . "' onClick=\"return confirmation('$langSureToDelAnnounce');\">
-			      <img src='$themeimg/delete.png' title='" . q($langDelete) . "' /></a>&nbsp;
-			      <a href='$_SERVER[SCRIPT_NAME]?course=".$code_cours ."&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
-			      <img src='$themeimg/$vis_icon' title='".q($langVisible)."' /></a>
-			</td>";
+			$tool_content .= "<td width='70' class='right'>" .
+                                icon('edit', $langModify,
+                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modify=$myrow[id]") .
+                                "&nbsp;" . icon('delete', $langDelete,
+                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;delete=$myrow[id]",
+                                        "onClick=\"return confirmation('$langSureToDelAnnounce');\"") .
+                                "&nbsp;" . icon($vis_icon, $langVisible,
+                                        "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;mkvis=$myrow[id]&amp;vis=$visibility") .
+                                "</td>";
 			if ($announcementNumber > 1)  {
 				$tool_content .= "<td align='center' width='35' class='right'>";
 			}
