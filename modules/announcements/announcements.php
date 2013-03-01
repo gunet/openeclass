@@ -146,7 +146,7 @@ if ($is_editor) {
                                   visibility = 'v'");
             $id = mysql_insert_id();
         }
-        create_preview($_POST['newContent'], false, $id);
+        create_preview($_POST['newContent'], false, $id, $cours_id, $code_cours);
 
         // send email
         if (isset($_POST['emailOption']) and $_POST['emailOption']) {
