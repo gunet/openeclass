@@ -121,12 +121,17 @@ units_set_maxorder();
 
 // other actions in course unit
 if ($is_editor) {
+        // update index
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        
         if (isset($_REQUEST['edit_submit'])) {
                 $main_content .= handle_unit_info_edit();
         } elseif (isset($_REQUEST['del'])) { // delete course unit
 		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");
 		db_query("DELETE FROM unit_resources WHERE unit_id = '$id'");
+                $idx->storeCourse($course_id);
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
 		$id = intval($_REQUEST['vis']);
@@ -134,6 +139,7 @@ if ($is_editor) {
 		list($vis) = mysql_fetch_row($sql);
 		$newvis = ($vis == 1)? 0: 1;
 		db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
+                $idx->storeCourse($course_id);
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down
                 move_order('course_units', 'id', $id, 'order', 'down',

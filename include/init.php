@@ -448,23 +448,28 @@ $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
 if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
-        if (!check_guest()) {
-		if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-			$result = db_query("SELECT module_id FROM course_module
-                                        WHERE visible = 1 AND
-                                              course_id = $course_id");
-		}
-	} else {
-		$result = db_query("SELECT * FROM course_module
-                                        WHERE visible = 1 AND
-                                              course_id = $course_id AND
-                                              module_id IN (".MODULE_ID_AGENDA.",
-                                                            ".MODULE_ID_LINKS.",
-                                                            ".MODULE_ID_DOCS.",
-                                                            ".MODULE_ID_VIDEO.",
-                                                            ".MODULE_ID_ANNOUNCE.",
-                                                            ".MODULE_ID_EXERCISE.",
-                                                            ".MODULE_ID_DESCRIPTION.")");
+        $sql = "SELECT * FROM course_module
+                        WHERE visible = 1 AND
+                              course_id = $course_id AND
+                                module_id NOT IN (".MODULE_ID_CHAT.",
+                                                  ".MODULE_ID_ASSIGN.",
+                                                  ".MODULE_ID_DROPBOX.",
+                                                  ".MODULE_ID_QUESTIONNAIRE.",
+                                                  ".MODULE_ID_FORUM.",
+                                                  ".MODULE_ID_GROUPS.",
+                                                  ".MODULE_ID_WIKI.",
+                                                  ".MODULE_ID_LP.")";
+        
+        if (isset($_SESSION['uid']) and $_SESSION['uid']) { // if we are logged in
+                if (check_guest()) { // guest user                        
+                        $result = db_query($sql);
+                } else { /// normal user
+                        $result = db_query("SELECT module_id FROM course_module
+                                             WHERE visible = 1 AND
+                                             course_id = $course_id");
+                }
+        } else {
+		$result = db_query($sql);
 	}
 
 	$publicModules = array();

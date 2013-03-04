@@ -10,7 +10,12 @@ require_once 'include/lib/multimediahelper.class.php';
 // Process resource actions
 function process_actions()
 {
-        global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified;
+        global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified,
+               $course_id, $webDir;
+        
+        // update index
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
 
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
@@ -26,12 +31,14 @@ function process_actions()
                                         title = $restitle,
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
+                        $idx->storeCourse($course_id);
                 }
                 $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
         } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = $res_id");
+                        $idx->storeCourse($course_id);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
@@ -41,6 +48,7 @@ function process_actions()
                         list($vis) = mysql_fetch_row($sql);
                         $newvis = ($vis == 1)? 0: 1;
                         db_query("UPDATE unit_resources SET visible = '$newvis' WHERE id = $res_id");
+                        $idx->storeCourse($course_id);
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
                 $res_id = intval($_REQUEST['down']);

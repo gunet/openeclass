@@ -65,7 +65,8 @@ if (!$is_editor) {
         $ebook_id = mysql_insert_id();
 
         // Initialize document subsystem global variables
-        include '../document/doc_init.php';
+        require_once 'modules/document/doc_init.php';
+        require_once 'include/log.php';
 
         if (!mkdir($basedir, 0775, true)) {
                 db_query("DELETE FROM ebook WHERE course_id = $course_id AND id = $ebook_id");

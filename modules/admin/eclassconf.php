@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -121,7 +121,7 @@ if (isset($_POST['submit']))  {
                         'am_required' => true,
                         'dont_display_login_form' => true,
                         'dropbox_allow_student_to_student' => true,
-                        'block_username_change' => true,                        
+                        'block_username_change' => true,
                         'display_captcha' => true,
                         'insert_xml_metadata' => true,
                         'betacms' => true,
@@ -131,7 +131,7 @@ if (isset($_POST['submit']))  {
                         'video_quota' => true,
                         'dropbox_quota' => true,
                         'max_glossary_terms' => true,
-                        'theme' => true,                                                
+                        'theme' => true,
                         'case_insensitive_usernames' => true,
                         'course_multidep' => true,
                         'user_multidep' => true,
@@ -179,51 +179,51 @@ else {
                 <fieldset><legend>$langBasicCfgSetting</legend>
 	<table class='tbl' width='100%'>
 	<tr>
-	  <th width='200' class='left'><b>\$urlServer:</b></th>
+	  <th width='200' class='left'><b>$langSiteUrl:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formurlServer' size='40' value='".q($urlServer)."'></td>
 	</tr>
         <tr>
-	  <th class='left'><b>\$phpMyAdminURL:</b></th>
+	  <th class='left'><b>$langphpMyAdminURL:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formphpMyAdminURL' size='40' value='".q(get_config('phpMyAdminURL'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$phpSysInfoURL:</b></th>
+	  <th class='left'><b>$langSystemInfoURL:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formphpSysInfoURL' size='40' value='".q(get_config('phpSysInfoURL'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$emailAdministrator:</b></th>
+	  <th class='left'><b>$langAdminEmail:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formemailAdministrator' size='40' value='".q(get_config('email_sender'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$administratorName:</b></th>
+	  <th class='left'><b>$langDefaultAdminName:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formadministratorName' size='40' value='".q(get_config('admin_name'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$siteName:</b></th>
+	  <th class='left'><b>$langCampusName:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formsiteName' size='40' value='".q(get_config('site_name'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$postaddress:</b></th>
+	  <th class='left'>$langPostMail</th>
 	      <td><textarea rows='3' cols='40' name='formpostaddress'>".q(get_config('postaddress'))."</textarea></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$telephone:</b></th>
+	  <th class='left'><b>$langPhone:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formtelephone' size='40' value='".q(get_config('phone'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$fax:</b></th>
+	  <th class='left'>$langFax</th>
 	  <td><input class='FormData_InputText' type='text' name='formfax' size='40' value='".q(get_config('fax'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$emailhelpdesk:</b></th>
+	  <th class='left'><b>$langHelpDeskEmail:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formemailhelpdesk' size='40' value='".q(get_config('email_helpdesk'))."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$Institution:</b></th>
+	  <th class='left'><b>$langInstituteShortName:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formInstitution' size='40' value='".$Institution."'></td>
 	</tr>
 	<tr>
-	  <th class='left'><b>\$InstitutionUrl:</b></th>
+	  <th class='left'><b>$langInstituteName:</b></th>
 	  <td><input class='FormData_InputText' type='text' name='formInstitutionUrl' size='40' value='".$InstitutionUrl."'></td>
 	</tr>";
 	if ($language == "el") {

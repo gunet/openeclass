@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -115,31 +115,47 @@ if (isset($_POST['submit'])) {
 draw($tool_content, 2, null, $head_content);
 
 
-// Create guest account or update password if it already exists
+
+/**
+ * @brief create guest account or update password if it already exists
+ * @global type $langGuestName
+ * @global type $langGuestSurname
+ * @param type $username
+ * @param type $course_id
+ * @param type $password
+ * @return none
+ */
 function createguest($username, $course_id, $password)
 {
-	global $langGuestName, $langGuestSurname;
+	global $langGuestName, $langGuestSurname, $langGuestFail;
 	
 	$hasher = new PasswordHash(8, false);
 	$password = $hasher->HashPassword($password);
 
-	$q = db_query("SELECT user_id from course_user WHERE statut=10 AND course_id = $course_id");
+	$q = db_query("SELECT user_id from course_user WHERE statut=".USER_GUEST." AND course_id = $course_id");
 	if (mysql_num_rows($q) > 0) {
 		list($guest_id) = mysql_fetch_array($q);
 		db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
 	} else {
                 $regtime = time();
                 $exptime = 126144000 + $regtime;
-                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at)
-                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', 10, $regtime, $exptime)");
+                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at, whitelist)
+                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', ".USER_GUEST.", $regtime, $exptime, '')");
                 $guest_id = mysql_insert_id();
 	}
         db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
-                  VALUES ($course_id, $guest_id, 10, CURDATE())")
+                  VALUES ($course_id, $guest_id, ".USER_GUEST.", CURDATE())")
                 or die ($langGuestFail);
+        
+        return;
 }
 
-// Check if guest account exists and return account information
+
+/**
+ * @brief check if guest account exists and return account information
+ * @param type $course_id
+ * @return boolean
+ */
 function guestinfo($course_id) {
 
 	$q = db_query("SELECT nom, prenom, username FROM user, course_user

@@ -276,6 +276,8 @@ function file_playurl($path, $filename = null, $courseCode = null)
                                 ENT_QUOTES);
     } else {
         $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
+        if (defined('COMMON_DOCUMENTS'))
+            $courseCode = 'common';
 
         return htmlspecialchars($urlServer .
                                         "modules/document/play.php/$courseCode$gid" .

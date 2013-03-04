@@ -51,19 +51,21 @@ class CourseIndexer {
      */
     private static function makeDoc($course) {
         global $urlServer;
+        $encoding = 'utf-8';
         
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id']));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id']));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course'));
-        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course['code'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course['title'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course['keywords'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course['visible']));
-        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course['prof_names'])));
-        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code'])));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created']));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code']));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'course', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('code', Indexer::phonetics($course['code']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($course['title']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('keywords', Indexer::phonetics($course['keywords']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('visible', $course['visible'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('prof_names', Indexer::phonetics($course['prof_names']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code']), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course['units'])), $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code'], $encoding));
         
         return $doc;
     }
@@ -76,7 +78,51 @@ class CourseIndexer {
      */
     private function fetchCourse($courseId) {
         $res = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
-        return mysql_fetch_assoc($res);
+        $course = mysql_fetch_assoc($res);
+        if (!$course)
+            return null;
+        
+        // visible units
+        $course['units'] = '';
+        $res = db_query("SELECT id, title, comments
+                           FROM course_units
+                          WHERE visible > 0
+                            AND course_id = " . intval($courseId));
+        $unitIds = array();
+        while($row = mysql_fetch_assoc($res)) {
+            $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
+            $unitIds[] = $row['id'];
+        }
+        
+        // visible unit resources
+        foreach ($unitIds as $unitId) {
+            $res = db_query("SELECT title, comments
+                               FROM unit_resources
+                              WHERE visible > 0
+                                AND unit_id = " . intval($unitId));
+            while($row = mysql_fetch_assoc($res))
+                $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
+        }
+        
+        // invisible but useful units and resources
+        $res = db_query("SELECT id
+                           FROM course_units
+                          WHERE visible = 0
+                            AND `order` = -1
+                            AND course_id  = " . intval($courseId));
+        $unitIds = array();
+        while($row = mysql_fetch_assoc($res))
+            $unitIds[] = $row['id'];
+        foreach($unitIds as $unitId) {
+            $res = db_query("SELECT comments
+                               FROM unit_resources
+                              WHERE visible >= 0
+                                AND unit_id = " . intval($unitId));
+            while($row = mysql_fetch_assoc($res))
+                $course['units'] .= $row['comments'] . ' ';
+        }
+        
+        return $course;
     }
 
     /**
@@ -135,9 +181,11 @@ class CourseIndexer {
             $this->__index->delete($id);
         
         // get/index all courses from db
-        $res = db_query("SELECT * FROM course");
-        while ($course = mysql_fetch_assoc($res))
+        $res = db_query("SELECT id FROM course");
+        while ($row = mysql_fetch_assoc($res)) {
+            $course = $this->fetchCourse($row['id']);
             $this->__index->addDocument(self::makeDoc($course));
+        }
         
         $this->__indexer->finalize();
     }
@@ -222,6 +270,7 @@ class CourseIndexer {
                 $queryStr .= 'prof_names:' . $term . '* ';
                 $queryStr .= 'code:' . $term . '* ';
                 $queryStr .= 'public_code:' . $term . '* ';
+                $queryStr .= 'units:' . $term . '* ';
             }
             $queryStr .= ')';
         } else {
@@ -232,7 +281,7 @@ class CourseIndexer {
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_instructor', 'prof_names', $queryStr, $needsOR);
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_coursecode', 'code', $queryStr, $needsOR);
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_coursecode', 'public_code', $queryStr, $needsOR);
-            //list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_description', '', $queryStr, $needsOR); // TODO: implement searching in course units
+            list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_description', 'units', $queryStr, $needsOR);
             $queryStr .= ')';
         }
         $queryStr .= ' AND doctype:course';

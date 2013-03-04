@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -46,6 +46,24 @@ $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
+function deactivate_input_password () {
+        $('#coursepassword').attr('disabled', 'disabled');
+        $('#coursepassword').addClass('invisible');
+}
+
+function activate_input_password () {
+        $('#coursepassword').removeAttr('disabled', 'disabled');
+        $('#coursepassword').removeClass('invisible');
+}
+
+function displayCoursePassword() {
+
+        if ($('#courseclose,#courseiactive').is(":checked")) {
+                deactivate_input_password ();
+        } else {
+                activate_input_password ();
+        }
+}
     var lang = {
 hContent;
 $head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
@@ -59,6 +77,22 @@ $head_content .= <<<hContent
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
+        
+        displayCoursePassword();
+        
+        $('#courseopen').click(function(event) {
+                activate_input_password();
+        });
+        $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+        });
+        $('#courseclose').click(function(event) {
+                deactivate_input_password();
+        });
+        $('#courseinactive').click(function(event) {
+                deactivate_input_password();
+        });
+        
     });
 
 /* ]]> */
@@ -88,8 +122,7 @@ if (isset($_POST['submit'])) {
                         }
                 }
                 // update course settings
-                if (isset($_POST['formvisible']) and
-                    $_POST['formvisible'] == '1') {
+                if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
                         $password = $_POST['password'];
                 } else {
                         $password = "";
@@ -115,7 +148,7 @@ if (isset($_POST['submit'])) {
                                         visible = ".intval($_POST['formvisible']).",
                                         prof_names = ".quote($_POST['titulary']).",
                                         lang = ".quote($language).",
-                                        password = ".quote($_POST['password'])."
+                                        password = ".quote($password)."
                                     WHERE id = $course_id");
                     $course->refresh($course_id, $departments);
                     
@@ -180,7 +213,7 @@ if (isset($_POST['submit'])) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         $tool_content .= $html;
-	$tool_content .= "
+	@$tool_content .= "
                 </td>
             </tr>
 	    <tr>
@@ -194,26 +227,26 @@ if (isset($_POST['submit'])) {
 	    <table class='tbl' width='100%'>
             <tr>		            
 		<th width='170'>$langOptPassword</th>
-                <td colspan='2'><input type='text' name='password' value='$password' id='password' /></td>
+                <td colspan='2'><input id='coursepassword' type='text' name='password' value='$password' /></td>
 	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
-		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." /></td>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." /></td>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] /></td>
 		<td class='smaller'>$langPrivOpen</td>
 	    </tr>	    
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
-		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." /></td>
+		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>
              <tr>
 		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
-		<td><input type='radio' name='formvisible' value='3'".@$visibleChecked[3]." /></td>
+		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] /></td>
 		<td class='smaller'>$langCourseInactive</td>
 	    </tr>
 	    </table>

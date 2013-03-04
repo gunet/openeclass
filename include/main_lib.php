@@ -1892,14 +1892,22 @@ function handle_unit_info_edit()
                                            title = $title,
                                            comments = $descr
                                     WHERE id = $unit_id AND course_id = $course_id");
-                return "<p class='success'>$langCourseUnitModified</p>";
+                $successmsg = $langCourseUnitModified;
         } else { // add new course unit
                 $order = $maxorder + 1;
                 db_query("INSERT INTO course_units SET
                                  title = $title, comments =  $descr, visible = 1,
                                  `order` = $order, course_id = $course_id");
-                return "<p class='success'>$langCourseUnitAdded</p>";
+                $successmsg = $langCourseUnitAdded;
         }
+        
+        // update index
+        global $webDir;
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        $idx->storeCourse($course_id);
+        
+        return "<p class='success'>$successmsg</p>";
 }
 
 function math_unescape($matches)
