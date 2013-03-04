@@ -344,7 +344,6 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                                      ADD receive_mail BOOL NOT NULL DEFAULT 1");
                 mysql_field_exists($mysqlMainDb, 'course_user', 'receive_mail') or
                         db_query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
-		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(39) NOT NULL DEFAULT '0.0.0.0'");
                 db_query("CREATE TABLE IF NOT EXISTS `document` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `course_id` INT(11) NOT NULL,
@@ -551,7 +550,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             }
             db_query("CREATE TABLE IF NOT EXISTS login_failure (
                 id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                ip varchar(15) NOT NULL,
+                ip varchar(45) NOT NULL,
                 count tinyint(4) unsigned NOT NULL default '0',
                 last_fail datetime NOT NULL,
                 UNIQUE KEY ip (ip)) $charset_spec");
@@ -579,9 +578,10 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `details` TEXT NOT NULL,
                         `action_type` INT(11) NOT NULL DEFAULT 0,
                         `ts` DATETIME NOT NULL,
-                        `ip` VARCHAR(39) NOT NULL DEFAULT '',
+                        `ip` VARCHAR(45) NOT NULL DEFAULT '',
                         PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
-                
+
+            
                 db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT,
                         `user_id` INT(11) NOT NULL DEFAULT 0,
@@ -590,7 +590,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `details` TEXT NOT NULL,
                         `action_type` INT(11) NOT NULL DEFAULT 0,
                         `ts` DATETIME NOT NULL,
-                        `ip` VARCHAR(39) NOT NULL DEFAULT '',
+                        `ip` VARCHAR(45) NOT NULL DEFAULT '',
                         PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
 
 		// add index on `loginout`.`id_user` for performace
@@ -674,7 +674,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `post_text` MEDIUMTEXT NOT NULL,
                         `poster_id` INT(10) NOT NULL DEFAULT 0,
                         `post_time` DATETIME,
-                        `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,
+                        `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
                         `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
 
                 db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
@@ -857,14 +857,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `assignment_id` INT(11) NOT NULL DEFAULT 0,
                             `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
+                            `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                             `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                             `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                             `comments` TEXT NOT NULL,
                             `grade` VARCHAR(50) NOT NULL DEFAULT '',
                             `grade_comments` TEXT NOT NULL,
                             `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
-                            `grade_submission_ip` VARCHAR(16) NOT NULL DEFAULT '',
+                            `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                             `group_id` INT( 11 ) NOT NULL DEFAULT 0)");
 
                 db_query("DROP TABLE IF EXISTS agenda");
@@ -957,7 +957,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("CREATE TABLE IF NOT EXISTS `logins` (
                           `id` int(11) NOT NULL auto_increment,
                           `user_id` int(11) NOT NULL,
-                          `ip` char(16) NOT NULL default '0.0.0.0',
+                          `ip` char(45) NOT NULL default '0.0.0.0',
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
@@ -1229,6 +1229,21 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                     END IF;
                                 END");
             }
+            
+            
+                // Update ip-containing fields to support IPv6 addresses
+                db_query("ALTER TABLE `log` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                db_query("ALTER TABLE `login_failure` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+		db_query("ALTER TABLE `loginout` CHANGE `ip` `ip` CHAR(45) NOT NULL DEFAULT '0.0.0.0'");
+                db_query("ALTER TABLE `log_archive` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+                db_query("ALTER TABLE `assignment_submit` CHANGE COLUMN `submission_ip`
+                            `submission_ip` VARCHAR(45)");
+                db_query("ALTER TABLE `assignment_submit` CHANGE COLUMN `grade_submission_ip`
+                            `grade_submission_ip` VARCHAR(45)");
+                db_query("ALTER TABLE `forum_post` CHANGE COLUMN `poster_ip`
+                        `poster_ip` VARCHAR(45)");
+                db_query("ALTER TABLE `logins` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
+
          }
 
         // Rename table `cours` to `course` and `cours_user` to `course_user`

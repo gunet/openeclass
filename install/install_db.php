@@ -88,7 +88,7 @@ db_query("CREATE TABLE IF NOT EXISTS `log` (
   `details` text NOT NULL,
   `action_type` int(11) NOT NULL default '0',
   `ts` datetime NOT NULL,
-  `ip` varchar(39) NOT NULL default '0',
+  `ip` varchar(45) NOT NULL default '0',
   PRIMARY KEY  (`id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
@@ -99,7 +99,7 @@ db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
   `details` text NOT NULL,
   `action_type` int(11) NOT NULL default '0',
   `ts` datetime NOT NULL,
-  `ip` varchar(39) NOT NULL default '0',
+  `ip` varchar(45) NOT NULL default '0',
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #
@@ -224,7 +224,7 @@ db_query("CREATE TABLE admin (
 
 db_query("CREATE TABLE login_failure (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    ip varchar(15) NOT NULL,
+    ip varchar(45) NOT NULL,
     count tinyint(4) unsigned NOT NULL default '0',
     last_fail datetime NOT NULL,
     UNIQUE KEY ip (ip)) $charset_spec");
@@ -232,7 +232,7 @@ db_query("CREATE TABLE login_failure (
 db_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
       id_user mediumint(9) unsigned NOT NULL default '0',
-      ip char(39) NOT NULL default '0.0.0.0',
+      ip char(45) NOT NULL default '0.0.0.0',
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
@@ -398,7 +398,7 @@ db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
   `post_text` MEDIUMTEXT NOT NULL,
   `poster_id` INT(10) NOT NULL DEFAULT 0,
   `post_time` DATETIME,
-  `poster_ip` VARCHAR(39) DEFAULT '' NOT NULL,
+  `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
   `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
@@ -575,14 +575,14 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                 `assignment_id` INT(11) NOT NULL DEFAULT '0',
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `submission_ip` VARCHAR(39) NOT NULL DEFAULT '',
+                `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                 `comments` TEXT NOT NULL,
                 `grade` VARCHAR(50) NOT NULL DEFAULT '',
                 `grade_comments` TEXT NOT NULL,
                 `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
-                `grade_submission_ip` VARCHAR(39) NOT NULL DEFAULT '',
+                `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `exercise` (
@@ -1088,7 +1088,7 @@ db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
 db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `id` int(11) NOT NULL auto_increment,
         `user_id` int(11) NOT NULL,
-        `ip` char(16) NOT NULL default '0.0.0.0',
+        `ip` char(45) NOT NULL default '0.0.0.0',
         `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY  (`id`))");
