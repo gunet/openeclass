@@ -75,13 +75,16 @@ $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'ti
 $menuTypeID = ($is_in_tinymce) ? 5: 2;
 
 if ($is_in_tinymce) {
-
     $_SESSION['embedonce'] = true; // necessary for baseTheme
 
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
+
+list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
+        ? select_proper_filters($_REQUEST['docsfilter']) 
+        : array('', '', true);
 
 if($is_editor) {
         load_js('tools.js');
@@ -417,9 +420,6 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
-list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
-        ? select_proper_filters($_REQUEST['docsfilter']) 
-        : array('', '', true);
 
 $count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video WHERE course_id = $course_id $filterv ORDER BY title"));
 $count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks WHERE course_id = $course_id $filterl
@@ -590,10 +590,8 @@ function select_proper_filters($requestDocsFilter) {
         case 'image':
             $ors = '';
             $first = true;
-            foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
-            {
-                if ($first)
-                {
+            foreach (MultimediaHelper::getSupportedImages() as $imgfmt) {
+                if ($first) {
                     $ors .= "path LIKE '%$imgfmt%'";
                     $first = false;
                 } else
