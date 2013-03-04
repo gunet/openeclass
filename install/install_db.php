@@ -931,7 +931,7 @@ db_query("CREATE TABLE user_request (
                 comment text,
                 lang varchar(16) NOT NULL DEFAULT 'el',
                 statut tinyint(4) NOT NULL DEFAULT 1,
-                ip_address INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                request_ip varchar(45) NOT NULL DEFAULT '',
                 PRIMARY KEY (id)) $charset_spec");
 
 

@@ -446,7 +446,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                         CHANGE proftmima faculty_id INT(11) NOT NULL DEFAULT 0,
                                         CHANGE profcomm phone VARCHAR(20) NOT NULL DEFAULT '',
                                         CHANGE lang lang VARCHAR(16) NOT NULL DEFAULT 'el',
-                                        ADD ip_address INT(11) UNSIGNED NOT NULL DEFAULT 0");
+                                        ADD request_ip varchar(45) NOT NULL DEFAULT ''");
                 }
 
                 // Upgrade table admin_announcements if needed
@@ -1243,8 +1243,22 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("ALTER TABLE `forum_post` CHANGE COLUMN `poster_ip`
                         `poster_ip` VARCHAR(45)");
                 db_query("ALTER TABLE `logins` CHANGE COLUMN `ip` `ip` VARCHAR(45)");
-
-         }
+                
+                // There is a special case with user_request storing its IP in numeric format
+                $fields_user_request = mysql_list_fields($mysqlMainDb, 'user_request');
+                $columns_user_request = mysql_num_fields($fields_user_request);
+                for ($i = 0; $i < $columns_user_request; $i++) {
+                    if (mysql_field_name($fields_user_request, $i) == "ip_address") {
+                        db_query("ALTER TABLE `user_request` ADD `request_ip` varchar(45) NOT NULL DEFAULT ''");
+                        $result = db_query("SELECT id,INET_NTOA(ip_address) FROM user_request");
+                        while ($row = mysql_fetch_array($result)) {
+                            db_query("UPDATE `user_request` SET `request_ip` = '" . $row[1] . "' WHERE `id` = " . $row[0]);
+                        }
+                        db_query("ALTER TABLE `user_request` DROP `ip_address`");
+                        break;
+                    }
+                }
+    }
 
         // Rename table `cours` to `course` and `cours_user` to `course_user`
         if (!mysql_table_exists($mysqlMainDb, 'course')) {

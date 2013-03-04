@@ -136,7 +136,7 @@ if ($all_set) {
 			date_open = NOW(),
 			comment = " . autoquote($usercomment). ',
 			lang = ' . quote($language). ",
-			ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')",
+			request_ip = " . autoquote($_SERVER[REMOTE_ADDR]),
 		$mysqlMainDb);
 
 	if (!$res) {

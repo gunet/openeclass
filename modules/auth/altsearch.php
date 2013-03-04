@@ -363,7 +363,7 @@ if ($is_valid) {
                          date_open = NOW(),
                          comment = " . autoquote($usercomment) . ",
                          lang = '$language',
-                         ip_address = inet_aton('$_SERVER[REMOTE_ADDR]')", $mysqlMainDb);
+                         request_ip = " . autoquote($_SERVER[REMOTE_ADDR]), $mysqlMainDb);
 
                 $request_id = mysql_insert_id();
 
