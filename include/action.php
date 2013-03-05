@@ -81,45 +81,49 @@ class action {
 
 
 // ophelia 2006-08-02: per month and per course
-    function summarize() {
+    function summarize($course_id = null) {
+        if ($course_id == null)
+            $course_id = $GLOBALS['course_id'];
+        
         // set start/stop dates
         $now = time();
         $stop_stmp = mktime(0, 0, 0, date("m", $now)- (get_config('actions_expire_interval')-1), 1, date("Y", $now)); // minus proper amount of months
         $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
-        $start_date = $this->calcSumStartDate();
+        $start_date = $this->calcSumStartDate($course_id);
 	$stmp = strtotime($start_date);
         $end_stmp = mktime(0, 0, 0, date("m", $stmp)+1, 1, date("Y", $stmp)); // min time + 1 month
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
         
         while ($end_date < $stop_month)
-            list($start_date, $end_date, $end_stmp) = $this->doSummarize($start_date, $end_date, $end_stmp);
+            list($start_date, $end_date, $end_stmp) = $this->doSummarize($course_id, $start_date, $end_date, $end_stmp);
     }
     
     /**
      * Summarize All statitics of current course: from its start up to (and including) the current month.
      */
-    function summarizeAll() {
+    function summarizeAll($course_id = null) {
+        if ($course_id == null)
+            $course_id = $GLOBALS['course_id'];
+        
         // set start/stop dates
         $now = time();
         $stop_stmp = mktime(0, 0, 0, date("m", $now)+1, 1, date("Y", $now)); // + 1 month offset
         $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
-        $start_date = $this->calcSumStartDate();
+        $start_date = $this->calcSumStartDate($course_id);
 	$stmp = strtotime($start_date);
         $end_stmp = mktime(0, 0, 0, date("m", $stmp)+1, 1, date("Y", $stmp)); // min time + 1 month
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
         
         while ($end_date <= $stop_month)
-            list($start_date, $end_date, $end_stmp) = $this->doSummarize($start_date, $end_date, $end_stmp);
+            list($start_date, $end_date, $end_stmp) = $this->doSummarize($course_id, $start_date, $end_date, $end_stmp);
     }
     
-    private function calcSumStartDate() {
-        global $course_id;
-        
+    private function calcSumStartDate($course_id) {
         $sql_0 = "SELECT min(day) as min_date
                     FROM actions_daily
-                   WHERE course_id = $course_id";
+                   WHERE course_id = " . intval($course_id);
         
         $result = db_query($sql_0);
         while ($row = mysql_fetch_assoc($result))
@@ -131,9 +135,7 @@ class action {
         return $start_date;
     }
     
-    private function doSummarize($start_date, $end_date, $end_stmp) {
-        global $course_id;
-        
+    private function doSummarize($course_id, $start_date, $end_date, $end_stmp) {
         $sql_1 = "SELECT DISTINCT module_id
                     FROM actions_daily
                    WHERE course_id = $course_id";

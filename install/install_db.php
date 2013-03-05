@@ -1039,6 +1039,12 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('log_purge_interval', 12),
                 ('version', '" . ECLASS_VERSION ."')");
 
+// table for cron parameters
+db_query("CREATE TABLE `cron_params` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `name` VARCHAR(255) NOT NULL UNIQUE,
+        `last_run` DATETIME NOT NULL) $charset_spec");
+
 // tables for units module
 db_query("CREATE TABLE `course_units` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,

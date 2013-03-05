@@ -53,9 +53,6 @@ $tool_content .= "
   </div>";
 
 
-// move data from table 'loginout' to 'loginout_summary' if older than eight months
-require_once 'modules/admin/summarizeLogins.php';
-
 require_once 'include/jscalendar/calendar.php';
 
 $lang = ($language == 'el')? 'el': 'en';

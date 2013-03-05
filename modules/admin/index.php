@@ -25,12 +25,6 @@ require_once '../../include/baseTheme.php';
 $nameTools = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
-// This is used for inserting data in 'monthly_report' table.
-// The work is done every time the admin page is called in order to
-// ensure correct (up-to-date) information on the table.
-require_once "summarizeMonthlyData.php";
-mysql_select_db($mysqlMainDb);
-
 // Construct a table with platform identification info
 $tool_content .= "
   <br />
@@ -150,6 +144,8 @@ $tool_content .= "
   </fieldset>
   <br />";
 
+
+// INDEX RELATED
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/search/courseindexer.class.php';
 $idx = new Indexer();
@@ -194,5 +190,29 @@ $tool_content .= "
     </table>
   </fieldset>
   <br />";
+
+
+// CRON RELATED
+$tool_content .= "<img src='cron.php' width='2' height='1' alt=''/>";
+$res = db_query("SELECT name, last_run FROM cron_params");
+if (mysql_num_rows($res) >= 1) {
+    $tool_content .= "
+      <fieldset>
+      <legend>$langCronInfo</legend>
+        <table width='100%' class='tbl'>
+        <tr>
+          <th width='260'>$langCronName</th>
+          <td>$langCronLastRun</td>
+        </tr>";
+
+    while ($row = mysql_fetch_assoc($res))
+        $tool_content .= "<tr><th>" . $row['name'] . "</th><td>" . $row['last_run'] . "</td></tr>";
+
+    $tool_content .= "
+      </tbody>
+      </table>
+      <br />";
+}
+
 
 draw($tool_content,3);
