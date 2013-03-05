@@ -673,19 +673,19 @@ if ($can_upload) {
 			    <th>$langAuthor : </th>
 			    <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
 			  </tr>";
+                        $dialogBox .= "<tr><th>$langCopyrighted : </th><td>";
+                        $dialogBox .= selection(array('0' => $langCopyrightedUnknown,
+                                                     '2' => $langCopyrightedFree,
+                                                     '1' => $langCopyrightedNotFree,
+                                                     '3' => $langCreativeCommonsCCBY,
+                                                     '4' => $langCreativeCommonsCCBYSA,
+                                                     '5' => $langCreativeCommonsCCBYND,
+                                                     '6' => $langCreativeCommonsCCBYNC,
+                                                     '7' => $langCreativeCommonsCCBYNCSA,
+                                                     '8' => $langCreativeCommonsCCBYNCND),
+                                                'file_copyrighted', $oldCopyrighted) . "</td></tr>";
 
-                        $dialogBox .= "
-                        <tr>
-                        <th>$langCopyrighted : </th>
-                        <td><input name='file_copyrighted' type='radio' value='0' ";
-                        if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
-
-                        if ($oldCopyrighted=="1") {
-                                $dialogBox .= " checked='checked' ";
-                        }
-                        $dialogBox .= "/>$langCopyrightedNotFree</td></tr>";
-
-                        //ektypwsh tou combox gia epilogh glwssas
+                        // display combo box for language selection
                         $dialogBox .= "
                                 <tr>
                                 <th>$langLanguage :</th>
