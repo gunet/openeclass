@@ -198,7 +198,7 @@ class Log {
          * @brief move logs from table `log` to table `log_archive`
          * @return none
          */
-        public function rotate() {
+        public static function rotate() {
                 
                 $date = get_config('log_expire_interval');
                 // move records in table `log_archive`
@@ -217,7 +217,7 @@ class Log {
          * @brief purge logs from table `logs_archive`
          * @return none
          */
-        public function purge() {
+        public static function purge() {
                 
                 $date = get_config('log_purge_interval');                
                 $sql = db_query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");

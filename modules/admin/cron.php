@@ -20,6 +20,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/cronutil.class.php';
+require_once 'include/log.php';
 session_write_close();
 
 
@@ -49,6 +50,8 @@ function monthlycronjob() {
         summarizeLogins();
         summarizeMonthlyData();
         summarizeMonthlyActions();
+        Log::rotate();
+        Log::purge();
         
         // update last run time
         if ($nevermonthly)
