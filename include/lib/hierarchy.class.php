@@ -1232,10 +1232,13 @@ jContent;
      * @return boolean
      */
     private function useProcedures() {
-        if (version_compare(mysql_get_server_info(), '5.0') >= 0)
-            return true;
-        else
-            return false;
+        global $mysqlMainDb;
+        if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
+            $res = db_query("SHOW PROCEDURE STATUS WHERE Db = '" . $mysqlMainDb . "' AND Name = 'add_node'");
+            if (mysql_num_rows($res) > 0)
+                return true;
+        }
+        return false;
     }
     
     /**
