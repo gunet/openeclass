@@ -296,21 +296,19 @@ if ($is_editor) {
 	$k = 0;
         while ($myrow = mysql_fetch_array($result)) {
                 $myrow['temps'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['temps']));
-		if ($is_editor) {
-		    if ($myrow['visibility'] == 'i') {
+		if ($is_editor and $myrow['visibility'] == 'i') {
 			$visibility = 1;
 			$vis_icon = 'invisible';
 			$tool_content .= "<tr class='invisible'>";
-		    } else {
-			$visibility = 0;
-			$vis_icon = 'visible';
-			if ($k%2 == 0) {
-			       $tool_content .= "<tr class='even'>";
-			} else {
-			       $tool_content .= "<tr class='odd'>";
-			}
-		    }
-		}
+                } else {
+                        $visibility = 0;
+                        $vis_icon = 'visible';
+                        if ($k%2 == 0) {
+                                $tool_content .= "<tr class='even'>";
+                        } else {
+                                $tool_content .= "<tr class='odd'>";
+                        }
+                }
 		$tool_content .= "<td width='16' valign='top'>
 			<img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><b>";

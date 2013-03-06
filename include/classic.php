@@ -67,24 +67,14 @@ function cours_table_end()
 }
 
 $status = array();
-$sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
-                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid        
-                ORDER BY statut, cours.intitule, cours.titulaires";
 $sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
                         cours.intitule title, cours.titulaires profs, cours_user.statut statut
                 FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
                 WHERE cours_user.user_id = $uid
-                AND cours.visible != ".COURSE_INACTIVE."
+                AND (cours.visible != ".COURSE_INACTIVE." OR cours_user.statut = 1)
                 ORDER BY statut, cours.intitule, cours.titulaires";
-
-if ($_SESSION['statut'] == 1) {
-        $result2 = db_query($sql);
-}
-if ($_SESSION['statut'] == 5) {
-        $result2 = db_query($sql2);
-}
+$result2 = db_query($sql2);
+$active_courses = array();
 if ($result2 and mysql_num_rows($result2) > 0) {
 	$k = 0;
         $this_statut = 0;
@@ -100,6 +90,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 }
 		$code = $mycours['code'];
                 $title = $mycours['title'];
+                $active_courses[$mycours['cours_id']] = $code;
 		$status[$code] = $this_statut;
 		$cours_id_map[$code] = $mycours['cours_id'];
                 $profs[$code] = $mycours['profs'];
@@ -134,59 +125,54 @@ if ($result2 and mysql_num_rows($result2) > 0) {
         $tool_content .= "\n<p class='success'>$langWelcomeProf</p>\n";
 }
 
-if (count($status) > 0) {
-        $announce_table_header = "
-        <table width='100%' class='sortable' id='t3'>
-        <tr>
-           <th colspan='2'>$langMyPersoAnnouncements</th>
-        </tr>\n";
-
+$announcements = array();
+if (count($active_courses) > 0) {
         $logindate = last_login($uid);
-
-        $table_begin = true;        
-        
-                
-                $result = db_query("SELECT annonces.id, contenu, temps, title, cours_id
-                                FROM `$mysqlMainDb`.annonces, `$code`.accueil
-                                WHERE cours_id IN (SELECT cours_id from cours_user WHERE user_id = $uid)
-				AND `$mysqlMainDb`.annonces.visibility = 'v'
-                                AND temps > DATE_SUB('$logindate', INTERVAL 10 DAY)
-                                AND `$code`.accueil.visible = 1
-                                AND `$code`.accueil.id = 7
-                                ORDER BY temps DESC", $mysqlMainDb);
-
-                if ($result and mysql_num_rows($result) > 0) {
-                        if ($table_begin) {
-                                $table_begin = false;
-                                $tool_content .= $announce_table_header;
+        foreach ($active_courses as $cid => $code) {
+                $q = db_query("SELECT annonces.id, preview, temps, title, cours_id
+                        FROM `$mysqlMainDb`.annonces, `$code`.accueil
+                        WHERE cours_id = $cid AND
+                              `$mysqlMainDb`.annonces.visibility = 'v' AND
+                               temps > DATE_SUB('$logindate', INTERVAL 10 DAY) AND
+                               `$code`.accueil.visible = 1 AND
+                               `$code`.accueil.id = 7
+                        ORDER BY temps DESC");
+                if ($q and mysql_num_rows($q) > 0) {
+                        while ($info = mysql_fetch_assoc($q)) {
+                                $info['code'] = $code;
+                                $info['cours_id'] = $cid;
+                                $announcements[] = $info;
                         }
-                        $la = 0;
-                        while ($ann = mysql_fetch_array($result)) {
-                                        $course_title = course_id_to_title($ann['cours_id']);
-                                        $code = course_id_to_code($ann['cours_id']);
-                                        $content = standard_text_escape($ann['contenu'], 'courses/mathimg/');
-                                        if ($la%2 == 0) {
-                                                $tool_content .= "<tr class='even'>\n";
-                                        } else {
-                                                $tool_content .= "<tr class='odd'>\n";
-                                        }
-                                        $tool_content .= "
-					<td width='16'>
-					    <img src='$themeimg/arrow.png' alt='' /></td><td>
-						<b><a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
-						<br>" . "<span class='smaller'>" .
-					    claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
-					    "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
-					    q($profs[$code]) . "</b></span>)<br />".
-					    standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/announcements.php?course=$code&amp;an_id=$ann[id]'>
-						<span class='smaller'>[$langMore]</span></a></strong>"), 'courses/mathimg/')."</td></tr>\n";
-                                        $la++;
-                                }
-                        }        
-        if (!$table_begin) {
-                $tool_content .= "\n</table>";
+                }
         }
 }
-if (isset($status)) {
-	$_SESSION['status'] = $status;
+if (count($announcements)) {
+        $tool_content .= "
+        <table width='100%' class='sortable' id='t3'>
+                <tr>
+                   <th colspan='2'>$langMyPersoAnnouncements</th>
+                </tr>\n";
+        $la = 0;
+        $lastcode = '';
+        foreach ($announcements as $ann) {
+                $code = $ann['code'];
+                if ($code != $lastcode) {
+                        $course_title = "<a href='$urlAppend/courses/$code/'>" .
+                                q(course_id_to_title($ann['cours_id'])) . "</a>";
+                        $tool_content .= "<tr class=''><td colspan='2'>" . q($langCourse) .
+                                ": <b>$course_title</b></td></tr>\n";
+                }
+                $lastcode = $code;
+                $class = ($la % 2)? 'odd': 'even';
+                $tool_content .= "
+                        <tr class='$class'>
+                            <td width='16'>" . icon('arrow', '') . "</td>
+                            <td>
+                            <b><a href='modules/announcements/announcements.php?course=$ann[code]&amp;an_id=$ann[id]'>".q($ann['title']) .
+                            "</a></b><br>" .
+                            claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
+                            "<br>$ann[preview]</td></tr>\n";
+                $la++;
+        }
+        $tool_content .= "\n</table>\n";
 }
