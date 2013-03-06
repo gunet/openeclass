@@ -97,7 +97,7 @@ if (isset($_GET['store']) && $is_editor) {
 
 // add new line
 if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
-	$chatLine = standard_text_escape($_GET['chatLine']);
+	$chatLine = purify($_GET['chatLine']);
 	$fchat = fopen($fileChatName,'a');
 	fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
 	fclose($fchat);
@@ -114,11 +114,9 @@ $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
 foreach ($fileReverse as $thisLine) {
-	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
-	if (strpos($newline, '</span>') === false) {
-		$newline .= '</span>';
-	}
- 	echo '<div><span>'. q($newline) ."</div>\n";
+        $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
+        $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
+ 	echo '<div>'. purify($newline) ."</div>\n";
 }
 echo "</body></html>\n";
 
