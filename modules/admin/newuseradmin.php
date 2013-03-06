@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -116,13 +116,13 @@ if($submit) {
                 $hasher = new PasswordHash(8, false);
                 $password_encrypted = $hasher->HashPassword($password);
                 $inscr_user = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail)
+                                (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                                 VALUES (" .
                                 autoquote($nom_form) . ', '.
                                 autoquote($prenom_form) . ', '.
                                 autoquote($uname) . ", '$password_encrypted', ".
                                 autoquote($email_form) .
-                                ", $pstatut, ".autoquote($phone).", ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail)");
+                                ", $pstatut, ".autoquote($phone).", ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail, '')");
                 $uid = mysql_insert_id();
                 $user->refresh($uid, array(intval($depid)));
 
