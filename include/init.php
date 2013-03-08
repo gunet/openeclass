@@ -66,6 +66,9 @@ mysql_select_db($mysqlMainDb, $db);
 if (isset($language)) {
         // Old-style config.php, redirect to upgrade
         $language = langname_to_code($language);
+        if (isset($_SESSION['langswitch'])) {
+                $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
+        }
         if (!defined('UPGRADE')) {
                 redirect_to_home_page('upgrade/');
         }
