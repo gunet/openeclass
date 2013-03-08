@@ -37,32 +37,7 @@ if (!defined('INDEX_START')) {
 define('MAIN', 0);
 
 include 'redirector.php';
-$status = array();
-$sql = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
-                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid        
-                ORDER BY statut, cours.intitule, cours.titulaires";
-$sql2 = "SELECT cours.cours_id cours_id, cours.code code, cours.fake_code fake_code,
-                        cours.intitule title, cours.titulaires profs, cours_user.statut statut
-                FROM cours JOIN cours_user ON cours.cours_id = cours_user.cours_id
-                WHERE cours_user.user_id = $uid
-                AND cours.visible != ".COURSE_INACTIVE."
-                ORDER BY statut, cours.intitule, cours.titulaires";
 
-if ($_SESSION['statut'] == 1) {
-        $result2 = db_query($sql);
-}
-if ($_SESSION['statut'] == 5) {            
-        $result2 = db_query($sql2);
-}
-
-if ($result2 and mysql_num_rows($result2) > 0) {
-	while ($mycours = mysql_fetch_array($result2)) {
-		$status[$mycours['code']] = $mycours['statut'];
-	}
-}
-$_SESSION['status'] = $status;
 $subsystem = MAIN;
 
 include "lib/textLib.inc.php";

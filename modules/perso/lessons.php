@@ -43,44 +43,26 @@
  */
 function getUserLessonInfo($uid, $type)
 {
-	global $mysqlMainDb;
-	//	TODO: add the new fields for memory in the db
-        if ($_SESSION['statut'] == 5) {
-                $user_courses = "SELECT cours.cours_id cours_id,
-                                        cours.code code,
-                                        cours.fake_code fake_code,
-                                        cours.intitule title,
-                                        cours.titulaires professor,
-                                        cours.languageCourse,
-                                        cours_user.statut statut,
-                                        user.perso,
-                                        user.announce_flag,
-                                        user.doc_flag,
-                                        user.forum_flag
-                                 FROM cours, cours_user, user
-                                 WHERE cours.cours_id = cours_user.cours_id AND
-                                       cours_user.user_id = $uid AND
-                                       user.user_id = $uid
-                                       AND cours.visible != ".COURSE_INACTIVE."
-                                 ORDER BY cours.intitule, cours.titulaires";
-        } elseif ($_SESSION['statut'] == 1)  {
-                $user_courses = "SELECT cours.cours_id cours_id,
+	global $mysqlMainDb, $status;
+        $user_courses = "SELECT cours.cours_id cours_id,
                                 cours.code code,
                                 cours.fake_code fake_code,
-	                        cours.intitule title,
+                                cours.intitule title,
                                 cours.titulaires professor,
-	                        cours.languageCourse,
-	                        cours_user.statut statut,
-	                        user.perso,
-	                        user.announce_flag,
-	                        user.doc_flag,
-	                        user.forum_flag
-	                 FROM cours, cours_user, user
-	                 WHERE cours.cours_id = cours_user.cours_id AND
-	                       cours_user.user_id = $uid AND
-	                       user.user_id = $uid
+                                cours.languageCourse,
+                                cours_user.statut statut,
+                                user.perso,
+                                user.announce_flag,
+                                user.doc_flag,
+                                user.forum_flag
+                         FROM cours, cours_user, user
+                         WHERE cours.cours_id = cours_user.cours_id AND
+                               cours_user.user_id = $uid AND
+                               user.user_id = $uid AND
+                               (cours.visible != ".COURSE_INACTIVE." OR cours_user.statut = 1)
                          ORDER BY cours.intitule, cours.titulaires";
-        }
+
+        $status = array();
 
 	$lesson_titles = $lesson_fakeCode = $lesson_id = $lesson_code = 
                          $lesson_professor = $lesson_statut = array();
@@ -88,6 +70,7 @@ function getUserLessonInfo($uid, $type)
 	$repeat_val = 0;
 	//getting user's lesson info
 	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
+		$status[$mycourses['code']] = $mycourses['statut'];
 		$lesson_id[$repeat_val] 	= $mycourses['cours_id'];
 		$lesson_titles[$repeat_val] 	= $mycourses['title'];
 		$lesson_code[$repeat_val]	= $mycourses['code'];
@@ -115,6 +98,8 @@ function getUserLessonInfo($uid, $type)
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;
 	$ret_val[8] = $lesson_id;
+
+        $_SESSION['status'] = $status;
 
 	//check what sort of data should be returned
 	if ($type == 'html') {
