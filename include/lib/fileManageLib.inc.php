@@ -386,6 +386,17 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         if (!$v) {
                 die("error: ".$zipfile->errorInfo(true));
         }
+        $real_paths = array();
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+                $filename = $GLOBALS['map_filenames'][$path];
+                $GLOBALS['common_filenames'][$real_path] = $filename;
+                $real_paths[] = $real_path;
+        }
+        $v = $zipfile->add($real_paths,
+                           PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
+        if (!$v) {
+                die("error: ".$zipfile->errorInfo(true));
+        }
 }
 
 // Creates mapping between encoded filenames and real filenames
@@ -397,10 +408,15 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $encoded_filenames = $decoded_filenames = $filename = array();
 
         $hidden_dirs = array();
-        $sql = db_query("SELECT path, filename, visible, format FROM document
+        $sql = db_query("SELECT path, filename, visible, format, extra_path FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
+                if ($cpath = common_doc_path($files['extra_path'], true)) {
+                        if ($include_invisible or $files['visible'] == 1) {
+                                $GLOBALS['common_docs'][$files['path']] = $cpath;
+                        }
+                }
                 $GLOBALS['path_visibility'][$files['path']] =
                         ($include_invisible or $files['visible'] == 1);
                 array_push($encoded_filenames, $files['path']);
@@ -478,6 +494,14 @@ function convert_to_real_filename($p_event, &$p_header)
         return 1;
 }
 
+// PclZip callback function to store common documents with real filenames
+function convert_to_real_filename_common($p_event, &$p_header)
+{
+        global $common_filenames;
+
+        $p_header['stored_filename'] = substr(greek_to_latin($common_filenames[$p_header['filename']]), 1);
+        return 1;
+}
 
 
 //------------------------------------------------------------------------------
