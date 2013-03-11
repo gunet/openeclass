@@ -111,6 +111,8 @@ if ($file_info['extra_path']) {
                 // external file URL
                 header("Location: $file_info[extra_path]");
                 exit;
+        } elseif (!$common_doc_visible) {
+                forbidden(preg_replace('/^.*file\.php/', '', $uri));
         }
 } else {
         // Normal file

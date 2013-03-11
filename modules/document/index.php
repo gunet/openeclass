@@ -131,6 +131,9 @@ if (isset($_GET['download'])) {
         } elseif ($extra_path) {
                 if ($real_path = common_doc_path($extra_path, true)) {
                         // Common document
+                        if (!$common_doc_visible) {
+                                forbidden($downloadDir);
+                        }  
                         $dload_filename = $real_path;
                         $delete = false;
                 } else {

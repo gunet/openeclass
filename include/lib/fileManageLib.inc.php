@@ -413,7 +413,8 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
                                       path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
                 if ($cpath = common_doc_path($files['extra_path'], true)) {
-                        if ($include_invisible or $files['visible'] == 1) {
+                        if ($GLOBALS['common_doc_visible'] and
+                            ($include_invisible or $files['visible'] == 1)) {
                                 $GLOBALS['common_docs'][$files['path']] = $cpath;
                         }
                 }
@@ -460,18 +461,28 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
 /**
  * Check if a path (from document table extra_path field) points to a common
  * document and if so return the full path on disk, else return false. 
+ * Sets global $common_doc_visible = false if file pointed to is invisible
  *
  * @global string $webDir
+ * @global bool $common_doc_visible
  * @param string $extra_path
  * @param bool $full Return full on-disk path
  * @return string|boolean
  */
 function common_doc_path($extra_path, $full=false)
 {
-        global $webDir;
-        
+        global $webDir, $common_doc_visible;
         if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
-                return ($full? $webDir: '') . '/courses/commondocs' . $matches[1];
+                $cpath = $matches[1];
+                $q = db_query("SELECT visible FROM document
+                                      WHERE path = " . quote($cpath) . " AND
+                                            subsystem = " . COMMON);
+                if ($q and list($vis) = mysql_fetch_row($q) and $vis) {
+                        $common_doc_visible = true;
+                } else {
+                        $common_doc_visible = false;
+                }
+                return ($full? $webDir: '') . '/courses/commondocs' . $cpath;
         } else {
                 return false;
         }
