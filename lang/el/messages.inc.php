@@ -1720,6 +1720,7 @@ $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής Πλατφόρμας';
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
+$lang_course_metadata = "Μετασχολιασμός Μαθημάτων";
 
 
 /********************************************************
@@ -3467,3 +3468,7 @@ $langPwStrengthWeak = "Αδύναμο";
 $langPwStrengthGood = "Καλό";
 $langPwStrengthStrong = "Δυνατό";
 
+/********************************************
+ Messages for Course Metadata
+ *******************************************/
+$langCourseMetadata = "Μεταδεδομένα μαθήματος";

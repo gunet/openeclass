@@ -565,8 +565,9 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
         }
 
         if ($oldversion < '3') {
-                db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
-                                        ('actions_expire_interval', 12)");
+                db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
+                                            ('actions_expire_interval', 12),
+                                            ('course_metadata', 0)");
             
                 db_query("DROP TABLE IF EXISTS passwd_reset");
 

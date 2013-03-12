@@ -152,7 +152,8 @@ if (isset($_POST['submit']))  {
                         'login_fail_forgive_interval' => true,
                         'actions_expire_interval' => true,
                         'log_expire_interval' => true,
-                        'log_purge_interval' => true);
+                        'log_purge_interval' => true,
+                        'course_metadata' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -317,6 +318,7 @@ else {
         $cbox_restrict_owndep = get_config('restrict_owndep') ? 'checked' : '';
         $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
         $town_dis = get_config('restrict_owndep') ? '' : 'disabled';
+        $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
         <legend>$langCourseSettings</legend>
@@ -333,6 +335,9 @@ else {
 	  <tr>		
 		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
+          <tr>
+		<td><input type='checkbox' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+          </tr>
         </table></fieldset>";
         
         $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames')? 'checked': '';

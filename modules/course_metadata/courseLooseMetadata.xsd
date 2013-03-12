@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.openeclass.org"
+           xmlns="http://www.openeclass.org"
+           elementFormDefault="qualified">
+    
+<xs:annotation>
+    <xs:documentation>
+    /* ========================================================================
+     * Open eClass 3.0
+     * E-learning and Course Management System
+     * ========================================================================
+     * Copyright 2003-2013  Greek Universities Network - GUnet
+     * A full copyright notice can be read in "/info/copyright.txt".
+     * For a full list of contributors, see "credits.txt".
+     *
+     * Open eClass is an open platform distributed in the hope that it will
+     * be useful (without any warranty), under the terms of the GNU (General
+     * Public License) as published by the Free Software Foundation.
+     * The full license can be read in "/info/license/license_gpl.txt".
+     *
+     * Contact address: GUnet Asynchronous eLearning Group,
+     *                  Network Operations Center, University of Athens,
+     *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+     *                  e-mail: info@openeclass.org
+     * ======================================================================== */
+    </xs:documentation>
+</xs:annotation>
+    
+<!-- definition of primitive types -->
+<xs:simpleType name="t_string">
+    <xs:restriction base="xs:string"/>
+</xs:simpleType>
+
+<xs:simpleType name="t_integer">
+    <xs:restriction base="xs:integer"/>
+</xs:simpleType>
+
+<xs:simpleType name="t_positiveInteger">
+    <xs:restriction base="xs:positiveInteger"/>
+</xs:simpleType>
+
+<xs:simpleType name="t_boolean">
+    <xs:restriction base="xs:boolean"/>
+</xs:simpleType>
+
+<xs:simpleType name="t_url">
+    <xs:restriction base="xs:anyURI"/>
+</xs:simpleType>
+
+<xs:simpleType name="t_blob">
+    <xs:restriction base="xs:base64Binary"/>
+</xs:simpleType>
+
+<!-- definition of simple types -->
+<xs:simpleType name="t_level">
+    <xs:restriction base="t_string">
+        <xs:enumeration value="undergraduate"/>
+        <xs:enumeration value="graduate"/>
+        <xs:enumeration value="doctoral"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="t_yearOfStudy">
+    <xs:restriction base="t_positiveInteger">
+        <xs:enumeration value="1"/>
+        <xs:enumeration value="2"/>
+        <xs:enumeration value="3"/>
+        <xs:enumeration value="4"/>
+        <xs:enumeration value="5"/>
+        <xs:enumeration value="6"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="t_semester">
+    <xs:restriction base="t_positiveInteger">
+        <xs:enumeration value="1"/>
+        <xs:enumeration value="2"/>
+        <xs:enumeration value="3"/>
+        <xs:enumeration value="4"/>
+        <xs:enumeration value="5"/>
+        <xs:enumeration value="6"/>
+        <xs:enumeration value="7"/>
+        <xs:enumeration value="8"/>
+        <xs:enumeration value="9"/>
+        <xs:enumeration value="10"/>
+        <xs:enumeration value="11"/>
+        <xs:enumeration value="12"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="t_type">
+    <xs:restriction base="t_string">
+        <xs:enumeration value="compulsory"/>
+        <xs:enumeration value="optional"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="t_format">
+    <xs:restriction base="t_string">
+        <xs:enumeration value="slides"/>
+        <xs:enumeration value="notes"/>
+        <xs:enumeration value="video lectures"/>
+        <xs:enumeration value="podcasts"/>
+        <xs:enumeration value="audio material"/>
+        <xs:enumeration value="multimedia material"/>
+        <xs:enumeration value="interactive exercises"/>
+    </xs:restriction>
+</xs:simpleType>
+
+<!-- definition of complex types -->
+<xs:complexType name="t_langString">
+    <xs:simpleContent>
+        <xs:extension base="t_string">
+            <xs:attribute name="lang" type="t_string" use="required"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
+<xs:complexType name="t_instructor">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="firstName"       type="t_langString"/>
+        <xs:element name="middleName"      type="t_langString"/>
+        <xs:element name="lastName"        type="t_langString"/>
+        <xs:element name="fullName"        type="t_langString"/>
+        <xs:element name="email"           type="t_string"/>
+        <xs:element name="phone"           type="t_string"/>
+        <xs:element name="institution"     type="t_string"/>
+        <xs:element name="department"      type="t_string"/>
+        <xs:element name="language"        type="t_string"/>
+        <xs:element name="moreInformation" type="t_langString"/>
+        <xs:element name="photo"           type="t_blob"/>
+    </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="t_multimedia">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="title"       type="t_string"/>
+        <xs:element name="speaker"     type="t_string"/>
+        <xs:element name="subject"     type="t_string"/>
+        <xs:element name="description" type="t_string"/>
+        <xs:element name="keywords"    type="t_string"/>
+        <xs:element name="url"         type="t_url"/>
+    </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="t_digital">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="url"     type="t_url"/>
+        <xs:element name="library" type="t_string"/>
+    </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="t_material">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="notes"      type="t_string"/>
+        <xs:element name="slides"     type="t_string"/>
+        <xs:element name="exercises"  type="t_string"/>
+        <xs:element name="multimedia" type="t_multimedia"/>
+        <xs:element name="other"      type="t_string"/>
+        <xs:element name="digital"    type="t_digital"/>
+    </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="t_unit">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="title"       type="t_langString"/>
+        <xs:element name="description" type="t_langString"/>
+        <xs:element name="keywords"    type="t_langString"/>
+        <xs:element name="material"    type="t_material"/>
+    </xs:choice>
+</xs:complexType>
+
+<xs:complexType name="t_course">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="g_courseinfo"/>
+        <xs:group ref="g_unit"/>
+        <xs:group ref="g_other"/>
+        <xs:group ref="g_allocation"/>
+    </xs:choice>
+</xs:complexType>
+
+<!-- definition of groups -->
+<xs:group name="g_courseinfo">
+    <xs:choice>
+        <xs:element name="instructor"                      type="t_instructor"/>
+        <xs:element name="title"                           type="t_langString"/>
+        <xs:element name="url"                             type="t_url"/>
+        <xs:element name="code"                            type="t_langString"/>
+        <xs:element name="level"                           type="t_level"/>
+        <xs:element name="yearOfStudy"                     type="t_yearOfStudy"/>
+        <xs:element name="semester"                        type="t_semester"/>
+        <xs:element name="type"                            type="t_type"/>
+        <xs:element name="credithours"                     type="t_integer"/>
+        <xs:element name="coTeaching"                      type="t_boolean"/>
+        <xs:element name="coTeachingColleagueOpensCourse"  type="t_boolean"/>
+        <xs:element name="coTeachingAutonomousDepartment"  type="t_boolean"/>
+        <xs:element name="coTeachingDepartmentCreditHours" type="t_integer"/>
+        <xs:element name="language"                        type="t_string"/>
+        <xs:element name="targetGroup"                     type="t_langString"/>
+        <xs:element name="credits"                         type="t_integer"/>
+        <xs:element name="description"                     type="t_langString"/>
+        <xs:element name="contents"                        type="t_langString"/>
+        <xs:element name="objectives"                      type="t_langString"/>
+        <xs:element name="keywords"                        type="t_langString"/>
+        <xs:element name="coursePhoto"                     type="t_blob"/>
+        <xs:element name="contentDevelopment"              type="t_langString"/>
+        <xs:element name="format"                          type="t_format"/>
+        <xs:element name="featuredBooks"                   type="t_langString"/>
+        <xs:element name="structure"                       type="t_langString"/>
+        <xs:element name="teachingMethod"                  type="t_langString"/>
+        <xs:element name="assessmentMethod"                type="t_langString"/>
+        <xs:element name="prerequisites"                   type="t_langString"/>
+        <xs:element name="literature"                      type="t_langString"/>
+        <xs:element name="recommendedComponents"           type="t_langString"/>
+        <xs:element name="assignments"                     type="t_langString"/>
+        <xs:element name="requirements"                    type="t_langString"/>
+        <xs:element name="remarks"                         type="t_langString"/>
+        <xs:element name="acknowledgments"                 type="t_langString"/>
+    </xs:choice>
+</xs:group>
+
+<xs:group name="g_unit">
+    <xs:choice>
+        <xs:element name="numberOfUnits" type="t_integer"/>
+        <xs:element name="unit"          type="t_unit"/>
+    </xs:choice>
+</xs:group>
+
+<xs:group name="g_other">
+    <xs:choice>
+        <xs:element name="eudoxusCode" type="t_string"/>
+        <xs:element name="eudoxusURL"  type="t_url"/>
+        <xs:element name="kalliposURL" type="t_url"/>
+        <xs:element name="thematic"    type="t_langString"/>
+        <xs:element name="license"     type="t_string"/>
+    </xs:choice>
+</xs:group>
+
+<xs:group name="g_allocation">
+    <xs:choice>
+        <xs:element name="institution"            type="t_langString"/>
+        <xs:element name="institutionDescription" type="t_langString"/>
+        <xs:element name="department"             type="t_langString"/>
+        <xs:element name="sector"                 type="t_langString"/>
+        <xs:element name="curriculumTitle"        type="t_langString"/>
+        <xs:element name="curriculumDescription"  type="t_langString"/>
+        <xs:element name="outcomes"               type="t_langString"/>
+        <xs:element name="curriculumKeywords"     type="t_langString"/>
+        <xs:element name="curriculumLevel"        type="t_level"/>
+        <xs:element name="curriculumTargetGroup"  type="t_langString"/>
+    </xs:choice>
+</xs:group>
+
+<!-- ====== root element  ======= -->
+<xs:element name="course" type="t_course"/>
+
+</xs:schema>

@@ -169,7 +169,10 @@ if (isset($_POST['submit'])) {
 	  <ul id='opslist'>
 	    <li><a href='archive_course.php?course=$course_code'>$langBackupCourse</a></li>
 	    <li><a href='delete_course.php?course=$course_code'>$langDelCourse</a></li>
-	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>
+	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>";
+        if (get_config('course_metadata'))
+            $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
+        $tool_content .= "
 	  </ul>
 	</div>";
 
