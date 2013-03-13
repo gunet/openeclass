@@ -621,12 +621,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 		}
 
                 // update table document
-		if (!mysql_field_exists($mysqlMainDb, 'document', 'visible')) {
-		        db_query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
-		        db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
-		        db_query("ALTER TABLE `document` CHANGE `visibility` `visible` TINYINT(4)");
-                        db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NULL AFTER `path`"); 
-		}
+                if (!mysql_field_exists($mysqlMainDb, 'document', 'visible')) {
+                        db_query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+                        db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+                        db_query("ALTER TABLE `document`
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
+                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1,
+                                ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`"); 
+                }
 
                 // Rename table `annonces` to `announcements`
 	        if (!mysql_table_exists($mysqlMainDb, 'announcement')) {

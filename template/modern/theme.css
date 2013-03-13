@@ -823,6 +823,10 @@ td.bold {
     font-weight: bold;
 }
 
+.toolbox {
+    white-space: nowrap;
+}
+
 /*-------------------------------------
    6. Course Stuff
 -------------------------------------*/
