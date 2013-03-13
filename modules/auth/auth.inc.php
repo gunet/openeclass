@@ -376,12 +376,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 								'lastname' => $lastname,
 								'email' => get_ldap_attribute($userinfo, 'mail'));
 						}
-                                         } else {
-                                                 // simple brute force delay
-                                                 sleep(10);
                                          }
-                                } else {
-                                        sleep(10);
                                 }
 			 } else {
 				 $GLOBALS['auth_errors'] = ldap_error($ldap);
@@ -648,7 +643,6 @@ function process_login()
                                         AND DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
 		if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
 		    $auth_allow = 8;
-		    sleep(5); // penalize
 		} else {		
                         $sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
                                 FROM user WHERE username ";
