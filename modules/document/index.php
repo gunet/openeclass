@@ -981,7 +981,7 @@ if ($doc_count == 0) {
                 foreach ($fileinfo as $entry) {
                         $link_title_extra = '';
                         if (($entry['is_dir'] != $is_dir) or
-                            (!$can_upload and !$entry['visible'])) {
+                            (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {
                                 continue;
                         }
                         $cmdDirName = $entry['path'];
@@ -1104,9 +1104,9 @@ if ($doc_count == 0) {
                                 }
                                 $tool_content .= "&nbsp;";
                                 if ($entry['public']) {
-                                        $tool_content .= icon('access_public', $langVisible, "{$base_url}limited=$cmdDirName");
+                                        $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
                                 } else {
-                                        $tool_content .= icon('access_limited', $langVisible, "{$base_url}public=$cmdDirName");
+                                        $tool_content .= icon('access_limited', $langResourceAccess, "{$base_url}public=$cmdDirName");
                                 }
                                 $tool_content .= "&nbsp;";
                                 if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
