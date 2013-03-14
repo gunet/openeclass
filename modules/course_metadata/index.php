@@ -31,6 +31,8 @@ if (!get_config('course_metadata')) {
     exit();
 }
 
+$xmlFile = $webDir . '/courses/' . $course_code . '/courseMetadata.xml';
+$skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
 
 if (isset($_POST['submit']))
     $tool_content .= submitForm();
@@ -44,36 +46,41 @@ draw($tool_content, 2, null, $head_content);
 //--- HELPER FUNCTIONS ---//
 
 function displayForm() {
-    global $course_code, $webDir;
+    global $xmlFile, $skeleton;
+    
+    $skeletonXML = simplexml_load_file ($skeleton, 'CourseXMLElement');
+    $data = gatherExtraData();
 
-    $filename = $webDir . '/courses/' . $course_code . '/courseMetadata.xml';
-    if (file_exists($filename))
-        $xml = simplexml_load_file($filename, 'CourseXMLElement');
-    else {
-        $filename = $webDir . '/modules/course_metadata/skeleton.xml';
-        $xml = simplexml_load_file ($filename, 'CourseXMLElement');
+    if (file_exists($xmlFile)) {
+        $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
+        if (!$xml)
+            return $skeletonXML->asForm($data);
+    } else
+        return $skeletonXML->asForm($data);
+    
+    if ($skeletonXML->countAll() > $xml->countAll()) {
+        $skeletonXML->populate($xml->asFlatArray());
+        return $skeletonXML->asForm($data);
     }
 
-    return $xml->asForm();
+    return $xml->asForm($data);
 }
 
 function submitForm() {
-    global $course_code, $urlServer, $webDir,
+    global $course_code, $urlServer, $xmlFile, $skeleton,
            $langModifDone, $langBack, $langBackCourse;
     
-    $filename = $webDir . '/courses/' . $course_code . '/courseMetadata.xml';
-    $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
-    
+    $extraData = gatherExtraData();
+    $data = array_merge($_POST, $extraData);
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
-    // TODO: append $_POST with hidden data such as units
     // TODO: append skeleton XML with additional fields (ex more instructors, units, etc)
-    $xml->populate($_POST);
+    $xml->populate($data);
 
     // save xml file
     $doc = new DOMDocument('1.0');
     $doc->loadXML( $xml->asXML() );
     $doc->formatOutput = true;
-    $doc->save($filename);
+    $doc->save($xmlFile);
 
     $out = "<p class='success'>$langModifDone</p>
             <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
@@ -90,4 +97,26 @@ function submitForm() {
 //    $out .= "</pre>";
 
     return $out;
+}
+
+function gatherExtraData() {
+    global $course_id, $currentCourseLanguage, $urlServer, $course_code, 
+           $titulaires, $title;
+    $extra = array();
+    
+    $res = db_query("SELECT * FROM course WHERE id = " . intval($course_id));
+    $course = mysql_fetch_assoc($res);
+    if (!$course)
+        return array();
+    
+    $extra['course_language'] = $currentCourseLanguage;
+    $extra['course_url'] = $urlServer . 'courses/'. $course_code;
+    $extra['course_instructor_fullName_' . $currentCourseLanguage] = $titulaires;
+    $extra['course_title_' . $currentCourseLanguage] = $title;
+    $extra['course_keywords_' . $currentCourseLanguage] = $course['keywords'];
+    // TODO: course units
+    // TODO: course description
+    // TODO: course objectives
+
+    return $extra;
 }

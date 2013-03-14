@@ -28,13 +28,15 @@ class CourseXMLElement extends SimpleXMLElement {
             return false;
     }
     
-    public function asForm() {
+    public function asForm($data = null) {
         global $course_code, $langSubmit;
         $out = "";
         $out .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                  <fieldset>
                  <legend>langCourseInfo</legend>
                  <table class='tbl' width='100%'>";
+        if ($data != null)
+            $this->populate ($data);
         $out .= $this->populateForm();
         $out .= "</table>
                  </fieldset>
@@ -43,7 +45,7 @@ class CourseXMLElement extends SimpleXMLElement {
         return $out;
     }
     
-    public function populateForm($parentKey = '') {
+    private function populateForm($parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
@@ -58,13 +60,29 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     private function appendLeafFormField($fullKey) {
+        global $currentCourseLanguage;
+        
+        // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
         $help = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? $GLOBALS['langCMeta']['help_' . $fullKey] : '';
+        $fullKeyNoLang = $fullKey;
+        $sameAsCourseLang = false;
         $lang = '';
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
             $lang = ' (' . $this->getAttribute('lang') .')';
+            if ($this->getAttribute('lang') == $currentCourseLanguage)
+                $sameAsCourseLang = true;
         }
+        
+        // hidden/auto-generated fields
+        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+            return;
+        
+        // readonly fields
+        $readonly = '';
+        if (in_array($fullKeyNoLang, self::$readOnlyFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+            $readonly = 'disabled="true" readonly';
         
         // TODO: types
         // if (lookup(key) == numeric/shorterInputField)
@@ -74,7 +92,7 @@ class CourseXMLElement extends SimpleXMLElement {
         
         return "<tr>
                 <th rowspan='2'>" . $keyLbl . $lang . ":</th>
-                <td><input type='text' size='60' name='". $fullKey ."' value='". (string) $this ."' /></td>
+                <td><input type='text' size='60' name='". $fullKey ."' value='". (string) $this ."' $readonly/></td>
                 </tr><tr><td>$help</td></tr>";
     }
     
@@ -93,7 +111,26 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang'))
             $fullKey .= '_' . $this->getAttribute('lang');
         
-        $this->{0} = $data[$fullKey];
+        if (isset($data[$fullKey]))
+            $this->{0} = $data[$fullKey];
+    }
+    
+    public function asFlatArray($parentKey = '') {
+        $fullKey = $this->mendFullKey($parentKey);
+        
+        $children = $this->children();
+        if (count($children) == 0) {
+            if ($this->getAttribute('lang'))
+                $fullKey .= '_' . $this->getAttribute('lang');
+            
+            return array($fullKey => (string) $this);
+        }
+        
+        $out = array();
+        foreach ($children as $ele)
+            $out = array_merge($out, $ele->asFlatArray($fullKey));
+        
+        return $out;
     }
     
     private function mendFullKey($parentKey) {
@@ -102,4 +139,25 @@ class CourseXMLElement extends SimpleXMLElement {
             $fullKey = $parentKey . "_" . $fullKey;
         return $fullKey;
     }
+    
+    public function countAll() {
+        $children = $this->children();
+        if (count($children) == 0)
+            return 1;
+        
+        $sum = 0;
+        foreach ($children as $ele)
+            $sum += $ele->countAll();
+        
+        return $sum;
+    }
+    
+    public static $hiddenFields = array(
+        
+    );
+    
+    public static $readOnlyFields = array(
+        'course_language', 'course_instructor_fullName', 'course_title',
+        'course_url', 'course_keywords'
+    );
 }
