@@ -20,6 +20,14 @@
 
 class CourseXMLElement extends SimpleXMLElement {
     
+    /**
+     * Get element's attribute if exists.
+     * Returns string with attribute value or
+     * boolean false if it doesn't exists.
+     * 
+     * @param  string $name
+     * @return mixed 
+     */
     public function getAttribute($name) {
         $attributes = $this->attributes();
         if (isset($attributes[$name]))
@@ -28,6 +36,14 @@ class CourseXMLElement extends SimpleXMLElement {
             return false;
     }
     
+    /**
+     * Returns an HTML Form for editing the XML.
+     * 
+     * @global string $course_code
+     * @global string $langSubmit
+     * @param  array  $data        - array containing data to preload the form with
+     * @return string
+     */
     public function asForm($data = null) {
         global $course_code, $langSubmit;
         $out = "";
@@ -45,6 +61,12 @@ class CourseXMLElement extends SimpleXMLElement {
         return $out;
     }
     
+    /**
+     * Recursively populate the HTML Form.
+     * 
+     * @param  string $parentKey
+     * @return string
+     */
     private function populateForm($parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
         
@@ -59,6 +81,13 @@ class CourseXMLElement extends SimpleXMLElement {
         return $out;
     }
     
+    /**
+     * Populate a single simple HTML Form Field (leaf).
+     * 
+     * @global string $currentCourseLanguage
+     * @param  string $fullKey
+     * @return string
+     */
     private function appendLeafFormField($fullKey) {
         global $currentCourseLanguage;
         
@@ -96,6 +125,12 @@ class CourseXMLElement extends SimpleXMLElement {
                 </tr><tr><td>$help</td></tr>";
     }
     
+    /**
+     * Populate the XML with data.
+     * 
+     * @param  array $data
+     * @param  string $parentKey
+     */
     public function populate($data, $parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
         
@@ -107,6 +142,12 @@ class CourseXMLElement extends SimpleXMLElement {
             $ele->populate($data, $fullKey);
     }
     
+    /**
+     * Populate a single simple xml node (leaf).
+     * 
+     * @param array  $data
+     * @param string $fullKey
+     */
     private function populateLeaf($data, $fullKey) {
         if ($this->getAttribute('lang'))
             $fullKey .= '_' . $this->getAttribute('lang');
@@ -115,6 +156,12 @@ class CourseXMLElement extends SimpleXMLElement {
             $this->{0} = $data[$fullKey];
     }
     
+    /**
+     * Convert the XML as a flat array (key => value).
+     * 
+     * @param  string $parentKey
+     * @return array
+     */
     public function asFlatArray($parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
         
@@ -133,6 +180,12 @@ class CourseXMLElement extends SimpleXMLElement {
         return $out;
     }
     
+    /**
+     * Array key for iterating over XML, POST or array data.
+     * 
+     * @param type $parentKey
+     * @return string
+     */
     private function mendFullKey($parentKey) {
         $fullKey = $this->getName();
         if (!empty($parentKey))
@@ -140,6 +193,11 @@ class CourseXMLElement extends SimpleXMLElement {
         return $fullKey;
     }
     
+    /**
+     * Iteratively count all XML elements.
+     * 
+     * @return int
+     */
     public function countAll() {
         $children = $this->children();
         if (count($children) == 0)
@@ -152,10 +210,18 @@ class CourseXMLElement extends SimpleXMLElement {
         return $sum;
     }
     
+    /**
+     * Fields that should be hidden from the HTML Form.
+     * @var array
+     */
     public static $hiddenFields = array(
         
     );
     
+    /**
+     * Fields that should readonly in the HTML Form.
+     * @var array
+     */
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
         'course_url', 'course_keywords'

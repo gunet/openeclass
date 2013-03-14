@@ -49,15 +49,16 @@ function displayForm() {
     global $xmlFile, $skeleton;
     
     $skeletonXML = simplexml_load_file ($skeleton, 'CourseXMLElement');
-    $data = gatherExtraData();
+    $data = gatherExtraData(); // preload form with auto-generated data
 
     if (file_exists($xmlFile)) {
         $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
-        if (!$xml)
+        if (!$xml) // fallback if xml is broken
             return $skeletonXML->asForm($data);
-    } else
+    } else // fallback if starting fresh
         return $skeletonXML->asForm($data);
     
+    // load form from skeleton if it has more fields (useful for incremental updates)
     if ($skeletonXML->countAll() > $xml->countAll()) {
         $skeletonXML->populate($xml->asFlatArray());
         return $skeletonXML->asForm($data);
@@ -73,7 +74,7 @@ function submitForm() {
     $extraData = gatherExtraData();
     $data = array_merge($_POST, $extraData);
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
-    // TODO: append skeleton XML with additional fields (ex more instructors, units, etc)
+    // TODO: append skeleton XML with additional fields (ex more instructors, units, etc) as necessary
     $xml->populate($data);
 
     // save xml file
