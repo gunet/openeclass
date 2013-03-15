@@ -30,7 +30,7 @@ require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox();
 
-$base_url = 'index.php?course=' . $course_code;
+$edit_url = $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 /*
@@ -56,8 +56,12 @@ while ($cat = mysql_fetch_assoc($q)) {
 }
 if (isset($_GET['cat'])) {
         $cat_id = intval($_GET['cat']);
+        $edit_url .= "&amp;cat=$cat_id";
 } else {
         $cat_id = false;
+}
+if (isset($_GET['prefix'])) {
+        $edit_url .= '&amp;prefix=' . urlencode($_GET['prefix']);
 }
 
 list($expand_glossary, $glossary_index) =
@@ -232,7 +236,7 @@ if ($is_editor) {
                 }
 
                 $tool_content .= "
-             <form action='$base_url' method='post'>
+             <form action='$edit_url' method='post'>
                $html_id
                <fieldset>
                  <legend>$nameTools</legend>
@@ -292,7 +296,7 @@ if ($glossary_index and count($prefixes) > 1) {
                 $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
                           (isset($_GET['prefix']) and autounquote($_GET['prefix']) == $letter);
                 $tool_content .= ($begin? '': ' | ') .
-                                 ($active? '<b>': "<a href='$base_url&amp;prefix=$letter'>") .
+                                 ($active? '<b>': "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
                                  q($letter) . ($active? '</b>': '</a>');
                 $begin = false;
         }
@@ -311,7 +315,7 @@ if (isset($_GET['edit'])) {
                 'name' => $langGlossary);
         $where = "AND id = " . intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
-        $where = " AND term LIKE " . autoquote($_GET['prefix'] . '%');
+        $where = " AND term LIKE " . quote($_GET['prefix'] . '%');
 } elseif ($glossary_index and !$cat_id and count($prefixes) > 1) {
         $where = " AND term LIKE " . quote($prefixes[0] . '%');
 }
@@ -378,9 +382,9 @@ if (mysql_num_rows($sql) > 0) {
                  <td><em>$definition_data</em>$urllink</td>";
 	    if ($is_editor) {
 		$tool_content .= "
-		 <td align='center' valign='top' width='50'><a href='$base_url&amp;edit=$g[id]'>
+		 <td align='center' valign='top' width='50'><a href='$edit_url&amp;edit=$g[id]'>
 		    <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit'></a>
-                    <a href='$base_url&amp;delete=$g[id]' onClick=\"return confirmation('" .
+                    <a href='$edit_url&amp;delete=$g[id]' onClick=\"return confirmation('" .
                         js_escape($langConfirmDelete) . "');\">
 		    <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete'></a>
 		 </td>";
