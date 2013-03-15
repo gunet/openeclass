@@ -119,6 +119,30 @@
     </xs:simpleContent>
 </xs:complexType>
 
+<xs:complexType name="t_indexedString">
+    <xs:simpleContent>
+        <xs:extension base="t_string">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
+<xs:complexType name="t_indexedLangString">
+    <xs:simpleContent>
+        <xs:extension base="t_langString">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
+<xs:complexType name="t_indexedurl">
+    <xs:simpleContent>
+        <xs:extension base="t_url">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
 <xs:complexType name="t_instructor">
     <xs:sequence>
         <xs:element name="firstName" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
@@ -137,29 +161,29 @@
 
 <xs:complexType name="t_multimedia">
     <xs:sequence>
-        <xs:element name="title" type="t_string"/>
-        <xs:element name="speaker" type="t_string"/>
-        <xs:element name="subject" type="t_string"/>
-        <xs:element name="description" type="t_string"/>
-        <xs:element name="keywords" type="t_string"/>
-        <xs:element name="url" minOccurs="0" type="t_url"/>
+        <xs:element name="title" type="t_indexedString"/>
+        <xs:element name="speaker" type="t_indexedString"/>
+        <xs:element name="subject" type="t_indexedString"/>
+        <xs:element name="description" type="t_indexedString"/>
+        <xs:element name="keywords" type="t_indexedString"/>
+        <xs:element name="url" minOccurs="0" type="t_indexedurl"/>
     </xs:sequence>
 </xs:complexType>
 
 <xs:complexType name="t_digital">
     <xs:sequence>
-        <xs:element name="url" minOccurs="0" maxOccurs="unbounded" type="t_url"/>
-        <xs:element name="library" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
+        <xs:element name="url" minOccurs="0" maxOccurs="unbounded" type="t_indexedurl"/>
+        <xs:element name="library" minOccurs="0" maxOccurs="unbounded" type="t_indexedString"/>
     </xs:sequence>
 </xs:complexType>
 
 <xs:complexType name="t_material">
     <xs:sequence>
-        <xs:element name="notes" minOccurs="0" type="t_string"/>
-        <xs:element name="slides" type="t_string"/>
-        <xs:element name="exercises" minOccurs="0" type="t_string"/>
+        <xs:element name="notes" minOccurs="0" type="t_indexedString"/>
+        <xs:element name="slides" type="t_indexedString"/>
+        <xs:element name="exercises" minOccurs="0" type="t_indexedString"/>
         <xs:element name="multimedia" minOccurs="0" maxOccurs="unbounded" type="t_multimedia"/>
-        <xs:element name="other" minOccurs="0" type="t_string"/>
+        <xs:element name="other" minOccurs="0" type="t_indexedString"/>
         <xs:element name="digital" minOccurs="0" type="t_digital"/>
     </xs:sequence>
 </xs:complexType>

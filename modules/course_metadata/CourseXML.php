@@ -37,6 +37,21 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Recursively set a leaf element's attribute.
+     * 
+     * @param string $name
+     * @param string $value
+     */
+    public function setLeafAttribute($name, $value) {
+        $children = $this->children();
+        if (count($children) == 0)
+            $this->addAttribute($name, $value);
+        
+        foreach ($children as $ele)
+            $ele->setLeafAttribute($name, $value);
+    }
+    
+    /**
      * Returns an HTML Form for editing the XML.
      * 
      * @global string $course_code
@@ -152,8 +167,17 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang'))
             $fullKey .= '_' . $this->getAttribute('lang');
         
-        if (isset($data[$fullKey]))
-            $this->{0} = $data[$fullKey];
+        if (isset($data[$fullKey])) {
+            if (!is_array($data[$fullKey]))
+                $this->{0} = $data[$fullKey];
+            else { // multiple entities use associative indexed arrays
+                $index = intval($this->getAttribute('index'));
+                if ($index && isset($data[$fullKey][$index])) {
+                    $this->{0} = $data[$fullKey][$index];
+                    unset($this['index']); // remove attribute
+                }
+            }
+        }
     }
     
     /**
@@ -178,6 +202,35 @@ class CourseXMLElement extends SimpleXMLElement {
             $out = array_merge($out, $ele->asFlatArray($fullKey));
         
         return $out;
+    }
+    
+    /**
+     * Adapt the current XML according to the given data array.
+     * It ensures the proper number of multiple
+     * elements exist in the XML (multiple instructors, units, etc).
+     * 
+     * @param array $data
+     */
+    public function adapt($data) {
+        global $webDir;
+        
+        // adapt for units in data
+        $unitsNo = (isset($data['course_numberOfUnits'])) ? intval($data['course_numberOfUnits']) : 0;
+        if ( $unitsNo > 0 ) {
+            $skeletonU = $webDir . '/modules/course_metadata/skeletonUnit.xml';
+            $dom = dom_import_simplexml($this);
+            
+            // remove current unit elements
+            unset($this->unit);
+            
+            for ($i = 1; $i <= $unitsNo; $i++) {
+                $unitXML = simplexml_load_file ($skeletonU, 'CourseXMLElement');
+                $unitXML->setLeafAttribute('index', $i);
+                $domU = dom_import_simplexml($unitXML);
+                $domUIn = $dom->ownerDocument->importNode($domU, true);
+                $dom->appendChild($domUIn);
+            }
+        }
     }
     
     /**
@@ -215,7 +268,13 @@ class CourseXMLElement extends SimpleXMLElement {
      * @var array
      */
     public static $hiddenFields = array(
-        
+        'course_unit_keywords', 
+        'course_unit_material_notes', 'course_unit_material_slides', 
+        'course_unit_material_exercises', 'course_unit_material_multimedia_title', 
+        'course_unit_material_multimedia_speaker', 'course_unit_material_multimedia_subject', 
+        'course_unit_material_multimedia_description', 'course_unit_material_multimedia_keywords', 
+        'course_unit_material_multimedia_url', 'course_unit_material_other', 
+        'course_unit_material_digital_url', 'course_unit_material_digital_library'
     );
     
     /**
@@ -224,6 +283,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
-        'course_url', 'course_keywords'
+        'course_url', 'course_keywords', 'course_numberOfUnits', 
+        'course_unit_title', 'course_unit_description'
     );
 }

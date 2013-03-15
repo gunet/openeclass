@@ -50,6 +50,7 @@ function displayForm() {
     
     $skeletonXML = simplexml_load_file ($skeleton, 'CourseXMLElement');
     $data = gatherExtraData(); // preload form with auto-generated data
+    $skeletonXML->adapt($data);
 
     if (file_exists($xmlFile)) {
         $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
@@ -57,6 +58,8 @@ function displayForm() {
             return $skeletonXML->asForm($data);
     } else // fallback if starting fresh
         return $skeletonXML->asForm($data);
+    
+    $xml->adapt($data);
     
     // load form from skeleton if it has more fields (useful for incremental updates)
     if ($skeletonXML->countAll() > $xml->countAll()) {
@@ -74,7 +77,7 @@ function submitForm() {
     $extraData = gatherExtraData();
     $data = array_merge($_POST, $extraData);
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
-    // TODO: append skeleton XML with additional fields (ex more instructors, units, etc) as necessary
+    $xml->adapt($data);
     $xml->populate($data);
 
     // save xml file
@@ -115,7 +118,20 @@ function gatherExtraData() {
     $extra['course_instructor_fullName_' . $currentCourseLanguage] = $titulaires;
     $extra['course_title_' . $currentCourseLanguage] = $title;
     $extra['course_keywords_' . $currentCourseLanguage] = $course['keywords'];
-    // TODO: course units
+    
+    // turn visible units to associative array
+    $res = db_query("SELECT id, title, comments
+                       FROM course_units
+                      WHERE visible > 0
+                        AND course_id = " . intval($course_id));
+    $unitsCount = 0;
+    while($row = mysql_fetch_assoc($res)) {
+        $unitsCount++; // also serves as array index
+        $extra['course_unit_title_' . $currentCourseLanguage][$unitsCount] = $row['title'];
+        $extra['course_unit_description_' . $currentCourseLanguage][$unitsCount] = $row['comments'];
+    }    
+    $extra['course_numberOfUnits'] = $unitsCount;
+    
     // TODO: course description
     // TODO: course objectives
 

@@ -119,6 +119,30 @@
     </xs:simpleContent>
 </xs:complexType>
 
+<xs:complexType name="t_indexedString">
+    <xs:simpleContent>
+        <xs:extension base="t_string">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
+<xs:complexType name="t_indexedLangString">
+    <xs:simpleContent>
+        <xs:extension base="t_langString">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
+<xs:complexType name="t_indexedurl">
+    <xs:simpleContent>
+        <xs:extension base="t_url">
+            <xs:attribute name="index" type="t_integer"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
 <xs:complexType name="t_instructor">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name="firstName"       type="t_langString"/>
@@ -137,38 +161,38 @@
 
 <xs:complexType name="t_multimedia">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="title"       type="t_string"/>
-        <xs:element name="speaker"     type="t_string"/>
-        <xs:element name="subject"     type="t_string"/>
-        <xs:element name="description" type="t_string"/>
-        <xs:element name="keywords"    type="t_string"/>
-        <xs:element name="url"         type="t_url"/>
+        <xs:element name="title"       type="t_indexedString"/>
+        <xs:element name="speaker"     type="t_indexedString"/>
+        <xs:element name="subject"     type="t_indexedString"/>
+        <xs:element name="description" type="t_indexedString"/>
+        <xs:element name="keywords"    type="t_indexedString"/>
+        <xs:element name="url"         type="t_indexedurl"/>
     </xs:choice>
 </xs:complexType>
 
 <xs:complexType name="t_digital">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="url"     type="t_url"/>
-        <xs:element name="library" type="t_string"/>
+        <xs:element name="url"     type="t_indexedurl"/>
+        <xs:element name="library" type="t_indexedString"/>
     </xs:choice>
 </xs:complexType>
 
 <xs:complexType name="t_material">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="notes"      type="t_string"/>
-        <xs:element name="slides"     type="t_string"/>
-        <xs:element name="exercises"  type="t_string"/>
+        <xs:element name="notes"      type="t_indexedString"/>
+        <xs:element name="slides"     type="t_indexedString"/>
+        <xs:element name="exercises"  type="t_indexedString"/>
         <xs:element name="multimedia" type="t_multimedia"/>
-        <xs:element name="other"      type="t_string"/>
+        <xs:element name="other"      type="t_indexedString"/>
         <xs:element name="digital"    type="t_digital"/>
     </xs:choice>
 </xs:complexType>
 
 <xs:complexType name="t_unit">
     <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="title"       type="t_langString"/>
-        <xs:element name="description" type="t_langString"/>
-        <xs:element name="keywords"    type="t_langString"/>
+        <xs:element name="title"       type="t_indexedLangString"/>
+        <xs:element name="description" type="t_indexedLangString"/>
+        <xs:element name="keywords"    type="t_indexedLangString"/>
         <xs:element name="material"    type="t_material"/>
     </xs:choice>
 </xs:complexType>
