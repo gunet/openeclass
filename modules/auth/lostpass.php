@@ -182,10 +182,22 @@ if (isset($_REQUEST['u']) and
                         }
                 }
         } else {
-		$tool_content .= "<div class='caution'>
-		    <p><strong>$langAccountNotFound1 (".q("$userName / $email").")</strong></p>
-		    <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
-		    $homelink";
+                $res = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.password, u.statut FROM user u
+	                LEFT JOIN admin a ON (a.idUser = u.user_id)
+	                WHERE u.email = " . quote($email) . " AND
+	                BINARY u.username = " . quote($userName) ." AND 
+	                a.idUser IS NULL AND  
+	                (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)");
+                if (mysql_num_rows($res) == 1) {
+                    $tool_content .= "<div class='caution'>
+                        <p>$langLostPassPending</p></div>
+                        $homelink";
+                } else {
+                    $tool_content .= "<div class='caution'>
+                        <p><strong>$langAccountNotFound1 (".q("$userName / $email").")</strong></p>
+                        <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
+                        $homelink";
+                }
         }
 } else {
 	/***** Email address entry form *****/
