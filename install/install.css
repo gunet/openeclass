@@ -211,3 +211,10 @@ DIV.welcomeImg {
 	color: #333333;
 }
 
+pre.config {
+        background-color: #EEEEEE;
+        margin-top: 20px;
+        padding: 10px;
+        border-bottom: 2px solid #7FA4E7;
+        border-top: 2px solid #7FA4E7;
+}
