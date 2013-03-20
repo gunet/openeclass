@@ -11,10 +11,11 @@ require_once 'include/lib/multimediahelper.class.php';
 function process_actions()
 {
         global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified,
-               $course_id, $webDir;
+               $course_id, $webDir, $course_code;
         
-        // update index
+        // update index and refresh course metadata
         require_once 'modules/search/courseindexer.class.php';
+        require_once 'modules/course_metadata/CourseXML.php';
         $idx = new CourseIndexer();
 
         if (isset($_REQUEST['edit'])) {
@@ -32,6 +33,7 @@ function process_actions()
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
                         $idx->storeCourse($course_id);
+                        CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
                 $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
         } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
@@ -39,6 +41,7 @@ function process_actions()
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = $res_id");
                         $idx->storeCourse($course_id);
+                        CourseXMLElement::refreshCourse($course_id, $course_code);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
@@ -49,6 +52,7 @@ function process_actions()
                         $newvis = ($vis == 1)? 0: 1;
                         db_query("UPDATE unit_resources SET visible = '$newvis' WHERE id = $res_id");
                         $idx->storeCourse($course_id);
+                        CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
                 $res_id = intval($_REQUEST['down']);

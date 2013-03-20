@@ -263,6 +263,93 @@ class CourseXMLElement extends SimpleXMLElement {
         return $sum;
     }
     
+    public static function init($courseId, $courseCode) {
+        $skeleton = self::getSkeletonPath();
+        $xmlFile  = self::getCourseXMLPath($courseCode);
+        $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
+        
+        $skeletonXML = simplexml_load_file($skeleton, 'CourseXMLElement');
+        $skeletonXML->adapt($data);
+        $skeletonXML->populate($data);
+
+        if (file_exists($xmlFile)) {
+            $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
+            if (!$xml) // fallback if xml is broken
+                return $skeletonXML;
+        } else // fallback if starting fresh
+            return $skeletonXML;
+
+        $xml->adapt($data);
+        $xml->populate($data);
+
+        // load xml from skeleton if it has more fields (useful for incremental updates)
+        if ($skeletonXML->countAll() > $xml->countAll()) {
+            $skeletonXML->populate($xml->asFlatArray());
+            return $skeletonXML;
+        }
+
+        return $xml;
+    }
+    
+    public static function refreshCourse($courseId, $courseCode) {
+        if (get_config('course_metadata')) {
+            $xml = self::init($courseId, $courseCode);
+            self::save($courseCode, $xml);
+        }
+    }
+    
+    public static function save($courseCode, $xml) {
+        $doc = new DOMDocument('1.0');
+        $doc->loadXML( $xml->asXML() );
+        $doc->formatOutput = true;
+        $doc->save(self::getCourseXMLPath($courseCode));
+    }
+    
+    public static function getAutogenData($courseId) {
+        global $urlServer;
+        $data = array();
+    
+        $res1 = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
+        $course = mysql_fetch_assoc($res1);
+        if (!$course)
+            return array();
+
+        $clang = $course['lang'];
+        $data['course_language'] = $clang;
+        $data['course_url'] = $urlServer . 'courses/'. $course['code'];
+        $data['course_instructor_fullName_' . $clang] = $course['prof_names'];
+        $data['course_title_' . $clang] = $course['title'];
+        $data['course_keywords_' . $clang] = $course['keywords'];
+
+        // turn visible units to associative array
+        $res2 = db_query("SELECT id, title, comments
+                           FROM course_units
+                          WHERE visible > 0
+                            AND course_id = " . intval($courseId));
+        $unitsCount = 0;
+        while($row = mysql_fetch_assoc($res2)) {
+            $unitsCount++; // also serves as array index
+            $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
+            $data['course_unit_description_' . $clang][$unitsCount] = $row['comments'];
+        }    
+        $data['course_numberOfUnits'] = $unitsCount;
+
+        // TODO: course description
+        // TODO: course objectives
+
+        return $data;
+    }
+    
+    public static function getSkeletonPath() {
+        global $webDir;
+        return $webDir . '/modules/course_metadata/skeleton.xml';
+    }
+    
+    public static  function getCourseXMLPath($courseCode) {
+        global $webDir;
+        return $webDir . '/courses/' . $courseCode . '/courseMetadata.xml';
+    }
+    
     /**
      * Fields that should be hidden from the HTML Form.
      * @var array

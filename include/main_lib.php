@@ -1908,7 +1908,7 @@ function units_set_maxorder()
 
 function handle_unit_info_edit()
 {
-        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id;
+        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
         $title = autoquote($_REQUEST['unittitle']);
         $descr = autoquote($_REQUEST['unitdescr']);
         if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1931,6 +1931,9 @@ function handle_unit_info_edit()
         require_once 'modules/search/courseindexer.class.php';
         $idx = new CourseIndexer();
         $idx->storeCourse($course_id);
+        // refresh course metadata
+        require_once 'modules/course_metadata/CourseXML.php';
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 
         return "<p class='success'>$successmsg</p>";
 }

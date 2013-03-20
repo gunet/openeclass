@@ -59,6 +59,9 @@ class Course {
         require_once 'modules/search/courseindexer.class.php';
         $idx = new CourseIndexer();
         $idx->storeCourse($id);
+        // refresh course metadata
+        require_once 'modules/course_metadata/CourseXML.php';
+        CourseXMLElement::refreshCourse($id, course_id_to_code($id));
     }
 
     /**
