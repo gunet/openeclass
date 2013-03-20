@@ -50,6 +50,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
                 checkAllText: '$langJQCheckAll',
                 uncheckAllText: '$langJQUncheckAll'
         });
+        $('<input type=hidden name=jsCheck value=1>').appendTo('form[name=groupedit]');
 });</script>
 <link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
@@ -95,22 +96,25 @@ if (isset($_POST['modify'])) {
 	// Count number of members
 	$numberMembers = @count($_POST['ingroup']);
 
-	// Insert new list of members
-	if ($maxStudent < $numberMembers and $maxStudent != 0) {
-		// More members than max allowed
-		$message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
-	} else {
-                // Delete all members of this group
-                $delGroupUsers = db_query("DELETE FROM `$mysqlMainDb`.group_members
-                                                  WHERE group_id = $group_id AND is_tutor = 0");
-                $numberMembers--;
+        if (isset($_POST['jsCheck'])) {
+                // Modifications possible only if JavaScript is enabled
+                // Insert new list of members
+                if ($maxStudent < $numberMembers and $maxStudent != 0) {
+                        // More members than max allowed
+                        $message .= "<p class='alert1'>$langGroupTooManyMembers</p>";
+                } else {
+                        // Delete all members of this group
+                        $delGroupUsers = db_query("DELETE FROM `$mysqlMainDb`.group_members
+                                                          WHERE group_id = $group_id AND is_tutor = 0");
+                        $numberMembers--;
 
-                for ($i = 0; $i <= $numberMembers; $i++) {
-                        db_query("INSERT IGNORE INTO `$mysqlMainDb`.group_members (user_id, group_id)
-                                  VALUES (" . intval($_POST['ingroup'][$i]) . ", $group_id)");
+                        for ($i = 0; $i <= $numberMembers; $i++) {
+                                db_query("INSERT IGNORE INTO `$mysqlMainDb`.group_members (user_id, group_id)
+                                          VALUES (" . intval($_POST['ingroup'][$i]) . ", $group_id)");
+                        }
+
+                        $message .= "<p class='success'>$langGroupSettingsModified</p>";
                 }
-
-                $message .= "<p class='success'>$langGroupSettingsModified</p>";
         }
         initialize_group_info($group_id);
 }
