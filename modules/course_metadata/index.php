@@ -52,28 +52,25 @@ function submitForm() {
     global $course_id, $course_code, $urlServer, $webDir,
            $langModifDone, $langBack, $langBackCourse;
     
+    // handle uploaded files
+    $fileData = array();
+    foreach(CourseXMLElement::$binaryFields as $bkey) {
+        if (isset($_FILES[$bkey]) && is_uploaded_file($_FILES[$bkey]['tmp_name'])) {
+            $fileData[$bkey] = base64_encode(file_get_contents($_FILES[$bkey]['tmp_name']));
+            $fileData[$bkey .'_mime'] = $_FILES[$bkey]['type'];
+        }
+    }
+    
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($course_id);
-    $data = array_merge($_POST, $extraData);
+    $data = array_merge($_POST, $extraData, $fileData);
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
     $xml->adapt($data);
     $xml->populate($data);
     
     CourseXMLElement::save($course_code, $xml);
 
-    $out = "<p class='success'>$langModifDone</p>
+    return "<p class='success'>$langModifDone</p>
             <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
-
-    // debug TODO: remove after all todos have been implemented
-//    $out .= "<pre>";
-//    ob_start();
-//    $out .= print_r($_POST, true);
-//    $out .= $doc->saveXML();
-//    $out .= print_r($xml, true);
-//    $out .= ob_get_contents();
-//    ob_end_clean();
-//    $out .= "</pre>";
-
-    return $out;
 }

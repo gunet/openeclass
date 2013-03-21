@@ -111,6 +111,14 @@
 </xs:simpleType>
 
 <!-- definition of complex types -->
+<xs:complexType name="t_image">
+    <xs:simpleContent>
+        <xs:extension base="t_blob">
+            <xs:attribute name="mime" type="t_string"/>
+        </xs:extension>
+    </xs:simpleContent>
+</xs:complexType>
+
 <xs:complexType name="t_langString">
     <xs:simpleContent>
         <xs:extension base="t_string">
@@ -155,7 +163,7 @@
         <xs:element name="department" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
         <xs:element name="language" minOccurs="0" maxOccurs="unbounded" type="t_string"/>
         <xs:element name="moreInformation" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="photo" minOccurs="0" type="t_blob"/>
+        <xs:element name="photo" minOccurs="0" type="t_image"/>
     </xs:sequence>
 </xs:complexType>
 
@@ -229,7 +237,7 @@
         <xs:element name="contents" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="objectives" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="keywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="coursePhoto" minOccurs="0" type="t_blob"/>
+        <xs:element name="coursePhoto" minOccurs="0" type="t_image"/>
         <xs:element name="contentDevelopment" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="format" minOccurs="0" maxOccurs="unbounded" type="t_format"/>
         <xs:element name="featuredBooks" maxOccurs="unbounded" type="t_langString"/>
