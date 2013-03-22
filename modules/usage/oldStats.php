@@ -47,7 +47,7 @@ require_once 'include/jscalendar/calendar.php';
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='usage.php?course=$course_code'>" . $langUsageVisits . "</a></li>
+      <li><a href='index.php?course=$course_code'>" . $langUsageVisits . "</a></li>
       <li><a href='favourite.php?course=$course_code&amp;first='>" . $langFavourite . "</a></li>
       <li><a href='userlogins.php?course=$course_code&amp;first='>" . $langUserLogins . "</a></li>
     </ul>
