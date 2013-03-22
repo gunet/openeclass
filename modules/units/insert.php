@@ -28,6 +28,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/courseindexer.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
 
 ModalBoxHelper::loadModalBox(true);
 $idx = new CourseIndexer();
@@ -170,6 +171,7 @@ function insert_docs($id)
 			 ", visible='$file[visible]', `order`=$order, `date`=NOW(), res_id=$file[id]");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -184,6 +186,7 @@ function insert_text($id)
 	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='',
 		comments=" . autoquote(purify($comments)) . ", visible=1, `order`=$order, `date`=NOW(), res_id=0");
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -209,6 +212,7 @@ function insert_lp($id)
 			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -229,6 +233,7 @@ function insert_video($id)
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -259,6 +264,7 @@ function insert_work($id)
                                 res_id = $work[id]");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -284,6 +290,7 @@ function insert_exercise($id)
 			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -315,6 +322,7 @@ function insert_forum($id)
 		}
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -335,6 +343,7 @@ function insert_wiki($id)
 			", visible=1, `order`=$order, `date`=NOW(), res_id=$wiki[id]");
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -367,6 +376,7 @@ function insert_link($id)
                 }
 	}
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }
@@ -388,6 +398,7 @@ function insert_ebook($id)
             }
         }
         $idx->storeCourse($course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
 }

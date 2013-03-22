@@ -37,6 +37,21 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Recursively set a leaf element's attribute.
+     * 
+     * @param string $name
+     * @param string $value
+     */
+    public function setLeafAttribute($name, $value) {
+        $children = $this->children();
+        if (count($children) == 0)
+            $this->addAttribute($name, $value);
+        
+        foreach ($children as $ele)
+            $ele->setLeafAttribute($name, $value);
+    }
+    
+    /**
      * Returns an HTML Form for editing the XML.
      * 
      * @global string $course_code
@@ -47,7 +62,7 @@ class CourseXMLElement extends SimpleXMLElement {
     public function asForm($data = null) {
         global $course_code, $langSubmit;
         $out = "";
-        $out .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+        $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                  <fieldset>
                  <legend>langCourseInfo</legend>
                  <table class='tbl' width='100%'>";
@@ -103,26 +118,59 @@ class CourseXMLElement extends SimpleXMLElement {
             if ($this->getAttribute('lang') == $currentCourseLanguage)
                 $sameAsCourseLang = true;
         }
+        $fieldStart = "<tr><th rowspan='2'>". $keyLbl . $lang .":</th><td>";
+        $fieldEnd = "</td></tr><tr><td>$help</td></tr>";
         
         // hidden/auto-generated fields
         if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
             return;
+        
+        // boolean fields
+        if (in_array($fullKeyNoLang, self::$booleanFields)) {
+            $value = (string) $this;
+            if (empty($value))
+                $value = 'false';
+            return $fieldStart . selection(array('false' => 'false', 'true' => 'true'), $fullKey, $value) . $fieldEnd;
+        }
+        
+        // enumeration fields
+        if (in_array($fullKeyNoLang, self::$enumerationFields))
+            return $fieldStart . selection(self::getEnumerationValues($fullKey), $fullKey, (string) $this) . $fieldEnd;
         
         // readonly fields
         $readonly = '';
         if (in_array($fullKeyNoLang, self::$readOnlyFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
             $readonly = 'disabled="true" readonly';
         
-        // TODO: types
-        // if (lookup(key) == numeric/shorterInputField)
-        // if (lookup(key) == largeString/textarea)
-        // if (lookup(key) == boolean/dropdown)
-        // if (lookup(key) == enumeration/dropdown)
+        // integer fields
+        if (in_array($fullKeyNoLang, self::$integerFields)) {
+            $value = (string) $this;
+            if (empty($value))
+                $value = 0;
+            return $fieldStart ."<input type='text' size='2' name='". $fullKey ."' value='". $value ."' $readonly/>". $fieldEnd;
+        }
         
-        return "<tr>
-                <th rowspan='2'>" . $keyLbl . $lang . ":</th>
-                <td><input type='text' size='60' name='". $fullKey ."' value='". (string) $this ."' $readonly/></td>
-                </tr><tr><td>$help</td></tr>";
+        // textarea fields
+        if (in_array($fullKeyNoLang, self::$textareaFields))
+            return $fieldStart ."<textarea cols='68' rows='2' name='". $fullKey ."'>". (string) $this ."</textarea>". $fieldEnd;
+        
+        // binary (file-upload) fields
+        if (in_array($fullKeyNoLang, self::$binaryFields)) {
+            $html = $fieldStart;
+            $value = (string) $this;
+            if (!empty($value)) { // image already exists
+                $mime = $this->getAttribute('mime');
+                $html .= "<img src='data:". $mime .";base64,". $value ."'/>
+                          <input type='hidden' name='". $fullKey ."' value='". $value ."'/>
+                          <input type='hidden' name='". $fullKey ."_mime' value='". $mime ."'/>
+                          </td></tr><tr><td>";
+            }
+            $html .= "<input type='file' size='30' name='". $fullKey ."'></input>". $fieldEnd;
+            return $html;
+        }
+        
+        // all others get a typical input type box
+        return $fieldStart ."<input type='text' size='60' name='". $fullKey ."' value='". (string) $this ."' $readonly/>". $fieldEnd;
     }
     
     /**
@@ -149,11 +197,25 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param string $fullKey
      */
     private function populateLeaf($data, $fullKey) {
+        $fullKeyNoLang = $fullKey;
         if ($this->getAttribute('lang'))
             $fullKey .= '_' . $this->getAttribute('lang');
         
-        if (isset($data[$fullKey]))
-            $this->{0} = $data[$fullKey];
+        if (isset($data[$fullKey])) {
+            if (!is_array($data[$fullKey])) {
+                $this->{0} = $data[$fullKey];
+                
+                if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
+                    $this['mime'] = $data[$fullKey .'_mime'];
+            }
+            else { // multiple entities use associative indexed arrays
+                $index = intval($this->getAttribute('index'));
+                if ($index && isset($data[$fullKey][$index])) {
+                    $this->{0} = $data[$fullKey][$index];
+                    unset($this['index']); // remove attribute
+                }
+            }
+        }
     }
     
     /**
@@ -178,6 +240,35 @@ class CourseXMLElement extends SimpleXMLElement {
             $out = array_merge($out, $ele->asFlatArray($fullKey));
         
         return $out;
+    }
+    
+    /**
+     * Adapt the current XML according to the given data array.
+     * It ensures the proper number of multiple
+     * elements exist in the XML (multiple instructors, units, etc).
+     * 
+     * @param array $data
+     */
+    public function adapt($data) {
+        global $webDir;
+        
+        // adapt for units in data
+        $unitsNo = (isset($data['course_numberOfUnits'])) ? intval($data['course_numberOfUnits']) : 0;
+        if ( $unitsNo > 0 ) {
+            $skeletonU = $webDir . '/modules/course_metadata/skeletonUnit.xml';
+            $dom = dom_import_simplexml($this);
+            
+            // remove current unit elements
+            unset($this->unit);
+            
+            for ($i = 1; $i <= $unitsNo; $i++) {
+                $unitXML = simplexml_load_file ($skeletonU, 'CourseXMLElement');
+                $unitXML->setLeafAttribute('index', $i);
+                $domU = dom_import_simplexml($unitXML);
+                $domUIn = $dom->ownerDocument->importNode($domU, true);
+                $dom->appendChild($domUIn);
+            }
+        }
     }
     
     /**
@@ -211,19 +302,250 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Initialize an XML structure for a specific course.
+     * 
+     * @param  int    $courseId
+     * @param  string $courseCode
+     * @return CourseXMLElement
+     */
+    public static function init($courseId, $courseCode) {
+        $skeleton = self::getSkeletonPath();
+        $xmlFile  = self::getCourseXMLPath($courseCode);
+        $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
+        
+        $skeletonXML = simplexml_load_file($skeleton, 'CourseXMLElement');
+        $skeletonXML->adapt($data);
+        $skeletonXML->populate($data);
+
+        if (file_exists($xmlFile)) {
+            $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
+            if (!$xml) // fallback if xml is broken
+                return $skeletonXML;
+        } else // fallback if starting fresh
+            return $skeletonXML;
+
+        $xml->adapt($data);
+        $xml->populate($data);
+
+        // load xml from skeleton if it has more fields (useful for incremental updates)
+        if ($skeletonXML->countAll() > $xml->countAll()) {
+            $skeletonXML->populate($xml->asFlatArray());
+            return $skeletonXML;
+        }
+
+        return $xml;
+    }
+    
+    /**
+     * Refresh/update the auto-generated values for a specific course.
+     * 
+     * @param int    $courseId
+     * @param string $courseCode
+     */
+    public static function refreshCourse($courseId, $courseCode) {
+        if (get_config('course_metadata')) {
+            $xml = self::init($courseId, $courseCode);
+            self::save($courseCode, $xml);
+        }
+    }
+    
+    /**
+     * Save the XML structure for a specific course.
+     * 
+     * @param string           $courseCode
+     * @param CourseXMLElement $xml
+     */
+    public static function save($courseCode, $xml) {
+        $doc = new DOMDocument('1.0');
+        $doc->loadXML( $xml->asXML() );
+        $doc->formatOutput = true;
+        $doc->save(self::getCourseXMLPath($courseCode));
+    }
+    
+    /**
+     * Auto-Generate Data for a specific course.
+     * 
+     * @global string $urlServer
+     * @param  int    $courseId
+     * @return array
+     */
+    public static function getAutogenData($courseId) {
+        global $urlServer;
+        $data = array();
+    
+        $res1 = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
+        $course = mysql_fetch_assoc($res1);
+        if (!$course)
+            return array();
+
+        $clang = $course['lang'];
+        $data['course_language'] = $clang;
+        $data['course_url'] = $urlServer . 'courses/'. $course['code'];
+        $data['course_instructor_fullName_' . $clang] = $course['prof_names'];
+        $data['course_title_' . $clang] = $course['title'];
+        $data['course_keywords_' . $clang] = $course['keywords'];
+
+        // turn visible units to associative array
+        $res2 = db_query("SELECT id, title, comments
+                           FROM course_units
+                          WHERE visible > 0
+                            AND course_id = " . intval($courseId));
+        $unitsCount = 0;
+        while($row = mysql_fetch_assoc($res2)) {
+            $unitsCount++; // also serves as array index
+            $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
+            $data['course_unit_description_' . $clang][$unitsCount] = $row['comments'];
+        }    
+        $data['course_numberOfUnits'] = $unitsCount;
+
+        return $data;
+    }
+    
+    /**
+     * Returns the path of the skeleton XML file.
+     * 
+     * @global string $webDir
+     * @return string
+     */
+    public static function getSkeletonPath() {
+        global $webDir;
+        return $webDir . '/modules/course_metadata/skeleton.xml';
+    }
+    
+    /**
+     * Returns the path of a specific course's XML file.
+     * 
+     * @global string $webDir
+     * @param  string $courseCode
+     * @return string
+     */
+    public static function getCourseXMLPath($courseCode) {
+        global $webDir;
+        return $webDir . '/courses/' . $courseCode . '/courseMetadata.xml';
+    }
+    
+    /**
+     * Enumeration values for HTML Form fields.
+     * @param  string $key
+     * @return array
+     */
+    public static function getEnumerationValues($key) { 
+        $valArr = array(
+            'course_level' => array('undergraduate' => 'undergraduate',
+                                    'graduate' => 'graduate',
+                                    'doctoral' => 'doctoral'),
+            'course_curriculumLevel' => array('undergraduate' => 'undergraduate',
+                                              'graduate' => 'graduate',
+                                              'doctoral' => 'doctoral'),
+            'course_yearOfStudy' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6'),
+            'course_semester' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6',
+                                       '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12'),
+            'course_type' => array('compulsory' => 'compulsory', 'optional' => 'optional'),
+            'course_format' => array('slides' => 'slides',
+                                     'notes' => 'notes',
+                                     'video lectures' => 'video lectures',
+                                     'podcasts' => 'podcasts',
+                                     'audio material' => 'audio material',
+                                     'multimedia material' => 'multimedia material',
+                                     'interactive exercises' => 'interactive exercises')
+        );
+        
+        if (isset($valArr[$key]))
+            return $valArr[$key];
+        else
+            return array();
+    }
+    
+    /**
      * Fields that should be hidden from the HTML Form.
      * @var array
      */
     public static $hiddenFields = array(
-        
+        'course_unit_keywords', 
+        'course_unit_material_notes', 'course_unit_material_slides', 
+        'course_unit_material_exercises', 'course_unit_material_multimedia_title', 
+        'course_unit_material_multimedia_speaker', 'course_unit_material_multimedia_subject', 
+        'course_unit_material_multimedia_description', 'course_unit_material_multimedia_keywords', 
+        'course_unit_material_multimedia_url', 'course_unit_material_other', 
+        'course_unit_material_digital_url', 'course_unit_material_digital_library'
     );
     
     /**
-     * Fields that should readonly in the HTML Form.
+     * Fields that should be readonly in the HTML Form.
      * @var array
      */
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
-        'course_url', 'course_keywords'
+        'course_url', 'course_keywords', 'course_numberOfUnits', 
+        'course_unit_title', 'course_unit_description'
     );
+    
+    /**
+     * Boolean/dropdown HTML Form fields.
+     * @var array
+     */
+    public static $booleanFields = array(
+        'course_coTeaching', 'course_coTeachingColleagueOpensCourse',
+        'course_coTeachingAutonomousDepartment'
+    );
+    
+    /**
+     * Integer HTML Form fields.
+     * @var array
+     */
+    public static $integerFields = array(
+        'course_credithours', 'course_coTeachingDepartmentCreditHours',
+        'course_credits', 'course_numberOfUnits'
+    );
+    
+    /**
+     * Enumeration HTML Form fields.
+     * @var array
+     */
+    public static $enumerationFields = array(
+        'course_level', 'course_curriculumLevel', 'course_yearOfStudy',
+        'course_semester', 'course_type', 'course_format'
+    );
+    
+    /**
+     * Textarea HTML Form fields.
+     * @var array
+     */
+    public static $textareaFields = array(
+        'course_instructor_moreInformation', 'course_targetGroup',
+        'course_description', 'course_contents', 'course_objectives',
+        'course_contentDevelopment', 'course_featuredBooks', 'course_structure',
+        'course_teachingMethod', 'course_assessmentMethod',
+        'course_prerequisites', 'course_literature',
+        'course_recommendedComponents', 'course_assignments',
+        'course_requirements', 'course_remarks', 'course_acknowledgments',
+        'course_thematic', 'course_institutionDescription',
+        'course_curriculumDescription', 'course_outcomes',
+        'course_curriculumTargetGroup'
+    );
+    
+    /**
+     * Binary HTML Form fields.
+     * @var array
+     */
+    public static $binaryFields = array(
+        'course_instructor_photo', 'course_coursePhoto'
+    );
+    
+    /**
+     * Debug the contents of an array.
+     * 
+     * @param  array $xmlArr
+     * @return string        - HTML preformatted output
+     */
+    public static function debugArray($xmlArr) {
+        $out = "<pre>";
+        ob_start();
+        $out .= print_r($xmlArr, true);
+        $out .= ob_get_contents();
+        ob_end_clean();
+        $out .= "</pre>";
+        return $out;
+    }
+    
 }

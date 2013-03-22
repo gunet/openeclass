@@ -11,7 +11,7 @@
         
         <moreInformation lang="el"></moreInformation>
         <moreInformation lang="en"></moreInformation>
-        <photo></photo>
+        <photo mime=""></photo>
     </instructor>
     
     <title lang="el"></title>
@@ -48,7 +48,7 @@
     <objectives lang="el"></objectives>
     <keywords lang="el"></keywords>
     <keywords lang="en"></keywords>
-    <coursePhoto></coursePhoto>
+    <coursePhoto mime=""></coursePhoto>
     <contentDevelopment lang="el"></contentDevelopment>
     <contentDevelopment lang="en"></contentDevelopment>
     <format></format>
@@ -73,31 +73,6 @@
     <remarks lang="en"></remarks>
     <acknowledgments lang="el"></acknowledgments>
     <acknowledgments lang="en"></acknowledgments>
-    
-    <numberOfUnits></numberOfUnits>
-    <unit>
-        <title lang="el"></title>
-        <description lang="el"></description>
-        <keywords lang="el"></keywords>
-        <material>
-            <notes></notes>
-            <slides></slides>
-            <exercises></exercises>
-            <multimedia>
-                <title></title>
-                <speaker></speaker>
-                <subject></subject>
-                <description></description>
-                <keywords></keywords>
-                <url></url>
-            </multimedia>
-            <other></other>
-            <digital>
-                <url></url>
-                <library></library>
-            </digital>
-        </material>
-    </unit>
     
     <eudoxusCode></eudoxusCode>
     <eudoxusURL></eudoxusURL>
@@ -127,4 +102,29 @@
     <curriculumLevel></curriculumLevel>
     <curriculumTargetGroup lang="el"></curriculumTargetGroup>
     <curriculumTargetGroup lang="en"></curriculumTargetGroup>
+    
+    <numberOfUnits></numberOfUnits>
+    <unit>
+        <title lang="el"></title>
+        <description lang="el"></description>
+        <keywords lang="el"></keywords>
+        <material>
+            <notes></notes>
+            <slides></slides>
+            <exercises></exercises>
+            <multimedia>
+                <title></title>
+                <speaker></speaker>
+                <subject></subject>
+                <description></description>
+                <keywords></keywords>
+                <url></url>
+            </multimedia>
+            <other></other>
+            <digital>
+                <url></url>
+                <library></library>
+            </digital>
+        </material>
+    </unit>
 </course>

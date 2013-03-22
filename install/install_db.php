@@ -82,24 +82,24 @@ db_query("CREATE TABLE IF NOT EXISTS `course_module` (
 #
 db_query("CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL default '0',
-  `course_id` int(11) NOT NULL default '0',
-  `module_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default 0,
+  `course_id` int(11) NOT NULL default 0,
+  `module_id` int(11) NOT NULL default 0,
   `details` text NOT NULL,
-  `action_type` int(11) NOT NULL default '0',
+  `action_type` int(11) NOT NULL default 0,
   `ts` datetime NOT NULL,
-  `ip` varchar(45) NOT NULL default '0',
+  `ip` varchar(45) NOT NULL default 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
   `id` int(11) NOT NULL auto_increment,
-  `user_id` int(11) NOT NULL default '0',
-  `course_id` int(11) NOT NULL default '0',
-  `module_id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default 0,
+  `course_id` int(11) NOT NULL default 0,
+  `module_id` int(11) NOT NULL default 0,
   `details` text NOT NULL,
-  `action_type` int(11) NOT NULL default '0',
+  `action_type` int(11) NOT NULL default 0,
   `ts` datetime NOT NULL,
-  `ip` varchar(45) NOT NULL default '0',
+  `ip` varchar(45) NOT NULL default 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #
@@ -141,8 +141,7 @@ db_query("CREATE TABLE `agenda` (
 	`day` DATE NOT NULL DEFAULT '0000-00-00',
 	`hour` TIME NOT NULL DEFAULT '00:00:00',
 	`lasting` VARCHAR(20),
-	`visible` TINYINT(4),
-	FULLTEXT KEY `agenda` (`title` ,`content`)) $charset_spec");
+	`visible` TINYINT(4)) $charset_spec");
 
 
 #
@@ -198,8 +197,8 @@ db_query("CREATE TABLE user (
       statut TINYINT(4) DEFAULT NULL,
       phone VARCHAR(20) DEFAULT NULL,
       am VARCHAR(20) DEFAULT NULL,
-      registered_at INT(10) NOT NULL default '0',
-      expires_at INT(10) NOT NULL default '0',
+      registered_at INT(10) NOT NULL default 0,
+      expires_at INT(10) NOT NULL default 0,
       perso ENUM('yes','no') NOT NULL default 'yes',
       lang VARCHAR(16) NOT NULL DEFAULT 'el',
       announce_flag date NOT NULL DEFAULT '0000-00-00',
@@ -218,20 +217,20 @@ db_query("CREATE TABLE user (
       KEY `user_username` (`username`)) $charset_spec");
 
 db_query("CREATE TABLE admin (
-      idUser mediumint unsigned  NOT NULL default '0',
-      `privilege` int(11) NOT NULL default '0',
+      idUser mediumint unsigned  NOT NULL default 0,
+      `privilege` int(11) NOT NULL default 0,
       UNIQUE KEY idUser (idUser)) $charset_spec");
 
 db_query("CREATE TABLE login_failure (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ip varchar(45) NOT NULL,
-    count tinyint(4) unsigned NOT NULL default '0',
+    count tinyint(4) unsigned NOT NULL default 0,
     last_fail datetime NOT NULL,
     UNIQUE KEY ip (ip)) $charset_spec");
 
 db_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
-      id_user mediumint(9) unsigned NOT NULL default '0',
+      id_user mediumint(9) unsigned NOT NULL default 0,
       ip char(45) NOT NULL default '0.0.0.0',
       loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
@@ -242,7 +241,7 @@ db_query("CREATE TABLE loginout (
 // only contains LOGIN events summed up by a period (typically weekly)
 db_query("CREATE TABLE loginout_summary (
         id mediumint unsigned NOT NULL auto_increment,
-        login_sum int(11) unsigned  NOT NULL default '0',
+        login_sum int(11) unsigned  NOT NULL default 0,
         start_date datetime NOT NULL default '0000-00-00 00:00:00',
         end_date datetime NOT NULL default '0000-00-00 00:00:00',
         PRIMARY KEY (id)) $charset_spec");
@@ -250,12 +249,12 @@ db_query("CREATE TABLE loginout_summary (
 //table keeping data for monthly reports
 db_query("CREATE TABLE monthly_summary (
         id mediumint unsigned NOT NULL auto_increment,
-        `month` varchar(20)  NOT NULL default '0',
-        profesNum int(11) NOT NULL default '0',
-        studNum int(11) NOT NULL default '0',
-        visitorsNum int(11) NOT NULL default '0',
-        coursNum int(11) NOT NULL default '0',
-        logins int(11) NOT NULL default '0',
+        `month` varchar(20)  NOT NULL default 0,
+        profesNum int(11) NOT NULL default 0,
+        studNum int(11) NOT NULL default 0,
+        visitorsNum int(11) NOT NULL default 0,
+        coursNum int(11) NOT NULL default 0,
+        logins int(11) NOT NULL default 0,
         details text,
         PRIMARY KEY (id)) $charset_spec");
 
@@ -280,10 +279,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
                 `format` VARCHAR(32) NOT NULL DEFAULT '',
                 `language` VARCHAR(16) NOT NULL DEFAULT 'el',
-                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
-                FULLTEXT KEY `document`
-                        (`filename`, `comment`, `title`, `creator`,
-                         `subject`, `description`, `author`, `language`)) $charset_spec");
+                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,
@@ -302,7 +298,7 @@ db_query("CREATE TABLE IF NOT EXISTS `group` (
                 `description` TEXT,
                 `forum_id` int(11) NULL,
                 `max_members` int(11) NOT NULL DEFAULT 0,
-                `secret_directory` varchar(30) NOT NULL DEFAULT '0') $charset_spec");
+                `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `group_members` (
                 `group_id` int(11) NOT NULL,
                 `user_id` int(11) NOT NULL,
@@ -374,8 +370,7 @@ db_query("CREATE TABLE IF NOT EXISTS `forum` (
   `last_post_id` INT(10) DEFAULT 0 NOT NULL,
   `cat_id` INT(10) DEFAULT 0 NOT NULL,
   `course_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  FULLTEXT KEY `forum` (`name`,`desc`)) $charset_spec");
+  PRIMARY KEY (`id`)) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `forum_category` (
   `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -438,17 +433,17 @@ db_query("CREATE TABLE IF NOT EXISTS videolinks (
 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
-                `uploaderId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                `uploaderId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
-                `filesize` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) DEFAULT '',
                 `description` VARCHAR(250) DEFAULT '',
                 `author` VARCHAR(250) DEFAULT '',
                 `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
-                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-                `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 PRIMARY KEY (fileId, personId)) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
                 `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -487,15 +482,15 @@ db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
                 //COMMENT='This table links module to the learning path using them';
 db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
                 `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `module_id` INT(11) NOT NULL DEFAULT '0',
+                `module_id` INT(11) NOT NULL DEFAULT 0,
                 `path` VARCHAR(255) NOT NULL DEFAULT '',
                 `comment` VARCHAR(255) default NULL)  $charset_spec");
                 //COMMENT='List of resources of module of learning paths';
 db_query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
                 `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
-                `learnPath_id` INT(11) NOT NULL DEFAULT '0',
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `learnPath_module_id` INT(11) NOT NULL DEFAULT 0,
+                `learnPath_id` INT(11) NOT NULL DEFAULT 0,
                 `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
                 `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
                 `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
@@ -568,13 +563,13 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `comments` TEXT NOT NULL,
                 `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` CHAR(1) NOT NULL DEFAULT '1',
+                `active` CHAR(1) NOT NULL DEFAULT 1,
                 `secret_directory` VARCHAR(30) NOT NULL,
-                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL ) $charset_spec");
+                `group_submissions` CHAR(1) DEFAULT 0 NOT NULL ) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                `assignment_id` INT(11) NOT NULL DEFAULT '0',
+                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `assignment_id` INT(11) NOT NULL DEFAULT 0,
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
@@ -591,25 +586,24 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `course_id` INT(11) NOT NULL,
                 `title` VARCHAR(250) DEFAULT NULL,
                 `description` TEXT,
-                `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
+                `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1,
                 `start_date` DATETIME DEFAULT NULL,
                 `end_date` DATETIME DEFAULT NULL,
-                `time_constraint` INT(11) DEFAULT '0',
-                `attempts_allowed` INT(11) DEFAULT '0',
-                `random` SMALLINT(6) NOT NULL DEFAULT '0',
+                `time_constraint` INT(11) DEFAULT 0,
+                `attempts_allowed` INT(11) DEFAULT 0,
+                `random` SMALLINT(6) NOT NULL DEFAULT 0,
                 `active` TINYINT(4) DEFAULT NULL,
-                `results` TINYINT(1) NOT NULL DEFAULT '1',
-                `score` TINYINT(1) NOT NULL DEFAULT '1',
-                FULLTEXT KEY `exercise` (`title`, `description`)) $charset_spec");
+                `results` TINYINT(1) NOT NULL DEFAULT 1,
+                `score` TINYINT(1) NOT NULL DEFAULT 1) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `eid` INT(11) NOT NULL DEFAULT '0',
-                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                `eid` INT(11) NOT NULL DEFAULT 0,
+                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00',
                 `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00',
-                `total_score` INT(11) NOT NULL DEFAULT '0',
-                `total_weighting` INT(11) DEFAULT '0',
-                `attempt` INT(11) NOT NULL DEFAULT '0' ) $charset_spec");
+                `total_score` INT(11) NOT NULL DEFAULT 0,
+                `total_weighting` INT(11) DEFAULT 0,
+                `attempt` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
@@ -617,10 +611,10 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                 `description` TEXT,
                 `weight` FLOAT(11,2) DEFAULT NULL,
                 `q_position` INT(11) DEFAULT 1,
-                `type` INT(11) DEFAULT 1 ) $charset_spec");
+                `type` INT(11) DEFAULT 1) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
-                `id` INT(11) NOT NULL DEFAULT '0',
-                `question_id` INT(11) NOT NULL DEFAULT '0',
+                `id` INT(11) NOT NULL DEFAULT 0,
+                `question_id` INT(11) NOT NULL DEFAULT 0,
                 `answer` TEXT,
                 `correct` INT(11) DEFAULT NULL,
                 `comment` TEXT,
@@ -628,8 +622,8 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
                 `r_position` INT(11) DEFAULT NULL,
                 PRIMARY KEY (id, question_id) ) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
-                `question_id` INT(11) NOT NULL DEFAULT '0',
-                `exercise_id` INT(11) NOT NULL DEFAULT '0',
+                `question_id` INT(11) NOT NULL DEFAULT 0,
+                `exercise_id` INT(11) NOT NULL DEFAULT 0,
                 PRIMARY KEY (question_id, exercise_id) ) $charset_spec");
 
 // hierarchy tables
@@ -648,7 +642,7 @@ db_query("CREATE TABLE IF NOT EXISTS `hierarchy` (
                 KEY `rgtindex` (`rgt`) )");
 
 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt)
-    VALUES ('', ".quote($institutionForm).", '1', '68')");
+    VALUES ('', ".quote($institutionForm).", 1, 68)");
 
 db_query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
     VALUES ('TMA', 'Τμήμα 1', '10', '100', '2', '23', true, true)");
@@ -943,7 +937,7 @@ db_query("CREATE TABLE `auth` (
                   `auth_name` varchar(20) NOT NULL default '',
                   `auth_settings` text ,
                   `auth_instructions` text ,
-                  `auth_default` tinyint(1) NOT NULL default '0',
+                  `auth_default` tinyint(1) NOT NULL default 0,
                   PRIMARY KEY (`auth_id`))
                   $charset_spec");
 

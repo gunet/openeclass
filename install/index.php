@@ -86,7 +86,7 @@ if (file_exists("../config/config.php")) {
         <body>
 
         <div class='install_container'>
-        <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+        <p><img src='../template/classic/img/logo_openeclass.png' alt='logo'></p>
         <div class='alert' align='center'>$langWarnConfig3!</div>
         <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
         <tr>
@@ -253,7 +253,7 @@ if(isset($_REQUEST['install2']) OR isset($_REQUEST['back2']))
                 <tr><td><textarea cols='92' rows='15' class='FormData_InputText'>" .
 	                file_get_contents('../info/license/gpl.txt') . "
                         </textarea></td></tr>
-                <tr><td><img src='../template/classic/img/printer.png' alt='print' />
+                <tr><td><img src='../template/classic/img/printer.png' alt='print'>
                         <a href='../info/license/gpl_print.txt'>$langPrintVers</a></td></tr>
                 <tr><td class='right'>
                         <input type='submit' name='back1' value='&laquo; $langPreviousStep' />
@@ -603,11 +603,7 @@ elseif(isset($_REQUEST['install7']))
         require 'install_db.php';
 
 	// create config.php
-	$fd = @fopen("../config/config.php", "w");
-	if (!$fd) {
-		$tool_content .= $langErrorConfig;
-	} else {
-		$stringConfig = '<?php
+        $stringConfig = '<?php
 /* ========================================================
  * Open eClass 3.0 configuration file
  * Created by install on '.date('Y-m-d H:i').'
@@ -618,18 +614,25 @@ $mysqlUser = '.quote($dbUsernameForm).';
 $mysqlPassword = '.quote($dbPassForm).';
 $mysqlMainDb = '.quote($mysqlMainDb).';
 ';
-	// write to file
-	fwrite($fd, $stringConfig);
-	// message
-	$tool_content .= "
+	$fd = @fopen("../config/config.php", "w");
+	if (!$fd) {
+                $config_dir = dirname(__DIR__) . '/config';
+		$tool_content .= "<p class='alert'>$langErrorConfig</p>" .
+                    "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
+                    "</p><pre class='config'>" . q($stringConfig) . "</pre>";
+	} else {
+            // write to file
+            fwrite($fd, $stringConfig);
+            // message
+            $tool_content .= "
 	<div class='success'>$langInstallSuccess</div>
 
 	<br />
 	<div>$langProtect</div>
 	<br /><br />
 	<form action='../'><input type='submit' value='$langEnterFirstTime' /></form>";
-        draw($tool_content);
 	}
+        draw($tool_content);
 }
 
 // step 1 requirements

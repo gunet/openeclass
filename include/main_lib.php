@@ -91,7 +91,7 @@ define('MATCHING',        4);
 define('TRUE_FALSE',      5);
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
-define('LISTBOX_FILL',	2);//
+define('LISTBOX_FILL',  2);//
 
 // Subsystem types (used in documents)
 define('MAIN', 0);
@@ -102,8 +102,8 @@ define('COMMON', 3);
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false)
 {
-	echo "<hr /><pre>".q($sql)."</pre><hr />";
-	return db_query($sql, $db);
+        echo "<hr /><pre>".q($sql)."</pre><hr />";
+        return db_query($sql, $db);
 }
 
 /*
@@ -118,18 +118,18 @@ If error happens just display the error and the code
 
 function db_query($sql, $db_name = null)
 {
-	if (isset($db_name)) {
-		mysql_select_db($db_name);
-	}
-        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
-		$f_sql = q(str_replace("\t", '        ', $sql));
-		$start_time = microtime(true);
+        if (isset($db_name)) {
+                mysql_select_db($db_name);
         }
-	$r = mysql_query($sql);
+        if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
+                $f_sql = q(str_replace("\t", '        ', $sql));
+                $start_time = microtime(true);
+        }
+        $r = mysql_query($sql);
         $printed_sql = false;
         if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
                 echo '<hr /><pre>', q($f_sql), '</pre><i>runtime: ',
-		     sprintf('%0.3f', 1000 * (microtime(true) - $start_time)),
+                     sprintf('%0.3f', 1000 * (microtime(true) - $start_time)),
                      'ms</i><hr />';
                 $printed_sql = true;
         }
@@ -143,8 +143,8 @@ function db_query($sql, $db_name = null)
                 } else {
                         echo '<hr />Database error<hr />';
                 }
-	}
-	return $r;
+        }
+        return $r;
 }
 
 
@@ -158,56 +158,56 @@ function email_seems_valid($email)
 // Eclass SQL query wrapper returning only a single result value.
 // Useful in some cases because, it avoid nested arrays of results.
 function db_query_get_single_value($sqlQuery, $db = false) {
-	$result = db_query($sqlQuery, $db);
+        $result = db_query($sqlQuery, $db);
 
-	if ($result) {
-		list($value) = mysql_fetch_row($result);
-		mysql_free_result($result);
-		return $value;
-	}
-	else {
-		return false;
-	}
+        if ($result) {
+                list($value) = mysql_fetch_row($result);
+                mysql_free_result($result);
+                return $value;
+        }
+        else {
+                return false;
+        }
 }
 
 // Claroline SQL query wrapper returning only the first row of the result
 // Useful in some cases because, it avoid nested arrays of results.
 function db_query_get_single_row($sqlQuery, $db = false) {
-	$result = db_query($sqlQuery, $db);
+        $result = db_query($sqlQuery, $db);
 
-	if($result) {
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
-		mysql_free_result($result);
-		return $row;
-	}
-	else {
-		return false;
-	}
+        if($result) {
+                $row = mysql_fetch_array($result, MYSQL_ASSOC);
+                mysql_free_result($result);
+                return $row;
+        }
+        else {
+                return false;
+        }
 }
 
 // Eclass SQL fetch array returning all the result rows
 // in an associative array. Compared to the PHP mysql_fetch_array(),
 // it proceeds in a single pass.
 function db_fetch_all($sqlResultHandler, $resultType = MYSQL_ASSOC) {
-	$rowList = array();
+        $rowList = array();
 
-	while( $row = mysql_fetch_array($sqlResultHandler, $resultType) )
-	{
-		$rowList [] = $row;
-	}
+        while( $row = mysql_fetch_array($sqlResultHandler, $resultType) )
+        {
+                $rowList [] = $row;
+        }
 
-	mysql_free_result($sqlResultHandler);
+        mysql_free_result($sqlResultHandler);
 
-	return $rowList;
+        return $rowList;
 }
 
 // Eclass SQL query and fetch array wrapper. It returns all the result rows
 // in an associative array.
 function db_query_fetch_all($sqlQuery, $db = false) {
-	$result = db_query($sqlQuery, $db);
+        $result = db_query($sqlQuery, $db);
 
-	if ($result) return db_fetch_all($result);
-	else         return false;
+        if ($result) return db_fetch_all($result);
+        else         return false;
 }
 
 
@@ -216,20 +216,20 @@ function db_query_fetch_all($sqlQuery, $db = false) {
 // ---------------------------------------------------------------------
 
 /*
- * Quote string for SQL query 
+ * Quote string for SQL query
  */
 function quote($s) {
-	return "'".mysql_real_escape_string(canonicalize_whitespace($s))."'";
+        return "'".mysql_real_escape_string(canonicalize_whitespace($s))."'";
 }
 
 
 // Quote string for SQL query if needed (if magic quotes are off)
 function autoquote($s) {
-	$s = canonicalize_whitespace($s);
+        $s = canonicalize_whitespace($s);
         if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        	return "'$s'";
+                return "'$s'";
         } else {
-        	return "'".addslashes($s)."'";
+                return "'".addslashes($s)."'";
         }
 }
 
@@ -237,16 +237,16 @@ function autoquote($s) {
 function autounquote($s) {
         $s = canonicalize_whitespace($s);
         if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        	return stripslashes($s);
+                return stripslashes($s);
         } else {
-        	return $s;
+                return $s;
         }
 }
 
 // Shortcut for htmlspecialchars()
 function q($s)
 {
-	return htmlspecialchars($s, ENT_QUOTES);
+        return htmlspecialchars($s, ENT_QUOTES);
 }
 
 function unescapeSimple($str)
@@ -270,7 +270,7 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend, $theme;
 
         if ($file == 'jquery') {
-		$file = 'jquery-1.8.3.min.js';
+                $file = 'jquery-1.8.3.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.1.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
@@ -307,15 +307,15 @@ function load_js($file, $init = '')
 // Translate uid to username
 function uid_to_username($uid)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query(
-	"SELECT username FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'",
-	$mysqlMainDb))) {
-		return $r[0];
-	} else {
-		return false;
-	}
+        if ($r = mysql_fetch_row(db_query(
+        "SELECT username FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'",
+        $mysqlMainDb))) {
+                return $r[0];
+        } else {
+                return false;
+        }
 }
 
 
@@ -341,7 +341,7 @@ function display_user($user, $print_email = false, $icon = true)
                 }
                 return $html;
         } elseif (!is_array($user)) {
-	        $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user");
+                $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user");
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
@@ -363,7 +363,7 @@ function display_user($user, $print_email = false, $icon = true)
                         $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
                 }
         }
-        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[nom] $user[prenom]") . "</a>" .
+        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
 }
@@ -373,8 +373,8 @@ function display_user($user, $print_email = false, $icon = true)
 function uid_to_name($uid) {
     global $mysqlMainDb;
 
-    $r = mysql_fetch_row(db_query("SELECT CONCAT(prenom, ' ', nom)
-		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb));
+    $r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
+                FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb));
 
     if ($r !== false) {
         return $r[0];
@@ -388,7 +388,7 @@ function uid_to_surname($uid) {
     global $mysqlMainDb;
 
     $r = mysql_fetch_row(db_query("SELECT nom
-		FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
+                FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
 
     if ($r !== false) {
         return $r[0];
@@ -402,7 +402,7 @@ function uid_to_email($uid) {
     global $mysqlMainDb;
 
     $r = mysql_fetch_row(db_query("SELECT email
-		FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
+                FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
 
     if ($r !== false) {
         return $r[0];
@@ -417,7 +417,7 @@ function uid_to_am($uid) {
     global $mysqlMainDb;
 
     $r = mysql_fetch_array(db_query("SELECT am from user
-		WHERE user_id = '$uid'", $mysqlMainDb));
+                WHERE user_id = '$uid'", $mysqlMainDb));
 
     if ($r !== false) {
         return $r[0];
@@ -438,23 +438,23 @@ return $departments_select : string (a formatted select box)
 ****************************************************************/
 function list_departments($department_value)
 {
-	$qry = "SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name";
-  	$dep = db_query($qry);
-  	if($dep)
-  	{
-		$departments_select = "";
-		$departments = array();
-		while($row = mysql_fetch_array($dep))
-		{
-		    	$id = $row['id'];
-	    		$name = $row['name'];
-	    		$departments[$id] = $name;
-		}
-		$departments_select = selection($departments, "department", $department_value);
-		return $departments_select;
-  	} else {
-		return 0;
-	}
+        $qry = "SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name";
+        $dep = db_query($qry);
+        if($dep)
+        {
+                $departments_select = "";
+                $departments = array();
+                while($row = mysql_fetch_array($dep))
+                {
+                        $id = $row['id'];
+                        $name = $row['name'];
+                        $departments[$id] = $name;
+                }
+                $departments_select = selection($departments, "department", $department_value);
+                return $departments_select;
+        } else {
+                return 0;
+        }
 }
 
 
@@ -474,23 +474,23 @@ return $divisions_select : string (a formatted select box)
 function list_divisions($department_value)
 {
 
-	$qry = "SELECT id, name FROM division WHERE faculte_id = $department_value ORDER BY name";
-  	$div = db_query($qry);
-  	if($div)
-  	{
-		$divisions_select = "";
-		$divisions = array();
-		while($row = mysql_fetch_array($div))
-		{
-		    	$id = $row['id'];
-	    		$name = $row['name'];
-	    		$divisions[$id] = $name;
-		}
-		$divisions_select = selection($divisions, "division");
-		return $divisions_select;
-  	} else {
-		return 0;
-	}
+        $qry = "SELECT id, name FROM division WHERE faculte_id = $department_value ORDER BY name";
+        $div = db_query($qry);
+        if($div)
+        {
+                $divisions_select = "";
+                $divisions = array();
+                while($row = mysql_fetch_array($div))
+                {
+                        $id = $row['id'];
+                        $name = $row['name'];
+                        $divisions[$id] = $name;
+                }
+                $divisions_select = selection($divisions, "division");
+                return $divisions_select;
+        } else {
+                return 0;
+        }
 }
 
 // Display links to the groups a user is member of
@@ -504,49 +504,49 @@ function user_groups($course_id, $user_id, $format = 'html')
                              `group`.id = group_members.group_id AND
                              `group_members`.user_id = $user_id
                        ORDER BY `group`.name");
-	$count = mysql_num_rows($q);
-	if (!$count) {
-		if ($format == 'html') {
-			return "<div style='padding-left: 15px'>-</div>";
-		} else {
-			return '-';
-		}
-	}
-        while ($r = mysql_fetch_array($q)) {
-		if ($format == 'html') {
-	                $groups .= (($count > 1)? '<li>': '') .
-				   "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r[id]' title='" .
-				   q($r['name']) . "'>" .
-	                           q(ellipsize($r['name'], 20)) . "</a>" .
-				   (($count > 1)? '</li>': '');
-		} else {
-			$groups .= (empty($groups)? '': ', ') . $r['name'];
-		}
+        $count = mysql_num_rows($q);
+        if (!$count) {
+                if ($format == 'html') {
+                        return "<div style='padding-left: 15px'>-</div>";
+                } else {
+                        return '-';
+                }
         }
-	if ($format == 'html') {
-		if ($count > 1) {
-			return "<ol>$groups</ol>";
-		} else {
-			return "<div style='padding-left: 15px'>$groups</div>";
-		}
-	} else {
-	        return $groups;
-	}
+        while ($r = mysql_fetch_array($q)) {
+                if ($format == 'html') {
+                        $groups .= (($count > 1)? '<li>': '') .
+                                   "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r[id]' title='" .
+                                   q($r['name']) . "'>" .
+                                   q(ellipsize($r['name'], 20)) . "</a>" .
+                                   (($count > 1)? '</li>': '');
+                } else {
+                        $groups .= (empty($groups)? '': ', ') . $r['name'];
+                }
+        }
+        if ($format == 'html') {
+                if ($count > 1) {
+                        return "<ol>$groups</ol>";
+                } else {
+                        return "<div style='padding-left: 15px'>$groups</div>";
+                }
+        } else {
+                return $groups;
+        }
 }
 
 
 // Find secret subdir of group gid
 function group_secret($gid)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
 
-	$res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'", $mysqlMainDb);
-	if ($res) {
-		$secret = mysql_fetch_row($res);
-		return $secret[0];
-	} else {
-		die("Error: group $gid doesn't exist");
-	}
+        $res = db_query("SELECT secret_directory FROM `group` WHERE id = '$gid'", $mysqlMainDb);
+        if ($res) {
+                $secret = mysql_fetch_row($res);
+                return $secret[0];
+        } else {
+                die("Error: group $gid doesn't exist");
+        }
 }
 
 
@@ -562,19 +562,19 @@ function group_secret($gid)
 // Changed by vagpits
 function selection($entries, $name, $default = '', $extra = '')
 {
-	$retString = "";
-	$retString .= "\n<select name='$name' $extra>\n";
-	foreach ($entries as $value => $label) {
-		if (isset($default) && ($value == $default)) {
-			$retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-			htmlspecialchars($label) . "</option>\n";
-		} else {
-			$retString .= "<option value='" . htmlspecialchars($value) . "'>" .
-			htmlspecialchars($label) . "</option>\n";
-		}
-	}
-	$retString .= "</select>\n";
-	return $retString;
+        $retString = "";
+        $retString .= "\n<select name='$name' $extra>\n";
+        foreach ($entries as $value => $label) {
+                if (isset($default) && ($value == $default)) {
+                        $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                } else {
+                        $retString .= "<option value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                }
+        }
+        $retString .= "</select>\n";
+        return $retString;
 }
 
 /********************************************************************
@@ -586,19 +586,19 @@ $name: the name of the selection element
 $default: if it matches one of the values, specifies the default entry
  ***********************************************************************/
 function selection3($entries, $name, $default = '') {
-	$select_box = "<select name='$name'>\n";
-	foreach ($entries as $value => $label)  {
-	    if ($value == $default) {
-		$select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-		}  else {
-		$select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
-				htmlspecialchars($label) . "</option>\n";
-		}
-	}
-	$select_box .= "</select>\n";
+        $select_box = "<select name='$name'>\n";
+        foreach ($entries as $value => $label)  {
+            if ($value == $default) {
+                $select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+                                htmlspecialchars($label) . "</option>\n";
+                }  else {
+                $select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
+                                htmlspecialchars($label) . "</option>\n";
+                }
+        }
+        $select_box .= "</select>\n";
 
-	return $select_box;
+        return $select_box;
 }
 
 // ------------------------------------------
@@ -609,16 +609,16 @@ function check_guest() {
 
     global $uid;
 
-	if (isset($uid)) {
-		$res = db_query("SELECT statut FROM user WHERE user_id = $uid");
-		$g = mysql_fetch_row($res);
+        if (isset($uid)) {
+                $res = db_query("SELECT statut FROM user WHERE user_id = $uid");
+                $g = mysql_fetch_row($res);
 
-		if ($g[0] == USER_GUEST) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+                if ($g[0] == USER_GUEST) {
+                        return true;
+                } else {
+                        return false;
+                }
+        }
 }
 
 // ------------------------------------------------
@@ -629,17 +629,17 @@ function check_editor() {
 
         global $uid, $course_id;
 
-	if (isset($uid)) {
-		$res = db_query("SELECT editor FROM course_user
+        if (isset($uid)) {
+                $res = db_query("SELECT editor FROM course_user
                             WHERE user_id = $uid
                             AND course_id = $course_id");
-		$s = mysql_fetch_array($res);
-		if ($s['editor'] == 1) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
+                $s = mysql_fetch_array($res);
+                if ($s['editor'] == 1) {
+                        return true;
+                } else {
+                        return false;
+                }
+        } else {
             return false;
         }
 }
@@ -649,17 +649,17 @@ function check_editor() {
 
 function check_uid() {
 
-	global $urlServer, $require_valid_uid, $uid;
+        global $urlServer, $require_valid_uid, $uid;
 
-	if (isset($_SESSION['uid']))
-	$uid = $_SESSION['uid'];
-	else
-	unset($uid);
+        if (isset($_SESSION['uid']))
+        $uid = $_SESSION['uid'];
+        else
+        unset($uid);
 
-	if ($require_valid_uid and !isset($uid)) {
-		header("Location: $urlServer");
-		exit;
-	}
+        if ($require_valid_uid and !isset($uid)) {
+                header("Location: $urlServer");
+                exit;
+        }
 
 }
 
@@ -672,9 +672,9 @@ function user_exists($login) {
 
   $qry = "SELECT user_id FROM `$mysqlMainDb`.user WHERE username ";
   if (get_config('case_insensitive_usernames')) {
-	$qry .= "= " . quote($login);
+        $qry .= "= " . quote($login);
   } else {
-	$qry .= "COLLATE utf8_bin = ". quote($login);
+        $qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
 
@@ -690,9 +690,9 @@ function user_app_exists($login) {
 
   $qry = "SELECT id FROM `$mysqlMainDb`.user_request WHERE status=1 and uname ";
   if (get_config('case_insensitive_usernames')) {
-	$qry .= "= " . quote($login);
+        $qry .= "= " . quote($login);
   } else {
-	$qry .= "COLLATE utf8_bin = ". quote($login);
+        $qry .= "COLLATE utf8_bin = ". quote($login);
   }
   $username_check = db_query($qry);
 
@@ -703,17 +703,17 @@ function user_app_exists($login) {
 
 function html2text ($string)
 {
-	$trans_tbl = get_html_translation_table (HTML_ENTITIES);
-	$trans_tbl = array_flip ($trans_tbl);
+        $trans_tbl = get_html_translation_table (HTML_ENTITIES);
+        $trans_tbl = array_flip ($trans_tbl);
 
-	$text = preg_replace('/</',' <',$string);
-	$text = preg_replace('/>/','> ',$string);
-	$desc = html_entity_decode(strip_tags($text));
-	$desc = preg_replace('/[\n\r\t]/',' ',$desc);
-	$desc = preg_replace('/  /',' ',$desc);
+        $text = preg_replace('/</',' <',$string);
+        $text = preg_replace('/>/','> ',$string);
+        $desc = html_entity_decode(strip_tags($text));
+        $desc = preg_replace('/[\n\r\t]/',' ',$desc);
+        $desc = preg_replace('/  /',' ',$desc);
 
-	return $desc;
-	//    return strtr (strip_tags($string), $trans_tbl);
+        return $desc;
+        //    return strtr (strip_tags($string), $trans_tbl);
 }
 
 /*
@@ -722,26 +722,26 @@ function html2text ($string)
 
 function imap_auth($server, $username, $password)
 {
-	$auth = false;
-	$fp = fsockopen($server, 143, $errno, $errstr, 10);
-	if ($fp) {
-		fputs ($fp, "A1 LOGIN ".imap_literal($username).
-		" ".imap_literal($password)."\r\n");
-		fputs ($fp, "A2 LOGOUT\r\n");
-		while (!feof($fp)) {
-			$line = fgets ($fp,200);
-			if (substr($line, 0, 5) == 'A1 OK') {
-				$auth = true;
-			}
-		}
-		fclose ($fp);
-	}
-	return $auth;
+        $auth = false;
+        $fp = fsockopen($server, 143, $errno, $errstr, 10);
+        if ($fp) {
+                fputs ($fp, "A1 LOGIN ".imap_literal($username).
+                " ".imap_literal($password)."\r\n");
+                fputs ($fp, "A2 LOGOUT\r\n");
+                while (!feof($fp)) {
+                        $line = fgets ($fp,200);
+                        if (substr($line, 0, 5) == 'A1 OK') {
+                                $auth = true;
+                        }
+                }
+                fclose ($fp);
+        }
+        return $auth;
 }
 
 function imap_literal($s)
 {
-	return "{".strlen($s)."}\r\n$s";
+        return "{".strlen($s)."}\r\n$s";
 }
 
 
@@ -751,11 +751,11 @@ function imap_literal($s)
 // ------------------------------------------------------------------------------------
 
 function mysql_version() {
-	$ver = mysql_get_server_info();
-	if (version_compare("4.1", $ver) <= 0)
-	return true;
-	else
-	return false;
+        $ver = mysql_get_server_info();
+        if (version_compare("4.1", $ver) <= 0)
+        return true;
+        else
+        return false;
 }
 
 
@@ -768,9 +768,9 @@ function mysql_version() {
 */
 function parse_tex($textext)
 {
-	$textext=str_replace("[tex]","<EMBED TYPE='application/x-techexplorer' TEXDATA='",$textext);
-	$textext=str_replace("[/tex]","' width='100%'>",$textext);
-	return $textext;
+        $textext=str_replace("[tex]","<EMBED TYPE='application/x-techexplorer' TEXDATA='",$textext);
+        $textext=str_replace("[/tex]","' width='100%'>",$textext);
+        return $textext;
 }
 
 
@@ -781,60 +781,60 @@ function parse_tex($textext)
 // Returns the code of a faculty given its name
 function find_faculty_by_name($name) {
 
-	$code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =". quote($name) ));
+        $code = mysql_fetch_row(db_query("SELECT code FROM hierarchy WHERE name =". quote($name) ));
 
-	if (!$code) {
-		return false;
-	} else {
-		return $code[0];
-	}
+        if (!$code) {
+                return false;
+        } else {
+                return $code[0];
+        }
 }
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
 
-	$req = db_query("SELECT name FROM hierarchy WHERE id = ". intval($id) );
+        $req = db_query("SELECT name FROM hierarchy WHERE id = ". intval($id) );
 
-	if ($req and mysql_num_rows($req)) {
-		$fac = mysql_fetch_row($req);
-		return $fac[0];
-	} else {
-		$req = db_query("SELECT name FROM hierarchy WHERE name = '" . addslashes($id) ."'");
-		if ($req and mysql_num_rows($req)) {
-			$fac = mysql_fetch_row($req);
-			return $fac[0];
-		}
-	}
+        if ($req and mysql_num_rows($req)) {
+                $fac = mysql_fetch_row($req);
+                return $fac[0];
+        } else {
+                $req = db_query("SELECT name FROM hierarchy WHERE name = '" . addslashes($id) ."'");
+                if ($req and mysql_num_rows($req)) {
+                        $fac = mysql_fetch_row($req);
+                        return $fac[0];
+                }
+        }
 
-	return false;
+        return false;
 }
 
 // Returns next available code for a new course in faculty with id $fac
 function new_code($fac) {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
 
-	mysql_select_db($mysqlMainDb);
-	$gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = ". intval($fac) ));
+        mysql_select_db($mysqlMainDb);
+        $gencode = mysql_fetch_row(db_query("SELECT code, generator FROM hierarchy WHERE id = ". intval($fac) ));
 
-	do {
-		$code = $gencode[0].$gencode[1];
-		$gencode[1] += 1;
-		db_query("UPDATE hierarchy SET generator = ". intval($gencode[1]) ." WHERE id = ". intval($fac) );
-	} while (file_exists("courses/". $code));
-	mysql_select_db($mysqlMainDb);
+        do {
+                $code = $gencode[0].$gencode[1];
+                $gencode[1] += 1;
+                db_query("UPDATE hierarchy SET generator = ". intval($gencode[1]) ." WHERE id = ". intval($fac) );
+        } while (file_exists("courses/". $code));
+        mysql_select_db($mysqlMainDb);
 
-	// Make sure the code returned isn't empty!
-	if (empty($code)) {
-		die("Course Code is empty!");
-	}
+        // Make sure the code returned isn't empty!
+        if (empty($code)) {
+                die("Course Code is empty!");
+        }
 
-	return $code;
+        return $code;
 }
 
 // due to a bug (?) to php function basename() our implementation
 // handles correct multibyte characters (e.g. greek)
 function my_basename($path) {
-	return preg_replace('#^.*/#', '', $path);
+        return preg_replace('#^.*/#', '', $path);
 }
 
 
@@ -845,7 +845,7 @@ function my_basename($path) {
 function greek_format($date, $time = FALSE, $dont_display_time = FALSE)
 {
         if ($time) {
-        	$datetime = explode(' ', $date);
+                $datetime = explode(' ', $date);
                 $new_date = implode('-', array_reverse(explode('-', $datetime[0])));
                 if ($dont_display_time) {
                        return $new_date;
@@ -860,8 +860,8 @@ function greek_format($date, $time = FALSE, $dont_display_time = FALSE)
 // format the date according to language
 function nice_format($date, $time = FALSE, $dont_display_time = FALSE)
 {
-	if ($GLOBALS['language'] == 'el') {
-		return greek_format($date, $time, $dont_display_time);
+        if ($GLOBALS['language'] == 'el') {
+                return greek_format($date, $time, $dont_display_time);
         } else {
                 return $date;
         }
@@ -915,8 +915,8 @@ function urlenc($string)
 
 function user_get_data($user_id)
 {
-	global $mysqlMainDb;
-	mysql_select_db($mysqlMainDb);
+        global $mysqlMainDb;
+        mysql_select_db($mysqlMainDb);
 
     $sql = 'SELECT  `user_id`,
                     `nom` AS `lastname` ,
@@ -925,8 +925,8 @@ function user_get_data($user_id)
                     `email`,
                     `phone` AS `phone`,
                     `statut` AS `status`
-		      	FROM   `user`
-		            WHERE `user_id` = "' . (int) $user_id . '"';
+                        FROM   `user`
+                            WHERE `user_id` = "' . (int) $user_id . '"';
     $result = db_query($sql);
 
     if (mysql_num_rows($result)) {
@@ -943,13 +943,13 @@ function user_get_data($user_id)
 //function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
 function randomkeys($length)
 {
-	$key = "";
-	$pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-	for($i=0;$i<$length;$i++)
-	{
-		$key .= $pattern{rand(0,35)};
-	}
-	return $key;
+        $key = "";
+        $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
+        for($i=0;$i<$length;$i++)
+        {
+                $key .= $pattern{rand(0,35)};
+        }
+        return $key;
 
 }
 
@@ -958,18 +958,18 @@ function randomkeys($length)
 // it returns a formated number string, with unit identifier.
 function format_bytesize ($kbytes, $dec_places = 2)
 {
-	global $text;
-	if ($kbytes > 1048576) {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
-		$result .= '&nbsp;Gb';
-	} elseif ($kbytes > 1024) {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
-		$result .= '&nbsp;Mb';
-	} else {
-		$result  = sprintf('%.' . $dec_places . 'f', $kbytes);
-		$result .= '&nbsp;Kb';
-	}
-	return $result;
+        global $text;
+        if ($kbytes > 1048576) {
+                $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
+                $result .= '&nbsp;Gb';
+        } elseif ($kbytes > 1024) {
+                $result  = sprintf('%.' . $dec_places . 'f', $kbytes / 1024);
+                $result .= '&nbsp;Mb';
+        } else {
+                $result  = sprintf('%.' . $dec_places . 'f', $kbytes);
+                $result .= '&nbsp;Kb';
+        }
+        return $result;
 }
 
 
@@ -997,23 +997,23 @@ function add_check_if_javascript_enabled_js()
 
 /*
  * check extension and  write  if exist  in a  <LI></LI>
- * @params string	$extensionName 	name  of  php extension to be checked
- * @params boolean	$echoWhenOk	true => show ok when  extension exist
+ * @params string       $extensionName  name  of  php extension to be checked
+ * @params boolean      $echoWhenOk     true => show ok when  extension exist
  * @author Christophe Gesche
  * @desc check extension and  write  if exist  in a  <LI></LI>
  */
 function warnIfExtNotLoaded($extensionName) {
 
-	global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-	if (extension_loaded ($extensionName)) {
-		$tool_content .= "<li><img src='../template/classic/img/tick_1.png' alt='tick' /> $extensionName <br /></li>";
-	} else {
-		$tool_content .= "
+        global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+        if (extension_loaded ($extensionName)) {
+                $tool_content .= "<li><img src='../template/classic/img/tick_1.png' alt='tick' /> $extensionName <br /></li>";
+        } else {
+                $tool_content .= "
                 <li><img src='../template/classic/img/error.png' alt='error' /> $extensionName
                 <font color=\"#FF0000\"> - <b>$langModuleNotInstalled</b></font>
                 (<a href=\"http://www.php.net/$extensionName\" target=_blank>$langReadHelp $langHere)</a>
                 <br /></li>";
-	}
+        }
 }
 
 
@@ -1024,19 +1024,19 @@ function warnIfExtNotLoaded($extensionName) {
  * @author KilerCris@Mail.com original function from  php manual
  * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team
  * @since  28-Aug-2001 09:12
- * @param sting		$path 		wanted path
+ * @param sting         $path           wanted path
  */
 function mkpath($path)  {
 
-	$path = str_replace("/","\\",$path);
-	$dirs = explode("\\",$path);
-	$path = $dirs[0];
-	for ($i = 1;$i < count($dirs);$i++) {
-		$path .= "/".$dirs[$i];
-		if (!is_dir($path)) {
-			mkdir($path, 0775);
-		}
-	}
+        $path = str_replace("/","\\",$path);
+        $dirs = explode("\\",$path);
+        $path = $dirs[0];
+        for ($i = 1;$i < count($dirs);$i++) {
+                $path .= "/".$dirs[$i];
+                if (!is_dir($path)) {
+                        mkdir($path, 0775);
+                }
+        }
 }
 
 
@@ -1046,26 +1046,26 @@ function display_activation_link($module_id) {
         global $modules;
 
         if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {
-        	return true;
-	} else {
-		return false;
-	}
+                return true;
+        } else {
+                return false;
+        }
 }
 
 // checks if a module is visible
 function visible_module($module_id) {
 
-	global $course_id;
+        global $course_id;
 
-	$v = mysql_fetch_array(db_query("SELECT visible FROM course_module
+        $v = mysql_fetch_array(db_query("SELECT visible FROM course_module
                                 WHERE module_id = $module_id AND
                                 course_id = $course_id"));
 
-	if ($v['visible'] == 1) {
-		return true;
-	} else {
-		return false;
-	}
+        if ($v['visible'] == 1) {
+                return true;
+        } else {
+                return false;
+        }
 }
 
 
@@ -1105,12 +1105,12 @@ function invalid_utf8($s)
 
 function utf8_to_cp1253($s)
 {
-	// First try with iconv() directly
+        // First try with iconv() directly
         $cp1253 = @iconv('UTF-8', 'Windows-1253', $s);
         if ($cp1253 === false) {
-        	// ... if it fails, fall back to indirect conversion
-		$cp1253 = str_replace("\xB6", "\xA2", @iconv('UTF-8', 'ISO-8859-7', $s));
-	}
+                // ... if it fails, fall back to indirect conversion
+                $cp1253 = str_replace("\xB6", "\xA2", @iconv('UTF-8', 'ISO-8859-7', $s));
+        }
         return $cp1253;
 }
 
@@ -1177,14 +1177,14 @@ function safe_filename($extension = '')
 
 function get_file_extension($filename)
 {
-	$matches = array();
-	if (preg_match('/\.(tar\.(z|gz|bz|bz2))$/i', $filename, $matches)) {
+        $matches = array();
+        if (preg_match('/\.(tar\.(z|gz|bz|bz2))$/i', $filename, $matches)) {
                 return strtolower($matches[1]);
         } elseif (preg_match('/\.([a-zA-Z0-9_-]{1,8})$/i', $filename, $matches)) {
-		return strtolower($matches[1]);
-	} else {
-		return '';
-	}
+                return strtolower($matches[1]);
+        } else {
+                return '';
+        }
 }
 
 // Wrap each $item with single quote
@@ -1221,12 +1221,11 @@ function remove_filename_unsafe_chars($s)
 function resource_access($visible, $public)
 {
         global $course_code;
-        
         if ($visible) {
                 if ($public) {
                         return TRUE;
                 } else {
-                        if (isset($_SESSION['uid']) 
+                        if (isset($_SESSION['uid'])
                                 and (isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code])) {
                                 return TRUE;
                         } else {
@@ -1242,25 +1241,25 @@ function resource_access($visible, $public)
 # If you add any new languages, make sure they are defined in the
 # next array as well
 $native_language_names_init = array (
-	'el' => 'Ελληνικά',
-	'en' => 'English',
-	'es' => 'Español',
-	'cs' => 'Česky',
-	'sq' => 'Shqip',
-	'bg' => 'Български',
-	'ca' => 'Català',
-	'da' => 'Dansk',
-	'nl' => 'Nederlands',
-	'fi' => 'Suomi',
-	'fr' => 'Français',
-	'de' => 'Deutsch',
-	'is' => 'Íslenska',
-	'it' => 'Italiano',
-	'jp' => '日本語',
-	'pl' => 'Polski',
-	'ru' => 'Русский',
-	'tr' => 'Türkçe',
-	'xx' => 'Variable Names',
+        'el' => 'Ελληνικά',
+        'en' => 'English',
+        'es' => 'Español',
+        'cs' => 'Česky',
+        'sq' => 'Shqip',
+        'bg' => 'Български',
+        'ca' => 'Català',
+        'da' => 'Dansk',
+        'nl' => 'Nederlands',
+        'fi' => 'Suomi',
+        'fr' => 'Français',
+        'de' => 'Deutsch',
+        'is' => 'Íslenska',
+        'it' => 'Italiano',
+        'jp' => '日本語',
+        'pl' => 'Polski',
+        'ru' => 'Русский',
+        'tr' => 'Türkçe',
+        'xx' => 'Variable Names',
 );
 
 $language_codes = array(
@@ -1291,10 +1290,10 @@ function langcode_to_name($langcode)
 {
         global $language_codes;
         if (isset($language_codes[$langcode])) {
-		return $language_codes[$langcode];
-	} else {
-		return 'english';
-	}
+                return $language_codes[$langcode];
+        } else {
+                return 'english';
+        }
 }
 
 // Convert language name to language code
@@ -1303,10 +1302,10 @@ function langname_to_code($langname)
         global $language_codes;
         $langcode = array_search($langname, $language_codes);
         if ($langcode) {
-		return $langcode;
-	} else {
-		return 'en';
-	}
+                return $langcode;
+        } else {
+                return 'en';
+        }
 }
 
 // Make sure a language code is valid - if not, default language is Greek
@@ -1322,11 +1321,11 @@ function validate_language_code($langcode, $default = 'el')
 
 function append_units($amount, $singular, $plural)
 {
-	if ($amount == 1) {
-		return $amount . ' ' . $singular;
-	} else {
-		return $amount . ' ' . $plural;
-	}
+        if ($amount == 1) {
+                return $amount . ' ' . $singular;
+        } else {
+                return $amount . ' ' . $plural;
+        }
 }
 
 // Convert $sec to days, hours, minutes, seconds;
@@ -1402,19 +1401,19 @@ function add_units_navigation($entry_page = false)
 {
         global $navigation, $course_id, $is_editor, $mysqlMainDb, $course_code;
         if ($entry_page and !isset($_GET['unit'])) {
-		unset($_SESSION['unit']);
-		return false;
-	} elseif (isset($_GET['unit']) or isset($_SESSION['unit'])) {
+                unset($_SESSION['unit']);
+                return false;
+        } elseif (isset($_GET['unit']) or isset($_SESSION['unit'])) {
                 if ($is_editor) {
                         $visibility_check = '';
                 } else {
                         $visibility_check = "AND visible = 1";
                 }
-		if (isset($_GET['unit'])) {
-			$unit_id = intval($_GET['unit']);
-		} elseif (isset($_SESSION['unit'])) {
-			$unit_id = intval($_SESSION['unit']);
-		}
+                if (isset($_GET['unit'])) {
+                        $unit_id = intval($_GET['unit']);
+                } elseif (isset($_SESSION['unit'])) {
+                        $unit_id = intval($_SESSION['unit']);
+                }
                 $q = db_query("SELECT title FROM course_units
                        WHERE id = $unit_id AND course_id = $course_id " .
                        $visibility_check, $mysqlMainDb);
@@ -1422,10 +1421,10 @@ function add_units_navigation($entry_page = false)
                         list($unit_name) = mysql_fetch_row($q);
                         $navigation[] = array("url"=>"../units/index.php?course=$course_code&amp;id=$unit_id", "name"=> htmlspecialchars($unit_name));
                 }
-		return true;
-	} else {
-		return false;
-	}
+                return true;
+        } else {
+                return false;
+        }
 }
 
 // Cut a string to be no more than $maxlen characters long, appending
@@ -1461,48 +1460,48 @@ function course_code_to_id($code)
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
-	} else {
+        } else {
                 return false;
-	}
+        }
 }
 
 // Find the title of a course from its id
 function course_id_to_title($cid)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
         $r = db_query("SELECT title FROM course WHERE id = $cid", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
-	} else {
+        } else {
                 return false;
-	}
+        }
 }
 
 // find the course code from its id
 function course_id_to_code($cid)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
         $r = db_query("SELECT code FROM course WHERE id = $cid ", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
-	} else {
+        } else {
                 return false;
-	}
+        }
 }
 
 // find the public course code from its id
 function course_id_to_public_code($cid)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
         $r = db_query("SELECT public_code FROM course WHERE id = $cid ", $mysqlMainDb);
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
-	} else {
+        } else {
                 return false;
-	}
+        }
 }
 
 // Delete course with id = $cid
@@ -1510,65 +1509,65 @@ function delete_course($cid)
 {
         global $webDir;
 
-	$course_code = course_id_to_code($cid);
+        $course_code = course_id_to_code($cid);
 
-	db_query("DELETE FROM announcement WHERE course_id = $cid");
-	db_query("DELETE FROM document WHERE course_id = $cid");
+        db_query("DELETE FROM announcement WHERE course_id = $cid");
+        db_query("DELETE FROM document WHERE course_id = $cid");
         db_query("DELETE FROM ebook_subsection WHERE section_id IN
                          (SELECT ebook_section.id FROM ebook_section, ebook
                                  WHERE ebook_section.ebook_id = ebook.id AND
                                        ebook.course_id = $cid)");
         db_query("DELETE FROM ebook_section WHERE id IN
                          (SELECT id FROM ebook WHERE course_id = $cid)");
-	db_query("DELETE FROM ebook WHERE course_id = $cid");
-	db_query("DELETE FROM forum_notify WHERE course_id = $cid");
-	db_query("DELETE FROM glossary WHERE course_id = $cid");
+        db_query("DELETE FROM ebook WHERE course_id = $cid");
+        db_query("DELETE FROM forum_notify WHERE course_id = $cid");
+        db_query("DELETE FROM glossary WHERE course_id = $cid");
         db_query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = $cid)");
-	db_query("DELETE FROM `group` WHERE course_id = $cid");
-	db_query("DELETE FROM group_properties WHERE course_id = $cid");
-	db_query("DELETE FROM link WHERE course_id = $cid");
-	db_query("DELETE FROM link_category WHERE course_id = $cid");
-	db_query("DELETE FROM agenda WHERE course_id = $cid");
+        db_query("DELETE FROM `group` WHERE course_id = $cid");
+        db_query("DELETE FROM group_properties WHERE course_id = $cid");
+        db_query("DELETE FROM link WHERE course_id = $cid");
+        db_query("DELETE FROM link_category WHERE course_id = $cid");
+        db_query("DELETE FROM agenda WHERE course_id = $cid");
         db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
         db_query("DELETE FROM course_units WHERE course_id = $cid");
-	db_query("DELETE FROM course_user WHERE course_id = $cid");
+        db_query("DELETE FROM course_user WHERE course_id = $cid");
         db_query("DELETE FROM course_department WHERE course = $cid");
-	db_query("DELETE FROM course WHERE id = $cid");
-	db_query("DELETE FROM video WHERE course_id = $cid");
-	db_query("DELETE FROM videolinks WHERE course_id = $cid");
-	db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
-	db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
-	db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
-	db_query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cid)");
-	db_query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
-	db_query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
-	db_query("DELETE FROM lp_module WHERE course_id = $cid");
-	db_query("DELETE FROM lp_learnPath WHERE course_id = $cid");
-	db_query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid))");
-	db_query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
-	db_query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
-	db_query("DELETE FROM wiki_properties WHERE course_id = $cid");
-	db_query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid))");
-	db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
-	db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
-	db_query("DELETE FROM poll WHERE course_id = $cid");
-	db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = $cid)");
-	db_query("DELETE FROM assignment WHERE course_id = $cid");
-	db_query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
-	db_query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = $cid)");
-	db_query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
-	db_query("DELETE FROM exercise_question WHERE course_id = $cid");
-	db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
-	db_query("DELETE FROM exercise WHERE course_id = $cid");
+        db_query("DELETE FROM course WHERE id = $cid");
+        db_query("DELETE FROM video WHERE course_id = $cid");
+        db_query("DELETE FROM videolinks WHERE course_id = $cid");
+        db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+        db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+        db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
+        db_query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cid)");
+        db_query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+        db_query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+        db_query("DELETE FROM lp_module WHERE course_id = $cid");
+        db_query("DELETE FROM lp_learnPath WHERE course_id = $cid");
+        db_query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid))");
+        db_query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
+        db_query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
+        db_query("DELETE FROM wiki_properties WHERE course_id = $cid");
+        db_query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid))");
+        db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+        db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+        db_query("DELETE FROM poll WHERE course_id = $cid");
+        db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = $cid)");
+        db_query("DELETE FROM assignment WHERE course_id = $cid");
+        db_query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
+        db_query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = $cid)");
+        db_query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
+        db_query("DELETE FROM exercise_question WHERE course_id = $cid");
+        db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
+        db_query("DELETE FROM exercise WHERE course_id = $cid");
         db_query("DELETE FROM course_module WHERE course_id = $cid");
 
         $garbage = "$webDir/courses/garbage";
         if (!is_dir($garbage)) {
                 mkdir($garbage, 0775);
         }
-	rename("$webDir/courses/$course_code", "$garbage/$course_code");
+        rename("$webDir/courses/$course_code", "$garbage/$course_code");
         removeDir("$webDir/video/$course_code");
         // refresh index
         require_once 'modules/search/courseindexer.class.php';
@@ -1590,10 +1589,10 @@ function csv_escape($string, $force = false)
         $string = preg_replace('/[\r\n]+/', ' ', $string);
         if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
                 return $string;
-	} else {
+        } else {
                 return '"' . str_replace('"', '""', $string) . '"';
 
-	}
+        }
 }
 
 
@@ -1612,7 +1611,7 @@ function get_config($key, $default=null)
 // Set the value of a key in the config table
 function set_config($key, $value)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
 
         db_query("REPLACE INTO `$mysqlMainDb`.config (`key`, `value`)
                           VALUES ('$key', " . quote($value) . ")");
@@ -1682,7 +1681,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
  */
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+        global $head_content, $language, $purifier, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
 
         $filebrowser = $url = '';
         $activemodule = 'document/index.php';
@@ -1722,8 +1721,8 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
                 $filebrowser = "file_browser_callback : 'openDocsPicker',";
                 $url = $urlAppend."modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
-	load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
-	$head_content .= "
+        load_js('tinymce/jscripts/tiny_mce/tiny_mce_gzip.js');
+        $head_content .= "
 <script type='text/javascript'>
 tinyMCE_GZ.init({
         plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
@@ -1734,42 +1733,42 @@ tinyMCE_GZ.init({
 });
 
 tinyMCE.init({
-	// General options
-		language : '$language',
-		mode : 'specific_textareas',
+        // General options
+                language : '$language',
+                mode : 'specific_textareas',
                 editor_deselector : 'mceNoEditor',
-		theme : 'advanced',
-		plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
-		entity_encoding : 'raw',
+                theme : 'advanced',
+                plugins : 'pagebreak,style,save,advimage,advlink,inlinepopups,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,emotions,preview,searchreplace,table,insertdatetime',
+                entity_encoding : 'raw',
                 relative_urls : false,
                 advlink_styles : '$langPopUp=colorbox;$langPopUpFrame=colorboxframe',
                 $filebrowser
 
-		// Theme options
-		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
-		theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,media,emotions,charmap,|,insertdate,inserttime',
-		theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
-		theme_advanced_toolbar_location : 'top',
-		theme_advanced_toolbar_align : 'left',
-		theme_advanced_statusbar_location : 'bottom',
-		theme_advanced_resizing : true,
+                // Theme options
+                theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect,|,forecolor,backcolor',
+                theme_advanced_buttons2 : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,image,eclmedia,media,emotions,charmap,|,insertdate,inserttime',
+                theme_advanced_buttons3 : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,preview,cleanup,code,|,print',
+                theme_advanced_toolbar_location : 'top',
+                theme_advanced_toolbar_align : 'left',
+                theme_advanced_statusbar_location : 'bottom',
+                theme_advanced_resizing : true,
 
-		// Style formats
-		style_formats : [
-			{title : 'Bold text', inline : 'b'},
-			{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-			{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-			{title : 'Example 1', inline : 'span', classes : 'example1'},
-			{title : 'Example 2', inline : 'span', classes : 'example2'},
-			{title : 'Table styles'},
-			{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		],
+                // Style formats
+                style_formats : [
+                        {title : 'Bold text', inline : 'b'},
+                        {title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+                        {title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+                        {title : 'Example 1', inline : 'span', classes : 'example1'},
+                        {title : 'Example 2', inline : 'span', classes : 'example2'},
+                        {title : 'Table styles'},
+                        {title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+                ],
 
-		// Replace values for the template plugin
-		template_replace_values : {
-			username : 'Open eClass',
-			staffid : '991234'
-		}
+                // Replace values for the template plugin
+                template_replace_values : {
+                        username : 'Open eClass',
+                        staffid : '991234'
+                }
 });
 
 function openDocsPicker(field_name, url, type, win) {
@@ -1790,13 +1789,13 @@ function openDocsPicker(field_name, url, type, win) {
 }
 </script>";
 
-	/*$text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
-			                      array('[m]', '[/m]', '[m]', '[/m]'),
-			                      $text); */
+        /*$text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
+                                              array('[m]', '[/m]', '[m]', '[/m]'),
+                                              $text); */
 
-	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
-	       q(str_replace('{','&#123;', $text)) .
-	       "</textarea>\n";
+        return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
+               q(str_replace('{','&#123;', $text)) .
+               "</textarea>\n";
 }
 
 
@@ -1805,17 +1804,17 @@ function openDocsPicker(field_name, url, type, win) {
 function text_area($name, $rows, $cols, $text, $extra = '')
 {
 
-	global $purifier;
+        global $purifier;
 
-	$text = $purifier->purify(str_replace(array('<m>', '</m>', '<M>', '</M>'),
-			                      array('[m]', '[/m]', '[m]', '[/m]'),
-			                      $text));
+        $text = str_replace(array('<m>', '</m>', '<M>', '</M>'),
+                            array('[m]', '[/m]', '[m]', '[/m]'),
+                            $text);
         if (strpos($extra, 'class=') === false) {
                 $extra .= ' class="mceNoEditor"';
         }
-	return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
+        return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
                q(str_replace('{','&#123;', $text)) .
-	       "</textarea>\n";
+               "</textarea>\n";
 }
 
 // Does the special course unit with course descriptions exist?
@@ -1908,7 +1907,7 @@ function units_set_maxorder()
 
 function handle_unit_info_edit()
 {
-        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id;
+        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
         $title = autoquote($_REQUEST['unittitle']);
         $descr = autoquote($_REQUEST['unitdescr']);
         if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1925,13 +1924,15 @@ function handle_unit_info_edit()
                                  `order` = $order, course_id = $course_id");
                 $successmsg = $langCourseUnitAdded;
         }
-        
         // update index
         global $webDir;
         require_once 'modules/search/courseindexer.class.php';
         $idx = new CourseIndexer();
         $idx->storeCourse($course_id);
-        
+        // refresh course metadata
+        require_once 'modules/course_metadata/CourseXML.php';
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+
         return "<p class='success'>$successmsg</p>";
 }
 
@@ -2010,24 +2011,24 @@ function glossary_expand_callback($matches)
                 return $matches[0];
         }
         $glossary_seen_terms[$term] = true;
-	if (!empty($_SESSION['glossary'][$term])) {
-		$definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
-	} else {
-		$definition = '';
-	}
-	if (isset($_SESSION['glossary_url'][$term])) {
-		return '<a href="' . q($_SESSION['glossary_url'][$term]) .
-		       '" target="_blank" class="glossary"' .
-		        $definition . '>' . $matches[0] . '</a>';
-	} else {
-		return '<span class="glossary"' .
-			$definition . '>' . $matches[0] . '</span>';
-	}
+        if (!empty($_SESSION['glossary'][$term])) {
+                $definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
+        } else {
+                $definition = '';
+        }
+        if (isset($_SESSION['glossary_url'][$term])) {
+                return '<a href="' . q($_SESSION['glossary_url'][$term]) .
+                       '" target="_blank" class="glossary"' .
+                        $definition . '>' . $matches[0] . '</a>';
+        } else {
+                return '<span class="glossary"' .
+                        $definition . '>' . $matches[0] . '</span>';
+        }
 }
 
 function get_glossary_terms($course_id)
 {
-	global $mysqlMainDb;
+        global $mysqlMainDb;
 
         list($expand) = mysql_fetch_row(db_query("SELECT glossary_expand FROM `$mysqlMainDb`.course
                                                          WHERE id = $course_id"));
@@ -2043,13 +2044,13 @@ function get_glossary_terms($course_id)
         }
 
         $_SESSION['glossary'] = array();
-	$_SESSION['glossary_url'] = array();
+        $_SESSION['glossary_url'] = array();
         while ($row = mysql_fetch_array($q)) {
                 $term = mb_strtolower($row['term'], 'UTF-8');
                 $_SESSION['glossary'][$term] = $row['definition'];
-		if (!empty($row['url'])) {
-			$_SESSION['glossary_url'][$term] = $row['url'];
-		}
+                if (!empty($row['url'])) {
+                        $_SESSION['glossary_url'][$term] = $row['url'];
+                }
         }
         $_SESSION['glossary_course_id'] = $course_id;
         return true;
@@ -2117,20 +2118,20 @@ function odd_even($k, $extra='')
 // Translate Greek characters to Latin
 function greek_to_latin($string)
 {
-	return str_replace(
-		array(
-			'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
-			'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
-			'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
-			'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-			'ΐ', 'ϋ', 'ΰ', 'Ϊ', 'Ϋ', '–'),
-		array(
-			'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
-			'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
-			'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
-			's', 'a', 'e', 'i', 'i', 'y', 'o', 'o', 'A', 'E', 'H', 'I', 'Y', 'O', 'O', 'i',
-			'i', 'y', 'y', 'I', 'Y', '-'),
-		$string);
+        return str_replace(
+                array(
+                        'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
+                        'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
+                        'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
+                        'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
+                        'ΐ', 'ϋ', 'ΰ', 'Ϊ', 'Ϋ', '–'),
+                array(
+                        'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
+                        'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
+                        'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
+                        's', 'a', 'e', 'i', 'i', 'y', 'o', 'o', 'A', 'E', 'H', 'I', 'Y', 'O', 'O', 'i',
+                        'i', 'y', 'y', 'I', 'Y', '-'),
+                $string);
 }
 
 // Convert to uppercase and remove accent marks
@@ -2151,44 +2152,44 @@ function remove_accents($string)
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
 function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_file)
 {
-	if ($type == 'image/jpeg') {
-		$image = @imagecreatefromjpeg($source_file);
-	} elseif ($type == 'image/png') {
-		$image = @imagecreatefrompng($source_file);
-	} elseif ($type == 'image/gif') {
-		$image = @imagecreatefromgif($source_file);
-	} elseif ($type == 'image/bmp') {
-		$image = @imagecreatefromwbmp($source_file);
-	}
-	if (!isset($image) or !$image) {
-		return false;
-	}
-	$width = imagesx($image);
-	$height = imagesy($image);
-	if ($width > $maxwidth or $height > $maxheight) {
-		$xscale = $maxwidth / $width;
-		$yscale = $maxheight / $height;
-		if ($yscale < $xscale) {
-			$newwidth = round($width * $yscale);
-			$newheight = round($height * $yscale);
-		} else {
-			$newwidth = round($width * $xscale);
-			$newheight = round($height * $xscale);
-		}
-		$resized = imagecreatetruecolor($newwidth, $newheight);
-		imagecopyresampled($resized, $image, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-		return imagejpeg($resized, $target_file);
-	} elseif ($type != 'image/jpeg') {
-		return imagejpeg($image, $target_file);
-	} else {
-		return copy($source_file, $target_file);
-	}
+        if ($type == 'image/jpeg') {
+                $image = @imagecreatefromjpeg($source_file);
+        } elseif ($type == 'image/png') {
+                $image = @imagecreatefrompng($source_file);
+        } elseif ($type == 'image/gif') {
+                $image = @imagecreatefromgif($source_file);
+        } elseif ($type == 'image/bmp') {
+                $image = @imagecreatefromwbmp($source_file);
+        }
+        if (!isset($image) or !$image) {
+                return false;
+        }
+        $width = imagesx($image);
+        $height = imagesy($image);
+        if ($width > $maxwidth or $height > $maxheight) {
+                $xscale = $maxwidth / $width;
+                $yscale = $maxheight / $height;
+                if ($yscale < $xscale) {
+                        $newwidth = round($width * $yscale);
+                        $newheight = round($height * $yscale);
+                } else {
+                        $newwidth = round($width * $xscale);
+                        $newheight = round($height * $xscale);
+                }
+                $resized = imagecreatetruecolor($newwidth, $newheight);
+                imagecopyresampled($resized, $image, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+                return imagejpeg($resized, $target_file);
+        } elseif ($type != 'image/jpeg') {
+                return imagejpeg($image, $target_file);
+        } else {
+                return copy($source_file, $target_file);
+        }
 }
 
 // Produce HTML source for an icon
 function icon($name, $title=null, $link=null, $attrs=null, $format='png', $link_attrs='')
 {
-	global $themeimg;
+        global $themeimg;
 
         if (isset($title)) {
                 $title = q($title);
@@ -2202,15 +2203,15 @@ function icon($name, $title=null, $link=null, $attrs=null, $format='png', $link_
         }
 
         $img = "<img src='$themeimg/$name.$format' $extra>";
-	if (isset($link)) {
-		return "<a href='$link'$link_attrs>$img</a>";
+        if (isset($link)) {
+                return "<a href='$link'$link_attrs>$img</a>";
         } else {
                 return $img;
-	}
+        }
 }
 
 /**
- * Link for displaying user profile 
+ * Link for displaying user profile
  * @param type $uid
  * @param type $size
  * @param type $default = false
@@ -2218,14 +2219,14 @@ function icon($name, $title=null, $link=null, $attrs=null, $format='png', $link_
  */
 function profile_image($uid, $size, $default = false)
 {
-	global $urlServer, $themeimg;
+        global $urlServer, $themeimg;
 
-	if (!$default) {
-		return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".q(uid_to_name($uid))."'>";
+        if (!$default) {
+                return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='".q(uid_to_name($uid))."'>";
         } else {
                 $name = q(uid_to_name($uid));
-		return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
-	}
+                return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
+        }
 }
 
 function canonicalize_url($url)
@@ -2233,8 +2234,8 @@ function canonicalize_url($url)
         if (!preg_match('/^[a-zA-Z0-9_-]+:/', $url)) {
                 return 'http://' . $url;
         } else {
-		return $url;
-	}
+                return $url;
+        }
 }
 
 function stop_output_buffering()
@@ -2246,44 +2247,44 @@ function stop_output_buffering()
 
 // Seed mt_rand
 function make_seed() {
-	list($usec, $sec) = explode(' ', microtime());
-	return (float) $sec + ((float) $usec * 100000);
+        list($usec, $sec) = explode(' ', microtime());
+        return (float) $sec + ((float) $usec * 100000);
 }
 
 // Generate a $len length random base64 encoded alphanumeric string
 // try first /dev/urandom but if not available generate pseudo-random string
 function generate_secret_key($len)
 {
-	if (($key = read_urandom($len)) == NULL) {
-		// poor man's choice
-		$key = poor_rand_string($len);
-	}
-	return base64_encode($key);
+        if (($key = read_urandom($len)) == NULL) {
+                // poor man's choice
+                $key = poor_rand_string($len);
+        }
+        return base64_encode($key);
 }
 
 // Generate a $len length pseudo random base64 encoded alphanumeric string from ASCII table
 function poor_rand_string($len) {
-	mt_srand(make_seed());
+        mt_srand(make_seed());
 
-	$c = "";
-	for ($i=0; $i<$len; $i++) {
-		$c .= chr(mt_rand(0, 127));
-	}
+        $c = "";
+        for ($i=0; $i<$len; $i++) {
+                $c .= chr(mt_rand(0, 127));
+        }
 
-	return $c;
+        return $c;
 }
 
 // Read $len length random string from /dev/urandom if it's available
 function read_urandom($len) {
-	if (@is_readable('/dev/urandom')) {
-		$f=fopen('/dev/urandom', 'r');
-		$urandom=fread($f, $len);
-		fclose($f);
-		return $urandom;
-	}
-	else {
-		return NULL;
-	}
+        if (@is_readable('/dev/urandom')) {
+                $f=fopen('/dev/urandom', 'r');
+                $urandom=fread($f, $len);
+                fclose($f);
+                return $urandom;
+        }
+        else {
+                return NULL;
+        }
 }
 
 // Get user admin rights from table `admin`
@@ -2296,9 +2297,9 @@ function get_admin_rights($user_id) {
         if ($r and mysql_num_rows($r) > 0) {
                 $row = mysql_fetch_row($r);
                 return $row[0];
-	} else {
+        } else {
                 return -1;
-	}
+        }
 }
 
 // checks if a course is inactive
@@ -2330,19 +2331,19 @@ function get_mail_ver_status($uid) {
 // check if username match for both case sensitive/insensitive
 function check_username_sensitivity($posted, $dbuser) {
         if (get_config('case_insensitive_usernames')) {
-		if (mb_strtolower($posted) == mb_strtolower($dbuser)) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		if ($posted == $dbuser) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	return false;
+                if (mb_strtolower($posted) == mb_strtolower($dbuser)) {
+                        return true;
+                } else {
+                        return false;
+                }
+        } else {
+                if ($posted == $dbuser) {
+                        return true;
+                } else {
+                        return false;
+                }
+        }
+        return false;
 }
 
 // checks if user is notified via email from a given course
@@ -2402,17 +2403,17 @@ function get_user_email_notification_from_courses($user_id) {
 // Return a list of all subdirectories of $base which contain a file named $filename
 function active_subdirs($base, $filename)
 {
-	$dir = opendir($base);
-	$out = array();
-	while (($f = readdir($dir)) !== false) {
+        $dir = opendir($base);
+        $out = array();
+        while (($f = readdir($dir)) !== false) {
                 if (is_dir($base.'/'.$f) and
                     $f != '.' and $f != '..' and
                     file_exists($base.'/'.$f.'/'.$filename)) {
-			$out[] = $f;
-		}
-	}
-	closedir($dir);
-	return $out;
+                        $out[] = $f;
+                }
+        }
+        closedir($dir);
+        return $out;
 }
 
 
@@ -2426,36 +2427,36 @@ function active_subdirs($base, $filename)
 function removeDir($dirPath)
 {
 
-	/* Try to remove the directory. If it can not manage to remove it,
-	 * it's probable the directory contains some files or other directories,
-	 * and that we must first delete them to remove the original directory.
-	 */
+        /* Try to remove the directory. If it can not manage to remove it,
+         * it's probable the directory contains some files or other directories,
+         * and that we must first delete them to remove the original directory.
+         */
 
-	if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
-	{
+        if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
+        {
                 $cwd = getcwd();
                 chdir($dirPath);
-		$handle = opendir($dirPath) ;
+                $handle = opendir($dirPath) ;
 
-		while ($element = readdir($handle)) {
-			if ( $element == "." || $element == "..") {
-				continue;	// skip current and parent directories
-			} elseif (is_file($element)) {
-				unlink($element);
-			} elseif (is_dir($element)) {
-				$dirToRemove[] = $dirPath."/".$element;
-			}
-		}
+                while ($element = readdir($handle)) {
+                        if ( $element == "." || $element == "..") {
+                                continue;       // skip current and parent directories
+                        } elseif (is_file($element)) {
+                                unlink($element);
+                        } elseif (is_dir($element)) {
+                                $dirToRemove[] = $dirPath."/".$element;
+                        }
+                }
 
-		closedir ($handle) ;
+                closedir ($handle) ;
                 chdir($cwd);
 
-		if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
-			foreach($dirToRemove as $j) removeDir($j) ; // recursivity
-		}
+                if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
+                        foreach($dirToRemove as $j) removeDir($j) ; // recursivity
+                }
 
-		rmdir( $dirPath ) ;
-	}
+                rmdir( $dirPath ) ;
+        }
 }
 
 /**
