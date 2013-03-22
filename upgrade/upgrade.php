@@ -657,8 +657,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `last_post_id` INT(10) DEFAULT 0 NOT NULL,
                         `cat_id` INT(10) DEFAULT 0 NOT NULL,
                         `course_id` INT(11) NOT NULL,
-                        PRIMARY KEY (`id`),
-                        FULLTEXT KEY `forum` (`name`,`desc`)) $charset_spec");
+                        PRIMARY KEY (`id`)) $charset_spec");
 
                 db_query("CREATE TABLE IF NOT EXISTS `forum_category` (
                         `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -707,9 +706,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `description` TEXT,
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
-                            `date` DATETIME,
-                            FULLTEXT KEY `video`
-                               (`url`, `title`, `description`))');
+                            `date` DATETIME)');
+                
                 db_query('CREATE TABLE IF NOT EXISTS videolinks (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
@@ -718,9 +716,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `description` TEXT,
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
-                            `date` DATETIME,
-                            FULLTEXT KEY `video`
-                               (`url`, `title`, `description`))');
+                            `date` DATETIME)');
 
                 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -884,8 +880,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `day` DATE NOT NULL DEFAULT '0000-00-00',
                             `hour` TIME NOT NULL DEFAULT '00:00:00',
                             `lasting` VARCHAR(20),
-                            `visible` TINYINT(4),
-                            FULLTEXT KEY `agenda` (`title` ,`content`))");
+                            `visible` TINYINT(4))");
 
                 db_query("CREATE TABLE IF NOT EXISTS `exercise` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -900,8 +895,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `random` SMALLINT(6) NOT NULL DEFAULT 0,
                             `active` TINYINT(4) NOT NULL DEFAULT 1,
                             `results` TINYINT(1) NOT NULL DEFAULT 1,
-                            `score` TINYINT(1) NOT NULL DEFAULT 1,
-                            FULLTEXT KEY `exercise` (`title`, `description`))");
+                            `score` TINYINT(1) NOT NULL DEFAULT 1)");
+                
                 db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                             `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `eid` INT(11) NOT NULL DEFAULT '0',
