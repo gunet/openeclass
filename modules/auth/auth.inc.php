@@ -849,12 +849,22 @@ function alt_login($user_info_array, $uname, $pass)
                         Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $uname,
                                                                    'pass' => $pass));
                 }
-                if ($auth_allow == 1) {
-                        //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
+                if ($auth_allow == 1) {                        
                         $_SESSION['uid'] = $user_info_array['user_id'];
                         $_SESSION['uname'] = $user_info_array['username'];
-                        $_SESSION['nom'] = $user_info_array['nom'];
-                        $_SESSION['prenom'] = $user_info_array['prenom'];
+                        // if ldap entries have changed update database
+                        if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) 
+                                and (($user_info_array['prenom'] != $auth_user_info['firstname']) or
+                                     ($user_info_array['nom'] != $auth_user_info['lastname']))) {                                
+                                db_query("UPDATE user SET prenom = '".$auth_user_info['firstname']."',
+                                                          nom = '".$auth_user_info['lastname']."'
+                                                      WHERE user_id = ".$user_info_array['user_id']."");
+                                $_SESSION['nom'] = $auth_user_info['firstname'];
+                                $_SESSION['prenom'] = $auth_user_info['lastname'];
+                        } else {
+                                $_SESSION['nom'] = $user_info_array['nom'];
+                                $_SESSION['prenom'] = $user_info_array['prenom'];
+                        }                      
                         $_SESSION['statut'] = $user_info_array['statut'];
                         $_SESSION['email'] = $user_info_array['email'];
                         $GLOBALS['userPerso'] = $user_info_array['perso'];

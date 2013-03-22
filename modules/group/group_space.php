@@ -135,7 +135,7 @@ $tool_content .= "
       <td>
         <table width='100%' align='center' class=\"tbl_alt\">
         <tr>
-          <th class='left'>$langNameSurname</th>
+          <th class='left'>$langSurnameName</th>
           <th class='center' width='120'>$langAm</th>
           <th class='center' width='150'>$langEmail</th>
         </tr>";
@@ -149,8 +149,7 @@ $myIndex = 0;
                 } else {
                     $tool_content .= "<tr class='odd'>";
                 }
-
-		$tool_content .= "<td>" . display_user($member);
+		$tool_content .= "<td>" . display_user($member);                
 		if ($user_group_description) {
 			$tool_content .= "<br />".q($user_group_description);
 		}

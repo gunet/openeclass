@@ -66,13 +66,6 @@ function confirmation (name)
         {return false;}
     }
 }
-function confirm_delete()
-{
-    if (confirm("$langConfirmDelete"))
-        {return true;}
-    else
-        {return false;}
-}
 </script>
 END;
 
@@ -267,23 +260,24 @@ if ($is_editor) {
           <td class='title1'><a href='../user/?course=$course_code'>$langGroupUsersList</a></td>
 	</tr>";
 
-        list($total_students) = mysql_fetch_row(db_query(
-                "SELECT COUNT(*) FROM course_user
-                 WHERE course_id = $course_id AND statut = 5 AND tutor = 0"));
+        list($total_students) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course_user
+                                                WHERE course_id = $course_id 
+                                                AND statut = ".USER_STUDENT." AND tutor = 0"));
         list($unregistered_students) = mysql_fetch_row(db_query(
                 "SELECT COUNT(*)
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
-                              cu.statut = 5 AND
+                              cu.statut = ".USER_STUDENT." AND
                               cu.tutor = 0 AND
                               u.user_id NOT IN (SELECT user_id
                                                        FROM group_members, `group`
                                                             WHERE `group`.id = group_members.group_id AND
                                                                   `group`.course_id = $course_id)"));
+        
 
         $registered_students = $total_students - $unregistered_students;
-
+        
         $tool_content .= "
         <tr>
           <td colspan='2'><u>$langGroupPrefs</u></td>
@@ -365,7 +359,6 @@ if ($is_editor) {
 		$tool_content .= "<br />
 		<table width='100%' align='left' class='tbl_alt'>
 		<tr>
-
 		  <th colspan='2'><div align='left'>$langGroupName</div></th>
 		  <th width='250'>$langGroupTutor</th>
 		  <th width='30'>$langRegistered</th>
@@ -375,45 +368,33 @@ if ($is_editor) {
                 while ($group = mysql_fetch_array($groupSelect)) {
                         initialize_group_info($group['id']);
                         if ($myIterator % 2 == 0) {
-                                $tool_content .= "
-                <tr class='even'>";
+                                $tool_content .= "<tr class='even'>";
                         } else {
-                                $tool_content .= "
-                <tr class='odd'>";
+                                $tool_content .= "<tr class='odd'>";
                         }
-                        $tool_content .= "
-                  <td width='16'>
+                        $tool_content .= "<td width='16'>
                         <img src='$themeimg/arrow.png' alt='' /></td><td>
                         <a href='group_space.php?course=$course_code&amp;group_id=$group[id]'>".q($group_name)."</a></td>";
-                        $tool_content .= "
-                  <td>" . display_user($tutors) . "</td>" . "
-                  <td class='center'>$member_count</td>";
+                        $tool_content .= "<td>" . display_user($tutors) . "</td>" . "
+                                          <td class='center'>$member_count</td>";
                         if ($max_members == 0) {
-                                $tool_content .= "
-                  <td>-</td>";
+                                $tool_content .= "<td>-</td>";
                         } else {
-                                $tool_content .= "
-                  <td class='center'>$max_members</td>";
+                                $tool_content .= "<td class='center'>$max_members</td>";
                         }
-                        $tool_content .= "
-                  <td class='center'>
+                        $tool_content .= "<td class='center'>
                         <a href='group_edit.php?course=$course_code&amp;group_id=$group[id]'>
                         <img src='$themeimg/edit.png' alt='$langEdit' title='$langEdit' /></a>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group[id]' onClick=\"return confirmation('" .
                                 js_escape($group_name) . "');\">
-                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td>
-                </tr>";
+                        <img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a></td></tr>";
                         $totalRegistered += $member_count;
                         $myIterator++;
                 }
-                $tool_content .= "
-              </table><br />\n";
+                $tool_content .= "</table><br />\n";
 	} else {
-		$tool_content .= "
-              <p class='alert1'>$langNoGroup</p>";
+		$tool_content .= "<p class='alert1'>$langNoGroup</p>";
 	}
-
-
 } else {
         // Begin student view
 	$q = db_query("SELECT id FROM `group` WHERE course_id = $course_id");
@@ -454,7 +435,7 @@ if ($is_editor) {
                                              "group_description.php?course=$code_cours&amp;group_id=$row[0]") . "&nbsp;" .
                                         icon('delete', $langDelete,
                                              "group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true",
-                                             'onClick="return confirm_delete();"');
+                                             'onClick="return confirmation();');
 			} elseif ($is_member) {
 				$tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
 			}

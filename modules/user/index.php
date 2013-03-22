@@ -220,7 +220,7 @@ $tool_content .= "
 <table width='100%' class='tbl_alt custom_list_order'>
 <tr>
   <th width='1'>$langID</th>
-  <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
+  <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=s$extra_link'>$langSurnameName</a></div></th>
   <th class='center' width='160'>$langGroup</th>
   <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
   <th colspan='3' class='center'>$langAddRole</th>

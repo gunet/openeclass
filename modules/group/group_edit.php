@@ -91,7 +91,7 @@ if (isset($_POST['modify'])) {
                                  WHERE group_id = $group_id AND is_tutor = 1");
                 foreach ($_POST['tutor'] as $tutor_id) {
                         $tutor_id = intval($tutor_id);
-                        db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
+                        db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1, description='$description'");
                 }
         }
 

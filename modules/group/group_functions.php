@@ -45,9 +45,9 @@ function initialize_group_info($group_id = false)
                         exit;
                 }
                 list($group_name, $group_description, $forum_id, $max_members, $secret_directory) = mysql_fetch_row($res);
-
                 list($member_count) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM group_members
-							       WHERE group_id = $group_id"));
+                                                                        WHERE group_id = $group_id 
+                                                                        AND is_tutor = 0"));
 
 		$tutors = group_tutors($group_id);
                 $is_tutor = $is_member = $user_group_description = false;

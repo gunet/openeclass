@@ -363,7 +363,7 @@ function display_user($user, $print_email = false, $icon = true)
                         $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
                 }
         }
-        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
+        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[nom] $user[prenom]") . "</a>" .
                 ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
 }
@@ -373,7 +373,7 @@ function display_user($user, $print_email = false, $icon = true)
 function uid_to_name($uid) {
     global $mysqlMainDb;
 
-    $r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
+    $r = mysql_fetch_row(db_query("SELECT CONCAT(prenom, ' ', nom)
 		FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb));
 
     if ($r !== false) {
