@@ -568,6 +568,11 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                                             ('actions_expire_interval', 12),
                                             ('course_metadata', 0)");
+                
+                db_query("CREATE TABLE `cron_params` (
+                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `name` VARCHAR(255) NOT NULL UNIQUE,
+                    `last_run` DATETIME NOT NULL) $charset_spec");
             
                 db_query("DROP TABLE IF EXISTS passwd_reset");
 
@@ -1368,11 +1373,6 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
         
         if ($oldversion < '3.0') { // special procedure, must execute after course upgrades
             mysql_select_db($mysqlMainDb);
-            
-            db_query("CREATE TABLE `cron_params` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `name` VARCHAR(255) NOT NULL UNIQUE,
-                    `last_run` DATETIME NOT NULL) $charset_spec");
             
             db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,
