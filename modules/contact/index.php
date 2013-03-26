@@ -141,19 +141,23 @@ function email_profs($course_id, $content, $from_name, $from_address)
 
 	$ret = "<p>$langSendingMessage</p><br />";
 
-	$profs = db_query("SELECT user.email AS email, user.nom AS nom,
+	$profs = db_query("SELECT user.user_id AS prof_uid, user.email AS email, user.nom AS nom,
 		user.prenom AS prenom
 		FROM course_user JOIN user ON user.user_id = course_user.user_id
-		WHERE course_id = $course_id AND course_user.statut=1");
+		WHERE course_id = $course_id AND course_user.statut = ".USER_TEACHER."");
 
 	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
 	$subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";
 
-	while ($prof = mysql_fetch_array($profs)) {
-		$to_name = $prof['prenom'].' '.$prof['nom'];
-		$ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
-		if (!send_mail($from_name,
+	while ($prof = mysql_fetch_array($profs)) {		
+                if (!get_user_email_notification_from_courses($prof['prof_uid']) 
+                        or (!get_user_email_notification($prof['prof_uid'], $course_id))) {
+                        continue;
+                } else {
+                        $to_name = $prof['prenom'].' '.$prof['nom'];
+                        $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
+                        if (!send_mail($from_name,
                                $from_address,
                                $to_name,
                                $prof['email'],
@@ -161,7 +165,8 @@ function email_profs($course_id, $content, $from_name, $from_address)
                                $message,
                                $GLOBALS['charset'])) {
                         $ret .= "<p class='alert1'>$GLOBALS[langErrorSendingMessage]</p>\n";
-		}
+                        }
+                }
 	}
         return $ret;
 }

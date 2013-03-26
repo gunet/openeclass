@@ -18,15 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * Course Home Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component creates the content for the course's home page
- *
+/**
+ * @file: course_home.php
+ * @brief: course home page
  */
 
 $require_current_course = true;
@@ -259,7 +253,7 @@ $helpTopic = 'course_home';
 $sql = "SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = $course_id";
-$res = db_query($sql, $mysqlMainDb);
+$res = db_query($sql);
 while($result = mysql_fetch_row($res)) {
         $numUsers = $result[0];
 }
@@ -312,6 +306,21 @@ if ($uid and $statut != USER_GUEST and !get_user_email_notification($uid, $cours
         $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
         (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
+// display `contact teacher via email` link if teacher actually receives email from his course
+$receive_mail = FALSE;
+$rec_mail = array();
+$q = db_query("SELECT user_id FROM course_user WHERE course_id = $course_id 
+                                AND statut = ".USER_TEACHER."");
+while ($p = mysql_fetch_array($q)) {        
+        $prof_uid = $p['user_id'];
+        if (get_user_email_notification_from_courses($prof_uid) 
+                and get_user_email_notification($prof_uid, $course_id)) {
+                $rec_mail[$prof_uid] = 1;         
+        }
+}
+if (!empty($rec_mail)) {
+        $receive_mail = TRUE;
+}
 
 $tool_content .= "
 <div id='content_course'>
@@ -333,8 +342,10 @@ $tool_content .= "
     <td class='title1'>$langTools</td>
     <td class='left'>$toggle_student_view";
     if ($statut != USER_GUEST) {
-          $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
+            if($receive_mail) {
+                  $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
                   <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
+            }
     }
     $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]' title='" . q($title) . "' class='jqbookmark'>
             <img src='$themeimg/bookmark.png' alt='$langAddAsBookmark' title='$langAddAsBookmark' /></a>&nbsp;&nbsp;";
