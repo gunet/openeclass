@@ -158,7 +158,7 @@ $tool_content .= "
 // display and handle search form if needed
 $search_sql = '';
 if (isset($_GET['search'])) {
-        $search_params = "&amp;search=1";
+        $search_params = "&amp;search=1&amp;course=".$course_code;
         $search_nom = $search_prenom = $search_uname = '';
         if (!empty($_REQUEST['search_nom'])) {
                 $search_nom = ' value="' . q($_REQUEST['search_nom']) . '"';
@@ -200,12 +200,12 @@ if (isset($_GET['search'])) {
         </fieldset>
         </form>";
 } else {
-        $search_params = '';
+        $search_params = '&amp;course='.$course_code;
 }
 
 // display navigation links if course users > COURSE_USERS_PER_PAGE
 if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
-        $limit_sql = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;
+        $limit_sql = "LIMIT $limit, " . COURSE_USERS_PER_PAGE;        
         $tool_content .= show_paging($limit, COURSE_USERS_PER_PAGE, $countUser,
                                      $_SERVER['SCRIPT_NAME'], $search_params, TRUE);
 }
