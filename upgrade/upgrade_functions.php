@@ -458,9 +458,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
                         (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,
-                         `description`, `author`, `uploadDate`, `lastUploadDate`)
+                         `description`, `uploadDate`, `lastUploadDate`)
                         SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
-                               `filesize`, `title`, `description`, `author`, `uploadDate`,
+                               `filesize`, `title`, `description`, `uploadDate`,
                                `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_person

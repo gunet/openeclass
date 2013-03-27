@@ -725,14 +725,15 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `filename` VARCHAR(250) NOT NULL DEFAULT '',
                             `filesize` INT(11) UNSIGNED NOT NULL DEFAULT '0',
                             `title` VARCHAR(250) DEFAULT '',
-                            `description` VARCHAR(250) DEFAULT '',
-                            `author` VARCHAR(250) DEFAULT '',
+                            `description` VARCHAR(250) DEFAULT '',                            
                             `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')");
+                
                 db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
                             `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
                             `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                             PRIMARY KEY (fileId, personId))");
+                
                 db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
                             `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
