@@ -63,15 +63,22 @@ class CourseXMLElement extends SimpleXMLElement {
         global $course_code, $langSubmit;
         $out = "";
         $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
-                 <fieldset>
-                 <legend>langCourseInfo</legend>
+                 <div id='tabs'>
+                    <ul>
+                       <li><a href='#tabs-1'>Group1</a></li>
+                       <li><a href='#tabs-2'>Group2</a></li>
+                       <li><a href='#tabs-3'>Group3</a></li>
+                    </ul>
+                 <div id='tabs-1'>
+                 <!--legend>langCourseInfo</legend-->
                  <table class='tbl' width='100%'>";
         if ($data != null)
-            $this->populate ($data);
+            $this->populate($data);
         $out .= $this->populateForm();
         $out .= "</table>
-                 </fieldset>
+                 </div>
                  <p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+                 </div>
                  </form>";
         return $out;
     }
@@ -114,12 +121,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $lang = '';
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
-            $lang = ' (' . $this->getAttribute('lang') .')';
+            $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
             if ($this->getAttribute('lang') == $currentCourseLanguage)
                 $sameAsCourseLang = true;
         }
-        $fieldStart = "<tr><th rowspan='2'>". $keyLbl . $lang .":</th><td>";
+        $fieldStart = "<tr><th style='background-color: transparent' rowspan='2'>". $keyLbl . $lang .":</th><td>";
         $fieldEnd = "</td></tr><tr><td>$help</td></tr>";
+        if (array_key_exists($fullKeyNoLang, self::$breakFields))
+            $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKeyNoLang] ."'><table class='tbl' width='100%'>";
         
         // hidden/auto-generated fields
         if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
@@ -130,7 +139,8 @@ class CourseXMLElement extends SimpleXMLElement {
             $value = (string) $this;
             if (empty($value))
                 $value = 'false';
-            return $fieldStart . selection(array('false' => 'false', 'true' => 'true'), $fullKey, $value) . $fieldEnd;
+            return $fieldStart . selection(array('false' => $GLOBALS['langCMeta']['false'], 
+                                                 'true'  => $GLOBALS['langCMeta']['true']), $fullKey, $value) . $fieldEnd;
         }
         
         // enumeration fields
@@ -152,14 +162,14 @@ class CourseXMLElement extends SimpleXMLElement {
         
         // textarea fields
         if (in_array($fullKeyNoLang, self::$textareaFields))
-            return $fieldStart ."<textarea cols='68' rows='2' name='". $fullKey ."'>". (string) $this ."</textarea>". $fieldEnd;
+            return $fieldStart ."<textarea cols='58' rows='2' name='". $fullKey ."'>". (string) $this ."</textarea>". $fieldEnd;
         
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, self::$binaryFields)) {
             $html = $fieldStart;
             $value = (string) $this;
             if (!empty($value)) { // image already exists
-                $mime = $this->getAttribute('mime');
+                $mime = (string) $this->getAttribute('mime');
                 $html .= "<img src='data:". $mime .";base64,". $value ."'/>
                           <input type='hidden' name='". $fullKey ."' value='". $value ."'/>
                           <input type='hidden' name='". $fullKey ."_mime' value='". $mime ."'/>
@@ -206,7 +216,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 $this->{0} = $data[$fullKey];
                 
                 if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
-                    $this['mime'] = $data[$fullKey .'_mime'];
+                    $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
             }
             else { // multiple entities use associative indexed arrays
                 $index = intval($this->getAttribute('index'));
@@ -232,7 +242,12 @@ class CourseXMLElement extends SimpleXMLElement {
             if ($this->getAttribute('lang'))
                 $fullKey .= '_' . $this->getAttribute('lang');
             
-            return array($fullKey => (string) $this);
+            $ret = array($fullKey => (string) $this);
+            
+            if ($this->getAttribute('mime'))
+                $ret = array_merge($ret, array($fullKey .'_mime' => (string) $this->getAttribute('mime')));
+            
+            return $ret;
         }
         
         $out = array();
@@ -431,23 +446,24 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static function getEnumerationValues($key) { 
         $valArr = array(
-            'course_level' => array('undergraduate' => 'undergraduate',
-                                    'graduate' => 'graduate',
-                                    'doctoral' => 'doctoral'),
-            'course_curriculumLevel' => array('undergraduate' => 'undergraduate',
-                                              'graduate' => 'graduate',
-                                              'doctoral' => 'doctoral'),
+            'course_level' => array('undergraduate' => $GLOBALS['langCMeta']['undergraduate'],
+                                    'graduate'      => $GLOBALS['langCMeta']['graduate'],
+                                    'doctoral'      => $GLOBALS['langCMeta']['doctoral']),
+            'course_curriculumLevel' => array('undergraduate' => $GLOBALS['langCMeta']['undergraduate'],
+                                              'graduate'      => $GLOBALS['langCMeta']['graduate'],
+                                              'doctoral'      => $GLOBALS['langCMeta']['doctoral']),
             'course_yearOfStudy' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6'),
             'course_semester' => array('1' => '1', '2' => '2', '3' => '3', '4' => '4', '5' => '5', '6' => '6',
                                        '7' => '7', '8' => '8', '9' => '9', '10' => '10', '11' => '11', '12' => '12'),
-            'course_type' => array('compulsory' => 'compulsory', 'optional' => 'optional'),
-            'course_format' => array('slides' => 'slides',
-                                     'notes' => 'notes',
-                                     'video lectures' => 'video lectures',
-                                     'podcasts' => 'podcasts',
-                                     'audio material' => 'audio material',
-                                     'multimedia material' => 'multimedia material',
-                                     'interactive exercises' => 'interactive exercises')
+            'course_type' => array('compulsory' => $GLOBALS['langCMeta']['compulsory'], 
+                                   'optional'   => $GLOBALS['langCMeta']['optional']),
+            'course_format' => array('slides'                => $GLOBALS['langCMeta']['slides'],
+                                     'notes'                 => $GLOBALS['langCMeta']['notes'],
+                                     'video lectures'        => $GLOBALS['langCMeta']['video lectures'],
+                                     'podcasts'              => $GLOBALS['langCMeta']['podcasts'],
+                                     'audio material'        => $GLOBALS['langCMeta']['audio material'],
+                                     'multimedia material'   => $GLOBALS['langCMeta']['multimedia material'],
+                                     'interactive exercises' => $GLOBALS['langCMeta']['interactive exercises'])
         );
         
         if (isset($valArr[$key]))
@@ -530,6 +546,15 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static $binaryFields = array(
         'course_instructor_photo', 'course_coursePhoto'
+    );
+    
+    /**
+     * UI Tabs Break points.
+     * @var array
+     */
+    public static $breakFields = array(
+        'course_language' => '2',
+        'course_format' => '3'
     );
     
     /**

@@ -36,7 +36,29 @@ if (isset($_POST['submit']))
 else
     $tool_content .= displayForm();
 
+load_js('jquery');
+load_js('jquery-ui-new');
+$head_content .= <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
 
+    $(function() {
+        $( "#tabs" ).tabs();
+    });
+
+/* ]]> */
+</script>
+<style>
+.ui-widget {
+    font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+}
+
+.ui-widget-content {
+    color: rgb(119, 119, 119);
+}
+</style>
+EOF;
 draw($tool_content, 2, null, $head_content);
 
 

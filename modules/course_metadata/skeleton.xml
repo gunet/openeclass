@@ -6,6 +6,12 @@
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
     
     <instructor>
+        <firstName lang="el"></firstName>
+        <firstName lang="en"></firstName>
+        
+        <lastName lang="el"></lastName>
+        <lastName lang="en"></lastName>
+        
         <fullName lang="el"></fullName>
         <fullName lang="en"></fullName>
         
