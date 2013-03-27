@@ -1103,12 +1103,14 @@ if ($doc_count == 0) {
                                         $tool_content .= icon('invisible', $langVisible, "{$base_url}mkVisibl=$cmdDirName");
                                 }
                                 $tool_content .= "&nbsp;";
-                                if ($entry['public']) {
-                                        $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
-                                } else {
-                                        $tool_content .= icon('access_limited', $langResourceAccess, "{$base_url}public=$cmdDirName");
-                                }
-                                $tool_content .= "&nbsp;";
+                                if (course_status($course_id) == COURSE_OPEN) {
+                                        if ($entry['public']) {
+                                                $tool_content .= icon('access_public', $langResourceAccess, "{$base_url}limited=$cmdDirName");
+                                        } else {
+                                                $tool_content .= icon('access_limited', $langResourceAccess, "{$base_url}public=$cmdDirName");
+                                        }
+                                        $tool_content .= "&nbsp;";
+                                }                                
                                 if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
                                         $tool_content .= "<a href='{$urlAppend}modules/work/group_work.php?course=$course_code" .
                                                          "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .

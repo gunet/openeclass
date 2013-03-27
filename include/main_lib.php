@@ -2302,21 +2302,22 @@ function get_admin_rights($user_id) {
         }
 }
 
-// checks if a course is inactive
-function check_inactive_course($course_id)
+/**
+ * @brief query course status
+ * @param type $course_id
+ * @return course status
+ */
+function course_status($course_id)
 {
-        global $mysqlMainDb;
 
-        $res = db_query("SELECT visible FROM course WHERE id = $course_id", $mysqlMainDb);
-        $g = mysql_fetch_row($res);
-        if ($g[0] == COURSE_INACTIVE) {
-                return true;
-        }
-        return false;
+        $status = db_query_get_single_value("SELECT visible FROM course WHERE id = $course_id");
+                
+        return $status;
 }
 
+
 /**
- * get user email verification status
+ * @brief get user email verification status
  * @param type $uid
  * @return verified mail or no
  */
@@ -2346,14 +2347,19 @@ function check_username_sensitivity($posted, $dbuser) {
         return false;
 }
 
-// checks if user is notified via email from a given course
+
+/**
+ * @brief checks if user is notified via email from a given course 
+ * @param type $user_id
+ * @param type $course_id
+ * @return boolean
+ */
 function get_user_email_notification($user_id, $course_id=null)
-{
-        global $mysqlMainDb;
+{        
 
         // checks if a course is active or not
         if (isset($course_id)) {
-                if (check_inactive_course($course_id) == true) {
+                if (course_status($course_id) == COURSE_INACTIVE) {
                         return false;
                 }
         }
@@ -2387,10 +2393,9 @@ function get_user_email_notification($user_id, $course_id=null)
 
 // checks if user is notified via email from courses
 function get_user_email_notification_from_courses($user_id) {
-        global $mysqlMainDb;
+                
 
-        $r = db_query("SELECT receive_mail FROM user
-                        WHERE user_id = $user_id", $mysqlMainDb);
+        $r = db_query("SELECT receive_mail FROM user WHERE user_id = $user_id");
         list($result) = mysql_fetch_row($r);
         if ($result == 1) {
                 return true;
