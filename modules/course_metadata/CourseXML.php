@@ -125,8 +125,8 @@ class CourseXMLElement extends SimpleXMLElement {
             if ($this->getAttribute('lang') == $currentCourseLanguage)
                 $sameAsCourseLang = true;
         }
-        $fieldStart = "<tr><th style='background-color: transparent' rowspan='2'>". $keyLbl . $lang .":</th><td>";
-        $fieldEnd = "</td></tr><tr><td>$help</td></tr>";
+        $fieldStart = "<tr><th style='background-color: transparent' rowspan='2'>". q($keyLbl . $lang) .":</th><td>";
+        $fieldEnd = "</td></tr><tr><td>". q($help) ."</td></tr>";
         if (array_key_exists($fullKeyNoLang, self::$breakFields))
             $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKeyNoLang] ."'><table class='tbl' width='100%'>";
         
@@ -157,12 +157,12 @@ class CourseXMLElement extends SimpleXMLElement {
             $value = (string) $this;
             if (empty($value))
                 $value = 0;
-            return $fieldStart ."<input type='text' size='2' name='". $fullKey ."' value='". $value ."' $readonly/>". $fieldEnd;
+            return $fieldStart ."<input type='text' size='2' name='". q($fullKey) ."' value='". intval($value) ."' $readonly/>". $fieldEnd;
         }
         
         // textarea fields
         if (in_array($fullKeyNoLang, self::$textareaFields))
-            return $fieldStart ."<textarea cols='58' rows='2' name='". $fullKey ."'>". (string) $this ."</textarea>". $fieldEnd;
+            return $fieldStart ."<textarea cols='58' rows='2' name='". q($fullKey) ."'>". q((string) $this) ."</textarea>". $fieldEnd;
         
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, self::$binaryFields)) {
@@ -170,17 +170,17 @@ class CourseXMLElement extends SimpleXMLElement {
             $value = (string) $this;
             if (!empty($value)) { // image already exists
                 $mime = (string) $this->getAttribute('mime');
-                $html .= "<img src='data:". $mime .";base64,". $value ."'/>
-                          <input type='hidden' name='". $fullKey ."' value='". $value ."'/>
-                          <input type='hidden' name='". $fullKey ."_mime' value='". $mime ."'/>
+                $html .= "<img src='data:". q($mime) .";base64,". q($value) ."'/>
+                          <input type='hidden' name='". q($fullKey) ."' value='". q($value) ."'/>
+                          <input type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'/>
                           </td></tr><tr><td>";
             }
-            $html .= "<input type='file' size='30' name='". $fullKey ."'></input>". $fieldEnd;
+            $html .= "<input type='file' size='30' name='". q($fullKey) ."'></input>". $fieldEnd;
             return $html;
         }
         
         // all others get a typical input type box
-        return $fieldStart ."<input type='text' size='60' name='". $fullKey ."' value='". (string) $this ."' $readonly/>". $fieldEnd;
+        return $fieldStart ."<input type='text' size='60' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly/>". $fieldEnd;
     }
     
     /**
@@ -213,7 +213,10 @@ class CourseXMLElement extends SimpleXMLElement {
         
         if (isset($data[$fullKey])) {
             if (!is_array($data[$fullKey])) {
-                $this->{0} = $data[$fullKey];
+                if (in_array($fullKeyNoLang, self::$integerFields))
+                    $this->{0} = intval($data[$fullKey]);
+                else
+                    $this->{0} = $data[$fullKey];
                 
                 if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
                     $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
@@ -409,7 +412,7 @@ class CourseXMLElement extends SimpleXMLElement {
         while($row = mysql_fetch_assoc($res2)) {
             $unitsCount++; // also serves as array index
             $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
-            $data['course_unit_description_' . $clang][$unitsCount] = $row['comments'];
+            $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($row['comments']);
         }    
         $data['course_numberOfUnits'] = $unitsCount;
 
