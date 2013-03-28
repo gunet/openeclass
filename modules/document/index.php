@@ -801,6 +801,8 @@ $curDirPath =
         pathvar($_GET['metadata'], true) .
         pathvar($_GET['mkInvisibl'], true) .
         pathvar($_GET['mkVisibl'], true) .
+        pathvar($_GET['public'], true) .
+        pathvar($_GET['limited'], true) .        
         pathvar($_POST['sourceFile'], true) .
         pathvar($_POST['replacePath'], true) .
         pathvar($_POST['commentPath'], true) .
@@ -885,7 +887,7 @@ if($can_upload) {
         // Action result message
         if (!empty($action_message))
         {
-                $tool_content .= "\n" . $action_message . "\n";
+                $tool_content .= $action_message;
         }
         // available actions
         if (!$is_in_tinymce) {
