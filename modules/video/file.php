@@ -22,7 +22,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
 
-if ( !isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token'])) )
+if ( !isset($_GET['course']) || !isset($_GET['id']) )
     header("Location: ${urlServer}");
 
 // locate course id
@@ -53,7 +53,7 @@ $row2 = mysql_fetch_array($res2);
 if (empty($row2))
     header("Location: ${urlServer}");
 
-$valid = ($uid) ? true : token_validate($row2['path'], $_GET['token'], 30);
+$valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($row2['path'], $_GET['token'], 30);
 if (!$valid) {
    header("Location: ${urlServer}");
    exit();

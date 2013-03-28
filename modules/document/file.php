@@ -121,9 +121,9 @@ if ($file_info['extra_path']) {
 
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
-        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info['path'], $_GET['token'], 30);
         if (!$valid) {
-           header("Location: ${urlServer}");
+           not_found(preg_replace('/^.*file\.php/', '', $uri));
            exit();
         }
         send_file_to_client($disk_path, $file_info['filename']);
@@ -149,16 +149,11 @@ if (file_exists($disk_path)) {
 }
 
 function check_cours_access() {
-	global $course_code, $uid;
+	global $course_code, $uid, $uri;
 
         if ( !$uid && !isset($course_code) )
             $course_code = $_SESSION['course_code'];
         
-        if ( !$uid && !isset($_GET['token'])) { // anonymous needs access token
-            redirect_to_home_page();
-            exit(0);
-        }
-            
 	$qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
 	$result = db_query($qry);
 
@@ -170,9 +165,15 @@ function check_cours_access() {
         
 	$cours = mysql_fetch_array($result);
         
+        if ( $cours['visible'] != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+            require_once 'include/lib/forcedownload.php';
+            not_found(preg_replace('/^.*\.php/', '', $uri));
+            exit(0);
+        }
+        
         if (!$uid) {
             $_SESSION['course_id'] = $cours['id'];
-            return; // do not do course check if anonymous with access token
+            return; // do not do own course check if anonymous with access token
         }
 
 	switch($cours['visible']) {
