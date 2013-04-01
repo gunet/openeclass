@@ -323,7 +323,7 @@ function public_path_to_disk_path($path_components, $path = '')
         $depth = substr_count($path, '/') + 1;
         foreach ($path_components as $component) {
                 $component = urldecode(str_replace(chr(1), '/', $component));
-                $q = db_query("SELECT path, visible, format, extra_path,
+                $q = db_query("SELECT path, visible, public, format, extra_path,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
@@ -370,9 +370,12 @@ function forbidden($path)
 function error($message)
 {
         global $urlServer;
-        $_SESSION['errMessage'] = $message;
+        
+        $_SESSION['errMessage'] = "<div class='caution'>$message</div>";
         session_write_close();
+        
         header("Location: $urlServer" );
+        
         exit;
 }
 

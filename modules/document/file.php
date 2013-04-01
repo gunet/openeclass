@@ -100,8 +100,9 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if (!$file_info['visible'] and !$is_editor) {
+if ((!$file_info['visible'] and !$is_editor) or (!$file_info['public'] and !$is_editor)) {
         error($langNoRead);
+
 }
 
 if ($file_info['extra_path']) {
