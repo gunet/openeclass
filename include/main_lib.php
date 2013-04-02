@@ -1570,9 +1570,21 @@ function delete_course($cid)
         rename("$webDir/courses/$course_code", "$garbage/$course_code");
         removeDir("$webDir/video/$course_code");
         // refresh index
+        require_once 'modules/search/indexer.class.php';
         require_once 'modules/search/courseindexer.class.php';
-        $idx = new CourseIndexer();
-        $idx->removeCourse($cid, false);
+        require_once 'modules/search/announcementindexer.class.php';
+        require_once 'modules/search/agendaindexer.class.php';
+        $idx = new Indexer();
+        $idx->removeAllByCourse();
+        
+        $cidx = new CourseIndexer($idx);
+        $cidx->remove($cid);
+        
+        $aidx = new AnnouncementIndexer($idx);
+        $aidx->removeByCourse($cid);
+        
+        $agdx = new AgendaIndexer($idx);
+        $agdx->removeByCourse($cid);
 }
 
 function csv_escape($string, $force = false)
@@ -1928,7 +1940,7 @@ function handle_unit_info_edit()
         global $webDir;
         require_once 'modules/search/courseindexer.class.php';
         $idx = new CourseIndexer();
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         // refresh course metadata
         require_once 'modules/course_metadata/CourseXML.php';
         CourseXMLElement::refreshCourse($course_id, $course_code);

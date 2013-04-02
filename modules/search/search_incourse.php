@@ -34,9 +34,11 @@
 
 $require_current_course = TRUE;
 $guest_allowed = true;
-
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'indexer.class.php';
+require_once 'announcementindexer.class.php';
+require_once 'agendaindexer.class.php';
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
@@ -72,6 +74,7 @@ if(empty($search_terms)) {
 	// display form
 	$tool_content .= "
 	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+            <input type='hidden' name='course_id' value='$course_id'/>
 	    <fieldset>
 	    <legend>$langSearchCriteria</legend>
 	    <table width='100%' class='tbl'>
@@ -104,100 +107,94 @@ if(empty($search_terms)) {
 	   </fieldset>
 	   </form>";
 } else {
-	$tool_content .= "
+    // course_id might originate from GET. ResourceIndexers need it inside the POST data array
+    if (!isset($_POST['course_id']) && isset($_REQUEST['course_id']))
+        $_POST['course_id'] = $_REQUEST['course_id'];
+    $idx = new Indexer();
+    
+    $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id='opslist'>
-	    <li><a href='$_SERVER[SCRIPT_NAME]'>$langNewSearch</a></li>
+	    <li><a href='". $_SERVER['SCRIPT_NAME'] ."'>$langNewSearch</a></li>
 	  </ul>
-	</div>";
-	$tool_content .= "
+	</div>
         <p class='sub_title1'>$langResults</p>";
 
-	// search in announcements
-	if ($announcements)
-	{
-		$myquery = "SELECT title, content, `date` FROM announcement
-				WHERE course_id = $course_id
-				AND visible = 1
-				AND MATCH (title, content)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
-		if(mysql_num_rows($result) > 0) {
-		$tool_content .= "
-                  <script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t1' align='left'>
-		  <tr>
-		    <th colspan='2'>$langAnnouncements:</th>
-                  </tr>";
-                        $numLine = 0;
-			while($res = mysql_fetch_array($result))
-			{
-                             if ($numLine%2 == 0) {
-                               $class_view = 'class="even"';
-                             } else {
-                               $class_view = 'class="odd"';
-                             }
+    // search in announcements
+    if ($announcements) {
+        $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
 
-		  $tool_content .= "
-                  <tr $class_view>
-                    <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                    <td><b>" . q($res['title']) ."</b>&nbsp;&nbsp;";
-				$tool_content .= "<small>("
-				.nice_format(claro_format_locale_date($dateFormatLong, strtotime($res['temps']))).
-				")</small><br />$res[content]
-                    </td>
-                  </tr>";
-                        $numLine++;
-			}
-                        $tool_content .= "</table>";
-                        $found = true;
-		}
-	}
-	// search in agenda
-	if ($agenda) {
-		$myquery = "SELECT title, content, day, hour, lasting FROM agenda
-				WHERE course_id = $course_id
-				AND visible = 1
-				AND MATCH (title, content)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "
+        if (count($announceHits) > 0) {
+            $tool_content .= "
+              <script type='text/javascript' src='../auth/sorttable.js'></script>
+              <table width='99%' class='sortable' id='t1' align='left'>
+              <tr>
+                <th colspan='2'>$langAnnouncements:</th>
+              </tr>";
+
+            $numLine = 0;
+            foreach ($announceHits as $annHit) {
+                $res = db_query("SELECT title, content, date FROM announcement WHERE id = " . intval($annHit->pkid));
+                $announce = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "<tr class='$class'>
+                                  <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                                  <td><b><a href='" . $annHit->url . "'>" . q($announce['title']) . "</a></b>&nbsp;&nbsp;
+                                  <small>("
+                        . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce['date']))) . "
+                                  )</small><br />" . $announce['content'] . "</td></tr>";
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+    }
+    
+    // search in agenda
+    if ($agenda) {
+        $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
+
+        if (count($agendaHits) > 0) {
+            $tool_content .= "
                   <script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table width='99%' class='sortable' id='t2' align='left'>
 		  <tr>
 		    <th colspan='2' class=\"left\">$langAgenda:</th>
                   </tr>";
-                        $numLine = 0;
-			while($res = mysql_fetch_array($result))
-			{
-                             if ($numLine%2 == 0) {
-                               $class_view = 'class="even"';
-                             } else {
-                               $class_view = 'class="odd"';
-                             }
-                  $tool_content .= "
-                  <tr $class_view>
+
+            $numLine = 0;
+            foreach ($agendaHits as $agHit) {
+                $res = db_query("SELECT title, content, day, hour, lasting FROM agenda WHERE id = " . intval($agHit->pkid));
+                $agenda = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                  <tr clas='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-				$message = $langUnknown;
-				if ($res["lasting"] != "") {
-					if ($res["lasting"] == 1)
-						$message = $langHour;
-					else
-						$message = $langHours;
-				}
-				$tool_content .= "<span class=day>".
-				ucfirst(claro_format_locale_date($dateFormatLong,strtotime($res["day"]))).
-				"</span> ($langHour: ".ucfirst(date("H:i",strtotime($res["hour"]))).")<br />"
-				.$res['title']." (".$langDuration.": ".$res["lasting"]." $message) ".$res['content']."
+                $message = $langUnknown;
+                if ($agenda["lasting"] != "") {
+                    if ($agenda["lasting"] == 1)
+                        $message = $langHour;
+                    else
+                        $message = $langHours;
+                }
+                $tool_content .= "<span class=day>" .
+                        ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda["day"]))) .
+                        "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda["hour"]))) . ")<br />"
+                        . q($agenda['title']) . " (" . $langDuration . ": " . q($agenda["lasting"]) . " $message) " . $agenda['content'] . "
                     </td>
                   </tr>";
-                        $numLine++;
-			}
-			$tool_content .= "
-                  </table>\n\n\n";
-		  $found = true;
-		}
-	}
+
+                $numLine++;
+            }
+            $tool_content .= "</table>\n\n\n";
+            $found = true;
+        }
+    }
+        
 	// search in documents
 	if ($documents) {
 		$myquery = "SELECT * FROM document

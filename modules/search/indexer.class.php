@@ -28,6 +28,9 @@ require_once 'Zend/Search/Lucene.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
+require_once 'courseindexer.class.php';
+require_once 'announcementindexer.class.php';
+require_once 'agendaindexer.class.php';
 
 class Indexer {
 
@@ -176,6 +179,36 @@ class Indexer {
             return array();
         }
         return array();
+    }
+    
+    /**
+     * Batch remove all index contents related to a Course.
+     * 
+     * @param int $courseId
+     */
+    public function removeAllByCourse($courseId) {
+        $cidx = new CourseIndexer($this);
+        $cidx->remove($courseId);
+        
+        $aidx = new AnnouncementIndexer($this);
+        $aidx->removeByCourse($courseId);
+        
+        $agdx = new AgendaIndexer($this);
+        $agdx->removeByCourse($courseId);
+    }
+    
+    /**
+     * Batch index all possible contents.
+     */
+    public function reindexAll() {
+        $cidx = new CourseIndexer($this);
+        $cidx->reindex();
+        
+        $aidx = new AnnouncementIndexer($this);
+        $aidx->reindex();
+        
+        $agdx = new AgendaIndexer($this);
+        $agdx->reindex();
     }
 
     /**

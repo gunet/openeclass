@@ -73,7 +73,7 @@ if ($is_editor) {
                 // update index
                 require_once 'modules/search/courseindexer.class.php';
                 $idx = new CourseIndexer();
-                $idx->storeCourse($course_id);
+                $idx->store($course_id);
                 
                 $log_action = ($id > 0)?LOG_INSERT:LOG_MODIFY;                
                 Log::record($course_id, MODULE_ID_DESCRIPTION, $log_action, array('id' => $id,

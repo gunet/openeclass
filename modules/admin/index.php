@@ -147,16 +147,15 @@ $tool_content .= "
 
 // INDEX RELATED
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/courseindexer.class.php';
 $idx = new Indexer();
 
+// optimize index
 if (isset($_GET['optimize']))
     $idx->finalize();
 
-if (isset($_GET['reindex'])) {
-    $cidx = new CourseIndexer($idx);
-    $cidx->reindex();
-}
+// reindex everything
+if (isset($_GET['reindex']))
+    $idx->reindexAll();
 
 $numDocs = $idx->getIndex()->numDocs();
 $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];

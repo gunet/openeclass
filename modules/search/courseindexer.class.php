@@ -19,11 +19,12 @@
  * ======================================================================== */
 
 require_once 'indexer.class.php';
+require_once 'resourceindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class CourseIndexer {
+class CourseIndexer implements ResourceIndexerInterface {
     
     private $__indexer = null;
     private $__index = null;
@@ -76,7 +77,7 @@ class CourseIndexer {
      * @param  int $courseId
      * @return array - the mysql fetched row
      */
-    private function fetchCourse($courseId) {
+    private function fetch($courseId) {
         $res = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
         $course = mysql_fetch_assoc($res);
         if (!$course)
@@ -131,13 +132,13 @@ class CourseIndexer {
      * @param  int     $courseId
      * @param  boolean $finalize
      */
-    public function storeCourse($courseId, $finalize = true) {
-        $course = $this->fetchCourse($courseId);
+    public function store($courseId, $finalize = true) {
+        $course = $this->fetch($courseId);
         if (!$course)
             return;
         
         // delete existing course from index
-        $this->removeCourse($courseId, false, false);
+        $this->remove($courseId, false, false);
 
         // add the course back to the index
         $this->__index->addDocument(self::makeDoc($course));
@@ -154,9 +155,9 @@ class CourseIndexer {
      * @param boolean $existCheck
      * @param boolean $finalize
      */
-    public function removeCourse($courseId, $existCheck = false, $finalize = true) {
+    public function remove($courseId, $existCheck = false, $finalize = true) {
         if ($existCheck) {
-            $course = $this->fetchCourse($courseId);
+            $course = $this->fetch($courseId);
             if (!$course)
                 return;
         }
@@ -183,7 +184,7 @@ class CourseIndexer {
         // get/index all courses from db
         $res = db_query("SELECT id FROM course");
         while ($row = mysql_fetch_assoc($res)) {
-            $course = $this->fetchCourse($row['id']);
+            $course = $this->fetch($row['id']);
             $this->__index->addDocument(self::makeDoc($course));
         }
         
@@ -256,7 +257,7 @@ class CourseIndexer {
     /**
      * Build a Lucene Query.
      * 
-     * @param  array   $data      - The data (usually $_POST), needs specific array keys, @see getDetailedSearchForm()
+     * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
      * @param  boolean $anonymous - whether we build query for anonymous user access or not
      * @return string             - the returned query string
      */
@@ -295,7 +296,7 @@ class CourseIndexer {
     /**
      * Append to the Lucene Query according to data input.
      * 
-     * @param  array   $data     - The data (usually coming from $_POST)
+     * @param  array   $data     - The data (normally coming from $_POST)
      * @param  string  $key      - $data[key]
      * @param  string  $queryKey - Lucene Document field key
      * @param  string  $queryStr - The Lucene Query string

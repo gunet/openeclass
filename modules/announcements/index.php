@@ -43,6 +43,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
+require_once 'modules/search/announcementindexer.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
@@ -58,6 +59,7 @@ if ($is_editor) {
 	load_js('tools.js');
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 			 $langEmptyAnTitle . '";</script>';
+        $aidx = new AnnouncementIndexer();
 
 	$result = db_query("SELECT COUNT(*) FROM announcement WHERE course_id = $course_id");
 
@@ -100,6 +102,7 @@ if ($is_editor) {
                 $mkvis = intval($_GET['mkvis']);
                 $vis = $_GET['vis']? 1: 0;
                 $result = db_query("UPDATE announcement SET visible = $vis WHERE id = $mkvis");
+                $aidx->store($mkvis);
         }
         /* delete */
         if (isset($_GET['delete'])) {
@@ -107,6 +110,7 @@ if ($is_editor) {
                 $row = mysql_fetch_array(db_query("SELECT title, content FROM announcement WHERE id = $delete"));
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 $result = db_query("DELETE FROM announcement WHERE id = $delete");
+                $aidx->remove($delete);
                 Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE,
                         array('id' => $delete,
                               'title' => $row['title'],
@@ -154,6 +158,7 @@ if ($is_editor) {
                         $id = mysql_insert_id();
                         $log_type = LOG_INSERT;
                 }
+                $aidx->store($id);
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
                 Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type,
                         array('id' => $id,

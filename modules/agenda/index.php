@@ -41,6 +41,7 @@ require_once 'include/log.php';
 require_once 'include/jscalendar/calendar.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/agendaindexer.class.php';
 ModalBoxHelper::loadModalBox();
 
 $action = new action();
@@ -99,11 +100,14 @@ $start_cal = $jscalendar->make_input_field(
 }
 
 if ($is_editor) {
+    $agdx = new AgendaIndexer();
 	// modify visibility
 	if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
                 db_query("UPDATE agenda SET visible = 0 WHERE course_id = $course_id AND id = $id");
+                $agdx->store($id);
 	} elseif (isset($_GET['mkVisibl']) and ($_GET['mkVisibl'] == true)) {
                 db_query("UPDATE agenda SET visible = 1 WHERE course_id = $course_id AND id = $id");
+                $agdx->store($id);
 	}
 	if (isset($_POST['submit'])) {
                 register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
@@ -133,6 +137,7 @@ if ($is_editor) {
                         $id = mysql_insert_id();
                         $log_type = LOG_INSERT;
 		}
+                $agdx->store($id);
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
                 Log::record($course_id, MODULE_ID_AGENDA, $log_type,
                     array('id' => $id,
@@ -152,6 +157,7 @@ if ($is_editor) {
                                         FROM agenda WHERE id = $id"));
                 $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 db_query("DELETE FROM agenda WHERE course_id = $course_id AND id = $id");
+                $agdx->remove($id);
                 Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('id' => $id,
                                                                 'day' => $row['day'],
                                                                 'hour' => $row['hour'],

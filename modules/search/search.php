@@ -103,17 +103,16 @@ $tool_content .= "
 
 $k = 0;
 foreach ($hits as $hit) {
-    $class = ($k % 2) ? 'odd' : 'even';
-    $tool_content .= "<tr class='$class'>";
-    
     $res = db_query("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ". intval($hit->pkid));
     $course = mysql_fetch_assoc($res);
     
-    $tool_content .= "<td><img src='$themeimg/arrow.png' alt='' /></td><td>"
-                    ."<a href='../../courses/" . $course['code'] . "/'>" . q($course['title']) 
-                    ."</a> (" . q($course['public_code']) . ")</td>"
-                    ."<td>" . q($course['prof_names']) . "</td>"
-                    ."<td>" . q($course['keywords']) . "</td></tr>";
+    $class = ($k % 2) ? 'odd' : 'even';
+    $tool_content .= "<tr class='$class'>
+                      <td><img src='$themeimg/arrow.png' alt='' /></td><td>
+                      <a href='../../courses/" . q($course['code']) . "/'>" . q($course['title']) ."
+                      </a> (" . q($course['public_code']) . ")</td>
+                      <td>" . q($course['prof_names']) . "</td>
+                      <td>" . q($course['keywords']) . "</td></tr>";
     $k++;
 }
 $tool_content .= "</table>";

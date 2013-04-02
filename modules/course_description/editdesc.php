@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
         // update index
         require_once 'modules/search/courseindexer.class.php';
         $idx = new CourseIndexer();
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
 }
 
 $description = '';

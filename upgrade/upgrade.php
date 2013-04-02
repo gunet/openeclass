@@ -1407,6 +1407,11 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
             db_query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
             db_query("DROP TABLE IF EXISTS `actions`");
+            
+            // reindex everything
+            require_once 'modules/search/indexer.class.php';
+            $idx = new Indexer();
+            $idx->reindexAll();
         }
 
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);

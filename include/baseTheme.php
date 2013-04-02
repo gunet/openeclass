@@ -79,7 +79,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-        global $courseHome, $course_code, $extraMessage, $helpTopic,
+        global $courseHome, $course_code, $course_id, $extraMessage, $helpTopic,
                $homePage, $title, $is_editor, $langActivate,
                $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
                $langChooseLang, $langCopyrightFooter, $langDeactivate,
@@ -244,7 +244,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//set the appropriate search action for the searchBox form
 		if ($menuTypeID == 2) {
-			$searchAction = "search_incourse.php?all=true";
+			$searchAction = "search_incourse.php?all=true&course_id=$course_id";
 			$searchAdvancedURL = $searchAction;
 		} elseif ($menuTypeID == 1 || $menuTypeID == 3) {
 			$searchAction = "search.php";

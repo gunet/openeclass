@@ -1067,7 +1067,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
     global $webDir;
     require_once 'modules/search/courseindexer.class.php';
     $idx = new CourseIndexer();
-    $idx->storeCourse($course_id);
+    $idx->store($course_id);
     
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {

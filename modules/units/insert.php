@@ -170,7 +170,7 @@ function insert_docs($id)
 			 quote($title) . ", comments=" . quote($file['comment']) .
 			 ", visible='$file[visible]', `order`=$order, `date`=NOW(), res_id=$file[id]");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -185,7 +185,7 @@ function insert_text($id)
 	$order++;
 	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='',
 		comments=" . autoquote(purify($comments)) . ", visible=1, `order`=$order, `date`=NOW(), res_id=0");
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -211,7 +211,7 @@ function insert_lp($id)
 			quote($lp['name']) . ", comments=" . quote($lp['comment']) .
 			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -232,7 +232,7 @@ function insert_video($id)
 			WHERE course_id = $course_id AND id = $res_id"), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -263,7 +263,7 @@ function insert_work($id)
                                 `date` = NOW(),
                                 res_id = $work[id]");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -289,7 +289,7 @@ function insert_exercise($id)
 			quote($exercise['title']) . ", comments=" . quote($exercise['description']) .
 			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -321,7 +321,7 @@ function insert_forum($id)
 				", visible=1, `order`=$order, `date`=NOW(), res_id=$forum[id]");
 		}
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -342,7 +342,7 @@ function insert_wiki($id)
 			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
 			", visible=1, `order`=$order, `date`=NOW(), res_id=$wiki[id]");
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -375,7 +375,7 @@ function insert_link($id)
                                 ", visible=1, `order` = $order, `date` = NOW(), res_id = $link[id]");
                 }
 	}
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -397,7 +397,7 @@ function insert_ebook($id)
                     }
             }
         }
-        $idx->storeCourse($course_id);
+        $idx->store($course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;

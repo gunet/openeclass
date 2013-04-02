@@ -55,7 +55,7 @@ $action = new action();
 $action->record(MODULE_ID_UNITS);
 
 if (isset($_GET['from_search'])) { // if we come from home page search
-        header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
+        header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]&course_id=$course_id");
 }
 
 $res = db_query("SELECT course.keywords, course.visible, course.prof_names, course.public_code
@@ -126,7 +126,7 @@ if ($is_editor) {
 		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");
 		db_query("DELETE FROM unit_resources WHERE unit_id = '$id'");
-                $idx->storeCourse($course_id);
+                $idx->store($course_id);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
@@ -135,7 +135,7 @@ if ($is_editor) {
 		list($vis) = mysql_fetch_row($sql);
 		$newvis = ($vis == 1)? 0: 1;
 		db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
-                $idx->storeCourse($course_id);
+                $idx->store($course_id);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down

@@ -32,7 +32,7 @@ function process_actions()
                                         title = $restitle,
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
-                        $idx->storeCourse($course_id);
+                        $idx->store($course_id);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
                 $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
@@ -40,7 +40,7 @@ function process_actions()
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = $res_id");
-                        $idx->storeCourse($course_id);
+                        $idx->store($course_id);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
@@ -51,7 +51,7 @@ function process_actions()
                         list($vis) = mysql_fetch_row($sql);
                         $newvis = ($vis == 1)? 0: 1;
                         db_query("UPDATE unit_resources SET visible = '$newvis' WHERE id = $res_id");
-                        $idx->storeCourse($course_id);
+                        $idx->store($course_id);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
