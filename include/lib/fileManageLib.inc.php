@@ -50,13 +50,18 @@
 
 function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 {
-	if ($action == "delete") {
-		db_query("DELETE FROM ".$dbTable." 
-			WHERE path LIKE \"".$oldPath."%\""); 
-	} elseif ($action = "update") {
-		db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-			WHERE path LIKE '$oldPath%'");
-	}
+        global $group_sql;
+
+        if ($action == "delete") {
+                db_query("DELETE FROM `$dbTable`
+                                 WHERE $group_sql AND
+                                       path LIKE " . quote($oldPath.'%')); 
+        } elseif ($action = "update") {
+                db_query("UPDATE $dbTable
+                                 SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
+                                 WHERE $group_sql AND
+                                       path LIKE " . quote($oldPath.'%'));
+        }
 }
 
 
