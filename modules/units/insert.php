@@ -25,10 +25,12 @@ Units module: insert new resource
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/courseindexer.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
+require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox(true);
 $idx = new CourseIndexer();
@@ -120,7 +122,8 @@ draw($tool_content, 2, null, $head_content);
 // insert docs in database
 function insert_docs($id)
 {
-	global $course_id, $course_code, $idx;
+        global $webDir, $course_id, $course_code, $idx,
+               $group_sql, $subsystem, $subsystem_id, $basedir;
 
         if ($id == -1) { // Insert common documents into main documents
                 $target_dir = '';
@@ -138,20 +141,11 @@ function insert_docs($id)
                                         AND subsystem = ".COMMON."
                                         AND id = " . intval($file_id)));
                         if ($file) {
-                                $file_date = date("Y\-m\-d G\:i\:s");
-                                $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
-                                db_query("INSERT INTO document SET
-                                                course_id = $course_id,
-                                                subsystem = ".MAIN.",
-                                                path = " . quote($path) . ",
-                                                extra_path = ".quote("common:$file[path]").",
-                                                filename = " . quote($file['filename']) . ",
-                                                visible = 1,
-                                                comment = " . quote($file['comment']) . ",
-                                                title =	" . quote($file['title']) . ",
-                                                date = '$file_date',
-                                                date_modified =	'$file_date',
-                                                format = ".quote($file['format'])."");
+                                $subsystem = MAIN;
+                                $subsystem_id = 'NULL';
+                                $group_sql = "course_id = $course_id AND subsystem = " . MAIN;
+                                $basedir = $webDir . '/courses/' . $course_code . '/document';
+                                insert_common_docs($file, $target_dir);
                         }
                 }
                 header('Location: ../document/index.php?course=' . $course_code .
@@ -401,4 +395,38 @@ function insert_ebook($id)
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
+}
+
+function insert_common_docs($file, $target_dir)
+{
+        global $course_id, $course_code;
+
+        if ($file['format'] == '.dir') {
+                $target_dir = make_path($target_dir, array($file['filename']));
+                $q = db_query("SELECT * FROM document
+                                      WHERE course_id = -1 AND
+                                            subsystem = ".COMMON." AND
+                                            path LIKE " . quote($file['path'] . '/%'));
+                while ($file = mysql_fetch_assoc($q)) {
+                        if ($file['format'] == '.dir') {
+                                make_path($target_dir, array($file['filename']));
+                        } else {
+                                insert_common_docs($file, $target_dir);
+                        }
+                }
+        } else {
+                $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
+                db_query("INSERT INTO document SET
+                                course_id = $course_id,
+                                subsystem = ".MAIN.",
+                                path = " . quote($path) . ",
+                                extra_path = ".quote("common:$file[path]").",
+                                filename = " . quote($file['filename']) . ",
+                                visible = 1,
+                                comment = " . quote($file['comment']) . ",
+                                title =	" . quote($file['title']) . ",
+                                date = NOW(),
+                                date_modified =	NOW(),
+                                format = ".quote($file['format'])."");
+        }
 }
