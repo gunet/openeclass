@@ -50,30 +50,40 @@
 
 function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "")
 {
-        global $course_id;
+        global $course_id, $group_sql, $subsystem;
 
 	if ($action == "delete") {
-                if ($course_id == -1) { // common docs
-                        db_query("DELETE FROM ".$dbTable."
-                                WHERE path LIKE '".$oldPath."%'");
-                } else {
-                        db_query("DELETE FROM ".$dbTable."
-                                WHERE path LIKE '".$oldPath."%' AND course_id = $course_id");
-                        Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
-                                                                          'filename' => $filename));
-                }                
+                db_query("DELETE FROM `$dbTable`
+                                 WHERE $group_sql AND
+                                       path LIKE " . quote($oldPath.'%'));
+                if ($subsystem == COMMON) {
+                        // For common documents, delete all references
+                        db_query("DELETE FROM `$dbTable`
+                                         WHERE extra_path LIKE " . quote('common:' . $oldPath.'%'));
+                }
+                Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE,
+                            array('path' => $oldPath,
+                                  'filename' => $filename));
 	} elseif ($action == "update") {                
-                db_query("UPDATE $dbTable SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-                                WHERE path LIKE '$oldPath%'
-                                AND course_id = $course_id");
+                db_query("UPDATE `$dbTable`
+                                 SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
+                                 WHERE $group_sql AND path LIKE " . quote($oldPath.'%'));
+                if ($subsystem == COMMON) {
+                        // For common documents, update all references
+                        db_query("UPDATE `$dbTable`
+                                         SET extra_path = CONCAT('common:$newPath',
+                                                                 SUBSTRING(extra_path, LENGTH('common:$oldPath')+1))
+                                         WHERE extra_path LIKE " . quote('common:' . $oldPath.'%'));
+                }
                 list($newencodepath) = mysql_fetch_row(db_query("SELECT SUBSTRING(path, 1, LENGTH(path) - LENGTH('$oldPath'))
                                 FROM $dbTable WHERE path='$newPath'"));
                 list($newpath) = mysql_fetch_row(db_query("SELECT filename FROM $dbTable
                                         WHERE path = '$newencodepath'"));
-                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
-                                                              'newencpath' => $newPath,
-                                                              'newpath' => $newpath,
-                                                              'filename' => $filename));                
+                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY,
+                            array('oldencpath' => $oldPath,
+                                  'newencpath' => $newPath,
+                                  'newpath' => $newpath,
+                                  'filename' => $filename));                
 	}
 }
 
