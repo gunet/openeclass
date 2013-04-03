@@ -859,9 +859,15 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         } else {
                 $path = $basedir . $row['path'];
         }
+        if (!$real_path and $row['extra_path']) {
+                // external file
+                $size = 0;
+        } else {
+                $size = filesize($path);
+        }
         $fileinfo[] = array(
                 'is_dir' => ($row['format'] == '.dir'),
-                'size' => filesize($path),
+                'size' => $size,
                 'title' => $row['title'],
                 'filename' => $row['filename'],
                 'format' => $row['format'],
