@@ -400,18 +400,25 @@ function insert_ebook($id)
 function insert_common_docs($file, $target_dir)
 {
         global $course_id, $course_code;
+                
+        $common_docs_dir_map = array();
 
         if ($file['format'] == '.dir') {
                 $target_dir = make_path($target_dir, array($file['filename']));
+                $common_docs_dir_map[$file['path']] = $target_dir;
                 $q = db_query("SELECT * FROM document
                                       WHERE course_id = -1 AND
                                             subsystem = ".COMMON." AND
-                                            path LIKE " . quote($file['path'] . '/%'));
+                                            path LIKE " . quote($file['path'] . '/%') . "
+                                      ORDER BY path");
                 while ($file = mysql_fetch_assoc($q)) {
+                        $new_target_dir = $common_docs_dir_map[dirname($file['path'])];
                         if ($file['format'] == '.dir') {
-                                make_path($target_dir, array($file['filename']));
+                                $new_dir = make_path($new_target_dir,
+                                                     array($file['filename']));
+                                $common_docs_dir_map[$file['path']] = $new_dir;
                         } else {
-                                insert_common_docs($file, $target_dir);
+                                insert_common_docs($file, $new_target_dir);
                         }
                 }
         } else {
