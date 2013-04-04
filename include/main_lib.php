@@ -1571,20 +1571,8 @@ function delete_course($cid)
         removeDir("$webDir/video/$course_code");
         // refresh index
         require_once 'modules/search/indexer.class.php';
-        require_once 'modules/search/courseindexer.class.php';
-        require_once 'modules/search/announcementindexer.class.php';
-        require_once 'modules/search/agendaindexer.class.php';
         $idx = new Indexer();
-        $idx->removeAllByCourse();
-        
-        $cidx = new CourseIndexer($idx);
-        $cidx->remove($cid);
-        
-        $aidx = new AnnouncementIndexer($idx);
-        $aidx->removeByCourse($cid);
-        
-        $agdx = new AgendaIndexer($idx);
-        $agdx->removeByCourse($cid);
+        $idx->removeAllByCourse();        
 }
 
 function csv_escape($string, $force = false)

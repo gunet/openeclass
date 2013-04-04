@@ -31,6 +31,7 @@ require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
 require_once 'courseindexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'agendaindexer.class.php';
+require_once 'linkindexer.class.php';
 
 class Indexer {
 
@@ -195,6 +196,9 @@ class Indexer {
         
         $agdx = new AgendaIndexer($this);
         $agdx->removeByCourse($courseId);
+        
+        $lidx = new LinkIndexer($this);
+        $lidx->removeByCourse($courseId);
     }
     
     /**
@@ -209,6 +213,9 @@ class Indexer {
         
         $agdx = new AgendaIndexer($this);
         $agdx->reindex();
+        
+        $lidx = new LinkIndexer($this);
+        $lidx->reindex();
     }
 
     /**

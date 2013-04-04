@@ -39,6 +39,7 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'indexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'agendaindexer.class.php';
+require_once 'linkindexer.class.php';
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
@@ -359,49 +360,39 @@ if(empty($search_terms)) {
 		  $found = true;
 		}
 	}
+        
+    // search in links
+    if ($links) {
+        $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
 
-	// search in links
-	if ($links) {
-		$myquery = "SELECT * FROM link
-				WHERE course_id = $course_id
-				AND MATCH (url, title, description)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0)
-		{
-		$tool_content .= "
+        if (count($linkHits) > 0) {
+            $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable' id='t7' align='left'>
 		<tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
-                $numLine = 0;
-		while($res = mysql_fetch_array($result))
-		{
-                   if ($numLine%2 == 0) {
-                      $class_view = 'class="even"';
-                   } else {
-                      $class_view = 'class="odd"';
-                   }
-                  $tool_content .= "
-                  <tr $class_view>
+
+            $numLine = 0;
+            foreach ($linkHits as $linkHit) {
+                $res = db_query("SELECT title, description FROM link WHERE id = " . intval($linkHit->pkid));
+                $link = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                  <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                        if (empty($res['description'])) {
-                                $desc_text = "";
-                        } else {
-                                $desc_text = "<span class='smaller'>$res[description]</span>";
-                        }
-                        $link_url = "{$urlServer}modules/link/go.php?c=$course_code&amp;id=$res[id]&amp;link_url=$res[url]";
-                        $tool_content .= "<a href='$link_url' target=_blank> ".$res['title']."</a> $desc_text
-                  </td>
-                </tr>";
-                 $numLine++;
-		 }
-		$tool_content .= "
-                </table>\n\n\n";
-			$found = true;
-		}
-	}
+                $desc_text = (empty($link['description'])) ? "" : "<span class='smaller'>" . $link['description'] . "</span>";
+                $tool_content .= "<a href='" . $linkHit->url . "' target=_blank> " . $link['title'] . "</a> $desc_text </td></tr>";
+                
+                $numLine++;
+            }
+            
+            $tool_content .= "</table>\n\n\n";
+            $found = true;
+        }
+    }
 
 	// search in video and videolinks
 	if ($video)

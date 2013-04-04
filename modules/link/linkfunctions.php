@@ -18,6 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once 'modules/search/linkindexer.class.php';
+
 function makedefaultviewcode($locatie)
 {
 	global $aantalcategories;
@@ -169,6 +171,8 @@ function submit_link()
                 $catlinkstatus = $langLinkAdded;
                 $log_type = LOG_INSERT;
         }
+        $lidx = new LinkIndexer();
+        $lidx->store($id);
         // find category name
         list($category) = mysql_fetch_array(db_query("SELECT link_category.name FROM link, link_category
                                                         WHERE link.category = link_category.id
@@ -198,9 +202,9 @@ function category_form_defaults($id)
 
 function link_form_defaults($id)
 {
-	global $cours_id, $form_url, $form_title, $form_description, $category;
+	global $course_id, $form_url, $form_title, $form_description, $category;
 
-        $result = db_query("SELECT * FROM `link` WHERE course_id = $cours_id AND id = $id");
+        $result = db_query("SELECT * FROM `link` WHERE course_id = $course_id AND id = $id");
         if ($myrow = mysql_fetch_array($result)) {
                 $form_url = ' value="' . q($myrow['url']) . '"';
                 $form_title = ' value="' . q($myrow['title']) . '"';
@@ -250,6 +254,8 @@ function delete_link($id)
 
         list($url, $title) = mysql_fetch_row(db_query("SELECT url, title FROM link WHERE course_id = $course_id AND id = $id"));
 	db_query("DELETE FROM `link` WHERE course_id = $course_id AND id = $id");
+        $lidx = new LinkIndexer();
+        $lidx->remove($id);
         $catlinkstatus = $langLinkDeleted;
         Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
                                                        'url' => $url,
