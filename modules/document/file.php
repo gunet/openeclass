@@ -18,9 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*===========================================================================
-file.php
- * @version $Id$
+/**
+@file file.php
+@brief serve files for subsystem documents
 */
 
 // playmode is used in order to re-use this script's logic via play.php
@@ -57,27 +57,31 @@ $path_components = explode('/', $uri);
 // temporary course change
 $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
-$_SESSION['dbname'] = $cinfo_components[0];
-
-if (isset($cinfo_components[1])) {
-        $group_id = intval($cinfo_components[1]);
-        define('GROUP_DOCUMENTS', true);
+if ($cinfo_components[0] == 'common') {
+        define('COMMON_DOCUMENTS', true);
 } else {
-        unset($group_id);
+        $require_current_course = true;
+        $_SESSION['course_code'] = $cinfo_components[0];
+        if (isset($cinfo_components[1])) {
+                $group_id = intval($cinfo_components[1]);
+                define('GROUP_DOCUMENTS', true);
+        } else {
+                unset($group_id);
+        }
 }
 
-$require_current_course = true;
 $guest_allowed = true;
 
 include '../../include/init.php';
 include '../../include/action.php';
+include '../../include/lib/fileManageLib.inc.php';
 
-// check user's access to cours
-check_cours_access();
-
-// record file access
-$action = new action();
-$action->record('MODULE_ID_DOCS');
+if (!defined('COMMON_DOCUMENTS')) {
+        // check user's access to cours
+        check_cours_access();        
+        // anonymous with access token needs course id set
+        $course_id = course_code_to_id($_SESSION['course_code']);
+}
 
 include 'doc_init.php';
 include '../../include/lib/forcedownload.php';
@@ -89,8 +93,6 @@ if (defined('GROUP_DOCUMENTS')) {
         if (!($is_editor or $is_member)) {
                 error($langNoRead);
         }
-} else {
-        $basedir = "{$webDir}courses/$dbname/document";
 }
 
 $file_info = public_path_to_disk_path($path_components);
@@ -98,17 +100,39 @@ if ($file_info['visibility'] != 'v' and !$is_editor) {
         error($langNoRead);
 }
 
-if (file_exists($basedir . $file_info['path'])) {
-    if (!$is_in_playmode)
-        send_file_to_client($basedir . $file_info['path'], $file_info['filename']);
-    else {
-        require_once ('../video/video_functions.php');
-        require_once '../../include/lib/fileDisplayLib.inc.php';
+if ($file_info['extra_path']) {
+        // $disk_path is set if common file link
+        $disk_path = common_doc_path($file_info['extra_path'], true);
+        if (!$disk_path) {
+                // external file URL
+                header("Location: $file_info[extra_path]");
+                exit;
+        } elseif (!$common_doc_visible) {
+                forbidden(preg_replace('/^.*file\.php/', '', $uri));
+        }
+} else {
+        // Normal file
+        $disk_path = $basedir . $file_info['path'];
+}
         
+if (file_exists($disk_path)) {
+    if (!$is_in_playmode) {
+        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        if (!$valid) {
+           not_found(preg_replace('/^.*file\.php/', '', $uri));
+           exit();
+        }
+        send_file_to_client($disk_path, $file_info['filename']);
+    } else {
+        require_once 'include/lib/fileDisplayLib.inc.php';
+        require_once 'include/lib/multimediahelper.class.php';
+
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/document.php?course='. $code_cours .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer .'modules/group/document.php?course='. $code_cours .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+            $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+        $token = token_generate($file_info['path'], true);
+        $mediaAccess = $mediaPath . '?token=' . $token;
         
         $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
         echo $htmlout;
@@ -119,10 +143,15 @@ if (file_exists($basedir . $file_info['path'])) {
 }
 
 function check_cours_access() {
-	global $mysqlMainDb, $dbname;
+	
+        global $mysqlMainDb, $dbname, $uid, $code_cours;        
 
-	// $dbname is used in filepath so we stick to this instead of $currentCourse
-	$qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
+        if (!$uid && !isset($code_cours)) {
+            $code_cours = $_SESSION['course_code'];
+        }
+
+        $qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
+        
 	$result = db_query($qry, $mysqlMainDb);
 
 	// invalid lesson code
@@ -146,6 +175,5 @@ function check_cours_access() {
 				redirect_to_home_page();
 			}
 	}
-
 	exit;
 }

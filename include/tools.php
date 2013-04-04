@@ -463,15 +463,18 @@ function adminMenu(){
             $arrMenuType['type'] = 'text';
             $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
             array_push($sideMenuSubGroup, $arrMenuType);
-
-            array_push($sideMenuText, $GLOBALS['langAdminAn']);
-            array_push($sideMenuLink, "../admin/adminannouncements.php");
-            array_push($sideMenuImg, "arrow.png");
+            
             array_push($sideMenuText, $GLOBALS['langConfigFile']);
             array_push($sideMenuLink, "../admin/eclassconf.php");
             array_push($sideMenuImg, "arrow.png");
             array_push($sideMenuText, $GLOBALS['langPlatformStats']);
-            array_push($sideMenuLink, "../admin/stateclass.php");
+            array_push($sideMenuLink, "../admin/stateclass.php");            
+            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuText, $GLOBALS['langCommonDocs']);
+	    array_push($sideMenuLink, "../admin/commondocs.php");
+	    array_push($sideMenuImg, "arrow.png");            
+            array_push($sideMenuText, $GLOBALS['langAdminAn']);
+            array_push($sideMenuLink, "../admin/adminannouncements.php");
             array_push($sideMenuImg, "arrow.png");
             array_push($sideMenuText, $GLOBALS['langAdminManual']);
             if ($language == 'greek') {

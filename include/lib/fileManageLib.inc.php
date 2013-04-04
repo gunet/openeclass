@@ -4,7 +4,7 @@
  * Open eClass 2.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2012  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -50,17 +50,28 @@
 
 function update_db_info($dbTable, $action, $oldPath, $newPath = "")
 {
-        global $group_sql;
+        global $group_sql, $subsystem;
 
-        if ($action == "delete") {
+	if ($action == "delete") {
                 db_query("DELETE FROM `$dbTable`
                                  WHERE $group_sql AND
-                                       path LIKE " . quote($oldPath.'%')); 
-        } elseif ($action = "update") {
-                db_query("UPDATE $dbTable
-                                 SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
-                                 WHERE $group_sql AND
                                        path LIKE " . quote($oldPath.'%'));
+                if ($subsystem == COMMON) {
+                        // For common documents, delete all references
+                        db_query("DELETE FROM `$dbTable`
+                                         WHERE extra_path LIKE " . quote('common:' . $oldPath.'%'));
+                }
+	} elseif ($action == "update") {
+                db_query("UPDATE `$dbTable`
+                                 SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
+                                 WHERE $group_sql AND path LIKE " . quote($oldPath.'%'));
+                if ($subsystem == COMMON) {
+                        // For common documents, update all references
+                        db_query("UPDATE `$dbTable`
+                                         SET extra_path = CONCAT('common:$newPath',
+                                                                 SUBSTRING(extra_path, LENGTH('common:$oldPath')+1))
+                                         WHERE extra_path LIKE " . quote('common:' . $oldPath.'%'));
+                }
         }
 }
 
@@ -416,6 +427,17 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         if (!$v) {
                 die("error: ".$zipfile->errorInfo(true));
         }
+        $real_paths = array();
+        foreach ($GLOBALS['common_docs'] as $path => $real_path) {
+                $filename = $GLOBALS['map_filenames'][$path];
+                $GLOBALS['common_filenames'][$real_path] = $filename;
+                $real_paths[] = $real_path;
+}
+        $v = $zipfile->add($real_paths,
+                           PCLZIP_CB_PRE_ADD, 'convert_to_real_filename_common');
+        if (!$v) {
+                die("error: ".$zipfile->errorInfo(true));
+        }
 }
 
 // Creates mapping between encoded filenames and real filenames
@@ -427,10 +449,16 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $encoded_filenames = $decoded_filenames = $filename = array();
 
         $hidden_dirs = array();
-        $sql = db_query("SELECT path, filename, visibility, format FROM document
+        $sql = db_query("SELECT path, filename, visibility, format, extra_path FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
+                if ($cpath = common_doc_path($files['extra_path'], true)) {
+                        if ($GLOBALS['common_doc_visible'] and
+                            ($include_invisible or $files['visibility'] == 'v')) {
+                                $GLOBALS['common_docs'][$files['path']] = $cpath;
+                        }
+                }
                 $GLOBALS['path_visibility'][$files['path']] =
                         ($include_invisible or $files['visibility'] == 'v');
                 array_push($encoded_filenames, $files['path']);
@@ -470,6 +498,37 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $GLOBALS['map_filenames'] = array_combine($encoded_filenames, $decoded_filenames);
 }
 
+
+/**
+ * Check if a path (from document table extra_path field) points to a common
+ * document and if so return the full path on disk, else return false. 
+ * Sets global $common_doc_visible = false if file pointed to is invisible
+ *
+ * @global string $webDir
+ * @global bool $common_doc_visible
+ * @param string $extra_path
+ * @param bool $full Return full on-disk path
+ * @return string|boolean
+ */
+function common_doc_path($extra_path, $full=false)
+{
+        global $webDir, $common_doc_visible;
+        if (preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
+                $cpath = $matches[1];
+                $q = db_query("SELECT visibility FROM document
+                                      WHERE path = " . quote($cpath) . " AND
+                                            subsystem = " . COMMON);
+                if ($q and list($vis) = mysql_fetch_row($q) and $vis) {
+                        $common_doc_visible = true;
+                } else {
+                        $common_doc_visible = false;
+                }
+                return ($full? $webDir: '') . '/courses/commondocs' . $cpath;
+        } else {
+                return false;
+        }
+}
+
 // PclZip callback function to store filenames with real filenames
 function convert_to_real_filename($p_event, &$p_header)
 {
@@ -487,6 +546,14 @@ function convert_to_real_filename($p_event, &$p_header)
         return 1;
 }
 
+// PclZip callback function to store common documents with real filenames
+function convert_to_real_filename_common($p_event, &$p_header)
+{
+        global $common_filenames;
+
+        $p_header['stored_filename'] = substr(greek_to_latin($common_filenames[$p_header['filename']]), 1);
+        return 1;
+}
 
 
 //------------------------------------------------------------------------------

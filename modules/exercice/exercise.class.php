@@ -73,7 +73,9 @@ class Exercise
 	function read($id)
 	{
 		global $TBL_EXERCICES, $TBL_EXERCICE_QUESTION, $TBL_QUESTIONS, $currentCourseID;
-		mysql_select_db($currentCourseID);
+		
+                mysql_select_db($currentCourseID);
+                
 		$sql="SELECT titre, description, type, StartDate, EndDate, TimeConstrain, 
 			AttemptsAllowed, random, active, results, score 
 			FROM `$TBL_EXERCICES` WHERE id='$id'";
@@ -92,8 +94,8 @@ class Exercise
 			$this->random=$object->random;
 			$this->active=$object->active;
 			$this->results=$object->results;
-			$this->score=$object->score;
-
+			$this->score=$object->score;                                                
+                                                
 			$sql="SELECT question_id,q_position FROM `$TBL_EXERCICE_QUESTION`,`$TBL_QUESTIONS` 
 				WHERE question_id=id AND exercice_id='$id' ORDER BY q_position";
 			$result=db_query($sql);
@@ -108,6 +110,11 @@ class Exercise
 				}
 				$this->questionList[$object->q_position]=$object->question_id;
 			}
+                        // get exercise total weight
+                        $this->totalweight = db_query_get_single_value("SELECT SUM(questions.ponderation)
+                                        FROM questions, exercice_question
+                                        WHERE questions.id = exercice_question.question_id
+                                        AND exercice_question.exercice_id = $id");
 			return true;
 		}
 		// exercise not found
@@ -169,6 +176,13 @@ class Exercise
 	    $this->description = trim($value);
 	}
 
+        
+        // return the total weighting of an exercise
+        function selectTotalWeighting()
+        {       
+                return $this->totalweight;                
+        }
+        
 	/**
 	 * returns the exercise type
 	 *

@@ -26,7 +26,7 @@ function list_docs()
         global $id, $webDir, $currentCourseID, $cours_id, $tool_content,
                $group_sql, $langDirectory, $langUp, $langName, $langSize,
                $langDate, $langType, $langAddModulesButton, $langChoice,
-               $langNoDocuments, $code_cours, $themeimg;
+               $langNoDocuments, $code_cours, $themeimg, $langCommonDocs;
 
         $basedir = $webDir . 'courses/' . $currentCourseID . '/document';
         if (isset($_GET['path'])) {
@@ -37,10 +37,24 @@ function list_docs()
         } else {
                 $path = "";
         }
-        $result = db_query("SELECT * FROM document
+        if ($id == -1) {
+                $common_docs = true;
+                $nameTools = $langCommonDocs;
+                $group_sql = "course_id = -1 AND subsystem = ".COMMON."";
+                $basedir = $webDir . '/courses/commondocs';
+                $result = db_query("SELECT * FROM document
                             WHERE $group_sql AND
-			          path LIKE '$path/%' AND
-                                  path NOT LIKE '$path/%/%'");
+                                          visibility = 'v' AND
+                                          path LIKE " . quote("$path/%") . " AND
+                                          path NOT LIKE " . quote("$path/%/%"));
+        } else {
+                $common_docs = false;
+                $result = db_query("SELECT * FROM document
+                                    WHERE $group_sql AND
+                                          path LIKE " . quote("$path/%") . " AND
+                                          path NOT LIKE " . quote("$path/%/%"));
+        }
+
         $fileinfo = array();
         while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 $fileinfo[] = array(

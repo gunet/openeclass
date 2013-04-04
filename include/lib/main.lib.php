@@ -54,6 +54,12 @@ define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User 
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.
 define('EMAIL_UNVERIFIED', 2); // email is unverified. User can login but cannot receive mail.
 
+// Subsystem types (used in documents)
+define('MAIN', 0);
+define('GROUP', 1);
+define('EBOOK', 2);
+define('COMMON', 3);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {

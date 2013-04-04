@@ -323,7 +323,7 @@ function public_path_to_disk_path($path_components, $path = '')
         $depth = substr_count($path, '/') + 1;
         foreach ($path_components as $component) {
                 $component = urldecode(str_replace(chr(1), '/', $component));
-                $q = db_query("SELECT path, visibility, format,
+                $q = db_query("SELECT path, visibility, format, extra_path,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
@@ -332,7 +332,7 @@ function public_path_to_disk_path($path_components, $path = '')
                 if (!$q or mysql_num_rows($q) == 0) {
                         not_found('/' . implode('/', $path_components));
                 }
-                $r = mysql_fetch_array($q);
+                $r = mysql_fetch_assoc($q);
                 $path = $r['path'];
                 $depth++;
         }
@@ -347,7 +347,6 @@ function public_path_to_disk_path($path_components, $path = '')
 
 function not_found($path)
 {
-        global $uri;
         header("HTTP/1.0 404 Not Found");
         echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
              '<title>404 Not Found</title></head><body>',
@@ -357,12 +356,26 @@ function not_found($path)
         exit;
 }
 
+function forbidden($path)
+{
+        header("HTTP/1.0 403 Forbidden");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+             '<title>403 Forbidden</title></head><body>',
+             '<h1>Forbidden</h1><p>You don\'t have permission to acces the requested path "',
+             htmlspecialchars($path),
+             '".</p></body></html>';
+        exit;
+}
+
 function error($message)
 {
         global $urlServer;
-        $_SESSION['errMessage'] = $message;
+        
+        $_SESSION['errMessage'] = "<div class='caution'>$message</div>";
         session_write_close();
+        
         header("Location: $urlServer" );
+        
         exit;
 }
 

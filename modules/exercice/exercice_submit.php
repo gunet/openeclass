@@ -80,6 +80,7 @@ if (isset($_POST['formSent'])) {
 	$exerciseType = isset($_POST['exerciseType'])?$_POST['exerciseType']:'';
 	$questionNum  = isset($_POST['questionNum'])?$_POST['questionNum']:'';
 	$nbrQuestions = isset($_POST['nbrQuestions'])?$_POST['nbrQuestions']:'';
+        $exercisetotalweight = isset($_POST['exercisetotalweight'])?$_POST['exercisetotalweight']:'';
 	$exerciseTimeConstrain = isset($_POST['exerciseTimeConstrain'])?$_POST['exerciseTimeConstrain']:'';
 	$eid_temp = isset($_POST['eid_temp'])?$_POST['eid_temp']:'';
 	$RecordStartDate = isset($_POST['RecordStartDate'])?$_POST['RecordStartDate']:'';
@@ -102,11 +103,12 @@ if (isset($_POST['formSent'])) {
 		} 
 	}
 	$RecordEndDate = date("Y-m-d H:i:s", time());
-	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
+	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record                
+                
 		mysql_select_db($currentCourseID); 
-		$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, attempt)
-			VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 1)";
-		$result=db_query($sql);
+		$sql="INSERT INTO exercise_user_record(eid, uid, RecordStartDate, RecordEndDate, TotalScore, TotalWeighting, attempt)
+                                VALUES ('$eid_temp','$uid','$RecordStartDate','$RecordEndDate', 0, $exercisetotalweight, 1)";
+		$result=db_query($sql);                
 	}	
 	
 	// if the user has answered at least one question
@@ -164,6 +166,7 @@ $exerciseType = $objExercise->selectType();
 $exerciseTimeConstrain = $objExercise->selectTimeConstrain();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
+$exercisetotalweight = $objExercise->selectTotalWeighting();
 $RecordStartDate = date("Y-m-d H:i:s", time());
 
 $temp_CurrentDate = date("Y-m-d H:i");
@@ -249,6 +252,7 @@ $tool_content .= "
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
   <input type='hidden' name='exerciseTimeConstrain' value='$exerciseTimeConstrain' />
   <input type='hidden' name='eid_temp' value='$eid_temp' />
+  <input type='hidden' name='exercisetotalweight' value='$exercisetotalweight' />
   <input type='hidden' name='RecordStartDate' value='$RecordStartDate' />";
 
 $i=0;

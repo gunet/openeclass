@@ -19,11 +19,8 @@
  * ======================================================================== */
 
 
-// Subsystems
-define('MAIN', 0);
-define('GROUP', 1);
-define('EBOOK', 2);
-$can_upload = $is_editor;
+$can_upload = $is_editor || $is_admin;
+
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
 	$subsystem = GROUP;
@@ -49,7 +46,29 @@ if (defined('GROUP_DOCUMENTS')) {
         $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' .$code_cours .'&amp;' . $groupset;
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-        $basedir = $webDir . 'courses/' . $currentCourseID . '/ebook/' . $ebook_id;
+        $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
+} elseif (defined('COMMON_DOCUMENTS')) {
+        $subsystem = COMMON;
+        $base_url = $_SERVER['SCRIPT_NAME'] . '?';
+        $subsystem_id = 'NULL';
+        $groupset = '';
+        $group_sql = "course_id = -1 AND subsystem = $subsystem";
+        $group_hidden_input = '';
+        $basedir = $webDir . 'courses/commondocs';
+        if (!is_dir($basedir)) {
+                mkdir($basedir, 0775);
+        }        
+        $nameTools = $langCommonDocs;        
+        $navigation[] = array('url' => $urlAppend . '/modules/admin/index.php', 'name' => $langAdmin);
+        // Saved course code so that file picker menu doesn't lose
+        // the current course if we're in a course
+        if (isset($_GET['code_course']) and $_GET['code_course']) {
+                define('SAVED_COURSE_CODE', $_GET['code_course']);
+                define('SAVED_COURSE_ID', course_code_to_id(SAVED_COURSE_CODE));
+                $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . SAVED_COURSE_CODE . '&amp;';
+        }        
+        $cours_id = -1;
+        $code_cours = '';
 } else {
 	$subsystem = MAIN;
         $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' .$code_cours .'&amp;';

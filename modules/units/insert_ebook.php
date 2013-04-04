@@ -19,8 +19,6 @@
  * ======================================================================== */
 
 
-define('EBOOK', 2);
-
 function list_ebooks()
 {
         global $id, $cours_id, $currentCourseID, $tool_content, $urlServer,

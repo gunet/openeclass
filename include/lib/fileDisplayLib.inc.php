@@ -220,7 +220,17 @@ function public_file_path($disk_path, $filename = null)
 	return $dirname . '/' . file_url_escape($filename);
 }
 
-
+/**
+ * Generate download URL for documents
+ * @global type $course_code
+ * @global type $urlServer
+ * @global type $group_id
+ * @global type $ebook_id
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
 function file_url($path, $filename = null, $courseCode = null)
 {
 	global $currentCourseID, $urlServer, $group_id, $ebook_id;
@@ -233,7 +243,9 @@ function file_url($path, $filename = null, $courseCode = null)
 					ENT_QUOTES);
 	} else {
 		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
-		
+                if (defined('COMMON_DOCUMENTS')) {
+                        $currentCourseID = 'common';
+                }
 		return htmlspecialchars($urlServer .
 						"modules/document/file.php/$courseCode$gid" .
 	                                        public_file_path($path, $filename),
@@ -241,7 +253,17 @@ function file_url($path, $filename = null, $courseCode = null)
 	}
 }
 
-
+/**
+ *
+ * @global type $course_code
+ * @global type $urlServer
+ * @global type $group_id
+ * @global type $ebook_id
+ * @param type $path
+ * @param type $filename
+ * @param type $courseCode
+ * @return type
+ */
 function file_playurl($path, $filename = null, $courseCode = null)
 {
     global $currentCourseID, $urlServer, $group_id, $ebook_id;
@@ -254,6 +276,8 @@ function file_playurl($path, $filename = null, $courseCode = null)
                                 ENT_QUOTES);
     } else {
         $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
+        if (defined('COMMON_DOCUMENTS'))
+            $currentCourseID = 'common';
 
         return htmlspecialchars($urlServer .
                                         "modules/document/play.php/$courseCode$gid" .

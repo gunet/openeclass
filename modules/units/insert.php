@@ -26,20 +26,24 @@ Units module: insert new resource
 $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
+include "../../include/lib/fileUploadLib.inc.php";
 require_once '../video/video_functions.php';
 load_modal_box(true);
 
 $lang_editor = langname_to_code($language);
 
 $id = intval($_REQUEST['id']);
-
-// Check that the current unit id belongs to the current course
-$q = db_query("SELECT * FROM course_units
-               WHERE id=$id AND course_id=$cours_id");
-if (!$q or mysql_num_rows($q) == 0) {
-        $nameTools = $langUnitUnknown;
-        draw('', 2, null, $head_content);
-        exit;
+if ($id != -1) {
+        // Check that the current unit id belongs to the current course
+        $q = db_query("SELECT * FROM course_units
+                       WHERE id=$id AND course_id=$cours_id");
+        if (!$q or mysql_num_rows($q) == 0) {
+                $nameTools = $langUnitUnknown;
+                draw('', 2, null, $head_content);
+                exit;
+        }
+        $info = mysql_fetch_array($q);        
+        $navigation[] = array("url"=>"index.php?course=$code_cours&amp;id=$id", "name"=> htmlspecialchars($info['title']));
 }
 
 if (isset($_POST['submit_doc'])) {
@@ -65,9 +69,6 @@ if (isset($_POST['submit_doc'])) {
 	insert_ebook($id);
 }
 
-
-$info = mysql_fetch_array($q);
-$navigation[] = array("url"=>"index.php?course=$code_cours&amp;id=$id", "name"=> htmlspecialchars($info['title']));
 
 switch ($_GET['type']) {
         case 'work': $nameTools = "$langAdd $langInsertWork";
@@ -118,7 +119,36 @@ draw($tool_content, 2, null, $head_content);
 // insert docs in database
 function insert_docs($id)
 {
-	global $cours_id, $code_cours;
+	global $cours_id, $code_cours, $webDir,
+              $group_sql, $subsystem, $subsystem_id, $basedir;
+        
+        if ($id == -1) { // Insert common documents into main documents
+                $target_dir = '';
+                if (isset($_POST['dir']) and !empty($_POST['dir'])) {                        
+                        // Make sure specified target dir exists in course
+                        $target_dir = db_query_get_single_value("SELECT path FROM document
+                                        WHERE course_id = $cours_id AND
+                                              subsystem = ".MAIN." AND
+                                              path = " . quote($_POST['dir']));
+                }
+
+                foreach ($_POST['document'] as $file_id) {                                        
+                        $file = mysql_fetch_assoc(db_query("SELECT * FROM document
+                                        WHERE course_id = -1
+                                        AND subsystem = ".COMMON."
+                                        AND id = " . intval($file_id)));
+                        if ($file) {
+                                $subsystem = MAIN;
+                                $subsystem_id = 'NULL';
+                                $group_sql = "course_id = $cours_id AND subsystem = " . MAIN;
+                                $basedir = $webDir . 'courses/' . $code_cours . '/document';
+                                insert_common_docs($file, $target_dir);
+                        }
+                }
+                header('Location: ../document/document.php?course=' . $code_cours .
+                        '&openDir=' . $target_dir);
+                exit;
+        }
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
 	
@@ -349,4 +379,45 @@ function insert_ebook($id)
         }
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
+}
+
+function insert_common_docs($file, $target_dir)
+{
+        global $cours_id, $code_cours;
+
+        $common_docs_dir_map = array();
+
+        if ($file['format'] == '.dir') {
+                $target_dir = make_path($target_dir, array($file['filename']));
+                $common_docs_dir_map[$file['path']] = $target_dir;
+                $q = db_query("SELECT * FROM document
+                                      WHERE course_id = -1 AND
+                                            subsystem = ".COMMON." AND
+                                            path LIKE " . quote($file['path'] . '/%') . "
+                                      ORDER BY path");
+                while ($file = mysql_fetch_assoc($q)) {
+                        $new_target_dir = $common_docs_dir_map[dirname($file['path'])];
+                        if ($file['format'] == '.dir') {
+                                $new_dir = make_path($new_target_dir,
+                                                     array($file['filename']));
+                                $common_docs_dir_map[$file['path']] = $new_dir;
+                        } else {
+                                insert_common_docs($file, $new_target_dir);
+                        }
+                }
+        } else {
+                $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
+                db_query("INSERT INTO document SET
+                                course_id = $cours_id,
+                                subsystem = ".MAIN.",
+                                path = " . quote($path) . ",
+                                extra_path = ".quote("common:$file[path]").",
+                                filename = " . quote($file['filename']) . ",
+                                visibility = 'v',
+                                comment = " . quote($file['comment']) . ",
+                                title =	" . quote($file['title']) . ",
+                                date = NOW(),
+                                date_modified =	NOW(),
+                                format = ".quote($file['format'])."");
+        }
 }

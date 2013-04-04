@@ -18,22 +18,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file upload.php
+ * @brief upload form for subsystem documents
+ */
 
-/*===========================================================================
-	upload.php
-	@last update: 18-07-2006 by Sakis Agorastos
-	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================
-        @Description: Upload form that aids the user to select
-		  a file to upload and add some metadata with it.
+if (!defined('COMMON_DOCUMENTS')) {
+        $require_current_course = TRUE;
+        $require_login = true;
+}
 
-    The script shows a form with a "Browse file" tag and some simple
-    inputs for metadata. The actual uploading takes place at document.php
-==============================================================================*/
-
-$require_current_course = true;
-$require_login = true;
-define('EBOOK', 2);
 include "../../include/baseTheme.php";
 
 if (isset($_GET['uploadPath'])) {
@@ -42,7 +36,7 @@ if (isset($_GET['uploadPath'])) {
         $uploadPath = '';
 }
 
-$can_upload = $is_editor;
+$can_upload = $is_editor || $is_admin;
 if (defined('GROUP_DOCUMENTS')) {
         include '../group/group_functions.php';
         initialize_group_id();
@@ -60,6 +54,17 @@ if (defined('GROUP_DOCUMENTS')) {
         $subsystem_id = $ebook_id;
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
+}elseif (defined('COMMON_DOCUMENTS')) {        
+        $subsystem = COMMON;
+        $subsystem_id = 'NULL';
+        $groupset = '';
+        $group_sql = "course_id = -1 AND subsystem = $subsystem";
+        $group_hidden_input = '';
+        $basedir = $webDir . '/courses/commondocs';                
+        $navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
+        $navigation[] = array ('url' => 'commondocs.php', 'name' => $langCommonDocs);
+        $cours_id = -1;
+        $code_cours = '';        
 } else {
 	$navigation[] = array ('url' => "document.php?course=$code_cours&amp;openDir=$uploadPath", 'name' => $langDoc);
         $group_hidden_input = '';
@@ -67,9 +72,12 @@ if (defined('GROUP_DOCUMENTS')) {
 
 if ($can_upload) {
 	$nameTools = $langDownloadFile;
-	$tool_content .= "
-	<form action='document.php?course=$code_cours' method='post' enctype='multipart/form-data'>
-        <fieldset>
+        if (defined('COMMON_DOCUMENTS')) {
+                $tool_content .= "<form action='commondocs.php?course=$code_cours' method='post' enctype='multipart/form-data'>";
+        } else {
+                $tool_content .= "<form action='document.php?course=$code_cours' method='post' enctype='multipart/form-data'>";
+        }
+        $tool_content .= "<fieldset>
 	<input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input
         <legend>$dropbox_lang[uploadFile]</legend>
@@ -158,15 +166,18 @@ if ($can_upload) {
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
-      <td colspan='2' class='right'><input type='submit' value='".q($langUpload)."' /></td>
+        <td colspan='2' class='right'><input type='submit' value='$langUpload' /></td>
 	</tr>
 	</table>
     </fieldset>
-          <div class='right smaller'>$langNotRequired<br />$langMaxFileSize ".
-        ini_get('upload_max_filesize')."</div>";
-	$tool_content .=  "\n        </form>";
+        <div class='right smaller'>$langNotRequired<br />$langMaxFileSize ". ini_get('upload_max_filesize')."</div>";
+	$tool_content .=  "</form>";
 } else {
 	$tool_content .= "<span class='caution'>$langNotAllowed</span>";
 }
 
-draw($tool_content, '2');
+if (defined('COMMON_DOCUMENTS')) {
+        draw($tool_content, 3);
+} else {
+        draw($tool_content, 2);
+}
