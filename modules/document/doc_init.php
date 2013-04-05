@@ -61,9 +61,9 @@ if (defined('GROUP_DOCUMENTS')) {
         $nameTools = $langCommonDocs;        
         $navigation[] = array('url' => $urlAppend . '/modules/admin/index.php', 'name' => $langAdmin);
         // Saved course code so that file picker menu doesn't lose
-        // the current course if we're in a course
-        if (isset($_GET['code_course']) and $_GET['code_course']) {
-                define('SAVED_COURSE_CODE', $_GET['code_course']);
+        // the current course if we're in a course        
+        if (isset($_GET['course']) and $_GET['course']) {                
+                define('SAVED_COURSE_CODE', $_GET['course']);
                 define('SAVED_COURSE_ID', course_code_to_id(SAVED_COURSE_CODE));
                 $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . SAVED_COURSE_CODE . '&amp;';
         }        

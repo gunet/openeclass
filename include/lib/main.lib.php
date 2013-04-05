@@ -1550,38 +1550,40 @@ function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 	
         $filebrowser = '';
         $activemodule = 'document/document.php';
-        if (isset($code_cours) && !empty($code_cours))
-        {
-            $filebrowser = "file_browser_callback : 'openDocsPicker',";
-            
-            if (!$is_editor)
-            {
-                $sql = "SELECT * FROM accueil
-                    WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
-                    AND VISIBLE = 1 ORDER BY rubrique";
+        if (isset($code_cours) && !empty($code_cours)) {
+                $filebrowser = "file_browser_callback : 'openDocsPicker',";
 
-                $result = db_query($sql, $code_cours);
-                $module = mysql_fetch_assoc($result);
+                if (!$is_editor) {
+                    $sql = "SELECT * FROM accueil
+                        WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
+                        AND VISIBLE = 1 ORDER BY rubrique";
 
-                if ($module === false)
-                    $filebrowser = '';
-                else {
-                    switch ($module['id']) {
-                        case 2:
-                            $activemodule  = 'link/link.php';
-                            break;
-                        case 3:
-                            $activemodule  = 'document/document.php';
-                            break;
-                        case 4:
-                            $activemodule  = 'video/video.php';
-                            break;
-                        default:
-                            $filebrowser = '';
-                            break;
+                    $result = db_query($sql, $code_cours);
+                    $module = mysql_fetch_assoc($result);
+
+                    if ($module === false)
+                        $filebrowser = '';
+                    else {
+                        switch ($module['id']) {
+                            case 2:
+                                $activemodule  = 'link/link.php';
+                                break;
+                            case 3:
+                                $activemodule  = 'document/document.php';
+                                break;
+                            case 4:
+                                $activemodule  = 'video/video.php';
+                                break;
+                            default:
+                                $filebrowser = '';
+                                break;
+                        }
                     }
                 }
-            }
+                $url = $urlAppend."/modules/$activemodule?course=$code_cours&embedtype=tinymce&docsfilter=";        
+        } elseif ($is_admin) { /* special case for admin announcements */
+                $filebrowser = "file_browser_callback : 'openDocsPicker',";
+                $url = $urlAppend."/modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
         
 	$lang_editor = langname_to_code($language);
@@ -1638,7 +1640,7 @@ tinyMCE.init({
 
 function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
-        file: '$urlAppend/modules/$activemodule?course=$code_cours&embedtype=tinymce&docsfilter=' + type,
+        file: '$url' + type,
         title: 'Resources Browser',
         width: 700,
         height: 500,

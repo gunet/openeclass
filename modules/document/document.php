@@ -19,6 +19,7 @@
  * ======================================================================== */
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+
 if (!defined('COMMON_DOCUMENTS')) {
         $require_current_course = TRUE;
         $menuTypeID = ($is_in_tinymce) ? 5: 2;
@@ -974,9 +975,9 @@ if ($doc_count == 0) {
         $download_path = empty($curDirPath)? '/': $curDirPath;
         $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
         $tool_content .= "<tr>
-      <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-      "&nbsp;$download_dir<br></div></td>
-      <td><div align='right'>";
+        <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+        "&nbsp;$download_dir<br></div></td>
+        <td><div align='right'>";
 
         // Link for sortable table headings
         function headlink($label, $this_sort)
@@ -1187,8 +1188,8 @@ if ($doc_count == 0) {
         $tool_content .= "\n    <br />";
 }
 if (defined('SAVED_COURSE_CODE')) {
-        $code_cours = SAVED_COURSE_CODE;
-        $cours_id = SAVED_COURSE_ID;
+        $code_cours = SAVED_COURSE_CODE;        
+        $cours_id = SAVED_COURSE_ID;        
 }
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);

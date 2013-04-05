@@ -587,7 +587,7 @@ function lessonToolsMenu(){
  */
 function pickerMenu() {
 
-	global $code_cours, $is_editor;
+	global $code_cours, $is_editor, $urlServer;
         
         $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';
         $params = "?course=$code_cours&embedtype=tinymce". $docsfilter;
@@ -608,7 +608,6 @@ function pickerMenu() {
         $sql = "SELECT * FROM accueil
                  WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
                  $visible  ORDER BY rubrique";
-        
         $result = db_query($sql, $code_cours);
         
         while($module = mysql_fetch_assoc($result))
@@ -616,7 +615,11 @@ function pickerMenu() {
             array_push($sideMenuText, $module['rubrique']);
             array_push($sideMenuLink, $module['lien']. $params);
             array_push($sideMenuImg , $module['image']."_on.png");
-        }
+        }        
+        /* link for common documents */
+        array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
+        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
+        array_push($sideMenuImg, 'docs.png');
         
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
