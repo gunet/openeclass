@@ -193,6 +193,7 @@ if(empty($search_terms)) {
 
                 $numLine++;
             }
+            
             $tool_content .= "</table>";
             $found = true;
         }
@@ -240,47 +241,38 @@ if(empty($search_terms)) {
 		}
 	}
 
-	// search in exercises
-	if ($exercises) {
-		$myquery = "SELECT * FROM exercise
-				WHERE course_id = $course_id
-				AND active = '1'
-				AND MATCH (title, description)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
-		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "
+    // search in exercises
+    if ($exercises) {
+        $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
+
+        if (count($exerciseHits) > 0) {
+            $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width=\"99%\" class='sortable' id='t4' align='left'>
 		<tr>
 		  <th colspan='2' class='left'>$langExercices:</th>
                 </tr>";
-                $numLine = 0;
-		while($res = mysql_fetch_array($result))
-		{
-                   if ($numLine%2 == 0) {
-                      $class_view = 'class="even"';
-                   } else {
-                      $class_view = 'class="odd"';
-                   }
-                        $tool_content .= "
-                        <tr $class_view>
+
+            $numLine = 0;
+            foreach ($exerciseHits as $exerciseHit) {
+                $res = db_query("SELECT title, description FROM exercise WHERE id = " . intval($exerciseHit->pkid));
+                $exercise = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                        <tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                        if (empty($res['description'])) {
-                                $desc_text = "";
-                        } else {
-                                $desc_text = "<br /> <span class='smaller'>$res[description]</span>";
-                        }
-                        $link_exercise =" ${urlServer}/modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$res[id]";
-                        $tool_content .= "<a href='$link_exercise'>".$res['title']."</a>$desc_text
-                        </td>
-                        </tr>";
-                        $numLine++;
-		}
-		$tool_content .= "</table>";
-		$found = true;
-		}
-	}
+                $desc_text = (empty($exercise['description'])) ? "" : "<br /> <span class='smaller'>" . $exercise['description'] . "</span>";
+                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . $exercise['title'] . "</a>$desc_text </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+    }
 
 	// search in forums
 	if ($forums) {

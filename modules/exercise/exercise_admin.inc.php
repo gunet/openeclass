@@ -23,6 +23,8 @@
  * @brief Create new exercise or modify an existing one
  */
 
+require_once 'modules/search/exerciseindexer.class.php';
+
 // the exercise form has been submitted
 if(isset($_POST['submitExercise'])) {
 	$exerciseTitle       = trim($exerciseTitle);
@@ -50,6 +52,8 @@ if(isset($_POST['submitExercise'])) {
 			$objExercise->save();
 			// reads the exercise ID (only useful for a new exercise)
 			$exerciseId = $objExercise->selectId();
+                        $eidx = new ExerciseIndexer();
+                        $eidx->store($exerciseId);
 			unset($_GET['modifyExercise']);
 		}
 	}

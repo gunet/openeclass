@@ -34,6 +34,7 @@ require_once 'agendaindexer.class.php';
 require_once 'linkindexer.class.php';
 require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
+require_once 'exerciseindexer.class.php';
 
 class Indexer {
 
@@ -207,6 +208,9 @@ class Indexer {
         
         $vldx = new VideolinkIndexer($this);
         $vldx->removeByCourse($courseId);
+        
+        $eidx = new ExerciseIndexer($this);
+        $eidx->remove($courseId);
     }
     
     /**
@@ -230,6 +234,9 @@ class Indexer {
         
         $vldx = new VideolinkIndexer($this);
         $vldx->reindex();
+        
+        $eidx = new ExerciseIndexer($this);
+        $eidx->reindex();
     }
 
     /**

@@ -40,6 +40,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/exerciseindexer.class.php';
 ModalBoxHelper::loadModalBox();
 /**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
@@ -80,18 +81,22 @@ if($is_editor) {
 		$objExerciseTmp = new Exercise();
 		if($objExerciseTmp->read($exerciseId))
 		{
+                        $eidx = new ExerciseIndexer();
 			switch($_GET['choice'])
 			{
 				case 'delete':	// deletes an exercise
 					$objExerciseTmp->delete();
+                                        $eidx->remove($exerciseId);
 					break;
 				case 'enable':  // enables an exercise
 					$objExerciseTmp->enable();
 					$objExerciseTmp->save();
+                                        $eidx->store($exerciseId);
 					break;
 				case 'disable': // disables an exercise
 					$objExerciseTmp->disable();
 					$objExerciseTmp->save();
+                                        $eidx->store($exerciseId);
 					break;
 			}
 		}
