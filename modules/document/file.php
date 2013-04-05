@@ -117,7 +117,7 @@ if ($file_info['extra_path']) {
         
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
-        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info['path'], $_GET['token'], 30);
         if (!$valid) {
            not_found(preg_replace('/^.*file\.php/', '', $uri));
            exit();

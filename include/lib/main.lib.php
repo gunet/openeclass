@@ -2147,19 +2147,21 @@ function get_admin_rights($user_id) {
 	} 
 }
 
-// checks if a course is inactive
-function check_inactive_course($course_id)
+
+/**
+ * @brief query course status
+ * @param type $course_id
+ * @return course status
+ */
+function course_status($course_id)
 {
         global $mysqlMainDb;
         
-        $res = db_query("SELECT visible FROM cours WHERE cours_id = $course_id", $mysqlMainDb);
-        $g = mysql_fetch_row($res);
-        if ($g[0] == COURSE_INACTIVE) {
-                return TRUE;
-        }
-        return FALSE;
+        $status = db_query_get_single_value("SELECT visible FROM cours 
+                                WHERE cours_id = $course_id", $mysqlMainDb);
+                
+        return $status;
 }
-
 
 // get user email verification status
 function get_mail_ver_status($uid) {
@@ -2176,9 +2178,9 @@ function get_user_email_notification($user_id, $course_id=null)
         
         // checks if a course is active or not
         if (isset($course_id)) {
-                if (check_inactive_course($course_id) == TRUE) {
-                        return FALSE;
-                }
+                if (course_status($course_id) == COURSE_INACTIVE) {
+                        return false;
+                }                
         }
         // checks if user has verified his email address
         if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
