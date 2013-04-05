@@ -150,7 +150,7 @@ class CourseXMLElement extends SimpleXMLElement {
         // readonly fields
         $readonly = '';
         if (in_array($fullKeyNoLang, self::$readOnlyFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
-            $readonly = 'disabled="true" readonly';
+            $readonly = 'disabled readonly';
         
         // integer fields
         if (in_array($fullKeyNoLang, self::$integerFields)) {
