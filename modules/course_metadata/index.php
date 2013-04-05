@@ -48,7 +48,7 @@ $head_content .= <<<EOF
 
 /* ]]> */
 </script>
-<style>
+<style type="text/css">
 .ui-widget {
     font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
     font-size: 13px;

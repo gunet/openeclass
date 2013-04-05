@@ -77,7 +77,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $out .= $this->populateForm();
         $out .= "</table>
                  </div>
-                 <p class='right'><input type='submit' name='submit' value='$langSubmit' /></p>
+                 <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
                  </div>
                  </form>";
         return $out;
@@ -157,7 +157,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $value = (string) $this;
             if (empty($value))
                 $value = 0;
-            return $fieldStart ."<input type='text' size='2' name='". q($fullKey) ."' value='". intval($value) ."' $readonly/>". $fieldEnd;
+            return $fieldStart ."<input type='text' size='2' name='". q($fullKey) ."' value='". intval($value) ."' $readonly>". $fieldEnd;
         }
         
         // textarea fields
@@ -171,16 +171,16 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!empty($value)) { // image already exists
                 $mime = (string) $this->getAttribute('mime');
                 $html .= "<img src='data:". q($mime) .";base64,". q($value) ."'/>
-                          <input type='hidden' name='". q($fullKey) ."' value='". q($value) ."'/>
-                          <input type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'/>
+                          <input type='hidden' name='". q($fullKey) ."' value='". q($value) ."'>
+                          <input type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'>
                           </td></tr><tr><td>";
             }
-            $html .= "<input type='file' size='30' name='". q($fullKey) ."'></input>". $fieldEnd;
+            $html .= "<input type='file' size='30' name='". q($fullKey) ."'>". $fieldEnd;
             return $html;
         }
         
         // all others get a typical input type box
-        return $fieldStart ."<input type='text' size='60' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly/>". $fieldEnd;
+        return $fieldStart ."<input type='text' size='60' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly>". $fieldEnd;
     }
     
     /**
