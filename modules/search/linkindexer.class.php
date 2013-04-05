@@ -131,10 +131,9 @@ class LinkIndexer implements ResourceIndexerInterface {
      * @param int $courseId
      */
     public function removeByCourse($courseId) {
-        $term = new Zend_Search_Lucene_Index_Term($courseId, 'courseid');
-        $docIds = $this->__index->termDocs($term);
-        foreach ($docIds as $id)
-            $this->__index->delete($id);
+        $hits = $this->__index->find('doctype:link AND courseid:' . $courseId);
+        foreach ($hits as $hit)
+            $this->__index->delete($hit->getDocument()->id);
         
         $this->__indexer->finalize();
     }

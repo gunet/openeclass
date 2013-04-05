@@ -40,6 +40,8 @@ require_once 'indexer.class.php';
 require_once 'announcementindexer.class.php';
 require_once 'agendaindexer.class.php';
 require_once 'linkindexer.class.php';
+require_once 'videoindexer.class.php';
+require_once 'videolinkindexer.class.php';
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
@@ -191,7 +193,7 @@ if(empty($search_terms)) {
 
                 $numLine++;
             }
-            $tool_content .= "</table>\n\n\n";
+            $tool_content .= "</table>";
             $found = true;
         }
     }
@@ -389,90 +391,72 @@ if(empty($search_terms)) {
                 $numLine++;
             }
             
-            $tool_content .= "</table>\n\n\n";
+            $tool_content .= "</table>";
             $found = true;
         }
     }
 
-	// search in video and videolinks
-	if ($video)
-	{
-		$myquery = "SELECT * FROM video
-				WHERE course_id = $course_id
-				AND MATCH (url, title, description)".$query;
-		$result = db_query($myquery, $mysqlMainDb);
-		if(mysql_num_rows($result) > 0)
-		{
-		$tool_content .= "
+    // search in video and videolinks
+    if ($video) {
+        $videoHits = $idx->searchRaw(VideoIndexer::buildQuery($_POST));
+        $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
+
+        if (count($videoHits) > 0) {
+            $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable'  id='t8' align='left'>
 		<tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
-                $numLine = 0;
-		while($res = mysql_fetch_array($result))
-		{
-                   if ($numLine%2 == 0) {
-                      $class_view = 'class="even"';
-                   } else {
-                      $class_view = 'class="odd"';
-                   }
-                  $tool_content .= "
-                  <tr $class_view>
+
+            $numLine = 0;
+            foreach ($videoHits as $videoHit) {
+                $res = db_query("SELECT title, description FROM video WHERE id = " . intval($videoHit->pkid));
+                $video = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                  <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                        if (empty($res['description'])) {
-                                $desc_text = "";
-                        } else {
-                                $desc_text = "<span class='smaller'>($res[description])</span>";
-                        }
-                        $link_video = "${urlServer}modules/video/index.php?action=download&amp;id=$res[path]";
-                        $tool_content .= "<a href='$link_video'>".$res['title']."</a> $desc_text
-                        </td>
-                        </tr>";
-                        $numLine++;
-		}
-			$tool_content .= "</table>";
-			$found = true;
-		}
-		$myquery = "SELECT * FROM videolinks
-				WHERE course_id = $course_id
-				AND MATCH (url, title, description)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-                        $tool_content .= "
+                $desc_text = (empty($video['description'])) ? "" : "<span class='smaller'>(" . $video['description'] . ")</span>";
+                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . $video['title'] . "</a> $desc_text </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+
+        if (count($vlinkHits) > 0) {
+            $tool_content .= "
                         <script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t9' align='left'>
                         <tr>
                         <th colspan='2' class='left'>$langLinks:</th>
                         </tr>";
-                        $numLine =0;
-                        while($res = mysql_fetch_array($result))
-                        {
-                        if ($numLine%2 == 0) {
-                                $class_view = 'class="even"';
-                        } else {
-                                $class_view = 'class="odd"';
-                        }
-                        $tool_content .= "<tr $class_view>
+
+            $numLine = 0;
+            foreach ($vlinkHits as $vlinkHit) {
+                $res = db_query("SELECT title, description FROM videolinks WHERE id = " . intval($vlinkHit->pkid));
+                $vlink = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "<tr $class_view>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                        if (empty($res['description'])) {
-                                $desc_text = "";
-                        } else {
-                                $desc_text = "<span class='smaller'>($res[description])</span>";
-                        }
-                        $link_video = $res['url'];
-                        $tool_content .= "<a href='$link_video' target=_blank>".$res['title']."</a><br /> $desc_text
-                        </td>
-                        </tr>";
-                        $numLine++;
-                        }
-                        $tool_content .= "
-                        </table>\n\n\n";
-                                $found = true;
-                        }
-                }
+                $desc_text = (empty($vlink['description'])) ? "" : "<span class='smaller'>(" . $vlink['description'] . ")</span>";
+                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . $vlink['title'] . "</a><br /> $desc_text </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>\n\n\n";
+            $found = true;
+        }
+    }
+
 	// search in cours_units and unit_resources
 	if ($course_units)
 	{
@@ -551,9 +535,10 @@ if(empty($search_terms)) {
 			$found = true;
 		}
 	}
-	// else ... no results found
-	if ($found == false) {
-		$tool_content .= "<p class='alert1'>$langNoResult</p>";
-	}
+        
+    // else ... no results found
+    if ($found == false) {
+        $tool_content .= "<p class='alert1'>$langNoResult</p>";
+    }
 } // end of search
 draw($tool_content, 2);

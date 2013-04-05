@@ -64,6 +64,9 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/videoindexer.class.php';
+require_once 'modules/search/videolinkindexer.class.php';
 
 $nameTools = $langVideo;
 
@@ -119,6 +122,9 @@ $d = mysql_fetch_array(db_query("SELECT video_quota FROM course WHERE code='$cou
 $diskQuotaVideo = $d['video_quota'];
 $updir = "$webDir/video/$course_code"; //path to upload directory
 $diskUsed = dir_total_space($updir);
+$idx = new Indexer();
+$vdx = new VideoIndexer($idx);
+$vldx = new VideolinkIndexer($idx);
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	$nameTools = $langQuotaBar;
@@ -149,6 +155,10 @@ if (isset($_POST['edit_submit'])) { // edit
                                                   WHERE id = $id";
 		}
 		$result = db_query($sql);
+                if ($table == 'video')
+                    $vdx->store($id);
+                else
+                    $vldx->store($id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY,
                           array('id' => $id,
@@ -177,6 +187,7 @@ if (isset($_POST['add_submit'])) {  // add
                                         '.quote($_POST['date']).')';
 			$result = db_query($sql);
                         $id = mysql_insert_id();
+                        $vldx->store($id);
                         $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                         Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT,
                                 @array('id' => $id,
@@ -230,8 +241,9 @@ if (isset($_POST['add_submit'])) {  // add
                                                                  quote($_POST['publisher']).', '.
                                                                  quote($_POST['date']).')';
 				}
-                                $id = mysql_insert_id();
 				$result = db_query($sql);
+                                $id = mysql_insert_id();
+                                $vdx->store($id);
                                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT,
                                         @array('id' => $id,
@@ -246,7 +258,7 @@ if (isset($_POST['add_submit'])) {  // add
 	if (isset($_GET['delete'])) { // delete
                 $id = intval($_GET['id']);
                 $table = select_table($_GET['table']);
-                $sql_select = "SELECT title, path FROM $table WHERE course_id = $course_id AND id = $id";
+                $sql_select = "SELECT * FROM $table WHERE course_id = $course_id AND id = $id";
                 $result = db_query($sql_select);
                 $myrow = mysql_fetch_array($result);
                 if ($table == 'video') {
@@ -254,6 +266,10 @@ if (isset($_POST['add_submit'])) {  // add
                 }
 		$sql = "DELETE FROM $table WHERE course_id = $course_id AND id = $id";
 		$result = db_query($sql);
+                if ($table == 'video')
+                    $vdx->remove($id);
+                else
+                    $vldx->remove($id);
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $myrow['title']));
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
 		$id = "";
