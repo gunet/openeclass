@@ -29,6 +29,9 @@ require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'config.php';
 require_once 'functions.php';
+require_once 'modules/search/forumpostindexer.class.php';
+
+$fpdx = new ForumPostIndexer();
 
 if (isset($_GET['forum'])) {
 	$forum = intval($_GET['forum']);
@@ -84,6 +87,7 @@ if (isset($_POST['submit'])) {
 			VALUES ($topic, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 	$this_post = mysql_insert_id();
+        $fpdx->store($this_post);
         $sql = "UPDATE forum_topic SET topic_time = '$time',
                     num_replies = num_replies+1,
                     last_post_id = $this_post

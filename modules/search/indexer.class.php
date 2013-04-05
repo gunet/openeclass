@@ -35,6 +35,9 @@ require_once 'linkindexer.class.php';
 require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
 require_once 'exerciseindexer.class.php';
+require_once 'forumindexer.class.php';
+require_once 'forumtopicindexer.class.php';
+require_once 'forumpostindexer.class.php';
 
 class Indexer {
 
@@ -210,7 +213,16 @@ class Indexer {
         $vldx->removeByCourse($courseId);
         
         $eidx = new ExerciseIndexer($this);
-        $eidx->remove($courseId);
+        $eidx->removeByCourse($courseId);
+        
+        $fidx = new ForumIndexer($this);
+        $fidx->removeByCourse($courseId);
+        
+        $ftdx = new ForumTopicIndexer($this);
+        $ftdx->removeByCourse($courseId);
+        
+        $fpdx = new ForumPostIndexer($this);
+        $fpdx->removeByCourse($courseId);
     }
     
     /**
@@ -237,6 +249,15 @@ class Indexer {
         
         $eidx = new ExerciseIndexer($this);
         $eidx->reindex();
+        
+        $fidx = new ForumIndexer($this);
+        $fidx->reindex();
+        
+        $ftdx = new ForumTopicIndexer($this);
+        $ftdx->reindex();
+        
+        $fpdx = new ForumPostIndexer($this);
+        $fpdx->reindex();
     }
 
     /**

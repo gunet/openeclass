@@ -30,6 +30,15 @@ $require_editor = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'functions.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/forumindexer.class.php';
+require_once 'modules/search/forumtopicindexer.class.php';
+require_once 'modules/search/forumpostindexer.class.php';
+
+$idx = new Indexer();
+$fidx = new ForumIndexer($idx);
+$ftdx = new ForumTopicIndexer($idx);
+$fpdx = new ForumPostIndexer($idx);
 
 $nameTools = $langCatForumAdmin;
 $navigation[]= array ('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -172,6 +181,7 @@ elseif (isset($_GET['forumgosave'])) {
                                    cat_id = $cat_id
                                 WHERE id = $forum_id
                                 AND course_id = $course_id");
+        $fidx->store($forum_id);
         $tool_content .= "<p class='success'>$langForumDataChanged</p>
                                 <p>&laquo; <a href='index.php?course=$course_code'>$langBack</a></p>";
 }
@@ -196,6 +206,7 @@ elseif (isset($_GET['forumgoadd'])) {
                                         " . autoquote($_POST['forum_desc']) . ",
                                         $cat_id, $course_id)");
         $forid = mysql_insert_id();
+        $fidx->store($forid);
         // --------------------------------
         // notify users
         // --------------------------------
@@ -224,9 +235,15 @@ elseif (isset($_GET['forumgoadd'])) {
 elseif (isset($_GET['forumcatdel'])) {
         $result = db_query("SELECT id FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
         while(list($forum_id) = mysql_fetch_row($result)) {
-                db_query("DELETE FROM forum_post WHERE forum_id = $forum_id");
+                $result2 = db_query("SELECT id FROM forum_topic WHERE forum_id = " . intval($forum_id));
+                while(list($topic_id) = mysql_fetch_row($result2)) {
+                    db_query("DELETE FROM forum_post WHERE topic_id = $topic_id");
+                    $fpdx->removeByTopic($topic_id);
+                }
                 db_query("DELETE FROM forum_topic WHERE forum_id = $forum_id");
+                $ftdx->removeByForum($forum_id);
                 db_query("DELETE FROM forum_notify WHERE forum_id = $forum_id AND course_id = $course_id");
+                $fidx->remove($forum_id);
         }
         db_query("DELETE FROM forum WHERE cat_id = $cat_id AND course_id = $course_id");
         db_query("DELETE FROM forum_notify WHERE cat_id = $cat_id AND course_id = $course_id");
@@ -240,10 +257,17 @@ elseif (isset($_GET['forumgodel'])) {
         $nameTools = $langDelete;
         $navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$course_code", "name"=> $langCatForumAdmin);
         $result = db_query("SELECT id FROM forum WHERE id = $forum_id AND course_id = $course_id");
-        while(list($forum_id) = mysql_fetch_row($result)) {                
+        while(list($forum_id) = mysql_fetch_row($result)) {
+                $result2 = db_query("SELECT id FROM forum_topic WHERE forum_id = " . intval($forum_id));
+                while(list($topic_id) = mysql_fetch_row($result2)) {
+                    db_query("DELETE FROM forum_post WHERE topic_id = $topic_id");
+                    $fpdx->removeByTopic($topic_id);
+                }
                 db_query("DELETE FROM forum_topic WHERE forum_id = $forum_id");
+                $ftdx->removeByForum($forum_id);
                 db_query("DELETE FROM forum_notify WHERE forum_id = $forum_id AND course_id = $course_id");
                 db_query("DELETE FROM forum WHERE id = $forum_id AND course_id = $course_id");
+                $fidx->remove($forum_id);
                 db_query("UPDATE `group` SET forum_id = 0
                         WHERE forum_id = $forum_id
                         AND course_id = $course_id");

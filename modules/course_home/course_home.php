@@ -55,7 +55,7 @@ $action = new action();
 $action->record(MODULE_ID_UNITS);
 
 if (isset($_GET['from_search'])) { // if we come from home page search
-        header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]&course_id=$course_id");
+        header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
 $res = db_query("SELECT course.keywords, course.visible, course.prof_names, course.public_code

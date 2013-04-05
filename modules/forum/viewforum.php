@@ -24,6 +24,13 @@ $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/forumtopicindexer.class.php';
+require_once 'modules/search/forumpostindexer.class.php';
+
+$idx = new Indexer();
+$ftdx = new ForumTopicIndexer($idx);
+$fpdx = new ForumPostIndexer($idx);
 
 if (!add_units_navigation(true)) {
 	$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -127,13 +134,15 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $number_of_posts = get_total_posts($topic_id);        
 	while ($r = mysql_fetch_array($sql)) {  
 		db_query("DELETE FROM forum_post WHERE id = $r[id]");
-	}        
+	}
+        $fpdx->removeByTopic($topic_id);
         $number_of_topics = get_total_topics($forum_id);
         $num_topics = $number_of_topics-1;
         if ($number_of_topics < 0) {
                 $num_topics = 0;
         }
 	db_query("DELETE FROM forum_topic WHERE id = $topic_id AND forum_id = $forum_id");                        
+        $ftdx->remove($topic_id);
 	db_query("UPDATE forum SET num_topics = $num_topics,
                                 num_posts = num_posts-$number_of_posts
                             WHERE id = $forum_id

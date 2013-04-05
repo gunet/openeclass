@@ -42,6 +42,11 @@ require_once 'agendaindexer.class.php';
 require_once 'linkindexer.class.php';
 require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
+require_once 'exerciseindexer.class.php';
+require_once 'forumindexer.class.php';
+require_once 'forumtopicindexer.class.php';
+require_once 'forumpostindexer.class.php';
+
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
@@ -77,7 +82,6 @@ if(empty($search_terms)) {
 	// display form
 	$tool_content .= "
 	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <input type='hidden' name='course_id' value='$course_id'/>
 	    <fieldset>
 	    <legend>$langSearchCriteria</legend>
 	    <table width='100%' class='tbl'>
@@ -110,9 +114,8 @@ if(empty($search_terms)) {
 	   </fieldset>
 	   </form>";
 } else {
-    // course_id might originate from GET. ResourceIndexers need it inside the POST data array
-    if (!isset($_POST['course_id']) && isset($_REQUEST['course_id']))
-        $_POST['course_id'] = $_REQUEST['course_id'];
+    // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
+    $_POST['course_id'] = $course_id;
     $idx = new Indexer();
     
     $tool_content .= "
@@ -274,86 +277,76 @@ if(empty($search_terms)) {
         }
     }
 
-	// search in forums
-	if ($forums) {
-		$myquery = "SELECT * FROM forum WHERE MATCH (name, `desc`)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-                        $tool_content .= "
+    // search in forums
+    if ($forums) {
+        $forumHits = $idx->searchRaw(ForumIndexer::buildQuery($_POST));
+        $forumTopicHits = $idx->searchRaw(ForumTopicIndexer::buildQuery($_POST));
+        $forumPostHits = $idx->searchRaw(ForumPostIndexer::buildQuery($_POST));
+
+        if (count($forumHits) > 0) {
+            $tool_content .= "
                         <script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t5' align='left'>
                         <tr>
                         <th colspan='2' class=\"left\">$langForum ($langCategories):</th>
                         </tr>";
 
-                        $numLine = 0;
-                        while($res = mysql_fetch_array($result)) {
-                        if ($numLine%2 == 0) {
-                                $class_view = 'class="even"';
-                        } else {
-                                $class_view = 'class="odd"';
-                        }
-                        $tool_content .= "
-                        <tr $class_view>
+            $numLine = 0;
+            foreach ($forumHits as $forumHit) {
+                $res = db_query("SELECT name, `desc` FROM forum WHERE id = " . intval($forumHit->pkid));
+                $forum = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                        <tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
-                        if (empty($res['forum_desc'])) {
-                                $desc_text = "";
-                        } else {
-                                $desc_text = "<br /><span class='smaller'>($res[forum_desc])</span>";
-                        }
-                        $link_forum = "${urlServer}/modules/forum/viewforum.php?forum=$res[forum_id]";
-                        $tool_content .= "<a href='$link_forum'>".$res['forum_name']."</a> $desc_text
-                        </td>
-                        </tr>";
-                        $numLine++;
-		  }
-		  $tool_content .= "</table>";
-		  $found = true;
-		}
-		$myquery = "SELECT id, title FROM forum_topic WHERE MATCH (title)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "
+                $desc_text = (empty($forum['desc'])) ? "" : "<br /><span class='smaller'>(" . $forum['desc'] . ")</span>";
+                $tool_content .= "<a href='" . $forumHit->url . "'>" . $forum['name'] . "</a> $desc_text </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+
+        if (count($forumTopicHits) > 0) {
+            $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table width='99%' class='sortable' id='t6' align='left'>
 		<tr>
 		  <th colspan='2' class=\"left\">$langForum ($langSubjects - $langMessages):</th>
                 </tr>";
-                $numLine = 0;
-		while($res = mysql_fetch_array($result))
-		{
-                   if ($numLine%2 == 0) {
-                      $class_view = 'class="even"';
-                   } else {
-                      $class_view = 'class="odd"';
-                   }
-                  $tool_content .= "
-                  <tr $class_view>
+
+            $numLine = 0;
+            foreach ($forumTopicHits as $forumTopicHit) {
+                $res = db_query("SELECT title FROM forum_topic WHERE id = " . intval($forumTopicHit->pkid));
+                $ftopic = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                  <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-			$link_topic = "${urlServer}/modules/forum/viewforum.php?forum=$res[forum_id]";
-			$tool_content .= "<strong>$langSubject</strong>: <a href='$link_topic'>".$res['topic_title']."</a>";
-			$myquery2 = "SELECT posts.topic_id AS topicid, posts_text.post_text AS posttext
-					FROM posts, posts_text
-					WHERE posts.forum_id = $res[forum_id]
-						AND posts.post_id = posts_text.post_id
-						AND MATCH (posts_text.post_text)".$query;
-			$result2 = db_query($myquery2, $course_code);
-			if(mysql_num_rows($result2) > 0) {
-			while($res2 = mysql_fetch_array($result2))
-			{
-			  $link_post = "${urlServer}/modules/forum/viewtopic.php?topic=$res2[topicid]&amp;forum=$res[forum_id]";
-			  $tool_content .= "<br /><strong>$langMessage</strong> <a href='$link_post'>".$res2['posttext']."</a>";
-			}
-	          }
-                  $tool_content .= "</td></tr>";
-                  $numLine++;
-		  }
-		  $tool_content .= "</table>";
-		  $found = true;
-		}
-	}
+                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . $ftopic['title'] . "</a>";
+                if (count($forumPostHits) > 0) {
+                    foreach ($forumPostHits as $forumPostHit) {
+                        $res2 = db_query("SELECT post_text FROM forum_post WHERE id = " . intval($forumPostHit->pkid));
+                        $fpost = mysql_fetch_assoc($res2);
+
+                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost['post_text'] . "</a>";
+                    }
+                }
+                $tool_content .= "</td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+    }
         
     // search in links
     if ($links) {

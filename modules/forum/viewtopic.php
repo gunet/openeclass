@@ -28,6 +28,9 @@ require_once 'config.php';
 require_once 'functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/forumtopicindexer.class.php';
+require_once 'modules/search/forumpostindexer.class.php';
 
 ModalBoxHelper::loadModalBox();
 
@@ -64,7 +67,11 @@ $forum_name = $myrow['name'];
 $forum = $myrow['id'];
 $total = get_total_posts($topic);
 
-if (isset($_GET['delete']) && $is_editor) {        
+if (isset($_GET['delete']) && $is_editor) {
+        $idx = new Indexer();
+        $ftdx = new ForumTopicIndexer($idx);
+        $fpdx = new ForumPostIndexer($idx);
+        
 	$post_id = intval($_GET['post_id']);
 	$last_post_in_thread = get_last_post($topic);
 
@@ -75,9 +82,11 @@ if (isset($_GET['delete']) && $is_editor) {
 	$this_post_time = $myrow["post_time"];	
 
 	db_query("DELETE FROM forum_post WHERE id = $post_id");
+        $fpdx->remove($post_id);
         
         if ($total == 1) { // if exists one post in topic
 		db_query("DELETE FROM forum_topic WHERE id = $topic AND forum_id = $forum");
+                $ftdx->remove($topic);
 		db_query("UPDATE forum SET num_topics = 0,
                             num_posts = 0
                             WHERE id = $forum

@@ -27,6 +27,13 @@ $require_help = false;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
+require_once 'modules/search/indexer.class.php';
+require_once 'modules/search/forumtopicindexer.class.php';
+require_once 'modules/search/forumpostindexer.class.php';
+
+$idx = new Indexer();
+$ftdx = new ForumTopicIndexer($idx);
+$fpdx = new ForumPostIndexer($idx);
 
 require_once 'config.php';
 require_once 'functions.php';
@@ -75,11 +82,15 @@ if (isset($_POST['submit'])) {
 	$result = db_query($sql);
 
 	$topic_id = mysql_insert_id();
+        $ftdx->store($topic_id);
+        
 	$sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic_id, ".autoquote($message).", $uid, '$time', '$poster_ip')";
 	$result = db_query($sql);
 
         $post_id = mysql_insert_id();
+        $fpdx->store($post_id);
+        
         db_query("UPDATE forum_topic
                     SET last_post_id = $post_id
                 WHERE id = $topic_id
