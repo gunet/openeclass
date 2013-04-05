@@ -44,14 +44,14 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-if (isset($_GET['exerciseId'])) {
-	$exerciseId = intval($_GET['exerciseId']);
+if (isset($_REQUEST['exerciseId'])) {
+	$exerciseId = intval($_REQUEST['exerciseId']);
 }
 
 if (isset($exerciseId)) {
 	// security check
 	$active = mysql_fetch_array(db_query("SELECT active FROM `$TBL_EXERCISE`
-		WHERE course_id = $course_id AND id = '$exerciseId'", $mysqlMainDb));
+                                                WHERE course_id = $course_id AND id = '$exerciseId'"));
 	if (($active['active'] == 0) and (!$is_editor)) {
 		header('Location: index.php?course='.$course_code);
 		exit();
@@ -75,6 +75,7 @@ if (isset($_POST['formSent'])) {
 	$exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
 	$questionNum  = isset($_POST['questionNum'])  ? $_POST['questionNum']  : '';
 	$nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
+        $exercisetotalweight = isset($_POST['exercisetotalweight'])?$_POST['exercisetotalweight']:'';
 	$exerciseTimeConstraint = isset($_POST['exerciseTimeConstraint']) ? $_POST['exerciseTimeConstraint'] : '';
 	$eid_temp        = isset($_POST['eid_temp'])          ? $_POST['eid_temp']          : '';
 	$recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
@@ -100,8 +101,8 @@ if (isset($_POST['formSent'])) {
 	$recordEndDate = date("Y-m-d H:i:s", time());
 	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) { // record
 		mysql_select_db($mysqlMainDb);
-		$sql = "INSERT INTO exercise_user_record (eid, uid, record_start_date, record_end_date, attempt)
-			VALUES ('$eid_temp', '$uid', '$recordStartDate', '$recordEndDate', 1)";
+		$sql = "INSERT INTO exercise_user_record (eid, uid, record_start_date, record_end_date, total_score, total_weighting, attempt)
+			VALUES ('$eid_temp', '$uid', '$recordStartDate', '$recordEndDate', 0, $exercisetotalweight, 1)";
 		$result = db_query($sql);
 	}
 
@@ -160,6 +161,7 @@ $exerciseType            = $objExercise->selectType();
 $exerciseTimeConstraint  = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp                = $objExercise->selectId();
+$exercisetotalweight     = $objExercise->selectTotalWeighting();
 $recordStartDate         = date("Y-m-d H:i:s", time());
 
 $temp_CurrentDate = date("Y-m-d H:i");
@@ -246,6 +248,7 @@ $tool_content .= "
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions' />
   <input type='hidden' name='exerciseTimeConstraint' value='$exerciseTimeConstraint' />
   <input type='hidden' name='eid_temp' value='$eid_temp' />
+  <input type='hidden' name='exercisetotalweight' value='$exercisetotalweight' />
   <input type='hidden' name='record_start_date' value='$recordStartDate' />";
 
 $i=0;
@@ -295,11 +298,7 @@ foreach($questionList as $questionId) {
         unset($question);
 	showQuestion($questionId);
 
-	$tool_content .= "
-	<tr>
-	  <td colspan='2'>&nbsp;</td>
-	</tr>
-	</table>";
+	$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr></table>";
 	// for sequential exercises
 	if($exerciseType == 2) {
 		// quits the loop
@@ -318,20 +317,20 @@ if (!$questionList) {
           </table>";
 } else {
 	$tool_content .= "
-          <br/>
-          <table width='100%' class='tbl'>
-          <tr>
-            <td><div class='right'><input type='submit' value=\"";
-		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-			$tool_content .= "$langCont\" />&nbsp;";
-		} else {
-			$tool_content .= $langNext." &gt;"."\" />";
-		}
-	$tool_content .= "<input type='submit' name='buttonCancel' value='$langCancel' /></div>
+        <br/>
+        <table width='100%' class='tbl'>
+        <tr>
+        <td><div class='right'><input type='submit' value='";
+        if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+                $tool_content .= "$langCont' />";
+        } else {
+                $tool_content .= $langNext." &gt;"."' />";
+        }
+	$tool_content .= "&nbsp;<input type='submit' name='buttonCancel' value='$langCancel' /></div>
         </td>
         </tr>
         <tr>
-        <td colspan=\"2\">&nbsp;</td>
+        <td colspan='2'>&nbsp;</td>
         </tr>
         </table>";
 }

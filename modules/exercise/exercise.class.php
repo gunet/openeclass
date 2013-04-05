@@ -109,6 +109,12 @@ class Exercise
 					$object->q_position++;
 				}
 				$this->questionList[$object->q_position]=$object->question_id;
+                                // find the total weighting of an exercise
+                                $this->totalweight = db_query_get_single_value("SELECT SUM(exercise_question.weight)
+                                                FROM $TBL_QUESTION, $TBL_EXERCISE_QUESTION
+                                                WHERE exercise_question.course_id = $course_id 
+                                                AND exercise_question.id = exercise_with_questions.question_id
+                                                AND exercise_with_questions.exercise_id = $id");
 			}
 			return true;
 		}
@@ -171,6 +177,15 @@ class Exercise
 	    $this->description = trim($value);
 	}
 
+        /**
+         * 
+         * @return the total weighting of an exercise
+         */
+        function selectTotalWeighting()
+        {       
+              return $this->totalweight;                
+        }
+        
 	/**
 	 * returns the exercise type
 	 *

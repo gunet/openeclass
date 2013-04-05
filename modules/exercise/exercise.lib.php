@@ -18,7 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 function showQuestion($questionId, $onlyAnswers = false) {
 	global $tool_content, $picturePath, $langNoAnswer,
                 $langColumnA, $langColumnB, $langMakeCorrespond;

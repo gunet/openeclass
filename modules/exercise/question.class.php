@@ -137,24 +137,7 @@ class Question
 	function selectWeighting()
 	{
 		return $this->weighting;
-	}
-
-        // return the total weighting of an exercise
-        function selectTotalWeighting()
-        {
-                mysql_select_db($course_code);
-                $result = db_query("SELECT SUM(questions.ponderation)
-                                FROM questions, exercise_question
-                                WHERE questions.id = exercise_question.question_id
-                                AND exercise_question.exercise_id = $id");
-
-                list($totalweighting) = mysql_fetch_array($result);
-                if (isset($totalweighting)) {
-                       return $this->totalweighting;
-                }
-		// total weighting not found
-		return false;
-        }
+	}       
 
 	/**
 	 * returns the question position
