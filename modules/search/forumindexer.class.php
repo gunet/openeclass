@@ -75,7 +75,9 @@ class ForumIndexer implements ResourceIndexerInterface {
      * @return array - the mysql fetched row
      */
     private function fetch($forumId) {
-        $res = db_query("SELECT * FROM forum WHERE id = " . intval($forumId));
+        $res = db_query("SELECT f.* FROM forum f 
+            JOIN forum_category fc ON f.cat_id = fc.id 
+            WHERE fc.cat_order >= 0 AND f.id = " . intval($forumId));
         $forum = mysql_fetch_assoc($res);
         if (!$forum)
             return null;
@@ -152,7 +154,7 @@ class ForumIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
         
         // get/index all forums from db
-        $res = db_query("SELECT * FROM forum");
+        $res = db_query("SELECT f.* FROM forum f JOIN forum_category fc ON f.cat_id = fc.id WHERE fc.cat_order >= 0");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         

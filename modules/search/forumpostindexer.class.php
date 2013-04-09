@@ -54,21 +54,17 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         global $urlServer;
         $encoding = 'utf-8';
         
-        // fetch courseId from Forum -> Forum Topic
-        $res = db_query("SELECT f.* FROM forum f JOIN forum_topic ft ON f.id = ft.forum_id WHERE ft.id = " . intval($fpost['topic_id']));
-        $forum = mysql_fetch_assoc($res);
-        
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'fpost_' . $fpost['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $fpost['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'fpost', $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $forum['course_id'], $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $fpost['course_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost['topic_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost['post_text'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', 
-                $urlServer .'modules/forum/viewtopic.php?course='. course_id_to_code($forum['course_id']) 
+                $urlServer .'modules/forum/viewtopic.php?course='. course_id_to_code($fpost['course_id']) 
                            .'&amp;topic=' . intval($fpost['topic_id']) 
-                           .'&amp;forum=' . intval($forum['id']), $encoding));
+                           .'&amp;forum=' . intval($fpost['forum_id']), $encoding));
         
         return $doc;
     }
@@ -80,7 +76,11 @@ class ForumPostIndexer implements ResourceIndexerInterface {
      * @return array - the mysql fetched row
      */
     private function fetch($fpostId) {
-        $res = db_query("SELECT * FROM forum_post WHERE id = " . intval($fpostId));
+        $res = db_query("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
+            JOIN forum_topic ft ON fp.topic_id = ft.id 
+            JOIN forum f ON ft.forum_id = f.id 
+            JOIN forum_category fc ON fc.id = f.cat_id 
+            WHERE fc.cat_order >= 0 AND fp.id = " . intval($fpostId));
         $fpost = mysql_fetch_assoc($res);
         if (!$fpost)
             return null;
@@ -170,7 +170,11 @@ class ForumPostIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
         
         // get/index all forum posts from db
-        $res = db_query("SELECT * FROM forum_post");
+        $res = db_query("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
+            JOIN forum_topic ft ON fp.topic_id = ft.id 
+            JOIN forum f ON ft.forum_id = f.id 
+            JOIN forum_category fc ON fc.id = f.cat_id 
+            WHERE fc.cat_order >= 0");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
