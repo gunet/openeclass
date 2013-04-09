@@ -38,6 +38,7 @@ require_once 'exerciseindexer.class.php';
 require_once 'forumindexer.class.php';
 require_once 'forumtopicindexer.class.php';
 require_once 'forumpostindexer.class.php';
+require_once 'documentindexer.class.php';
 
 class Indexer {
 
@@ -223,6 +224,9 @@ class Indexer {
         
         $fpdx = new ForumPostIndexer($this);
         $fpdx->removeByCourse($courseId);
+        
+        $didx = new DocumentIndexer($this);
+        $didx->removeByCourse($courseId);
     }
     
     /**
@@ -258,6 +262,9 @@ class Indexer {
         
         $fpdx = new ForumPostIndexer($this);
         $fpdx->reindex();
+        
+        $didx = new DocumentIndexer($this);
+        $didx->reindex();
     }
 
     /**

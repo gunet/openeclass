@@ -38,6 +38,8 @@
 ==============================================================================
 */
 
+require_once 'modules/search/documentindexer.class.php';
+
 /*
  * replaces some dangerous character in a string for HTML use
  * currently: ?*<>\/"|:.
@@ -462,6 +464,7 @@ function process_extracted_file($p_event, &$p_header) {
                $file_title, $file_description, $file_author, $file_language,
                $file_copyrighted, $uploadPath, $realFileSize, $basedir, $course_id,
                $subsystem, $subsystem_id, $uploadPath, $group_sql;
+        $didx = new DocumentIndexer();
 
         $replace = isset($_POST['replace']);
 
@@ -482,7 +485,9 @@ function process_extracted_file($p_event, &$p_header) {
         $path = make_path($uploadPath, $path_components);
         if ($p_header['folder']) {
                 // Directory has been created by make_path(),
-                // no need to do anything else
+                // only need to update the index
+                $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = ". autoquote($path)));
+                $didx->store($r['id']);
                 return 0;
         } else {
                 // Check if file already exists
@@ -517,6 +522,7 @@ function process_extracted_file($p_event, &$p_header) {
                                 db_query("UPDATE document SET filename = " . quote($backup) . "
                                                  WHERE $group_sql AND
                                                        path = " . quote($file_path));
+                                $didx->store($old_id);
                         }
                 }
 
@@ -542,6 +548,7 @@ function process_extracted_file($p_event, &$p_header) {
                                  copyrighted = " . intval($file_copyrighted));
                                 // Logging
                                 $id = mysql_insert_id();
+                                $didx->store($id);
                                 Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
                                         array('id' => $id,
                                               'filepath' => $path,

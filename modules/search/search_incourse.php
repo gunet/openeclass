@@ -46,6 +46,7 @@ require_once 'exerciseindexer.class.php';
 require_once 'forumindexer.class.php';
 require_once 'forumtopicindexer.class.php';
 require_once 'forumpostindexer.class.php';
+require_once 'documentindexer.class.php';
 
 $nameTools = $langSearch;
 
@@ -177,7 +178,7 @@ if(empty($search_terms)) {
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $tool_content .= "
-                  <tr clas='$class'>
+                  <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $message = $langUnknown;
@@ -202,47 +203,38 @@ if(empty($search_terms)) {
         }
     }
         
-	// search in documents
-	if ($documents) {
-		$myquery = "SELECT * FROM document
-				WHERE course_id = $course_id
-				AND subsystem = 0
-				AND visible = 1
-				AND MATCH (filename, comment, title, creator, subject, description, author, language)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "
-                        <script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t3' align='left'>
-                        <tr>
-                        <th colspan='2' class='left'>$langDoc:</th>
-                        </tr>";
-                        $numLine = 0;
-                        while($res = mysql_fetch_array($result)) {
-                                if ($numLine%2 == 0) {
-                                        $class_view = 'class="even"';
-                                } else {
-                                        $class_view = 'class="odd"';
-                                }
-                                $tool_content .= "
-                                <tr $class_view>
-                                <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";
-                                if (empty($res['comment']))  {
-                                        $add_comment = "";
-                                } else {
-                                        $add_comment = "<br /><span class='smaller'> ($res[comment])</span>";
-                                }
-                                $link_document = "{$urlServer}modules/document/index.php?action2=download&amp;id=$res[path]";
-                                $tool_content .= "<a href='$link_document'>".$res['filename']."</a>$add_comment
-                                </td>
-                                </tr>";
-                                $numLine++;
-                        }
-                        $tool_content .= "</table>";
-                        $found = true;
-		}
-	}
+    // search in documents
+    if ($documents) {
+        $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
+
+        if (count($documentHits) > 0) {
+            $tool_content .= "
+                  <script type='text/javascript' src='../auth/sorttable.js'></script>
+                  <table width='99%' class='sortable' id='t3' align='left'>
+                  <tr>
+                    <th colspan='2' class='left'>$langDoc:</th>
+                  </tr>";
+
+            $numLine = 0;
+            foreach ($documentHits as $docHit) {
+                $res = db_query("SELECT filename, path, comment FROM document WHERE id = " . intval($docHit->pkid));
+                $document = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                      <tr class='$class'>
+                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td>";
+                $add_comment = (empty($document['comment'])) ? "" : "<br /><span class='smaller'> (" . $document['comment'] . ")</span>";
+                $tool_content .= "<a href='" . $docHit->url . "'>" . $document['filename'] . "</a> $add_comment </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+    }
 
     // search in exercises
     if ($exercises) {

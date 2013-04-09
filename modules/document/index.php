@@ -47,6 +47,7 @@ require_once 'include/pclzip/pclzip.lib.php' ;
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'modules/search/documentindexer.class.php';
 require_once 'include/log.php';
 
 load_js('tools.js');
@@ -189,6 +190,8 @@ if ($can_upload) {
         arxeiou. Parola afta to palio filename pernaei apo 'filtrarisma' wste
         na apofefxthoun 'epikyndynoi' xarakthres.
         ***********************************************************************/
+    
+    $didx = new DocumentIndexer();
 
         $action_message = $dialogBox = '';
         if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -283,6 +286,7 @@ if ($can_upload) {
                                                         language = " . autoquote($_POST['file_language']) . ",
                                                         copyrighted = " . intval($_POST['file_copyrighted']));
                                         $id = mysql_insert_id();
+                                        $didx->store($id);
                                         /*** Copy the file to the desired destination ***/
                                         copy ($userFile, $basedir . $file_path);
                                         // Logging
@@ -358,6 +362,12 @@ if ($can_upload) {
                 $r = mysql_fetch_array($result);
                 $filename = $r['filename'];
                 if (mysql_num_rows($result) > 0) {
+                        // remove from index if relevant (except non-main sysbsystems and metadata)
+                        $res2 = db_query("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0 
+                                            AND format <> \".meta\" AND path LIKE " . quote($delete.'%'));
+                        while ($r2 = mysql_fetch_assoc($res2))
+                            $didx->remove($r2['id']);
+                        
                         if (empty($r['extra_path'])) {
                                 if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
                                         if (hasMetaData($delete, $basedir, $group_sql)) {
@@ -368,6 +378,7 @@ if ($can_upload) {
                         } else {
                                 update_db_info('document', 'delete', $delete, $filename);
                         }
+                        
                         $action_message = "<p class='success'>$langDocDeleted</p><br />";
                 }
         }
@@ -378,7 +389,7 @@ if ($can_upload) {
         // Step 2: Rename file by updating record in database
         if (isset($_POST['renameTo'])) {
 
-            $r = mysql_fetch_array(db_query("SELECT filename, format FROM document WHERE $group_sql AND path = ". quote($_POST['sourceFile']) ));
+            $r = mysql_fetch_array(db_query("SELECT id, filename, format FROM document WHERE $group_sql AND path = ". quote($_POST['sourceFile']) ));
 
         if ($r['format'] != '.dir')
             validateRenamedFile($_POST['renameTo'], $menuTypeID);
@@ -387,6 +398,7 @@ if ($can_upload) {
                          autoquote($_POST['renameTo']) .
                          ", date_modified=NOW()
                           WHERE $group_sql AND path=" . autoquote($_POST['sourceFile']));
+                $didx->store($r['id']);
                 Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY,
                                 array('path' => $_POST['sourceFile'],
                                         'filename' => $r['filename'],
@@ -433,11 +445,13 @@ if ($can_upload) {
         if (isset($_POST['newDirPath'])) {
                 $newDirName = canonicalize_whitespace($_POST['newDirName']);
                 if (!empty($newDirName)) {
-                        make_path($_POST['newDirPath'], array($newDirName));
+                        $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
                         // $path_already_exists: global variable set by make_path()
                         if ($path_already_exists) {
                                 $action_message = "<p class='caution'>$langFileExists</p>";
                         } else {
+                                $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = ". autoquote($newDirPath)));
+                                $didx->store($r['id']);
                                 $action_message = "<p class='success'>$langDirCr</p>";
                         }
                 }
@@ -484,6 +498,7 @@ if ($can_upload) {
                                                 copyrighted = " . intval($_POST['file_copyrighted']) . "
                                         WHERE $group_sql AND
                                               path = '$commentPath'");
+                        $didx->store($res['id']);
                         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY,
                                 array('path' => $commentPath,
                                       'filename' => $res['filename'],
@@ -537,12 +552,12 @@ if ($can_upload) {
             validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
                 $replacePath = $_POST['replacePath'];
                 // Check if file actually exists
-                $result = db_query("SELECT path, format FROM document WHERE
+                $result = db_query("SELECT id, path, format FROM document WHERE
                                         $group_sql AND
                                         format <> '.dir' AND
                                         path=" . autoquote($replacePath));
                 if (mysql_num_rows($result) > 0) {
-                        list($oldpath, $oldformat) = mysql_fetch_row($result);
+                        list($docId, $oldpath, $oldformat) = mysql_fetch_row($result);
                         // check for disk quota
                         $diskUsed = dir_total_space($basedir);
                         if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
@@ -570,6 +585,7 @@ if ($can_upload) {
                                                       filename=" . autoquote($_FILES['newFile']['name'] . ".xml") .
                                                     " WHERE $group_sql AND path =" . quote($oldpath . ".xml"));
                                         }
+                                        $didx->store($docId);
                                         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY,
                                                 array('oldpath' => $oldpath,
                                                       'newpath' => $newpath,
@@ -751,6 +767,8 @@ if ($can_upload) {
                 db_query("UPDATE document SET visible='$newVisibilityStatus'
                                           WHERE $group_sql AND
                                                 path = " . autoquote($visibilityPath));
+                $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = " . autoquote($visibilityPath)));
+                $didx->store($r['id']);
                 $action_message = "<p class='success'>$langViMod</p>";
         }
 
@@ -761,6 +779,8 @@ if ($can_upload) {
                 db_query("UPDATE document SET public = $new_public_status
                                           WHERE $group_sql AND
                                                 path = " . autoquote($path));
+                $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = " . autoquote($path)));
+                $didx->store($r['id']);
                 $action_message = "<p class='success'>$langViMod</p>";
         }
 } // teacher only

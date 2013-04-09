@@ -29,11 +29,13 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/courseindexer.class.php';
+require_once 'modules/search/documentindexer.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox(true);
 $idx = new CourseIndexer();
+$didx = new DocumentIndexer();
 
 $id = intval($_REQUEST['id']);
 if ($id != -1) {
@@ -399,12 +401,14 @@ function insert_ebook($id)
 
 function insert_common_docs($file, $target_dir)
 {
-        global $course_id, $course_code;
+        global $course_id, $course_code, $group_sql, $didx;
                 
         $common_docs_dir_map = array();
 
         if ($file['format'] == '.dir') {
                 $target_dir = make_path($target_dir, array($file['filename']));
+                $r = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = ". autoquote($target_dir)));
+                $didx->store($r['id']);
                 $common_docs_dir_map[$file['path']] = $target_dir;
                 $q = db_query("SELECT * FROM document
                                       WHERE course_id = -1 AND
@@ -416,6 +420,8 @@ function insert_common_docs($file, $target_dir)
                         if ($file['format'] == '.dir') {
                                 $new_dir = make_path($new_target_dir,
                                                      array($file['filename']));
+                                $r2 = mysql_fetch_assoc(db_query("SELECT id FROM document WHERE $group_sql AND path = ". autoquote($new_dir)));
+                                $didx->store($r2['id']);
                                 $common_docs_dir_map[$file['path']] = $new_dir;
                         } else {
                                 insert_common_docs($file, $new_target_dir);
@@ -435,5 +441,7 @@ function insert_common_docs($file, $target_dir)
                                 date = NOW(),
                                 date_modified =	NOW(),
                                 format = ".quote($file['format'])."");
+                $id = mysql_insert_id();
+                $didx->store($id);
         }
 }
