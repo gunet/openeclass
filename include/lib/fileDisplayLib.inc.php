@@ -244,7 +244,7 @@ function file_url($path, $filename = null, $courseCode = null)
 	} else {
 		$gid = defined('GROUP_DOCUMENTS')? ",$group_id": '';
                 if (defined('COMMON_DOCUMENTS')) {
-                        $currentCourseID = 'common';
+                        $courseCode = 'common';
                 }
 		return htmlspecialchars($urlServer .
 						"modules/document/file.php/$courseCode$gid" .

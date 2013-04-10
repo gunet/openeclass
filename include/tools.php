@@ -587,11 +587,11 @@ function lessonToolsMenu(){
  */
 function pickerMenu() {
 
-	global $code_cours, $is_editor, $urlServer;
+	global $code_cours, $cours_id, $is_editor, $urlServer, $urlAppend;
         
         $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';
         $params = "?course=$code_cours&embedtype=tinymce". $docsfilter;
-
+        
 	$sideMenuGroup = array();
 
 	$sideMenuSubGroup = array();
@@ -604,18 +604,21 @@ function pickerMenu() {
 	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
 	array_push($sideMenuSubGroup, $arrMenuType);
         
-        $visible = ($is_editor) ? '' : 'AND visible = 1';
-        $sql = "SELECT * FROM accueil
-                 WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
-                 $visible  ORDER BY rubrique";
-        $result = db_query($sql, $code_cours);
-        
-        while($module = mysql_fetch_assoc($result))
-        {
-            array_push($sideMenuText, $module['rubrique']);
-            array_push($sideMenuLink, $module['lien']. $params);
-            array_push($sideMenuImg , $module['image']."_on.png");
-        }        
+        if (isset($cours_id) and $cours_id >= 1) {
+                $visible = ($is_editor) ? '' : 'AND visible = 1';
+                $sql = "SELECT * FROM accueil
+                         WHERE (lien LIKE '%/document.php' OR lien LIKE '%/video.php' OR lien LIKE '%/link.php')
+                         $visible  ORDER BY rubrique";
+                $result = db_query($sql, $code_cours);
+
+                while($module = mysql_fetch_assoc($result))
+                {
+                    array_push($sideMenuText, $module['rubrique']);
+                    $module['lien'] = str_replace('../../', $urlAppend.'/', $module['lien']);
+                    array_push($sideMenuLink, $module['lien']. $params);
+                    array_push($sideMenuImg , $module['image']."_on.png");
+                }
+        }
         /* link for common documents */
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
         array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
@@ -626,5 +629,6 @@ function pickerMenu() {
         array_push($sideMenuSubGroup, $sideMenuImg);
 
         array_push($sideMenuGroup, $sideMenuSubGroup);
+        //print_a($sideMenuGroup);
 	return $sideMenuGroup;
 }
