@@ -1154,18 +1154,16 @@ if ($doc_count == 0) {
 	                                $tool_content .= "<img src='$themeimg/lom.png' " .
 	                                                 "title='".q($langMetadata)."' alt='".q($langMetadata)."' /></a>&nbsp;";
                                 }
-                                /*** visibility command ***/
-                                if ($is_editor) {
-					if ($entry['visible']) {
-						$tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
-								 "<img src='$themeimg/visible.png' " .
-								 "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
-	                                } else {
-	                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
-								 "<img src='$themeimg/invisible.png' " .
-								 "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
-	                                }
-				}
+                                /*** visibility command ***/                                
+                                if ($entry['visible']) {
+                                        $tool_content .= "<a href='{$base_url}mkInvisibl=$cmdDirName'>" .
+                                                         "<img src='$themeimg/visible.png' " .
+                                                         "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
+                                } else {
+                                        $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
+                                                         "<img src='$themeimg/invisible.png' " .
+                                                         "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
+                                }				
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .
