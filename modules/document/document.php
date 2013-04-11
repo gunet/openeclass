@@ -1035,7 +1035,7 @@ if ($doc_count == 0) {
                 foreach ($fileinfo as $entry) {
                         $link_title_extra = '';
                         if (($entry['is_dir'] != $is_dir) or
-                                        (!$is_editor and !$entry['visible'])) {
+                                        (!$can_upload and !$entry['visible'])) {
                                 continue;
                         }
                         $cmdDirName = $entry['path'];
