@@ -28,14 +28,18 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/search/indexer.class.php';
 require_once 'modules/search/courseindexer.class.php';
 require_once 'modules/search/documentindexer.class.php';
+require_once 'modules/search/unitresourceindexer.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox(true);
-$idx = new CourseIndexer();
-$didx = new DocumentIndexer();
+$idx = new Indexer();
+$cidx = new CourseIndexer($idx);
+$didx = new DocumentIndexer($idx);
+$urdx = new UnitResourceIndexer($idx);
 
 $id = intval($_REQUEST['id']);
 if ($id != -1) {
@@ -124,7 +128,7 @@ draw($tool_content, 2, null, $head_content);
 // insert docs in database
 function insert_docs($id)
 {
-        global $webDir, $course_id, $course_code, $idx,
+        global $webDir, $course_id, $course_code, $cidx, $urdx,
                $group_sql, $subsystem, $subsystem_id, $basedir;
 
         if ($id == -1) { // Insert common documents into main documents
@@ -165,8 +169,10 @@ function insert_docs($id)
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='doc', title=" .
 			 quote($title) . ", comments=" . quote($file['comment']) .
 			 ", visible='$file[visible]', `order`=$order, `date`=NOW(), res_id=$file[id]");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -175,13 +181,15 @@ function insert_docs($id)
 // insert text in database
 function insert_text($id)
 {
-	global $title, $comments, $course_code, $course_id, $idx;
+	global $title, $comments, $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	$order++;
 	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='',
 		comments=" . autoquote(purify($comments)) . ", visible=1, `order`=$order, `date`=NOW(), res_id=0");
-        $idx->store($course_id);
+        $uresId = mysql_insert_id();
+        $urdx->store($uresId, false);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -191,7 +199,7 @@ function insert_text($id)
 // insert lp in database
 function insert_lp($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['lp'] as $lp_id) {
@@ -203,11 +211,13 @@ function insert_lp($id)
 		} else {
 			$visibility = 'v';
 		}
-			db_query("INSERT INTO unit_resources SET unit_id=$id, type='lp', title=" .
-			quote($lp['name']) . ", comments=" . quote($lp['comment']) .
-			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]");
+                db_query("INSERT INTO unit_resources SET unit_id=$id, type='lp', title=" .
+                    quote($lp['name']) . ", comments=" . quote($lp['comment']) .
+                    ", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -216,7 +226,7 @@ function insert_lp($id)
 // insert video in database
 function insert_video($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['video'] as $video_id) {
@@ -227,8 +237,10 @@ function insert_video($id)
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
 			WHERE course_id = $course_id AND id = $res_id"), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -237,7 +249,7 @@ function insert_video($id)
 // insert work (assignment) in database
 function insert_work($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['work'] as $work_id) {
@@ -258,8 +270,10 @@ function insert_work($id)
                                 `order` = $order,
                                 `date` = NOW(),
                                 res_id = $work[id]");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -269,7 +283,7 @@ function insert_work($id)
 // insert exercise in database
 function insert_exercise($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['exercise'] as $exercise_id) {
@@ -284,8 +298,10 @@ function insert_exercise($id)
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='exercise', title=" .
 			quote($exercise['title']) . ", comments=" . quote($exercise['description']) .
 			", visible='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -294,7 +310,7 @@ function insert_exercise($id)
 // insert forum in database
 function insert_forum($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['forum'] as $for_id) {
@@ -316,8 +332,10 @@ function insert_forum($id)
 				quote($forum['name']) . ", comments=" . quote($forum['desc']) .
 				", visible=1, `order`=$order, `date`=NOW(), res_id=$forum[id]");
 		}
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -327,7 +345,7 @@ function insert_forum($id)
 // insert wiki in database
 function insert_wiki($id)
 {
-	global $course_code, $course_id, $idx;
+	global $course_code, $course_id, $cidx, $urdx;
 
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['wiki'] as $wiki_id) {
@@ -337,8 +355,10 @@ function insert_wiki($id)
 		db_query("INSERT INTO unit_resources SET unit_id=$id, type='wiki', title=" .
 			quote($wiki['title']) . ", comments=" . quote($wiki['description']) .
 			", visible=1, `order`=$order, `date`=NOW(), res_id=$wiki[id]");
+                $uresId = mysql_insert_id();
+                $urdx->store($uresId, false);
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -347,7 +367,7 @@ function insert_wiki($id)
 // insert link in database
 function insert_link($id)
 {
-        global $course_id, $course_code, $idx;
+        global $course_id, $course_code, $cidx, $urdx;
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	// insert link categories
         if (isset($_POST['catlink']) and count($_POST['catlink'] > 0)) {
@@ -358,6 +378,8 @@ function insert_link($id)
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type='linkcategory', title = " .
                                 quote($linkcat['name']) . ", comments = " . autoquote($linkcat['description']) .
                                 ", visible = 1, `order` = $order, `date` = NOW(), res_id = $linkcat[id]");
+                        $uresId = mysql_insert_id();
+                        $urdx->store($uresId, false);
                 }
         }
 
@@ -369,9 +391,11 @@ function insert_link($id)
                         db_query("INSERT INTO unit_resources SET unit_id = $id, type = 'link', title = " .
                                 quote($link['title']) . ", comments = " . autoquote($link['description']) .
                                 ", visible=1, `order` = $order, `date` = NOW(), res_id = $link[id]");
+                        $uresId = mysql_insert_id();
+                        $urdx->store($uresId, false);
                 }
 	}
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;
@@ -380,7 +404,7 @@ function insert_link($id)
 // insert ebook in database
 function insert_ebook($id)
 {
-        global $course_id, $course_code, $idx;
+        global $course_id, $course_code, $cidx, $urdx;
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id = $id"));
         foreach (array('ebook', 'section', 'subsection') as $type) {
             if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
@@ -390,10 +414,12 @@ function insert_ebook($id)
                                         title = " . autoquote($_POST[$type.'_title'][$ebook_id]) . ", comments = '',
                                         visible=1, `order` = $order, `date` = NOW(),
                                         res_id = " . intval($ebook_id));
+                            $uresId = mysql_insert_id();
+                            $urdx->store($uresId, false);
                     }
             }
         }
-        $idx->store($course_id);
+        $cidx->store($course_id, true);
         CourseXMLElement::refreshCourse($course_id, $course_code);
 	header('Location: index.php?course='.$course_code.'&id=' . $id);
 	exit;

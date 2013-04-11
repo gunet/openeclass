@@ -39,6 +39,8 @@ require_once 'forumindexer.class.php';
 require_once 'forumtopicindexer.class.php';
 require_once 'forumpostindexer.class.php';
 require_once 'documentindexer.class.php';
+require_once 'unitindexer.class.php';
+require_once 'unitresourceindexer.class.php';
 
 class Indexer {
 
@@ -227,6 +229,12 @@ class Indexer {
         
         $didx = new DocumentIndexer($this);
         $didx->removeByCourse($courseId);
+        
+        $uidx = new UnitIndexer($this);
+        $uidx->removeByCourse($courseId);
+        
+        $urdx = new UnitResourceIndexer($this);
+        $urdx->removeByCourse($courseId);
     }
     
     /**
@@ -265,6 +273,12 @@ class Indexer {
         
         $didx = new DocumentIndexer($this);
         $didx->reindex();
+        
+        $uidx = new UnitIndexer($this);
+        $uidx->reindex();
+        
+        $urdx = new UnitResourceIndexer($this);
+        $urdx->reindex();
     }
 
     /**

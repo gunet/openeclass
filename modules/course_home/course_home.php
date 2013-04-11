@@ -116,9 +116,16 @@ units_set_maxorder();
 // other actions in course unit
 if ($is_editor) {
         // update index and refresh course metadata
+        require_once 'modules/search/indexer.class.php';
         require_once 'modules/search/courseindexer.class.php';
+        require_once 'modules/search/unitindexer.class.php';
+        require_once 'modules/search/unitresourceindexer.class.php';
         require_once 'modules/course_metadata/CourseXML.php';
-        $idx = new CourseIndexer();
+        $idx = new Indexer();
+        $cidx = new CourseIndexer($idx);
+        $uidx = new UnitIndexer($idx);
+        $urdx = new UnitResourceIndexer($idx);
+        
         
         if (isset($_REQUEST['edit_submit'])) {
                 $main_content .= handle_unit_info_edit();
@@ -126,7 +133,9 @@ if ($is_editor) {
 		$id = intval($_REQUEST['del']);
 		db_query("DELETE FROM course_units WHERE id = '$id'");
 		db_query("DELETE FROM unit_resources WHERE unit_id = '$id'");
-                $idx->store($course_id);
+                $uidx->remove($id, false);
+                $urdx->removeByUnit($id, false);
+                $cidx->store($course_id, true);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
 		$main_content .= "<p class='success_small'>$langCourseUnitDeleted</p>";
 	} elseif (isset($_REQUEST['vis'])) { // modify visibility
@@ -135,7 +144,8 @@ if ($is_editor) {
 		list($vis) = mysql_fetch_row($sql);
 		$newvis = ($vis == 1)? 0: 1;
 		db_query("UPDATE course_units SET visible = $newvis WHERE id = $id AND course_id = $course_id");
-                $idx->store($course_id);
+                $uidx->store($id, false);
+                $cidx->store($course_id, true);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
 	} elseif (isset($_REQUEST['down'])) {
 		$id = intval($_REQUEST['down']); // change order down

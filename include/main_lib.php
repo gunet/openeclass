@@ -1923,12 +1923,18 @@ function handle_unit_info_edit()
                                  title = $title, comments =  $descr, visible = 1,
                                  `order` = $order, course_id = $course_id");
                 $successmsg = $langCourseUnitAdded;
+                $unit_id = mysql_insert_id();
         }
         // update index
         global $webDir;
+        require_once 'modules/search/indexer.class.php';
         require_once 'modules/search/courseindexer.class.php';
-        $idx = new CourseIndexer();
-        $idx->store($course_id);
+        require_once 'modules/search/unitindexer.class.php';
+        $idx = new Indexer();
+        $cidx = new CourseIndexer($idx);
+        $uidx = new UnitIndexer($idx);
+        $uidx->store($unit_id, false);
+        $cidx->store($course_id, true);
         // refresh course metadata
         require_once 'modules/course_metadata/CourseXML.php';
         CourseXMLElement::refreshCourse($course_id, $course_code);

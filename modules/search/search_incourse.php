@@ -47,6 +47,8 @@ require_once 'forumindexer.class.php';
 require_once 'forumtopicindexer.class.php';
 require_once 'forumpostindexer.class.php';
 require_once 'documentindexer.class.php';
+require_once 'unitindexer.class.php';
+require_once 'unitresourceindexer.class.php';
 
 $nameTools = $langSearch;
 
@@ -117,6 +119,8 @@ if(empty($search_terms)) {
 } else {
     // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
     $_POST['course_id'] = $course_id;
+    // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
+    $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
     
     $tool_content .= "
@@ -420,7 +424,7 @@ if(empty($search_terms)) {
                 $vlink = mysql_fetch_assoc($res);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr $class_view>
+                $tool_content .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($vlink['description'])) ? "" : "<span class='smaller'>(" . $vlink['description'] . ")</span>";
@@ -429,89 +433,72 @@ if(empty($search_terms)) {
                 $numLine++;
             }
 
-            $tool_content .= "</table>\n\n\n";
+            $tool_content .= "</table>";
             $found = true;
         }
     }
 
-	// search in cours_units and unit_resources
-	if ($course_units)
-	{
-		$myquery = "SELECT id, title, comments FROM course_units
-				WHERE course_id = $course_id
-				AND visible = 1
-				AND MATCH (title, comments)".$query;
-		$result = db_query($myquery);
-		if(mysql_num_rows($result) > 0) {
-			$tool_content .= "
-			<script type='text/javascript' src='../auth/sorttable.js'></script>
-			<table width='99%' class='sortable' id='t11' align='left'>
-			<tr>
-			  <th colspan='2' class='left'>$langCourseUnits:</th>
-			</tr>";
-			$numLine = 0;
-			while($res = mysql_fetch_array($result))
-			{
-                                if ($numLine%2 == 0) {
-                                        $class_view = 'class="even"';
-                                } else {
-                                        $class_view = 'class="odd"';
-                                }
-                                $tool_content .= "
-                                <tr $class_view>
-                                <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";
-                                if (empty($res['comments'])) {
-                                        $comments_text = "";
-                                } else {
-                                        $comments_text = " $res[comments]";
-                                }
-                                $link = "${urlServer}modules/units/?id=$res[id]";
-                                $tool_content .= "<a href='$link'>".$res['title']."</a> $comments_text</td></tr>";
-                                $numLine++;
-			}
-			$tool_content .= "</table>";
-			$found = true;
-		}
-		$myquery2 = $myquery2 = "SELECT unit_resources.unit_id AS id,
-				unit_resources.title AS title,
-				unit_resources.comments AS comments
-			FROM unit_resources, course_units
-				WHERE unit_resources.unit_id = course_units.id
-				AND course_units.course_id = $course_id
-				AND course_units.visible = 1
-			AND MATCH(unit_resources.title, unit_resources.comments)".$query;
-		$result2 = db_query($myquery2);
-		if (mysql_num_rows($result2) > 0) {
-                        $tool_content .= "
-			<script type='text/javascript' src='../auth/sorttable.js'></script>
-			<table width='99%' class='sortable' id='t11' align='left'>
-			<tr>
-			  <th colspan='2' class='left'>$langCourseUnits:</th>
-			</tr>";
-			$numLine = 0;
-			while ($res2 = mysql_fetch_array($result2)) {
-				if ($numLine%2 == 0) {
-				 $class_view = 'class="even"';
-			      } else {
-				 $class_view = 'class="odd"';
-			      }
-			      $tool_content .= "<tr $class_view>
-                                <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                <td>";
-				if (empty($res2['comments'])) {
-					$comments_text = "";
-				} else {
-					$comments_text = "<span class='smaller'> $res2[comments]</span>";
-				}
-				$unitlink = "${urlServer}modules/units/?id=$res2[id]";
-				$tool_content .= "$res2[title]<a href='$unitlink'>".$comments_text."</a></td></tr>";
-				$numLine++;
-			}
-			$tool_content .= "</table>";
-			$found = true;
-		}
-	}
+    // search in cours_units and unit_resources
+    if ($course_units) {
+        $unitHits = $idx->searchRaw(UnitIndexer::buildQuery($_POST));
+        $uresHits = $idx->searchRaw(UnitResourceIndexer::buildQuery($_POST));
+
+        if (count($unitHits) > 0) {
+            $tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t11' align='left'>
+                <tr>
+                  <th colspan='2' class='left'>$langCourseUnits:</th>
+                </tr>";
+
+            $numLine = 0;
+            foreach ($unitHits as $unitHit) {
+                $res = db_query("SELECT title, comments FROM course_units WHERE id = " . intval($unitHit->pkid));
+                $unit = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                    <tr class='$class'>
+                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td>";
+                $comments_text = (empty($unit['comments'])) ? "" : " " . $unit['comments'];
+                $tool_content .= "<a href='" . $unitHit->url . "'>" . $unit['title'] . "</a> $comments_text </td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+
+        if (count($uresHits) > 0) {
+            $tool_content .= "
+                <script type='text/javascript' src='../auth/sorttable.js'></script>
+                <table width='99%' class='sortable' id='t11' align='left'>
+                <tr>
+                  <th colspan='2' class='left'>$langCourseUnits:</th>
+                </tr>";
+
+            $numLine = 0;
+            foreach ($uresHits as $uresHit) {
+                $res = db_query("SELECT title, comments FROM unit_resources WHERE id = " . intval($uresHit->pkid));
+                $ures = mysql_fetch_assoc($res);
+
+                $class = ($numLine % 2) ? 'odd' : 'even';
+                $tool_content .= "
+                    <tr class='$class'>
+                        <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+                        <td>";
+                $comments_text = (empty($ures['comments'])) ? "" : "<span class='smaller'>" . $ures['comments'] . "</span>";
+                $tool_content .= $ures['title'] . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
+
+                $numLine++;
+            }
+
+            $tool_content .= "</table>";
+            $found = true;
+        }
+    }
         
     // else ... no results found
     if ($found == false) {

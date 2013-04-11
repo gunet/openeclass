@@ -14,9 +14,13 @@ function process_actions()
                $course_id, $webDir, $course_code;
         
         // update index and refresh course metadata
+        require_once 'modules/search/indexer.class.php';
         require_once 'modules/search/courseindexer.class.php';
+        require_once 'modules/search/unitresourceindexer.class.php';
         require_once 'modules/course_metadata/CourseXML.php';
-        $idx = new CourseIndexer();
+        $idx = new Indexer();
+        $cidx = new CourseIndexer($idx);
+        $urdx = new UnitResourceIndexer($idx);
 
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
@@ -32,7 +36,8 @@ function process_actions()
                                         title = $restitle,
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
-                        $idx->store($course_id);
+                        $urdx->store($res_id, false);
+                        $cidx->store($course_id, true);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
                 $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
@@ -40,7 +45,8 @@ function process_actions()
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = $res_id");
-                        $idx->store($course_id);
+                        $urdx->remove($res_id, false, false);
+                        $cidx->store($course_id, true);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
@@ -51,7 +57,8 @@ function process_actions()
                         list($vis) = mysql_fetch_row($sql);
                         $newvis = ($vis == 1)? 0: 1;
                         db_query("UPDATE unit_resources SET visible = '$newvis' WHERE id = $res_id");
-                        $idx->store($course_id);
+                        $urdx->store($res_id, false);
+                        $cidx->store($course_id, true);
                         CourseXMLElement::refreshCourse($course_id, $course_code);
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
