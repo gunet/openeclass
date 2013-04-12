@@ -455,11 +455,16 @@ function insert_common_docs($file, $target_dir)
                 }
         } else {
                 $path = preg_replace('|^.*/|', $target_dir . '/', $file['path']);
+                if ($file['extra_path']) {
+                        $extra_path = $file['extra_path'];
+                } else {
+                        $extra_path = "common:$file[path]";
+                }
                 db_query("INSERT INTO document SET
                                 course_id = $course_id,
                                 subsystem = ".MAIN.",
                                 path = " . quote($path) . ",
-                                extra_path = ".quote("common:$file[path]").",
+                                extra_path = " . quote($extra_path) . ",
                                 filename = " . quote($file['filename']) . ",
                                 visible = 1,
                                 comment = " . quote($file['comment']) . ",

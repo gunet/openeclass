@@ -261,63 +261,69 @@ while ($myrow = mysql_fetch_array($result)) {
         // show public list of users
         $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
         $tool_content .= "
-        <td class='smaller' valign='top' align='right'>$i.</td>\n" .
-                "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
+        <td class='smaller right'>$i.</td>\n" .
+                "<td class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
         $tool_content .= "\n" .
-                "<td class='smaller' valign='top' width='150'>" . user_groups($course_id, $myrow['user_id']) . "</td>\n" .
-                "<td align='center' class='smaller'>";
+                "<td class='smaller' width='150'>" . user_groups($course_id, $myrow['user_id']) . "</td>\n" .
+                "<td class='smaller center'>";
         if ($myrow['reg_date'] == '0000-00-00') {
                 $tool_content .= $langUnknownDate;
         } else {
                 $tool_content .= nice_format($myrow['reg_date']);
         }
         $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
-        $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link'
-                         onClick=\"return confirmation('" . $langDeleteUser . " &laquo;".$alert_uname."&raquo; ".$langDeleteUser2."');\">
-                         <img src='$themeimg/cunregister.png' title='$langUnregCourse' /></a>";
+        $tool_content .= "&nbsp;&nbsp;" .
+                icon('cunregister', $langUnregCourse,
+                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link",
+                     "onClick=\"return confirmation('" . js_escape("$langDeleteUser $alert_uname $langDeleteUser2")."');\"") .
+                "</td>";
 
-        $tool_content .= "</td>";
         // tutor right
         if ($myrow['tutor'] == '0') {
-                $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/group_manager_add.png' title='$langGiveRightTutor' /></a></td>";
+                $class = 'add_user';
+                $control = icon('group_manager_add', $langGiveRightTutor,
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow[user_id]$extra_link");
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow[user_id]$extra_link' title='$langRemoveRightTutor'>
-                                <img src='$themeimg/group_manager_remove.png' title ='$langRemoveRightTutor' /></a></td>";
+                $class = 'add_teacherLabel';
+                $control = icon('group_manager_remove', $langRemoveRightTutor,
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow[user_id]$extra_link");
         }
+        $tool_content .= "<td class='$class center' width='30'>$control</td>";
+
         // editor right
         if ($myrow['editor'] == '0') {
-            $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/assistant_add.png' title='$langGiveRightΕditor' /></a></td>";
+                $class = 'add_user';
+                $control = icon('assistant_add', $langGiveRightΕditor,
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[user_id]$extra_link");
         } else {
-                $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
-                                <img src='$themeimg/assistant_remove.png' title ='$langRemoveRightEditor' /></a></td>";
+                $class = 'add_teacherLabel';
+                $control = icon('assistant_remove', $langRemoveRightEditor,
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow[user_id]$extra_link");
         }
+        $tool_content .= "<td class='$class center' width='30'>$control</td>";
+
         // admin right
-        if ($myrow['user_id'] != $_SESSION["uid"]) {
+        if ($myrow['user_id'] != $_SESSION['uid']) {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow[user_id]$extra_link' title='$langRemoveRightAdmin'>
-                                        <img src='$themeimg/teacher_remove.png' title ='$langRemoveRightAdmin' /></a></td>";
+                        $class = 'add_teacherLabel';
+                        $control = icon('teacher_remove', $langRemoveRightAdmin,
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow[user_id]$extra_link");
                 } else {
-                        $tool_content .= "<td valign='top' align='center' class='add_user'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/teacher_add.png' title='$langGiveRightAdmin' /></a></td>";
+                        $class = 'add_user';
+                        $control = icon('teacher_add', $langGiveRightAdmin,
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
                 }
         } else {
                 if ($myrow['statut']=='1') {
-                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
-                                        <img src='$themeimg/teacher.png' title='$langTutor' /></td>";
+                        $class = 'add_teacherLabel';
+                        $control = icon('teacher', '$langTutor');
                 } else {
-                        $tool_content .= "<td class='smaller' valign='top' align='center'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link'>
-                                        <img src='$themeimg/add.png' title='$langGiveRightAdmin' /></a></td>";
+                        $class = 'add_user';
+                        $control = icon('add', $langGiveRightAdmin,
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
                 }
         }
-        $tool_content .= "</tr>";
+        $tool_content .= "<td class='$class center' width='30'>$control</td></tr>";
         $i++;
 }
 $tool_content .= "</table>";

@@ -94,11 +94,16 @@ function list_docs()
         $fileinfo = array();
         $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
 
-        while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        while ($row = mysql_fetch_assoc($result)) {
+                if ($row['extra_path']) {
+                        $size = 0;
+                } else {
+                        $size = filesize($basedir . $row['path']);
+                }
                 $fileinfo[] = array(
 			'id' => $row['id'],
                         'is_dir' => is_dir($basedir . $row['path']),
-                        'size' => filesize($basedir . $row['path']),
+                        'size' => $size,
                         'title' => $row['title'],
                         'name' => htmlspecialchars($row['filename']),
                         'format' => $row['format'],

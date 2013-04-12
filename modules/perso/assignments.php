@@ -123,19 +123,20 @@ function assignHtmlInterface($data)
 {
 	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer, $urlAppend;
 
-	$assign_content = "";
-	$assign_content= <<<aCont
-      <table width="100%">
-aCont;
+        $assign_content = '';
 	$assignmentsExist = false;
 	$max_repeat_val = count($data);
  	for ($i=0; $i <$max_repeat_val; $i++) {
+                if ($i == 0) {
+                        $assign_content = "<table width='100%'>";
+                }
 		$iterator = count($data[$i][2]);
 		$assign_content .= "<tr><td class='sub_title1'>".q($data[$i][0])."</td></tr>";
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {                                
-                                $url = "modules/work/index.php?course=".$data[$i][1]."&amp;id=". $data[$i][2][$j][0];
+                                $url = $urlServer . "index.php?perso=1&amp;c=" .
+                                       $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {
 					$submit_status = "".$langGroupWorkSubmitted."";
@@ -152,9 +153,10 @@ aCont;
                                         $submit_status . "</div></div></li></ul></td></tr>";
 			}			
 		}
+        	if ($i + 1 == $max_repeat_val) {
+                        $assign_content .= "</table>";
 	}
-	$assign_content .= "
-        </table>";
+}
 
 	if (!$assignmentsExist) {
 		$assign_content .= "<p class='alert1'>$langNoAssignmentsExist</p>";
@@ -224,9 +226,7 @@ function submitted($uid, $assignment_id, $lesson_id)
  */
 function isGroupAssignment($id)
 {
-    global $mysqlMainDb;
-
-	$res = db_query("SELECT group_submissions FROM `$mysqlMainDb`.assignments WHERE id = '$id'", $mysqlMainDb);
+	$res = db_query("SELECT group_submissions FROM assignments WHERE id = $id");
 	if ($res) {
 		$row = mysql_fetch_row($res);
 		if ($row[0] == 0) {

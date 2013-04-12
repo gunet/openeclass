@@ -70,7 +70,16 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 if ($can_upload) {
-	$nameTools = $langDownloadFile;
+        if (isset($_GET['ext'])) {
+                $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
+                $nameTools = $langExternalFile;
+                $fileinput = "<th width='200'>$langExternalFileInfo:</th>
+                              <td><input type='text' name='fileURL' size='40' /></td>";
+        } else {
+        	$nameTools = $langDownloadFile;
+                $fileinput = "<th width='200'>$langPathUploadFile:</th>
+                              <td><input type='file' name='userFile' size='35' /></td>";
+        }
         if (defined('COMMON_DOCUMENTS')) {
                 $tool_content .= "<form action='commondocs.php?course=$course_code' method='post' enctype='multipart/form-data'>";
         } else {
@@ -82,8 +91,7 @@ if ($can_upload) {
         <legend>$langUpload</legend>
         <table class='tbl' width='100%'>
         <tr>
-          <th width='200'>$langPathUploadFile:</th>
-          <td><input type='file' name='userFile' size='35' /></td>
+          $fileinput
           <td>&nbsp;</td>
         </tr>
         <tr>
@@ -159,12 +167,16 @@ if ($can_upload) {
                    'file_copyrighted') . "          
           </td>
           <td>&nbsp;</td>
-        </tr>
+        </tr>";
+        if (!isset($_GET['ext'])) {
+                $tool_content .= "
         <tr>
           <th>$langUncompress</th>
           <td><input type='checkbox' name='uncompress' value='1' /> </td>
           <td>&nbsp;</td>
-        </tr>
+        </tr>";
+        }
+        $tool_content .= "
         <tr>
           <th>$langReplaceSameName</th>
           <td><input type='checkbox' name='replace' value='1' /> </td>

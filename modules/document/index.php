@@ -182,6 +182,23 @@ function make_clickable_path($path)
 }
 
 if ($can_upload) {
+        $error = false;
+        $uploaded = false;
+        if (isset($_POST['uploadPath'])) {
+                $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
+        } else {
+                $uploadPath = '';
+        }
+        // Check if upload path exists
+        if (!empty($uploadPath)) {
+                $result = mysql_fetch_row(db_query("SELECT count(*) FROM document
+                        WHERE $group_sql AND
+                        path = " . autoquote($uploadPath)));
+                if (!$result[0]) {
+                        $error = $langImpossible;
+                }
+        }
+
         /*********************************************************************
         UPLOAD FILE
 
@@ -191,19 +208,18 @@ if ($can_upload) {
         na apofefxthoun 'epikyndynoi' xarakthres.
         ***********************************************************************/
     
-    $didx = new DocumentIndexer();
+        $didx = new DocumentIndexer();
 
         $action_message = $dialogBox = '';
         if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
             validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
+                $extra_path = '';
                 $userFile = $_FILES['userFile']['tmp_name'];
                 // check for disk quotas
                 $diskUsed = dir_total_space($basedir);
                 if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
                         $action_message .= "<p class='caution'>$langNoSpace</p>";
                 } else {
-                        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
-
                         if (unwanted_file($_FILES['userFile']['name'])) {
                                 $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
                                                    q($_FILES['userFile']['name']) . "</p>";
@@ -220,89 +236,92 @@ if ($can_upload) {
                                         $action_message .= "<p class='success'>$langDownloadAndZipEnd</p><br />";
                                 }
                         } else {
-                                $error = false;
                                 $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
-                                // Check if upload path exists
-                                if (!empty($uploadPath)) {
-                                        $result = mysql_fetch_row(db_query("SELECT count(*) FROM document
-                                                        WHERE $group_sql AND
-                                                              path = " . autoquote($uploadPath)));
-                                        if (!$result[0]) {
-                                                $error = $langImpossible;
-                                        }
-                                }
-                                if (!$error) {
-                                        // Check if file already exists
-                                        $result = db_query("SELECT path, visible FROM document WHERE
-                                                                   $group_sql AND
-                                                                   path REGEXP " . quote("^$uploadPath/[^/]+$") . " AND
-                                                                   filename = " . quote($fileName) ." LIMIT 1");
-                                        if (mysql_num_rows($result)) {
-                                                if (isset($_POST['replace'])) {
-                                                        // Delete old file record when replacing file
-                                                        list($file_path, $vis) = mysql_fetch_row($result);
-                                                        db_query("DELETE FROM document WHERE
-                                                                         $group_sql AND
-                                                                         path = " . quote($file_path));
-                                                } else {
-                                                        $error = $langFileExists;
-                                                }
-                                        } else {
-                                                // Try to add an extension to files witout extension,
-                                                // change extension of PHP files
-                                                $fileName = php2phps(add_ext_on_mime($fileName));
-                                                // File name used in file system and path field
-                                                $safe_fileName = safe_filename(get_file_extension($fileName));
-                                                if ($uploadPath == '.') {
-                                                        $file_path = '/' . $safe_fileName;
-                                                } else {
-                                                        $file_path = $uploadPath . '/' . $safe_fileName;
-                                                }
-                                                $vis = 1;
-                                        }
-                                }
-                                if (!$error) {
-                                        // No errors, so proceed with upload
-                                        $file_format = get_file_extension($fileName);
-                                        // File date is current date
-                                        $file_date = date("Y\-m\-d G\:i\:s");
-                                        db_query("INSERT INTO document SET
-                                                        course_id = $course_id,
-                                                        subsystem = $subsystem,
-                                                        subsystem_id = $subsystem_id,
-                                                        path = " . quote($file_path) . ",
-                                                        filename = " . autoquote($fileName) . ",
-                                                        visible = '$vis',
-                                                        comment = " . autoquote($_POST['file_comment']) . ",
-                                                        category = " . intval($_POST['file_category']) . ",
-                                                        title = " . autoquote($_POST['file_title']) . ",
-                                                        creator = " . autoquote($_POST['file_creator']) . ",
-                                                        date = '$file_date',
-                                                        date_modified = '$file_date',
-                                                        subject = " . autoquote($_POST['file_subject']) . ",
-                                                        description = " . autoquote($_POST['file_description']) . ",
-                                                        author = " . autoquote($_POST['file_author']) . ",
-                                                        format = " . autoquote($file_format) . ",
-                                                        language = " . autoquote($_POST['file_language']) . ",
-                                                        copyrighted = " . intval($_POST['file_copyrighted']));
-                                        $id = mysql_insert_id();
-                                        $didx->store($id);
-                                        /*** Copy the file to the desired destination ***/
-                                        copy ($userFile, $basedir . $file_path);
-                                        // Logging
-                                        Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
-                                                array('id' => $id,
-                                                      'filepath' => $file_path,
-                                                      'filename' => $fileName,
-                                                      'comment' => $_POST['file_comment'],
-                                                      'title' => $_POST['file_title']));
-                                        $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
-                                } else {
-                                        $action_message .= "<p class='caution'>$error</p><br />";
-                                }
+                                $uploaded = true;
                         }
                 }
-        } // end if is_uploaded_file
+        } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
+                $extra_path = canonicalize_url($fileURL);
+                if (preg_match('/^javascript/', $extra_path)) {
+                        $action_message .= "<p class='caution'>$langUnwantedFiletype: " .
+                                           q($extra_path) . "</p>";
+                } else {
+                        $uploaded = true;
+                }
+                $components = explode('/', $extra_path);
+                $fileName = end($components);
+        }
+        if ($uploaded) {
+                // Check if file already exists
+                $result = db_query("SELECT path, visible FROM document WHERE
+                                           $group_sql AND
+                                           path REGEXP " . quote("^$uploadPath/[^/]+$") . " AND
+                                           filename = " . quote($fileName) ." LIMIT 1");
+                if (mysql_num_rows($result)) {
+                        if (isset($_POST['replace'])) {
+                                // Delete old file record when replacing file
+                                list($file_path, $vis) = mysql_fetch_row($result);
+                                db_query("DELETE FROM document WHERE
+                                                 $group_sql AND
+                                                 path = " . quote($file_path));
+                        } else {
+                                $error = $langFileExists;
+                        }
+                }
+        }
+        if ($error) {
+                $action_message .= "<p class='caution'>$error</p><br />";
+        } elseif ($uploaded) {
+                // No errors, so proceed with upload
+                // Try to add an extension to files witout extension,
+                // change extension of PHP files
+                $fileName = php2phps(add_ext_on_mime($fileName));
+                // File name used in file system and path field
+                $safe_fileName = safe_filename(get_file_extension($fileName));
+                if ($uploadPath == '.') {
+                        $file_path = '/' . $safe_fileName;
+                } else {
+                        $file_path = $uploadPath . '/' . $safe_fileName;
+                }
+                $vis = 1;
+                $file_format = get_file_extension($fileName);
+                // File date is current date
+                $file_date = date("Y\-m\-d G\:i\:s");
+                db_query("INSERT INTO document SET
+                                course_id = $course_id,
+                                subsystem = $subsystem,
+                                subsystem_id = $subsystem_id,
+                                path = " . quote($file_path) . ",
+                                extra_path = " . quote($extra_path) . ",
+                                filename = " . autoquote($fileName) . ",
+                                visible = $vis,
+                                comment = " . autoquote($_POST['file_comment']) . ",
+                                category = " . intval($_POST['file_category']) . ",
+                                title = " . autoquote($_POST['file_title']) . ",
+                                creator = " . autoquote($_POST['file_creator']) . ",
+                                date = '$file_date',
+                                date_modified = '$file_date',
+                                subject = " . autoquote($_POST['file_subject']) . ",
+                                description = " . autoquote($_POST['file_description']) . ",
+                                author = " . autoquote($_POST['file_author']) . ",
+                                format = " . autoquote($file_format) . ",
+                                language = " . autoquote($_POST['file_language']) . ",
+                                copyrighted = " . intval($_POST['file_copyrighted']));
+                $id = mysql_insert_id();
+                $didx->store($id);
+                if (isset($userFile)) {
+                        /*** Copy the file to the desired destination ***/
+                        copy($userFile, $basedir . $file_path);
+                }
+                // Logging
+                Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
+                        array('id' => $id,
+                              'filepath' => $file_path,
+                              'filename' => $fileName,
+                              'comment' => $_POST['file_comment'],
+                              'title' => $_POST['file_title']));
+                $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+        }
 
         /**************************************
         MOVE FILE OR DIRECTORY
@@ -593,6 +612,112 @@ if ($can_upload) {
                                         $action_message = "<p class='success'>$langReplaceOK</p>";
                                 }
                         }
+                }
+        }
+
+        // Display form to add external file link
+        if (isset($_GET['link'])) {
+                $comment = $_GET['comment'];
+                $oldComment='';
+                /*** Retrieve the old comment and metadata ***/
+                $result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($comment));
+                if (mysql_num_rows($result) > 0) {
+                        $row = mysql_fetch_array($result);
+                        $oldFilename = q($row['filename']);
+                        $oldComment = q($row['comment']);
+                        $oldCategory = $row['category'];
+                        $oldTitle = q($row['title']);
+                        $oldCreator = q($row['creator']);
+                        $oldDate = q($row['date']);
+                        $oldSubject = q($row['subject']);
+                        $oldDescription = q($row['description']);
+                        $oldAuthor = q($row['author']);
+                        $oldLanguage = q($row['language']);
+                        $oldCopyrighted = $row['copyrighted'];
+
+                        // filsystem compability: ean gia to arxeio den yparxoun dedomena sto pedio filename
+                        // (ara to arxeio den exei safe_filename (=alfarithmitiko onoma)) xrhsimopoihse to
+                        // $fileName gia thn provolh tou onomatos arxeiou
+                        $fileName = my_basename($comment);
+                        if (empty($oldFilename)) $oldFilename = $fileName;
+                        $dialogBox .= "
+                        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                        <fieldset>
+                          <legend>$langAddComment</legend>
+                          <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+                          <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
+                          $group_hidden_input
+                          <table class='tbl' width='100%'>
+                          <tr>
+                            <th>$langWorkFile:</th>
+                            <td>$oldFilename</td>
+                          </tr>
+                          <tr>
+                            <th>$langTitle:</th>
+                            <td><input type='text' size='60' name='file_title' value='$oldTitle' /></td>
+                          </tr>
+                          <tr>
+                            <th>$langComment:</th>
+                            <td><input type='text' size='60' name='file_comment' value='$oldComment' /></td>
+                          </tr>
+                          <tr>
+                            <th>$langCategory:</th>
+                            <td>" .
+                                selection(array('0' => $langCategoryOther,
+                                                '1' => $langCategoryExcercise,
+                                                '2' => $langCategoryLecture,
+                                                '3' => $langCategoryEssay,
+                                                '4' => $langCategoryDescription,
+                                                '5' => $langCategoryExample,
+                                                '6' => $langCategoryTheory),
+                                          'file_category', $oldCategory) . "</td>
+                          </tr>
+                          <tr>
+                            <th>$langSubject : </th>
+                            <td><input type='text' size='60' name='file_subject' value='$oldSubject' /></td>
+                          </tr>
+                          <tr>
+                            <th>$langDescription : </th>
+                            <td><input type='text' size='60' name='file_description' value='$oldDescription' /></td>
+                          </tr>
+                          <tr>
+                            <th>$langAuthor : </th>
+                            <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
+                          </tr>";
+                        $dialogBox .= "<tr><th>$langCopyrighted : </th><td>";
+                        $dialogBox .= selection($copyright_titles,
+                                                'file_copyrighted', $oldCopyrighted) . "</td></tr>";
+
+                        // display combo box for language selection
+                        $dialogBox .= "
+                                <tr>
+                                <th>$langLanguage :</th>
+                                <td>" .
+                                selection(array('en' => $langEnglish,
+                                                'fr' => $langFrench,
+                                                'de' => $langGerman,
+                                                'el' => $langGreek,
+                                                'it' => $langItalian,
+                                                'es' => $langSpanish), 'file_language', $oldLanguage) .
+                                "</td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'><input type='submit' value='$langOkComment' /></td>
+                        </tr>
+                        <tr>
+                        <th>&nbsp;</th>
+                        <td class='right'>$langNotRequired</td>
+                        </tr>
+                        </table>
+                        <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
+                        <input type='hidden' size='80' name='file_date' value='$oldDate' />
+                        <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
+                        </fieldset>
+                        </form>
+                        \n\n";
+                } else {
+                        $action_message = "<p class='caution'>$langFileNotFound</p>";
                 }
         }
 
@@ -917,15 +1042,17 @@ if($can_upload) {
         }
         // available actions
         if (!$is_in_tinymce) {
-            $tool_content .= "<div id='operations_container'><ul id='opslist'>";
-            $tool_content .= "<li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
-            $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
+            $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+            $tool_content .= "<div id='operations_container'>
+                    <ul id='opslist'>
+                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>  
+                       <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
+                       <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
             if (!defined('COMMON_DOCUMENTS')) {
                     $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             }
-            $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-            $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>";
-            $tool_content .= "</ul></div>\n";
+            $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>
+            </ul></div>\n";
         }
 
         // Dialog Box
