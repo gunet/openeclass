@@ -129,10 +129,14 @@ class Indexer {
         // Utilize UTF-8 compatible text analyzer
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
 
-        if (file_exists($index_path))
-            $this->__index = Zend_Search_Lucene::open($index_path); // Open index
-        else
-            $this->__index = Zend_Search_Lucene::create($index_path); // Create index
+        try {
+            if (file_exists($index_path))
+                $this->__index = Zend_Search_Lucene::open($index_path); // Open index
+            else
+                $this->__index = Zend_Search_Lucene::create($index_path); // Create index
+        } catch (Zend_Search_Lucene_Exception $e) {
+            require_once 'fatal_error.php';
+        }
 
         $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version
         Zend_Search_Lucene::setResultSetLimit(self::$_resultSetLimit);    // Set Result Set Limit
