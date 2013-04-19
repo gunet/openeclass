@@ -1807,7 +1807,8 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/')
         }
 
         $dom = new DOMDocument();
-        @$dom->loadHTML('<?xml encoding="UTF-8"><div>' . $html . '</div>');
+	// workaround because DOM doesn't handle utf8 encoding correctly.
+	@$dom->loadHTML('<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>'); 
 
         $xpath = new DOMXpath($dom);
         $textNodes = $xpath->query('//text()');
