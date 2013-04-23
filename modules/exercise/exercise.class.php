@@ -600,6 +600,17 @@ class Exercise
                 db_query($sql);
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_DELETE, array('title' => $title));
 	}
+        
+        /**
+         * Purge exercise user results
+         */
+        function purge() 
+        {
+                $id = $this->id;
+                
+                $sql = "DELETE FROM exercise_user_record WHERE eid = $id";
+                db_query($sql);                
+        }
 }
 
 endif;

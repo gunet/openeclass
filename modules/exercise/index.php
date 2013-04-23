@@ -88,6 +88,9 @@ if($is_editor) {
 					$objExerciseTmp->delete();
                                         $eidx->remove($exerciseId);
 					break;
+                                case 'purge':	// purge exercise results
+					$objExerciseTmp->purge();
+					break;
 				case 'enable':  // enables an exercise
 					$objExerciseTmp->enable();
 					$objExerciseTmp->save();
@@ -148,8 +151,8 @@ if(!$nbrExercises) {
 	if($is_editor) {
 		$tool_content .= "
 	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
-	      <th width='65'>${langResults}</th>
-	      <th width='65' class='right'>$langCommands&nbsp;</th>
+	      <th class='center'>$langResults</th>
+	      <th width='85' class='center'>$langCommands&nbsp;</th>
 	    </tr>";
 	} else { // student view
 		$tool_content .= "
@@ -193,15 +196,15 @@ if(!$nbrExercises) {
 			}
 			$tool_content .= "<td width='16'>
 				<img src='$themeimg/arrow.png' alt='' /></td>
-				<td><a href=\"exercise_submit.php?course=$course_code&amp;exerciseId=${row['id']}\">".q($row['title'])."</a>$descr</td>";
+				<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=${row['id']}'>".q($row['title'])."</a>$descr</td>";
 			$eid = $row['id'];
 			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
                                                 WHERE eid = '$eid'", $mysqlMainDb));
 
 			if ($NumOfResults[0]) {
-				$tool_content .= "<td align='center'><a href=\"results.php?course=$course_code&amp;exerciseId=".$row['id']."\">".
+				$tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId=".$row['id']."'>".
 				$langExerciseScores1."</a> |
-				<a href=\"csv.php?course=$course_code&amp;exerciseId=".$row['id']."\" target=_blank>".$langExerciseScores3."</a></td>";
+				<a href='csv.php?course=$course_code&amp;exerciseId=".$row['id']."' target=_blank>".$langExerciseScores3."</a></td>";
 			} else {
 				$tool_content .= "<td align='center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
 			}
@@ -210,11 +213,14 @@ if(!$nbrExercises) {
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
                                   <a href='admin.php?course=$course_code&amp;exerciseId=$row[id]'>
-                                  <img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
-			  </a>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick=\"return confirmation('$langConfirmDelete');\">
-			  <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
-			  </a>";
+                                        <img src='$themeimg/edit.png' alt='$langModify_temp' title='$langModify_temp' />
+                                  </a>
+                                  <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row[id]' onClick=\"return confirmation('$langConfirmDelete');\">
+                                        <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
+                                 </a>
+                                  <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row[id]' onClick=\"return confirmation('$langConfirmPurgeExercises');\">
+                                        <img src='$themeimg/clear.png' alt='".q($langPurgeExercises)."' title='".q($langPurgeExercises)."'>
+                                  </a";
 
 			// if active
 			if($row['active']) {

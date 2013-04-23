@@ -57,6 +57,9 @@ if(isset($_POST['submit'])) {
 	if (isset($_POST['hideworks'])) {
 		$output[] = hide_work();
 	}
+        if (isset($_POST['purgeexercises'])) {
+                $output[] = purge_exercises();
+        }
         if (isset($_POST['clearstats'])) {
                 $output[] = clear_stats();
         }
@@ -93,22 +96,27 @@ if(isset($_POST['submit'])) {
 	  <th><td>&nbsp;</th><td>". make_calendar('before_date')."</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"$themeimg/announcements_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAnnouncements</th>
+	  <th class='left'><img src='$themeimg/announcements_on.png' alt='' height='16' width='16'> $langAnnouncements</th>
 	  <td><input type='checkbox' name='delannounces'></td>
 	  <td>$langAnnouncesDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"$themeimg/calendar_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langAgenda</th>
+	  <th class='left'><img src='$themeimg/calendar_on.png' alt='' height='16' width='16'> $langAgenda</th>
 	  <td><input type='checkbox' name='delagenda'></td>
 	  <td>$langAgendaDel</td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"$themeimg/assignments_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langWorks</th>
+	  <th class='left'><img src='$themeimg/assignments_on.png' alt='' height='16' width='16'> $langWorks</th>
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
 	</tr>
         <tr>
-	  <th class='left'><img src=\"$themeimg/usage_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langStats</th>
+	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
+	  <td><input type='checkbox' name='purgeexercises'></td>
+	  <td>$langPurgeExerciseResults</td>
+	</tr>
+        <tr>
+	  <th class='left'><img src='$themeimg/usage_on.png' alt='' height='16' width='16'> $langStats</th>
 	  <td><input type='checkbox' name='clearstats'></td>
 	  <td>$langClearStats</td>
 	</tr>
@@ -168,6 +176,14 @@ function hide_work()  {
 
 	db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
 	return "<p>$langWorksDeleted</p>";
+}
+
+function purge_exercises() {
+        global $langPurgedExerciseResults;
+
+	db_query("TRUNCATE exercise_user_record");
+	return "<p>$langPurgedExerciseResults</p>";
+        
 }
 
 function clear_stats() {
