@@ -58,6 +58,9 @@ if(isset($_POST['submit'])) {
 	if (isset($_POST['hideworks'])) {
 		$output[] = hide_work();
 	}
+        if (isset($_POST['purgeexercises'])) {
+                $output[] = purge_exercises();
+        }        
 
 	if (($count_events = count($output)) > 0 ) {
 		$tool_content .=  "<p class='success_small'>$langRefreshSuccess
@@ -104,6 +107,11 @@ if(isset($_POST['submit'])) {
 	  <th class='left'><img src='$themeimg/assignments_on.png' alt='' height='16' width='16'> $langWorks</th>
 	  <td><input type='checkbox' name='hideworks'></td>
 	  <td>$langHideWork</td>
+	</tr>
+        <tr>
+	  <th class='left'><img src='$themeimg/exercise_on.png' alt='' height='16' width='16'> $langExercises</th>
+	  <td><input type='checkbox' name='purgeexercises'></td>
+	  <td>$langPurgeExerciseResults</td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
@@ -163,6 +171,14 @@ function hide_work()  {
 
 	db_query("UPDATE assignments SET active=0");
 	return "<p>$langWorksDeleted</p>";
+}
+
+function purge_exercises() {
+        global $langPurgedExerciseResults;
+
+	db_query("TRUNCATE exercise_user_record");
+	return "<p>$langPurgedExerciseResults</p>";
+        
 }
 
 function make_calendar($name) {

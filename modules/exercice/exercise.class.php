@@ -607,6 +607,16 @@ class Exercise
 		$sql="DELETE FROM `$TBL_EXERCICES` WHERE id='$id'";
 		db_query($sql) or die("Error : DELETE in file ".__FILE__." at line ".__LINE__);
 	}
+        
+        function purge() 
+        {
+                $id = $this->id;
+                
+                $sql = "DELETE FROM exercise_user_record WHERE eid = $id";
+                db_query($sql);
+                
+        }
+        
 }
 
 endif;

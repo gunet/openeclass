@@ -71,18 +71,27 @@ if (isset($_GET['page'])) {
 $from = $page * $limitExPage;
 
 // only for administrator
-if($is_editor) {
-	// delete confirmation
-	$head_content .= '
-	<script type="text/javascript">
-	function confirmation ()
+if($is_editor) {	
+        $head_content = <<< END
+        <script type="text/javascript">	
+	function confirmation (name)
 	{
-	    if (confirm("'.$langConfirmDelete.'"))
-		{return true;}
-	    else
-		{return false;}
+                if (name == "purge") {
+                        if (confirm("$langConfirmPurgeExercises")) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                } else if (name == "delete") {
+                        if (confirm("$langConfirmDelete")) {
+                                return true;
+                        } else {
+                            return false;
+                        }
+                }
 	}
-	</script>';
+	</script>
+END;
 
 	if (isset($_GET['exerciseId'])) {
 		$exerciseId = $_GET['exerciseId'];
@@ -96,6 +105,9 @@ if($is_editor) {
 			{
 				case 'delete':	// deletes an exercise
 					$objExerciseTmp->delete();
+					break;
+                                case 'purge':	// deletes an exercise
+					$objExerciseTmp->purge();
 					break;
 				case 'enable':  // enables an exercise
 					$objExerciseTmp->enable();
@@ -160,8 +172,8 @@ if(!$nbrExercises) {
 	if($is_editor) {
 		$tool_content .= "
 	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
-	      <th width='65'>${langResults}</th>
-	      <th width='65' class='right'>$langCommands&nbsp;</th>
+	      <th>$langResults</th>
+	      <th width='85' class='right'>$langCommands&nbsp;</th>
 	    </tr>";
 	} else { // student view
 		$tool_content .= "
@@ -221,8 +233,12 @@ if(!$nbrExercises) {
 			$langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
 			$langDelete_temp = htmlspecialchars($langDelete);
 			$tool_content .= "<td align = 'right'>
-			  <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'><img src='$themeimg/edit.png' alt='".q($langModify_temp)."' title='".q($langModify_temp)."'></a>
-				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick='return confirmation();'><img src='$themeimg/delete.png' alt='".q($langDelete_temp)."' title='".q($langDelete_temp)."'></a>&nbsp;";
+                                <a href='admin.php?course=$code_cours&amp;exerciseId=$row[id]'>
+                                  <img src='$themeimg/edit.png' alt='".q($langModify_temp)."' title='".q($langModify_temp)."'></a>
+				<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=delete&amp;exerciseId=$row[id]' onClick=\"return confirmation('delete');\">
+                                        <img src='$themeimg/delete.png' alt='".q($langDelete_temp)."' title='".q($langDelete_temp)."'></a>&nbsp;
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=purge&amp;exerciseId=$row[id]' onClick=\"return confirmation('purge');\">
+                                        <img src='$themeimg/clear.png' alt='".q($langPurgeExercises)."' title='".q($langPurgeExercises)."'></a>&nbsp;";
 		
 			// if active
 			if($row['active']) {

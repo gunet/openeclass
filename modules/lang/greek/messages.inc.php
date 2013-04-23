@@ -777,6 +777,8 @@ $langAnnDeleted="Οι ανακοινώσεις διαγράφηκαν από τ�
 $langAgendaDeleted="Οι εγγραφές της ατζέντας διαγράφηκαν από το μάθημα";
 $langWorksDeleted="Οι εργασίες απενεργοποιήθηκαν";
 $langDocsDeleted="Τα έγγραφα απενεργοποιήθηκαν";
+$langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων ασκήσεων του μαθήματος";
+$langPurgedExerciseResults = "Τα αποτελέσματα ασκήσεων διαγράφηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
 
 /*****************************************************
@@ -1189,6 +1191,8 @@ $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλο
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
+$langPurgeExercises = "Διαγραφή αποτελεσμάτων";
+$langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
 
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";
