@@ -52,6 +52,7 @@ function monthlycronjob() {
         summarizeMonthlyActions();
         Log::rotate();
         Log::purge();
+        optimizeIndex();
         
         // update last run time
         if ($nevermonthly)
@@ -246,4 +247,11 @@ function summarizeMonthlyActions() {
         if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time())
             $action->summarize($course_id);
     }   
+}
+
+function optimizeIndex() {
+    global $webDir;
+    require_once 'modules/search/indexer.class.php';
+    $idx = new Indexer();
+    $idx->getIndex()->optimize();
 }

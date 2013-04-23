@@ -46,7 +46,7 @@ class CronUtil {
         $lock = $webDir . self::$dlockpath;
         
         if (file_exists($lock)) {
-            imgOut();
+            self::imgOut();
             exit();
         }
         mkdir($lock);

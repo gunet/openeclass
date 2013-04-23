@@ -97,9 +97,9 @@ class DocumentIndexer implements ResourceIndexerInterface {
      * Store a Document in the Index.
      * 
      * @param  int     $docId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($docId, $finalize = true) {
+    public function store($docId, $optimize = false) {
         $doc = $this->fetch($docId);
         if (!$doc)
             return;
@@ -110,9 +110,10 @@ class DocumentIndexer implements ResourceIndexerInterface {
         // add the document back to the index
         $this->__index->addDocument(self::makeDoc($doc));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -120,9 +121,9 @@ class DocumentIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $docId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($docId, $existCheck = false, $finalize = true) {
+    public function remove($docId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $doc = $this->fetch($docId);
             if (!$doc)
@@ -134,27 +135,35 @@ class DocumentIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Documents belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:doc AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all documents.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all documents from index
         $term = new Zend_Search_Lucene_Index_Term('doc', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -166,7 +175,10 @@ class DocumentIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

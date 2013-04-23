@@ -84,10 +84,10 @@ class VideoIndexer implements ResourceIndexerInterface {
     /**
      * Store a Video in the Index.
      * 
-     * @param  int     $videoId
-     * @param  boolean $finalize
+     * @param int     $videoId
+     * @param boolean $optimize
      */
-    public function store($videoId, $finalize = true) {
+    public function store($videoId, $optimize = false) {
         $video = $this->fetch($videoId);
         if (!$video)
             return;
@@ -98,9 +98,10 @@ class VideoIndexer implements ResourceIndexerInterface {
         // add the video back to the index
         $this->__index->addDocument(self::makeDoc($video));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -108,9 +109,9 @@ class VideoIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $videoId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($videoId, $existCheck = false, $finalize = true) {
+    public function remove($videoId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $video = $this->fetch($videoId);
             if (!$video)
@@ -122,27 +123,35 @@ class VideoIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Videos belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:video AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all videos.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all videos from index
         $term = new Zend_Search_Lucene_Index_Term('video', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -154,7 +163,10 @@ class VideoIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

@@ -89,9 +89,9 @@ class ForumIndexer implements ResourceIndexerInterface {
      * Store a Forum in the Index.
      * 
      * @param  int     $forumId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($forumId, $finalize = true) {
+    public function store($forumId, $optimize = false) {
         $forum = $this->fetch($forumId);
         if (!$forum)
             return;
@@ -102,9 +102,10 @@ class ForumIndexer implements ResourceIndexerInterface {
         // add the forum back to the index
         $this->__index->addDocument(self::makeDoc($forum));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -112,9 +113,9 @@ class ForumIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $forumId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($forumId, $existCheck = false, $finalize = true) {
+    public function remove($forumId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $forum = $this->fetch($forumId);
             if (!$forum)
@@ -126,27 +127,35 @@ class ForumIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Forums belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @oaram boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:forum AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all forums.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all forums from index
         $term = new Zend_Search_Lucene_Index_Term('forum', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -158,7 +167,10 @@ class ForumIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

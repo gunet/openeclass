@@ -151,11 +151,7 @@ $idx = new Indexer();
 
 // optimize index
 if (isset($_GET['optimize']))
-    $idx->finalize();
-
-// reindex everything
-if (isset($_GET['reindex']))
-    $idx->reindexAll();
+    $idx->getIndex()->optimize();
 
 $numDocs = $idx->getIndex()->numDocs();
 $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
@@ -181,11 +177,19 @@ if ($idx->getIndex()->hasDeletions()) {
     </tr>";
 }
 
+// Auto to koumpi kalytera na mhn emfanizetai se production,
+// dioti eksartatai apo to php max exec time.
+// Kalytera to indexing na ginetai mono transparently
+// reindex everything
+//if (isset($_GET['reindex']))
+//    $idx->reindexAll();
+//$tool_content .= "
+//    <tr>
+//      <th></th>
+//      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
+//    </tr>";
+
 $tool_content .= "
-    <tr>
-      <th></th>
-      <td><a href='" . $_SERVER['SCRIPT_NAME'] . "?reindex'>$langReindex</a></td>
-    </tr>
     </table>
   </fieldset>
   <br />";

@@ -86,9 +86,9 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
      * Store an Announcement in the Index.
      * 
      * @param  int     $announceId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($announceId, $finalize = true) {
+    public function store($announceId, $optimize = false) {
         $announce = $this->fetch($announceId);
         if (!$announce)
             return;
@@ -99,9 +99,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         // add the announcement back to the index
         $this->__index->addDocument(self::makeDoc($announce));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -109,9 +110,9 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $announceId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($announceId, $existCheck = false, $finalize = true) {
+    public function remove($announceId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $announce = $this->fetch($announceId);
             if (!$announce)
@@ -123,27 +124,35 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Announcements belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:announce AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all announcements.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all announcements from index
         $term = new Zend_Search_Lucene_Index_Term('announce', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -155,7 +164,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

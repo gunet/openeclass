@@ -1572,7 +1572,7 @@ function delete_course($cid)
         // refresh index
         require_once 'modules/search/indexer.class.php';
         $idx = new Indexer();
-        $idx->removeAllByCourse();        
+        $idx->removeAllByCourse($cid);
 }
 
 function csv_escape($string, $force = false)

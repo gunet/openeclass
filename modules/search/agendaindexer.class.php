@@ -86,9 +86,9 @@ class AgendaIndexer implements ResourceIndexerInterface {
      * Store an Agenda in the Index.
      * 
      * @param  int     $agendaId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($agendaId, $finalize = true) {
+    public function store($agendaId, $optimize = false) {
         $agenda = $this->fetch($agendaId);
         if (!$agenda)
             return;
@@ -99,9 +99,10 @@ class AgendaIndexer implements ResourceIndexerInterface {
         // add the agenda back to the index
         $this->__index->addDocument(self::makeDoc($agenda));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -109,9 +110,9 @@ class AgendaIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $agendaId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($agendaId, $existCheck = false, $finalize = true) {
+    public function remove($agendaId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $agenda = $this->fetch($agendaId);
             if (!$agenda)
@@ -123,27 +124,35 @@ class AgendaIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Agendas belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:agenda AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all agendas.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all agendas from index
         $term = new Zend_Search_Lucene_Index_Term('agenda', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -155,7 +164,10 @@ class AgendaIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

@@ -84,9 +84,9 @@ class LinkIndexer implements ResourceIndexerInterface {
      * Store a Link in the Index.
      * 
      * @param  int     $linkId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($linkId, $finalize = true) {
+    public function store($linkId, $optimize = false) {
         $link = $this->fetch($linkId);
         if (!$link)
             return;
@@ -98,8 +98,10 @@ class LinkIndexer implements ResourceIndexerInterface {
         $this->__index->addDocument(self::makeDoc($link));
         
         // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -107,9 +109,9 @@ class LinkIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $linkId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($linkId, $existCheck = false, $finalize = true) {
+    public function remove($linkId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $link = $this->fetch($linkId);
             if (!$link)
@@ -121,27 +123,35 @@ class LinkIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Links belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:link AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all links.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all links from index
         $term = new Zend_Search_Lucene_Index_Term('link', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -153,7 +163,10 @@ class LinkIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

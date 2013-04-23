@@ -130,9 +130,9 @@ class CourseIndexer implements ResourceIndexerInterface {
      * Store a Course in the Index.
      * 
      * @param  int     $courseId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($courseId, $finalize = true) {
+    public function store($courseId, $optimize = false) {
         $course = $this->fetch($courseId);
         if (!$course)
             return;
@@ -143,9 +143,10 @@ class CourseIndexer implements ResourceIndexerInterface {
         // add the course back to the index
         $this->__index->addDocument(self::makeDoc($course));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -153,9 +154,9 @@ class CourseIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $courseId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($courseId, $existCheck = false, $finalize = true) {
+    public function remove($courseId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $course = $this->fetch($courseId);
             if (!$course)
@@ -167,14 +168,18 @@ class CourseIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all courses.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all courses from index
         $term = new Zend_Search_Lucene_Index_Term('course', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -188,7 +193,10 @@ class CourseIndexer implements ResourceIndexerInterface {
             $this->__index->addDocument(self::makeDoc($course));
         }
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

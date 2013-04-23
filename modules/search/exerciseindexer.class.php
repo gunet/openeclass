@@ -86,9 +86,9 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * Store an Exercise in the Index.
      * 
      * @param  int     $exerciseId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($exerciseId, $finalize = true) {
+    public function store($exerciseId, $optimize = false) {
         $exercise = $this->fetch($exerciseId);
         if (!$exercise)
             return;
@@ -99,9 +99,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         // add the exercise back to the index
         $this->__index->addDocument(self::makeDoc($exercise));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -109,9 +110,9 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $exerciseId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($exerciseId, $existCheck = false, $finalize = true) {
+    public function remove($exerciseId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $exercise = $this->fetch($exerciseId);
             if (!$exercise)
@@ -123,27 +124,35 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Exercises belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:exercise AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all exercises.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all exercises from index
         $term = new Zend_Search_Lucene_Index_Term('exercise', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -155,7 +164,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

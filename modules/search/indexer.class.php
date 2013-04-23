@@ -159,16 +159,7 @@ class Indexer {
         return $this->__index;
     }
 
-    /**
-     * Optimize and Commit changes to the index.
-     */
-    public function finalize() {
-        // Finish
-        $this->__index->optimize();
-        $this->__index->commit();
-    }
-
-    /**
+   /**
      * Filtered Search in the index.
      * 
      * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators

@@ -83,10 +83,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
     /**
      * Store a VideoLink in the Index.
      * 
-     * @param  int     $vlinkId
-     * @param  boolean $finalize
+     * @param int     $vlinkId
+     * @param boolean $optimize
      */
-    public function store($vlinkId, $finalize = true) {
+    public function store($vlinkId, $optimize = false) {
         $vlink = $this->fetch($vlinkId);
         if (!$vlink)
             return;
@@ -97,9 +97,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
         // add the videolink back to the index
         $this->__index->addDocument(self::makeDoc($vlink));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -107,9 +108,9 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $vlinkId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($vlinkId, $existCheck = false, $finalize = true) {
+    public function remove($vlinkId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $vlink = $this->fetch($vlinkId);
             if (!$vlink)
@@ -121,27 +122,35 @@ class VideolinkIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all VideoLinks belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:vlink AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all VideoLinks.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all videolinks from index
         $term = new Zend_Search_Lucene_Index_Term('vlink', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -153,7 +162,10 @@ class VideolinkIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**

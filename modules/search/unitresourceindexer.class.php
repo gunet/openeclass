@@ -92,9 +92,9 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
      * Store a Unit Resource in the Index.
      * 
      * @param  int     $uresId
-     * @param  boolean $finalize
+     * @param  boolean $optimize
      */
-    public function store($uresId, $finalize = true) {
+    public function store($uresId, $optimize = false) {
         $ures = $this->fetch($uresId);
         if (!$ures)
             return;
@@ -105,9 +105,10 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
         // add the unit resource back to the index
         $this->__index->addDocument(self::makeDoc($ures));
         
-        // commit/optimize unless not wanted
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
@@ -115,9 +116,9 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
      * 
      * @param int     $uresId
      * @param boolean $existCheck
-     * @param boolean $finalize
+     * @param boolean $optimize
      */
-    public function remove($uresId, $existCheck = false, $finalize = true) {
+    public function remove($uresId, $existCheck = false, $optimize = false) {
         if ($existCheck) {
             $ures = $this->fetch($uresId);
             if (!$ures)
@@ -129,41 +130,52 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
         foreach ($docIds as $id)
             $this->__index->delete($id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Unit Resources belonging to a Course.
      * 
-     * @param int $courseId
+     * @param int     $courseId
+     * @param boolean $optimize
      */
-    public function removeByCourse($courseId) {
+    public function removeByCourse($courseId, $optimize = false) {
         $hits = $this->__index->find('doctype:unitresource AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Remove all Unit Resources belonging to a Unit.
      * 
-     * @param int $unitId
+     * @param int     $unitId
+     * @param boolean $optimize
      */
-    public function removeByUnit($unitId, $finalize = true) {
+    public function removeByUnit($unitId, $optimize = false) {
         $hits = $this->__index->find('doctype:unitresource AND unitid:' . $unitId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
         
-        if ($finalize)
-            $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
      * Reindex all unit resources.
+     * 
+     * @param boolean $optimize
      */
-    public function reindex() {
+    public function reindex($optimize = false) {
         // remove all unit resources from index
         $term = new Zend_Search_Lucene_Index_Term('unitresource', 'doctype');
         $docIds  = $this->__index->termDocs($term);
@@ -177,7 +189,10 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
-        $this->__indexer->finalize();
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
     }
     
     /**
