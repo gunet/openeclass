@@ -60,7 +60,7 @@ if(isset($_POST['submit'])) {
 	}
         if (isset($_POST['purgeexercises'])) {
                 $output[] = purge_exercises();
-        }        
+        }
 
 	if (($count_events = count($output)) > 0 ) {
 		$tool_content .=  "<p class='success_small'>$langRefreshSuccess

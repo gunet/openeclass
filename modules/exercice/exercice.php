@@ -106,7 +106,7 @@ END;
 				case 'delete':	// deletes an exercise
 					$objExerciseTmp->delete();
 					break;
-                                case 'purge':	// deletes an exercise
+                                case 'purge':	// purge exercise results
 					$objExerciseTmp->purge();
 					break;
 				case 'enable':  // enables an exercise
@@ -172,8 +172,8 @@ if(!$nbrExercises) {
 	if($is_editor) {
 		$tool_content .= "
 	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
-	      <th>$langResults</th>
-	      <th width='85' class='right'>$langCommands&nbsp;</th>
+	      <th class='center'>$langResults</th>
+	      <th width='85' class='center'>$langCommands&nbsp;</th>
 	    </tr>";
 	} else { // student view
 		$tool_content .= "

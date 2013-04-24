@@ -217,6 +217,7 @@ $langAll="όλοι";
 $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με τα κριτήρια που ορίσατε";
 $langAsInactive = "ως μη ενεργοί";
 $langChanges = "αλλαγές";
+$langParentEmail = "Δευτερεύουσα διεύθυνση email";
 
 // listcours
 $langOpenCourse = "Ανοιχτό";
@@ -1666,6 +1667,7 @@ $lang_display_captcha = "Να εμφανίζεται κωδικός ασφαλε
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
 $lang_betacms = "Να γίνεται σύνδεση της πλατφόρμας με το αποθετήριο BetaCMS";
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tables)";
+$lang_secondary_email = "Ενεργοποίηση δεύτερης διεύθυνσης email";
 $langPossibleReasons = 'Πιθανοί λόγοι';
 $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής';
@@ -2341,6 +2343,11 @@ $langUsersAlreadyRegistered = "Οι παρακάτω χρήστες είναι �
 $langUsersRegistered = "Οι παρακάτω χρήστες προστέθηκαν στο μάθημά σας:";
 $langNotifyRegUser1 = "Πραγματοποιήθηκε η εγγραφή σας στο μάθημα ";
 $langNotifyRegUser2 = " από τον διαχειριστή του μαθήματος.";
+$langEmailToParent = "Αποστολή email στον γονέα";
+$langEmailBody = "Περιεχόμενο μηνύματος";
+$langContactWithParent = "Επικοινωνία με τον γονέα";
+$langParentOf = "Γονέα του/της";
+$langSentItems = "Απεσταλμένα emails στον/στην";
 
 // search_user.php
 $langUserNoneMasc="-";

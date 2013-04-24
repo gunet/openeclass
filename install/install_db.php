@@ -259,6 +259,16 @@ db_query("CREATE TABLE monthly_summary (
         details text,
         PRIMARY KEY (id)) $charset_spec");
 
+db_query("CREATE TABLE `parents_announcements` (
+        `id` mediumint(9) NOT NULL auto_increment,
+        `title` varchar(255) default NULL,
+        `content` text,
+        `date` datetime default NULL,
+        `sender_id` int(11) NOT NULL,
+        `recipient_id` int(11) NOT NULL,
+        `course_id` int(11) NOT NULL,
+         PRIMARY KEY  (`id`)) $charset_spec");
+
 db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL DEFAULT 0,

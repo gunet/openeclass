@@ -64,7 +64,9 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
-        $q = db_query("SELECT nom, prenom, username, password, email, phone, department,
+        $extra = '';
+        // Display secondary email field for students        
+        $q = db_query("SELECT nom, prenom, username, password, email, parent_email, phone, department,
                         registered_at, expires_at, statut, am, verified_mail, whitelist 
                         FROM user WHERE user_id = $u");
         $info = mysql_fetch_assoc($q);
@@ -189,6 +191,17 @@ $tool_content .= "
         $tool_content .= "
                   </td>
              </tr>";
+        
+        // Display secondary email field for students
+        if (get_config('enable_secondary_email')) {
+                        if ($info['statut'] == 5) {
+                        $tool_content .= "
+                        <tr>
+                          <th class='left'>$langParentEmail: </th>
+                          <td><input type='text' name='parent_email' size='50' value='".q(mb_strtolower(trim($info['parent_email'])))."' /></td>
+                        </tr>";
+                }
+        }
 
 $tool_content .= "
    <tr>
@@ -348,6 +361,9 @@ $tool_content .= "
 	// trim white spaces in the end and in the beginning of the word
 	$username = isset($_POST['username'])?$_POST['username']:'';
 	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
+        if (get_config('enable_secondary_email')) {
+                $parent_email = isset($_POST['parent_email'])?mb_strtolower(trim($_POST['parent_email'])):'';
+        }
 	$phone = isset($_POST['phone'])?$_POST['phone']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'NULL';
@@ -393,8 +409,11 @@ $tool_content .= "
 			if (empty($email) && $verified_mail==1) {
 				$verified_mail=2;
 			}
+                        $extra = '';                                         
+                
 			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-                                       username = ".autoquote($username).", email = ".autoquote($email).", 
+                                       username = ".autoquote($username).", email = ".autoquote($email).",
+                                       parent_email = ".autoquote($parent_email).",
                                        statut = ".intval($newstatut).", phone=".autoquote($phone).",
                                        department = ".intval($department).", expires_at=".$expires_at.",
                                        am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) .",

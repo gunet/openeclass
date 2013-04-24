@@ -190,6 +190,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
 	                'email_verification_required' => true,
 	                'dont_mail_unverified_mails' => true,
 	                'email_from' => true,
+                        'enable_secondary_email' => true,
 	                'am_required' => true,
 	                'dont_display_login_form' => true,
 	                'dropbox_allow_student_to_student' => true,
@@ -407,6 +408,7 @@ else {
         $cbox_email_required = get_config('email_required')?'checked':'';
 	$cbox_email_verification_required = get_config('email_verification_required')?'checked':'';
 	$cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails')?'checked':'';
+        $cbox_secondary_email = get_config('enable_secondary_email')?'checked':'';
         $cbox_email_from = get_config('email_from')?'checked':'';
 	$cbox_am_required = get_config('am_required')?'checked':'';
 	$cbox_dont_display_login_form = get_config('dont_display_login_form')?'checked':'';
@@ -440,6 +442,9 @@ else {
 	  </tr>
           <tr>		
 		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
+	  </tr>
+          <tr>		
+		<td><input type='checkbox' name='enable_secondary_email' value='1' $cbox_secondary_email />&nbsp;$lang_secondary_email</td>
 	  </tr>
 	  <tr>		
 		<td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>

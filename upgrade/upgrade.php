@@ -600,7 +600,16 @@ if (!isset($_POST['submit2'])) {
 
         if ($oldversion < '2.7') {
                 mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
-                        db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");                        
+                        db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
+                db_query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
+                        `id` mediumint(9) NOT NULL auto_increment,
+                        `title` varchar(255) default NULL,
+                        `content` text,
+                        `date` datetime default NULL,
+                        `sender_id` int(11) NOT NULL,
+                        `recipient_id` int(11) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                         PRIMARY KEY (`id`)) $charset_spec");
         }
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
                 db_query("ALTER TABLE `annonces` ADD `preview` TEXT NOT NULL DEFAULT ''");

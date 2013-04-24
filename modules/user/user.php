@@ -230,7 +230,7 @@ switch ($ord) {
         default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
                 break;
 }
-$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
+$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.parent_email,
                            user.am, user.has_icon, cours_user.statut,
                            cours_user.tutor, cours_user.editor, cours_user.reg_date
                     FROM cours_user, user
@@ -247,9 +247,19 @@ while ($myrow = mysql_fetch_array($result)) {
         }
         // show public list of users
         $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
+        $link_parent_email = "";
+        if (get_config('enable_secondary_email')) {
+                if ($myrow['editor'] == 1 or $myrow['tutor'] == 1 or $myrow['statut'] == 1 or empty($myrow['parent_email'])) {
+                        $link_parent_email = "";
+                } else {
+                        $link_parent_email = "<a href='emailparent.php?course=$code_cours&amp;id=$myrow[user_id]'>
+                                <img src='$themeimg/email.png' title='".q($langEmailToParent)."' alt='".q($langEmailToParent)."' />
+                                </a>";                
+                }
+        }
         $tool_content .= "
         <td class='smaller' valign='top' align='right'>$i.</td>\n" .
-                "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
+                "<td valign='top' class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $link_parent_email $am_message</td>\n";
         $tool_content .= "\n" .
                 "<td class='smaller' valign='top' width='150'>" . user_groups($cours_id, $myrow['user_id']) . "</td>\n" .
                 "<td align='center' class='smaller'>";
