@@ -137,6 +137,29 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
     }
     
     /**
+     * Store all Unit Resources belonging to a Course.
+     * 
+     * @param int     $courseId
+     * @param boolean $optimize
+     */
+    public function storeByCourse($courseId, $optimize = false) {
+        // delete existing unit resources from index
+        $this->removeByCourse($courseId);
+
+        // add the unit resources back to the index
+        $res = db_query("SELECT ur.*, cu.course_id
+            FROM unit_resources ur 
+            JOIN course_units cu ON cu.id = ur.unit_id AND cu.course_id = ". intval($courseId));
+        while ($row = mysql_fetch_assoc($res))
+            $this->__index->addDocument(self::makeDoc($row));
+        
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
+    }
+    
+    /**
      * Remove all Unit Resources belonging to a Course.
      * 
      * @param int     $courseId

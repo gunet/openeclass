@@ -130,6 +130,27 @@ class VideoIndexer implements ResourceIndexerInterface {
     }
     
     /**
+     * Store all Videos belonging to a Course.
+     * 
+     * @param int     $courseId
+     * @param boolean $optimize
+     */
+    public function storeByCourse($courseId, $optimize = false) {
+        // delete existing videos from index
+        $this->removeByCourse($courseId);
+
+        // add the videos back to the index
+        $res = db_query("SELECT * FROM video WHERE course_id = ". intval($courseId));
+        while ($row = mysql_fetch_assoc($res))
+            $this->__index->addDocument(self::makeDoc($row));
+        
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
+    }
+    
+    /**
      * Remove all Videos belonging to a Course.
      * 
      * @param int     $courseId

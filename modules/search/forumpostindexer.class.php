@@ -137,6 +137,31 @@ class ForumPostIndexer implements ResourceIndexerInterface {
     }
     
     /**
+     * Store all Forum Posts belonging to a Course.
+     * 
+     * @param int     $courseId
+     * @param boolean $optimize
+     */
+    public function storeByCourse($courseId, $optimize = false) {
+        // delete existing forum posts from index
+        $this->removeByCourse($courseId);
+
+        // add the forum posts back to the index
+        $res = db_query("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
+            JOIN forum_topic ft ON fp.topic_id = ft.id 
+            JOIN forum f ON ft.forum_id = f.id 
+            JOIN forum_category fc ON fc.id = f.cat_id 
+            WHERE fc.cat_order >= 0 AND f.course_id = ". intval($courseId));
+        while ($row = mysql_fetch_assoc($res))
+            $this->__index->addDocument(self::makeDoc($row));
+        
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
+    }
+    
+    /**
      * Remove all Forum Posts belonging to a Course.
      * 
      * @param int     $courseId

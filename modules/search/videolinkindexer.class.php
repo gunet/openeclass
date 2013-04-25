@@ -129,6 +129,27 @@ class VideolinkIndexer implements ResourceIndexerInterface {
     }
     
     /**
+     * Store all VideoLinks belonging to a Course.
+     * 
+     * @param int     $courseId
+     * @param boolean $optimize
+     */
+    public function storeByCourse($courseId, $optimize = false) {
+        // delete existing videolinks from index
+        $this->removeByCourse($courseId);
+
+        // add the videolinks back to the index
+        $res = db_query("SELECT * FROM videolinks WHERE course_id = ". intval($courseId));
+        while ($row = mysql_fetch_assoc($res))
+            $this->__index->addDocument(self::makeDoc($row));
+        
+        if ($optimize)
+            $this->__index->optimize();
+        else
+            $this->__index->commit();
+    }
+    
+    /**
      * Remove all VideoLinks belonging to a Course.
      * 
      * @param int     $courseId

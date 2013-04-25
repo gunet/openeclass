@@ -1065,9 +1065,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
     // index all courses
     mysql_select_db($mysqlMainDb);
     global $webDir;
-    require_once 'modules/search/courseindexer.class.php';
-    $idx = new CourseIndexer();
-    $idx->store($course_id);
+    require_once 'modules/search/indexer.class.php';
+    $idx = new Indexer();
+    $idx->storeAllByCourse($course_id);
     
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {

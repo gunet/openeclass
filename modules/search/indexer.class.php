@@ -187,6 +187,52 @@ class Indexer {
     }
     
     /**
+     * Batch store all index contents related to a Course.
+     * 
+     * @param int $courseId
+     */
+    public function storeAllByCourse($courseId) {
+        $cidx = new CourseIndexer($this);
+        $cidx->store($courseId);
+        
+        $aidx = new AnnouncementIndexer($this);
+        $aidx->storeByCourse($courseId);
+        
+        $agdx = new AgendaIndexer($this);
+        $agdx->storeByCourse($courseId);
+        
+        $lidx = new LinkIndexer($this);
+        $lidx->storeByCourse($courseId);
+        
+        $vdx = new VideoIndexer($this);
+        $vdx->storeByCourse($courseId);
+        
+        $vldx = new VideolinkIndexer($this);
+        $vldx->storeByCourse($courseId);
+        
+        $eidx = new ExerciseIndexer($this);
+        $eidx->storeByCourse($courseId);
+        
+        $fidx = new ForumIndexer($this);
+        $fidx->storeByCourse($courseId);
+        
+        $ftdx = new ForumTopicIndexer($this);
+        $ftdx->storeByCourse($courseId);
+        
+        $fpdx = new ForumPostIndexer($this);
+        $fpdx->storeByCourse($courseId);
+        
+        $didx = new DocumentIndexer($this);
+        $didx->storeByCourse($courseId);
+        
+        $uidx = new UnitIndexer($this);
+        $uidx->storeByCourse($courseId);
+        
+        $urdx = new UnitResourceIndexer($this);
+        $urdx->storeByCourse($courseId);
+    }
+    
+    /**
      * Batch remove all index contents related to a Course.
      * 
      * @param int $courseId
