@@ -250,7 +250,7 @@ function course_list_handler()
 
 function profile_init()
 {
-        $('#delete').live('click', function() {
+        $(document).on('click', '#delete', function() {
                 if (confirm(lang.confirmDelete)) {
                         var tr = $(this).closest('tr');
                         tr.children('th').html(lang.addPicture);
