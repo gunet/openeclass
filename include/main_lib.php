@@ -289,7 +289,7 @@ function load_js($file, $init = '')
             $head_content .= "<link rel='stylesheet' href='{$urlAppend}js/fancybox2/jquery.fancybox.css?v=2.0.3' type='text/css' media='screen'>";
             $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
         } elseif ($file == 'colorbox') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
             $file = 'colorbox/jquery.colorbox-min.js';
         } elseif ($file == 'flot') {
             $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
