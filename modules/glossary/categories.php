@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,8 +36,28 @@ $cat_url = 'categories.php?course=' . $code_cours;
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
 $nameTools = $langCategories;
 
+$categories = array();
+$q = db_query("SELECT id, name, description, `order`
+                      FROM glossary_category WHERE course_id = $cours_id
+                      ORDER BY name");
+while ($cat = mysql_fetch_assoc($q)) {
+        $categories[intval($cat['id'])] = $cat['name'];
+}
+
 if ($is_editor) {
         load_js('tools.js');
+        
+        $tool_content .= "
+       <div id='operations_container'>
+         <ul id='opslist'>" .
+           ($categories? "<li><a href='categories.php?course=$code_cours'>$langCategories</a></li>": '') . "
+           <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
+           <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
+           <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
+           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$code_cours'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>Windows 1253</a>)</li>  
+         </ul>
+       </div>";
+        
         if (isset($_POST['submit_category'])) {
                 if (isset($_POST['category_id'])) {
                         $category_id = intval($_POST['category_id']);
@@ -97,38 +117,30 @@ if ($is_editor) {
                         $submit_value = $langModify;
                 }
                 $tool_content .= "
-             <form action='$cat_url' method='post'>
-               $html_id
-               <fieldset>
-                 <legend>$nameTools</legend>
-                 <table class='tbl' width='100%'>
-                 <tr>
-                   <th>$langCategoryName:</th>
-                   <td>
-                     <input name='name' size='60'$html_name>
-                   </td>
-                 </tr>
-                 <tr>
-                   <th valign='top'>$langDescription:</th>
-                   <td valign='top'>" . rich_text_editor('description', 4, 60, $description) . "
-                   </td>
-                 </tr>
-                 <tr>
-                   <th>&nbsp;</th>
-                   <td class='right'><input type='submit' name='submit_category' value='$submit_value'></td>
-                 </tr>
-                 </table>
-               </fieldset>
-             </form>\n";
-        }else{
-        $tool_content .= "
-       <div id='operations_container'>
-         <ul id='opslist'>
-           <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
-         </ul>
-       </div>";
+                <form action='$cat_url' method='post'>
+                  $html_id
+                  <fieldset>
+                    <legend>$nameTools</legend>
+                    <table class='tbl' width='100%'>
+                    <tr>
+                      <th>$langCategoryName:</th>
+                      <td>
+                        <input name='name' size='60'$html_name>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th valign='top'>$langDescription:</th>
+                      <td valign='top'>" . rich_text_editor('description', 4, 60, $description) . "
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <td class='right'><input type='submit' name='submit_category' value='$submit_value'></td>
+                    </tr>
+                    </table>
+                  </fieldset>
+                </form>\n";
         }
-
 }
 
 $q = db_query("SELECT id, name, description
