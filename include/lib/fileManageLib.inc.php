@@ -108,34 +108,21 @@ function check_name_exist($filePath)
  *
  * @author - Hugues Peeters
  * @param  - $file (String) - the path of file or directory to delete
- * @return - bolean - true if the delete succeed
- *           bolean - false otherwise.
+ * @return - boolean - true if the delete succeed, false otherwise.
  * @see    - delete() uses check_name_exist() and removeDir() functions
  */
 
 function my_delete($file)
 {
-	if (check_name_exist($file))
-	{
-		if (is_file($file)) // FILE CASE
-		{
-			unlink($file);
-			return true;
-		}
-
-		elseif (is_dir($file)) // DIRECTORY CASE
-		{
-			removeDir($file);
-			return true;
-		}
-	}
-	else
-	{
-		return false; // no file or directory to delete
-	}
-
+        if (!file_exists($file)) {
+                return true; // no need to delete nonexistent file
+        }
+        if (is_file($file) or is_link($file)) {
+                return @unlink($file);
+        } elseif (is_dir($file)) {
+                return removeDir($file);
+        }
 }
-
 
 
 /*

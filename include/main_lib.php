@@ -2434,42 +2434,45 @@ function active_subdirs($base, $filename)
  *
  * @author - Hugues Peeters
  * @param  - $dirPath (String) - the path of the directory to delete
- * @return - no return !
+ * @return - boolean - true if the delete succeed, false otherwise.
  */
 function removeDir($dirPath)
 {
-
-        /* Try to remove the directory. If it can not manage to remove it,
-         * it's probable the directory contains some files or other directories,
-         * and that we must first delete them to remove the original directory.
-         */
-
-        if (!@rmdir($dirPath)) // If PHP can not manage to remove the dir...
-        {
+	/* Try to remove the directory. If it can not manage to remove it,
+	 * it's probable the directory contains some files or other directories,
+	 * and that we must first delete them to remove the original directory.
+	 */
+        if (@rmdir($dirPath)) {
+                return true;
+        } else { // if directory couldn't be removed...
+                $ok = true;
                 $cwd = getcwd();
                 chdir($dirPath);
-                $handle = opendir($dirPath) ;
+		$handle = opendir($dirPath) ;
 
-                while ($element = readdir($handle)) {
-                        if ( $element == "." || $element == "..") {
-                                continue;       // skip current and parent directories
-                        } elseif (is_file($element)) {
-                                unlink($element);
-                        } elseif (is_dir($element)) {
-                                $dirToRemove[] = $dirPath."/".$element;
-                        }
-                }
+		while ($element = readdir($handle)) {
+			if ($element == '.' or $element == '..') {
+				continue;	// skip current and parent directories
+			} elseif (is_file($element)) {
+				$ok = @unlink($element) && $ok;
+			} elseif (is_dir($element)) {
+				$dirToRemove[] = $dirPath . '/' . $element;
+			}
+		}
 
-                closedir ($handle) ;
+		closedir ($handle) ;
                 chdir($cwd);
 
-                if (isset($dirToRemove) and sizeof($dirToRemove) > 0) {
-                        foreach($dirToRemove as $j) removeDir($j) ; // recursivity
-                }
+		if (isset($dirToRemove) and count($dirToRemove)) {
+                        foreach($dirToRemove as $j) {
+                                $ok = removeDir($j) && $ok;
+                        }
+		}
 
-                rmdir( $dirPath ) ;
-        }
+		return @rmdir($dirPath) && $ok;
+	}
 }
+
 
 /**
  * Generate a token verifying some info

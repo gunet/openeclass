@@ -287,40 +287,40 @@ if ($can_upload) {
                 $file_format = get_file_extension($fileName);
                 // File date is current date
                 $file_date = date("Y\-m\-d G\:i\:s");
-                db_query("INSERT INTO document SET
-                                course_id = $course_id,
-                                subsystem = $subsystem,
-                                subsystem_id = $subsystem_id,
-                                path = " . quote($file_path) . ",
-                                extra_path = " . quote($extra_path) . ",
-                                filename = " . autoquote($fileName) . ",
-                                visible = $vis,
-                                comment = " . autoquote($_POST['file_comment']) . ",
-                                category = " . intval($_POST['file_category']) . ",
-                                title = " . autoquote($_POST['file_title']) . ",
-                                creator = " . autoquote($_POST['file_creator']) . ",
-                                date = '$file_date',
-                                date_modified = '$file_date',
-                                subject = " . autoquote($_POST['file_subject']) . ",
-                                description = " . autoquote($_POST['file_description']) . ",
-                                author = " . autoquote($_POST['file_author']) . ",
-                                format = " . autoquote($file_format) . ",
-                                language = " . autoquote($_POST['file_language']) . ",
-                                copyrighted = " . intval($_POST['file_copyrighted']));
-                $id = mysql_insert_id();
-                $didx->store($id);
-                if (isset($userFile)) {
-                        /*** Copy the file to the desired destination ***/
-                        copy($userFile, $basedir . $file_path);
-                }
-                // Logging
-                Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
-                        array('id' => $id,
-                              'filepath' => $file_path,
-                              'filename' => $fileName,
-                              'comment' => $_POST['file_comment'],
-                              'title' => $_POST['file_title']));
-                $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                if (isset($userFile) and @copy($userFile, $basedir . $file_path)) {
+                        db_query("INSERT INTO document SET
+                                        course_id = $course_id,
+                                        subsystem = $subsystem,
+                                        subsystem_id = $subsystem_id,
+                                        path = " . quote($file_path) . ",
+                                        extra_path = " . quote($extra_path) . ",
+                                        filename = " . autoquote($fileName) . ",
+                                        visible = $vis,
+                                        comment = " . autoquote($_POST['file_comment']) . ",
+                                        category = " . intval($_POST['file_category']) . ",
+                                        title = " . autoquote($_POST['file_title']) . ",
+                                        creator = " . autoquote($_POST['file_creator']) . ",
+                                        date = '$file_date',
+                                        date_modified = '$file_date',
+                                        subject = " . autoquote($_POST['file_subject']) . ",
+                                        description = " . autoquote($_POST['file_description']) . ",
+                                        author = " . autoquote($_POST['file_author']) . ",
+                                        format = " . autoquote($file_format) . ",
+                                        language = " . autoquote($_POST['file_language']) . ",
+                                        copyrighted = " . intval($_POST['file_copyrighted']));
+                        $id = mysql_insert_id();
+                        $didx->store($id);
+                        // Logging
+                        Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT,
+                                array('id' => $id,
+                                      'filepath' => $file_path,
+                                      'filename' => $fileName,
+                                      'comment' => $_POST['file_comment'],
+                                      'title' => $_POST['file_title']));
+                        $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                } else {
+                        // Moving uploaded file failed
+                        $action_message .= "<p class='caution'>$error</p><br />";
         }
 
         /**************************************
@@ -380,6 +380,7 @@ if ($can_upload) {
                                         WHERE $group_sql AND path=" . autoquote($delete));
                 $r = mysql_fetch_array($result);
                 $filename = $r['filename'];
+                $delete_ok = true;
                 if (mysql_num_rows($result) > 0) {
                         // remove from index if relevant (except non-main sysbsystems and metadata)
                         $res2 = db_query("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0 
@@ -388,17 +389,20 @@ if ($can_upload) {
                             $didx->remove($r2['id']);
                         
                         if (empty($r['extra_path'])) {
-                                if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
+                                if ($delete_ok = my_delete($basedir . $delete) && $delete_ok) {
                                         if (hasMetaData($delete, $basedir, $group_sql)) {
-                                                my_delete($basedir . $delete . ".xml");
+                                                $delete_ok = my_delete($basedir . $delete . ".xml") && $delete_ok;
                                         }
                                         update_db_info('document', 'delete', $delete, $filename);
                                 }
                         } else {
                                 update_db_info('document', 'delete', $delete, $filename);
                         }
-                        
-                        $action_message = "<p class='success'>$langDocDeleted</p><br />";
+                        if ($delete_ok) {
+                                $action_message = "<p class='success'>$langDocDeleted</p><br />";
+                        } else {
+                                $action_message = "<p class='caution'>$langError</p><br />";
+                        }
                 }
         }
 
