@@ -211,9 +211,9 @@ if ($countUser > COURSE_USERS_PER_PAGE and !isset($_GET['all'])) {
 }
 
 if (isset($_GET['all'])) {
-        $extra_link = '&amp;all=true' . $search_params;
+        $extra_link = '&amp;all=true';
 } else {
-        $extra_link = '&amp;limit=' . $limit . $search_params;
+        $extra_link = '&amp;limit=' . $limit;
 }
 
 $tool_content .= "
