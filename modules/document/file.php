@@ -113,7 +113,7 @@ if ($file_info['extra_path']) {
         // Normal file
         $disk_path = $basedir . $file_info['path'];
 }
-        
+
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
         $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info['path'], $_GET['token'], 30);

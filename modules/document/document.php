@@ -295,29 +295,32 @@ if ($can_upload) {
                                         $file_format = get_file_extension($fileName);
                                         // File date is current date
                                         $file_date = date("Y\-m\-d G\:i\:s");
-                                        db_query("INSERT INTO document SET
-                                                        course_id = $cours_id,
-							subsystem = $subsystem,
-                                                        subsystem_id = $subsystem_id,
-                                                        path = " . quote($file_path) . ",
-                                                        filename = " . autoquote($fileName) . ",
-                                                        visibility = '$vis',
-                                                        comment = " . autoquote($_POST['file_comment']) . ",
-                                                        category = " . intval($_POST['file_category']) . ",
-                                                        title =	" . autoquote($_POST['file_title']) . ",
-                                                        creator	= " . autoquote($_POST['file_creator']) . ",
-                                                        date = '$file_date',
-                                                        date_modified =	'$file_date',
-                                                        subject	= " . autoquote($_POST['file_subject']) . ",
-                                                        description = " . autoquote($_POST['file_description']) . ",
-                                                        author = " . autoquote($_POST['file_author']) . ",
-                                                        format = " . autoquote($file_format) . ",
-                                                        language = " . autoquote($_POST['file_language']) . ",
-                                                        copyrighted = " . intval($_POST['file_copyrighted']));
-
                                         /*** Copy the file to the desired destination ***/
-                                        copy ($userFile, $basedir . $file_path);
-                                        $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                                        if (@copy($userFile, $basedir . $file_path)) {
+                                                db_query("INSERT INTO document SET
+                                                                course_id = $cours_id,
+                                                                subsystem = $subsystem,
+                                                                subsystem_id = $subsystem_id,
+                                                                path = " . quote($file_path) . ",
+                                                                filename = " . autoquote($fileName) . ",
+                                                                visibility = '$vis',
+                                                                comment = " . autoquote($_POST['file_comment']) . ",
+                                                                category = " . intval($_POST['file_category']) . ",
+                                                                title =	" . autoquote($_POST['file_title']) . ",
+                                                                creator	= " . autoquote($_POST['file_creator']) . ",
+                                                                date = '$file_date',
+                                                                date_modified =	'$file_date',
+                                                                subject	= " . autoquote($_POST['file_subject']) . ",
+                                                                description = " . autoquote($_POST['file_description']) . ",
+                                                                author = " . autoquote($_POST['file_author']) . ",
+                                                                format = " . autoquote($file_format) . ",
+                                                                language = " . autoquote($_POST['file_language']) . ",
+                                                                copyrighted = " . intval($_POST['file_copyrighted']));
+
+                                                $action_message .= "<p class='success'>$langDownloadEnd</p><br />";
+                                        } else {
+                                                $action_message .= "<p class='caution'>$langError</p><br />";
+                                        }
                                 } else {
                                         $action_message .= "<p class='caution'>$error</p><br />";
                                 }
@@ -382,20 +385,25 @@ if ($can_upload) {
 					WHERE $group_sql AND path=" . autoquote($delete));
                 $r = mysql_fetch_array($result);                
                 $filename = $r['filename'];
+                $delete_ok = true;
                 if (mysql_num_rows($result) > 0) {
                         if (empty($r['extra_path'])) {
-                        if (my_delete($basedir . $delete) or !file_exists($basedir . $delete)) {
+                                if ($delete_ok = my_delete($basedir . $delete) && $delete_ok) {
                                         if (hasMetaData($delete, $basedir, $group_sql)) {
-                                	my_delete($basedir . $delete . ".xml");
+                                                $delete_ok = my_delete($basedir . $delete . ".xml") && $delete_ok;
                                         }
                                         update_db_info('document', 'delete', $delete);
                                 }
                         } else {
                                 update_db_info('document', 'delete', $delete);
                         }
+                        if ($delete_ok) {
                                 $action_message = "<p class='success'>$langDocDeleted</p><br />";
+                        } else {
+                                $action_message = "<p class='caution'>$langError</p><br />";
                         }
                 }
+        }
 
 	/*****************************************
 	RENAME
