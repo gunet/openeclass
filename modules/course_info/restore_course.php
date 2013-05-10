@@ -477,7 +477,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
 elseif (isset($_POST['do_restore'])) {
         if (!file_exists($_POST['restoreThis'] . '/backup.php')) {
-                $tool_content .= "<p class='alert1'>$dropbox_lang[generalError]</p>";
+                $tool_content .= "<p class='alert1'>$langGeneralError</p>";
                 draw($tool_content, 3);
                 exit;
         }

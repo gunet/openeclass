@@ -321,6 +321,7 @@ if ($can_upload) {
                 } else {
                         // Moving uploaded file failed
                         $action_message .= "<p class='caution'>$error</p><br />";
+                }
         }
 
         /**************************************
@@ -385,8 +386,9 @@ if ($can_upload) {
                         // remove from index if relevant (except non-main sysbsystems and metadata)
                         $res2 = db_query("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0 
                                             AND format <> \".meta\" AND path LIKE " . quote($delete.'%'));
-                        while ($r2 = mysql_fetch_assoc($res2))
-                            $didx->remove($r2['id']);
+                        while ($r2 = mysql_fetch_assoc($res2)) {
+                                $didx->remove($r2['id']);
+                        }
                         
                         if (empty($r['extra_path'])) {
                                 if ($delete_ok = my_delete($basedir . $delete) && $delete_ok) {
@@ -401,7 +403,7 @@ if ($can_upload) {
                         if ($delete_ok) {
                                 $action_message = "<p class='success'>$langDocDeleted</p><br />";
                         } else {
-                                $action_message = "<p class='caution'>$langError</p><br />";
+                                $action_message = "<p class='caution'>$langGeneralError</p><br />";
                         }
                 }
         }
@@ -600,7 +602,7 @@ if ($can_upload) {
                                                                    date_modified = NOW()
                                                               WHERE $group_sql AND
                                                                path = " . quote($oldpath))) {
-                                        $action_message = "<p class='caution'>$dropbox_lang[generalError]</p>";
+                                        $action_message = "<p class='caution'>$langGeneralError</p>";
                                 } else {
                                         if (hasMetaData($oldpath, $basedir, $group_sql)) {
                                                 rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
