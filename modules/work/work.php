@@ -135,7 +135,9 @@ if ($is_editor) {
 	} elseif (isset($_POST['sid'])) {
 		show_submission(intval($_POST['sid']));
 	} elseif (isset($_POST['new_assign'])) {
-		add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
+                if (!add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions'])) {
+                        $tool_content = "<p class='caution'>$langError</p>\n";
+                }
 		show_assignments();
 	} elseif (isset($_POST['grades'])) {
 		$nameTools = $langWorks;
@@ -258,13 +260,17 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 {
         global $tool_content, $workPath;
 
-        $secret = uniqid('');
-        db_query("INSERT INTO assignments
-                (title, description, comments, deadline, submission_date, secret_directory,
-                group_submissions) VALUES
-                (".autoquote($title).", ".autoquote(purify($desc)).", '', ".autoquote($deadline).", NOW(), '$secret',
-                        ".autoquote($group_submissions).")");
-        mkdir("$workPath/$secret",0777);
+        if (@mkdir("$workPath/$secret",0777)) {
+                $secret = uniqid('');
+                db_query("INSERT INTO assignments
+                        (title, description, comments, deadline, submission_date, secret_directory,
+                        group_submissions) VALUES
+                        (".autoquote($title).", ".autoquote(purify($desc)).", '', ".autoquote($deadline).", NOW(), '$secret',
+                                ".autoquote($group_submissions).")");
+                return true;
+        } else {
+                return false;
+        }
 }
 
 function submit_work($id, $on_behalf_of=null)
@@ -292,9 +298,9 @@ function submit_work($id, $on_behalf_of=null)
                                 if ($res and mysql_num_rows($res) == 1) {
                                         $row = mysql_fetch_array($res);
                                         if ($row['time'] < 0 and !$on_behalf_of) {
-                                                $submit_ok = FALSE; // after assignment deadline
+                                                $submit_ok = false; // after assignment deadline
                                         } else {
-                                                $submit_ok = TRUE; // before deadline
+                                                $submit_ok = true; // before deadline
                                         }
                                 } else {
                                         $tool_content .= "<p class='caution'>$langNoAssign</p>";
@@ -357,7 +363,7 @@ function submit_work($id, $on_behalf_of=null)
                 } else {
                         $msg1 = '';
                 }
-                if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+                if ($no_files or @move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
                         if ($no_files) {
                                 $filename = '';
                         } else {
