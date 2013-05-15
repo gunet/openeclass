@@ -601,6 +601,8 @@ if (!isset($_POST['submit2'])) {
         if ($oldversion < '2.7') {
                 mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
                         db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
+		mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
+                        db_query("ALTER TABLE `user` ADD `parent_email` VARCHAR(100) NOT NULL DEFAULT '' AFTER `email`");
                 db_query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
                         `id` mediumint(9) NOT NULL auto_increment,
                         `title` varchar(255) default NULL,

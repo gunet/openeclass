@@ -194,6 +194,7 @@ db_query("CREATE TABLE user (
       username VARCHAR(50) DEFAULT 'empty',
       password VARCHAR(60) DEFAULT 'empty',
       email VARCHAR(100) DEFAULT NULL,
+      parent_email VARCHAR(100) DEFAULT NULL,
       statut TINYINT(4) DEFAULT NULL,
       phone VARCHAR(20) DEFAULT NULL,
       department INT(10) DEFAULT NULL,
