@@ -1546,9 +1546,9 @@ function register_posted_variables($var_array, $what = 'all', $callback = null)
 // Apply automatically various fixes for the text to be edited
 function rich_text_editor($name, $rows, $cols, $text, $extra = '')
 {
-	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame, $is_editor;
+	global $head_content, $language, $purifier, $urlAppend, $code_cours, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
 	
-        $filebrowser = '';
+        $filebrowser = $url = '';
         $activemodule = 'document/document.php';
         if (isset($code_cours) && !empty($code_cours)) {
                 $filebrowser = "file_browser_callback : 'openDocsPicker',";
