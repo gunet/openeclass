@@ -65,12 +65,12 @@ class CourseXMLElement extends SimpleXMLElement {
         $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                  <div id='tabs'>
                     <ul>
-                       <li><a href='#tabs-1'>Group1</a></li>
-                       <li><a href='#tabs-2'>Group2</a></li>
-                       <li><a href='#tabs-3'>Group3</a></li>
+                       <li><a href='#tabs-1'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                       <li><a href='#tabs-2'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
+                       <li><a href='#tabs-3'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
+                       <li><a href='#tabs-4'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                     </ul>
                  <div id='tabs-1'>
-                 <!--legend>langCourseInfo</legend-->
                  <table class='tbl' width='100%'>";
         if ($data != null)
             $this->populate($data);
@@ -124,11 +124,13 @@ class CourseXMLElement extends SimpleXMLElement {
             $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
             if ($this->getAttribute('lang') == $currentCourseLanguage)
                 $sameAsCourseLang = true;
+            else
+                $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
         }
-        $fieldStart = "<tr><th style='background-color: transparent' rowspan='2'>". q($keyLbl . $lang) .":</th><td>";
-        $fieldEnd = "</td></tr><tr><td>". q($help) ."</td></tr>";
-        if (array_key_exists($fullKeyNoLang, self::$breakFields))
-            $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKeyNoLang] ."'><table class='tbl' width='100%'>";
+        $fieldStart = "<tr><th style='background-color: transparent'>". q($keyLbl . $lang) .":</th><td rowspan='2'>";
+        $fieldEnd = "</td></tr><tr><td style='font-size: 10px;'>". $help ."</td></tr>";
+        if (array_key_exists($fullKey, self::$breakFields))
+            $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKey] ."'><table class='tbl' width='100%'>";
         
         // hidden/auto-generated fields
         if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
@@ -556,8 +558,9 @@ class CourseXMLElement extends SimpleXMLElement {
      * @var array
      */
     public static $breakFields = array(
-        'course_language' => '2',
-        'course_format' => '3'
+        'course_acknowledgments_en' => '2',
+        'course_coTeachingDepartmentCreditHours' => '3',
+        'course_kalliposURL' => '4'
     );
     
     /**

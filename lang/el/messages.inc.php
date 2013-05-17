@@ -3482,6 +3482,10 @@ $langPwStrengthStrong = "Δυνατό";
  Messages for Course Metadata
  *******************************************/
 $langCourseMetadata = "Μεταδεδομένα μαθήματος";
+$langCMeta['courseGroup'] = "Μάθημα";
+$langCMeta['instructorGroup'] = "Διδάσκοντες";
+$langCMeta['curriculumGroup'] = "Προγράμματα Σπουδών";
+$langCMeta['unitsGroup'] = "Θεματικές Ενότητες";
 $langCMeta['el'] = "Ελληνικά";
 $langCMeta['en'] = "Αγγλικά";
 $langCMeta['false'] = "όχι";
@@ -3504,43 +3508,117 @@ $langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκ
 $langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον/τους διδάσκοντες";
 $langCMeta['course_instructor_photo'] = "Φωτογραφία διδάσκοντος";
 $langCMeta['course_title'] = "Τίτλος Μαθήματος";
+$langCMeta['help_course_title'] = "όπως αναφέρεται στο πρόγραμμα σπουδών (ΠΣ)";
 $langCMeta['course_url'] = "Δικτυακός τόπος μαθήματος";
+$langCMeta['help_course_url'] = "Σελίδα του μαθήματος ή/και σύνδεσμο στο Learning Management System (LMS) 
+    του Ιδρύματος (π.χ. στο eClass, Moodle, Blackboard, ή όποιο άλλο LMS)";
 $langCMeta['course_code'] = "Κωδικός Μαθήματος";
+$langCMeta['help_course_code'] = "όπως αναφέρεται στο ΠΣ";
 $langCMeta['course_level'] = "Επίπεδο μαθήματος";
+$langCMeta['help_course_level'] = "Επιλέξτε";
 $langCMeta['course_yearOfStudy'] = "Έτος σπουδών";
+$langCMeta['help_course_yearOfStudy'] = "Επιλέξτε 1 έως 6 όπως αναφέρεται στο ΠΣ";
 $langCMeta['course_semester'] = "Εξάμηνο";
+$langCMeta['help_course_semester'] = "Επιλέξτε 1 έως 12 όπως αναφέρεται στο ΠΣ";
 $langCMeta['course_type'] = "Τύπος μαθήματος";
+$langCMeta['help_course_type'] = "Επιλέξτε";
 $langCMeta['course_credithours'] = "Διδακτικές ώρες στο εξάμηνο";
+$langCMeta['help_course_credithours'] = "Δηλώστε το αριθμό των διδακτικών ωρών του μαθήματος στη διάρκεια του εξαμήνου";
 $langCMeta['course_coTeaching'] = "Συνδιδασκαλία";
+$langCMeta['help_course_coTeaching'] = "Επιλέξτε ανάλογα:
+    <ul><li>εάν ο συνάδελφός σας συμμετέχει στο άνοιγμα του μαθήματος</li>
+    <li>εάν το τμήμα που σας αντιστοιχεί είναι αυτόνομο</li>
+    <li>τις διδακτικές ώρες που αντιστοιχούν στο τμήμα σας</li></ul>";
 $langCMeta['course_coTeachingColleagueOpensCourse'] = "Συμμετοχή συναδέλφου στο άνοιγμα του μαθήματος";
 $langCMeta['course_coTeachingAutonomousDepartment'] = "Αυτόνομο τμήμα";
 $langCMeta['course_coTeachingDepartmentCreditHours'] = "Διδακτικές ώρες συνδιδασκαλίας";
 $langCMeta['course_language'] = "Γλώσσα διδασκαλίας";
 $langCMeta['course_targetGroup'] = "Ομάδα στόχος";
+$langCMeta['help_course_targetGroup'] = "Π.χ. Οι φοιτητές/απόφοιτοι του τμήματος Υ.
+    Ενδιαφερόμενοι για τη θεματική περιοχή Ζ.";
 $langCMeta['course_credits'] = "Διδακτικές μονάδες";
+$langCMeta['help_course_credits'] = "Όπως αναφέρεται στο ΠΣ. Ορατό μόνο στους φοιτητές, όχι στο ευρύ κοινό. 
+    Την πληροφορία αυτή μπορεί να την παρακάμψει ένα μέλος ΔΕΠ/ΕΠ και να την εισάγει η τοπική ομάδα υποστήριξης";
 $langCMeta['course_description'] = "Περιγραφή μαθήματος";
 $langCMeta['course_contents'] = "Περιεχόμενα μαθήματος";
+$langCMeta['help_course_contents'] = "Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Δομή περιεχομένων (course outline) και </li>
+    <li>περιεχόμενα (θέματα) μαθήματος  (topics)</li></ul>";
 $langCMeta['course_objectives'] = "Μαθησιακοί στόχοι μαθήματος";
+$langCMeta['help_course_objectives'] = "Θα απεικονίζεται ως πληροφορία σε διαφορετικό σημείο του ανοικτού μαθήματος 
+    σε σχέση με τη συνοπτική περιγραφή<br/><br/>
+    Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Αντικειμενικοί Στόχοι μαθήματος – επιδιωκόμενα μαθησιακά αποτελέσματα – μαθησιακοί στόχοι</li>
+    <li>Tι αναμένεται ο εκπαιδευόμενος να γνωρίζει, να κατανοεί και να κάνει μετά την επιτυχή ολοκλήρωση του  μαθήματος</li></ul>";
 $langCMeta['course_keywords'] = "Λέξεις κλειδιά";
 $langCMeta['course_coursePhoto'] = "Προτεινόμενη φωτογραφία για το μάθημα";
 $langCMeta['course_contentDevelopment'] = "Ομάδα ανάπτυξης περιεχομένου";
+$langCMeta['help_course_contentDevelopment'] = "Η ομάδα που έχει βοηθήσει στην ανάπτυξη του περιεχομένου του μαθήματος";
 $langCMeta['course_format'] = "Τύποι εκπαιδευτικού υλικού";
+$langCMeta['help_course_format'] = "Επιλέξτε (περισσότερους από έναν) τους τύπους υλικού που διαθέτει το μάθημα";
 $langCMeta['course_featuredBooks'] = "Προτεινόμενα συγγράμματα";
 $langCMeta['course_structure'] = "Οργάνωση μαθήματος";
+$langCMeta['help_course_structure'] = "Διαθέσιμο μόνο στους φοιτητές όχι στο ευρύ κοινό<br/>
+    Δομή και συχνότητα διδασκαλίας 
+    <ul><li>Ώρες γραφείου</li>
+    <li>Διαλέξεις (Lectures) ( π.χ. 2 φορές την εβδομάδα, τρίωρες διαλέξεις) για 13 εβδομάδες</li>
+    <li>Φροντιστήριο (Recitations) (1 φορά την εβδομάδα, 2 ώρες)</li>
+    <li>Εργαστήρια</li>
+    <li>Άλλα</li></ul>";
 $langCMeta['course_teachingMethod'] = "Μέθοδος διδασκαλίας";
+$langCMeta['help_course_teachingMethod'] = "Διαθέσιμο μόνο στους φοιτητές όχι στο ευρύ κοινό<br/>
+    Λεκτική περιγραφή των διδακτικών και μαθησιακών  μεθόδων που χρησιμοποιούνται. 
+    Π.χ. Διδασκαλία καθ΄ έδρας και συμπληρωματική-ενισχυτική εκπαίδευση μέσω ασύγχρονης πλατφόρμα.
+    Εργαστήριο.";
 $langCMeta['course_assessmentMethod'] = "Μέθοδοι αξιολόγησης/βαθμολόγησης";
+$langCMeta['help_course_assessmentMethod'] = "Διαθέσιμο μόνο στους φοιτητές όχι στο ευρύ κοινό<br/>
+    Λεκτική περιγραφή των μεθόδων αξιολόγησης , βαθμολόγησης και κριτηρίων αξιολόγησης  που χρησιμοποιούνται. 
+    Μπορεί κανείς να αναφερθεί στα εξής:
+    <ul><li>Εξετάσεις</li>
+    <li>Πρόοδοι</li>
+    <li>Επιτρεπόμενο υλικό κατά τις εξετάσεις/προόδους</li>
+    <li>Παλαιότερα θέματα εξετάσεων/προόδων</li></ul>";
 $langCMeta['course_prerequisites'] = "Προαπαιτoύμενα";
+$langCMeta['help_course_prerequisites'] = "Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Γενικές προαπαιτούμενες γνώσεις και πιθανή προετοιμασία για παρακολούθηση του μαθήματος</li>
+    <li>Κωδικοί και σύνδεσμοι προαπαιτούμενων μαθημάτων</li></ul>";
 $langCMeta['course_literature'] = "Επιπλέον συνιστώμενη βιβλιογραφία και υλικό προς μελέτη";
+$langCMeta['help_course_literature'] = "Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Βιβλία- κείμενα (Text/books)</li>
+    <li>Συγγράμματα (επανάληψη)</li>
+    <li>Βιβλιογραφία</li>
+    <li>Online readings</li>
+    <li>Πηγές στο Διαδίκτυο</li>
+    <li>Πηγές στη βιβλιοθήκη του ιδρύματος. EINAI ΠΟΛΥ ΣΗΜΑΝΤΙΚΟ !</li>
+    <li>Άλλα σχετικά ανοικτά μαθήματα άλλων ιδρυμάτων εσωτερικού ή εξωτερικού</li>
+    <li>Άρθρα (Articles)</li>
+    <li>Ταινίες (Films)</li></ul>
+    Η κάθε πρόταση, συστήνεται να συνοδεύεται από ένα μικρό σχολιασμό του τύπου σε τι είναι χρήσιμο προκειμένου να παρακινηθεί ο ενδιαφερόμενος";
 $langCMeta['course_recommendedComponents'] = "Άλλα προτεινόμενα μαθήματα του ιδρύματος σχετικών με το πρόγραμμα σπουδών";
 $langCMeta['course_assignments'] = "Αναθέσεις εργασιών";
+$langCMeta['help_course_assignments'] = "Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Eργασίες (Homework)</li>
+    <li>Τests</li>
+    <li>Βαθμολόγηση (Grading): Πως μετράνε οι εργασίες στο τελικό βαθμό</li></ul>";
 $langCMeta['course_requirements'] = "Απαιτήσεις μαθήματος";
+$langCMeta['help_course_requirements'] = "Προτείνεται λεκτική περιγραφή που να περιλαμβάνει τα εξής:
+    <ul><li>Τεχνικές απαιτήσεις (Technical Requirements)</li>
+    <li>Άλλες απαιτήσεις (Other Requirements), Eργασίες (Homework)</li></ul>";
 $langCMeta['course_remarks'] = "Παρατηρήσεις";
 $langCMeta['course_acknowledgments'] = "Ευχαριστίες";
+$langCMeta['help_course_acknowledgments'] = "Π.χ. σε εκδοτικό οίκο ή άλλο μέλος ΔΕΠ για παραχώρηση εκπαιδευτικού υλικού";
 $langCMeta['course_eudoxusCode'] = "Κωδικός μαθήματος στο Εύδοξο";
 $langCMeta['course_eudoxusURL'] = "Σύνδεσμος συγγράμματος στον Εύδοξο";
 $langCMeta['course_kalliposURL'] = "Σύνδεσμος συγγράμματος στον Κάλλιπο";
+$langCMeta['help_course_kalliposURL'] = "Σε περίπτωση που αναπτυχθεί ηλεκτρονικό σύγγραμμα στο πλαίσιο του προγράμματος Κάλλιππος. 
+    Για περισσότερες πληροφορίες ανατρέξτε στο σύνδεσμο: http://www.kallipos.gr";
 $langCMeta['course_thematic'] = "Θεματική επιστημονική περιοχή";
-$langCMeta['course_license'] = "Άδεια χρήσης";
+$langCMeta['help_course_thematic'] = "Θεματική ταξινόμηση σύμφωνα με πρότυπα βιβλιοθηκονομίας. Θα υπάρχουν συγκεκριμένες επιλογές. 
+    Η συμπλήρωση πιθανόν να γίνει σε συνεργασία με την αντίστοιχη βιβλιοθήκη του τμήματος ή της σχολής. Θα υπάρξουν διευκρινήσεις 
+    σε επόμενη έκδοση.";
+$langCMeta['course_license'] = "Άδεια χρήσης Creative Commons (CC)";
+$langCMeta['help_course_license'] = "Θα πρέπει να πραγματοποιηθεί η επιλογή άδειας χρήσης CC σε συνεργασία με το μέλος ΔΕΠ και σε 
+    συμφωνία με την αντίστοιχη πολιτική του ιδρύματος.";
 $langCMeta['course_institution'] = "Ίδρυμα";
 $langCMeta['course_institutionDescription'] = "Περιγραφή Ιδρύματος";
 $langCMeta['course_department'] = "Τίτλος τμήματος";

@@ -5,6 +5,41 @@
     xmlns='http://www.openeclass.org'
     xsi:schemaLocation='http://www.openeclass.org courseLooseMetadata.xsd'>
     
+    
+    <title lang="el"></title>
+    <title lang="en"></title>
+    <code lang="el"></code>
+    <url></url>
+    <level></level>
+    <description lang="el"></description>
+    <description lang="en"></description>
+    <contents lang="el"></contents>
+    <objectives lang="el"></objectives>
+    <keywords lang="el"></keywords>
+    <keywords lang="en"></keywords>
+    <thematic lang="el"></thematic>
+    <thematic lang="en"></thematic>
+    <license></license>
+    <prerequisites lang="el"></prerequisites>
+    <prerequisites lang="en"></prerequisites>
+    <literature lang="el"></literature>
+    <literature lang="en"></literature>
+    <coursePhoto mime=""></coursePhoto>
+    <contentDevelopment lang="el"></contentDevelopment>
+    <contentDevelopment lang="en"></contentDevelopment>
+    <format></format>
+    <recommendedComponents lang="el"></recommendedComponents>
+    <recommendedComponents lang="en"></recommendedComponents>
+    <assignments lang="el"></assignments>
+    <assignments lang="en"></assignments>
+    <requirements lang="el"></requirements>
+    <requirements lang="en"></requirements>
+    <remarks lang="el"></remarks>
+    <remarks lang="en"></remarks>
+    <acknowledgments lang="el"></acknowledgments>
+    <acknowledgments lang="en"></acknowledgments>
+    
+    
     <instructor>
         <firstName lang="el"></firstName>
         <firstName lang="en"></firstName>
@@ -19,76 +54,12 @@
         <moreInformation lang="en"></moreInformation>
         <photo mime=""></photo>
     </instructor>
-    
-    <title lang="el"></title>
-    <title lang="en"></title>
-    
-    <url></url>
-    
-    <code lang="el"></code>
-    
-    <level></level>
-    
-    <yearOfStudy></yearOfStudy>
-    <semester></semester>
-    
-    <type></type>
-    
-    <credithours></credithours>
-    
     <coTeaching></coTeaching>
     <coTeachingColleagueOpensCourse></coTeachingColleagueOpensCourse>
     <coTeachingAutonomousDepartment></coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours></coTeachingDepartmentCreditHours>
-    
-    <language></language>
-    
-    <targetGroup lang="el"></targetGroup>
-    <targetGroup lang="en"></targetGroup>
-    
-    <credits></credits>
-    
-    <description lang="el"></description>
-    <description lang="en"></description>
-    <contents lang="el"></contents>
-    <objectives lang="el"></objectives>
-    <keywords lang="el"></keywords>
-    <keywords lang="en"></keywords>
-    <coursePhoto mime=""></coursePhoto>
-    <contentDevelopment lang="el"></contentDevelopment>
-    <contentDevelopment lang="en"></contentDevelopment>
-    <format></format>
-    <featuredBooks lang="el"></featuredBooks>
-    <structure lang="el"></structure>
-    <structure lang="en"></structure>
-    <teachingMethod lang="el"></teachingMethod>
-    <teachingMethod lang="en"></teachingMethod>
-    <assessmentMethod lang="el"></assessmentMethod>
-    <assessmentMethod lang="en"></assessmentMethod>
-    <prerequisites lang="el"></prerequisites>
-    <prerequisites lang="en"></prerequisites>
-    <literature lang="el"></literature>
-    <literature lang="en"></literature>
-    <recommendedComponents lang="el"></recommendedComponents>
-    <recommendedComponents lang="en"></recommendedComponents>
-    <assignments lang="el"></assignments>
-    <assignments lang="en"></assignments>
-    <requirements lang="el"></requirements>
-    <requirements lang="en"></requirements>
-    <remarks lang="el"></remarks>
-    <remarks lang="en"></remarks>
-    <acknowledgments lang="el"></acknowledgments>
-    <acknowledgments lang="en"></acknowledgments>
-    
-    <eudoxusCode></eudoxusCode>
-    <eudoxusURL></eudoxusURL>
-    <kalliposURL></kalliposURL>
-    
-    <thematic lang="el"></thematic>
-    <thematic lang="en"></thematic>
-    
-    <license></license>
-    
+
+        
     <institution lang="el"></institution>
     <institution lang="en"></institution>
     <institutionDescription lang="el"></institutionDescription>
@@ -108,6 +79,26 @@
     <curriculumLevel></curriculumLevel>
     <curriculumTargetGroup lang="el"></curriculumTargetGroup>
     <curriculumTargetGroup lang="en"></curriculumTargetGroup>
+    
+    <yearOfStudy></yearOfStudy>
+    <semester></semester>
+    <type></type>
+    <credithours></credithours>
+    <language></language>
+    <targetGroup lang="el"></targetGroup>
+    <targetGroup lang="en"></targetGroup>
+    <credits></credits>
+    <featuredBooks lang="el"></featuredBooks>
+    <structure lang="el"></structure>
+    <structure lang="en"></structure>
+    <teachingMethod lang="el"></teachingMethod>
+    <teachingMethod lang="en"></teachingMethod>
+    <assessmentMethod lang="el"></assessmentMethod>
+    <assessmentMethod lang="en"></assessmentMethod>
+    <eudoxusCode></eudoxusCode>
+    <eudoxusURL></eudoxusURL>
+    <kalliposURL></kalliposURL>
+    
     
     <numberOfUnits></numberOfUnits>
     <unit>
