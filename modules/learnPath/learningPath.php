@@ -281,10 +281,7 @@ foreach ($flatElementList as $module)
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if( $module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT'
-            && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED'
-            && !$passExercise
-          )
+        if($module['lock'] == 'CLOSE')
         {
             if($uid)
             {

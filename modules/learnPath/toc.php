@@ -176,8 +176,7 @@ foreach ($flatElementList as $module)
                 echo "&nbsp;&nbsp;".$imagePassed;
         echo "</li>";
 
-        if ($module['lock'] == 'CLOSE' && $module['credit'] != 'CREDIT'
-                && $module['lesson_status'] != 'COMPLETED' && $module['lesson_status'] != 'PASSED') {
+        if ($module['lock'] == 'CLOSE') {
                 $is_blocked = true;
         }
 
