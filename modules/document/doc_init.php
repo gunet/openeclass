@@ -46,7 +46,7 @@ if (defined('GROUP_DOCUMENTS')) {
         $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' .$code_cours .'&amp;' . $groupset;
         $group_sql = "course_id = $cours_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
         $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-        $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
+        $basedir = $webDir . '/courses/' . $currentCourseID . '/ebook/' . $ebook_id;
 } elseif (defined('COMMON_DOCUMENTS')) {
         $subsystem = COMMON;
         $base_url = $_SERVER['SCRIPT_NAME'] . '?';
