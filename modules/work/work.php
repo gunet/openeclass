@@ -260,8 +260,8 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 {
         global $tool_content, $workPath;
 
+        $secret = uniqid('');
         if (@mkdir("$workPath/$secret",0777)) {
-                $secret = uniqid('');
                 db_query("INSERT INTO assignments
                         (title, description, comments, deadline, submission_date, secret_directory,
                         group_submissions) VALUES
