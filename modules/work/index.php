@@ -645,27 +645,26 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
         $group_select_hidden_input = $group_select_form = '';
         $is_group_assignment = is_group_assignment($id);
         if ($is_group_assignment) {
-                if (!$on_behalf_of and count($user_group_info) == 1) {
-                        $gids = array_keys($user_group_info);
-                        $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
-                        $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
-                } else {
-                        $group_link = $urlAppend . '/modules/group/group.php';
-                        $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
-                                             selection($user_group_info, 'group_id') . "</td></tr>";
-                }
                 if (!$on_behalf_of) {
-                        $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
-                                sprintf(count($user_group_info)?
-                                        $m['group_assignment_publish']:
-                                        $m['group_assignment_no_groups'], $group_link) .
-                                "</p>\n";
+                        if (count($user_group_info) == 1) {
+                                $gids = array_keys($user_group_info);
+                                $group_link = $urlAppend . '/modules/group/document.php?gid=' . $gids[0];
+                                $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
+                        } elseif ($user_group_info) {
+                                $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
+                                                     selection($user_group_info, 'group_id') . "</td></tr>";
+                        } else {
+                                $group_link = $urlAppend . '/modules/group/group.php';
+                                $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
+                                        sprintf(count($user_group_info)?
+                                                $m['group_assignment_publish']:
+                                                $m['group_assignment_no_groups'], $group_link) .
+                                        "</p>\n";
+                        }
+                } else {
+                        $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
+                                             selection(groups_with_no_submissions($id), 'group_id') . "</td></tr>";
                 }
-        } elseif ($on_behalf_of) {
-                $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
-                        selection(users_with_no_submissions($id), 'user_id') .
-                        "</td></tr>";
-
         }
         $notice = $on_behalf_of? '': "<br />$langNotice3";
         $extra = $on_behalf_of? "<tr><th class='left'>$m[grade]</th>
@@ -673,7 +672,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
                                          <input type='hidden' name='on_behalf_of' value='1'></td></tr>
                                  <tr><th><label for='email_button'>$m[email_users]:</label></th>
                                      <td><input type='checkbox' value='1' id='email_button' name='email'></td></tr>": '';
-        if (!$is_group_assignment or count($user_group_info)) {
+        if (!$is_group_assignment or count($user_group_info) or $on_behalf_of) {
                 $tool_content .= "
                      <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
@@ -1008,7 +1007,6 @@ function show_student_assignments()
 
         $gids = user_group_info($uid, $course_id);
 
-
         $result = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                    FROM assignment
                                            WHERE course_id = $course_id AND active = 1
@@ -1152,7 +1150,7 @@ function show_assignments($message = null)
                 }
                 $tool_content .= '</table>';
         } else {
-                $tool_content .= "\n<p class=\"alert1\">$langNoAssign</p>";
+                $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";
         }
 }
 
@@ -1426,7 +1424,7 @@ function users_with_no_submissions($id)
                                     course_user.course_id = $course_id AND
                                     course_user.statut = 5 AND
                                     user.user_id NOT IN (SELECT uid FROM assignment_submit
-                                                                WHERE id = $id)");
+                                                                WHERE assignment_id = $id)");
         $users = array();
         while ($row = mysql_fetch_row($q)) {
                 $users[$row[0]] = "$row[1] $row[2]";
