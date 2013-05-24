@@ -42,6 +42,14 @@ function confirmation (name)
     else
         {return false;}
 }
+
+function confirm_delete_assignment ()
+{
+    if (confirm(\"$langDelWarnUserAssignment\"))
+        {return true;}
+    else
+        {return false;}
+}
 </script>
 ";
 
@@ -139,7 +147,10 @@ if ($is_editor) {
                         $tool_content = "<p class='caution'>$langError</p>\n";
                 }
 		show_assignments();
-	} elseif (isset($_POST['grades'])) {
+        } elseif (isset($_GET['as_id'])) {
+                $as_id = $_GET['as_id'];
+                delete_user_assignment($as_id);
+        } elseif (isset($_POST['grades'])) {
 		$nameTools = $langWorks;
 		$navigation[] = $works_url;
                 submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
@@ -183,12 +194,12 @@ if ($is_editor) {
                                 $navigation[] = $works_url;
                                 $navigation[] = $work_id_url;
                                 edit_assignment($id);
-                        } elseif ($choice = 'add') {
+                        } elseif ($choice == 'add') {
                                 $nameTools = $langAddGrade;
                                 $navigation[] = $works_url;
                                 $navigation[] = $work_id_url;
                                 show_submission_form($id, groups_with_no_submissions($id), true);
-                        } elseif ($choice = 'plain') {
+                        } elseif ($choice == 'plain') {
                                 show_plain_view($id);
                         }
                 } else {
@@ -213,8 +224,7 @@ if ($is_editor) {
                         submit_work($id);
                 } else {
                         $work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = $id", $currentCourseID);
-                        $nameTools = $work_title;
-                        $navigation[] = $works_url;
+                        $nameTools = $work_title;                        
                         show_student_assignment($id);
                 }
         } else {
@@ -476,27 +486,27 @@ function show_edit_assignment($id)
 
         $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 	$tool_content .= "
-    <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post' onsubmit=\"return checkrequired(this, 'title');\">
-    <input type='hidden' name='id' value='$id'>
-    <input type='hidden' name='choice' value='do_edit'>
-    <fieldset>
-    <legend>$m[WorkInfo]</legend>
-    <table class='tbl'>
-    <tr>
-      <th>$m[title]:</th>
-      <td><input type='text' name='title' size='45' value='".q($row['title'])."'></td>
-    </tr>
-    <tr>
-      <th valign='top'>$m[description]:</th>
-      <td>$textarea</td>
-    </tr>";
-	$comments = trim($row['comments']);
-        if (!empty($comments)) {
-                $tool_content .= "
-    <tr>
-      <th>$m[comments]:</th>
-      <td>" . text_area('comments', 5, 65, $comments) .  "</td>
-    </tr>";
+        <form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post' onsubmit=\"return checkrequired(this, 'title');\">
+        <input type='hidden' name='id' value='$id'>
+        <input type='hidden' name='choice' value='do_edit'>
+        <fieldset>
+        <legend>$m[WorkInfo]</legend>
+        <table class='tbl'>
+        <tr>
+          <th>$m[title]:</th>
+          <td><input type='text' name='title' size='45' value='".q($row['title'])."'></td>
+        </tr>
+        <tr>
+          <th valign='top'>$m[description]:</th>
+          <td>$textarea</td>
+        </tr>";
+            $comments = trim($row['comments']);
+            if (!empty($comments)) {
+                    $tool_content .= "
+        <tr>
+          <th>$m[comments]:</th>
+          <td>" . text_area('comments', 5, 65, $comments) .  "</td>
+        </tr>";
         }
 
 	if ($row['group_submissions'] == '0') {
@@ -556,7 +566,17 @@ function edit_assignment($id)
 }
 
 
-//delete assignment
+/**
+ * @brief delete assignment
+ * @global string $tool_content
+ * @global string $workPath
+ * @global type $currentCourseID
+ * @global type $webDir
+ * @global type $langBack
+ * @global type $langDeleted
+ * @global type $code_cours
+ * @param type $id
+ */
 function delete_assignment($id) {
 
 	global $tool_content, $workPath, $currentCourseID, $webDir, $langBack, $langDeleted, $code_cours;
@@ -567,7 +587,21 @@ function delete_assignment($id) {
 	move_dir("$workPath/$secret",
 	"$webDir/courses/garbage/${currentCourseID}_work_${id}_$secret");
 
-	$tool_content .="\n  <p class=\"success\">$langDeleted<br /><a href=\"$_SERVER[SCRIPT_NAME]?course=$code_cours\">".$langBack."</a></p>";
+	$tool_content .="<p class='success'>$langDeleted<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>".$langBack."</a></p>";
+}
+
+
+function delete_user_assignment($id) 
+{
+        global $currentCourseID, $webDir, $langBack, $langDeleted, $tool_content;
+        
+        $filename = db_query_get_single_value("SELECT file_path FROM assignment_submit WHERE id = $id");        
+        $file = $webDir."courses/".$currentCourseID."/work/".$filename;        
+        if (my_delete($file)) {
+                db_query("DELETE FROM assignment_submit WHERE id = $id");
+                $tool_content .= "<p class='success'>$langDeleted<br />
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$currentCourseID'>".$langBack."</a></p>";
+        }                
 }
 
 
@@ -909,18 +943,22 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;get=$row[id]'>" .
                                          q($row['file_name']) . "</a>");
                                 $tool_content .= "
-		  <tr $row_color>
-		    <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-		    <td>${uid_2_name}</td>
-		    <td width='85'>" . q($stud_am[0]) . "</td>
-		    <td width='180'>$filelink</td>
-		    <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
-		    <td width='5'>
-		       <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
-		    </td>
-		  </tr>
-		  <tr $row_color>
-		    <td colspan='5'>$subContentGroup";
+                                <tr $row_color>
+                                  <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
+                                  <td>${uid_2_name}</td>
+                                  <td width='85'>" . q($stud_am[0]) . "</td>
+                                  <td width='180'>$filelink&nbsp;&nbsp;
+                                   <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;as_id=$row[id]' onClick='return confirm_delete_assignment();'>
+                                                  <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
+                                          </a>
+                                  </td>
+                                  <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
+                                  <td width='5'>
+                                     <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
+                                  </td>
+                                </tr>
+                                <tr $row_color>
+                                <td colspan='5'>$subContentGroup";
                                 if (trim($row['comments'] != '')) {
                                         $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
                                                 q($row['comments']) . '</div>';
