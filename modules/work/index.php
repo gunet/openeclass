@@ -32,45 +32,6 @@ $helpTopic = 'Work';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 
-$head_content = "
-<script type='text/javascript'>
-function confirmation (name)
-{
-
-    if (confirm(\"$langDelWarn1 \"+ name + \". $langWarnForSubmissions. $langDelSure \"))
-        {return true;}
-    else
-        {return false;}
-}
-</script>
-";
-
-$head_content .= <<<hContent
-<script type="text/javascript">
-function checkrequired(which, entry) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if (tempobj.name == entry) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langEmptyAsTitle");
-		return false;
-	} else {
-		return true;
-	}
-}
-
-</script>
-hContent;
-
 // For using with the pop-up calendar
 require_once 'jscalendar.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -118,6 +79,7 @@ $nameTools = $langWorks;
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
 
 if ($is_editor) {
+        load_js('tools.js');
         $email_notify = isset($_POST['email']) and $_POST['email'];
 	if (isset($_POST['grade_comments'])) {                
                 $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $_POST[assignment]");
@@ -134,6 +96,9 @@ if ($is_editor) {
 	} elseif (isset($_POST['new_assign'])) {
 		add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
 		show_assignments();
+        } elseif (isset($_GET['as_id'])) {
+                $as_id = $_GET['as_id'];
+                delete_user_assignment($as_id);        
 	} elseif (isset($_POST['grades'])) {
 		$nameTools = $langWorks;
 		$navigation[] = $works_url;
@@ -578,7 +543,17 @@ function edit_assignment($id)
 }
 
 
-//delete assignment
+/**
+ * @brief delete assignment
+ * @global type $tool_content
+ * @global string $workPath
+ * @global type $course_code
+ * @global type $webDir
+ * @global type $langBack
+ * @global type $langDeleted
+ * @global type $course_id
+ * @param type $id
+ */
 function delete_assignment($id) {
 
 	global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
@@ -598,8 +573,41 @@ function delete_assignment($id) {
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
+/**
+ * @brief delete user assignment
+ * @global string $tool_content
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @global type $langBack
+ * @global type $langDeleted
+ * @param type $id
+ */
+function delete_user_assignment($id) 
+{
+        global $tool_content, $course_code, $webDir, $langBack, $langDeleted;
+        
+        $filename = db_query_get_single_value("SELECT file_path FROM assignment_submit WHERE id = $id");
+        $file = $webDir."/courses/".$course_code."/work/".$filename;               
+        if (my_delete($file)) {
+                db_query("DELETE FROM assignment_submit WHERE id = $id");
+                $tool_content .= "<p class='success'>$langDeleted<br />
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".$langBack."</a></p>";
+        }                
+}
 
-// show assignment - student
+/**
+ * @brief display user assignment
+ * @global type $tool_content
+ * @global type $m
+ * @global type $uid
+ * @global type $langUserOnly
+ * @global type $langBack
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $course_code
+ * @param type $id
+ */
 function show_student_assignment($id)
 {
 	global $tool_content, $m, $uid, $langUserOnly, $langBack,
@@ -708,14 +716,13 @@ function assignment_details($id, $row, $message = null)
         global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
                $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
                $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-               $langSaved, $langGraphResults;
+               $langSaved, $langGraphResults, $langConfirmDelete;
 
 	if ($is_editor) {
             $tool_content .= "
             <div id='operations_container'>
               <ul id='opslist'>
-              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" .
-                js_escape($row['title']) . "\");'>$langDelAssign</a></li>
+              <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>$langDelAssign</a></li>
                 <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
 		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
 		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
@@ -817,7 +824,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
         global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
                $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
                $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
-               $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id;
+               $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, $langDelWarnUserAssignment;
        
         
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -928,13 +935,17 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                                 }
                                 $filelink = empty($row['file_name'])? '&nbsp;':
                                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row[id]'>" .
-                                         q($row['file_name']) . "</a>");
+                                         q($row['file_name']) . "</a>");                                 
                                 $tool_content .= "
                                 <tr $row_color>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am[0]) . "</td>
-                                <td width='180'>$filelink</a></td>
+                                <td width='180'>$filelink
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;as_id=$row[id]' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
+                                 <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
+                                </a>                                        
+                                </td>
                                 <td width='100'>".nice_format($row['submission_date'], TRUE)."</td>
                                 <td width='5'>
                                 <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
@@ -1073,7 +1084,7 @@ function show_student_assignments()
 function show_assignments($message = null)
 {
         global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
-               $course_code, $themeimg, $course_id;
+               $course_code, $themeimg, $course_id, $langConfirmDelete;
 
 	$result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY deadline");
 
@@ -1135,7 +1146,7 @@ function show_assignments($message = null)
 			  <td class='center'>".nice_format($row['deadline'], true)."</td>
 			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".addslashes($row_title)."\");'>
+			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"".$langConfirmDelete."\");'>
 			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
 			if ($row['active']) {
 				$deactivate_temp = htmlspecialchars($m['deactivate']);

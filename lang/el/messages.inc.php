@@ -3273,6 +3273,7 @@ $langAddGrade = 'Υποβολή εργασίας/βαθμολογίας';
 $langOnBehalfOf = 'Εκ μέρους του';
 $langOnBehalfOfUserComment = 'Υποβλήθηκε από: %s, εκ μέρους του χρήστη: %s';
 $langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρους της ομάδας: %s';
+$langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργασίας '.$langOfUser;
 
 /*************************************************************
 * listerqusers.php
