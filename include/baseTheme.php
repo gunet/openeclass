@@ -94,6 +94,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                $statut, $switchLangURL, $theme, $themeimg, $webDir,
                $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer;
 
+        if (defined('MENU_TYPE_ID_OVERRIDE')) {
+                $GLOBALS['old_menuTypeID'] = $menuTypeID;
+                $menuTypeID = MENU_TYPE_ID_OVERRIDE;
+        }
+
 	//get blocks content from $toolContent array
 	if ($perso_tool_content) {
 		$lesson_content = $perso_tool_content ['lessons_content'];
