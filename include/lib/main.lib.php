@@ -1488,6 +1488,11 @@ function csv_escape($string, $force = false)
 function get_config($key)
 {
 	global $mysqlMainDb;
+
+        if (defined('CONFIG_OVERRIDE') and
+            isset($GLOBALS[CONFIG_OVERRIDE][$key])) {
+                return $GLOBALS[CONFIG_OVERRIDE][$key];
+        }
 	
         $r = db_query("SELECT value FROM `$mysqlMainDb`.config WHERE `key` = '$key'");
         if ($r and mysql_num_rows($r) > 0) {
