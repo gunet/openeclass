@@ -52,6 +52,7 @@
         
         <moreInformation lang="el"></moreInformation>
         <moreInformation lang="en"></moreInformation>
+        <cv></cv>
         <photo mime=""></photo>
     </instructor>
     <coTeaching></coTeaching>

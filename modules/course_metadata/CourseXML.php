@@ -128,7 +128,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
         }
         $fieldStart = "<tr><th style='background-color: transparent'>". q($keyLbl . $lang) .":</th><td rowspan='2'>";
-        $fieldEnd = "</td></tr><tr><td style='font-size: 10px;'>". $help ."</td></tr>";
+        $fieldEnd = "</td></tr><tr><td style='font-size: 10px;'>". $help ."</td></tr><tr><td></td></tr>";
         if (array_key_exists($fullKey, self::$breakFields))
             $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKey] ."'><table class='tbl' width='100%'>";
         
@@ -164,7 +164,7 @@ class CourseXMLElement extends SimpleXMLElement {
         
         // textarea fields
         if (in_array($fullKeyNoLang, self::$textareaFields))
-            return $fieldStart ."<textarea cols='58' rows='2' name='". q($fullKey) ."'>". q((string) $this) ."</textarea>". $fieldEnd;
+            return $fieldStart ."<textarea cols='53' rows='2' name='". q($fullKey) ."'>". q((string) $this) ."</textarea>". $fieldEnd;
         
         // binary (file-upload) fields
         if (in_array($fullKeyNoLang, self::$binaryFields)) {
@@ -182,7 +182,7 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         
         // all others get a typical input type box
-        return $fieldStart ."<input type='text' size='60' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly>". $fieldEnd;
+        return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly>". $fieldEnd;
     }
     
     /**
@@ -282,7 +282,7 @@ class CourseXMLElement extends SimpleXMLElement {
             unset($this->unit);
             
             for ($i = 1; $i <= $unitsNo; $i++) {
-                $unitXML = simplexml_load_file ($skeletonU, 'CourseXMLElement');
+                $unitXML = simplexml_load_file($skeletonU, 'CourseXMLElement');
                 $unitXML->setLeafAttribute('index', $i);
                 $domU = dom_import_simplexml($unitXML);
                 $domUIn = $dom->ownerDocument->importNode($domU, true);
@@ -482,7 +482,6 @@ class CourseXMLElement extends SimpleXMLElement {
      * @var array
      */
     public static $hiddenFields = array(
-        'course_unit_keywords', 
         'course_unit_material_notes', 'course_unit_material_slides', 
         'course_unit_material_exercises', 'course_unit_material_multimedia_title', 
         'course_unit_material_multimedia_speaker', 'course_unit_material_multimedia_subject', 
@@ -533,8 +532,9 @@ class CourseXMLElement extends SimpleXMLElement {
      * @var array
      */
     public static $textareaFields = array(
-        'course_instructor_moreInformation', 'course_targetGroup',
-        'course_description', 'course_contents', 'course_objectives',
+        'course_instructor_moreInformation', 'course_instructor_cv',
+        'course_targetGroup', 'course_description', 
+        'course_contents', 'course_objectives',
         'course_contentDevelopment', 'course_featuredBooks', 'course_structure',
         'course_teachingMethod', 'course_assessmentMethod',
         'course_prerequisites', 'course_literature',

@@ -163,6 +163,7 @@
         <xs:element name="department"      type="t_string"/>
         <xs:element name="language"        type="t_string"/>
         <xs:element name="moreInformation" type="t_langString"/>
+        <xs:element name="cv"              type="t_string"/>
         <xs:element name="photo"           type="t_image"/>
     </xs:choice>
 </xs:complexType>
