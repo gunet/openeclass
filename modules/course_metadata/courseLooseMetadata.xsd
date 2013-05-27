@@ -240,7 +240,7 @@
         <xs:element name="keywords"                        type="t_langString"/>
         <xs:element name="coursePhoto"                     type="t_image"/>
         <xs:element name="contentDevelopment"              type="t_langString"/>
-        <xs:element name="format"                          type="t_format"/>
+        <xs:element name="format"                          type="t_string"/>
         <xs:element name="featuredBooks"                   type="t_langString"/>
         <xs:element name="structure"                       type="t_langString"/>
         <xs:element name="teachingMethod"                  type="t_langString"/>

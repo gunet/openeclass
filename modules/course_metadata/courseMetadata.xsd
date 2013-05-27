@@ -240,7 +240,7 @@
         <xs:element name="keywords" minOccurs="2" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="coursePhoto" minOccurs="0" type="t_image"/>
         <xs:element name="contentDevelopment" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
-        <xs:element name="format" minOccurs="0" maxOccurs="unbounded" type="t_format"/>
+        <xs:element name="format" minOccurs="0" type="t_string"/>
         <xs:element name="featuredBooks" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="structure" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
         <xs:element name="teachingMethod" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>

@@ -279,6 +279,9 @@ function load_js($file, $init = '')
                 else
                     $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/smoothness/jquery-ui-1.9.2.custom.min.css'>\n";
                 $file = 'jquery-ui-1.9.2.custom.min.js';
+        } elseif ($file == 'jquery-multiselect') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
+            $file = 'jquery.multiselect.min.js';
         } elseif ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
@@ -566,6 +569,27 @@ function selection($entries, $name, $default = '', $extra = '')
         $retString .= "\n<select name='$name' $extra>\n";
         foreach ($entries as $value => $label) {
                 if (isset($default) && ($value == $default)) {
+                        $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                } else {
+                        $retString .= "<option value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                }
+        }
+        $retString .= "</select>\n";
+        return $retString;
+}
+
+// Show a multi-selection box.
+// $entries: an array of (value => label)
+// $name: the name of the selection element
+// $defaults: array() if it matches one of the values, specifies the default entry
+function multiselection($entries, $name, $defaults = array(), $extra = '')
+{
+        $retString = "";
+        $retString .= "\n<select name='$name' $extra>\n";
+        foreach ($entries as $value => $label) {
+                if (is_array($defaults) && (in_array($value, $defaults))) {
                         $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
                         htmlspecialchars($label) . "</option>\n";
                 } else {

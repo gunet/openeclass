@@ -38,12 +38,17 @@ else
 
 load_js('jquery');
 load_js('jquery-ui-new');
+load_js('jquery-multiselect');
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
 
     $(function() {
         $( "#tabs" ).tabs();
+    });
+        
+    $(document).ready(function(){
+        $( "#multiselect" ).multiselect();
     });
 
 /* ]]> */

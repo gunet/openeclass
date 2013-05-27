@@ -148,6 +148,10 @@ class CourseXMLElement extends SimpleXMLElement {
         // enumeration fields
         if (in_array($fullKeyNoLang, self::$enumerationFields))
             return $fieldStart . selection(self::getEnumerationValues($fullKey), $fullKey, (string) $this) . $fieldEnd;
+
+        // multiple enumeration fields
+        if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
+            return $fieldStart . multiselection(self::getEnumerationValues($fullKey), $fullKey . '[]', explode(',', (string) $this), 'id="multiselect" multiple="true"') . $fieldEnd;
         
         // readonly fields
         $readonly = '';
@@ -223,11 +227,15 @@ class CourseXMLElement extends SimpleXMLElement {
                 if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
                     $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
             }
-            else { // multiple entities use associative indexed arrays
-                $index = intval($this->getAttribute('index'));
-                if ($index && isset($data[$fullKey][$index])) {
-                    $this->{0} = $data[$fullKey][$index];
-                    unset($this['index']); // remove attribute
+            else { // multiple entities (multiEnum and units) use associative indexed arrays
+                if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
+                    $this->{0} = implode(',', $data[$fullKey]); // comma separated
+                else { // units
+                    $index = intval($this->getAttribute('index')) - 1;
+                    if ($index >= 0 && isset($data[$fullKey][$index])) {
+                        $this->{0} = $data[$fullKey][$index];
+                        unset($this['index']); // remove attribute
+                    }
                 }
             }
         }
@@ -412,9 +420,9 @@ class CourseXMLElement extends SimpleXMLElement {
                             AND course_id = " . intval($courseId));
         $unitsCount = 0;
         while($row = mysql_fetch_assoc($res2)) {
-            $unitsCount++; // also serves as array index
             $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
             $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($row['comments']);
+            $unitsCount++; // also serves as array index, starting from 0
         }    
         $data['course_numberOfUnits'] = $unitsCount;
 
@@ -524,7 +532,15 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static $enumerationFields = array(
         'course_level', 'course_curriculumLevel', 'course_yearOfStudy',
-        'course_semester', 'course_type', 'course_format'
+        'course_semester', 'course_type'
+    );
+    
+    /**
+     * Multiple enumartion HTML Form fields.
+     * @var array
+     */
+    public static $multiEnumerationFields = array(
+        'course_format'
     );
     
     /**
