@@ -62,7 +62,7 @@ if (isset($path2add) && $path2add == 0) {
 // ---------------------------------
 
 // function library
-include $relPathLib . "lib/main.lib.php";
+require_once $relPathLib . "lib/main.lib.php";
 //if session isn't started, start it. Needed by the language switch
 if (!session_id()) { session_start(); }
 
