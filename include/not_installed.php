@@ -1,9 +1,10 @@
 <?php
+
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,34 +37,17 @@ $tool_content = "
     <title>Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass</title>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
     <link href='./install/install.css' rel='stylesheet' type='text/css' />
-
   </head>
   <body>
-  <div class='install_container'>
-  <p><img src='template/classic/img/logo_openeclass.png' alt='logo' /></p>
-  <div class='alert' align='center'>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί!</div>
-      <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
-    <tr>
-      <th width='300'>Πιθανοί λόγοι</th>
-      <th>Αντιμετώπιση</th>
-    </tr>
-    <tr>
-      <td>Υπάρχει πρόβλημα με την <b>MySQL</b>:</td>
-      <td>Eπικοινωνήστε με το διαχειριστή του συστήματος.</td>
-    </tr>
-    <tr>
-      <td>Πρόβλημα στο αρχείο \"<b>config.php</b>\":</td>
-      <td>Το αρχείο δεν υπάρχει ή δεν μπορεί να διαβαστεί.</td>
-    </tr>
-    <tr>
-      <td>Xρησιμοποιείτε την πλατφόρμα για <b>πρώτη</b> φορά:</td>
-      <td>Επιλέξτε τον <a href=\"./install/\" class=\"installer\"><b>Οδηγό Εγκατάστασης</b></a><br /> για να ξεκινήσετε το πρόγραμμα εγκατάστασης</td>
-    </tr>
-    </table>
-	</div>
+        <div class='install_container'>
+          <p align='center'><img src='template/classic/img/logo_openeclass.png' alt='logo' /></p>
+          <div class='alert' align='center'>
+          <p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί.</p>
+          <p>Πιθανό πρόβλημα με την βάση δεδομένων ή με το αρχείο ρυθμίσεων της πλατφόρμας.</p>
+          </div>
+          </div>   
   </body>
 </html>
 ";
 echo $tool_content;
 exit();
-?>
