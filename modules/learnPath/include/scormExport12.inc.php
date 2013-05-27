@@ -1132,7 +1132,7 @@ class ScormExport
         $zipFile = new PclZip($this->destDir . '.zip');
         $list = $zipFile->create($this->destDir, PCLZIP_OPT_REMOVE_PATH, $this->destDir);
         
-        if ( !$list )
+        if ($list == 0)
         {
             $this->error[] = $langErrorCreatingScormArchive;
             return false;
