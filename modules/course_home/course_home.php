@@ -38,7 +38,7 @@ define('HIDE_TOOL_TITLE', 1);
 // $courseHome = true;
 // $path2add is used in init.php to fix relative paths
 $path2add = 1;
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 require_once '../../modules/video/video_functions.php';
 
 $nameTools = $langIdentity;
@@ -54,7 +54,7 @@ $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark)
 //For statistics: record login
 $sql_log = "INSERT INTO logins SET user_id='$uid', ip='$_SERVER[REMOTE_ADDR]', date_time=NOW()";
 db_query($sql_log, $currentCourse);
-include '../../include/action.php';
+require_once '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_UNITS');
 
