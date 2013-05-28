@@ -29,7 +29,7 @@
  *
  */
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 $nameTools = $langListCourses;
 $navigation[] = array ('url' => 'listfaculte.php', 'name' => $langSelectFac);
 if (isset($_GET['fc'])) {
