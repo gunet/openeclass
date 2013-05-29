@@ -26,11 +26,11 @@ define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
-include '../../include/baseTheme.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-include '../../include/action.php';
-include 'functions.php';
-include '../document/doc_init.php';
+require_once '../../include/baseTheme.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
+require_once '../../include/action.php';
+require_once 'functions.php';
+require_once '../document/doc_init.php';
 require_once '../video/video_functions.php';
 
 $action = new action();
