@@ -473,9 +473,11 @@ function adminMenu(){
             array_push($sideMenuText, $GLOBALS['langPlatformStats']);
             array_push($sideMenuLink, "../admin/stateclass.php");            
             array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langCommonDocs']);
-	    array_push($sideMenuLink, "../admin/commondocs.php");
-	    array_push($sideMenuImg, "arrow.png");            
+            if (get_config('enable_common_docs')) {
+                array_push($sideMenuText, $GLOBALS['langCommonDocs']);
+                array_push($sideMenuLink, "../admin/commondocs.php");
+                array_push($sideMenuImg, "arrow.png");
+            }
             array_push($sideMenuText, $GLOBALS['langAdminAn']);
             array_push($sideMenuLink, "../admin/adminannouncements.php");
             array_push($sideMenuImg, "arrow.png");
@@ -623,9 +625,11 @@ function pickerMenu() {
                 }
         }
         /* link for common documents */
-        array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
-        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
-        array_push($sideMenuImg, 'docs.png');
+        if (get_config('enable_common_docs')) {
+                array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
+                array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
+                array_push($sideMenuImg, 'docs.png');
+        }
         
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);

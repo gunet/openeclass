@@ -950,7 +950,7 @@ if($can_upload) {
             $tool_content .= "<div id='operations_container'><ul id='opslist'>";
             $tool_content .= "<li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
             $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
-            if (!defined('COMMON_DOCUMENTS')) {
+            if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
                     $tool_content .= "<li><a href='../units/insert.php?course=$code_cours&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             }
             $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;

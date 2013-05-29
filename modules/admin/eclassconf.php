@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -212,6 +212,7 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
                         'alt_auth_prof_reg' => true,
 			'case_insensitive_usernames' => true,
                         'enable_search' => true,
+                        'enable_common_docs' => true,
                         'login_fail_check' => true,
                         'login_fail_threshold' => true,
                         'login_fail_deny_interval' => true,
@@ -420,6 +421,7 @@ else {
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
         $max_glossary_terms = get_config('max_glossary_terms');
         $cbox_enable_search = get_config('enable_search')?'checked':'';
+        $cbox_enable_common_docs = get_config('enable_common_docs')?'checked':'';
         $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
@@ -473,6 +475,9 @@ else {
           <tr>
                 <td><input type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
           </tr>
+          <tr>
+                <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
+          </tr>          
         </table></fieldset>";
         
         $tool_content .= "<fieldset>
