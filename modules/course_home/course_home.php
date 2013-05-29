@@ -31,7 +31,9 @@
 
 $require_current_course = TRUE;
 $guest_allowed = true;
-define('HIDE_TOOL_TITLE', 1);
+if (!defined('HIDE_TOOL_TITLE')) {
+        define('HIDE_TOOL_TITLE', 1);
+}
 
 // $courseHome is used by the breadcrumb logic
 // See function draw() in baseTheme.php for details

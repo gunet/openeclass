@@ -22,7 +22,9 @@
 /*
 Units display module	
 */
-define('HIDE_TOOL_TITLE', 1);
+if (!defined('HIDE_TOOL_TITLE')) {
+        define('HIDE_TOOL_TITLE', 1);
+}
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
@@ -81,7 +83,7 @@ if ($is_editor) {
         $visibility_check = "AND visibility='v'";
 }
 if (isset($id) and $id !== false) {
-	$q = db_query("SELECT * FROM course_units
+        $q = db_query("SELECT * FROM course_units
 		                WHERE id = $id AND course_id=$cours_id " . $visibility_check);
 } else {
 	$q = false;
