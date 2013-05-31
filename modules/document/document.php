@@ -34,17 +34,17 @@ if (!defined('COMMON_DOCUMENTS')) {
 
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 /**** The following is added for statistics purposes ***/
-include '../../include/action.php';
+require_once '../../include/action.php';
 $action = new action();
 include 'doc_init.php';
-include 'doc_metadata.php';
-include '../../include/lib/forcedownload.php';
-include '../../include/lib/fileDisplayLib.inc.php';
-include '../../include/lib/fileManageLib.inc.php';
-include '../../include/lib/fileUploadLib.inc.php';
-include '../../include/pclzip/pclzip.lib.php' ;
+require_once 'doc_metadata.php';
+require_once '../../include/lib/forcedownload.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
+require_once '../../include/lib/fileManageLib.inc.php';
+require_once '../../include/lib/fileUploadLib.inc.php';
+require_once '../../include/pclzip/pclzip.lib.php' ;
 require_once '../video/video_functions.php';
 
 load_js('tools.js');
@@ -52,6 +52,96 @@ load_modal_box(true);
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
+
+
+// Allow double inclusion of document.php
+if (!function_exists('make_clickable_path')) {
+
+/**
+ * Used in documents path navigation bar
+ * @global type $langRoot
+ * @global type $base_url
+ * @global type $group_sql
+ * @param type $path
+ * @return type
+ */
+function make_clickable_path($path)
+{
+	global $langRoot, $base_url, $group_sql;
+
+	$cur = $out = '';
+	foreach (explode('/', $path) as $component) {
+		if (empty($component)) {
+			$out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
+		} else {
+			$cur .= rawurlencode("/$component");
+			$row = mysql_fetch_array(db_query ("SELECT filename FROM document
+					WHERE path LIKE '%/$component' AND $group_sql"));
+			$dirname = q($row['filename']);
+			$out .= " &raquo; <a href='{$base_url}openDir=$cur'>$dirname</a>";
+		}
+	}
+	return $out;
+}
+
+// Check if $var is set and return it - if $is_file, then return only dirname part
+function pathvar(&$var, $is_file = false)
+{
+        static $found = false;
+
+        if (defined('EXPORTING')) {
+                if ($found == $GLOBALS['code_cours'] . $GLOBALS['export_dir_path']) {
+                        return '';
+                } else {
+                        $found = $GLOBALS['code_cours'] . $GLOBALS['export_dir_path'];
+                        return $GLOBALS['export_dir_path'];
+                }
+        }
+
+        if ($found) {
+                return '';
+        }
+        if (isset($var)) {
+                $found = true;
+                $var = str_replace('..', '', $var);
+                if ($is_file) {
+                        return dirname($var);
+                } else {
+                        return $var;
+                }
+        }
+        return '';
+}
+
+// Link for sortable table headings
+function headlink($label, $this_sort)
+{
+        global $sort, $reverse, $curDirPath, $base_url, $themeimg;
+
+        if (defined('EXPORTING')) {
+                return $label;
+        }
+
+        if (empty($curDirPath)) {
+                $path = '/';
+        } else {
+                $path = $curDirPath;
+        }
+        if ($sort == $this_sort) {
+                $this_reverse = !$reverse;
+                $indicator = " <img src='$themeimg/arrow_" . 
+                        ($reverse? 'up': 'down') . ".png' />";
+        } else {
+                $this_reverse = $reverse;
+                $indicator = '';
+        }
+        return '<a href="' . $base_url . 'openDir=' . $path .
+               '&amp;sort=' . $this_sort . ($this_reverse? '&amp;rev=1': '') .
+               '">' . $label . $indicator . '</a>';
+}
+
+} // end if function_exists('make_clickable_path')
+
 
 if ($is_in_tinymce) {
     
@@ -176,36 +266,6 @@ if (isset($_GET['download'])) {
 	send_file_to_client($dload_filename, $real_filename, null, true, $delete);
 	exit;
 }
-
-
-
-/**
- * Used in documents path navigation bar
- * @global type $langRoot
- * @global type $base_url
- * @global type $group_sql
- * @param type $path
- * @return type
- */
-function make_clickable_path($path)
-{
-	global $langRoot, $base_url, $group_sql;
-
-	$cur = $out = '';
-	foreach (explode('/', $path) as $component) {
-		if (empty($component)) {
-			$out = "<a href='{$base_url}openDir=/'>$langRoot</a>";
-		} else {
-			$cur .= rawurlencode("/$component");
-			$row = mysql_fetch_array(db_query ("SELECT filename FROM document
-					WHERE path LIKE '%/$component' AND $group_sql"));
-			$dirname = q($row['filename']);
-			$out .= " &raquo; <a href='{$base_url}openDir=$cur'>$dirname</a>";
-		}
-	}
-	return $out;
-}
-
 
 /*** clean information submited by the user from antislash ***/
 // stripSubmitValue($_POST);
@@ -792,24 +852,6 @@ if ($can_upload) {
 // Common for teachers and students
 // define current directory
 
-// Check if $var is set and return it - if $is_file, then return only dirname part
-function pathvar(&$var, $is_file = false)
-{
-        static $found = false;
-        if ($found) {
-                return '';
-        }
-        if (isset($var)) {
-                $found = true;
-                $var = str_replace('..', '', $var);
-                if ($is_file) {
-                        return dirname($var);
-                } else {
-                        return $var;
-                }
-        }
-        return '';
-}
 
 $curDirPath = 
         pathvar($_GET['openDir'], false) .
@@ -946,7 +988,7 @@ if($can_upload) {
                 $tool_content .= $action_message;
 	}
         // available actions
-        if (!$is_in_tinymce) {
+        if (!$is_in_tinymce and !defined('EXPORTING')) {
             $tool_content .= "<div id='operations_container'><ul id='opslist'>";
             $tool_content .= "<li><a href='upload.php?course=$code_cours&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>";
             $tool_content .= "<li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>";
@@ -981,34 +1023,11 @@ if ($doc_count == 0) {
         }
 
         $download_path = empty($curDirPath)? '/': $curDirPath;
-        $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
+        $download_dir = ($is_in_tinymce or defined('EXPORTING')) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
         $tool_content .= "<tr>
         <td colspan='$cols'><div class='sub_title1'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
         "&nbsp;$download_dir<br></div></td>
         <td><div align='right'>";
-
-        // Link for sortable table headings
-        function headlink($label, $this_sort)
-        {
-                global $sort, $reverse, $curDirPath, $base_url, $themeimg;
-
-                if (empty($curDirPath)) {
-                        $path = '/';
-                } else {
-                        $path = $curDirPath;
-                }
-                if ($sort == $this_sort) {
-                        $this_reverse = !$reverse;
-                        $indicator = " <img src='$themeimg/arrow_" . 
-                                ($reverse? 'up': 'down') . ".png' />";
-                } else {
-                        $this_reverse = $reverse;
-                        $indicator = '';
-                }
-                return '<a href="' . $base_url . 'openDir=' . $path .
-                       '&amp;sort=' . $this_sort . ($this_reverse? '&amp;rev=1': '') .
-                       '">' . $label . $indicator . '</a>';
-        }
 
 	/*** go to parent directory ***/
         if ($curDirName) // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
@@ -1025,7 +1044,7 @@ if ($doc_count == 0) {
                          "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
                          "<th width='60' class='center'><b>$langSize</b></th>" .
                          "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
-        if (!$is_in_tinymce) {
+        if (!$is_in_tinymce and !defined('EXPORTING')) {
             if($can_upload) {
 		$width = (get_config("insert_xml_metadata")) ? 175 : 135;
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
@@ -1128,7 +1147,7 @@ if ($doc_count == 0) {
                                 $size = format_file_size($entry['size']);                               
                                 $tool_content .= "\n<td class='center'>$size</td>\n<td class='center' title='$date_with_time'>$date</td>";
                         }
-                        if (!$is_in_tinymce) {
+                        if (!$is_in_tinymce and !defined('EXPORTING')) {
                             if ($can_upload) {
                                 $tool_content .= "\n<td class='right' valign='top'><form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' method='post'>" . $group_hidden_input .
                                                  "<input type='hidden' name='filePath' value='$cmdDirName' />" .
@@ -1188,7 +1207,7 @@ if ($doc_count == 0) {
                 }
         }
         $tool_content .=  "\n    </table>\n";
-	if ($can_upload && !$is_in_tinymce) {
+	if ($can_upload and !$is_in_tinymce) {
 		$tool_content .= "\n    <br><div class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>\n";
 	}
         $tool_content .= "\n    <br />";
