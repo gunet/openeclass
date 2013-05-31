@@ -635,7 +635,7 @@ else {
 		<table width='100%' class='tbl_alt'>
 		<tr>
                   <th colspan='2'><div align='left'>$langDirectory $langVideo</div></th>";
-                if (!$is_in_tinymce)
+                if (!$is_in_tinymce and !defined('EXPORTING'))
                     $tool_content .= "<th width='70'>$langActions</th>";
 		$tool_content .= "</tr>";
 		$i=0;
@@ -683,7 +683,7 @@ else {
 				$tool_content .= "<tr $rowClass>";
 				$tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
 				$tool_content .= $link_to_add;
-                                if (!$is_in_tinymce)
+                                if (!$is_in_tinymce and !defined('EXPORTING'))
                                     $tool_content .= "<td align='center'>$link_to_save</td>";
 				$tool_content .= "</tr>";
 				$i++;
