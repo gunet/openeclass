@@ -35,13 +35,13 @@ $require_help = TRUE;
 $helpTopic = 'Coursedescription';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
-include '../../include/lib/textLib.inc.php';
-include '../units/functions.php';
+require_once '../../include/baseTheme.php';
+require_once '../../include/lib/textLib.inc.php';
+require_once '../units/functions.php';
 require_once '../video/video_functions.php';
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_DESCRIPTION');
 /**************************************/
