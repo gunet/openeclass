@@ -320,7 +320,9 @@ $tool_content .= "
 
    <table width='100%'>
    <tr>
-      <td valign='top'>$main_content</td>
+      <td valign='top'>$main_content</td>";
+if (!defined('EXPORTING')) {
+        $tool_content .= "
       <td width='200' valign='top'>
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
@@ -348,10 +350,10 @@ $tool_content .= "
         </tr>        
         </table>
         $emailnotification
-        <br />\n";
-
+        <br />
+      </td>\n";
+}
 $tool_content .= "
-      </td>
    </tr>
    </table>
 

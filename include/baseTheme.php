@@ -286,7 +286,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'ACTIVATE_MODULE', $mod_activation );
 		}
 
-		if ($menuTypeID != 2) {
+		if ($menuTypeID != 2 and !defined('EXPORTING')) {
 			$t->set_var ( 'LANG_SELECT', lang_selections () );
 			$t->set_var ( 'LANG_SELECT_TITLE', "title='$langChooseLang'" );
 		} else {
