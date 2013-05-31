@@ -19,15 +19,13 @@
  * ======================================================================== */
 
 
-$path2add=2;
-include '../include/baseTheme.php';
+$path2add = 2;
+require_once '../include/baseTheme.php';
 $nameTools = $langCopyright;
-$tool_content = "";
-$tool_content .= "<p align=justify>$langCopyrightNotice</p>";
+$tool_content = "<p align=justify>$langCopyrightNotice</p>";
 
 if (isset($_SESSION['uid'])) {
-	draw($tool_content,1);
+	draw($tool_content, 1);
 } else {
 	draw($tool_content, 0);
 }
-?>
