@@ -26,22 +26,22 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 $require_current_course = TRUE;
 
 $require_help = TRUE;
 $helpTopic = 'Exercise';
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
 
 require_once '../video/video_functions.php';
 load_modal_box();
 
 /**** The following is added for statistics purposes ***/
-include('../../include/action.php');
+require_once '../../include/action.php';
 $action = new action();
 $action->record('MODULE_ID_EXERCISE');
 
