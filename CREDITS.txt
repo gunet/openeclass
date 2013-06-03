@@ -1,8 +1,8 @@
 /*========================================================================
-*   Open eClass 2.6
+*   Open eClass 2.7
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2012  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2013  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -156,7 +156,7 @@ jQuery JavaScript Library v1.6 - Copyright 2010, John Resig
   Released under the MIT, BSD, and GPL Licenses.
   http://sizzlejs.com/
 
-jQuery UI 1.8.1 - Copyright (c) 2010 (http://jqueryui.com/about)
+jQuery UI 1.8.3 - Copyright (c) 2010 (http://jqueryui.com/about)
   Dual licensed under the MIT and GPL licenses.
 
 jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
@@ -175,7 +175,7 @@ Tiny MCE Editor
   Copyright © 2003-2011 Moxiecode Systems AB. All rights Reserved.
   Licensed under LGPL
   http:/tinymce.moxiecode.com
-  version 3.4.9
+  version 3.5.8
 
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
