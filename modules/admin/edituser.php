@@ -361,9 +361,7 @@ $tool_content .= "
 	// trim white spaces in the end and in the beginning of the word
 	$username = isset($_POST['username'])?$_POST['username']:'';
 	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
-        if (get_config('enable_secondary_email')) {
-                $parent_email = isset($_POST['parent_email'])?mb_strtolower(trim($_POST['parent_email'])):'';
-        }
+        $parent_email = (get_config('enable_secondary_email') and isset($_POST['parent_email']))?mb_strtolower(trim($_POST['parent_email'])):'';        
 	$phone = isset($_POST['phone'])?$_POST['phone']:'';
 	$am = isset($_POST['am'])?$_POST['am']:'';
 	$department = isset($_POST['department'])?$_POST['department']:'NULL';
