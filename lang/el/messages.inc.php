@@ -480,6 +480,7 @@ $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 $langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
 $langLogActions = "Καταγραφή ενεργειών";
+$langEnableCommonDocs = "Ενεργοποίηση λειτουργίας «Κοινόχρηστων Αρχείων»";
 
 
 // admin announcements

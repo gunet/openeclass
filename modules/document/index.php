@@ -1054,7 +1054,7 @@ if($can_upload) {
                        <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath'>$langDownloadFile</a></li>  
                        <li><a href='{$base_url}createDir=$cmdCurDirPath'>$langCreateDir</a></li>
                        <li><a href='upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true'>$langExternalFile</a></li>";
-            if (!defined('COMMON_DOCUMENTS')) {
+            if (!defined('COMMON_DOCUMENTS') and get_config('enable_common_docs')) {
                     $tool_content .= "<li><a href='../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1'>$langCommonDocs</a>";
             }
             $tool_content .= "<li><a href='{$base_url}showQuota=true'>$langQuotaBar</a></li>
