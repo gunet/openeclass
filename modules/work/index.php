@@ -222,19 +222,24 @@ function add_assignment($title, $desc, $deadline, $group_submissions)
 
         $secret = uniqid('');
         $desc = purify($desc);
-        db_query("INSERT INTO assignment
-                (course_id, title, description, deadline, comments, submission_date, secret_directory,
-                group_submissions) VALUES
-                ($course_id, ".quote($title).", ".quote($desc).", ".quote($deadline).", ' ', NOW(), '$secret', ".quote($group_submissions).")");
-        mkdir("$workPath/$secret",0777);
-        $id = mysql_insert_id();
-        Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT,
-                array('id' => $id,
-                      'title' => $title,
-                      'description' => $desc,
-                      'deadline' => $deadline,
-                      'secret' => $secret,
-                      'group' => $group_submissions));
+        if (@mkdir("$workPath/$secret",0777)) {
+                db_query("INSERT INTO assignment
+                        (course_id, title, description, deadline, comments, submission_date, secret_directory,
+                        group_submissions) VALUES
+                        ($course_id, ".quote($title).", ".quote($desc).", ".quote($deadline).", ' ', NOW(),
+                         '$secret', ".quote($group_submissions).")");
+                $id = mysql_insert_id();
+                Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT,
+                        array('id' => $id,
+                              'title' => $title,
+                              'description' => $desc,
+                              'deadline' => $deadline,
+                              'secret' => $secret,
+                              'group' => $group_submissions));
+                return true;
+        } else {
+                return false;
+        }
 }
 
 function submit_work($id, $on_behalf_of = null)

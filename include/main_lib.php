@@ -936,7 +936,6 @@ function urlenc($string)
  * @return  array( `user_id`, `lastname`, `firstname`, `username`, `email`, `picture`, `officialCode`, `phone`, `status` ) with user data
  * @author Mathieu Laurent <laurent@cerdecam.be>
  */
-
 function user_get_data($user_id)
 {
         global $mysqlMainDb;
@@ -1005,7 +1004,6 @@ function format_bytesize ($kbytes, $dec_places = 2)
  * return boolean enabling state of javascript
  * author Hugues Peeters <hugues.peeters@claroline.net>
  */
-
 function is_javascript_enabled()
 {
         return isset($_COOKIE['javascriptEnabled'])
@@ -1050,23 +1048,28 @@ function warnIfExtNotLoaded($extensionName) {
  * @since  28-Aug-2001 09:12
  * @param sting         $path           wanted path
  */
-function mkpath($path)  {
-
+function mkpath($path)
+{
         $path = str_replace("/","\\",$path);
         $dirs = explode("\\",$path);
         $path = $dirs[0];
         for ($i = 1;$i < count($dirs);$i++) {
                 $path .= "/".$dirs[$i];
-                if (!is_dir($path)) {
-                        mkdir($path, 0775);
-                }
+                if (file_exists($path)) {
+                        if (!is_dir($path)) {
+                                return false;
+                        }
+                } elseif (!mkdir($path, 0775)) {
+                        return false;
+                } 
         }
+        return true;
 }
 
 
 // check if we can display activationlink (e.g. module_id is one of our modules)
-function display_activation_link($module_id) {
-
+function display_activation_link($module_id)
+{
         global $modules;
 
         if (!defined('STATIC_MODULE') and array_key_exists($module_id, $modules)) {
@@ -1077,8 +1080,8 @@ function display_activation_link($module_id) {
 }
 
 // checks if a module is visible
-function visible_module($module_id) {
-
+function visible_module($module_id)
+{
         global $course_id;
 
         $v = mysql_fetch_array(db_query("SELECT visible FROM course_module

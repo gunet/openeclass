@@ -18,10 +18,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_usermanage_user = TRUE;
-include '../../include/baseTheme.php';
-require_once 'admin.inc.php';
-require_once '../create_course/functions.php';
+$require_departmentmanage_user = true;
+require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
+require_once 'include/lib/course.class.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/hierarchy_validations.php';
+require_once 'modules/create_course/functions.php';
 
 $nameTools = $langMultiCourse;
 $navigation[]= array ('url' => 'index.php', 'name' => $langAdmin);
@@ -77,8 +81,21 @@ if (isset($_POST['submit'])) {
         }
 
 } else {
-    
-    $tool_content .= "<div class='noteit'>". $langMultiCourseInfo ."</div>
+        $tree = new hierarchy();
+        $course = new course();
+        $user = new user();
+
+        // validate course Id
+        //
+        // $cId = course_code_to_id($_GET['c']);
+        //
+        // validateCourseNodes($cId, isDepartmentAdmin());
+        //
+        load_js('jquery');
+        load_js('jquery-ui-new');
+        load_js('jstree');
+
+        $tool_content .= "<div class='noteit'>". $langMultiCourseInfo ."</div>
         <form method='post' action='". $_SERVER['SCRIPT_NAME'] ."'>
         <fieldset>
         <legend>". $langMultiCourseData ."</legend>
@@ -89,12 +106,13 @@ if (isset($_POST['submit'])) {
         </tr>
 	<tr>
 	  <th>$langFaculty:</th>
-	  <td>";
-	$facs = db_query("SELECT id, name FROM faculte order by id");
-	while ($n = mysql_fetch_array($facs)) {
-		$fac[$n['id']] = $n['name'];
-	}
-	$tool_content .= selection($fac, 'faculte');
+          <td>";
+
+        list($js, $html) = $tree->buildCourseNodePicker(
+                array('allowables' => $user->getDepartmentIds($uid)));
+        $head_content .= $js;
+        $tool_content .= $html;
+
 	$tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>

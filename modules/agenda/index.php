@@ -110,7 +110,7 @@ if ($is_editor) {
                 $agdx->store($id);
 	}
 	if (isset($_POST['submit'])) {
-                register_posted_variables(array('date' => true, 'title' => true, 'content' => true, 'lasting' => true));
+                register_posted_variables(array('date' => true, 'event_title' => true, 'content' => true, 'lasting' => true));
                 $content = purify($content);
                 $datetime = explode(' ', $date);
                 $date = $datetime[0];
@@ -118,7 +118,7 @@ if ($is_editor) {
 		if (isset($_POST['id']) and !empty($_POST['id'])) {
 			$id = intval($_POST['id']);
                         db_query("UPDATE agenda
-                                         SET title = ".autoquote($title).",
+                                         SET title = ".autoquote($event_title).",
                                              content = ".autoquote($content).",
                                              day = ".autoquote($date).",
                                              hour = ".autoquote($hour).",
@@ -128,7 +128,7 @@ if ($is_editor) {
 		} else {
 			db_query("INSERT INTO agenda
                                          SET course_id = $course_id,
-                                             title = ".autoquote($title).",
+                                             title = ".autoquote($event_title).",
                                              content = ".autoquote($content).",
                                              day = ".autoquote($date).",
                                              hour = ".autoquote($hour).",
@@ -144,12 +144,12 @@ if ($is_editor) {
                           'day' => $date,
                           'hour' => $hour,
                           'lasting' => $lasting,
-                          'title' => $title,
+                          'title' => $event_title,
                           'content' => $txt_content));
                 unset($id);
 		unset($content);
-		unset($title);
-		$tool_content .= "<p class='success'>$langStoredOK</p><br />";
+		unset($event_title);
+		$tool_content .= "<p class='success'>$langStoredOK</p><br>";
 		unset($addEvent);
 	}
 	elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
@@ -164,7 +164,7 @@ if ($is_editor) {
                                                                 'lasting' => $row['lasting'],
                                                                 'title' => $row['title'],
                                                                 'content' => $txt_content));
-		$tool_content .= "<p class='success'>$langDeleteOK</p><br />";
+		$tool_content .= "<p class='success'>$langDeleteOK</p><br>";
 		unset($addEvent);
 	}
 
@@ -200,7 +200,7 @@ if ($is_editor) {
                 $result= db_query($sql);
                 $myrow = mysql_fetch_array($result);
                 $id = $myrow['id'];
-                $title = $myrow['title'];
+                $event_title = $myrow['title'];
                 $content = $myrow['content'];
                 $hourAncient = $myrow['hour'];
                 $dayAncient = $myrow['day']. ' '.$hourAncient;
@@ -222,29 +222,29 @@ if ($is_editor) {
 		$nameTools = $langAddEvent;
 		$navigation[] = array ("url" => $_SERVER['SCRIPT_NAME']."?course=$course_code", "name" => $langAgenda);
 		$tool_content .= "
-		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return checkrequired(this, \"title\");'>
-		<input type='hidden' name='id' value='$id' />
+		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return checkrequired(this, \"event_title\");'>
+		<input type='hidden' name='id' value='$id'>
                 <fieldset>
                   <legend>$langOptions</legend>
 		  <table class='tbl' width='100%'>";
 		$day = date("d");
-		if (isset($title)) {
-			$title_value = ' value="' . q($title) . '"';
+		if (isset($event_title)) {
+			$title_value = ' value="' . q($event_title) . '"';
 		} else {
 			$title_value = '';
                 }
 		$tool_content .= "
                   <tr>
                     <th>$langTitle:</th>
-                    <td><input type='text' size='70' name='title'$title_value /></td>
+                    <td><input type='text' size='70' name='title'$title_value></td>
                   </tr>
 		  <tr>
                     <th>$langDate:</th>
                     <td> ".$start_cal."</td>
                   </tr>
                   <tr>
-                    <th>$langDuration <small> $langInHour</small>:</td>
-                    <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
+                    <th>$langDuration <small> $langInHour</small>:</th>
+                    <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2'></td>
                   </tr>";
     		if (!isset($content)) {
                         $content = '';
@@ -256,12 +256,12 @@ if ($is_editor) {
                   </tr>
 		  <tr>
                     <th>&nbsp;</th>
-                    <td class='right'><input type='submit' name='submit' value='$langAddModify' /></td>
+                    <td class='right'><input type='submit' name='submit' value='$langAddModify'></td>
                   </tr>
 		  </table>
                 </fieldset>
 		</form>
-                <br />";
+                <br>";
 	}
 }
 
@@ -358,7 +358,7 @@ if (mysql_num_rows($result) > 0) {
                 } else {
                         $msg = '';
                 }
-		$tool_content .=  "\n<br /><br /><div class='event'><b>";
+		$tool_content .=  "\n<br><b><div class='event'><b>";
                 if ($myrow['title'] == '') {
                         $tool_content .= $langAgendaNoTitle;
                 } else {

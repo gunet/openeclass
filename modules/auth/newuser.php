@@ -236,7 +236,7 @@ if (!isset($_POST['submit'])) {
 		$password_encrypted = $hasher->HashPassword($password);
 
 		$q1 = "INSERT INTO user
-			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail, white_listl)
+			(nom, prenom, username, password, email, statut, am, phone, registered_at, expires_at, lang, verified_mail, whitelist)
 			VALUES (". quote($nom_form) .",
 				". quote($prenom_form) .",
 				". quote($uname) .",
