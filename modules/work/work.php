@@ -678,6 +678,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false)
                         $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                                              selection(groups_with_no_submissions($id), 'group_id') . "</td></tr>";
                 }
+        } elseif ($on_behalf_of) {
+                $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
+                                     selection(users_with_no_submissions($id), 'user_id') . "</td></tr>";
         }
         $notice = $on_behalf_of? '': "<br />$langNotice3";
         $extra = $on_behalf_of? "<tr><th class='left'>$m[grade]</th>
