@@ -99,24 +99,24 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 draw($tool_content, 3);
                 exit;
         }
-        $cours_file = $_POST['restoreThis'] . '/course';
+        $cours_file = $_POST['restoreThis'] . '/course';        
         if (file_exists($cours_file)) {
                 $data = unserialize(file_get_contents($cours_file));
-                $data = $data[0];
+                $data = $data[0];                
                 db_query("UPDATE course
-                                 SET course_keywords = ".quote($data['course_keywords']).",
+                                 SET keywords = ".quote($data['keywords']).",
                                      doc_quota = ".floatval($data['doc_quota']).",
                                      video_quota = ".floatval($data['video_quota']).",
                                      group_quota = ".floatval($data['group_quota']).",
                                      dropbox_quota = ".floatval($data['dropbox_quota']).",
-                                     expand_glossary = ".intval($data['expand_glossary'])."
-                                 WHERE cours_id = $course_id");
+                                     glossary_expand = ".intval($data['glossary_expand'])."
+                                 WHERE id = $course_id");
         }
 
         $userid_map = array();
         $user_file = $_POST['restoreThis'] . '/user';
         if (file_exists($user_file)) {
-                $cours_user = unserialize(file_get_contents($_POST['restoreThis'] . '/cours_user'));
+                $cours_user = unserialize(file_get_contents($_POST['restoreThis'] . '/course_user'));
                 $userid_map = restore_users($course_id, unserialize(file_get_contents($user_file)),
                                             $cours_user);
                 register_users($course_id, $userid_map, $cours_user);
@@ -139,7 +139,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         //        map_db_field('dropbox_post', 'recipientId', $userid_map);
 
         $config_data = unserialize(file_get_contents("$restoreThis/config_vars"));
-        $course_data = unserialize(file_get_contents("$restoreThis/cours"));
+        $course_data = unserialize(file_get_contents("$restoreThis/course"));
         $url_prefix_map = array(
                 $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data[0]['code'] =>
                         $urlServer . 'modules/ebook/show.php/' . $new_course_code,
@@ -211,7 +211,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             return true;
         }
 
-        restore_table($restoreThis, 'announcements',
+        restore_table($restoreThis, 'announcement',
                 array('set' => array('course_id' => $course_id),
                       'delete' => array('id')));
         restore_table($restoreThis, 'group_properties',
@@ -361,7 +361,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             {
                 $group_map[0] = 0;
             }
-            $assignments_map = restore_table($restoreThis, 'assignments',
+            $assignments_map = restore_table($restoreThis, 'assignment',
                 array('set' => array('course_id' => $course_id),
                       'return_mapping' => 'id'));
             restore_table($restoreThis, 'assignment_submit',
@@ -378,9 +378,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         }
         if (file_exists("$restoreThis/exercise") &&
             file_exists("$restoreThis/exercise_user_record") &&
-            file_exists("$restoreThis/question") &&
-            file_exists("$restoreThis/answer") &&
-            file_exists("$restoreThis/exercise_question"))
+            file_exists("$restoreThis/exercise_question") &&
+            file_exists("$restoreThis/exercise_answer") &&
+            file_exists("$restoreThis/exercise_with_questions"))
         {
             $exercise_map = restore_table($restoreThis, 'exercise',
                 array('set' => array('course_id' => $course_id),
@@ -389,19 +389,19 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 array('delete' => array('eurid'),
                       'map' => array('eid' => $exercise_map,
                                      'uid' => $userid_map)));
-            $question_map = restore_table($restoreThis, 'question',
+            $question_map = restore_table($restoreThis, 'exercise_question',
                 array('set' => array('course_id' => $course_id),
                       'return_mapping' => 'id'));
 
-            list($answer_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM answer"));
+            list($answer_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM exercise_answer"));
             if (!$answer_offset)
                 $answer_offset = 0;
 
-            restore_table($restoreThis, 'answer',
+            restore_table($restoreThis, 'exercise_answer',
                 array('map_function' => 'offset_map_function',
                       'map_function_data' => array('id', $answer_offset),
                       'map' => array('question_id' => $question_map)));
-            restore_table($restoreThis, 'exercise_question',
+            restore_table($restoreThis, 'exercise_with_questions',
                 array('map' => array('question_id' => $question_map,
                                      'exercise_id' => $exercise_map)));
 
@@ -443,8 +443,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
 elseif (isset($_POST['do_restore'])) {
         $base = $_POST['restoreThis'];
-        if (!file_exists($base . '/backup.php') and
-            !file_exists($base . '/config_vars')) {
+        if (!file_exists($base . '/config_vars')) {
                 $tool_content .= "<p class='alert1'>$langInvalidArchive</p>";
                 draw($tool_content, 3);
                 exit;
@@ -458,7 +457,7 @@ elseif (isset($_POST['do_restore'])) {
                 }
                 $tool_content = course_details_form($data['public_code'], $data['title'],
                         $data['prof_names'], $data['lang'], null, $data['visible'],
-                        "data[description]", $hierarchy);
+                        $data['description'], $hierarchy);
         } elseif ($data = get_serialized_file('cours')) {
                 // 2.x-style backup
                 die('FIXME!');
