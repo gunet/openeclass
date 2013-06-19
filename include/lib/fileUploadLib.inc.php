@@ -395,7 +395,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir)
 function showquota($quota, $used) {
 
 	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, 
-               $code_cours, $subsystem, $group_id;
+               $code_cours, $subsystem, $group_id, $ebook_id;
 	include 'gaugebar.php';
 
 	$retstring = '';
@@ -415,8 +415,10 @@ function showquota($quota, $used) {
 
 	// telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	// ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-        if ($subsystem == 'GROUP') {
+        if ($subsystem == GROUP) {
                 $link = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;group_id=$group_id";
+        } elseif ($subsystem == EBOOK) {
+                $link = "$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;ebook_id=$ebook_id";
         } else {
                 $link = "$_SERVER[SCRIPT_NAME]?course=$code_cours";
         }
