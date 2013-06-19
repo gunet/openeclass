@@ -393,7 +393,7 @@ require_once 'include/lib/gaugebar.php';
 function showquota($quota, $used) {
 
 	global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack,
-               $course_code, $subsystem, $group_id;
+               $course_code, $subsystem, $group_id, $ebook_id;
 
 	$retstring = '';
 
@@ -412,8 +412,10 @@ function showquota($quota, $used) {
 
 	// telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
 	// ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-        if ($subsystem == 'GROUP') {
+        if ($subsystem == GROUP) {
                 $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id";
+        } elseif ($subsystem == EBOOK) {
+                $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ebook_id=$ebook_id";
         } else {
                 $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         }
