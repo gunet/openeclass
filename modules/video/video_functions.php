@@ -436,7 +436,9 @@ function using_ie()
 }
 
 /**
- * Whether the client is an iOS device or not
+ * Whether the client uses an iOS device or not
+ * 
+ * @return boolean
  */
 function using_ios()
 {
