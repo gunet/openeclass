@@ -214,7 +214,7 @@ class MultimediaHelper {
             case "f4v":
             case "m4v":
             case "mp3":
-                $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.6.min.js'></script>";
+                $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.12.min.js'></script>";
                 $ret .= $startdiv;
                 if (self::isUsingIOS())
                     $ret .= '<br/><br/><a href="'.$mediaDL.'">Download or Stream media</a>';
@@ -222,7 +222,7 @@ class MultimediaHelper {
                     $ret .= '<div id="flowplayer" style="display: block; width: '. self::getObjectWidth() .'px; height: '. self::getObjectHeight() .'px;"></div>
                              <script type="text/javascript">
                                  flowplayer("flowplayer", {
-                                     src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf",
+                                     src: "'.$urlAppend.'js/flowplayer/flowplayer-3.2.16.swf",
                                      wmode: "transparent"
                                      }, {
                                      clip: {
