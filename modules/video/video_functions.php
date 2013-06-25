@@ -294,22 +294,25 @@ function media_html_object($mediaPath, $mediaURL, $bgcolor = '#000000', $color =
         case "mp3":
             $ret .= "<script type='text/javascript' src='$urlAppend/js/flowplayer/flowplayer-3.2.6.min.js'></script>";
             $ret .= $startdiv;
-            $ret .= '<div id="flowplayer" style="display: block; width: '.get_object_width().'px; height: '.get_object_height().'px;"></div>
-                     <script type="text/javascript">
-                         flowplayer("flowplayer", {
-                             src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf", 
-                             wmode: "transparent"
-                             }, {
-                             clip: {
-                                 url: "'.$mediaPath.'",
-                                 scaling: "fit"
-                             },
-                             canvas: {
-                                 backgroundColor: "#000000",
-                                 backgroundGradient: "none"
-                             }
-                         });
-                     </script>';
+            if (using_ios())
+                $ret .= '<br/><br/><a href="'.$mediaURL.'">Download or Stream media</a>';
+            else 
+                $ret .= '<div id="flowplayer" style="display: block; width: '.get_object_width().'px; height: '.get_object_height().'px;"></div>
+                         <script type="text/javascript">
+                             flowplayer("flowplayer", {
+                                 src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf", 
+                                 wmode: "transparent"
+                                 }, {
+                                 clip: {
+                                     url: "'.$mediaPath.'",
+                                     scaling: "fit"
+                                 },
+                                 canvas: {
+                                     backgroundColor: "#000000",
+                                     backgroundGradient: "none"
+                                 }
+                             });
+                         </script>';
             $ret .= $enddiv;
             break;
         case "swf":
@@ -429,6 +432,22 @@ function using_ie()
         $ub = true;
     }
    
+    return $ub;
+}
+
+/**
+ * Whether the client is an iOS device or not
+ */
+function using_ios()
+{
+    $u_agent = $_SERVER['HTTP_USER_AGENT'];
+    $ub = false;
+    
+    if (preg_match('/iPhone/i', $u_agent) || preg_match('/iPod/i', $u_agent) || preg_match('/iPad/i', $u_agent))
+    {
+        $ub = true;
+    }
+    
     return $ub;
 }
 
