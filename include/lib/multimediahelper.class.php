@@ -216,22 +216,25 @@ class MultimediaHelper {
             case "mp3":
                 $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.6.min.js'></script>";
                 $ret .= $startdiv;
-                $ret .= '<div id="flowplayer" style="display: block; width: '. self::getObjectWidth() .'px; height: '. self::getObjectHeight() .'px;"></div>
-                         <script type="text/javascript">
-                             flowplayer("flowplayer", {
-                                 src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf",
-                                 wmode: "transparent"
-                                 }, {
-                                 clip: {
-                                     url: "'.$mediaPlay.'",
-                                     scaling: "fit"
-                                 },
-                                 canvas: {
-                                     backgroundColor: "#000000",
-                                     backgroundGradient: "none"
-                                 }
-                             });
-                         </script>';
+                if (self::isUsingIOS())
+                    $ret .= '<br/><br/><a href="'.$mediaDL.'">Download or Stream media</a>';
+                else
+                    $ret .= '<div id="flowplayer" style="display: block; width: '. self::getObjectWidth() .'px; height: '. self::getObjectHeight() .'px;"></div>
+                             <script type="text/javascript">
+                                 flowplayer("flowplayer", {
+                                     src: "'.$urlAppend.'/js/flowplayer/flowplayer-3.2.7.swf",
+                                     wmode: "transparent"
+                                     }, {
+                                     clip: {
+                                         url: "'.$mediaPlay.'",
+                                         scaling: "fit"
+                                     },
+                                     canvas: {
+                                         backgroundColor: "#000000",
+                                         backgroundGradient: "none"
+                                     }
+                                 });
+                             </script>';
                 $ret .= $enddiv;
                 break;
             case "swf":
@@ -339,6 +342,17 @@ class MultimediaHelper {
     public static function isUsingIE() {
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         return (preg_match('/MSIE/i', $u_agent)) ? true : false;
+    }
+    
+    /** Whether the client uses an iOS device or not
+     * 
+     * @return boolean
+     */
+    public static function isUsingIOS() {
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+        return (preg_match('/iPhone/i', $u_agent) || 
+                preg_match('/iPod/i', $u_agent) || 
+                preg_match('/iPad/i', $u_agent)) ? true : false;
     }
 
     /**
