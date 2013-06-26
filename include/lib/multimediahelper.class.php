@@ -218,7 +218,7 @@ class MultimediaHelper {
                 $ret .= $startdiv;
                 if (self::isUsingIOS())
                     $ret .= '<br/><br/><a href="'.$mediaDL.'">Download or Stream media</a>';
-                else
+                else {
                     $ret .= '<div id="flowplayer" style="display: block; width: '. self::getObjectWidth() .'px; height: '. self::getObjectHeight() .'px;"></div>
                              <script type="text/javascript">
                                  flowplayer("flowplayer", {
@@ -226,7 +226,11 @@ class MultimediaHelper {
                                      wmode: "transparent"
                                      }, {
                                      clip: {
-                                         url: "'.$mediaPlay.'",
+                                         url: "'.$mediaPlay;
+                    // flowplayer needs to see a pattern of name.mp3 in order to stream it
+                    if ($extension == 'mp3')
+                        $ret .= '&amp;ext=media.'.$extension;
+                    $ret .= '",
                                          scaling: "fit"
                                      },
                                      canvas: {
@@ -235,6 +239,7 @@ class MultimediaHelper {
                                      }
                                  });
                              </script>';
+                }
                 $ret .= $enddiv;
                 break;
             case "swf":
