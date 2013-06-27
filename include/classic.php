@@ -178,7 +178,7 @@ if (count($status) > 0) {
                             claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
                             "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
                             q($profs[$code]) . "</b></span>)<br />".
-                            standard_text_escape(ellipsize($content, 250, "<strong>&nbsp;...<a href='modules/announcements/index.php.php?course=$code&amp;an_id=$ann[id]'>
+                            standard_text_escape(ellipsize_html($content, 250, "<strong>&nbsp;...<a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>
                                 <span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
                         $la++;
                 }

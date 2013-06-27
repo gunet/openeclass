@@ -188,3 +188,7 @@ SecureImage - Copyright 2009 Drew Phillips
   http://www.phpcaptcha.org Securimage PHP CAPTCHA
   author Drew Phillips <drew@drew-phillips.com>
   version 2.0.1 BETA (December 6th, 2009)
+
+Class HtmlCutString - Based on code provided by Prajwala  <m.prajwala@gmail.com>
+  Licenced under GPL
+  http://code.google.com/p/cut-html-string/

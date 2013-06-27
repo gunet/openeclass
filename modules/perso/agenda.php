@@ -100,7 +100,7 @@ function getUserAgenda($param, $type)
 	$agendaDateData = array();
 	$previousDate = "0000-00-00";
 	$firstRun = true;
-	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {
+	while ($myAgenda = mysql_fetch_row($mysql_query_result)) {                
 		//allow certain html tags that do not cause errors in the
 		//personalised interface
 		$myAgenda[1] = strip_tags($myAgenda[1], '<b><i><u><ol><ul><li><br>');
@@ -124,7 +124,6 @@ function getUserAgenda($param, $type)
 	if (!$firstRun) {
 		array_push($agendaDateData, $agendaData);
 	}
-
 	if($type == "html") {
 		return agendaHtmlInterface($agendaDateData);
 	} elseif ($type == "data") {
@@ -161,11 +160,14 @@ function agendaHtmlInterface($data)
 				}
 				else {
 					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
-				}
+				}                                
                                 $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-                                $data[$i][$j][1] = ellipsize($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
+                                $data[$i][$j][1] = ellipsize_html($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");                                
                                 $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
-				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.":<b>".$data[$i][$j][3]."</b> | $langDuration:<b>".$data[$i][$j][4]."</b><br />".standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
+				$agenda_content .= "<tr><td><ul class='custom_list'>
+                                                <li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b>
+                                                <div class='smaller'>".$langExerciseStart.": <b>".$data[$i][$j][3]."</b> | $langDuration: <b>".$data[$i][$j][4]."</b>
+                                                <br />".standard_text_escape($data[$i][$j][1])."</div></li></ul></td></tr>";
 			}
 		}
 		$agenda_content .= "</table>";

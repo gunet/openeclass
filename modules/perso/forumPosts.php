@@ -109,14 +109,12 @@ function forumHtmlInterface($data)
 			$content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
-				$url = $urlServer."index.php?perso=5&amp;c=".$data[$i][1]."&amp;t=".$data[$i][2][0][$j][2]."&amp;f=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];
-                                //$data[$i][2][0][$j][8] = ellipsize($data[$i][2][0][$j][8], 150,
-                                //        "... <b>[$langMore]</b>");
+				$url = $urlServer."index.php?perso=5&amp;c=".$data[$i][1]."&amp;t=".$data[$i][2][0][$j][2]."&amp;f=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];                                
 				$content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
 				<b>".q($data[$i][2][0][$j][3])." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
                                 </a><div class='smaller grey'><b>".q(uid_to_name($data[$i][2][0][$j][6])).
                                 "</b></div><div class='smaller'>" .
-                                standard_text_escape(ellipsize($data[$i][2][0][$j][7], 150,
+                                standard_text_escape(ellipsize_html($data[$i][2][0][$j][7], 150,
                                                      "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
                                 "</div></li></ul></td></tr>";
 			}

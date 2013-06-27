@@ -108,7 +108,7 @@ if ($is_editor) {
         if (isset($_GET['delete'])) {
                 $delete = intval($_GET['delete']);
                 $row = mysql_fetch_array(db_query("SELECT title, content FROM announcement WHERE id = $delete"));
-                $txt_content = ellipsize(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
+                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
                 $result = db_query("DELETE FROM announcement WHERE id = $delete");
                 $aidx->remove($delete);
                 Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE,
@@ -159,7 +159,7 @@ if ($is_editor) {
                         $log_type = LOG_INSERT;
                 }
                 $aidx->store($id);
-                $txt_content = ellipsize(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
+                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
                 Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type,
                         array('id' => $id,
                               'email' => $send_mail,
@@ -331,7 +331,7 @@ while ($myrow = mysql_fetch_array($result)) {
                 $nameTools = q($myrow['title']);
                 $tool_content .= $content;
         } else {
-                $tool_content .= standard_text_escape(ellipsize($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
+                $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
         }
         $tool_content .= "</td>";
 

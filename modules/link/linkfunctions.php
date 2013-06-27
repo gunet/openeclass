@@ -178,7 +178,7 @@ function submit_link()
                                                         WHERE link.category = link_category.id
                                                         AND link.course_id = $course_id
                                                         AND link.id = $id"));
-        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
+        $txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
         Log::record($course_id, MODULE_ID_LINKS, $log_type,
                     @array('id' => $id,
                           'url' => $urllink,

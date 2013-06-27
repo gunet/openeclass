@@ -44,10 +44,7 @@ if (isset($_SESSION['langswitch'])) {
 
 require_once 'include/lib/textLib.inc.php';
 
-$tool_content .= <<<lCont
-
-<p align='justify'>$langInfoAbout</p>
-lCont;
+$tool_content .= "<p align='justify'>$langInfoAbout</p>";
 
 $sql = "SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
         WHERE `visible` = 1
@@ -75,17 +72,16 @@ if (mysql_num_rows($result) > 0) {
 	for($i=0; $i < $numOfAnnouncements; $i++) {
 		$aid = $announceArr[$i]['id'];
 		$tool_content .= "
-        <tr>
-          <td width='1'><img style='border:0px;' src='$themeimg/arrow.png' alt='' /></td>
-          <td>
-	    <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
-    &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
-		".standard_text_escape(ellipsize($announceArr[$i]['body'], 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
-	  </td>
-	</tr>";
+                <tr>
+                  <td width='1'><img style='border:0px;' src='$themeimg/arrow.png' alt='' /></td>
+                  <td>
+                <b><a href='modules/announcements/main_ann.php?aid=$aid'>".q($announceArr[$i]['title'])."</a></b>
+                        &nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
+		".standard_text_escape(ellipsize_html($announceArr[$i]['body'], 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>"))."
+                </td>
+              </tr>";
 	}
-	$tool_content .= "
-        </table>";
+	$tool_content .= "</table>";
 }
 
 // check for shibboleth

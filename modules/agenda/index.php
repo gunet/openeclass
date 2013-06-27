@@ -111,7 +111,7 @@ if ($is_editor) {
 	}
 	if (isset($_POST['submit'])) {
                 register_posted_variables(array('date' => true, 'event_title' => true, 'content' => true, 'lasting' => true));
-                $content = purify($content);
+                $content = purify($content);                
                 $datetime = explode(' ', $date);
                 $date = $datetime[0];
                 $hour = $datetime[1];
@@ -227,16 +227,11 @@ if ($is_editor) {
                 <fieldset>
                   <legend>$langOptions</legend>
 		  <table class='tbl' width='100%'>";
-		$day = date("d");
-		if (isset($event_title)) {
-			$title_value = ' value="' . q($event_title) . '"';
-		} else {
-			$title_value = '';
-                }
-		$tool_content .= "
+		$day = date("d");		
+		@$tool_content .= "
                   <tr>
                     <th>$langTitle:</th>
-                    <td><input type='text' size='70' name='title'$title_value></td>
+                    <td><input type='text' size='70' name='event_title' value = '". q($event_title) . "'></td>
                   </tr>
 		  <tr>
                     <th>$langDate:</th>
@@ -244,7 +239,7 @@ if ($is_editor) {
                   </tr>
                   <tr>
                     <th>$langDuration <small> $langInHour</small>:</th>
-                    <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2'></td>
+                    <td><input type='text' name='lasting' value='".$myrow['lasting']."' size='2' maxlength='2'></td>
                   </tr>";
     		if (!isset($content)) {
                         $content = '';
