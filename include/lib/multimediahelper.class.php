@@ -226,12 +226,11 @@ class MultimediaHelper {
                                      wmode: "transparent"
                                      }, {
                                      clip: {
-                                         url: "'.$mediaPlay;
+                                         url: "'.$mediaPlay.'",';
                     // flowplayer needs to see a pattern of name.mp3 in order to stream it
                     if ($extension == 'mp3')
-                        $ret .= '&amp;ext=media.'.$extension;
-                    $ret .= '",
-                                         scaling: "fit"
+                        $ret .= '        type: "audio",';
+                    $ret .= '            scaling: "fit"
                                      },
                                      canvas: {
                                          backgroundColor: "#000000",
