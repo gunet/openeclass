@@ -28,7 +28,7 @@ if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 } else {
         $charset = 'UTF-8';
 }
-$crlf="\r\n";
+$crlf = "\r\n";
 
 if(!isset($_GET['pid'])) {
 	header("Location: $urlServer");
@@ -43,8 +43,7 @@ echo csv_escape($langQuestions), $crlf, $crlf;
 $questions = db_query("SELECT * FROM poll_question WHERE pid=$pid", $currentCourseID);
 while ($theQuestion = mysql_fetch_array($questions)) {
         if ($theQuestion['qtype'] == 'multiple') { // only for questions with mupliple answers
-                echo $theQuestion['question_text'];
-                echo "$crlf";                
+                echo csv_escape($theQuestion['question_text']), $crlf;                
                 $answers = db_query("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
                                 FROM poll_answer_record LEFT JOIN poll_question_answer
                                 ON poll_answer_record.aid = poll_question_answer.pqaid
@@ -65,9 +64,8 @@ while ($theQuestion = mysql_fetch_array($questions)) {
                 foreach ($answer_counts as $i => $count) {
                         $percentage = round(100 * ($count / $answer_total));
                         $label = $answer_text[$i];                        
-                        echo csv_escape($label).
-                        ";".csv_escape($percentage)."$crlf";
+                        echo csv_escape($label), ';', csv_escape($percentage), $crlf;
                 }        
-                echo "$crlf";
+                echo $crlf;
         }
 }
