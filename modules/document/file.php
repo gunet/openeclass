@@ -61,7 +61,7 @@ if ($cinfo_components[0] == 'common') {
         define('COMMON_DOCUMENTS', true);
 } else {
         $require_current_course = true;
-        $_SESSION['course_code'] = $cinfo_components[0];
+        $_SESSION['dbname'] = $cinfo_components[0];
         if (isset($cinfo_components[1])) {
                 $group_id = intval($cinfo_components[1]);
                 define('GROUP_DOCUMENTS', true);
