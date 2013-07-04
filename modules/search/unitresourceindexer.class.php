@@ -80,7 +80,7 @@ class UnitResourceIndexer implements ResourceIndexerInterface {
         $res = db_query("SELECT ur.*, cu.course_id
             FROM unit_resources ur 
             JOIN course_units cu ON cu.id = ur.unit_id 
-            WHERE id = " . intval($uresId));
+            WHERE ur.id = " . intval($uresId));
         $ures = mysql_fetch_assoc($res);
         if (!$ures)
             return null;
