@@ -72,9 +72,11 @@ if ($cinfo_components[0] == 'common') {
 
 $guest_allowed = true;
 
-include '../../include/init.php';
-include '../../include/action.php';
-include '../../include/lib/fileManageLib.inc.php';
+require_once '../../include/init.php';
+require_once '../../include/action.php';
+require_once '../../include/lib/fileManageLib.inc.php';
+require_once '../../include/lib/fileDisplayLib.inc.php';
+require_once '../video/video_functions.php';
 
 if (!defined('COMMON_DOCUMENTS')) {
         // check user's access to cours
@@ -123,9 +125,6 @@ if (file_exists($disk_path)) {
         }
         send_file_to_client($disk_path, $file_info['filename']);
     } else {
-        require_once 'include/lib/fileDisplayLib.inc.php';
-        require_once 'include/lib/multimediahelper.class.php';
-
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/document.php?course='. $code_cours .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
