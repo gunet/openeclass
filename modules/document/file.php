@@ -80,7 +80,7 @@ if (!defined('COMMON_DOCUMENTS')) {
         // check user's access to cours
         check_cours_access();        
         // anonymous with access token needs course id set
-        $course_id = course_code_to_id($_SESSION['course_code']);
+        $course_id = course_code_to_id($_SESSION['dbname']);
 }
 
 include 'doc_init.php';
@@ -129,7 +129,7 @@ if (file_exists($disk_path)) {
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/document/document.php?course='. $code_cours .'&amp;download='. $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+            $mediaURL = $urlServer .'modules/group/index.php?course='. $code_cours .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
         
@@ -146,7 +146,7 @@ function check_cours_access() {
         global $mysqlMainDb, $dbname, $uid, $code_cours;        
 
         if (!$uid && !isset($code_cours)) {
-            $code_cours = $_SESSION['course_code'];
+            $code_cours = $_SESSION['dbname'];
         }
 
         $qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
