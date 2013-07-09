@@ -451,13 +451,21 @@ elseif (isset($_POST['do_restore'])) {
         if ($data = get_serialized_file('course')) {
                 // 3.0-style backup
                 $data = $data[0];
-                $hierarchy = get_serialized_file('hierarchy');
                 if (isset($data['fake_code'])) {
                         $data['public_code'] = $data['fake_code'];
                 }
+                $hierarchy = get_serialized_file('hierarchy');
+                $course_units = get_serialized_file('course_units');
+                $unit_resources = get_serialized_file('unit_resources');
+                $description = '';
+                if ($unit_data = search_table_dump($course_units, 'order', -1)) {
+                        if ($resource_data = search_table_dump($unit_resources, 'order', -1)) {
+                                $description = purify($resource_data['comments']);
+                        }
+                }
                 $tool_content = course_details_form($data['public_code'], $data['title'],
                         $data['prof_names'], $data['lang'], null, $data['visible'],
-                        $data['description'], $hierarchy);
+                        $description, $hierarchy);
         } elseif ($data = get_serialized_file('cours')) {
                 // 2.x-style backup
                 die('FIXME!');
@@ -1095,4 +1103,15 @@ function get_serialized_file($file)
         } else {
                 return false;
         }
+}
+
+function search_table_dump($table, $field, $value)
+{
+        foreach ($table as $id => $data) {
+                if (isset($data[$field]) and
+                    $data[$field] == $value) {
+                            return $data;
+                }
+        }
+        return null;
 }
