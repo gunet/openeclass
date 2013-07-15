@@ -1408,7 +1408,12 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             db_query("DROP VIEW IF EXISTS `actions_daily_tmpview`");
             db_query("DROP TABLE IF EXISTS `actions`");
         }
-
+        // convert tables to InnoDB storage engine
+        $s = db_query("SHOW TABLES");
+        while ($table = mysql_fetch_array($sql)) {
+                db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+        }
+        // update eclass version
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
 
         echo "<hr><p class='success'>$langUpgradeSuccess
