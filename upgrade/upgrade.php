@@ -968,6 +968,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 
             // hierarchy tables
             $n = db_query("SHOW TABLES LIKE 'faculte'");
+            $root_node = null;
             $rebuildHierarchy = (mysql_num_rows($n) == 1) ? true : false;
             // Whatever code $rebuildHierarchy wraps, can only be executed once.
             // Everything else can be executed several times.
@@ -1024,6 +1025,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 $root_rgt = 2 + 8 * intval($r[0]);
                 db_query("INSERT INTO `hierarchy` (code, name, lft, rgt)
                     VALUES ('', ". quote($_POST['Institution']) .", 1, $root_rgt)");
+                $root_node = mysql_insert_id();
             }
 
             db_query("CREATE TABLE IF NOT EXISTS `course_department` (
@@ -1034,10 +1036,21 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             if ($rebuildHierarchy) {
                 $n = db_query("SELECT cours_id, faculteid, type FROM `cours`");
                 while ($r = mysql_fetch_assoc($n)) {
-                    $qlike = 'lang' . $r['type'];
+                    // take care of courses with not type
+                    if (!empty($r['type']) && strlen($r['type']) > 0)
+                        $qlike = 'lang' . $r['type'];
+                    else
+                        $qlike = 'langother';
+                    
+                    // take care of courses with no parent
+                    if (!empty($r['faculteid']))
+                        $qfaculteid = $r['faculteid'];
+                    else
+                        $qfaculteid = $root_node;
+                    
                     $res = db_query("SELECT node.id FROM `hierarchy` AS node, `hierarchy` AS parent
                                       WHERE node.name LIKE ". quote($$qlike) ."
-                                        AND parent.id = ". $r['faculteid'] ."
+                                        AND parent.id = ". $qfaculteid ."
                                         AND node.lft BETWEEN parent.lft AND parent.rgt");
                     $node = mysql_fetch_assoc($res);
 
