@@ -418,7 +418,8 @@ db_query("CREATE TABLE IF NOT EXISTS video (
                 `description` TEXT,
                 `creator` VARCHAR(200),
                 `publisher` VARCHAR(200),
-                `date` DATETIME) $charset_spec");
+                `date` DATETIME,
+                `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS videolinks (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -428,7 +429,8 @@ db_query("CREATE TABLE IF NOT EXISTS videolinks (
                 `description` TEXT,
                 `creator` VARCHAR(200),
                 `publisher` VARCHAR(200),
-                `date` DATETIME) $charset_spec");
+                `date` DATETIME,
+                `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

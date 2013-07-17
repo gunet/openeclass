@@ -721,7 +721,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `description` TEXT,
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
-                            `date` DATETIME)');
+                            `date` DATETIME,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1)');
                 
                 db_query('CREATE TABLE IF NOT EXISTS videolinks (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -731,7 +732,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `description` TEXT,
                             `creator` VARCHAR(200),
                             `publisher` VARCHAR(200),
-                            `date` DATETIME)');
+                            `date` DATETIME,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1)');
 
                 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1353,7 +1355,10 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `description` TEXT NOT NULL,
                                 `order` INT(11) NOT NULL DEFAULT 0)");
         }
+        
+        // ----------------------------------
         // creation of indexes
+        // ----------------------------------
 	mysql_index_exists('document', 'doc_path_index') or
                 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
 	mysql_index_exists('course_units', 'course_units_index') or
@@ -1362,6 +1367,10 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
 		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
         mysql_index_exists('course_module', 'visible_cid') or
                 db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
+        mysql_index_exists('video', 'cid') or
+                db_query('CREATE INDEX `cid` ON video (course_id)');
+        mysql_index_exists('videolinks', 'cid') or
+                db_query('CREATE INDEX `cid` ON videolinks (course_id)');
 
         // **********************************************
         // upgrade courses databases
