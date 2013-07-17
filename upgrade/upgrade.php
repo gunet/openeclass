@@ -563,6 +563,22 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                         ('login_fail_deny_interval', 5),
                                         ('login_fail_forgive_interval', 24)");
         }
+        
+        if ($oldversion < '2.7') {
+                mysql_field_exists($mysqlMainDb, 'document', 'extra_path') or
+                        db_query("ALTER TABLE `document` ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`");
+		mysql_field_exists($mysqlMainDb, 'user', 'parent_email') or
+                        db_query("ALTER TABLE `user` ADD `parent_email` VARCHAR(100) NOT NULL DEFAULT '' AFTER `email`");
+                db_query("CREATE TABLE IF NOT EXISTS `parents_announcements` (
+                        `id` mediumint(9) NOT NULL auto_increment,
+                        `title` varchar(255) default NULL,
+                        `content` text,
+                        `date` datetime default NULL,
+                        `sender_id` int(11) NOT NULL,
+                        `recipient_id` int(11) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                         PRIMARY KEY (`id`)) $charset_spec");
+        }
 
         if ($oldversion < '3') {
                 db_query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
@@ -631,8 +647,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         db_query("ALTER TABLE `document`
                                 CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `extra_path` VARCHAR(255) NOT NULL DEFAULT '' AFTER `path`"); 
+                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1"); 
                 }
 
                 // Rename table `annonces` to `announcements`
@@ -1338,13 +1353,15 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `description` TEXT NOT NULL,
                                 `order` INT(11) NOT NULL DEFAULT 0)");
         }
-
+        // creation of indexes
 	mysql_index_exists('document', 'doc_path_index') or
-                db_query('CREATE INDEX `doc_path_index` ON document (course_id,subsystem,path)');
+                db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem,path)');
 	mysql_index_exists('course_units', 'course_units_index') or
-                db_query('CREATE INDEX `course_units_index` ON course_units (course_id,`order`)');
+                db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
 	mysql_index_exists('unit_resources', 'unit_res_index') or
-		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id,visibility,res_id)');
+		db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
+        mysql_index_exists('course_module', 'visible_cid') or
+                db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
 
         // **********************************************
         // upgrade courses databases
