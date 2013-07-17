@@ -42,12 +42,6 @@ $tool_content .= "
 <p> &nbsp; </p>
 <p class='red'>$langExpl2Upgrade</p>";
 set_time_limit(0);
-$max_execution_time = ini_get('max_execution_time');
-if ($max_execution_time != 0 and $max_execution_time < 300) {
-	$tool_content .= "<p>$langExecTimeUpgrade</p>";
-	draw($tool_content, 0);
-	exit;
-}
 $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$langHere</a>. $langUpgRead <a href='$upgrade_info_file'>$langUpgMan</a>
    $langUpgLastStep</p>
 <p>$langUpgradeCont</p></div>
@@ -63,11 +57,9 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 <th width='200'>$langPass:</th>
 <td><input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
 </tr>
-
 <tr>
   <td class='right' colspan='2'><input type='submit' name='submit_upgrade2' value='$langUpgrade' /></td>
   </tr>
-
 </table>
 </fieldset>";
 
