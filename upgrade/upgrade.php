@@ -1416,12 +1416,12 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             $result = db_query("SHOW FULL TABLES");
             while ($table = mysql_fetch_array($result)) {
                 if ($table['Table_type'] === 'BASE TABLE')
-                    db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+                    db_query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
             }
         } else {
             $result = db_query("SHOW TABLES");
             while ($table = mysql_fetch_array($result)) {
-                    db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+                    db_query("ALTER TABLE `$table[0]` ENGINE = InnoDB");
             }
         }
         // update eclass version
