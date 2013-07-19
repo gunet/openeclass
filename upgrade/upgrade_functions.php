@@ -1018,10 +1018,21 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
     }
 
     // move table `actions`, `actions_summary`, `login` in main DB
-        db_query("INSERT INTO $mysqlMainDb.actions
-                        (user_id, module_id, action_type_id, date_time, duration, course_id)
-                        SELECT user_id, module_id, action_type_id, date_time, duration, $course_id
-                        FROM actions", $code);
+        $result = db_query("SELECT
+                            `user_id`,
+                            `module_id`,
+                            $course_id as `course_id`,
+                            COUNT(`id`) AS `hits`,
+                            SUM(`duration`) AS `duration`,
+                            DATE(`date_time`) AS `day`
+                            FROM `actions`
+                            GROUP BY DATE(`date_time`), `user_id`, `module_id`");
+        while ($row = mysql_fetch_assoc($result)) {
+            db_query("INSERT INTO `$mysqlMainDb`.`actions_daily`
+                        (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
+                        VALUES 
+                        (NULL, ". $row['user_id'] .", ". $row['module_id'] .", ". $row['course_id'] .", ". $row['hits'] .", ". $row['duration'] .", '". $row['day'] ."', NOW())");
+        }
 
         db_query("INSERT INTO $mysqlMainDb.actions_summary
                 (module_id, visits, start_date, end_date, duration, course_id)
