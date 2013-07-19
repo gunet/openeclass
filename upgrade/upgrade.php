@@ -1412,9 +1412,17 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
         }
         
         // convert tables to InnoDB storage engine
-        $result = db_query("SHOW TABLES");
-        while ($table = mysql_fetch_array($result)) {
-                db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+        if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
+            $result = db_query("SHOW FULL TABLES");
+            while ($table = mysql_fetch_array($result)) {
+                if ($table['Table_type'] === 'BASE TABLE')
+                    db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+            }
+        } else {
+            $result = db_query("SHOW TABLES");
+            while ($table = mysql_fetch_array($result)) {
+                    db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
+            }
         }
         // update eclass version
         db_query("UPDATE config SET `value` = '" . ECLASS_VERSION ."' WHERE `key`='version'", $mysqlMainDb);
