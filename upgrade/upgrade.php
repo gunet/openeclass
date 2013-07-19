@@ -1448,8 +1448,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
             db_query("DROP TABLE IF EXISTS `actions`");
         }
         // convert tables to InnoDB storage engine
-        $s = db_query("SHOW TABLES");
-        while ($table = mysql_fetch_array($sql)) {
+        $result = db_query("SHOW TABLES");
+        while ($table = mysql_fetch_array($result)) {
                 db_query("ALTER TABLE $table[0] ENGINE = InnoDB");
         }
         // update eclass version
