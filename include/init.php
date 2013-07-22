@@ -491,5 +491,5 @@ set_glossary_cache();
 $tool_content = $head_content = '';
 function caution($s)
 {
-	return '<p class="alert1"' . $s . '</p>';
+	return '<p class="alert1">' . $s . '</p>';
 }
