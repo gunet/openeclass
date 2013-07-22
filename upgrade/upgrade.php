@@ -647,7 +647,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         db_query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
                         db_query("ALTER TABLE `document`
                                 CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1"); 
+                                ADD `public` TINYINT(4) NOT NULL DEFAULT 1
+                                DROP INDEX document"); 
                 }
 
                 // Rename table `annonces` to `announcements`
@@ -659,7 +660,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                                            CHANGE `temps` `date` DATETIME,
                                                            CHANGE `cours_id` `course_id` INT(11),
                                                            CHANGE `ordre` `order` MEDIUMINT(11),
-                                                           CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0");
+                                                           CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0
+                                                           DROP INDEX annonces");
                 }
 
                 // create forum tables
@@ -1329,7 +1331,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                              DROP COLUMN `type`,
                                              DROP COLUMN `faculteid`,
                                              CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
-                                             CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0");
+                                             CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0
+                                             DROP INDEX cours");
                 $lang_q = db_query('SELECT DISTINCT lang from course');
                 while (list($old_lang) = mysql_fetch_row($lang_q)) {
                         $new_lang = langname_to_code($old_lang);
