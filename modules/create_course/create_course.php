@@ -366,6 +366,13 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 // create the course and the course database
 if (isset($_POST['create_course'])) {
 
+        // validation in case it skipped JS validation
+        if (count($departments) < 1 || empty($departments[0])) {
+            $_SESSION['errMessage'] = caution($langEmptyAddNode);
+            header("Location:" . $urlServer . "modules/create_course/create_course.php");
+            exit;
+        }
+
         $nameTools = $langCourseCreate;
 
         // create new course code: uppercase, no spaces allowed
