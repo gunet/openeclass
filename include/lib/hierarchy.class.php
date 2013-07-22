@@ -976,7 +976,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" '. $params .' value="'. $defs[0] .'" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#'. $defs[0] .'\', true, null);' : '';
-            $html .= '<input id="dialog-set-value" type="text" onclick="'. $onclick .' $( \'#dialog-form\' ).dialog( \'open\' );" value="'. $def .'" />&nbsp;';
+            $html .= '<input id="dialog-set-value" type="text" onclick="'. $onclick .' $( \'#dialog-form\' ).dialog( \'open\' );" onfocus="'. $onclick .' $( \'#dialog-form\' ).dialog( \'open\' );" value="'. $def .'" />&nbsp;';
         }
 
         $html .= '<div id="dialog-form" title="'. $langNodeAdd .'"><fieldset><div id="js-tree">';
