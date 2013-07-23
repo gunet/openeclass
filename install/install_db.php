@@ -1104,3 +1104,7 @@ db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)
 db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
 db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)');
 db_query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
+db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
+db_query('CREATE INDEX `cid` ON video (course_id)');
+db_query('CREATE INDEX `cid` ON videolinks (course_id)');
+db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');

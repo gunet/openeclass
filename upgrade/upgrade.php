@@ -1391,6 +1391,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 db_query('CREATE INDEX `cid` ON video (course_id)');
         mysql_index_exists('videolinks', 'cid') or
                 db_query('CREATE INDEX `cid` ON videolinks (course_id)');
+        mysql_index_exists('log', 'cmid') or
+                db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
 
         // **********************************************
         // upgrade courses databases
