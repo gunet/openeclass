@@ -926,6 +926,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                             `attempts_allowed` INT(11) DEFAULT 0,
                             `random` SMALLINT(6) NOT NULL DEFAULT 0,
                             `active` TINYINT(4) NOT NULL DEFAULT 1,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1,
                             `results` TINYINT(1) NOT NULL DEFAULT 1,
                             `score` TINYINT(1) NOT NULL DEFAULT 1)");
                 

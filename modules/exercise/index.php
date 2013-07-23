@@ -95,9 +95,19 @@ if($is_editor) {
 					$objExerciseTmp->enable();
 					$objExerciseTmp->save();
                                         $eidx->store($exerciseId);
-					break;
+					break;                                
 				case 'disable': // disables an exercise
 					$objExerciseTmp->disable();
+					$objExerciseTmp->save();
+                                        $eidx->store($exerciseId);
+					break;
+                                case 'public':  // make exercise public
+					$objExerciseTmp->makepublic();
+					$objExerciseTmp->save();
+                                        $eidx->store($exerciseId);
+					break;
+                                case 'limited':  // make exercise limited
+					$objExerciseTmp->makelimited();
 					$objExerciseTmp->save();
                                         $eidx->store($exerciseId);
 					break;
@@ -106,13 +116,14 @@ if($is_editor) {
 		// destruction of Exercise
 		unset($objExerciseTmp);
 	}
-	$sql = "SELECT id, title, description, type, active FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id LIMIT $from, $limitExPage";
+	$sql = "SELECT id, title, description, type, active, public FROM `$TBL_EXERCISE` 
+                        WHERE course_id = $course_id ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql);
 	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id");
 } else {
     // only for students
-	$sql = "SELECT id, title, description, type, start_date, end_date, time_constraint, attempts_allowed ".
-		"FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = '1' ORDER BY id LIMIT $from, $limitExPage";
+	$sql = "SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed ".
+		"FROM `$TBL_EXERCISE` WHERE course_id = $course_id ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql);
 	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCISE` WHERE course_id = $course_id AND active = 1");
 }
@@ -131,7 +142,7 @@ if($is_editor) {
 }
 
 if(!$nbrExercises) {
-    $tool_content .= "<p class='alert1'>$langNoEx</p>";
+        $tool_content .= "<p class='alert1'>$langNoEx</p>";
 } else {
 	$maxpage = 1 + intval($num_of_ex / $limitExPage);
 	if ($maxpage > 0) {
@@ -149,22 +160,21 @@ if(!$nbrExercises) {
 
 	// shows the title bar only for the administrator
 	if($is_editor) {
-		$tool_content .= "
-	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
-	      <th class='center'>$langResults</th>
-	      <th width='85' class='center'>$langCommands&nbsp;</th>
-	    </tr>";
+                $tool_content .= "
+                <th width='500' colspan='2'><div class='left'>$langExerciseName</div></th>
+                <th class='center'>$langResults</th>
+                <th class='center'>$langCommands&nbsp;</th>
+              </tr>";
 	} else { // student view
 		$tool_content .= "
-	      <th colspan='2'>$langExerciseName</th>
-	      <th width='110' class='center'>$langExerciseStart / $langExerciseEnd</th>
-	      <th width='70' class='center'>$langExerciseConstrain</th>
-	      <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
-              <th width='70' class='center'>$langResults</th>
-	    </tr>";
-	}
-	$tool_content .= "<tbody>";
-	// while list exercises
+                <th colspan='2'>$langExerciseName</th>
+                <th width='110' class='center'>$langExerciseStart / $langExerciseEnd</th>
+                <th width='70' class='center'>$langExerciseConstrain</th>
+                <th width='70' class='center'>$langExerciseAttemptsAllowed</th>
+                <th width='70' class='center'>$langResults</th>
+              </tr>";
+	}	
+	// display exercise list
 	$k = 0;
 	while($row = mysql_fetch_array($result)) {
 		if($is_editor) {
@@ -240,10 +250,21 @@ if(!$nbrExercises) {
 					<img src='$themeimg/invisible.png' alt='$langVisible' title='$langVisible' /></a>&nbsp;";
 				}
 			}
+                        if (course_status($course_id) == COURSE_OPEN) {
+                                if ($row['public']) {
+                                        $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=".$row['id']."");
+                                } else {
+                                        $tool_content .= icon('access_limited', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=".$row['id']."");
+                                }
+                                $tool_content .= "&nbsp;";
+                        }
 			$tool_content .= "</td></tr>";
 		}
 		// student only
 		else {
+                        if (!resource_access($row['active'], $row['public'])) {
+                                continue;
+                        }
                         $currentDate = date("Y-m-d H:i");
                         $temp_StartDate = mktime(substr($row['start_date'], 11, 2), substr($row['start_date'], 14, 2), 0, substr($row['start_date'], 5,2), substr($row['start_date'], 8,2), substr($row['start_date'], 0,4));
                         $temp_EndDate   = mktime(substr($row['end_date'], 11, 2), substr($row['end_date'], 14, 2), 0, substr($row['end_date'], 5,2),   substr($row['end_date'], 8,2),   substr($row['end_date'], 0,4));

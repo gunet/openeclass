@@ -60,6 +60,7 @@ class Exercise
 		$this->attemptsAllowed = 0;
 		$this->random = 0;
 		$this->active = 1;
+                $this->public = 1;
 		$this->results = 1;
 		$this->score = 1;
 		$this->questionList = array();
@@ -92,7 +93,7 @@ class Exercise
 			$this->timeConstraint  = $object->time_constraint;
 			$this->attemptsAllowed = $object->attempts_allowed;
 			$this->random          = $object->random;
-			$this->active          = $object->active;
+			$this->active          = $object->active;                        
 			$this->results         = $object->results;
 			$this->score           = $object->score;
 
@@ -421,7 +422,21 @@ class Exercise
 	{
 		$this->active = 0;
 	}
-
+        /**
+         * make exercise public
+         */
+        function makepublic()
+        {
+                $this->public = 1;
+        }
+        /**
+         * make exercise limited
+         */
+        function makelimited()
+        {
+                $this->public = 0;
+        }
+                
 	/**
 	 * updates the exercise in the data base
 	 *
@@ -441,6 +456,7 @@ class Exercise
 		$attemptsAllowed = $this->attemptsAllowed;
 		$random          = $this->random;
 		$active          = $this->active;
+                $public          = $this->public;
 		$results         = $this->results;
 		$score           = $this->score;
 		
@@ -450,7 +466,7 @@ class Exercise
 				SET title = ".quote($exercise).", description = ".quote($description).", type = '$type',".
 				"start_date = '$startDate', end_date = '$endDate', time_constraint = '$timeConstraint',".
 				"attempts_allowed = '$attemptsAllowed', random = '$random',
-				active = '$active', results = '$results', score = '$score' 
+				active = $active, public = $public, results = '$results', score = '$score' 
                                 WHERE course_id = $course_id AND id = $id";
 			db_query($sql);
                         
