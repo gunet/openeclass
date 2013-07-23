@@ -219,8 +219,8 @@ if(!$nbrExercises) {
                                         <img src='$themeimg/delete.png' alt='$langDelete_temp' title='$langDelete_temp' />
                                  </a>
                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row[id]' onClick=\"return confirmation('$langConfirmPurgeExercises');\">
-                                        <img src='$themeimg/clear.png' alt='".q($langPurgeExercises)."' title='".q($langPurgeExercises)."'>
-                                  </a";
+                                        <img src='$themeimg/clear.png' alt='".q($langPurgeExercises)."' title='".q($langPurgeExercises)."' />
+                                  </a>";
 
 			// if active
 			if($row['active']) {
