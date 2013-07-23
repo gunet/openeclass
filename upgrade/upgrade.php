@@ -32,6 +32,11 @@ include 'upgrade_functions.php';
 
 set_time_limit(0);
 
+if (php_sapi_name() == 'cli' or empty($_SERVER['REMOTE_ADDR'])) {
+        $command_line = true;
+} else {
+        $command_line = false;
+}
 load_global_messages();
 
 if ($urlAppend[strlen($urlAppend)-1] != '/') {
@@ -63,7 +68,7 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 $fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!isset($_POST['submit2'])) {
-        if (!is_admin($_POST['login'], $_POST['password'])) {
+        if (!is_admin($_POST['login'], $_POST['password']) and !$command_line) {
                 $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
                         <center><a href=\"index.php\">$langBack</a></center>";
                 draw($tool_content, 0);
@@ -96,7 +101,7 @@ mkdir_or_error('courses/userimg');
 // upgrade config.php
 // *******************************************
 
-if (!isset($_POST['submit2'])) {
+if (!isset($_POST['submit2']) and !$command_line) {
         if (ini_get('register_globals')) { // check if register globals is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
         }
@@ -132,6 +137,13 @@ if (!isset($_POST['submit2'])) {
                 <div class='right'><input name='submit2' value='$langCont &raquo;' type='submit'></div>
                 </form>";
 } else {
+	if ($command_line) {
+		$_POST['Institution'] = @$Institution;
+		$_POST['postaddress'] = @$postaddress;
+		$_POST['telephone'] = @$telephone;
+		$_POST['fax'] = @$fax;
+	} else {
+
         // Main part of upgrade starts here
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -150,7 +162,7 @@ if (!isset($_POST['submit2'])) {
         echo "<p class='title1'>$langUpgradeStart</p>",
              "<p class='sub_title1'>$langUpgradeConfig</p>";
 	flush();
-
+	}                
         if (isset($telephone)) {
                 // Upgrade to 3.x-style config
                 if (!copy('config/config.php', 'config/config_backup.php')) {
