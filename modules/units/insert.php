@@ -28,6 +28,7 @@ include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
 include "../../include/lib/fileUploadLib.inc.php";
 require_once '../video/video_functions.php';
+require_once '../course_metadata/CourseXML.php';
 load_modal_box(true);
 
 $lang_editor = langname_to_code($language);
@@ -162,6 +163,7 @@ function insert_docs($id)
 			 ", visibility='$file[visibility]', `order`=$order, `date`=NOW(), res_id=$file[id]",
 			 $GLOBALS['mysqlMainDb']); 
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -169,14 +171,14 @@ function insert_docs($id)
 // insert text in database
 function insert_text($id)
 {
-	global $title, $comments, $code_cours;
+	global $title, $comments, $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	$order++;
 	db_query("INSERT INTO unit_resources SET unit_id=$id, type='text', title='', 
 		comments=" . autoquote(purify($comments)) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=0",
 		$GLOBALS['mysqlMainDb']);
-			
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -185,7 +187,7 @@ function insert_text($id)
 // insert lp in database
 function insert_lp($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['lp'] as $lp_id) {
@@ -202,6 +204,7 @@ function insert_lp($id)
 			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$lp[learnPath_id]",
 			$GLOBALS['mysqlMainDb']);
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -209,7 +212,7 @@ function insert_lp($id)
 // insert video in database
 function insert_video($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['video'] as $video_id) {
@@ -221,6 +224,7 @@ function insert_video($id)
 			WHERE id = $res_id", $GLOBALS['currentCourseID']), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['titre']) . ", comments=" . quote($row['description']) . ", visibility='v', `order`=$order, `date`=NOW(), res_id=$res_id", $GLOBALS['mysqlMainDb']);
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -228,7 +232,7 @@ function insert_video($id)
 // insert work (assignment) in database
 function insert_work($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['work'] as $work_id) {
@@ -251,6 +255,7 @@ function insert_work($id)
                                 res_id = $work[id]",
 			 $GLOBALS['mysqlMainDb']); 
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -259,7 +264,7 @@ function insert_work($id)
 // insert exercise in database
 function insert_exercise($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['exercise'] as $exercise_id) {
@@ -276,6 +281,7 @@ function insert_exercise($id)
 			", visibility='$visibility', `order`=$order, `date`=NOW(), res_id=$exercise[id]",
 			$GLOBALS['mysqlMainDb']); 
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -283,7 +289,7 @@ function insert_exercise($id)
 // insert forum in database
 function insert_forum($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['forum'] as $for_id) {
@@ -306,6 +312,7 @@ function insert_forum($id)
 				$GLOBALS['mysqlMainDb']);
 		} 
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -314,7 +321,7 @@ function insert_forum($id)
 // insert wiki in database
 function insert_wiki($id)
 {
-	global $code_cours;
+	global $cours_id, $code_cours;
 	
 	list($order) = mysql_fetch_array(db_query("SELECT MAX(`order`) FROM unit_resources WHERE unit_id=$id"));
 	foreach ($_POST['wiki'] as $wiki_id) {
@@ -326,6 +333,7 @@ function insert_wiki($id)
 			", visibility='v', `order`=$order, `date`=NOW(), res_id=$wiki[id]",
 			$GLOBALS['mysqlMainDb']); 
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -357,6 +365,7 @@ function insert_link($id)
                                 ", visibility='v', `order` = $order, `date` = NOW(), res_id = $link[id]");
                 }
 	}
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }
@@ -377,6 +386,7 @@ function insert_ebook($id)
                     }
             }
         }
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
 	header('Location: index.php?course='.$code_cours.'&id=' . $id);
 	exit;
 }

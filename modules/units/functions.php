@@ -7,7 +7,11 @@
 // Process resource actions
 function process_actions()
 {
-        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted, $langResourceUnitModified;
+        global $tool_content, $id, $mysqlMainDb, $langResourceCourseUnitDeleted, $langResourceUnitModified,
+               $cours_id, $code_cours;
+        
+        // refresh course metadata
+        require_once '../course_metadata/CourseXML.php';
 	
         if (isset($_REQUEST['edit'])) {
                 $res_id = intval($_GET['edit']);
@@ -23,12 +27,14 @@ function process_actions()
                                         title = $restitle,
                                         comments = $rescomments
                                         WHERE unit_id = $id AND id = $res_id");
+                         CourseXMLElement::refreshCourse($cours_id, $code_cours);
                 }
                 $tool_content .= "<p class='success'>$langResourceUnitModified</p>";
         } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
                 $res_id = intval($_GET['del']);
                 if ($id = check_admin_unit_resource($res_id)) {
                         db_query("DELETE FROM unit_resources WHERE id = $res_id", $mysqlMainDb);
+                        CourseXMLElement::refreshCourse($cours_id, $code_cours);
                         $tool_content .= "<p class='success'>$langResourceCourseUnitDeleted</p>";
                 }
         } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
@@ -38,6 +44,7 @@ function process_actions()
                         list($vis) = mysql_fetch_row($sql);
                         $newvis = ($vis == 'v')? 'i': 'v';
                         db_query("UPDATE unit_resources SET visibility = '$newvis' WHERE id = $res_id");
+                        CourseXMLElement::refreshCourse($cours_id, $code_cours);
                 }
         } elseif (isset($_REQUEST['down'])) { // change order down
                 $res_id = intval($_REQUEST['down']);

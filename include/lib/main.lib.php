@@ -258,12 +258,21 @@ function js_escape($s)
 // Include a JavaScript file from the main js directory
 function load_js($file, $init = '')
 {
-        global $head_content, $urlAppend;
+        global $head_content, $urlAppend, $theme;
 
         if ($file == 'jquery') {
 		$file = 'jquery-1.8.3.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.23.custom.min.js';
+        } elseif ($file == 'jquery-ui-new') {
+                if ($theme == 'modern' || $theme == 'ocean')
+                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/jquery-ui-css/redmond/jquery-ui-1.9.2.custom.min.css'>\n";
+                else
+                    $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/jquery-ui-css/smoothness/jquery-ui-1.9.2.custom.min.css'>\n";
+                $file = 'jquery-ui-1.9.2.custom.min.js';
+        } else if ($file == 'jquery-multiselect') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}/js/jquery.multiselect.css'>\n";
+            $file = 'jquery.multiselect.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/shadowbox/shadowbox.css'>";
             $file = 'shadowbox/shadowbox.js'; 
@@ -533,6 +542,27 @@ function selection($entries, $name, $default = '', $extra = '')
 	}
 	$retString .= "</select>\n";
 	return $retString;
+}
+
+// Show a multi-selection box.
+// $entries: an array of (value => label)
+// $name: the name of the selection element
+// $defaults: array() if it matches one of the values, specifies the default entry
+function multiselection($entries, $name, $defaults = array(), $extra = '')
+{
+        $retString = "";
+        $retString .= "\n<select name='$name' $extra>\n";
+        foreach ($entries as $value => $label) {
+                if (is_array($defaults) && (in_array($value, $defaults))) {
+                        $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                } else {
+                        $retString .= "<option value='" . htmlspecialchars($value) . "'>" .
+                        htmlspecialchars($label) . "</option>\n";
+                }
+        }
+        $retString .= "</select>\n";
+        return $retString;
 }
 
 /********************************************************************
@@ -1803,7 +1833,7 @@ function units_set_maxorder()
 
 function handle_unit_info_edit()
 {
-        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $cours_id;
+        global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $cours_id, $code_cours;
         $title = autoquote($_REQUEST['unittitle']);
         $descr = autoquote(purify($_REQUEST['unitdescr']));
         if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1812,14 +1842,19 @@ function handle_unit_info_edit()
                                            title = $title,
                                            comments = $descr
                                     WHERE id = $unit_id AND course_id = $cours_id");
-                return "<p class='success'>$langCourseUnitModified</p>";
+                $successmsg = $langCourseUnitModified;
         } else { // add new course unit
                 $order = $maxorder + 1;
                 db_query("INSERT INTO course_units SET
                                  title = $title, comments =  $descr,
                                  `order` = $order, course_id = $cours_id");
-                return "<p class='success'>$langCourseUnitAdded</p>";
+                $successmsg = $langCourseUnitAdded;
+                $unit_id = mysql_insert_id();
         }
+        // refresh course metadata
+        require_once '../../modules/course_metadata/CourseXML.php';
+        CourseXMLElement::refreshCourse($cours_id, $code_cours);
+        return "<p class='success'>$successmsg</p>";
 }
 
 function math_unescape($matches)

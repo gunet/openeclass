@@ -216,7 +216,8 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
                         'login_fail_check' => true,
                         'login_fail_threshold' => true,
                         'login_fail_deny_interval' => true,
-                        'login_fail_forgive_interval' => true);
+                        'login_fail_forgive_interval' => true,
+                        'course_metadata' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
@@ -423,6 +424,7 @@ else {
         $cbox_enable_search = get_config('enable_search')?'checked':'';
         $cbox_enable_common_docs = get_config('enable_common_docs')?'checked':'';
         $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
+        $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
@@ -477,7 +479,10 @@ else {
           </tr>
           <tr>
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
-          </tr>          
+          </tr>
+          <tr>
+                <td><input type='checkbox' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+          </tr>
         </table></fieldset>";
         
         $tool_content .= "<fieldset>

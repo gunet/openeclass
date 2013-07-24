@@ -189,6 +189,11 @@ if (isset($c)) {
 	$tool_content .= "<tr>
 	  <td><a href=\"../course_info/archive_course.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langTakeBackup."</a></td>
 	</tr>";
+  // Course metadata
+    if (get_config('course_metadata'))
+        $tool_content .= "<tr>
+          <td><a href=\"../course_metadata/index.php?course=".htmlspecialchars($c)."\">".$langCourseMetadata."</a></td>
+        </tr>";
   // Delete course
 	$tool_content .= "
 	<tr>
