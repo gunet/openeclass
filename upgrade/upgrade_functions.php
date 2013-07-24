@@ -330,7 +330,7 @@ function upgrade_course($code, $lang)
         upgrade_course_2_8($code, $lang);        
 }
 
-function upgrade_course_2_8($code, $lang, $extra_message = '') {
+function upgrade_course_2_8($code, $lang, $extramessage = '') {
         
         global $langUpgCourse, $global_messages;
 
