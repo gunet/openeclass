@@ -107,7 +107,7 @@ function show_resources($unit_id)
 		list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                 WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
 		$tool_content .= "
-        <table class='tbl_alt_bordless' width='99%'>";
+                <table class='tbl_alt_bordless' width='99%'>";
 		while ($info = mysql_fetch_array($req)) {
 			$info['comments'] = standard_text_escape($info['comments']);
 			show_resource($info);
@@ -142,7 +142,7 @@ function show_resource($info)
 		case 'videolinks':
                         $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
-		case 'exercise':
+		case 'exercise':                        
                         $tool_content .= show_exercise($info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'work':
@@ -180,11 +180,11 @@ function show_resource($info)
 function show_doc($title, $comments, $resource_id, $file_id)
 {
         global $is_editor, $course_id,
-               $langWasDeleted, $visibility_check, $urlServer, $id,
+               $langWasDeleted, $urlServer, $id,
                $course_code, $themeimg;
-
-        $title = htmlspecialchars($title);
-        $r = db_query("SELECT * FROM document WHERE course_id = $course_id AND id =" . intval($file_id) ." $visibility_check");
+                
+        $title = htmlspecialchars($title);        
+        $r = db_query("SELECT * FROM document WHERE course_id = $course_id AND id =" . intval($file_id) ."");
         if (mysql_num_rows($r) == 0) {
                 if (!$is_editor) {
                         return '';
@@ -195,6 +195,9 @@ function show_doc($title, $comments, $resource_id, $file_id)
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
                 $status = $file['visible'];
+                if (!$is_editor and (!resource_access($file['visible'], $file['public']))) {
+                    return '';
+                }
                 if ($file['format'] == '.dir') {
                         $image = $themeimg.'/folder.png';
                         $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file[path]&amp;unit=$id'>";
@@ -203,8 +206,8 @@ function show_doc($title, $comments, $resource_id, $file_id)
                                 choose_image('.' . $file['format']);
                         $link = "<a href='" . file_url($file['path'], $file['filename']) . "' target='_blank'>";
                 }
-        }
-	$class_vis = ($status == 0 or $status == 'del')? ' class="invisible"': ' class="even"';
+        }        
+	$class_vis = ($status == '0' or $status == 'del')? ' class="invisible"': ' class="even"';
         if (!empty($comments)) {
                 $comment = '<br />' . $comments;
         } else {
@@ -212,7 +215,7 @@ function show_doc($title, $comments, $resource_id, $file_id)
         }
         return "
         <tr$class_vis>
-          <td width='1'>$link<img src='$image' alt=''></a></td>
+          <td width='1'>$link<img src='$image' alt='' /></a></td>
           <td align='left'>$link$title</a>$comment</td>" .
                 actions('doc', $resource_id, $status) .
                 '</tr>';
@@ -302,10 +305,24 @@ function show_lp($title, $comments, $resource_id, $lp_id)
 }
 
 
-// display resource video
+/**
+ * @brief display resource video
+ * @global type $is_editor
+ * @global type $course_id
+ * @global string $tool_content
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param type $table
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $video_id
+ * @param string $visibility
+ * @return string
+ */
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility)
 {
-        global $is_editor, $course_id, $mysqlMainDb, $tool_content, $themeimg, $langInactiveModule;
+        global $is_editor, $course_id, $tool_content, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
         if (!$module_visible and !$is_editor) {
@@ -315,11 +332,13 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         $class_vis = ($visibility == 0 or !$module_visible)?
                      ' class="invisible"': ' class="even"';
 
-        $result = db_query("SELECT * FROM $table WHERE course_id = $course_id AND id=$video_id",
-                            $mysqlMainDb);
+        $result = db_query("SELECT * FROM $table WHERE course_id = $course_id AND id = $video_id");
         if ($result and mysql_num_rows($result) > 0) {
-                $row = mysql_fetch_array($result, MYSQL_ASSOC);
-
+                $row = mysql_fetch_array($result, MYSQL_ASSOC);                
+                if (!$is_editor and (!resource_access(1, $row['public']))) {
+                    return '';
+                }
+                $status = $row['public'];
                 if ($table == 'video') {
                     $vObj = MediaResourceFactory::initFromVideo($row);
                     $videolink = MultimediaHelper::chooseMediaAhref($vObj);
@@ -341,12 +360,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 $visibility = 'del';
         }
 
-
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
         } else {
                 $comment_box = "";
         }
+        $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="invisible"': ' class="even"';
         $tool_content .= "
         <tr$class_vis>
           <td width='1'>$imagelink</td>
@@ -355,10 +374,26 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
 }
 
 
-// display resource work (assignment)
+/**
+ * @brief display resource work (assignment)
+ * @global type $id
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $langWasDeleted
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $work_id
+ * @param type $visibility
+ * @return string
+ */
 function show_work($title, $comments, $resource_id, $work_id, $visibility)
 {
-	global $id, $mysqlMainDb, $urlServer, $is_editor,
+	global $id, $urlServer, $is_editor,
                $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(MODULE_ID_ASSIGN); // checks module visibility
@@ -370,7 +405,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
                      ' class="invisible"': ' class="even"';
 
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = $work_id", $mysqlMainDb);
+	$r = db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = $work_id");
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';
@@ -405,10 +440,26 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility)
 }
 
 
-// display resource exercise
+/**
+ * @brief display resource exercise
+ * @global type $id
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $langWasDeleted
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $exercise_id
+ * @param type $visibility
+ * @return string
+ */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility)
 {
-	global $id, $mysqlMainDb, $urlServer, $is_editor,
+	global $id, $urlServer, $is_editor,
                $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
 
         $module_visible = visible_module(MODULE_ID_EXERCISE); // checks module visibility
@@ -416,11 +467,8 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 return '';
         }
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 0 or !$module_visible)?
-                     ' class="invisible"': ' class="even"';
-
         $title = htmlspecialchars($title);
-	$r = db_query("SELECT * FROM exercise WHERE course_id = $course_id AND id = $exercise_id", $mysqlMainDb);
+	$r = db_query("SELECT * FROM exercise WHERE course_id = $course_id AND id = $exercise_id");
 	if (mysql_num_rows($r) == 0) { // check if it was deleted
 		if (!$is_editor) {
 			return '';
@@ -431,6 +479,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 		}
 	} else {
                 $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
+                $status = $exercise['active'];
+                if (!$is_editor and (!resource_access($exercise['active'], $exercise['public']))) {
+                    return '';
+                }
 		$link = "<a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
                 if (!$module_visible) {
@@ -440,13 +492,14 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                         "<img src='$themeimg/exercise_" .
 			($visibility == 0? 'off': 'on') . ".png' /></a>";
 	}
-
-
+        $class_vis = ($status == '0' or $status == 'del')? ' class="invisible"': ' class="even"';
+        
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
 	} else {
                 $comment_box = "";
         }
+        
 	return "
         <tr$class_vis>
           <td width='3'>$imagelink</td>
@@ -455,7 +508,22 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 }
 
 
-// display resource forum
+/**
+ * @brief display resource forum
+ * @global type $id
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @param type $type
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $ft_id
+ * @param type $visibility
+ * @return string
+ */
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 {
 	global $id, $urlServer, $is_editor, $course_id, $course_code, $themeimg;
@@ -499,7 +567,24 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
 }
 
 
-// display resource wiki
+/**
+ * @brief display resource wiki
+ * @global type $id
+ * @global type $mysqlMainDb
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $langWasDeleted
+ * @global type $langInactiveModule
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $wiki_id
+ * @param type $visibility
+ * @return string
+ */
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 {
 	global $id, $mysqlMainDb, $urlServer, $is_editor,
@@ -550,7 +635,25 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility)
 }
 
 
-// display resource link
+/**
+ * @brief display resource link
+ * @global type $id
+ * @global string $tool_content
+ * @global type $mysqlMainDb
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $langWasDeleted
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $link_id
+ * @param type $visibility
+ * @return string
+ */
 function show_link($title, $comments, $resource_id, $link_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
@@ -603,7 +706,25 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility)
         </tr>";
 }
 
-// display resource link category
+/**
+ * @brief display resource link category
+ * @global type $id
+ * @global string $tool_content
+ * @global type $mysqlMainDb
+ * @global type $urlServer
+ * @global type $is_editor
+ * @global type $langWasDeleted
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langInactiveModule
+ * @param type $title
+ * @param type $comments
+ * @param type $resource_id
+ * @param type $linkcat_id
+ * @param type $visibility
+ * @return string
+ */
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
 {
 	global $id, $tool_content, $mysqlMainDb, $urlServer, $is_editor,
