@@ -100,9 +100,8 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if ((!$file_info['visible'] and !$is_editor) or (!$file_info['public'] and !$is_editor)) {
+if (!$is_editor and !resource_access($file_info['visible'], $file_info['public'])) {
         error($langNoRead);
-
 }
 
 if ($file_info['extra_path']) {
@@ -186,7 +185,7 @@ function check_cours_access() {
                 if (isset($_SESSION['status'][$course_code]) && ($_SESSION['status'][$course_code] >= 1)) {
                         return;
                 }
-                else {
+                else {                        
                         redirect_to_home_page();
                 }
 	}
