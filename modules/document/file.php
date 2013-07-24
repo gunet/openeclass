@@ -97,7 +97,9 @@ if (defined('GROUP_DOCUMENTS')) {
         }
 }
 $file_info = public_path_to_disk_path($path_components);
-if ($file_info['visibility'] != 'v' and !$is_editor) {
+print_r($file_info);
+$file_visible = ($file_info['visibility'] == 'v')? 1 : 0;
+if (!$is_editor and !resource_access($file_visible, $file_info['public'])) {
         error($langNoRead);
 }
 
