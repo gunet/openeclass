@@ -39,6 +39,7 @@ class Exercise
 	var $AttemptsAllowed;
 	var $random;
 	var $active;
+        var $public;
 	var $questionList;  // array with the list of this exercise's questions
 
 	/**
@@ -58,6 +59,7 @@ class Exercise
 		$this->AttemptsAllowed=0;
 		$this->random=0;
 		$this->active=1;
+                $this->public = 1;
 		$this->results=1;
 		$this->score=1;
 		$this->questionList=array();
@@ -92,7 +94,7 @@ class Exercise
 			$this->TimeConstrain=$object->TimeConstrain;
 			$this->AttemptsAllowed=$object->AttemptsAllowed;
 			$this->random=$object->random;
-			$this->active=$object->active;
+			$this->active=$object->active;                        
 			$this->results=$object->results;
 			$this->score=$object->score;                                                
                                                 
@@ -418,7 +420,21 @@ class Exercise
 	{
 		$this->active=0;
 	}
-
+        
+        /**
+         * make exercise public
+         */
+        function makepublic()
+        {
+                $this->public = 1;
+        }
+        /**
+         * make exercise limited
+         */
+        function makelimited()
+        {
+                $this->public = 0;
+        }
 	/**
 	 * updates the exercise in the data base
 	 *
@@ -438,6 +454,7 @@ class Exercise
 		$AttemptsAllowed=$this->AttemptsAllowed;
 		$random=$this->random;
 		$active=$this->active;
+                $public=$this->public;
 		$results=$this->results;
 		$score=$this->score;
 
@@ -449,7 +466,7 @@ class Exercise
 				SET titre = '$exercise', description = $description, type = '$type', ".
 				"StartDate = '$StartDate', EndDate = '$EndDate', TimeConstrain = '$TimeConstrain', ".
 				"AttemptsAllowed = '$AttemptsAllowed',  random = '$random', 
-				active = '$active',  results = '$results',  score = '$score' WHERE id = '$id'";
+				active = $active, public = $public, results = '$results',  score = '$score' WHERE id = '$id'";
 			db_query($sql) or die("Error : UPDATE in file ".__FILE__." at line ".__LINE__);
 		}
 		// creates a new exercise

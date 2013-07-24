@@ -279,6 +279,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
                 `filename` VARCHAR(255) NOT NULL,
                 `visibility` CHAR(1) NOT NULL DEFAULT 'v',
+                `public` TINYINT(4) NOT NULL DEFAULT 1,
                 `comment` TEXT,
                 `category` TINYINT(4) NOT NULL DEFAULT 0,
                 `title` TEXT,

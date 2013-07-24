@@ -244,6 +244,14 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	exit;
 }	
 
+// Public accessibility commands
+if (isset($_GET['public']) or isset($_GET['limited'])) {
+        $new_public_status = intval(isset($_GET['public']))? 1: 0;        
+        $table = select_table($_GET['table']);
+        db_query("UPDATE $table SET public = $new_public_status WHERE id = $_GET[vid]", $currentCourseID);
+        $action_message = "<p class='success'>$langViMod</p>";
+}
+
 if (isset($_POST['edit_submit'])) { // edit
 	if(isset($_POST['id'])) {
 		$id = intval($_POST['id']);
@@ -543,7 +551,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         }
         $tool_content .= "<th width='70'>$langdate</th>";
         if (!$is_in_tinymce)
-            $tool_content .= "<th width='70'>$langActions</th>";
+            $tool_content .= "<th width='90'>$langActions</th>";
         $tool_content .= "</tr>";
         foreach($results as $table => $result)
                 while ($myrow = mysql_fetch_array($result)) {
@@ -600,13 +608,24 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                    $link_to_add";
                         if (!$is_in_tinymce)
                         {
-                            $tool_content .= "
+                                $tool_content .= "
                                    <td align='right'>
                                       $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'>
                                       <img src='$themeimg/edit.png' title='".q($langModify)."'>
-                                      </a>&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\">
-                                      <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>
-                                   </td>";
+                                      </a><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\">
+                                      <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>&nbsp;";
+                                if (course_status($cours_id) == COURSE_OPEN) {
+                                        if ($myrow['public']) {
+                                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vid=$myrow[id]&amp;limited=1&amp;table=$table'>" .
+                                                                "<img src='$themeimg/access_public.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                        } else {
+                                                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vid=$myrow[id]&amp;public=1&amp;table=$table'>" .
+                                                                "<img src='$themeimg/access_limited.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                        }
+                                }
+                                $tool_content .= "</td>";
                         }
                         $tool_content .= "</tr>";
                         $i++;
@@ -680,12 +699,14 @@ else {
 				} else {
 					$rowClass = "class='even'";
 				}
-				$tool_content .= "<tr $rowClass>";
-				$tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
-				$tool_content .= $link_to_add;
-                                if (!$is_in_tinymce and !defined('EXPORTING'))
-                                    $tool_content .= "<td align='center'>$link_to_save</td>";
-				$tool_content .= "</tr>";
+                                if (resource_access(1, $myrow['public'])) {
+                                        $tool_content .= "<tr $rowClass>";
+                                        $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
+                                        $tool_content .= $link_to_add;
+                                        if (!$is_in_tinymce and !defined('EXPORTING'))
+                                            $tool_content .= "<td align='center'>$link_to_save</td>";
+                                        $tool_content .= "</tr>";
+                                }
 				$i++;
 				$count_video_presented++;
 			}
@@ -702,4 +723,19 @@ if (isset($head_content)) {
 	draw($tool_content, $menuTypeID, null, $head_content);
 } else {
         draw($tool_content, $menuTypeID);
+}
+
+
+/**
+ * 
+ * @param type $table
+ * @return return table name
+ */
+function select_table($table)
+{
+        if ($table == 'videolinks') {
+                return $table;
+        } else {
+                return 'video';
+        }
 }

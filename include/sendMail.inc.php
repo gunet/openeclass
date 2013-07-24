@@ -36,12 +36,12 @@ function send_mail($from, $from_address, $to, $to_address,
                 $bcc = '';
         }
 	$headers = from($from, $from_address) . $bcc .
-		"MIME-Version: 1.0\n" .
-		"Content-Type: text/plain; charset=$charset\n" .
+		"MIME-Version: 1.0\r\n" .
+		"Content-Type: text/plain; charset=$charset\r\n" .
 		"Content-Transfer-Encoding: 8bit" .
                 reply_to($from, $from_address);
 	if ($extra_headers) {
-		$headers .= "\n" . preg_replace('/\n+/', "\n", $extra_headers);
+		$headers .= "\r\n" . preg_replace('/\n+/', "\n", $extra_headers);
 	}
 
 	return @mail($to_header, qencode($subject, $charset),
@@ -72,7 +72,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
                                 $to_header = "($to)";
                         }
                 }
-                $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
+                $bcc = 'Bcc: ' . join(', ', $to_address) . "\r\n";
         } else {
                 if (empty($to)) {
                      if (is_array($to_address)) {
@@ -92,23 +92,23 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
         $separator = uniqid('==eClass-Multipart_Boundary_0_', true) . '_' .
                      md5(time());
 	$headers = from($from, $from_address) . $bcc .
-		   "MIME-Version: 1.0\n" .
+		   "MIME-Version: 1.0\r\n" .
                    "Content-Type: multipart/alternative;" .
-                   "\n\tboundary=\"$separator\"" .
+                   "\r\n\tboundary=\"$separator\"" .
                    reply_to($from, $from_address);
 
 	$body = "This is a multi-part message in MIME format.\n\n" .
-		"--$separator\n" .
+		"--$separator\r\n" .
 		"Content-Type: text/plain; charset=$charset\n" .
 		"Content-Transfer-Encoding: 8bit\n\n$body_plain\n\n" .
-		"--$separator\n" .
+		"--$separator\r\n" .
 		"Content-Type: text/html; charset=$charset\n" .
 		"Content-Transfer-Encoding: 8bit\n\n" .
 		"<html><head><meta http-equiv='Content-Type' " .
 		"content='text/html; charset=\"$charset\"'>" .
 		"<title>message</title></head><body>\n" .
 		"$body_html\n</body></html>\n\n" .
-		"--$separator--\n";
+		"--$separator--\r\n";
 
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);
@@ -122,11 +122,11 @@ function from($from, $from_address)
 
         if (empty($from_address) or !get_config('email_from')) {                
                 return "From: " . qencode($siteName, $charset) .
-                       " <$emailAdministrator>\n";                
+                       " <$emailAdministrator>\r\n";
         } else {                
 		return "From: " .
                        qencode("$from ($langVia: $siteName)", $charset) .
-                       " <$from_address>\n";
+                       " <$from_address>\r\n";
         }
 }
 
@@ -138,9 +138,9 @@ function reply_to($from, $from_address)
 
         if (!get_config('email_from') and $emailAdministrator <> $from_address) {
                 if (empty($from)) {
-                        return "\nReply-To: $from_address";
+                        return "\r\nReply-To: $from_address";
                 } else {
-                        return "\nReply-To: " .
+                        return "\r\nReply-To: " .
                                     qencode($from, $charset) .
                                     " <$from_address>";
                 }

@@ -1156,6 +1156,32 @@ function remove_filename_unsafe_chars($s)
 }
 
 
+/**
+ * @brief check recourse accessibility
+ * @global type $course_code
+ * @param type $public
+ * @return boolean
+ */
+function resource_access($visible, $public)
+{
+        global $currentCourse;
+        
+        if ($visible) {
+                if ($public) {
+                        return TRUE;
+                } else {
+                        if (isset($_SESSION['uid'])
+                                and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+                                return TRUE;
+                        } else {
+                                return FALSE;
+                        }
+                }
+        } else {
+                return FALSE;
+        }
+}
+
 # Only languages defined below are available for selection in the UI
 # If you add any new languages, make sure they are defined in the
 # next array as well

@@ -117,20 +117,28 @@ END;
 					$objExerciseTmp->disable();
 					$objExerciseTmp->save();
 					break;
+                                case 'public':  // make exercise public
+					$objExerciseTmp->makepublic();
+					$objExerciseTmp->save();                                        
+					break;
+                                case 'limited':  // make exercise limited
+					$objExerciseTmp->makelimited();
+					$objExerciseTmp->save();                                        
+					break;
 			}
 		}
 		// destruction of Exercise
 		unset($objExerciseTmp);
 	}
-	$sql="SELECT id, titre, description, type, active FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from, $limitExPage";
-	$result = db_query($sql,$currentCourseID);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES`");
+	$sql="SELECT id, titre, description, type, active, public FROM `$TBL_EXERCICES` ORDER BY id LIMIT $from, $limitExPage";
+	$result = db_query($sql, $currentCourseID);
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCICES`");
 } else {
         // only for students
-	$sql = "SELECT id, titre, description, type, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
+	$sql = "SELECT id, titre, description, type, active, public, StartDate, EndDate, TimeConstrain, AttemptsAllowed ".
 		"FROM `$TBL_EXERCICES` WHERE active='1' ORDER BY id LIMIT $from, $limitExPage";
 	$result = db_query($sql);
-	$qnum = db_query("SELECT count(*) FROM `$TBL_EXERCICES` WHERE active = 1");
+	$qnum = db_query("SELECT COUNT(*) FROM `$TBL_EXERCICES` WHERE active = 1");
 }
 
 list($num_of_ex) = mysql_fetch_array($qnum);
@@ -171,9 +179,9 @@ if(!$nbrExercises) {
 	// shows the title bar only for the administrator
 	if($is_editor) {
 		$tool_content .= "
-	      <th colspan='2'><div class='left'>$langExerciseName</div></th>
+	      <th width='500' colspan='2'><div class='left'>$langExerciseName</div></th>
 	      <th class='center'>$langResults</th>
-	      <th width='85' class='center'>$langCommands&nbsp;</th>
+	      <th class='center'>$langCommands&nbsp;</th>
 	    </tr>";
 	} else { // student view
 		$tool_content .= "
@@ -256,10 +264,25 @@ if(!$nbrExercises) {
 					<img src='$themeimg/invisible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				}
 			}
+                        if (course_status($cours_id) == COURSE_OPEN) {
+                                if ($row['public']) {
+                                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=limited&amp;exerciseId=".$row['id']."'>" .
+                                                                "<img src='$themeimg/access_public.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                } else {
+                                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=public&amp;exerciseId=".$row['id']."'>" .
+                                                                "<img src='$themeimg/access_limited.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                }
+                                $tool_content .= "&nbsp;";
+                        }
 			$tool_content .= "</td></tr>";
 		}
 		// student only
 		else {
+                        if (!resource_access($row['active'], $row['public'])) {
+                                continue;
+                        }
                         $CurrentDate = date("Y-m-d H:i");
                         $temp_StartDate = mktime(substr($row['StartDate'], 11, 2), substr($row['StartDate'], 14, 2), 0, substr($row['StartDate'], 5, 2), substr($row['StartDate'], 8, 2), substr($row['StartDate'], 0, 4));
                         $temp_EndDate = mktime(substr($row['EndDate'], 11, 2), substr($row['EndDate'], 14, 2), 0, substr($row['EndDate'], 5, 2), substr($row['EndDate'], 8, 2), substr($row['EndDate'], 0, 4));

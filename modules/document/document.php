@@ -847,6 +847,16 @@ if ($can_upload) {
 					        path = " . autoquote($visibilityPath));
 		$action_message = "<p class='success'>$langViMod</p>";
 	}
+        
+        // Public accessibility commands
+        if (isset($_GET['public']) || isset($_GET['limited'])) {
+                $new_public_status = intval(isset($_GET['public']));
+                $path = isset($_GET['public'])? $_GET['public']: $_GET['limited'];
+                db_query("UPDATE document SET public = $new_public_status
+                                          WHERE $group_sql AND
+                                                path = " . autoquote($path));         
+                $action_message = "<p class='success'>$langViMod</p>";
+        }
 } // teacher only
 
 // Common for teachers and students
@@ -867,6 +877,7 @@ $curDirPath =
         pathvar($_GET['metadata'], true) .
         pathvar($_GET['mkInvisibl'], true) .
         pathvar($_GET['mkVisibl'], true) .
+        pathvar($_GET['public'], true) .
         pathvar($_POST['sourceFile'], true) .
         pathvar($_POST['replacePath'], true) .
         pathvar($_POST['commentPath'], true) .
@@ -966,7 +977,8 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'format' => $row['format'],
                 'path' => $row['path'],
                 'extra_path' => $row['extra_path'],
-                'visible' => ($row['visibility'] == 'v'),                
+                'visible' => ($row['visibility'] == 'v'),
+                'public' => $row['public'],
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
                 'date' => $row['date_modified']);
@@ -1045,8 +1057,8 @@ if ($doc_count == 0) {
                          "<th width='60' class='center'><b>$langSize</b></th>" .
                          "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
         if (!$is_in_tinymce and !defined('EXPORTING')) {
-            if($can_upload) {
-		$width = (get_config("insert_xml_metadata")) ? 175 : 135;
+            if($can_upload) {                    
+		$width = (get_config("insert_xml_metadata")) ? 185 : 135;                
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
             } else {
 		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
@@ -1061,8 +1073,8 @@ if ($doc_count == 0) {
         foreach (array(true, false) as $is_dir) {
                 foreach ($fileinfo as $entry) {
                         $link_title_extra = '';
-                        if (($entry['is_dir'] != $is_dir) or
-                                        (!$can_upload and !$entry['visible'])) {
+                        if (($entry['is_dir'] != $is_dir) or 
+                                (!$can_upload and (!resource_access($entry['visible'], $entry['public'])))) {                                        
                                 continue;
                         }
                         $cmdDirName = $entry['path'];
@@ -1190,7 +1202,20 @@ if ($doc_count == 0) {
                                         $tool_content .= "<a href='{$base_url}mkVisibl=$cmdDirName'>" .
                                                          "<img src='$themeimg/invisible.png' " .
                                                          "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
-                                }				
+                                }
+                                $tool_content .= "&nbsp;";
+                                if (course_status($cours_id) == COURSE_OPEN) {
+                                        if ($entry['public']) {
+                                                $tool_content .= "<a href='{$base_url}limited=$cmdDirName'>" .
+                                                                "<img src='$themeimg/access_public.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                        } else {
+                                                $tool_content .= "<a href='{$base_url}public=$cmdDirName'>" .
+                                                                "<img src='$themeimg/access_limited.png' " .
+                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                                        }
+                                        $tool_content .= "&nbsp;";
+                                }
 				if ($subsystem == GROUP and isset($is_member) and ($is_member)) {
 	                                $tool_content .= "<a href='$urlAppend/modules/work/group_work.php?course=$code_cours" .
 							 "&amp;group_id=$group_id&amp;submit=$cmdDirName'>" .

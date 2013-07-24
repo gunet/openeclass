@@ -104,6 +104,7 @@ db_query("CREATE TABLE exercices (
       AttemptsAllowed int(11) default '0',
       random smallint(6) NOT NULL default '0',
       active tinyint(4) default NULL,
+      `public` TINYINT(4) NOT NULL DEFAULT 1,
       results TINYINT(1) NOT NULL DEFAULT '1',
       score TINYINT(1) NOT NULL DEFAULT '1',
       PRIMARY KEY  (id))
@@ -497,6 +498,7 @@ db_query("CREATE TABLE agenda (
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
+               `public` TINYINT(4) NOT NULL DEFAULT 1,
                PRIMARY KEY (id))
          $charset_spec");
 
@@ -507,9 +509,10 @@ db_query("CREATE TABLE agenda (
                url varchar(200),
                titre varchar(200),
                description text,
-         creator varchar(200),
-         publisher varchar(200),
-         date DATETIME,
+               creator varchar(200),
+               publisher varchar(200),
+               date DATETIME,
+               `public` TINYINT(4) NOT NULL DEFAULT 1,
                PRIMARY KEY (id))
          $charset_spec");
 

@@ -613,6 +613,10 @@ if (!isset($_POST['submit2'])) {
                         `course_id` int(11) NOT NULL,
                          PRIMARY KEY (`id`)) $charset_spec");
         }
+        if ($oldversion < '2.8') {
+                mysql_field_exists($mysqlMainDb, 'document', 'public') or
+                        db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
+        }
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
                 db_query("ALTER TABLE `annonces` ADD `preview` TEXT NOT NULL DEFAULT ''");
         mysql_field_exists($mysqlMainDb, 'cours', 'expand_glossary') or
@@ -672,6 +676,9 @@ if (!isset($_POST['submit2'])) {
                 }
                 if ($oldversion < '2.5') {
 			upgrade_course_2_5($code[0], $lang, "($i / $total)");
+                }
+                if ($oldversion < '2.8') {
+			upgrade_course_2_8($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;

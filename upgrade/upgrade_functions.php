@@ -327,6 +327,20 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
+        upgrade_course_2_8($code, $lang);        
+}
+
+function upgrade_course_2_8($code, $lang, $extra_message = '') {
+        
+        global $langUpgCourse, $global_messages;
+
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
+	flush();                
+        
+        db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
+        db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

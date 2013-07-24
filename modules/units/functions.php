@@ -157,13 +157,13 @@ function show_resource($info)
 // display resource documents
 function show_doc($title, $comments, $resource_id, $file_id)
 {
-        global $mysqlMainDb, $is_editor, $currentCourseID, $cours_id,
-               $langWasDeleted, $visibility_check, $urlServer, $id,
+        global $mysqlMainDb, $is_editor, $cours_id,
+               $langWasDeleted, $urlServer, $id,
                $code_cours, $themeimg;
 
         $title = htmlspecialchars($title);
         $r = db_query("SELECT * FROM `$mysqlMainDb`.document
-	               WHERE course_id = $cours_id AND id =" . intval($file_id) ." $visibility_check");
+	               WHERE course_id = $cours_id AND id =" . intval($file_id));
         if (mysql_num_rows($r) == 0) {
                 if (!$is_editor) {
                         return '';
@@ -173,7 +173,10 @@ function show_doc($title, $comments, $resource_id, $file_id)
                 $link = "<span class='invisible'>".q($title)." ($langWasDeleted)</span>";
         } else {
                 $file = mysql_fetch_array($r, MYSQL_ASSOC);
-                $status = $file['visibility'];
+                $status = $file['visibility'];                
+                if (!$is_editor and (!resource_access($status, $file['public']))) {
+                    return '';
+                }
                 if ($file['format'] == '.dir') {
                         $image = $themeimg.'/folder.png';
                         $link = "<a href='{$urlServer}modules/document/document.php?course=$code_cours&amp;openDir=$file[path]&amp;unit=$id'>";
@@ -292,14 +295,15 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                 return '';
         }        
         $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
-                     ' class="invisible"': ' class="even"';        
         
         $result = db_query("SELECT * FROM $table WHERE id=$video_id",
                            $currentCourseID);
         if ($result and mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_array($result, MYSQL_ASSOC);
-                
+                if (!$is_editor and (!resource_access(1, $row['public']))) {
+                    return '';
+                }
+                $status = $row['public'];
                 if ($table == 'video') 
                 {
                     list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
@@ -330,6 +334,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         } else {
                 $comment_box = "";
         }
+        $class_vis = ($visibility == 'i' or !$module_visible or $status == 'del')? ' class="invisible"': ' class="even"';
         $tool_content .= "
         <tr$class_vis>
           <td width='1'>$imagelink</td>
@@ -399,9 +404,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$module_visible and !$is_editor) {
                 return '';
         }        
-        $comment_box = $class_vis = $imagelink = $link = '';
-        $class_vis = ($visibility == 'i' or !$module_visible)?
-                     ' class="invisible"': ' class="even"';        
+        $comment_box = $class_vis = $imagelink = $link = '';        
 	
         $title = htmlspecialchars($title);
 	$r = db_query("SELECT * FROM exercices WHERE id = $exercise_id",
@@ -416,6 +419,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
 		}
 	} else {
                 $exercise = mysql_fetch_array($r, MYSQL_ASSOC);
+                $status = $exercise['active'];
+                if (!$is_editor and (!resource_access($status, $exercise['public']))) {
+                    return '';
+                }                
 		$link = "<a href='${urlServer}modules/exercice/exercice_submit.php?course=$code_cours&amp;exerciseId=$exercise_id&amp;unit=$id'>";
                 $exlink = $link . "$title</a>";
                 if (!$module_visible) {
@@ -425,7 +432,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                         "<img src='$themeimg/exercise_" .
 			($visibility == 'i'? 'off': 'on') . ".png' /></a>";
 	}
-	
+	$class_vis = ($status == '0' or $visibility == 'i' or !$module_visible)? ' class="invisible"': ' class="even"';
 
         if (!empty($comments)) {
                 $comment_box = "<br />$comments";
