@@ -122,7 +122,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
             $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
-            if ($this->getAttribute('lang') == $currentCourseLanguage)
+            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage))
                 $sameAsCourseLang = true;
             else
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
