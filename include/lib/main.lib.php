@@ -49,6 +49,7 @@ define('ACCESS_USERS', 2);
 define('ADMIN_USER', 0); // admin user can do everything
 define('POWER_USER', 1); // poweruser can admin only users and courses
 define('USERMANAGE_USER', 2); // usermanage user can admin only users
+define('OPENCOURSES_REVIEWER', 99); // opencourses reviewer can admin users, courses and review for opencourses
 // user email status
 define('EMAIL_VERIFICATION_REQUIRED', 0);  // email verification required. User cannot login.
 define('EMAIL_VERIFIED', 1); // email is verified. User can login.

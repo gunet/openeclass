@@ -34,13 +34,15 @@ if(isset($_POST['submit']) and !empty($username)) {
 
     if (mysql_num_rows($res) == 1) {
         list($user_id) = mysql_fetch_array($res);
-         
+        
         switch ($_POST['adminrights']) {
             case 'admin': $privilege = '0'; // platform admin user
             break;
             case 'poweruser': $privilege = '1'; // power user
             break;
             case 'manageuser': $privilege = '2'; //  manage user accounts
+            break;
+            case 'opencoursesreviewer': $privilege = '99'; // opencourses reviewer
             break;
         }
          
@@ -108,6 +110,8 @@ while($row = mysql_fetch_array($r1)) {
                 break;
             case '2': $message = $langManageUser;
                 break;
+            case '99' : $message = $langOpenCoursesReviewer;
+                break;
         }
         $tool_content .= "<td align='center'>$message</td>";
         if($row['user_id'] != 1) {
@@ -140,7 +144,10 @@ draw($tool_content, 3);
 function printform ($message) {
 	
     global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData;
+           $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData,
+           $langOpenCoursesReviewer, $langHelpOpenCoursesReviewer;
+    
+    $rowspan = (get_config('course_metadata')) ? 4 : 3;
         
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
     $ret .= "
@@ -151,14 +158,20 @@ function printform ($message) {
             <th class='left'>".$message."</th>
             <td><input type='text' name='username' size='30' maxlength='30'></td>
         </tr>
-        <tr><th rowspan='3'>$langAddRole</th>            
+        <tr><th rowspan='$rowspan'>$langAddRole</th>            
             <td><input type='radio' name='adminrights' value='admin' checked>&nbsp;$langAdministrator&nbsp;
         <span class='smaller'>($langHelpAdministrator)</span></td></tr>
         <tr>
         <td><input type='radio' name='adminrights' value='poweruser'>&nbsp;$langPowerUser&nbsp;
             <span class='smaller'>($langHelpPowerUser)</span></td></tr>
         <tr><td><input type='radio' name='adminrights' value='manageuser'>&nbsp;$langManageUser&nbsp;
-            <span class='smaller'>($langHelpManageUser)</span></td></tr>
+            <span class='smaller'>($langHelpManageUser)</span></td></tr>";
+    if (get_config('course_metadata')) {
+    $ret .= "
+        <tr><td><input type='radio' name='adminrights' value='opencoursesreviewer'>&nbsp;$langOpenCoursesReviewer&nbsp;
+            <span class='smaller'>($langHelpOpenCoursesReviewer)</span></td></tr>";
+    }
+    $ret .= "
         <tr>
             <td colspan='2' class='right'><input type='submit' name='submit' value='".q($langAdd)."'></td>
         </tr>
