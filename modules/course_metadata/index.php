@@ -92,6 +92,12 @@ function submitForm() {
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($cours_id);
     $data = array_merge($_POST, $extraData, $fileData);
+    // course-based adaptation
+    list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $code_cours));
+    list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $code_cours));
+    if ($vnum + $vlnum < 1)
+        $data['course_confirmVideolectures'] = 'false';
+    
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
     $xml->adapt($data);
     $xml->populate($data);

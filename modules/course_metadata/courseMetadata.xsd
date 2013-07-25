@@ -287,6 +287,16 @@
     </xs:sequence>
 </xs:group>
 
+<xs:group name="g_confirmation">
+    <xs:sequence>
+        <xs:element name="confirmCurriculum"    minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmVideolectures" minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmAMinusLevel"   minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmALevel"        minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmAPlusLevel"    minOccurs="0" type="t_boolean"/>
+    </xs:sequence>
+</xs:group>
+
 <!-- ====== root element  ======= -->
 <xs:element name="course" type="t_course"/>
 

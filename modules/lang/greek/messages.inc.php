@@ -3560,3 +3560,5 @@ $langCMeta['course_numberOfUnits'] = "Αριθμός Θεματικών Ενοτ
 $langCMeta['course_unit_title'] = "Τίτλος Θεματικής Ενότητας";
 $langCMeta['course_unit_description'] = "Αναλυτική περιγραφή Θεματικής Ενότητας";
 $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ενότητα";
+$langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
+$langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
