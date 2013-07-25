@@ -35,6 +35,8 @@ mysql_select_db($mysqlMainDb);
 
 // Construct a table with platform identification info
 $tool_content .= "
+  <div class='info'>$langOnlineUsers: <b>".  getOnlineUsers() ."</b></div>
+  <br />
   <br />
   <fieldset>
   <legend>$langPlatformIdentity</legend>

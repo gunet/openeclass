@@ -61,6 +61,7 @@ $langUserS = "χρήστης";
 $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση Χρηστών";
+$langOnlineUsers = "Συνδεδεμένοι χρήστες";
 
 /********************************************
 * addadmin.php

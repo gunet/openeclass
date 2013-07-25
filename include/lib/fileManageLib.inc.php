@@ -417,7 +417,7 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
         if ($v == 0) {
                 die("error: ".$zipfile->errorInfo(true));
         }
-        $real_paths = array();
+        $real_paths = array();        
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
                 $filename = $GLOBALS['map_filenames'][$path];
                 $GLOBALS['common_filenames'][$real_path] = $filename;

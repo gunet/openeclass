@@ -129,6 +129,7 @@ if (!get_config('dont_display_login_form')) {
 	 $tool_content .= "<tr><td class='LoginData'>
 	   $shibboleth_link
 	   $cas_link</td></tr>
+          <th class='LoginHead'><br />$langOnlineUsers: ".getOnlineUsers()."</th>
 	</table>
 	</form>";
 }

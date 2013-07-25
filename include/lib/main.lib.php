@@ -60,6 +60,9 @@ define('GROUP', 1);
 define('EBOOK', 2);
 define('COMMON', 3);
 
+// interval in minutes for counting online users
+define('MAX_IDLE_TIME', 10);
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -2358,3 +2361,23 @@ function check_username_sensitivity($posted, $dbuser) {
 	return false;
 }
 
+
+/**
+ * @brief count online users (depending on sessions)
+ * @return int
+ */
+function getOnlineUsers() {
+       
+        $count = 0;
+        if ($directory_handle = opendir(session_save_path())) {
+                while (false !== ($file = readdir($directory_handle))) {
+                        if ($file != '.' and $file != '..') {
+                                if (time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60) {
+                                        $count++;
+                                }
+                        }
+                }
+        }
+        closedir($directory_handle);
+        return $count;
+}
