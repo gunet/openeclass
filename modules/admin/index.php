@@ -27,6 +27,8 @@ define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
 $tool_content .= "
+  <div class='info'>$langOnlineUsers: <b>".  getOnlineUsers() ."</b></div>
+  <br />
   <br />
   <fieldset>
   <legend>$langPlatformIdentity</legend>
