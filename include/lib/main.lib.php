@@ -2370,7 +2370,7 @@ function check_username_sensitivity($posted, $dbuser) {
 function getOnlineUsers() {
        
         $count = 0;
-        if ($directory_handle = opendir(session_save_path())) {
+        if ($directory_handle = @opendir(session_save_path())) {
                 while (false !== ($file = readdir($directory_handle))) {
                         if ($file != '.' and $file != '..') {
                                 if (time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60) {
@@ -2379,6 +2379,7 @@ function getOnlineUsers() {
                         }
                 }
         }
-        closedir($directory_handle);
+        @closedir($directory_handle);
+        
         return $count;
 }

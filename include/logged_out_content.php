@@ -126,10 +126,14 @@ if (!get_config('dont_display_login_form')) {
 	 if (!empty($shibboleth_link) or !empty($cas_link)) {
 		$tool_content .= "<tr><th class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
 	 }
-	 $tool_content .= "<tr><td class='LoginData'>
+	$tool_content .= "<tr><td class='LoginData'>
 	   $shibboleth_link
-	   $cas_link</td></tr>
-          <th class='LoginHead'><br />$langOnlineUsers: ".getOnlineUsers()."</th>
+	   $cas_link</td></tr>";
+        $online_users = getOnlineUsers();
+        if ($online_users > 0) {
+               $tool_content .= "<th class='LoginHead'><br />$langOnlineUsers: $online_users</th>";
+        }          
+        $tool_content .= "
 	</table>
 	</form>";
 }
