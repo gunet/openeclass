@@ -122,7 +122,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
             $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
-            if ($this->getAttribute('lang') == $currentCourseLanguage)
+            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage))
                 $sameAsCourseLang = true;
             else
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
@@ -341,6 +341,14 @@ class CourseXMLElement extends SimpleXMLElement {
         $xmlFile  = self::getCourseXMLPath($courseCode);
         $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
         
+        // course-based adaptation
+        list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $courseCode));
+        list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $courseCode));
+        if ($vnum + $vlnum < 1) {
+            self::$hiddenFields[] = 'course_confirmVideolectures';
+            $data['course_confirmVideolectures'] = 'false';
+        }
+        
         $skeletonXML = simplexml_load_file($skeleton, 'CourseXMLElement');
         $skeletonXML->adapt($data);
         $skeletonXML->populate($data);
@@ -349,6 +357,10 @@ class CourseXMLElement extends SimpleXMLElement {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
             if (!$xml) // fallback if xml is broken
                 return $skeletonXML;
+            else { // xml is valid, merge autogen data and current xml data
+                $new_data = array_merge($xml->asFlatArray(), $data);
+                $data = $new_data;
+            }
         } else // fallback if starting fresh
             return $skeletonXML;
 
@@ -495,7 +507,8 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_unit_material_multimedia_speaker', 'course_unit_material_multimedia_subject', 
         'course_unit_material_multimedia_description', 'course_unit_material_multimedia_keywords', 
         'course_unit_material_multimedia_url', 'course_unit_material_other', 
-        'course_unit_material_digital_url', 'course_unit_material_digital_library'
+        'course_unit_material_digital_url', 'course_unit_material_digital_library',
+        'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel'
     );
     
     /**
@@ -514,7 +527,8 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static $booleanFields = array(
         'course_coTeaching', 'course_coTeachingColleagueOpensCourse',
-        'course_coTeachingAutonomousDepartment'
+        'course_coTeachingAutonomousDepartment', 'course_confirmCurriculum',
+        'course_confirmVideolectures'
     );
     
     /**
@@ -575,7 +589,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static $breakFields = array(
         'course_acknowledgments_en' => '2',
-        'course_coTeachingDepartmentCreditHours' => '3',
+        'course_confirmCurriculum' => '3',
         'course_kalliposURL' => '4'
     );
     

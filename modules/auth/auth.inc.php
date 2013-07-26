@@ -773,6 +773,8 @@ function login($user_info_array, $posted_uname, $pass)
                         $_SESSION['is_power_user'] = 1;
                 } elseif($admin_rights == USERMANAGE_USER) {
                         $_SESSION['is_usermanage_user'] = 1;
+                } elseif($admin_rights == OPENCOURSES_REVIEWER) {
+                        $_SESSION['is_opencourses_reviewer'] = 1;
                 }
                 if ($is_active) {
                         //$_SESSION['is_admin'] = !(!($user_info_array['is_admin'])); // double 'not' to handle NULL
