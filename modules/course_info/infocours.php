@@ -138,8 +138,11 @@ if (isset($_POST['submit'])) {
 	    <li><a href='archive_course.php?course=$code_cours'>$langBackupCourse</a></li>
 	    <li><a href='delete_course.php?course=$code_cours'>$langDelCourse</a></li>
 	    <li><a href='refresh_course.php?course=$code_cours'>$langRefreshCourse</a></li>";
-        if (get_config('course_metadata'))
+        if (get_config('course_metadata')) {
             $tool_content .= "<li><a href='../course_metadata/index.php?course=$code_cours'>$langCourseMetadata</a></li>";
+            if ($is_opencourses_reviewer)
+                $tool_content .= "<li><a href='../course_metadata/control.php?course=$code_cours'>$langCourseMetadataControlPanel</a></li>";
+        }
         $tool_content .= "
 	  </ul>
 	</div>";
