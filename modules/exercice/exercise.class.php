@@ -475,7 +475,7 @@ class Exercise
 			mysql_select_db($currentCourseID);
 			$sql="INSERT INTO `$TBL_EXERCICES`
 				VALUES (NULL,  '$exercise', $description, $type, '$StartDate', '$EndDate', 
-					$TimeConstrain,  $AttemptsAllowed,  $random,  $active,  $results,  $score)";
+					$TimeConstrain,  $AttemptsAllowed,  $random,  $active, 1, $results,  $score)";
 			db_query($sql);
 			$this->id=mysql_insert_id();
 		}
