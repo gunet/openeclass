@@ -3408,8 +3408,6 @@ $langPwStrengthStrong = "Δυνατό";
  Messages for Course Metadata
  *******************************************/
 $langCourseMetadata = "Μεταδεδομένα μαθήματος";
-$langOpenCoursesReviewer = "OpenCourses Reviewer";
-$langHelpOpenCoursesReviewer = "διαχειρίζεται μαθήματα, χρήστες και εγκρίνει ανοιχτά μαθήματα";
 $langCourseMetadataControlPanel = "Πίνακας Ελέγχου OpenCourses";
 $langOpenCoursesCharacteristics = "Ποιοτικά/Ποσοτικά χαρακτηριστικά";
 $langOpenCoursesOpenAccess = "Πρόσβαση Ανοιχτή";

@@ -159,27 +159,18 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 	$is_admin = true;
         $is_power_user = true;
         $is_usermanage_user = true;
-        $is_opencourses_reviewer = true;
 } elseif (isset($_SESSION['is_power_user']) and $_SESSION['is_power_user']) {
 	$is_power_user = true;
         $is_usermanage_user = true;
 	$is_admin = false;
-        $is_opencourses_reviewer = false;
 } elseif (isset($_SESSION['is_usermanage_user']) and $_SESSION['is_usermanage_user']) {
         $is_usermanage_user = true;
         $is_power_user = false;
-	$is_admin = false;
-        $is_opencourses_reviewer = false;
-} elseif (isset($_SESSION['is_opencourses_reviewer']) and $_SESSION['is_opencourses_reviewer']) {
-        $is_power_user = true;
-        $is_usermanage_user = true;
-        $is_opencourses_reviewer = true;
 	$is_admin = false;
 } else {
 	$is_admin = false;
 	$is_power_user = false;
         $is_usermanage_user = false;
-        $is_opencourses_reviewer = false;
 }
 
 if (!isset($_SESSION['theme'])) {
