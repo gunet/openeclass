@@ -121,6 +121,22 @@ if (isset($_GET['giveAdmin'])) {
                                       group_id IN (SELECT id FROM `group` WHERE course_id = $cours_id)");
         }
 }
+
+if (get_config('course_metadata')) {
+    if (isset($_GET['giveReviewer'])) {
+        $new_reviewr_gid = intval($_GET['giveReviewer']);
+        db_query("UPDATE cours_user SET statut = 1, reviewer = 1
+                        WHERE user_id = $new_reviewr_gid 
+                        AND cours_id = $cours_id", $mysqlMainDb);
+    } elseif (isset($_GET['removeReviewer'])) {
+        $removed_reviewer_gid = intval($_GET['removeReviewer']);
+        db_query("UPDATE cours_user SET statut = 5, reviewer = 0
+                        WHERE user_id <> $uid AND
+                              user_id = $removed_reviewer_gid AND
+                              cours_id = $cours_id", $mysqlMainDb);
+    }
+}
+
 // show help link and link to Add new user, search new user and management page of groups
 $tool_content .= "
 
@@ -203,6 +219,8 @@ if (isset($_GET['all'])) {
         $extra_link = '&amp;limit=' . $limit;
 }
 
+$addRoleSpan = (get_config('course_metadata')) ? 4 : 3;
+
 $tool_content .= "
 <table width='100%' class='tbl_alt custom_list_order'>
 <tr>
@@ -210,7 +228,7 @@ $tool_content .= "
   <th><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;ord=s$extra_link'>$langName $langSurname</a></div></th>
   <th class='center' width='160'>$langGroup</th>
   <th class='center' width='90'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;ord=rd$extra_link'>$langRegistrationDateShort</a></th>
-  <th colspan='3' class='center'>$langAddRole</th>          
+  <th colspan='$addRoleSpan' class='center'>$langAddRole</th>
 </tr>";
 
 
@@ -232,7 +250,8 @@ switch ($ord) {
 }
 $result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.parent_email,
                            user.am, user.has_icon, cours_user.statut,
-                           cours_user.tutor, cours_user.editor, cours_user.reg_date
+                           cours_user.tutor, cours_user.editor, cours_user.reviewer, 
+                           cours_user.reg_date
                     FROM cours_user, user
                     WHERE `user`.`user_id` = `cours_user`.`user_id` 
                     AND `cours_user`.`cours_id` = $cours_id
@@ -296,9 +315,14 @@ while ($myrow = mysql_fetch_array($result)) {
         // admin right
         if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($myrow['statut']=='1') {
+                    if (get_config('course_metadata') && $myrow['reviewer'] == '1') {
+                        $tool_content .= "<td valign='top' class='add_teacherLabel' align='center'  width='30'>
+                                        <img src='$themeimg/teacher.png' title='".q($langTutor)."' alt='".q($langTutor)."' /></td>";
+                    } else {
                         $tool_content .= "<td class='add_teacherLabel' align='center'  width='30'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeAdmin=$myrow[user_id]$extra_link' title='".q($langRemoveRightAdmin)."'>
                                         <img src='$themeimg/teacher_remove.png' title='".q($langRemoveRightAdmin)."' alt='".q($langRemoveRightAdmin)."' /></a></td>";
+                    }
                 } else {
                         $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveAdmin=$myrow[user_id]$extra_link'>
@@ -314,6 +338,35 @@ while ($myrow = mysql_fetch_array($result)) {
                                         <img src='$themeimg/add.png' title='".q($langGiveRightAdmin)."' alt='".q($langGiveRightAdmin)."' /></a></td>";
                 }
         }
+        
+        // opencourses reviewer right
+        if (get_config('course_metadata')) {
+            if ($myrow['user_id'] != $_SESSION["uid"]) {
+                if ($is_opencourses_reviewer) {
+                    // do nothing as the reviewer cannot give the reviewer right to other users
+                    $tool_content .= "<td></td>";
+                } else {
+                    if ($myrow['reviewer'] == '1') {
+                        $tool_content .= "<td class='add_teacherLabel' align='center' width='30'>
+                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeReviewer=$myrow[user_id]$extra_link' title='" . q($langRemoveRightReviewer) . "'>
+                                                    <img src='$themeimg/reviewer_remove.png' title='" . q($langRemoveRightReviewer) . "' alt='" . q($langRemoveRightReviewer) . "' /></a></td>";
+                    } else {
+                        $tool_content .= "<td valign='top' align='center' class='add_user'>
+                                            <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveReviewer=$myrow[user_id]$extra_link'>
+                                            <img src='$themeimg/reviewer_add.png' title='" . q($langGiveRightReviewer) . "' alt='" . q($langGiveRightReviewer) . "' /></a></td>";
+                    }
+                }
+            } else {
+                if ($myrow['reviewer'] == '1') {
+                    $tool_content .= "<td valign='top' class='add_teacherLabel' align='center' width='30'>
+                                                <img src='$themeimg/reviewer.png' title='" . q($langOpenCoursesReviewer) . "' alt='" . q($langOpenCoursesReviewer) . "' /></td>";
+                } else {
+                    // do nothing as the course teacher cannot make himeself a reviewer
+                    $tool_content .= "<td></td>";
+                }
+            }
+        }
+        
         $tool_content .= "</tr>";
         $i++;
 }

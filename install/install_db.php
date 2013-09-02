@@ -160,6 +160,7 @@ db_query("CREATE TABLE cours_user (
       `team` INT(11) NOT NULL DEFAULT 0,
       `tutor` INT(11) NOT NULL DEFAULT 0,
       `editor` INT(11) NOT NULL DEFAULT 0,
+      `reviewer` INT(11) NOT NULL DEFAULT 0,
       `reg_date` DATE NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (cours_id, user_id)) $charset_spec");

@@ -619,6 +619,8 @@ if (!isset($_POST['submit2'])) {
                 
                 mysql_field_exists($mysqlMainDb, 'document', 'public') or
                         db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
+                
+                db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
         }
         
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or

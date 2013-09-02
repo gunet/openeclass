@@ -2384,9 +2384,11 @@ $langUserNumber="αριθμός";
 $langGiveRightTutor="Προσθήκη δικαιώματος υπεύθυνου ομάδας";
 $langGiveRightΕditor="Προσθήκη δικαιώματος βοηθού εκπαιδευτή";
 $langGiveRightAdmin="Προσθήκη δικαιώματος εκπαιδευτή";
+$langGiveRightReviewer="Προσθήκη δικαιώματος OpenCourses Reviewer";
 $langRemoveRightTutor="Αφαίρεση δικαιώματος υπεύθυνου ομάδας";
 $langRemoveRightEditor="Αφαίρεση δικαιώματος βοηθού εκπαιδευτή";
 $langRemoveRightAdmin="Αφαίρεση δικαιώματος εκπαιδευτή";
+$langRemoveRightReviewer="Αφαίρεση δικαιώματος OpenCourses Reviewer";
 $langRemoveRight="Αφαίρεση δικαιώματος";
 $langUserOneByOneExplanation="Αυτός (αυτή) θα λάβει ειδοποίηση μέσω email με όνομα χρήστη και συνθηματικό";
 $langBackUser="Επιστροφή στη λίστα χρηστών";
@@ -3408,6 +3410,7 @@ $langPwStrengthStrong = "Δυνατό";
  Messages for Course Metadata
  *******************************************/
 $langCourseMetadata = "Μεταδεδομένα μαθήματος";
+$langOpenCoursesReviewer = "OpenCourses Reviewer";
 $langCourseMetadataControlPanel = "Πίνακας Ελέγχου OpenCourses";
 $langOpenCoursesCharacteristics = "Ποιοτικά/Ποσοτικά χαρακτηριστικά";
 $langOpenCoursesOpenAccess = "Πρόσβαση Ανοιχτή";
