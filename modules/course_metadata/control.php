@@ -31,75 +31,173 @@ if (!get_config('course_metadata') || !$is_opencourses_reviewer) {
     exit();
 }
 
+// initialize data from xml and db
 $xml = CourseXMLElement::init($cours_id, $code_cours);
 $xmlData = $xml->asFlatArray();
 list($visible) = mysql_fetch_row(db_query("SELECT visible FROM `$mysqlMainDb`.cours WHERE code = '$currentCourseID'"));
-
 $hasOpenAccess = ($visible == 2) ? true : false;
-$hasMandatoryMetadata = false;
-$hasLicense = false;
+$hasMandatoryMetadata = $xml->hasMandatoryMetadata();
+$hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license'])) ? true : false;
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
 list($numDocs) = mysql_fetch_row(db_query("SELECT count(id) FROM `$mysqlMainDb`.document WHERE course_id = " . intval($cours_id)));
 list($numUnits) = mysql_fetch_row(db_query("SELECT count(id) FROM `$mysqlMainDb`.course_units WHERE course_id = " . intval($cours_id) . " AND `order` >= 1 AND visibility = 'v'"));
-list($numAudio) = mysql_fetch_row(db_query(""));
-list($numVideo) = mysql_fetch_row(db_query(""));
+list($numVideo) = mysql_fetch_row(db_query("SELECT count(id) FROM video"));
+list($numVideoLinks) = mysql_fetch_row(db_query("SELECT count(id) FROM videolinks"));
+$numMedia = $numVideo + $numVideoLinks;
 $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xmlData['course_confirmVideolectures'] == 'true');
 
+// auto detect level
+$looksAMinus = false;
+if ($hasOpenAccess && $hasMandatoryMetadata && $hasLicense && 
+    $hasTeacherConfirm && ($numDocs > 0) && ($numUnits > 0))
+    $looksAMinus = true;
+$looksA = false;
+if ($looksAMinus && ($numMedia > 0))
+    $looksA = true;
+$looksAPlus = false;
+if ($looksA && $hasTeacherConfirmVideo)
+    $looksAPlus = true;
+
+if (isset($_POST['submit'])) {
+    // default fallback is false
+    if (!isset($_POST['course_confirmAMinusLevel']))
+        $_POST['course_confirmAMinusLevel'] = 'false';
+    if (!isset($_POST['course_confirmALevel']))
+        $_POST['course_confirmALevel'] = 'false';
+    if (!isset($_POST['course_confirmAPlusLevel']))
+        $_POST['course_confirmAPlusLevel'] = 'false';
+    
+    // validation
+    if ($_POST['course_confirmAMinusLevel'] == 'true') {
+        if (!$looksAMinus) {
+            $_POST['course_confirmAMinusLevel'] = 'false';
+            $_POST['course_confirmALevel'] = 'false';
+            $_POST['course_confirmAPlusLevel'] = 'false';
+        }
+    }
+    
+    if ($_POST['course_confirmALevel'] == 'true') {
+        if (!$looksA) {
+            $_POST['course_confirmALevel'] = 'false';
+            $_POST['course_confirmAPlusLevel'] = 'false';
+        } else {
+            $_POST['course_confirmAMinusLevel'] = 'true';
+        }
+    }
+    
+    if ($_POST['course_confirmAPlusLevel'] == 'true') {
+        if (!$looksAPlus) {
+            $_POST['course_confirmAPlusLevel'] = 'false';
+        } else {
+            $_POST['course_confirmAMinusLevel'] = 'true';
+            $_POST['course_confirmALevel'] = 'true';
+        }
+    }
+    
+    $xml->populate($_POST);
+    CourseXMLElement::save($code_cours, $xml);
+    $xmlData = $xml->asFlatArray(); // reload data
+}
+
+// checkboxes
+$checkedAMinusLevel = ($xmlData['course_confirmAMinusLevel'] == 'true') ? "checked='checked'" : '';
+$checkedALevel      = ($xmlData['course_confirmALevel']      == 'true') ? "checked='checked'" : '';
+$checkedAPlusLevel  = ($xmlData['course_confirmAPlusLevel']  == 'true') ? "checked='checked'" : '';
+$disabledAMinusLevel = (!$looksAMinus) ? "disabled='disabled'" : '';
+$disabledALevel      = (!$looksA)      ? "disabled='disabled'" : '';
+$disabledAPlusLevel  = (!$looksAPlus)  ? "disabled='disabled'" : '';
+
+// images
 $openAccessImg = ($hasOpenAccess) ? 'tick' : 'delete';
 $mandatoryMetadataImg = ($hasMandatoryMetadata) ? 'tick' : 'delete';
 $licenseImg = ($hasLicense) ? 'tick' : 'delete';
 $teacherConfirmImg = ($hasTeacherConfirm) ? 'tick' : 'delete';
 $docsImg = ($numDocs > 0) ? 'tick' : 'delete';
 $unitsImg = ($numUnits > 0) ? 'tick' : 'delete';
-$audioImg = ($numAudio > 0) ? 'tick' : 'delete';
-$videoImg = ($numVideo > 0) ? 'tick' : 'delete';
+$mediaImg = ($numMedia > 0) ? 'tick' : 'delete';
 $teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'tick' : 'delete';
 
+$tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>";
 $tool_content .= <<<EOF
-        <table class="tbl_courseid" width="100%">
-	<tbody><tr>
-	  <td class="title1" colspan="2">$langOpenCoursesCharacteristics</td>
-	</tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesOpenAccess</td> 
-          <td align="right"><img src="$themeimg/$openAccessImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesMandatoryMetadata</td>
-          <td align="right"><img src="$themeimg/$mandatoryMetadataImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesLicense</td>
-          <td align="right"><img src="$themeimg/$licenseImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesTeacherConfirm</td>
-          <td align="right"><img src="$themeimg/$teacherConfirmImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasDocuments ($numDocs $langDoc)</td>
-          <td align="right"><img src="$themeimg/$docsImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasUnits ($numUnits $langSections)</td>
-          <td align="right"><img src="$themeimg/$unitsImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasAudio ($numAudio $langOpenCoursesFiles)</td>
-          <td align="right"><img src="$themeimg/$audioImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasVideo ($numVideo $langOpenCoursesFiles)</td>
-          <td align="right"><img src="$themeimg/$videoImg.png" alt=""></td>
-        </tr>
-        <tr>
-          <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesTeacherConfirmVideo</td>
-          <td align="right"><img src="$themeimg/$teacherConfirmVideoImg.png" alt=""></td>
-        </tr>
-        </tbody></table>
-        <br/><br/>
-        <p>&laquo; <a href='{$urlServer}modules/course_info/infocours.php?course=$code_cours'>$langBack</a></p>
-        <p>&laquo; <a href='{$urlServer}courses/$code_cours/index.php'>$langBackCourse</a></p>
+    <table class="tbl_courseid" width="100%">
+    <tbody><tr>
+      <td class="title1" colspan="2">$langOpenCoursesCharacteristics</td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesOpenAccess</td> 
+      <td align="right"><img src="$themeimg/$openAccessImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesMandatoryMetadata</td>
+      <td align="right"><img src="$themeimg/$mandatoryMetadataImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesLicense</td>
+      <td align="right"><img src="$themeimg/$licenseImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesTeacherConfirm</td>
+      <td align="right"><img src="$themeimg/$teacherConfirmImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasDocuments ($numDocs $langDoc)</td>
+      <td align="right"><img src="$themeimg/$docsImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasUnits ($numUnits $langSections)</td>
+      <td align="right"><img src="$themeimg/$unitsImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsAMinusLevel</td>
+      <td align="right"><input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasMediaFiles ($numMedia $langOpenCoursesFiles)</td>
+      <td align="right"><img src="$themeimg/$mediaImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsALevel</td>
+      <td align="right"><input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesTeacherConfirmVideo</td>
+      <td align="right"><img src="$themeimg/$teacherConfirmVideoImg.png" alt=""></td>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsAPlusLevel</td>
+      <td align="right"><input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/>
+    </tr>
+    </tbody></table>
+    <br/>
+    <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
+    </form>
+    <br/><br/>
+    <p>&laquo; <a href='{$urlServer}modules/course_info/infocours.php?course=$code_cours'>$langBack</a></p>
+    <p>&laquo; <a href='{$urlServer}courses/$code_cours/index.php'>$langBackCourse</a></p>
 EOF;
 
-draw($tool_content, 2);
+load_js('jquery');
+$head_content .= <<<EOF
+    <script type='text/javascript'>
+        $(document).ready(function() {
+
+            $('#check_AMinus').click(function(event) {
+                if (!$('#check_AMinus').is(":checked") && $('#check_A').is(":checked")) {
+                    $('#check_A').attr('checked', false);
+                }
+                if (!$('#check_AMinus').is(":checked") && $('#check_APlus').is(":checked")) {
+                    $('#check_APlus').attr('checked', false);
+                }
+            });
+        
+            $('#check_A').click(function(event) {
+                if (!$('#check_A').is(":checked") && $('#check_APlus').is(":checked")) {
+                    $('#check_APlus').attr('checked', false);
+                }
+            });
+
+        });
+    </script>
+EOF;
+
+draw($tool_content, 2, null, $head_content);

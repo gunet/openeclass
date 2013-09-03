@@ -78,7 +78,7 @@ function displayForm() {
 
 function submitForm() {
     global $cours_id, $code_cours, $urlServer, $webDir,
-           $langModifDone, $langBack, $langBackCourse;
+           $langModifDone, $langBack, $langBackCourse, $mysqlMainDb;
     
     // handle uploaded files
     $fileData = array();
@@ -93,9 +93,10 @@ function submitForm() {
     $extraData = CourseXMLElement::getAutogenData($cours_id);
     $data = array_merge($_POST, $extraData, $fileData);
     // course-based adaptation
+    list($dnum)  = mysql_fetch_row(db_query("select count(id) from document where course_id = " . $cours_id, $mysqlMainDb));
     list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $code_cours));
     list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $code_cours));
-    if ($vnum + $vlnum < 1)
+    if ($dnum + $vnum + $vlnum < 1)
         $data['course_confirmVideolectures'] = 'false';
     
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');

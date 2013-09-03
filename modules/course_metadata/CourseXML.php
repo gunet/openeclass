@@ -330,6 +330,25 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Whether the XML contains all mandatory fields or not.
+     * 
+     * @return boolean
+     */
+    public function hasMandatoryMetadata() {
+        $data = $this->asFlatArray();
+        
+        foreach (self::$mandatoryFields as $mfield)
+            if (!isset($data[$mfield]) || empty($data[$mfield]))
+                return false;
+            
+        // TODO for units
+        // units no > 0
+        // every unit has title, description, keywords
+            
+        return true;
+    }
+    
+    /**
      * Initialize an XML structure for a specific course.
      * 
      * @param  int    $courseId
@@ -337,14 +356,16 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return CourseXMLElement
      */
     public static function init($courseId, $courseCode) {
+        global $mysqlMainDb;
         $skeleton = self::getSkeletonPath();
         $xmlFile  = self::getCourseXMLPath($courseCode);
         $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
         
         // course-based adaptation
+        list($dnum)  = mysql_fetch_row(db_query("select count(id) from document where course_id = " . intval($courseId), $mysqlMainDb));
         list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $courseCode));
         list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $courseCode));
-        if ($vnum + $vlnum < 1) {
+        if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
         }
@@ -591,6 +612,37 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_acknowledgments_en' => '2',
         'course_confirmCurriculum' => '3',
         'course_kalliposURL' => '4'
+    );
+    
+    /**
+     * Mandatory HTML Form fields.
+     * @var array
+     */
+    public static $mandatoryFields = array(
+        'course_instructor_firstName_el', 'course_instructor_firstName_en',
+        'course_instructor_lastName_el', 'course_instructor_lastName_en',
+        'course_instructor_fullName_el', 'course_instructor_fullName_en',
+        'course_title_el', 'course_title_en',
+        'course_url',
+        'course_code_el',
+        'course_targetGroup_el',
+        'course_description_el', 'course_description_en',
+        'course_contents_el',
+        'course_objectives_el',
+        'course_keywords_el', 'course_keywords_en',
+        'course_featuredBooks_el',
+        'course_prerequisites_el',
+        'course_literature_el',
+        'course_thematic_el', 'course_thematic_en',
+        'course_institution_el', 'course_institution_en',
+        'course_institutionDescription_el', 'course_institutionDescription_en',
+        'course_department_el', 'course_department_en',
+        'course_sector_el', 'course_sector_en',
+        'course_curriculumTitle_el', 'course_curriculumTitle_en',
+        'course_curriculumDescription_el', 'course_curriculumDescription_en',
+        'course_outcomes_el', 'course_outcomes_en',
+        'course_curriculumKeywords_el', 'course_curriculumKeywords_en',
+        'course_curriculumTargetGroup_el', 'course_curriculumTargetGroup_en'
     );
     
     /**
