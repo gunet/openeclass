@@ -36,11 +36,12 @@ require_once 'include/lib/textLib.inc.php';
 $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"index.php?course=$course_code", "name"=> $langExercices);
 
+// picture path
+$picturePath = "courses/$course_code/image";
+
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
-
-
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
@@ -122,8 +123,13 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	    standard_text_escape($questionDescription_temp)
 	    ."<br/><br/>
 	  </td>
-	</tr>";
-
+	</tr>";                              
+         if(file_exists($picturePath.'/quiz-'.$questionId)) {                                      
+		$tool_content .= "here
+                  <tr class='even'>
+                    <td class='center' colspan='${colspan}'><img src='../../".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+                  </tr>";
+	}
 	$questionScore=0;
 
 	if ($displayResults == 1) {

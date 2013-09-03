@@ -123,10 +123,11 @@ if (!get_config('dont_display_login_form')) {
 	 }
 	 $tool_content .= "<tr><td class='LoginData'>
 	   $shibboleth_link
-	   $cas_link</td></tr>
-          <th class='LoginHead'><br />$langOnlineUsers: ".getOnlineUsers()."</th>
-	</table>
-	</form>";
+	   $cas_link</td></tr>";
+          $online_users = getOnlineUsers();
+          if ($online_users > 0) {
+                  $tool_content .= "<th class='LoginHead'><br />$langOnlineUsers: $online_users</th>";
+          }
+	$tool_content .= "</table></form>";
 }
-
 $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";

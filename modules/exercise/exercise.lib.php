@@ -41,7 +41,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
 		<b>". q($questionName) ."</b><br />
 		$questionDescription_temp
                 </td>
-              </tr>";
+              </tr>";                
 		if(file_exists($picturePath.'/quiz-'.$questionId)) {
 			$tool_content .= "
                   <tr class='even'>
