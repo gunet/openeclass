@@ -295,7 +295,15 @@ if ($is_course_admin) {
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+$bar_content .= "<li><b>$langUsers</b>: $link</li>";
+
+// display opencourses level in bar
+require_once '../../modules/course_metadata/CourseXML.php';
+$level = CourseXMLElement::getLevel($cours_id, $code_cours);
+if (isset($level) && !empty($level))
+    $bar_content .= "<li><b>$langOpenCoursesLevel</b>: " . $level . "</li></ul>";
+
+$bar_content .= "</ul>";
 
 
 if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) 

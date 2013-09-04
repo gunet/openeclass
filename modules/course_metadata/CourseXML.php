@@ -514,6 +514,33 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Returns the Certification Level of the course.
+     * 
+     * @param  int     $courseId
+     * @param  string  $courseCode
+     * @return string
+     */
+    public static function getLevel($courseId, $courseCode) {
+        global $langOpenCoursesAMinusLevel, $langOpenCoursesALevel, $langOpenCoursesAPlusLevel;
+        
+        if (!get_config('course_metadata'))
+            return null;
+        
+        $xml = self::init($courseId, $courseCode);
+        $xmlData = $xml->asFlatArray();
+        if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
+            return $langOpenCoursesAPlusLevel;
+        
+        if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
+            return $langOpenCoursesALevel;
+        
+        if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
+            return $langOpenCoursesAMinusLevel;
+        
+        return null;
+    }
+    
+    /**
      * Enumeration values for HTML Form fields.
      * @param  string $key
      * @return array
