@@ -408,8 +408,9 @@ return $departments_select : string (a formatted select box)
 ****************************************************************/
 function list_departments($department_value)
 {
+        global $mysqlMainDb;
 	$qry = "SELECT id, name FROM faculte ORDER BY name";
-  	$dep = db_query($qry);
+  	$dep = db_query($qry, $mysqlMainDb);
   	if($dep)
   	{
 		$departments_select = "";
@@ -800,7 +801,8 @@ function find_faculty_by_name($name) {
 
 // Returns the name of a faculty given its code or its name
 function find_faculty_by_id($id) {
-	$req = db_query("SELECT name FROM faculte WHERE id = $id");
+        global $mysqlMainDb;
+	$req = db_query("SELECT name FROM faculte WHERE id = $id", $mysqlMainDb);
 	if ($req and mysql_num_rows($req)) {
 		$fac = mysql_fetch_row($req);
 		return $fac[0];
