@@ -166,7 +166,7 @@ if ($is_editor) {
 if ($is_editor) {
         list($last_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
                                                    WHERE course_id = $cours_id AND `order` >= 0
-                                                   ORDER BY `order` DESC LIMIT 1"));
+                                                   ORDER BY `order` DESC LIMIT 1", $mysqlMainDb));
 	$query = "SELECT id, title, comments, visibility
 		  FROM course_units WHERE course_id = $cours_id AND `order` >= 0
                   ORDER BY `order`";
@@ -175,7 +175,7 @@ if ($is_editor) {
 		  FROM course_units WHERE course_id = $cours_id AND visibility='v' AND `order` >= 0
                   ORDER BY `order`";
 }
-$sql = db_query($query);
+$sql = db_query($query, $mysqlMainDb);
 $first = true;
 $count_index = 1;
 while ($cu = mysql_fetch_array($sql)) {

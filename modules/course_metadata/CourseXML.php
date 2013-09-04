@@ -341,9 +341,16 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!isset($data[$mfield]) || empty($data[$mfield]))
                 return false;
             
-        // TODO for units
-        // units no > 0
-        // every unit has title, description, keywords
+        // check mandatory unit fields
+        if (!isset($data['course_numberOfUnits']) || !intval($data['course_numberOfUnits']) > 0)
+            return false;
+        // check each unit title and description
+        for ($i = 0; $i < intval($data['course_numberOfUnits']); $i++) {
+            if (!isset($data['course_unit_title_el'][$i]) || empty($data['course_unit_title_el'][$i]))
+                return false;
+            if (!isset($data['course_unit_description_el'][$i]) || empty($data['course_unit_description_el'][$i]))
+                return false;
+        }
             
         return true;
     }
@@ -431,10 +438,10 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer;
+        global $urlServer, $mysqlMainDb;
         $data = array();
     
-        $res1 = db_query("SELECT * FROM cours WHERE cours_id = " . intval($courseId));
+        $res1 = db_query("SELECT * FROM cours WHERE cours_id = " . intval($courseId), $mysqlMainDb);
         $course = mysql_fetch_assoc($res1);
         if (!$course)
             return array();
@@ -450,7 +457,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $res2 = db_query("SELECT id, title, comments
                            FROM course_units
                           WHERE visibility = 'v'
-                            AND course_id = " . intval($courseId));
+                            AND course_id = " . intval($courseId), $mysqlMainDb);
         $unitsCount = 0;
         while($row = mysql_fetch_assoc($res2)) {
             $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
