@@ -64,6 +64,7 @@ if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 }
 
 include ($relPath . "template/template.inc.php");
+require_once ($relPath . "modules/course_metadata/CourseXML.php");
 include ('tools.php');
 
 /**
