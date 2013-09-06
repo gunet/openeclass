@@ -134,9 +134,16 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 	exit;
 }
 
+// visibility commands
+if (isset($_GET['vis'])) {    
+        $new_vis_status = intval($_GET['vis']);
+        $table = select_table($_GET['table']);
+        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = $_GET[vid] AND course_id = $course_id");
+        $action_message = "<p class='success'>$langViMod</p>";
+}
 // Public accessibility commands
 if (isset($_GET['public']) or isset($_GET['limited'])) {
-        $new_public_status = intval(isset($_GET['public']))? 1: 0;        
+        $new_public_status = intval(isset($_GET['public']))? 1: 0;
         $table = select_table($_GET['table']);
         db_query("UPDATE $table SET public = $new_public_status WHERE id = $_GET[vid] AND course_id = $course_id");
         $action_message = "<p class='success'>$langViMod</p>";
@@ -467,7 +474,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         }
         $tool_content .= "<th width='70'>$langDate</th>";
         if (!$is_in_tinymce) {
-                $tool_content .= "<th width='90'>$langActions</th>";
+                $tool_content .= "<th width='110'>$langActions</th>";
         }
         $tool_content .= "</tr>";
         foreach($results as $table => $result)
@@ -496,14 +503,21 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 				default:
 					exit;
 			}
-                        if ($i%2) {
-				$rowClass = "class='odd'";
-			} else {
-				$rowClass = "class='even'";
-			}
-                        $tool_content .= "
-                                <tr $rowClass>
-                                   <td width='1' valign='top'>
+                        if ($is_editor and $myrow['visible'] == '1') {
+                                $visibility = 0;
+                                $vis_icon = 'visible';
+                                if ($i%2) {
+                                	$rowClass = "class='odd'";
+                                } else {
+                                        $rowClass = "class='even'";
+                                }
+                                $tool_content .= "<tr $rowClass>";
+                        } else {
+                                $tool_content .= "<tr class='invisible'>";
+                                $visibility = 1;
+                                $vis_icon = 'invisible';                                    
+                        }
+                        $tool_content .= "<td width='1' valign='top'>
                                       <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
                                    </td>
                                    $link_to_add";
@@ -513,6 +527,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                       $link_to_save".icon('edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow[id]&amp;table_edit=$table")."
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=".$myrow['id']."&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape($langConfirmDelete ." ". $myrow['title'])."');\">
                                         <img src='$themeimg/delete.png' title='$langDelete'></a>&nbsp;";
+                                $tool_content .= icon($vis_icon, $langVisible, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow[id]&amp;vis=$visibility&amp;table=$table")."&nbsp;";
                                 if (course_status($course_id) == COURSE_OPEN) {
                                         if ($myrow['public']) {
                                                 $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow[id]&amp;limited=1&amp;table=$table");
@@ -581,7 +596,7 @@ else {
 				} else {
 					$rowClass = "class='even'";
 				}
-                                if (resource_access(1, $myrow['public'])) {
+                                if (resource_access($myrow['visible'], $myrow['public'])) {
                                         $tool_content .= "<tr $rowClass>";
                                         $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
                                         $tool_content .= $link_to_add;

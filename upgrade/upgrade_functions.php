@@ -404,9 +404,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
                 }
 
                 $ok = db_query("INSERT INTO `$mysqlMainDb`.video
-                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                        (`id`, `course_id`, `path`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`,
-                               `creator`, `publisher`, `date` FROM video ORDER by id");
+                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id");
 
         if (false !== $ok)
             db_query("DROP TABLE video");
@@ -433,9 +433,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
         }
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.videolinks
-                        (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`)
+                        (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
-                               `publisher`, `date` FROM videolinks ORDER by id");
+                               `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
 
         if (false !== $ok)
             db_query("DROP TABLE videolinks");
@@ -943,10 +943,10 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
         db_query("UPDATE exercices SET active = 0 WHERE active IS NULL");
         $ok = db_query("INSERT INTO `$mysqlMainDb`.exercise
                          (`id`, `course_id`, `title`, `description`, `type`, `start_date`, `end_date`,
-                          `time_constraint`, `attempts_allowed`, `random`, `active`, `results`, `score`)
+                          `time_constraint`, `attempts_allowed`, `random`, `active`, `public`, `results`, `score`)
                          SELECT `id` + $exerciseid_offset, $course_id, `titre`, `description`, `type`,
                                 `StartDate`, `EndDate`, `TimeConstrain`, `AttemptsAllowed`, `random`,
-                                `active`, `results`, `score`
+                                `active`, `public`, `results`, `score`
                            FROM exercices ORDER BY id") && $ok;
 
         // ----- exercise_user_record DB Table ----- //

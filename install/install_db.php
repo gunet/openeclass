@@ -419,6 +419,7 @@ db_query("CREATE TABLE IF NOT EXISTS video (
                 `creator` VARCHAR(200),
                 `publisher` VARCHAR(200),
                 `date` DATETIME,
+                `visible` TINYINT(4) NOT NULL DEFAULT 1,
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS videolinks (
@@ -430,6 +431,7 @@ db_query("CREATE TABLE IF NOT EXISTS videolinks (
                 `creator` VARCHAR(200),
                 `publisher` VARCHAR(200),
                 `date` DATETIME,
+                `visible` TINYINT(4) NOT NULL DEFAULT 1,
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
