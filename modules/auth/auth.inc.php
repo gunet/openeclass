@@ -280,7 +280,6 @@ email (LDAP attribute: mail)
 function auth_user_login($auth, $test_username, $test_password, $settings)
 {
         global $mysqlMainDb, $webDir;
-
         $testauth = false;
         switch($auth) {
 	case '1':
@@ -740,8 +739,7 @@ Authenticate user via eclass
 ****************************************************************/
 function login($user_info_array, $posted_uname, $pass)
 {
-		global $mysqlMainDb;
-		
+		global $mysqlMainDb;		
 		$pass_match = false;
 		$hasher = new PasswordHash(8, false);
 		

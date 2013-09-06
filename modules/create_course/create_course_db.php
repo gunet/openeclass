@@ -498,6 +498,7 @@ db_query("CREATE TABLE agenda (
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
+               `visible` TINYINT(4) NOT NULL DEFAULT 1,
                `public` TINYINT(4) NOT NULL DEFAULT 1,
                PRIMARY KEY (id))
          $charset_spec");
@@ -512,6 +513,7 @@ db_query("CREATE TABLE agenda (
                creator varchar(200),
                publisher varchar(200),
                date DATETIME,
+               `visible` TINYINT(4) NOT NULL DEFAULT 1,
                `public` TINYINT(4) NOT NULL DEFAULT 1,
                PRIMARY KEY (id))
          $charset_spec");

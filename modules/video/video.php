@@ -244,6 +244,14 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	exit;
 }	
 
+// visibility commands
+if (isset($_GET['vis'])) {    
+        $new_vis_status = intval($_GET['vis']);
+        $table = select_table($_GET['table']);
+        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = $_GET[vid]", $currentCourseID);        
+        $action_message = "<p class='success'>$langViMod</p>";
+}
+
 // Public accessibility commands
 if (isset($_GET['public']) or isset($_GET['limited'])) {
         $new_public_status = intval(isset($_GET['public']))? 1: 0;        
@@ -359,7 +367,7 @@ if (isset($_POST['add_submit'])) {  // add
 		$id="";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
 		$nameTools = $langAddV;
-		$navigation[] = array('url' => "video.php?course=$code_cours", 'name' => $langVideo);
+		$navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours", 'name' => $langVideo);
 		$tool_content .= "
               <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'titre');\">
               <fieldset>
@@ -404,7 +412,7 @@ if (isset($_POST['add_submit'])) {  // add
               
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'url') { // display video links form
 		$nameTools = $langAddVideoLink;
-		$navigation[] = array ('url' => "video.php?course=$code_cours", 'name' => $langVideo);
+		$navigation[] = array ('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours", 'name' => $langVideo);
 		$tool_content .= "
 		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' onsubmit=\"return checkrequired(this, 'titre');\">
                 <fieldset>
@@ -471,19 +479,18 @@ if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 		$nameTools = $langModify;
 		$navigation[] = array ('url' => "video.php?course=$code_cours", 'name' => $langVideo);
 		$tool_content .= "
-           <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' onsubmit=\"return checkrequired(this, 'titre');\">
-           <fieldset>
-           <legend>$langModify</legend>
+                <form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' onsubmit=\"return checkrequired(this, 'titre');\">
+                <fieldset>
+                <legend>$langModify</legend>
 
-           <table width='100%' class='tbl'>";
-		if ($table_edit == 'videolinks') {
-			$tool_content .= "
-           <tr>
-             <th>$langURL:</th>
-             <td><input type='text' name='url' value='".q($url)."' size='55'></td>
-           </tr>";
-		}
-		elseif ($table_edit == 'video') {
+                <table width='100%' class='tbl'>";
+                if ($table_edit == 'videolinks') {
+                       $tool_content .= "
+                       <tr>
+                         <th>$langURL:</th>
+                         <td><input type='text' name='url' value='".q($url)."' size='55'></td>
+                       </tr>";
+		} elseif ($table_edit == 'video') {
 			$tool_content .= "<input type='hidden' name='url' value='".q($url)."'>";
 		}
 		@$tool_content .= "
@@ -528,8 +535,8 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
-$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video $filterv ORDER BY titre",$currentCourseID));
-$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks $filterl
+$count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video $filterv ORDER BY titre",$currentCourseID));
+$count_video_links = mysql_fetch_array(db_query("SELECT COUNT(*) FROM videolinks $filterl
 				ORDER BY titre",$currentCourseID));
 
 if ($count_video[0]<>0 || $count_video_links[0]<>0) {
@@ -551,7 +558,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         }
         $tool_content .= "<th width='70'>$langdate</th>";
         if (!$is_in_tinymce)
-            $tool_content .= "<th width='90'>$langActions</th>";
+            $tool_content .= "<th width='110'>$langActions</th>";
         $tool_content .= "</tr>";
         foreach($results as $table => $result)
                 while ($myrow = mysql_fetch_array($result)) {
@@ -595,25 +602,37 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 				default:
 					exit;
 			}
-                        if ($i%2) {
-				$rowClass = "class='odd'";
-			} else {
-				$rowClass = "class='even'";
-			}
-                        $tool_content .= "
-                                <tr $rowClass>
+                                                
+                        if ($is_editor and $myrow['visible'] == '1') {
+                                $visibility = 0;
+                                $vis_icon = 'visible';
+                                if ($i%2) {
+                                	$rowClass = "class='odd'";
+                                } else {
+                                        $rowClass = "class='even'";
+                                }
+                                $tool_content .= "<tr $rowClass>";
+                        } else {
+                                $tool_content .= "<tr class='invisible'>";
+                                $visibility = 1;
+                                $vis_icon = 'invisible';                                    
+                        }
+                        $tool_content .= "                        
                                    <td width='1' valign='top'>
                                       <img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''>
                                    </td>
                                    $link_to_add";
                         if (!$is_in_tinymce)
-                        {
+                        {                            
                                 $tool_content .= "
                                    <td align='right'>
                                       $link_to_save<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;table_edit=$table'>
                                       <img src='$themeimg/edit.png' title='".q($langModify)."'>
                                       </a><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$myrow[0]&amp;delete=yes&amp;table=$table' onClick=\"return confirmation('".js_escape("$langConfirmDelete $myrow[2]")."');\">
                                       <img src='$themeimg/delete.png' title='".q($langDelete)."'></a>&nbsp;";
+                                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vid=$myrow[id]&amp;vis=$visibility&amp;table=$table'>" .
+                                                                "<img src='$themeimg/$vis_icon.png' " .
+                                                                "title='".q($langVisible)."' alt='".q($langVisible)."' /></a>&nbsp;";
                                 if (course_status($cours_id) == COURSE_OPEN) {
                                         if ($myrow['public']) {
                                                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;vid=$myrow[id]&amp;limited=1&amp;table=$table'>" .
@@ -646,8 +665,8 @@ else {
     
 	$results['video'] = db_query("SELECT *  FROM video $filterv ORDER BY titre", $currentCourseID);
 	$results['videolinks'] = db_query("SELECT * FROM videolinks $filterl ORDER BY titre", $currentCourseID);
-	$count_video = mysql_fetch_array(db_query("SELECT count(*) FROM video $filterv ORDER BY titre", $currentCourseID));
-	$count_video_links = mysql_fetch_array(db_query("SELECT count(*) FROM videolinks $filterl ORDER BY titre",$currentCourseID));
+	$count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video $filterv ORDER BY titre", $currentCourseID));
+	$count_video_links = mysql_fetch_array(db_query("SELECT COUNT(*) FROM videolinks $filterl ORDER BY titre",$currentCourseID));
         
 	if ($count_video[0]<>0 || $count_video_links[0]<>0) {
 		$tool_content .= "
@@ -699,7 +718,7 @@ else {
 				} else {
 					$rowClass = "class='even'";
 				}
-                                if (resource_access(1, $myrow['public'])) {
+                                if (resource_access($myrow['visible'], $myrow['public'])) {
                                         $tool_content .= "<tr $rowClass>";
                                         $tool_content .= "<td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' alt=''></td>";
                                         $tool_content .= $link_to_add;

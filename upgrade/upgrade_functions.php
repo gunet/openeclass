@@ -339,7 +339,9 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
 	flush();                
         
         db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
+        db_query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
         db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
         db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
 }
 
