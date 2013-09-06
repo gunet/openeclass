@@ -41,6 +41,9 @@ include '../../include/baseTheme.php';
 $nameTools = $langExercicesResult;
 $navigation[] = array ("url"=>"exercice.php?course=$code_cours", "name"=> $langExercices);
 
+// picture path
+$picturePath='../../courses/'.$currentCourseID.'/image';
+
 require_once '../video/video_functions.php';
 load_modal_box();
 
@@ -126,6 +129,12 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	    ."<br/><br/>
 	  </td>
 	</tr>";
+        if(file_exists($picturePath.'/quiz-'.$questionId)) {
+		$tool_content .= "
+                  <tr class='even'>
+                    <td class='center' colspan='${colspan}'><img src='".${'picturePath'}."/quiz-".${'questionId'}."'></td>
+                  </tr>";
+	}
 
 	$questionScore=0;
 
