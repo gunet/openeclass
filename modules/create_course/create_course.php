@@ -72,14 +72,33 @@ hContent;
     $head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
 $head_content .= <<<hContent
     };
-    
+   
+    function showCCFields() {           
+        $('#cc_1').show();
+        $('#cc_2').show();            
+    }
+    function hideCCFields() {           
+        $('#cc_1').hide();
+        $('#cc_2').hide();            
+    }
+                
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
-    });
-
+       
+        hideCCFields();
+        
+        $('#cc_license').click(function(event) {
+            showCCFields();
+        });
+        $('#copyright_license').click(function(event) {
+            hideCCFields();
+        });
+    });  
+        
 /* ]]> */
+    
 </script>
 hContent;
 
@@ -167,12 +186,35 @@ if (!isset($_POST['create_course'])) {
           </tr>            
           <tr>
             <td class='right'>&nbsp;
-              <input type='submit' name='create_course' value='".q($langFinalize)."' />
+              <input type='submit' name='create_course' value='".q($langCourseCreate)."' />
             </td>
           </tr>
-          </table>          
-          <div class='right smaller'>$langFieldsOptionalNote</div>
-          </fieldset>";
+          </table>";
+                     
+        $tool_content .= "<table class='tbl'>
+            <tr><td><input id = 'copyright_license' type='radio' name='l_radio' value='copyrightfield' checked />
+            $langCopyrightedNotFree
+            </td>
+            <td><input id = 'cc_license' type='radio' name='l_radio' value='ccfield'/>
+                $langCMeta[course_license]
+            </td>
+            </tr>            
+            <tr id = 'cc_1'>
+            <td>Allow commercial use of your work</td>
+            <td>Allow modifications of your work</td>
+            </tr>
+            <tr id = 'cc_2'><td>
+                ".selection(array('yes' => $langYes, 'no' => $langNo), 'commercial_use')."
+                </td>
+             <td>".selection(array('yes_with_terms' => "yes as long", 
+                                   'yes' => $langYes, 
+                                   'no' => $langNo), 'modifications_allow')."
+             </td></tr>            
+            </table>
+        </div>";
+        
+        $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
+        $tool_content .= "</fieldset>";
         $tool_content .= "</form>";
 
 } else { // create the course and the course database
