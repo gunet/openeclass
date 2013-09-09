@@ -542,6 +542,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('login_fail_deny_interval', 5),
                 ('login_fail_forgive_interval', 24),
                 ('course_metadata', 0),
+                ('opencourses_enable', 0),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // tables for units module

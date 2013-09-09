@@ -1685,6 +1685,7 @@ $langDefaultAdminName = 'Διαχειριστής';
 $langDefaultAdminSurname = 'Πλατφόρμας';
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUnet';
 $lang_course_metadata = "Μετασχολιασμός Μαθημάτων";
+$lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
 
 
 /********************************************************

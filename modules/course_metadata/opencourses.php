@@ -20,6 +20,13 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'CourseXML.php';
+
+// exit if feature disabled
+if (!get_config('opencourses_enable')) {
+    header("Location: {$urlServer}");
+    exit();
+}
+
 $nameTools = $langListOpenCourses;
 $navigation[] = array ('url' => 'openfaculties.php', 'name' => $langSelectFac);
 if (isset($_GET['fc'])) {

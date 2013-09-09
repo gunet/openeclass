@@ -86,6 +86,19 @@ $(document).ready(function() {
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
+        
+    $('#opencourses_enable').click(function(event) {
+        if ($('#opencourses_enable').is(":checked")) {
+            $('#course_metadata').attr('checked', true);
+            $('#course_metadata').attr('disabled', true);
+        } else {
+            $('#course_metadata').attr('disabled', false);
+        }
+    });
+    
+    if ($('#opencourses_enable').is(":checked")) {
+        $('#course_metadata').attr('disabled', true);
+    }
 
 });
 
@@ -138,7 +151,7 @@ if (isset($_POST['submit']))  {
 		// Prepare config.php content
 		$stringConfig='<?php
 /*===========================================================================
- *   Open eClass 2.6
+ *   Open eClass 2.8
  *   E-learning and Course Management System
  *===========================================================================
 
@@ -217,10 +230,14 @@ $active_ui_languages = '.$string_active_ui_languages."\n";
                         'login_fail_threshold' => true,
                         'login_fail_deny_interval' => true,
                         'login_fail_forgive_interval' => true,
-                        'course_metadata' => true);
+                        'course_metadata' => true,
+                        'opencourses_enable' => true);
 
 	register_posted_variables($config_vars, 'all', 'intval');
 	$_SESSION['theme'] = $theme = $available_themes[$theme];
+        
+        if ($GLOBALS['opencourses_enable'] == 1)
+            $GLOBALS['course_metadata'] = 1;
 
 	foreach ($config_vars as $varname => $what) {
 		set_config($varname, $GLOBALS[$varname]);
@@ -425,6 +442,7 @@ else {
         $cbox_enable_common_docs = get_config('enable_common_docs')?'checked':'';
         $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
         $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
+        $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
         <legend>$langOtherOptions</legend>
@@ -481,7 +499,10 @@ else {
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
           </tr>
           <tr>
-                <td><input type='checkbox' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+                <td><input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+          </tr>
+          <tr>
+                <td><input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable />&nbsp;$lang_opencourses_enable</td>
           </tr>
         </table></fieldset>";
         

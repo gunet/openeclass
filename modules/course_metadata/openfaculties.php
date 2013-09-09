@@ -23,6 +23,12 @@ require_once '../../include/baseTheme.php';
 require_once 'CourseXML.php';
 $nameTools = $langSelectFac;
 
+// exit if feature disabled
+if (!get_config('opencourses_enable')) {
+    header("Location: {$urlServer}");
+    exit();
+}
+
 $result = db_query("SELECT id, name, code FROM faculte ORDER BY name");
 
 if (isset($result)) {

@@ -615,7 +615,8 @@ if (!isset($_POST['submit2'])) {
         }
         if ($oldversion < '2.8') {
                 db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
-                                        ('course_metadata', 0)");
+                                        ('course_metadata', 0),
+                                        ('opencourses_enable', 0)");
                 
                 mysql_field_exists($mysqlMainDb, 'document', 'public') or
                         db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");

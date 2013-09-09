@@ -286,7 +286,7 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "arrow.png");
-        if (get_config('course_metadata')) {
+        if (get_config('opencourses_enable')) {
             $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
             while ($course = mysql_fetch_assoc($res)) {
                 if (CourseXMLElement::isCertified($course['cours_id'], $course['code'])) {
