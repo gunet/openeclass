@@ -180,7 +180,7 @@ db_query("CREATE TABLE `course_description`
             }
     }
 
-db_query("CREATE TABLE accueil (
+    db_query("CREATE TABLE accueil (
                id int(11) NOT NULL auto_increment,
                rubrique varchar(100), lien varchar(255),
                image varchar(100),
@@ -191,13 +191,12 @@ db_query("CREATE TABLE accueil (
                PRIMARY KEY (id))
          $charset_spec");
 
-// Content accueil (homepage) Table
     db_query("INSERT INTO accueil VALUES (
                 '1',
                 ".quote($langAgenda).",
                 '../../modules/agenda/agenda.php',
                 'calendar',
-                '".$sbsystems[1]."',
+                '1',
                 '0',
                 '',
                 'MODULE_ID_AGENDA')");
@@ -207,7 +206,7 @@ db_query("CREATE TABLE accueil (
                ".quote($langLinks).",
                '../../modules/link/link.php',
                'links',
-               '".$sbsystems[2]."',
+               '1',
                '0',
                '',
                'MODULE_ID_LINKS'
@@ -218,29 +217,29 @@ db_query("CREATE TABLE accueil (
                ".quote($langDoc).",
                '../../modules/document/document.php',
                'docs',
-               '".$sbsystems[3]."',
+               '1',
                '0',
                '',
                'MODULE_ID_DOCS'
                )");
-    
+
     db_query("INSERT INTO accueil VALUES (
                '4',
                ".quote($langVideo).",
                '../../modules/video/video.php',
                'videos',
-               '".$sbsystems[4]."',
+               '0',
                '0',
                '',
                'MODULE_ID_VIDEO'
                )");
 
-db_query("INSERT INTO accueil VALUES (
+    db_query("INSERT INTO accueil VALUES (
                '5',
                ".quote($langWorks).",
                '../../modules/work/work.php',
                'assignments',
-               '".$sbsystems[5]."',
+               '0',
                '0',
                '',
                'MODULE_ID_ASSIGN'
@@ -251,7 +250,7 @@ db_query("INSERT INTO accueil VALUES (
                ".quote($langAnnouncements).",
                '../../modules/announcements/announcements.php',
                'announcements',
-               '".$sbsystems[7]."',
+               '1',
                '0',
                '',
                'MODULE_ID_ANNOUNCE'
@@ -262,7 +261,7 @@ db_query("INSERT INTO accueil VALUES (
                ".quote($langForums).",
                '../../modules/phpbb/index.php',
                'forum',
-               '".$sbsystems[9]."',
+               '0',
                '0',
                '',
                'MODULE_ID_FORUM'
@@ -273,166 +272,165 @@ db_query("INSERT INTO accueil VALUES (
                ".quote($langExercices).",
                '../../modules/exercice/exercice.php',
                'exercise',
-               '".$sbsystems[10]."',
+               '1',
                '0',
                '',
                'MODULE_ID_EXERCISE'
                )");
 
-	db_query("INSERT INTO accueil VALUES (
-        '15',
-        ".quote($langGroups).",
-        '../../modules/group/group.php',
-        'groups',
-        '".$sbsystems[15]."',
-        '0',
-        '',
-        'MODULE_ID_GROUPS'
-        )");
-
     db_query("INSERT INTO accueil VALUES (
-        '16',
-        ".quote($langDropBox).",
-        '../../modules/dropbox/index.php',
-        'dropbox',
-        '".$sbsystems[16]."',
-        '0',
-        '',
-        'MODULE_ID_DROPBOX'
-        )");
-
-    db_query("INSERT INTO accueil VALUES (
-        '17',
-        ".quote($langGlossary).",
-        '../../modules/glossary/glossary.php',
-        'glossary',
-        '".$sbsystems[17]."',
-        '0',
-        '',
-        'MODULE_ID_GLOSSARY'
-        )");
-
-    db_query("INSERT INTO accueil VALUES (
-        '18',
-        ".quote($langEBook).",
-        '../../modules/ebook/index.php',
-        'ebook',
-        '".$sbsystems[18]."',
-        '0',
-        '',
-        'MODULE_ID_EBOOK'
-        )");
-
-    db_query("INSERT INTO accueil VALUES (
-                '19',
-                ".quote($langConference).",
-                '../../modules/conference/conference.php',
-                'conference',
-                '".$sbsystems[19]."',
+                '15',
+                ".quote($langGroups).",
+                '../../modules/group/group.php',
+                'groups',
+                '0',
                 '0',
                 '',
-                'MODULE_ID_CHAT'
+                'MODULE_ID_GROUPS'
                 )");
 
     db_query("INSERT INTO accueil VALUES (
-               '20',
-               ".quote($langCourseDescription).",
-               '../../modules/course_description/',
-               'description',
-               '".$sbsystems[20]."',
-               '0',
-               '',
-               'MODULE_ID_DESCRIPTION'
-               )");
-
-db_query("INSERT INTO accueil VALUES (
-                '21',
-                ".quote($langQuestionnaire).",
-                '../../modules/questionnaire/questionnaire.php',
-                'questionnaire',
-                '".$sbsystems[21]."',
+                '16',
+                ".quote($langDropBox).",
+                '../../modules/dropbox/index.php',
+                'dropbox',
+                '0',
                 '0',
                 '',
-                'MODULE_ID_QUESTIONNAIRE'
+                'MODULE_ID_DROPBOX'
                 )");
 
     db_query("INSERT INTO accueil VALUES (
-               '23',
-               ".quote($langLearnPath).",
-               '../../modules/learnPath/learningPathList.php',
-               'lp',
-               '".$sbsystems[23]."',
-               '0',
-               '',
-               'MODULE_ID_LP'
-               )");
-
-    db_query("INSERT INTO accueil VALUES (
-               25,
-               ".quote($langToolManagement).",
-               '../../modules/course_tools/course_tools.php',
-               'tooladmin',
-               '0',
-               '1',
-               '',
-               'MODULE_ID_TOOLADMIN'
-               )");
-
-    db_query("INSERT INTO accueil VALUES (
-               '26',
-               ".quote($langWiki).",
-               '../../modules/wiki/wiki.php',
-               'wiki',
-               '".$sbsystems[26]."',
-               '0',
-               '',
-               'MODULE_ID_WIKI'
-               )");
-
-        db_query("INSERT INTO accueil VALUES (
-                '8',
-                ".quote($langAdminUsers).",
-                '../../modules/user/user.php',
-                'users',
+                '17',
+                ".quote($langGlossary).",
+                '../../modules/glossary/glossary.php',
+                'glossary',
                 '0',
-                '1',
+                '0',
                 '',
-                'MODULE_ID_USERS'
+                'MODULE_ID_GLOSSARY'
                 )");
 
-db_query("INSERT INTO accueil VALUES (
-               '14',
-               ".quote($langModifyInfo).",
-               '../../modules/course_info/infocours.php',
-               'course_info',
-               '".$sbsystems[14]."',
-               '1',
-               '',
-               'MODULE_ID_COURSEINFO'
-               )");
+    db_query("INSERT INTO accueil VALUES (
+            '18',
+            ".quote($langEBook).",
+            '../../modules/ebook/index.php',
+            'ebook',
+            '0',
+            '0',
+            '',
+            'MODULE_ID_EBOOK'
+            )");
 
-db_query("INSERT INTO accueil VALUES (
-                '24',
-                ".quote($langUsage).",
-                '../../modules/usage/usage.php',
-                'usage',
-                '".$sbsystems[24]."',
-                '1',
-                '',
-                'MODULE_ID_USAGE')");
+    db_query("INSERT INTO accueil VALUES (
+            '19',
+            ".quote($langConference).",
+            '../../modules/conference/conference.php',
+            'conference',
+            '0',
+            '0',
+            '',
+            'MODULE_ID_CHAT'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '20',
+            ".quote($langCourseDescription).",
+            '../../modules/course_description/',
+            'description',
+            '1',
+            '0',
+            '',
+            'MODULE_ID_DESCRIPTION'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '21',
+            ".quote($langQuestionnaire).",
+            '../../modules/questionnaire/questionnaire.php',
+            'questionnaire',
+            '0',
+            '0',
+            '',
+            'MODULE_ID_QUESTIONNAIRE'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '23',
+            ".quote($langLearnPath).",
+            '../../modules/learnPath/learningPathList.php',
+            'lp',
+            '0',
+            '0',
+            '',
+            'MODULE_ID_LP'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            25,
+            ".quote($langToolManagement).",
+            '../../modules/course_tools/course_tools.php',
+            'tooladmin',
+            '0',
+            '1',
+            '',
+            'MODULE_ID_TOOLADMIN'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '26',
+            ".quote($langWiki).",
+            '../../modules/wiki/wiki.php',
+            'wiki', 
+            '0',
+            '0',
+            '',
+            'MODULE_ID_WIKI'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '8',
+            ".quote($langAdminUsers).",
+            '../../modules/user/user.php',
+            'users',
+            '0',
+            '1',
+            '',
+            'MODULE_ID_USERS'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '14',
+            ".quote($langModifyInfo).",
+            '../../modules/course_info/infocours.php',
+            'course_info',
+            '0',
+            '1',
+            '',
+            'MODULE_ID_COURSEINFO'
+            )");
+
+    db_query("INSERT INTO accueil VALUES (
+            '24',
+            ".quote($langUsage).",
+            '../../modules/usage/usage.php',
+            'usage',
+            '0',
+            '1',
+            '',
+            'MODULE_ID_USAGE')");
 
 // The Units subsystem is special - neither visible, nor invisible, it doesn't
 // appear in the menu, so it gets visibility = 2
-$sbsystems[27] = 2;
 db_query("INSERT INTO accueil VALUES (
-                '27',
-                ".quote($langCourseUnits).",
-                '../../modules/units/index.php',
-                'description',
-                '".$sbsystems[27]."',
-                '0',
-                '',
-                'MODULE_ID_UNITS')");
+            '27',
+            ".quote($langCourseUnits).",
+            '../../modules/units/index.php',
+            'description',
+            '2',
+            '0',
+            '',
+            'MODULE_ID_UNITS')");
 
 
 #################################### USAGE ################################
