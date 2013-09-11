@@ -120,7 +120,7 @@ $teacher = "$_SESSION[prenom] $_SESSION[nom]";
 // --------------------------
 // display form
 // --------------------------
-if (!isset($_POST['create_course'])) {   
+if (!isset($_POST['create_course'])) {  
     $tool_content .= "
     <fieldset><legend>$langCreateCourseStep1Title</legend>
         <table class='tbl'>
@@ -153,6 +153,28 @@ if (!isset($_POST['create_course'])) {
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langUncompulsory</span><br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
+        $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
+        
+        $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
+            <tr><td><input id = 'copyright_license' type='radio' name='l_radio' value='0' checked />
+            $langCopyrightedNotFree
+            </td>
+            <td><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
+                $langCMeta[course_license]
+            </td>
+            </tr>            
+            <tr id = 'cc_1'>
+            <td>Allow commercial use of your work</td>
+            <td>Allow modifications of your work</td>
+            </tr>
+            <tr id = 'cc_2'><td>
+                ".selection(array('a' => $langYes, 
+                                  'b' => $langNo), 'commercial_use')."
+                </td>
+             <td>".selection(array('1' => "yes as long", 
+                                   '2' => $langYes, 
+                                   '3' => $langNo), 'modifications_allow')."
+             </td></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         @$tool_content .= "<tr><td class='sub_title1' colspan='2'>$langAvailableTypes</td></tr>
           <tr>
@@ -190,28 +212,6 @@ if (!isset($_POST['create_course'])) {
             </td>
           </tr>
           </table>";
-                     
-        $tool_content .= "<table class='tbl'>
-            <tr><td><input id = 'copyright_license' type='radio' name='l_radio' value='copyrightfield' checked />
-            $langCopyrightedNotFree
-            </td>
-            <td><input id = 'cc_license' type='radio' name='l_radio' value='ccfield'/>
-                $langCMeta[course_license]
-            </td>
-            </tr>            
-            <tr id = 'cc_1'>
-            <td>Allow commercial use of your work</td>
-            <td>Allow modifications of your work</td>
-            </tr>
-            <tr id = 'cc_2'><td>
-                ".selection(array('yes' => $langYes, 'no' => $langNo), 'commercial_use')."
-                </td>
-             <td>".selection(array('yes_with_terms' => "yes as long", 
-                                   'yes' => $langYes, 
-                                   'no' => $langNo), 'modifications_allow')."
-             </td></tr>            
-            </table>
-        </div>";
         
         $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
         $tool_content .= "</fieldset>";
@@ -265,11 +265,29 @@ if (!isset($_POST['create_course'])) {
         $group_quota = get_config('group_quota');
         $video_quota = get_config('video_quota');
         $dropbox_quota = get_config('dropbox_quota');
-        
+        // get course_license
+        if (isset($_POST['l_radio'])) {           
+            $l = $_POST['l_radio'];
+            switch ($l) {
+                case '0': $course_license = 0;
+                        break;
+                case '1': if (isset($_POST['commercial_use']) and $_POST['commercial_use'] == 'a') {
+                                $course_license = $_POST['modifications_allow'];                                
+                          } elseif (isset($_POST['commercial_use']) and $_POST['commercial_use'] == 'b') {                              
+                                $course_license = $_POST['modifications_allow']+3;
+                          }
+                        break;
+                }
+            }
+/*        echo "course_license <br />";
+        echo $course_license;
+
+        die;*/
         db_query("INSERT INTO cours SET
                         code = '$code',
                         languageCourse =" . quote($language) . ",
                         intitule = " . quote($_POST['intitule']) . ",
+                        course_license = $course_license,
                         visible = " . quote($_POST['formvisible']) . ",
                         titulaires = " . quote($teacher) . ",
                         fake_code = " . quote($code) . ",
