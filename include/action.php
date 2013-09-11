@@ -52,9 +52,9 @@ class action {
     function summarize() {
         global $currentCourseID;
         
-        ## edw ftia3e tis hmeromhnies
-        $now = date('Y-m-d H:i:s');
-        $current_month = date('Y-m-01 00:00:00');
+        // edw ftia3e tis hmeromhnies
+        $stop_stmp = time() - (8-1) * 30 * 24 * 3600; // for last 8 months
+        $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
         
         $sql_0 = "SELECT min(date_time) as min_date FROM actions";   //gia na doume
         $sql_1 = "SELECT DISTINCT module_id FROM actions ";  //arkei gia twra.
@@ -72,7 +72,7 @@ class action {
 	$stmp = strtotime($start_date);
         $end_stmp = $stmp + 31*24*60*60;  //min time + 1 month
         $end_date = date('Y-m-01 00:00:00', $end_stmp);
-        while ($end_date < $current_month){
+        while ($end_date < $stop_month){
             $result = db_query($sql_1, $currentCourseID);
             while ($row = mysql_fetch_assoc($result)) {
                 #edw kanoume douleia gia ka8e module
