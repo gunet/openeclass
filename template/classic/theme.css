@@ -1023,7 +1023,7 @@ a.unit_link_invisible:hover {
   padding: 4px 0px 0px 4px;
 }
 
-.agendaBody {;
+.agendaBody {
   padding: 0px 0px 0px 4px;
 }
 /* ----- END agenda ----- */
@@ -1403,3 +1403,39 @@ dt {
 	border: 1px solid #73bc00;
 }
 
+/* -- OpenCourses Metadata Form -- */
+.cmetarow {
+    clear: both; 
+    padding: 4px;
+}
+
+.cmetalabel {
+    font-weight: bold;
+    float: left;
+    width: 269px;
+    border-right: 1px dashed #dfdfdf;
+    padding: 4px 0px 4px 0px;
+}
+
+.cmetalabelinaccordion {
+    font-weight: bold;
+    float: left;
+    width: 222px;
+    border-right: 1px dashed #dfdfdf;
+    padding: 4px 0px 4px 0px;
+}
+
+.cmetafield {
+    padding: 4px;
+}
+
+.cmetamandatory {
+    font-size: 11px;
+    color: red;
+    padding: 4px;
+    float: right;
+}
+
+.cmetaaccordion {
+    clear: both;
+}
