@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -60,9 +60,9 @@ while ($row = mysql_fetch_assoc($result)) {
     }
 
 mysql_free_result($result);
- if ($min_time + 243*24*3600 < time()) { #actions more than eight months old
+ if ($min_time + (14-1) *30*24*3600 < time()) { // actions more than fourteen months old
     $action = new action();
-    $action->summarize();     #move data to action_summary
+    $action->summarize();     // move data to action_summary
 }
 
 $query = "SELECT MIN(date_time) as min_time FROM actions";

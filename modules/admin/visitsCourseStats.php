@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -44,7 +44,7 @@ $tool_content .= "
     <ul id='opslist\">
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>".$langOldStats."</a></li>
       <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
     </ul>
   </div>";
@@ -376,4 +376,5 @@ $tool_content .= '<br />';
     </form>';
 }
 
+$local_head .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
 draw($tool_content, 3, null, $local_head);

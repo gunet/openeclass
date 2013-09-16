@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -32,7 +32,7 @@
 ==============================================================================
 */
 
-    $stop_stmp = time() - (8-1) * 30 * 24 * 3600; // for last 8 months
+    $stop_stmp = time() - (14-1) * 30 * 24 * 3600; // for last 14 months
     $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
     $sql_0 = "SELECT min(`when`) as min_date, max(`when`) as max_date FROM loginout";
@@ -49,7 +49,7 @@
     $maxstmp = strtotime($max_date);
 
 
-    if ( $minstmp + (8-1) *30*24*3600 < $maxstmp ) { //data more than eight months old
+    if ( $minstmp + (14-1) *30*24*3600 < $maxstmp ) { //data more than 14 months old
 	$stmp = strtotime($min_date);
         $end_stmp = $stmp + 31*24*60*60;  //min time + 1 month
         $start_date = $min_date;

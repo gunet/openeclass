@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -53,9 +53,9 @@ $tool_content .= "
   </div>";
 
 
-//move data from table 'loginout' to 'loginout_summary' if older than eight months
+// move data from table 'loginout' to 'loginout_summary' if older than fourteen months
 require_once "summarizeLogins.php";
-#see if chart has content
+// see if chart has content
 $chart_content=0;
 
 include('../../include/jscalendar/calendar.php');

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -75,4 +75,5 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     }
 }
 add_units_navigation(TRUE);
+$local_head .= "<script type='text/javascript' src='$urlAppend/js/tools.js'></script>\n";
 draw($tool_content, 2, null, $local_head);

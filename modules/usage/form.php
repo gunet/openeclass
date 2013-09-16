@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -93,7 +93,7 @@ $tool_content .= '
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.q($langSubmit).'">
-        <div><br /><a href="oldStats.php?course='.$code_cours.'">'.$langOldStats.'</a></div>
+        <div><br /><a href="oldStats.php?course='.$code_cours.'" onClick="return confirmation(\'' . $langOldStatsExpireConfirm . '\');">'.$langOldStats.'</a></div>
     </td>
   </tr>
   </table>

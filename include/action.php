@@ -53,7 +53,7 @@ class action {
         global $currentCourseID;
         
         // edw ftia3e tis hmeromhnies
-        $stop_stmp = time() - (8-1) * 30 * 24 * 3600; // for last 8 months
+        $stop_stmp = time() - (14-1) * 30 * 24 * 3600; // for last 14 months
         $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
         
         $sql_0 = "SELECT min(date_time) as min_date FROM actions";   //gia na doume
