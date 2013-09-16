@@ -878,6 +878,16 @@ $langVideoText="Παράδειγμα ενός αρχείου RealVideo. Μπορ
 $langGoogle="Μηχανής αναζήτησης";
 $langIntroductionText="Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated="Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
+$langCopyrighted="Πνευματικά Δικαιώματα";
+$langCopyrightedFree="Ελεύθερο δικαιωμάτων";
+$langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
+$langCopyrightedUnknown="Άγνωστο";
+$langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
+$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
 
  // Groups
 $langCreateCourseGroups="Ομάδες Χρηστών";
@@ -981,7 +991,6 @@ $langSubject="Θέμα";
 $langAuthor="Συγγραφέας";
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langCopyrightedFree="Ελεύθερο";
-$langCopyrightedNotFree="Προστατευμένο";
 $langCopyrightedUnknown="Άγνωστο";
 $langChangeMetadata="Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta="Επεξεργασία<br>Πληροφοριών";

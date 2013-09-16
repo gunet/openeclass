@@ -156,13 +156,14 @@ if (!isset($_POST['create_course'])) {
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
-            <tr><td><input id = 'copyright_license' type='radio' name='l_radio' value='0' checked />
+            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' />
             $langCopyrightedNotFree
             </td>
-            <td><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
+            </tr>
+            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
                 $langCMeta[course_license]
             </td>
-            </tr>            
+            </tr>
             <tr id = 'cc_1'>
             <td>Allow commercial use of your work</td>
             <td>Allow modifications of your work</td>
