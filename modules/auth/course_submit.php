@@ -39,8 +39,8 @@ $q = db_query("SELECT visible, password FROM cours WHERE cours_id = $cid");
 if ($q and mysql_num_rows($q)) {
         list($visible, $course_password) = mysql_fetch_row($q);
         if ($state == 'true') {
-                if ($visible == COURSE_OPEN or
-                    ($visible == COURSE_REGISTRATION and $password == $course_password)) {
+            if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
+                    $password == $course_password) {               
                         db_query("INSERT IGNORE INTO `cours_user` (`cours_id`, `user_id`, `statut`, `reg_date`)
                                          VALUES ($cid, $uid, 5, CURDATE())");
                         die('registered');

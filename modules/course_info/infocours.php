@@ -38,6 +38,25 @@ $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
+function deactivate_input_password () {
+        $('#coursepassword').attr('disabled', 'disabled');
+        $('#coursepassword').addClass('invisible');
+}
+
+function activate_input_password () {
+        $('#coursepassword').removeAttr('disabled', 'disabled');
+        $('#coursepassword').removeClass('invisible');
+}
+
+function displayCoursePassword() {
+
+        if ($('#courseclose,#courseiactive').is(":checked")) {
+                deactivate_input_password ();
+        } else {
+                activate_input_password ();
+        }
+}
+
     var lang = {
 hContent;
 $head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
@@ -51,6 +70,22 @@ $head_content .= <<<hContent
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
+        
+        displayCoursePassword();
+        
+        $('#courseopen').click(function(event) {
+                activate_input_password();
+        });
+        $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+        });
+        $('#courseclose').click(function(event) {
+                deactivate_input_password();
+        });
+        $('#courseinactive').click(function(event) {
+                deactivate_input_password();
+        });    
+        
     });
 
 /* ]]> */
@@ -87,8 +122,7 @@ if (isset($_POST['submit'])) {
                         }
                 }
                 // update course settings
-                if (isset($_POST['formvisible']) and
-                    $_POST['formvisible'] == '1') {
+                if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
                         $password = $_POST['password'];
                 } else {
                         $password = "";
@@ -109,7 +143,7 @@ if (isset($_POST['submit'])) {
                               titulaires = " . quote($_POST['titulary']) .",
                               languageCourse = '$newlang',
                               type = " . quote($_POST['type']) .",
-                              password = " . quote($_POST['password']) .",
+                              password = " . quote($password) .",
                               faculteid = $department
                           WHERE cours_id = $cours_id");
 
@@ -202,7 +236,7 @@ if (isset($_POST['submit'])) {
 	        <th>$langType:</th>
 	        <td>";
 	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
-	$tool_content .= "
+	@$tool_content .= "
                 </td>
 	    </tr>
 	    <tr>
@@ -211,37 +245,36 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    </table>
 	</fieldset>
-
-	<fieldset>
+        <fieldset>
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>
+            <tr>		            
+		<th width='170'>$langOptPassword</th>
+                <td colspan='2'><input id='coursepassword' type='text' name='password' value='$password' /></td>
+	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
-		<td width='1'><input type='radio' name='formvisible' value='2'".@$visibleChecked[2]." $disabledVisibility/></td>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
-		<th rowspan='2' valign='top'><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-		<td><input type='radio' name='formvisible' value='1'".@$visibleChecked[1]." $disabledVisibility/></td>
+		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] /></td>
 		<td class='smaller'>$langPrivOpen</td>
-	    </tr>
-	    <tr>
-		<td>&nbsp;</td>
-		<td class='smaller'><i>$langOptPassword</i>&nbsp;<input type='text' name='password' value='$password' id='password' />&nbsp;<span id='result'></span></td>
-	    </tr>
+	    </tr>	    
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
-		<td><input type='radio' name='formvisible' value='0'".@$visibleChecked[0]." $disabledVisibility/></td>
+		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>
              <tr>
 		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
-		<td><input type='radio' name='formvisible' value='3'".@$visibleChecked[3]." $disabledVisibility/></td>
+		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] /></td>
 		<td class='smaller'>$langCourseInactive</td>
 	    </tr>
 	    </table>
 	</fieldset>
-
+       
 	<fieldset>
 	    <legend>$langLanguage</legend>
 	    <table class='tbl'>

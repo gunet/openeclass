@@ -43,26 +43,45 @@ $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
-function checkrequired(which, entry, entry2) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if ((tempobj.name == entry) || (tempobj.name == entry2)) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langFieldsMissing");
-		return false;
-	} else {
-		return true;
-	}
-}
+    function deactivate_input_password () {
+        $('#coursepassword').attr('disabled', 'disabled');
+        $('#coursepassword').addClass('invisible');
+    }
+
+    function activate_input_password () {
+            $('#coursepassword').removeAttr('disabled', 'disabled');
+            $('#coursepassword').removeClass('invisible');
+    }
+
+    function displayCoursePassword() {
+
+            if ($('#courseclose,#courseiactive').is(":checked")) {
+                    deactivate_input_password ();
+            } else {
+                    activate_input_password ();
+            }
+    }
+        
+    function checkrequired(which, entry, entry2) {
+            var pass=true;
+            if (document.images) {
+                    for (i=0;i<which.length;i++) {
+                            var tempobj=which.elements[i];
+                            if ((tempobj.name == entry) || (tempobj.name == entry2)) {
+                                    if (tempobj.type=="text"&&tempobj.value=='') {
+                                            pass=false;
+                                            break;
+                                    }
+                            }
+                    }
+            }
+            if (!pass) {
+                    alert("$langFieldsMissing");
+                    return false;
+            } else {
+                    return true;
+            }
+    }
 
     var lang = {
 hContent;
@@ -85,6 +104,21 @@ $head_content .= <<<hContent
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
+        });
+        
+        displayCoursePassword();
+        
+        $('#courseopen').click(function(event) {
+                activate_input_password();
+        });
+        $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+        });
+        $('#courseclose').click(function(event) {
+                deactivate_input_password();
+        });
+        $('#courseinactive').click(function(event) {
+                deactivate_input_password();
         });
        
         hideCCFields();
@@ -177,7 +211,38 @@ if (!isset($_POST['create_course'])) {
                                    '3' => $langNo), 'modifications_allow')."
              </td></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-        @$tool_content .= "<tr><td class='sub_title1' colspan='2'>$langAvailableTypes</td></tr>
+        $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
+          <tr>
+            <td colspan='2'>        
+	    <table class='sub_title1' width='100%'>
+            <tr>		            
+		<th width='170'>$langOptPassword</th>
+                <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' /></td>
+	    </tr>            
+	    <tr>
+		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2'checked='checked' /></td>
+		<td class='smaller'>$langPublic</td>
+	    </tr>
+	    <tr>
+		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' /></td>
+		<td class='smaller'>$langPrivOpen</td>
+	    </tr>	    
+	    <tr>
+		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
+		<td><input id='courseclose' type='radio' name='formvisible' value='0' /></td>
+		<td class='smaller'>$langPrivate</td>
+	    </tr>
+             <tr>
+		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
+		<td><input id='courseinactive' type='radio' name='formvisible' value='3' /></td>
+		<td class='smaller'>$langCourseInactive</td>
+	    </tr>
+	    </table>";
+        /*
+        
+        @$tool_content .= "<tr><td class='sub_title1' colspan='2'></td></tr>
           <tr>
             <td colspan='2'>
               <table class='tbl'>
@@ -204,8 +269,8 @@ if (!isset($_POST['create_course'])) {
                 <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
                 <td>$langCourseInactive</td>
               </tr>
-              </table>              
-            </td>
+              </table>              */
+            $tool_content .= "</td>
           </tr>            
           <tr>
             <td class='right'>&nbsp;
