@@ -63,6 +63,7 @@ define('COMMON', 3);
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 15);
 
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {
@@ -2403,4 +2404,31 @@ function getOnlineUsers() {
         @closedir($directory_handle);
         
         return $count;
+}
+
+
+/**
+ * Initialize copyright/license global arrays
+ */
+function copyright_info($cid)
+{
+    
+    global $mysqlMainDb, $language, $license, $themeimg;
+    $lang = langname_to_code($language);
+    
+    $lic = db_query_get_single_value("SELECT course_license FROM cours WHERE cours_id = $cid", $mysqlMainDb);
+    if (($lic == 0) or ($lic == 20)) {
+        $link_suffix = '';
+    } else {
+        if ($language != 'en') {
+                    $link_suffix = 'deed.' . $lang;
+        } else {
+                    $link_suffix = '';
+        }
+    }
+    $link = "<a href='".$license[$lic]['link']."$link_suffix'>
+            <img src='$themeimg/".$license[$lic]['image'].".png' title='".$license[$lic]['title']."' alt='".$license[$lic]['title']."' /></a>";
+    
+    return $link;
+                
 }

@@ -93,12 +93,10 @@ $head_content .= <<<hContent
     };
    
     function showCCFields() {           
-        $('#cc_1').show();
-        $('#cc_2').show();            
+        $('#cc').show();        
     }
     function hideCCFields() {           
-        $('#cc_1').hide();
-        $('#cc_2').hide();            
+        $('#cc').hide();        
     }
                 
     $(document).ready(function() {
@@ -204,19 +202,14 @@ if (!isset($_POST['create_course'])) {
             <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
                 $langCMeta[course_license]
             </td>
-            </tr>
-            <tr id = 'cc_1'>
-            <td>$langCommercialUse</td>
-            <td>$langAllowModification</td>
-            </tr>
-            <tr id = 'cc_2'><td>
-                ".selection(array('a' => $langCreativeCommonsCCBYNC,
-                                  'b' => $langCreativeCommonsCCBYNCSA, 
-                                  'c' => $langCreativeCommonsCCBYNCND), 'commercial_use')."
-                </td>                
-             <td>".selection(array('1' => $langCreativeCommonsCCBY, 
-                                   '2' => $langCreativeCommonsCCBYSA, 
-                                   '3' => $langCreativeCommonsCCBYND), 'modifications_allow')."
+            </tr>            
+            <tr id = 'cc'><td>
+                ".selection(array('1' => $langCreativeCommonsCCBYNC,
+                                  '2' => $langCreativeCommonsCCBYNCSA, 
+                                  '3' => $langCreativeCommonsCCBYNCND,
+                                  '4' => $langCreativeCommonsCCBY, 
+                                  '5' => $langCreativeCommonsCCBYSA, 
+                                  '6' => $langCreativeCommonsCCBYND), 'cc_use')."
              </td></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
@@ -263,6 +256,7 @@ if (!isset($_POST['create_course'])) {
 
 } else { // create the course and the course database
 
+   
         $nameTools = $langCourseCreate;
         $facid = intval($_POST['faculte']);
         $facname = find_faculty_by_id($facid);
@@ -315,12 +309,8 @@ if (!isset($_POST['create_course'])) {
             switch ($l) {
                 case '0': $course_license = 0;
                         break;
-                case '1': if (isset($_POST['commercial_use']) and $_POST['commercial_use'] == 'a') {
-                                $course_license = $_POST['modifications_allow'];                                
-                          } elseif (isset($_POST['commercial_use']) and $_POST['commercial_use'] == 'b') {                              
-                                $course_license = $_POST['modifications_allow']+3;
-                          } elseif (isset($_POST['commercial_use']) and $_POST['commercial_use'] == 'c') {                              
-                                $course_license = $_POST['modifications_allow']+6;
+                case '1': if (isset($_POST['cc_use'])) {
+                                $course_license = $_POST['cc_use'];
                           }
                         break;
                 case '20': $course_license = 20;

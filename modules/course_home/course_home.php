@@ -108,15 +108,15 @@ if (!empty($description)) {
         $main_content .= "<div class='descr_title'>$langDescription$edit_link</div>\n$description";
 
 } else {
-        $main_content .= "\n      <p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
+        $main_content .= "<p>$langThisCourseDescriptionIsEmpty$edit_link</p>";
 }
 if (!empty($keywords)) {
-	$main_content .= "\n      <p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
+	$main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
 }
-$main_content .= "\n      </div>\n";
+$main_content .= "</div>\n";
 
 if (!empty($addon)) {
-	$main_content .= "\n      <div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+	$main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
 $main_content .= $main_extra;
 
@@ -289,6 +289,9 @@ switch ($visible) {
                 break;
         }
 }
+// display course license
+$bar_content .= "<li><b>$langOpenCoursesLicense</b>: ".copyright_info($cours_id)."</li>";
+// display course access
 $bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
 if ($is_course_admin) {
     $link = "<a href='$urlAppend/modules/user/user.php?course=$code_cours'>$numUsers $langRegistered</a>";
