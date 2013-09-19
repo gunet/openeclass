@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,6 +65,13 @@ $head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
 $head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
 $head_content .= <<<hContent
     };
+        
+    function showCCFields() {           
+        $('#cc').show();        
+    }
+    function hideCCFields() {           
+        $('#cc').hide();        
+    }
 
     $(document).ready(function() {
         $('#password').keyup(function() {
@@ -85,6 +92,22 @@ $head_content .= <<<hContent
         $('#courseinactive').click(function(event) {
                 deactivate_input_password();
         });    
+        
+        if ($('#cc_license').is(":checked")) {
+            showCCFields();
+        } else {
+            hideCCFields();
+        }
+        
+        $('#cc_license').click(function(event) {
+            showCCFields();
+        });
+        $('#no_license').click(function(event) {
+            hideCCFields();
+        });
+        $('#copyright_license').click(function(event) {
+            hideCCFields();
+        });
         
     });
 
@@ -128,6 +151,21 @@ if (isset($_POST['submit'])) {
                         $password = "";
                 }
                 
+                // update course_license
+                if (isset($_POST['l_radio'])) {           
+                    $l = $_POST['l_radio'];
+                    switch ($l) {
+                        case '0': $course_license = 0;
+                                break;
+                        case '1': if (isset($_POST['cc_use'])) {
+                                        $course_license = $_POST['cc_use'];
+                                  }
+                                break;
+                        case '20': $course_license = 20;
+                                break;
+                        }
+                }
+                
                 // disable visibility if it is opencourses certified
                 if (get_config('opencourses_enable') && $isOpenCourseCertified)
                     $_POST['formvisible'] = '2';
@@ -140,6 +178,7 @@ if (isset($_POST['submit'])) {
                               fake_code = " . quote($_POST['fcode']) .",
                               course_keywords = ". quote($_POST['course_keywords']) .",
                               visible = " . intval($_POST['formvisible']) .",
+                              course_license = $course_license,
                               titulaires = " . quote($_POST['titulary']) .",
                               languageCourse = '$newlang',
                               type = " . quote($_POST['type']) .",
@@ -193,7 +232,7 @@ if (isset($_POST['submit'])) {
 
 	$sql = "SELECT cours.intitule, cours.course_keywords, cours.visible,
 		       cours.fake_code, cours.titulaires, cours.languageCourse, cours.type,
-		       cours.password, cours.faculteid
+                       cours.course_license, cours.password, cours.faculteid
 		FROM `$mysqlMainDb`.cours WHERE cours.code = '$currentCourseID'";
 	$result = db_query($sql);
 	$c = mysql_fetch_array($result);
@@ -207,7 +246,13 @@ if (isset($_POST['submit'])) {
 	$languageCourse	= $c['languageCourse'];
 	$course_keywords = q($c['course_keywords']);
 	$password = q($c['password']);
-
+        $license = $c['course_license'];
+        $licenseChecked[$license] = " checked";
+        $cc_checked = "";
+        if (($license != 0) and ($license != 20)) {
+            $cc_checked = " checked";
+        }
+        
 	$tool_content .="
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
 	<fieldset>
@@ -245,6 +290,31 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    </table>
 	</fieldset>
+        <fieldset>
+        <legend>$langOpenCoursesLicense</legend>
+            <table class='tbl' width='100%'>           
+            <tr><td colspan='2'><input id = 'no_license' type='radio' name='l_radio' value='20' $licenseChecked[20] />
+            $langWithoutCopyright
+            </td>
+            </tr>           
+            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' $licenseChecked[0] />
+            $langCopyrightedNotFree
+            </td>
+            </tr>
+            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1' $cc_checked />
+                $langCMeta[course_license]
+            </td>
+            </tr>            
+            <tr id = 'cc'><td>
+                ".selection(array('1' => $langCreativeCommonsCCBYNC,
+                                  '2' => $langCreativeCommonsCCBYNCSA, 
+                                  '3' => $langCreativeCommonsCCBYNCND,
+                                  '4' => $langCreativeCommonsCCBY, 
+                                  '5' => $langCreativeCommonsCCBYSA, 
+                                  '6' => $langCreativeCommonsCCBYND), 'cc_use', $license)."
+             </td></tr>
+             </table>
+        </fieldset>
         <fieldset>
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>
