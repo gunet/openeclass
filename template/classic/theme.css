@@ -1412,7 +1412,7 @@ dt {
 .cmetalabel {
     font-weight: bold;
     float: left;
-    width: 269px;
+    width: 232px;
     border-right: 1px dashed #dfdfdf;
     padding: 4px 0px 4px 0px;
 }
@@ -1420,7 +1420,7 @@ dt {
 .cmetalabelinaccordion {
     font-weight: bold;
     float: left;
-    width: 222px;
+    width: 172px;
     border-right: 1px dashed #dfdfdf;
     padding: 4px 0px 4px 0px;
 }
@@ -1438,4 +1438,13 @@ dt {
 
 .cmetaaccordion {
     clear: both;
+}
+
+.cmetalabel a, .cmetalabelinaccordion a {
+    color: rgb(119, 119, 119) !important;
+    border-bottom: 1px dashed;
+}
+
+.cmetalabel a:hover, .cmetalabelinaccordion a:hover {
+    border-bottom: none;
 }

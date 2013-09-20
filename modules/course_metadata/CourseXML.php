@@ -133,7 +133,12 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
         $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div title='$help' class='cmetarow'>
-            <span class='$cmetalabel'>". q($keyLbl . $lang) .":</span>
+            <span class='$cmetalabel'>";
+        if (in_array($fullKey, self::$linkedFields))
+            $fieldStart .= "<a href='" . self::getLinkedValue($fullKey) ."' target='_blank'>" . q($keyLbl . $lang) . "</a>";
+        else
+            $fieldStart .= q($keyLbl . $lang); 
+        $fieldStart .= ":</span>
             <span class='cmetafield'>";
         
         $fieldEnd = "</span>";
@@ -730,6 +735,45 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_yearOfStudy', 'course_semester', 'course_credithours',
         'course_type', 'course_credits'
     );
+    
+    /**
+     * Linked HTML Form labels.
+     * @var array 
+     */
+    public static $linkedFields = array(
+        'course_title_el', 'course_instructor_fullName_el', 
+        'course_language', 'course_keywords_el', 
+        'course_unit_title_el', 'course_unit_description_el',
+        'course_numberOfUnits'
+    );
+    
+    /**
+     * Link value for HTML Form labels.
+     * 
+     * @param  string $key
+     * @return string
+     */
+    public static function getLinkedValue($key) {
+        global $urlServer, $code_cours;
+        
+        $infocours = $urlServer . 'modules/course_info/infocours.php?course=' . $code_cours;
+        $coursehome = $urlServer .'courses/' . $code_cours . '/index.php';
+        
+        $valArr = array(
+            'course_title_el' => $infocours,
+            'course_instructor_fullName_el' => $urlServer . 'modules/profile/profile.php',
+            'course_language' => $infocours,
+            'course_keywords_el' => $infocours,
+            'course_unit_title_el' => $coursehome,
+            'course_unit_description_el' => $coursehome,
+            'course_numberOfUnits' => $coursehome
+        );
+        
+        if (isset($valArr[$key]))
+            return $valArr[$key];
+        else
+            return null;
+    }
     
     /**
      * Debug the contents of an array.

@@ -1483,3 +1483,12 @@ dt {
 .cmetaaccordion {
     clear: both;
 }
+
+.cmetalabel a, .cmetalabelinaccordion a {
+    color: rgb(119, 119, 119) !important;
+    border-bottom: 1px dashed;
+}
+
+.cmetalabel a:hover, .cmetalabelinaccordion a:hover {
+    border-bottom: none;
+}
