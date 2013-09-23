@@ -623,7 +623,7 @@ if (!isset($_POST['submit2'])) {
                 mysql_field_exists($mysqlMainDb, 'cours_user', 'reviewer') or
                         db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
                 mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
-                        db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) AFTER `course_addon`");
+                        db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
         }
         
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
