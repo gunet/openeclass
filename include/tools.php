@@ -200,6 +200,18 @@ function loggedInMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/courses.php");
 	array_push($sideMenuImg, "arrow.png");
+        
+        if (get_config('opencourses_enable')) {
+            $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
+            while ($course = mysql_fetch_assoc($res)) {
+                if (CourseXMLElement::isCertified($course['cours_id'], $course['code'])) {
+                    array_push($sideMenuText, $GLOBALS['langListOpenCourses']);
+                    array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
+                    array_push($sideMenuImg, "arrow.png");
+                    break;
+                }
+            }
+        }
 
 	array_push($sideMenuText, $GLOBALS['langManuals']);
 	array_push($sideMenuLink, $urlServer."manuals/manual.php");
