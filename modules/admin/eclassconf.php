@@ -484,9 +484,6 @@ else {
 		<td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
 	  </tr>
 	  <tr>		
-		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
-	  </tr>
-	  <tr>		
 		<td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>
 	  </tr>
 	  <tr>		
@@ -498,6 +495,14 @@ else {
           <tr>
                 <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
           </tr>
+        </table></fieldset>";
+        
+        $tool_content .= "<fieldset>
+        <legend>$langMetaCommentary</legend>
+        <table class='tbl' width='100%'>
+	  <tr>		
+		<td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
+	  </tr>
           <tr>
                 <td><input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
           </tr>
