@@ -331,18 +331,23 @@ function upgrade_course($code, $lang)
 }
 
 function upgrade_course_2_8($code, $lang, $extramessage = '') {
-        
+
         global $langUpgCourse, $global_messages;
 
 	mysql_select_db($code);
 	echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
 	flush();                
         
-        db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
-        db_query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-        db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-        db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
-        db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        mysql_field_exists(null, 'exercices', 'public') or
+           db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
+        mysql_field_exists(null, 'video', 'visible') or
+            db_query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
+        mysql_field_exists(null, 'video', 'public') or
+            db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        mysql_field_exists(null, 'videolinks', 'visible') or
+            db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
+        mysql_field_exists(null, 'videolinks', 'public') or
+            db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {
