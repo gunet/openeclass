@@ -49,6 +49,7 @@ require_once '../video/video_functions.php';
 
 load_js('tools.js');
 load_modal_box(true);
+copyright_info_init();
 
 $require_help = TRUE;
 $helpTopic = 'Doc';
@@ -763,23 +764,11 @@ if ($can_upload) {
 			    <td><input type='text' size='60' name='file_author' value='$oldAuthor' /></td>
 			  </tr>";
 		  
-                        $dialogBox .= "
-          <tr>
-            <th>$langCopyrighted : </th>
-            <td><input name='file_copyrighted' type='radio' value='0' ";
-                        if ($oldCopyrighted=="0" || empty($oldCopyrighted)) $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedUnknown <input name='file_copyrighted' type='radio' value='2' "; if ($oldCopyrighted=="2") $dialogBox .= " checked='checked' "; $dialogBox .= " /> $langCopyrightedFree <input name='file_copyrighted' type='radio' value='1' ";
-
-                        if ($oldCopyrighted=="1") { 
-                                $dialogBox .= " checked='checked' ";
-                        }
-                        $dialogBox .= "/>$langCopyrightedNotFree</td>
-          </tr>";
-
-                        //ektypwsh tou combox gia epilogh glwssas
-                        $dialogBox .= "
-          <tr>
-            <th>$langLanguage :</th>
-            <td>" .
+                        $dialogBox .= "<tr><th>$langCopyrighted : </th><td>";
+                        $dialogBox .= selection($copyright_titles,
+                                                'file_copyrighted', $oldCopyrighted) . "</td></tr>";
+                        
+                        $dialogBox .= "<tr><th>$langLanguage :</th><td>" .
                                 selection(array('en' => $langEnglish,
                                                 'fr' => $langFrench,
                                                 'de' => $langGerman,
@@ -1111,10 +1100,17 @@ if ($doc_count == 0) {
                                                 }
                                         }
                                 }
+                                if ($copyid = $entry['copyrighted'] and
+                                    $copyicon = $copyright_icons[$copyid]) {                                    
+                                        $link_title_extra .= "&nbsp;" .
+                                                icon($copyicon,
+                                                     $copyright_titles[$copyid],
+                                                     $copyright_links[$copyid],
+                                                     null, 'png', 'target="_blank"');
+                                }
                                 $play_url = file_playurl($cmdDirName, $entry['filename']);
                                 $link_extra = " class='fileURL' title='$langSave' target='_blank'";
-                                $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);
-                                $link_title_extra = ($entry['copyrighted']) ? "&nbsp;<img src='$urlAppend/modules/document/img/copyrighted.png' />" : '';
+                                $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);                                
                                 $dload_msg = $langSave;
                                 if ($is_in_tinymce) {
                                         $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;

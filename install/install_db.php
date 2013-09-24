@@ -293,10 +293,7 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
                 `format` VARCHAR(32) NOT NULL DEFAULT '',
                 `language` VARCHAR(16) NOT NULL DEFAULT 'el',
-                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
-                FULLTEXT KEY `document`
-                        (`filename`, `comment`, `title`, `creator`,
-                         `subject`, `description`, `author`, `language`)) $charset_spec");
+                `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `group_properties` (
                 `course_id` INT(11) NOT NULL PRIMARY KEY ,

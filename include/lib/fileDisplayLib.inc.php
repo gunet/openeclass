@@ -286,3 +286,52 @@ function file_playurl($path, $filename = null, $courseCode = null)
     }
 }
 
+
+/**
+ * Initialize copyright/license global arrays for documents
+ */
+function copyright_info_init()
+{
+        global $language;
+        
+        $lang = langname_to_code($language);
+
+        if ($language != 'en') {
+                $link_suffix = 'deed.' . $lang;
+        } else {
+                $link_suffix = '';
+        }
+
+        $GLOBALS['copyright_icons'] = array(
+                '0' => '',
+                '2' => '',
+                '1' => 'copyrighted',
+                '3' => 'cc/by',
+                '4' => 'cc/by-sa',
+                '5' => 'cc/by-nd',
+                '6' => 'cc/by-nc',
+                '7' => 'cc/by-nc-sa',
+                '8' => 'cc/by-nc-nd');
+
+        $GLOBALS['copyright_titles'] = array(
+                '0' => $GLOBALS['langCopyrightedUnknown'],
+                '2' => $GLOBALS['langCopyrightedFree'],
+                '1' => $GLOBALS['langCopyrightedNotFree'],
+                '3' => $GLOBALS['langCreativeCommonsCCBY'],
+                '4' => $GLOBALS['langCreativeCommonsCCBYSA'],
+                '5' => $GLOBALS['langCreativeCommonsCCBYND'],
+                '6' => $GLOBALS['langCreativeCommonsCCBYNC'],
+                '7' => $GLOBALS['langCreativeCommonsCCBYNCSA'],
+                '8' => $GLOBALS['langCreativeCommonsCCBYNCND']);
+
+        $GLOBALS['copyright_links'] = array(
+                '0' => null,
+                '2' => null,
+                '1' => null,
+                '3' => 'http://creativecommons.org/licenses/by/3.0/' . $link_suffix,
+                '4' => 'http://creativecommons.org/licenses/by-sa/3.0/' . $link_suffix,
+                '5' => 'http://creativecommons.org/licenses/by-nd/3.0/' . $link_suffix,
+                '6' => 'http://creativecommons.org/licenses/by-nc/3.0/' . $link_suffix,
+                '7' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/' . $link_suffix,
+                '8' => 'http://creativecommons.org/licenses/by-nc-nd/3.0/' . $link_suffix);
+}

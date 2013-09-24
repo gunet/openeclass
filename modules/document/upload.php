@@ -147,10 +147,17 @@ if ($can_upload) {
 	</tr>
 	<tr>
 	  <th>$langCopyrighted:</th>
-	  <td>
-	    <input name='file_copyrighted' type='radio' value='0' checked='checked' /> $langCopyrightedUnknown&nbsp;
-	    <input name='file_copyrighted' type='radio' value='2' /> $langCopyrightedFree&nbsp;
-	    <input name='file_copyrighted' type='radio' value='1' /> $langCopyrightedNotFree
+            <td>".
+          selection(array('0' => $langCopyrightedUnknown,
+                          '2' => $langCopyrightedFree,
+                          '1' => $langCopyrightedNotFree,
+                          '3' => $langCreativeCommonsCCBY,
+                          '4' => $langCreativeCommonsCCBYSA,
+                          '5' => $langCreativeCommonsCCBYND,
+                          '6' => $langCreativeCommonsCCBYNC,
+                          '7' => $langCreativeCommonsCCBYNCSA,
+                          '8' => $langCreativeCommonsCCBYNCND),
+                   'file_copyrighted') . "	  
 	  </td>
 	  <td>&nbsp;</td>
 	</tr>
