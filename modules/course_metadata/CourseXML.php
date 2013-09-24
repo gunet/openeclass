@@ -456,7 +456,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer, $mysqlMainDb;
+        global $urlServer, $mysqlMainDb, $license;
         $data = array();
     
         $res1 = db_query("SELECT * FROM cours WHERE cours_id = " . intval($courseId), $mysqlMainDb);
@@ -470,6 +470,8 @@ class CourseXMLElement extends SimpleXMLElement {
         $data['course_instructor_fullName_' . $clang] = $course['titulaires'];
         $data['course_title_' . $clang] = $course['intitule'];
         $data['course_keywords_' . $clang] = $course['course_keywords'];
+        if ($course['course_license'] != null)
+            $data['course_license'] = $license[$course['course_license']]['title'];
 
         // turn visible units to associative array
         $res2 = db_query("SELECT id, title, comments
@@ -612,7 +614,7 @@ class CourseXMLElement extends SimpleXMLElement {
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
         'course_url', 'course_keywords', 'course_numberOfUnits', 
-        'course_unit_title', 'course_unit_description'
+        'course_unit_title', 'course_unit_description', 'course_license'
     );
     
     /**
@@ -744,7 +746,7 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_title_el', 'course_instructor_fullName_el', 
         'course_language', 'course_keywords_el', 
         'course_unit_title_el', 'course_unit_description_el',
-        'course_numberOfUnits'
+        'course_numberOfUnits', 'course_license'
     );
     
     /**
@@ -766,7 +768,8 @@ class CourseXMLElement extends SimpleXMLElement {
             'course_keywords_el' => $infocours,
             'course_unit_title_el' => $coursehome,
             'course_unit_description_el' => $coursehome,
-            'course_numberOfUnits' => $coursehome
+            'course_numberOfUnits' => $coursehome,
+            'course_license' => $infocours
         );
         
         if (isset($valArr[$key]))
