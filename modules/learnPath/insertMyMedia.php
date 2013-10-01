@@ -34,7 +34,9 @@ $TABLEASSET              = "lp_asset";
 $TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 require_once("../../include/baseTheme.php");
-require_once("../video/video_functions.php");
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+require_once '../../include/lib/mediaresource.factory.php';
 
 $dialogBox = "";
 
@@ -42,7 +44,7 @@ $navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=>
 $navigation[] = array("url"=>"learningPathAdmin.php?course=$code_cours&amp;path_id=".(int)$_SESSION['path_id'], "name"=> $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -211,11 +213,12 @@ function showmedia()
     $i=1;
     while ($myrow = mysql_fetch_array($resultMedia))
     {
-        list($mediaURL, $mediaPath, $mediaPlay) = media_url($myrow['path']);
+        $myrow['course_id'] = $GLOBALS['cours_id'];
+        $vObj = MediaResourceFactory::initFromVideo($myrow);
                                                     
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($myrow['titre']), $myrow['path']) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMediaAhref($vObj) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
@@ -225,9 +228,11 @@ function showmedia()
     $j=1;
     while($myrow = mysql_fetch_array($resultMediaLinks))
     {
+        $myrow['course_id'] = $GLOBALS['cours_id'];
+        $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". choose_medialink_ahref(q($myrow['url']), q($myrow['titre'])) ."
+                    <td align='left' valign='top'>". MultimediaHelper::chooseMedialinkAhref($vObj) ."
                     <br />
                     <small class='comments'>".q($myrow['description'])."</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";

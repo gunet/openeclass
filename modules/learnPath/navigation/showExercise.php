@@ -41,9 +41,9 @@ include("../../../include/init.php");
 // exercice_submit.php. Oi mones diafores einai xrhsh twn echo
 // anti gia to tool_content kai kapoies mikrodiafores opou xreiazetai 
 require_once('../../../include/lib/textLib.inc.php');
-
-require_once '../../video/video_functions.php';
-load_modal_box();
+require_once '../../../include/lib/modalboxhelper.class.php';
+require_once '../../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 // answer types
 define('UNIQUE_ANSWER', 1);

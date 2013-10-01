@@ -57,8 +57,9 @@ $TABLEQUIZTEST          = "exercices";
 $dbTable                = $TABLEASSET; // for old functions of document tool
 
 require_once("../../include/baseTheme.php");
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 $body_action = '';
 

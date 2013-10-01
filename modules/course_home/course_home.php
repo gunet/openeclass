@@ -41,7 +41,8 @@ if (!defined('HIDE_TOOL_TITLE')) {
 // $path2add is used in init.php to fix relative paths
 $path2add = 1;
 require_once '../../include/baseTheme.php';
-require_once '../../modules/video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
 $nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";
@@ -50,7 +51,7 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 load_js('jquery');
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 $head_content .= "<script type='text/javascript'>$(document).ready(add_bookmark);</script>";
 
 //For statistics: record login

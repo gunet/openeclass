@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -864,9 +864,9 @@ function display_my_documents($dialogBox, $style)
                 $date        = nice_format($fileList['date'][$fileKey]);
                 //$doc_url = $cmdFileName;
                 //$urlFileName = "../../".$courseDir.$doc_url;
-                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
-                $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
-                $urlFileName = choose_media_ahref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
+                $file_url    = file_url($fileList['path'][$fileKey], $dspFileName);
+                $play_url    = file_playurl($fileList['path'][$fileKey], $dspFileName);
+                $urlFileName = MultimediaHelper::chooseMediaAhref($file_url, $file_url, $play_url, $dspFileName, $dspFileName);
             }
             elseif ($fileList['type'][$fileKey] == A_DIRECTORY)
             {

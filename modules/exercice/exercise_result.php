@@ -44,8 +44,9 @@ $navigation[] = array ("url"=>"exercice.php?course=$code_cours", "name"=> $langE
 // picture path
 $picturePath='../../courses/'.$currentCourseID.'/image';
 
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 include('../../include/lib/textLib.inc.php');
 if (isset($_GET['exerciseId'])) {

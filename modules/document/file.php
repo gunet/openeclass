@@ -76,7 +76,7 @@ require_once '../../include/init.php';
 require_once '../../include/action.php';
 require_once '../../include/lib/fileManageLib.inc.php';
 require_once '../../include/lib/fileDisplayLib.inc.php';
-require_once '../video/video_functions.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
 if (!defined('COMMON_DOCUMENTS')) {
         // check user's access to cours
@@ -133,7 +133,9 @@ if (file_exists($disk_path)) {
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
         
-        $htmlout = (!$is_in_lightstyle) ? media_html_object($mediaPath, $mediaURL) : media_html_object($mediaPath, $mediaURL, '#ffffff', '#000000');
+        $htmlout = (!$is_in_lightstyle) 
+            ? MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath)
+            : MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#ffffff', '#000000', $mediaPath);
         echo $htmlout;
         exit();
     }
@@ -148,6 +150,11 @@ function check_cours_access() {
         if (!$uid && !isset($code_cours)) {
             $code_cours = $_SESSION['dbname'];
         }
+        
+        if ( !$uid && !isset($_GET['token'])) { // anonymous needs access token
+            redirect_to_home_page();
+            exit(0);
+        }
 
         $qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
         
@@ -158,8 +165,13 @@ function check_cours_access() {
 		redirect_to_home_page();
 		exit;
 	}
-
+        
 	$cours = mysql_fetch_array($result);
+        
+        if (!$uid) {
+            $_SESSION['course_id'] = $cours['id'];
+            return; // do not do course check if anonymous with access token
+        }
 
 	switch($cours['visible']) {
 		case '2': return; 	// cours is open

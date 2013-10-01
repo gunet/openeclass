@@ -32,9 +32,9 @@ $helpTopic = 'Exercise';
 include '../../include/baseTheme.php';
 include('exercise.class.php');
 include('../../include/lib/textLib.inc.php');
-
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 $nameTools = $langResults;
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);

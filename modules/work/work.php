@@ -81,9 +81,9 @@ hContent;
 
 // For using with the pop-up calendar
 include 'jscalendar.inc.php';
-
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 /**** The following is added for statistics purposes ***/
 include '../../include/action.php';

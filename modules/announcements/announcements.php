@@ -40,7 +40,8 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 include '../../include/lib/textLib.inc.php';
 include '../../include/sendMail.inc.php';
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 require_once 'preview.php';
 
 // The following is added for statistics purposes
@@ -53,7 +54,7 @@ define('RSS', 'modules/announcements/rss.php?c='.$currentCourseID);
 $fake_code = course_id_to_fake_code($cours_id);
 $nameTools = $langAnnouncements;
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 if ($is_editor) {
 	load_js('tools.js');
 	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .

@@ -45,10 +45,12 @@ require_once '../../include/lib/fileDisplayLib.inc.php';
 require_once '../../include/lib/fileManageLib.inc.php';
 require_once '../../include/lib/fileUploadLib.inc.php';
 require_once '../../include/pclzip/pclzip.lib.php' ;
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+require_once '../../include/lib/mediaresource.factory.php';
 
 load_js('tools.js');
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
 $require_help = TRUE;
@@ -152,36 +154,7 @@ if ($is_in_tinymce) {
     
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-    
-    $head_content .= <<<EOF
-<script type='text/javascript'>
-$(document).ready(function() {
-
-    $("a.fileURL").click(function() { 
-        var URL = $(this).attr('href');
-        var win = tinyMCEPopup.getWindowArg("window");
-
-        // insert information now
-        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
-
-        // are we an image browser
-        if (typeof(win.ImageDialog) != "undefined") {
-            // we are, so update image dimensions...
-            if (win.ImageDialog.getImageData)
-                win.ImageDialog.getImageData();
-
-            // ... and preview if necessary
-            if (win.ImageDialog.showPreviewImage)
-                win.ImageDialog.showPreviewImage(URL);
-        }
-
-        // close popup window
-        tinyMCEPopup.close();
-        return false;
-    });
-});
-</script>
-EOF;
+    load_js('tinymce.popup.urlgrabber.min.js');
 }
 
 // check for quotas
@@ -905,38 +878,9 @@ if (isset($_GET['rev'])) {
         $reverse = true;
 }
 
-$filter = '';
-$eclplugin = true;
-if (isset($_REQUEST['docsfilter'])) {
-    
-    switch ($_REQUEST['docsfilter']) {
-        case 'image':
-            $ors = '';
-            foreach (get_supported_images() as $imgfmt)
-                $ors .= " OR format LIKE '$imgfmt'";
-            $filter = "AND (format LIKE '.dir' $ors)";
-            break;
-        case 'eclmedia':
-        	$ors = '';
-        	foreach (get_supported_media() as $mediafmt)
-        		$ors .= " OR format LIKE '$mediafmt'";
-        	$filter = "AND (format LIKE '.dir' $ors)";
-        	break;
-        case 'media':
-            $eclplugin = false;
-            $ors = '';
-            foreach (get_supported_media() as $mediafmt)
-                $ors .= " OR format LIKE '$mediafmt'";
-            $filter = "AND (format LIKE '.dir' $ors)";
-            break;
-        case 'zip':
-            $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
-            break;
-        case 'file':
-        default:
-            break;
-    }
-}
+list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
+        ? select_proper_filters($_REQUEST['docsfilter']) 
+        : array('', true);
 
 /*** Retrieve file info for current directory from database and disk ***/
 $result = db_query("SELECT * FROM document
@@ -970,7 +914,8 @@ while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
                 'public' => $row['public'],
                 'comment' => $row['comment'],
                 'copyrighted' => $row['copyrighted'],
-                'date' => $row['date_modified']);
+                'date' => $row['date_modified'],
+                'object' => MediaResourceFactory::initFromDocument($row) );
 }
 // end of common to teachers and students
 
@@ -1108,16 +1053,15 @@ if ($doc_count == 0) {
                                                      $copyright_links[$copyid],
                                                      null, 'png', 'target="_blank"');
                                 }
-                                $play_url = file_playurl($cmdDirName, $entry['filename']);
-                                $link_extra = " class='fileURL' title='$langSave' target='_blank'";
-                                $link_title = (empty($entry['title'])) ? $entry['filename'] : q($entry['title']);                                
                                 $dload_msg = $langSave;
-                                if ($is_in_tinymce) {
-                                        $furl = (is_supported_media($entry['path'], true) && $eclplugin) ? $play_url : $file_url;
-                                        $link_href = "<a href='$furl'$link_extra>".$link_title."</a>$link_title_extra";
-                                } else {                                    
-                                       $link_href = choose_media_ahref($file_url, $file_url, $play_url, $link_title, $entry['path'], $link_title, $link_extra);
-                                }
+                                
+                                $dObj = $entry['object'];
+                                $dObj->setAccessURL($file_url);
+                                $dObj->setPlayURL(file_playurl($cmdDirName, $entry['filename']));
+                                if ($is_in_tinymce && !$compatiblePlugin) // use Access/DL URL for non-modable tinymce plugins
+                                    $dObj->setPlayURL($dObj->getAccessURL());
+                                
+                                $link_href = MultimediaHelper::chooseMediaAhref($dObj);
                         }
                         $img_href = "<img src='$image' />";                       
                         if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
@@ -1239,3 +1183,42 @@ if (defined('SAVED_COURSE_CODE')) {
 }
 add_units_navigation(TRUE);
 draw($tool_content, $menuTypeID, null, $head_content);
+
+
+
+function select_proper_filters() {
+    $filter = '';
+    $compatiblePlugin = true;
+    
+    switch ($_REQUEST['docsfilter']) {
+        case 'image':
+                $ors = '';
+                foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
+                    $ors .= " OR format LIKE '$imgfmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
+        case 'eclmedia':
+        	$ors = '';
+        	foreach (MultimediaHelper::getSupportedMedia() as $mediafmt)
+        		$ors .= " OR format LIKE '$mediafmt'";
+        	$filter = "AND (format LIKE '.dir' $ors)";
+        	break;
+        case 'media':
+                $compatiblePlugin = false;
+                $ors = '';
+                foreach (MultimediaHelper::getSupportedMedia() as $mediafmt)
+                    $ors .= " OR format LIKE '$mediafmt'";
+                $filter = "AND (format LIKE '.dir' $ors)";
+                break;
+        case 'zip':
+                $filter = "AND (format LIKE '.dir' OR FORMAT LIKE 'zip')";
+                break;
+        case 'file':
+                $filter = '';
+                break;
+        default:
+            break;
+    }
+
+    return array($filter, $compatiblePlugin);
+}

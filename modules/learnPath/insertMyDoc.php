@@ -57,9 +57,10 @@ $TABLEUSERMODULEPROGRESS= 'lp_user_module_progress';
 
 require_once '../../include/baseTheme.php';
 require_once '../document/doc_init.php';
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 $(document).ready(function() {

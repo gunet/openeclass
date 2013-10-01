@@ -38,7 +38,8 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once '../../include/lib/textLib.inc.php';
 require_once '../units/functions.php';
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
 /**** The following is added for statistics purposes ***/
 require_once '../../include/action.php';
@@ -51,7 +52,7 @@ mysql_select_db($mysqlMainDb);
 
 $unit_id = description_unit_id($cours_id);
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 if ($is_editor) {
 	$tool_content .= "
 	<div id='operations_container'>

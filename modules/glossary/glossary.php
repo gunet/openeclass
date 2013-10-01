@@ -24,9 +24,9 @@ $require_help = true;
 $helpTopic = 'Glossary';
 
 include '../../include/baseTheme.php';
-
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 $base_url = 'glossary.php?course=' . $code_cours;
 $cat_url = 'categories.php?course=' . $code_cours;

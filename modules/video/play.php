@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -18,13 +18,28 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-define('INDEX_START', 1);
-require_once('../../include/baseTheme.php');
+$require_current_course = true;
+$guest_allowed = true;
+
+require_once '../../include/baseTheme.php';
 require_once '../../include/lib/multimediahelper.class.php';
-require_once('../../include/perso.php');
+require_once '../../include/lib/mediaresource.factory.php';
+require_once '../../include/action.php';
 
-$nameTools = $langMyPersoDeadlines;
+$action = new action();
+$action->record('MODULE_ID_VIDEO');
 
-$tool_content = "<div class='panel_content'>{%ASSIGN_CONTENT%}</div>";
+// ----------------------
+// play video
+// ----------------------
+$res = db_query("SELECT * FROM video WHERE id = " . intval($_GET['id']));
+$row = mysql_fetch_array($res);
 
-draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
+if (!empty($row)) {
+    $row['course_id'] = $GLOBALS['cours_id'];
+    $vObj = MediaResourceFactory::initFromVideo($row);
+    $token = token_generate($row['path'], true);                         // generate new token
+    $vObj->setAccessURL($vObj->getAccessURL() . '&amp;token=' . $token); // append token to accessurl
+    echo MultimediaHelper::mediaHtmlObject($vObj);
+} else
+    header("Location: ${urlServer}modules/video/index.php?course=$code_cours");

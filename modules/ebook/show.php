@@ -76,15 +76,17 @@ if ($show_orphan_file and $file_path) {
     if (!$is_in_playmode)
         send_file_by_url_file_path($file_path);
     else {
-        require_once ('../video/video_functions.php');
+        require_once '../../include/lib/multimediahelper.class.php';
         
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
         
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/ebook/document.php?course='. $code_cours .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
+        $token = token_generate($file_info['path'], true);
+        $mediaAccess = $mediaPath . '?token=' . $token;
         
-        echo media_html_object($mediaPath, $mediaURL);
+        echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath);
         exit();
     }
 }
@@ -258,10 +260,17 @@ $t->pparse('Output', 'page');
 
 function send_file_by_url_file_path($file_path, $initial_path = '')
 {
-        global $basedir;
+        global $basedir, $uid;
 
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, $initial_path);
+        
+        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
+        if (!$valid) {
+           header("Location: ${urlServer}");
+           exit();
+        }
+        
 	if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], null, false)) {
                 not_found($file_path);
 	}

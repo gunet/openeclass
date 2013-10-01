@@ -1,7 +1,7 @@
 <?php
 session_start();
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -40,9 +40,11 @@ $path2add = 0;
 include "include/baseTheme.php";
 include "include/CAS/CAS.php";
 include "modules/auth/auth.inc.php";
-require_once 'modules/video/video_functions.php';
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/phpass/PasswordHash.php';
-load_modal_box();
+
+ModalBoxHelper::loadModalBox();
 //$homePage is used by baseTheme.php to parse correctly the breadcrumb
 $homePage = true;
 $tool_content = "";

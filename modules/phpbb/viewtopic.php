@@ -55,9 +55,10 @@ $helpTopic = 'For';
 include '../../include/baseTheme.php';
 include_once "config.php";
 include "functions.php"; 
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
-load_modal_box();
+ModalBoxHelper::loadModalBox();
 $head_content .= '
 <script type="text/javascript">
 function confirmation()

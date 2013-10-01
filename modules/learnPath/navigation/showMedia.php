@@ -24,19 +24,22 @@ $require_login = TRUE;
 $path2add = 3;
 
 require_once "../../../include/init.php";
-require_once "../../video/video_functions.php";
+require_once '../../../include/lib/multimediahelper.class.php';
+require_once '../../../include/lib/mediaresource.factory.php';
 
 $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id']))
 {
-    $id = $_GET['id'];
-    $videoPath = $urlServer ."video/". $currentCourseID . $id;
-    $videoURL = $urlServer ."modules/video/video.php?course=$code_cours&amp;action=download&amp;id=". $id;
+    $id = q($_GET['id']);
     
-    if (strpos($videoPath, '/../') === FALSE)
-    {
-        echo media_html_object($videoPath, $videoURL, '#ffffff', '#000000');
+    $res = db_query("SELECT * FROM video WHERE path = " . quote($id), $code_cours);
+    $row = mysql_fetch_array($res);
+    
+    if (!empty($row)) {
+        $row['course_id'] = $cours_id;
+        $vObj = MediaResourceFactory::initFromVideo($row);
+        echo MultimediaHelper::mediaHtmlObject($vObj, '#ffffff', '#000000');
     }
 }
 

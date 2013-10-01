@@ -43,9 +43,9 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 $dbname = $_SESSION['dbname'];
-
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 /**** The following is added for statistics purposes ***/
 include('../../include/action.php');
@@ -69,36 +69,7 @@ if ($is_in_tinymce) {
 
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
-
-    $head_content .= <<<EOF
-<script type='text/javascript'>
-$(document).ready(function() {
-
-    $("a.fileURL").click(function() {
-        var URL = $(this).attr('href');
-        var win = tinyMCEPopup.getWindowArg("window");
-
-        // insert information now
-        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
-
-        // are we an image browser
-        if (typeof(win.ImageDialog) != "undefined") {
-            // we are, so update image dimensions...
-            if (win.ImageDialog.getImageData)
-                win.ImageDialog.getImageData();
-
-            // ... and preview if necessary
-            if (win.ImageDialog.showPreviewImage)
-                win.ImageDialog.showPreviewImage(URL);
-        }
-
-        // close popup window
-        tinyMCEPopup.close();
-        return false;
-    });
-});
-</script>
-EOF;
+    load_js('tinymce.popup.urlgrabber.min.js');
 }
 
 $head_content .= <<<hContent

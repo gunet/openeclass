@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2012  Greek Universities Network - GUnet
@@ -18,7 +18,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+require_once '../../include/lib/mediaresource.factory.php';
+require_once '../../include/lib/multimediahelper.class.php';
 
 function list_videos()
 {
@@ -46,15 +47,13 @@ function list_videos()
                                 $table_started = true;
                         }
                         
-                        if ($table == 'video') 
-                        {
-                            list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
-
-                            $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
-                        }
-                        else
-                        {
-                            $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                        $row['course_id'] = $GLOBALS['cours_id'];
+                        if ($table == 'video') {
+                            $vObj = MediaResourceFactory::initFromVideo($row);
+                            $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                        } else {
+                            $vObj = MediaResourceFactory::initFromVideoLink($row);
+                            $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                         }
 
                           if ($numLine%2 == 0) {

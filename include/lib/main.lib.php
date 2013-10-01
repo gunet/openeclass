@@ -1,7 +1,7 @@
 <?php
 /*
 * ========================================================================
-* Open eClass 2.4 - E-learning and Course Management System
+* Open eClass 2.8 - E-learning and Course Management System
 * ========================================================================
  
 Copyright(c) 2003-2011  Greek Universities Network - GUnet
@@ -1345,18 +1345,6 @@ function format_time_duration($sec)
         return (($day == 0)? '': (' ' . append_units($day, $langDay, $langDays))) .
                 (($hour == 0)? '': (' ' . append_units($hour, $langhour, $langhours))) .                 
                 (($min == 0)? '': (' ' . append_units($min, $langminute, $langminutes)));
-}
-
-// Return the URLs for media files 
-function media_url($path)
-{
-	global $urlServer, $code_cours, $currentCourseID;
-        
-        $mediaURL  = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=download&amp;id='.$path;
-        $mediaPath = $urlServer ."video/". $currentCourseID . $path;
-        $mediaPlay = $urlServer .'modules/video/video.php?course='.$code_cours.'&amp;action=play&amp;id='.$path;
-        
-        return array($mediaURL, $mediaPath, $mediaPlay);
 }
 
 // Move entry $id in $table to $direction 'up' or 'down', where

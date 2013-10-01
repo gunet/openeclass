@@ -27,9 +27,10 @@ $require_current_course = true;
 include '../../include/baseTheme.php';
 include "../../include/lib/fileDisplayLib.inc.php";
 include "../../include/lib/fileUploadLib.inc.php";
-require_once '../video/video_functions.php';
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
 require_once '../course_metadata/CourseXML.php';
-load_modal_box(true);
+ModalBoxHelper::loadModalBox(true);
 
 $lang_editor = langname_to_code($language);
 

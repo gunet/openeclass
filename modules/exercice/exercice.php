@@ -36,9 +36,9 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
-
-require_once '../video/video_functions.php';
-load_modal_box();
+require_once '../../include/lib/modalboxhelper.class.php';
+require_once '../../include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 /**** The following is added for statistics purposes ***/
 require_once '../../include/action.php';
@@ -72,7 +72,7 @@ $from = $page * $limitExPage;
 
 // only for administrator
 if($is_editor) {	
-        $head_content = <<< END
+        $head_content .= <<< END
         <script type="text/javascript">	
 	function confirmation (name)
 	{

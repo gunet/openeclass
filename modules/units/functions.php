@@ -1,5 +1,8 @@
 <?php
 
+require_once '../../include/lib/mediaresource.factory.php';
+require_once '../../include/lib/multimediahelper.class.php';
+
 //
 // Units utility functions	
 //
@@ -311,15 +314,14 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
                     return '';
                 }
                 $status = $row['public'];
-                if ($table == 'video') 
-                {
-                    list($mediaURL, $mediaPath, $mediaPlay) = media_url($row['path']);
-                    
-                    $videolink = choose_media_ahref($mediaURL, $mediaPath, $mediaPlay, q($row['titre']), $row['path']);
-                }
-                else
-                {
-                    $videolink = choose_medialink_ahref(q($row['url']), q($row['titre']));
+                $row['course_id'] = $GLOBALS['cours_id'];
+                
+                if ($table == 'video') {
+                    $vObj = MediaResourceFactory::initFromVideo($row);
+                    $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                } else {
+                    $vObj = MediaResourceFactory::initFromVideoLink($row);
+                    $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 if (!$module_visible) {
 			$videolink .= " <i>($langInactiveModule)</i>";
