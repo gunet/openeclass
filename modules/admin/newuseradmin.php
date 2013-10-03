@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -79,9 +79,12 @@ if($submit) {
                 $proflanguage = langname_to_code($language);
         }
 		  $verified_mail = isset($_REQUEST['verified_mail_form'])?intval($_REQUEST['verified_mail_form']):2;
-
-        $backlink = $_SERVER['SCRIPT_NAME'] .
-                    isset($rid)? ('?id=' . intval($rid)): '';
+            
+        $backlink = $_SERVER['SCRIPT_NAME'];
+       
+        if (isset($rid) and $rid) {
+            $backlink .= "?id=" . intval($rid);
+        }
 
         // check if user name exists
         $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user 

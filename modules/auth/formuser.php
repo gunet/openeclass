@@ -115,7 +115,6 @@ if ($all_set) {
 	else {
 		$verified_mail=0;
 	}
-
 	// register user request
 	$statut = $prof? 1: 5;
 	$res = db_query('INSERT INTO user_request SET
