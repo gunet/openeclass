@@ -99,6 +99,9 @@ if (isset($_GET['store']) && $is_editor) {
 if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
 	$chatLine = purify($_GET['chatLine']);
 	$fchat = fopen($fileChatName,'a');
+        if ($is_editor) {
+                $nick = "<b>$nick</b>";
+        }
 	fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
 	fclose($fchat);
 }
