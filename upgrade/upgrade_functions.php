@@ -348,6 +348,9 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
             db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
         mysql_field_exists(null, 'videolinks', 'public') or
             db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        if (mysql_index_exists('dropbox_file', 'UN_filename')) {
+            db_query("ALTER TABLE dropbox_file DROP index UN_filename");
+        }
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

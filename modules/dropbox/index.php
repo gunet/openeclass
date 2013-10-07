@@ -77,7 +77,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	<legend>".$dropbox_lang['uploadFile']."</legend>
 	<table width='100%' class='tbl'>
 	<tr>
-	  <th width='160'>".$dropbox_lang['file'].":</th>
+	  <th width='160'>".$langFileName.":</th>
 	  <td><input type='file' name='file' size='35' />
 	      <input type='hidden' name='dropbox_unid' value='$dropbox_unid' />
 	  </td>
@@ -89,7 +89,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	  <td>".q(uid_to_name($uid))."</td>
 	</tr>
 	<tr>
-	  <th>".$dropbox_lang['description'].":</th>
+	  <th>".$langMessage.":</th>
 	  <td><textarea name='description' cols='37' rows='2'></textarea></td>
 	</tr>
 	<tr>
@@ -180,23 +180,28 @@ if (!isset($_GET['mailing'])) {
                 </tr>";
                 $numberDisplayed = count($dropbox_person -> receivedWork);  // RH
                 $i = 0;
-                foreach ($dropbox_person -> receivedWork as $w) {
+                foreach ($dropbox_person -> receivedWork as $w) {                    
                         if ($w -> uploaderId == $uid)  // RH: justUpload
                         {
-                                $numberDisplayed -= 1; continue;
+                                $numberDisplayed -= 1; 
+                                continue;
                         }
                         if ($i%2==0) {
-                                $tool_content .= "\n<tr>";
+                                $tool_content .= "<tr>";
                         } else {
-                                $tool_content .= "\n<tr class=\"odd\">";
+                                $tool_content .= "<tr class='odd'>";
                         }
-                        $tool_content .= "<td width='16'>
-                        <img src='$themeimg/inbox.png' title='".q($dropbox_lang['receivedTitle'])."' /></td>
-                        <td>";
-                        $tool_content .= "<a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
-                        $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
-                                         "<small>".q($w->description)."</small></td>" .
-                                         "<td>".display_user($w->uploaderId, false, false)."</td><td>".$w->uploadDate;
+                        if (($w->filename != '') and ($w->filesize != 0)) {
+                            $tool_content .= "<td width='16'><img src='$themeimg/inbox.png' title='".q($dropbox_lang['receivedTitle'])."' /></td>";
+                                $tool_content .= "<td><a href='dropbox_download.php?course=$code_cours&amp;id=".urlencode($w->id)."' target=_blank>".$w->title."</a>";
+                                $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />" .
+                                                 "<small>".q($w->description)."</small></td>";
+                        } else {
+                                $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";                
+                                $tool_content .= "<td><small>".q($w->description)."</small></td>";
+                        }
+                        $tool_content .= "<td>".display_user($w->uploaderId, false, false)."</td>";
+                        $tool_content .= "<td>".$w->uploadDate;
                         if ($w->uploadDate != $w->lastUploadDate) {
                                 $tool_content .= " (".$dropbox_lang['lastUpdated']." $w->lastUploadDate)";
                         }
@@ -220,7 +225,7 @@ if (!isset($_GET['mailing'])) {
 
 $numSent = count($dropbox_person -> sentWork);
 $tool_content .= "<br /><p class='sub_title1'>";
-$tool_content .= strtoupper($dropbox_lang["sentTitle"]);
+$tool_content .= $dropbox_lang["sentTitle"];
 // if the user has sent files then display the icon deleteall
 if ($numSent > 0) {
         $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
@@ -258,12 +263,15 @@ if ($numSent == 0) {
                 } else {
                         $tool_content .= "<tr class='odd'>";
                 }
-                $tool_content .= "<td width='16'>
-                                <img src='$themeimg/outbox.png' title='".q($w->title)."' /></td>
-                                <td><a href='$ahref' target='_blank'>".q($w->title)."</a>
+                if (($w->filename != '') and ($w->filesize != 0)) {
+                        $tool_content .= "<td width='16'><img src='$themeimg/outbox.png' title='".q($w->title)."' /></td>";
+                        $tool_content .= "<td><a href='$ahref' target='_blank'>".q($w->title)."</a>
                                 <small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />
                                 <small>".q($w->description)."</small></td>";
-
+                } else {
+                        $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
+                        $tool_content .= "<td><small>".q($w->description)."</small></td>";
+                }               
                 $tool_content .= "<td>";
                 $recipients_names = '';                
                 foreach($w -> recipients as $r) {
@@ -286,7 +294,6 @@ if ($numSent == 0) {
                         <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                 $tool_content .= "</div></td></tr>";
 
-                // RH: Mailing: clickable images for examine and send
                 if ($w -> uploadDate != $w->lastUploadDate) {
                         $tool_content .= "<tr><td colspan='2'>
                         <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class=\"dropbox_date\">$w->lastUploadDate</span></span></td>
@@ -326,11 +333,17 @@ if ($is_editor) {
                         } else {
                                 $tool_content .= "<tr class='odd'>";
                         }
-                        $tool_content .= "<td width='16'>
-                                        <img src='$themeimg/outbox.png' title='".q($w->title)."' /></td>
-                                        <td><a href='$ahref' target='_blank'>".q($w->title)."</a>
-                                        <small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />
-                                        <small>".q($w->description)."</small></td>";                        
+                        
+                        if (($w->filename != '') and ($w->filesize != 0)) {
+                                $tool_content .= "<td width='16'>
+                                                <img src='$themeimg/outbox.png' title='".q($w->title)."' /></td>
+                                                <td><a href='$ahref' target='_blank'>".q($w->title)."</a>
+                                                <small>&nbsp;&nbsp;&nbsp;(".format_file_size($w->filesize).")</small><br />
+                                                <small>".q($w->description)."</small></td>";
+                        } else {
+                                $tool_content .= "<td width='16'><img src='$themeimg/message.png' title='".q($w->title)."' /></td>";
+                                $tool_content .= "<td><small>".q($w->description)."</small></td>";
+                        }
                         $tool_content .= "<td>".display_user($w->uploaderId, false, false)."</td>";                        
                         $tool_content .= "<td>";
                         $recipients_names = '';                
@@ -351,14 +364,12 @@ if ($is_editor) {
                                 onClick=\"return confirmationpurge();\">
                                 <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</div></td></tr>";
-
-                        // RH: Mailing: clickable images for examine and send
                         if ($w -> uploadDate != $w->lastUploadDate) {
                                 $tool_content .= "<tr><td colspan='2'>
                                 <span class='dropbox_detail'>".$dropbox_lang["lastResent"]." <span class='dropbox_date'>$w->lastUploadDate</span></span></td>
                                 </tr>";
                         }
-                $i++;
+                        $i++;
                 } //end of foreach        
                 $tool_content .= "</table>";
         }

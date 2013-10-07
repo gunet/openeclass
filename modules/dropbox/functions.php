@@ -58,9 +58,6 @@ $head_content ='<script type="text/javascript">
                 if (frm.elements["recipients[]"].selectedIndex < 0) {
                         alert("'.$dropbox_lang['noUserSelected'].'");
                         return false;
-                } else if (frm.file.value == "") {
-                        alert("'.$dropbox_lang['noFileSpecified'].'");
-                        return false;
                 } else {
                         return true;
                 }
@@ -81,7 +78,8 @@ $dropbox_cnf["personTbl"] = "dropbox_person";
  *       INITIALISE OTHER VARIABLES & CONSTANTS
  * --------------------------------------
  */
-$dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox"; 
+$dropbox_cnf["sysPath"] = $webDir."courses/".$currentCourseID."/dropbox";
+$thisisJustMessage = FALSE;
 if (!is_dir($dropbox_cnf["sysPath"])) {
 	mkdir($dropbox_cnf["sysPath"]);
 } 

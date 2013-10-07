@@ -79,7 +79,7 @@ class Dropbox_Work {
         */
 	private function createNewWork ($uploaderId, $title, $description, $author, $filename, $filesize) {
 		
-		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
+		global $dropbox_cnf, $dropbox_lang, $currentCourseID, $thisisJustMessage;
 		
 		/*
 		* Do some sanity checks
@@ -90,9 +90,9 @@ class Dropbox_Work {
 		* Fill in the properties
 		*/
 		$this->uploaderId = $uploaderId; 
-		$this->uploaderName = uid_to_name($this->uploaderId);
-		$this->filename = $filename;
-		$this->filesize = $filesize;
+		$this->uploaderName = uid_to_name($this->uploaderId);               
+                $this->filename = $filename;
+                $this->filesize = $filesize;                
 		$this->title = $title;
 		$this->description = $description;
 		$this->author = $author;
@@ -102,19 +102,21 @@ class Dropbox_Work {
 		* Check if object exists already. If it does, the old object is used 
 		* with updated information (authors, descriptio, uploadDate)
 		*/
-		$this->isOldWork = FALSE;
-		if ($GLOBALS['language'] == 'greek') {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
-				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE filename = '".addslashes($this->filename)."'";
-		} else {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
-				FROM `".$dropbox_cnf["fileTbl"]."` 
-				WHERE filename = '".addslashes($this->filename)."'";
-		}
-        	$result = db_query($sql,$currentCourseID);
-		$res = mysql_fetch_array($result);
-		if ($res != FALSE) $this->isOldWork = TRUE;
+                $this->isOldWork = FALSE;
+                if (!$thisisJustMessage) {		
+                    if ($GLOBALS['language'] == 'greek') {
+                            $sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
+                                    FROM `".$dropbox_cnf["fileTbl"]."` 
+                                    WHERE filename = '".addslashes($this->filename)."'";
+                    } else {
+                            $sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
+                                    FROM `".$dropbox_cnf["fileTbl"]."` 
+                                    WHERE filename = '".addslashes($this->filename)."'";
+                    }
+                    $result = db_query($sql, $currentCourseID);
+                    $res = mysql_fetch_array($result);
+                    if ($res != FALSE) $this->isOldWork = TRUE;
+                }
 		
 		/*
 		* insert or update the dropbox_file table and set the id property
@@ -129,8 +131,8 @@ class Dropbox_Work {
 					, author = '".addslashes($this->author)."'
 					, lastUploadDate = '".addslashes($this->lastUploadDate)."'
 					WHERE id='".addslashes($this->id)."'";
-			$result = db_query($sql);
-		} else {
+			$result = db_query($sql, $currentCourseID);
+		} else {                    
 			$this->uploadDate = $this->lastUploadDate;
 			$sql="INSERT INTO `".$dropbox_cnf["fileTbl"]."` 
 				(uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate)
@@ -144,7 +146,7 @@ class Dropbox_Work {
 						, '".addslashes($this->lastUploadDate)."'
 						)";
 
-        	$result = db_query($sql);		
+        	$result = db_query($sql, $currentCourseID);
 			$this->id = mysql_insert_id(); //get automatically inserted id
 		}
 				
@@ -153,7 +155,7 @@ class Dropbox_Work {
 		*/
 		$sql="INSERT INTO `".$dropbox_cnf["personTbl"]."` (fileId, personId)
 				VALUES ($this->id, $this->uploaderId)";
-                $result = db_query($sql);	//if work already exists no error is generated
+                $result = db_query($sql, $currentCourseID);	//if work already exists no error is generated
 	}
 	
         /*
@@ -223,7 +225,7 @@ class Dropbox_SentWork extends Dropbox_Work {
         */
 	public function Dropbox_SentWork($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
 		
-		if (func_num_args()>1) {
+		if (func_num_args() > 1) {
                         $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
 		} else {
 			$this->createExistingSentWork ($arg1);
