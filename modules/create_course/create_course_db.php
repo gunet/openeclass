@@ -561,7 +561,7 @@ db_query("CREATE TABLE `assignment_submit` (
       author varchar(250) default '',
       uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
       lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-      PRIMARY KEY (id)    
+      PRIMARY KEY (id))
      $charset_spec");
 
     db_query("CREATE TABLE dropbox_person (
