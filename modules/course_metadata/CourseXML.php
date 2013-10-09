@@ -604,7 +604,8 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_unit_material_multimedia_description', 'course_unit_material_multimedia_keywords', 
         'course_unit_material_multimedia_url', 'course_unit_material_other', 
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
-        'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel'
+        'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
+        'course_lastLevelConfirmation'
     );
     
     /**

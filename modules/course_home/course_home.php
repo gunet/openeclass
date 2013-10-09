@@ -299,16 +299,19 @@ if ($is_course_admin) {
 } else {
     $link = "$numUsers $langRegistered";
 }
-$bar_content .= "<li><b>$langUsers</b>: $link</li>";
+$bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 
 // display opencourses level in bar
 require_once '../../modules/course_metadata/CourseXML.php';
 $level = CourseXMLElement::getLevel($cours_id, $code_cours);
-if (isset($level) && !empty($level))
-    $bar_content .= "<li><b>$langOpenCoursesLevel</b>: " . $level . "</li></ul>";
-
-$bar_content .= "</ul>";
-
+if (isset($level) && !empty($level)) {
+    $opencourses_level = "<table class='tbl_courseid' width='200'>
+        <tr class='title1'>
+          <td class='title1'>$langOpenCoursesLevel:</td><td style='text-align: right;'>$level&nbsp;&nbsp;</td>
+        </tr>
+        </table>
+        <br/>";
+}
 
 if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor']) 
         or (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
@@ -350,6 +353,7 @@ if (!defined('EXPORTING')) {
         </tr>
         </table>
         <br />
+        $opencourses_level
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
           <td class='title1'>$langTools</td>

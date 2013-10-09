@@ -63,6 +63,7 @@
     <confirmAMinusLevel>false</confirmAMinusLevel>
     <confirmALevel>false</confirmALevel>
     <confirmAPlusLevel>false</confirmAPlusLevel>
+    <lastLevelConfirmation></lastLevelConfirmation>
     <confirmVideolectures></confirmVideolectures>
     <confirmCurriculum></confirmCurriculum>
 

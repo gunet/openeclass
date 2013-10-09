@@ -54,6 +54,10 @@
     <xs:restriction base="xs:base64Binary"/>
 </xs:simpleType>
 
+<xs:simpleType name="t_dateTime">
+    <xs:restriction base="xs:dateTime"/>
+</xs:simpleType>
+
 <!-- definition of simple types -->
 <xs:simpleType name="t_level">
     <xs:restriction base="t_string">
@@ -289,11 +293,12 @@
 
 <xs:group name="g_confirmation">
     <xs:sequence>
-        <xs:element name="confirmCurriculum"    minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmVideolectures" minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmAMinusLevel"   minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmALevel"        minOccurs="0" type="t_boolean"/>
-        <xs:element name="confirmAPlusLevel"    minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmCurriculum"     minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmVideolectures"  minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmAMinusLevel"    minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmALevel"         minOccurs="0" type="t_boolean"/>
+        <xs:element name="confirmAPlusLevel"     minOccurs="0" type="t_boolean"/>
+        <xs:element name="lastLevelConfirmation" minOccurs="0" type="t_dateTime"/>
     </xs:sequence>
 </xs:group>
 

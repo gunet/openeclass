@@ -293,15 +293,15 @@ if (isset($_POST['submit'])) {
         <fieldset>
         <legend>$langOpenCoursesLicense</legend>
             <table class='tbl' width='100%'>           
-            <tr><td colspan='2'><input id = 'no_license' type='radio' name='l_radio' value='20' $licenseChecked[20] />
+            <tr><td colspan='2'><input id = 'no_license' type='radio' name='l_radio' value='20' $licenseChecked[20] $disabledVisibility />
             $langWithoutCopyright
             </td>
             </tr>           
-            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' $licenseChecked[0] />
+            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' $licenseChecked[0] $disabledVisibility />
             $langCopyrightedNotFree
             </td>
             </tr>
-            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1' $cc_checked />
+            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1' $cc_checked $disabledVisibility />
                 $langCMeta[course_license]
             </td>
             </tr>            
@@ -311,7 +311,7 @@ if (isset($_POST['submit'])) {
                                   '3' => $langCreativeCommonsCCBYNCND,
                                   '4' => $langCreativeCommonsCCBY, 
                                   '5' => $langCreativeCommonsCCBYSA, 
-                                  '6' => $langCreativeCommonsCCBYND), 'cc_use', $license)."
+                                  '6' => $langCreativeCommonsCCBYND), 'cc_use', $license, $disabledVisibility)."
              </td></tr>
              </table>
         </fieldset>
@@ -324,22 +324,22 @@ if (isset($_POST['submit'])) {
 	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
-		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] /></td>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] /></td>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /></td>
 		<td class='smaller'>$langPrivOpen</td>
 	    </tr>	    
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
-		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] /></td>
+		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>
              <tr>
 		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
-		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] /></td>
+		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility /></td>
 		<td class='smaller'>$langCourseInactive</td>
 	    </tr>
 	    </table>

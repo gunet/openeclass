@@ -110,7 +110,8 @@ if (count($opencourses) > 0) {
                                    cours.fake_code c,
                                    cours.intitule i,
                                    cours.visible visible,
-                                   cours.titulaires t
+                                   cours.titulaires t,
+                                   cours.cours_id id
                             FROM cours
                             WHERE cours.faculteid = $fc 
                             AND cours.type = '$type'
@@ -137,6 +138,7 @@ if (count($opencourses) > 0) {
             <table width='100%' class='sortable' id='t$tid'>
             <tr>
                 <th class='left' colspan='2'>$m[lessoncode]</th>
+                <th class='left' width='120'>$langOpenCoursesLevel</th>
                 <th class='left' width='200'>$m[professor]</th>
                 <th width='30'>$langType</th>
             </tr>";
@@ -157,6 +159,7 @@ if (count($opencourses) > 0) {
             }
             $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
+            $tool_content .= "\n<td>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</td>";
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";
             // show the necessary access icon
