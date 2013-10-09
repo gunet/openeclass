@@ -58,18 +58,6 @@ $looksAPlus = false;
 if ($looksA && $hasTeacherConfirmVideo)
     $looksAPlus = true;
 
-// parse last submission date
-$lastSubmission = '';
-if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
-    $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
-    if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
-        $lastSubmission = '<p><small>Last Submission: ' .
-                $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
-                '&nbsp;' .
-                $lastDate['hour'] . ':' . $lastDate['minute'] . '</small></p>';
-    }
-}
-
 if (isset($_POST['submit'])) {
     // default fallback is false
     if (!isset($_POST['course_confirmAMinusLevel']))
@@ -139,6 +127,18 @@ $docsImg = ($numDocs > 0) ? 'tick' : 'delete';
 $unitsImg = ($numUnits > 0) ? 'tick' : 'delete';
 $mediaImg = ($numMedia > 0) ? 'tick' : 'delete';
 $teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'tick' : 'delete';
+
+// parse last submission date
+$lastSubmission = '';
+if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
+    $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
+    if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
+        $lastSubmission = '<p><small>Last Submission: ' .
+                $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
+                '&nbsp;' .
+                $lastDate['hour'] . ':' . $lastDate['minute'] . '</small></p>';
+    }
+}
 
 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>";
 $tool_content .= <<<EOF
