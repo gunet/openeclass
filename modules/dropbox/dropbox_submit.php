@@ -122,7 +122,11 @@ if (isset($_POST["submitWork"]))
                         $dropbox_filename = '';
                         $dropbox_filesize = 0;
                         $newWorkRecipients = $_POST["recipients"];
-                        $dropbox_title = $langMessage;
+                        if (isset($_POST['title']) and $_POST['title'] != '') {
+                                $dropbox_title = $_POST['title'];
+                        } else {
+                                $dropbox_title = $langMessage;
+                        }
                         new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
                         
                 } else {
@@ -147,7 +151,11 @@ if (isset($_POST["submitWork"]))
                         }
 
                         // set title
-                        $dropbox_title = $dropbox_filename;
+                        if (isset($_POST['title']) and $_POST['title'] != '') {
+                                $dropbox_title = $_POST['title'];
+                        } else {
+                                $dropbox_title = $dropbox_filename;
+                        }                        
                         $format = get_file_extension($dropbox_filename);
                         $dropbox_filename = safe_filename($format);
                         // set author
@@ -189,7 +197,7 @@ if (isset($_POST["submitWork"]))
                 }
 	} //end if(!$error)
 	if (!$error) {
-		$tool_content .= "<p class=\"success\">".$dropbox_lang["docAdd"]."<br />
+		$tool_content .= "<p class='success'>".$dropbox_lang["docAdd"]."<br />
 		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
 	}
 	else

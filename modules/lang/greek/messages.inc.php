@@ -1107,7 +1107,7 @@ $dropbox_lang['errorCreatingDir'] = "Παρουσιάστηκε σφάλμα κ�
 $dropbox_lang['quotaError'] = "Έχετε ξεπεράσει το μέγιστο συνολικό επιτρεπτό μέγεθος αρχείων! Το ανέβασμα του αρχείου δεν πραγματοποιήθηκε.";
 $dropbox_lang['uploadFile'] = "Ανέβασμα αρχείου";
 $dropbox_lang['authors'] = "Αποστολέας";
-$dropbox_lang['sendTo'] = "Αποστολή στον/στην";
+$dropbox_lang['sendTo'] = "Αποστολή στους";
 $dropbox_lang['receivedTitle'] = "Εισερχόμενα";
 $dropbox_lang['sentTitle'] = "Εξερχόμενα";
 $dropbox_lang['confirmDelete1'] = "Σημείωση: Το αρχείο ";
@@ -1149,6 +1149,7 @@ $langDropBoxIncompatible = "Προσοχή! Το υποσύστημα 'Αντα�
     dropbox_file στη βάση του μαθήματος.";
 $langPurgeFile = "Προσοχή! Το αρχείο θα διαγραφεί από όλους τους χρήστες";
 $langOtherDropBoxFiles = "Λοιπές αποστολές";
+$langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 500 χαρακτήρες.";
 /**********************************************************
 * exercise.php
 **********************************************************/
