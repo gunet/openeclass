@@ -1419,7 +1419,7 @@ td.subsection {
 .cmetalabel {
     font-weight: bold;
     float: left;
-    width: 269px;
+    width: 232px;
     border-right: 1px dashed #dfdfdf;
     padding: 4px 0px 4px 0px;
 }
@@ -1427,7 +1427,7 @@ td.subsection {
 .cmetalabelinaccordion {
     font-weight: bold;
     float: left;
-    width: 222px;
+    width: 170px;
     border-right: 1px dashed #dfdfdf;
     padding: 4px 0px 4px 0px;
 }
