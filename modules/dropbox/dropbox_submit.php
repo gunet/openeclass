@@ -202,7 +202,7 @@ if (isset($_POST["submitWork"]))
 	}
 	else
 	{
-		$tool_content .= "<p class=\"caution\">".$errormsg."<br /><br />
+		$tool_content .= "<p class='caution'>".$errormsg."<br /><br />
 		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a><br/>";
 	}
 }

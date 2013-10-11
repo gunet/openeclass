@@ -20,7 +20,7 @@
 
 
 require_once("functions.php");
-$nameTools = $dropbox_lang["dropbox"];
+$nameTools = $langDropBox;
 $basedir = $webDir . 'courses/' . $currentCourseID . '/dropbox';
 $diskUsed = dir_total_space($basedir);
 
@@ -32,7 +32,7 @@ $action->record('MODULE_ID_DROPBOX');
 
 if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 	$nameTools = $langQuotaBar;
-	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $dropbox_lang["dropbox"]);
+	$navigation[]= array ("url"=>"$_SERVER[SCRIPT_NAME]?course=$code_cours", "name"=> $langDropBox);
 	$tool_content .= showquota($diskQuotaDropbox, $diskUsed);
 	draw($tool_content, 2);
 	exit;
@@ -90,7 +90,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	/*
 	*  if current user is a teacher then show all users of current course
 	*/
-	if ($dropbox_person -> isCourseAdmin or $dropbox_cnf["allowStudentToStudent"])  // RH: also if option is set
+	if ($dropbox_person -> isCourseAdmin or $dropbox_cnf["allowStudentToStudent"])
 	{
 		// select all users except yourself
 		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
@@ -124,7 +124,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	$tool_content .= "</select></td></tr>
 	<tr>
 	  <th>&nbsp;</th>
-	  <td class='left'><input type='submit' name='submitWork' value='".q($dropbox_lang["ok"])."' />&nbsp;
+	  <td class='left'><input type='submit' name='submitWork' value='".q($langSend)."' />&nbsp;
 	  $dropbox_lang[mailtousers]<input type='checkbox' name='mailing' value='1' /></td>
 	</tr>
         </table>
@@ -146,7 +146,7 @@ if (!isset($_GET['mailing'])) {
         $dr_unid = urlencode($dropbox_unid);
         if ($numberDisplayed > 0) {
                 $dr_lang_all = addslashes( $dropbox_lang["all"]);
-                $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall();\">
+                $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmation();\">
                 <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
         }
         $tool_content .= "</p>";
@@ -196,7 +196,7 @@ if (!isset($_GET['mailing'])) {
                         }
                         $tool_content .= "</small></td><td class='center'>";
                         $tool_content .= "
-                            <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation(\"$w->title\");'>
+                            <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."\" onClick='return confirmation();'>
                             <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</td></tr>";
                         $i++;
@@ -217,7 +217,7 @@ $tool_content .= $dropbox_lang["sentTitle"];
 // if the user has sent files then display the icon deleteall
 if ($numSent > 0) {
         $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$code_cours&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
-        onClick=\"return confirmationall();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+        onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
 }
 $tool_content .= "</p>";
 
@@ -275,7 +275,7 @@ if ($numSent == 0) {
 
                 $tool_content .= "
                 <a href=\"dropbox_submit.php?course=$code_cours&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."\"
-                        onClick=\"return confirmation('".js_escape($w->title)."');\">
+                        onClick=\"return confirmation();\">
                         <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                 $tool_content .= "</div></td></tr>";
 

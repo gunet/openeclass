@@ -29,30 +29,22 @@ include "../../include/lib/fileDisplayLib.inc.php";
 
 // javascript functions
 $head_content ='<script type="text/javascript">
-                function confirmation (name) {
-                if (confirm("'.$dropbox_lang['confirmDelete1'].'" + name + "'.$dropbox_lang['confirmDelete2'].'" )) {
+                function confirmation () {
+                if (confirm("'.$langConfirmDelete.'")) {
                         return true;
                 } else {
                         return false;
                 }
                 return true;
                 }
-
-                function confirmationall () {
-                if (confirm("'.$dropbox_lang['all'].'" )) {
-                        return true;
-                } else {
-                        return false;
-                }
-                return true;
-                }
-			function confirmationpurge () {
-                        if (confirm("'.$langPurgeFile.'" )) {
-                                return true;
-                        } else {
-                                return false;
-                        }
-                        return true;
+                
+                function confirmationpurge () {
+                    if (confirm("'.$langPurgeFile.'" )) {
+                            return true;
+                    } else {
+                            return false;
+                    }
+                    return true;
                 }
 		function checkForm (frm) {
                 if (frm.elements["recipients[]"].selectedIndex < 0) {
