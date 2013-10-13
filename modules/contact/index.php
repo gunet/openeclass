@@ -19,9 +19,9 @@
  * ======================================================================== */
 
 
-if (isset($_REQUEST['from_reg'])) {
-	$from_reg = $_REQUEST['from_reg'];
-	$cours_id = $_REQUEST['cours_id'];
+if (isset($_REQUEST['from_reg']) and isset($_REQUEST['cours_id'])) {
+	$from_reg = true;
+	$cours_id = intval($_REQUEST['cours_id']);
 }
 
 if (isset($from_reg)) {
@@ -77,7 +77,7 @@ function form()
 
 	if (isset($from_reg)) {
 		$message = $langInfoAboutRegistration;
-		$hidden = "<input type='hidden' name='from_reg' value='$from_reg'>
+		$hidden = "<input type='hidden' name='from_reg' value='true'>
 			<input type='hidden' name='cours_id' value='$cours_id'>";
 	} else {
 		$message = $langContactMessage;
@@ -120,7 +120,7 @@ function email_profs($cours_id, $content, $from_name, $from_address)
 	$profs = db_query("SELECT user.email AS email, user.nom AS nom,
 		user.prenom AS prenom
 		FROM cours_user JOIN user ON user.user_id = cours_user.user_id
-		WHERE cours_id = $cours_id AND cours_user.statut=1");
+		WHERE cours_id = $cours_id AND cours_user.statut = 1");
 
 	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
