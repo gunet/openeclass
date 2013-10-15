@@ -56,14 +56,15 @@ class CourseXMLElement extends SimpleXMLElement {
      * 
      * @global string $code_cours
      * @global string $langSubmit
-     * @param  array  $data        - array containing data to preload the form with
+     * @global string $langRequiredFields
+     * @param  array  $data - array containing data to preload the form with
      * @return string
      */
     public function asForm($data = null) {
         global $code_cours, $langSubmit, $langRequiredFields;
         $out = "<div class='right smaller'>$langRequiredFields</div>";
         $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>
-                 <div id='tabs'>
+                 <div id='tabs' style='padding-bottom: 10px;'>
                     <ul>
                        <li><a href='#tabs-1'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
                        <li><a href='#tabs-2'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
@@ -83,6 +84,29 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Returns an HTML Div for viewing the XML.
+     * 
+     * @param  array  $data        - array containing data to preload the form with
+     * @return string
+     */
+    public function asDiv($data = null) {     
+        $out  = "<div class='tabs' style='padding-bottom: 10px;'>
+                    <ul>
+                       <li><a href='#tabs-1'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
+                       <li><a href='#tabs-2'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
+                       <li><a href='#tabs-3'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
+                       <li><a href='#tabs-4'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
+                    </ul>
+                 <div id='tabs-1'>";
+        if ($data != null)
+            $this->populate($data);
+        $out .= $this->populateDiv();
+        $out .= "</div>
+                 </div>";
+        return $out;
+    }
+    
+    /**
      * Recursively populate the HTML Form.
      * 
      * @param  string $parentKey
@@ -98,6 +122,26 @@ class CourseXMLElement extends SimpleXMLElement {
         $out = "";
         foreach ($children as $ele)
             $out .= $ele->populateForm($fullKey);
+        
+        return $out;
+    }
+    
+    /**
+     * Recursively populate the HTML Div.
+     * 
+     * @param  string $parentKey
+     * @return string
+     */
+    private function populateDiv($parentKey = '') {
+        $fullKey = $this->mendFullKey($parentKey);
+        
+        $children = $this->children();
+        if (count($children) == 0)
+            return $this->appendLeafDivElement($fullKey);
+        
+        $out = "";
+        foreach ($children as $ele)
+            $out .= $ele->populateDiv($fullKey);
         
         return $out;
     }
@@ -197,7 +241,8 @@ class CourseXMLElement extends SimpleXMLElement {
                 $html .= "<img src='data:". q($mime) .";base64,". q($value) ."'/>
                           <input type='hidden' name='". q($fullKey) ."' value='". q($value) ."'>
                           <input type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'>
-                          </td></tr><tr><td>";
+                          </span></div>
+                          <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
             }
             $html .= "<input type='file' size='30' name='". q($fullKey) ."'>". $fieldEnd;
             return $html;
@@ -205,6 +250,105 @@ class CourseXMLElement extends SimpleXMLElement {
         
         // all others get a typical input type box
         return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly>". $fieldEnd;
+    }
+    
+    /**
+     * Populate a single simple HTML Div Element (leaf).
+     * 
+     * @global string $currentCourseLanguage
+     * @param  string $fullKey
+     * @return string
+     */
+    private function appendLeafDivElement($fullKey) {
+        global $currentCourseLanguage;
+        
+        // init vars
+        $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
+        $fullKeyNoLang = $fullKey;
+        $sameAsCourseLang = false;
+        $lang = '';
+        if ($this->getAttribute('lang')) {
+            $fullKey .= '_' . $this->getAttribute('lang');
+            $lang = ' (' . $GLOBALS['langCMeta'][(string)$this->getAttribute('lang')] .')';
+            if ($this->getAttribute('lang') == langname_to_code($currentCourseLanguage))
+                $sameAsCourseLang = true;
+        }
+        
+        // proper divs initializations
+        $fieldStart = "";
+        if (in_array($fullKey, self::$breakAccordionStartFields))
+            $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
+        $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
+        $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield'>";
+        
+        $fieldEnd = "</span></div>";
+        if (in_array($fullKey, self::$breakAccordionEndFields))
+            $fieldEnd .= "</div></div>";
+        if (array_key_exists($fullKey, self::$breakFields))
+            $fieldEnd .= "</div><div id='tabs-". self::$breakFields[$fullKey] ."'>";
+        
+        // hidden/auto-generated fields
+        if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
+            return;
+        
+        // fields hidden from anonymous users
+        if ( (!isset($GLOBALS['code_cours']) || $_SESSION['status'][$GLOBALS['code_cours']] == 0) 
+            && in_array($fullKeyNoLang, self::$hiddenFromAnonymousFields) )
+            return;
+        
+        // print nothing for empty and non-breaking-necessary fields
+        if ( !in_array($fullKey, self::$breakAccordionStartFields) &&
+             !in_array($fullKey, self::$breakAccordionEndFields) &&
+             !array_key_exists($fullKey, self::$breakFields) &&
+             strlen((string) $this) <= 0 )
+            return;
+        
+        // boolean fields
+        if (in_array($fullKeyNoLang, self::$booleanFields)) {
+            $value = (string) $this;
+            if (empty($value))
+                $value = 'false';
+            $valueOut = $GLOBALS['langCMeta'][$value];
+            return $fieldStart . $valueOut . $fieldEnd;
+        }
+        
+        // enumeration and multiple enumeration fields
+        if (in_array($fullKeyNoLang, self::$enumerationFields)) {
+            $valArr = self::getEnumerationValues($fullKey);
+            return $fieldStart . $valArr[(string) $this] . $fieldEnd;
+        }
+        
+        // multiple enumeration fiels
+        if (in_array($fullKeyNoLang, self::$multiEnumerationFields)) {
+            $valueOut = '';
+            $valArr = self::getEnumerationValues($fullKey);
+            $i = 1;
+            foreach (explode(',', (string) $this) as $value) {
+                if ($i > 1)
+                    $valueOut .= ', ';
+                $valueOut .= $valArr[$value];
+                $i++;
+            }
+            return $fieldStart . $valueOut . $fieldEnd;
+        }
+        
+        // binary (file-upload) fields
+        if (in_array($fullKeyNoLang, self::$binaryFields)) {
+            $html = $fieldStart;
+            $value = (string) $this;
+            if (!empty($value)) { // image already exists
+                $mime = (string) $this->getAttribute('mime');
+                $html .= "<img src='data:". q($mime) .";base64,". q($value) ."'/>";
+            }
+            $html .= $fieldEnd;
+            return $html;
+        }
+        
+        if($fullKey == 'course_language')
+            return $fieldStart . $GLOBALS['native_language_names_init'][((string) $this)] . $fieldEnd;
+        
+        // all others get a typical printout
+        return $fieldStart . q((string) $this) . $fieldEnd;
     }
     
     /**
@@ -606,6 +750,14 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
         'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
         'course_lastLevelConfirmation'
+    );
+    
+    /**
+     * Fields that should be hidden from anonymous users.
+     * @var array
+     */
+    public static $hiddenFromAnonymousFields = array(
+        'course_credits', 'course_structure', 'course_assessmentMethod', 'course_assignments'
     );
     
     /**

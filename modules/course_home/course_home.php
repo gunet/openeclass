@@ -304,10 +304,13 @@ $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 // display opencourses level in bar
 require_once '../../modules/course_metadata/CourseXML.php';
 $level = CourseXMLElement::getLevel($cours_id, $code_cours);
+$opencourses_level = '';
 if (isset($level) && !empty($level)) {
+    $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $code_cours;
     $opencourses_level = "<table class='tbl_courseid' width='200'>
         <tr class='title1'>
-          <td class='title1'>$langOpenCoursesLevel:</td><td style='text-align: right;'>$level&nbsp;&nbsp;</td>
+            <td class='title1'><a href='$metadataUrl'>$langOpenCoursesLevel:</a></td>
+            <td style='text-align: right;'><a href='$metadataUrl'>$level</a>&nbsp;&nbsp;</td>
         </tr>
         </table>
         <br/>";
