@@ -136,7 +136,8 @@ if ($is_editor) {
         }
 
         if (isset($_GET['delete'])) {
-                $q = db_query("DELETE FROM glossary WHERE id = '$_GET[delete]' AND course_id = $cours_id");
+                $del_id = intval($_GET['delete']);
+                $q = db_query("DELETE FROM glossary WHERE id = $del_id AND course_id = $cours_id");
                 invalidate_glossary_cache();
                 if ($q and mysql_affected_rows()) {
                         $tool_content .= "<div class='success'>$langGlossaryDeleted</div><br />";    
