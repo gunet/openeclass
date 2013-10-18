@@ -38,10 +38,10 @@ $nameTools = $m['grades'];
 mysql_select_db($currentCourseID);
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
-		$assign = get_assignment_details($_GET['assignment']);
-		$navigation[] = array("url"=>"work.php?course=$code_cours&amp;id=$_GET[assignment]", "name"=>$langWorks);
-		$navigation[] = array("url"=>"work.php?course=$code_cours", "name"=>$assign['title']);
-		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
+		$assign = get_assignment_details(intval($_GET['assignment']));
+		$navigation[] = array('url' => "work.php?course=$code_cours&amp;id=$_GET[assignment]", 'name' => $langWorks);
+		$navigation[] = array('url' => "work.php?course=$code_cours", "name"=>$assign['title']);
+		show_edit_form(intval($_GET['assignment']), intval($_GET['submission']), $assign);
 		draw($tool_content, 2);
 } else {
 		header('Location: work.php?course='.$code_cours);
@@ -109,4 +109,4 @@ function show_edit_form($id, $sid, $assign)
 		$tool_content .= "<p class='caution'>error - no such submission with id $sid</p>\n";
 	}
 }
-?>
+

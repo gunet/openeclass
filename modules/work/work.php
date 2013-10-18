@@ -130,11 +130,12 @@ $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$code_cours", 'name' =
 if ($is_editor) {
         $email_notify = isset($_POST['email']) and $_POST['email'];
 	if (isset($_POST['grade_comments'])) {
-		$work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = $_POST[assignment]", $currentCourseID);
+		$work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = " .
+                                                        intval($_POST['assignment']), $currentCourseID);
 		$nameTools = $work_title;
 		$nameTools = $langWorks;
 		$navigation[] = $works_url;
-                submit_grade_comments($_POST['assignment'], $_POST['submission'],
+                submit_grade_comments(intval($_POST['assignment']), intval($_POST['submission']),
                                       $_POST['grade'], $_POST['comments'], $email_notify);
 	} elseif (isset($_GET['add'])) {
 		$nameTools = $langNewAssign;
@@ -148,7 +149,7 @@ if ($is_editor) {
                 }
 		show_assignments();
         } elseif (isset($_GET['as_id'])) {
-                $as_id = $_GET['as_id'];
+                $as_id = intval($_GET['as_id']);
                 delete_user_assignment($as_id);
         } elseif (isset($_POST['grades'])) {
 		$nameTools = $langWorks;
@@ -248,7 +249,7 @@ function show_submission($sid)
         $nameTools = $langWorks;
         $navigation[] = $works_url;
 
-        if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
+        if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = $sid"))) {
 
                 $tool_content .= "<p>$langSubmissionDescr".
                                  q(uid_to_name($sub['uid'])).
