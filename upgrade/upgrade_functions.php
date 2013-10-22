@@ -321,6 +321,7 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
+        upgrade_course_2_8($code, $lang);
         upgrade_course_3_0($code);
 }
 
@@ -1084,6 +1085,33 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
+}
+
+
+function upgrade_course_2_8($code, $lang, $extramessage = '') {
+
+        global $langUpgCourse, $global_messages;
+
+	mysql_select_db($code);
+	echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
+	flush();                
+        
+        mysql_field_exists(null, 'exercices', 'public') or
+           db_query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
+        mysql_field_exists(null, 'video', 'visible') or
+            db_query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
+        mysql_field_exists(null, 'video', 'public') or
+            db_query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        mysql_field_exists(null, 'videolinks', 'visible') or
+            db_query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");        
+        mysql_field_exists(null, 'videolinks', 'public') or
+            db_query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
+        if (mysql_index_exists('dropbox_file', 'UN_filename')) {
+            db_query("ALTER TABLE dropbox_file DROP index UN_filename");
+        }
+        db_query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
+        db_query("UPDATE accueil SET rubrique = " .quote($global_messages['langDropBox'][$lang]) . "
+                                    WHERE id = 16 AND define_var = 'MODULE_ID_DROPBOX'");
 }
 
 function upgrade_course_2_5($code, $lang, $extramessage = '') {

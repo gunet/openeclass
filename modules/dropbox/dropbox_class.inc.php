@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,30 +21,6 @@
 /**
  * Classes for the dropbox module.
  *
- * 3 classes are defined:
- * - Dropbox_Work:
- * 		. id
- * 		. uploaderId	=> who sent it		// RH: Mailing: or mailing pseudo_id
- * 		. uploaderName
- * 		. filename		=> name of file stored on the server
- * 		. filesize							// RH: Mailing: zero for sent zip
- * 		. title			=> name of file returned to user. This is the original name of the file
- * 		except when the original name contained spaces. In that case the spaces
- * 		will be replaced by _
- * 		. description
- * 		. uploaddate	=> date when file was first sent
- * 		. lastUploadDate=> date when file was last sent
- *  	. isOldWork 	=> has the work already been uploaded before
- *
- * - Dropbox_SentWork extends Dropbox_Work
- * 		. recipients	=> array of ["id"]["name"] lists the recipients of the work
- * - Dropbox_Person:
- * 		. userId
- * 		. receivedWork 	=> array of Dropbox_Work objects
- * 		. sentWork 		=> array of Dropbox_SentWork objects 
- * 		. _orderBy		=>private property used for determining the field by which the works have
- * to be ordered
- *
  **/
 require_once 'include/log.php';
 require_once 'functions.php';
@@ -61,7 +37,7 @@ class Dropbox_Work {
 	var $lastUploadDate;
 	var $isOldWork;
 
-	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg5=null, $arg6=null) {
+        function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg5=null, $arg6=null) {
 		/*
 		* Constructor calls private functions to create a new work or retreive an existing work from DB
 		* depending on the number of parameters
@@ -78,7 +54,7 @@ class Dropbox_Work {
         */
 	private function createNewWork ($uploaderId, $title, $description, $filename, $filesize) {
 		
-		global $course_id;		
+		global $course_id, $thisisJustMessage;		
 		/*
 		* Fill in the properties
 		*/
@@ -95,19 +71,20 @@ class Dropbox_Work {
 		* with updated information (description, uploadDate)
 		*/
 		$this->isOldWork = FALSE;
-		if ($GLOBALS['language'] == 'el') {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
-				FROM dropbox_file
-				WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
-		} else {
-			$sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
-				FROM dropbox_file
-				WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
-		}
-		$result = db_query($sql);
-		$res = mysql_fetch_array($result);
-		if ($res != FALSE) $this->isOldWork = TRUE;
-
+                if (!$thisisJustMessage) {
+                        if ($GLOBALS['language'] == 'el') {
+                                $sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
+                                        FROM dropbox_file
+                                        WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
+                        } else {
+                                $sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
+                                        FROM dropbox_file
+                                        WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
+                        }                
+                        $result = db_query($sql);
+                        $res = mysql_fetch_array($result);
+                        if ($res != FALSE) $this->isOldWork = TRUE;
+                }
 		/*
 		* insert or update the dropbox_file table and set the id property
 		*/
@@ -148,9 +125,8 @@ class Dropbox_Work {
 		* insert entries into person table
 		*/
 		$sql="INSERT INTO dropbox_person(fileId, personId)
-			VALUES ($this->id, $this->uploaderId)";
-                
-                $result = db_query($sql);	//if work already exists no error is generated
+			VALUES ($this->id, $this->uploaderId)";                
+                $result = db_query($sql);
 	}
 
         /*
@@ -209,9 +185,9 @@ class Dropbox_SentWork extends Dropbox_Work {
         * Constructor calls private functions to create a new work or retreive an existing work from DB
         * depending on the number of parameters
         */
-	public function Dropbox_SentWork ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
+	public function Dropbox_SentWork ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
 		if (func_num_args() > 1) {
-                        $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
+                        $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
 		} else {
 			$this->createExistingSentWork($arg1);
 		}

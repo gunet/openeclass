@@ -441,7 +441,7 @@ db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) DEFAULT '',
-                `description` VARCHAR(250) DEFAULT '',                
+                `description` VARCHAR(500) DEFAULT '',                
                 `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
 
