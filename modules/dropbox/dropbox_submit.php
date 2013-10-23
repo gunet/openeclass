@@ -38,41 +38,6 @@ $d = mysql_fetch_array(db_query("SELECT dropbox_quota FROM course WHERE code = '
 $diskQuotaDropbox = $d['dropbox_quota'];
 $nameTools = $langDropBox;
 
-/**
- * ========================================
- * PREVENT RESUBMITING
- * ========================================
- * This part checks if the $dropbox_unid var has the same ID
- * as the session var $dropbox_uniqueid that was registered as a session
- * var before.
- * The resubmit prevention only works with GET requests, because it gives some annoying
- * behaviours with POST requests.
- */
-
-if (isset($_POST['dropbox_unid'])) {
-	$dropbox_unid = $_POST['dropbox_unid'];
-} elseif (isset($_GET['dropbox_unid']))
-{
-	$dropbox_unid = $_GET['dropbox_unid'];
-} else {
-	header("Location: $urlServer");
-}
-
-if (isset($_SESSION["dropbox_uniqueid"]) && isset($_GET["dropbox_unid"]) && $dropbox_unid == $_SESSION["dropbox_uniqueid"]) {
-
-	if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"]=="on") {
-		$mypath = "https";
-	} else {
-		$mypath = "http";
-	}
-	$mypath=$mypath."://".$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME'])."/index.php?course=$course_code";
-
-	header("Location: $mypath");
-}
-
-$dropbox_uniqueid = $dropbox_unid;
-$_SESSION['dropbox_uniqueid'] = $dropbox_uniqueid;
-
 require_once("dropbox_class.inc.php");
 
 /*

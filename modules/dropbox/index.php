@@ -110,8 +110,7 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 }
 
 $dropbox_person = new Dropbox_Person($uid);
-$dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
-                                                //page request. This is to prevent resubmiting data
+
 /*
  * ========================================
  * FORM UPLOAD FILE
@@ -139,8 +138,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
             </tr>";
 	$tool_content .= "<tr>
 	  <th width='120'>$langFileName:</th>
-	  <td><input type='file' name='file' size='35' />
-	      <input type='hidden' name='dropbox_unid' value='$dropbox_unid' />
+	  <td><input type='file' name='file' size='35' />	     
 	  </td>
 	</tr>
 	<tr>
@@ -202,10 +200,9 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 if (!isset($_GET['mailing'])) {
         $numberDisplayed = count($dropbox_person -> receivedWork);
         $tool_content .= "<p class='sub_title1'>$langReceivedFiles";
-        // check if there are received documents. If yes then display the icon deleteall
-        $dr_unid = urlencode($dropbox_unid);
+        // check if there are received documents. If yes then display the icon deleteall       
         if ($numberDisplayed > 0) {                
-                $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=all' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
         }
         $tool_content .= "</p>";
 
@@ -254,7 +251,7 @@ if (!isset($_GET['mailing'])) {
                                 $tool_content .= " (".$langlastUpdated." $w->lastUploadDate)";
                         }
                         $tool_content .= "</small></td><td class='center'>";
-                        $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid)."' onClick='return confirmation();'>
+                        $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteReceived=".urlencode($w->id)."' onClick='return confirmation();'>
                                         <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</td></tr>";
                         $i++;
@@ -274,8 +271,7 @@ $tool_content .= "<br /><p class='sub_title1'>";
 $tool_content .= $langSentFiles;
 // if the user has sent files then display the icon delete all
 if ($numSent > 0) {
-        $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=all&amp;dropbox_unid=".urlencode($dropbox_unid)."'
-        onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+        $tool_content .= "&nbsp;<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=all' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
 }
 $tool_content .= "</p>";
 
@@ -329,9 +325,7 @@ if ($numSent == 0) {
                                 <td class='center'><small>$w->uploadDate</small></td>
                                 <td class='center'>
                                 <div class='cellpos'>";                
-                $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."'
-                        onClick=\"return confirmation();\">
-                        <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;deleteSent=".urlencode($w->id)."' onClick=\"return confirmation();\"><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                 $tool_content .= "</div></td></tr>";
 
                 // RH: Mailing: clickable images for examine and send
@@ -396,10 +390,7 @@ if ($is_editor) {
                                         <td class='center'><small>$w->uploadDate</small></td>
                                         <td class='center'>
                                         <div class='cellpos'>";                
-                        $tool_content .= "
-                        <a href='dropbox_submit.php?course=$course_code&amp;AdminDeleteSent=".urlencode($w->id)."&amp;dropbox_unid=".urlencode($dropbox_unid) ."'
-                                onClick='return confirmationpurge();'>
-                                <img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
+                        $tool_content .= "<a href='dropbox_submit.php?course=$course_code&amp;AdminDeleteSent=".urlencode($w->id)."' onClick='return confirmationpurge();'><img src='$themeimg/delete.png' title='".q($langDelete)."' /></a>";
                         $tool_content .= "</div></td></tr>";
                         if ($w -> uploadDate != $w->lastUploadDate) {
                                 $tool_content .= "<tr><td colspan='2'>

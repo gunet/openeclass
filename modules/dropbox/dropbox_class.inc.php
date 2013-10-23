@@ -422,14 +422,15 @@ class Dropbox_Person {
                 db_query("DELETE FROM dropbox_post WHERE fileId = $id");
                 db_query("DELETE FROM dropbox_person WHERE fileId = $id");
                 
-                $filename = db_query_get_single_value("SELECT filename FROM dropbox_file WHERE id = $id");
-                $title = db_query_get_single_value("SELECT title from dropbox_file WHERE id = $id");
+                $data = db_query_get_single_row("SELECT filename, filesize, title FROM dropbox_file 
+                                                    WHERE id = $id AND course_id = $course_id");
                 db_query("DELETE FROM dropbox_file WHERE id = $id");
                                 
                 Log::record($course_id, MODULE_ID_DROPBOX, LOG_DELETE, 
-                        array('title' => $title));
-                
-                //delete file
-                unlink($dropbox_dir . "/" . $filename);
+                        array('title' => $data['title']));
+                if (($data['filename'] != '') and ($data['filesize'] != 0)) {                                
+                        //delete file
+                        unlink($dropbox_dir . "/" . $data['filename']);
+                }
         }
 }
