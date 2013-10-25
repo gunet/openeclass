@@ -3,3 +3,4 @@ syntax: regexp
 ^video/
 ^config/.*\.php
 ^html/
+^nbproject/private/
