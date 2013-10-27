@@ -147,10 +147,11 @@ if (isset($_POST['delete'])) {
 
 if (isset($_POST['submit'])) {
         // Add external link        
-        $link = isset($_POST['link'])?$_POST['link']:'';
-        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
-        if ((trim($link) == 'http://') or (trim($link) == 'ftp://')
-                        or empty($link) or empty($name_link))  {
+        $link = isset($_POST['link'])? trim($_POST['link']): '';
+        $name_link = isset($_POST['name_link'])? trim($_POST['name_link']): '';
+        if (($link == 'http://') or empty($link) or empty($name_link) or
+            !filter_var($link, FILTER_VALIDATE_URL) or
+            preg_match('/^javascript/i', $link))  {
                 $tool_content .= "<p class='caution'>$langInvalidLink<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;action=true'>$langHome</a></p><br />";
                 draw($tool_content, 2, null, $head_content);
                 exit();
