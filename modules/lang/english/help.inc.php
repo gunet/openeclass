@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-01-16 14:29:25
+// Generated 2013-10-27 15:50:56
 
 $langCourseAccessHelp = "
 <ul>
@@ -173,7 +173,7 @@ Click on 'Create Questionnaire' in order to complete the creation procedure.</br
 <p><img src='$themeimg/warning.png' width=18 height=18> <b>Warning</b>: If within an active questionnaire, at least one question has been answered by a student, then the procedure of correction of this questionnaire is accomplished through the creation of a 'new' questionnaire (the corrected one). This automatic procedure reassures the questionnaire results reliability.</p>
 </p>
 <hr>
-<p><b>Other actions</b><br>
+<p><b>Available actions</b><br>
 <ul>
   <li>Questionnaire modification. Click on the (<img src='$themeimg/edit.png' width=16 height=16>) button in order to modify the contents of a questionnaire.</li>
   <li>Questionnaire deletion. Click on the (<img src='$themeimg/delete.png' width=16 height=16>) button in order to delete a questionnaire.</li>
@@ -519,7 +519,7 @@ $langWiki_studentContent = "The Wiki module is a new collaboration tool that all
 <p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis.</p>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnitscontent = "Add course unit content";
+$langHAddCourseUnitscontent = "Add unit content";
 $langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
 $langHGlossary = "Glossary";
 $langHGlossary_student = $langHGlossary;
@@ -614,7 +614,7 @@ Click on icon <strong>Delete</strong> to <strong>delete</strong> an E-Book.</p>
 For accomplishing this, click on the course unit you want to link and from the available tools select <strong>'Add e-book'</strong>.
 From the displaying form select the desired E-Book section.
 After that click on <strong>'Add selection'</strong>.</p>";
-$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
+$langEBook_studentContent = "<p>'eBook' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
 <p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
 $langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
 You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
