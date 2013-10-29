@@ -165,7 +165,7 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
 if (isset($_GET['vis'])) {    
         $new_vis_status = intval($_GET['vis']);
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = $_GET[vid]", $currentCourseID);        
+        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = " . intval($_GET['vid']), $currentCourseID);        
         $action_message = "<p class='success'>$langViMod</p>";
 }
 
@@ -173,7 +173,7 @@ if (isset($_GET['vis'])) {
 if (isset($_GET['public']) or isset($_GET['limited'])) {
         $new_public_status = intval(isset($_GET['public']))? 1: 0;        
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET public = $new_public_status WHERE id = $_GET[vid]", $currentCourseID);
+        db_query("UPDATE $table SET public = $new_public_status WHERE id = " . intval($_GET['vid']), $currentCourseID);
         $action_message = "<p class='success'>$langViMod</p>";
 }
 
@@ -181,7 +181,7 @@ if (isset($_POST['edit_submit'])) { // edit
 	if(isset($_POST['id'])) {
 		$id = intval($_POST['id']);
 		if (isset($_POST['table'])) {
-			$table = q($_POST['table']);
+			$table = select_table($_POST['table']);
 		}
 		if ($table == 'video') {
 			$sql = "UPDATE video SET titre = ".autoquote($_POST['titre']).",
@@ -233,7 +233,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$file_name = $_FILES['userFile']['name'];
 					$tmpfile = $_FILES['userFile']['tmp_name'];
 					// convert php file in phps to protect the platform against malicious codes
-					$file_name = preg_replace("/\.php$/", ".phps", $file_name);
+					$file_name = preg_replace("/\.php.*$/", ".phps", $file_name);
 					// check for dangerous file extensions
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
@@ -244,7 +244,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$file_name = str_replace(" ", "%20", $file_name);
 					$file_name = str_replace("%20", "", $file_name);
 					$file_name = str_replace("\'", "", $file_name);
-					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extension($file_name);
+					$safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
 					$iscopy = copy("$tmpfile", "$updir/$safe_filename");
 					if(!$iscopy) {
 						$tool_content .= "<p class='success'>$langFileNot<br />
@@ -271,15 +271,15 @@ if (isset($_POST['add_submit'])) {  // add
 	}	// end of add
 	if (isset($_GET['delete'])) { // delete
 		$id = intval($_GET['id']);
-		$table = q($_GET['table']);
-		$sql_select="SELECT * FROM $table WHERE id='".mysql_real_escape_string($id)."'";
-		$result = db_query($sql_select,$currentCourseID);
+		$table = select_table($_GET['table']);
+		$sql_select="SELECT * FROM $table WHERE id = " . $id;
+		$result = db_query($sql_select, $currentCourseID);
 		$myrow = mysql_fetch_array($result);
 		if($table == "video") {
 			unlink("$webDir/video/$currentCourseID/".$myrow['path']);
 		}
-		$sql = "DELETE FROM $table WHERE id='".mysql_real_escape_string($id)."'";
-		$result = db_query($sql,$currentCourseID);
+		$sql = "DELETE FROM $table WHERE id = " . $id;
+		$result = db_query($sql, $currentCourseID);
 		$tool_content .= "<p class='success'>$langDelF</p><br />";
 		$id="";
 	} elseif (isset($_GET['form_input']) && $_GET['form_input'] == 'file') { // display video form
@@ -320,7 +320,7 @@ if (isset($_POST['add_submit'])) {  // add
 		</tr>
 		<tr>
 		  <th>&nbsp;</th>
-		  <td class='right'><input type='submit' name='add_submit' value='".q($dropbox_lang['uploadFile'])."'></td>
+		  <td class='right'><input type='submit' name='add_submit' value='".q($langUpload)."'></td>
 		</tr>
 
 		</table>
@@ -374,10 +374,10 @@ if (isset($_POST['add_submit'])) {  // add
 // ------------------- if no submit -----------------------
 if (isset($_GET['id']) and isset($_GET['table_edit']))  {
 	$id = intval($_GET['id']);
-	$table_edit = q($_GET['table_edit']);
+	$table_edit = select_table($_GET['table_edit']);
 	if ($id) {
 		$sql = "SELECT * FROM $table_edit WHERE id = $id ORDER BY titre";
-		$result = db_query($sql,$currentCourseID);
+		$result = db_query($sql, $currentCourseID);
 		$myrow = mysql_fetch_array($result);
 		$id = $myrow[0];
 		if ($table_edit == 'videolinks') {
@@ -456,14 +456,14 @@ list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
         ? select_proper_filters($_REQUEST['docsfilter']) 
         : array('', '', true);
 
-$count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video $filterv ORDER BY titre",$currentCourseID));
+$count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video $filterv ORDER BY titre", $currentCourseID));
 $count_video_links = mysql_fetch_array(db_query("SELECT COUNT(*) FROM videolinks $filterl
-				ORDER BY titre",$currentCourseID));
+				ORDER BY titre", $currentCourseID));
 
 if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         // print the list if there is no editing
-        $results['video'] = db_query("SELECT * FROM video $filterv ORDER BY titre",$currentCourseID);
-        $results['videolinks'] = db_query("SELECT * FROM videolinks $filterl ORDER BY titre",$currentCourseID);
+        $results['video'] = db_query("SELECT * FROM video $filterv ORDER BY titre", $currentCourseID);
+        $results['videolinks'] = db_query("SELECT * FROM videolinks $filterl ORDER BY titre", $currentCourseID);
         $i = 0;
         $count_video_presented_for_admin = 1;
         $tool_content .= "
@@ -481,7 +481,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
         if (!$is_in_tinymce)
             $tool_content .= "<th width='110'>$langActions</th>";
         $tool_content .= "</tr>";
-        foreach($results as $table => $result)
+        foreach($results as $table => $result) {
                 while ($myrow = mysql_fetch_array($result)) {
                         $myrow['course_id'] = $GLOBALS['cours_id'];
                         switch($table){
@@ -503,7 +503,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow[3]) . "</td>";
                                         $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow[4]) . "</td><td>" . q($myrow[5]) . "</td>" : '';
                                         $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow[6]))) . "</td>";
-                                        $link_to_save = "<a href='".q($myrow[1])."' target='_blank'><img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;&nbsp;";
 					break;
 				default:
 					exit;
@@ -556,7 +556,8 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                         $i++;
                         $count_video_presented_for_admin++;
 		} // while
-		$tool_content.="</table>";
+            } // foreach
+            $tool_content.="</table>";
 	}
 	else
 	{
@@ -603,7 +604,7 @@ else {
                                                 $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow[3]) . "</td>";
                                                 
-                                                $link_to_save = "<a href='".q($myrow[1])."' target='_blank'>
+                                                $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'>
                                                         <img src='$themeimg/links_on.png' alt='".q($langPreview)."' title='".q($langPreview)."'></a>&nbsp;&nbsp;";
 						break;
 					default:
