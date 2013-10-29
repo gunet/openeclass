@@ -138,14 +138,14 @@ if (isset($_GET['showQuota']) and $_GET['showQuota'] == true) {
 if (isset($_GET['vis'])) {    
         $new_vis_status = intval($_GET['vis']);
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = $_GET[vid] AND course_id = $course_id");
+        db_query("UPDATE $table SET visible = $new_vis_status WHERE id = " . intval($_GET['vid']) . " AND course_id = ". $course_id);
         $action_message = "<p class='success'>$langViMod</p>";
 }
 // Public accessibility commands
 if (isset($_GET['public']) or isset($_GET['limited'])) {
         $new_public_status = intval(isset($_GET['public']))? 1: 0;
         $table = select_table($_GET['table']);
-        db_query("UPDATE $table SET public = $new_public_status WHERE id = $_GET[vid] AND course_id = $course_id");
+        db_query("UPDATE $table SET public = $new_public_status WHERE id = " . intval($_GET['vid']) . " AND course_id = " . $course_id);
         $action_message = "<p class='success'>$langViMod</p>";
 }
 
@@ -224,7 +224,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$file_name = $_FILES['userFile']['name'];
 					$tmpfile = $_FILES['userFile']['tmp_name'];
 					// convert php file in phps to protect the platform against malicious codes
-					$file_name = preg_replace("/\.php$/", ".phps", $file_name);
+					$file_name = preg_replace("/\.php.*$/", ".phps", $file_name);
 					// check for dangerous file extensions
 					if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
 						$tool_content .= "<p class='caution'>$langUnwantedFiletype:  $file_name<br />";
@@ -235,7 +235,7 @@ if (isset($_POST['add_submit'])) {  // add
 					$file_name = str_replace(" ", "%20", $file_name);
 					$file_name = str_replace("%20", "", $file_name);
 					$file_name = str_replace("\'", "", $file_name);
-					$safe_filename = date("YmdGis").randomkeys("8").".".get_file_extension($file_name);
+					$safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
 					$iscopy = copy("$tmpfile", "$updir/$safe_filename");
 					if(!$iscopy) {
 						$tool_content .= "<p class='success'>$langFileNot<br />
@@ -326,7 +326,7 @@ if (isset($_POST['add_submit'])) {  // add
                         </tr>
                         <tr>
                         <th>&nbsp;</th>
-                        <td class='right'><input type='submit' name='add_submit' value='$langDownloadFile'></td>
+                        <td class='right'><input type='submit' name='add_submit' value='" . q($langUpload) . "'></td>
                         </tr>
                         </table>
                 </fieldset>
@@ -477,7 +477,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                 $tool_content .= "<th width='110'>$langActions</th>";
         }
         $tool_content .= "</tr>";
-        foreach($results as $table => $result)
+        foreach($results as $table => $result) {
                 while ($myrow = mysql_fetch_array($result)) {
                         switch($table){
 				case 'video':
@@ -498,7 +498,7 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                                         $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
                                         $link_to_add .= (!$is_in_tinymce) ? "<td>" . q($myrow['creator']) . "</td><td>" . q($myrow['publisher']) . "</td>" : '';
                                         $link_to_add .= "<td align='center'>" . nice_format(date('Y-m-d', strtotime($myrow['date']))) . "</td>";
-                                        $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
+                                        $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 					break;
 				default:
 					exit;
@@ -540,7 +540,8 @@ if ($count_video[0]<>0 || $count_video_links[0]<>0) {
                         $i++;
                         $count_video_presented_for_admin++;
 		} // while
-		$tool_content.="</table>";
+            } // foreach
+            $tool_content.="</table>";
 	}
 	else
 	{
@@ -586,7 +587,7 @@ else {
                                                 $vObj = MediaResourceFactory::initFromVideoLink($myrow);
                                                 $link_href = MultimediaHelper::chooseMedialinkAhref($vObj);
                                                 $link_to_add = "<td>". $link_href ."<br/>" . q($myrow['description']) . "</td>";
-                                                $link_to_save = "<a href='".q($myrow['url'])."' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
+                                                $link_to_save = "<a href='" . q($vObj->getPath()) . "' target='_blank'><img src='$themeimg/links_on.png' alt='$langPreview' title='$langPreview'></a>&nbsp;&nbsp;";
 						break;
 					default:
 						exit;

@@ -966,17 +966,21 @@ function user_get_data($user_id)
 }
 
 
-//function pou epistrefei tyxaious xarakthres. to orisma $length kathorizei to megethos tou apistrefomenou xarakthra
-function randomkeys($length)
-{
-        $key = "";
-        $pattern = "1234567890abcdefghijklmnopqrstuvwxyz";
-        for($i=0;$i<$length;$i++)
-        {
-                $key .= $pattern{rand(0,35)};
-        }
-        return $key;
-
+/**
+ * Function for generating fixed-length strings containing random characters.
+ * 
+ * @param int $length
+ * @return string
+ */
+function randomkeys($length) {
+    $key = "";
+    $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+    $codeAlphabet.= "0123456789";
+    for ($i = 0; $i < $length; $i++) {
+        $key .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet))];
+    }
+    return $key;
 }
 
 // A helper function, when passed a number representing KB,
@@ -2657,4 +2661,30 @@ function getOnlineUsers() {
         }
         @closedir($directory_handle);
         return $count;
+}
+
+/**
+ * Drop in replacement for rand() or mt_rand().
+ * 
+ * @param int $min
+ * @param int $max
+ * @return int
+ */
+function crypto_rand_secure($min, $max) {
+    if (function_exists('openssl_random_pseudo_bytes')) {
+        $range = $max - $min;
+        if ($range < 0)
+            return $min; // not so random...
+        $log = log($range, 2);
+        $bytes = (int) ($log / 8) + 1; // length in bytes
+        $bits = (int) $log + 1; // length in bits
+        $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+        do {
+            $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
+            $rnd = $rnd & $filter; // discard irrelevant bits
+        } while ($rnd >= $range);
+        return $min + $rnd;
+    } else {
+        return mt_rand($min, $max);
+    }
 }

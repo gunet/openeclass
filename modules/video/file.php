@@ -22,8 +22,15 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
 
-if ( !isset($_GET['course']) || !isset($_GET['id']) )
+if ( !isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token'])) ) {
     header("Location: ${urlServer}");
+    exit();
+}
+
+if (strpos($_GET['course'], '..') !== false) {
+    header("Location: ${urlServer}");
+    exit();
+}
 
 // locate course id
 $course_id = null;
@@ -38,8 +45,10 @@ if ($course_id != null && $uid) {
     $action->record(MODULE_ID_VIDEO);
 }
 
-if ($course_id == null)
+if ($course_id == null) {
     header("Location: ${urlServer}");
+    exit();
+}
 
 // ----------------------
 // download video
@@ -50,8 +59,10 @@ $res2 = db_query("SELECT *
                     AND id = " . intval($_GET['id']));
 $row2 = mysql_fetch_array($res2);
 
-if (empty($row2))
+if (empty($row2)) {
     header("Location: ${urlServer}");
+    exit();
+}
 
 $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($row2['path'], $_GET['token'], 30);
 if (!$valid) {
