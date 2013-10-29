@@ -96,6 +96,7 @@ if (!file_exists($videoDir)) {
 
 mkdir_or_error('courses/temp');
 mkdir_or_error('courses/userimg');
+touch_or_error($webDir . '/video/index.htm');
 
 // ********************************************
 // upgrade config.php
@@ -590,6 +591,29 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `recipient_id` int(11) NOT NULL,
                         `course_id` int(11) NOT NULL,
                          PRIMARY KEY (`id`)) $charset_spec");
+        }
+        
+        if ($oldversion < '2.8') {
+                db_query("INSERT IGNORE INTO `config`(`key`, `value`) VALUES
+                                        ('course_metadata', 0),
+                                        ('opencourses_enable', 0)");
+                
+                mysql_field_exists($mysqlMainDb, 'document', 'public') or
+                        db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");                
+                mysql_field_exists($mysqlMainDb, 'cours_user', 'reviewer') or
+                        db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
+                        db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
+                
+                // prevent dir list under video storage
+                if ($handle = opendir($webDir . '/video/')) {
+                    while (false !== ($entry = readdir($handle))) {
+                        if (is_dir($webDir . '/video/' . $entry) && $entry != "." && $entry != "..") {
+                            touch_or_error($webDir . '/video/' . $entry . '/index.htm');
+                        }
+                    }
+                    closedir($handle);
+                }
         }
 
         if ($oldversion < '3') {

@@ -2571,6 +2571,13 @@ function mkdir_or_error($dirname)
         }
 }
 
+function touch_or_error($filename) {
+    global $langErrorCreatingDirectory;
+    if (@!touch($filename)) {
+        echo "<p class='caution'>$langErrorCreatingDirectory $filename</p>";
+    }
+}
+
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages()
 {

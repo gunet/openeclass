@@ -404,7 +404,8 @@ if (isset($_POST['create_course'])) {
               mkdir("courses/$code/group", 0775) and
               mkdir("courses/$code/temp", 0775) and
               mkdir("courses/$code/scormPackages", 0775) and
-              mkdir("video/$code", 0775))) {
+              mkdir("video/$code", 0775) and 
+              touch("video/$code/index.htm") )) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;

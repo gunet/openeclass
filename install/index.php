@@ -652,6 +652,7 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	mkdir_or_error('courses/userimg');
         mkdir_or_error('courses/commondocs');
         mkdir_or_error('video');
+        touch_or_error('video/index.htm');
 
 	if($configErrorExists) {
 		$tool_content .= implode("<br />", $errorContent);
@@ -753,3 +754,13 @@ function mkdir_or_error($dirname) {
                         }
                 }
         }
+        
+function touch_or_error($filename) {
+    global $errorContent, $configErrorExists, $langWarningInstall3, 
+                       $langWarnInstallNotice1, $langWarnInstallNotice2,
+                       $install_info_file, $langHere;
+    if (@!touch('../' . $filename)) {
+        $errorContent[] = sprintf("<p class='caution'>$langWarningInstall3 $langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</p>", $filename);
+        $configErrorExists = true;
+    }
+}
