@@ -34,7 +34,7 @@ require_once("functions.php");
 include "../../include/lib/forcedownload.php";
 include "../../include/sendMail.inc.php";
 require_once '../../include/lib/fileUploadLib.inc.php';
-$nameTools = $dropbox_lang["dropbox"];
+$nameTools = $langDropBox;
 
 /**
  * ========================================

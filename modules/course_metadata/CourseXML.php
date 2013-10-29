@@ -531,9 +531,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
         
         // course-based adaptation
-        list($dnum)  = mysql_fetch_row(db_query("select count(id) from document where course_id = " . intval($courseId), $mysqlMainDb));
-        list($vnum)  = mysql_fetch_row(db_query("select count(id) from video", $courseCode));
-        list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks", $courseCode));
+        list($dnum)  = mysql_fetch_row(db_query("select count(id) from `$mysqlMainDb`.document where course_id = " . intval($courseId)));
+        list($vnum)  = mysql_fetch_row(db_query("select count(id) from `$courseCode`.video"));
+        list($vlnum) = mysql_fetch_row(db_query("select count(id) from `$courseCode`.videolinks"));
         if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
@@ -603,7 +603,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $mysqlMainDb, $license;
         $data = array();
     
-        $res1 = db_query("SELECT * FROM cours WHERE cours_id = " . intval($courseId), $mysqlMainDb);
+        $res1 = db_query("SELECT * FROM `$mysqlMainDb`.cours WHERE cours_id = " . intval($courseId));
         $course = mysql_fetch_assoc($res1);
         if (!$course)
             return array();
@@ -619,9 +619,9 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // turn visible units to associative array
         $res2 = db_query("SELECT id, title, comments
-                           FROM course_units
+                           FROM `$mysqlMainDb`.course_units
                           WHERE visibility = 'v'
-                            AND course_id = " . intval($courseId), $mysqlMainDb);
+                            AND course_id = " . intval($courseId));
         $unitsCount = 0;
         while($row = mysql_fetch_assoc($res2)) {
             $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];

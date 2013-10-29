@@ -6,7 +6,7 @@
 body 
 {
 	font-family : 'Times New Roman',times,serif ;
-	font-size :; 
+	/*font-size :; */
 	background-color:white ;
 }
 #header
