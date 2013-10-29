@@ -78,12 +78,9 @@ if (!defined('UTF8')) {
 }
 
 if (!isset($_POST['submit2'])) {
-
-		$newpass = @q($_POST['password']);
-
-        if (!is_admin(@q($_POST['login']), $newpass, $mysqlMainDb)) {
+        if (!is_admin(@q($_POST['login']), @q($_POST['password']), $mysqlMainDb)) {
                 $tool_content .= "<p class='alert1'>$langUpgAdminError</p>
-                        <center><a href=\"index.php\">$langBack</a></center>";
+                        <center><a href='index.php'>$langBack</a></center>";
                 draw($tool_content, 0);
                 exit;
         }
@@ -109,8 +106,7 @@ mkdir_or_error('../courses/userimg');
 if (!@chdir("../config/")) {
      die ("$langConfigError4");
 }
-
-if (!isset($_POST['submit2'])) {
+if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is_admin'] == true) {
         if (ini_get('register_globals')) { // check if register globals is Off
                 $tool_content .= "<div class='caution'>$langWarningInstall1</div>";
         }
@@ -233,7 +229,6 @@ if (!isset($_POST['submit2'])) {
 	echo "<p class='sub_title1'>$langUpgradeBase <b>$mysqlMainDb</b></p>";
 	flush();
         mysql_select_db($mysqlMainDb);
-
 	// Create or upgrade config table
 	if (!mysql_table_exists($mysqlMainDb, 'config')) {
                 db_query("CREATE TABLE `config`
