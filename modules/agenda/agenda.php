@@ -198,7 +198,6 @@ if ($is_editor) {
 		$contenu = standard_text_escape($myrow['contenu']);
 		$hourAncient = $myrow['hour'];
 		$dayAncient = $myrow['day']. ' '.$hourAncient;
-		$lastingAncient = $myrow['lasting'];
 		$start_cal = $jscalendar->make_input_field(
                         array('showsTime' => true,                           
                                'showOthers' => true,
@@ -231,7 +230,7 @@ if ($is_editor) {
 
 	if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 		$nameTools = $langAddEvent;
-		$navigation[] = array ("url" => $_SERVER['SCRIPT_NAME']."?course=$code_cours", "name" => $langAgenda);
+		$navigation[] = array ('url' => $_SERVER['SCRIPT_NAME']."?course=$code_cours", 'name' => $langAgenda);
 		$tool_content .= "
 		<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' onsubmit='return checkrequired(this, \"titre\");'>
 		<input type='hidden' name='id' value='$id' />
@@ -255,7 +254,7 @@ if ($is_editor) {
                   </tr>                  
                   <tr>
                     <th>$langDuration <small> $langInHour</small>:</td>
-                    <td><input type='text' name='lasting' value='".@$myrow['lasting']."' size='2' maxlength='2' /></td>
+                    <td><input type='text' name='lasting' value='".q($myrow['lasting'])."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($contenu)) {
 			$contenu = '';
