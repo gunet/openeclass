@@ -287,7 +287,8 @@ if (!isset($_POST['create_course'])) {
               mkdir("../../courses/$repertoire/group", 0775) and
               mkdir("../../courses/$repertoire/temp", 0775) and
               mkdir("../../courses/$repertoire/scormPackages", 0775) and
-              mkdir("../../video/$repertoire", 0775))) {
+              mkdir("../../video/$repertoire", 0775) and
+              touch("../../video/$repertoire/index.htm") )) {
                 $tool_content .= "<div class='caution'>$langErrorDir</div>";
                 draw($tool_content, 1, null, $head_content);
                 exit;

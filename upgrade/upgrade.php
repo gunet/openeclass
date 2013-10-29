@@ -99,6 +99,7 @@ if (!file_exists('../video')) {
 
 mkdir_or_error('../courses/temp');
 mkdir_or_error('../courses/userimg');
+touch_or_error('../video/index.htm');
 
 // ********************************************
 // upgrade config.php
@@ -619,6 +620,16 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                         db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
                 mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
                         db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
+                
+                // prevent dir list under video storage
+                if ($handle = opendir('../video/')) {
+                    while (false !== ($entry = readdir($handle))) {
+                        if (is_dir('../video/' . $entry) && $entry != "." && $entry != "..") {
+                            touch_or_error('../video/' . $entry . '/index.htm');
+                        }
+                    }
+                    closedir($handle);
+                }
         }
         
         mysql_field_exists($mysqlMainDb, 'annonces', 'preview') or
