@@ -64,8 +64,8 @@ $tinymce_params = '';
 if ($is_in_tinymce) {
 
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-    $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter='. $_REQUEST['docsfilter'] : '';
-    $tinymce_params = '&amp;embedtype=tinymce'. $docsfilter;
+    $tinymce_params = '&amp;embedtype=tinymce' .
+                      isset($_REQUEST['docsfilter'])? ('&amp;docsfilter=' . q($_REQUEST['docsfilter'])): '';
 
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
