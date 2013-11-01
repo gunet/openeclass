@@ -3600,8 +3600,8 @@ $license = array(
     '0' => array('title' => $langCopyrightedNotFree, 'link' => ' ', 'image' => 'copyright'),
     '20' => array('title' => $langCopyrightedFree, 'link' =>  ' ', 'image' => 'no_copyright'),
     '1' => array('title' => $langCreativeCommonsCCBYNC, 'link' => 'http://creativecommons.org/licenses/by-nc/3.0/', 'image' => 'cc/by-nc'),
-    '2' => array('title' => $langCreativeCommonsCCBYNCSA, 'link' => 'http://creativecommons.org/licenses/by-nc/3.0/', 'image' => 'cc/by-nc-sa'),
-    '3' => array('title' => $langCreativeCommonsCCBYNCND, 'link' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/', 'image' => 'cc/by-nc-nd'),
+    '2' => array('title' => $langCreativeCommonsCCBYNCSA, 'link' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/', 'image' => 'cc/by-nc-sa'),
+    '3' => array('title' => $langCreativeCommonsCCBYNCND, 'link' => 'http://creativecommons.org/licenses/by-nc-nd/3.0/', 'image' => 'cc/by-nc-nd'),
     '4' => array('title' => $langCreativeCommonsCCBY, 'link' => 'http://creativecommons.org/licenses/by/3.0/', 'image' => 'cc/by'),
     '5' => array('title' => $langCreativeCommonsCCBYSA, 'link' => 'http://creativecommons.org/licenses/by-sa/3.0/', 'image' => 'cc/by-sa'),
     '6' => array('title' => $langCreativeCommonsCCBYND, 'link' => 'http://creativecommons.org/licenses/by-nd/3.0/', 'image' => 'cc/by-nd')
