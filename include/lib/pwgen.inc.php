@@ -27,9 +27,9 @@
  */
 function genPass() {
     
-    $rand = genPassRandom(rand(2,3));
+    $rand = genPassRandom(crypto_rand_secure(2,3));
     
-    if($flag = rand(0, 1)) {
+    if($flag = crypto_rand_secure(0, 1)) {
         return genPassPronouncable().$rand;
     } else {
         return $rand.genPassPronouncable();
@@ -48,13 +48,12 @@ function genPassPronouncable() {
     $syllables="er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
     
     $syllable_array = explode(",", $syllables);
-    srand((double)microtime() * 1000000);
     
     while(strlen($makepass) < 8) {
-        if (rand() %10 == 1) {
-            $makepass .= sprintf("%0.0f", (rand() % 50) + 1);
+        if (crypto_rand_secure() %10 == 1) {
+            $makepass .= sprintf("%0.0f", (crypto_rand_secure() % 50) + 1);
         } else {
-            $makepass .= sprintf("%s", $syllable_array[rand() % 62]);
+            $makepass .= sprintf("%s", $syllable_array[crypto_rand_secure() % 62]);
         }
     }
     
@@ -70,12 +69,10 @@ function genPassRandom($length = 8)    {
     
     $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
 
-    mt_srand((double)microtime() * 1000000);
-
     $pass = "";
 
     for($i = 0; $i < $length; $i++) {
-        $pass .= $allowable_characters[mt_rand(0, strlen($allowable_characters) - 1)];
+        $pass .= $allowable_characters[crypto_rand_secure(0, strlen($allowable_characters) - 1)];
     }
 
     return $pass;
@@ -93,6 +90,6 @@ function create_pass() {
 			'ru', 'bur', 'fur', 'gur', 'kur', 'lur', 'mur',
 			'sy', 'zy', 'gy', 'ky', 'tri', 'kro', 'pra');
 	$max = count($parts) - 1;
-	$num = rand(10,499);
-	return $parts[rand(0,$max)] . $parts[rand(0,$max)] . $num;
+	$num = crypto_rand_secure(10,499);
+	return $parts[crypto_rand_secure(0,$max)] . $parts[crypto_rand_secure(0,$max)] . $num;
 }

@@ -48,8 +48,8 @@ $tool_content .="
 require_once('dropbox_class.inc.php');
 
 $dropbox_person = new Dropbox_Person($uid, $is_editor, $is_editor);
-$dropbox_unid = md5(uniqid(rand(), true));	//this var is used to give a unique value to every
-                                                //page request. This is to prevent resubmiting data
+$dropbox_unid = md5(uniqid(crypto_rand_secure(), true)); //this var is used to give a unique value to every
+                                                         //page request. This is to prevent resubmiting data
 
 /*
  * ========================================
