@@ -290,8 +290,6 @@ class Exercise
 			$draws=$this->random;
 		}
 
-		srand((double)microtime()*1000000);
-
 		$randQuestionList=array();
 		$alreadyChosed=array();
 
@@ -301,7 +299,7 @@ class Exercise
 			// selects a question randomly
 			do
 			{
-				$rand=rand(0,$this->selectNbrQuestions()-1);
+                            $rand = crypto_rand_secure(0, $this->selectNbrQuestions()-1);
 			}
 			// if the question has already been selected, continues in the loop
 			while(in_array($rand,$alreadyChosed));

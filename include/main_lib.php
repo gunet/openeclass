@@ -2666,14 +2666,22 @@ function getOnlineUsers() {
 /**
  * Drop in replacement for rand() or mt_rand().
  * 
- * @param int $min
- * @param int $max
+ * @param int $min [optional]
+ * @param int $max [optional]
  * @return int
  */
-function crypto_rand_secure($min, $max) {
+function crypto_rand_secure($min = null, $max = null) {
+    // default values for optional min/max
+    if ($min === null)
+        $min = 0;
+    if ($max === null)
+        $max = getrandmax ();
+    else
+        $max += 1; // for being inclusive
+
     if (function_exists('openssl_random_pseudo_bytes')) {
         $range = $max - $min;
-        if ($range < 0)
+        if ($range <= 0)
             return $min; // not so random...
         $log = log($range, 2);
         $bytes = (int) ($log / 8) + 1; // length in bytes
@@ -2685,6 +2693,7 @@ function crypto_rand_secure($min, $max) {
         } while ($rnd >= $range);
         return $min + $rnd;
     } else {
+        mt_srand((double)microtime() * 1000000);
         return mt_rand($min, $max);
     }
 }
