@@ -41,13 +41,19 @@ include '../auth/auth.inc.php';
 include '../../include/jscalendar/calendar.php';
 
 if (isset($_REQUEST['u'])) {
-	$u = intval($_REQUEST['u']);
+	$u = intval($_REQUEST['u']);        
+        // security check
+        if (check_admin($u) and (!(isset($_SESSION['is_admin'])))) {            
+                header('Location: ' . $urlServer);
+        }
 	$_SESSION['u_tmp'] = $u;
 }
 
 if (!isset($_REQUEST['u'])) {
 	$u = $_SESSION['u_tmp'];
 }
+
+
 
 $verified_mail = isset($_REQUEST['verified_mail'])?intval($_REQUEST['verified_mail']):2;
 
@@ -61,7 +67,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 $nameTools = $langEditUser;
 
-$u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
+if (isset($_POST['u_submitted'])) {
+        $u_submitted = $_POST['u_submitted'];
+} else {
+        $u_submitted = '';
+}
 
 if ($u)	{
         $extra = '';
@@ -173,11 +183,11 @@ if ($u)	{
                 </tr>";
         }
 
-$tool_content .= "
-   <tr>
-     <th class='left'>e-mail: </th>
-     <td><input type='text' name='email' size='50' value='".q(mb_strtolower(trim($info['email'])))."' /></td>
-   </tr>";
+        $tool_content .= "
+           <tr>
+             <th class='left'>e-mail: </th>
+             <td><input type='text' name='email' size='50' value='".q(mb_strtolower(trim($info['email'])))."' /></td>
+           </tr>";
 
         $tool_content .= "<tr>
        <th>$langEmailVerified: </th>
@@ -203,18 +213,18 @@ $tool_content .= "
                 }
         }
 
-$tool_content .= "
-   <tr>
-     <th class='left'>$langAm: </th>
-     <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
-   </tr>
-   <tr>
-     <th class='left'>$langTel: </th>
-     <td><input type='text' name='phone' size='50' value='".q($info['phone'])."' /></td>
-   </tr>
-   <tr>
-     <th class='left'>$langFaculty:</th>
-   <td>";
+        $tool_content .= "
+           <tr>
+             <th class='left'>$langAm: </th>
+             <td><input type='text' name='am' size='50' value='".q($info['am'])."' /></td>
+           </tr>
+           <tr>
+             <th class='left'>$langTel: </th>
+             <td><input type='text' name='phone' size='50' value='".q($info['phone'])."' /></td>
+           </tr>
+           <tr>
+             <th class='left'>$langFaculty:</th>
+           <td>";
 	if(!empty($info['department'])) {
 		$department_select_box = list_departments(intval($info['department']));
 	} else {
@@ -223,9 +233,9 @@ $tool_content .= "
 
 	$tool_content .= $department_select_box."</td></tr>";
 	$tool_content .= "
-    <tr>
-      <th class='left'>$langProperty:</th>
-      <td>";
+        <tr>
+          <th class='left'>$langProperty:</th>
+          <td>";       
 	if ($info['statut'] == '10') { // if we are guest user do not display selection
 		$tool_content .= selection(array(10 => $langGuest), 'newstatut', intval($info['statut']));
 	} else {

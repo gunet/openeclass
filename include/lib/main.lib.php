@@ -594,10 +594,13 @@ function selection3($entries, $name, $default = '') {
 	return $select_box;
 }
 
-// ------------------------------------------
-// function to check if user is a guest user
-// ------------------------------------------
 
+/**
+ * check if user is a guest user
+ * @global type $mysqlMainDb
+ * @global type $uid
+ * @return boolean
+ */
 function check_guest() {
 	global $mysqlMainDb, $uid;
 	if (isset($uid)) {
@@ -612,10 +615,14 @@ function check_guest() {
 	}
 }
 
-// ------------------------------------------------
-// function to check if user is a course editor
-// ------------------------------------------------
 
+/**
+ * check if user is a course editor
+ * @global type $mysqlMainDb
+ * @global type $uid
+ * @global type $cours_id
+ * @return boolean
+ */
 function check_editor() {
 	
         global $mysqlMainDb, $uid, $cours_id;
@@ -636,6 +643,25 @@ function check_editor() {
 }
 
 /**
+ * check if a user is admin user
+ * @global type $mysqlMainDb
+ * @param type $uid
+ * @return boolean
+ */
+function check_admin($uid) {
+    
+    global $mysqlMainDb;
+  
+    $sql = db_query("SELECT idUser, privilege FROM admin where idUser = ".intval($uid)." AND privilege = 0");
+    if (mysql_num_rows($sql) > 0) {
+            return TRUE;
+    } else {
+            return FALSE;
+    }
+   
+}
+
+/** 
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
@@ -654,18 +680,20 @@ function check_opencourses_reviewer() {
         return FALSE;
 }
 
-// ---------------------------------------------------
-// just make sure that the $uid variable isn't faked
-// --------------------------------------------------
-
+/**
+ * just make sure that the $uid variable isn't faked
+ * @global type $urlServer
+ * @global type $require_valid_uid
+ * @global type $uid
+ */
 function check_uid() {
 
 	global $urlServer, $require_valid_uid, $uid;
 
 	if (isset($_SESSION['uid']))
-	$uid = $_SESSION['uid'];
+            $uid = $_SESSION['uid'];
 	else
-	unset($uid);
+            unset($uid);
 
 	if ($require_valid_uid and !isset($uid)) {
 		header("Location: $urlServer");

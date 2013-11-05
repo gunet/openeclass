@@ -25,46 +25,35 @@ require_once 'admin.inc.php';
 $nameTools = $langUnregUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-// get the incoming values and initialize them
-$u    = isset($_GET['u']) ? intval($_GET['u']) : false;
+$u = isset($_GET['u']) ? intval($_GET['u']) : false;
+if (check_admin($u) and (!(isset($_SESSION['is_admin'])))) {            
+        header('Location: ' . $urlServer);
+}
 $doit = isset($_GET['doit']);
 
 $u_account  = $u ? q(uid_to_username($u)) : '';
 $u_realname = $u ? q(uid_to_name($u))     : '';
-$t = 0;
 
 if (!$doit) {
-
     if ($u_account) {
-
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
             <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em><br/>
             $langConfirmDeleteQuestion3
             </div>
             <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;doit=yes'>$langDelete</a></p>";
-
     } else {
         $tool_content .= "<p>$langErrorDelete</p>";
-    }
-    
+    }    
     $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 
 } else {
-
-    if ($u == 1) {
-        $tool_content .= $langTryDeleteAdmin;
-    } else {
-
         $success = deleteUser($u);
         
-        if ($success === true)
+        if ($success === true) {
             $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
-        else
+        } else {
             $tool_content .= "<p>$langErrorDelete</p>";
-    }
-    
-    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
+        }   
+    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 }
-
-
 draw($tool_content,3);

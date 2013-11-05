@@ -18,23 +18,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * Index
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract Password change component (for platform administrator)
- *
+/**
+ * @file password.php
+ * @brief change user password from admin tool
  */
-$require_login = true;
-$require_admin = TRUE;
-$helpTopic = 'Profile';
-$require_valid_uid = TRUE;
 
+$require_usermanage_user = TRUE;
 require_once '../../include/phpass/PasswordHash.php';
 include '../../include/baseTheme.php';
+
+if (isset($_REQUEST['userid'])) {
+        $userid = intval($_REQUEST['userid']);        
+        if (check_admin($userid) and (!(isset($_SESSION['is_admin'])))) {
+                header('Location: ' . $urlServer);
+        }
+} else {   
+        header('Location: ' . $urlServer);
+}
 
 $nameTools = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -66,50 +66,42 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-check_uid();
-$tool_content = "";
-
 if (!isset($urlSecure)) {
 	$passurl = $urlServer.'modules/admin/password.php';
 } else {
 	$passurl = $urlSecure.'modules/admin/password.php';
 }
 
-if (!isset($_POST['changePass'])) {
-        if (!isset($_GET['userid'])) {
-                header("Location: {$urlServer}modules/admin/");
-                exit;
-        }
+if (!isset($_POST['changePass'])) {        
 	$tool_content .= "
-<form method='post' action='$passurl'>
-<fieldset>
-  <legend>$lang_remind_pass</legend>
-  <input type='hidden' name='userid' value='$_GET[userid]' />
-  <table class='tbl' width='100%'>
-  <tr>
-    <th class='left' width='160'>$langNewPass1:</th>
-    <td><input type='password' size='40' name='password_form' value='' id='password' />&nbsp;<span id='result'></span></td>
-  </tr>
-  <tr>
-    <th class='left'>$langNewPass2:</th>
-    <td><input type='password' size='40' name='password_form1' value='' /></td>
-  </tr>
-  <tr>
-    <th class='left'>&nbsp;</th>
-    <td class='right'><input type='submit' name='changePass' value='".q($langModify)."' /></td>
-  </tr>
-  </table>
-</fieldset>
-</form>";
+        <form method='post' action='$passurl'>
+        <fieldset>
+          <legend>$lang_remind_pass</legend>
+          <input type='hidden' name='userid' value='$_GET[userid]' />
+          <table class='tbl' width='100%'>
+          <tr>
+            <th class='left' width='160'>$langNewPass1:</th>
+            <td><input type='password' size='40' name='password_form' value='' id='password' />&nbsp;<span id='result'></span></td>
+          </tr>
+          <tr>
+            <th class='left'>$langNewPass2:</th>
+            <td><input type='password' size='40' name='password_form1' value='' /></td>
+          </tr>
+          <tr>
+            <th class='left'>&nbsp;</th>
+            <td class='right'><input type='submit' name='changePass' value='".q($langModify)."' /></td>
+          </tr>
+          </table>
+        </fieldset>
+        </form>";
 } else {
-	$userid = intval($_POST['userid']);
 	if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-		$tool_content .= mes($langFieldsMissing, '', 'caution');
+		$tool_content .= mes($langFieldsMissing, 'caution');
 		draw($tool_content, 3);
 		exit();
 	}
 	if ($_POST['password_form1'] !== $_POST['password_form']) {
-		$tool_content .= mes($langPassTwo, '', 'caution_small');
+		$tool_content .= mes($langPassTwo, 'caution');
 		draw($tool_content, 3);
 		exit();
 	}
@@ -118,17 +110,32 @@ if (!isset($_POST['changePass'])) {
 	$new_pass = $hasher->HashPassword($_POST['password_form']);
 	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `user_id` = $userid";
 	db_query($sql, $mysqlMainDb);
-	$tool_content .= mes($langPassChanged, $langHome, 'success');
+        
+	$tool_content .= mes($langPassChanged, 'success');
 	draw($tool_content, 3);
 	exit();
 }
 
 draw($tool_content, 3, null, $head_content);
 
-// display message
-function mes($message, $urlText, $type) {
+
+/**
+ * display message
+ * @global type $urlServer
+ * @global type $langBack
+ * @global type $userid
+ * @param type $message
+ * @param type $type
+ * @return type
+ */
+function mes($message, $type) {
+    
 	global $urlServer, $langBack, $userid;
 
- 	$str = "<p class='$type'>$message</p><br /><p><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
+        if ($type == 'success') {
+            $str = "<p class='$type'>$message</p><br /><p><a href='${urlServer}modules/admin/edituser.php?u=$userid'>$langBack</a></p>";
+        } else {
+            $str = "<p class='$type'>$message</p><br /><p><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
+        }
 	return $str;
 }
