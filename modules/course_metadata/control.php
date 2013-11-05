@@ -41,8 +41,8 @@ $hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_lice
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
 list($numDocs) = mysql_fetch_row(db_query("SELECT count(id) FROM `$mysqlMainDb`.document WHERE course_id = " . intval($cours_id)));
 list($numUnits) = mysql_fetch_row(db_query("SELECT count(id) FROM `$mysqlMainDb`.course_units WHERE course_id = " . intval($cours_id) . " AND `order` >= 1 AND visibility = 'v'"));
-list($numVideo) = mysql_fetch_row(db_query("SELECT count(id) FROM video"));
-list($numVideoLinks) = mysql_fetch_row(db_query("SELECT count(id) FROM videolinks"));
+list($numVideo) = mysql_fetch_row(db_query("SELECT count(id) FROM `$currentCourseID`.video"));
+list($numVideoLinks) = mysql_fetch_row(db_query("SELECT count(id) FROM `$currentCourseID`.videolinks"));
 $numMedia = $numVideo + $numVideoLinks;
 $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xmlData['course_confirmVideolectures'] == 'true');
 
