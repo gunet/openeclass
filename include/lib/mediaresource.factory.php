@@ -51,7 +51,7 @@ class MediaResourceFactory {
         global $urlServer, $code_cours;
         // validate url
         $url = $queryRow['url'];
-        if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', $url) )
+        if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url)) )
             $url = '#';
         return new MediaResource(
                         $queryRow['id'],

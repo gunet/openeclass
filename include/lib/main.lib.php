@@ -2431,7 +2431,7 @@ function copyright_info($cid)
  * Drop in replacement for rand() or mt_rand().
  * 
  * @param int $min [optional]
- * @param int $max (optional]
+ * @param int $max [optional]
  * @return int
  */
 function crypto_rand_secure($min = null, $max = null) {
