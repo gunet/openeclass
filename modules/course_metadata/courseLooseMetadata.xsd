@@ -231,6 +231,11 @@
         <xs:element name="coTeachingColleagueOpensCourse"  type="t_boolean"/>
         <xs:element name="coTeachingAutonomousDepartment"  type="t_boolean"/>
         <xs:element name="coTeachingDepartmentCreditHours" type="t_integer"/>
+        <xs:element name="confirmCurriculum"               type="t_boolean"/>
+        <xs:element name="confirmVideolectures"            type="t_boolean"/>
+        <xs:element name="confirmAMinusLevel"              type="t_boolean"/>
+        <xs:element name="confirmALevel"                   type="t_boolean"/>
+        <xs:element name="confirmAPlusLevel"               type="t_boolean"/>
         <xs:element name="language"                        type="t_string"/>
         <xs:element name="targetGroup"                     type="t_langString"/>
         <xs:element name="credits"                         type="t_integer"/>

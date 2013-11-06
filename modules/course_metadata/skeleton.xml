@@ -59,6 +59,11 @@
     <coTeachingColleagueOpensCourse></coTeachingColleagueOpensCourse>
     <coTeachingAutonomousDepartment></coTeachingAutonomousDepartment>
     <coTeachingDepartmentCreditHours></coTeachingDepartmentCreditHours>
+    <confirmAMinusLevel>false</confirmAMinusLevel>
+    <confirmALevel>false</confirmALevel>
+    <confirmAPlusLevel>false</confirmAPlusLevel>
+    <confirmVideolectures></confirmVideolectures>
+    <confirmCurriculum></confirmCurriculum>
 
         
     <institution lang="el"></institution>
@@ -99,7 +104,6 @@
     <eudoxusCode></eudoxusCode>
     <eudoxusURL></eudoxusURL>
     <kalliposURL></kalliposURL>
-    
     
     <numberOfUnits></numberOfUnits>
     <unit>
