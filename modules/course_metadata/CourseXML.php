@@ -341,9 +341,16 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!isset($data[$mfield]) || empty($data[$mfield]))
                 return false;
             
-        // TODO for units
-        // units no > 0
-        // every unit has title, description, keywords
+        // check mandatory unit fields
+        if (!isset($data['course_numberOfUnits']) || !intval($data['course_numberOfUnits']) > 0)
+            return false;
+        // check each unit title and description
+        for ($i = 0; $i < intval($data['course_numberOfUnits']); $i++) {
+            if (!isset($data['course_unit_title_el'][$i]) || empty($data['course_unit_title_el'][$i]))
+                return false;
+            if (!isset($data['course_unit_description_el'][$i]) || empty($data['course_unit_description_el'][$i]))
+                return false;
+        }
             
         return true;
     }
