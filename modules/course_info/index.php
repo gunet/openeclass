@@ -101,6 +101,13 @@ hContent;
 
 $nameTools = $langModifInfo;
 
+// check if the course is opencourses certified
+require_once 'modules/course_metadata/CourseXML.php';
+$isOpenCourseCertified = CourseXMLElement::isCertified($course_id, $course_code);
+// if it is, disable visibility choice in form
+$disabledVisibility = ($isOpenCourseCertified) ? "disabled='disabled'" : '';
+    
+
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
                 $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
@@ -127,6 +134,10 @@ if (isset($_POST['submit'])) {
                 } else {
                         $password = "";
                 }
+                
+                // disable visibility if it is opencourses certified
+                if (get_config('course_metadata') && $isOpenCourseCertified)
+                    $_POST['formvisible'] = '2';
 
                 $departments = isset($_POST['department']) ? $_POST['department'] : array();
                 $deps_valid = true;
@@ -237,22 +248,22 @@ if (isset($_POST['submit'])) {
 	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
-		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] /></td>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] /></td>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /></td>
 		<td class='smaller'>$langPrivOpen</td>
 	    </tr>	    
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
-		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] /></td>
+		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /></td>
 		<td class='smaller'>$langPrivate</td>
 	    </tr>
              <tr>
 		<th><img src='$themeimg/lock_inactive.png' alt='$m[linactive]' title='$m[linactive]' width='16' height='16' />&nbsp;$m[linactive]:</th>
-		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] /></td>
+		<td><input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility /></td>
 		<td class='smaller'>$langCourseInactive</td>
 	    </tr>
 	    </table>

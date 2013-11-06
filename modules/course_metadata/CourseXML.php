@@ -492,6 +492,27 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Returns whether a course is OpenCourses Certified or not.
+     * 
+     * @param  int     $courseId
+     * @param  string  $courseCode
+     * @return boolean
+     */
+    public static function isCertified($courseId, $courseCode) {
+        if (!get_config('course_metadata'))
+            return false;
+        
+        $xml = self::init($courseId, $courseCode);
+        $xmlData = $xml->asFlatArray();
+        if ( (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true') || 
+             (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true') || 
+             (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') )
+            return true;
+        
+        return false;
+    }
+    
+    /**
      * Enumeration values for HTML Form fields.
      * @param  string $key
      * @return array
