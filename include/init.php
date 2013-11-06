@@ -423,6 +423,11 @@ if (isset($_SESSION['status'])) {
 	unset($status);
 }
 
+$is_opencourses_reviewer = FALSE;
+if (get_config('course_metadata') && isset($currentCourse) && check_opencourses_reviewer()) {
+    $is_opencourses_reviewer = TRUE;
+}
+
 if (isset($require_course_admin) and $require_course_admin) {
 	if (!$is_course_admin) {
 		$toolContent_ErrorExists = caution($langCheckCourseAdmin);

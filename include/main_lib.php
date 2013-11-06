@@ -670,6 +670,26 @@ function check_editor() {
             return false;
         }
 }
+
+/**
+ * function to check if user is a course opencourses reviewer
+ */
+function check_opencourses_reviewer() {
+    global $uid, $course_id;
+    
+    if (isset($uid)) {
+        $res = db_query("SELECT reviewer FROM course_user
+                          WHERE user_id = " . intval($uid) ."
+                            AND cours_id = " . intval($course_id));
+        $s = mysql_fetch_array($res);
+        if ($s['reviewer'] == 1)
+            return TRUE;
+        else
+            return FALSE;
+    } else
+        return FALSE;
+}
+
 // ---------------------------------------------------
 // just make sure that the $uid variable isn't faked
 // --------------------------------------------------

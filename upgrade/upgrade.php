@@ -605,6 +605,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
                         db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
                 
+                db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                
                 // prevent dir list under video storage
                 if ($handle = opendir($webDir . '/video/')) {
                     while (false !== ($entry = readdir($handle))) {
