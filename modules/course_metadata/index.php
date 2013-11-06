@@ -92,9 +92,10 @@ function submitForm() {
     $extraData = CourseXMLElement::getAutogenData($course_id);
     $data = array_merge($_POST, $extraData, $fileData);
     // course-based adaptation
+    list($dnum)  = mysql_fetch_row(db_query("select count(id) from document WHERE course_id = " . intval($course_id) ));
     list($vnum)  = mysql_fetch_row(db_query("select count(id) from video WHERE course_id = " . intval($course_id) ));
     list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks WHERE course_id = " . intval($course_id) ));
-    if ($vnum + $vlnum < 1)
+    if ($dnum + $vnum + $vlnum < 1)
         $data['course_confirmVideolectures'] = 'false';
     
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
