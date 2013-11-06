@@ -349,6 +349,10 @@ class CourseXMLElement extends SimpleXMLElement {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
             if (!$xml) // fallback if xml is broken
                 return $skeletonXML;
+            else { // xml is valid, merge autogen data and current xml data
+                $new_data = array_merge($xml->asFlatArray(), $data);
+                $data = $new_data;
+            }
         } else // fallback if starting fresh
             return $skeletonXML;
 
