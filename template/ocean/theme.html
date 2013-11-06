@@ -55,27 +55,30 @@
   
 
   <div id="content">  
-    <!-- BEGIN leftNavBlock -->
-      <div id="leftnav">
-        <div id="navcontainer">
-          <ul id="navlist">
-          <!-- BEGIN leftNavCategoryBlock -->
-          <!-- BEGIN leftNavCategoryTitleBlock -->
-          <li class="{%NAV_CSS_CAT_CLASS%}">{%ACTIVE_TOOLS%}</li>
-          <!-- END leftNavCategoryTitleBlock -->
-          <!-- BEGIN leftNavLinkBlock -->
-          <li class="{%TOOL_ICON%}">
-          <div><a href="{%TOOL_LINK%}"{%TOOL_ATTR%}><img
-                   src="{%img_base%}/{%IMG_FILE%}" width="16"
-                   height="16" alt="" />{%TOOL_TEXT%}</a></div>
-          </li>
-          <!-- END leftNavLinkBlock -->
-          <!-- END leftNavCategoryBlock -->
-          </ul>
-     </div>
-     {%ECLASS_HOME_EXTRAS_LEFT%}
-    </div>
-    <!-- END leftNavBlock -->
+      <!-- BEGIN leftNavBlock -->
+      <div class="leftnav">
+          <div class="navmenu">
+              <div class="navcontainer">
+                  <ul class="navlist">
+                      <!-- BEGIN leftNavCategoryBlock -->
+                      <!-- BEGIN leftNavCategoryTitleBlock -->
+                      <li class="{%NAV_CSS_CAT_CLASS%}">{%ACTIVE_TOOLS%}</li>
+                      <!-- END leftNavCategoryTitleBlock -->
+                      <!-- BEGIN leftNavLinkBlock -->
+                      <li class="{%TOOL_ICON%}">
+                          <div><a href="{%TOOL_LINK%}"{%TOOL_ATTR%}><img
+                                      src="{%img_base%}/{%IMG_FILE%}" width="16"
+                                      height="16" alt="" />{%TOOL_TEXT%}</a></div>
+                      </li>
+                      <!-- END leftNavLinkBlock -->
+                      <!-- END leftNavCategoryBlock -->
+                  </ul>
+              </div>
+              {%ECLASS_HOME_EXTRAS_LEFT%}
+          </div>
+          {%ECLASS_LEFTNAV_EXTRAS%}
+      </div>
+      <!-- END leftNavBlock -->
     
     <div id="{%CONTENT_MAIN_CSS%}"><div class="lesson">{%THIRD_BAR_TEXT%}</div>
       <!-- BEGIN toolTitleBlock -->

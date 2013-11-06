@@ -218,41 +218,7 @@ function loggedInMenu(){
 	array_push($sideMenuSubGroup, $sideMenuImg);
 	array_push($sideMenuGroup, $sideMenuSubGroup);
         
-        if (get_config('opencourses_enable')) {
-            $openCoursesNum = 0;
-            $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
-            while ($course = mysql_fetch_assoc($res)) {
-                if (CourseXMLElement::isCertified($course['cours_id'], $course['code'])) {
-                    $openCoursesNum++;
-                }
-            }
-            
-            if ($openCoursesNum > 0) {
-                $sideMenuSubGroup = array();
-                $sideMenuText     = array();
-                $sideMenuLink     = array();
-                $sideMenuImg      = array();
-                
-                $arrMenuType = array();
-                $arrMenuType['type'] = 'text';
-                $arrMenuType['text'] = $GLOBALS['langOpenCourses'];
-
-                array_push($sideMenuSubGroup, $arrMenuType);
-                
-                array_push($sideMenuText, $GLOBALS['langListOpenCourses']);
-                array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
-                array_push($sideMenuImg, "arrow.png");
-                
-                array_push($sideMenuText, $GLOBALS['langNumOpenCourses'] . ": " . $openCoursesNum);
-                array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
-                array_push($sideMenuImg, "arrow.png");
-                
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
-            }
-        }
+        openCoursesExtra();
 	
 	$sideMenuSubGroup = array();
 	$sideMenuText 	= array();
@@ -343,41 +309,7 @@ function loggedOutMenu(){
 
 	array_push($sideMenuGroup, $sideMenuSubGroup);
         
-        if (get_config('opencourses_enable')) {
-            $openCoursesNum = 0;
-            $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
-            while ($course = mysql_fetch_assoc($res)) {
-                if (CourseXMLElement::isCertified($course['cours_id'], $course['code'])) {
-                    $openCoursesNum++;
-                }
-            }
-            
-            if ($openCoursesNum > 0) {
-                $sideMenuSubGroup = array();
-                $sideMenuText     = array();
-                $sideMenuLink     = array();
-                $sideMenuImg      = array();
-                
-                $arrMenuType = array();
-                $arrMenuType['type'] = 'text';
-                $arrMenuType['text'] = $GLOBALS['langOpenCourses'];
-
-                array_push($sideMenuSubGroup, $arrMenuType);
-                
-                array_push($sideMenuText, $GLOBALS['langListOpenCourses']);
-                array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
-                array_push($sideMenuImg, "arrow.png");
-                
-                array_push($sideMenuText, $GLOBALS['langNumOpenCourses'] . ": " . $openCoursesNum);
-                array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
-                array_push($sideMenuImg, "arrow.png");
-                
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
-            }
-        }
+        openCoursesExtra();
         
 	return $sideMenuGroup;
 }
@@ -711,4 +643,37 @@ function pickerMenu() {
         array_push($sideMenuGroup, $sideMenuSubGroup);
         //print_a($sideMenuGroup);
 	return $sideMenuGroup;
+}
+
+
+function openCoursesExtra() {
+    global $mysqlMainDb, $urlServer, $themeimg;
+    
+    if (get_config('opencourses_enable')) {
+        $openCoursesNum = 0;
+        $res = db_query("SELECT cours_id, code FROM cours", $mysqlMainDb);
+        while ($course = mysql_fetch_assoc($res)) {
+            if (CourseXMLElement::isCertified($course['cours_id'], $course['code'])) {
+                $openCoursesNum++;
+            }
+        }
+
+        if ($openCoursesNum > 0) {
+            $GLOBALS['leftNavExtras'] = '
+                <div class="navmenu">
+                    <div class="navcontainer">
+                        <ul class="navlist">
+                            <li class="category">' . $GLOBALS['langOpenCoursesShort'] . '</li>
+                            <li><a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">
+                                <img src="' . $themeimg . '/arrow.png" alt="" height="16" width="16"/>' . 
+                                $GLOBALS['langListOpenCoursesShort'] . '</a></li>
+                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="smaller">' . 
+                            $openCoursesNum . ' ' . 
+                            (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . 
+                            '</span></li>
+                        </ul>
+                    </div>
+                </div>';
+        }
+    }
 }

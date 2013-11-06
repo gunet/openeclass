@@ -3412,7 +3412,8 @@ $langPwStrengthStrong = "Δυνατό";
 /********************************************
  Messages for Course Metadata
  *******************************************/
-$langOpenCourses = "Open Courses";
+$langOpenCourses = "Ανοικτά Ακαδημαϊκά Μαθήματα";
+$langOpenCoursesShort = "Ανοικτά Ακαδημαϊκά";
 $langCourseMetadata = "Μεταδεδομένα μαθήματος";
 $langOpenCoursesReviewer = "OpenCourses Reviewer";
 $langCourseMetadataControlPanel = "Πίνακας Ελέγχου OpenCourses";
@@ -3430,12 +3431,14 @@ $langOpenCoursesFiles = "Αρχεία";
 $langOpenCoursesIsAMinusLevel = "Open Courses Α-";
 $langOpenCoursesIsALevel = "Open Courses Α";
 $langOpenCoursesIsAPlusLevel = "Open Courses Α+";
-$langOpenCoursesLevel = "OpenCourses Level";
+$langOpenCoursesLevel = "Επίπεδο";
 $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
-$langListOpenCourses = "Κατάλογος Μαθημάτων";
-$langNumOpenCourses = "Αριθμός μαθημάτων";
+$langListOpenCourses = "Ευρετήριο Ανοικτών Ακαδημαϊκών Μαθημάτων";
+$langListOpenCoursesShort = "Ευρετήριο Μαθημάτων";
+$langNumOpenCourses = "ανοικτά μαθήματα";
+$langNumOpenCourse = "ανοικτό μάθημα";
 $langMetaCommentary = "Μετασχολιασμός";
 $langOpenCoursesType = "Μάθημα τύπου";
 $langOpenCoursesWasNotSet = "Το μάθημα δεν έχει χαρακτηριστεί ως τύπου Open Courses";

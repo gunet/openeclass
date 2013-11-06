@@ -138,9 +138,8 @@ if (count($opencourses) > 0) {
             <table width='100%' class='sortable' id='t$tid'>
             <tr>
                 <th class='left' colspan='2'>$m[lessoncode]</th>
-                <th class='left' width='120'>$langOpenCoursesLevel</th>
-                <th class='left' width='200'>$m[professor]</th>
-                <th width='30'>$langType</th>
+                <th class='left' width='220'>$m[professor]</th>
+                <th width='30'>$langOpenCoursesLevel</th>
             </tr>";
     
         $k = 0;
@@ -160,19 +159,23 @@ if (count($opencourses) > 0) {
             $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' alt=''></td>";
             $tool_content .= "\n<td>" . $codelink . "</td>";
             
-            // metadata are displayed in click-to-open modal dialogs
-            $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n<td><div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</a></td>";
-            
             $tool_content .= "\n<td>$mycours[t]</td>";
             $tool_content .= "\n<td align='center'>";
             // show the necessary access icon
-            foreach ($icons as $visible => $image) {
+            /*foreach ($icons as $visible => $image) {
                 if ($visible == $mycours['visible']) {
                     $tool_content .= $image;
                 }
-            }
+            }*/
+            
+            // metadata are displayed in click-to-open modal dialogs
+            $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) .
+                "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
+                $metadata->asDiv() . "</div>
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 
+                "<img src='${themeimg}/lom.png'/></a>";
+            
             $tool_content .= "</td>\n";
             $tool_content .= "</tr>";
             $k++;
@@ -212,7 +215,12 @@ $head_content .= <<<EOF
             autoOpen: false,
             modal: true,
             height: 600,
-            width: 600
+            width: 600,
+            open: function() {
+                $( ".ui-widget-overlay" ).on('click', function() {
+                    $( ".modaldialog" ).dialog('close');
+                });
+            }
         });
     });
 

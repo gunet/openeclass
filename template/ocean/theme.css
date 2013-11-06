@@ -369,30 +369,33 @@ fieldset table.th {
 
 /* left */
 
-#leftnav {
+.leftnav {
     float: left;
-	width: 170px;
-	padding:8px;
-    margin: 10px;
-	background-color: #f8f8f8;
-	-moz-box-shadow: 0 0 2px 2px #ebebeb;
-	-webkit-box-shadow: 0 0 2px 2px #ebebeb;
-	box-shadow: 0 0 2px 2px #febebeb;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color='#ebebeb', Direction=120, Strength=5);
-	line-height: 32px;    
 }
 
-#navcontainer {
+.navmenu {
+    width: 170px;
+    padding:8px;
+    margin: 10px;
+    background-color: #f8f8f8;
+    -moz-box-shadow: 0 0 2px 2px #ebebeb;
+    -webkit-box-shadow: 0 0 2px 2px #ebebeb;
+    box-shadow: 0 0 2px 2px #febebeb;
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#ebebeb', Direction=120, Strength=5);
+    line-height: 32px;    
+}
+
+.navcontainer {
     font-size: 12px;
 }
 
-#navcontainer ul {
+.navcontainer ul {
 	margin:0;
 	padding:0;
 	list-style-type: none;
 }
 
-#navcontainer a {
+.navcontainer a {
 	display: block;
 	padding: 3px;
 	margin-top: 2px;
@@ -404,11 +407,11 @@ fieldset table.th {
 	border-bottom:1px dashed #e4e4e4;
 }
 
-#navcontainer a:hover {
+.navcontainer a:hover {
 	color:#615f5f; 
 }
 
-#navcontainer li.category {
+.navcontainer li.category {
     font-weight: bold;
 	border-bottom:1px dashed #e4e4e4;
     color: #617f90;    
@@ -416,7 +419,7 @@ fieldset table.th {
 	font-size: 13px;
 }
 
-#navcontainer li img {
+.navcontainer li img {
 	float:left;
 	margin-right:5px;
 	clear:left;
@@ -1387,7 +1390,7 @@ dt {
 }
 
 @media print {
-        #leftnav, #header, #operations_container,
+        .leftnav, #header, #operations_container,
         .deactivate_module, .activate_module,
         .title1 {
                 display: none;
