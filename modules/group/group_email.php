@@ -87,10 +87,10 @@ if ($is_editor or $is_tutor)  {
 		<table width='99%' class='FormData'>
 		<thead>
 		<tr>
-		  <td class='left'>$langMailSubject</td></tr>
+		  <td class='left'>$langMailSubject</td>
 		</tr>
 		<tr>
-		    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
+		    <td><input type='text' name='subject' size='58' class='FormData_InputText'></td>
 		</tr>
 		<tr>
 		  <td class='left'>$langMailBody</td>
@@ -99,7 +99,7 @@ if ($is_editor or $is_tutor)  {
 		  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
 		</tr>
 		<tr>
-		  <td><input type='submit' name='submit' value='".q($langSend)."'></input></td>
+		  <td><input type='submit' name='submit' value='".q($langSend)."'></td>
 		</tr>
 		</thead>
 		</table>
