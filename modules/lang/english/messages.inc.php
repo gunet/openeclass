@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-10-27 15:50:56
+// Generated 2013-11-10 10:26:19
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2956,7 +2956,7 @@ $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
 $langListOpenCourses = "Open Courses List";
-$langNumOpenCourses = "Number of Open Courses";
+$langNumOpenCourses = "open courses";
 $langMetaCommentary = "Meta comments";
 $langOpenCoursesType = "Open Course type";
 $langOpenCoursesWasNotSet = "Course is not Open Course ready";
@@ -3119,3 +3119,6 @@ $license = array(
     '5' => array('title' => $langCreativeCommonsCCBYSA, 'link' => 'http://creativecommons.org/licenses/by-sa/3.0/', 'image' => 'cc/by-sa'),
     '6' => array('title' => $langCreativeCommonsCCBYND, 'link' => 'http://creativecommons.org/licenses/by-nd/3.0/', 'image' => 'cc/by-nd')
     );
+$langOpenCoursesShort = "Open Courses";
+$langListOpenCoursesShort = "Open Courses List";
+$langNumOpenCourse = "open course";
