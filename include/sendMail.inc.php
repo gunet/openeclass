@@ -58,6 +58,8 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 {
         global $emailAnnounce;
 
+        $body_html = add_host_to_urls($body_html);
+
         if (count($to_address) > 1) {
                 if (isset($emailAnnounce)) {
                         if (empty($to)) {
@@ -109,7 +111,6 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
 		"<title>message</title></head><body>\n" .
 		"$body_html\n</body></html>\n\n" .
 		"--$separator--\r\n";
-
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);
 }
@@ -160,4 +161,44 @@ function qencode($header, $charset)
                 mb_internal_encoding('UTF-8');
 	        return mb_encode_mimeheader($header, $charset);
         }
+}
+
+
+/**
+ * Make sure URLs appearing in href and src attributes in HTML include a host. 
+ * 
+ * @param string $html  - The HTML snippet to canonicalize
+ * @return string       - The canonicalized HTML
+ */
+function add_host_to_urls($html)
+{
+        global $urlServer, $urlAppend;
+        static $html_memo, $out_memo;
+
+        if (!isset($html_memo) or $html_memo != $html) {
+            $html_memo = $html;
+            $url_start = substr($urlServer, 0, strlen($urlServer) - strlen($urlAppend) - 1);
+            $dom = new DOMDocument();
+            @$dom->loadHTML('<div>' . mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8') . '</div>');
+
+            foreach (array('a' => 'href', 'img' => 'src') as $tag_name => $attribute) {
+                $elements = $dom->getElementsByTagName($tag_name);
+                if ($elements instanceof DOMNodeList) {
+                    foreach ($elements as $element) {
+                        $url = $element->getAttribute($attribute);
+                        if ($url) {
+                            $url_info = parse_url($url);
+                            if (!isset($url_info['scheme']) and !isset($url_info['host'])) {
+                                $element->setAttribute($attribute, $url_start . $url);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $base_node = $dom->getElementsByTagName('div')->item(0);
+            $out_memo = dom_save_html($dom, $base_node);
+        }
+
+        return $out_memo;
 }
