@@ -147,17 +147,12 @@ if (file_exists($disk_path)) {
 
 function check_cours_access() {
 	
-        global $mysqlMainDb, $dbname, $uid, $code_cours;        
+        global $mysqlMainDb, $dbname, $uid, $code_cours, $webDir, $uri;        
 
         if (!$uid && !isset($code_cours)) {
             $code_cours = $_SESSION['dbname'];
         }
         
-        if ( !$uid && !isset($_GET['token'])) { // anonymous needs access token
-            redirect_to_home_page();
-            exit(0);
-        }
-
         $qry = "SELECT cours_id, code, visible FROM `cours` WHERE code='$dbname'";
         
 	$result = db_query($qry, $mysqlMainDb);
@@ -170,8 +165,14 @@ function check_cours_access() {
         
 	$cours = mysql_fetch_array($result);
         
+        if ( $cours['visible'] != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+            require_once $webDir . '/include/lib/forcedownload.php';
+            not_found(preg_replace('/^.*\.php/', '', $uri));
+            exit(0);
+        }
+        
         if (!$uid) {
-            $_SESSION['course_id'] = $cours['id'];
+            $_SESSION['course_id'] = $cours['cours_id'];
             return; // do not do course check if anonymous with access token
         }
 
@@ -183,9 +184,9 @@ function check_cours_access() {
 			// check if user has access to cours
 			if (isset($_SESSION['status'][$dbname]) && ($_SESSION['status'][$dbname] >= 1)) {
 				return;
-			}
-			else {
+			} else {
 				redirect_to_home_page();
+                                exit(0);
 			}
 	}
 	exit;
