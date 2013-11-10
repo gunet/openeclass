@@ -128,10 +128,10 @@ if ($is_editor) {
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
         $antitle = autoquote($_POST['antitle']);
-        $newContent = autoquote(purify($_POST['newContent']));
+        $newContent = purify(autounquote($_POST['newContent']));
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            db_query("UPDATE annonces SET contenu = $newContent,
+            db_query("UPDATE annonces SET contenu = " . quote($newContent) . ",
                              title = $antitle, temps = NOW()
 			WHERE id = $id AND cours_id = $cours_id");
             $message = "<p class='success'>$langAnnModify</p>";
@@ -141,7 +141,7 @@ if ($is_editor) {
             list($orderMax) = mysql_fetch_row($result);
             $order = $orderMax + 1;
             // insert
-            db_query("INSERT INTO annonces SET contenu = $newContent,
+            db_query("INSERT INTO annonces SET contenu = " . quote($newContent) . ",
                                   title = $antitle, temps = NOW(),
                                   cours_id = $cours_id, ordre = $order,
                                   visibility = 'v'");
@@ -154,7 +154,7 @@ if ($is_editor) {
             $emailContent = "$professorMessage: $_SESSION[prenom] $_SESSION[nom]<br>\n<br>\n".
 			     autounquote($_POST['antitle']) .
                             "<br>\n<br>\n" .
-                            autounquote($_POST['newContent']);
+                            $newContent;
             $emailSubject = "$intitule ($fake_code)";
             // select students email list
             $sqlUserOfCourse = "SELECT cours_user.user_id, user.email FROM cours_user, user
