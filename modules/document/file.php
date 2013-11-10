@@ -187,6 +187,7 @@ function check_cours_access() {
                 }
                 else {                        
                         redirect_to_home_page();
+                        exit(0);
                 }
 	}
 	exit;
