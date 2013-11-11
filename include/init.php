@@ -348,6 +348,8 @@ if (isset($require_current_course) and $require_current_course) {
 	}
 }
 
+require_once "${webDir}include/license_info.php";
+
 // actually a prof has $status 1
 // the system admin and power user has rights to all courses
 if ($is_admin or $is_power_user) {

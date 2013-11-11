@@ -63,7 +63,6 @@ define('COMMON', 3);
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 15);
 
-
 // Show query string and then do MySQL query
 function db_query2($sql, $db = FALSE)
 {

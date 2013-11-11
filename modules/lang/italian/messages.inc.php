@@ -649,6 +649,7 @@ $langCopyrighted = "Copyright";
 $langCopyrightedFree = "Gratuito";
 $langCopyrightedNotFree = "Protetto";
 $langCopyrightedUnknown = "Sconosciuto";
+$langLicenseUnset = 'No license specified';
 $langChangeMetadata = "Modificare le informazioni del documento";
 $langEditMeta = "Modificare<br>informazioni";
 $langCategoryExcercise = "Esercizio";
@@ -3084,16 +3085,6 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
-$license = array(
-    '0' => array('title' => $langCopyrightedNotFree, 'link' => ' ', 'image' => 'copyright'),
-    '20' => array('title' => $langCopyrightedFree, 'link' =>  ' ', 'image' => 'no_copyright'),
-    '1' => array('title' => $langCreativeCommonsCCBYNC, 'link' => 'http://creativecommons.org/licenses/by-nc/3.0/', 'image' => 'cc/by-nc'),
-    '2' => array('title' => $langCreativeCommonsCCBYNCSA, 'link' => 'http://creativecommons.org/licenses/by-nc/3.0/', 'image' => 'cc/by-nc-sa'),
-    '3' => array('title' => $langCreativeCommonsCCBYNCND, 'link' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/', 'image' => 'cc/by-nc-nd'),
-    '4' => array('title' => $langCreativeCommonsCCBY, 'link' => 'http://creativecommons.org/licenses/by/3.0/', 'image' => 'cc/by'),
-    '5' => array('title' => $langCreativeCommonsCCBYSA, 'link' => 'http://creativecommons.org/licenses/by-sa/3.0/', 'image' => 'cc/by-sa'),
-    '6' => array('title' => $langCreativeCommonsCCBYND, 'link' => 'http://creativecommons.org/licenses/by-nd/3.0/', 'image' => 'cc/by-nd')
-    );
 $langOpenCoursesShort = "Open Courses";
 $langListOpenCoursesShort = "Open Courses List";
 $langNumOpenCourse = "open course";
