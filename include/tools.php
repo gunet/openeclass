@@ -663,7 +663,7 @@ function openCoursesExtra() {
                 <div class="navmenu">
                     <div class="navcontainer">
                         <ul class="navlist">
-                            <li class="category">' . $GLOBALS['langOpenCoursesShort'] . '</li>
+                            <li class="category">' . $GLOBALS['langOpenCoursesShort'] . '<img src="' . $themeimg . '/open_courses_logo_small.png" title='. $GLOBALS['langOpenCoursesShort'] .' /></li>
                             <li><a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">
                                 <img src="' . $themeimg . '/arrow.png" alt="" height="16" width="16"/>' . 
                                 $GLOBALS['langListOpenCoursesShort'] . '</a></li>
