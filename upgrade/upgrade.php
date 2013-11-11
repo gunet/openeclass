@@ -617,9 +617,9 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 mysql_field_exists($mysqlMainDb, 'document', 'public') or
                         db_query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");                
                 mysql_field_exists($mysqlMainDb, 'cours_user', 'reviewer') or
-                        db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                        db_query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT 0 AFTER `editor`");
                 mysql_field_exists($mysqlMainDb, 'cours', 'course_license') or
-                        db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
+                        db_query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT 0 AFTER `course_addon`");
                 
                 // prevent dir list under video storage
                 if ($handle = opendir('../video/')) {

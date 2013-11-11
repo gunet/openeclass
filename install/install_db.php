@@ -128,7 +128,7 @@ db_query("CREATE TABLE `cours` (
   `description` TEXT,
   `course_keywords` TEXT,
   `course_addon` TEXT,
-  `course_license` TINYINT(4) NOT NULL DEFAULT 20,
+  `course_license` TINYINT(4) NOT NULL DEFAULT 0,
   `visible` tinyint(4) NOT NULL,
   `titulaires` varchar(200) NOT NULL DEFAULT '',
   `fake_code` varchar(20) NOT NULL DEFAULT '',

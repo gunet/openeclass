@@ -3600,7 +3600,8 @@ $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξει�
 
 
 $license = array(
-    '0' => array('title' => $langCopyrightedNotFree, 'link' => ' ', 'image' => 'copyright'),
+    '0' => array('title' => $langCopyrightedUnknown, 'link' => ' ', 'image' => 'copyright'),
+    '10' => array('title' => $langCopyrightedNotFree, 'link' => ' ', 'image' => 'copyright'),
     '20' => array('title' => $langCopyrightedFree, 'link' =>  ' ', 'image' => 'no_copyright'),
     '1' => array('title' => $langCreativeCommonsCCBYNC, 'link' => 'http://creativecommons.org/licenses/by-nc/3.0/', 'image' => 'cc/by-nc'),
     '2' => array('title' => $langCreativeCommonsCCBYNCSA, 'link' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/', 'image' => 'cc/by-nc-sa'),
