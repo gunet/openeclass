@@ -195,11 +195,11 @@ if (!isset($_POST['create_course'])) {
 
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
-                $langCopyrightedUnknown
+                {$license[0]['title']}
             </td>
             </tr>           
             <tr><td colspan='2'><input type='radio' name='l_radio' value='10'>
-                $langCopyrightedNotFree
+                {$license[10]['title']}
             </td>
             </tr>
             <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1'/>

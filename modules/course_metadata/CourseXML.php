@@ -615,8 +615,11 @@ class CourseXMLElement extends SimpleXMLElement {
         $data['course_instructor_fullName_' . $clang] = $course['titulaires'];
         $data['course_title_' . $clang] = $course['intitule'];
         $data['course_keywords_' . $clang] = $course['course_keywords'];
-        if ($course['course_license'])
+        if ($course['course_license']) {
             $data['course_license'] = $license[$course['course_license']]['title'];
+        } else {
+            $data['course_license'] = '';
+        }
 
         // turn visible units to associative array
         $res2 = db_query("SELECT id, title, comments

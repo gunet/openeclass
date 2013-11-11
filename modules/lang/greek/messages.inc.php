@@ -882,6 +882,7 @@ $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
 $langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
 $langCopyrightedUnknown="Άγνωστο";
+$langLicenseUnset = 'Δεν έχει οριστεί';
 $langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
 $langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
 $langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
@@ -3601,7 +3602,7 @@ $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξει�
 
 
 $license = array(
-    '0' => array('title' => $langCopyrightedUnknown, 'link' => ' ', 'image' => 'copyright'),
+    '0' => array('title' => $langLicenseUnset, 'link' => ' ', 'image' => 'copyright'),
     '1' => array('title' => $langCreativeCommonsCCBY, 'link' => 'http://creativecommons.org/licenses/by/3.0/', 'image' => 'cc/by'),
     '2' => array('title' => $langCreativeCommonsCCBYSA, 'link' => 'http://creativecommons.org/licenses/by-sa/3.0/', 'image' => 'cc/by-sa'),
     '3' => array('title' => $langCreativeCommonsCCBYND, 'link' => 'http://creativecommons.org/licenses/by-nd/3.0/', 'image' => 'cc/by-nd'),

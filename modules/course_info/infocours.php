@@ -295,11 +295,11 @@ if (isset($_POST['submit'])) {
         <legend>$langOpenCoursesLicense</legend>
             <table class='tbl' width='100%'>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
-            $langCopyrightedUnknown
+            {$license[0]['title']}
             </td>
             </tr>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='10'$license_checked[10]$disabledVisibility>
-            $langCopyrightedNotFree
+            {$license[10]['title']}
             </td>
             </tr>
             <tr><td colspan='2'><input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>
