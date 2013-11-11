@@ -665,9 +665,12 @@ function check_admin($uid) {
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
-    global $mysqlMainDb, $uid, $cours_id;
+    global $mysqlMainDb, $uid, $cours_id, $is_admin;
     
     if (isset($uid)) {
+        if ($is_admin) {
+            return TRUE;
+        }
         $res = db_query("SELECT reviewer FROM cours_user
                           WHERE user_id = $uid
                             AND cours_id = $cours_id", $mysqlMainDb);
