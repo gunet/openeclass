@@ -573,6 +573,27 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Returns a closure for counting open courses under a subnode.
+     * 
+     * @return function
+     */
+    public static function getCountCallback() {
+        $countCallback = function($subnode) {
+            $count = 0;
+            $n = db_query("SELECT course.id, course.code
+                             FROM course, course_department
+                            WHERE course.id = course_department.course
+                              AND course_department.department = ". intval($subnode));
+            while ($r = mysql_fetch_array($n)) {
+                if (CourseXMLElement::isCertified($r['id'], $r['code']))
+                    $count++;
+            }
+            return $count;
+        };
+        return $countCallback;
+    }
+    
+    /**
      * Fields that should be hidden from the HTML Form.
      * @var array
      */

@@ -18,19 +18,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * Open courses component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component shows a list of courses
- *
- */
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
+
+$countCallback = null;
+
+if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+    require_once 'modules/course_metadata/CourseXML.php';
+    $countCallback = CourseXMLElement::getCountCallback();
+}
 
 $tree = new Hierarchy();
 
@@ -73,64 +69,98 @@ $tool_content .= "<table width=100% class='tbl_border'>
                     </tr>
                   </table><br/>\n\n";
 
-$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses');
+$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback);
 
-$result = db_query("SELECT course.code k,
-                           course.public_code c,
-                           course.title i,
-                           course.visible visible,
-                           course.prof_names t
-                      FROM course, course_department
-                     WHERE course.id = course_department.course
-                       AND course_department.department = $fc
-                       AND course.visible != ".COURSE_INACTIVE."
-                  ORDER BY course.title, course.prof_names");
+$queryCourseIds = '';
+$runQuery = true;
 
-if (mysql_num_rows($result) > 0) {
+if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+    // find subnode's opencourses
+    $opencourses = array();
+    $res = db_query("SELECT course.id, course.code
+                         FROM course, course_department
+                        WHERE course.id = course_department.course
+                          AND course_department.department = " . $fc);
+    while ($course = mysql_fetch_assoc($res)) {
+        if (CourseXMLElement::isCertified($course['id'], $course['code']))
+            $opencourses[$course['id']] = $course['code'];
+    }
+
+    // construct comma seperated string with open courses ids
+    $commaIds = "";
+    $i = 0;
+    foreach ($opencourses as $courseId => $courseCode) {
+        if ($i != 0)
+            $commaIds .= ",";
+        $commaIds .= $courseId;
+        $i++;
+    }
+    
+    if (count($opencourses) > 0)
+        $queryCourseIds = " AND course.id IN ($commaIds) ";
+    else {
+        $runQuery = false;
+        $numrows = 0;
+    }
+}
+
+if ($runQuery) {
+    $result = db_query("SELECT course.code k,
+                               course.public_code c,
+                               course.title i,
+                               course.visible visible,
+                               course.prof_names t
+                          FROM course, course_department
+                         WHERE course.id = course_department.course
+                           AND course_department.department = $fc
+                           AND course.visible != ".COURSE_INACTIVE."
+                           $queryCourseIds
+                      ORDER BY course.title, course.prof_names");
+    $numrows = mysql_num_rows($result);
+}
+
+if ($numrows > 0) {
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
-            <th class='left' colspan='2'>$m[lessoncode]</th>
-            <th class='left' width='200'>$m[professor]</th>
+            <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>
+            <th class='left' width='200'>" . $m['professor']  . "</th>
             <th width='30'>$langType</th>
         </tr>";
-} else {
-    $tool_content .= "<p class='alert1'>$m[nolessons]</p>";
-}
-
-
-$k = 0;
-while ($mycours = mysql_fetch_array($result)) {
-    if ($mycours['visible'] == 2) {
-        $codelink = "<a href='../../courses/$mycours[k]/'>". q($mycours['i']) ."</a>&nbsp;<small>(". $mycours['c'] .")</small>";
-    } else {
-        $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
-    }
-
-    if ($k%2 == 0) {
-        $tool_content .= "\n<tr class='even'>";
-    } else {
-        $tool_content .= "\n<tr class='odd'>";
-    }
-
-    $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
-    $tool_content .= "\n<td>". $codelink ."</td>";
-    $tool_content .= "\n<td>". $mycours['t'] ."</td>";
-    $tool_content .= "\n<td align='center'>";
-
-    // show the necessary access icon
-    foreach ($icons as $visible => $image) {
-        if ($visible == $mycours['visible']) {
-            $tool_content .= $image;
+    
+    $k = 0;
+    while ($mycours = mysql_fetch_array($result)) {
+        if ($mycours['visible'] == 2) {
+            $codelink = "<a href='../../courses/$mycours[k]/'>". q($mycours['i']) ."</a>&nbsp;<small>(". $mycours['c'] .")</small>";
+        } else {
+            $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
         }
-    }
-    $tool_content .= "</td>\n";
-    $tool_content .= "</tr>";
-    $k++;
-}
 
-if ($k > 0) {
+        if ($k%2 == 0) {
+            $tool_content .= "\n<tr class='even'>";
+        } else {
+            $tool_content .= "\n<tr class='odd'>";
+        }
+
+        $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
+        $tool_content .= "\n<td>". $codelink ."</td>";
+        $tool_content .= "\n<td>". $mycours['t'] ."</td>";
+        $tool_content .= "\n<td align='center'>";
+
+        // show the necessary access icon
+        foreach ($icons as $visible => $image) {
+            if ($visible == $mycours['visible']) {
+                $tool_content .= $image;
+            }
+        }
+        $tool_content .= "</td>\n";
+        $tool_content .= "</tr>";
+        $k++;
+    }
+
     $tool_content .= "</table>";
-}
+} else
+    $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
+
 
 draw($tool_content, (isset($uid) and $uid)? 1: 0);

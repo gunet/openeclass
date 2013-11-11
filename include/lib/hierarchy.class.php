@@ -722,8 +722,8 @@ class Hierarchy {
      */
     public function buildRootsArray() {
         $ret = array();
-        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth=0")
-                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth=0");
+        $res = ($this->useProcedures()) ? db_query("SELECT id FROM ". $this->dbdepth ." WHERE depth = 0")
+                                        : db_query("SELECT id FROM ". $this->view ." WHERE depth = 0");
         while ($row = mysql_fetch_assoc($res))
             $ret[] = $row['id'];
         return $ret;
@@ -1253,11 +1253,12 @@ jContent;
     /**
      * Build an HTML table containing navigation code for the given nodes
      * 
-     * @param  array  $nodes - The node ids whose children we want to navigate to
-     * @param  string $url   - The php script to call in the navigational URLs
-     * @return string $ret   - The returned HTML output
+     * @param  array    $nodes         - The node ids whose children we want to navigate to
+     * @param  string   $url           - The php script to call in the navigational URLs
+     * @param  function $countCallback - An optional closure that will be used for the counting
+     * @return string   $ret           - The returned HTML output
      */
-    public function buildNodesNavigationHtml($nodes, $url) {
+    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null) {
         global $langAvCours, $langAvCourses;
         
         $ret = '';
@@ -1283,13 +1284,17 @@ jContent;
                     $ret .= "(". q($nodecodes[$key]) .")";
 
                 $count = 0;
-                foreach( $this->buildSubtrees(array(intval($key))) as $subnode ){
-                    $n = db_query("SELECT COUNT(*)
-                                     FROM course, course_department
-                                    WHERE course.id = course_department.course
-                                      AND course_department.department = ". intval($subnode));
-                    $r = mysql_fetch_array($n);
-                    $count += $r[0];
+                foreach( $this->buildSubtrees(array(intval($key))) as $subnode ) {
+                    if ($countCallback !== null && is_callable($countCallback)) {
+                        $count += $countCallback($subnode);
+                    } else {
+                        $n = db_query("SELECT COUNT(*)
+                                         FROM course, course_department
+                                        WHERE course.id = course_department.course
+                                          AND course_department.department = ". intval($subnode));
+                        $r = mysql_fetch_array($n);
+                        $count += $r[0];
+                    } 
                 }
 
                 $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;". intval($count) ."&nbsp;". ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
@@ -1304,11 +1309,12 @@ jContent;
     /**
      * Build an HTML table containing navigation code for a node's children nodes
      * 
-     * @param  int    $depid - The node's id whose children we want to navigate to
-     * @param  string $url   - The php script to call in the navigational URLs
-     * @return string $ret   - The returned HTML output
+     * @param  int      $depid         - The node's id whose children we want to navigate to
+     * @param  string   $url           - The php script to call in the navigational URLs
+     * @param  function $countCallback - An optional closure that will be used for the counting
+     * @return string   $ret           - The returned HTML output
      */
-    public function buildDepartmentChildrenNavigationHtml($depid, $url) {
+    public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null) {
         // select subnodes of the next depth level
         $res = db_query("SELECT node.id FROM ". $this->dbtable ." AS node
                 LEFT OUTER JOIN ". $this->dbtable ." AS parent ON parent.lft =
@@ -1322,7 +1328,7 @@ jContent;
             while ($node = mysql_fetch_assoc($res))
                 $nodes[] = $node['id'];
             
-            return $this->buildNodesNavigationHtml($nodes, $url);
+            return $this->buildNodesNavigationHtml($nodes, $url, $countCallback);
         } else
             return "";
     }

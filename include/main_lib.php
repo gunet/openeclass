@@ -680,7 +680,7 @@ function check_opencourses_reviewer() {
     if (isset($uid)) {
         $res = db_query("SELECT reviewer FROM course_user
                           WHERE user_id = " . intval($uid) ."
-                            AND cours_id = " . intval($course_id));
+                            AND course_id = " . intval($course_id));
         $s = mysql_fetch_array($res);
         if ($s['reviewer'] == 1)
             return TRUE;

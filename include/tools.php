@@ -294,6 +294,17 @@ function loggedOutMenu(){
 	array_push($sideMenuText, $GLOBALS['langListCourses']);
 	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
 	array_push($sideMenuImg, "arrow.png");
+        if (get_config('course_metadata')) {
+            $res = db_query("SELECT id, code FROM course");
+            while ($course = mysql_fetch_assoc($res)) {
+                if (CourseXMLElement::isCertified($course['id'], $course['code'])) {
+                    array_push($sideMenuText, $GLOBALS['langListOpenCourses']);
+                    array_push($sideMenuLink, $urlServer."modules/course_metadata/openfaculties.php");
+                    array_push($sideMenuImg, "arrow.png");
+                    break;
+                }
+            }
+        }
         if (get_config('user_registration')) {
                 array_push($sideMenuText, $GLOBALS['langNewUser']);
                 array_push($sideMenuLink, $urlServer."modules/auth/registration.php");

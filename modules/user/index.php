@@ -347,7 +347,7 @@ while ($myrow = mysql_fetch_array($result)) {
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
                 }
         }
-        $tool_content .= "<td class='$class center' width='30'>$control</td></tr>";
+        $tool_content .= "<td class='$class center' width='30'>$control</td>";
         
         // opencourses reviewer right
         if (get_config('course_metadata')) {
@@ -370,7 +370,7 @@ while ($myrow = mysql_fetch_array($result)) {
             } else {
                 if ($myrow['reviewer'] == '1') {
                     $class = 'add_teacherLabel';
-                    $control = icon('reviewer.png', $langOpenCoursesReviewer);
+                    $control = icon('reviewer', $langOpenCoursesReviewer);
                 } else {
                     // do nothing as the course teacher cannot make himeself a reviewer
                     $class = '';

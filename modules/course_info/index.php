@@ -184,7 +184,7 @@ if (isset($_POST['submit'])) {
         if (get_config('course_metadata')) {
             $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
             if ($is_opencourses_reviewer)
-                $tool_content .= "<li><a href='../course_metadata/control.php?course=$code_cours'>$langCourseMetadataControlPanel</a></li>";
+                $tool_content .= "<li><a href='../course_metadata/control.php?course=$course_code'>$langCourseMetadataControlPanel</a></li>";
         }
         $tool_content .= "
 	  </ul>

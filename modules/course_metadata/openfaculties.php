@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,29 +18,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once '../../include/baseTheme.php';
-require_once 'include/lib/hierarchy.class.php';
+define('LISTING_MODE', 'COURSE_METADATA');
+require_once('../auth/listfaculte.php');
 
-$redirectUrl = "modules/auth/opencourses.php?fc=";
-$countCallback = null;
-
-if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
-    require_once 'modules/course_metadata/CourseXML.php';
-    $red_url = "modules/course_metadata/opencourses.php?fc=";
-    $countCallback = CourseXMLElement::getCountCallback();
-}
-
-$tree = new Hierarchy();
-$nameTools = $langSelectFac;
-$roots = $tree->buildRootsArray();
-
-if (count($roots) <= 0)
-    die("ERROR: no root nodes");
-else if (count($roots) == 1) {
-    header("Location:" . $urlServer . $redirectUrl . intval($roots[0]));
-    exit();
-} else
-    $tool_content = $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
-
-
-draw($tool_content, (isset($uid) and $uid)? 1: 0);
+exit();
