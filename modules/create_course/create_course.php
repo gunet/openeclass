@@ -119,17 +119,14 @@ $head_content .= <<<hContent
                 deactivate_input_password();
         });
        
-        hideCCFields();
-        
-        $('#cc_license').click(function(event) {
-            showCCFields();
-        });
-        $('#no_license').click(function(event) {
-            hideCCFields();
-        });
-        $('#copyright_license').click(function(event) {
-            hideCCFields();
-        });
+        $('input[name=l_radio]').change(function () {
+            if ($('#cc_license').is(":checked")) {
+                showCCFields();
+            } else {
+                hideCCFields();
+            }
+        }).change();
+
     });  
         
 /* ]]> */
@@ -189,28 +186,27 @@ if (!isset($_POST['create_course'])) {
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langUncompulsory</span><br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
-        
+
+        foreach ($license as $id => $l_info) {
+            if ($id and $id < 10) {
+                $cc_license[$id] = $l_info['title'];
+            }
+        }
+
         $tool_content .= "<tr><td class='sub_title1' colspan='2'>$langOpenCoursesLicense</td></tr>
-            <tr><td colspan='2'><input id = 'no_license' type='radio' name='l_radio' value='20' />
-            $langWithoutCopyright
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
+                $langCopyrightedUnknown
             </td>
             </tr>           
-            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' />
-            $langCopyrightedNotFree
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='10'>
+                $langCopyrightedNotFree
             </td>
             </tr>
             <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
                 $langCMeta[course_license]
             </td>
             </tr>            
-            <tr id = 'cc'><td>
-                ".selection(array('1' => $langCreativeCommonsCCBYNC,
-                                  '2' => $langCreativeCommonsCCBYNCSA, 
-                                  '3' => $langCreativeCommonsCCBYNCND,
-                                  '4' => $langCreativeCommonsCCBY, 
-                                  '5' => $langCreativeCommonsCCBYSA, 
-                                  '6' => $langCreativeCommonsCCBYND), 'cc_use')."
-             </td></tr>";
+            <tr id = 'cc'><td>&nbsp;</td><td>" . selection($cc_license, 'cc_use') . "</td></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
           <tr>

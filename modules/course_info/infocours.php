@@ -65,21 +65,21 @@ $head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
 $head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
 $head_content .= <<<hContent
     };
-        
-    function showCCFields() {           
-        $('#cc').show();        
+
+    function showCCFields() {
+        $('#cc').show();
     }
-    function hideCCFields() {           
-        $('#cc').hide();        
+    function hideCCFields() {
+        $('#cc').hide();
     }
 
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
-        
+
         displayCoursePassword();
-        
+
         $('#courseopen').click(function(event) {
                 activate_input_password();
         });
@@ -91,24 +91,15 @@ $head_content .= <<<hContent
         });
         $('#courseinactive').click(function(event) {
                 deactivate_input_password();
-        });    
-        
-        if ($('#cc_license').is(":checked")) {
-            showCCFields();
-        } else {
-            hideCCFields();
-        }
-        
-        $('#cc_license').click(function(event) {
-            showCCFields();
         });
-        $('#no_license').click(function(event) {
-            hideCCFields();
-        });
-        $('#copyright_license').click(function(event) {
-            hideCCFields();
-        });
-        
+
+        $('input[name=l_radio]').change(function () {
+            if ($('#cc_license').is(":checked")) {
+                showCCFields();
+            } else {
+                hideCCFields();
+            }
+        }).change();
     });
 
 /* ]]> */
@@ -122,7 +113,7 @@ require_once '../course_metadata/CourseXML.php';
 $isOpenCourseCertified = CourseXMLElement::isCertified($cours_id, $code_cours);
 // if it is, disable visibility choice in form
 $disabledVisibility = ($isOpenCourseCertified) ? "disabled='disabled'" : '';
-    
+
 
 if (isset($_POST['submit'])) {
         if (empty($_POST['title'])) {
@@ -150,29 +141,32 @@ if (isset($_POST['submit'])) {
                 } else {
                         $password = "";
                 }
-                
+
                 // update course_license
-                if (isset($_POST['l_radio'])) {           
+                if (isset($_POST['l_radio'])) {
                     $l = $_POST['l_radio'];
                     switch ($l) {
-                        case '0': $course_license = 0;
-                                break;
-                        case '1': if (isset($_POST['cc_use'])) {
-                                        $course_license = $_POST['cc_use'];
-                                  }
-                                break;
-                        case '20': $course_license = 20;
-                                break;
-                        }
+                        case 'cc':
+                            if (isset($_POST['cc_use'])) {
+                                $course_license = intval($_POST['cc_use']);
+                            }
+                            break;
+                        case '10':
+                            $course_license = 10;
+                            break;
+                        default:
+                            $course_license = 0;
+                            break;
+                    }
                 }
-                
+
                 // disable visibility if it is opencourses certified
                 if (get_config('opencourses_enable') && $isOpenCourseCertified)
                     $_POST['formvisible'] = '2';
 
                 $department = intval($_POST['department']);
-		
-		$facname = find_faculty_by_id($department);
+
+                $facname = find_faculty_by_id($department);
                 db_query("UPDATE `$mysqlMainDb`.cours
                           SET intitule = " . quote($_POST['title']) .",
                               fake_code = " . quote($_POST['fcode']) .",
@@ -200,7 +194,7 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langModifyInfo)." WHERE define_var='MODULE_ID_COURSEINFO'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGroups)." WHERE define_var='MODULE_ID_GROUPS'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langDropBox)." WHERE define_var='MODULE_ID_DROPBOX'");
-		db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langGlossary)." WHERE define_var='MODULE_ID_GLOSSARY'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langEBook)." WHERE define_var='MODULE_ID_EBOOK'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langConference)." WHERE define_var='MODULE_ID_CHAT'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseDescription)." WHERE define_var='MODULE_ID_DESCRIPTION'");
@@ -209,7 +203,7 @@ if (isset($_POST['submit'])) {
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langUsage)." WHERE define_var='MODULE_ID_USAGE'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langToolManagement)." WHERE define_var='MODULE_ID_TOOLADMIN'");
                 db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langWiki)." WHERE define_var='MODULE_ID_WIKI'");
-                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseUnits)." WHERE define_var='MODULE_ID_UNITS'");                                
+                db_query("UPDATE `$currentCourseID`.accueil SET rubrique=".quote($langCourseUnits)." WHERE define_var='MODULE_ID_UNITS'");
 
                 $tool_content .= "<p class='success'>$langModifDone</p>
                         <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$code_cours'>$langBack</a></p>
@@ -239,20 +233,27 @@ if (isset($_POST['submit'])) {
 	$title = q($c['intitule']);
 	$department = $c['faculteid'];
 	$type = $c['type'];
-	$visible = $c['visible'];
+    $visible = $c['visible'];
+    $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
 	$visibleChecked[$visible] = " checked";
 	$fake_code = q($c['fake_code']);
 	$titulary = q($c['titulaires']);
 	$languageCourse	= $c['languageCourse'];
 	$course_keywords = q($c['course_keywords']);
-	$password = q($c['password']);
-        $license = $c['course_license'];
-        $licenseChecked[$license] = " checked";
-        $cc_checked = "";
-        if (($license != 0) and ($license != 20)) {
-            $cc_checked = " checked";
+    $password = q($c['password']);
+    $course_license = $c['course_license'];
+    if ($course_license > 0 and $course_license < 10) {
+        $cc_checked = ' checked';
+    } else {
+        $cc_checked = '';
+    }
+    foreach ($license as $id => $l_info) {
+        $license_checked[$id] = ($course_license == $id)? ' checked': '';
+        if ($id and $id < 10) {
+            $cc_license[$id] = $l_info['title'];
         }
-        
+    }
+
 	$tool_content .="
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
 	<fieldset>
@@ -281,7 +282,7 @@ if (isset($_POST['submit'])) {
 	        <th>$langType:</th>
 	        <td>";
 	$tool_content .= selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type', $type);
-	@$tool_content .= "
+	$tool_content .= "
                 </td>
 	    </tr>
 	    <tr>
@@ -292,36 +293,31 @@ if (isset($_POST['submit'])) {
 	</fieldset>
         <fieldset>
         <legend>$langOpenCoursesLicense</legend>
-            <table class='tbl' width='100%'>           
-            <tr><td colspan='2'><input id = 'no_license' type='radio' name='l_radio' value='20' $licenseChecked[20] $disabledVisibility />
-            $langWithoutCopyright
+            <table class='tbl' width='100%'>
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
+            $langCopyrightedUnknown
             </td>
-            </tr>           
-            <tr><td colspan='2'><input id = 'copyright_license' type='radio' name='l_radio' value='0' $licenseChecked[0] $disabledVisibility />
+            </tr>
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='10'$license_checked[10]$disabledVisibility>
             $langCopyrightedNotFree
             </td>
             </tr>
-            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1' $cc_checked $disabledVisibility />
+            <tr><td colspan='2'><input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>
                 $langCMeta[course_license]
             </td>
-            </tr>            
+            </tr>
             <tr id = 'cc'><td>
-                ".selection(array('1' => $langCreativeCommonsCCBYNC,
-                                  '2' => $langCreativeCommonsCCBYNCSA, 
-                                  '3' => $langCreativeCommonsCCBYNCND,
-                                  '4' => $langCreativeCommonsCCBY, 
-                                  '5' => $langCreativeCommonsCCBYSA, 
-                                  '6' => $langCreativeCommonsCCBYND), 'cc_use', $license, $disabledVisibility)."
+                ".selection($cc_license, 'cc_use', $course_license, $disabledVisibility)."
              </td></tr>
              </table>
         </fieldset>
         <fieldset>
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>
-            <tr>		            
+            <tr>
 		<th width='170'>$langOptPassword</th>
                 <td colspan='2'><input id='coursepassword' type='text' name='password' value='$password' /></td>
-	    </tr>            
+	    </tr>
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
 		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /></td>
@@ -331,7 +327,7 @@ if (isset($_POST['submit'])) {
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
 		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /></td>
 		<td class='smaller'>$langPrivOpen</td>
-	    </tr>	    
+	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
 		<td><input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility /></td>
@@ -344,7 +340,7 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    </table>
 	</fieldset>
-       
+
 	<fieldset>
 	    <legend>$langLanguage</legend>
 	    <table class='tbl'>

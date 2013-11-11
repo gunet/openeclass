@@ -65,10 +65,10 @@ if (isset($_GET['from_search'])) { // if we come from home page search
         header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course_keywords, faculte.name AS faculte, type, visible, titulaires, fake_code
+$res = db_query("SELECT course_keywords, faculte.name AS faculte, type, visible, titulaires,
+                        fake_code, course_license
                         FROM cours, faculte
-                        WHERE cours_id = $cours_id 
-                        AND faculte.id = faculteid", $mysqlMainDb);
+                        WHERE cours_id = $cours_id AND faculte.id = faculteid", $mysqlMainDb);
 $result = mysql_fetch_array($res);
 $keywords = q(trim($result['course_keywords']));
 $faculte = $result['faculte'];
@@ -77,6 +77,7 @@ $visible = $result['visible'];
 $professor = $result['titulaires'];
 $fake_code = $result['fake_code'];
 $main_extra = $description = $addon = '';
+$course_license = $result['course_license'];
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $cours_id AND `order` = -1)
                         AND (visibility = 'v' OR res_id < 0)
@@ -290,8 +291,6 @@ switch ($visible) {
                 break;
         }
 }
-// display course license
-$bar_content .= "<li><b>$langOpenCoursesLicense</b>: ".copyright_info($cours_id)."</li>";
 // display course access
 $bar_content .= "<li><b>$langConfidentiality</b>: $lessonStatus</li>";
 if ($is_course_admin) {
@@ -300,6 +299,19 @@ if ($is_course_admin) {
     $link = "$numUsers $langRegistered";
 }
 $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
+
+// display course license
+if ($course_license) {
+    $license_info_box = "<table class='tbl_courseid' width='200'>
+        <tr class='title1'>
+            <td class='title1'>${langOpenCoursesLicense}</td>
+        <tr><td colspan='2'><ul class='custom_list'>
+            <li>".copyright_info($cours_id)."</li></ul></td></tr>
+        </table>
+        <br/>";
+} else {
+    $license_info_box = '';
+}
 
 // display opencourses level in bar
 require_once '../../modules/course_metadata/CourseXML.php';
@@ -358,6 +370,7 @@ if (!defined('EXPORTING')) {
         </tr>
         </table>
         <br />
+        $license_info_box
         $opencourses_level
         <table class='tbl_courseid' width='200'>
         <tr class='title1'>
