@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -687,7 +687,7 @@ $langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν �
 ******************************************************************/
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2011<br>&nbsp;<br>
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2013<br>&nbsp;<br>
 Η πλατφόρμα '.$siteName.' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
