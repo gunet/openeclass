@@ -1,59 +1,8 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-19 13:31:15
+// Generated 2013-11-12 19:12:19
 
-$langCourseAccessHelp = "
-<ul>
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
-</ul>
-";
-$langWikiSyntaxHelp = "
-<h4>Basic syntax</h4>
-<p>Creating wiki pages and links between them</p>
-<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. The Wiki Word <em>MyPage</em> will automatically be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;</p>
-<p><strong>Wiki links</strong>: Wiki links are like Hyperlinks (see below) apart from the fact that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
-<ul>Hyperlinks
-<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
-<ul>Image inclusion
-<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
-You can also use the syntax of Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, so it is better to consider using the preceding one &nbsp;</li></ul>
-<ul>Link to an image
-<li>same as Hyperlinks but put a 1 as the fifth argument to avoid uploading an image and get a hyperlink to the image instead. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of displaying the image itself</li></ul>
-<p>Layout</p>
-<ul>
-<li><strong>Italic</strong>: enclose your text in two straight single quotes <code>\'\'text\'\'</code>&nbsp;</li>
-<li><strong>Bold</strong>: enclose your text in three straight single quotes <code>\'\'\'text\'\'\'</code>&nbsp;</li>
-<li><strong>Underline</strong>: enclose your text in two underscores <code>__text__</code>&nbsp;</li>
-<li><strong>Stroke</strong>: enclose your text in two minus symbols <code>--text--</code>&nbsp;</li>
-<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
-<li>List</li>
-line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
-<li>Paragraph</li>
-Separate paragraphs with one or more new lines&nbsp;
-</ul>
-<h4>Advanced syntax</h4>
-<ul>
-<li>Footnote</li>
-<code>$$ footnote text$$</code>&nbsp;
-<li>Preformatted text</li>
-Begin each line of preformatted text with a blank space &nbsp;
-<li>Cite block</li>
-<code>&gt;</code> or <code>;:</code> before each line &nbsp;
-<li>Horizontal line</li>
-<code>----</code>&nbsp;
-<li>Forced line break</li>
-<code>%%%</code>&nbsp;
-<li>Acronym</li>
-<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
-<li>Inline cite</li>
-<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
-</ul>
-</ul>
-<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langWindowClose = "Fermer la fenêtre";
 $langHDefault = 'Aide non disponible';
 $langDefaultContent = "<p>Il n'y a pas de texte d'aide pour la page de la plateforme sur laquelle vous êtes actuellement.</p>";
@@ -80,8 +29,10 @@ Enter a title and a description for the forum and click on Add.</p>
   <li>Εmail notification if replies are posted. Clicking (<img src='$themeimg/email.png' width=16 height=16>) you select to start or stop receiving email notifications on posts in a specific forum category.</li>
   </ul>
 ";
-$langHInit_student = $langHInit;
-$langInit_studentContent = $langInitContent;
+$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
+You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
+Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
+;
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p>
@@ -265,6 +216,11 @@ $langGroupContent = "<p>This module allows you to create and manage work groups.
 To modify the group settings click on the icon next to 'Groups settings'.
 There you can set the group registration type (students can self-register in groups or the course teacher will have to permit registrations). 
 Furthermore, you can set whether a group will contain its own forum or not and select whether the access to the group forum will be closed (granted only to group members) or open (granted to everybody).</p>";
+$langHGroupSpace = "User Groups";
+$langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this group'.
+        Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
+        You may send an email to all users within a group by clicking on 'Email to group' selection.
+         You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
 $langGroup_studentContent = "<p>Un groupe d'utilisateurs est un <b>ensemble</b> d'utilisateurs inscrits au module qui se partagent le même espace de discussions ainsi que le même espace de chargement de fichiers et de devoirs. Le sous-système 'Groupes d'utilisateurs' permet la collaboration et l'interactivité des formés à travers leur organisation en groupes. De cette manière, l'apprentissage collaboratif est renforcé, bon nombre de questions sont répondus et des points de vue sont échangés sur des sujets bien précis du module. Les données d'un groupe tels le responsable du groupe, le nombre d'utilisateurs inscrits, le maximum d'utilisateurs autorisés au groupe sont disponibles ce qui vous permet d'avoir une meilleure information sur le groupe.</p>";
 $langHAgenda = "Agenda";
 $langHAgenda_student = $langHAgenda;
@@ -280,6 +236,8 @@ $langAgendaContent = "<p>You can add an event in the Agenda, by clicking on the 
 <hr noshade size=1>
 <p> $langPHPMathPublisher</p>";
 $langAgenda_studentContent = "<p>The Agenda module informs you about the most important events of the course set by the teacher in a chronological order (conferences, meetings, evaluations, etc).</p>";
+$langHMyAgenda = "Mon calendrier";
+$langMyAgendaContent = "$langAgenda_studentContent";
 $langHLink = "Liens";
 $langHLink_student = $langHLink;
 $langLinkContent = "<p>Within this section the links added to your course, are displayed. 
@@ -328,12 +286,35 @@ $langcourseToolsContent = "<p>Through this module you can activate or deactivate
 Each tool is presented in one of the two columns: 'Inactive tools' and 'Active tools' according to its' status.<br>
 In order to change the status of a tool click on the tool name and then click on one of the '>>' and '<<' buttons in order to move it to the other column and change its' status.
 For multiple selection of tools use the CTRL-Click action and then move them to the other column. Click on 'Submit changes' to save your changes.</p>";
+$langCourseAccessHelp = "
+<ul>
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
+</ul>
+";
 $langHInfocours = "Gestion du cours";
+$langInfocoursContent = "
+<p>You can modify/edit several course parameters, namely Course code, Title, Teachers, Faculty, etc.</p>
+<p>You can also modify the course Access Type. The available types of access are: 
+$langCourseAccessHelp
+</p>
+<p>You can select the language in which the course messages will be presented.</p>
+<p>Click on 'Submit' when you finish with all modifications.</p>
+<p>Other actions:
+<ul>
+<li><b>Archive this course:</b> You can create a backup file for the course and then download it and save it locally on your computer. In case you want to recover the course content you have to contact the platform administrator.</li>
+<li><b>Course deletion:</b> You can delete a course and permanently delete all the documents it contains and unregister all its students (Please note that students will not be unregistered from other courses). 
+</li>
+<li><b>Refresh Course:</b> You may selectively remove some of the course contents so as to prepare it for the next academic year.</li>
+</ul>
+</p>";
 $langHConference = "Téléconférence";
-$langHConference_student = $langHConference;
 $langConferenceContent = "<p>You can exchange messages with the students registered in your course in real time. 
 First type your message and then click on <img src='$themeimg/arrow.png' width=16 height=16>.</p>
 <p>Click on 'Cleaning' to remove all past messages, or on 'Save' to save all messages in a document file under the course 'Documents'.</p>";
+$langHConference_student = $langHConference;
 $langConference_studentContent = "<p>Though this module you can communicate in real time with teachers or students of a course. 
 Type your message and click on <img src='$themeimg/arrow.png' width=16 height=16>.</p>";
 $langHVideo = "Multimédia";
@@ -458,7 +439,7 @@ and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 
 <p>Selection of the 'Activation' / 'Inactivation' link moves the Learning Path to the 'Active' or 'Inactive Tools' correspondingly.</p>
 ";
-$langPath_studentContent =  "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
+$langPath_studentContent = "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
 In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute <b>pre-requisites</b> for the steps
 after them (you cannot go to step 2 before step 1). That sequence can only be suggestive (steps are displayed one after the other).
 All learning objects have a status: completed or incomplete and the students progress is available through the <i>Tracking</i> tool at any time. 
@@ -489,6 +470,8 @@ $langUsageContent = "<p>This module presents course usage statistics information
 <li><b>User Group statistics</b>. Useful information on course usage statistics per group is presented here.</li>
 </ul>
 </p>";
+$langHPersonalStats = 'Mes statistiques';
+$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
 $langHCreateCourse = "Créer un cours";
 $langCreateCourseContent = "<p>The Create Course Wizard is one of the most important tools of the platform. By using this, the user-teacher is able to create new courses in the platform and configure them.<br>
 The wizard consists of 3 steps. Filling in every required field with an asterisk, is mandatory. Under each field, lie exemplary information to help the user filling them in.<br>
@@ -499,6 +482,49 @@ In case the user enters invalid data in a field, the system informs the user and
 $langCourseAccessHelp.
 <p>Select the modules you want to enable for your course and click on 'Create Course' to finish with the course creation.</p>
 <p>Please note that all information entered above can be modified at a later stage through the 'Course Administration' tool.</p>";
+$langWikiSyntaxHelp = "
+<h4>Basic syntax</h4>
+<p>Creating wiki pages and links between them</p>
+<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. The Wiki Word <em>MyPage</em> will automatically be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;</p>
+<p><strong>Wiki links</strong>: Wiki links are like Hyperlinks (see below) apart from the fact that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
+<ul>Hyperlinks
+<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
+<ul>Image inclusion
+<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
+You can also use the syntax of Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, so it is better to consider using the preceding one &nbsp;</li></ul>
+<ul>Link to an image
+<li>same as Hyperlinks but put a 1 as the fifth argument to avoid uploading an image and get a hyperlink to the image instead. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of displaying the image itself</li></ul>
+<p>Layout</p>
+<ul>
+<li><strong>Italic</strong>: enclose your text in two straight single quotes <code>\'\'text\'\'</code>&nbsp;</li>
+<li><strong>Bold</strong>: enclose your text in three straight single quotes <code>\'\'\'text\'\'\'</code>&nbsp;</li>
+<li><strong>Underline</strong>: enclose your text in two underscores <code>__text__</code>&nbsp;</li>
+<li><strong>Stroke</strong>: enclose your text in two minus symbols <code>--text--</code>&nbsp;</li>
+<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
+<li>List</li>
+line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
+<li>Paragraph</li>
+Separate paragraphs with one or more new lines&nbsp;
+</ul>
+<h4>Advanced syntax</h4>
+<ul>
+<li>Footnote</li>
+<code>$$ footnote text$$</code>&nbsp;
+<li>Preformatted text</li>
+Begin each line of preformatted text with a blank space &nbsp;
+<li>Cite block</li>
+<code>&gt;</code> or <code>;:</code> before each line &nbsp;
+<li>Horizontal line</li>
+<code>----</code>&nbsp;
+<li>Forced line break</li>
+<code>%%%</code>&nbsp;
+<li>Acronym</li>
+<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
+<li>Inline cite</li>
+<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
+</ul>
+</ul>
+<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
 $langWikiContent = "
@@ -518,8 +544,6 @@ $langWiki_studentContent = "The Wiki module is a new collaboration tool that all
 <p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis.</p>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnitscontent = "Ajouter le contenu d'une unité thématique";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
 $langHGlossary = "Glossaire";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "<p>
@@ -615,31 +639,5 @@ From the displaying form select the desired E-Book section.
 After that click on <strong>'Add selection'</strong>.</p>";
 $langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
 <p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
-$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
-You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
-Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
-;
-$langHMyAgenda = "Mon calendrier";
-$langMyAgendaContent = "$langAgenda_studentContent";
-$langHPersonalStats = 'Mes statistiques';
-$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
-$langInfocoursContent = "
-<p>You can modify/edit several course parameters, namely Course code, Title, Teachers, Faculty, etc.</p>
-<p>You can also modify the course Access Type. The available types of access are: 
-$langCourseAccessHelp
-</p>
-<p>You can select the language in which the course messages will be presented.</p>
-<p>Click on 'Submit' when you finish with all modifications.</p>
-<p>Other actions:
-<ul>
-<li><b>Archive this course:</b> You can create a backup file for the course and then download it and save it locally on your computer. In case you want to recover the course content you have to contact the platform administrator.</li>
-<li><b>Course deletion:</b> You can delete a course and permanently delete all the documents it contains and unregister all its students (Please note that students will not be unregistered from other courses). 
-</li>
-<li><b>Refresh Course:</b> You may selectively remove some of the course contents so as to prepare it for the next academic year.</li>
-</ul>
-</p>";
-$langHGroupSpace = "User Groups";
-$langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this group'.
-        Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
-        You may send an email to all users within a group by clicking on 'Email to group' selection.
-         You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
+$langHAddCourseUnits = "Ajouter le contenu d'une unité thématique";
+$langAddCourseUnitsContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";

@@ -1,59 +1,8 @@
 <?php
 
 // Message file for language de
-// Generated 2012-10-31 12:55:14
+// Generated 2013-11-12 19:12:19
 
-$langCourseAccessHelp = "
-<ul>
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
-</ul>
-";
-$langWikiSyntaxHelp = "
-<h4>Basic syntax</h4>
-<p>Creating wiki pages and links between them</p>
-<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. The Wiki Word <em>MyPage</em> will automatically be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;</p>
-<p><strong>Wiki links</strong>: Wiki links are like Hyperlinks (see below) apart from the fact that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
-<ul>Hyperlinks
-<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
-<ul>Image inclusion
-<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
-You can also use the syntax of Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, so it is better to consider using the preceding one &nbsp;</li></ul>
-<ul>Link to an image
-<li>same as Hyperlinks but put a 1 as the fifth argument to avoid uploading an image and get a hyperlink to the image instead. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of displaying the image itself</li></ul>
-<p>Layout</p>
-<ul>
-<li><strong>Italic</strong>: enclose your text in two straight single quotes <code>\'\'text\'\'</code>&nbsp;</li>
-<li><strong>Bold</strong>: enclose your text in three straight single quotes <code>\'\'\'text\'\'\'</code>&nbsp;</li>
-<li><strong>Underline</strong>: enclose your text in two underscores <code>__text__</code>&nbsp;</li>
-<li><strong>Stroke</strong>: enclose your text in two minus symbols <code>--text--</code>&nbsp;</li>
-<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
-<li>List</li>
-line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
-<li>Paragraph</li>
-Separate paragraphs with one or more new lines&nbsp;
-</ul>
-<h4>Advanced syntax</h4>
-<ul>
-<li>Footnote</li>
-<code>$$ footnote text$$</code>&nbsp;
-<li>Preformatted text</li>
-Begin each line of preformatted text with a blank space &nbsp;
-<li>Cite block</li>
-<code>&gt;</code> or <code>;:</code> before each line &nbsp;
-<li>Horizontal line</li>
-<code>----</code>&nbsp;
-<li>Forced line break</li>
-<code>%%%</code>&nbsp;
-<li>Acronym</li>
-<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
-<li>Inline cite</li>
-<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
-</ul>
-</ul>
-<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langWindowClose = "Fenster schließen";
 $langHDefault = 'Hilfe ist nicht verfügbar';
 $langDefaultContent = '<p>Es ist kein Hilfe-Text verfügbar für die Seite der Plattform, die Sie 
@@ -96,8 +45,10 @@ nicht angezeigt werden wird.</p>
 <p>Die Beschreibung eines Forums kann die Liste der Mitglieder, dessen Zweck, eine Tätigkeit oder 
 ein Thema usw beinhalten.</p><p>Der Link 'Deaktiviereng' / 'Aktivierung' verschiebt die Foren 
 von den aktiven zu den inaktiven Werkzeugen und umgekehrt.</p>";
-$langHInit_student = $langHInit;
-$langInit_studentContent = $langInitContent;
+$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
+You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
+Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
+;
 $langHDoc = "Dokumente";
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>Das Subsystem 'Dokumente'ist in seiner Funktionalität ähnlich dem 
@@ -451,6 +402,11 @@ Liste der Mitglieder ändern.</li>
 <p>Der Link 'Deaktivierung' / 'Aktivierung' verschiebt die Benutzergruppen von den aktiven zu den 
 inaktiven Werkzeugen und umgekehrt.</p>
 ";
+$langHGroupSpace = "User Groups";
+$langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this group'.
+        Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
+        You may send an email to all users within a group by clicking on 'Email to group' selection.
+         You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
 $langGroup_studentContent = "<p>Eine Benutzergruppe ist eine Menge von registrierten Benutzern des 
 Kurses, welche das gleiche Diskussionsforum und den selben Dokumentenbereich teilen</p>";
 $langHAgenda = "Agenda";
@@ -471,6 +427,8 @@ des Kurses in ihrer chronologischen Reihenfolge zu verfolgen (Vorlesungen, Meeti
 Sie können die Reihenfolge der Darstellung ändern, mit der die Ereignisse ausgegeben werden 
 (jüngstes - ältestes), durch Anklicken des Links "Umkehrung der Reihenfolge bei der Darstellung" 
 oben rechts.</p>';
+$langHMyAgenda = "My Agenda";
+$langMyAgendaContent = "$langAgenda_studentContent";
 $langHLink = "Links";
 $langHLink_student = $langHLink;
 $langLinkContent = "<p>Sie können Web-Links auf Web-Seiten im Internet (oder auf Ihre lokalen Web-Seiten) hinzufügen.</p><p>
@@ -540,9 +498,32 @@ werden.</p>
 des Links 'Webseite hochladen'. Falls es einen externen Weblink mit für die Plattform relevanten 
 Inhalten gibt, dann kann dieser festgelegt werden mit Hilfe des Links 
 'Hinzufügen eines externen Links im linken Menu'.</p>";
+$langCourseAccessHelp = "
+<ul>
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
+</ul>
+";
 $langHInfocours = "Administration des Kurses";
+$langInfocoursContent = "<p>Sie können einige der Detailinformationen des Kurses ändern, wie den 
+Namen des Dozenten, den Titel und den Zugriff auf den Kurs. Nach Vollendung der Änderungen klicken 
+Sie auf 'Änderungen abschicken'.
+</p>
+<p><u>Zugang zum Kurs:</u></p>
+<p><b>Offener Kurs :</b>jeder kann Zugang zum Kurs haben auch ohne Benutzerkonto.</p>
+<p><b>Registrierung erforderlich :</b>nur Benutzer mit Benutzerkonto auf der Plattform haben Zugang.</p>
+<p><b>Geschlossener Kurs :</b>nur die Benutzer haben Zugang zum Kurs, die in der Liste der Benutzer des Kurses sind</p>
+<p><u>Andere Aktionen :</u></p>
+<p><b>Sicherheitskopie des Kurses:</b>Sie können eine Sicherheitskopie des Kurses erzeugen und 
+diese lokal auf Ihrem Rechner speichern. Für den Fall, dass Sie den Inhalt wiederherstellen möchten, 
+müssen Sie sich an den Administrator der Plattform wenden.</p>
+<p><b>Löschen des Kurses :</b> Beim Löschen des Kurses wird dessen Inhalt und die Benutzer des 
+Kurses gelöscht (aber die Benutzer werden nicht von der Plattform gelöscht).</p>
+<p><b>Erneuerung des Kurses :</b>Sie können selektiv einige der Daten des Kurses löschen, um den 
+Kurs für ein neues akademisches Jahr vorzubereiten.</p>";
 $langHConference = "Telearbeit";
-$langHConference_student = $langHConference;
 $langConferenceContent = "<p>Sie können Nachrichten mit allen am Kurs registrierten Benutzern 
 austauschen indem Sie ihre Nachricht eintippen und danach auf die Schaltfläche '>>' klicken.
 Weiterhin können Sie alle Nachrichten während des Live-Gesprächs (Chat) löschen durch Auswahl von 
@@ -550,6 +531,7 @@ Weiterhin können Sie alle Nachrichten während des Live-Gesprächs (Chat) lösc
 Subsystem Dokumente gespeichert.</p>
 <p>Der Link 'Deaktivierung' / 'Aktivierung' verschiebt die Telearbeit von den aktiven zu den 
 inaktiven Werkzeugen und umgekehrt.</p>";
+$langHConference_student = $langHConference;
 $langConference_studentContent = '<p>Das Subsystem "Telearbeit"(conference) beinhaltet die 
 Möglichkeit, Textnachrichten auszutauschen (chat). Der Auszubildende (Student) hat die Möglichkeit, 
 mit allen am Kurs registrierten Benutzern Nachrichten auszutauschen, indem er die Nachricht eintippt 
@@ -775,6 +757,8 @@ für welche Statistiken benötigt werden.</p>
 zeitlichen Dauer von Besuchen. Außerdem kann ausgewählt werden für welche Subsysteme Statistiken 
 benötigt werden sowie deren zeitliche Dauer.</p>
 ";
+$langHPersonalStats = 'Personal Statistics';
+$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
 $langHCreateCourse = "Kurs erzeugen";
 $langCreateCourseContent = "<p>Der Assistent zum Erzeugen von Kursen ist ein sehr wichtiges Werkzeug 
 der Plattform, da der Benutzer-Dozent mit dessen hilfe neue kurse erzeugen kann.</p><p> Der Assistent 
@@ -783,6 +767,49 @@ gekennzeichneten Eingabefelder ist zwingend erforderlich. Unter jedem Eingabefel
 Wert als Beispiel, um den Benutzer beim Ausfüllen zu unterstützen.</p><p>Im Fall der Eingabe eines 
 falschen Wertes informiert das System den Benutzer und fordert Ihn auf, diesen zu beheben, so dass 
 er mit dem nächsten Schritt fortfahren kann.</p>";
+$langWikiSyntaxHelp = "
+<h4>Basic syntax</h4>
+<p>Creating wiki pages and links between them</p>
+<p><strong>Wiki words</strong>: Wiki words are words written like <em>WikiWord</em>. To create a wiki page or a link to a wiki page, edit an existing one and add the title of the page in WikiWord syntax, for example <em>MyPage</em>, then save the page. The Wiki Word <em>MyPage</em> will automatically be replaced with a link to the Wiki page <em>MyPage</em>&nbsp;</p>
+<p><strong>Wiki links</strong>: Wiki links are like Hyperlinks (see below) apart from the fact that they do not contain any protocol scheme (like <em>http://</em> or <em>ftp://</em>) and are automatically recognized as links to Wiki pages. To create a new page or create a link to an existing one using Wiki links, edit a page and add <code>[page title]</code> or <code>[name of link|title of page]</code> to its content. You can also use this syntax to change the text of a WikiWord link : <code>[name of link|WikiWord]</code>.</p>
+<ul>Hyperlinks
+<li><code>[url]</code>, <code>[name|url]</code>, <code>[name|url|language]</code> or <code>[name|url|language|title]</code>.&nbsp;;</li></ul>
+<ul>Image inclusion
+<li><code>((url|alternate text))</code>, <code>((url|alternate text|position))</code> or <code>((url|alternate text|position|long description))</code>. <br />The position argument can take the following values: L (left), R (right) or C (center). &nbsp;
+You can also use the syntax of Hyperlinks. For example <code>[title|image.gif]</code>. This syntax is deprecated, so it is better to consider using the preceding one &nbsp;</li></ul>
+<ul>Link to an image
+<li>same as Hyperlinks but put a 1 as the fifth argument to avoid uploading an image and get a hyperlink to the image instead. For example <code>[image|image.gif||0]</code> will display a link to image.gif instead of displaying the image itself</li></ul>
+<p>Layout</p>
+<ul>
+<li><strong>Italic</strong>: enclose your text in two straight single quotes <code>\'\'text\'\'</code>&nbsp;</li>
+<li><strong>Bold</strong>: enclose your text in three straight single quotes <code>\'\'\'text\'\'\'</code>&nbsp;</li>
+<li><strong>Underline</strong>: enclose your text in two underscores <code>__text__</code>&nbsp;</li>
+<li><strong>Stroke</strong>: enclose your text in two minus symbols <code>--text--</code>&nbsp;</li>
+<li><strong>Title</strong>: <code>!!!</code>, <code>!!</code>, <code>!</code> respectively for titles, sub-titles and sub-sub-titles&nbsp;</li>
+<li>List</li>
+line starting with <code>*</code> (unordered list) or <code>#</code> (ordered list). You can mix lists (<code>*#*</code>) to create multi-level lists&nbsp;
+<li>Paragraph</li>
+Separate paragraphs with one or more new lines&nbsp;
+</ul>
+<h4>Advanced syntax</h4>
+<ul>
+<li>Footnote</li>
+<code>$$ footnote text$$</code>&nbsp;
+<li>Preformatted text</li>
+Begin each line of preformatted text with a blank space &nbsp;
+<li>Cite block</li>
+<code>&gt;</code> or <code>;:</code> before each line &nbsp;
+<li>Horizontal line</li>
+<code>----</code>&nbsp;
+<li>Forced line break</li>
+<code>%%%</code>&nbsp;
+<li>Acronym</li>
+<code>??acronym??</code> or <code>??acronym|definition??</code>&nbsp;
+<li>Inline cite</li>
+<code>{{cite}}</code>, <code>{{cite|language}}</code> or <code>{{cite|language|url}}</code>&nbsp;
+</ul>
+</ul>
+<p> The 'Inactivation' / 'Activation' link moves the Wiki system from active to inactive and vice versa tools.</p>";
 $langHWiki = "Wiki-System";
 $langHWiki_student = $langHWiki;
 $langWikiContent = "<p>Damit Sie ein neues Wiki erzeugen,</p>
@@ -878,17 +905,6 @@ $langWiki_studentContent = "<p>Das Wiki-System ist ein Kollaborationswerkzeug zu
 der aktuellen Version der Open eClass Plattform integriert ist. Es bietet den Teilnehmern des 
 Kurses (Dozenten und Studenten) die Möglichkeit, gemeinsam den Inhalt von unterschiedlichen Texten 
 zu bearbeiten.</p>";
-$langHAddCourseUnitscontent = "Inhalt einer Kurseinheit hinzufügen";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>Auf dieser Bildschirmseite werden Inhalt 
-oder Ressourcen der Kurseinheit hinzugefügt. Die Art der Ressourcen, die hinzugefügt werden können, 
-werden neben dem Wert 'Hinzufügen:' aufgelistet. Durch Klicken auf 'Hinzufügen' werden die verfügbaren 
-Ressourcen des Kurses angezeigt, die der gewählten Art entsprechen. Wählen Sie die von ihnen gewünschten 
-Ressourcen aus und klicken Sie dann auf 'Hinzufügen der ausgewählten'. Jede der hinzugefügten Ressourcen 
-wird in einer Liste dargestellt und rechts davon werden die Icons für das Löschen und Bearbeiten 
-angezeigt. Beachten Sie, dass falls mehr als eine Kurseinheit in einem Kurs vorhanden ist, dann 
-Links auf die folgende und vorherige Kurseinheit angezeigt werden. Alternativ kann auch die Liste 
-der Optionen im unteren Bereich der Webseite zum direkten Übergang zu einer bestimmten Kurseinheit 
-benutzt werden.</p>";
 $langHGlossary = "Glossary";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "<p>
@@ -984,32 +1000,14 @@ From the displaying form select the desired E-Book section.
 After that click on <strong>'Add selection'</strong>.</p>";
 $langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
 <p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
-$langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
-You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
-Υou can also click on (<img src='$themeimg/email.png' width=16 height=16>) in order to start or stop receiving email notifications for new posts in a specific topic or forum category.</li>"
-;
-$langHMyAgenda = "My Agenda";
-$langMyAgendaContent = "$langAgenda_studentContent";
-$langHPersonalStats = 'Personal Statistics';
-$langPersonalStatsContent = "<p>The number and duration of visits per course is presented here.</p>";
-$langInfocoursContent = "<p>Sie können einige der Detailinformationen des Kurses ändern, wie den 
-Namen des Dozenten, den Titel und den Zugriff auf den Kurs. Nach Vollendung der Änderungen klicken 
-Sie auf 'Änderungen abschicken'.
-</p>
-<p><u>Zugang zum Kurs:</u></p>
-<p><b>Offener Kurs :</b>jeder kann Zugang zum Kurs haben auch ohne Benutzerkonto.</p>
-<p><b>Registrierung erforderlich :</b>nur Benutzer mit Benutzerkonto auf der Plattform haben Zugang.</p>
-<p><b>Geschlossener Kurs :</b>nur die Benutzer haben Zugang zum Kurs, die in der Liste der Benutzer des Kurses sind</p>
-<p><u>Andere Aktionen :</u></p>
-<p><b>Sicherheitskopie des Kurses:</b>Sie können eine Sicherheitskopie des Kurses erzeugen und 
-diese lokal auf Ihrem Rechner speichern. Für den Fall, dass Sie den Inhalt wiederherstellen möchten, 
-müssen Sie sich an den Administrator der Plattform wenden.</p>
-<p><b>Löschen des Kurses :</b> Beim Löschen des Kurses wird dessen Inhalt und die Benutzer des 
-Kurses gelöscht (aber die Benutzer werden nicht von der Plattform gelöscht).</p>
-<p><b>Erneuerung des Kurses :</b>Sie können selektiv einige der Daten des Kurses löschen, um den 
-Kurs für ein neues akademisches Jahr vorzubereiten.</p>";
-$langHGroupSpace = "User Groups";
-$langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this group'.
-        Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
-        You may send an email to all users within a group by clicking on 'Email to group' selection.
-         You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
+$langHAddCourseUnits = 'Inhalt einer Kurseinheit hinzufügen';
+$langAddCourseUnitsContent = "<p class='helptopic'>Auf dieser Bildschirmseite werden Inhalt 
+oder Ressourcen der Kurseinheit hinzugefügt. Die Art der Ressourcen, die hinzugefügt werden können, 
+werden neben dem Wert 'Hinzufügen:' aufgelistet. Durch Klicken auf 'Hinzufügen' werden die verfügbaren 
+Ressourcen des Kurses angezeigt, die der gewählten Art entsprechen. Wählen Sie die von ihnen gewünschten 
+Ressourcen aus und klicken Sie dann auf 'Hinzufügen der ausgewählten'. Jede der hinzugefügten Ressourcen 
+wird in einer Liste dargestellt und rechts davon werden die Icons für das Löschen und Bearbeiten 
+angezeigt. Beachten Sie, dass falls mehr als eine Kurseinheit in einem Kurs vorhanden ist, dann 
+Links auf die folgende und vorherige Kurseinheit angezeigt werden. Alternativ kann auch die Liste 
+der Optionen im unteren Bereich der Webseite zum direkten Übergang zu einer bestimmten Kurseinheit 
+benutzt werden.</p>";

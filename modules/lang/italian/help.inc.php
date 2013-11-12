@@ -1,58 +1,8 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-31 12:32:35
+// Generated 2013-11-12 19:12:19
 
-$langCourseAccessHelp = "<ul> 
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16>Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li> 
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16>Corso inattivo</b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li> 
-</ul>
-";
-$langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>
-<p>Creare pagine wiki e link fra di loro</p>
-<p><strong>Parole  di wiki</strong>: Le parole di Wiki sono parole che sono scritte come <em>Parola</em>. Per creare una pagina wiki o un link a una pagina wiki, modifica una già esistente e compila il titolo della pagina secondo la sintassi, ad esempio <em>La mia pagina</em>, e quindi salvarla. Automaticamente la parola <em>La mia pagina</em> sarà sostituita con un link alla pagina Wiki <em>La mia pagina </em>&nbsp;</p>
-<p><strong><p>Link Wiki </strong>: I link Wiki sono come i link ipertestuali (hyperlink - guarda più avanti), tuttavia non si riferiscono ad un protocollo (ad esempio <em>http://</em> o <em>ftp://</em>) e si trasformano automaticamente in link alle pagine Wiki. Per creare una nuova pagina o un link ad una già esistente, modifica la pagina ed aggiungi <code>[titolo della pagina]</code> o <code>[nome di link | titolo della pagina]</code> al contenuto. Puoi utilizzare la seguente sintassi per rinominare un link Wiki: <code>[Nome del link | parola]</code>.</p>
-<ul>Link ipertestuali
-<li><code>[url]</code>, <code>[nome | url]</code>, <code>[nome | url | lingua]</code> o <code>[nome | url | lingua |. titolo]</code>.&nbsp;</li></ul>
-<ul> Inserire Immagine
-<li><code>((url | alt text ))</code>, <code>((url | alt text | posizione))</code> o <code>((url | alt text | posizione | descrizione ))</code>. <br /> Il parametro di posizione può assumere i seguenti valori: L (sinistra), R (destra) o C (centro).&nbsp;
-Inoltre è possibile utilizzare la sintassi dei link ipertestuali. Per esempio <code>[titolo | image.gif]</code>. Questa sintassi sta per essere abolita, qundi utilizza quella precedente per sicurezza.</li></ul>
-<ul>Link a un' immagine
-<li>Si tratta di un link ipertestuale, però metti un 1 come quinto parametro per evitare il caricamento dell' immagine, sicché risulti un link a un' immagine. Per esempio <code>[image | image.gif || 0]</code> presenterà un link all' immagine image.gif, anziché l'immagine stessa </li> </ul>
-<p>Impaginazione</p>
-<ul>
-<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>''testo''</code>&nbsp;</li>
-<li><strong>Grassetto</strong>: racchiudi il testo tra tre virgolette singole <code>'''testo'''</code>&nbsp;</li>
-<li><strong>Sottolineato</strong>: racchiudi il testo tra due trattini bassi (underscore) <code>__testo__</code>&nbsp;</li>
-<li><strong>Barrato</strong>: racchiudi il testo tra due trattini <code>--testo--</code>&nbsp;</li>
-<li><strong>Titolo</strong>:!!!<code></code>, <code>!!</code>, <code>!</code> per i titoli, sottotitoli, sottotitoli-minori rispettivamente&nbsp;</li>
-<li>Lista</li>
-La linea deve iniziare con <code>*</code> (lista non ordinata) o <code>#</code> (lista ordinata). Puoi disordinare le liste (<code>*#*</code>) per creare delle liste in vari livelli&nbsp;.
-<li>Paragrafo</li>
-Separa i paragrafi separati con una o più linee
-</ul>
-
-<h4>Sintassi avanzata</​​h4>
-<ul>
-<li>Nota a piè</​​li>
-<code>Testo della nota</​​code>&nbsp;
-<li>Testo in formato pronto</li>
-Inizia ogni riga con uno spazio &nbsp;
-<li>Blocco  di riferimento</li>
-<code>&gt;</code> o <code>;:</code> prima di ogni riga&nbsp;
-<li>Linea orizzontale</li>
-<code>----</code>
-<li>Interruzione di riga obbligatoria</li>
-<code>%%%</code>&nbsp;
-<li>Acronimo</li>
-<code>??acronimo??</code> o <code>??acronimo|definizione??</code>&nbsp;
-<li>Riferimento diretto</li>
-<code>{{riferimento}}</code>, <code>{{riferimento|lingua}}</code> o <code>{{riferimento|lingua|url}}</code>&nbsp;
-</ul>
-</ul>
-<p>Il link 'Attivare' / 'Disattivare' muove il sistema Wiki dagli strumenti attivi a quelli inattivi e vice versa.</p>";
 $langWindowClose = 'Chiudi finestra';
 $langHDefault = 'Guida non disponibile';
 $langDefaultContent = '<p>Non è disponibile alcun testo di aiuto per la pagina della piattaforma che stai visualizzando ora.</p>';
@@ -81,8 +31,9 @@ $langForContent = "<p>Puoi comunicare con tutti gli utenti del corso.</p>
   <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando un post o una risposta al forum della propria categoria viene apposta.</li> 
   </ul>
 ";
-$langHInit_student = $langHInit;
-$langInit_studentContent = $langInitContent;
+$langFor_studentContent = "<p>Il modulo 'Forum' permette la comunicazione scritta <b>asincrona</b> tra gli studenti e gli insegnanti. Ad un argomento già postato puoi dare la tua risposta, partecipando così al forum del corso. Per farlo, clicca sul forum che desideri. In seguito fai clic sul argomento che ti interessa da un certo gruppo e premi il link 'Rispondere'. Inserisci il testo che vuoi postare alla discussione particolare e poi clicca sul pulsante 'Inviare'.
+</p>
+<p>Per ogni forum la piattaforma fornisce una serie di informazioni, come: l' argomento, il numero dei post, l' ultimo (in tempo) post. Una funzione utile di questo modulo  è l'avviso via e-mail dei post inviati. Premendo il pulsante (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare gli avvisi via e-mail dei post inviati al forum della categoria attuale. </p>";
 $langHDoc = 'Documenti';
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>Il modulo 'Documenti' è uno strumento importante che aiuta notevolmente lo
@@ -389,6 +340,12 @@ $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazion
 <li>Documenti del Gruppo. Puoi aggiungere o rimuovere,  attraverso i link rispettivi, i documenti che si riferiscono al gruppo attuale. Anche in questo punto, va sottolineato che i documenti caricati riguardano il ​​gruppo attuale e non hanno rapporto con il modulo 'Documenti' della Home Page della piattaforma. È inoltre possibile creare delle cartelle in cui puoi sistemare i documenti del gruppo caricati,  facendo clic sul link 'Creare Cartella'. Una caratteristica molto utile che riguarda lo spazio al server che hai alla tua disposizione, è raggiungibile tramite il link 'Visualizzare lo spazio al server'. </li>
 </ul>
 <p><b>b) Gestione della lista degli utenti.</b> In questo modulo è possibile gestire la lista degli utenti nel corso. È possibile aggiungere uno o più utenti attraverso il link 'Aggiungere un utente' e 'Aggiungere molti utenti'. Puoi anche aggiungere un utente ospite, cliccando sul link 'Aggiungere un utente ospite'. Per cercare un utente fai clic su 'Cercare utente' e compila il suo nome e cognome o il username. Per cancellare un utente basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sul lato destro dei dati dell'utente. </p>";
+$langHGroupSpace = "Gruppi di utenti";
+$langGroupSpaceContent = "<p>Per modificare gli elementi del gruppo di utenti, fai clic su 'Modificare gruppo di utenti'.
+        Cliccando su 'Forum' la piattaforma ti reindirizza al modulo dei 'Forum', in cui un Forum è stato creato per ogni gruppo di utenti. Cliccando sul 'Documenti del gruppo' puoi aggiungere o rimuovere i documenti del gruppo, attraverso i propri link. 
+        Qui, deve essere addirittura sottolineato che i documenti del gruppo caricati non sono relativi al modulo 'Documenti' della Home Page della piattaforma. 
+        Puoi inviare una e-mail ai membri di un gruppo cliccando su 'Inviare e-mail al gruppo'.
+         Puoi anche vedere alcune statistiche per un gruppo cliccando su 'Statistiche' </p>.";
 $langGroup_studentContent = "<p>Un gruppo di utenti è una <b>collezione</b> di utenti registrati che condividono lo stesso forum e lo stesso spazio sul server di file e compiti caricati. Il modulo 'Gruppi di utenti' permette la collaborazione e l'interazione degli studenti attraverso la loro organizzazione in gruppi. In questo modo si rinforza l' apprendimento collaborativo, si sono risposte varie domande e scambiate delle opinioni su certe questioni del corso. I dati di un gruppo come: il manager del gruppo, il numero degli utenti registrati, il numero massimo degli utenti autorizzati nel gruppo è alla tua disposizione, per il tuo migliore aggiornamento riguardante al gruppo.</p>.";
 $langHAgenda = "Agenda";
 $langHAgenda_student = $langHAgenda;
@@ -408,6 +365,14 @@ $langAgenda_studentContent = "
 <p>Il modulo 'Agenda' ha l' obbiettivo  di <b>aggiornare</b> e <b>organizzare</b> il tempo degli studenti sui processi che hanno luogo in un certo corso. La specificazione dei capitoli (materia didattica), la specificazione del tempo quando avranno luogo la presentazioni del corso, dei soggetti che tratterà il corso, sono alcuni degli usi di questo modulo. Usando la 'barra di scorrimento' sul lato destro del tuo browser, si possono vedere i vari eventi che si svolgono in un certo corso. È importante notare che oltre alla data programmata  di un evento, si riferisce ancora  l'ora esatta della sua realizzazione. L'utilità di questo modulo è evidente soprattutto in caso di emergenze o del cambiamento dell' orario della realizzazione di un corso.
 </p> 
 ";
+$langHMyAgenda = "Il mio calendario";
+$langMyAgendaContent = "<p>Il modulo 'Mio Calendario' ha come obbiettivo l' <b>aggiornamento</b> e l'
+<b>organizzazione</b> del tuo tempo rispetto ai processi che si svolgono in
+questo corso. La determinazione dell' orario che avranno luogo le
+presentazione del corso e  gli esami, ed ancora altri e vari
+eventi significativi che riguardano al corso sono disponibili con questo modulo. In maniera grafica, vengono visualizzate le date e
+gli intervalli di tempo degli eventi. Qui si dovrebbe chiarire che questo
+modulo ha un rapporto immediato con il modulo 'Agenda'.</ p>";
 $langHLink = "Links";
 $langHLink_student = $langHLink;
 $langLinkContent = "<p>Via il modulo 'Link' puoi raccogliere tutti i link che sono utili per il corso. La piattaforma offre la possibilità di sistemare i link in categorie per facilitare il loro accesso. Le caratteristiche di questo modulo sono:</p>
@@ -456,15 +421,42 @@ Le operazioni supportate dalla piattaforma sul modulo dell' attivazione degli st
 <li> <b>Aggiungere un link esterno sul menu laterale di sinistra</b>. Se desideri inserire un link esterno, compila l' indirizzo del link e premi il pulsante 'Aggiungere'. </li> 
  </ul> 
 </p>";
+$langCourseAccessHelp = "<ul> 
+<li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
+<li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
+<li><b><img src='$themeimg/lock_closed.png' width=16 height=16>Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li> 
+<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16>Corso inattivo</b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li> 
+</ul>
+";
 $langHInfocours = "Gestione di Corso";
+$langInfocoursContent = "<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
+<hr>
+<p> <b>Identità del corso</b></p>
+<p>Questa categoria riguarda gli elementi dell'identità del corso. Qui puoi <b>digitare</b> il codice e il titolo di un corso, e l' insegnante-insegnanti che gestiranno il corso. Tramite una casella di riepilogo puoi selezionare la Scuola-Faccoltà che appartiene questo corso, ed ancora il tipo del corso  - ad es. corso post-laurea. Questa categoria si conclude compilando alcune parole-chiave  che si usano dagli studenti affinché loro <b>si concentrino</b> al meglio sui concetti rispettivi. </p>
+<hr> 
+ <p><b>Accesso al corso</b></p>
+<p>Questa categoria è associata all' accesso degli utenti al corso. La piattaforma supporta i seguenti modi d' <b>accesso</b> da parte degli utenti:</p>
+$langCourseAccessHelp 
+<hr> 
+<p><b>Lingua</b></p>
+<p>Riguarda alla lingua in cui si visualizzano i messaggi del corso.</p> 
+<hr> 
+<p><b>Operazioni supportate dal modulo 'Gestione Corsi'</b></p> 
+<p>Le operazioni che sono supportate dalla piattaforma sul modulo 'Gestione Corsi' sono i seguenti:</p> 
+<ul> 
+<li><b>Backup del corso:</b> Puoi creare una copia di backup del corso e salvarlo sul tuo computer locale. Se desideri recuperare il suo contenuto bisogna contattare il gestore della piattaforma.</li> 
+<li><b>Eliminare un corso:</b> Eliminando un corso, si elimina il suo contenuto e viene cancellata la registrazione dei suoi utenti. (nota che gli utenti non si rimuovono dalla piattaforma).</li> 
+<li><b>Riutilizzare un corso:</b> Puoi eliminare selettivamente alcuni dei dati del corso, per prepararlo per il nuovo anno accademico.</li> 
+</ul> 
+</p> ";
 $langHConference = "Collaborazione remota";
-$langHConference_student = $langHConference;
 $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 <ul>
 <li><b>Svuotare</b>. Cliccando su questo link si puoi <b>svuotare</b> l'area di messaggi della 'Collaborazione Remota', sia quando il volume dei messaggi è molto grande, che quando inizi un nuovo tema di 'Collaborazione Remota'</li>
 <li><b>Salvare</b>Cliccando questo link, puoi salvare i messaggi che sono stati scambiati nell' area della 'Collaborazione Remota'. I messaggi vengono salvati nel menu 'Documenti' (in formato .txt) e sono visibili agli studenti. Se sei un insegnante, puoi renderli invisibili facendo clic sul pulsante <img src='$themeimg/visibile.png' width=16 height=16>.</li> 
 </ul> 
 ";
+$langHConference_student = $langHConference;
 $langConference_studentContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 ";
 $langHVideo = "Multimedia";
@@ -683,6 +675,9 @@ $langUsageContent = "<p>Questo modulo serve a visualizzare le statistiche per qu
 <hr>
 <p>Preferenza dei moduli</b></p>
 <p>La preferenza dei moduli<p> è un' operazione che è inclusa in tutte le suddette categorie di statistiche, e permette l' impostazione dei parametri che saranno utilizzati alla ricerca delle statistiche. Prima puoi specificare il tipo delle statistiche, in base al 'Numero di visite' o la 'Durata'. Poi, specifica la data di inizio e di scadenza, e prosegui alla visualizzazione delle statistiche. Se desideri visualizzare le statistiche per un certo utente, digita la prima lettera del suo cognome, altrimenti seleziona 'Tutti gli utenti' dalla lista di valori. Il processo si completa cliccando sul pulsante 'Inviare'.</p>";
+$langHPersonalStats = 'Le mie statistiche';
+$langPersonalStatsContent = '
+<p>Questo modulo <b>presenta</b> una serie di informazioni utili sui corsi. Ci vengono visualizzati in formato grafico, gli accessi per ogni corso, delle tabelle con gli accessi totali (il tempo e la durata della partecipazione) per ogni corso e il tuo accesso alla piattaforma (data e ora di entrata e di uscita).</p>';
 $langHCreateCourse = "Creare corso";
 $langCreateCourseContent = "
 <p>Questo modulo è uno strumento molto importante della piattaforma, perché  l' insegnante lo può utilizzare per creare nuovi corsi. Il processo di creazione è costituito da 3 passi. In particolare:</p> 
@@ -694,6 +689,49 @@ $langCreateCourseContent = "
 La piattaforma supporta i seguenti modi di accesso da parte degli utenti:</p> 
 $langCourseAccessHelp 
 ";
+$langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>
+<p>Creare pagine wiki e link fra di loro</p>
+<p><strong>Parole  di wiki</strong>: Le parole di Wiki sono parole che sono scritte come <em>Parola</em>. Per creare una pagina wiki o un link a una pagina wiki, modifica una già esistente e compila il titolo della pagina secondo la sintassi, ad esempio <em>La mia pagina</em>, e quindi salvarla. Automaticamente la parola <em>La mia pagina</em> sarà sostituita con un link alla pagina Wiki <em>La mia pagina </em>&nbsp;</p>
+<p><strong><p>Link Wiki </strong>: I link Wiki sono come i link ipertestuali (hyperlink - guarda più avanti), tuttavia non si riferiscono ad un protocollo (ad esempio <em>http://</em> o <em>ftp://</em>) e si trasformano automaticamente in link alle pagine Wiki. Per creare una nuova pagina o un link ad una già esistente, modifica la pagina ed aggiungi <code>[titolo della pagina]</code> o <code>[nome di link | titolo della pagina]</code> al contenuto. Puoi utilizzare la seguente sintassi per rinominare un link Wiki: <code>[Nome del link | parola]</code>.</p>
+<ul>Link ipertestuali
+<li><code>[url]</code>, <code>[nome | url]</code>, <code>[nome | url | lingua]</code> o <code>[nome | url | lingua |. titolo]</code>.&nbsp;</li></ul>
+<ul> Inserire Immagine
+<li><code>((url | alt text ))</code>, <code>((url | alt text | posizione))</code> o <code>((url | alt text | posizione | descrizione ))</code>. <br /> Il parametro di posizione può assumere i seguenti valori: L (sinistra), R (destra) o C (centro).&nbsp;
+Inoltre è possibile utilizzare la sintassi dei link ipertestuali. Per esempio <code>[titolo | image.gif]</code>. Questa sintassi sta per essere abolita, qundi utilizza quella precedente per sicurezza.</li></ul>
+<ul>Link a un' immagine
+<li>Si tratta di un link ipertestuale, però metti un 1 come quinto parametro per evitare il caricamento dell' immagine, sicché risulti un link a un' immagine. Per esempio <code>[image | image.gif || 0]</code> presenterà un link all' immagine image.gif, anziché l'immagine stessa </li> </ul>
+<p>Impaginazione</p>
+<ul>
+<li><strong>Corsivo</strong>: racchiudi il testo tra virgolette semplici <code>''testo''</code>&nbsp;</li>
+<li><strong>Grassetto</strong>: racchiudi il testo tra tre virgolette singole <code>'''testo'''</code>&nbsp;</li>
+<li><strong>Sottolineato</strong>: racchiudi il testo tra due trattini bassi (underscore) <code>__testo__</code>&nbsp;</li>
+<li><strong>Barrato</strong>: racchiudi il testo tra due trattini <code>--testo--</code>&nbsp;</li>
+<li><strong>Titolo</strong>:!!!<code></code>, <code>!!</code>, <code>!</code> per i titoli, sottotitoli, sottotitoli-minori rispettivamente&nbsp;</li>
+<li>Lista</li>
+La linea deve iniziare con <code>*</code> (lista non ordinata) o <code>#</code> (lista ordinata). Puoi disordinare le liste (<code>*#*</code>) per creare delle liste in vari livelli&nbsp;.
+<li>Paragrafo</li>
+Separa i paragrafi separati con una o più linee
+</ul>
+
+<h4>Sintassi avanzata</​​h4>
+<ul>
+<li>Nota a piè</​​li>
+<code>Testo della nota</​​code>&nbsp;
+<li>Testo in formato pronto</li>
+Inizia ogni riga con uno spazio &nbsp;
+<li>Blocco  di riferimento</li>
+<code>&gt;</code> o <code>;:</code> prima di ogni riga&nbsp;
+<li>Linea orizzontale</li>
+<code>----</code>
+<li>Interruzione di riga obbligatoria</li>
+<code>%%%</code>&nbsp;
+<li>Acronimo</li>
+<code>??acronimo??</code> o <code>??acronimo|definizione??</code>&nbsp;
+<li>Riferimento diretto</li>
+<code>{{riferimento}}</code>, <code>{{riferimento|lingua}}</code> o <code>{{riferimento|lingua|url}}</code>&nbsp;
+</ul>
+</ul>
+<p>Il link 'Attivare' / 'Disattivare' muove il sistema Wiki dagli strumenti attivi a quelli inattivi e vice versa.</p>";
 $langHWiki = "Wiki";
 $langHWiki_student = $langHWiki;
 $langWikiContent = "<p>Attraverso il modulo <b>Wiki</b> gli studenti e gli insegnanti possono  creare documenti in collaborazione. Questa operazione viene effettuata utilizzando un browser. Per questo motivo,  i <b>Wiki</b> sono uno strumento utile per la collaborazione tra gruppi di studenti nell' ambito del corso.</p>
@@ -715,8 +753,6 @@ $langWiki_studentContent = "
 <li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <img src='$themeimg/book.png' align='absmiddle'> la visualizzazione di tutte le pagine , <img src='$themeimg/list.png' align='absmiddle'>la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnitscontent = "Aggiungere contenuto di sezione tematica";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>In questo display dei contenuti o delle risorse vengono aggiunti alla sezione tematica selezionata. Il tipo delle risorse che si possono  aggiungere è scritto accanto alla parola 'Aggiungere:'. Cliccandola vengono visualizzate le risorse disponibili che corrispondono al tipo selezionato. Seleziona le risorse desiderate e quindi fai clic su 'Aggiungere selezionati'. Ogni risorsa che viene aggiunta, appare in un elenco e ha sulla destra le icone 'Modificare' e 'Eliminare'. Nota che qualora ci siano più di una sezioni tematiche in un corso, vengono visualizzati i link alla sezione successiva e precedente. Altrimenti puoi utilizzare  la lista delle opzioni che viene visualizzata nella parte inferiore della pagina,  per andare direttamente a qualsiasi sezione.</p>";
 $langHGlossary = "Glossario";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "
@@ -826,43 +862,5 @@ Per <strong>eliminare</strong> un E-book,  dal menu principale (a sinistra), dev
 <p>Puoi associare una sezione tematica del tuo corso, alla <strong>sezione</strong> corrispondente dell' <strong>E-book</strong>. Perciò, vai alla sezione del corso alla quale vuoi associare l' E-book,  e dalla barra con gli strumenti disponibili, seleziona <strong>'Aggiungere E-book'</strong>. Verrà visualizzata una pagina in cui devi selezionare la sezione dell' E-book desideri associare. In seguito,  premi <strong>'Aggiungere Selezionati'</strong>. </p>
 ";
 $langEBook_studentContent = "<p>L' e-book è un insieme di <b>hypertext</b> (ipertesto) che 'simula' il libro stampato. Sostanzialmente un e-book è una struttura flessibile che, oltre al testo in formato digitale, può essere ulteriormente migliorato con elementi multimediali come: foto, video, link esterni, ecc. In più, questo modulo permette l' impostazione dei contenuti in sezioni-sottosezioni. La presentazione dei contenuti avviene mediante una di lista di scelta (casella di riepilogo). La sfogliata di un e-book si svolge con modo amichevole, siccome ci sono pulsanti di controllo di varie operazioni, ad esempio pagina precedente - successiva.</p>.";
-$langFor_studentContent = "<p>Il modulo 'Forum' permette la comunicazione scritta <b>asincrona</b> tra gli studenti e gli insegnanti. Ad un argomento già postato puoi dare la tua risposta, partecipando così al forum del corso. Per farlo, clicca sul forum che desideri. In seguito fai clic sul argomento che ti interessa da un certo gruppo e premi il link 'Rispondere'. Inserisci il testo che vuoi postare alla discussione particolare e poi clicca sul pulsante 'Inviare'.
-</p>
-<p>Per ogni forum la piattaforma fornisce una serie di informazioni, come: l' argomento, il numero dei post, l' ultimo (in tempo) post. Una funzione utile di questo modulo  è l'avviso via e-mail dei post inviati. Premendo il pulsante (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare gli avvisi via e-mail dei post inviati al forum della categoria attuale. </p>";
-$langHMyAgenda = "Il mio calendario";
-$langMyAgendaContent = "<p>Il modulo 'Mio Calendario' ha come obbiettivo l' <b>aggiornamento</b> e l'
-<b>organizzazione</b> del tuo tempo rispetto ai processi che si svolgono in
-questo corso. La determinazione dell' orario che avranno luogo le
-presentazione del corso e  gli esami, ed ancora altri e vari
-eventi significativi che riguardano al corso sono disponibili con questo modulo. In maniera grafica, vengono visualizzate le date e
-gli intervalli di tempo degli eventi. Qui si dovrebbe chiarire che questo
-modulo ha un rapporto immediato con il modulo 'Agenda'.</ p>";
-$langHPersonalStats = 'Le mie statistiche';
-$langPersonalStatsContent = '
-<p>Questo modulo <b>presenta</b> una serie di informazioni utili sui corsi. Ci vengono visualizzati in formato grafico, gli accessi per ogni corso, delle tabelle con gli accessi totali (il tempo e la durata della partecipazione) per ogni corso e il tuo accesso alla piattaforma (data e ora di entrata e di uscita).</p>';
-$langInfocoursContent = "<p>Il modulo 'Gestione Corsi' ti permette di modificare / elaborare una serie di parametri che sono associati con un certo corso. Le impostazioni di questi parametri si classificano come segue: </p> 
-<hr>
-<p> <b>Identità del corso</b></p>
-<p>Questa categoria riguarda gli elementi dell'identità del corso. Qui puoi <b>digitare</b> il codice e il titolo di un corso, e l' insegnante-insegnanti che gestiranno il corso. Tramite una casella di riepilogo puoi selezionare la Scuola-Faccoltà che appartiene questo corso, ed ancora il tipo del corso  - ad es. corso post-laurea. Questa categoria si conclude compilando alcune parole-chiave  che si usano dagli studenti affinché loro <b>si concentrino</b> al meglio sui concetti rispettivi. </p>
-<hr> 
- <p><b>Accesso al corso</b></p>
-<p>Questa categoria è associata all' accesso degli utenti al corso. La piattaforma supporta i seguenti modi d' <b>accesso</b> da parte degli utenti:</p>
-$langCourseAccessHelp 
-<hr> 
-<p><b>Lingua</b></p>
-<p>Riguarda alla lingua in cui si visualizzano i messaggi del corso.</p> 
-<hr> 
-<p><b>Operazioni supportate dal modulo 'Gestione Corsi'</b></p> 
-<p>Le operazioni che sono supportate dalla piattaforma sul modulo 'Gestione Corsi' sono i seguenti:</p> 
-<ul> 
-<li><b>Backup del corso:</b> Puoi creare una copia di backup del corso e salvarlo sul tuo computer locale. Se desideri recuperare il suo contenuto bisogna contattare il gestore della piattaforma.</li> 
-<li><b>Eliminare un corso:</b> Eliminando un corso, si elimina il suo contenuto e viene cancellata la registrazione dei suoi utenti. (nota che gli utenti non si rimuovono dalla piattaforma).</li> 
-<li><b>Riutilizzare un corso:</b> Puoi eliminare selettivamente alcuni dei dati del corso, per prepararlo per il nuovo anno accademico.</li> 
-</ul> 
-</p> ";
-$langHGroupSpace = "Gruppi di utenti";
-$langGroupSpaceContent = "<p>Per modificare gli elementi del gruppo di utenti, fai clic su 'Modificare gruppo di utenti'.
-        Cliccando su 'Forum' la piattaforma ti reindirizza al modulo dei 'Forum', in cui un Forum è stato creato per ogni gruppo di utenti. Cliccando sul 'Documenti del gruppo' puoi aggiungere o rimuovere i documenti del gruppo, attraverso i propri link. 
-        Qui, deve essere addirittura sottolineato che i documenti del gruppo caricati non sono relativi al modulo 'Documenti' della Home Page della piattaforma. 
-        Puoi inviare una e-mail ai membri di un gruppo cliccando su 'Inviare e-mail al gruppo'.
-         Puoi anche vedere alcune statistiche per un gruppo cliccando su 'Statistiche' </p>.";
+$langHAddCourseUnits = 'Aggiungere contenuto di sezione tematica';
+$langAddCourseUnitsContent = "<p class='helptopic'>In questo display dei contenuti o delle risorse vengono aggiunti alla sezione tematica selezionata. Il tipo delle risorse che si possono  aggiungere è scritto accanto alla parola 'Aggiungere:'. Cliccandola vengono visualizzate le risorse disponibili che corrispondono al tipo selezionato. Seleziona le risorse desiderate e quindi fai clic su 'Aggiungere selezionati'. Ogni risorsa che viene aggiunta, appare in un elenco e ha sulla destra le icone 'Modificare' e 'Eliminare'. Nota che qualora ci siano più di una sezioni tematiche in un corso, vengono visualizzati i link alla sezione successiva e precedente. Altrimenti puoi utilizzare  la lista delle opzioni che viene visualizzata nella parte inferiore della pagina,  per andare direttamente a qualsiasi sezione.</p>";
