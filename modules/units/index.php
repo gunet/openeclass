@@ -26,8 +26,8 @@ if (!defined('HIDE_TOOL_TITLE')) {
         define('HIDE_TOOL_TITLE', 1);
 }
 $require_current_course = true;
-$require_help = TRUE;
-$helpTopic = 'AddCourseUnitscontent';
+$require_help = true;
+$helpTopic = 'AddCourseUnits';
 require_once '../../include/baseTheme.php';
 require_once '../../include/lib/fileDisplayLib.inc.php';
 require_once '../../include/action.php';
