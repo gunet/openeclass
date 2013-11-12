@@ -84,7 +84,7 @@ if (file_exists("../config/config.php")) {
 <body>
 
   <div class='install_container'>
-  <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+  <p><img src='../template/classic/img/logo_openeclass.png' alt='logo' ></p>
   <div class='alert' align='center'>$langWarnConfig3!</div>
   <table width='600' align='center' cellpadding='5' cellspacing='5' class='tbl_alt'>
     <tr>
@@ -203,7 +203,7 @@ function checkbox_input($name)
 {
         $GLOBALS['input_fields'][$name] = true;
         return "<input type='checkbox' name='$name' value='1'" .
-               ($GLOBALS[$name]? ' checked="1"': '') . " />";
+               ($GLOBALS[$name]? ' checked="checked"': '') . " />";
 }
 
 function text_input($name, $size)
@@ -584,7 +584,7 @@ elseif(isset($_REQUEST['install7']))
 	// create main database
 	require "install_db.php";
 	// create config.php
-	$fd=@fopen("../config/config.php", "w");
+	$fd=fopen("../config/config.php", "w");
 	if (!$fd) {
 		$tool_content .= $langErrorConfig;
 	} else {		
@@ -594,30 +594,30 @@ elseif(isset($_REQUEST['install7']))
  * Automatically created by install on '.date('Y-m-d H:i').'
  * ======================================================== */
 
-$urlServer = "'.$urlForm.'";
-$urlAppend = "'.$urlAppendPath.'";
-$webDir    = "'.$pathForm.'";
+$urlServer = '.pquote($urlForm).';
+$urlAppend = '.pquote($urlAppendPath).';
+$webDir    = '.pquote($pathForm).';
 
-$mysqlServer = "'.$dbHostForm.'";
-$mysqlUser = "'.$dbUsernameForm.'";
-$mysqlPassword = '.autoquote($dbPassForm).';
-$mysqlMainDb = "'.$mysqlMainDb.'";
-$phpMyAdminURL = "'.$dbMyAdmin.'";
-$phpSysInfoURL = "'.$phpSysInfoURL.'";
-$emailAdministrator = "'.$emailForm.'";
-$administratorName = "'.$nameForm.'";
-$administratorSurname = "'.$surnameForm.'";
-$siteName = "'.$campusForm.'";
+$mysqlServer = '.pquote($dbHostForm).';
+$mysqlUser = '.pquote($dbUsernameForm).';
+$mysqlPassword = '.pquote($dbPassForm).';
+$mysqlMainDb = '.pquote($mysqlMainDb).';
+$phpMyAdminURL = '.pquote($dbMyAdmin).';
+$phpSysInfoURL = '.pquote($phpSysInfoURL).';
+$emailAdministrator = '.pquote($emailForm).';
+$administratorName = '.pquote($nameForm).';
+$administratorSurname = '.pquote($surnameForm).';
+$siteName = '.pquote($campusForm).';
 
-$telephone = "'.$helpdeskForm.'";
-$fax = "'.$faxForm.'";
-$emailhelpdesk = "'.$helpdeskmail.'";
+$telephone = '.pquote($helpdeskForm).';
+$fax = '.pquote($faxForm).';
+$emailhelpdesk = '.pquote($helpdeskmail).';
 
 $language = "greek";
 
-$Institution = "'.$institutionForm.'";
-$InstitutionUrl = "'.$institutionUrlForm.'";
-$postaddress = "'.addslashes($postaddressForm).'";
+$Institution = '.pquote($institutionForm).';
+$InstitutionUrl = '.pquote($institutionUrlForm).';
+$postaddress = '.pquote($postaddressForm).';
 
 $persoIsActive = TRUE;
 $durationAccount = "126144000";
@@ -648,15 +648,15 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	$_SESSION['step'] = 1;
 	$configErrorExists = false;
 
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
+    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?alreadyVisited=1' method='post'>";
 
 	// create config, courses and video catalogs
-        mkdir_or_error('config');
-	mkdir_or_error('courses');
-	mkdir_or_error('courses/temp');
-	mkdir_or_error('courses/userimg');
-        mkdir_or_error('video');
-        touch_or_error('video/index.htm');
+    mkdir_or_error('config');
+    mkdir_or_error('courses');
+    mkdir_or_error('courses/temp');
+    mkdir_or_error('courses/userimg');
+    mkdir_or_error('video');
+    touch_or_error('video/index.htm');
 	
 	if($configErrorExists) {
 		$tool_content .= implode("<br />", $errorContent);

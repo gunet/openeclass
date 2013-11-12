@@ -153,3 +153,8 @@ function installerMenu(){
 
 	return $sideMenuGroup;
 }
+
+function pquote($s)
+{
+    return "'" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $s) . "'";
+}
