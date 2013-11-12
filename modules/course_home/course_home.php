@@ -304,9 +304,8 @@ $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 if ($course_license) {
     $license_info_box = "<table class='tbl_courseid' width='200'>
         <tr class='title1'>
-            <td class='title1'>${langOpenCoursesLicense}</td>
-        <tr><td colspan='2'><ul class='custom_list'>
-            <li>".copyright_info($cours_id)."</li></ul></td></tr>
+            <td class='title1'>${langOpenCoursesLicense}</td></tr>
+        <tr><td><div align='center'><small>".copyright_info($cours_id)."</small></div></td></tr>
         </table>
         <br/>";
 } else {

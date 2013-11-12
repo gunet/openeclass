@@ -664,18 +664,14 @@ function openCoursesExtra() {
                     <div class="navcontainer">
                         <ul class="navlist">
                             <li class="category">' . q($GLOBALS['langOpenCoursesShort']) . '</li>
-                        </ul>
-                        <div style="padding-left: 20px;">' .
-                             icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) .'</div>
-                        <ul class="navlist">
-                            <li><a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">
-                                <img src="' . $themeimg . '/arrow.png" alt="" height="16" width="16"/>' . 
-                                $GLOBALS['langListOpenCoursesShort'] . '</a></li>
-                            <li>&nbsp;&nbsp;&nbsp;&nbsp;<span class="smaller">' . 
-                            $openCoursesNum . ' ' . 
+                        </ul><div style="text-align:center;">' .
+                             icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) .'
+                            &nbsp;<a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">' . 
+                                $GLOBALS['langListOpenCoursesShort'] . '</a>
+                            <span class="smaller">' .
+                            $openCoursesNum . ' ' .
                             (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . 
-                            '</span></li>
-                        </ul>
+                            '</span></div>
                     </div>
                 </div>';
         }
