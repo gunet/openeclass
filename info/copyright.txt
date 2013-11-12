@@ -1,6 +1,6 @@
 Copyright Notice
 
-Open eClass © 2003 - 2013 Greek Universities Network GUnet.
+Open eClass Â© 2003 - 2013 Greek Universities Network GUnet.
 
 The Open eClass plaform is a complete Course Management System .It is the 
 solution offered by the Greek Academic Network GUnet to support Asynchronous 
