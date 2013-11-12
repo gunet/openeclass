@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2013-11-12 19:12:19
+// Generated 2013-11-12 19:44:33
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -593,7 +593,7 @@ $langNoAliens = "Seuls les utilisateurs inscrits sur la plateforme sont autoris�
 $langNoGuest = "Les utilisateurs-visiteurs ne sont pas autorisés à utiliser le sous-système 'Conversation (Chat)' !";
 $langCopyright = "Notice de Copyright";
 $langCopyrightNotice = '
-Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
@@ -3311,3 +3311,4 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
+$langLastSubmission = "Last Submission";

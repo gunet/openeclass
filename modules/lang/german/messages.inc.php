@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2013-11-12 19:12:19
+// Generated 2013-11-12 19:44:33
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -538,7 +538,7 @@ $langSaveErrorMessage = "Fehler. Der Chat konnte nicht gespeichert werden.";
 $langNoAliens = "Nur registrierte Benutzer der Plattform können 'Chat'verwenden!";
 $langNoGuest = "Gast-Benutzer können 'Chat'nicht benutzen";
 $langCopyright = "Urheberrechts-Informationen";
-$langCopyrightNotice = 'Copyright © 2003 - 2010 <a href="http://www.openeclass.org"target=_blank>Open eClass</a>.<br>&nbsp;<br> Die Plattform '.$siteName.'basiert auf der <a href="http://www.openeclass.org"target=_blank>Open eClass Plattform</a> und stellt ein integriertes System zur Verwaltung von elektronischen Kursen dar. Diese repräsentiert den Vorschlag des GUnet für die Infrastruktur eines asynchronen eLearning Dienstes. Sie wurde entwickelt und wird aktiv unterstützt von der GUnet Asynchrones eLearning Arbeitsgruppe und wird <a href="http://download.eclass.gunet.gr"target="_blank">frei verteilt</a> als Open Source Software unter der allgemeinen öffentlichen Lizenz GNU General Public License (GNU GPL).<br><br> Der Inhalt des elektronischen Kursmaterials, welches in der Plattform '.$siteName.'beherbergt wird, sowie dessen geistiges Eigentumsrecht, gehört den jeweiligen Autoren und somit beansprucht das GUnet keinerlei Ansprüche diesbezüglich. Für jegliche Verwendung oder Wiederveröffentlichung von Kursmaterial wenden Sis sich bitte an den jeweiligen Kursbetreuer.';
+$langCopyrightNotice = 'Copyright © 2003 - 2013 <a href="http://www.openeclass.org"target=_blank>Open eClass</a>.<br>&nbsp;<br> Die Plattform '.$siteName.'basiert auf der <a href="http://www.openeclass.org"target=_blank>Open eClass Plattform</a> und stellt ein integriertes System zur Verwaltung von elektronischen Kursen dar. Diese repräsentiert den Vorschlag des GUnet für die Infrastruktur eines asynchronen eLearning Dienstes. Sie wurde entwickelt und wird aktiv unterstützt von der GUnet Asynchrones eLearning Arbeitsgruppe und wird <a href="http://download.eclass.gunet.gr"target="_blank">frei verteilt</a> als Open Source Software unter der allgemeinen öffentlichen Lizenz GNU General Public License (GNU GPL).<br><br> Der Inhalt des elektronischen Kursmaterials, welches in der Plattform '.$siteName.'beherbergt wird, sowie dessen geistiges Eigentumsrecht, gehört den jeweiligen Autoren und somit beansprucht das GUnet keinerlei Ansprüche diesbezüglich. Für jegliche Verwendung oder Wiederveröffentlichung von Kursmaterial wenden Sis sich bitte an den jeweiligen Kursbetreuer.';
 $langCourseProgram = "Beschreibung des Kurses";
 $langThisCourseDescriptionIsEmpty = "Die Beschreibung dieses Kurses ist nicht vorhanden";
 $langEditCourseProgram = "Erzeugen und Bearbeiten";
@@ -3002,3 +3002,4 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
+$langLastSubmission = "Last Submission";

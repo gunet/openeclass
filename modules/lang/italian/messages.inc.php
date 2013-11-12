@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2013-11-12 19:12:19
+// Generated 2013-11-12 19:44:33
 
 $langCourse = "Corso";
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
@@ -555,7 +555,7 @@ $langNoAliens = "Solo gli utenti registrati nella piattaforma possono utilizzare
 $langNoGuest = "Gli utenti ospiti non possono utilizzare il modulo 'Chiacchierata'!";
 $langCopyright = "Avviso di copyright";
 $langCopyrightNotice = ' 
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br> 
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2013<br> &nbsp; <br> 
 La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br> 
 Il contenuto dei corsi elettronici che sono ospitati dalla piattaforma  '. $siteName. ', ed anche i diritti (copyright) di questo materiale, appartengono ai loro autori e la GUnet non ci pretende dei diritti. Per qualsiasi utilizzo o ripubblica del contenuto ti preghiamo di contattare i responsabili dei corsi rispettivi.
 ';
@@ -3075,3 +3075,4 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
+$langLastSubmission = "Last Submission";

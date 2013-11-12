@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2013-11-12 19:12:15
+// Generated 2013-11-12 19:44:29
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -556,7 +556,7 @@ $langSaveErrorMessage = "Error. El chat no podido ser guardado.";
 $langNoAliens = "Sólo los usuarios registrados a la plataforma pueden acceder al 'Chat'!";
 $langNoGuest = "Los usuarios invitados no pueden acceder al 'Chat'";
 $langCopyright = "Aviso de Derechos de Copia";
-$langCopyrightNotice = 'Open eClass © 2003 - 2010 <a href="http://www.openeclass.org" target="_blank">Open eClass</a>.<br />&nbsp;<br />La<a href="http://www.openeclass.org/" target="_blank">plataforma Open eClass</a> es un completo Sistema Electrónico de Administración de Curso y es la propuesta de GUnet para la infraestructura del Servicio para el eAprendizaje Asincrónico.<br />&nbsp;<br />
+$langCopyrightNotice = 'Open eClass © 2003 - 2013 <a href="http://www.openeclass.org" target="_blank">Open eClass</a>.<br />&nbsp;<br />La<a href="http://www.openeclass.org/" target="_blank">plataforma Open eClass</a> es un completo Sistema Electrónico de Administración de Curso y es la propuesta de GUnet para la infraestructura del Servicio para el eAprendizaje Asincrónico.<br />&nbsp;<br />
 Has sido desarrollada y está activamente soportada por el GUnet Asynchronous<br><br>
 eLearning Group, y su <a href="http://download.eclass.gunet.gr" target="_blank">con distribución libre</a> como un Open Source Software bajo la licencia pública de GNU General Public License (GNU GPL).<br />&nbsp;<br/>
 El contenido de los Cursos Electrónicos hospedados en la Plataforma Open eClass, como también como todos los copyrights de su contenido, que pertenece a los autores de los cursos y GUnet no reclama derechos en eso. Para cada uso o replica del contenido del curso, por favor contacta con las personas responsables de los respectivos cursos';
@@ -3090,3 +3090,4 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
+$langLastSubmission = "Last Submission";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-11-12 19:12:15
+// Generated 2013-11-12 19:44:28
 
 $langEclass = "Open eClass - Asynchronous Teleteaching Platform";
 $langYes = "Yes";

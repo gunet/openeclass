@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2013-11-12 19:12:15
+// Generated 2013-11-12 19:44:28
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -552,7 +552,7 @@ $langNoAliens = "Only platform registered users can access 'Chat'!";
 $langNoGuest = "Guest Users cannot access 'Chat'";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
@@ -2437,7 +2437,7 @@ $langCheckPublicTools = "<b>You tried to access an inactive module.</b>
 $langWarnShibUser = "<b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.";
 $langUserBriefcase = "User portfolio";
 $langPersonalisedBriefcase = "Personalised portfolio";
-$langCopyrightFooter = "Copyright &copy;2003-2011 GUnet";
+$langCopyrightFooter = "<span class='smaller'>Copyright Notice</span>";
 $langAdvancedSearch = "Advanced search";
 $langTitle = "Title";
 $langType = "Type";
@@ -3100,3 +3100,4 @@ $langCMeta['course_unit_description'] = "Unit description";
 $langCMeta['course_unit_keywords'] = "Unit keywords";
 $langCMeta['course_confirmCurriculum'] = "The online course covers 100% of the curriculum";
 $langCMeta['course_confirmVideolectures'] = "The video lectures cover 80% of the curriculum";
+$langLastSubmission = "Last Submission";
