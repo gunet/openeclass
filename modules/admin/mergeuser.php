@@ -132,7 +132,7 @@ function do_user_merge($source, $target)
         $q = db_query("CREATE TEMPORARY TABLE `$tmp_table` AS
                               SELECT cours_id, $target_id AS user_id,
                                      MIN(statut) AS statut, MAX(team) AS team, MAX(tutor) AS tutor,
-                                     MAX(editor) AS editor, MIN(reg_date) AS reg_date,
+                                     MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail
                                  FROM cours_user
                                  WHERE user_id IN ($source_id, $target_id)
