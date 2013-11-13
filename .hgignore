@@ -4,3 +4,4 @@ syntax: regexp
 ^config/.*\.php
 ^html/
 ^nbproject/private/
+^\.htaccess
