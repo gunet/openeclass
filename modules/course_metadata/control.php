@@ -94,6 +94,16 @@ if (isset($_POST['submit'])) {
         }
     }
     
+    // success message
+    if ($_POST['course_confirmAPlusLevel'] == 'true')
+        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
+    else if ($_POST['course_confirmALevel'] == 'true')
+        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
+    else if ($_POST['course_confirmAMinusLevel'] == 'true')
+        $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
+    else
+        $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
+    
     $xml->populate($_POST);
     CourseXMLElement::save($course_code, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
@@ -148,23 +158,29 @@ $tool_content .= <<<EOF
       <td align="right"><img src="$themeimg/$unitsImg.png" alt=""></td>
     </tr>
     <tr>
-      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsAMinusLevel</td>
-      <td align="right"><input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
-    </tr>
-    <tr>
       <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesHasMediaFiles ($numMedia $langOpenCoursesFiles)</td>
       <td align="right"><img src="$themeimg/$mediaImg.png" alt=""></td>
-    </tr>
-    <tr>
-      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsALevel</td>
-      <td align="right"><input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
     </tr>
     <tr>
       <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesTeacherConfirmVideo</td>
       <td align="right"><img src="$themeimg/$teacherConfirmVideoImg.png" alt=""></td>
     </tr>
+    </tbody></table>
+    <br/>
+    <table class="tbl_courseid" width="100%">
+    <tbody><tr>
+      <td class="title1" colspan="2">$langOpenCoursesCharacter</td>
+    </tr>
     <tr>
-      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesIsAPlusLevel</td>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesType <strong>$langOpenCoursesIsAMinusLevel</strong></td>
+      <td align="right"><input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesType <strong>$langOpenCoursesIsALevel</strong></td>
+      <td align="right"><input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
+    </tr>
+    <tr>
+      <td class="smaller"><img src="$themeimg/arrow.png" alt="">&nbsp;$langOpenCoursesType <strong>$langOpenCoursesIsAPlusLevel</strong></td>
       <td align="right"><input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/>
     </tr>
     </tbody></table>
