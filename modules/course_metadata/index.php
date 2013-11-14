@@ -89,9 +89,21 @@ function submitForm() {
     // handle uploaded files
     $fileData = array();
     foreach(CourseXMLElement::$binaryFields as $bkey) {
-        if (isset($_FILES[$bkey]) && is_uploaded_file($_FILES[$bkey]['tmp_name'])) {
-            $fileData[$bkey] = base64_encode(file_get_contents($_FILES[$bkey]['tmp_name']));
-            $fileData[$bkey .'_mime'] = $_FILES[$bkey]['type'];
+        if (isset($_FILES[$bkey]) 
+                && is_uploaded_file($_FILES[$bkey]['tmp_name'])
+                && isValidImage($_FILES[$bkey]['type'])) {
+            // convert to resized jpg if possible
+            $uploaded = $_FILES[$bkey]['tmp_name'];
+            $copied = $_FILES[$bkey]['tmp_name'].'.new';
+            $type = $_FILES[$bkey]['type'];
+            
+            if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
+                $fileData[$bkey] = base64_encode(file_get_contents($copied));
+                $fileData[$bkey .'_mime'] = 'image/jpeg'; // copy_resized_image always outputs jpg
+            } else { // erase possible previous image or failed conversion
+                $fileData[$bkey] = '';
+                $fileData[$bkey .'_mime'] = '';
+            }
         }
     }
     
@@ -114,4 +126,19 @@ function submitForm() {
     return "<p class='success'>$langModifDone</p>
             <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
             <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
+}
+
+function isValidImage($type) {
+    $ret = false;
+    if ($type == 'image/jpeg') {
+        $ret = true;
+    } elseif ($type == 'image/png') {
+        $ret = true;
+    } elseif ($type == 'image/gif') {
+        $ret = true;
+    } elseif ($type == 'image/bmp') {
+        $ret = true;
+    }
+    
+    return $ret;
 }
