@@ -209,6 +209,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft );
 			$t->set_var ( 'ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight );
 		}
+                
+                if (isset($GLOBALS['leftNavExtras']))
+                    $t->set_var ( 'ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras'] );
 
 		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {

@@ -78,7 +78,6 @@ $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses'
 
 $queryCourseIds = '';
 $runQuery = true;
-$tableAddH = '';
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     // find subnode's opencourses
@@ -108,8 +107,6 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
         $runQuery = false;
         $numrows = 0;
     }
-    
-    $tableAddH = "<th class='left' width='120'>$langOpenCoursesLevel</th>";
 }
 
 if ($runQuery) {
@@ -129,15 +126,23 @@ if ($runQuery) {
 }
 
 if ($numrows > 0) {
+    
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
             <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>";
-    $tool_content .= $tableAddH;
-    $tool_content .= "
-            <th class='left' width='200'>" . $m['professor']  . "</th>
-            <th width='30'>$langType</th>
-        </tr>";
+    
+    if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+        $tool_content .= "
+                <th class='left' width='220'>" . $m['professor'] . "</th>
+                <th width='30'>$langOpenCoursesLevel</th>";
+    } else {
+        $tool_content .= "
+                <th class='left' width='200'>" . $m['professor']  . "</th>
+                <th width='30'>$langType</th>";
+    }
+    
+    $tool_content .= "</tr>";
     
     $k = 0;
     while ($mycours = mysql_fetch_array($result)) {
@@ -155,21 +160,26 @@ if ($numrows > 0) {
 
         $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
         $tool_content .= "\n<td>". $codelink ."</td>";
+        $tool_content .= "\n<td>". $mycours['t'] ."</td>";
+        $tool_content .= "\n<td align='center'>";
+        
         if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n<td><div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</a></td>";            
-        }
-        $tool_content .= "\n<td>". $mycours['t'] ."</td>";
-        $tool_content .= "\n<td align='center'>";
-
-        // show the necessary access icon
-        foreach ($icons as $visible => $image) {
-            if ($visible == $mycours['visible']) {
-                $tool_content .= $image;
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) .
+                "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
+                $metadata->asDiv() . "</div>
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 
+                "<img src='${themeimg}/lom.png'/></a>";
+        } else {
+            // show the necessary access icon
+            foreach ($icons as $visible => $image) {
+                if ($visible == $mycours['visible']) {
+                    $tool_content .= $image;
+                }
             }
         }
+        
         $tool_content .= "</td>\n";
         $tool_content .= "</tr>";
         $k++;
@@ -205,7 +215,12 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
             autoOpen: false,
             modal: true,
             height: 600,
-            width: 600
+            width: 600,
+            open: function() {
+                $( ".ui-widget-overlay" ).on('click', function() {
+                    $( ".modaldialog" ).dialog('close');
+                });
+            }
         });
     });
 
