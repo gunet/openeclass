@@ -45,6 +45,9 @@ $head_content .= <<<EOF
 
     $(function() {
         $( "#tabs" ).tabs();
+        $( document ).tooltip({
+            track: true
+        });
     });
         
     $(document).ready(function(){

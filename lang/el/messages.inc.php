@@ -3534,18 +3534,18 @@ $langCMeta['course_instructor_moreInformation'] = "Περισσότερα για
 $langCMeta['course_instructor_cv'] = "Σύνδεσμος σε βιογραφικό ή σύντομο βιογραφικό (έως 10 γραμμές)";
 $langCMeta['course_instructor_photo'] = "Φωτογραφία διδάσκοντος";
 $langCMeta['course_title'] = "Τίτλος Μαθήματος";
-$langCMeta['help_course_title'] = "όπως αναφέρεται στο πρόγραμμα σπουδών (ΠΣ)";
+$langCMeta['help_course_title'] = "όπως αναφέρεται στο Πρόγραμμα Σπουδών";
 $langCMeta['course_url'] = "Δικτυακός τόπος μαθήματος";
 $langCMeta['help_course_url'] = "Σελίδα του μαθήματος ή/και σύνδεσμο στο Learning Management System (LMS) 
     του Ιδρύματος (π.χ. στο eClass, Moodle, Blackboard, ή όποιο άλλο LMS)";
 $langCMeta['course_code'] = "Κωδικός Μαθήματος";
-$langCMeta['help_course_code'] = "όπως αναφέρεται στο ΠΣ";
+$langCMeta['help_course_code'] = "όπως αναφέρεται στο Πρόγραμμα Σπουδών";
 $langCMeta['course_level'] = "Επίπεδο μαθήματος";
 $langCMeta['help_course_level'] = "Επιλέξτε";
 $langCMeta['course_yearOfStudy'] = "Έτος σπουδών";
-$langCMeta['help_course_yearOfStudy'] = "Επιλέξτε 1 έως 6 όπως αναφέρεται στο ΠΣ";
+$langCMeta['help_course_yearOfStudy'] = "Επιλέξτε 1 έως 6 όπως αναφέρεται στο Πρόγραμμα Σπουδών";
 $langCMeta['course_semester'] = "Εξάμηνο";
-$langCMeta['help_course_semester'] = "Επιλέξτε 1 έως 12 όπως αναφέρεται στο ΠΣ";
+$langCMeta['help_course_semester'] = "Επιλέξτε 1 έως 12 όπως αναφέρεται στο Πρόγραμμα Σπουδών";
 $langCMeta['course_type'] = "Τύπος μαθήματος";
 $langCMeta['help_course_type'] = "Επιλέξτε";
 $langCMeta['course_credithours'] = "Διδακτικές ώρες στο εξάμηνο";
@@ -3563,7 +3563,7 @@ $langCMeta['course_targetGroup'] = "Ομάδα στόχος";
 $langCMeta['help_course_targetGroup'] = "Π.χ. Οι φοιτητές/απόφοιτοι του τμήματος Υ.
     Ενδιαφερόμενοι για τη θεματική περιοχή Ζ.";
 $langCMeta['course_credits'] = "Διδακτικές μονάδες";
-$langCMeta['help_course_credits'] = "Όπως αναφέρεται στο ΠΣ. Ορατό μόνο στους φοιτητές, όχι στο ευρύ κοινό. 
+$langCMeta['help_course_credits'] = "Όπως αναφέρεται στο Πρόγραμμα Σπουδών. Ορατό μόνο στους φοιτητές, όχι στο ευρύ κοινό. 
     Την πληροφορία αυτή μπορεί να την παρακάμψει ένα μέλος ΔΕΠ/ΕΠ και να την εισάγει η τοπική ομάδα υποστήριξης";
 $langCMeta['course_description'] = "Περιγραφή μαθήματος";
 $langCMeta['course_contents'] = "Περιεχόμενα μαθήματος";
@@ -3615,7 +3615,7 @@ $langCMeta['help_course_literature'] = "Προτείνεται λεκτική π
     <li>Βιβλιογραφία</li>
     <li>Online readings</li>
     <li>Πηγές στο Διαδίκτυο</li>
-    <li>Πηγές στη βιβλιοθήκη του ιδρύματος. EINAI ΠΟΛΥ ΣΗΜΑΝΤΙΚΟ !</li>
+    <li>Πηγές στη βιβλιοθήκη του ιδρύματος</li>
     <li>Άλλα σχετικά ανοικτά μαθήματα άλλων ιδρυμάτων εσωτερικού ή εξωτερικού</li>
     <li>Άρθρα (Articles)</li>
     <li>Ταινίες (Films)</li></ul>

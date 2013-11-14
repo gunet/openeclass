@@ -60,8 +60,8 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     public function asForm($data = null) {
-        global $course_code, $langSubmit;
-        $out = "";
+        global $course_code, $langSubmit, $langRequiredFields;
+        $out = "<div class='right smaller'>$langRequiredFields</div>";
         $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                  <div id='tabs'>
                     <ul>
@@ -79,7 +79,8 @@ class CourseXMLElement extends SimpleXMLElement {
                  </div>
                  <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
                  </div>
-                 </form>";
+                 </form>
+                 <div class='right smaller'>$langRequiredFields</div>";
         return $out;
     }
     
@@ -127,8 +128,11 @@ class CourseXMLElement extends SimpleXMLElement {
             else
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
         }
-        $fieldStart = "<tr><th style='background-color: transparent'>". q($keyLbl . $lang) .":</th><td rowspan='2'>";
-        $fieldEnd = "</td></tr><tr><td style='font-size: 10px;'>". $help ."</td></tr><tr><td></td></tr>";
+        $fieldStart = "<tr title='$help'><th style='background-color: transparent'>". q($keyLbl . $lang) .":</th><td>";
+        $fieldEnd = "</td><td>";
+        if (in_array($fullKey, self::$mandatoryFields))
+            $fieldEnd .= "<span class='smaller' style='color:red'>*</span>";
+        $fieldEnd .="</td></tr>";
         if (array_key_exists($fullKey, self::$breakFields))
             $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKey] ."'><table class='tbl' width='100%'>";
         
