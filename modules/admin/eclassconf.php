@@ -336,6 +336,7 @@ else {
         $cbox_restrict_owndep = get_config('restrict_owndep') ? 'checked' : '';
         $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
         $town_dis = get_config('restrict_owndep') ? '' : 'disabled';
+        $cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
         $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
         $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
 
@@ -354,6 +355,14 @@ else {
 	  <tr>		
 		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
+        </table></fieldset>";
+        
+        $tool_content .= "<fieldset>
+        <legend>$langMetaCommentary</legend>
+        <table class='tbl' width='100%'>
+	  <tr>		
+                <td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
+          </tr>
           <tr>
                 <td><input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
           </tr>
@@ -369,7 +378,6 @@ else {
 	$cbox_display_captcha = get_config('display_captcha')?'checked':'';                                
         $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student')?'checked':'';
 	$cbox_block_username_change = get_config('block_username_change')?'checked':'';
-	$cbox_insert_xml_metadata = get_config('insert_xml_metadata')?'checked':'';
 	$cbox_betacms = get_config('betacms')?'checked':'';
 	$cbox_enable_mobileapi = get_config('enable_mobileapi')?'checked':'';
         $max_glossary_terms = get_config('max_glossary_terms');
@@ -409,9 +417,6 @@ else {
         </tr>
         <tr>		
                 <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
         </tr>
         <tr>		
                 <td><input type='checkbox' name='betacms' value='1' $cbox_betacms />&nbsp;$lang_betacms</td>

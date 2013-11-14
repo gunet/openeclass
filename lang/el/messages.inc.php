@@ -3507,6 +3507,7 @@ $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
 $langListOpenCourses = "Κατάλογος Ανοιχτών Μαθημάτων";
+$langMetaCommentary = "Μετασχολιασμός";
 $langCMeta['courseGroup'] = "Μάθημα";
 $langCMeta['instructorGroup'] = "Διδάσκοντες";
 $langCMeta['curriculumGroup'] = "Προγράμματα Σπουδών";
