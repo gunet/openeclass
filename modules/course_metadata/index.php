@@ -43,18 +43,18 @@ $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
 
-    $(function() {
+    $(document).ready(function(){
         $( ".cmetaaccordion" ).accordion({
             collapsible: true,
             active: false
         });
+        
         $( document ).tooltip({
             track: true
         });
-        $( "#tabs" ).tabs();
-    });
         
-    $(document).ready(function(){
+        $( "#tabs" ).tabs();
+        
         $( "#multiselect" ).multiselect();
     });
 

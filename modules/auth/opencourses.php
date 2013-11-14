@@ -155,8 +155,12 @@ if ($numrows > 0) {
 
         $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
         $tool_content .= "\n<td>". $codelink ."</td>";
-        if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA')
-            $tool_content .= "\n<td>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</td>";
+        if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+            // metadata are displayed in click-to-open modal dialogs
+            $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
+            $tool_content .= "\n<td><div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . $metadata->asDiv() . "</div>
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</a></td>";            
+        }
         $tool_content .= "\n<td>". $mycours['t'] ."</td>";
         $tool_content .= "\n<td align='center'>";
 
@@ -175,5 +179,50 @@ if ($numrows > 0) {
 } else
     $tool_content .= "<p class='alert1'>" . $m['nolessons'] . "</p>";
 
+$head_content = '';
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0);
+if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+    $head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
+    load_js('jquery');
+    load_js('jquery-ui-new');
+    $head_content .= <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+    var modalOpen = function(id) {
+        $(id).dialog( "open" );
+    };
+
+    $(document).ready(function(){
+        $( ".cmetaaccordion" ).accordion({
+            collapsible: true,
+            active: false
+        });
+
+        $( ".tabs" ).tabs();
+
+        $( ".modaldialog" ).dialog({
+            autoOpen: false,
+            modal: true,
+            height: 600,
+            width: 600
+        });
+    });
+
+/* ]]> */
+</script>
+<style type="text/css">
+.ui-widget {
+    font-family: "Trebuchet MS",Tahoma,Arial,Helvetica,sans-serif;
+    font-size: 13px;
+}
+
+.ui-widget-content {
+    color: rgb(119, 119, 119);
+}
+</style>
+EOF;
+}
+
+
+draw($tool_content, (isset($uid) and $uid)? 1: 0, null, $head_content);

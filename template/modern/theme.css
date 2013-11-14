@@ -1411,7 +1411,7 @@ td.subsection {
     float: left;
     width: 232px;
     border-right: 1px dashed #dfdfdf;
-    padding: 4px 0px 4px 0px;
+    padding-bottom: 4px;
 }
 
 .cmetalabelinaccordion {
@@ -1419,11 +1419,11 @@ td.subsection {
     float: left;
     width: 170px;
     border-right: 1px dashed #dfdfdf;
-    padding: 4px 0px 4px 0px;
+    padding-bottom: 4px;
 }
 
 .cmetafield {
-    padding: 4px;
+    padding-left: 4px;
 }
 
 .cmetamandatory {
