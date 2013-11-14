@@ -202,7 +202,7 @@ if (!isset($_POST['create_course'])) {
                 {$license[10]['title']}
             </td>
             </tr>
-            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='1'/>
+            <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='cc'/>
                 $langCMeta[course_license]
             </td>
             </tr>            
@@ -304,14 +304,17 @@ if (!isset($_POST['create_course'])) {
         if (isset($_POST['l_radio'])) {           
             $l = $_POST['l_radio'];
             switch ($l) {
-                case '0': $course_license = 0;
-                        break;
-                case '1': if (isset($_POST['cc_use'])) {
-                                $course_license = $_POST['cc_use'];
-                          }
-                        break;
-                case '20': $course_license = 20;
-                        break;
+                case 'cc':
+                    if (isset($_POST['cc_use'])) {
+                        $course_license = intval($_POST['cc_use']);
+                    }
+                    break;
+                case '10':
+                    $course_license = 10;
+                    break;
+                default:
+                    $course_license = 0;
+                    break;                                        
                 }
             }        
         db_query("INSERT INTO cours SET
