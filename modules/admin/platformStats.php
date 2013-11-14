@@ -45,7 +45,7 @@ $tool_content .= "
     <ul id='opslist'>
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
-      <li><a href='oldStats.php'>".$langOldStats."</a></li>
+      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
       <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
     </ul>
   </div>";
@@ -60,4 +60,5 @@ require_once "modules/admin/statsResults.php";
 //show form for determining time period and user
 require_once "modules/admin/statsForm.php";
 
+load_js('tools.js');
 draw($tool_content, 3, null, $head_content);

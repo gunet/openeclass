@@ -43,7 +43,7 @@ $tool_content .= "
     <ul id='opslist'>
       <li><a href='stateclass.php'>$langPlatformGenStats</a></li>
       <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
-      <li><a href='oldStats.php'>$langOldStats</a></li>
+      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
       <li><a href='monthlyReport.php'>$langMonthlyReport</a></li>
     </ul>
   </div>";
@@ -324,4 +324,5 @@ $tool_content .= '
     </table>
     </form>';
 
+load_js('tools.js');
 draw($tool_content, 3, null, $head_content);

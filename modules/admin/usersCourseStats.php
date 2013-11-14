@@ -48,7 +48,7 @@ $tool_content .= "
       <li><a href='platformStats.php?first='>$langVisitsStats</a></li>
       <li><a href='usersCourseStats.php'>$langUsersCourse</a></li>
       <li><a href='visitsCourseStats.php?first='>$langVisitsCourseStats</a></li>
-      <li><a href='oldStats.php'>$langOldStats</a></li>
+      <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
       <li><a href='monthlyReport.php'>$langMonthlyReport</a>></li>
     </ul>
   </div>";
@@ -71,4 +71,5 @@ while ($row = mysql_fetch_assoc($result)) {
 mysql_free_result($result);
 $tool_content .= $chart->plot();
 
+load_js('tools.js');
 draw($tool_content, 3, 'admin', $head_content);

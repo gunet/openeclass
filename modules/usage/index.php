@@ -70,4 +70,5 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     require_once "form.php";
 }
 add_units_navigation(true);
+load_js('tools.js');
 draw($tool_content, 2, null, $head_content);
