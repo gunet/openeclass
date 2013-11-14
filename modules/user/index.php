@@ -135,7 +135,7 @@ if (isset($_GET['giveAdmin'])) {
                                                                    'right' => 0));
 }
 
-if (get_config('course_metadata')) {
+if (get_config('opencourses_enable')) {
     if (isset($_GET['giveReviewer'])) {
         $new_reviewr_gid = intval($_GET['giveReviewer']);
         db_query("UPDATE course_user SET statut = 1, reviewer = 1
@@ -232,7 +232,7 @@ if (isset($_GET['all'])) {
         $extra_link = '&amp;limit=' . $limit;
 }
 
-$addRoleSpan = (get_config('course_metadata')) ? 4 : 3;
+$addRoleSpan = (get_config('opencourses_enable')) ? 4 : 3;
 
 $tool_content .= "
 <table width='100%' class='tbl_alt custom_list_order'>
@@ -324,7 +324,7 @@ while ($myrow = mysql_fetch_array($result)) {
         // admin right
         if ($myrow['user_id'] != $_SESSION['uid']) {
                 if ($myrow['statut']=='1') {
-                    if (get_config('course_metadata') && $myrow['reviewer'] == '1') {
+                    if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
                         $class = 'add_teacherLabel';
                         $control = icon('teacher', $langTutor);
                     } else {
@@ -350,7 +350,7 @@ while ($myrow = mysql_fetch_array($result)) {
         $tool_content .= "<td class='$class center' width='30'>$control</td>";
         
         // opencourses reviewer right
-        if (get_config('course_metadata')) {
+        if (get_config('opencourses_enable')) {
             if ($myrow['user_id'] != $_SESSION["uid"]) {
                 if ($is_opencourses_reviewer) {
                     // do nothing as the reviewer cannot give the reviewer right to other users

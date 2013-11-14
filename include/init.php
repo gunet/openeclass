@@ -424,7 +424,7 @@ if (isset($_SESSION['status'])) {
 }
 
 $is_opencourses_reviewer = FALSE;
-if (get_config('course_metadata') && isset($currentCourse) && check_opencourses_reviewer()) {
+if (get_config('opencourses_enable') && isset($currentCourse) && check_opencourses_reviewer()) {
     $is_opencourses_reviewer = TRUE;
 }
 

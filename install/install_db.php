@@ -1040,6 +1040,7 @@ db_query("INSERT INTO `config` (`key`, `value`) VALUES
                 ('log_expire_interval', 5),
                 ('log_purge_interval', 12),
                 ('course_metadata', 0),
+                ('opencourses_enable', 0),
                 ('version', '" . ECLASS_VERSION ."')");
 
 // table for cron parameters

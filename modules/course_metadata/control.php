@@ -26,7 +26,7 @@ $nameTools = $langCourseMetadataControlPanel;
 require_once 'CourseXML.php';
 
 // exit if feature disabled or is not reviewer
-if (!get_config('course_metadata') || !$is_opencourses_reviewer) {
+if (!get_config('opencourses_enable') || !$is_opencourses_reviewer) {
     header("Location: {$urlServer}courses/$course_code/index.php");
     exit();
 }

@@ -1729,6 +1729,7 @@ $langTroubleshooting = 'Αντιμετώπιση';
 $langDefaultAdminName = 'Διαχειριστής Πλατφόρμας';
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
 $lang_course_metadata = "Μετασχολιασμός Μαθημάτων";
+$lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
 
 
 /********************************************************

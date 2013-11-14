@@ -67,6 +67,19 @@ $(document).ready(function() {
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
+        
+    $('#opencourses_enable').click(function(event) {
+        if ($('#opencourses_enable').is(":checked")) {
+            $('#course_metadata').attr('checked', true);
+            $('#course_metadata').attr('disabled', true);
+        } else {
+            $('#course_metadata').attr('disabled', false);
+        }
+    });
+    
+    if ($('#opencourses_enable').is(":checked")) {
+        $('#course_metadata').attr('disabled', true);
+    }
 
 });
 
@@ -154,10 +167,14 @@ if (isset($_POST['submit']))  {
                         'actions_expire_interval' => true,
                         'log_expire_interval' => true,
                         'log_purge_interval' => true,
-                        'course_metadata' => true);
+                        'course_metadata' => true,
+                        'opencourses_enable' => true);
 
         register_posted_variables($config_vars, 'all', 'intval');
         $_SESSION['theme'] = $theme = $available_themes[$theme];
+        
+        if ($GLOBALS['opencourses_enable'] == 1)
+            $GLOBALS['course_metadata'] = 1;
         
         // restrict_owndep and restrict_teacher_owndep are interdependent
         if ($GLOBALS['restrict_owndep'] == 0) {
@@ -320,6 +337,7 @@ else {
         $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep')?'checked':'';
         $town_dis = get_config('restrict_owndep') ? '' : 'disabled';
         $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
+        $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
 
         $tool_content .= "<fieldset>
         <legend>$langCourseSettings</legend>
@@ -337,7 +355,10 @@ else {
 		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
 	  </tr>
           <tr>
-		<td><input type='checkbox' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+                <td><input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
+          </tr>
+          <tr>
+                <td><input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable />&nbsp;$lang_opencourses_enable</td>
           </tr>
         </table></fieldset>";
         
