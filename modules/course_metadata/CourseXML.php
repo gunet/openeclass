@@ -455,7 +455,7 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer;
+        global $urlServer, $license;
         $data = array();
     
         $res1 = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
@@ -469,6 +469,8 @@ class CourseXMLElement extends SimpleXMLElement {
         $data['course_instructor_fullName_' . $clang] = $course['prof_names'];
         $data['course_title_' . $clang] = $course['title'];
         $data['course_keywords_' . $clang] = $course['keywords'];
+        if ($course['course_license'] != null)
+            $data['course_license'] = $license[$course['course_license']]['title'];
 
         // turn visible units to associative array
         $res2 = db_query("SELECT id, title, comments
@@ -632,7 +634,7 @@ class CourseXMLElement extends SimpleXMLElement {
     public static $readOnlyFields = array(
         'course_language', 'course_instructor_fullName', 'course_title',
         'course_url', 'course_keywords', 'course_numberOfUnits', 
-        'course_unit_title', 'course_unit_description'
+        'course_unit_title', 'course_unit_description', 'course_license'
     );
     
     /**
@@ -764,7 +766,7 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_title_el', 'course_instructor_fullName_el', 
         'course_language', 'course_keywords_el', 
         'course_unit_title_el', 'course_unit_description_el',
-        'course_numberOfUnits'
+        'course_numberOfUnits', 'course_license'
     );
     
     /**
@@ -786,7 +788,8 @@ class CourseXMLElement extends SimpleXMLElement {
             'course_keywords_el' => $courseinfo,
             'course_unit_title_el' => $coursehome,
             'course_unit_description_el' => $coursehome,
-            'course_numberOfUnits' => $coursehome
+            'course_numberOfUnits' => $coursehome,
+            'course_license' => $courseinfo
         );
         
         if (isset($valArr[$key]))
