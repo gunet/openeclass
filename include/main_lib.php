@@ -675,9 +675,12 @@ function check_editor() {
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
-    global $uid, $course_id;
+    global $uid, $course_id, $is_admin;
     
     if (isset($uid)) {
+        if ($is_admin) {
+            return TRUE;
+        }
         $res = db_query("SELECT reviewer FROM course_user
                           WHERE user_id = " . intval($uid) ."
                             AND course_id = " . intval($course_id));
