@@ -56,6 +56,18 @@ $head_content .= <<<EOF
         $( "#tabs" ).tabs();
         
         $( "#multiselect" ).multiselect();
+        
+        $( "#course_coursePhoto_delete" ).on('click', function() {
+            $( "#course_coursePhoto_image" ).remove();
+            $( "#course_coursePhoto_hidden" ).remove();
+            $( "#course_coursePhoto_hidden_mime" ).remove();
+        });
+        
+        $( "#course_instructor_photo_delete" ).on('click', function() {
+            $( "#course_instructor_photo_image" ).remove();
+            $( "#course_instructor_photo_hidden" ).remove();
+            $( "#course_instructor_photo_hidden_mime" ).remove();
+        });
     });
 
 /* ]]> */

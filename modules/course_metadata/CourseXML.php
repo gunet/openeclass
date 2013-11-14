@@ -238,9 +238,10 @@ class CourseXMLElement extends SimpleXMLElement {
             $value = (string) $this;
             if (!empty($value)) { // image already exists
                 $mime = (string) $this->getAttribute('mime');
-                $html .= "<img src='data:". q($mime) .";base64,". q($value) ."'/>
-                          <input type='hidden' name='". q($fullKey) ."' value='". q($value) ."'>
-                          <input type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'>
+                $html .= "<img id='" . $fullKey . "_image' src='data:". q($mime) .";base64,". q($value) ."'/>
+                          <img id='" . $fullKey . "_delete' src='" . $GLOBALS['themeimg'] . "/delete.png'/>
+                          <input id='" . $fullKey . "_hidden' type='hidden' name='". q($fullKey) ."' value='". q($value) ."'>
+                          <input id='" . $fullKey . "_hidden_mime' type='hidden' name='". q($fullKey) ."_mime' value='". q($mime) ."'>
                           </span></div>
                           <div class='cmetarow'><span class='$cmetalabel'></span><span class='cmetafield'>";
             }
