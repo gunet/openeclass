@@ -9,7 +9,6 @@
     <title lang="el"></title>
     <title lang="en"></title>
     <code lang="el"></code>
-    <url></url>
     <level></level>
     <description lang="el"></description>
     <description lang="en"></description>
@@ -19,11 +18,13 @@
     <keywords lang="en"></keywords>
     <thematic lang="el"></thematic>
     <thematic lang="en"></thematic>
-    <license></license>
     <prerequisites lang="el"></prerequisites>
-    <prerequisites lang="en"></prerequisites>
     <literature lang="el"></literature>
+    
+    <prerequisites lang="en"></prerequisites>
     <literature lang="en"></literature>
+    <url></url>
+    <license></license>
     <coursePhoto mime=""></coursePhoto>
     <contentDevelopment lang="el"></contentDevelopment>
     <contentDevelopment lang="en"></contentDevelopment>
@@ -65,15 +66,19 @@
     <confirmVideolectures></confirmVideolectures>
     <confirmCurriculum></confirmCurriculum>
 
-        
+
+    <curriculumLevel></curriculumLevel>
+    <yearOfStudy></yearOfStudy>
+    <semester></semester>
+    <type></type>
+    <credithours></credithours>
+    <credits></credits>
     <institution lang="el"></institution>
     <institution lang="en"></institution>
     <institutionDescription lang="el"></institutionDescription>
     <institutionDescription lang="en"></institutionDescription>
     <department lang="el"></department>
     <department lang="en"></department>
-    <sector lang="el"></sector>
-    <sector lang="en"></sector>
     <curriculumTitle lang="el"></curriculumTitle>
     <curriculumTitle lang="el"></curriculumTitle>
     <curriculumDescription lang="el"></curriculumDescription>
@@ -82,19 +87,16 @@
     <outcomes lang="en"></outcomes>
     <curriculumKeywords lang="el"></curriculumKeywords>
     <curriculumKeywords lang="en"></curriculumKeywords>
-    <curriculumLevel></curriculumLevel>
-    <curriculumTargetGroup lang="el"></curriculumTargetGroup>
-    <curriculumTargetGroup lang="en"></curriculumTargetGroup>
-    
-    <yearOfStudy></yearOfStudy>
-    <semester></semester>
-    <type></type>
-    <credithours></credithours>
+        
+    <sector lang="el"></sector>
+    <sector lang="en"></sector>
     <language></language>
     <targetGroup lang="el"></targetGroup>
     <targetGroup lang="en"></targetGroup>
-    <credits></credits>
+    <curriculumTargetGroup lang="el"></curriculumTargetGroup>
+    <curriculumTargetGroup lang="en"></curriculumTargetGroup>
     <featuredBooks lang="el"></featuredBooks>
+    <featuredBooks lang="en"></featuredBooks>
     <structure lang="el"></structure>
     <structure lang="en"></structure>
     <teachingMethod lang="el"></teachingMethod>
@@ -104,6 +106,7 @@
     <eudoxusCode></eudoxusCode>
     <eudoxusURL></eudoxusURL>
     <kalliposURL></kalliposURL>
+    
     
     <numberOfUnits></numberOfUnits>
     <unit>

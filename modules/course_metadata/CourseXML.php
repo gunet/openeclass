@@ -70,13 +70,11 @@ class CourseXMLElement extends SimpleXMLElement {
                        <li><a href='#tabs-3'>" . $GLOBALS['langCMeta']['curriculumGroup'] . "</a></li>
                        <li><a href='#tabs-4'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                     </ul>
-                 <div id='tabs-1'>
-                 <table class='tbl' width='100%'>";
+                 <div id='tabs-1'>";
         if ($data != null)
             $this->populate($data);
         $out .= $this->populateForm();
-        $out .= "</table>
-                 </div>
+        $out .= "</div>
                  <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
                  </div>
                  </form>
@@ -128,13 +126,24 @@ class CourseXMLElement extends SimpleXMLElement {
             else
                 $help = ''; // in case of multi-lang field, display help text only once (the same as the course lang)
         }
-        $fieldStart = "<tr title='$help'><th style='background-color: transparent'>". q($keyLbl . $lang) .":</th><td>";
-        $fieldEnd = "</td><td>";
+        
+        // proper divs initializations
+        $fieldStart = "";
+        if (in_array($fullKey, self::$breakAccordionStartFields))
+            $fieldStart .= "<div class='cmetaaccordion'><h3>" . $GLOBALS['langMore'] . "</h3><div>";
+        $cmetalabel = (in_array($fullKey, self::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel' : 'cmetalabelinaccordion';
+        $fieldStart .= "<div title='$help' class='cmetarow'>
+            <span class='$cmetalabel'>". q($keyLbl . $lang) .":</span>
+            <span class='cmetafield'>";
+        
+        $fieldEnd = "</span>";
         if (in_array($fullKey, self::$mandatoryFields))
-            $fieldEnd .= "<span class='smaller' style='color:red'>*</span>";
-        $fieldEnd .="</td></tr>";
+            $fieldEnd .= "<span class='cmetamandatory'>*</span>";
+        $fieldEnd .= "</div>";
+        if (in_array($fullKey, self::$breakAccordionEndFields))
+            $fieldEnd .= "</div></div>";
         if (array_key_exists($fullKey, self::$breakFields))
-            $fieldEnd .= "</table></div><div id='tabs-". self::$breakFields[$fullKey] ."'><table class='tbl' width='100%'>";
+            $fieldEnd .= "</div><div id='tabs-". self::$breakFields[$fullKey] ."'>";
         
         // hidden/auto-generated fields
         if (in_array($fullKeyNoLang, self::$hiddenFields) && (!$this->getAttribute('lang') || $sameAsCourseLang))
@@ -694,6 +703,26 @@ class CourseXMLElement extends SimpleXMLElement {
     );
     
     /**
+     * UI Accordion Start Break points.
+     * @var array
+     */
+    public static $breakAccordionStartFields = array(
+        'course_prerequisites_en',
+        'course_instructor_moreInformation_el',
+        'course_sector_el'
+    );
+    
+    /**
+     * UI Accordion End Break points.
+     * @var array
+     */
+    public static $breakAccordionEndFields = array(
+        'course_acknowledgments_en',
+        'course_confirmCurriculum',
+        'course_kalliposURL'
+    );
+    
+    /**
      * Mandatory HTML Form fields.
      * @var array
      */
@@ -702,26 +731,24 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_instructor_lastName_el', 'course_instructor_lastName_en',
         'course_instructor_fullName_el', 'course_instructor_fullName_en',
         'course_title_el', 'course_title_en',
-        'course_url',
-        'course_code_el',
-        'course_targetGroup_el',
+        'course_level', 'course_code_el',
         'course_description_el', 'course_description_en',
         'course_contents_el',
         'course_objectives_el',
         'course_keywords_el', 'course_keywords_en',
-        'course_featuredBooks_el',
         'course_prerequisites_el',
         'course_literature_el',
         'course_thematic_el', 'course_thematic_en',
         'course_institution_el', 'course_institution_en',
         'course_institutionDescription_el', 'course_institutionDescription_en',
         'course_department_el', 'course_department_en',
-        'course_sector_el', 'course_sector_en',
         'course_curriculumTitle_el', 'course_curriculumTitle_en',
         'course_curriculumDescription_el', 'course_curriculumDescription_en',
         'course_outcomes_el', 'course_outcomes_en',
         'course_curriculumKeywords_el', 'course_curriculumKeywords_en',
-        'course_curriculumTargetGroup_el', 'course_curriculumTargetGroup_en'
+        'course_curriculumLevel',
+        'course_yearOfStudy', 'course_semester', 'course_credithours',
+        'course_type', 'course_credits'
     );
     
     /**

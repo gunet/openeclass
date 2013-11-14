@@ -44,10 +44,14 @@ $head_content .= <<<EOF
 /* <![CDATA[ */
 
     $(function() {
-        $( "#tabs" ).tabs();
+        $( ".cmetaaccordion" ).accordion({
+            collapsible: true,
+            active: false
+        });
         $( document ).tooltip({
             track: true
         });
+        $( "#tabs" ).tabs();
     });
         
     $(document).ready(function(){
