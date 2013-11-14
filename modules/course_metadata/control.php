@@ -133,10 +133,10 @@ $lastSubmission = '';
 if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
     $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
     if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
-        $lastSubmission = '<p><small>Last Submission: ' .
+        $lastSubmission = '<p><small>' . $langLastSubmission . ': ' .
                 $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
                 '&nbsp;' .
-                $lastDate['hour'] . ':' . $lastDate['minute'] . '</small></p>';
+                $lastDate['hour'] . ':' . zeroComplete($lastDate['minute']) . '</small></p>';
     }
 }
 
@@ -231,3 +231,10 @@ $head_content .= <<<EOF
 EOF;
 
 draw($tool_content, 2, null, $head_content);
+
+function zeroComplete($input) {
+    if (intval($input) <= 9)
+        return '0' . $input;
+    else
+        return $input;
+}

@@ -3517,6 +3517,7 @@ $langMetaCommentary = "Μετασχολιασμός";
 $langOpenCoursesType = "Μάθημα τύπου";
 $langOpenCoursesWasNotSet = "Το μάθημα δεν έχει χαρακτηριστεί ως τύπου Open Courses";
 $langOpenCoursesWasSet = "Το μάθημα έχει χαρακτηριστεί";
+$langLastSubmission = "Τελευταία Υποβολή";
 $langCMeta['courseGroup'] = "Μάθημα";
 $langCMeta['instructorGroup'] = "Διδάσκοντες";
 $langCMeta['curriculumGroup'] = "Προγράμματα Σπουδών";
