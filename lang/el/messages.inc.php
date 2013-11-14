@@ -3510,6 +3510,7 @@ $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
 $langListOpenCourses = "Ευρετήριο Ανοικτών Ακαδημαϊκών Μαθημάτων";
+$langListOpenCoursesShort = "Ευρετήριο Μαθημάτων";
 $langOpenCoursesShort = "Ανοικτά Ακ. Μαθήματα";
 $langOpenCourseShort = "Ανοικτό Ακαδ. Μάθημα";
 $langNumOpenCourses = "ανοικτά μαθήματα";
