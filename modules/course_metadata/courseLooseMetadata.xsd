@@ -54,6 +54,10 @@
     <xs:restriction base="xs:base64Binary"/>
 </xs:simpleType>
 
+<xs:simpleType name="t_dateTime">
+    <xs:restriction base="xs:dateTime"/>
+</xs:simpleType>
+
 <!-- definition of simple types -->
 <xs:simpleType name="t_level">
     <xs:restriction base="t_string">
@@ -236,6 +240,7 @@
         <xs:element name="confirmAMinusLevel"              type="t_boolean"/>
         <xs:element name="confirmALevel"                   type="t_boolean"/>
         <xs:element name="confirmAPlusLevel"               type="t_boolean"/>
+        <xs:element name="lastLevelConfirmation"           type="t_dateTime"/>
         <xs:element name="language"                        type="t_string"/>
         <xs:element name="targetGroup"                     type="t_langString"/>
         <xs:element name="credits"                         type="t_integer"/>

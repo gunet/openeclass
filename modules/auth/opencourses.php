@@ -78,6 +78,7 @@ $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses'
 
 $queryCourseIds = '';
 $runQuery = true;
+$tableAddH = '';
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     // find subnode's opencourses
@@ -107,6 +108,8 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
         $runQuery = false;
         $numrows = 0;
     }
+    
+    $tableAddH = "<th class='left' width='120'>$langOpenCoursesLevel</th>";
 }
 
 if ($runQuery) {
@@ -114,7 +117,8 @@ if ($runQuery) {
                                course.public_code c,
                                course.title i,
                                course.visible visible,
-                               course.prof_names t
+                               course.prof_names t,
+                               course.id id
                           FROM course, course_department
                          WHERE course.id = course_department.course
                            AND course_department.department = $fc
@@ -128,7 +132,9 @@ if ($numrows > 0) {
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
-            <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>
+            <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>";
+    $tool_content .= $tableAddH;
+    $tool_content .= "
             <th class='left' width='200'>" . $m['professor']  . "</th>
             <th width='30'>$langType</th>
         </tr>";
@@ -149,6 +155,8 @@ if ($numrows > 0) {
 
         $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
         $tool_content .= "\n<td>". $codelink ."</td>";
+        if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA')
+            $tool_content .= "\n<td>" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) . "</td>";
         $tool_content .= "\n<td>". $mycours['t'] ."</td>";
         $tool_content .= "\n<td align='center'>";
 

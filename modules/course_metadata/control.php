@@ -35,9 +35,9 @@ if (!get_config('opencourses_enable') || !$is_opencourses_reviewer) {
 $xml = CourseXMLElement::init($course_id, $course_code);
 $xmlData = $xml->asFlatArray();
 list($visible) = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = " . intval($course_id)));
-$hasOpenAccess = ($visible == 2) ? true : false;
+$hasOpenAccess = ($visible == 2);
 $hasMandatoryMetadata = $xml->hasMandatoryMetadata();
-$hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license'])) ? true : false;
+$hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license']));
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
 list($numDocs) = mysql_fetch_row(db_query("SELECT count(id) FROM document WHERE course_id = " . intval($course_id)));
 list($numUnits) = mysql_fetch_row(db_query("SELECT count(id) FROM course_units WHERE course_id = " . intval($course_id) . " AND `order` >= 1 AND visible = 1"));
@@ -57,6 +57,18 @@ if ($looksAMinus && ($numMedia > 0))
 $looksAPlus = false;
 if ($looksA && $hasTeacherConfirmVideo)
     $looksAPlus = true;
+
+// parse last submission date
+$lastSubmission = '';
+if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
+    $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
+    if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
+        $lastSubmission = '<p><small>Last Submission: ' .
+                $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
+                '&nbsp;' .
+                $lastDate['hour'] . ':' . $lastDate['minute'] . '</small></p>';
+    }
+}
 
 if (isset($_POST['submit'])) {
     // default fallback is false
@@ -104,6 +116,7 @@ if (isset($_POST['submit'])) {
     else
         $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
     
+    $_POST['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP");
     $xml->populate($_POST);
     CourseXMLElement::save($course_code, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
@@ -188,6 +201,7 @@ $tool_content .= <<<EOF
     <p class='right'><input type='submit' name='submit' value='$langSubmit'></p>
     </form>
     <br/><br/>
+    $lastSubmission
     <p>&laquo; <a href='{$urlServer}modules/course_info/index.php?course=$course_code'>$langBack</a></p>
     <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>
 EOF;
