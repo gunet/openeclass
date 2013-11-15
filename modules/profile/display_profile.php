@@ -27,8 +27,11 @@ $nameTools = $langUserProfile;
 
 $userdata = array();
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) and isset($_GET['token'])) {
         $id = intval($_GET['id']);
+        if (!token_validate($id, $_GET['token'], 3600)) {
+            forbidden($_SERVER['REQUEST_URI']);
+        }
 } else {
         $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
         $id = $uid;
