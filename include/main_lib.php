@@ -341,7 +341,7 @@ function display_user($user, $print_email = false, $icon = true)
                         if ($begin) {
                                 $begin = false;
                         } else {
-                                $html .= ', ';
+                                $html .= '<br>';
                         }
                         $html .= display_user($user_data, $print_email);
                 }
@@ -369,9 +369,11 @@ function display_user($user, $print_email = false, $icon = true)
                         $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
                 }
         }
-        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[user_id]'>" . q("$user[prenom] $user[nom]") . "</a>" .
-                ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 
+        $token = token_generate($user['user_id'], true);
+        return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]&amp;token=$token'>" .
+               q("$user[surname] $user[givenname]") . "</a>" .
+               ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 }
 
 
@@ -2720,3 +2722,15 @@ function crypto_rand_secure($min = null, $max = null) {
         return mt_rand($min, $max);
     }
 }
+
+function forbidden($path)
+{
+        header("HTTP/1.0 403 Forbidden");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+             '<title>403 Forbidden</title></head><body>',
+             '<h1>Forbidden</h1><p>You don\'t have permission to acces the requested path "',
+             htmlspecialchars($path),
+             '".</p></body></html>';
+        exit;
+}
+
