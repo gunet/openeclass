@@ -233,6 +233,10 @@ fieldset table.th {
     color: #ffffff;
 }
 
+#userInfo {
+    float: left;
+}
+
 .langSwitch {
     float: right;
 	font-size: 10px;
