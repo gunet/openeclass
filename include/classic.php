@@ -66,7 +66,7 @@ function course_table_end()
         $GLOBALS['tool_content'] .= "\n</table><br />\n";
 }
 
-$status = array();
+$courses = array();
 $sql = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
@@ -100,7 +100,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 }
 		$code = $mycours['code'];
                 $title = $mycours['title'];
-		$status[$code] = $this_status;
+		$courses[$code] = $this_status;
 		$course_id_map[$code] = $mycours['cid'];
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
@@ -187,6 +187,6 @@ if (count($status) > 0) {
                 $tool_content .= "</table>";
         }
 }
-if (isset($status)) {
-	$_SESSION['status'] = $status;
+if (isset($courses)) {
+	$_SESSION['courses'] = $courses;
 }

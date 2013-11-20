@@ -313,8 +313,8 @@ if (isset($level) && !empty($level)) {
 
 
 if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'])
-        or (isset($_SESSION['saved_statut']) and $_SESSION['saved_statut'] == 1)) {
-        if (isset($_SESSION['saved_statut'])) {
+        or (isset($_SESSION['saved_status']) and $_SESSION['saved_status'] == 1)) {
+        if (isset($_SESSION['saved_status'])) {
                 $button_message = $langStudentViewDisable;
                 $button_image = "switch_t";
         } else {
@@ -329,7 +329,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 }
 
 $emailnotification = '';
-if ($uid and $statut != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
         $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
         (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
@@ -337,7 +337,7 @@ if ($uid and $statut != USER_GUEST and !get_user_email_notification($uid, $cours
 $receive_mail = FALSE;
 $rec_mail = array();
 $q = db_query("SELECT user_id FROM course_user WHERE course_id = $course_id 
-                                AND statut = ".USER_TEACHER."");
+                                AND status = ".USER_TEACHER."");
 while ($p = mysql_fetch_array($q)) {        
         $prof_uid = $p['user_id'];
         if (get_user_email_notification_from_courses($prof_uid) 
@@ -369,7 +369,7 @@ $tool_content .= "
   <tr class='title1'>
     <td class='title1'>$langTools</td>
     <td class='left'>$toggle_student_view";
-    if ($statut != USER_GUEST) {
+    if ($status != USER_GUEST) {
             if($receive_mail) {
                   $tool_content .= "<a href='../../modules/contact/index.php?course=$course_code' id='email_btn'>
                   <img src='$themeimg/email.png' alt='$langContactProf' title='$langContactProf' /></a>";
