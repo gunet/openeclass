@@ -126,19 +126,19 @@ $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
         $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor'>\n";
-        $q = db_query("SELECT user.user_id, nom, prenom,
-                                   user.user_id IN (SELECT user_id FROM group_members
-                                                                   WHERE group_id = $group_id AND
-                                                                         is_tutor = 1) AS is_tutor
+        $q = db_query("SELECT user.id AS user_id, surname, givenname,
+                                   user.id IN (SELECT user_id FROM group_members
+                                                              WHERE group_id = $group_id AND
+                                                                    is_tutor = 1) AS is_tutor
                               FROM course_user, user
-                              WHERE course_user.user_id = user.user_id AND
+                              WHERE course_user.user_id = user.id AND
                                     course_user.tutor = 1 AND
                                     course_user.course_id = $course_id
-                              ORDER BY nom, prenom, user_id");
+                              ORDER BY surname, givenname, user_id");
         while ($row = mysql_fetch_array($q)) {
                 $selected = $row['is_tutor']? ' selected="selected"': '';
-                $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['nom']) .
-                                       ' ' . q($row['prenom']) . "</option>\n";
+                $tool_content_tutor .= "<option value='$row[user_id]'$selected>" . q($row['surname']) .
+                                       ' ' . q($row['givenname']) . "</option>\n";
 
         }
         $tool_content_tutor .= '</select>';
@@ -152,17 +152,17 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
-        $sqll = "SELECT u.user_id, u.nom, u.prenom
+        $sqll = "SELECT u.user_id, u.surname, u.givenname
                         FROM user u, course_user cu
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
                               u.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
                               cu.statut = 5
                         GROUP BY u.user_id
-                        ORDER BY u.nom, u.prenom";
+                        ORDER BY u.surname, u.givenname";
 } else {
         // Students registered to the course but members of no group
-        $sqll = "SELECT u.user_id, u.nom, u.prenom
+        $sqll = "SELECT u.user_id, u.surname, u.givenname
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
@@ -171,26 +171,26 @@ if ($multi_reg) {
                                                                WHERE `group`.id = group_members.group_id AND
                                                                `group`.course_id = $course_id)
                         GROUP BY u.user_id
-                        ORDER BY u.nom, u.prenom";
+                        ORDER BY u.surname, u.givenname";
 }
 
 $tool_content_not_Member = '';
 $resultNotMember = db_query($sqll);
 while ($myNotMember = mysql_fetch_array($resultNotMember)) {
         $tool_content_not_Member .= "<option value='$myNotMember[user_id]'>" .
-                        q("$myNotMember[nom] $myNotMember[prenom]") . "</option>";
+                        q("$myNotMember[surname] $myNotMember[givenname]") . "</option>";
 }
 
-$q = db_query("SELECT user.user_id, nom, prenom
+$q = db_query("SELECT user.id AS user_id, surname, givenname
                FROM user, group_members
-               WHERE group_members.user_id = user.user_id AND
+               WHERE group_members.user_id = user.id AND
                      group_members.group_id = $group_id AND
                      group_members.is_tutor = 0
-               ORDER BY nom, prenom");
+               ORDER BY surname, givenname");
 
 $tool_content_group_members = '';
 while ($member = mysql_fetch_array($q)) {
-        $tool_content_group_members .= "<option value='$member[user_id]'>" . q("$member[nom] $member[prenom]") .
+        $tool_content_group_members .= "<option value='$member[user_id]'>" . q("$member[surname] $member[givenname]") .
                                        "</option>\n";
 }
 

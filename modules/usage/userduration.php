@@ -104,20 +104,20 @@ if ($result) {
         $i = 0;
         while ($row = mysql_fetch_assoc($result)) {
                 $i++;
-                $grp_name = user_groups($course_id, $row['user_id'], $format);
+                $grp_name = user_groups($course_id, $row['id'], $format);
                 if ($format == 'html') {
                         if ($i%2 == 0) {
                                 $tool_content .= "\n<tr class='even'>";
                         } else {
                                 $tool_content .= "\n<tr class='odd'>";
                         }
-                        $tool_content .= "<td class='bullet'>" . display_user($row['user_id']) . "</td>
+                        $tool_content .= "<td class='bullet'>" . display_user($row['id']) . "</td>
                                 <td class='center'>$row[am]</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
                                 </tr>\n";
                 } else {
-                        echo csv_escape($row['nom'] . ' ' . $row['prenom']), ';',
+                        echo csv_escape($row['surname'] . ' ' . $row['givenname']), ';',
                              csv_escape($row['am']), ';',
                              csv_escape($grp_name), ';',
                              csv_escape(format_time_duration(0 + $row['duration'])), $crlf;

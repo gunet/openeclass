@@ -28,7 +28,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 // Initialize the incoming variables
 $username = isset($_POST['username'])?$_POST['username']:'';
 
-if(isset($_POST['submit']) and !empty($username)) {
+if (isset($_POST['submit']) and !empty($username)) {
 
     $res = db_query("SELECT user_id FROM user WHERE username=". quote($username));
 
@@ -49,7 +49,7 @@ if(isset($_POST['submit']) and !empty($username)) {
             $user_id = intval($user_id);
             $s = db_query("SELECT * FROM admin WHERE idUser = $user_id");
             if (mysql_num_rows($s) > 0) {
-                    db_query("UPDATE admin SET privilege = $privilege 
+                db_query("UPDATE admin SET privilege = $privilege
                                 WHERE idUser = $user_id");
             } else {
                 $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");
@@ -57,7 +57,7 @@ if(isset($_POST['submit']) and !empty($username)) {
             if (isset($sql) or mysql_affected_rows() > 0) {
                     $tool_content .= "<p class='success'>
                     $langTheUser ". q($username) ." $langWith id=".q($user_id) ." $langDone</p>";
-             }
+            }
         } else {
             $tool_content .= "<p class='caution'>$langError</p>";
         }
@@ -68,24 +68,25 @@ if(isset($_POST['submit']) and !empty($username)) {
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-            $sql = db_query("DELETE FROM admin WHERE admin.idUser = ". $aid);
-            if (!$sql) {
-                        $tool_content .= "<center><br />$langDeleteAdmin". q($aid) ." $langNotFeasible  <br /></center>";
-            } else {
-                $tool_content .= "<p class='success'>$langNotAdmin</p>";
-            }
-
+        $sql = db_query("DELETE FROM admin WHERE admin.idUser = ". $aid);
+        if (!$sql) {
+            $tool_content .= "<center><br />$langDeleteAdmin". q($aid) ." $langNotFeasible  <br /></center>";
         } else {
-            $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
+            $tool_content .= "<p class='success'>$langNotAdmin</p>";
         }
- }
 
- $tool_content .= printform($langUsername);
+    } else {
+        $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
+    }
+}
+
+$tool_content .= printform($langUsername);
 
 // Display the list of admins
-$r1 = db_query("SELECT user_id, prenom, nom, username, admin.privilege FROM user, admin
-                    WHERE user.user_id = admin.idUser
-                    ORDER BY user_id");
+$r1 = db_query("SELECT id, givenname, surname, username, admin.privilege
+                    FROM user, admin
+                    WHERE user.id = admin.user_id
+                    ORDER BY id");
 
 $tool_content .= "
   <table class='tbl_alt' width='100%'>
@@ -98,31 +99,31 @@ $tool_content .= "
   </tr>";
 
 while($row = mysql_fetch_array($r1)) {
-        $tool_content .= "<tr>";
-        $tool_content .= "<td align='right'>". q($row['user_id']) .".</td>".
-        "<td>". q($row['prenom']) ." ". q($row['nom']) ."</td>".
-        "<td>". q($row['username']) ."</td>";
-        switch ($row['privilege']) {
-            case '0': $message = $langAdministrator;
-                break;
-            case '1': $message = $langPowerUser;
-                break;
-            case '2': $message = $langManageUser;
-                break;
-            case '3' : $message = $langManageDepartment;
-                break;
-        }
-        $tool_content .= "<td align='center'>$message</td>";
-        if($row['user_id'] != 1) {
-                $tool_content .= "<td class='center'>
+    $tool_content .= "<tr>
+        <td align='right'>". q($row['id']) .".</td>
+        <td>". q($row['givenname']) ." ". q($row['surname']) ."</td>
+        <td>". q($row['username']) ."</td>";
+    switch ($row['privilege']) {
+        case '0': $message = $langAdministrator;
+            break;
+        case '1': $message = $langPowerUser;
+            break;
+        case '2': $message = $langManageUser;
+            break;
+        case '3' : $message = $langManageDepartment;
+            break;
+    }
+    $tool_content .= "<td align='center'>$message</td>";
+    if($row['user_id'] != 1) {
+        $tool_content .= "<td class='center'>
                         <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=". q($row['user_id']) ."'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
-                        </td>";
-        } else {
-                $tool_content .= "<td class='center'>---</td>";
-        }
-        $tool_content .= "</tr>";
+                      </td>";
+    } else {
+        $tool_content .= "<td class='center'>---</td>";
+    }
+    $tool_content .= "</tr>";
 }
 $tool_content .= "</table><br />";
 
@@ -132,7 +133,7 @@ $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 draw($tool_content, 3);
 
 /*****************************************************************************
-	 			function printform()
+                                function printform()
 ******************************************************************************
   This method constructs a simple form where the administrator searches for
   a user by username to give user administrator permissions

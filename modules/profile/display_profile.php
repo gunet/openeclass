@@ -43,18 +43,18 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
         $id = $uid;
 }
 
-$userdata = db_query_get_single_row("SELECT user.nom, user.prenom, user.email, user.phone, user.am,
+$userdata = db_query_get_single_row("SELECT user.surname, user.givenname, user.email, user.phone, user.am,
                                             user.has_icon, user.description,
                                             user.email_public, user.phone_public, user.am_public
                                         FROM user
-                                        WHERE user.user_id = $id ");
+                                        WHERE user.id = $id");
 
 if ($userdata !== false)
 {
     $tool_content .= "<table class='tbl'>
             <tr>
                 <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
-                <td><b>" . q("$userdata[prenom] $userdata[nom]") . "</b><br>";
+                <td><b>" . q("$userdata[givenname] $userdata[surname]") . "</b><br>";
     if (!empty($userdata['email']) and allow_access($userdata['email_public'])) {
             $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
     }
@@ -85,11 +85,11 @@ draw($tool_content, 1);
 
 function allow_access($level)
 {
-        global $uid, $statut;
+        global $uid, $status;
 
         if ($level == ACCESS_USERS and $uid > 0) {
                 return true;
-        } elseif ($level == ACCESS_PROFS and $statut = 1) {
+        } elseif ($level == ACCESS_PROFS and $status = 1) {
                 return true;
         } else {
                 return false;

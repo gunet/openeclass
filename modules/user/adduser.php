@@ -38,7 +38,7 @@ $navigation[] = array ('url' => "index.php?course=$course_code", 'name' => $lang
 
 if (isset($_GET['add'])) {
         $uid_to_add = intval($_GET['add']);	
-	$result = db_query("INSERT IGNORE INTO course_user (user_id, course_id, statut, reg_date) ".
+	$result = db_query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date) ".
                            "VALUES ($uid_to_add, $course_id, ".USER_STUDENT.", CURDATE())");
         
                 Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
@@ -61,8 +61,8 @@ if (isset($_GET['add'])) {
 
 } else {
 	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
-        register_posted_variables(array('search_nom' => true,
-                                        'search_prenom' => true,
+        register_posted_variables(array('search_surname' => true,
+                                        'search_givenname' => true,
                                         'search_username' => true,
                                         'search_am' => true), 'any');
 
@@ -72,9 +72,9 @@ if (isset($_GET['add'])) {
         <table class='tbl'>
         <tr><td colspan='2'>$langAskUser<br /><br /></td></tr>
         <tr><th class='left'>$langSurname:</th>
-            <td><input type='text' name='search_nom' value='".q($search_nom)."' /></td></tr>
+            <td><input type='text' name='search_surname' value='".q($search_surname)."' /></td></tr>
         <tr><th class='left'>$langName:</th>
-            <td><input type='text' name='search_prenom' value='".q($search_prenom)."' /></td></tr>
+            <td><input type='text' name='search_givenname' value='".q($search_givenname)."' /></td></tr>
         <tr><th class='left'>$langUsername:</th>
             <td><input type='text' name='search_username' value='".q($search_username)."' /></td></tr>
         <tr><th class='left'>$langAm:</th>
@@ -86,7 +86,7 @@ if (isset($_GET['add'])) {
         </form>";
 	
 	$search = array();
-        foreach (array('nom', 'prenom', 'username', 'am') as $term) {
+        foreach (array('surname', 'givenname', 'username', 'am') as $term) {
                 $tvar = 'search_'.$term;
                 if (!empty($GLOBALS[$tvar])) {
                         $search[] = "u.$term LIKE " . quote($GLOBALS[$tvar] . '%');
@@ -96,7 +96,7 @@ if (isset($_GET['add'])) {
 	if (!empty($query)) {
                     db_query("CREATE TEMPORARY TABLE lala AS
                     SELECT user_id FROM course_user WHERE course_id = $course_id");
-                    $result = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.am FROM
+                    $result = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
                         user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
                         c.user_id IS NULL AND $query");
                     if (mysql_num_rows($result) == 0) {
@@ -118,8 +118,8 @@ if (isset($_GET['add'])) {
                                     } else {
                                             $tool_content .= "<tr class='odd'>";
                                     }
-                                    $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow['prenom']) . "</td><td>" .
-                                            q($myrow['nom']) . "</td><td>" . q($myrow['username']) . "</td><td>" .
+                                    $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow['givenname']) . "</td><td>" .
+                                            q($myrow['surname']) . "</td><td>" . q($myrow['username']) . "</td><td>" .
                                             q($myrow['am']) . "</td><td align='center'>" .
                                             "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
                                     $i++;

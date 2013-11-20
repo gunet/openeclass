@@ -293,7 +293,7 @@ class CourseXMLElement extends SimpleXMLElement {
             return;
         
         // fields hidden from anonymous users
-        if ( (!isset($GLOBALS['code_cours']) || $_SESSION['status'][$GLOBALS['code_cours']] == 0) 
+        if ( (!isset($GLOBALS['code_cours']) || $_SESSION['courses'][$GLOBALS['code_cours']] == 0) 
             && in_array($fullKeyNoLang, self::$hiddenFromAnonymousFields) )
             return;
         

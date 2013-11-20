@@ -80,8 +80,8 @@ if (isset($_POST['submit'])) {
         
 
 	$time = date("Y-m-d H:i");
-	$nom = addslashes($_SESSION['nom']);
-	$prenom = addslashes($_SESSION['prenom']);
+	$surname = addslashes($_SESSION['surname']);
+	$givenname = addslashes($_SESSION['givenname']);
 
 	$sql = "INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip)
 			VALUES ($topic, ".autoquote($message) ." , $uid, '$time', '$poster_ip')";

@@ -66,7 +66,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
                         // clear session access to lesson
                         unset($_SESSION['dbname']);
                         unset($_SESSION['cid_tmp']);
-                        unset($_SESSION['status'][$code]);
+                        unset($_SESSION['courses'][$code]);
                         $tool_content .= "<p class='success'>$langCoursDelSuccess</p>";
                 } else {
                         $tool_content .= "<p class='caution_small'>$langCoursError</p>";

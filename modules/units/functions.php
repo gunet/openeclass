@@ -139,7 +139,7 @@ function show_resource($info)
                         $tool_content .= show_lp($info['title'], $info['comments'], $info['id'], $info['res_id']);
                         break;
 		case 'video':
-		case 'videolinks':
+		case 'videolink':
                         $tool_content .= show_video($info['type'], $info['title'], $info['comments'], $info['id'], $info['res_id'], $info['visible']);
                         break;
 		case 'exercise':                        

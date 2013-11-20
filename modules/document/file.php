@@ -182,7 +182,7 @@ function check_cours_access() {
 		case '0':
 		default:
                 // check if user has access to course
-                if (isset($_SESSION['status'][$course_code]) && ($_SESSION['status'][$course_code] >= 1)) {
+                if (isset($_SESSION['courses'][$course_code]) && ($_SESSION['courses'][$course_code] >= 1)) {
                         return;
                 }
                 else {                        

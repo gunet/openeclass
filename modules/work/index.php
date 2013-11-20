@@ -256,10 +256,10 @@ function submit_work($id, $on_behalf_of = null)
         }
         $submit_ok = FALSE; // Default do not allow submission
         if (isset($uid) && $uid) { // check if logged-in
-                if ($GLOBALS['statut'] == 10) { // user is guest
+                if ($GLOBALS['status'] == 10) { // user is guest
                         $submit_ok = FALSE;
                 } else { // user NOT guest
-                        if (isset($_SESSION['status']) && isset($_SESSION['status'][$_SESSION['dbname']])) {
+                        if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
                                 // user is registered to this lesson
                                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                         FROM assignment WHERE id = ". intval($id));
@@ -631,7 +631,7 @@ function show_student_assignment($id)
 	if (!$uid) {
 		$tool_content .= "<p>$langUserOnly</p>";
 		$submit_ok = FALSE;
-	} elseif ($GLOBALS['statut'] == 10) {
+	} elseif ($GLOBALS['status'] == 10) {
 		$tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
 		$submit_ok = FALSE;
 	} else {
@@ -855,25 +855,23 @@ function show_assignment($id, $message = false, $display_graph_results = false)
 		} elseif ($_REQUEST['sort'] == 'filename') {
 			$order = 'file_name';
 		} else {
-			$order = 'nom';
+			$order = 'surname';
 		}
 	} else {
-		$order = 'nom';
+		$order = 'surname';
 	}
 
 	$result = db_query("SELECT *
-		FROM assignment_submit AS assign,
-		     user AS user
-		WHERE assign.assignment_id = $id AND user.user_id = assign.uid
+		FROM assignment_submit AS assign, user
+		WHERE assign.assignment_id = $id AND user.id = assign.uid
 		ORDER BY $order $rev");
 
 	// Used to display grades distribution chart
         list($graded_submissions_count) = mysql_fetch_row(
                                 db_query("SELECT COUNT(*)
-                                                 FROM assignment_submit AS assign,
-                                                      user AS user
+                                                 FROM assignment_submit AS assign, user
                                                  WHERE assign.assignment_id = $id AND
-                                                       user.user_id = assign.uid AND
+                                                       user.id = assign.uid AND
                                                        assign.grade <> ''"));
 
 	$num_results = mysql_num_rows($result);
@@ -900,10 +898,10 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                         }
                 }
                 if (!$display_graph_results) {
-                        $result = db_query("SELECT * FROM assignment_submit AS assign,
-                                                          user AS user
-                                                     WHERE assign.assignment_id='$id' AND user.user_id = assign.uid
-                                                     ORDER BY $order $rev");
+                        $result = db_query("SELECT * FROM assignment_submit AS assign, user
+                                                   WHERE assign.assignment_id='$id' AND
+                                                         user.id = assign.uid
+                                                   ORDER BY $order $rev");
 
                         $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -913,7 +911,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                         <table width='100%' class='sortable'>
                         <tr>
                       <th width='3'>&nbsp;</th>";
-                        sort_link($m['username'], 'nom');
+                        sort_link($m['username'], 'username');
                         sort_link($m['am'], 'am');
                         sort_link($m['filename'], 'filename');
                         sort_link($m['sub_date'], 'date');
@@ -1410,13 +1408,12 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments)
 function send_mail_to_group_id($gid, $subject, $body)
 {
         global $charset;
-        $res = db_query("SELECT nom, prenom, email
-                                FROM user AS user,
-                                     group_members AS members
+        $res = db_query("SELECT surname, givenname, email
+                                FROM user, group_members AS members
                                 WHERE members.group_id = $gid AND
-                                      user.user_id = members.user_id");
+                                      user.id = members.user_id");
         while ($info = mysql_fetch_assoc($res)) {
-                send_mail('', '', "$info[prenom] $info[nom]", $info['email'],
+                send_mail('', '', "$info[givenname] $info[surname]", $info['email'],
                           $subject, $body, $charset);
         }
 }
@@ -1424,9 +1421,9 @@ function send_mail_to_group_id($gid, $subject, $body)
 function send_mail_to_user_id($uid, $subject, $body)
 {
         global $charset;
-        list($nom, $prenom, $email) = mysql_fetch_row(db_query("SELECT nom, prenom, email
-                FROM user WHERE user_id = $uid"));
-        send_mail('', '', "$prenom $nom", $email, $subject, $body, $charset);
+        list($surname, $givenname, $email) = mysql_fetch_row(db_query("SELECT surname, givenname, email
+                FROM user WHERE id = $uid"));
+        send_mail('', '', "$givenname $surname", $email, $subject, $body, $charset);
 }
 
 // Return a list of users with no submissions for assignment $id
@@ -1434,13 +1431,13 @@ function users_with_no_submissions($id)
 {
         global $course_id;
 
-        $q = db_query("SELECT user.user_id, nom, prenom
+        $q = db_query("SELECT user.id AS id, surname, givenname
                               FROM user, course_user
-                              WHERE user.user_id = course_user.user_id AND
+                              WHERE user.id = course_user.user_id AND
                                     course_user.course_id = $course_id AND
-                                    course_user.statut = 5 AND
-                                    user.user_id NOT IN (SELECT uid FROM assignment_submit
-                                                                WHERE assignment_id = $id)");
+                                    course_user.status = 5 AND
+                                    user.id NOT IN (SELECT uid FROM assignment_submit
+                                                          WHERE assignment_id = $id)");
         $users = array();
         while ($row = mysql_fetch_row($q)) {
                 $users[$row[0]] = "$row[1] $row[2]";

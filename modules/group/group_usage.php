@@ -156,7 +156,7 @@ $i = 0;
 if ($type == 'duration') {
         $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 } else {
-        $result = db_query("SELECT user_id FROM group_members WHERE group_id = $group_id", $mysqlMainDb);
+        $result = db_query("SELECT user_id FROM group_members WHERE group_id = $group_id");
 }
 if ($result) {
         while ($row = mysql_fetch_array($result)) {
@@ -170,7 +170,7 @@ if ($result) {
                 if ($type == 'duration') {
                 	$value = format_time_duration(0 + $row['duration']);
                         $sortkey = $row['duration'];
-                        $name = $row['nom'] . ' ' .$row['prenom'];
+                        $name = $row['surname'] . ' ' .$row['givenname'];
                         $am = $row['am'];
                 } elseif ($type == 'lp') {
 			$name = uid_to_name($user_id);

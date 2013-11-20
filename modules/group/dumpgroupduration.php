@@ -33,42 +33,42 @@ if (!$is_editor and !$is_tutor) {
 }
 
 if($is_editor) {
-	if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-		$charset = 'Windows-1253';
-	} else {
-		$charset = 'UTF-8';
-	}
-	$crlf="\r\n";
+        if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
+                $charset = 'Windows-1253';
+        } else {
+                $charset = 'UTF-8';
+        }
+        $crlf="\r\n";
 
-	header("Content-Type: text/csv; charset=$charset");
-	header("Content-Disposition: attachment; filename=groupuserduration.csv");
-	if (isset($_REQUEST['u_date_start']) and
+        header("Content-Type: text/csv; charset=$charset");
+        header("Content-Disposition: attachment; filename=groupuserduration.csv");
+        if (isset($_REQUEST['u_date_start']) and
             isset($_REQUEST['u_date_end'])) {
                 $u_date_start = autounquote($_REQUEST['u_date_start']);
                 $u_date_end = autounquote($_REQUEST['u_date_end']);
-	} else {
-		list($min_date) = mysql_fetch_row(db_query(
+        } else {
+                list($min_date) = mysql_fetch_row(db_query(
                                 'SELECT MIN(day) FROM actions_daily', $course_code));
-		$u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
+                $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
                 $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
-	}
+        }
 
-	if (isset($u_date_start) and isset($u_date_end)) {
-		$first_line = "$langFrom $u_date_start $langAs $u_date_end";
-	} else {
-		$date_spec = '';
+        if (isset($u_date_start) and isset($u_date_end)) {
+                $first_line = "$langFrom $u_date_start $langAs $u_date_end";
+        } else {
+                $date_spec = '';
 
-	}
-	echo csv_escape($first_line), $crlf, $crlf,
-	     join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
-	     $crlf;
-	$totalDuration = 0;
+        }
+        echo csv_escape($first_line), $crlf, $crlf,
+             join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
+             $crlf;
+        $totalDuration = 0;
 
-	$result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
+        $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 
-	while ($row = mysql_fetch_assoc($result)) {
-                echo csv_escape($row['nom']) . ";" .
-                     csv_escape($row['prenom']) . ";" .
+        while ($row = mysql_fetch_assoc($result)) {
+                echo csv_escape($row['surname']) . ";" .
+                     csv_escape($row['givenname']) . ";" .
                      csv_escape($row['am']) . ";" .
                      csv_escape($group_name) . ";" .
                      csv_escape(format_time_duration(0 + $row['duration'])) . ";" .

@@ -86,12 +86,12 @@ if (!empty($user_registered_at)) {
 }
 // surname search
 if (!empty($lname)) {
-	$criteria[] = 'nom LIKE ' . quote('%' . $lname . '%');
+	$criteria[] = 'surname LIKE ' . quote('%' . $lname . '%');
         add_param('lname');
 }
 // first name search
 if (!empty($fname)) {
-	$criteria[] = 'prenom LIKE ' . quote('%' . $fname . '%');
+	$criteria[] = 'givenname LIKE ' . quote('%' . $fname . '%');
         add_param('fname');
 }
 // username search
@@ -113,7 +113,7 @@ if (!empty($am)) {
 }
 // user type search
 if (!empty($user_type)) {
-	$criteria[] = "statut = " . $user_type;
+	$criteria[] = "status = " . $user_type;
         add_param('user_type');
 }
 // auth type search
@@ -133,7 +133,7 @@ if (!empty($email)) {
 }
 // search for inactive users
 if ($search == 'inactive') {
-	$criteria[] = 'expires_at < '.time().' AND user_id <> 1';
+	$criteria[] = 'expires_at < '.time().' AND id <> 1';
         add_param('search', 'inactive');
 }
 
@@ -161,7 +161,7 @@ if ( $dep || isDepartmentAdmin() )
     $deps = substr($ids , 0, -1);
 
     $pref = ($c) ? 'a' : 'user';
-    $criteria[] = $pref . '.user_id = user_department.user';
+    $criteria[] = $pref . '.id = user_department.user';
     $criteria[] = 'department IN ('. $deps .')';
 }
 
@@ -175,42 +175,42 @@ if (count($criteria)) {
 $ord_param_id = 0;
 if (!empty($ord)) { // if we want to order results
 	switch ($ord) {
-		case 's': $order = 'statut, prenom, nom'; break;
-		case 'n': $order = 'nom, prenom, statut'; break;
-		case 'p': $order = 'prenom, nom, statut'; break;
-		case 'u': $order = 'username, statut, prenom'; break;
-		default: $order = 'statut, prenom, nom'; break;
+		case 's': $order = 'status, givenname, surname'; break;
+		case 'n': $order = 'surname, givenname, status'; break;
+		case 'p': $order = 'givenname, surname, status'; break;
+		case 'u': $order = 'username, status, givenname'; break;
+		default: $order = 'status, givenname, surname'; break;
 	}
         add_param('ord');
         $ord_param_id = count($params);
 } else {
-	$order = 'statut';
+	$order = 'status';
 }
 if ($c) { // users per course
         $qry_base = "FROM user AS a
                           LEFT JOIN course_user AS b
-                               ON a.user_id = b.user_id
+                               ON a.id = b.user_id
                           $depqryadd
                      WHERE b.course_id = $c";
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT COUNT(DISTINCT a.user_id) AS num, b.statut AS user_type " .
+        $count_qry = "SELECT COUNT(DISTINCT a.id) AS num, b.status AS user_type " .
                      $qry_base;
-        $qry = "SELECT DISTINCT a.user_id,a.nom, a.prenom, a.username, a.email,
-                       a.verified_mail, b.statut " . $qry_base;
+        $qry = "SELECT DISTINCT a.id, a.surname, a.givenname, a.username, a.email,
+                       a.verified_mail, b.status " . $qry_base;
         add_param('c');
 } elseif ($search == 'no_login') { // users who have never logged in
         $qry_base = "FROM user
                           LEFT JOIN loginout
-                               ON user.user_id = loginout.id_user
+                               ON user.id = loginout.id_user
                           $depqryadd
                           WHERE loginout.id_user IS NULL";
         if ($qry_criteria) {
                 $qry_base .= ' AND ' . $qry_criteria;
         }
-        $count_qry = "SELECT COUNT(DISTINCT user_id) AS num, statut AS user_type " . $qry_base;
-        $qry = "SELECT DISTINCT user_id, nom, prenom, username, email, verified_mail, statut " .
+        $count_qry = "SELECT COUNT(DISTINCT id) AS num, status AS user_type " . $qry_base;
+        $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail, status " .
                $qry_base;
         add_param('search', 'no_login');
 } else {
@@ -219,9 +219,9 @@ if ($c) { // users per course
         if ($qry_criteria) {
                 $qry_base .= ' WHERE ' . $qry_criteria;
         }
-        $count_qry = 'SELECT COUNT(DISTINCT user_id) AS num, statut AS user_type' .
+        $count_qry = 'SELECT COUNT(DISTINCT id) AS num, status AS user_type' .
                 $qry_base;
-        $qry = 'SELECT DISTINCT user_id, nom, prenom, username, email, statut, verified_mail' .
+        $qry = 'SELECT DISTINCT id, surname, givenname, username, email, status, verified_mail' .
                 $qry_base;        
 }
 
@@ -290,8 +290,8 @@ if($countUser > 0) {
                         }
                         $tool_content .= "<td width='1'>
                         <img src='$themeimg/arrow.png' alt=''></td>
-                        <td>".q($logs['nom'])."</td>
-                        <td>".q($logs['prenom'])."</td>
+                        <td>".q($logs['surname'])."</td>
+                        <td>".q($logs['givenname'])."</td>
                         <td>".q($logs['username'])."</td>
                         <td width='200'>".q($logs['email']);
                         if ($mail_ver_required) {
@@ -312,7 +312,7 @@ if($countUser > 0) {
                                 $tool_content .= ' ' . icon($icon, $tip);
                         }
 
-                        switch ($logs['statut']) {
+                        switch ($logs['status']) {
                             case USER_TEACHER:
                                 $icon = 'teacher';
                                 $tip = $langTeacher;
@@ -328,23 +328,23 @@ if($countUser > 0) {
                             default:
                                 $icon = false;
                                 $tool_content .= "</td><td class='center'>$langOther (" .
-                                        q($logs['statut']) . ')</td>';
+                                        q($logs['status']) . ')</td>';
                                 break;
                         }
                         if ($icon) {
                                 $tool_content .= "</td><td class='center'>" .
                                         icon($icon, $tip) . "</td>";
                         }
-                        if ($logs['user_id'] == 1) { // don't display actions for admin user
+                        if ($logs['id'] == 1) { // don't display actions for admin user
                                 $tool_content .= "<td class='center'>&mdash;&nbsp;</td>";
                         } else {
                                 $changetip = q("$langChangeUserAs $logs[username]");
                                 $width = (!isDepartmentAdmin()) ? 100 : 80;
                                 $tool_content .= "<td width='$width'>" .
-                                        icon('edit', $langEdit, "edituser.php?u=$logs[user_id]") . '&nbsp;' .
-                                        icon('delete', $langDelete, "deluser.php?u=$logs[user_id]") . '&nbsp;' .
-                                        icon('platform_stats', $langStat, "userstats.php?u=$logs[user_id]") . '&nbsp;' .
-                                        icon('platform_stats', $langActions, "userlogs.php?u=$logs[user_id]");
+                                        icon('edit', $langEdit, "edituser.php?u=$logs[id]") . '&nbsp;' .
+                                        icon('delete', $langDelete, "deluser.php?u=$logs[id]") . '&nbsp;' .
+                                        icon('platform_stats', $langStat, "userstats.php?u=$logs[id]") . '&nbsp;' .
+                                        icon('platform_stats', $langActions, "userlogs.php?u=$logs[id]");
                                 if (!isDepartmentAdmin()) {
                                         $tool_content .= '&nbsp;' . icon('log_as', $changetip,
                                                                          'change_user.php?username='.urlencode($logs['username']));

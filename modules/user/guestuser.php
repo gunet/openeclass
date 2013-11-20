@@ -68,8 +68,8 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "<p class='caution'>$langGuestExist</p>";
                 $submit_label = $langModify;
         } else {
-                $guest_info = array('nom' => $langGuestSurname,
-                                    'prenom' => $langGuestName,
+                $guest_info = array('surname' => $langGuestSurname,
+                                    'givenname' => $langGuestName,
                                     'username' => $default_guest_username);
                 $submit_label = $langAdd;
         }
@@ -79,12 +79,12 @@ if (isset($_POST['submit'])) {
         <table width='100%' class='tbl'>
         <tr>
         <th class='left'>$langName:</th>
-        <td>$guest_info[prenom]</td>
+        <td>$guest_info[givenname]</td>
         <td>&nbsp;</td>
         </tr>
         <tr>
         <th class='left'>$langSurname:</th>
-        <td>$guest_info[nom]</td>
+        <td>$guest_info[surname]</td>
         <td>&nbsp;</td>
         </tr>
         <tr>
@@ -132,18 +132,18 @@ function createguest($username, $course_id, $password)
 	$hasher = new PasswordHash(8, false);
 	$password = $hasher->HashPassword($password);
 
-	$q = db_query("SELECT user_id from course_user WHERE statut=".USER_GUEST." AND course_id = $course_id");
+	$q = db_query("SELECT user_id from course_user WHERE status=".USER_GUEST." AND course_id = $course_id");
 	if (mysql_num_rows($q) > 0) {
 		list($guest_id) = mysql_fetch_array($q);
 		db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
 	} else {
                 $regtime = time();
                 $exptime = 126144000 + $regtime;
-                db_query("INSERT INTO user (nom, prenom, username, password, statut, registered_at, expires_at, whitelist)
+                db_query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist)
                              VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', ".USER_GUEST.", $regtime, $exptime, '')");
                 $guest_id = mysql_insert_id();
 	}
-        db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
+        db_query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
                   VALUES ($course_id, $guest_id, ".USER_GUEST.", CURDATE())")
                 or die ($langGuestFail);
         
@@ -158,9 +158,9 @@ function createguest($username, $course_id, $password)
  */
 function guestinfo($course_id) {
 
-	$q = db_query("SELECT nom, prenom, username FROM user, course_user
-                       WHERE user.user_id = course_user.user_id AND
-                             course_user.statut = ".USER_GUEST." AND
+	$q = db_query("SELECT surname, givenname, username FROM user, course_user
+                       WHERE user.id = course_user.user_id AND
+                             course_user.status = ".USER_GUEST." AND
                              course_user.course_id = $course_id");
 	if (mysql_num_rows($q) == 0) {
 		return false;

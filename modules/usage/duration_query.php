@@ -21,7 +21,7 @@
 
 // Do the queries to calculate usage between timestamps $start and $end
 // Returns a MySQL resource, where fetching rows results in:
-// duration, nom, prenom, user_id, am
+// duration, surname, givenname, user_id, am
 function user_duration_query($course_id, $start = false, $end = false, $group = false)
 {
 
@@ -39,17 +39,17 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
 
         if ($group !== false) {
                 $from = "`group_members` AS groups
-                                LEFT JOIN user ON groups.user_id = user.user_id";
+                                LEFT JOIN user ON groups.user_id = user.id";
                 $and = "AND groups.group_id = $group";
                 $or = '';
         } else {
-                $from = " (select * from user union (SELECT 0 as user_id,
-                            '' as nom,
-                            'Anonymous' as prenom,
+                $from = " (SELECT * FROM user UNION (SELECT 0 as id,
+                            '' as surname,
+                            'Anonymous' as givenname,
                             null as username,
                             null as password,
                             null as email,
-                            null as statut,
+                            null as status,
                             null as phone,
                             null as am,
                             null as registered_at,
@@ -69,21 +69,21 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as whitelist,
                             null as last_passreminder)) as user ";
                 $and = '';
-                $or = ' OR user.user_id = 0 ';
+                $or = ' OR user.id = 0 ';
         }
         
         
         return db_query("SELECT SUM(actions_daily.duration) AS duration,
-                                   user.nom AS nom,
-                                   user.prenom AS prenom,
-                                   user.user_id AS user_id,
+                                   user.surname AS surname,
+                                   user.givenname AS givenname,
+                                   user.id AS id,
                                    user.am AS am
                             FROM $from
-                            LEFT JOIN actions_daily ON user.user_id = actions_daily.user_id
+                            LEFT JOIN actions_daily ON user.id = actions_daily.user_id
                             WHERE (actions_daily.course_id = $course_id  $or )
                             $and
                             $date_where
-                            GROUP BY user_id
-                            ORDER BY nom, prenom");
+                            GROUP BY user.id
+                            ORDER BY surname, givenname");
 }
 

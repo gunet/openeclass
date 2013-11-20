@@ -30,7 +30,7 @@ $tree = new Hierarchy();
 $user = new User();
 
 $nameTools = $langMultiDelUser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+$navigation[]= array ('url' => "index.php", 'name' => $langAdmin);
 load_js('tools.js');
 
 
@@ -98,22 +98,22 @@ if (isset($_POST['submit'])) {
         }
         
         if (!empty($lname))
-            $criteria[] = "nom LIKE " . autoquote('%' . $lname . '%');
+            $criteria[] = "surname LIKE " . quote('%' . $lname . '%');
         
         if (!empty($fname))
-            $criteria[] = "prenom LIKE " . autoquote('%' . $fname . '%');
+            $criteria[] = "givenname LIKE " . quote('%' . $fname . '%');
 
         if (!empty($uname))
-            $criteria[] = "username LIKE " . autoquote('%' . $uname . '%');
+            $criteria[] = "username LIKE " . quote('%' . $uname . '%');
 
         if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or $verified_mail === EMAIL_VERIFIED or $verified_mail === EMAIL_UNVERIFIED)
-            $criteria[] = "verified_mail=" . autoquote($verified_mail);
+            $criteria[] = "verified_mail=" . quote($verified_mail);
 
         if (!empty($am))
-            $criteria[] = "am LIKE " . autoquote('%' . $am . '%');
+            $criteria[] = "am LIKE " . quote('%' . $am . '%');
 
         if (!empty($user_type))
-            $criteria[] = "statut = " . intval($user_type);
+            $criteria[] = "status = " . intval($user_type);
 
         if (!empty($auth_type)) {
             if ($auth_type >= 2)
@@ -123,10 +123,10 @@ if (isset($_POST['submit'])) {
         }
 
         if (!empty($email))
-            $criteria[] = " email LIKE " . autoquote('%' . $email . '%');
+            $criteria[] = " email LIKE " . quote('%' . $email . '%');
         
         if ($search == 'inactive')
-            $criteria[] = "expires_at < ".time()." AND user_id <> 1";
+            $criteria[] = "expires_at < ".time()." AND user.id <> 1";
         
         // Department search
         $depqryadd = '';
@@ -151,7 +151,7 @@ if (isset($_POST['submit'])) {
         	$deps = substr($ids , 0, -1);
         
         	$pref = ($c) ? 'a' : 'user';
-        	$criteria[] = $pref . '.user_id = user_department.user';
+        	$criteria[] = $pref . '.user.id = user_department.user';
         	$criteria[] = 'department IN ('. $deps .')';
         }
         
@@ -159,12 +159,12 @@ if (isset($_POST['submit'])) {
         // end filter/criteria
         
         if (!empty($c)) {
-            $qry_base = " FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id $depqryadd WHERE b.course_id = $c ";
+            $qry_base = " FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id $depqryadd WHERE b.course_id = $c ";
             if ($qry_criteria)
         	    $qry_base .= ' AND '. $qry_criteria;
             $qry = "SELECT DISTINCT a.username ". $qry_base ." ORDER BY a.username ASC";
         } elseif ($search == 'no_login') {
-            $qry_base = " FROM user LEFT JOIN loginout ON user.user_id = loginout.id_user $depqryadd WHERE loginout.id_user IS NULL ";
+            $qry_base = " FROM user LEFT JOIN loginout ON user.id = loginout.id_user $depqryadd WHERE loginout.id_user IS NULL ";
             if ($qry_criteria)
                 $qry_base .= ' AND '. $qry_criteria;
         	$qry = "SELECT DISTINCT username ". $qry_base .' ORDER BY username ASC';
@@ -206,9 +206,7 @@ draw($tool_content, 3, 'admin', $head_content);
 // Translate username to uid
 function usernameToUid($uname)
 {
-	global $mysqlMainDb;
-
-	if ($r = mysql_fetch_row(db_query("SELECT user_id FROM user WHERE username = ". quote($uname), $mysqlMainDb))) {
+	if ($r = mysql_fetch_row(db_query("SELECT id FROM user WHERE username = ". quote($uname)))) {
 		return intval($r[0]);
 	} else {
 		return false;

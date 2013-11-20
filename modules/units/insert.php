@@ -233,7 +233,7 @@ function insert_video($id)
 		$order++;
                 list($table, $res_id) = explode(':', $video_id);
                 $res_id = intval($res_id);
-                $table = ($table == 'video')? 'video': 'videolinks';
+                $table = ($table == 'video')? 'video': 'videolink';
 		$row = mysql_fetch_array(db_query("SELECT * FROM $table
 			WHERE course_id = $course_id AND id = $res_id"), MYSQL_ASSOC);
                 db_query("INSERT INTO unit_resources SET unit_id=$id, type='$table', title=" . quote($row['title']) . ", comments=" . quote($row['description']) . ", visible=1, `order`=$order, `date`=NOW(), res_id=$res_id");

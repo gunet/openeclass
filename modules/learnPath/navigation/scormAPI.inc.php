@@ -58,7 +58,7 @@ if($uid)
 {
     mysql_select_db($mysqlMainDb);
     // Get user first and last name
-    $sql = "SELECT nom, prenom
+    $sql = "SELECT surname, givenname
               FROM `".$TABLEUSERS."` AS U
              WHERE U.`user_id` = ". (int)$uid;
     $userDetails = db_query_get_single_row($sql);
@@ -75,8 +75,8 @@ if($uid)
                AND LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
                AND M.`course_id` = $course_id";
     $userProgressionDetails = db_query_get_single_row($sql);
-    $userProgressionDetails['nom'] = $userDetails['nom'];
-    $userProgressionDetails['prenom'] = $userDetails['prenom'];
+    $userProgressionDetails['surname'] = $userDetails['surname'];
+    $userProgressionDetails['givenname'] = $userDetails['givenname'];
 }
 
 if( !$uid || !$userProgressionDetails )
@@ -99,7 +99,7 @@ else // authenticated user and no error in query
 {
     // set vars
     $sco['student_id'] = $uid;
-    $sco['student_name'] = $userProgressionDetails['nom'].', '.$userProgressionDetails['prenom'];
+    $sco['student_name'] = $userProgressionDetails['surname'].', '.$userProgressionDetails['givenname'];
     $sco['lesson_location'] = $userProgressionDetails['lesson_location'];
     $sco['credit'] = strtolower($userProgressionDetails['credit']);
     $sco['lesson_status'] = strtolower($userProgressionDetails['lesson_status']);

@@ -420,7 +420,7 @@ if(empty($search_terms)) {
 
             $numLine = 0;
             foreach ($vlinkHits as $vlinkHit) {
-                $res = db_query("SELECT title, description FROM videolinks WHERE id = " . intval($vlinkHit->pkid));
+                $res = db_query("SELECT title, description FROM videolink WHERE id = " . intval($vlinkHit->pkid));
                 $vlink = mysql_fetch_assoc($res);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';

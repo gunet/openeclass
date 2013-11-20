@@ -61,7 +61,7 @@ $errors = array();
 
 $all_set = register_posted_variables(array(
                 'usercomment' => true,
-                'name' => true,
+                'givenname' => true,
                 'surname' => true,
                 'username' => true,
                 'userphone' => $prof,
@@ -121,17 +121,17 @@ if ($all_set) {
 	}
 
 	// register user request
-	$statut = $prof? USER_TEACHER: USER_STUDENT;
+	$status = $prof? USER_TEACHER: USER_STUDENT;
 	$res = db_query('INSERT INTO user_request SET
-			name = ' . autoquote($name). ',
+			givenname = ' . autoquote($givenname). ',
 			surname = ' . autoquote($surname). ',
-			uname = ' . autoquote($username). ',
+			username = ' . autoquote($username). ',
 			email = ' . autoquote($usermail). ',
 			am = ' . autoquote($am). ',
 			faculty_id = ' . intval($department). ',
 			phone = ' . autoquote($userphone). ",
-			status = 1,
-			statut = $statut,
+			state = 1,
+			status = $status,
 			verified_mail = $verified_mail,
 			date_open = NOW(),
 			comment = " . autoquote($usercomment). ',
@@ -139,12 +139,11 @@ if ($all_set) {
 			request_ip = " . autoquote($_SERVER[REMOTE_ADDR]),
 		$mysqlMainDb);
 
-	if (!$res) {
-		$request_id = '';
-	}
-	else {
-		$request_id = mysql_insert_id();
-	}
+    if (!$res) {
+        $request_id = '';
+    } else {
+        $request_id = mysql_insert_id();
+    }
 
 	// email does not need verification -> mail helpdesk
 	if (!$email_verification_required) {
@@ -152,7 +151,7 @@ if ($all_set) {
 		//----------------------------- Email Request Message --------------------------
 		$dep_body = $tree->getFullPath($department);
 		$subject = $prof? $mailsubject: $mailsubject2;
-		$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
+		$MailMessage = $mailbody1 . $mailbody2 . "$givenname $surname\n\n" .
 			$mailbody3 . $mailbody4 . $mailbody5 .
 			($prof? $mailbody6: $mailbody8) .
 			"\n\n$langFaculty: $dep_body\n$langComments: $usercomment\n" .
@@ -209,28 +208,28 @@ if ($all_set) {
           <table class='tbl'>
           <tr>
             <th>$langName</th>
-            <td><input type='text' name='name' value='" . q($name) . "' size='30' maxlength='50' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60'>&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langSurname</th>
-            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='100' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60'>&nbsp;&nbsp;(*)</td>
           </tr>
           <tr>
             <th>$langPhone</th>
-            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' />$phone_star</td>
+            <td colspan='2'><input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20'>$phone_star</td>
           <tr>
             <th>$langUsername</th>
-            <td><input type='text' name='username' size='30' maxlength='30' value='" . q($username) . "' />&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
+            <td><input type='text' name='username' size='30' maxlength='50' value='" . q($username) . "'>&nbsp;&nbsp;<small>(*)&nbsp;$langUserNotice</small></td>
           </tr>
           <tr>
             <th>$langProfEmail</th>
-            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' />&nbsp;&nbsp;(*)</td>
+            <td><input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100'>&nbsp;&nbsp;(*)</td>
           </tr>";
         if (!$prof) {
                 $tool_content .= "
                 <tr>
                 <th>$langAm</th>
-                <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' />" .
+                <td colspan='2'><input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20'>" .
                         ($am_required? '&nbsp;&nbsp;(*)': '') . "</td>
                 </tr>";
         }

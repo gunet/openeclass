@@ -35,11 +35,11 @@ header("Content-Disposition: attachment; filename=listusers.csv");
 
 echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
      $crlf;
-$sql = db_query("SELECT user.user_id, user.nom, user.prenom, user.email, user.am, user.username
+$sql = db_query("SELECT user.id AS user_id, user.surname, user.givenname, user.email, user.am, user.username
                         FROM course_user, user
                         WHERE `user`.`user_id` = `course_user`.`user_id` AND
                               `course_user`.`course_id` = $course_id
-                        ORDER BY user.nom,user.prenom");
+                        ORDER BY user.surname, user.givenname");
 $r=0;
 while ($r < mysql_num_rows($sql)) {
         $a = mysql_fetch_array($sql);

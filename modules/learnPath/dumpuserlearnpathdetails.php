@@ -40,11 +40,11 @@ require_once 'modules/group/group_functions.php';
 	     $crlf;
 
 	// display a list of user and their respective progress
-	$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
+	$sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 		FROM `user` AS U, `course_user` AS CU
-		WHERE U.`user_id`= CU.`user_id`
+		WHERE U.`id`= CU.`user_id`
 		AND CU.`course_id` = $course_id
-		ORDER BY U.`nom` ASC";
+		ORDER BY U.`surname` ASC, U.`givenname` ASC";
 	$usersList = get_limited_list($sql, 500000);
 	foreach ($usersList as $user)
 	{
@@ -57,7 +57,7 @@ require_once 'modules/group/group_functions.php';
 		foreach($learningPathList as $learningPath)
 		{
 			// % progress
-			$prog = get_learnPath_progress($learningPath['learnPath_id'], $user['user_id']);
+			$prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
 			if ($prog >= 0)
 			{
 				$globalprog += $prog;
@@ -65,9 +65,9 @@ require_once 'modules/group/group_functions.php';
 			$iterator++;
 		}
 		$total = round($globalprog/($iterator-1));
-		echo csv_escape(uid_to_name($user['user_id'])).
-		";".csv_escape(uid_to_am($user['user_id'])).
-		";".csv_escape(user_groups($course_id, $user['user_id'], 'csv')).
+		echo csv_escape(uid_to_name($user['id'])).
+		";".csv_escape(uid_to_am($user['id'])).
+		";".csv_escape(user_groups($course_id, $user['id'], 'csv')).
 		";".$total."%";
 	}
-	echo "$crlf";
+	echo $crlf;

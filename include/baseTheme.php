@@ -92,7 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                $langUserBriefcase, $langUserHeader, $language, $nameTools,
                $navigation, $page_name, $page_navi,
                $require_current_course, $require_help, $siteName, $siteName,
-               $statut, $switchLangURL, $theme, $themeimg,
+               $status, $switchLangURL, $theme, $themeimg,
                $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer;
 
 	//get blocks content from $toolContent array
@@ -215,9 +215,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		//if user is logged in display the logout option
 		if (isset($_SESSION['uid'])) {
-			$t->set_var ( 'LANG_USER', $langUserHeader );
-			$t->set_var ( 'USER_NAME', q($_SESSION['prenom']) );
-			$t->set_var ( 'USER_SURNAME', q($_SESSION['nom']) . ", " );
+			$t->set_var ('LANG_USER', $langUserHeader );
+			$t->set_var ('USER_NAME', q($_SESSION['givenname']) );
+			$t->set_var ('USER_SURNAME', q($_SESSION['surname']) . ", " );
 			$t->set_var ('LANG_LOGOUT', $langLogout);
 			$t->set_var ('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
                 } else {
@@ -299,7 +299,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
 		$t->set_block ( 'mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome' );
 
-                if ($statut != 10) {
+                if ($status != 10) {
                         $perso_breadcrumb = (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active'])?
                                 $langPersonalisedBriefcase: $langUserBriefcase;
 			if (!isset($_SESSION['uid'])) {
@@ -326,7 +326,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 			$t->set_var ( 'BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">' );
 			$t->set_var ( 'BREAD_LINK', $urlServer . 'courses/' . $course_code . '/index.php' );
 			$t->set_var ( 'BREAD_TEXT', q(ellipsize($title, 64)) );
-			if ($statut == USER_GUEST)
+			if ($status == USER_GUEST)
 				$t->set_var ( 'BREAD_ARROW', '' );
 			$t->set_var ( 'BREAD_HREF_END', '</a>' );
 			$t->parse ( 'breadCrumbStart', 'breadCrumbStartBlock', true );

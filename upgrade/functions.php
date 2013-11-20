@@ -417,11 +417,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
                             WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
     }
 
-    $videolinks_map = array();
+    $videolink_map = array();
     // move videolinks to central db and drop table
     if (mysql_table_exists($code, 'videolinks')) {
 
-        list($linkid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolinks"));
+        list($linkid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.videolink"));
         $linkid_offset = (!$linkid_offset) ? 0 : intval($linkid_offset);
 
         if ($return_mapping) {
@@ -429,11 +429,11 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
             while ($row = mysql_fetch_array($result)) {
                 $oldid = intval($row['id']);
                 $newid = $oldid + $linkid_offset;
-                $videolinks_map[$oldid] = $newid;
+                $videolink_map[$oldid] = $newid;
             }
         }
 
-        $ok = db_query("INSERT INTO `$mysqlMainDb`.videolinks
+        $ok = db_query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `creator`,
                                `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id");
@@ -443,7 +443,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
 
         db_query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinks'");
+                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
     }
 
     // move dropbox to central db and drop tables
@@ -1019,28 +1019,24 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false)
     }
 
     // move table `actions`, `actions_summary`, `login` in main DB
-        $result = db_query("SELECT
-                            `user_id`,
-                            `module_id`,
-                            $course_id as `course_id`,
-                            COUNT(`id`) AS `hits`,
-                            SUM(`duration`) AS `duration`,
-                            DATE(`date_time`) AS `day`
+    $result = db_query("SELECT `user_id`, `module_id`, $course_id AS `course_id`,
+                               COUNT(`id`) AS `hits`, SUM(`duration`) AS `duration`,
+                               DATE(`date_time`) AS `day`
                             FROM `actions`
                             GROUP BY DATE(`date_time`), `user_id`, `module_id`");
-        while ($row = mysql_fetch_assoc($result)) {
-            db_query("INSERT INTO `$mysqlMainDb`.`actions_daily`
+    while ($row = mysql_fetch_assoc($result)) {
+        db_query("INSERT INTO `$mysqlMainDb`.`actions_daily`
                         (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
                         VALUES 
-                        (NULL, ". $row['user_id'] .", ". $row['module_id'] .", ". $row['course_id'] .", ". $row['hits'] .", ". $row['duration'] .", '". $row['day'] ."', NOW())");
+                        (NULL, $row[user_id], $row[module_id], $row[course_id], $row[hits], $row[duration], '$row[day]', NOW())");
         }
 
-        db_query("INSERT INTO $mysqlMainDb.actions_summary
+        db_query("INSERT INTO `$mysqlMainDb`.actions_summary
                 (module_id, visits, start_date, end_date, duration, course_id)
                 SELECT module_id, visits, start_date, end_date, duration, $course_id
                 FROM actions_summary", $code);
 
-        db_query("INSERT INTO $mysqlMainDb.logins
+        db_query("INSERT INTO `$mysqlMainDb`.logins
                 (user_id, ip, date_time, course_id)
                 SELECT user_id, ip, date_time, $course_id
                 FROM logins", $code);
@@ -1488,7 +1484,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         update_assignment_submit();
 
         // upgrade queries for eClass 1.5
-        if (!mysql_table_exists($code, 'videolinks'))  {
+        if (!mysql_table_exists($code, 'videolink'))  {
                 db_query("CREATE TABLE videolinks (
                         id int(11) NOT NULL auto_increment,
                            url varchar(200),
@@ -1970,25 +1966,25 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         upgrade_video($row['url'], $row['id'], $code);
                 }
         }
-        if (!mysql_field_exists("$code",'video','creator'))
+        if (!mysql_field_exists($code, 'video', 'creator'))
                 echo add_field_after_field('video', 'creator', 'description', "VARCHAR(255)");
-        if (!mysql_field_exists("$code",'video','publisher'))
+        if (!mysql_field_exists($code, 'video', 'publisher'))
                 echo add_field_after_field('video', 'publisher', 'creator',"VARCHAR(255)");
-        if (!mysql_field_exists("$code",'video','date'))
+        if (!mysql_field_exists($code, 'video', 'date'))
                 echo add_field_after_field('video', 'date', 'publisher',"DATETIME");
 
         // upgrade videolinks
-        if (!mysql_field_exists("$code",'videolinks','creator'))
+        if (!mysql_field_exists($code, 'videolinks', 'creator'))
                 echo add_field_after_field('videolinks', 'creator', 'description', "VARCHAR(255)");
-        if (!mysql_field_exists("$code",'videolinks','publisher'))
+        if (!mysql_field_exists($code, 'videolinks', 'publisher'))
                 echo add_field_after_field('videolinks', 'publisher', 'creator',"VARCHAR(255)");
-        if (!mysql_field_exists("$code",'videolinks','date'))
+        if (!mysql_field_exists($code, 'videolinks', 'date'))
                 echo add_field_after_field('videolinks', 'date', 'publisher',"DATETIME");
 
         // upgrading accueil table
 
         //  create new column (define_var)
-        echo add_field("accueil","define_var", "VARCHAR(50) NOT NULL");
+        echo add_field('accueil', 'define_var', 'VARCHAR(50) NOT NULL');
 
         // Move all external links to id > 1000
         db_query("UPDATE `accueil`

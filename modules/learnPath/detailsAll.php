@@ -66,11 +66,11 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
 }
 
 // display a list of user and their respective progress
-$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
+$sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 	FROM `$TABLEUSER` AS U, `$TABLECOURSUSER` AS CU
-	WHERE U.`user_id`= CU.`user_id`
+	WHERE U.`id`= CU.`user_id`
 	AND CU.`course_id` = $course_id
-	ORDER BY U.`nom` ASC";
+	ORDER BY U.`surname` ASC";
 
 @$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 $usersList = get_limited_list($sql, 30);
@@ -132,7 +132,7 @@ foreach ($usersList as $user)
 	foreach($learningPathList as $learningPath)
 	{
 		// % progress
-		$prog = get_learnPath_progress($learningPath['learnPath_id'], $user['user_id']);
+		$prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
 		if ($prog >= 0)
 		{
 			$globalprog += $prog;
@@ -141,9 +141,9 @@ foreach ($usersList as $user)
 	}	
 		$total = round($globalprog/($iterator-1));
 		$tool_content .= '    <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
-		.'    <td><a href="detailsUser.php?course='.$course_code.'&amp;uInfo='.$user['user_id'].'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
-		.'    <td class="center">'.q(uid_to_am($user['user_id'])).'</td>'."\n"
-		.'    <td align="center">'.user_groups($course_id, $user['user_id']).'</td>'."\n"
+		.'    <td><a href="detailsUser.php?course='.$course_code.'&amp;uInfo='.$user['id'].'">'.$user['surname'].' '.$user['givenname'].'</a></td>'."\n"
+		.'    <td class="center">'.q(uid_to_am($user['id'])).'</td>'."\n"
+		.'    <td align="center">'.user_groups($course_id, $user['id']).'</td>'."\n"
 		.'    <td class="right" width=\'120\'>'
 		.disp_progress_bar($total, 1)
 		.'</td>'."\n"

@@ -83,13 +83,14 @@ foreach ($usage_defaults as $key => $val) {
 }
 
 $date_fmt = '%Y-%m-%d';
-$date_where = " (date_time BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+$date_where = ' (date_time BETWEEN ' . quote("$u_date_start 00:00:00") .
+              ' AND ' . quote("$u_date_end 23:59:59") . ') ';
 $date_what  = "DATE_FORMAT(MIN(date_time), '$date_fmt') AS date_start, DATE_FORMAT(MAX(date_time), '$date_fmt') AS date_end ";
 
 if ($u_user_id != -1) {
-    $user_where = " (a.user_id = '$u_user_id') ";
+    $user_where = ' (a.id = ' . intval($u_user_id) . ') ';
 } else {
-    $user_where = " (1) ";
+    $user_where = ' (1) ';
 }
 
 $sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
@@ -98,8 +99,8 @@ $sql_1 = "SELECT user_id, ip, date_time FROM logins AS a
                  AND course_id = $course_id
                  ORDER BY date_time DESC";
 
-$sql_2 = "SELECT a.user_id as user_id, a.nom as nom, a.prenom as prenom, a.username
-                 FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+$sql_2 = "SELECT a.id, a.surname, a.givenname, a.username
+                 FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
                  WHERE b.course_id = $course_id AND ".$user_where;
 
 // Take data from logins
@@ -107,7 +108,7 @@ $result_2= db_query($sql_2, $mysqlMainDb);
 
 $users = array();
 while ($row = mysql_fetch_assoc($result_2)) {
-    $users[$row['user_id']] = $row['nom'].' '.$row['prenom'];
+    $users[$row['id']] = $row['surname'].' '.$row['givenname'];
 }
 
 $result = db_query($sql_1);
@@ -117,13 +118,13 @@ $unknown_users = array();
 $k = 0;
 while ($row = mysql_fetch_assoc($result)) {
         $known = false;
-        if (isset($users[$row['user_id']])) {
-                $user = $users[$row['user_id']];
+        if (isset($users[$row['id']])) {
+                $user = $users[$row['id']];
                 $known = true;
-        } elseif (isset($unknown_users[$row['user_id']])) {
-                $user = $unknown_users[$row['user_id']];
+        } elseif (isset($unknown_users[$row['id']])) {
+                $user = $unknown_users[$row['id']];
         } else {
-                $user = uid_to_name($row['user_id']);
+                $user = uid_to_name($row['id']);
                 if ($user === false) {
                         $user = $langAnonymous;
                 }
@@ -194,8 +195,8 @@ $start_cal = $jscalendar->make_input_field(
                  'value'       => $u_date_end));
 
 
-    $qry = "SELECT LEFT(a.nom, 1) AS first_letter
-        FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+    $qry = "SELECT LEFT(a.surname, 1) AS first_letter
+        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
         WHERE b.course_id = $course_id
         GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry, $mysqlMainDb);
@@ -208,12 +209,12 @@ $start_cal = $jscalendar->make_input_field(
 
     if (isset($_GET['first'])) {
         $firstletter = mysql_real_escape_string($_GET['first']);
-        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
             WHERE b.course_id = $course_id AND LEFT(a.nom,1) = '$firstletter'";
     } else {
-        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-            FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+            FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
             WHERE b.course_id = $course_id";
     }
 
@@ -221,8 +222,8 @@ $start_cal = $jscalendar->make_input_field(
     $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
     $result = db_query($qry, $mysqlMainDb);
     while ($row = mysql_fetch_assoc($result)) {
-        if ($u_user_id == $row['user_id']) { $selected = 'selected'; } else { $selected = ''; }
-        $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
+        if ($u_user_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
+        $user_opts .= '<option '.$selected.' value="'.$row['id'].'">'.q($row['givenname'].' '.$row['surname'])."</option>\n";
     }
 
 $tool_content .= '

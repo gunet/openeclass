@@ -59,10 +59,10 @@ if (isset($_POST['submit'])) {
                         if ($cid) {
                                 activate_subsystems($lang, $_POST['subsystems']);
                                 if ($prof_uid) {
-                                        db_query("INSERT INTO `$mysqlMainDb`.cours_user
+                                        db_query("INSERT INTO cours_user
                                                          SET cours_id = $cid,
                                                              user_id = $prof_uid,
-                                                             statut = 1,
+                                                             status = 1,
                                                              tutor = 1,
                                                              reg_date = NOW()");
                                 }
@@ -265,9 +265,8 @@ draw($tool_content, 3, null, $head_content);
 // Helper function
 function prof_query($sql)
 {
-        global $mysqlMainDb;
-        return db_query_get_single_value("SELECT user_id FROM `$mysqlMainDb`.user
-                                                 WHERE statut = 1 AND $sql");
+        return db_query_get_single_value("SELECT id FROM user
+                                                 WHERE status = 1 AND $sql");
 }
 
 // Find a professor by name ("Name surname") or username
@@ -278,10 +277,10 @@ function find_prof($uname)
         } else {
                 $names = explode(' ', $uname);
                 if (count($names) == 2 and
-                    $uid = prof_query('(nom = ' . quote($names[0]) .
-                                      ' AND prenom = ' . quote($names[1]) .
-                                      ') OR (prenom = ' . quote($names[0]) .
-                                      ' AND nom = ' . quote($names[1]) . ')')) {
+                    $uid = prof_query('(surname = ' . quote($names[0]) .
+                                      ' AND givenname = ' . quote($names[1]) .
+                                      ') OR (givenname = ' . quote($names[0]) .
+                                      ' AND surname = ' . quote($names[1]) . ')')) {
                         return $uid;
                 }
 	}

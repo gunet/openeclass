@@ -110,8 +110,8 @@ if (!isset($_SESSION['was_validated']) or
                 if ($shibsettings != 'shibboleth' and $shibsettings != '') {
                         $shibseparator = $shibsettings;
                 }
-                if (strpos($_SESSION['shib_nom'], $shibseparator)) {
-                        $temp = explode($shibseparator, $_SESSION['shib_nom']);
+                if (strpos($_SESSION['shib_surname'], $shibseparator)) {
+                        $temp = explode($shibseparator, $_SESSION['shib_surname']);
                         $auth_user_info['firstname'] = $temp[0];
                         $auth_user_info['lastname'] = $temp[1];
                 }
@@ -175,8 +175,8 @@ if ($is_valid) {
                 $ok = register_posted_variables(array('submit' => false, 'uname' => true,
                     'email' => $email_required &&
                     $ext_mail,
-                    'prenom_form' => $ext_info,
-                    'nom_form' => $ext_info,
+                    'surname_form' => $ext_info,
+                    'givenname_form' => $ext_info,
                     'am' => $am_required,
                     'department' => true,
                     'usercomment' => $comment_required,
@@ -185,8 +185,8 @@ if ($is_valid) {
                 $ok = register_posted_variables(array('submit' => false,
                     'email' => $email_required &&
                     $ext_mail,
-                    'prenom_form' => $ext_info,
-                    'nom_form' => $ext_info,
+                    'surname_form' => $ext_info,
+                    'givenname_form' => $ext_info,
                     'am' => $am_required,
                     'department' => true,
                     'userphone' => $phone_required), 'all');
@@ -197,8 +197,8 @@ if ($is_valid) {
         }        
         $depid = intval($department);
         if (isset($auth_user_info)) {
-                $prenom_form = $auth_user_info['firstname'];
-                $nom_form = $auth_user_info['lastname'];
+                $givenname_form = $auth_user_info['firstname'];
+                $surname_form = $auth_user_info['lastname'];
                 if (!$email and !empty($auth_user_info['email'])) {
                         $email = $auth_user_info['email'];
                 }
@@ -226,7 +226,7 @@ if ($is_valid) {
                 $password = isset($auth_ids[$auth]) ? $auth_ids[$auth] : '';
         }
 
-        $statut = $prof ? USER_TEACHER : USER_STUDENT;
+        $status = $prof ? USER_TEACHER : USER_STUDENT;
         $greeting = $prof ? $langDearProf : $langDearUser;
 
         $uname = canonicalize_whitespace($uname);
@@ -259,12 +259,12 @@ if ($is_valid) {
                 $authmethods = array('2', '3', '4', '5');                
 
                 $q1 = "INSERT INTO user
-                      SET nom = " . autoquote($nom_form) . ",
-                          prenom = " . autoquote($prenom_form) . ",
+                      SET surname = " . autoquote($surname_form) . ",
+                          givenname = " . autoquote($givenname_form) . ",
                           username = " . autoquote($uname) . ",
                           password = '$password',
                           email = " . autoquote($email) . ",
-                          statut = ".USER_STUDENT.",
+                          status = ".USER_STUDENT.",
                           am = " . autoquote($am) . ",
                           registered_at = $registered_at,
                           expires_at = $expires_at,
@@ -286,7 +286,7 @@ if ($is_valid) {
                 $password = $auth_ids[$auth];
                 $telephone = get_config('phone');
                 $emailsubject = "$langYourReg $siteName";
-                $emailbody = "$langDestination $prenom_form $nom_form\n" .
+                $emailbody = "$langDestination $givenname_form $surname_form\n" .
                         "$langYouAreReg $siteName $langSettings $uname\n" .
                         "$langPassSameAuth\n$langAddress $siteName: " .
                         "$urlServer\n" .
@@ -300,22 +300,22 @@ if ($is_valid) {
                         send_mail('', $emailhelpdesk, '', $email, $emailsubject, $emailbody, $charset);
                 }
 
-                $result = db_query("SELECT user_id, nom, prenom FROM user WHERE user_id = $last_id");
+                $result = db_query("SELECT id, surname, givenname FROM user WHERE id = $last_id");
                 while ($myrow = mysql_fetch_array($result)) {
                         $uid = $myrow[0];
-                        $nom = $myrow[1];
-                        $prenom = $myrow[2];
+                        $surname = $myrow[1];
+                        $givenname = $myrow[2];
                 }
 
                 if (!$vmail) {
                         db_query("INSERT INTO loginout
-                                                SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
-                                                `when` = NOW(), action = 'LOGIN'");
+                                         SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',
+                                             `when` = NOW(), action = 'LOGIN'");
                         $_SESSION['uid'] = $uid;
-                        $_SESSION['statut'] = 5;
-                        $_SESSION['prenom'] = $prenom;
-                        $_SESSION['nom'] = $nom;
-                        $_SESSION['uname'] = canonicalize_whitespace($uname);
+                        $_SESSION['status'] = 5;
+                        $_SESSION['givenname'] = $givenname;
+                        $_SESSION['surname'] = $surname;
+                        $_SESSION['uname'] = canonicalize_whitespace($username);
                         $_SESSION['user_perso_active'] = false;
 
                         $tool_content .= "<div class='success'><p>$greeting,</p><p>";
@@ -349,16 +349,16 @@ if ($is_valid) {
 
                 // Record user request
                 db_query('INSERT INTO user_request SET
-                         name = ' . autoquote($prenom_form) . ',
-                         surname = ' . autoquote($nom_form) . ',
-                         uname = ' . autoquote($uname) . ",
+                         givenname = ' . autoquote($givenname_form) . ',
+                         surname = ' . autoquote($surname_form) . ',
+                         username = ' . autoquote($uname) . ",
                          password = '$password',
                          email = " . autoquote($email) . ",
                          faculty_id = $depid,
                          phone = " . autoquote($userphone) . ",
                          am = " . autoquote($am) . ",
-                         status = 1,
-                         statut = $statut,
+                         state = 1,
+                         status = $status,
                          verified_mail = $verified_mail,
                          date_open = NOW(),
                          comment = " . autoquote($usercomment) . ",
@@ -370,7 +370,7 @@ if ($is_valid) {
                 // email does not need verification -> mail helpdesk
                 if (!$email_verification_required) {
                         // send email
-                        $MailMessage = $mailbody1 . $mailbody2 . "$prenom_form $nom_form\n\n" . $mailbody3
+                        $MailMessage = $mailbody1 . $mailbody2 . "$givenname_form $surname_form\n\n" . $mailbody3
                                 . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
         \n$langComments: $usercomment\n"
                                 . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
@@ -483,14 +483,14 @@ function user_info_form() {
             <th class='left'>$langName</th>
             <td colspan='2'>" . (isset($auth_user_info) ?
                         $auth_user_info['firstname'] :
-                        '<input type="text" name="prenom_form" size="30" maxlength="30"' . set('prenom_form') . '>&nbsp;&nbsp;(*)') . "
+                        '<input type="text" name="givenname_form" size="30" maxlength="30"' . set('givenname_form') . '>&nbsp;&nbsp;(*)') . "
             </td>
           </tr>
           <tr>
              <th class='left'>$langSurname</th>
              <td colspan='2'>" . (isset($auth_user_info) ?
                         $auth_user_info['lastname'] :
-                        '<input type="text" name="nom_form" size="30" maxlength="30"' . set('nom_form') . '>&nbsp;&nbsp;(*)') . "
+                        '<input type="text" name="surname_form" size="30" maxlength="30"' . set('surname_form') . '>&nbsp;&nbsp;(*)') . "
              </td>
           </tr>
           <tr>

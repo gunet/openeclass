@@ -32,7 +32,7 @@ $action->record(MODULE_ID_VIDEO);
 // ----------------------
 // play videolink
 // ----------------------
-$res = db_query("SELECT * FROM videolinks WHERE course_id = $course_id AND id = " . intval($_GET['id']));
+$res = db_query("SELECT * FROM videolink WHERE course_id = $course_id AND id = " . intval($_GET['id']));
 $row = mysql_fetch_array($res);
 
 if (!empty($row)) {

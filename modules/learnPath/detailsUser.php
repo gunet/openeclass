@@ -71,11 +71,11 @@ if( empty($_REQUEST['uInfo']) ) {
 }
 
 // check if user is in this course
-$sql = "SELECT `u`.`nom` AS `lastname`,`u`.`prenom` AS `firstname`, `u`.`email`
+$sql = "SELECT `u`.`surname`,`u`.`givenname`, `u`.`email`
 			FROM `".$TABLECOURSUSER."` as `cu` , `".$TABLEUSER."` as `u`
-			WHERE `cu`.`user_id` = `u`.`user_id`
+			WHERE `cu`.`user_id` = `u`.`id`
 			AND `cu`.`course_id` = $course_id
-			AND `u`.`user_id` = '". (int)$_REQUEST['uInfo']."'";
+			AND `u`.`id` = '". (int)$_REQUEST['uInfo']."'";
 
 $results = db_query_fetch_all($sql);
 
@@ -87,12 +87,12 @@ if( empty($results) )
 
 $trackedUser = $results[0];
 
-$nameTools = $trackedUser['lastname']." ".$trackedUser['firstname'];
+$nameTools = $trackedUser['surname']." ".$trackedUser['givenname'];
 /*
 $tool_content .= ucfirst(strtolower($langUser)).': <br />'."\n"
 	.'<ul>'."\n"
-	.'<li>'.$langLastName.': '.$trackedUser['lastname'].'</li>'."\n"
-	.'<li>'.$langName.': '.$trackedUser['firstname'].'</li>'."\n"
+	.'<li>'.$langLastName.': '.$trackedUser['surname'].'</li>'."\n"
+	.'<li>'.$langName.': '.$trackedUser['givenname'].'</li>'."\n"
 	.'<li>'.$langEmail.': ';
 if( empty($trackedUser['email']) )	$tool_content .= $langNoEmail;
 else 			$tool_content .= $trackedUser['email'];

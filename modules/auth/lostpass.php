@@ -83,8 +83,8 @@ if (isset($_REQUEST['u']) and
         $change_ok = false;
 	$userUID = intval($_REQUEST['u']);
         $valid = token_validate('password'.$userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
-	$res = db_query("SELECT user_id FROM user
-                                WHERE user_id = $userUID AND
+	$res = db_query("SELECT id FROM user
+                                WHERE id = $userUID AND
                                       password NOT IN ('" .
                                       implode("', '", $auth_ids) . "')");
         $error_messages = array();
@@ -93,7 +93,7 @@ if (isset($_REQUEST['u']) and
                     count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
                             $hasher = new PasswordHash(8, false);
                             if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
-                                                      WHERE user_id = $userUID")) {
+                                                      WHERE id = $userUID")) {
                                       $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";
                                       $change_ok = true;
@@ -136,8 +136,8 @@ if (isset($_REQUEST['u']) and
 	$email = isset($_POST['email'])? mb_strtolower(trim($_POST['email'])): '';
 	$userName = isset($_POST['userName'])? canonicalize_whitespace($_POST['userName']): '';
 	/***** If valid e-mail address was entered, find user and send email *****/
-	$res = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.password, u.statut FROM user u
-	                LEFT JOIN admin a ON (a.idUser = u.user_id)
+	$res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+	                LEFT JOIN admin a ON (a.idUser = u.id)
 	                WHERE u.email = " . quote($email) . " AND
 	                BINARY u.username = " . quote($userName) ." AND 
 	                a.idUser IS NULL AND  
@@ -152,10 +152,10 @@ if (isset($_REQUEST['u']) and
                                 $found_editable_password = true;
 				//prepare instruction for password reset
 				$text .= $langPassResetGoHere;
-                                $text .= $urlServer . "modules/auth/lostpass.php?u=$s[user_id]&h=" .
-                                         token_generate('password'.$s['user_id'], true);
+                                $text .= $urlServer . "modules/auth/lostpass.php?u=$s[id]&h=" .
+                                         token_generate('password'.$s['id'], true);
                 // store the timestamp of this action (password reminding and token generation)
-                db_query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE user_id = ". $s['user_id']);
+                db_query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ". $s['id']);
 
 			} else { //other type of auth...
                                 $auth = array_search($s['password'], $auth_ids) or 1;
@@ -182,8 +182,8 @@ if (isset($_REQUEST['u']) and
                         }
                 }
         } else {
-                $res = db_query("SELECT u.user_id, u.nom, u.prenom, u.username, u.password, u.statut FROM user u
-	                LEFT JOIN admin a ON (a.idUser = u.user_id)
+                $res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+	                LEFT JOIN admin a ON (a.idUser = u.id)
 	                WHERE u.email = " . quote($email) . " AND
 	                BINARY u.username = " . quote($userName) ." AND 
 	                a.idUser IS NULL AND  

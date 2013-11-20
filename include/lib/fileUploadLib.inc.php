@@ -570,7 +570,7 @@ function process_extracted_file($p_event, &$p_header) {
 // Returns the full encoded path created.
 function make_path($path, $path_components)
 {
-        global $basedir, $nom, $prenom, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
+        global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
 
         $path_already_exists = true;
         $depth = 1 + substr_count($path, '/');
@@ -597,7 +597,7 @@ function make_path($path, $path_components)
                                           path = " . quote($path) . ",
                                           filename = " . quote($component) . ",
                                           visible = 1,
-                                          creator = " . quote($prenom.' '.$nom) . ",
+                                          creator = " . quote("$givenname $surname") . ",
                                           date = NOW(),
                                           date_modified = NOW(),
                                           format = '.dir'");
@@ -714,7 +714,7 @@ function isWhitelistAllowed($filename)
  */
 function fetchUserWhitelist($uid)
 {
-    $q = db_query("SELECT whitelist from user where user_id = ". intval($uid));
+    $q = db_query("SELECT whitelist FROM user WHERE id = ". intval($uid));
     $r = mysql_fetch_array($q);
     return $r['whitelist'];
 }

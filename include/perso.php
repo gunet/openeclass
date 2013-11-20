@@ -36,32 +36,22 @@ if (!defined('INDEX_START')) {
 }
 
 require_once 'include/redirector.php';
-$status = array();
 $sql = "SELECT course.id cid, course.code code, course.public_code,
-                        course.title title, course.prof_names profs, course_user.statut statut
+                        course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
-                WHERE course_user.user_id = $uid
-                ORDER BY statut, course.title, course.prof_names";
-$sql2 = "SELECT course.id cid, course.code code, course.public_code,
-                        course.title title, course.prof_names profs, course_user.statut statut
-                FROM course JOIN course_user ON course.id = course_user.course_id
-                WHERE course_user.user_id = $uid
-                AND course.visible != ".COURSE_INACTIVE."
-                ORDER BY statut, course.title, course.prof_names";
+                WHERE course_user.user_id = $uid " .
+                ($_SESSION['status'] == USER_TEACHER? ("AND course.visible != " . COURSE_INACTIVE): '') . "
+                ORDER BY status, course.title, course.prof_names";
 
-if ($_SESSION['statut'] == 1) {
-        $result2 = db_query($sql);
-}
-if ($_SESSION['statut'] == 5) {
-        $result2 = db_query($sql2);
-}
+$result2 = db_query($sql);
 
+$courses = array();
 if ($result2 and mysql_num_rows($result2) > 0) {
 	while ($mycours = mysql_fetch_array($result2)) {
-		$status[$mycours['code']] = $mycours['statut'];
+		$courses[$mycours['code']] = $mycours['status'];
 	}
 }
-$_SESSION['status'] = $status;
+$_SESSION['courses'] = $courses;
 $subsystem = MAIN;
 
 require_once 'include/lib/textLib.inc.php';
@@ -85,71 +75,76 @@ $user_lesson_info = getUserLessonInfo($uid, "html");
 //if user is registered to at least one lesson
 if ($user_lesson_info[0][0] > 0) {
 	// BEGIN - Get user assignments
-	$param = array(	'uid'	=> $uid,
-	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-	'lesson_titles'	=> $user_lesson_info[0][1],
-	'lesson_code'	=> $user_lesson_info[0][2],
-	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4],
-	'lesson_id'             => $user_lesson_info[0][8]
-	);
+    $param = array(
+        'uid' => $uid,
+        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
+        'lesson_titles' => $user_lesson_info[0][1],
+        'lesson_code' => $user_lesson_info[0][2],
+        'lesson_professor' => $user_lesson_info[0][3],
+        'lesson_status' => $user_lesson_info[0][4],
+        'lesson_id' => $user_lesson_info[0][8]
+    );
 	$user_assignments = getUserAssignments($param, "html");
 	//END - Get user assignments
 
-	// BEGIN - Get user announcements
-	$param = array(	'uid'	=> $uid,
-	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-	'lesson_titles'	=> $user_lesson_info[0][1],
-	'lesson_code'	=> $user_lesson_info[0][2],
-	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4],
-	'usr_lst_login'		=> $_user["lastLogin"],
-	'usr_memory'		=> $user_lesson_info[0][5],
-        'lesson_id'             => $user_lesson_info[0][8]
-	);
+    // BEGIN - Get user announcements
+    $param = array(
+        'uid' => $uid,
+        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
+        'lesson_titles' => $user_lesson_info[0][1],
+        'lesson_code' => $user_lesson_info[0][2],
+        'lesson_professor' => $user_lesson_info[0][3],
+        'lesson_status' => $user_lesson_info[0][4],
+        'usr_lst_login' => $_user["lastLogin"],
+        'usr_memory' => $user_lesson_info[0][5],
+        'lesson_id' => $user_lesson_info[0][8]
+    );
 
 	$user_announcements = getUserAnnouncements($param, 'html');
 	// END - Get user announcements
 
 	// BEGIN - Get user documents
 
-	$param = array(	'uid'	=> $uid,
-	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-	'lesson_titles'	=> $user_lesson_info[0][1],
-	'lesson_code'	=> $user_lesson_info[0][2],
-	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4],
-	'usr_lst_login'		=> $_user["lastLogin"],
-	'usr_memory'		=> $user_lesson_info[0][6]
-	);
+    $param = array(
+        'uid'  => $uid,
+        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
+        'lesson_titles' => $user_lesson_info[0][1],
+        'lesson_code' => $user_lesson_info[0][2],
+        'lesson_professor' => $user_lesson_info[0][3],
+        'lesson_status' => $user_lesson_info[0][4],
+        'usr_lst_login' => $_user["lastLogin"],
+        'usr_memory' => $user_lesson_info[0][6]
+    );
 
 	$user_documents = getUserDocuments($param, "html");
 
 	// END - Get user documents
 
 	//BEGIN - Get user agenda
-	$param = array(	'uid'	=> $uid,
-	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-	'lesson_titles'	=> $user_lesson_info[0][1],
-	'lesson_code'	=> $user_lesson_info[0][2],
-	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4],
-	'usr_lst_login'		=> $_user["lastLogin"],
-	'lesson_id'         => $user_lesson_info[0][8]
+    $param = array(
+        'uid' => $uid,
+        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
+        'lesson_titles' => $user_lesson_info[0][1],
+        'lesson_code' => $user_lesson_info[0][2],
+        'lesson_professor' => $user_lesson_info[0][3],
+        'lesson_status' => $user_lesson_info[0][4],
+        'usr_lst_login' => $_user["lastLogin"],
+        'lesson_id' => $user_lesson_info[0][8]
 	);
 	$user_agenda = getUserAgenda($param, "html");
 
 	//END - Get user agenda
 
 	//BEGIN - Get user forum posts
-	$param = array(	'uid'	=> $uid,
-	'max_repeat_val' 	=> $user_lesson_info[0][0], //max repeat val (num of lessons)
-	'lesson_titles'	=> $user_lesson_info[0][1],
-	'lesson_code'	=> $user_lesson_info[0][2],
-	'lesson_professor'	=> $user_lesson_info[0][3],
-	'lesson_statut'		=> $user_lesson_info[0][4],
-	'usr_lst_login'		=> $_user["lastLogin"],
-	'usr_memory'		=> $user_lesson_info[0][7]//forum memory
+    $param = array(
+        'uid' => $uid,
+        'max_repeat_val' => $user_lesson_info[0][0], //max repeat val (num of lessons)
+        'lesson_titles' => $user_lesson_info[0][1],
+        'lesson_code' => $user_lesson_info[0][2],
+        'lesson_professor' => $user_lesson_info[0][3],
+        'lesson_status' => $user_lesson_info[0][4],
+        'usr_lst_login' => $_user['lastLogin'],
+        'usr_memory' => $user_lesson_info[0][7] //forum memory
 	);
 	$user_forumPosts = getUserForumPosts($param, "html");
 	//END - Get user forum posts
@@ -166,12 +161,12 @@ if ($user_lesson_info[0][0] > 0) {
 
 // ==  BEGIN create array with personalised content
 $perso_tool_content = array(
-'lessons_content' 	=> $user_lesson_info[1],
-'assigns_content' 	=> $user_assignments,
-'announce_content' 	=> $user_announcements,
-'docs_content'		=> $user_documents,
-'agenda_content' 	=> $user_agenda,
-'forum_content' 	=> $user_forumPosts
+    'lessons_content' 	=> $user_lesson_info[1],
+    'assigns_content' 	=> $user_assignments,
+    'announce_content' 	=> $user_announcements,
+    'docs_content'		=> $user_documents,
+    'agenda_content' 	=> $user_agenda,
+    'forum_content' 	=> $user_forumPosts
 );
 
 // == END create array with personalised content
@@ -193,9 +188,9 @@ $perso_tool_content = array(
  * @param string $string HTML code parsed by the personalised components
  * @return string HTML code with all html tag elements closed properly
  */
-function autoCloseTags($string) {
-
-	$donotclose=array('br','img','input'); //Tags that are not to be closed
+function autoCloseTags($string)
+{
+	$donotclose = array('br','img','input'); // Tags that are not to be closed
 
 	//prepare vars and arrays
 	$tagstoclose='';
@@ -206,20 +201,20 @@ function autoCloseTags($string) {
 
 	$openedtags=$result[1];
 
-	//this is just done so that the order of the closed tags in the end will be better
+	// this is just done so that the order of the closed tags in the end will be better
 	$openedtags=array_reverse($openedtags);
 
-	//put all closed tags into an array
+	// put all closed tags into an array
 	preg_match_all("/<\/(([A-Z]|[a-z]).*)(( )|(>))/isU",$string,$result2);
 	$closedtags=$result2[1];
 
-	//look up which tags still have to be closed and put them in an array
+	// look up which tags still have to be closed and put them in an array
 	for ($i=0;$i<count($openedtags);$i++) {
 		if (in_array($openedtags[$i],$closedtags)) { unset($closedtags[array_search($openedtags[$i],$closedtags)]); }
 		else array_push($tags, $openedtags[$i]);
 	}
-	//prepare the close-tags for output
-	for($x=0;$x<count($tags);$x++) {
+	// prepare the close-tags for output
+	for($x=0; $x<count($tags);$x++) {
 		$add=strtolower(trim($tags[$x]));
 
 		if(!in_array($add,$donotclose)) $tagstoclose.='</'.$add.'>';

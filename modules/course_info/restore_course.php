@@ -20,7 +20,6 @@
 
 $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'upgrade/upgrade_functions.php';
 require_once 'modules/create_course/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -134,9 +133,9 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         load_global_messages();
 
-        //        map_db_field('dropbox_file', 'uploaderId', $userid_map);
-        //        map_db_field('dropbox_person', 'personId', $userid_map);
-        //        map_db_field('dropbox_post', 'recipientId', $userid_map);
+        //        map_db_field('dropbox_file', 'uploader_id', $userid_map);
+        //        map_db_field('dropbox_person', 'person_id', $userid_map);
+        //        map_db_field('dropbox_post', 'recipient_id', $userid_map);
 
         $config_data = unserialize(file_get_contents("$restoreThis/config_vars"));
         $course_data = unserialize(file_get_contents("$restoreThis/course"));
@@ -171,7 +170,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         }
 
         function unit_map_function(&$data, $maps) {
-                list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolinks_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
+                list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
                 $type = $data['type'];
                 if ($type == 'doc') {
                         $data['res_id'] = $document_map[$data['res_id']];
@@ -189,8 +188,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                         $data['res_id'] = intval($data['res_id']);
                 } elseif ($type == 'video') {
                         $data['res_id'] = $video_map[$data['res_id']];
-                } elseif ($type == 'videolinks') {
-                        $data['res_id'] = $videolinks_map[$data['res_id']];
+                } elseif ($type == 'videolink') {
+                        $data['res_id'] = $videolink_map[$data['res_id']];
                 } elseif ($type == 'lp') {
                         $data['res_id'] = $lp_learnPath_map[$data['res_id']];
                 } elseif ($type == 'wiki') {
@@ -257,8 +256,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             $video_map = restore_table($restoreThis, 'video',
                 array('set' => array('course_id' => $course_id),
                       'return_mapping' => 'id'));
-        if (file_exists("$restoreThis/videolinks"))
-            $videolinks_map  = restore_table($restoreThis, 'videolinks',
+        if (file_exists("$restoreThis/videolink"))
+            $videolink_map  = restore_table($restoreThis, 'videolink',
                 array('set' => array('course_id' => $course_id),
                       'return_mapping' => 'id'));
         if (file_exists("$restoreThis/dropbox_file") &&
@@ -267,14 +266,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         {
             $dropbox_map = restore_table($restoreThis, 'dropbox_file',
                 array('set' => array('course_id' => $course_id),
-                      'map' => array('uploaderId' => $userid_map),
+                      'map' => array('uploader_id' => $userid_map),
                       'return_mapping' => 'id'));
             restore_table($restoreThis, 'dropbox_person',
-                array('map' => array('fileId' => $dropbox_map,
-                                     'personId' => $userid_map)));
+                array('map' => array('file_id' => $dropbox_map,
+                                     'person_id' => $userid_map)));
             restore_table($restoreThis, 'dropbox_post',
-                array('map' => array('fileId' => $dropbox_map,
-                                     'recipientId' => $userid_map)));
+                array('map' => array('file_id' => $dropbox_map,
+                                     'recipient_id' => $userid_map)));
         }
         if (file_exists("$restoreThis/lp_learnPath") &&
             file_exists("$restoreThis/lp_module") &&
@@ -430,7 +429,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                                                    $ebook_section_map,
                                                    $ebook_subsection_map,
                                                    $video_map,
-                                                   $videolinks_map,
+                                                   $videolink_map,
                                                    $lp_learnPath_map,
                                                    $wiki_map,
                                                    $assignments_map,
@@ -519,7 +518,7 @@ draw($tool_content, 3, null, $head_content);
 
 
 // insert users into main database
-function user($userid, $name, $surname, $login, $password, $email, $statut, $phone, $department,
+function user($userid, $givenname, $surname, $login, $password, $email, $status, $phone, $department,
               $registered_at = NULL, $expires_at = NULL, $inst_id = NULL)
 {
         global $action, $new_course_code, $course_id, $userid_map,
@@ -528,16 +527,16 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
                $langRestoreUserExists, $langRestoreUserNew,
                $langUsername, $langPrevId, $langNewId, $langUserName;
 
-        $name = inner_unquote($name);
+        $givenname = inner_unquote($givenname);
         $surname = inner_unquote($surname);
         $login = inner_unquote($login);
 
         if (!$action or $_POST['add_users'] == 'none' or
-            ($_POST['add_users'] == 'prof' and $statut != 1)) {
+            ($_POST['add_users'] == 'prof' and $status != 1)) {
                 return;
         }
         if (isset($userid_map[$userid])) {
-                echo "<br />$langUserWith $userid_map[$userid] $langAlready\n";
+                echo "<br />$langUserWith {$userid_map[$userid]} $langAlready\n";
                 return;
         }
         if (!$registered_at)  {
@@ -553,7 +552,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
                 $userid_map[$userid] = $res['user_id'];
                 echo sprintf($langRestoreUserExists,
                              '<b>' . q($login) . '</b>',
-                             '<i>' . q("$res[prenom] $res[nom]") . '</i>',
+                             '<i>' . q("$res[givenname] $res[surname]") . '</i>',
                              '<i>' . q("$name $surname") . '</i>'), '<br>';
         } elseif (isset($_POST['create_users'])) {
                 if ($version == 1) { // if we come from a archive < 2.x encrypt user password
@@ -561,7 +560,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
                         $password = $hasher->HashPassword($password);
                 }
                 db_query("INSERT INTO user
-                        (nom, prenom, username, password, email, statut, phone, department, registered_at, expires_at, description)
+                        (surname, givenname, username, password, email, status, phone, department, registered_at, expires_at, description)
                         VALUES (".
                         join(", ", array(
                                 quote($name),
@@ -569,7 +568,7 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
                                 quote($login),
                                 quote($password),
                                 quote($email),
-                                quote($statut),
+                                quote($status),
                                 quote($phone),
                                 quote($department),
                                 quote($registered_at),
@@ -585,8 +584,8 @@ function user($userid, $name, $surname, $login, $password, $email, $statut, $pho
         }
 
         db_query("INSERT INTO course_user
-                (course_id, user_id, statut, reg_date)
-                VALUES ($course_id, {$userid_map[$userid]}, $statut, NOW())");
+                (course_id, user_id, status, reg_date)
+                VALUES ($course_id, {$userid_map[$userid]}, $status, NOW())");
         echo q("$langUsername=$login, $langPrevId=$userid, $langNewId=" . $userid_map[$userid]),
              "<br>\n";
 }
@@ -846,7 +845,7 @@ function restore_users($course_id, $users, $cours_user)
         if ($_POST['add_users'] == 'prof') {
                 $add_only_profs = true;
                 foreach ($cours_user as $cu_info) {
-                        $is_prof[$cu_info['user_id']] = ($cu_info['statut'] == 1);
+                        $is_prof[$cu_info['user_id']] = ($cu_info['status'] == 1);
                 }
         } else {
                 $add_only_profs = false;
@@ -864,17 +863,17 @@ function restore_users($course_id, $users, $cours_user)
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserExists,
                                                  '<b>' . q($data['username']) . '</b>',
-                                                 '<i>' . q("$res[prenom] $res[nom]") . '</i>',
-                                                 '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
+                                                 '<i>' . q("$res[givenname] $res[surname]") . '</i>',
+                                                 '<i>' . q("$data[givenname] $data[surname]") . '</i>') .
                                          "</p>\n";
                 } elseif (isset($_POST['create_users'])) {
                         db_query("INSERT INTO user
-                                         SET nom = ".quote($data['nom']).",
-                                             prenom = ".quote($data['prenom']).",
+                                         SET surname = ".quote($data['surname']).",
+                                             givenname = ".quote($data['givenname']).",
                                              username = ".quote($data['username']).",
                                              password = ".quote($data['password']).",
                                              email = ".quote($data['email']).",
-                                             statut = ".quote($data['statut']).",
+                                             status = ".quote($data['status']).",
                                              phone = ".quote($data['phone']).",
                                              department = ".quote($data['department']).",
                                              registered_at = ".quote($data['registered_at']).",
@@ -883,7 +882,7 @@ function restore_users($course_id, $users, $cours_user)
                         $tool_content .= "<p>" .
                                          sprintf($langRestoreUserNew,
                                                  '<b>' . q($data['username']) . '</b>',
-                                                 '<i>' . q("$data[prenom] $data[nom]") . '</i>') .
+                                                 '<i>' . q("$data[givenname] $data[surname]") . '</i>') .
                                          "</p>\n";
                 }
 
@@ -898,7 +897,7 @@ function register_users($course_id, $userid_map, $cours_user)
         foreach ($cours_user as $cudata) {
                 $old_id = $cudata['user_id'];
                 if (isset($userid_map[$old_id])) {
-                        $statut[$old_id] = $cudata['statut'];
+                        $status[$old_id] = $cudata['status'];
                         $tutor[$old_id] = $cudata['tutor'];
                         $reg_date[$old_id] = $cudata['reg_date'];
                         $receive_mail[$old_id] = $cudata['receive_mail'];
@@ -909,7 +908,7 @@ function register_users($course_id, $userid_map, $cours_user)
                 db_query("INSERT INTO course_user
                                  SET course_id = $course_id,
                                      user_id = $new_id,
-                                     statut = {$statut[$old_id]},
+                                     status = {$status[$old_id]},
                                      reg_date = ".quote($reg_date[$old_id]).",
                                      receive_mail = {$receive_mail[$old_id]}");
                 $tool_content .=  "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
@@ -1004,7 +1003,7 @@ function parse_backup_php($file)
                                         }
                                         $info['user'][] = make_assoc($args,
                                                 array('id', 'name', 'surname', 'username', 'password',
-                                                      'email', 'statut', 'phone', 'department',
+                                                      'email', 'status', 'phone', 'department',
                                                       'registered_at', 'expires_at'));
                                 } elseif ($text == 'assignment_submit') {
                                         $info['assignment_submit'][] = make_assoc($args,
@@ -1014,16 +1013,16 @@ function parse_backup_php($file)
                                                       'grade_submission_date', 'grade_submission_ip'));
                                 } elseif ($text == 'dropbox_file') {
                                         $info['dropbox_file'][] = make_assoc($args,
-                                                array('uploaderId', 'filename', 'filesize', 'title',
-                                                      'description', 'author', 'uploadDate', 'lastUploadDate'));
+                                                array('uploader_id', 'filename', 'filesize', 'title',
+                                                      'description', 'author', 'upload_date', 'last_upload_date'));
                                 } elseif ($text == 'dropbox_person') {
                                         $info['dropbox_person'][] = array(
-                                                'fileId' => $args[0],
-                                                'personId' => $args[1]);
+                                                'file_id' => $args[0],
+                                                'person_id' => $args[1]);
                                 } elseif ($text == 'dropbox_post') {
                                         $info['dropbox_post'][] = array(
-                                                'fileId' => $args[0],
-                                                'recipientId' => $args[1]);
+                                                'file_id' => $args[0],
+                                                'recipient_id' => $args[1]);
                                 } elseif ($text == 'group') {
                                         $info['group'][] = make_assoc($args,
                                                 array('user', 'team', 'status', 'role'));

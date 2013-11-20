@@ -26,10 +26,10 @@ $helpTopic = 'CreateCourse';
 
 require_once '../../include/baseTheme.php';
 
-if (isset($_SESSION['statut']) and $_SESSION['statut'] != 1) { // if we are not teachers
+if (isset($_SESSION['status']) and $_SESSION['status'] != 1) { // if we are not teachers
     redirect_to_home_page();
 }
-if (get_config("betacms")) { // added support for betacms
+if (get_config('betacms')) { // added support for betacms
 	require_once 'betacms_bridge/include/bcms.inc.php';
 }
 
@@ -129,12 +129,12 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$titulaire_probable = "$_SESSION[prenom] $_SESSION[nom]";
+$default_prof = "$_SESSION[givenname] $_SESSION[surname]";
 
 if (isset($_POST['back1']) or !isset($_POST['visit']))
-    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'titulaires');\">";
+    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
 else
-    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"checkrequired(this, 'title', 'titulaires');\">";
+    $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"checkrequired(this, 'title', 'prof_names');\">";
 
 if (get_config("betacms")) { // added support for betacms
 	// Import from BetaCMS Bridge
@@ -152,7 +152,7 @@ function escape_if_exists($name) {
         }
 }
 escape_if_exists('title');
-escape_if_exists('titulaires');
+escape_if_exists('prof_names');
 escape_if_exists('languageCourse');
 escape_if_exists('description');
 escape_if_exists('course_keywords');
@@ -160,8 +160,12 @@ escape_if_exists('visit');
 escape_if_exists('password');
 escape_if_exists('formvisible');
 
+if (!$languageCourse) {
+    $languageCourse = $language;
+}
+
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
-$faculte_html = "";
+$faculte_html = '';
 $deps_valid = true;
 
 foreach ($departments as $dep) {
@@ -180,13 +184,13 @@ if (!$deps_valid) {
     exit();
 }
 
-if (empty($titulaires)) {
-        $titulaires = $titulaire_probable;
+if (empty($prof_names)) {
+        $prof_names = $default_prof;
 }
 
 $tool_content .= $title_html .
                  $faculte_html .
-                 $titulaires_html .
+                 $prof_names_html .
                  $languageCourse_html .
                  $description_html .
                  $course_keywords_html .
@@ -218,7 +222,7 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 	$tool_content .= "
         <tr>
         <th>$langTeachers:</th>
-        <td><input type='text' name='titulaires' size='60' value='" . q($titulaires) . "' /></td>
+        <td><input type='text' name='prof_names' size='60' value='" . q($prof_names) . "' /></td>
         <td>&nbsp;</td>
         </tr>
         <tr>
@@ -423,7 +427,7 @@ if (isset($_POST['create_course'])) {
                         title = " . quote($title) . ",
                         keywords = " . quote($course_keywords) . ",
                         visible = " . quote($formvisible) . ",
-                        prof_names = " . quote($titulaires) . ",
+                        prof_names = " . quote($prof_names) . ",
                         public_code = " . quote($code) . ",
                         doc_quota = $doc_quota*1024*1024,
                         video_quota = $video_quota*1024*1024,
@@ -451,7 +455,7 @@ if (isset($_POST['create_course'])) {
         db_query("INSERT INTO course_user SET
                         course_id = $new_course_id,
                         user_id = $uid,
-                        statut = 1,
+                        status = 1,
                         tutor = 1,
                         reg_date = CURDATE()");
         db_query("INSERT INTO group_properties SET

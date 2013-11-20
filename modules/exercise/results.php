@@ -26,8 +26,8 @@ $TBL_ANSWER = 'exercise_answer';
 
 require_once 'exercise.class.php';
 
-$require_current_course = TRUE;
-$require_help = TRUE;
+$require_current_course = true;
+$require_help = true;
 $helpTopic = 'Exercise';
 
 require_once '../../include/baseTheme.php';
@@ -40,23 +40,23 @@ $nameTools = $langResults;
 $navigation[]=array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = intval($_GET['exerciseId']);
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'][$exerciseId])) {
-	// construction of Exercise
-	$objExercise = new Exercise();
-	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_editor)) {
-		$tool_content .= "<p>$langExerciseNotFound</p>";
-		draw($tool_content, 2);
-		exit();
-	}
+if (!isset($_SESSION['objExercise'][$exerciseId])) {
+    // construction of Exercise
+    $objExercise = new Exercise();
+    // if the specified exercise doesn't exist or is disabled
+    if(!$objExercise->read($exerciseId) && (!$is_editor)) {
+        $tool_content .= "<p>$langExerciseNotFound</p>";
+        draw($tool_content, 2);
+        exit();
+    }
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
-	$objExercise = $_SESSION['objExercise'][$exerciseId];
+        $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 $exerciseTitle = $objExercise->selectTitle();
@@ -77,26 +77,26 @@ $tool_content .= "
 $sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $course_id)";
 $result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
-	$sid = $row['uid'];
-	$StudentName = db_query("SELECT nom,prenom,am FROM user WHERE user_id='$sid'");
-	$theStudent = mysql_fetch_array($StudentName);
+        $sid = $row['uid'];
+        $StudentName = db_query("SELECT surname, givenname, am FROM user WHERE id = $sid");
+        $theStudent = mysql_fetch_array($StudentName);
 
-	$sql2="SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
-		TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
-		AS time_duration, total_score, total_weighting
-		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
-	$result2 = db_query($sql2);
-	if (mysql_num_rows($result2) > 0) { // if users found
-		$tool_content .= "<table class='tbl_alt' width='100%'>";
-		$tool_content .= "<tr><td colspan='3'>";
-		if (!$sid) {
-			$tool_content .= "$langNoGroupStudents";
-		} else {
-			if ($theStudent['am'] == '') $studentam = '-';
-			else $studentam = $theStudent['am'];
-			$tool_content .= "<b>$langUser:</b> $theStudent[nom] $theStudent[prenom]  <div class='smaller'>($langAm: $studentam)</div>";
-		}
-		$tool_content .= "</td>
+        $sql2="SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
+                TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
+                AS time_duration, total_score, total_weighting
+                FROM `exercise_user_record` WHERE uid = $sid AND eid = $exerciseId";
+        $result2 = db_query($sql2);
+        if (mysql_num_rows($result2) > 0) { // if users found
+                $tool_content .= "<table class='tbl_alt' width='100%'>";
+                $tool_content .= "<tr><td colspan='3'>";
+                if (!$sid) {
+                        $tool_content .= "$langNoGroupStudents";
+                } else {
+                        if ($theStudent['am'] == '') $studentam = '-';
+                        else $studentam = $theStudent['am'];
+                        $tool_content .= "<b>$langUser:</b> $theStudent[surname] $theStudent[givenname]  <div class='smaller'>($langAm: $studentam)</div>";
+                }
+                $tool_content .= "</td>
                 </tr>
                 <tr>
                   <th width='150' class='center'>".$langExerciseStart."</td>
@@ -112,16 +112,16 @@ while($row=mysql_fetch_array($result)) {
                         $tool_content .= "<tr class='odd'>";
                 }
                 $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
-			if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
-				$tool_content .= "<td class='center'>$langNotRecorded</td>";
-			} else {
-				$tool_content .= "<td class='center'>".format_time_duration($row2['time_duration'])."</td>";
-			}
-			$tool_content .= "<td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
+                        if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
+                                $tool_content .= "<td class='center'>$langNotRecorded</td>";
+                        } else {
+                                $tool_content .= "<td class='center'>".format_time_duration($row2['time_duration'])."</td>";
+                        }
+                        $tool_content .= "<td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
                         </tr>";
                         $k++;
-		}
-	$tool_content .= "</table><br/>";
-	}
+                }
+        $tool_content .= "</table><br/>";
+        }
 }
 draw($tool_content, 2, null, $head_content);

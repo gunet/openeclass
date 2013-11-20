@@ -238,7 +238,7 @@ function loggedInMenu()
 
 	array_push($sideMenuSubGroup, $arrMenuType);
 
-	$res2 = db_query("SELECT statut FROM user WHERE user_id = $uid");
+	$res2 = db_query("SELECT status FROM user WHERE id = $uid");
 
 	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
 

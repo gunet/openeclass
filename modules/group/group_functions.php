@@ -65,11 +65,11 @@ function initialize_group_info($group_id = false)
 function group_tutors($group_id)
 {
 	$tutors = array();
-	$res = db_query("SELECT user.user_id, nom, prenom, has_icon FROM group_members, user
+	$res = db_query("SELECT user.id AS user_id, surname, givenname, has_icon FROM group_members, user
 			 WHERE group_id = $group_id AND
 			       is_tutor = 1 AND
-			       group_members.user_id = user.user_id
-			 ORDER BY nom, prenom");
+			       group_members.user_id = user.id
+			 ORDER BY surname, givenname");
 	while ($tutor = mysql_fetch_array($res)) {
 		$tutors[] = $tutor;
 	}

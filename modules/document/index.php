@@ -548,7 +548,7 @@ if ($can_upload) {
                 $result = db_query("SELECT * FROM document WHERE $group_sql AND path = " . autoquote($metadataPath));
                 if (mysql_num_rows($result) > 0) {
                         db_query("UPDATE document SET
-                                creator = " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
+                                creator = " . autoquote($_SESSION['givenname'] ." ". $_SESSION['surname']) . ",
                                 date_modified = NOW(),
                                 format = " . autoquote($file_format) . ",
                                 language = ". autoquote($_POST['meta_language']) ."
@@ -561,7 +561,7 @@ if ($can_upload) {
                                 path = " . quote($metadataPath) . ",
                                 filename = " . autoquote($oldFilename) . ",
                                 visible = 0,
-                                creator = " . autoquote($_SESSION['prenom'] ." ". $_SESSION['nom']) . ",
+                                creator = " . autoquote($_SESSION['givenname'] ." ". $_SESSION['surname']) . ",
                                 date = '$xml_date',
                                 date_modified = '$xml_date',
                                 format = " . autoquote($file_format) . ",

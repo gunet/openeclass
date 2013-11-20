@@ -39,14 +39,14 @@ $u_id = (isset($_GET['id']) && is_numeric($_GET['id']))? intval($_GET['id']): NU
 if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 	// user has applied for account
 	if (!empty($req_id)) {
-                $qry = "SELECT id, uname, email, verified_mail, name, surname,
-                               faculty_id, phone, am, status, statut, comment, lang
-                               FROM `user_request` WHERE id = $req_id";
+        $qry = "SELECT id, username, email, verified_mail, givenname, surname,
+                       faculty_id, phone, am, state, status, comment, lang
+                    FROM `user_request` WHERE id = $req_id";
 		$id = $req_id;
 	}
 	// no user application. user account has been created with pending mail verification
 	elseif(!empty($u_id)) {
-		$qry = "SELECT user_id, username, email, verified_mail FROM `user` WHERE user_id = $u_id";
+		$qry = "SELECT id, username, email, verified_mail FROM `user` WHERE id = $u_id";
 		$id = $u_id;
 	}
 	// no id given
@@ -70,20 +70,20 @@ if ( !empty($code) and (!empty($u_id) or !empty($req_id)) ) {
 				$verified_mail = intval($ar['verified_mail']);
 				// update user's application
 				if (!empty($req_id) and ($verified_mail!==1) ) {
-					$qry = "UPDATE `user_request` SET verified_mail=1 WHERE id=$req_id";
+					$qry = "UPDATE `user_request` SET verified_mail=1 WHERE id = $req_id";
 					mysql_query($qry);
 
 					$department = find_faculty_by_id($ar['faculty_id']);
-					$prof = isset($ar['statut']) && intval($ar['statut'])===1? 1: NULL;
-					$name = $ar['name'];
-					$am = $ar['am'];
+					$prof = isset($ar['status']) && intval($ar['status'])===1? 1: NULL;
+					$givenname = $ar['givenname'];
 					$surname = $ar['surname'];
+					$am = $ar['am'];
 					$usercomment = $ar['comment'];
 					$usermail = $ar['email'];
 					$userphone = $ar['phone'];
 
 					$subject = $prof? $mailsubject: $mailsubject2;
-					$MailMessage = $mailbody1 . $mailbody2 . "$name $surname\n\n" .
+					$MailMessage = $mailbody1 . $mailbody2 . "$givenname $surname\n\n" .
 						$mailbody3 . $mailbody4 . $mailbody5 .
 						($prof? $mailbody6: $mailbody8) .
 						"\n\n$langFaculty: $department\n$langComments: $usercomment\n" .

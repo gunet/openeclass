@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -280,7 +280,7 @@ function metaCreateDomDocument($xmlFilename) {
 	$metaMetadata = $lom->appendChild($dom->createElement('metaMetadata'));
 
 	$contribute = $metaMetadata->appendChild($dom->createElement('contribute'));
-	$entity = $contribute->appendChild($dom->createElement('entity', $_SESSION['prenom'] ." ". $_SESSION['nom']));
+	$entity = $contribute->appendChild($dom->createElement('entity', $_SESSION['givenname'] ." ". $_SESSION['surname']));
 	$date = $contribute->appendChild($dom->createElement('date'));
 	$dateTime = $date->appendChild($dom->createElement('dateTime', date('Y-m-d')));
 	// end of metametadata
@@ -434,4 +434,3 @@ function metaRenameDomDocument($xmlFilename, $newEntry) {
 	$dom->save($xmlFilename);
 }
 
-?>

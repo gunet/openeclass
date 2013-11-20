@@ -66,8 +66,8 @@ $reqtype = '';
 $all_set = register_posted_variables(array(
         'auth' => true,
         'uname' => true,
-        'nom_form' => true,
-        'prenom_form' => true,
+        'surname_form' => true,
+        'givenname_form' => true,
         'email_form' => true,
         'verified_mail_form' => false,
         'language' => true,
@@ -116,10 +116,10 @@ if($submit) {
                 $hasher = new PasswordHash(8, false);
                 $password_encrypted = $hasher->HashPassword($password);
                 $inscr_user = db_query("INSERT INTO user
-                                (nom, prenom, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
+                                (surname, givenname, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                                 VALUES (" .
-                                autoquote($nom_form) . ', '.
-                                autoquote($prenom_form) . ', '.
+                                autoquote($surname_form) . ', '.
+                                autoquote($givenname_form) . ', '.
                                 autoquote($uname) . ", '$password_encrypted', ".
                                 autoquote($email_form) .
                                 ", $pstatut, ".autoquote($phone).", ".autoquote($am).", $registered_at, $expires_at, '$proflanguage', '', $verified_mail, '')");
@@ -129,7 +129,7 @@ if($submit) {
                 // close request if needed
                 if (!empty($rid)) {
                         $rid = intval($rid);
-                        db_query("UPDATE user_request set status = 2, date_closed = NOW() WHERE id = $rid");
+                        db_query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = $rid");
                 }
 
                 if ($pstatut == 1) {
@@ -148,7 +148,7 @@ if($submit) {
                 $telephone = get_config('phone');
                 $emailsubject = "$langYourReg $siteName $type_message";
                 $emailbody = "
-$langDestination $prenom_form $nom_form
+$langDestination $givenname_form $surname_form
 
 $langYouAreReg $siteName $type_message, $langSettings $uname
 $langPass : $password
@@ -168,11 +168,11 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         if (isset($_GET['id'])) { // if we come from prof request
                 $id = intval($_GET['id']);
                 
-                $res = mysql_fetch_array(db_query("SELECT name, surname, uname, email, faculty_id, phone, am,
-                        comment, lang, date_open, statut, verified_mail FROM user_request WHERE id = $id"));
+                $res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email, faculty_id, phone, am,
+                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id = $id"));
                 $ps = $res['surname'];
-                $pn = $res['name'];
-                $pu = $res['uname'];
+                $pn = $res['givenname'];
+                $pu = $res['username'];
                 $pe = $res['email'];
                 $pv = intval($res['verified_mail']);
                 $pt = intval($res['faculty_id']);
@@ -213,11 +213,11 @@ $langEmail : ".get_config('email_helpdesk')."\n";
         <legend>$title</legend>
         <table width='100%' align='left' class='tbl'>
           <tr><th class='left' width='180'><b>$langName:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='prenom_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='givenname_form' value='".q($pn)."' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langSurname:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='nom_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='surname_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langUsername:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='username' value='".q($pu)."' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langPass:</b></th>
               <td><input class='FormData_InputText' type='text' name='password' value='".genPass()."' id='password' />&nbsp;<span id='result'></span></td></tr>
           <tr><th class='left'><b>$langEmail:</b></th>

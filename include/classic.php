@@ -35,19 +35,19 @@ if (!defined('INDEX_START')) {
 
 require_once 'include/lib/textLib.inc.php';
 
-function course_table_header($statut)
+function course_table_header($status)
 {
         global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
                $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
 
-        if ($statut == 1) {
+        if ($status == 1) {
                 $legend = $langMyCoursesProf;
                 $manage = $langAdm;
-        } elseif ($statut == 5) {
+        } elseif ($status == 5) {
                 $legend = $langMyCoursesUser;
                 $manage = $langUnCourse;
         } else {
-                $legend = "(? $statut ?)";
+                $legend = "(? $status ?)";
                 $manage = '';
         }
 
@@ -68,39 +68,39 @@ function course_table_end()
 
 $status = array();
 $sql = "SELECT course.id cid, course.code code, course.public_code,
-                        course.title title, course.prof_names profs, course_user.statut statut
+                        course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
                 WHERE course_user.user_id = $uid
-                ORDER BY statut, course.title, course.prof_names";
+                ORDER BY status, course.title, course.prof_names";
 $sql2 = "SELECT course.id cid, course.code code, course.public_code,
-                        course.title title, course.prof_names profs, course_user.statut statut
+                        course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
                 WHERE course_user.user_id = $uid
                 AND course.visible != ".COURSE_INACTIVE."
-                ORDER BY statut, course.title, course.prof_names";
+                ORDER BY status, course.title, course.prof_names";
 
-if ($_SESSION['statut'] == 1) {
+if ($_SESSION['status'] == 1) {
         $result2 = db_query($sql);
 }
-if ($_SESSION['statut'] == 5) {
+if ($_SESSION['status'] == 5) {
         $result2 = db_query($sql2);
 }
 if ($result2 and mysql_num_rows($result2) > 0) {
 	$k = 0;
-        $this_statut = 0;
+        $this_status = 0;
 	// display courses
 	while ($mycours = mysql_fetch_array($result2)) {
-                $old_statut = $this_statut;
-                $this_statut = $mycours['statut'];
-                if ($k == 0 or $old_statut <> $this_statut) {
+                $old_status = $this_status;
+                $this_status = $mycours['status'];
+                if ($k == 0 or $old_status <> $this_status) {
                         if ($k > 0) {
                                 course_table_end();
                         }
-                        course_table_header($this_statut);
+                        course_table_header($this_status);
                 }
 		$code = $mycours['code'];
                 $title = $mycours['title'];
-		$status[$code] = $this_statut;
+		$status[$code] = $this_status;
 		$course_id_map[$code] = $mycours['cid'];
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
@@ -109,7 +109,7 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 		} else {
 			$tool_content .= "<tr class='odd'>\n";
 		}
-                if ($this_statut == 1) {
+                if ($this_status == 1) {
                         $manage_link = "${urlServer}modules/course_info/?from_home=true&amp;cid=$code";
                         $manage_icon = $themeimg . '/tools.png';
                         $manage_title = $langAdm;
@@ -126,10 +126,10 @@ if ($result2 and mysql_num_rows($result2) > 0) {
 		$k++;
 	}
         course_table_end();
-}  elseif ($_SESSION['statut'] == '5') {
+}  elseif ($_SESSION['status'] == 5) {
         // if are loging in for the first time as student...
 	$tool_content .= "<p class='success'>$langWelcomeStud</p>\n";
-}  elseif ($_SESSION['statut'] == '1') {
+}  elseif ($_SESSION['status'] == 1) {
         // ...or as professor
         $tool_content .= "<p class='success'>$langWelcomeProf</p>\n";
 }

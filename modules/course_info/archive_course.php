@@ -87,7 +87,7 @@ $archive_conditions = array(
         'glossary_category' => $sql_course,
 
         'video' => $sql_course,
-        'videolinks' => $sql_course,
+        'videolink' => $sql_course,
         'dropbox_file' => $sql_course,
         'dropbox_person' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",
         'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",

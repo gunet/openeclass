@@ -73,17 +73,19 @@ class Dropbox_Work {
 		$this->isOldWork = FALSE;
                 if (!$thisisJustMessage) {
                         if ($GLOBALS['language'] == 'el') {
-                                $sql="SELECT id, DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i')
+                                $sql="SELECT id, DATE_FORMAT(upload_date, '%d-%m-%Y / %H:%i')
                                         FROM dropbox_file
-                                        WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
+                                        WHERE course_id = $course_id AND filename = '".quote($this->filename);
                         } else {
-                                $sql="SELECT id, DATE_FORMAT(uploadDate, '%Y-%m-d% / %H:%i')
+                                $sql="SELECT id, DATE_FORMAT(upload_date, '%Y-%m-d% / %H:%i')
                                         FROM dropbox_file
-                                        WHERE course_id = $course_id AND filename = '".addslashes($this->filename)."'";
+                                        WHERE course_id = $course_id AND filename = ".quote($this->filename);
                         }                
                         $result = db_query($sql);
                         $res = mysql_fetch_array($result);
-                        if ($res != FALSE) $this->isOldWork = TRUE;
+                        if (!$res) {
+                            $this->isOldWork = true;
+                        }
                 }
 		/*
 		* insert or update the dropbox_file table and set the id property
@@ -93,23 +95,23 @@ class Dropbox_Work {
 			$this->uploadDate = $res["uploadDate"];
                         $sql = "UPDATE dropbox_file
 					SET filesize = ".quote($this->filesize).", 
-                                            title = ".quote($this->title).",
-                                            description = ".quote($this->description).",
-                                            lastUploadDate = ".quote($this->lastUploadDate)."
+                        title = ".quote($this->title).",
+                        description = ".quote($this->description).",
+                        last_upload_date = ".quote($this->lastUploadDate)."
 					WHERE id= $this->id";
 			$result = db_query($sql);                        
 		} else {
 			$this->uploadDate = $this->lastUploadDate;
 			$sql="INSERT INTO dropbox_file(course_id, uploaderId, filename, filesize, title, description, uploadDate, lastUploadDate)
-				VALUES ($course_id, 
-                                        $this->uploaderId,
-                                        ".quote($this->filename).",
-                                        $this->filesize,
-                                        ".quote($this->title).",
-                                        ".quote($this->description).",
-                                        ".quote($this->uploadDate).",
-                                        ".quote($this->lastUploadDate)."
-                                        )";
+                         VALUES ($course_id, 
+                                 $this->uploaderId,
+                                 ".quote($this->filename).",
+                                 $this->filesize,
+                                 ".quote($this->title).",
+                                 ".quote($this->description).",
+                                 ".quote($this->uploadDate).",
+                                 ".quote($this->lastUploadDate)."
+                                )";
 
                         $result = db_query($sql);
 			$this->id = mysql_insert_id();

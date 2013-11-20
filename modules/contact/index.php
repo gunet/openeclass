@@ -43,7 +43,7 @@ if (isset($from_reg)) {
 }
 $nameTools = $langContactProf;
 
-$userdata = mysql_fetch_array(db_query("SELECT nom, prenom, email FROM user WHERE user_id=$uid"));
+$userdata = mysql_fetch_array(db_query("SELECT surname, givenname, email FROM user WHERE user_id=$uid"));
 
 if (empty($userdata['email'])) {
 	if ($uid) {
@@ -58,7 +58,7 @@ if (empty($userdata['email'])) {
 		$tool_content .= form();
 	} else {
 		$tool_content .= email_profs($course_id, $content,
-			"$userdata[prenom] $userdata[nom]",
+			"$userdata[givenname] $userdata[surname]",
 			$userdata['email']);
 	}
 } else {
@@ -141,10 +141,10 @@ function email_profs($course_id, $content, $from_name, $from_address)
 
 	$ret = "<p>$langSendingMessage</p><br />";
 
-	$profs = db_query("SELECT user.user_id AS prof_uid, user.email AS email, user.nom AS nom,
-		user.prenom AS prenom
-		FROM course_user JOIN user ON user.user_id = course_user.user_id
-		WHERE course_id = $course_id AND course_user.statut = ".USER_TEACHER."");
+        $profs = db_query("SELECT user.id AS prof_uid, user.email AS email,
+                                  user.surname, user.givenname
+                               FROM course_user JOIN user ON user.id = course_user.user_id
+                               WHERE course_id = $course_id AND course_user.statut = ".USER_TEACHER);
 
 	$message = sprintf($langContactIntro,
 		$from_name, $from_address, $content);
@@ -155,7 +155,7 @@ function email_profs($course_id, $content, $from_name, $from_address)
                         or (!get_user_email_notification($prof['prof_uid'], $course_id))) {
                         continue;
                 } else {
-                        $to_name = $prof['prenom'].' '.$prof['nom'];
+                        $to_name = $prof['givenname'].' '.$prof['surname'];
                         $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
                         if (!send_mail($from_name,
                                $from_address,

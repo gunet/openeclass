@@ -72,7 +72,7 @@ class VideolinkIndexer implements ResourceIndexerInterface {
      * @return array - the mysql fetched row
      */
     private function fetch($vlinkId) {
-        $res = db_query("SELECT * FROM videolinks WHERE id = " . intval($vlinkId));
+        $res = db_query("SELECT * FROM videolink WHERE id = " . intval($vlinkId));
         $vlink = mysql_fetch_assoc($res);
         if (!$vlink)
             return null;
@@ -139,7 +139,7 @@ class VideolinkIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the videolinks back to the index
-        $res = db_query("SELECT * FROM videolinks WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM videolink WHERE course_id = ". intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         
@@ -179,7 +179,7 @@ class VideolinkIndexer implements ResourceIndexerInterface {
             $this->__index->delete($id);
         
         // get/index all videolinks from db
-        $res = db_query("SELECT * FROM videolinks");
+        $res = db_query("SELECT * FROM videolink");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
         

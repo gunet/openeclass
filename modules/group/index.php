@@ -49,20 +49,20 @@ $head_content = <<< END
 <script type="text/javascript">
 function confirmation (name)
 {
-	if (name == "delall") {
-		if(confirm("$langDeleteGroupAllWarn"))
-		{return true;}
-		else
-		{return false;}
-	} else if (name == "emptyall") {
-		if (confirm("$langDeleteGroupAllWarn"))
-		{return true;}
-		else
-		{return false;}
-	} else {
-		if (confirm("$langDeleteGroupWarn ("+ name + ") "))
+        if (name == "delall") {
+                if(confirm("$langDeleteGroupAllWarn"))
+                {return true;}
+                else
+                {return false;}
+        } else if (name == "emptyall") {
+                if (confirm("$langDeleteGroupAllWarn"))
+                {return true;}
+                else
+                {return false;}
+        } else {
+                if (confirm("$langDeleteGroupWarn ("+ name + ") "))
         {return true;}
-    	else
+        else
         {return false;}
     }
 }
@@ -122,7 +122,7 @@ if ($is_editor) {
                                          max_members = $group_max,
                                          secret_directory = '$secretDirectory'");
                         $id = mysql_insert_id();
-                        
+
                         Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' =>$id,
                                                                                     'name' => "$langGroup $group_num",
                                                                                     'max_members' => $group_max,
@@ -178,16 +178,16 @@ if ($is_editor) {
                 db_query("DELETE FROM document WHERE course_id = $course_id AND subsystem = 1 AND subsystem_id = $id");
                 db_query("DELETE FROM group_members WHERE group_id = $id");
                 db_query("DELETE FROM `group` WHERE id = $id");
-                
+
                 Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('gid' => $id,
                                                                             'name' => $myDir['name']));
-                
+
                 $message = $langGroupDel;
 
         } elseif (isset($_REQUEST['empty'])) {
                 $result = db_query("DELETE FROM group_members
-				   WHERE group_id IN
-				   (SELECT id FROM `group` WHERE course_id = $course_id)");
+                                   WHERE group_id IN
+                                   (SELECT id FROM `group` WHERE course_id = $course_id)");
                 $message = $langGroupsEmptied;
 
         } elseif (isset($_REQUEST['fill'])) {
@@ -201,17 +201,17 @@ if ($is_editor) {
                         }
                 }
                 // Course members not registered to any group
-                $resUserSansGroupe= db_query("SELECT u.user_id, u.nom, u.prenom
+                $resUserSansGroupe= db_query("SELECT u.id, u.surname, u.givenname
                                 FROM (user u, course_user cu)
                                 WHERE cu.course_id = $course_id AND
-                                      cu.user_id = u.user_id AND
-                                      cu.statut = 5 AND
+                                      cu.user_id = u.id AND
+                                      cu.status = 5 AND
                                       cu.tutor = 0 AND
-                                      u.user_id NOT IN (SELECT user_id FROM group_members, `group`
-                                                                       WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $course_id)
-                                GROUP BY u.user_id
-                                ORDER BY u.nom, u.prenom");
+                                      u.id NOT IN (SELECT user_id FROM group_members, `group`
+                                                                  WHERE `group`.id = group_members.group_id AND
+                                                                        `group`.course_id = $course_id)
+                                GROUP BY u.id
+                                ORDER BY u.surname, u.givenname");
                 while (isset($placeAvailableInGroups) and is_array($placeAvailableInGroups) and (!empty($placeAvailableInGroups)) and list($idUser) = mysql_fetch_array($resUserSansGroupe)) {
                         $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
                         $idGroupChoisi = $idGroupChoisi[0];
@@ -234,10 +234,10 @@ if ($is_editor) {
                 $message = $langGroupFilledGroups;
         }
 
-	// Show DB messages
-	if (isset($message)) {
-		$tool_content .= "<p class='success'>$message</p><br />";
-	}
+        // Show DB messages
+        if (isset($message)) {
+                $tool_content .= "<p class='success'>$message</p><br />";
+        }
 
           $tool_content .= "
         <div id='operations_container'>
@@ -249,35 +249,35 @@ if ($is_editor) {
           </ul>
         </div>";
 
-	// ---------- display properties ------------------------
-	$tool_content .= "
+        // ---------- display properties ------------------------
+        $tool_content .= "
         <table class='tbl_courseid' width='100%'>
-	<tr>
-	  <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
+        <tr>
+          <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
               <a href='group_properties.php?course=$course_code' title='$langPropModify'><img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
           </td>
           <td class='even'>&nbsp;</td>
           <td class='title1'><a href='../user/?course=$course_code'>$langGroupUsersList</a></td>
-	</tr>";
+        </tr>";
 
         list($total_students) = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course_user
-                                                WHERE course_id = $course_id 
-                                                AND statut = ".USER_STUDENT." AND tutor = 0"));
+                                                WHERE course_id = $course_id
+                                                AND status = ".USER_STUDENT." AND tutor = 0"));
         list($unregistered_students) = mysql_fetch_row(db_query(
                 "SELECT COUNT(*)
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
-                              cu.user_id = u.user_id AND
-                              cu.statut = ".USER_STUDENT." AND
+                              cu.user_id = u.id AND
+                              cu.status = ".USER_STUDENT." AND
                               cu.tutor = 0 AND
-                              u.user_id NOT IN (SELECT user_id
-                                                       FROM group_members, `group`
-                                                            WHERE `group`.id = group_members.group_id AND
-                                                                  `group`.course_id = $course_id)"));
-        
+                              u.id NOT IN (SELECT user_id
+                                                  FROM group_members, `group`
+                                                  WHERE `group`.id = group_members.group_id AND
+                                                        `group`.course_id = $course_id)"));
+
 
         $registered_students = $total_students - $unregistered_students;
-        
+
         $tool_content .= "
         <tr>
           <td colspan='2'><u>$langGroupPrefs</u></td>
@@ -348,23 +348,23 @@ if ($is_editor) {
         }
         $tool_content .= "</td>
         </tr>";
-	$tool_content .= "
+        $tool_content .= "
         </table>";
 
-	$groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $course_id ORDER BY id");
-	$myIterator = 0;
-	$num_of_groups = mysql_num_rows($groupSelect);
-	// groups list
-	if ($num_of_groups > 0) {
-		$tool_content .= "<br />
-		<table width='100%' align='left' class='tbl_alt'>
-		<tr>
-		  <th colspan='2'><div align='left'>$langGroupName</div></th>
-		  <th width='250'>$langGroupTutor</th>
-		  <th width='30'>$langRegistered</th>
-		  <th width='30'>$langMax</th>
-		  <th width='30'>$langActions</th>
-		</tr>";
+        $groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $course_id ORDER BY id");
+        $myIterator = 0;
+        $num_of_groups = mysql_num_rows($groupSelect);
+        // groups list
+        if ($num_of_groups > 0) {
+                $tool_content .= "<br />
+                <table width='100%' align='left' class='tbl_alt'>
+                <tr>
+                  <th colspan='2'><div align='left'>$langGroupName</div></th>
+                  <th width='250'>$langGroupTutor</th>
+                  <th width='30'>$langRegistered</th>
+                  <th width='30'>$langMax</th>
+                  <th width='30'>$langActions</th>
+                </tr>";
                 while ($group = mysql_fetch_array($groupSelect)) {
                         initialize_group_info($group['id']);
                         if ($myIterator % 2 == 0) {
@@ -392,23 +392,23 @@ if ($is_editor) {
                         $myIterator++;
                 }
                 $tool_content .= "</table><br />\n";
-	} else {
-		$tool_content .= "<p class='alert1'>$langNoGroup</p>";
-	}
+        } else {
+                $tool_content .= "<p class='alert1'>$langNoGroup</p>";
+        }
 } else {
         // Begin student view
-	$q = db_query("SELECT id FROM `group` WHERE course_id = $course_id");
+        $q = db_query("SELECT id FROM `group` WHERE course_id = $course_id");
         if (mysql_num_rows($q) == 0) {
                 $tool_content .= "<p class='alert1'>$langNoGroup</p>";
         } else {
-		$tool_content .= "
+                $tool_content .= "
                 <table width='100%' align='left' class='tbl_alt'>
                 <tr>
                   <th colspan='2'><div align='left'>$langGroupName</div></th>
                   <th width='250'>$langGroupTutor</th>";
                 $tool_content .= "<th width='50'>$langRegistration</th>";
 
-		$tool_content .= "
+                $tool_content .= "
                   <th width='50'>$langRegistered</th>
                   <th width='50'>$langMax</th>
                 </tr>";
@@ -426,33 +426,33 @@ if ($is_editor) {
                         if ($is_member) {
                                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$row[0]'>" . q($group_name) .
                                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
-			} else {
-				$tool_content .= q($group_name);
-			}
-			if ($user_group_description) {
+                        } else {
+                                $tool_content .= q($group_name);
+                        }
+                        if ($user_group_description) {
                                 $tool_content .= "<br />".q($user_group_description) . "&nbsp;&nbsp;" .
                                         icon('edit', $langModify,
                                              "group_description.php?course=$code_cours&amp;group_id=$row[0]") . "&nbsp;" .
                                         icon('delete', $langDelete,
                                              "group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true",
                                              'onClick="return confirmation();');
-			} elseif ($is_member) {
-				$tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
-			}
+                        } elseif ($is_member) {
+                                $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
+                        }
                         $tool_content .= "</td>";
                         $tool_content .= "<td class='center'>" . display_user($tutors) . "</td>";
 
                         // If self-registration and multi registration allowed by admin and group is not full
                         $tool_content .= "<td class='center'>";
-			if ($uid and
-			    $self_reg and
-			    (!$user_groups or $multi_reg) and
-			    !$is_member and
-			    (!$max_members or $member_count < $max_members)) {
+                        if ($uid and
+                            $self_reg and
+                            (!$user_groups or $multi_reg) and
+                            !$is_member and
+                            (!$max_members or $member_count < $max_members)) {
                                         $tool_content .= "<a href='group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$row[0]'>$langRegistration</a>";
-			} else {
+                        } else {
                                         $tool_content .= "-";
-			}
+                        }
                         $tool_content .= "</td>";
                         $tool_content .= "
                   <td class='center'>$member_count</td>
@@ -464,7 +464,7 @@ if ($is_editor) {
                 }
                 $tool_content .= "
                 </table>";
-	}
+        }
 }
 
 add_units_navigation(TRUE);

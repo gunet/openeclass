@@ -102,6 +102,8 @@ define('COMMON', 3);
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
 
+require_once 'lib/session.class.php';
+
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false)
 {
@@ -315,9 +317,7 @@ function uid_to_username($uid)
 {
         global $mysqlMainDb;
 
-        if ($r = mysql_fetch_row(db_query(
-        "SELECT username FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'",
-        $mysqlMainDb))) {
+        if ($r = mysql_fetch_row(db_query("SELECT username FROM user WHERE id = ".intval($uid)))) {
                 return $r[0];
         } else {
                 return false;
@@ -326,7 +326,7 @@ function uid_to_username($uid)
 
 
 // Return HTML for a user - first parameter is either a user id (so that the
-// user's info is fetched from the DB) or a hash with user_id, prenom, nom,
+// user's info is fetched from the DB) or a hash with user_id, surname, givenname,
 // email, or an array of user ids or user info arrays
 function display_user($user, $print_email = false, $icon = true)
 {
@@ -347,14 +347,15 @@ function display_user($user, $print_email = false, $icon = true)
                 }
                 return $html;
         } elseif (!is_array($user)) {
-                $r = db_query("SELECT user_id, nom, prenom, email, has_icon FROM user WHERE user_id = $user");
+                $r = db_query("SELECT user_id, surname, givenname, email, has_icon FROM user WHERE id = $user");
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
-                        if ($icon)
-                            return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;'. $langAnonymous;
-                        else
-                            return $langAnonymous;
+                        if ($icon) {
+                                return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;'. $langAnonymous;
+                        } else {
+                                return $langAnonymous;
+                        }
                 }
         }
 
@@ -364,26 +365,24 @@ function display_user($user, $print_email = false, $icon = true)
         }
         if ($icon) {
                 if ($user['has_icon']) {
-                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL) . '&nbsp;';
+                        $icon = profile_image($user['id'], IMAGESIZE_SMALL) . '&nbsp;';
                 } else {
-                        $icon = profile_image($user['user_id'], IMAGESIZE_SMALL, true) . '&nbsp;';
+                        $icon = profile_image($user['id'], IMAGESIZE_SMALL, true) . '&nbsp;';
                 }
         }
 
         $token = token_generate($user['user_id'], true);
-        return "$icon<a href='$urlAppend/modules/profile/display_profile.php?id=$user[user_id]&amp;token=$token'>" .
-               q("$user[surname] $user[givenname]") . "</a>" .
+        return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
+               q("$user[givenname] $user[surname]") . "</a>" .
                ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');
 }
 
 
 // Translate uid to real name / surname
-function uid_to_name($uid) {
-    global $mysqlMainDb;
-
-    $r = mysql_fetch_row(db_query("SELECT CONCAT(nom, ' ', prenom)
-                FROM user WHERE user_id = '".mysql_real_escape_string($uid)."'", $mysqlMainDb));
-
+function uid_to_name($uid)
+{
+    $r = mysql_fetch_row(db_query("SELECT CONCAT(surname, ' ', givenname)
+                                          FROM user WHERE id = ".intval($uid)));
     if ($r !== false) {
         return $r[0];
     } else {
@@ -392,12 +391,9 @@ function uid_to_name($uid) {
 }
 
 // Translate uid to real surname
-function uid_to_surname($uid) {
-    global $mysqlMainDb;
-
-    $r = mysql_fetch_row(db_query("SELECT nom
-                FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
-
+function uid_to_surname($uid)
+{
+    $r = mysql_fetch_row(db_query("SELECT surname FROM user WHERE id = " . intval($uid)));
     if ($r !== false) {
         return $r[0];
     } else {
@@ -406,12 +402,9 @@ function uid_to_surname($uid) {
 }
 
 // Translate uid to user email
-function uid_to_email($uid) {
-    global $mysqlMainDb;
-
-    $r = mysql_fetch_row(db_query("SELECT email
-                FROM user WHERE user_id = '" . mysql_real_escape_string($uid) . "'", $mysqlMainDb));
-
+function uid_to_email($uid)
+{
+    $r = mysql_fetch_row(db_query("SELECT email FROM user WHERE id = " . intval($uid)));
     if ($r !== false) {
         return $r[0];
     } else {
@@ -422,11 +415,7 @@ function uid_to_email($uid) {
 
 // Translate uid to AM (student number)
 function uid_to_am($uid) {
-    global $mysqlMainDb;
-
-    $r = mysql_fetch_array(db_query("SELECT am from user
-                WHERE user_id = '$uid'", $mysqlMainDb));
-
+    $r = mysql_fetch_array(db_query("SELECT am from user WHERE id = " . intval($uid)));
     if ($r !== false) {
         return $r[0];
     } else {
@@ -634,43 +623,43 @@ function selection3($entries, $name, $default = '') {
 // function to check if user is a guest user
 // ------------------------------------------
 
-function check_guest() {
-
+function check_guest()
+{
     global $uid;
 
-        if (isset($uid)) {
-                $res = db_query("SELECT statut FROM user WHERE user_id = $uid");
-                $g = mysql_fetch_row($res);
+    if (isset($uid) and $uid) {
+        $res = db_query("SELECT status FROM user WHERE id = $uid");
+        $g = mysql_fetch_row($res);
 
-                if ($g[0] == USER_GUEST) {
-                        return true;
-                } else {
-                        return false;
-                }
+        if ($g[0] == USER_GUEST) {
+            return true;
+        } else {
+            return false;
         }
+    }
+    return false;
 }
 
 // ------------------------------------------------
 // function to check if user is a course editor
 // ------------------------------------------------
+function check_editor()
+{
+    global $uid, $course_id;
 
-function check_editor() {
-
-        global $uid, $course_id;
-
-        if (isset($uid)) {
-                $res = db_query("SELECT editor FROM course_user
-                            WHERE user_id = $uid
-                            AND course_id = $course_id");
-                $s = mysql_fetch_array($res);
-                if ($s['editor'] == 1) {
-                        return true;
-                } else {
-                        return false;
-                }
+    if (isset($uid)) {
+        $res = db_query("SELECT editor FROM course_user
+                                WHERE user_id = $uid AND
+                                      course_id = $course_id");
+        $s = mysql_fetch_array($res);
+        if ($s['editor'] == 1) {
+            return true;
         } else {
             return false;
         }
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -695,10 +684,10 @@ function check_opencourses_reviewer() {
         return FALSE;
 }
 
+
 // ---------------------------------------------------
 // just make sure that the $uid variable isn't faked
 // --------------------------------------------------
-
 function check_uid() {
 
         global $urlServer, $require_valid_uid, $uid;
@@ -718,37 +707,33 @@ function check_uid() {
 // -------------------------------------------------------
 // Check if a user with username $login already exists
 // ------------------------------------------------------
+function user_exists($login)
+{
+    $qry = "SELECT id FROM user WHERE username";
+    if (get_config('case_insensitive_usernames')) {
+        $qry .= " COLLATE utf8_general_ci = " . quote($login);
+    } else {
+        $qry .= " = ". quote($login);
+    }
+    $username_check = db_query($qry);
 
-function user_exists($login) {
-  global $mysqlMainDb;
-
-  $qry = "SELECT user_id FROM `$mysqlMainDb`.user WHERE username ";
-  if (get_config('case_insensitive_usernames')) {
-        $qry .= "= " . quote($login);
-  } else {
-        $qry .= "COLLATE utf8_bin = ". quote($login);
-  }
-  $username_check = db_query($qry);
-
-  return ($username_check && mysql_num_rows($username_check) > 0);
+    return ($username_check and mysql_num_rows($username_check) > 0);
 }
 
 // ----------------------------------------------------------------
 // Check if a user with username $login already applied for account
 // ----------------------------------------------------------------
+function user_app_exists($login)
+{
+    $qry = "SELECT id FROM user_request WHERE state = 1 AND username";
+    if (get_config('case_insensitive_usernames')) {
+        $qry .= " COLLATE utf8_general_ci = = " . quote($login);
+    } else {
+        $qry .= " = ". quote($login);
+    }
+    $username_check = db_query($qry);
 
-function user_app_exists($login) {
-  global $mysqlMainDb;
-
-  $qry = "SELECT id FROM `$mysqlMainDb`.user_request WHERE status=1 and uname ";
-  if (get_config('case_insensitive_usernames')) {
-        $qry .= "= " . quote($login);
-  } else {
-        $qry .= "COLLATE utf8_bin = ". quote($login);
-  }
-  $username_check = db_query($qry);
-
-  return ($username_check && mysql_num_rows($username_check) > 0);
+    return ($username_check && mysql_num_rows($username_check) > 0);
 }
 
 // Convert HTML to plain text
@@ -959,33 +944,22 @@ function urlenc($string)
 
 
 /*
- * Get user data on the platform
+ * Get user data
  * @param $user_id integer
- * @return  array( `user_id`, `lastname`, `firstname`, `username`, `email`, `picture`, `officialCode`, `phone`, `status` ) with user data
+ * @return array(`id`, `surname`, `givenname`, `username`, `email`, `phone`, `status`) with user data
  * @author Mathieu Laurent <laurent@cerdecam.be>
  */
 function user_get_data($user_id)
 {
-        global $mysqlMainDb;
-        mysql_select_db($mysqlMainDb);
-
-    $sql = 'SELECT  `user_id`,
-                    `nom` AS `lastname` ,
-                    `prenom`  AS `firstname`,
-                    `username`,
-                    `email`,
-                    `phone` AS `phone`,
-                    `statut` AS `status`
-                        FROM   `user`
-                            WHERE `user_id` = "' . (int) $user_id . '"';
+    $sql = 'SELECT id, surname, givenname, username, email, phone, status
+                   FROM user
+                   WHERE id = ' . (int) $user_id;
     $result = db_query($sql);
 
     if (mysql_num_rows($result)) {
         $data = mysql_fetch_array($result);
         return $data;
-    }
-    else
-    {
+    } else {
         return null;
     }
 }
@@ -1011,7 +985,7 @@ function randomkeys($length) {
 // A helper function, when passed a number representing KB,
 // and optionally the number of decimal places required,
 // it returns a formated number string, with unit identifier.
-function format_bytesize ($kbytes, $dec_places = 2)
+function format_bytesize($kbytes, $dec_places = 2)
 {
         global $text;
         if ($kbytes > 1048576) {
@@ -1285,7 +1259,7 @@ function resource_access($visible, $public)
                         return TRUE;
                 } else {
                         if (isset($_SESSION['uid'])
-                                and (isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code])) {
+                                and (isset($_SESSION['courses'][$course_code]) and $_SESSION['courses'][$course_code])) {
                                 return TRUE;
                         } else {
                                 return FALSE;
@@ -1606,7 +1580,7 @@ function delete_course($cid)
         db_query("DELETE FROM course_department WHERE course = $cid");
         db_query("DELETE FROM course WHERE id = $cid");
         db_query("DELETE FROM video WHERE course_id = $cid");
-        db_query("DELETE FROM videolinks WHERE course_id = $cid");
+        db_query("DELETE FROM videolink WHERE course_id = $cid");
         db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
         db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
         db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
@@ -2365,18 +2339,16 @@ function read_urandom($len) {
 }
 
 // Get user admin rights from table `admin`
-function get_admin_rights($user_id) {
-
-    global $mysqlMainDb;
-
+function get_admin_rights($user_id)
+{
     $r = db_query("SELECT privilege FROM admin
-                    WHERE idUser = $user_id", $mysqlMainDb);
-        if ($r and mysql_num_rows($r) > 0) {
-                $row = mysql_fetch_row($r);
-                return $row[0];
-        } else {
-                return -1;
-        }
+                          WHERE user_id = $user_id");
+    if ($r and mysql_num_rows($r) > 0) {
+        $row = mysql_fetch_row($r);
+        return $row[0];
+    } else {
+        return -1;
+    }
 }
 
 /**
@@ -2386,10 +2358,9 @@ function get_admin_rights($user_id) {
  */
 function course_status($course_id)
 {
+    $status = db_query_get_single_value("SELECT visible FROM course WHERE id = $course_id");
 
-        $status = db_query_get_single_value("SELECT visible FROM course WHERE id = $course_id");
-                
-        return $status;
+    return $status;
 }
 
 
@@ -2398,11 +2369,11 @@ function course_status($course_id)
  * @param type $uid
  * @return verified mail or no
  */
-function get_mail_ver_status($uid) {
-
-        $res = db_query("SELECT verified_mail FROM user WHERE user_id = $uid");
-        $g = mysql_fetch_row($res);
-        return $g[0];
+function get_mail_ver_status($uid)
+{
+    $res = db_query("SELECT verified_mail FROM user WHERE id = $uid");
+    $g = mysql_fetch_row($res);
+    return $g[0];
 }
 
 
@@ -2469,10 +2440,9 @@ function get_user_email_notification($user_id, $course_id=null)
 
 
 // checks if user is notified via email from courses
-function get_user_email_notification_from_courses($user_id) {
-                
-
-        $r = db_query("SELECT receive_mail FROM user WHERE user_id = $user_id");
+function get_user_email_notification_from_courses($user_id)
+{
+        $r = db_query("SELECT receive_mail FROM user WHERE id = $user_id");
         list($result) = mysql_fetch_row($r);
         if ($result == 1) {
                 return true;

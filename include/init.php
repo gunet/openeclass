@@ -83,14 +83,10 @@ if (isset($language)) {
                 $urlSecure = $urlServer;
         }
         $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
-        $language = get_config('default_language');
+        $session = new Session();
+        $uid = $session->user_id;
+        $language = $session->language;
         $active_ui_languages = explode(' ', get_config('active_ui_languages'));
-}
-
-if (isset($_REQUEST['localize'])) {
-        $_SESSION['langswitch'] = $language = validate_language_code($_REQUEST['localize']);
-} elseif (isset($_SESSION['langswitch'])) {
-	$language = $_SESSION['langswitch'];
 }
 
 // HTML Purifier
@@ -122,23 +118,16 @@ if (!isset($urlMobile)) {
 }
 
 // include_messages
-require "$webDir/lang/$language/common.inc.php";
-$extra_messages = "config/{$language_codes[$language]}.inc.php";
+require "$webDir/lang/{$session->language}/common.inc.php";
+$extra_messages = "config/{$language_codes[$session->language]}.inc.php";
 if (file_exists($extra_messages)) {
 	include $extra_messages;
 } else {
 	$extra_messages = false;
 }
-require "$webDir/lang/$language/messages.inc.php";
+require "$webDir/lang/{$session->language}/messages.inc.php";
 if ($extra_messages) {
 	include $extra_messages;
-}
-
-// Make sure that the $uid variable isn't faked
-if (isset($_SESSION['uid'])) {
-	$uid = $_SESSION['uid'];
-} else {
-	$uid = 0;
 }
 
 // check if we are admin or power user or manageuser_user
@@ -304,16 +293,16 @@ if (isset($require_current_course) and $require_current_course) {
 		$fac_lower = strtolower($fac);
 
 		// Check for course visibility by current user
-		$statut = 0;
+		$status = 0;
 		// The admin and power users can see all courses as adminOfCourse
 		if ($is_admin or $is_power_user) {
-			$statut = USER_TEACHER;
+			$status = USER_TEACHER;
 		} else {
-			$res2 = db_query("SELECT statut FROM course_user
+			$res2 = db_query("SELECT status FROM course_user
                                                  WHERE user_id = $uid AND
                                                        course_id = $course_id");
 			if ($res2 and mysql_num_rows($res2) > 0) {
-				list($statut) = mysql_fetch_row($res2);
+				list($status) = mysql_fetch_row($res2);
 			}
 		}
 
@@ -321,15 +310,15 @@ if (isset($require_current_course) and $require_current_course) {
 			if (!$uid) {
 				$toolContent_ErrorExists = caution($langNoAdminAccess);
 				$errorMessagePath = "../../";
-			} elseif ($statut == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
+			} elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
 				$toolContent_ErrorExists = caution($langLoginRequired);
 				$errorMessagePath = "../../";
-			} elseif ($statut == 5 and $visible == COURSE_INACTIVE) {
+			} elseif ($status == 5 and $visible == COURSE_INACTIVE) {
                                 $toolContent_ErrorExists = caution($langCheckProf);
 				$errorMessagePath = "../../";
                         }
 		}
-                $_SESSION['status'][$course_code] = $status[$course_code] = $statut;
+                $_SESSION['courses'][$course_code] = $status[$course_code] = $status;
 	}
 
 	# force a specific interface language
@@ -401,20 +390,19 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
 if ($is_admin or $is_power_user) {
 	$is_course_admin = true;
 	if (isset($currentCourse)) {
-		$_SESSION['status'][$currentCourse] = USER_TEACHER;
+		$_SESSION['courses'][$currentCourse] = USER_TEACHER;
 	}
 } else {
 	$is_course_admin = false;
 }
 
 $is_editor = false;
-if (isset($_SESSION['status'])) {
-	$status = $_SESSION['status'];
+if (isset($_SESSION['courses'])) {
 	if (isset($currentCourse)) {
 		if (check_editor()) { // chech if user is editor of course
 			$is_editor = true;
 		}
-		if (@$status[$currentCourse] == USER_TEACHER) {
+		if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER) {
 			$is_course_admin = true;
 			$is_editor = true;
 		}
@@ -443,12 +431,12 @@ if (isset($require_editor) and $require_editor) {
 }
 
 // Temporary student view
-if (isset($_SESSION['saved_statut'])) {
-	$statut = 5;
+if (isset($_SESSION['saved_status'])) {
+	$status = 5;
 	$is_course_admin = false;
 	$is_editor = false;
 	if (isset($currentCourse)) {
-		$_SESSION['status'][$currentCourse] = USER_STUDENT;
+		$_SESSION['courses'][$currentCourse] = USER_STUDENT;
 	}
 }
 

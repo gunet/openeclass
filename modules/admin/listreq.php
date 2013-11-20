@@ -45,20 +45,20 @@ function confirmation() {
 
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
-        $list_statut = 5;
+        $list_status = 5;
         $nameTools = $langUserOpenRequests;
         $reqtype = '&amp;type=user';
         $basetoolurl .= '?type=user';
 	$linkreg = $langUserDetails;
 	$linkget = '?type=user';
 } else {
-        $list_statut = 1;
+        $list_status = 1;
         $nameTools = $langOpenProfessorRequests;
         $reqtype = '';
 	$linkreg = $langProfReg;
 	$linkget = '';
 }
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Main body
 $close = isset($_GET['close'])?$_GET['close']:(isset($_POST['close'])?$_POST['close']:'');
@@ -87,12 +87,12 @@ if (isDepartmentAdmin())
 // Deal with navigation
 switch ($show) {
 	case "closed":
-		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
+		$navigation[] = array('url' => $basetoolurl, 'name' => $nameTools);
 		$nameTools = $langReqHaveClosed;
-        $pagination_link = "&amp;show=closed";
+        $pagination_link = '&amp;show=closed';
 		break;
 	case "rejected":
-		$navigation[] = array("url" => $basetoolurl, "name" => $nameTools);
+		$navigation[] = array('url' => $basetoolurl, 'name' => $nameTools);
 		$nameTools = $langReqHaveBlocked;
 		break;
 }
@@ -113,18 +113,18 @@ switch ($show) {
 if (!empty($show) and $show == 'closed') {
 	if (!empty($id) and $id > 0) {
 		// restore request
-		$sql = db_query("UPDATE user_request set status = 1, date_closed = NULL WHERE id = $id");
+		$sql = db_query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = $id");
 		$tool_content = "<p class='success'>$langReintroductionApplication</p>";
 	} else {		                                
  		$result = db_query("SELECT * FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut)");
+                                        WHERE (state = 2 AND status = $list_status)");
                                         
                 $count_req = mysql_num_rows($result);
                 
-                $q = "SELECT id, name, surname, uname, email, faculty_id,
-                                        phone, am, date_open, date_closed, comment
-                                        FROM user_request
-                                        WHERE (status = 2 AND statut = $list_statut)";
+                $q = "SELECT id, givenname, surname, username, email, faculty_id,
+                             phone, am, date_open, date_closed, comment
+                          FROM user_request
+                          WHERE (state = 2 AND status = $list_status)";
                 
                 if ($count_req > REQUESTS_PER_PAGE) { // display navigation links if needed
                         $tool_content .= show_paging($limit, REQUESTS_PER_PAGE, $count_req, $_SERVER['SCRIPT_NAME'], $pagination_link);
@@ -143,8 +143,8 @@ if (!empty($show) and $show == 'closed') {
 	            	}
 	        	$tool_content .= "<td width='1'>
 			<img style='border:0px;' src='$themeimg/arrow.png' title='bullet'></td>";
-			$tool_content .= '<td>'.q($req['name'])."&nbsp;".q($req['surname'])."";
-			$tool_content .= '<td>'.q($req['uname']).'</td>';
+			$tool_content .= '<td>'.q($req['givenname'])."&nbsp;".q($req['surname'])."";
+			$tool_content .= '<td>'.q($req['username']).'</td>';
 			$tool_content .= '<td>'.q(find_faculty_by_id($req['faculty_id'])).'</td>';
 			$tool_content .= "<td align='center'>
 				<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
@@ -163,16 +163,16 @@ if (!empty($show) and $show == 'closed') {
 } elseif (!empty($show) && ($show == 'rejected')) {
 	if (!empty($id) && ($id > 0)) {
 	// restore request
-		$sql = db_query("UPDATE user_request set status = 1, date_closed = NULL WHERE id = $id");
+		$sql = db_query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = $id");
 		$tool_content = "
 		<p class=\"success\">$langReintroductionApplication</p>";
 	} else {
 		$tool_content .= "<table class=\"tbl_alt\" width=\"100%\" align=\"left\">";
 		$tool_content .= table_header(1, $langDateReject_small);
- 		$sql = db_query("SELECT id, name, surname, uname, email,
+ 		$sql = db_query("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (status = 3 AND statut = $list_statut $depqryadd) ORDER BY date_open DESC");
+                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
         	$k = 0;
 		while ($req = mysql_fetch_array($sql)) {
 			if ($k%2==0) {
@@ -182,8 +182,8 @@ if (!empty($show) and $show == 'closed') {
 	            	}
 	    		$tool_content .= "<td width='1'>
 			<img src='$themeimg/arrow.png' title='bullet'></td>";
-			$tool_content .= "<td>".q($req['name'])."&nbsp;".q($req['surname'])."</td>";
-                        $tool_content .= "<td>".q($req['uname'])."&nbsp;</td>";
+			$tool_content .= "<td>".q($req['givenname'])."&nbsp;".q($req['surname'])."</td>";
+                        $tool_content .= "<td>".q($req['username'])."&nbsp;</td>";
 			$tool_content .= "<td>".q(find_faculty_by_id($req['faculty_id']))."</td>";
 			$tool_content .= "<td align='center'>
 				<small>".nice_format(date('Y-m-d', strtotime($req['date_open'])))."</small></td>";
@@ -203,22 +203,22 @@ if (!empty($show) and $show == 'closed') {
 } elseif(!empty($close)) {
 	switch($close) {
 	case '1':
-		$sql = db_query("UPDATE user_request SET status = 2, date_closed = NOW() WHERE id = $id");
-                if ($list_statut == 1) {
-        		$tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
-                } else {
-        		$tool_content .= "<div class='info'$langRequestStudent</div>";
-                }
+		$sql = db_query("UPDATE user_request SET state = 2, date_closed = NOW() WHERE id = $id");
+        if ($list_status == 1) {
+            $tool_content .= "<div class='info'>$langProfessorRequestClosed</div>";
+        } else {
+            $tool_content .= "<div class='info'$langRequestStudent</div>";
+        }
 		break;
 	case '2':
 		$submit = isset($_POST['submit'])? $_POST['submit']: '';
 		if(!empty($submit)) {
 			// post the comment and do the delete action
 			if (!empty($_POST['comment'])) {
-                                $sql = "UPDATE user_request
-                                               SET status = 3, date_closed = NOW(),
-                                                   comment = " . autoquote($_POST['comment']) . "
-                                               WHERE id = $id";
+                $sql = "UPDATE user_request
+                               SET state = 3, date_closed = NOW(),
+                                   comment = " . autoquote($_POST['comment']) . "
+                               WHERE id = $id";
 				if (db_query($sql)) {
 					if (isset($_POST['sendmail']) and ($_POST['sendmail'] == 1)) {
                                                 $telephone = get_config('phone');
@@ -229,19 +229,19 @@ $langManager $siteName
 $administratorName $administratorSurname
 $langPhone: $telephone
 $langEmail: $emailhelpdesk";
-						send_mail('', '', "$_POST[prof_name] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
+						send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
 					}
-					$tool_content .= "<p class='success'>" .  ($list_statut == 1)? $langTeacherRequestHasRejected: $langRequestReject;
+					$tool_content .= "<p class='success'>" .  ($list_status == 1)? $langTeacherRequestHasRejected: $langRequestReject;
 					$tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></p>";
 					$tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
 				}
 			}
 		} else {
 			// display the form
-			$r = db_query("SELECT comment, name, surname, email, statut
-                                              FROM user_request WHERE id = $id");
+			$r = db_query("SELECT comment, givenname, surname, email, status
+                               FROM user_request WHERE id = $id");
 			$d = mysql_fetch_assoc($r);
-                        $warning = ($d['statut'] == 5)? $langWarnReject: $langGoingRejectRequest;
+                        $warning = ($d['status'] == 5)? $langWarnReject: $langGoingRejectRequest;
 			$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 			<div class='alert1'>$warning</div>
 			<table width='100%' class='tbl_border'>
@@ -255,7 +255,7 @@ $langEmail: $emailhelpdesk";
 			<td>
 			<input type='hidden' name='id' value='".$id."'>
 			<input type='hidden' name='close' value='2'>
-			<input type='hidden' name='prof_name' value='".q($d['name'])."'>
+			<input type='hidden' name='prof_givenname' value='".q($d['givenname'])."'>
 			<input type='hidden' name='prof_surname' value='".q($d['surname'])."'>
 			<textarea class='auth_input' name='comment' rows='5' cols='60'>".q($d['comment'])."</textarea>
 			</td></tr>
@@ -281,7 +281,7 @@ else
 {	
 	// show username as well (useful)
  	$sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
-                                WHERE (status = 1 AND statut = $list_statut $depqryadd)");
+                                WHERE (state = 1 AND status = $list_status $depqryadd)");
         if (mysql_num_rows($sql) > 0) {
                 $tool_content .= "<table class='tbl_alt' width='100%'>";
                 $tool_content .= table_header();
@@ -355,18 +355,18 @@ draw($tool_content, 3, null, $head_content);
 function table_header($addon = FALSE, $message = FALSE) {
 
 	global $langName, $langSurname, $langFaculty, $langDate, $langActions, $langComments, $langUsername;
-	global $langDateRequest_small, $list_statut;
+	global $langDateRequest_small, $list_status;
 
-	$string = "";
+	$string = '';
 	if ($addon) {
-		$rowspan=2;
+		$rowspan = 2;
 		$datestring = "<th colspan='2'>$langDate</th>
 		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
 		</tr><tr>
 		<th>$langDateRequest_small</th>
 		<th>$message</th>";
 	} else {
-		$rowspan=1;
+		$rowspan = 1;
 		$datestring = "<th scope='col'><div align='center'>$langDate<br />$langDateRequest_small</div></th>
 		<th scope='col'><div align='center'>$langActions</div></th>";
 	}

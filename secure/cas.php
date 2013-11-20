@@ -23,7 +23,6 @@
  *  	Authors:	Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
  */
 
-
 require_once '../include/baseTheme.php';
 require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
@@ -39,10 +38,10 @@ if (phpCAS::checkAuthentication()) {
 		$_SESSION['uname'] = $_SESSION['cas_uname'];
 	}
 	if (!empty($attrs['casuserlastattr'])) {
-		$_SESSION['cas_nom'] = $attrs['casuserlastattr'];
+		$_SESSION['cas_surname'] = $attrs['casuserlastattr'];
 	}
 	if (!empty($attrs['casuserfirstattr'])) {
-		$_SESSION['cas_prenom'] = $attrs['casuserfirstattr'];
+		$_SESSION['cas_givenname'] = $attrs['casuserfirstattr'];
 	}
 	if (!empty($attrs['casusermailattr'])) {
 		$_SESSION['cas_email'] = $attrs['casusermailattr'];
@@ -50,4 +49,3 @@ if (phpCAS::checkAuthentication()) {
 }
 
 header("Location: $urlServer");
-?>

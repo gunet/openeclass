@@ -30,7 +30,7 @@ function list_videos()
 
         $table_started = false;
         $count = 0;
-        foreach (array('video', 'videolinks') as $table) {
+        foreach (array('video', 'videolink') as $table) {
                 $result = db_query("SELECT * FROM $table WHERE course_id = $course_id", $mysqlMainDb);
                 $count += mysql_num_rows($result);
                 $numLine=0;

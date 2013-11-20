@@ -152,13 +152,13 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	if ($is_editor or $allowStudentToStudent)
 	{
 		// select all users except yourself
-		$sql = "SELECT DISTINCT u.user_id user_id, CONCAT(u.nom,' ', u.prenom) AS name
+		$sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
                                 FROM user u, course_user cu
 			WHERE cu.course_id = $course_id
-                                AND cu.user_id = u.user_id
-                                AND cu.statut != ".USER_GUEST."
-                                AND u.user_id != $uid
-                        ORDER BY UPPER(u.nom), UPPER(u.prenom)";
+                                AND cu.user_id = u.id
+                                AND cu.status != ".USER_GUEST."
+                                AND u.id != $uid
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
 	}
 	/*
 	* if current user is student then show all teachers of current course
@@ -166,13 +166,13 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	else
 	{
 		// select all the teachers except yourself
-		$sql = "SELECT DISTINCT u.user_id user_id, CONCAT(u.nom,' ', u.prenom) AS name
+		$sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name
                                 FROM user u, course_user cu
 			WHERE cu.course_id = $course_id
-                                AND cu.user_id = u.user_id
-                                AND (cu.statut = ".USER_TEACHER." OR cu.tutor = 1)
-                                AND u.user_id != $uid
-                        ORDER BY UPPER(u.nom), UPPER(u.prenom)";
+                                AND cu.user_id = u.id
+                                AND (cu.status = ".USER_TEACHER." OR cu.tutor = 1)
+                                AND u.id != $uid
+                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
 	}
 	$result = db_query($sql);
 	while ($res = mysql_fetch_array($result))

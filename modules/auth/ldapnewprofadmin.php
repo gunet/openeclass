@@ -103,7 +103,7 @@ if ($submit)  {
     $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
     $sql = db_query("INSERT INTO user
-                    (nom, prenom, username, password, email, statut,
+                    (surname, givenname, username, password, email, status,
                     am, registered_at, expires_at, lang, verified_mail)
                     VALUES (" .
                     quote($ps) .', '.
@@ -118,7 +118,7 @@ if ($submit)  {
 
 	// Close user request
 	$rid = intval($_POST['rid']);
-	db_query("UPDATE user_request set status = 2, date_closed = NOW(), verified_mail=$verified_mail WHERE id = $rid");
+	db_query("UPDATE user_request set state = 2, date_closed = NOW(), verified_mail = $verified_mail WHERE id = $rid");
 	$emailbody = "$langDestination $pn $ps\n" .
             	"$langYouAreReg $siteName $langSettings $pu\n" .
             	"$langPass: $langPassSameAuth\n$langAddress $siteName: " .
@@ -156,11 +156,11 @@ if ($submit)  {
         }
                 $tool_content .= "
 		</ul></div>";
-		$res = mysql_fetch_array(db_query("SELECT name, surname, uname, email,
+		$res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email,
 			faculty_id, comment, lang, date_open, phone, am, verified_mail FROM user_request WHERE id = $id"));
 		$ps = $res['surname'];
-		$pn = $res['name'];
-		$pu = $res['uname'];
+		$pn = $res['givenname'];
+		$pu = $res['username'];
 		$pe = $res['email'];
 		$pt = intval($res['faculty_id']);
 		$pcom = $res['comment'];

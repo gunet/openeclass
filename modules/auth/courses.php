@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
                 $cid = intval($value);
                 if (!in_array($cid, $selectCourse)) {
 			db_query("DELETE FROM course_user
-					WHERE statut <> ".USER_TEACHER." AND statut <> ".USER_GUEST."
+					WHERE status <> ".USER_TEACHER." AND status <> ".USER_GUEST."
 					AND user_id = $uid AND course_id = $cid");                        
                         // logging
                         Log::record($cid, MODULE_ID_USERS, LOG_DELETE,
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                                 $errorExists = true;
                                 $restrictedCourses[] = $row['public_code'];
                         } else {
-                                db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `statut`, `reg_date`)
+                                db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                                 VALUES ($cid, $uid, ".USER_STUDENT.", CURDATE())");
                         }
                 }
@@ -211,7 +211,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
     // build a list of course followed by user.
     $usercourses = db_query("SELECT course.code course_code, course.public_code public_code,
-                                    course.id course_id, statut
+                                    course.id course_id, status
                                 FROM course_user, course
                                 WHERE course_user.course_id = course.id
                                 AND user_id = ".$uid);
@@ -272,7 +272,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
         $vis_class = ($mycours['visible'] == 0)? 'class="reg_closed"': '';
 
         if (isset($myCourses[$cid])) {
-            if ($myCourses[$cid]['statut'] != 1) { // display registered courses
+            if ($myCourses[$cid]['status'] != 1) { // display registered courses
                 // password needed
                 if (!empty($password)) {
                     $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='". q($password) ."' />";

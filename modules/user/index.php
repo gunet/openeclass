@@ -35,15 +35,15 @@ $limit = isset($_REQUEST['limit'])? $_REQUEST['limit']: 0;
 
 $nameTools = $langAdminUsers;
 
-$sql = "SELECT user.user_id, course_user.statut FROM course_user, user
-	WHERE course_user.course_id = $course_id AND course_user.user_id = user.user_id";
+$sql = "SELECT user.id AS user_id, course_user.status FROM course_user, user
+	WHERE course_user.course_id = $course_id AND course_user.user_id = user.id";
 $result_numb = db_query($sql);
 $countUser = mysql_num_rows($result_numb);
 
 $teachers = $students = $visitors = 0;
 
 while ($numrows = mysql_fetch_array($result_numb)) {
-	switch ($numrows['statut']) {
+	switch ($numrows['status']) {
 		case USER_TEACHER: {
                                 $teachers++;
                                 break;                
@@ -64,7 +64,7 @@ $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
         $new_admin_gid = intval($_GET['giveAdmin']);
-        db_query("UPDATE course_user SET statut = ".USER_TEACHER."
+        db_query("UPDATE course_user SET status = ".USER_TEACHER."
                         WHERE user_id = $new_admin_gid
                         AND course_id = $course_id");
         Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $new_admin_gid,
@@ -89,7 +89,7 @@ if (isset($_GET['giveAdmin'])) {
                                                                    'right' => '+2'));
 } elseif (isset($_GET['removeAdmin'])) {
         $removed_admin_gid = intval($_GET['removeAdmin']);
-        db_query("UPDATE course_user SET statut = ".USER_STUDENT."
+        db_query("UPDATE course_user SET status = ".USER_STUDENT."
                         WHERE user_id <> $uid AND
                               user_id = $removed_admin_gid AND
                               course_id = $course_id");
@@ -116,7 +116,7 @@ if (isset($_GET['giveAdmin'])) {
         if ($unregister_gid == $uid) {
                 $result = db_query("SELECT user_id FROM course_user
                                         WHERE course_id = $course_id AND
-                                              statut = ".USER_TEACHER." AND
+                                              status = ".USER_TEACHER." AND
                                               user_id != $uid
                                         LIMIT 1");
                 if (mysql_num_rows($result) == 0) {
@@ -175,16 +175,16 @@ $tool_content .= "
 $search_sql = '';
 if (isset($_GET['search'])) {
         $search_params = "&amp;search=1&amp;course=".$course_code;
-        $search_nom = $search_prenom = $search_uname = '';
-        if (!empty($_REQUEST['search_nom'])) {
-                $search_nom = ' value="' . q($_REQUEST['search_nom']) . '"';
-                $search_sql .= " AND user.nom LIKE " . autoquote(mysql_escape_string($_REQUEST['search_nom']).'%');
-                $search_params .= "&amp;search_nom=" . urlencode($_REQUEST['search_nom']);
+        $search_surname = $search_givenname = $search_uname = '';
+        if (!empty($_REQUEST['search_surname'])) {
+                $search_surname = ' value="' . q($_REQUEST['search_surname']) . '"';
+                $search_sql .= " AND user.surname LIKE " . autoquote(mysql_escape_string($_REQUEST['search_surname']).'%');
+                $search_params .= "&amp;search_surname=" . urlencode($_REQUEST['search_surname']);
         }
-        if (!empty($_REQUEST['search_prenom'])) {
-                $search_prenom = ' value="' . q($_REQUEST['search_prenom']) . '"';
-                $search_sql .= " AND user.prenom LIKE " . autoquote(mysql_escape_string($_REQUEST['search_prenom']).'%');
-                $search_params .= "&amp;search_prenom=" . urlencode($_REQUEST['search_prenom']);
+        if (!empty($_REQUEST['search_givenname'])) {
+                $search_givenname = ' value="' . q($_REQUEST['search_givenname']) . '"';
+                $search_sql .= " AND user.givenname LIKE " . autoquote(mysql_escape_string($_REQUEST['search_givenname']).'%');
+                $search_params .= "&amp;search_givenname=" . urlencode($_REQUEST['search_givenname']);
         }
         if (!empty($_REQUEST['search_uname'])) {
                 $search_uname = ' value="' . q($_REQUEST['search_uname']) . '"';
@@ -198,11 +198,11 @@ if (isset($_GET['search'])) {
         <table width='100%' class='tbl'>
         <tr>
           <th class='left' width='180'>$langSurname:</th>
-          <td><input type='text' name='search_nom'$search_nom></td>
+          <td><input type='text' name='search_surname'$search_surname></td>
         </tr>
         <tr>
           <th class='left'>$langName:</th>
-          <td><input type='text' name='search_prenom'$search_prenom></td>
+          <td><input type='text' name='search_givenname'$search_givenname></td>
         </tr>
         <tr>
           <th class='left'>$langUsername:</th>
@@ -250,7 +250,7 @@ $i = $limit + 1;
 $ord = isset($_GET['ord'])?$_GET['ord']:'';
 
 switch ($ord) {
-        case 's': $order_sql = 'ORDER BY nom';
+        case 's': $order_sql = 'ORDER BY surname';
                 break;
         case 'e': $order_sql = 'ORDER BY email';
                 break;
@@ -258,13 +258,12 @@ switch ($ord) {
                 break;
         case 'rd': $order_sql = 'ORDER BY course_user.reg_date DESC';
                 break;
-        default: $order_sql = 'ORDER BY statut, editor DESC, tutor DESC, nom, prenom';
+        default: $order_sql = 'ORDER BY status, editor DESC, tutor DESC, surname, givenname';
                 break;
 }
-$result = db_query("SELECT user.user_id, user.nom, user.prenom, user.email,
-                           user.am, user.has_icon, course_user.statut,
-                           course_user.tutor, course_user.editor, course_user.reviewer,
-                           course_user.reg_date
+$result = db_query("SELECT user.id AS user_id, user.surname, user.givenname, user.email,
+                           user.am, user.has_icon, course_user.status,
+                           course_user.tutor, course_user.editor, course_user.reg_date
                     FROM course_user, user
                     WHERE `user`.`user_id` = `course_user`.`user_id`
                     AND `course_user`.`course_id` = $course_id
@@ -290,7 +289,7 @@ while ($myrow = mysql_fetch_array($result)) {
         } else {
                 $tool_content .= nice_format($myrow['reg_date']);
         }
-        $alert_uname = $myrow['prenom'] . " " . $myrow['nom'];
+        $alert_uname = $myrow['givenname'] . " " . $myrow['surname'];
         $tool_content .= "&nbsp;&nbsp;" .
                 icon('cunregister', $langUnregCourse,
                      "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link",
@@ -323,7 +322,7 @@ while ($myrow = mysql_fetch_array($result)) {
 
         // admin right
         if ($myrow['user_id'] != $_SESSION['uid']) {
-                if ($myrow['statut']=='1') {
+                if ($myrow['status'] == '1') {
                     if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
                         $class = 'add_teacherLabel';
                         $control = icon('teacher', $langTutor);
@@ -338,7 +337,7 @@ while ($myrow = mysql_fetch_array($result)) {
                                 "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
                 }
         } else {
-                if ($myrow['statut']=='1') {
+                if ($myrow['status']=='1') {
                         $class = 'add_teacherLabel';
                         $control = icon('teacher', '$langTutor');
                 } else {

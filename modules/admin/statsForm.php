@@ -39,29 +39,29 @@ $end_cal = $jscalendar->make_input_field(
                  'value'       => $u_date_end));
 
 
-    $qry = "SELECT LEFT(nom, 1) AS first_letter FROM user
+    $qry = "SELECT LEFT(surname, 1) AS first_letter FROM user
             GROUP BY first_letter ORDER BY first_letter";
     $result = db_query($qry);
     $letterlinks = '';
     while ($row = mysql_fetch_assoc($result)) {
         $first_letter = $row['first_letter'];
-        $letterlinks .= '<a href="?first='.$first_letter.'">'.$first_letter.'</a> ';
+        $letterlinks .= '<a href="?first='.$first_letter.'">'.q($first_letter).'</a> ';
     }
 
     if (isset($_GET['first'])) {
         $firstletter = $_GET['first'];
-        $qry = "SELECT user_id, nom, prenom, username, email
-                FROM user WHERE LEFT(nom,1) = '".mysql_real_escape_string($firstletter)."'";
+        $qry = "SELECT id, surname, givenname, username, email
+                FROM user WHERE LEFT(surname, 1) = ".quote($firstletter);
     } else {
-        $qry = "SELECT user_id, nom, prenom, username, email FROM user";
+        $qry = "SELECT id, surname, givenname, username, email FROM user";
     }
 
 
 $user_opts = '<option value="-1">'.$langAllUsers."</option>\n";
 $result = db_query($qry, $mysqlMainDb);
 while ($row = mysql_fetch_assoc($result)) {
-    if ($u_user_id == $row['user_id']) { $selected = 'selected'; } else { $selected = ''; }
-    $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
+    if ($u_user_id == $row['id']) { $selected = 'selected'; } else { $selected = ''; }
+    $user_opts .= '<option '.$selected.' value="'.$row['id'].'">'.q($row['givenname'].' '.$row['surname'])."</option>\n";
 }
 
 

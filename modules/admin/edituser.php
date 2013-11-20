@@ -72,13 +72,14 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 
 if ($u)	{
-        
+
         if (isDepartmentAdmin())
             validateUserNodes(intval($u), true);
-        
-        $q = db_query("SELECT user.nom, user.prenom, user.username, user.password, user.email, user.phone,
-                        user.registered_at, user.expires_at, user.statut, user.am, user.verified_mail, user.whitelist
-                        FROM user WHERE user.user_id = $u");
+
+        $q = db_query("SELECT surname, givenname, username, password, email,
+                              phone, registered_at, expires_at, status, am,
+                              verified_mail, whitelist
+                         FROM user WHERE id = $u");
         $info = mysql_fetch_assoc($q);
         if (isset($_POST['submit_editauth'])) {
                 $auth = intval($_POST['auth']);
@@ -149,11 +150,11 @@ if ($u)	{
                     <table class='tbl' width='100%'>
                     <tr>
                       <th width='170' class='left'>$langSurname:</th>
-                      <td><input type='text' name='lname' size='50' value='".q($info['nom'])."' /></td>
+                      <td><input type='text' name='lname' size='50' value='".q($info['surname'])."' /></td>
                     </tr>
                     <tr>
                       <th class='left'>$langName:</th>
-                      <td><input type='text' name='fname' size='50' value='".q($info['prenom'])."' /></td>
+                      <td><input type='text' name='fname' size='50' value='".q($info['givenname'])."' /></td>
                    </tr>";
 
         if(!in_array($info['password'], $auth_ids)) {
@@ -224,10 +225,10 @@ $tool_content .= "
     <tr>
       <th class='left'>$langProperty:</th>
       <td>";
-	if ($info['statut'] == '10') { // if we are guest user do not display selection
-		$tool_content .= selection(array(10 => $langGuest), 'newstatut', intval($info['statut']));
+	if ($info['status'] == '10') { // if we are guest user do not display selection
+		$tool_content .= selection(array(10 => $langGuest), 'newstatus', intval($info['status']));
 	} else {
-		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatut', intval($info['statut']));
+		$tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatus', intval($info['status']));
 	}
 	$tool_content .= "</td>";
 
@@ -287,12 +288,12 @@ $tool_content .= "
      </fieldset>
      </form>";
 
-	$sql = db_query("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.statut
-                                FROM course AS a
-                                JOIN course_department ON a.id = course_department.course
-                                JOIN hierarchy ON course_department.department = hierarchy.id
-                                LEFT JOIN course_user AS b ON a.id = b.course_id
-                                WHERE b.user_id = $u ORDER BY b.statut, hierarchy.name");
+	$sql = db_query("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.status
+                            FROM course AS a
+                            JOIN course_department ON a.id = course_department.course
+                            JOIN hierarchy ON course_department.department = hierarchy.id
+                            LEFT JOIN course_user AS b ON a.id = b.course_id
+                            WHERE b.user_id = $u ORDER BY b.status, hierarchy.name");
 
 		// user is registered to courses
 		if (mysql_num_rows($sql) > 0) {
@@ -326,7 +327,7 @@ $tool_content .= "
 					$tool_content .= " ".nice_format($logs['reg_date'])." ";
                                 }
 				$tool_content .= "</td><td align='center'>";
-				switch ($logs['statut'])
+				switch ($logs['status'])
 				{
 					case 1:
 						$tool_content .= $langTeacher;
@@ -359,101 +360,106 @@ $tool_content .= "
 		}
 	} else { // if the form was submitted then update user
 
-	// get the variables from the form and initialize them
-	$fname = isset($_POST['fname'])?$_POST['fname']:'';
-	$lname = isset($_POST['lname'])?$_POST['lname']:'';
-	// trim white spaces in the end and in the beginning of the word
-	$username = isset($_POST['username'])?autoquote($_POST['username']):'';
-	$email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
-	$phone = isset($_POST['phone'])?$_POST['phone']:'';
-	$am = isset($_POST['am'])?$_POST['am']:'';
-	$departments = isset($_POST['department'])?$_POST['department']:'NULL';
-	$newstatut = isset($_POST['newstatut'])?$_POST['newstatut']:'NULL';
-	$registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
-	$date = isset($_POST['date'])?$_POST['date']:'';
-	$hour = isset($_POST['hour'])?$_POST['hour']:'';
-	$minute = isset($_POST['minute'])?$_POST['minute']:'';
-	$date = explode("-",  $date);
-	$day=$date[0];
-	$year=$date[2];
-	$month=$date[1];
-	$expires_at = mktime($hour, $minute, 0, $month, $day, $year);
-	$user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
-	$user_exist= FALSE;
-	// check if username is free
-	$username_check = db_query("SELECT username FROM user WHERE
-		user_id <> $u AND username = ".quote($username));
-	if (mysql_num_rows($username_check) > 0) {
-		$user_exist = TRUE;
-	}
+        // get the variables from the form and initialize them
+        $fname = isset($_POST['fname'])?$_POST['fname']:'';
+        $lname = isset($_POST['lname'])?$_POST['lname']:'';
+        // trim white spaces in the end and in the beginning of the word
+        $username = isset($_POST['username'])?autoquote($_POST['username']):'';
+        $email = isset($_POST['email'])?mb_strtolower(trim($_POST['email'])):'';
+        $phone = isset($_POST['phone'])?$_POST['phone']:'';
+        $am = isset($_POST['am'])?$_POST['am']:'';
+        $departments = isset($_POST['department'])?$_POST['department']:'NULL';
+        $newstatus = isset($_POST['newstatus'])?$_POST['newstatus']:'NULL';
+        $registered_at = isset($_POST['registered_at'])?$_POST['registered_at']:'';
+        $date = isset($_POST['date'])?$_POST['date']:'';
+        $hour = isset($_POST['hour'])?$_POST['hour']:'';
+        $minute = isset($_POST['minute'])?$_POST['minute']:'';
+        $date = explode("-",  $date);
+        $day=$date[0];
+        $year=$date[2];
+        $month=$date[1];
+        $expires_at = mktime($hour, $minute, 0, $month, $day, $year);
+        $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
+        $user_exist= FALSE;
+        // check if username is free
+        $username_check = db_query("SELECT username FROM user
+                                           WHERE id <> $u AND
+                                                 username = ".quote($username));
+        if (mysql_num_rows($username_check) > 0) {
+            $user_exist = TRUE;
+        }
 
         // check if there are empty fields
-	if (empty($fname) OR empty($lname) OR empty($username)) {
-		$tool_content .= "<table width='99%'><tbody><tr>
-		<td class='caution' height='60'><p>$langFieldsMissing</p>
-		<p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
-		draw($tool_content, 3, ' ', $head_content);
-		  exit();
-	      }
-	elseif(isset($user_exist) AND $user_exist == TRUE) {
-	       $tool_content .= "<table width='100%'><tbody><tr>
-	       <td class='caution' height='60'><p>$langUserFree</p>
-	       <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p></td></tr></tbody></table><br /><br />";
-	       draw($tool_content, 3, null, $head_content);
-	   exit();
-	}
-		if($registered_at>$expires_at) {
-			$tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
-		} else {
-		    if ($u == 1) $departments = array();
-		    
-		    // email cannot be verified if there is no mail saved
-		    if (empty($email) && $verified_mail==1) {
-		        $verified_mail=2;
-		    }
-		    
-		    // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
-		    if (isDepartmentAdmin())
-		    {
-		    	$olddeps = $user->getDepartmentIds(intval($u));
-		    	 
-		    	foreach ($departments as $depId)
-		    	{
-		    		if (!in_array($depId, $olddeps))
-		    			validateNode(intval($depId), true);
-		    	}
-		    	
-		    	foreach ($olddeps as $depId)
-		    	{
-		    	    if (!in_array($depId, $departments))
-		    	        validateNode($depId, true);
-		    	}
-		    }
-		    
-			$sql = "UPDATE user SET nom = ".autoquote($lname).", prenom = ".autoquote($fname).",
-                                       username = $username, email = ".autoquote($email).",
-                                       statut = ".intval($newstatut).", phone=".autoquote($phone).",
-                                       expires_at=".$expires_at.",
-                                       am = ".autoquote($am)." , verified_mail = ".intval($verified_mail) .",
-                                       whitelist = ". quote($user_upload_whitelist) ."
-                                       WHERE user_id = ".intval($u);
-			
-			$qry = db_query($sql);
-			$user->refresh(intval($u), $departments);
-			
-			if (!$qry) {
-			    $tool_content .= "$langNoUpdate: $u!";
-			} else {
-			    $num_update = mysql_affected_rows();
-			    if ($num_update == 1) {
-			        $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
-			    } else {
-			        $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
-			    }
-			}
-			$tool_content .= "<a href='listusers.php'>$langBack</a></center>";
-		}
-	}
+        if (empty($fname) or empty($lname) or empty($username)) {
+            $tool_content .= "<table width='99%'><tbody><tr>
+                                <td class='caution' height='60'><p>$langFieldsMissing</p>
+                                  <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>
+                                </td></tr></tbody></table><br><br>";
+            draw($tool_content, 3, ' ', $head_content);
+            exit();
+        } elseif (isset($user_exist) and $user_exist == true) {
+            $tool_content .= "<table width='100%'><tbody><tr>
+                                <td class='caution' height='60'><p>$langUserFree</p>
+                                  <p><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></p>
+                                </td></tr></tbody></table><br><br>";
+            draw($tool_content, 3, null, $head_content);
+            exit();
+        }
+        if ($registered_at > $expires_at) {
+            $tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
+        } else {
+            if ($u == 1) $departments = array();
+
+            // email cannot be verified if there is no mail saved
+            if (empty($email) and $verified_mail) {
+                $verified_mail = 2;
+            }
+
+            // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
+            if (isDepartmentAdmin()) {
+                $olddeps = $user->getDepartmentIds(intval($u));
+
+                foreach ($departments as $depId) {
+                    if (!in_array($depId, $olddeps)) {
+                        validateNode(intval($depId), true);
+                    }
+                }
+
+                foreach ($olddeps as $depId) {
+                    if (!in_array($depId, $departments)) {
+                        validateNode($depId, true);
+                    }
+                }
+
+                $sql = "UPDATE user SET surname = ".autoquote($lname).",
+                                        givenname = ".autoquote($fname).",
+                                        username = $username,
+                                        email = ".autoquote($email).",
+                                        status = ".intval($newstatus).",
+                                        phone = ".autoquote($phone).",
+                                        expires_at = ".$expires_at.",
+                                        am = ".autoquote($am).",
+                                        verified_mail = ".intval($verified_mail) .",
+                                        whitelist = ". quote($user_upload_whitelist) ."
+                              WHERE id = ".intval($u);
+            }
+
+            $qry = db_query($sql);
+            $user->refresh(intval($u), $departments);
+
+            if (!$qry) {
+                $tool_content .= "$langNoUpdate: $u!";
+            } else {
+                $num_update = mysql_affected_rows();
+                if ($num_update == 1) {
+                    $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";
+                } else {
+                    $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";
+                }
+            }
+            $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
+        }
+    }
 }
 else
 {

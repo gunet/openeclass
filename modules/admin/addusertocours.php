@@ -47,127 +47,127 @@ $cid = intval(course_code_to_id($_GET['c']));
 
 // Register - Unregister students - professors to course
 if (isset($_POST['submit']))  {
-        $regstuds = isset($_POST['regstuds'])? array_map('intval', $_POST['regstuds']): array();
-        $regprofs = isset($_POST['regprofs'])? array_map('intval', $_POST['regprofs']): array();
-        $reglist = implode(', ', array_merge($regstuds, $regprofs));
+    $regstuds = isset($_POST['regstuds'])? array_map('intval', $_POST['regstuds']): array();
+    $regprofs = isset($_POST['regprofs'])? array_map('intval', $_POST['regprofs']): array();
+    $reglist = implode(', ', array_merge($regstuds, $regprofs));
 
-	// Remove unneded users - guest user (statut == 10) is never removed
+    // Remove unneded users - guest user (statut == 10) is never removed
+    if ($reglist) {
+        $reglist = "AND user_id NOT IN ($reglist)";
+        db_query("DELETE FROM group_members
+                         WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cid)
+                               $reglist");
+    }
+    db_query("DELETE FROM course_user
+                     WHERE course_id = $cid AND statut <> 10 $reglist");
+
+
+    function regusers($cid, $users, $statut)
+    {
+        foreach ($users as $uid) {
+            db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
+                             VALUES ($cid, $uid, $statut, CURDATE())");
+        }
+        $reglist = implode(', ', $users);
         if ($reglist) {
-                $reglist = "AND user_id NOT IN ($reglist)";
-                db_query("DELETE FROM group_members
-                                 WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $cid)
-                                       $reglist");
+            db_query("UPDATE course_user SET statut = $statut WHERE user_id IN ($reglist)");
         }
-        db_query("DELETE FROM course_user
-                         WHERE course_id = $cid AND statut <> 10 $reglist");
+    }
+    regusers($cid, $regstuds, 5);
+    regusers($cid, $regprofs, 1);
 
-
-        function regusers($cid, $users, $statut)
-        {
-                foreach ($users as $uid) {
-                        db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
-                                  VALUES ($cid, $uid, $statut, CURDATE())");
-                }
-                $reglist = implode(', ', $users);
-                if ($reglist) {
-                        db_query("UPDATE course_user SET statut = $statut WHERE user_id IN ($reglist)");
-                }
-        }
-        regusers($cid, $regstuds, 5);
-        regusers($cid, $regprofs, 1);
-
-	$tool_content .= "<p>".$langQuickAddDelUserToCoursSuccess."</p>";
+    $tool_content .= "<p>".$langQuickAddDelUserToCoursSuccess."</p>";
 
 }
 // Display form to manage users
 else {
-        load_js('tools.js');
+    load_js('tools.js');
 
-	$tool_content .= "<form action='". q($_SERVER['SCRIPT_NAME'] ."?c=". q($_GET['c'])) ."' method='post'>";
-	$tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
+    $tool_content .= "<form action='". q($_SERVER['SCRIPT_NAME'] ."?c=". q($_GET['c'])) ."' method='post'>";
+    $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
                           <tr><th colspan='3'>".$langFormUserManage."</th></tr>
                           <tr><th align=left>".$langListNotRegisteredUsers."<br />
                           <select id='unregusers_box' name='unregusers[]' size='20' multiple class='auth_input'>";
 
-	// Registered users not registered in the selected course
-	$sqll= "SELECT DISTINCT u.user_id , u.nom, u.prenom FROM user u
-		LEFT JOIN course_user cu ON u.user_id = cu.user_id
+    // Registered users not registered in the selected course
+    $sqll= "SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
+                LEFT JOIN course_user cu ON u.id = cu.user_id
                      AND cu.course_id = $cid
-		WHERE cu.user_id IS NULL ORDER BY nom";
+                WHERE cu.user_id IS NULL ORDER BY nom";
 
-	$resultAll = db_query($sqll);
-	while ($myuser = mysql_fetch_assoc($resultAll)) {
-                $tool_content .= "<option value='". q($myuser['user_id']) ."'>".
-                        q("$myuser[nom] $myuser[prenom]") . '</option>';
-	}
+    $resultAll = db_query($sqll);
+    while ($myuser = mysql_fetch_assoc($resultAll)) {
+        $tool_content .= "<option value='". q($myuser['id']) ."'>".
+            q("$myuser[surname] $myuser[givenname]") . '</option>';
+    }
 
-	$tool_content .= "</select></th>
-	<td width='3%' class='center' nowrap>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p align='center'><b>$langStudents</b></p>
-	<p align='center'><input type='button' onClick=\"move('unregusers_box','regstuds_box')\" value='   >>   ' />
-	<input type='button' onClick=\"move('regstuds_box','unregusers_box')\" value='   <<   ' />
-	</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p align='center'><b>$langTeachers</b></p>";
+    $tool_content .= "</select></th>
+        <td width='3%' class='center' nowrap>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p align='center'><b>$langStudents</b></p>
+        <p align='center'><input type='button' onClick=\"move('unregusers_box','regstuds_box')\" value='   >>   ' />
+        <input type='button' onClick=\"move('regstuds_box','unregusers_box')\" value='   <<   ' />
+        </p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p align='center'><b>$langTeachers</b></p>";
 
-	$tool_content .= "<p align='center'><input type='button' onClick=\"move('unregusers_box','regprofs_box')\" value='   >>   ' />
-	<input type='button' onClick=\"move('regprofs_box','unregusers_box')\" value='   <<   ' /></p>
-	</td>
-	<th>".$langListRegisteredStudents."<br />
-	<select id='regstuds_box' name='regstuds[]' size='8' multiple class='auth_input'>";
+    $tool_content .= "<p align='center'><input type='button' onClick=\"move('unregusers_box','regprofs_box')\" value='   >>   ' />
+        <input type='button' onClick=\"move('regprofs_box','unregusers_box')\" value='   <<   ' /></p>
+        </td>
+        <th>".$langListRegisteredStudents."<br />
+        <select id='regstuds_box' name='regstuds[]' size='8' multiple class='auth_input'>";
 
-	// Students registered in the selected course
-	$resultStud = db_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
-				FROM user u, course_user cu
-				WHERE cu.course_id = $cid
-				AND cu.user_id=u.user_id
-				AND cu.statut=5 ORDER BY nom");
+    // Students registered in the selected course
+    $resultStud = db_query("SELECT DISTINCT u.id , u.surname, u.givenname
+                                FROM user u, course_user cu
+                                WHERE cu.course_id = $cid
+                                AND cu.user_id = u.id
+                                AND cu.statut=5 ORDER BY surname");
 
-	$a=0;
-	while ($myStud = mysql_fetch_assoc($resultStud)) {
-                $tool_content .= "<option value='". q($myStud['user_id']) ."'>".
-                        q("$myStud[nom] $myStud[prenom]") . '</option>';
-		$a++;
-	}
+    $a=0;
+    while ($myStud = mysql_fetch_assoc($resultStud)) {
+        $tool_content .= "<option value='". q($myStud['id']) ."'>".
+            q("$myStud[surname] $myStud[givenname]") . '</option>';
+        $a++;
+    }
 
-	$tool_content .= "</select>
-		<p>&nbsp;</p>
-		$langListRegisteredProfessors<br />
-		<select id='regprofs_box' name='regprofs[]' size='8' multiple class='auth_input'>";
-	// Professors registered in the selected course
-	$resultProf = db_query("SELECT DISTINCT u.user_id , u.nom, u.prenom
-				FROM user u, course_user cu
-				WHERE cu.course_id = $cid
-				AND cu.user_id = u.user_id
-				AND cu.statut = 1
-				ORDER BY nom, prenom");
-	$a=0;
-	while ($myProf = mysql_fetch_assoc($resultProf)) {
-                $tool_content .= "<option value='". q($myProf['user_id']) ."'>".
-                        q("$myProf[nom] $myProf[prenom]") . "</option>";
-		$a++;
-	}
-	$tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
+    $tool_content .= "</select>
+        <p>&nbsp;</p>
+        $langListRegisteredProfessors<br />
+        <select id='regprofs_box' name='regprofs[]' size='8' multiple class='auth_input'>";
+    // Professors registered in the selected course
+    $resultProf = db_query("SELECT DISTINCT u.id , u.surname, u.givenname
+                                FROM user u, course_user cu
+                                WHERE cu.course_id = $cid
+                                AND cu.user_id = u.id
+                                AND cu.statut = 1
+                                ORDER BY nom, givenname");
+    $a=0;
+    while ($myProf = mysql_fetch_assoc($resultProf)) {
+        $tool_content .= "<option value='". q($myProf['id']) ."'>".
+            q("$myProf[surname] $myProf[givenname]") . "</option>";
+        $a++;
+    }
+    $tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
                 <td><input type=submit value='$langAcceptChanges' name='submit' onClick=\"selectAll('regstuds_box',true);selectAll('regprofs_box',true)\"></td>
-		<td>&nbsp;</td>
-		</tr></tbody></table>";
-	$tool_content .= "</form>";
+                <td>&nbsp;</td>
+                </tr></tbody></table>
+              </form>";
 }
 
 if (isset($_GET['c'])) {
-        // If course selected go back to editcours.php
-	$tool_content .= "<p align='right'>
-	<a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
+    // If course selected go back to editcours.php
+    $tool_content .= "<p align='right'>
+        <a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
 } else {
-        // Else go back to index.php directly
-	$tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
+    // Else go back to index.php directly
+    $tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
 }
 
 draw($tool_content, 3, null, $head_content);

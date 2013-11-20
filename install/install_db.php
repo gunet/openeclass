@@ -175,8 +175,7 @@ db_query("CREATE TABLE `course` (
 db_query("CREATE TABLE course_user (
       `course_id` INT(11) NOT NULL DEFAULT 0,
       `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-      `statut` TINYINT(4) NOT NULL DEFAULT 0,
-      `team` INT(11) NOT NULL DEFAULT 0,
+      `status` TINYINT(4) NOT NULL DEFAULT 0,
       `tutor` INT(11) NOT NULL DEFAULT 0,
       `editor` INT(11) NOT NULL DEFAULT 0,
       `reviewer` INT(11) NOT NULL DEFAULT 0,
@@ -189,38 +188,34 @@ db_query("CREATE TABLE course_user (
 #
 
 db_query("CREATE TABLE user (
-      user_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-      nom VARCHAR(60) DEFAULT NULL,
-      prenom VARCHAR(60) DEFAULT NULL,
-      username VARCHAR(50) DEFAULT 'empty',
-      password VARCHAR(60) DEFAULT 'empty',
-      email VARCHAR(100) DEFAULT NULL,
-      statut TINYINT(4) DEFAULT NULL,
-      phone VARCHAR(20) DEFAULT NULL,
-      am VARCHAR(20) DEFAULT NULL,
-      registered_at INT(10) NOT NULL default 0,
-      expires_at INT(10) NOT NULL default 0,
-      perso ENUM('yes','no') NOT NULL default 'yes',
+      id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+      surname VARCHAR(60) NOT NULL DEFAULT '',
+      givenname VARCHAR(60) NOT NULL DEFAULT '',
+      username VARCHAR(50) NOT NULL UNIQUE KEY COLLATE utf8_bin,
+      password VARCHAR(60) NOT NULL DEFAULT 'empty',
+      email VARCHAR(100) NOT NULL DEFAULT '',
+      status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
+      phone VARCHAR(20) NOT NULL DEFAULT '',
+      am VARCHAR(20) NOT NULL DEFAULT '',
+      registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
+      expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
       lang VARCHAR(16) NOT NULL DEFAULT 'el',
       announce_flag date NOT NULL DEFAULT '0000-00-00',
       doc_flag DATE NOT NULL DEFAULT '0000-00-00',
       forum_flag DATE NOT NULL DEFAULT '0000-00-00',
-      description TEXT,
-      has_icon BOOL NOT NULL DEFAULT 0,
-      verified_mail BOOL NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
-      receive_mail BOOL NOT NULL DEFAULT 1,
+      description TEXT NOT NULL,
+      has_icon TINYINT(1) NOT NULL DEFAULT 0,
+      verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
+      receive_mail TINYINT(1) NOT NULL DEFAULT 1,
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
-      whitelist TEXT,
-      last_passreminder DATETIME DEFAULT NULL,
-      PRIMARY KEY (user_id),
-      KEY `user_username` (`username`)) $charset_spec");
+      whitelist TEXT NOT NULL,
+      last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 db_query("CREATE TABLE admin (
-      idUser mediumint unsigned  NOT NULL default 0,
-      `privilege` int(11) NOT NULL default 0,
-      UNIQUE KEY idUser (idUser)) $charset_spec");
+      user_id INT(11) NOT NULL UNIQUE KEY,
+      privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE login_failure (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -413,38 +408,38 @@ db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
 db_query("CREATE TABLE IF NOT EXISTS video (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
-                `path` VARCHAR(255),
-                `url` VARCHAR(200),
-                `title` VARCHAR(200),
-                `description` TEXT,
-                `creator` VARCHAR(200),
-                `publisher` VARCHAR(200),
-                `date` DATETIME,
+                `path` VARCHAR(255) NOT NULL,
+                `url` VARCHAR(200) NOT NULL,
+                `title` VARCHAR(200) NOT NULL,
+                `description` TEXT NOT NULL,
+                `creator` VARCHAR(200) NOT NULL,
+                `publisher` VARCHAR(200) NOT NULL,
+                `date` DATETIME NOT NULL,
                 `visible` TINYINT(4) NOT NULL DEFAULT 1,
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
-db_query("CREATE TABLE IF NOT EXISTS videolinks (
+db_query("CREATE TABLE IF NOT EXISTS videolink (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
-                `url` VARCHAR(200),
-                `title` VARCHAR(200),
-                `description` TEXT,
-                `creator` VARCHAR(200),
-                `publisher` VARCHAR(200),
-                `date` DATETIME,
-                `visible` TINYINT(4) NOT NULL DEFAULT 1,
+                `url` VARCHAR(200) NOT NULL DEFAULT '',
+                `title` VARCHAR(200) NOT NULL DEFAULT '',
+                `description` TEXT NOT NULL,
+                `creator` VARCHAR(200) NOT NULL DEFAULT '',
+                `publisher` VARCHAR(200) NOT NULL DEFAULT '',
+                `date` DATETIME NOT NULL,
+                `visible` TINYINT(4) NOT NULL DEFAULT 1, 
                 `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
-                `uploaderId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `uploader_id` INT(11) NOT NULL DEFAULT 0,
                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `title` VARCHAR(250) DEFAULT '',
-                `description` VARCHAR(500) DEFAULT '',                
-                `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+                `title` VARCHAR(250) NOT NULL DEFAULT '',
+                `description` VARCHAR(250) NOT NULL DEFAULT '',                
+                `upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `last_upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
                 `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -903,7 +898,7 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
 $exp_time = time() + 140000000;
-db_query("INSERT INTO `user` (`prenom`, `nom`, `username`, `password`, `email`, `statut`,`registered_at`,`expires_at`, `verified_mail`, `whitelist`)
+db_query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`)
                  VALUES (" . quote($nameForm) . ", '', " .
                              quote($loginForm) . ", '$password_encrypted', " .
                              quote($emailForm) . ", 1, " . time() . ", $exp_time, 1, '*,,')");
@@ -917,23 +912,23 @@ db_query("INSERT INTO admin VALUES ($admin_uid, 0)");
 #
 
 db_query("CREATE TABLE user_request (
-                id int(11) NOT NULL AUTO_INCREMENT,
-                name varchar(255) NOT NULL DEFAULT '',
-                surname varchar(255) NOT NULL DEFAULT '',
-                uname varchar(255) NOT NULL DEFAULT '',
-                password varchar(255) NOT NULL DEFAULT '',
-                email varchar(255) NOT NULL DEFAULT '',
-                verified_mail tinyint(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
+                id INT(11) NOT NULL AUTO_INCREMENT,
+                givenname VARCHAR(60) NOT NULL DEFAULT '',
+                surname VARCHAR(60) NOT NULL DEFAULT '',
+                username VARCHAR(50) NOT NULL DEFAULT '',
+                password VARCHAR(255) NOT NULL DEFAULT '',
+                email VARCHAR(100) NOT NULL DEFAULT '',
+                verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
                 faculty_id INT(11) NOT NULL DEFAULT 0,
-                phone varchar(20) NOT NULL DEFAULT '',
-		am varchar(20) NOT NULL DEFAULT '',
-                status int(11) default NULL,
-                date_open datetime default NULL,
-                date_closed datetime default NULL,
-                comment text,
-                lang varchar(16) NOT NULL DEFAULT 'el',
-                statut tinyint(4) NOT NULL DEFAULT 1,
-                request_ip varchar(45) NOT NULL DEFAULT '',
+                phone VARCHAR(20) NOT NULL DEFAULT '',
+                am VARCHAR(20) NOT NULL DEFAULT '',
+                state INT(11) NOT NULL DEFAULT 0,
+                date_open DATETIME DEFAULT NULL,
+                date_closed DATETIME DEFAULT NULL,
+                comment TEXT NOT NULL,
+                lang VARCHAR(16) NOT NULL DEFAULT 'el',
+                status TINYINT(4) NOT NULL DEFAULT 1,
+                request_ip VARCHAR(45) NOT NULL DEFAULT '',
                 PRIMARY KEY (id)) $charset_spec");
 
 
@@ -1111,5 +1106,5 @@ db_query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res
 db_query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');        
 db_query('CREATE INDEX `cid` ON video (course_id)');
-db_query('CREATE INDEX `cid` ON videolinks (course_id)');
+db_query('CREATE INDEX `cid` ON videolink (course_id)');
 db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');

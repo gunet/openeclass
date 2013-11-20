@@ -759,14 +759,14 @@ switch( $action )
 		    ;
 
 	$userInfo = user_get_data( $oldEditor );	
-	$oldEditorStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
+	$oldEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
 
 	$newTime = claro_format_locale_date( $dateTimeFormatLong
 		    , strtotime($newTime) )
 		    ;
 
 	$userInfo = user_get_data( $newEditor );
-	$newEditorStr = q($userInfo['firstname']) . "&nbsp;" . q($userInfo['lastname']);
+	$newEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
 
 	$versionInfo = '('
 	    . sprintf( $langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr )

@@ -20,48 +20,44 @@
 
 
 /*===========================================================================
-	change_user.php
+        change_user.php
 ==============================================================================
-	@Description: Allows platform admin to login as another user without
+        @Description: Allows platform admin to login as another user without
          asking for a password
 ==============================================================================
 */
 
-$require_admin = TRUE;
+$require_admin = true;
 require_once '../../include/baseTheme.php';
 $nameTools = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
-	$sql = "SELECT user_id, nom, username, password, prenom, statut, email, iduser is_admin, perso, lang
-		FROM user LEFT JOIN admin ON user.user_id = admin.iduser
-		WHERE username ";
+    $sql = "SELECT user.id, surname, username, password, givenname, status, email,
+                   admin.user_id AS is_admin, lang
+                FROM user LEFT JOIN admin ON user.id = admin.user_id
+                WHERE username ";
 
-	if (get_config('case_insensitive_usernames')) {
-		$sql .= "= " . quote($_REQUEST['username']);
-	} else {
-		$sql .= "COLLATE utf8_bin = " . quote($_REQUEST['username']);
-	}
-	$result = db_query($sql);
-	if (mysql_num_rows($result) > 0) {
-                $myrow = mysql_fetch_array($result);
-                $_SESSION['uid'] = $myrow['user_id'];
-                $_SESSION['nom'] = $myrow['nom'];
-                $_SESSION['prenom'] = $myrow['prenom'];
-                $_SESSION['statut'] = $myrow['statut'];
-                $_SESSION['email'] = $myrow['email'];
-                $_SESSION['is_admin'] = !(!($myrow['is_admin'])); // double 'not' to handle NULL
-                $_SESSION['uname'] = $myrow['username'];
-	        if ($myrow['perso'] == 'no') {
-        		$_SESSION['user_perso_active'] = true;
-                } else {
-        		$_SESSION['user_perso_active'] = false;
-                }
-                $_SESSION['langswitch'] = $myrow['lang'];
-                redirect_to_home_page();
-        } else {
-                $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
-        }
+    if (get_config('case_insensitive_usernames')) {
+        $sql .= "= " . quote($_REQUEST['username']);
+    } else {
+        $sql .= "COLLATE utf8_bin = " . quote($_REQUEST['username']);
+    }
+    $result = db_query($sql);
+    if (mysql_num_rows($result) > 0) {
+        $myrow = mysql_fetch_array($result);
+        $_SESSION['uid'] = $myrow['id'];
+        $_SESSION['surname'] = $myrow['surname'];
+        $_SESSION['givenname'] = $myrow['givenname'];
+        $_SESSION['status'] = $myrow['status'];
+        $_SESSION['email'] = $myrow['email'];
+        $_SESSION['is_admin'] = !(!($myrow['is_admin'])); // double 'not' to handle NULL
+        $_SESSION['uname'] = $myrow['username'];
+        $_SESSION['langswitch'] = $myrow['lang'];
+        redirect_to_home_page();
+    } else {
+        $tool_content = "<div class='caution'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
+    }
 }
 
 $tool_content .= "<legend><form action='$_SERVER[SCRIPT_NAME]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";

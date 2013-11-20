@@ -38,11 +38,11 @@ require_once 'include/sendMail.inc.php';
 $group_id = intval($_REQUEST['group_id']);
 
 $nameTools = $langEmailGroup;
-$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langGroupSpace,
-"url"=>"group_space.php?group_id=$group_id", "name"=>$langGroupSpace);
+$navigation[]= array ('url' => "index.php?course=$course_code", 'name' => $langGroupSpace,
+                      'url' => "group_space.php?group_id=$group_id", 'name' =>$langGroupSpace);
 
-list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id='$group_id'", $mysqlMainDb));
-$is_tutor = ($tutor_id == 1)?TRUE:FALSE;
+list($tutor_id) = mysql_fetch_row(db_query("SELECT is_tutor FROM group_members WHERE group_id = $group_id"));
+$is_tutor = ($tutor_id == 1);
 
 if (!$is_editor and !$is_tutor) {
         header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
@@ -50,17 +50,17 @@ if (!$is_editor and !$is_tutor) {
 }
 
 if ($is_editor or $is_tutor)  {
-	if (isset($_POST['submit'])) {
-                $sender = mysql_fetch_array(db_query("SELECT email, nom, prenom FROM user
-						WHERE user_id = $uid", $mysqlMainDb));
-                $sender_name = $sender['prenom'] . ' ' . $sender['nom'];
+        if (isset($_POST['submit'])) {
+                $sender = mysql_fetch_array(db_query("SELECT email, surname, givenname FROM user
+                                                             WHERE id = $uid"));
+                $sender_name = $sender['givenname'] . ' ' . $sender['surname'];
                 $sender_email = $sender['email'];
                 $emailsubject = $title." - ".$_POST['subject'];
-                $emailbody = "$_POST[body_mail]\n\n$langSender: $sender[nom] $sender[prenom] <$sender[email]>\n$langProfLesson\n";
-		$req = db_query("SELECT user_id FROM group_members WHERE group_id = '$group_id'", $mysqlMainDb);
-		while ($userid = mysql_fetch_array($req)) {
-                        $r = db_query("SELECT email FROM user where user_id='$userid[user_id]'", $mysqlMainDb);
-			list($email) = mysql_fetch_array($r);
+                $emailbody = "$_POST[body_mail]\n\n$langSender: $sender[surname] $sender[givenname] <$sender[email]>\n$langProfLesson\n";
+                $req = db_query("SELECT user_id FROM group_members WHERE group_id = '$group_id'");
+                while ($userid = mysql_fetch_array($req)) {
+                        $r = db_query("SELECT email FROM user WHERE id = $userid[user_id]");
+                        list($email) = mysql_fetch_array($r);
                         if (get_user_email_notification($userid[user_id], $course_id)) {
                                 $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
                                 $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
@@ -72,38 +72,38 @@ if ($is_editor or $is_tutor)  {
                                         $tool_content .= "<h4>$langMailError</h4>";
                                 }
                         }
-		}
-		// aldo send email to professor
-		send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
-		$tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
-		$tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></p>";
-	} else {
-		$tool_content .= "
-		<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-		<fieldset>
-		<legend>$langTypeMessage</legend>
-		<input type='hidden' name='group_id' value='$group_id'>
-		<table width='99%' class='FormData'>
-		<thead>
-		<tr>
-		  <td class='left'>$langMailSubject</td></tr>
-		</tr>
-		<tr>
-		    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
-		</tr>
-		<tr>
-		  <td class='left'>$langMailBody</td>
-		</tr>
-		<tr>
-		  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
-		</tr>
-		<tr>
-		  <td><input type='submit' name='submit' value='$langSend'></input></td>
-		</tr>
-		</thead>
-		</table>
-		</fieldset>
-		 </form>";
-	}
+                }
+                // aldo send email to professor
+                send_mail($sender_name, $sender_email,'', $sender_email, $emailsubject, $emailbody, $charset);
+                $tool_content .= "<p class='success_small'>$langEmailSuccess<br />";
+                $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></p>";
+        } else {
+                $tool_content .= "
+                <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+                <fieldset>
+                <legend>$langTypeMessage</legend>
+                <input type='hidden' name='group_id' value='$group_id'>
+                <table width='99%' class='FormData'>
+                <thead>
+                <tr>
+                  <td class='left'>$langMailSubject</td></tr>
+                </tr>
+                <tr>
+                    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
+                </tr>
+                <tr>
+                  <td class='left'>$langMailBody</td>
+                </tr>
+                <tr>
+                  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
+                </tr>
+                <tr>
+                  <td><input type='submit' name='submit' value='$langSend'></input></td>
+                </tr>
+                </thead>
+                </table>
+                </fieldset>
+                 </form>";
+        }
 }
 draw($tool_content, 2);

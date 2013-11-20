@@ -120,7 +120,7 @@ while ($iterator <= $_POST['maxMediaForm'])
     if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMediaLink_'.$iterator]))
     {
         // get from DB everything related to the medialink
-        $sql = "SELECT * FROM videolinks WHERE id = '". intval($_POST['insertMediaLink_'.$iterator]) ."'";
+        $sql = "SELECT * FROM videolink WHERE id = '". intval($_POST['insertMediaLink_'.$iterator]) ."'";
         $row = db_query_get_single_row($sql);
 
         // check if this medialink is already a module
@@ -195,7 +195,7 @@ function showmedia()
     global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
 
     $sqlMedia = "SELECT * FROM video ORDER BY title";
-    $sqlMediaLinks = "SELECT * FROM videolinks ORDER BY title";
+    $sqlMediaLinks = "SELECT * FROM videolink ORDER BY title";
 
     $resultMedia = db_query($sqlMedia);
     $resultMediaLinks = db_query($sqlMediaLinks);

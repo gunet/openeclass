@@ -118,7 +118,7 @@ if ($can_upload) {
           </select>
           </td>
           <td>&nbsp;</td>
-          <td><input type='hidden' name='file_creator' value='".q($_SESSION['prenom']) ." ". q($_SESSION['nom']) ."' size='40' /></td>
+          <td><input type='hidden' name='file_creator' value='".q($_SESSION['givenname']) ." ". q($_SESSION['surname']) ."' size='40' /></td>
         </tr>
         <tr>
           <th>$langSubject:</th>

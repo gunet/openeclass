@@ -67,8 +67,8 @@ class User {
      */
     public function delete($id)
     {
-        db_query("DELETE FROM $this->departmenttable WHERE user = '$id'");
-        db_query("DELETE FROM $this->utable WHERE user_id = '$id'");
+        db_query("DELETE FROM $this->departmenttable WHERE user = $id");
+        db_query("DELETE FROM $this->utable WHERE id = $id");
     }
 
     /**
@@ -82,8 +82,8 @@ class User {
         $ret = array();
         $result = db_query("SELECT ud.department AS id
                               FROM $this->utable u, $this->departmenttable ud
-                             WHERE u.user_id = ". intval($id) ."
-                               AND u.user_id = ud.user");
+                             WHERE u.id = ". intval($id) ."
+                               AND u.id = ud.user");
 
         while($row = mysql_fetch_assoc($result))
             $ret[] = $row['id'];

@@ -40,11 +40,11 @@ $userid = isset($_GET['userid'])? intval($_GET['userid']): 0;
 
 if ($userid and isset($_GET['h']) and
     token_validate("userid=$userid", $_GET['h'])) {
-	$q = db_query("SELECT * FROM user WHERE user_id = ".$userid);
+	$q = db_query("SELECT * FROM user WHERE id = ".$userid);
         if ($q and mysql_num_rows($q) > 0) {
                 $info = mysql_fetch_assoc($q);
-                $firstname = $info['prenom'];
-                $lastname = $info['nom'];
+                $firstname = $info['givenname'];
+                $lastname = $info['surname'];
                 $email = $info['email'];
         } else {
                 $firstname = $lastname = $email = '';

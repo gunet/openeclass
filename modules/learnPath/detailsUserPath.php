@@ -66,9 +66,8 @@ if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
 
 
 // get infos about the user
-$sql = "SELECT `nom` AS `lastname`, `prenom` as `firstname`, `email`
-        FROM `".$TABLEUSER."`
-       WHERE `user_id` = ". (int)$_REQUEST['uInfo'];
+$sql = "SELECT surname, givenname, email FROM `".$TABLEUSER."`
+               WHERE id = ". (int)$_REQUEST['uInfo'];
 $uDetails = db_query_get_single_row($sql);
 
 mysql_select_db($mysqlMainDb);
@@ -76,8 +75,8 @@ mysql_select_db($mysqlMainDb);
 // get infos about the learningPath
 $sql = "SELECT `name`
         FROM `".$TABLELEARNPATH."`
-       WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'] ."
-       AND `course_id` = $course_id";
+        WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'] ."
+        AND `course_id` = $course_id";
 $LPresult = mysql_fetch_row(db_query($sql));
 $LPname = $LPresult[0];
 
@@ -133,7 +132,7 @@ $tool_content .= '
     // ------------------- some user details --------------------------
 	.'    <tr class="odd">'."\n"
 	.'      <td colspan="'.($maxDeep+1).'" class="left"><small><b>'.$langLearnPath.'</b>:&nbsp;'.$LPname.'</small></td>'."\n"
-	.'      <td colspan="'.($maxDeep+4).'" class="right"><small><b>'.$langStudent.'</b>: '.$uDetails['lastname'].' '.$uDetails['firstname'].' ('.$uDetails['email'].')</small></td>'."\n"
+	.'      <td colspan="'.($maxDeep+4).'" class="right"><small><b>'.$langStudent.'</b>: '.q($uDetails['surname']).' '.q($uDetails['givenname']).' ('.q($uDetails['email']).')</small></td>'."\n"
 	.'    </tr>'."\n"
 	.'    <tr>'."\n"
 	.'      <th colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"

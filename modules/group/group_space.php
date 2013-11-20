@@ -89,12 +89,12 @@ $tool_content .=  "<br />
 
 $tutors = array();
 $members = array();
-$q = db_query("SELECT user.user_id, nom, prenom, email, am, is_tutor, has_icon,
+$q = db_query("SELECT user.id AS user_id, surname, givenname, email, am, is_tutor, has_icon,
 		      group_members.description
                       FROM group_members, user
                       WHERE group_id = $group_id AND
-                            group_members.user_id = user.user_id
-                      ORDER BY nom, prenom");
+                            group_members.user_id = user.id
+                      ORDER BY surname, givenname");
 while ($user = mysql_fetch_array($q)) {
         if ($user['is_tutor']) {
                 $tutors[] = display_user($user, true);

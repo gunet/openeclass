@@ -43,62 +43,61 @@
  */
 function getUserLessonInfo($uid, $type)
 {	
-        
-	//	TODO: add the new fields for memory in the db
-        if ($_SESSION['statut'] == USER_STUDENT) {
-                $user_courses = "SELECT course.id course_id,
-                                        course.code code,
-                                        course.public_code,
-                                        course.title title,
-                                        course.prof_names professor,
-                                        course.lang,
-                                        course_user.statut statut,
-                                        user.perso,
-                                        user.announce_flag,
-                                        user.doc_flag,
-                                        user.forum_flag
-                                 FROM course, course_user, user
-                                 WHERE course.id = course_user.course_id AND
-                                       course_user.user_id = $uid AND
-                                       user.user_id = $uid
-                                       AND course.visible != ".COURSE_INACTIVE."
-                                 ORDER BY course.title, course.prof_names";
-        } elseif ($_SESSION['statut'] == USER_TEACHER)  {
-                $user_courses = "SELECT course.id course_id,
+    global $session;
+
+    //	TODO: add the new fields for memory in the db
+    if ($session->status == USER_STUDENT) {
+        $user_courses = "SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
-	                        course.title title,
+                                course.title title,
                                 course.prof_names professor,
-	                        course.lang,
-	                        course_user.statut statut,
-	                        user.perso,
-	                        user.announce_flag,
-	                        user.doc_flag,
-	                        user.forum_flag
-	                 FROM course, course_user, user
-	                 WHERE course.id = course_user.course_id AND
-	                       course_user.user_id = $uid AND
-	                       user.user_id = $uid
-                         ORDER BY course.title, course.prof_names";
-        }
+                                course.lang,
+                                course_user.status status,
+                                user.announce_flag,
+                                user.doc_flag,
+                                user.forum_flag
+                             FROM course, course_user, user
+                             WHERE course.id = course_user.course_id AND
+                                   course_user.user_id = $uid AND
+                                   user.id = $uid AND
+                                   course.visible != ".COURSE_INACTIVE."
+                             ORDER BY course.title, course.prof_names";
+    } elseif ($session->status == USER_TEACHER)  {
+        $user_courses = "SELECT course.id course_id,
+                                course.code code,
+                                course.public_code,
+	                            course.title title,
+                                course.prof_names professor,
+	                            course.lang,
+	                            course_user.status status,
+	                            user.announce_flag,
+                                user.doc_flag,
+                                user.forum_flag
+	                         FROM course, course_user, user
+                             WHERE course.id = course_user.course_id AND
+	                               course_user.user_id = $uid AND
+	                               user.id = $uid
+                             ORDER BY course.title, course.prof_names";
+    }
 
-	$lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code =
-                         $lesson_professor = $lesson_statut = array();
-	$mysql_query_result = db_query($user_courses);
-	$repeat_val = 0;
-	//getting user's lesson info
-	while ($mycourses = mysql_fetch_array($mysql_query_result)) {
-		$lesson_id[$repeat_val] 	= $mycourses['course_id'];
-		$lesson_titles[$repeat_val] 	= $mycourses['title'];
-		$lesson_code[$repeat_val]	= $mycourses['code'];
-		$lesson_professor[$repeat_val]	= $mycourses['professor'];
-		$lesson_statut[$repeat_val]	= $mycourses['statut'];
-		$lesson_publicCode[$repeat_val]	= $mycourses['public_code'];
-		$repeat_val++;
-	}
+    $lesson_titles = $lesson_publicCode = $lesson_id = $lesson_code =
+        $lesson_professor = $lesson_status = array();
+    $mysql_query_result = db_query($user_courses);
+    $repeat_val = 0;
+    //getting user's lesson info
+    while ($mycourses = mysql_fetch_array($mysql_query_result)) {
+        $lesson_id[$repeat_val] 	= $mycourses['course_id'];
+        $lesson_titles[$repeat_val] 	= $mycourses['title'];
+        $lesson_code[$repeat_val]	= $mycourses['code'];
+        $lesson_professor[$repeat_val]	= $mycourses['professor'];
+        $lesson_status[$repeat_val]	= $mycourses['status'];
+        $lesson_publicCode[$repeat_val]	= $mycourses['public_code'];
+        $repeat_val++;
+    }
 
 	$memory = "SELECT user.announce_flag, user.doc_flag, user.forum_flag
-                        FROM user WHERE user.user_id = $uid";
+                      FROM user WHERE user.id = $uid";
 	$memory_result = db_query($memory);
 	while ($my_memory_result = mysql_fetch_row($memory_result)) {
 		$lesson_announce_f = str_replace('-', ' ', $my_memory_result[0]);
@@ -110,7 +109,7 @@ function getUserLessonInfo($uid, $type)
 	$ret_val[1] = $lesson_titles;
 	$ret_val[2] = $lesson_code;
 	$ret_val[3] = $lesson_professor;
-	$ret_val[4] = $lesson_statut;
+	$ret_val[4] = $lesson_status;
 	$ret_val[5] = $lesson_announce_f;
 	$ret_val[6] = $lesson_doc_f;
 	$ret_val[7] = $lesson_forum_f;
@@ -134,7 +133,7 @@ function getUserLessonInfo($uid, $type)
  */
 function htmlInterface($data, $lesson_code)
 {
-	global $statut, $urlServer, $langNotEnrolledToLessons, $langWelcomeProfPerso;
+	global $status, $urlServer, $langNotEnrolledToLessons, $langWelcomeProfPerso;
         global $langWelcomeStudPerso, $langWelcomeSelect;
 	global $langUnregCourse, $langAdm, $uid, $themeimg;
 
@@ -164,7 +163,7 @@ function htmlInterface($data, $lesson_code)
 		$lesson_content .= "<table width='100%'>";
 		$lesson_content .= "<tr>";
 		$lesson_content .= "<td align='left' width='10'><img src='$themeimg/arrow.png' alt='' /></td>";
-		if ($statut == USER_TEACHER) {
+		if ($status == USER_TEACHER) {
 			$lesson_content .= "\n<td align='left'>$langWelcomeProfPerso</td>";
 		} else {
 			$lesson_content .= "\n<td align='left' >$langWelcomeStudPerso</td>";

@@ -50,16 +50,16 @@ check_uid();
 $nameTools = $langModifyProfile;
 check_guest();
 
-$result = db_query("SELECT user.nom, user.prenom, user.username, user.email, user.am, user.phone, user.perso,
-                           user.lang, user.statut, user.has_icon, user.description,
-                           user.email_public, user.phone_public, user.am_public, user.password
-                        FROM user WHERE user.user_id = $uid");
+$result = db_query("SELECT surname, givenname, username, email, am, phone,
+                           lang, status, has_icon, description,
+                           email_public, phone_public, am_public, password
+                        FROM user WHERE id = $uid");
 $myrow = mysql_fetch_assoc($result);
 
 $password = $myrow['password'];
 $auth = array_search($password, $auth_ids);
 if (!$auth) {
-	$auth = 1;
+        $auth = 1;
 }
 $auth_text = get_auth_info($auth);
 
@@ -72,9 +72,9 @@ if ($auth != 1) {
 }
 
 if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
-	$allow_name_change = false;
+        $allow_name_change = false;
 } else {
-	$allow_name_change = true;
+        $allow_name_change = true;
 }
 
 function redirect_to_message($id) {
@@ -86,141 +86,133 @@ function redirect_to_message($id) {
 if (isset($_POST['delimage'])) {
         @unlink($image_path . '_' . IMAGESIZE_LARGE . '.jpg');
         @unlink($image_path . '_' . IMAGESIZE_SMALL . '.jpg');
-        db_query("UPDATE user SET has_icon = 0 WHERE user_id = $uid");
+        db_query("UPDATE user SET has_icon = 0 WHERE id = $uid");
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                              'deleteimage' => 1));
         exit;
 }
 
 if (isset($_POST['submit'])) {
-        // First do personalization and language changes
-	if (!file_exists($webDir.'/courses/userimg/')) {
-		mkdir($webDir.'/courses/userimg/', 0775);
-	}
-	$image_path = $webDir.'/courses/userimg/'.$_SESSION['uid'];
-        $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
-        $old_language = $language;
-        $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
-        $old_perso_status = $_SESSION['user_perso_active'];
-        if (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes') {
-                $_SESSION['user_perso_active'] = false;
-        } else {
-                $_SESSION['user_perso_active'] = true;
+    // First process language changes
+        if (!file_exists($webDir.'/courses/userimg/')) {
+                mkdir($webDir.'/courses/userimg/', 0775);
         }
-        db_query("UPDATE user SET perso = '$_POST[persoStatus]',
-                                  lang = '$langcode'
-                              WHERE user_id = $uid");
+    $image_path = $webDir.'/courses/userimg/'.$_SESSION['uid'];
+    $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes')? '1': '0';
+    $old_language = $language;
+    $langcode  = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
+    db_query("UPDATE user SET lang = " . quote($langcode) . " WHERE id = $uid");
 
-        $all_ok = register_posted_variables(array(
-                'am_form' => get_config('am_required') and $myrow['statut'] != 1,
+    $all_ok = register_posted_variables(array(
+                'am_form' => get_config('am_required') and $myrow['status'] != 1,
                 'desc_form' => false,
                 'phone_form' => false,
                 'email_form' => get_config('email_required'),
-                'nom_form' => !$is_admin,
-                'prenom_form' => true,
+                'surname_form' => !$is_admin,
+                'givenname_form' => true,
                 'username_form' => true,
                 'email_public' => false,
                 'phone_public' => false,
                 'am_public' => false), 'all');
 
-        $departments = null;
-        if (!get_config('restrict_owndep')) {
-            if (!isset($_POST['department']) and !$is_admin)
-                $all_ok = false;
-            else
-                $departments = $_POST['department'];
+    $departments = null;
+    if (!get_config('restrict_owndep')) {
+        if (!isset($_POST['department']) and !$is_admin)
+            $all_ok = false;
+        else
+            $departments = $_POST['department'];
+    }
+
+    $email_public = valid_access($email_public);
+    $phone_public = valid_access($phone_public);
+    $am_public = valid_access($am_public);
+
+        // upload user picture
+        if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
+            
+            validateUploadedFile($_FILES['userimage']['name'], 1);
+            
+                $type = $_FILES['userimage']['type'];
+                $image_file = $_FILES['userimage']['tmp_name'];
+
+                if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE,
+                                        $image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
+                        redirect_to_message(7);
+                }
+                if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL,
+                                        $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
+                        redirect_to_message(7);
+                }
+                db_query("UPDATE user SET has_icon = 1 WHERE id = $_SESSION[uid]");
+                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
+                                                     'addimage' => 1,
+                                                     'imagetype' => $type));
         }
 
-        $email_public = valid_access($email_public);
-        $phone_public = valid_access($phone_public);
-        $am_public = valid_access($am_public);
-
-	// upload user picture
-	if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
-	    
-	    validateUploadedFile($_FILES['userimage']['name'], 1);
-	    
-		$type = $_FILES['userimage']['type'];
-		$image_file = $_FILES['userimage']['tmp_name'];
-
-		if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE,
-					$image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
-			redirect_to_message(7);
-		}
-		if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL,
-					$image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
-			redirect_to_message(7);
-		}
-		db_query("UPDATE user SET has_icon = 1 WHERE user_id = $_SESSION[uid]");
-                Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
-                                                      'addimage' => 1,
-                                                      'imagetype' => $type));
-	}
-
-	// check if email is valid
-	if ((get_config('email_required') | get_config('email_verification_required'))
+        // check if email is valid
+        if ((get_config('email_required') | get_config('email_verification_required'))
                         and !email_seems_valid($email_form)) {
-		redirect_to_message(6);
-	}
+                redirect_to_message(6);
+        }
 
-	// check if there are empty fields
-	if (!$all_ok) {
-		redirect_to_message(4);
-	}
+        // check if there are empty fields
+        if (!$all_ok) {
+                redirect_to_message(4);
+        }
 
-	if (!$allow_username_change) {
-		$username_form = $_SESSION['uname'];
-	}
+        if (!$allow_username_change) {
+                $username_form = $_SESSION['uname'];
+        }
 
-	$username_form = canonicalize_whitespace($username_form);
-	// If changing username check if the new one is free
-	if ($username_form != $_SESSION['uname']) {
-		// check if username exists
-		$username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
-		if (mysql_num_rows($username_check) > 0) {
-			redirect_to_message(5);
-		}
-	}
+        $username_form = canonicalize_whitespace($username_form);
+        // If changing username check if the new one is free
+        if ($username_form != $_SESSION['uname']) {
+                // check if username exists
+                $username_check = db_query('SELECT username FROM user WHERE username = ' . autoquote($username_form));
+                if (mysql_num_rows($username_check) > 0) {
+                        redirect_to_message(5);
+                }
+        }
 
-  	// TODO: Allow admin to configure allowed username format
-	if (!empty($email_form) && ($email_form != $_SESSION['email'])
+        // TODO: Allow admin to configure allowed username format
+        if (!empty($email_form) && ($email_form != $_SESSION['email'])
                 && get_config('email_verification_required')) {
-		$verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;
-	} else {
-		$verified_mail_sql = '';
-	}
-	// everything is ok
-	$email_form = mb_strtolower(trim($email_form));
+                $verified_mail_sql = ", verified_mail = " . EMAIL_UNVERIFIED;
+        } else {
+                $verified_mail_sql = '';
+        }
+        // everything is ok
+        $email_form = mb_strtolower(trim($email_form));
 
-	if (db_query("UPDATE user SET nom = " . quote($nom_form) . ",
-						prenom = " . quote($prenom_form) . ",
-						username = " . quote($username_form) . ",
-						email = " . quote($email_form) . ",
-						am = " . quote($am_form) . ",
-						phone = " . quote($phone_form) . ",
-						description = " . quote(purify($desc_form)) . ",
-						email_public = ". quote($email_public) .",
-						phone_public = ". quote($phone_public) .",
-                                                receive_mail = ". quote($subscribe) .",
-						am_public = ". quote($am_public) ."
-                                                $verified_mail_sql
-						WHERE user_id = ". intval($_SESSION['uid']) )) {
+        if (db_query("UPDATE user SET surname = " . quote($surname_form) . ",
+                             givenname = " . quote($givenname_form) . ",
+                             username = " . quote($username_form) . ",
+                             email = " . quote($email_form) . ",
+                             am = " . quote($am_form) . ",
+                             phone = " . quote($phone_form) . ",
+                             description = " . quote(purify($desc_form)) . ",
+                             email_public = ". quote($email_public) .",
+                             phone_public = ". quote($phone_public) .",
+                             receive_mail = ". quote($subscribe) .",
+                             am_public = ". quote($am_public) ."
+                             $verified_mail_sql
+                         WHERE id = ". intval($_SESSION['uid']) )) {
                 $userObj->refresh($uid, $departments);
                 Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                                      'modifyprofile' => 1,
                                                      'username' => $username_form,
                                                      'email' => $email_form,
                                                      'am' => $am_form));
-		$_SESSION['uname'] = $username_form;
-		$_SESSION['nom'] = $nom_form;
-		$_SESSION['prenom'] = $prenom_form;
-		$_SESSION['email'] = $email_form;
+                $_SESSION['uname'] = $username_form;
+                $_SESSION['surname'] = $surname_form;
+                $_SESSION['givenname'] = $givenname_form;
+                $_SESSION['email'] = $email_form;
 
-		redirect_to_message(1);
-	}
-	if ($old_language != $language or $old_perso_status != $_POST['persoStatus']) {
-		redirect_to_message(1);
-	}
+                redirect_to_message(1);
+        }
+        if ($old_language != $language) {
+                redirect_to_message(1);
+        }
 }
 
 //Show message if exists
@@ -254,11 +246,11 @@ if (isset($_GET['msg'])) {
             default:
                 exit;
         }
-	$tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
+        $tool_content .=  "<p class='$type'>$message$urlText</p><br/>";
 }
 
-$nom_form = q($myrow['nom']);
-$prenom_form = q($myrow['prenom']);
+$surname_form = q($myrow['surname']);
+$givenname_form = q($myrow['givenname']);
 $username_form = q($myrow['username']);
 $email_form = q($myrow['email']);
 $am_form = q($myrow['am']);
@@ -266,14 +258,6 @@ $phone_form = q($myrow['phone']);
 $desc_form = $myrow['description'];
 $userLang = $myrow['lang'];
 $icon = $myrow['has_icon'];
-
-if ($myrow['perso'] == 'yes')  {
-	$checkedClassic = " checked='checked'";
-	$checkedPerso = '';
-} else {
-	$checkedClassic = '';
-	$checkedPerso = " checked='checked'";
-}
 
 $sec = $urlSecure . 'modules/profile/profile.php';
 $passurl = $urlSecure . 'modules/profile/password.php';
@@ -300,11 +284,11 @@ $tool_content .= "
 
 if ($allow_name_change) {
         $tool_content .= "
-          <td><input type='text' size='40' name='prenom_form' value='$prenom_form' /></td>";
+          <td><input type='text' size='40' name='givenname_form' value='$givenname_form' /></td>";
 } else {
         $tool_content .= "
-          <td><b>$prenom_form</b>
-            <input type='hidden' name='prenom_form' value='$prenom_form' />
+          <td><b>$givenname_form</b>
+            <input type='hidden' name='givenname_form' value='$givenname_form' />
           </td>";
 }
 
@@ -314,11 +298,11 @@ $tool_content .= "
           <th>$langSurname:</th>";
 if ($allow_name_change) {
         $tool_content .= "
-          <td><input type='text' size='40' name='nom_form' value='$nom_form' /></td>";
+          <td><input type='text' size='40' name='surname_form' value='$surname_form' /></td>";
 } else {
         $tool_content .= "
-          <td><b>".$nom_form."</b>
-            <input type='hidden' name='nom_form' value='$nom_form' /></td>";
+          <td><b>".$surname_form."</b>
+            <input type='hidden' name='surname_form' value='$surname_form' /></td>";
 }
 $tool_content .= "
         </tr>";
@@ -365,16 +349,6 @@ $tool_content .= selection($access_options, 'email_public', $myrow['email_public
             <td><input type='text' size='40' name='phone_form' value='$phone_form' /> " .
                 selection($access_options, 'phone_public', $myrow['phone_public']) . "</td></tr>";
 
-##[BEGIN personalisation modification]############
-        $tool_content .= "
-        <tr>
-          <th>$langPerso:</th>
-          <td><input type='radio' name='persoStatus' id='persoStatus_no' value='no'$checkedPerso /><label for='persoStatus_no'>$langModern</label>&nbsp;
-              <input type='radio' name='persoStatus' id='persoStatus_yes' value='yes'$checkedClassic /><label for='persoStatus_yes'>$langClassic</label>
-          </td>
-        </tr>";
-
-
 if (get_user_email_notification_from_courses($uid)) {
         $selectedyes = 'checked';
         $selectedno = '';
@@ -414,20 +388,18 @@ if (!get_config('restrict_owndep')) {
     $tool_content .= "</td></tr>";
 }
 
-
-##[END personalisation modification]############
 $tool_content .= "
         <tr>
           <th>$langLanguage:</th>
           <td>" . lang_select_options('userLanguage') . "</td>
         </tr>";
 if ($icon) {
-	$message_pic = $langReplacePicture;
-	$picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
+        $message_pic = $langReplacePicture;
+        $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
         $delete = '&nbsp;' . icon('delete', $langDelete, null, 'id="delete"') . '&nbsp;';
 } else {
-	$picture = $delete = '';
-	$message_pic = $langAddPicture;
+        $picture = $delete = '';
+        $message_pic = $langAddPicture;
 }
 $tool_content .= "
         <tr>

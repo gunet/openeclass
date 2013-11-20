@@ -77,8 +77,8 @@ $start_cal = $jscalendar->make_input_field(
                  'name'        => 'u_date_end',
                  'value'       => $u_date_end));
 
-$qry = "SELECT LEFT(a.nom, 1) AS first_letter
-        FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+$qry = "SELECT LEFT(a.surname, 1) AS first_letter
+        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
         WHERE b.course_id = $course_id
         GROUP BY first_letter ORDER BY first_letter";
 $result = db_query($qry);
@@ -91,24 +91,25 @@ while ($row = mysql_fetch_assoc($result)) {
 
 if (isset($_GET['first'])) {
         $firstletter = mysql_real_escape_string($_GET['first']);
-        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-                FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
-                WHERE b.course_id = $course_id AND LEFT(a.nom,1) = '$firstletter'";
+        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+                FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
+                WHERE b.course_id = $course_id AND LEFT(a.surname,1) = " . quote($firstletter);
 } else {
-        $qry = "SELECT a.user_id, a.nom, a.prenom, a.username, a.email, b.statut
-        FROM user AS a LEFT JOIN course_user AS b ON a.user_id = b.user_id
+        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+        FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
         WHERE b.course_id = $course_id";
 }
 
 $user_opts = "<option value='-1'>$langAllUsers</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
-        if ($u_user_id == $row['user_id']) {
+        if ($u_user_id == $row['id']) {
                 $selected = 'selected';
         } else {
                 $selected = '';
         }
-        $user_opts .= '<option '.$selected.' value="'.$row["user_id"].'">'.$row['prenom'].' '.$row['nom']."</option>\n";
+        $user_opts .= '<option '.$selected.' value="'.$row['id'].'">'.
+                      q($row['givenname'].' '.$row['surname'])."</option>\n";
 }
 $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>

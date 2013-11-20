@@ -39,175 +39,172 @@ load_js('jquery-ui-new');
 load_js('jstree');
 
 $nameTools = $langMultiRegUser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+$navigation[]= array ('url' => 'index.php', 'name' => $langAdmin);
 
 $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
-        register_posted_variables(array('perso' => true,
-                                        'email_public' => true,
-                                        'am_public' => true,
-                                        'phone_public' => true),
-                                  'all', 'intval');
-        $perso = $perso? 'no': 'yes';
-        $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
-        $unparsed_lines = '';
-        $new_users_info = array();
-        $newstatut = ($_POST['type'] == 'prof')? 1: 5;
-        $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
-        $am = $_POST['am'];
-        $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
-        
-        foreach ($fields as $field) {
-                if (!in_array($field, $acceptable_fields)) {
-                        $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
-                        draw($tool_content, 3, 'admin');
-                        exit;
+    register_posted_variables(array('perso' => true,
+                                    'email_public' => true,
+                                    'am_public' => true,
+                                    'phone_public' => true),
+                              'all', 'intval');
+    $perso = $perso? 'no': 'yes';
+    $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
+    $unparsed_lines = '';
+    $new_users_info = array();
+    $newstatus = ($_POST['type'] == 'prof')? 1: 5;
+    $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
+    $am = $_POST['am'];
+    $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+
+    foreach ($fields as $field) {
+        if (!in_array($field, $acceptable_fields)) {
+            $tool_content = "<p class='caution'>$langMultiRegFieldError <b>".q($field)."</b></p>";
+            draw($tool_content, 3, 'admin');
+            exit;
+        }
+    }
+
+    // validation for departments
+    foreach ($departments as $dep) {
+        validateNode($dep, isDepartmentAdmin());
+    }
+
+    $numfields = count($fields);
+    $line = strtok($_POST['user_info'], "\n");
+    while ($line !== false) {
+        $line = preg_replace('/#.*/', '', trim($line));
+        if (!empty($line)) {
+            $userl = preg_split('/[ \t]+/', $line);
+            if (count($userl) >= $numfields) {
+                $info = array();
+                foreach ($fields as $field) {
+                    $info[$field] = array_shift($userl);
                 }
-        }
-        
-        // validation for departments
-        foreach ($departments as $dep)
-        {
-            validateNode($dep, isDepartmentAdmin());
-        }
-        
-        $numfields = count($fields);
-        $line = strtok($_POST['user_info'], "\n");
-        while ($line !== false) {
-                $line = preg_replace('/#.*/', '', trim($line));
-                if (!empty($line)) {
-                        $userl = preg_split('/[ \t]+/', $line);
-                        if (count($userl) >= $numfields) {
-                                $info = array();
-                                foreach ($fields as $field) {
-                                        $info[$field] = array_shift($userl);
-                                }
 
-                                if (!isset($info['email']) or
-                                    !email_seems_valid($info['email'])) {
-                                        $info['email'] = '';
-                                }
+                if (!isset($info['email']) or
+                    !email_seems_valid($info['email'])) {
+                        $info['email'] = '';
+                    }
 
-                                if (!empty($am)) {
-                                        if (!isset($info['id']) or empty($info['id'])) {
-                                                $info['id'] = $am;
-                                        } else {
-                                                $info['id'] = $am . ' - ' . $info['id'];
-                                        }
-                                }
-                                $nom = isset($info['last'])? $info['last']: '';
-                                $prenom = isset($info['first'])? $info['first']: '';
-                                if (!isset($info['username'])) {
-                                        $info['username'] = create_username($newstatut,
-                                                                            $departments,
-                                                                            $nom,
-                                                                            $prenom,
-                                                                            $_POST['prefix']);
-                                }
-                                if (!isset($info['password'])) {
-                                        $info['password'] = genPass();
-                                }
-                                $new = create_user($newstatut,
-                                                   $info['username'],
-                                                   $info['password'],
-                                                   $nom,
-                                                   $prenom,
-                                                   @$info['email'],
-                                                   $departments,
-                                                   @$info['id'],
-                                                   @$info['phone'],
-                                                   $_POST['lang'],
-                                                   $send_mail,
-                                                   $email_public, $phone_public, $am_public, $perso);
-                                if ($new === false) {
-                                        $unparsed_lines .= q($line . "\n" . $error . "\n");
-                                } else {
-                                        $new_users_info[] = $new;
+                if (!empty($am)) {
+                    if (!isset($info['id']) or empty($info['id'])) {
+                        $info['id'] = $am;
+                    } else {
+                        $info['id'] = $am . ' - ' . $info['id'];
+                    }
+                }
+                $surname = isset($info['last'])? $info['last']: '';
+                $givenname = isset($info['first'])? $info['first']: '';
+                if (!isset($info['username'])) {
+                    $info['username'] = create_username($newstatus,
+                                                        $departments,
+                                                        $surname,
+                                                        $givenname,
+                                                        $_POST['prefix']);
+                }
+                if (!isset($info['password'])) {
+                    $info['password'] = genPass();
+                }
+                $new = create_user($newstatus,
+                                   $info['username'],
+                                   $info['password'],
+                                   $surname,
+                                   $givenname,
+                                   @$info['email'],
+                                   $departments,
+                                   @$info['id'],
+                                   @$info['phone'],
+                                   $_POST['lang'],
+                                   $send_mail,
+                                   $email_public, $phone_public, $am_public, $perso);
+                if ($new === false) {
+                    $unparsed_lines .= q($line . "\n" . $error . "\n");
+                } else {
+                    $new_users_info[] = $new;
 
-                                        // Now, the $userl array should contain only course codes
-                                        foreach ($userl as $ccode) {
-                                                if (!register($new[0], $ccode)) {
-                                                        $unparsed_lines .=
-                                                                sprintf($langMultiRegCourseInvalid . "\n",
-                                                                        q("$info[last] $info[first] ($info[username])"),
-                                                                        q($ccode));
-                                                }
-                                        }
-                                }
-                        } else {
-                                $unparsed_lines .= $line;
+                    // Now, the $userl array should contain only course codes
+                    foreach ($userl as $ccode) {
+                        if (!register($new[0], $ccode)) {
+                            $unparsed_lines .=
+                                sprintf($langMultiRegCourseInvalid . "\n",
+                                    q("$info[last] $info[first] ($info[username])"),
+                                    q($ccode));
                         }
+                    }
                 }
-                $line = strtok("\n");
+            } else {
+                $unparsed_lines .= $line;
+            }
         }
-        if (!empty($unparsed_lines)) {
-                $tool_content .= "<p><b>$langErrors</b></p><pre>".q($unparsed_lines)."</pre>";
-        }
-        $tool_content .= "<table class='tbl_alt'><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
-        foreach ($new_users_info as $n) {
-                $tool_content .= "<tr><td>".q($n[1])."</td><td>".q($n[2])."</td><td>".q($n[3])."</td><td>".q($n[4])."</td><td>".q($n[5])."</td><td>".q($n[6])."</td><td>".q($n[7])."</td></tr>\n";
-        }
-        $tool_content .= "</table>\n";
+        $line = strtok("\n");
+    }
+    if (!empty($unparsed_lines)) {
+        $tool_content .= "<p><b>$langErrors</b></p><pre>".q($unparsed_lines)."</pre>";
+    }
+    $tool_content .= "<table class='tbl_alt'><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
+    foreach ($new_users_info as $n) {
+        $tool_content .= "<tr><td>".q($n[1])."</td><td>".q($n[2])."</td><td>".q($n[3])."</td><td>".q($n[4])."</td><td>".q($n[5])."</td><td>".q($n[6])."</td><td>".q($n[7])."</td></tr>\n";
+    }
+    $tool_content .= "</table>\n";
 } else {
-        $req = db_query("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name");
-        while ($n = mysql_fetch_array($req)) {
-                $facs[$n['id']] = $n['name'];
-        }
-        $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-                                ACCESS_PROFS => $langProfileInfoProfs,
-                                ACCESS_USERS => $langProfileInfoUsers);
-        $profile_options = array(0 => $langModern,
-                                 1 => $langClassic);
-        $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
+    $req = db_query("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name");
+    while ($n = mysql_fetch_array($req)) {
+        $facs[$n['id']] = $n['name'];
+    }
+    $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
+                            ACCESS_PROFS => $langProfileInfoProfs,
+                            ACCESS_USERS => $langProfileInfoUsers);
+    $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
         <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
         <fieldset>
         <legend>$langMultiRegUserData</legend>
         <table class='tbl' width='100%'>
         <tr><th>$langMultiRegFields:</th>
-        <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
-        <tr><th>$langUsersData:</th>
-        <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
+            <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
+            <tr><th>$langUsersData:</th>
+            <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
         </tr>
         <tr><th>$langMultiRegType:</th>
-        <td><select name='type'>
-                <option value='stud'>$langsOfStudents</option>
-                <option value='prof'>$langOfTeachers</option></select></td>
+            <td><select name='type'>
+                    <option value='stud'>$langsOfStudents</option>
+                    <option value='prof'>$langOfTeachers</option></select></td>
         </tr>
         <tr><th>$langMultiRegPrefix:</th>
-        <td><input type='text' name='prefix' size='10' value='user' /></td>
+            <td><input type='text' name='prefix' size='10' value='user' /></td>
         </tr>
         <tr><th>$langFaculty:</th>
-        <td>";
-                if (isDepartmentAdmin())
-                    list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"', 'allowables' => $user->getDepartmentIds($uid)));
-                else
-                  list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
-                $head_content .= $js;
-                $tool_content .= $html;
-                $tool_content .= "</td>
+            <td>";
+    if (isDepartmentAdmin()) {
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"',
+                                                            'allowables' => $user->getDepartmentIds($uid)));
+    } else {
+        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
+    }
+    $head_content .= $js;
+    $tool_content .= $html;
+    $tool_content .= "</td>
         </tr>
         <tr><th>$langAm:</th>
-        <td><input type='text' name='am' size='10' /></td>
+            <td><input type='text' name='am' size='10' /></td>
         </tr>
         <tr><th>$langLanguage:</th>
-        <td>" . lang_select_options('lang') . "</td>
+            <td>" . lang_select_options('lang') . "</td>
         </tr>
         <tr><th>$langEmail</th>
-        <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
+            <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
         <tr><th>$langAm</th>
-        <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
+            <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
         <tr><th>$langPhone</th>
-        <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
-        <tr><th>$langUserBriefcase</th>
-        <td>" . selection($profile_options, 'perso', 0) . "</td></tr>
+            <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
         <tr><th>$langInfoMail:</th>
-        <td><input name='send_mail' type='checkbox' />
+            <td><input name='send_mail' type='checkbox' />
                 $langMultiRegSendMail</td>
         </tr>
         <tr><th>&nbsp;</th>
-        <td class='right'><input type='submit' name='submit' value='$langSubmit' /></td>
+            <td class='right'><input type='submit' name='submit' value='$langSubmit' /></td>
         </tr>
         </table>
         </fieldset>
@@ -217,7 +214,8 @@ if (isset($_POST['submit'])) {
 draw($tool_content, 3, null, $head_content);
 
 
-function create_user($statut, $uname, $password, $nom, $prenom, $email, $departments, $am, $phone, $lang, $send_mail,
+function create_user($status, $uname, $password, $surname, $givenname,
+                     $email, $departments, $am, $phone, $lang, $send_mail,
                      $email_public, $phone_public, $am_public, $perso)
 {
         global $charset, $langAsUser, $langAsProf,
@@ -228,7 +226,7 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
                $emailhelpdesk, $profsuccess, $usersuccess,
                $user;
 
-        if ($statut == 1) {
+        if ($status == 1) {
                 $message = $profsuccess;
                 $type_message = $langAsProf;
         } else {
@@ -243,30 +241,30 @@ function create_user($statut, $uname, $password, $nom, $prenom, $email, $departm
                 return false;
         }
 
-        $registered_at = time();
-        $expires_at = time() + get_config('account_duration');
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
 
         $req = db_query("INSERT INTO user
-                               (nom, prenom, username, password, email, statut, registered_at, expires_at, lang, am, phone,
-                                email_public, phone_public, am_public, perso)
-                        VALUES (" .
-				quote($nom) . ', ' .
-				quote($prenom) . ', ' .
+                (surname, givenname, username, password, email,
+                 status, registered_at, expires_at, lang, am, phone,
+                 email_public, phone_public, am_public)
+                VALUES (" .
+				quote($surname) . ', ' .
+				quote($givenname) . ', ' .
 				quote($uname) . ", '$password_encrypted', " .
 				quote(mb_strtolower(trim($email))) .
-				", $statut, " .
-                                "$registered_at, $expires_at, '$lang', " .
-                                quote($am) . ', ' .
-                                quote($phone) . ", $email_public, $phone_public, $am_public, '$perso')");
+				", $status, " .
+                "NOW(), DATE_ADD(NOW(), INTERVAL $account_duration SECOND), " .
+                quote($lang) . ", " .
+                quote($am) . ', ' .
+                quote($phone) . ", $email_public, $phone_public, $am_public)");
         $id = mysql_insert_id();
         $user->refresh($id, $departments);
         $telephone = get_config('phone');
 
         $emailsubject = "$langYourReg $siteName $type_message";
         $emailbody = "
-$langDestination $prenom $nom
+$langDestination $givenname $nom
 
 $langYouAreReg $siteName $type_message, $langSettings $uname
 $langPass : $password
@@ -282,15 +280,15 @@ $langEmail : $emailhelpdesk
                 send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
 
-        return array($id, $nom, $prenom, $email, $phone, $am, $uname, $password);
+        return array($id, $nom, $givenname, $email, $phone, $am, $uname, $password);
 }
 
-function create_username($statut, $departments, $nom, $prenom, $prefix)
+function create_username($status, $departments, $nom, $givenname, $prefix)
 {
         $wildcard = str_pad('', SUFFIX_LEN, '_');
         $req = db_query("SELECT username FROM user
-                         WHERE username LIKE ".quote($prefix.$wildcard)."
-                         ORDER BY username DESC LIMIT 1");
+                             WHERE username LIKE ".quote($prefix.$wildcard)."
+                             ORDER BY username DESC LIMIT 1");
         if ($req and mysql_num_rows($req) > 0) {
                 list($last_uname) = mysql_fetch_row($req);
                 $lastid = 1 + str_replace($prefix, '', $last_uname);
@@ -311,8 +309,9 @@ function register($uid, $course_code)
         $req = db_query("SELECT code, id FROM course WHERE code=$code OR public_code=$code");
         if ($req and mysql_num_rows($req) > 0) {
                 list($code, $cid) = mysql_fetch_row($req);
-                db_query("INSERT INTO course_user SET course_id = $cid, user_id = $uid, statut = 5,
-                                                     team = 0, tutor = 0, reg_date = NOW()");
+                db_query("INSERT INTO course_user
+                                 SET course_id = $cid, user_id = $uid, status = 5,
+                                     team = 0, tutor = 0, reg_date = NOW()");
                 return true;
         }
         return false;

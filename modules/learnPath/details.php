@@ -79,12 +79,12 @@ if( $learnPathName )
 	mysql_select_db($mysqlMainDb);
 
 	// display a list of user and their respective progress
-	$sql = "SELECT U.`nom`, U.`prenom`, U.`user_id`
+	$sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 		FROM `$TABLEUSER` AS U,
 		     `$TABLECOURSUSER` AS CU
-		WHERE U.`user_id` = CU.`user_id`
+		WHERE U.`id` = CU.`user_id`
 		AND CU.`course_id` = $course_id
-		ORDER BY U.`nom` ASC";
+		ORDER BY U.`surname` ASC, U.`givenname` ASC";
 
 	@$tool_content .= get_limited_page_links($sql, 30, $langPreviousPage, $langNextPage);
 
@@ -107,7 +107,7 @@ if( $learnPathName )
 	$k=0;
 	foreach ($usersList as $user)
 	{
-		$lpProgress = get_learnPath_progress($path_id,$user['user_id']);
+		$lpProgress = get_learnPath_progress($path_id, $user['id']);
 			if ($k%2==0) {
 	           $tool_content .= "\n    <tr class=\"even\">";
 	        } else {
@@ -115,7 +115,7 @@ if( $learnPathName )
             }
 		$tool_content .= ''."\n"
 		.'      <td width="1"><img src="'.$themeimg.'/arrow.png" alt="bullet" title="bullet" border="0"></td>'."\n"
-		.'      <td><a href="detailsUserPath.php?course='.$course_code.'&amp;uInfo='.$user['user_id'].'&amp;path_id='.$path_id.'">'.$user['nom'].' '.$user['prenom'].'</a></td>'."\n"
+		.'      <td><a href="detailsUserPath.php?course='.$course_code.'&amp;uInfo='.$user['id'].'&amp;path_id='.$path_id.'">'.q($user['surname']).' '.q($user['givenname']).'</a></td>'."\n"
 		.'      <td align="right">'
 		.disp_progress_bar($lpProgress, 1)
 		.'</td>'."\n"
