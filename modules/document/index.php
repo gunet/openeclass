@@ -287,7 +287,7 @@ if ($can_upload) {
                 $file_format = get_file_extension($fileName);
                 // File date is current date
                 $file_date = date("Y\-m\-d G\:i\:s");
-                if (isset($userFile) and @copy($userFile, $basedir . $file_path)) {
+                if ($extra_path or (isset($userFile) and @copy($userFile, $basedir . $file_path))) {
                         db_query("INSERT INTO document SET
                                         course_id = $course_id,
                                         subsystem = $subsystem,
