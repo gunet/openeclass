@@ -30,7 +30,7 @@ if (isset($_SESSION['status']) and $_SESSION['status'] != 1) { // if we are not 
     redirect_to_home_page();
 }
 if (get_config('betacms')) { // added support for betacms
-	require_once 'betacms_bridge/include/bcms.inc.php';
+	require_once 'modules/betacms_bridge/include/bcms.inc.php';
 }
 
 $TBL_USER_DEPARTMENT   = 'user_department';
