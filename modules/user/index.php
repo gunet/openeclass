@@ -35,7 +35,7 @@ $limit = isset($_REQUEST['limit'])? $_REQUEST['limit']: 0;
 
 $nameTools = $langAdminUsers;
 
-$sql = "SELECT user.id AS user_id, course_user.status FROM course_user, user
+$sql = "SELECT user.id, course_user.status FROM course_user, user
 	WHERE course_user.course_id = $course_id AND course_user.user_id = user.id";
 $result_numb = db_query($sql);
 $countUser = mysql_num_rows($result_numb);
@@ -45,8 +45,8 @@ $teachers = $students = $visitors = 0;
 while ($numrows = mysql_fetch_array($result_numb)) {
 	switch ($numrows['status']) {
 		case USER_TEACHER: {
-                                $teachers++;
-                                break;                
+                        $teachers++;
+                        break;
                 }                        
 		case USER_STUDENT: {
                         $students++;
@@ -178,17 +178,17 @@ if (isset($_GET['search'])) {
         $search_surname = $search_givenname = $search_uname = '';
         if (!empty($_REQUEST['search_surname'])) {
                 $search_surname = ' value="' . q($_REQUEST['search_surname']) . '"';
-                $search_sql .= " AND user.surname LIKE " . autoquote(mysql_escape_string($_REQUEST['search_surname']).'%');
+                $search_sql .= " AND user.surname LIKE " . autoquote(mysql_real_escape_string($_REQUEST['search_surname']).'%');
                 $search_params .= "&amp;search_surname=" . urlencode($_REQUEST['search_surname']);
         }
         if (!empty($_REQUEST['search_givenname'])) {
                 $search_givenname = ' value="' . q($_REQUEST['search_givenname']) . '"';
-                $search_sql .= " AND user.givenname LIKE " . autoquote(mysql_escape_string($_REQUEST['search_givenname']).'%');
+                $search_sql .= " AND user.givenname LIKE " . autoquote(mysql_real_escape_string($_REQUEST['search_givenname']).'%');
                 $search_params .= "&amp;search_givenname=" . urlencode($_REQUEST['search_givenname']);
         }
         if (!empty($_REQUEST['search_uname'])) {
                 $search_uname = ' value="' . q($_REQUEST['search_uname']) . '"';
-                $search_sql .= " AND user.username LIKE " . autoquote(mysql_escape_string($_REQUEST['search_uname']).'%');
+                $search_sql .= " AND user.username LIKE " . autoquote(mysql_real_escape_string($_REQUEST['search_uname']).'%');
                 $search_params .= "&amp;search_uname=" . urlencode($_REQUEST['search_uname']);
         }
 
@@ -261,11 +261,11 @@ switch ($ord) {
         default: $order_sql = 'ORDER BY status, editor DESC, tutor DESC, surname, givenname';
                 break;
 }
-$result = db_query("SELECT user.id AS user_id, user.surname, user.givenname, user.email,
+$result = db_query("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
                            course_user.tutor, course_user.editor, course_user.reg_date
                     FROM course_user, user
-                    WHERE `user`.`user_id` = `course_user`.`user_id`
+                    WHERE `user`.id = `course_user`.`user_id`
                     AND `course_user`.`course_id` = $course_id
                     $search_sql $order_sql $limit_sql");
 
@@ -280,9 +280,9 @@ while ($myrow = mysql_fetch_array($result)) {
         $am_message = empty($myrow['am'])? '': ("<div class='right'>($langAm: " . q($myrow['am']) . ")</div>");
         $tool_content .= "
         <td class='smaller right'>$i.</td>\n" .
-                "<td class='smaller'>" . display_user($myrow) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
+                "<td class='smaller'>" . display_user($myrow['id']) . "&nbsp;&nbsp;(". mailto($myrow['email']) . ")  $am_message</td>\n";
         $tool_content .= "\n" .
-                "<td class='smaller' width='150'>" . user_groups($course_id, $myrow['user_id']) . "</td>\n" .
+                "<td class='smaller' width='150'>" . user_groups($course_id, $myrow['id']) . "</td>\n" .
                 "<td class='smaller center'>";
         if ($myrow['reg_date'] == '0000-00-00') {
                 $tool_content .= $langUnknownDate;
@@ -292,7 +292,7 @@ while ($myrow = mysql_fetch_array($result)) {
         $alert_uname = $myrow['givenname'] . " " . $myrow['surname'];
         $tool_content .= "&nbsp;&nbsp;" .
                 icon('cunregister', $langUnregCourse,
-                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[user_id]$extra_link",
+                     "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;unregister=$myrow[id]$extra_link",
                      "onClick=\"return confirmation('" . js_escape("$langDeleteUser $alert_uname $langDeleteUser2")."');\"") .
                 "</td>";
 
@@ -300,11 +300,11 @@ while ($myrow = mysql_fetch_array($result)) {
         if ($myrow['tutor'] == '0') {
                 $class = 'add_user';
                 $control = icon('group_manager_add', $langGiveRightTutor,
-                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow[user_id]$extra_link");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow[id]$extra_link");
         } else {
                 $class = 'add_teacherLabel';
                 $control = icon('group_manager_remove', $langRemoveRightTutor,
-                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow[user_id]$extra_link");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow[id]$extra_link");
         }
         $tool_content .= "<td class='$class center' width='30'>$control</td>";
 
@@ -312,16 +312,16 @@ while ($myrow = mysql_fetch_array($result)) {
         if ($myrow['editor'] == '0') {
                 $class = 'add_user';
                 $control = icon('assistant_add', $langGiveRightΕditor,
-                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[user_id]$extra_link");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[id]$extra_link");
         } else {
                 $class = 'add_teacherLabel';
                 $control = icon('assistant_remove', $langRemoveRightEditor,
-                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow[user_id]$extra_link");
+                        "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow[id]$extra_link");
         }
         $tool_content .= "<td class='$class center' width='30'>$control</td>";
 
         // admin right
-        if ($myrow['user_id'] != $_SESSION['uid']) {
+        if ($myrow['id'] != $_SESSION['uid']) {
                 if ($myrow['status'] == '1') {
                     if (get_config('opencourses_enable') && $myrow['reviewer'] == '1') {
                         $class = 'add_teacherLabel';
@@ -329,12 +329,12 @@ while ($myrow = mysql_fetch_array($result)) {
                     } else {
                         $class = 'add_teacherLabel';
                         $control = icon('teacher_remove', $langRemoveRightAdmin,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow[user_id]$extra_link");
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow[id]$extra_link");
                     }
                 } else {
                         $class = 'add_user';
                         $control = icon('teacher_add', $langGiveRightAdmin,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[id]$extra_link");
                 }
         } else {
                 if ($myrow['status']=='1') {
@@ -350,7 +350,7 @@ while ($myrow = mysql_fetch_array($result)) {
         
         // opencourses reviewer right
         if (get_config('opencourses_enable')) {
-            if ($myrow['user_id'] != $_SESSION["uid"]) {
+            if ($myrow['id'] != $_SESSION["uid"]) {
                 if ($is_opencourses_reviewer) {
                     // do nothing as the reviewer cannot give the reviewer right to other users
                     $class = '';
@@ -359,11 +359,11 @@ while ($myrow = mysql_fetch_array($result)) {
                     if ($myrow['reviewer'] == '1') {
                         $class = 'add_teacherLabel';
                         $control = icon('reviewer_remove', $langRemoveRightReviewer,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow[user_id]$extra_link");
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow[id]$extra_link");
                     } else {
                         $class = 'add_user';
                         $control = icon('reviewer_add', $langGiveRightReviewer,
-                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow[user_id]$extra_link");
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow[id]$extra_link");
                     }
                 }
             } else {
@@ -378,7 +378,7 @@ while ($myrow = mysql_fetch_array($result)) {
             }
             $tool_content .= "<td class='$class center' width='30'>$control</td></tr>";
         }
-        
+                                                                                                                                                                
         $i++;
 }
 $tool_content .= "</table>";

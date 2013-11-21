@@ -291,7 +291,7 @@ function file_playurl($path, $filename = null, $courseCode = null)
  */
 function copyright_info_init()
 {
-        global $language;
+        global $language;        
 
         if ($language != 'en') {
                 $link_suffix = 'deed.' . $language;

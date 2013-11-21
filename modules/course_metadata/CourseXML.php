@@ -533,7 +533,7 @@ class CourseXMLElement extends SimpleXMLElement {
         // course-based adaptation
         list($dnum)  = mysql_fetch_row(db_query("select count(id) from document WHERE course_id = " . intval($courseId) ));
         list($vnum)  = mysql_fetch_row(db_query("select count(id) from video WHERE course_id = " . intval($courseId) ));
-        list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks WHERE course_id = " . intval($courseId) ));
+        list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolink WHERE course_id = " . intval($courseId) ));
         if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';

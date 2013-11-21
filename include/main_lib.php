@@ -346,7 +346,7 @@ function display_user($user, $print_email = false, $icon = true)
                 }
                 return $html;
         } elseif (!is_array($user)) {
-                $r = db_query("SELECT user_id, surname, givenname, email, has_icon FROM user WHERE id = $user");
+                $r = db_query("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = $user");
                 if ($r and mysql_num_rows($r) > 0) {
                         $user = mysql_fetch_array($r);
                 } else {
@@ -370,7 +370,7 @@ function display_user($user, $print_email = false, $icon = true)
                 }
         }
 
-        $token = token_generate($user['user_id'], true);
+        $token = token_generate($user['id'], true);
         return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
                q("$user[givenname] $user[surname]") . "</a>" .
                ($print_email? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')'): '');

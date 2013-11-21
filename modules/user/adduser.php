@@ -97,7 +97,7 @@ if (isset($_GET['add'])) {
                     db_query("CREATE TEMPORARY TABLE lala AS
                     SELECT user_id FROM course_user WHERE course_id = $course_id");
                     $result = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
-                        user u LEFT JOIN lala c ON u.user_id = c.user_id WHERE
+                        user u LEFT JOIN lala c ON u.id = c.user_id WHERE
                         c.user_id IS NULL AND $query");
                     if (mysql_num_rows($result) == 0) {
                             $tool_content .= "<p class='caution'>$langNoUsersFound</p>\n";
@@ -121,7 +121,7 @@ if (isset($_GET['add'])) {
                                     $tool_content .= "<td class='right'>$i.</td><td>" . q($myrow['givenname']) . "</td><td>" .
                                             q($myrow['surname']) . "</td><td>" . q($myrow['username']) . "</td><td>" .
                                             q($myrow['am']) . "</td><td align='center'>" .
-                                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[user_id]'>$langRegister</a></td></tr>\n";
+                                            "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow[id]'>$langRegister</a></td></tr>\n";
                                     $i++;
                             }
                             $tool_content .= "</table>";
