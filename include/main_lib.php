@@ -121,11 +121,16 @@ If error happens just display the error and the code
 -----------------------------------------------------------------------
 */
 
-function db_query($sql, $db_name = null)
-{
-        if (isset($db_name)) {
-                mysql_select_db($db_name);
+function db_query($sql, $db_name = null) {
+    global $mysqlServer, $mysqlUser, $mysqlPassword;
+
+    if (!isset($db_name)) {
+                $db_name = $GLOBALS['mysqlMainDb'];
         }
+        @mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+        mysql_select_db($db_name);
+        mysql_query("SET NAMES utf8");
+
         if (defined('DEBUG_MYSQL') and DEBUG_MYSQL === 'FULL') {
                 $f_sql = q(str_replace("\t", '        ', $sql));
                 $start_time = microtime(true);
@@ -315,13 +320,7 @@ function load_js($file, $init = '')
 // Translate uid to username
 function uid_to_username($uid)
 {
-        global $mysqlMainDb;
-
-        if ($r = mysql_fetch_row(db_query("SELECT username FROM user WHERE id = ".intval($uid)))) {
-                return $r[0];
-        } else {
-                return false;
-        }
+        return Database::get()->querySingle("SELECT username FROM user WHERE user_id = ?", intval($uid))->username;
 }
 
 

@@ -59,13 +59,11 @@ if ($course_id === false) {
         exit;
  }
 
-list($title) = mysql_fetch_row(db_query("SELECT title FROM course WHERE id = $course_id"));
-$title = htmlspecialchars($title, ENT_NOQUOTES);
+$title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?", $course_id)->title, ENT_NOQUOTES);
 
-$result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM announcement WHERE course_id = $course_id AND visible = 1
-                ORDER BY `order` DESC");
-list($lastbuilddate) = mysql_fetch_row($result);
+$lastbuilddate = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+                FROM announcement WHERE course_id = ? AND visible = 1
+                ORDER BY `order` DESC", $course_id)->dateformat;
 
 header ("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
@@ -78,17 +76,15 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
-$sql = db_query("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM announcement WHERE course_id = $course_id AND visible = 1 ORDER BY `order` DESC");
-
-while ($r = mysql_fetch_array($sql)) {
-	echo "<item>";
-	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
-	echo "<link>{$urlServer}modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".urlencode($code)."</link>";
-	echo "<description>".htmlspecialchars($r['content'], ENT_NOQUOTES)."</description>";
-	echo "<pubDate>".$r['dateformat']."</pubDate>";
-	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
-	echo "</item>";
-}
+Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+		FROM announcement WHERE course_id = ? AND visible = 1 ORDER BY `order` DESC", function($r) use ($code, $urlServer){
+    echo "<item>";
+    echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
+    echo "<link>{$urlServer}modules/announcements/announcements.php?an_id=" . $r->id . "&amp;c=" . urlencode($code) . "</link>";
+    echo "<description>" . htmlspecialchars($r->content, ENT_NOQUOTES) . "</description>";
+    echo "<pubDate>" . $r->dateformat . "</pubDate>";
+    echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
+    echo "</item>";
+}, $course_id);
 
 echo "</channel></rss>";

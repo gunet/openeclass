@@ -56,64 +56,61 @@ $nameTools = $langAnnouncements;
 
 ModalBoxHelper::loadModalBox();
 if ($is_editor) {
-        load_js('tools.js');
-        $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-                         $langEmptyAnTitle . '";</script>';
+	load_js('tools.js');
+	$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+			 $langEmptyAnTitle . '";</script>';
         $aidx = new AnnouncementIndexer();
 
-        $result = db_query("SELECT COUNT(*) FROM announcement WHERE course_id = $course_id");
+        $announcementNumber = Database::get()->querySingle("SELECT COUNT(*) as count FROM announcement WHERE course_id = ?", $course_id )->count;
 
-        list($announcementNumber) = mysql_fetch_row($result);
-        mysql_free_result($result);
+	$displayForm = true;
+	/* up and down commands */
+	if (isset($_GET['down'])) {
+		$thisAnnouncementId = intval($_GET['down']);
+		$sortDirection = 'DESC';
+	}
+	if (isset($_GET['up'])) {
+		$thisAnnouncementId = intval($_GET['up']);
+		$sortDirection = 'ASC';
+	}
 
-        $displayForm = true;
-        /* up and down commands */
-        if (isset($_GET['down'])) {
-                $thisAnnouncementId = intval($_GET['down']);
-                $sortDirection = 'DESC';
-        }
-        if (isset($_GET['up'])) {
-                $thisAnnouncementId = intval($_GET['up']);
-                $sortDirection = 'ASC';
-        }
+    $thisAnnouncementOrderFound = false;
+    if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
+        Database::get()->queryFunc("SELECT id, `order` FROM announcement
+                                           WHERE course_id = ?
+                                           ORDER BY `order` ?", function($announcement) use (&$thisAnnouncementOrderFound, &$thisAnnouncementOrder, $thisAnnouncementId) {
+            if ($thisAnnouncementOrderFound) {
+                $nextAnnouncementId = $announcement->id;
+                $nextAnnouncementOrder = $announcement->order;
+                Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $nextAnnouncementOrder, $thisAnnouncementId);
+                Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $thisAnnouncementOrder, $nextAnnouncementId);
+                return true;
+            }
+            // find the order
+            if ($announcement->id == $thisAnnouncementId) {
+                $thisAnnouncementOrder = $announcement->order;
+                $thisAnnouncementOrderFound = true;
+            }
+        }, $course_id, $sortDirection);
+    }
 
-        if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-                $result = db_query("SELECT id, `order` FROM announcement
-                                           WHERE course_id = $course_id
-                                           ORDER BY `order` $sortDirection");
-                while (list ($announcementId, $announcementOrder) = mysql_fetch_row($result)) {
-                        if (isset($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
-                                $nextAnnouncementId = $announcementId;
-                                $nextAnnouncementOrder = $announcementOrder;
-                                db_query("UPDATE announcement SET `order` = $nextAnnouncementOrder WHERE id = $thisAnnouncementId");
-                                db_query("UPDATE announcement SET `order` = $thisAnnouncementOrder WHERE id = $nextAnnouncementId");
-                                break;
-                        }
-                        // find the order
-                        if ($announcementId == $thisAnnouncementId) {
-                                $thisAnnouncementOrder = $announcementOrder;
-                                $thisAnnouncementOrderFound = true;
-                        }
-                }
-        }
-
-        /* modify visibility */
+    /* modify visibility */
         if (isset($_GET['mkvis'])) {
                 $mkvis = intval($_GET['mkvis']);
                 $vis = $_GET['vis']? 1: 0;
-                $result = db_query("UPDATE announcement SET visible = $vis WHERE id = $mkvis");
+                Database::get()->query("UPDATE announcement SET visible = ? WHERE id = ?", $vis, $mkvis);
                 $aidx->store($mkvis);
         }
         /* delete */
         if (isset($_GET['delete'])) {
                 $delete = intval($_GET['delete']);
-                $row = mysql_fetch_array(db_query("SELECT title, content FROM announcement WHERE id = $delete"));
-                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($row['content'])), 50, '+');
-                $result = db_query("DELETE FROM announcement WHERE id = $delete");
+                $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ? ", $delete);
+                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
+                Database::get()->query("DELETE FROM announcement WHERE id = ?", $delete);
                 $aidx->remove($delete);
                 Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE,
                         array('id' => $delete,
-                              'title' => $row['title'],
+                              'title' => $announce->title,
                               'content' => $txt_content));
                 $message = "<p class='success'>$langAnnDel</p>";
         }
@@ -121,12 +118,11 @@ if ($is_editor) {
         /* modify */
         if (isset($_GET['modify'])) {
                 $modify = intval($_GET['modify']);
-                $result = db_query("SELECT * FROM announcement WHERE id='$modify'");
-                $myrow = mysql_fetch_array($result);
-                if ($myrow) {
-                        $AnnouncementToModify = $myrow['id'];
-                        $contentToModify = $myrow['content'];
-                        $titleToModify = q($myrow['title']);
+                $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?", $modify);
+                if ($announce) {
+                        $AnnouncementToModify = $announce->id;
+                        $contentToModify = $announce->content;
+                        $titleToModify = q($announce->title);
                 }
         }
 
@@ -138,24 +134,20 @@ if ($is_editor) {
                 $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
                 if (!empty($_POST['id'])) {
                         $id = intval($_POST['id']);
-                        db_query("UPDATE announcement
-                                         SET content = $newContent,
-                                             title = $antitle, `date` = NOW()
-                                         WHERE id = $id");
+                        Database::get()->query("UPDATE announcement SET content = ?, title = ?, `date` = NOW() WHERE id = ?", $newContent, $antitle, $id);
                         $log_type = LOG_MODIFY;
                         $message = "<p class='success'>$langAnnModify</p>";
                 } else { // add new announcement
-                        $result = db_query("SELECT MAX(`order`) FROM announcement
-                                                   WHERE course_id = $course_id");
-                        list($orderMax) = mysql_fetch_row($result);
+                        $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM announcement
+                                                   WHERE course_id = ?", $course_id)->maxorder;
                         $order = $orderMax + 1;
                         // insert
-                        db_query("INSERT INTO announcement
-                                         SET content = $newContent,
-                                             title = $antitle, `date` = NOW(),
-                                             course_id = $course_id, `order` = $order,
-                                             visible = 1");
-                        $id = mysql_insert_id();
+                        Database::get()->query("INSERT INTO announcement
+                                         SET content = ?,
+                                             title = ?, `date` = NOW(),
+                                             course_id = ?, `order` = ?,
+                                             visible = 1", $newContent, $antitle, $course_id, $order);
+                        $id = Database::get()->lastInsertID();
                         $log_type = LOG_INSERT;
                 }
                 $aidx->store($id);
@@ -174,14 +166,7 @@ if ($is_editor) {
                                         autounquote($_POST['newContent']);
                         $emailSubject = "$professorMessage ($public_code - $title)";
                         // select students email list
-                        $sqlUserOfCourse = "SELECT course_user.user_id, user.email
-                                                   FROM course_user, user
-                                                   WHERE course_id = $course_id AND
-                                                         course_user.user_id = user.id";
-                        $result = db_query($sqlUserOfCourse);
-
-                        $countEmail = mysql_num_rows($result); // number of mail recipients
-
+                        $countEmail = 0;
                         $invalid = 0;
                         $recipients = array();
                         $emailBody = html2text($emailContent);
@@ -189,9 +174,14 @@ if ($is_editor) {
                         $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $title);
                         $emailContent .= $unsubscribe.$linkhere;
                         $general_to = 'Members of course ' . $course_code;
-                        while ($myrow = mysql_fetch_array($result)) {
-                                $emailTo = $myrow['email'];
-                                $user_id = $myrow['user_id'];
+                        Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
+                                                   FROM course_user, user
+                                                   WHERE course_id = ? AND
+                                                         course_user.user_id = user.user_id", function ($person) 
+                                use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
+                            $countEmail++;
+                                $emailTo = $person->email;
+                                $user_id = $person->id;
                                 // check email syntax validity
                                 if (!email_seems_valid($emailTo)) {
                                         $invalid++;
@@ -206,7 +196,7 @@ if ($is_editor) {
                                                 $emailBody, $emailContent, $charset);
                                         $recipients = array();
                                 }
-                        }
+                        }, $course_id);
                         if (count($recipients) > 0)  {
                                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to,
                                         $recipients, $emailSubject,
@@ -276,12 +266,10 @@ if ($is_editor) {
 /* display announcements */
 $limit_sql = ($is_editor? '': ' AND visible = 1') .
              (isset($_GET['an_id'])? ' AND id = ' . intval($_GET['an_id']): '');
-$result = db_query("SELECT * FROM announcement
-                           WHERE course_id = $course_id
-                                 $limit_sql
-                           ORDER BY `order` DESC");
+$result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ? ".$limit_sql." ORDER BY `order` DESC", $course_id);
+
 $iterator = 1;
-$bottomAnnouncement = $announcementNumber = mysql_num_rows($result);
+$bottomAnnouncement = $announcementNumber = count($result);
 
 $tool_content .= "
         <script type='text/javascript' src='../auth/sorttable.js'></script>
@@ -299,11 +287,12 @@ if ($announcementNumber > 0) {
         $tool_content .= "</tr>\n";
 }
 $k = 0;
-while ($myrow = mysql_fetch_array($result)) {
-        $content = standard_text_escape($myrow['content']);
-        $myrow['date'] = claro_format_locale_date($dateFormatLong, strtotime($myrow['date']));
+if ($result)
+foreach ($result as $announce) {
+        $content = standard_text_escape($announce->content);
+        $announce->date = claro_format_locale_date($dateFormatLong, strtotime($announce->date));
         if ($is_editor) {
-                if ($myrow['visible'] == 0) {
+                if ($announce->visible == 0) {
                         $visibility = 1;
                         $vis_icon = 'invisible.png';
                         $tool_content .= "<tr class='invisible'>";
@@ -318,45 +307,45 @@ while ($myrow = mysql_fetch_array($result)) {
                 }
         }
         $tool_content .= "<td width='16' valign='top'>
-                        <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                        <td><b>";
-        if (empty($myrow['title'])) {
+			<img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+			<td><b>";
+        if (empty($announce->title)) {
                 $tool_content .= $langAnnouncementNoTille;
         } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$myrow[id]'>".q($myrow['title'])."</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$announce->id'>".q($announce->title)."</a>";
         }
-        $tool_content .= "</b><div class='smaller'>" . nice_format($myrow["date"]). "</div>";
+        $tool_content .= "</b><div class='smaller'>" . nice_format($announce->date). "</div>";
         if (isset($_GET['an_id'])) {
                 $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
-                $nameTools = q($myrow['title']);
+                $nameTools = q($announce->title);
                 $tool_content .= $content;
         } else {
-                $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$myrow[id]'> <span class='smaller'>[$langMore]</span></a></strong>"));
+                $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;an_id=$announce->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
         }
         $tool_content .= "</td>";
 
         if ($is_editor) {
                 $tool_content .= "
-                        <td width='70' class='right'>
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow[id]'>
-                              <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$myrow[id]' onClick=\"return confirmation('$langSureToDelAnnounce');\">
-                              <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;mkvis=$myrow[id]&amp;vis=$visibility'>
-                              <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
-                        </td>";
+			<td width='70' class='right'>
+			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
+			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
+			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">
+			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;mkvis=$announce->id&amp;vis=$visibility'>
+			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
+			</td>";
                               if ($announcementNumber > 1)  {
                                       $tool_content .= "<td align='center' width='35' class='right'>";
                               }
                               if ($iterator != 1)  {
-                                      $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow[id]'>
-                            <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
-                            </a>";
-                        }
-                        if ($iterator < $bottomAnnouncement) {
-                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=" . $myrow["id"] . "'>
-                            <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
-                            </a>";
+                                      $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$announce->id'>
+			    <img class='displayed' src='$themeimg/up.png' title='" . $langMove ." ". $langUp . "' />
+			    </a>";
+			}
+			if ($iterator < $bottomAnnouncement) {
+			    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=" . $announce->id . "'>
+			    <img class='displayed' src='$themeimg/down.png' title='" . $langMove ." ". $langDown . "' />
+			    </a>";
                         }
                         if ($announcementNumber > 1) {
                                 $tool_content .= "</td>";

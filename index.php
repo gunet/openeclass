@@ -49,14 +49,8 @@ ModalBoxHelper::loadModalBox();
 $homePage = true;
 
 // check if we can connect to database. If not then eclass is most likely not installed
-if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword)) {
-	$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-	if (mysql_version()) db_query("SET NAMES utf8");
-} else {
-        $db = false;
-}
-if (!$db) {
-	require_once 'include/not_installed.php';
+if (isset($mysqlServer) and isset($mysqlUser) and isset($mysqlPassword) && !Database::get()) {
+    require_once 'include/not_installed.php';
 }
 
 // unset system that records visitor only once by course for statistics

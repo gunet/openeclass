@@ -577,6 +577,10 @@ elseif(isset($_REQUEST['install7']))
 	$langStep = $langStep7;
 	$_SESSION['step']=7;
 	$db = @mysql_connect($dbHostForm, $dbUsernameForm, autounquote($dbPassForm));
+        $GLOBALS['mysqlServer'] = $dbHostForm;
+        $GLOBALS['mysqlUser'] = $dbUsernameForm;
+        $GLOBALS['mysqlPassword'] = $dbPassForm;
+        $GLOBALS['mysqlMainDb'] = $dbNameForm;        
 	if (mysql_errno() > 0) { // problem with server
 		$no = mysql_errno();
 		$msg = mysql_error();

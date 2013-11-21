@@ -54,14 +54,11 @@ if (!isset($mysqlServer)) {
 }
 
 // Connect to database
-@$db = mysql_connect($mysqlServer, $mysqlUser, $mysqlPassword);
-if (!$db) {
+require_once 'modules/db/database.php';
+
+if (!Database::get()) {
 	require_once 'include/not_installed.php';
 }
-if (mysql_version()) {
-        db_query('SET NAMES utf8');
-}
-mysql_select_db($mysqlMainDb, $db);
 
 if (isset($language)) {
         // Old-style config.php, redirect to upgrade
@@ -249,41 +246,41 @@ if (isset($require_current_course) and $require_current_course) {
 		$toolContent_ErrorExists = caution($langSessionIsLost);
 		$errorMessagePath = "../../";
 	} else {
-		$currentCourse = $dbname = $_SESSION['dbname'];
-                $result = db_query("SELECT course.id, course.code, course.public_code, course.title,
-                                           course.prof_names, course.lang, course.visible,
-                                           hierarchy.name AS faculte
+            $currentCourse = $dbname = $_SESSION['dbname'];
+        Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
+                course.title as title, course.prof_names as prof_names, course.lang as lang,
+                course.visible as visible, hierarchy.name AS faculte
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
-                                                 course.code=" . autoquote($dbname));
+                                                 course.code=?"
+                , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$title, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseDepartment, &$currentCourseTitular, &$currentCourseLanguage ) {
+            $course_id = $course_info->cid;
+            $public_code = $course_info->public_code;
+            $course_code = $course_info->code;
+            $title = $course_info->title;
+            $fac = $course_info->faculte;
+            $titulaires = $course_info->prof_names;
+            $languageInterface = $course_info->lang;
+            $visible = $course_info->visible;
+            // New variables
+            $currentCourseName = $title;
+            $currentCourseDepartment = $fac;
+            $currentCourseTitular = $titulaires;
+            $currentCourseLanguage = $languageInterface;
+        }
+                , function ($errormsg) use($urlServer) {
+            if (defined('M_INIT')) {
+                echo RESPONSE_FAILED . " Error: " . $errormsg;
+                exit();
+            } else {
+                restore_dbname_override(true);
+                header('Location: ' . $urlServer);
+                exit();
+            }
+        }
+                , $dbname);
 
-		if (!$result or mysql_num_rows($result) == 0) {
-                    if (defined('M_INIT')) {
-                        echo RESPONSE_FAILED;
-                        exit();
-                    } else {
-                        restore_dbname_override(true);
-                        header('Location: ' . $urlServer);
-                        exit();
-                    }
-		}
-
-		while ($course_info = mysql_fetch_assoc($result)) {
- 			$course_id = $course_info['id'];
-			$public_code = $course_info['public_code'];
-			$course_code = $course_info['code'];
-			$title = $course_info['title'];
-			$fac = $course_info['faculte'];
-			$titulaires = $course_info['prof_names'];
-			$languageInterface = $course_info['lang'];
-			$visible = $course_info['visible'];
-			// New variables
-			$currentCourseName = $title;
-			$currentCourseDepartment = $fac;
-			$currentCourseTitular = $titulaires;
-			$currentCourseLanguage = $languageInterface;
-		}
 
 		if (!isset($course_code) or empty($course_code)) {
 			$toolContent_ErrorExists = caution($langLessonDoesNotExist);
@@ -298,12 +295,9 @@ if (isset($require_current_course) and $require_current_course) {
 		if ($is_admin or $is_power_user) {
 			$status = USER_TEACHER;
 		} else {
-			$res2 = db_query("SELECT status FROM course_user
-                                                 WHERE user_id = $uid AND
-                                                       course_id = $course_id");
-			if ($res2 and mysql_num_rows($res2) > 0) {
-				list($status) = mysql_fetch_row($res2);
-			}
+                    $status = Database::get()->querySingle("SELECT status FROM course_user
+                                                 WHERE user_id = ? AND
+                                                       course_id = ?", $uid, $course_id)->status;
 		}
 
 		if ($visible != COURSE_OPEN) {
@@ -444,39 +438,33 @@ $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
 if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
-        $sql = "SELECT * FROM course_module
-                        WHERE visible = 1 AND
-                              course_id = $course_id AND
-                                module_id NOT IN (".MODULE_ID_CHAT.",
-                                                  ".MODULE_ID_ASSIGN.",
-                                                  ".MODULE_ID_DROPBOX.",
-                                                  ".MODULE_ID_QUESTIONNAIRE.",
-                                                  ".MODULE_ID_FORUM.",
-                                                  ".MODULE_ID_GROUPS.",
-                                                  ".MODULE_ID_WIKI.",
-                                                  ".MODULE_ID_LP.")";
-        
-        if (isset($_SESSION['uid']) and $_SESSION['uid']) { // if we are logged in
-                if (check_guest()) { // guest user                        
-                        $result = db_query($sql);
-                } else { /// normal user
-                        $result = db_query("SELECT module_id FROM course_module
-                                             WHERE visible = 1 AND
-                                             course_id = $course_id");
-                }
-        } else {
-		$result = db_query($sql);
-	}
 
-	$publicModules = array();
-	while ($moduleIDs = mysql_fetch_array($result)) {
-		array_push($publicModules, $moduleIDs["module_id"]);
-	}
-        
-        if (!in_array($module_id, $publicModules)) {                
-		$toolContent_ErrorExists = caution($langCheckPublicTools);
-		$errorMessagePath = "../../";
-	}
+    if (isset($_SESSION['uid']) and $_SESSION['uid'] and check_guest())
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                                             WHERE visible = 1 AND
+                                             course_id = ", $course_id);
+    else
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE visible = 1 AND
+                              course_id = ? AND
+                                module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                  " . MODULE_ID_ASSIGN . ",
+                                                  " . MODULE_ID_DROPBOX . ",
+                                                  " . MODULE_ID_QUESTIONNAIRE . ",
+                                                  " . MODULE_ID_FORUM . ",
+                                                  " . MODULE_ID_GROUPS . ",
+                                                  " . MODULE_ID_WIKI . ",
+                                                  " . MODULE_ID_LP . ")", $course_id);
+
+    $publicModules = array();
+    foreach ($moduleIDs as $module) {
+        $publicModules[] = $module->module_id;
+    }
+
+    if (!in_array($module_id, $publicModules)) {
+        $toolContent_ErrorExists = caution($langCheckPublicTools);
+        $errorMessagePath = "../../";
+    }
 }
 
 set_glossary_cache();

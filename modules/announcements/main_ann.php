@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -26,31 +27,24 @@ require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langAnnouncements;
 
-if (isset($_GET['aid'])) {
-	$aid = intval($_GET['aid']);
-	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = '$aid'";
-} else {
-	$sql = "SELECT `date`, `title` , `body` FROM `admin_announcement`
-	        WHERE `visible` = 1 AND lang='$language' ORDER BY `date` DESC";
-}
-$result = db_query($sql);
-if (mysql_num_rows($result) > 0) {
-	$announceArr = array();
-	while ($eclassAnnounce = mysql_fetch_array($result)) {
-		array_push($announceArr, $eclassAnnounce);
-	}
-        $tool_content .= "<table width='100%' class='sortable'>";
-	$numOfAnnouncements = count($announceArr);
-	for($i=0; $i < $numOfAnnouncements; $i++) {
-		$tool_content .= "<tr><td>
+$isaid = isset($_GET['aid']);
+$announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?" :
+                "SELECT `date`, `title` , `body` FROM `admin_announcement`
+	        WHERE `visible` = 1 AND lang= ? ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
+
+$numOfAnnouncements = count($announceArr);
+if ($numOfAnnouncements > 0) {
+    $tool_content .= "<table width='100%' class='sortable'>";
+    for ($i = 0; $i < $numOfAnnouncements; $i++) {
+        $tool_content .= "<tr><td>
 		<img src='$themeimg/arrow.png' alt='' /></td>
-		<td><b>".q($announceArr[$i]['title'])."</b>
-		&nbsp;<span class='smaller'>(".claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])).")</span>
+		<td><b>" . q($announceArr[$i]->title) . "</b>
+		&nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . ")</span>
 		<p>
-		".standard_text_escape($announceArr[$i]['body'])."<br /></p>
+		" . standard_text_escape($announceArr[$i]->body) . "<br /></p>
 		</td>
 		</tr>";
-	}
-	$tool_content .= "</table>";
+    }
+    $tool_content .= "</table>";
 }
 draw($tool_content, 0);
