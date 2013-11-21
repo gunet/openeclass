@@ -116,7 +116,7 @@ if($submit) {
                 $hasher = new PasswordHash(8, false);
                 $password_encrypted = $hasher->HashPassword($password);
                 $inscr_user = db_query("INSERT INTO user
-                                (surname, givenname, username, password, email, statut, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
+                                (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                                 VALUES (" .
                                 autoquote($surname_form) . ', '.
                                 autoquote($givenname_form) . ', '.
@@ -217,7 +217,7 @@ $langEmail : ".get_config('email_helpdesk')."\n";
           <tr><th class='left'><b>$langSurname:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='surname_form' value='".q($ps)."' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langUsername:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='username' value='".q($pu)."' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='".q($pu)."' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langPass:</b></th>
               <td><input class='FormData_InputText' type='text' name='password' value='".genPass()."' id='password' />&nbsp;<span id='result'></span></td></tr>
           <tr><th class='left'><b>$langEmail:</b></th>
