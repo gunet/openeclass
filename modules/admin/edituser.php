@@ -92,7 +92,7 @@ if ($u)	{
                         $newpass = $auth_ids[$auth];
                 }
                 $tool_content .= "</p>";
-                db_query("UPDATE user SET password = '$newpass' WHERE user_id = $u");
+                db_query("UPDATE user SET password = '$newpass' WHERE id = $u");
                 $info['password'] = $newpass;
         }
         if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {

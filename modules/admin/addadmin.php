@@ -30,7 +30,7 @@ $username = isset($_POST['username'])?$_POST['username']:'';
 
 if (isset($_POST['submit']) and !empty($username)) {
 
-    $res = db_query("SELECT user_id FROM user WHERE username=". quote($username));
+    $res = db_query("SELECT id FROM user WHERE username=". quote($username));
 
     if (mysql_num_rows($res) == 1) {
         list($user_id) = mysql_fetch_array($res);
@@ -47,10 +47,10 @@ if (isset($_POST['submit']) and !empty($username)) {
 
         if (isset($privilege)) {
             $user_id = intval($user_id);
-            $s = db_query("SELECT * FROM admin WHERE idUser = $user_id");
+            $s = db_query("SELECT * FROM admin WHERE user_id = $user_id");
             if (mysql_num_rows($s) > 0) {
                 db_query("UPDATE admin SET privilege = $privilege
-                                WHERE idUser = $user_id");
+                                WHERE user_id = $user_id");
             } else {
                 $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");
             }
@@ -68,7 +68,7 @@ if (isset($_POST['submit']) and !empty($username)) {
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        $sql = db_query("DELETE FROM admin WHERE admin.idUser = ". $aid);
+        $sql = db_query("DELETE FROM admin WHERE admin.user_id = ". $aid);
         if (!$sql) {
             $tool_content .= "<center><br />$langDeleteAdmin". q($aid) ." $langNotFeasible  <br /></center>";
         } else {
@@ -114,9 +114,9 @@ while($row = mysql_fetch_array($r1)) {
             break;
     }
     $tool_content .= "<td align='center'>$message</td>";
-    if($row['user_id'] != 1) {
+    if($row['id'] != 1) {
         $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=". q($row['user_id']) ."'>
+                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=". q($row['id']) ."'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
                       </td>";
