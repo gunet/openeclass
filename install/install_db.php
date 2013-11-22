@@ -24,6 +24,7 @@
  */
 
 require_once '../include/phpass/PasswordHash.php';
+require_once '../modules/db/dbhelper.php';
 
 if (!defined('ECLASS_VERSION')) {
         exit;
@@ -138,7 +139,7 @@ db_query("CREATE TABLE `agenda` (
 	`course_id` INT(11) NOT NULL,
 	`title` VARCHAR(200) NOT NULL,
 	`content` TEXT,
-	`day` DATE NOT NULL DEFAULT '0000-00-00',
+	`day` DATE NOT NULL DEFAULT '1000-10-10',
 	`hour` TIME NOT NULL DEFAULT '00:00:00',
 	`lasting` VARCHAR(20),
 	`visible` TINYINT(4)) $charset_spec");
@@ -157,7 +158,7 @@ db_query("CREATE TABLE `course` (
   `visible` TINYINT(4) NOT NULL,
   `prof_names` VARCHAR(200) NOT NULL DEFAULT '',
   `public_code` VARCHAR(20) NOT NULL DEFAULT '',
-  `created` DATETIME NOT NULL default '0000-00-00 00:00:00',
+  `created` DATETIME NOT NULL default CURRENT_TIMESTAMP,
   `doc_quota` FLOAT NOT NULL default '104857600',
   `video_quota` FLOAT NOT NULL default '104857600',
   `group_quota` FLOAT NOT NULL default '104857600',
@@ -197,12 +198,12 @@ db_query("CREATE TABLE user (
       status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
       phone VARCHAR(20) NOT NULL DEFAULT '',
       am VARCHAR(20) NOT NULL DEFAULT '',
-      registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
-      expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
+      registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      expires_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       lang VARCHAR(16) NOT NULL DEFAULT 'el',
-      announce_flag date NOT NULL DEFAULT '0000-00-00',
-      doc_flag DATE NOT NULL DEFAULT '0000-00-00',
-      forum_flag DATE NOT NULL DEFAULT '0000-00-00',
+      announce_flag date NOT NULL DEFAULT '1000-01-01',
+      doc_flag DATE NOT NULL DEFAULT '1000-01-01',
+      forum_flag DATE NOT NULL DEFAULT '1000-01-01',
       description TEXT NOT NULL,
       has_icon TINYINT(1) NOT NULL DEFAULT 0,
       verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
@@ -228,7 +229,7 @@ db_query("CREATE TABLE loginout (
       idLog mediumint(9) unsigned NOT NULL auto_increment,
       id_user mediumint(9) unsigned NOT NULL default 0,
       ip char(45) NOT NULL default '0.0.0.0',
-      loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
+      loginout.when datetime NOT NULL default CURRENT_TIMESTAMP,
       loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
       PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
@@ -238,8 +239,8 @@ db_query("CREATE TABLE loginout (
 db_query("CREATE TABLE loginout_summary (
         id mediumint unsigned NOT NULL auto_increment,
         login_sum int(11) unsigned  NOT NULL default 0,
-        start_date datetime NOT NULL default '0000-00-00 00:00:00',
-        end_date datetime NOT NULL default '0000-00-00 00:00:00',
+        start_date datetime NOT NULL default CURRENT_TIMESTAMP,
+        end_date datetime NOT NULL default CURRENT_TIMESTAMP,
         PRIMARY KEY (id)) $charset_spec");
 
 //table keeping data for monthly reports
@@ -268,8 +269,8 @@ db_query("CREATE TABLE IF NOT EXISTS `document` (
                 `category` TINYINT(4) NOT NULL DEFAULT 0,
                 `title` TEXT,
                 `creator` TEXT,
-                `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `subject` TEXT,
                 `description` TEXT,
                 `author` VARCHAR(255) NOT NULL DEFAULT '',
@@ -438,8 +439,8 @@ db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) NOT NULL DEFAULT '',
                 `description` VARCHAR(250) NOT NULL DEFAULT '',                
-                `upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `last_upload_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+                `upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `last_upload_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
                 `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -519,14 +520,14 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                 `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(255) NOT NULL DEFAULT '',
-                `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `ctime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )  $charset_spec");
+                `last_mtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP )  $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+                `mtime` DATETIME NOT NULL default CURRENT_TIMESTAMP,
                 `content` TEXT NOT NULL )  $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `poll` (
@@ -534,9 +535,9 @@ db_query("CREATE TABLE IF NOT EXISTS `poll` (
                 `course_id` INT(11) NOT NULL,
                 `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
-                `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `start_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `end_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `active` INT(11) NOT NULL DEFAULT 0 ) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -545,7 +546,7 @@ db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `aid` INT(11) NOT NULL DEFAULT 0,
                 `answer_text` TEXT NOT NULL,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ) $charset_spec");
+                `submit_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `poll_question` (
                 `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
@@ -562,8 +563,8 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `title` VARCHAR(200) NOT NULL DEFAULT '',
                 `description` TEXT NOT NULL,
                 `comments` TEXT NOT NULL,
-                `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `deadline` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `submission_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `active` CHAR(1) NOT NULL DEFAULT 1,
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT 0 NOT NULL ) $charset_spec");
@@ -571,14 +572,14 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `assignment_id` INT(11) NOT NULL DEFAULT 0,
-                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `submission_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                 `comments` TEXT NOT NULL,
                 `grade` VARCHAR(50) NOT NULL DEFAULT '',
                 `grade_comments` TEXT NOT NULL,
-                `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
+                `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
 
@@ -601,8 +602,8 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `eid` INT(11) NOT NULL DEFAULT 0,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00',
-                `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00',
+                `record_start_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `record_end_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
                 `attempt` INT(11) NOT NULL DEFAULT 0) $charset_spec");
@@ -897,11 +898,10 @@ if (version_compare(mysql_get_server_info(), '5.0') >= 0) {
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
 $password_encrypted = $hasher->HashPassword($passForm);
-$exp_time = time() + 140000000;
-db_query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`)
+db_query("INSERT INTO `user` (`givenname`, `surname`, `username`, `password`, `email`, `status`, `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
                  VALUES (" . quote($nameForm) . ", '', " .
                              quote($loginForm) . ", '$password_encrypted', " .
-                             quote($emailForm) . ", 1, " . time() . ", $exp_time, 1, '*,,')");
+                             quote($emailForm) . ", 1, " . DBHelper::timeAfter() .", ". DBHelper::timeAfter(5*365*24*60*60).", 1, '*,,', 'Administrator')");
 $admin_uid = mysql_insert_id();
 db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                  VALUES ($admin_uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
@@ -1062,7 +1062,7 @@ db_query("CREATE TABLE `course_units` (
 	`type` VARCHAR(255) NOT NULL DEFAULT '',
 	`visible` TINYINT(4),
 	`order` INT(11) NOT NULL DEFAULT 0,
-	`date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
+	`date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) $charset_spec");
 
 db_query("CREATE TABLE `actions_daily` (
         `id` int(11) NOT NULL auto_increment,
@@ -1084,8 +1084,8 @@ db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
         `id` int(11) NOT NULL auto_increment,
         `module_id` int(11) NOT NULL,
         `visits` int(11) NOT NULL,
-        `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-        `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+        `start_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+        `end_date` datetime NOT NULL default CURRENT_TIMESTAMP,
         `duration` int(11) NOT NULL,
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY  (`id`))");
@@ -1094,7 +1094,7 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `id` int(11) NOT NULL auto_increment,
         `user_id` int(11) NOT NULL,
         `ip` char(45) NOT NULL default '0.0.0.0',
-        `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+        `date_time` datetime NOT NULL default CURRENT_TIMESTAMP,
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY  (`id`))");
 

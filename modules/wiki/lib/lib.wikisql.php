@@ -79,9 +79,9 @@
             `wiki_id` int(11) unsigned NOT NULL default '0',
             `owner_id` int(11) unsigned NOT NULL default '0',
             `title` varchar(255) NOT NULL default '',
-            `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+            `ctime` datetime NOT NULL default CURRENT_TIMESTAMP,
             `last_version` int(11) unsigned NOT NULL default '0',
-            `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+            `last_mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
             PRIMARY KEY  (`id`)
             )"
             ;
@@ -94,7 +94,7 @@
             `id` int(11) unsigned NOT NULL auto_increment,
             `pid` int(11) unsigned NOT NULL default '0',
             `editor_id` int(11) NOT NULL default '0',
-            `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+            `mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
             `content` text NOT NULL,
             PRIMARY KEY  (`id`)
             )"

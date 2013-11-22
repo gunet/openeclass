@@ -1124,31 +1124,31 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
 
         db_query("ALTER TABLE `assignments`
                         CHANGE `deadline` `deadline` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `assignments`
                         CHANGE `submission_date` `submission_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `assignment_submit`
                         CHANGE `submission_date` `submission_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `poll`
                         CHANGE `start_date` `start_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `poll`
                         CHANGE `end_date` `end_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `poll`
                         CHANGE `creation_date` `creation_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `poll_answer_record`
                         CHANGE `submit_date` `submit_date` DATETIME
-                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
+                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
 
         db_query("ALTER TABLE `exercices`
                         CHANGE `StartDate` `StartDate` DATETIME
@@ -1323,9 +1323,9 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
 
 	// upgrade exercises
  	db_query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", $code);
  	db_query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", $code);
 	if (!mysql_field_exists("$code",'exercices','results'))
                 echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
 	db_query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
@@ -1456,8 +1456,8 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `title` varchar(200) NOT NULL default '',
                         `description` text NOT NULL,
                         `comments` text NOT NULL,
-                        `deadline` date NOT NULL default '0000-00-00',
-                        `submission_date` date NOT NULL default '0000-00-00',
+                        `deadline` date NOT NULL default '1000-10-10',
+                        `submission_date` date NOT NULL default '1000-10-10',
                         `active` char(1) NOT NULL default '1',
                         `secret_directory` varchar(30) NOT NULL,
                         `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
@@ -1469,14 +1469,14 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `id` int(11) NOT NULL auto_increment,
                         `uid` int(11) NOT NULL default '0',
                         `assignment_id` int(11) NOT NULL default '0',
-                        `submission_date` date NOT NULL default '0000-00-00',
+                        `submission_date` date NOT NULL default '1000-10-10',
                         `submission_ip` varchar(16) NOT NULL default '',
                         `file_path` varchar(200) NOT NULL default '',
                         `file_name` varchar(200) NOT NULL default '',
                         `comments` text NOT NULL,
                         `grade` varchar(50) NOT NULL default '',
                         `grade_comments` text NOT NULL,
-                        `grade_submission_date` date NOT NULL default '0000-00-00',
+                        `grade_submission_date` date NOT NULL default '1000-10-10',
                         `grade_submission_ip` varchar(16) NOT NULL default '',
                         `group_id` INT( 11 ) DEFAULT NULL,
                         UNIQUE KEY `id` (`id`))",$code);
@@ -1534,8 +1534,8 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            title varchar(250) default '',
                            description varchar(250) default '',
                            author varchar(250) default '',
-                           uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
-                           lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+                           uploadDate datetime NOT NULL default CURRENT_TIMESTAMP,
+                           lastUploadDate datetime NOT NULL default CURRENT_TIMESTAMP,
                            PRIMARY KEY (id),
                            UNIQUE KEY UN_filename (filename))", $code);
         }
@@ -1696,9 +1696,9 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `wiki_id` int(11) unsigned NOT NULL default '0',
                         `owner_id` int(11) unsigned NOT NULL default '0',
                         `title` varchar(255) NOT NULL default '',
-                        `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `ctime` datetime NOT NULL default CURRENT_TIMESTAMP,
                         `last_version` int(11) unsigned NOT NULL default '0',
-                        `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `last_mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
                         PRIMARY KEY  (`id`)
                                 ) ", $code);
         }
@@ -1708,7 +1708,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `id` int(11) unsigned NOT NULL auto_increment,
                         `pid` int(11) unsigned NOT NULL default '0',
                         `editor_id` int(11) NOT NULL default '0',
-                        `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
                         `content` text NOT NULL,
                         PRIMARY KEY  (`id`)
                                 ) ", $code);
@@ -1721,9 +1721,9 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `creator_id` mediumint(8) unsigned NOT NULL default '0',
                         `course_id` varchar(20) NOT NULL default '0',
                         `name` varchar(255) NOT NULL default '',
-                        `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                        `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                        `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `creation_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `start_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `end_date` datetime NOT NULL default CURRENT_TIMESTAMP,
                         `type` int(11) NOT NULL default '0',
                         `active` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`sid`)
@@ -1734,7 +1734,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `aid` bigint(12) NOT NULL default '0',
                         `creator_id` mediumint(8) unsigned NOT NULL default '0',
                         `sid` bigint(12) NOT NULL default '0',
-                        `date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `date` datetime NOT NULL default CURRENT_TIMESTAMP,
                         PRIMARY KEY  (`aid`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
         }
@@ -1771,17 +1771,17 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `creator_id` mediumint(8) unsigned NOT NULL default '0',
                         `course_id` varchar(20) NOT NULL default '0',
                         `name` varchar(255) NOT NULL default '',
-                        `creation_date` date NOT NULL default '0000-00-00',
-                        `start_date` date NOT NULL default '0000-00-00',
-                        `end_date` date NOT NULL default '0000-00-00',
+                        `creation_date` date NOT NULL default '1000-10-10',
+                        `start_date` date NOT NULL default '1000-10-10',
+                        `end_date` date NOT NULL default '1000-10-10',
                         `type` int(11) NOT NULL default '0',
                         `active` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`pid`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='For the poll module';
         } else {
-                db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-                db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
-                db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '0000-00-00'", $code);
+                db_query("ALTER TABLE `poll` CHANGE `creation_date` `creation_date` DATE NOT NULL DEFAULT '1000-10-10'", $code);
+                db_query("ALTER TABLE `poll` CHANGE `start_date` `start_date` DATE NOT NULL DEFAULT '1000-10-10'", $code);
+                db_query("ALTER TABLE `poll` CHANGE `end_date` `end_date` DATE NOT NULL DEFAULT '1000-10-10'", $code);
         }
 
         if (!mysql_table_exists($code, 'poll_answer_record'))  {
@@ -1809,7 +1809,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
         if (!mysql_field_exists("$code",'poll_answer_record','user_id'))
                 echo add_field('poll_answer_record', 'user_id', "INT(11) NOT NULL DEFAULT '0'");
         if (!mysql_field_exists("$code",'poll_answer_record', 'submit_date'))
-                echo add_field('poll_answer_record', 'submit_date', "DATE NOT NULL DEFAULT '0000-00-00'");
+                echo add_field('poll_answer_record', 'submit_date', "DATE NOT NULL DEFAULT '1000-10-10'");
 
         if (!mysql_table_exists($code, 'poll_question'))  {
                 db_query("CREATE TABLE `poll_question` (
@@ -1840,7 +1840,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                            user_id int(11) NOT NULL,
                            module_id int(11) NOT NULL,
                            action_type_id int(11) NOT NULL,
-                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           date_time DATETIME NOT NULL default CURRENT_TIMESTAMP,
                            duration int(11) NOT NULL,
                            PRIMARY KEY (id))", $code);
         }
@@ -1850,7 +1850,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         id int(11) NOT NULL auto_increment,
                            user_id int(11) NOT NULL,
                            ip char(16) NOT NULL default '0.0.0.0',
-                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           date_time DATETIME NOT NULL default CURRENT_TIMESTAMP,
                            PRIMARY KEY (id))", $code);
         }
 
@@ -1859,8 +1859,8 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         id int(11) NOT NULL auto_increment,
                            module_id int(11) NOT NULL,
                            visits int(11) NOT NULL,
-                           start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
-                           end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           start_date DATETIME NOT NULL default CURRENT_TIMESTAMP,
+                           end_date DATETIME NOT NULL default CURRENT_TIMESTAMP,
                            duration int(11) NOT NULL,
                            PRIMARY KEY (id))", $code);
         }
@@ -1871,8 +1871,8 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `eurid` int(11) NOT NULL auto_increment,
                         `eid` tinyint(4) NOT NULL default '0',
                         `uid` mediumint(8) NOT NULL default '0',
-                        `RecordStartDate` date NOT NULL default '0000-00-00',
-                        `RecordEndDate` date NOT NULL default '0000-00-00',
+                        `RecordStartDate` date NOT NULL default '1000-10-10',
+                        `RecordEndDate` date NOT NULL default '1000-10-10',
                         `TotalScore` int(11) NOT NULL default '0',
                         `TotalWeighting` int(11) default '0',
                         `attempt` int(11) NOT NULL default '0',
@@ -1882,11 +1882,11 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 
         // Upgrading EXERCICES table for new func of EXERCISE module
         if (!mysql_field_exists("$code",'exercices','StartDate'))
-                echo add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '0000-00-00'");
+                echo add_field_after_field('exercices', 'StartDate', 'type', "DATE NOT NULL default '1000-10-10'");
         else
                 db_query("ALTER TABLE `exercices` CHANGE `StartDate` `StartDate` DATE NULL DEFAULT NULL", $code);
         if (!mysql_field_exists("$code",'exercices','EndDate'))
-                echo add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '0000-00-00'");
+                echo add_field_after_field('exercices', 'EndDate', 'StartDate', "DATE NOT NULL default '1000-10-10'");
         else
                 db_query("ALTER TABLE `exercices` CHANGE `EndDate` `EndDate` DATE NULL DEFAULT NULL", $code);
         if (!mysql_field_exists("$code",'exercices','TimeConstrain'))

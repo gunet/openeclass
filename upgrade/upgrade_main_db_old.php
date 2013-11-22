@@ -42,7 +42,7 @@
         if (!mysql_field_exists("$mysqlMainDb",'cours','course_addon'))
                 echo add_field('cours', 'course_addon', "TEXT");
         if (!mysql_field_exists("$mysqlMainDb",'cours','first_create'))
-                echo add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
+                echo add_field('cours', 'first_create', "datetime not null default CURRENT_TIMESTAMP");
 
         // delete useless fields
         if (mysql_field_exists("$mysqlMainDb",'cours','cahier_charges'))
@@ -101,8 +101,8 @@
                 mysql_query("CREATE TABLE loginout_summary (
                         id mediumint unsigned NOT NULL auto_increment,
                            login_sum int(11) unsigned  NOT NULL default '0',
-                           start_date datetime NOT NULL default '0000-00-00 00:00:00',
-                           end_date datetime NOT NULL default '0000-00-00 00:00:00',
+                           start_date datetime NOT NULL default CURRENT_TIMESTAMP,
+                           end_date datetime NOT NULL default CURRENT_TIMESTAMP,
                            PRIMARY KEY  (id))
                                 TYPE=MyISAM DEFAULT CHARACTER SET=utf8");
         }
@@ -144,7 +144,7 @@
                         `lesson_event_id` int(11) NOT NULL default '0',
                         `titre` varchar(200) NOT NULL default '',
                         `contenu` text NOT NULL,
-                        `day` date NOT NULL default '0000-00-00',
+                        `day` date NOT NULL default '1000-10-10',
                         `hour` time NOT NULL default '00:00:00',
                         `lasting` varchar(20) NOT NULL default '',
                         `lesson_code` varchar(50) NOT NULL default '',
@@ -170,11 +170,11 @@
         if (!mysql_field_exists("$mysqlMainDb",'user','perso'))
                 echo add_field('user', 'perso', "enum('yes','no') NOT NULL default 'yes'");
         if (!mysql_field_exists("$mysqlMainDb",'user','announce_flag'))
-                echo add_field('user', 'announce_flag', "date NOT NULL default '0000-00-00'");
+                echo add_field('user', 'announce_flag', "date NOT NULL default '1000-10-10'");
         if (!mysql_field_exists("$mysqlMainDb",'user','doc_flag'))
-                echo add_field('user', 'doc_flag', "date NOT NULL default '0000-00-00'");
+                echo add_field('user', 'doc_flag', "date NOT NULL default '1000-10-10'");
         if (!mysql_field_exists("$mysqlMainDb",'user','forum_flag'))
-                echo add_field('user', 'forum_flag', "date NOT NULL default '0000-00-00'");
+                echo add_field('user', 'forum_flag', "date NOT NULL default '1000-10-10'");
         if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
                 echo add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 

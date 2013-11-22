@@ -92,8 +92,8 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
         db_query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
-                        ADD registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
-                        ADD expires_at DATETIME NOT NULL DEFAULT '0000-00-00'");
+                        ADD registered_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        ADD expires_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP");
         db_query("UPDATE user
                         SET registered_at = FROM_UNIXTIME(ts_registered_at),
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
@@ -327,7 +327,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                 `type` VARCHAR(255) NOT NULL DEFAULT '',
                 `visibility` CHAR(1) NOT NULL DEFAULT 'v',
                 `order` INT(11) NOT NULL DEFAULT 0,
-                `date` DATETIME NOT NULL DEFAULT '0000-00-00') $charset_spec");
+                `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) $charset_spec");
     }
 
     if ($oldversion < '2.2.1') {
@@ -403,8 +403,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                         `category` TINYINT(4) NOT NULL DEFAULT 0,
                         `title` TEXT,
                         `creator` TEXT,
-                        `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                        `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        `date_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         `subject` TEXT,
                         `description` TEXT,
                         `author` VARCHAR(255) NOT NULL DEFAULT '',
@@ -853,8 +853,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                                 `title` VARCHAR(250) NOT NULL DEFAULT '',
                                 `description` VARCHAR(250) NOT NULL DEFAULT '',                            
-                                `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')");
+                                `uploadDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                `lastUploadDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
                     
             db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
                                 `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -936,14 +936,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                                 `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                                 `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `ctime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+                                `last_mtime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP )");
             db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
                                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                                 `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+                                `mtime` DATETIME NOT NULL default CURRENT_TIMESTAMP,
                                 `content` TEXT NOT NULL )");
     
             db_query("CREATE TABLE IF NOT EXISTS `poll` (
@@ -951,9 +951,9 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `course_id` INT(11) NOT NULL,
                                 `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                                 `name` VARCHAR(255) NOT NULL DEFAULT '',
-                                `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                `start_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                `end_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `active` INT(11) NOT NULL DEFAULT 0 )");
             db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -962,7 +962,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `aid` INT(11) NOT NULL DEFAULT 0,
                                 `answer_text` TEXT NOT NULL,
                                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+                                `submit_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP )");
             db_query("CREATE TABLE IF NOT EXISTS `poll_question` (
                                 `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `pid` INT(11) NOT NULL DEFAULT 0,
@@ -979,8 +979,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `title` VARCHAR(200) NOT NULL DEFAULT '',
                                 `description` TEXT NOT NULL,
                                 `comments` TEXT NOT NULL,
-                                `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `deadline` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                `submission_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `active` CHAR(1) NOT NULL DEFAULT '1',
                                 `secret_directory` VARCHAR(30) NOT NULL,
                                 `group_submissions` CHAR(1) DEFAULT '0' NOT NULL )");
@@ -988,14 +988,14 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                                 `assignment_id` INT(11) NOT NULL DEFAULT 0,
-                                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                                `submission_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                                 `comments` TEXT NOT NULL,
                                 `grade` VARCHAR(50) NOT NULL DEFAULT '',
                                 `grade_comments` TEXT NOT NULL,
-                                `grade_submission_date` DATE NOT NULL DEFAULT '0000-00-00',
+                                `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                                 `group_id` INT( 11 ) NOT NULL DEFAULT 0)");
     
@@ -1005,7 +1005,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `course_id` INT(11) NOT NULL,
                                 `title` VARCHAR(200) NOT NULL,
                                 `content` TEXT,
-                                `day` DATE NOT NULL DEFAULT '0000-00-00',
+                                `day` DATE NOT NULL DEFAULT '1000-10-10',
                                 `hour` TIME NOT NULL DEFAULT '00:00:00',
                                 `lasting` VARCHAR(20),
                                 `visible` TINYINT(4))");
@@ -1029,8 +1029,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 `eid` INT(11) NOT NULL DEFAULT '0',
                                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                                `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00',
-                                `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00',
+                                `record_start_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                `record_end_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `total_score` INT(11) NOT NULL DEFAULT '0',
                                 `total_weighting` INT(11) DEFAULT '0',
                                 `attempt` INT(11) NOT NULL DEFAULT '0' )");
@@ -1069,7 +1069,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                               `user_id` int(11) NOT NULL,
                               `module_id` int(11) NOT NULL,
                               `action_type_id` int(11) NOT NULL,
-                              `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                              `date_time` datetime NOT NULL default CURRENT_TIMESTAMP,
                               `duration` int(11) NOT NULL default '900',
                               `course_id` INT(11) NOT NULL,
                               PRIMARY KEY  (`id`),
@@ -1079,8 +1079,8 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                               `id` int(11) NOT NULL auto_increment,
                               `module_id` int(11) NOT NULL,
                               `visits` int(11) NOT NULL,
-                              `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                              `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                              `start_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+                              `end_date` datetime NOT NULL default CURRENT_TIMESTAMP,
                               `duration` int(11) NOT NULL,
                               `course_id` INT(11) NOT NULL,
                               PRIMARY KEY  (`id`))");
@@ -1089,7 +1089,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                               `id` int(11) NOT NULL auto_increment,
                               `user_id` int(11) NOT NULL,
                               `ip` char(45) NOT NULL default '0.0.0.0',
-                              `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                              `date_time` datetime NOT NULL default CURRENT_TIMESTAMP,
                               `course_id` INT(11) NOT NULL,
                               PRIMARY KEY  (`id`))");
     
@@ -1432,7 +1432,7 @@ $mysqlMainDb = '.quote($mysqlMainDb).';
                                              DROP COLUMN `expirationDate`,
                                              DROP COLUMN `type`,
                                              DROP COLUMN `faculteid`,
-                                             CHANGE `first_create` `created` datetime NOT NULL default '0000-00-00 00:00:00',
+                                             CHANGE `first_create` `created` datetime NOT NULL default CURRENT_TIMESTAMP,
                                              CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0,
                                              DROP INDEX cours");
                 $lang_q = db_query('SELECT DISTINCT lang from course');

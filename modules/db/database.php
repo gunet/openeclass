@@ -247,7 +247,7 @@ class Database {
             $callback_error($error_msg);
         if ($close_transaction && $this->isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-		echo "Error: " . $error_msg;
+        echo "Error: " . $error_msg;
     }
 
 }
