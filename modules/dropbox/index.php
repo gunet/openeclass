@@ -24,7 +24,7 @@
  * @file index.php
  * @abstract This is responsible for exchanging files between the users of a course
  *
- * Based on code by Jan Bols <<jan@ivpv.ugent.be>
+ * Based on code by Jan Bols <jan@ivpv.ugent.be>
  */
 
 $require_login = TRUE;
@@ -243,8 +243,7 @@ if (!isset($_GET['mailing'])) {
                                                  "<small>".q($w->description)."</small></td>";
                         } else {                                
                                 $tool_content .= "<td>".q($w->title)."<br /><small>".q($w->description)."</small></td>";
-                        }
-                       
+                        }                       
                         $tool_content .= "<td>".display_user($w->uploaderId, false, false)."</td>
                                           <td><small>".$w->uploadDate;
                         if ($w->uploadDate != $w->lastUploadDate) {
@@ -312,14 +311,14 @@ if ($numSent == 0) {
                         $tool_content .= "<td>".q($w->title)."<br /><small>".q($w->description)."</small></td>";
                 }
                 $tool_content .= "<td>";
-                $recipients_names = '';
-                foreach($w -> recipients as $r) {
+                $recipients_names = '';                
+                foreach($w -> recipients as $r) {                    
                         $recipients_names .= display_user($r['id'], false, false) . " <br />";
                 }                
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
                         $tool_content .= $recipients_names;
                 } else {
-                        $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
+                       $tool_content .= ellipsize_html($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                 }
                 $tool_content .= "</td>
                                 <td class='center'><small>$w->uploadDate</small></td>
@@ -384,7 +383,7 @@ if ($is_editor) {
                         if (isset($_GET['d']) and $_GET['d'] == 'all') {
                                 $tool_content .= $recipients_names;
                         } else {
-                                $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
+                                $tool_content .= ellipsize_html($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                         }
                         $tool_content .= "</td>
                                         <td class='center'><small>$w->uploadDate</small></td>

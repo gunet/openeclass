@@ -294,9 +294,9 @@ if (isset($require_current_course) and $require_current_course) {
 		// The admin and power users can see all courses as adminOfCourse
 		if ($is_admin or $is_power_user) {
 			$status = USER_TEACHER;
-		} else {
+		} else {                    
                     $status = Database::get()->querySingle("SELECT status FROM course_user
-                                                 WHERE user_id = ? AND
+                                                       WHERE user_id = ? AND
                                                        course_id = ?", $uid, $course_id)->status;
 		}
 
@@ -437,13 +437,12 @@ if (isset($_SESSION['saved_status'])) {
 $module_id = current_module_id();
 // Security check:: Users that do not have Professor access for a course must not
 // be able to access inactive tools.
-if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
-
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and check_guest())
+if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {    
+    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {        
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
-                                             course_id = ", $course_id);
-    else
+                                             course_id = ?", $course_id);
+    } else {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
                               course_id = ? AND
@@ -455,7 +454,7 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                                                   " . MODULE_ID_GROUPS . ",
                                                   " . MODULE_ID_WIKI . ",
                                                   " . MODULE_ID_LP . ")", $course_id);
-
+    }
     $publicModules = array();
     foreach ($moduleIDs as $module) {
         $publicModules[] = $module->module_id;

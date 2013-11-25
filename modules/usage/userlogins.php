@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -211,7 +211,7 @@ $start_cal = $jscalendar->make_input_field(
         $firstletter = mysql_real_escape_string($_GET['first']);
         $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = $course_id AND LEFT(a.nom,1) = '$firstletter'";
+            WHERE b.course_id = $course_id AND LEFT(a.surname,1) = '$firstletter'";
     } else {
         $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
@@ -252,7 +252,7 @@ $tool_content .= '
   <tr>
     <th>&nbsp;</th>
     <td><input type="submit" name="btnUsage" value="'.$langSubmit.'">
-        <div><br /><a href="oldStats.php?course=' . $course_code . '" onClick="return confirmation(\'' . $langOldStatsExpireConfirm . '\');">' . $langOldStats . '</a></div>
+        <div><br /><a href="oldStats.php?course=' . $course_code . '" onClick="return confirmation(\'' . $langOldStatsExpireConfirm.  '\');">' . $langOldStats . '</a></div>
     </td>
   </tr>
   </table>

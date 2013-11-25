@@ -92,7 +92,7 @@ class Dropbox_Work {
 		*/
 		if ($this->isOldWork) {
 			$this->id = $res["id"];
-			$this->uploadDate = $res["uploadDate"];
+			$this->uploadDate = $res["upload_date"];
                         $sql = "UPDATE dropbox_file
 					SET filesize = ".quote($this->filesize).", 
                         title = ".quote($this->title).",
@@ -102,7 +102,7 @@ class Dropbox_Work {
 			$result = db_query($sql);                        
 		} else {
 			$this->uploadDate = $this->lastUploadDate;
-			$sql="INSERT INTO dropbox_file(course_id, uploaderId, filename, filesize, title, description, uploadDate, lastUploadDate)
+			$sql="INSERT INTO dropbox_file(course_id, uploader_id, filename, filesize, title, description, upload_date, last_upload_date)
                          VALUES ($course_id, 
                                  $this->uploaderId,
                                  ".quote($this->filename).",
@@ -142,21 +142,21 @@ class Dropbox_Work {
 		* get the data from DB
 		*/
                 if ($GLOBALS['language'] == 'el') {
-                        $sql="SELECT uploaderId, filename, filesize, title, description,
-                                DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i') AS uploadDate,
-                                DATE_FORMAT(lastUploadDate, '%d-%m-%Y / %H:%i') AS lastUploadDate
+                        $sql="SELECT uploader_id, filename, filesize, title, description,
+                                DATE_FORMAT(upload_date, '%d-%m-%Y / %H:%i') AS uploadDate,
+                                DATE_FORMAT(last_upload_date, '%d-%m-%Y / %H:%i') AS lastUploadDate
                                 FROM dropbox_file
                                 WHERE id='".addslashes($id)."'";
                 } else {
-                        $sql="SELECT uploaderId, filename, filesize, title, description,
-                                DATE_FORMAT(uploadDate, '%Y-%m-%d / %H:%i') AS uploadDate,
-                                DATE_FORMAT(lastUploadDate, '%Y-%m-%d / %H:%i') AS lastUploadDate
+                        $sql="SELECT uploader_id, filename, filesize, title, description,
+                                DATE_FORMAT(upload_date, '%Y-%m-%d / %H:%i') AS uploadDate,
+                                DATE_FORMAT(last_upload_date, '%Y-%m-%d / %H:%i') AS lastUploadDate
                                 FROM dropbox_file
                                 WHERE id='".addslashes($id)."'";
                 }
 	        $result = db_query($sql);
 		$res = mysql_fetch_array($result);		
-		$uploaderId = stripslashes($res["uploaderId"]);
+		$uploaderId = stripslashes($res["uploader_id"]);
 		$uploaderName = uid_to_name($uploaderId);
 		if ($uploaderName == FALSE) {
 			//deleted user
@@ -298,8 +298,8 @@ class Dropbox_Person {
 		*/
 		$sql = "SELECT f.id FROM dropbox_file f, dropbox_person p
 				WHERE f.course_id = $course_id
-				AND f.uploaderId = $this->userId
-				AND f.uploaderId = p.personId
+				AND f.uploader_id = $this->userId
+				AND f.uploader_id = p.personId
 				AND f.id = p.fileId";
                 $result = db_query($sql);
                 while ($res = mysql_fetch_array($result)) {
@@ -311,8 +311,8 @@ class Dropbox_Person {
 		*/		                
                 $sql = "SELECT DISTINCT f.id FROM dropbox_file f, dropbox_person p, dropbox_post r
 				WHERE f.course_id = $course_id
-				AND f.uploaderId = p.personId
-                                AND f.uploaderId != $this->userId
+				AND f.uploader_id = p.personId
+                                AND f.uploader_id != $this->userId
 				AND f.id = p.fileId
                                 AND r.recipientId != $this->userId
                                 AND r.fileId = f.id";
