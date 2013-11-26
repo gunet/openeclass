@@ -17,11 +17,11 @@
 class Debug {
 
     private static $level = Debug::CRITICAL;
-    private static $default_level = Debug::ADMIN_CRITICAL;
+    private static $default_level = Debug::ERROR;
 
     const LOW = 0;
     const INFO = 10;
-    const ADMIN_CRITICAL = 20;
+    const ERROR = 20;
     const CRITICAL = 30;
     const ALWAYS = 100;
 
@@ -39,6 +39,11 @@ class Debug {
         if ($level >= Debug::$level) {
             echo '<br>' . $message . '<br>';
         }
+        /*
+          if ($level > Debug::ERROR) {
+            // Store it somewhere
+          }
+         */
     }
 
 }

@@ -245,7 +245,7 @@ class Database {
     /**
      * Private function to call master Debug object
      */
-    private static function dbg($message, $statement, $init_time, $level = Debug::ADMIN_CRITICAL) {
+    private static function dbg($message, $statement, $init_time, $level = Debug::ERROR) {
         Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level);
     }
 
