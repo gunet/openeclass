@@ -53,6 +53,9 @@ if (!isset($mysqlServer)) {
 	require_once 'include/not_installed.php';
 }
 
+// Initialize global debug mechanism
+require_once 'modules/admin/debug.php';
+
 // Connect to database
 require_once 'modules/db/database.php';
 

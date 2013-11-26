@@ -70,19 +70,19 @@ class Database {
      */
     public function __construct($server, $dbase, $user, $password) {
         try {
-            $default_query = null;
+            $params = null;
             switch (DB_TYPE) {
                 case "POSTGRES":
                     $dsn = "pgsql:host=" . $server . ';dbname=' . $dbase;
                     break;
                 case "MYSQL":
-                    $default_query = "SET NAMES utf8";
-                default :
                     $dsn = 'mysql:host=' . $server . ';dbname=' . $dbase . ';charset=utf8';
+                    $params = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8");
+                    break;
+                default :
+                    Debug::message("Unknown database backend: " . DB_TYPE, Debug::ALWAYS);
             }
-            $this->dbh = new PDO($dsn, $user, $password);
-            if ($default_query)
-                $this->query($default_query);
+            $this->dbh = new PDO($dsn, $user, $password, $params);
             $this->setTransactional(true);
         } catch (PDOException $e) {
             throw new Exception($e->getMessage());
@@ -161,68 +161,59 @@ class Database {
     }
 
     private function queryImpl($statement, $callback_fetch, $callback_error, $arrayType, $variables) {
-        if (is_null($statement) || !is_string($statement) || empty($statement)) {
-            $this->errorFound($callback_error, "First parameter of query should be a non-empty string; found: " . $statement . " (" . gettype($statement) . ").");
-            return null;
-        }
-        if (!is_callable($callback_fetch) && !is_null($callback_fetch)) {
-            $this->errorFound($callback_error, "Second parameter of query should be a closure, or null; found: " . $callback_fetch . " (" . gettype($callback_fetch) . ").");
-            return null;
-        }
+        $init_time = microtime();
+        if (is_null($statement) || !is_string($statement) || empty($statement))
+            return $this->errorFound($callback_error, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time);
+        if (!is_callable($callback_fetch) && !is_null($callback_fetch))
+            return $this->errorFound($callback_error, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time);
 
         /* Start transaction, if required */
-        if ($this->isTransactional && !$this->dbh->beginTransaction()) {
-            $this->errorFound($callback_error, "Unable to initialize transaction");
-            return null;
-        }
+        if ($this->isTransactional && !$this->dbh->beginTransaction())
+            return $this->errorFound($callback_error, "Unable to initialize transaction", $statement, $init_time);
 
         /* Prepare statement */
         $stm = $this->dbh->prepare($statement);
-        if (!$stm) {
-            $this->errorFound($callback_error, "Unable to prepare statement '" . $statement . "'");
-            return null;
-        }
+        if (!$stm)
+            return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
+
         /* Bind values - use '?' notation  */
         $howmanyvalues = count($variables);
         for ($i = 1; $i <= $howmanyvalues; $i++) {
             $bound = $variables[$i - 1];
             if (is_bool($bound)) {
                 if (!$stm->bindValue($i, $bound, PDO::PARAM_BOOL))
-                    $this->errorFound($callback_error, "Unable to bind boolean parameter '$bound' at location #" . $i, false);
+                    $this->errorFound($callback_error, "Unable to bind boolean parameter '$bound' at location #" . $i, $statement, $init_time, false);
             }
             else if (is_int($bound)) {
                 if (!$stm->bindValue($i, $bound, PDO::PARAM_INT))
-                    $this->errorFound($callback_error, "Unable to bind integer parameter '$bound' at location #" . $i, false);
+                    $this->errorFound($callback_error, "Unable to bind integer parameter '$bound' at location #" . $i, $statement, $init_time, false);
             }
             else if (is_float($bound)) {
                 if (!$stm->bindValue($i, strval($bound), PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind float parameter '$bound' at location #" . $i, false);
+                    $this->errorFound($callback_error, "Unable to bind float parameter '$bound' at location #" . $i, $statement, $init_time, false);
             }
             else if (is_string($bound)) {
                 if (!$stm->bindValue($i, $bound, PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind string parameter '$bound' at location #" . $i, false);
+                    $this->errorFound($callback_error, "Unable to bind string parameter '$bound' at location #" . $i, $statement, $init_time, false);
             } else {
                 if (!$stm->bindValue($i, $bound))
-                    $this->errorFound($callback_error, "Unable to bind generic parameter '$bound' at location #" . $i, false);
+                    $this->errorFound($callback_error, "Unable to bind generic parameter '$bound' at location #" . $i, $statement, $init_time, false);
             }
         }
         /* Execute statement */
-        if (!$stm->execute()) {
-            $this->errorFound($callback_error, "Unable to execute statement '" . $statement . "'");
-            return null;
-        }
+        if (!$stm->execute())
+            return $this->errorFound($callback_error, "Unable to execute statement", $statement, $init_time);
+
         /* fetch results */
         $result = null;
         if ($arrayType == 1) {
-            if (!($result = $stm->fetch(PDO::FETCH_OBJ))) {
-                $this->errorFound($callback_error, "Unable to fetch single result as object for statement '" . $statement . "'");
-                return null;
-            }
+            $result = $stm->fetch(PDO::FETCH_OBJ);
+            if (!is_object($result))
+                return $this->errorFound($callback_error, "Unable to fetch single result as object", $statement, $init_time);
         } else if ($arrayType == 2) {
-            if (!($result = $stm->fetchAll(PDO::FETCH_OBJ))) {
-                $this->errorFound($callback_error, "Unable to fetch all results as objects for statement '" . $statement . "'");
-                return null;
-            }
+            $result = $stm->fetchAll(PDO::FETCH_OBJ);
+            if (!is_array($result))
+                return $this->errorFound($callback_error, "Unable to fetch all results as objects", $statement, $init_time);
         } else if ($callback_fetch)
             while (TRUE)
                 if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
@@ -230,7 +221,7 @@ class Database {
         /* Close transaction, if required */
         if ($this->isTransactional)
             $this->dbh->commit();
-
+        Database::dbg("Succesfully performed query", $statement, $init_time, Debug::INFO);
         return $result;
     }
 
@@ -242,12 +233,20 @@ class Database {
         return $this->dbh->lastInsertId();
     }
 
-    private function errorFound($callback_error, $error_msg, $close_transaction = true) {
+    private function errorFound($callback_error, $error_msg, $statement, $init_time, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
         if ($close_transaction && $this->isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-        echo "Error: " . $error_msg;
+        Database::dbg("Error: " . $error_msg, $statement, $init_time);
+        return null;
+    }
+
+    /**
+     * Private function to call master Debug object
+     */
+    private static function dbg($message, $statement, $init_time, $level = Debug::ADMIN_CRITICAL) {
+        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level);
     }
 
 }
