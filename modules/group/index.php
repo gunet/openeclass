@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -317,12 +317,12 @@ if ($is_editor) {
 
         if ($has_forum) {
                 $tool_content .= "$langGroupForum</td>
-          <td align='right'><font color='green'>$langYes</font>";
-                $fontColor="black";
+                <td align='right'><font color='green'>$langYes</font>";
+                      $fontColor="black";
         } else {
                 $tool_content .= "$langGroupForum</td>
-          <td align='right'>
-                <font color='red'>$langNo</font>";$fontColor="silver";
+                    <td align='right'>
+                    <font color='red'>$langNo</font>";$fontColor="silver";
         }
         $tool_content .= "</td>
         </tr>
@@ -330,10 +330,10 @@ if ($is_editor) {
           <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
         if ($private_forum) {
                 $tool_content .= "$langForumType</td>
-          <td align='right'><font color='red'>$langForumClosed</font>";
+                    <td align='right'><font color='red'>$langForumClosed</font>";
         } else {
                 $tool_content .= "$langForumType</td>
-          <td align='right'><font color='green'>$langForumOpen</font>";
+                    <td align='right'><font color='green'>$langForumOpen</font>";
         }
         $tool_content .= "</td>
         </tr>
@@ -341,15 +341,13 @@ if ($is_editor) {
           <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
         if ($documents) {
                 $tool_content .= "$langDoc</td>
-          <td align='right'><font color='green'>$langYes</font>";
+                    <td align='right'><font color='green'>$langYes</font>";
         } else {
                 $tool_content .= "$langDoc</td>
-          <td align='right'><font color='red'>$langNo</font>";
+                    <td align='right'><font color='red'>$langNo</font>";
         }
-        $tool_content .= "</td>
-        </tr>";
-        $tool_content .= "
-        </table>";
+        $tool_content .= "</td></tr>";
+        $tool_content .= "</table>";
 
         $groupSelect = db_query("SELECT id FROM `group` WHERE course_id = $course_id ORDER BY id");
         $myIterator = 0;
@@ -391,7 +389,7 @@ if ($is_editor) {
                         $totalRegistered += $member_count;
                         $myIterator++;
                 }
-                $tool_content .= "</table><br />\n";
+                $tool_content .= "</table><br />";
         } else {
                 $tool_content .= "<p class='alert1'>$langNoGroup</p>";
         }
@@ -432,9 +430,9 @@ if ($is_editor) {
                         if ($user_group_description) {
                                 $tool_content .= "<br />".q($user_group_description) . "&nbsp;&nbsp;" .
                                         icon('edit', $langModify,
-                                             "group_description.php?course=$code_cours&amp;group_id=$row[0]") . "&nbsp;" .
+                                             "group_description.php?course=$course_code&amp;group_id=$row[0]") . "&nbsp;" .
                                         icon('delete', $langDelete,
-                                             "group_description.php?course=$code_cours&amp;group_id=$row[0]&amp;delete=true",
+                                             "group_description.php?course=$course_code&amp;group_id=$row[0]&amp;delete=true",
                                              'onClick="return confirmation();');
                         } elseif ($is_member) {
                                 $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
@@ -454,16 +452,12 @@ if ($is_editor) {
                                         $tool_content .= "-";
                         }
                         $tool_content .= "</td>";
-                        $tool_content .= "
-                  <td class='center'>$member_count</td>
-                  <td class='center'>" .
-                                         ($max_members? $max_members: '-') . "</td>
-                </tr>\n";
+                        $tool_content .= "<td class='center'>$member_count</td><td class='center'>" .
+                                         ($max_members? $max_members: '-') . "</td></tr>";
                         $totalRegistered += $member_count;
                         $k++;
                 }
-                $tool_content .= "
-                </table>";
+                $tool_content .= "</table>";
         }
 }
 

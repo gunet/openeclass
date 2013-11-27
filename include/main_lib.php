@@ -330,10 +330,10 @@ function uid_to_username($uid)
 function display_user($user, $print_email = false, $icon = true)
 {
         global $langAnonymous, $urlAppend;
-
+        
         if (count($user) == 0) {
                 return '-';
-        } elseif (is_array($user) and !isset($user['user_id'])) {
+        } elseif (is_array($user) and !isset($user['id'])) {
                 $begin = true;
                 $html = '';
                 foreach ($user as $user_data) {

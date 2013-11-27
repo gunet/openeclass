@@ -66,7 +66,7 @@ if (!$is_member and !$is_editor and (!$self_reg or $member_count >= $max_members
         exit;
 }
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>\n";
+$tool_content .= "<div id='operations_container'><ul id='opslist'>";
 if ($is_editor or $is_tutor) {
         $tool_content .= "<li><a href='group_edit.php?course=$course_code&amp;group_id=$group_id'>$langEditGroup</a></li>\n";
 } elseif ($self_reg and isset($uid) and !$is_member) {
@@ -89,12 +89,12 @@ $tool_content .=  "<br />
 
 $tutors = array();
 $members = array();
-$q = db_query("SELECT user.id AS user_id, surname, givenname, email, am, is_tutor, has_icon,
+$q = db_query("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
 		      group_members.description
                       FROM group_members, user
-                      WHERE group_id = $group_id AND
+                      WHERE group_members.group_id = $group_id AND
                             group_members.user_id = user.id
-                      ORDER BY surname, givenname");
+                      ORDER BY user.surname, user.givenname");
 while ($user = mysql_fetch_array($q)) {
         if ($user['is_tutor']) {
                 $tutors[] = display_user($user, true);
@@ -133,7 +133,7 @@ $tool_content .= "
     <tr>
       <th class='left' valign='top'>$langGroupMembers:</th>
       <td>
-        <table width='100%' align='center' class=\"tbl_alt\">
+        <table width='100%' align='center' class='tbl_alt'>
         <tr>
           <th class='left'>$langSurnameName</th>
           <th class='center' width='120'>$langAm</th>
@@ -141,8 +141,8 @@ $tool_content .= "
         </tr>";
 
 if ($members) {
-$myIndex = 0;
-	foreach ($members as $member){
+        $myIndex = 0;
+	foreach ($members as $member){            
 		$user_group_description = $member['description'];
                 if ($myIndex % 2 == 0) {
                     $tool_content .= "<tr class='even'>";
@@ -166,8 +166,7 @@ $myIndex = 0;
                 } else {
                         $tool_content .= '-';
                 }
-                $tool_content .= "</td>
-        </tr>\n";
+                $tool_content .= "</td></tr>";
         $myIndex++;
 	}
 } else {
@@ -178,7 +177,22 @@ $tool_content .=  "</table>";
 $tool_content .= "</td></tr></table></fieldset>";
 draw($tool_content, 2);
 
-
+/**
+ * 
+ * @global type $has_forum
+ * @global type $forum_id
+ * @global type $documents
+ * @global type $langForums
+ * @global type $group_id
+ * @global type $langGroupDocumentsLink
+ * @global type $is_editor
+ * @global type $is_tutor
+ * @global type $group_id
+ * @global type $langEmailGroup
+ * @global type $langUsage
+ * @global type $course_code
+ * @return string
+ */
 function loadGroupTools(){
         global $has_forum, $forum_id, $documents, $langForums,
                $group_id, $langGroupDocumentsLink, $is_editor, $is_tutor, $group_id, $langEmailGroup,

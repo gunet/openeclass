@@ -18,10 +18,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups usage / statistics
- *
+/**
+ * @file group_usage.php
+ * @brief Groups usage / statistics
  */
+
 
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -154,13 +155,13 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 
 $i = 0;
 if ($type == 'duration') {
-        $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
-} else {
-        $result = db_query("SELECT user_id FROM group_members WHERE group_id = $group_id");
+        $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);        
+} else {    
+        $result = db_query("SELECT user_id AS id FROM group_members WHERE group_id = $group_id");
 }
 if ($result) {
         while ($row = mysql_fetch_array($result)) {
-                $user_id = $row['user_id'];
+                $user_id = $row['id'];
                 if ($i%2 == 0) {
                         $tool_content .= "<tr>";
                 } else {

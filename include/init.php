@@ -297,10 +297,13 @@ if (isset($require_current_course) and $require_current_course) {
 		// The admin and power users can see all courses as adminOfCourse
 		if ($is_admin or $is_power_user) {
 			$status = USER_TEACHER;
-		} else {                    
-                    $status = Database::get()->querySingle("SELECT status FROM course_user
-                                                       WHERE user_id = ? AND
-                                                       course_id = ?", $uid, $course_id)->status;
+		} else {
+                        $stat = Database::get()->querySingle("SELECT status FROM course_user
+                                                           WHERE user_id = ? AND
+                                                           course_id = ?", $uid, $course_id);
+                        if ($stat) {
+                            $status = $stat->status;
+                        }
 		}
 
 		if ($visible != COURSE_OPEN) {

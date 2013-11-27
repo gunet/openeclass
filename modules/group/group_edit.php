@@ -3,7 +3,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -152,46 +152,46 @@ $tool_content_group_description = q($group_description);
 
 if ($multi_reg) {
         // Students registered to the course but not members of this group
-        $sqll = "SELECT u.user_id, u.surname, u.givenname
+        $sqll = "SELECT u.id, u.surname, u.givenname
                         FROM user u, course_user cu
                         WHERE cu.course_id = $course_id AND
-                              cu.user_id = u.user_id AND
-                              u.user_id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
-                              cu.statut = 5
-                        GROUP BY u.user_id
+                              cu.user_id = u.id AND
+                              u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = $group_id) AND
+                              cu.status = 5
+                        GROUP BY u.id
                         ORDER BY u.surname, u.givenname";
 } else {
         // Students registered to the course but members of no group
-        $sqll = "SELECT u.user_id, u.surname, u.givenname
+        $sqll = "SELECT u.id, u.surname, u.givenname
                         FROM (user u, course_user cu)
                         WHERE cu.course_id = $course_id AND
                               cu.user_id = u.user_id AND
-                              cu.statut = 5 AND
-                              u.user_id NOT IN (SELECT user_id FROM group_members, `group`
+                              cu.status = 5 AND
+                              u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                WHERE `group`.id = group_members.group_id AND
                                                                `group`.course_id = $course_id)
-                        GROUP BY u.user_id
+                        GROUP BY u.id
                         ORDER BY u.surname, u.givenname";
 }
 
 $tool_content_not_Member = '';
 $resultNotMember = db_query($sqll);
 while ($myNotMember = mysql_fetch_array($resultNotMember)) {
-        $tool_content_not_Member .= "<option value='$myNotMember[user_id]'>" .
+        $tool_content_not_Member .= "<option value='$myNotMember[id]'>" .
                         q("$myNotMember[surname] $myNotMember[givenname]") . "</option>";
 }
 
-$q = db_query("SELECT user.id AS user_id, surname, givenname
+$q = db_query("SELECT user.id, user.surname, user.givenname
                FROM user, group_members
                WHERE group_members.user_id = user.id AND
                      group_members.group_id = $group_id AND
                      group_members.is_tutor = 0
-               ORDER BY surname, givenname");
+               ORDER BY user.surname, user.givenname");
 
 $tool_content_group_members = '';
 while ($member = mysql_fetch_array($q)) {
-        $tool_content_group_members .= "<option value='$member[user_id]'>" . q("$member[surname] $member[givenname]") .
-                                       "</option>\n";
+        $tool_content_group_members .= "<option value='$member[id]'>" . q("$member[surname] $member[givenname]") .
+                                       "</option>";
 }
 
 if (!empty($message)) {
@@ -261,7 +261,6 @@ $tool_content .="
     </tr>
     </table>
     </fieldset>
-</form>
-";
+</form>";
 
 draw($tool_content, 2, null, $head_content);

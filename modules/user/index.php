@@ -138,12 +138,12 @@ if (isset($_GET['giveAdmin'])) {
 if (get_config('opencourses_enable')) {
     if (isset($_GET['giveReviewer'])) {
         $new_reviewr_gid = intval($_GET['giveReviewer']);
-        db_query("UPDATE course_user SET statut = 1, reviewer = 1
+        db_query("UPDATE course_user SET status = 1, reviewer = 1
                         WHERE user_id = $new_reviewr_gid 
                         AND course_id = " . intval($course_id));
     } elseif (isset($_GET['removeReviewer'])) {
         $removed_reviewer_gid = intval($_GET['removeReviewer']);
-        db_query("UPDATE course_user SET statut = 5, reviewer = 0
+        db_query("UPDATE course_user SET status = 5, reviewer = 0
                         WHERE user_id <> $uid AND
                               user_id = $removed_reviewer_gid AND
                               course_id = " . intval($course_id));
@@ -263,7 +263,7 @@ switch ($ord) {
 }
 $result = db_query("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
-                           course_user.tutor, course_user.editor, course_user.reg_date
+                           course_user.tutor, course_user.editor, course_user.reviewer, course_user.reg_date
                     FROM course_user, user
                     WHERE `user`.id = `course_user`.`user_id`
                     AND `course_user`.`course_id` = $course_id
