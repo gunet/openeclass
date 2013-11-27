@@ -314,7 +314,7 @@ if ($course_license) {
 
 // display opencourses level in bar
 require_once '../../modules/course_metadata/CourseXML.php';
-$level = CourseXMLElement::getLevel($cours_id, $code_cours);
+$level = CourseXMLElement::getLevel($code_cours);
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $code_cours;

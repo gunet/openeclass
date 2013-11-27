@@ -110,7 +110,7 @@ $lang_editor = langname_to_code($language);
 
 // check if the course is opencourses certified
 require_once '../course_metadata/CourseXML.php';
-$isOpenCourseCertified = CourseXMLElement::isCertified($cours_id, $code_cours);
+$isOpenCourseCertified = CourseXMLElement::isCertified($code_cours);
 // if it is, disable visibility choice in form
 $disabledVisibility = ($isOpenCourseCertified) ? "disabled='disabled'" : '';
 

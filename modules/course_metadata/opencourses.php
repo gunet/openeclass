@@ -56,7 +56,7 @@ $icons = array(2 => "<img src='$themeimg/lock_open.png'   alt='" . $m['legopen']
 $opencourses = array();
 $res = db_query("SELECT cours_id, code FROM cours WHERE faculteid = $fc", $mysqlMainDb);
 while ($course = mysql_fetch_assoc($res)) {
-    if (CourseXMLElement::isCertified($course['cours_id'], $course['code']))
+    if (CourseXMLElement::isCertified($course['code']))
         $opencourses[$course['cours_id']] = $course['code'];
 }
 
@@ -170,7 +170,7 @@ if (count($opencourses) > 0) {
             
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) .
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['k']) .
                 "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
                 $metadata->asDiv() . "</div>
                 <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 

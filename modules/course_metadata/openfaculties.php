@@ -49,9 +49,9 @@ if (isset($result)) {
         
         // count open courses
         $numOpenCourses = 0;
-        $res = db_query("SELECT cours_id, code FROM cours WHERE faculteid = " . intval($fac['id']), $mysqlMainDb);
+        $res = db_query("SELECT code FROM cours WHERE faculteid = " . intval($fac['id']), $mysqlMainDb);
         while ($course = mysql_fetch_assoc($res)) {
-            if (CourseXMLElement::isCertified($course['cours_id'], $course['code']))
+            if (CourseXMLElement::isCertified($course['code']))
                 $numOpenCourses++;
         }
         
