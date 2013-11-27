@@ -87,7 +87,7 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
                         WHERE course.id = course_department.course
                           AND course_department.department = " . $fc);
     while ($course = mysql_fetch_assoc($res)) {
-        if (CourseXMLElement::isCertified($course['id'], $course['code']))
+        if (CourseXMLElement::isCertified($course['code']))
             $opencourses[$course['id']] = $course['code'];
     }
 
@@ -166,7 +166,7 @@ if ($numrows > 0) {
         if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['id'], $mycours['k']) .
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['k']) .
                 "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
                 $metadata->asDiv() . "</div>
                 <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 

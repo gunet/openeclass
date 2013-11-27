@@ -567,6 +567,28 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
+     * Initialize an XML structure for a specific course only if the metadatafile is present
+     * and without using database queries. This is a lighter version than init, but it 
+     * should be used for read-only operations. Write operations rely on init's adaption
+     * and population with DB data as well.
+     * 
+     * @param  string $courseCode
+     * @return CourseXMLElement or false on error
+     */
+    public static function initFromFile($courseCode) {
+        $xmlFile  = self::getCourseXMLPath($courseCode);
+        
+        if (file_exists($xmlFile)) {
+            $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
+            if (!$xml)
+                return false;
+            else
+                return $xml;
+        } else
+            return false;
+    }
+    
+    /**
      * Refresh/update the auto-generated values for a specific course.
      * 
      * @param int    $courseId
@@ -662,20 +684,21 @@ class CourseXMLElement extends SimpleXMLElement {
     /**
      * Returns whether a course is OpenCourses Certified or not.
      * 
-     * @param  int     $courseId
      * @param  string  $courseCode
      * @return boolean
      */
-    public static function isCertified($courseId, $courseCode) {
+    public static function isCertified($courseCode) {
         if (!get_config('course_metadata'))
             return false;
         
-        $xml = self::init($courseId, $courseCode);
-        $xmlData = $xml->asFlatArray();
-        if ( (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true') || 
-             (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true') || 
-             (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') )
-            return true;
+        $xml = self::initFromFile($courseCode);
+        if ($xml !== false) {
+            $xmlData = $xml->asFlatArray();
+            if ( (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true') || 
+                 (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true') || 
+                 (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') )
+                return true;
+        }
         
         return false;
     }
@@ -687,22 +710,24 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param  string  $courseCode
      * @return string
      */
-    public static function getLevel($courseId, $courseCode) {
+    public static function getLevel($courseCode) {
         global $langOpenCoursesAMinusLevel, $langOpenCoursesALevel, $langOpenCoursesAPlusLevel;
         
         if (!get_config('course_metadata'))
             return null;
         
-        $xml = self::init($courseId, $courseCode);
-        $xmlData = $xml->asFlatArray();
-        if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
-            return $langOpenCoursesAPlusLevel;
-        
-        if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
-            return $langOpenCoursesALevel;
-        
-        if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
-            return $langOpenCoursesAMinusLevel;
+        $xml = self::initFromFile($courseCode);
+        if ($xml !== false) {
+            $xmlData = $xml->asFlatArray();
+            if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
+                return $langOpenCoursesAPlusLevel;
+
+            if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
+                return $langOpenCoursesALevel;
+
+            if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
+                return $langOpenCoursesAMinusLevel;
+        }
         
         return null;
     }
@@ -748,12 +773,12 @@ class CourseXMLElement extends SimpleXMLElement {
     public static function getCountCallback() {
         $countCallback = function($subnode) {
             $count = 0;
-            $n = db_query("SELECT course.id, course.code
+            $n = db_query("SELECT course.code
                              FROM course, course_department
                             WHERE course.id = course_department.course
                               AND course_department.department = ". intval($subnode));
             while ($r = mysql_fetch_array($n)) {
-                if (CourseXMLElement::isCertified($r['id'], $r['code']))
+                if (CourseXMLElement::isCertified($r['code']))
                     $count++;
             }
             return $count;

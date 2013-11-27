@@ -103,7 +103,7 @@ $nameTools = $langModifInfo;
 
 // check if the course is opencourses certified
 require_once 'modules/course_metadata/CourseXML.php';
-$isOpenCourseCertified = CourseXMLElement::isCertified($course_id, $course_code);
+$isOpenCourseCertified = CourseXMLElement::isCertified($course_code);
 // if it is, disable visibility choice in form
 $disabledVisibility = ($isOpenCourseCertified) ? "disabled='disabled'" : '';
     

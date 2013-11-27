@@ -713,9 +713,9 @@ function openCoursesExtra() {
     
     if (get_config('opencourses_enable')) {
         $openCoursesNum = 0;
-        $res = db_query("SELECT id, code FROM course");
+        $res = db_query("SELECT code FROM course");
         while ($course = mysql_fetch_assoc($res)) {
-            if (CourseXMLElement::isCertified($course['id'], $course['code'])) {
+            if (CourseXMLElement::isCertified($course['code'])) {
                 $openCoursesNum++;
             }
         }
