@@ -46,6 +46,7 @@ db_query("DROP TABLE IF EXISTS annonces");
 db_query("DROP TABLE IF EXISTS auth");
 db_query("DROP TABLE IF EXISTS cours");
 db_query("DROP TABLE IF EXISTS cours_user");
+db_query("DROP TABLE IF EXISTS course_review");
 db_query("DROP TABLE IF EXISTS faculte");
 db_query("DROP TABLE IF EXISTS institution");
 db_query("DROP TABLE IF EXISTS loginout");
