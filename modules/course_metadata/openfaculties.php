@@ -20,7 +20,6 @@
  * ======================================================================== */
 
 require_once '../../include/baseTheme.php';
-require_once 'CourseXML.php';
 $nameTools = $langSelectFac;
 
 // exit if feature disabled
@@ -48,12 +47,10 @@ if (isset($result)) {
 		($fac[code])";
         
         // count open courses
-        $numOpenCourses = 0;
-        $res = db_query("SELECT code FROM cours WHERE faculteid = " . intval($fac['id']), $mysqlMainDb);
-        while ($course = mysql_fetch_assoc($res)) {
-            if (CourseXMLElement::isCertified($course['code']))
-                $numOpenCourses++;
-        }
+        $numOpenCourses = db_query_get_single_value("SELECT COUNT(cr.id) "
+                . " FROM course_review cr "
+                . " LEFT JOIN cours c ON (c.cours_id = cr.course_id) "
+                . " WHERE cr.is_certified = 1 AND c.faculteid = " . intval($fac['id']), $mysqlMainDb);
         
         $tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$numOpenCourses&nbsp;" . ($numOpenCourses == 1 ? $langAvCours : $langAvCourses) . "</small></td>
 		</tr>";

@@ -20,6 +20,11 @@
 
 class CourseXMLElement extends SimpleXMLElement {
     
+    const NO_LEVEL = 0;
+    const A_MINUS_LEVEL = 1;
+    const A_LEVEL = 2;
+    const A_PLUS_LEVEL = 3;
+    
     /**
      * Get element's attribute if exists.
      * Returns string with attribute value or
@@ -705,32 +710,26 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
-     * Returns the Certification Level of the course.
+     * Returns the Certification Level language string by matching a key-value 
+     * (i.e. int field from DB table course_review).
      * 
-     * @param  int     $courseId
-     * @param  string  $courseCode
+     * @param  int    $key
      * @return string
      */
-    public static function getLevel($courseCode) {
-        global $langOpenCoursesAMinusLevel, $langOpenCoursesALevel, $langOpenCoursesAPlusLevel;
-        
+    public static function getLevel($key) {
         if (!get_config('course_metadata'))
             return null;
         
-        $xml = self::initFromFile($courseCode);
-        if ($xml !== false) {
-            $xmlData = $xml->asFlatArray();
-            if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
-                return $langOpenCoursesAPlusLevel;
-
-            if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
-                return $langOpenCoursesALevel;
-
-            if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
-                return $langOpenCoursesAMinusLevel;
-        }
+        $valArr = array(
+            self::A_MINUS_LEVEL => $GLOBALS['langOpenCoursesAMinusLevel'],
+            self::A_LEVEL       => $GLOBALS['langOpenCoursesALevel'],
+            self::A_PLUS_LEVEL  => $GLOBALS['langOpenCoursesAPlusLevel']
+        );
         
-        return null;
+        if (isset($valArr[$key]))
+            return $valArr[$key];
+        else
+            return null;
     }
     
     /**

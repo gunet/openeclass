@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2011  Greek Universities Network - GUnet
@@ -64,7 +64,6 @@ if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
 }
 
 include ($relPath . "template/template.inc.php");
-require_once ($relPath . "modules/course_metadata/CourseXML.php");
 include ('tools.php');
 
 /**

@@ -52,12 +52,11 @@ $icons = array(2 => "<img src='$themeimg/lock_open.png'   alt='" . $m['legopen']
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
     );
 
-// find all opencourses
+// find all certified opencourses
 $opencourses = array();
-$res = db_query("SELECT cours_id, code FROM cours WHERE faculteid = $fc", $mysqlMainDb);
+$res = db_query("SELECT c.cours_id, c.code FROM cours c LEFT JOIN course_review cr ON (cr.course_id = c.cours_id) WHERE c.faculteid = $fc and cr.is_certified = 1", $mysqlMainDb);
 while ($course = mysql_fetch_assoc($res)) {
-    if (CourseXMLElement::isCertified($course['code']))
-        $opencourses[$course['cours_id']] = $course['code'];
+    $opencourses[$course['cours_id']] = $course['code'];
 }
 
 // construct comma seperated string with open courses ids
@@ -111,8 +110,10 @@ if (count($opencourses) > 0) {
                                    cours.intitule i,
                                    cours.visible visible,
                                    cours.titulaires t,
-                                   cours.cours_id id
+                                   cours.cours_id id,
+                                   course_review.level level
                             FROM cours
+                            LEFT JOIN course_review ON (course_review.course_id = cours.cours_id)
                             WHERE cours.faculteid = $fc 
                             AND cours.type = '$type'
                             AND cours.visible != ".COURSE_INACTIVE."
@@ -170,7 +171,7 @@ if (count($opencourses) > 0) {
             
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['k']) .
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['level']) .
                 "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
                 $metadata->asDiv() . "</div>
                 <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 

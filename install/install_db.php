@@ -155,16 +155,29 @@ db_query("CREATE TABLE `cours` (
 #
 
 db_query("CREATE TABLE cours_user (
-      `cours_id` INT(11) NOT NULL DEFAULT 0,
-      `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-      `statut` TINYINT(4) NOT NULL DEFAULT 0,
-      `team` INT(11) NOT NULL DEFAULT 0,
-      `tutor` INT(11) NOT NULL DEFAULT 0,
-      `editor` INT(11) NOT NULL DEFAULT 0,
-      `reviewer` INT(11) NOT NULL DEFAULT 0,
-      `reg_date` DATE NOT NULL,
-      `receive_mail` BOOL NOT NULL DEFAULT 1,
-      PRIMARY KEY (cours_id, user_id)) $charset_spec");
+    `cours_id` INT(11) NOT NULL DEFAULT 0,
+    `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `statut` TINYINT(4) NOT NULL DEFAULT 0,
+    `team` INT(11) NOT NULL DEFAULT 0,
+    `tutor` INT(11) NOT NULL DEFAULT 0,
+    `editor` INT(11) NOT NULL DEFAULT 0,
+    `reviewer` INT(11) NOT NULL DEFAULT 0,
+    `reg_date` DATE NOT NULL,
+    `receive_mail` BOOL NOT NULL DEFAULT 1,
+    PRIMARY KEY (cours_id, user_id)) $charset_spec");
+
+//
+// table `course_review
+//
+
+db_query("CREATE TABLE course_review (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `is_certified` BOOL NOT NULL DEFAULT 0,
+    `level` TINYINT(4) NOT NULL DEFAULT 0,
+    `last_review` DATETIME NOT NULL,
+    `last_reviewer` INT(11) NOT NULL,
+    PRIMARY KEY (id)) $charset_spec");
 
 #
 # Table `faculte`

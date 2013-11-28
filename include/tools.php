@@ -647,16 +647,10 @@ function pickerMenu() {
 
 
 function openCoursesExtra() {
-    global $mysqlMainDb, $urlServer, $themeimg;
+    global $mysqlMainDb, $urlServer;
     
     if (get_config('opencourses_enable')) {
-        $openCoursesNum = 0;
-        $res = db_query("SELECT code FROM cours", $mysqlMainDb);
-        while ($course = mysql_fetch_assoc($res)) {
-            if (CourseXMLElement::isCertified($course['code'])) {
-                $openCoursesNum++;
-            }
-        }
+        $openCoursesNum = db_query_get_single_value("SELECT COUNT(id) FROM course_review WHERE is_certified = 1", $mysqlMainDb);
 
         if ($openCoursesNum > 0) {
             $GLOBALS['leftNavExtras'] = '

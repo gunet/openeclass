@@ -94,20 +94,42 @@ if (isset($_POST['submit'])) {
         }
     }
     
-    // success message
-    if ($_POST['course_confirmAPlusLevel'] == 'true')
+    // success message and values for storage
+    $is_certified = 1;
+    $level = CourseXMLElement::NO_LEVEL;
+    if ($_POST['course_confirmAPlusLevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
-    else if ($_POST['course_confirmALevel'] == 'true')
+        $level = CourseXMLElement::A_PLUS_LEVEL;
+    } else if ($_POST['course_confirmALevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
-    else if ($_POST['course_confirmAMinusLevel'] == 'true')
+        $level = CourseXMLElement::A_LEVEL;
+    } else if ($_POST['course_confirmAMinusLevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
-    else
+        $level = CourseXMLElement::A_MINUS_LEVEL;
+    } else {
         $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
+        $is_certified = 0;
+    }
     
     $_POST['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP");
+    $last_review = date('Y-m-d H:i:s');
     $xml->populate($_POST);
     CourseXMLElement::save($code_cours, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
+    //
+    // insert or update db
+    $exists = db_query_get_single_value("SELECT 1 FROM `$mysqlMainDb`.course_review WHERE course_id = " . $cours_id);
+    if ($exists) {
+        db_query("UPDATE `$mysqlMainDb`.course_review SET "
+                . " is_certified = $is_certified, "
+                . " level = $level, "
+                . " last_review = '" . $last_review ."', "
+                . " last_reviewer = $uid "
+                . " WHERE course_id = $cours_id");
+    } else {
+        db_query("INSERT INTO `$mysqlMainDb`.course_review (course_id, is_certified, level, last_review, last_reviewer) "
+                . " VALUES ($cours_id, $is_certified, $level, '" . $last_review . "', $uid)");
+    }
 }
 
 // checkboxes
@@ -130,14 +152,10 @@ $teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'tick' : 'delete';
 
 // parse last submission date
 $lastSubmission = '';
-if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
-    $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
-    if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
-        $lastSubmission = '<p><small>' . $langLastSubmission . ': ' .
-                $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
-                '&nbsp;' .
-                $lastDate['hour'] . ':' . zeroComplete($lastDate['minute']) . '</small></p>';
-    }
+if (isset($xmlData['course_lastLevelConfirmation']) && 
+        strlen($xmlData['course_lastLevelConfirmation']) > 0 && 
+        ($ts = strtotime($xmlData['course_lastLevelConfirmation'])) > 0) {
+    $lastSubmission = '<p><small>' . $langLastSubmission . ': ' . date('j/n/Y H:i:s', $ts) . '</small></p>';
 }
 
 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$code_cours'>";
