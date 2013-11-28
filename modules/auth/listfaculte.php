@@ -26,7 +26,7 @@ $countCallback = null;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     require_once 'modules/course_metadata/CourseXML.php';
-    $red_url = "modules/course_metadata/opencourses.php?fc=";
+    $redirectUrl = "modules/course_metadata/opencourses.php?fc=";
     $countCallback = CourseXMLElement::getCountCallback();
     // exit if feature disabled
     if (!get_config('opencourses_enable')) {

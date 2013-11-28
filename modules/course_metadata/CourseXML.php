@@ -20,6 +20,11 @@
 
 class CourseXMLElement extends SimpleXMLElement {
     
+    const NO_LEVEL = 0;
+    const A_MINUS_LEVEL = 1;
+    const A_LEVEL = 2;
+    const A_PLUS_LEVEL = 3;
+    
     /**
      * Get element's attribute if exists.
      * Returns string with attribute value or
@@ -531,9 +536,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $data     = self::getAutogenData($courseId); // preload xml with auto-generated data
         
         // course-based adaptation
-        list($dnum)  = mysql_fetch_row(db_query("select count(id) from document WHERE course_id = " . intval($courseId) ));
-        list($vnum)  = mysql_fetch_row(db_query("select count(id) from video WHERE course_id = " . intval($courseId) ));
-        list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolink WHERE course_id = " . intval($courseId) ));
+        $dnum  = Database::get()->querySingle("select count(id) as count from document where course_id = ?", intval($courseId))->count;
+        $vnum  = Database::get()->querySingle("select count(id) as count from video where course_id = ?", intval($courseId))->count;
+        $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?", intval($courseId))->count;
         if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
@@ -625,34 +630,31 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $license;
         $data = array();
     
-        $res1 = db_query("SELECT * FROM course WHERE id = " . intval($courseId));
-        $course = mysql_fetch_assoc($res1);
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?", intval($courseId));
         if (!$course)
             return array();
 
-        $clang = $course['lang'];
+        $clang = $course->lang;
         $data['course_language'] = $clang;
-        $data['course_url'] = $urlServer . 'courses/'. $course['code'];
-        $data['course_instructor_fullName_' . $clang] = $course['prof_names'];
-        $data['course_title_' . $clang] = $course['title'];
-        $data['course_keywords_' . $clang] = $course['keywords'];
-        if (!empty($course['course_license'])) {
-            $data['course_license'] = $license[$course['course_license']]['title'];
+        $data['course_url'] = $urlServer . 'courses/'. $course->code;
+        $data['course_instructor_fullName_' . $clang] = $course->prof_names;
+        $data['course_title_' . $clang] = $course->title;
+        $data['course_keywords_' . $clang] = $course->keywords;
+        if (!empty($course->course_license)) {
+            $data['course_license'] = $license[$course->course_license]['title'];
         } else {
             $data['course_license'] = '';
         }
 
         // turn visible units to associative array
-        $res2 = db_query("SELECT id, title, comments
-                           FROM course_units
-                          WHERE visible > 0
-                            AND course_id = " . intval($courseId));
         $unitsCount = 0;
-        while($row = mysql_fetch_assoc($res2)) {
-            $data['course_unit_title_' . $clang][$unitsCount] = $row['title'];
-            $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($row['comments']);
+        DataBase::get()->queryFunc("SELECT title, comments 
+                                      FROM course_units
+                                     WHERE visible > 0 AND course_id = ?", function($unit) use (&$data, &$unitsCount, $clang) {
+            $data['course_unit_title_' . $clang][$unitsCount] = $unit->title;
+            $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($unit->comments);
             $unitsCount++; // also serves as array index, starting from 0
-        }    
+        }, intval($courseId));
         $data['course_numberOfUnits'] = $unitsCount;
 
         return $data;
@@ -704,32 +706,26 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
-     * Returns the Certification Level of the course.
+     * Returns the Certification Level language string by matching a key-value 
+     * (i.e. int field from DB table course_review).
      * 
-     * @param  int     $courseId
-     * @param  string  $courseCode
+     * @param  int    $key
      * @return string
      */
-    public static function getLevel($courseCode) {
-        global $langOpenCoursesAMinusLevel, $langOpenCoursesALevel, $langOpenCoursesAPlusLevel;
-        
+    public static function getLevel($key) {
         if (!get_config('course_metadata'))
             return null;
         
-        $xml = self::initFromFile($courseCode);
-        if ($xml !== false) {
-            $xmlData = $xml->asFlatArray();
-            if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
-                return $langOpenCoursesAPlusLevel;
-
-            if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
-                return $langOpenCoursesALevel;
-
-            if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
-                return $langOpenCoursesAMinusLevel;
-        }
+        $valArr = array(
+            self::A_MINUS_LEVEL => $GLOBALS['langOpenCoursesAMinusLevel'],
+            self::A_LEVEL       => $GLOBALS['langOpenCoursesALevel'],
+            self::A_PLUS_LEVEL  => $GLOBALS['langOpenCoursesAPlusLevel']
+        );
         
-        return null;
+        if (isset($valArr[$key]))
+            return $valArr[$key];
+        else
+            return null;
     }
     
     /**
@@ -772,20 +768,16 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static function getCountCallback() {
         $countCallback = function($subnode) {
-            $count = 0;
-            $n = db_query("SELECT course.code
-                             FROM course, course_department
-                            WHERE course.id = course_department.course
-                              AND course_department.department = ". intval($subnode));
-            while ($r = mysql_fetch_array($n)) {
-                if (CourseXMLElement::isCertified($r['code']))
-                    $count++;
-            }
+            $count = Database::get()->querySingle("SELECT COUNT(course_review.id) as count
+                                                     FROM course, course_department, course_review
+                                                    WHERE course.id = course_department.course
+                                                      AND course.id = course_review.course_id AND course_department.department = ?
+                                                      AND course_review.is_certified = 1", intval($subnode))->count;
             return $count;
         };
         return $countCallback;
     }
-    
+
     /**
      * Fields that should be hidden from the HTML Form.
      * @var array

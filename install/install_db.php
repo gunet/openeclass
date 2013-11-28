@@ -54,6 +54,7 @@ db_query("DROP TABLE IF EXISTS announcements");
 db_query("DROP TABLE IF EXISTS auth");
 db_query("DROP TABLE IF EXISTS course");
 db_query("DROP TABLE IF EXISTS course_user");
+db_query("DROP TABLE IF EXISTS course_review");
 db_query("DROP TABLE IF EXISTS faculte");
 db_query("DROP TABLE IF EXISTS institution");
 db_query("DROP TABLE IF EXISTS loginout");
@@ -183,6 +184,21 @@ db_query("CREATE TABLE course_user (
       `reg_date` DATE NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
+
+
+//
+// Tabe `course_review`
+//
+
+db_query("CREATE TABLE course_review (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `is_certified` BOOL NOT NULL DEFAULT 0,
+    `level` TINYINT(4) NOT NULL DEFAULT 0,
+    `last_review` DATETIME NOT NULL,
+    `last_reviewer` INT(11) NOT NULL,
+    PRIMARY KEY (id)) $charset_spec");
+
 
 #
 # Table `user`

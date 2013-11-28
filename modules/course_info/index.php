@@ -101,11 +101,10 @@ hContent;
 
 $nameTools = $langModifInfo;
 
-// check if the course is opencourses certified
-require_once 'modules/course_metadata/CourseXML.php';
-$isOpenCourseCertified = CourseXMLElement::isCertified($course_code);
-// if it is, disable visibility choice in form
-$disabledVisibility = ($isOpenCourseCertified) ? "disabled='disabled'" : '';
+// if the course is opencourses certified, disable visibility choice in form
+$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) 
+        ? $creview->is_certified : false;
+$disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
     
 
 if (isset($_POST['submit'])) {

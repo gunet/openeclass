@@ -53,7 +53,7 @@ if (!isset($fc))
     $fc = $_SESSION['fc_memo'];
 
 
-$fac = mysql_fetch_row(db_query("SELECT name FROM hierarchy WHERE id = " . $fc));
+$fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?", $fc)->name;
 if (!($fac = $fac[0]))
     die("ERROR: no faculty with id $fc");
 
@@ -80,16 +80,16 @@ $queryCourseIds = '';
 $runQuery = true;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
-    // find subnode's opencourses
+    // find subnode's certified opencourses
     $opencourses = array();
-    $res = db_query("SELECT course.id, course.code
-                         FROM course, course_department
-                        WHERE course.id = course_department.course
-                          AND course_department.department = " . $fc);
-    while ($course = mysql_fetch_assoc($res)) {
-        if (CourseXMLElement::isCertified($course['code']))
-            $opencourses[$course['id']] = $course['code'];
-    }
+    Database::get()->queryFunc("SELECT course.id, course.code
+                                  FROM course, course_department, course_review
+                                 WHERE course.id = course_department.course
+                                   AND course.id = course_review.course_id
+                                   AND course_department.department = ?
+                                   AND course_review.is_certified = 1", function($course) use (&$opencourses) {
+        $opencourses[$course->id] = $course->code;
+    }, $fc);
 
     // construct comma seperated string with open courses ids
     $commaIds = "";
@@ -115,9 +115,11 @@ if ($runQuery) {
                                course.title i,
                                course.visible visible,
                                course.prof_names t,
-                               course.id id
-                          FROM course, course_department
+                               course.id id,
+                               course_review.level level
+                          FROM course, course_department, course_review
                          WHERE course.id = course_department.course
+                           AND course.id = course_review.course_id
                            AND course_department.department = $fc
                            AND course.visible != ".COURSE_INACTIVE."
                            $queryCourseIds
@@ -166,7 +168,7 @@ if ($numrows > 0) {
         if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['k']) .
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['level']) .
                 "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
                 $metadata->asDiv() . "</div>
                 <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 

@@ -123,9 +123,9 @@ function submitForm() {
     $extraData = CourseXMLElement::getAutogenData($course_id);
     $data = array_merge($_POST, $extraData, $fileData);
     // course-based adaptation
-    list($dnum)  = mysql_fetch_row(db_query("select count(id) from document WHERE course_id = " . intval($course_id) ));
-    list($vnum)  = mysql_fetch_row(db_query("select count(id) from video WHERE course_id = " . intval($course_id) ));
-    list($vlnum) = mysql_fetch_row(db_query("select count(id) from videolinks WHERE course_id = " . intval($course_id) ));
+    $dnum  = Database::get()->querySingle("select count(id) as count from document where course_id = ?", $course_id)->count;
+    $vnum  = Database::get()->querySingle("select count(id) as count from video where course_id = ?", $course_id)->count;
+    $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?", $course_id)->count;
     if ($dnum + $vnum + $vlnum < 1)
         $data['course_confirmVideolectures'] = 'false';
     

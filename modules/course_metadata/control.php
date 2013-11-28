@@ -34,15 +34,15 @@ if (!get_config('opencourses_enable') || !$is_opencourses_reviewer) {
 // initialize data from xml and db
 $xml = CourseXMLElement::init($course_id, $course_code);
 $xmlData = $xml->asFlatArray();
-list($visible) = mysql_fetch_row(db_query("SELECT visible FROM course WHERE id = " . intval($course_id)));
+$visible = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?", $course_id)->visible;
 $hasOpenAccess = ($visible == 2);
 $hasMandatoryMetadata = $xml->hasMandatoryMetadata();
 $hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license']));
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
-list($numDocs) = mysql_fetch_row(db_query("SELECT count(id) FROM document WHERE course_id = " . intval($course_id)));
-list($numUnits) = mysql_fetch_row(db_query("SELECT count(id) FROM course_units WHERE course_id = " . intval($course_id) . " AND `order` >= 1 AND visible = 1"));
-list($numVideo) = mysql_fetch_row(db_query("SELECT count(id) FROM video WHERE course_id = ". intval($course_id)));
-list($numVideoLinks) = mysql_fetch_row(db_query("SELECT count(id) FROM videolinks WHERE course_id = " . intval($course_id)));
+$numDocs  = Database::get()->querySingle("SELECT count(id) as count FROM document WHERE course_id = ?", $course_id)->count;
+$numUnits = Database::get()->querySingle("SELECT count(id) as count FROM course_units WHERE course_id = ? AND `order` >= 1 AND visible = 1", $course_id)->count;
+$numVideo = Database::get()->querySingle("SELECT count(id) as count FROM video WHERE course_id = ?", $course_id)->count;
+$numVideoLinks = Database::get()->querySingle("SELECT count(id) as count FROM videolink WHERE course_id = ?", $course_id)->count;
 $numMedia = $numVideo + $numVideoLinks;
 $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xmlData['course_confirmVideolectures'] == 'true');
 
@@ -94,20 +94,38 @@ if (isset($_POST['submit'])) {
         }
     }
     
-    // success message
-    if ($_POST['course_confirmAPlusLevel'] == 'true')
+    // success messageand values for storage
+    $is_certified = 1;
+    $level = CourseXMLElement::NO_LEVEL;
+    if ($_POST['course_confirmAPlusLevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
-    else if ($_POST['course_confirmALevel'] == 'true')
+        $level = CourseXMLElement::A_PLUS_LEVEL;
+    } else if ($_POST['course_confirmALevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
-    else if ($_POST['course_confirmAMinusLevel'] == 'true')
+        $level = CourseXMLElement::A_LEVEL;
+    } else if ($_POST['course_confirmAMinusLevel'] == 'true') {
         $tool_content .= "<div class='success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
-    else
+        $level = CourseXMLElement::A_MINUS_LEVEL;
+    } else {
         $tool_content .= "<div class='caution'>$langOpenCoursesWasNotSet</div>";
+        $is_certified = 0;
+    }
     
     $_POST['course_lastLevelConfirmation'] = date("Y-m-d\TH:i:sP");
+    $last_review = date('Y-m-d H:i:s');
     $xml->populate($_POST);
     CourseXMLElement::save($course_code, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
+    
+    // insert or update db
+    $exists = ($exres = Database::get()->querySingle("SELECT 1 as `exists` FROM course_review WHERE course_id = ?", $course_id)) ? $exres->exists : false;
+    if ($exists) {
+        Database::get()->query("UPDATE course_review SET is_certified = ?, level = ?, 
+            last_review = ?, last_reviewer = ? WHERE course_id = ?", $is_certified, $level, $last_review, $uid, $course_id);
+    } else {
+        Database::get()->query("INSERT INTO course_review (course_id, is_certified, level, last_review, last_reviewer)
+            VALUES (?, ?, ?, ?, ?)", $course_id, $is_certified, $level, $last_review, $uid);
+    }
 }
 
 // checkboxes
@@ -130,14 +148,10 @@ $teacherConfirmVideoImg = ($hasTeacherConfirmVideo) ? 'tick' : 'delete';
 
 // parse last submission date
 $lastSubmission = '';
-if (isset($xmlData['course_lastLevelConfirmation']) && strlen($xmlData['course_lastLevelConfirmation']) > 0) {
-    $lastDate = date_parse($xmlData['course_lastLevelConfirmation']);
-    if (is_array($lastDate) && in_array('error_count', $lastDate) && $lastDate['error_count'] == 0) {
-        $lastSubmission = '<p><small>' . $langLastSubmission . ': ' .
-                $lastDate['day'] . '/' . $lastDate['month'] . '/' . $lastDate['year'] .
-                '&nbsp;' .
-                $lastDate['hour'] . ':' . zeroComplete($lastDate['minute']) . '</small></p>';
-    }
+if (isset($xmlData['course_lastLevelConfirmation']) && 
+        strlen($xmlData['course_lastLevelConfirmation']) > 0 && 
+        ($ts = strtotime($xmlData['course_lastLevelConfirmation'])) > 0) {
+    $lastSubmission = '<p><small>' . $langLastSubmission . ': ' . date('j/n/Y H:i:s', $ts) . '</small></p>';
 }
 
 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
@@ -231,10 +245,3 @@ $head_content .= <<<EOF
 EOF;
 
 draw($tool_content, 2, null, $head_content);
-
-function zeroComplete($input) {
-    if (intval($input) <= 9)
-        return '0' . $input;
-    else
-        return $input;
-}

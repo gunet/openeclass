@@ -296,7 +296,8 @@ $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
-$level = CourseXMLElement::getLevel($course_code);
+$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?", $course_id))
+        ? CourseXMLElement::getLevel($levres->level) : false;
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
