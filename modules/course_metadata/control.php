@@ -249,10 +249,3 @@ $head_content .= <<<EOF
 EOF;
 
 draw($tool_content, 2, null, $head_content);
-
-function zeroComplete($input) {
-    if (intval($input) <= 9)
-        return '0' . $input;
-    else
-        return $input;
-}
