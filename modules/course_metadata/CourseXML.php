@@ -298,7 +298,7 @@ class CourseXMLElement extends SimpleXMLElement {
             return;
         
         // fields hidden from anonymous users
-        if ( (!isset($GLOBALS['code_cours']) || $_SESSION['courses'][$GLOBALS['code_cours']] == 0) 
+        if ( (!isset($GLOBALS['course_code']) || $_SESSION['courses'][$GLOBALS['course_code']] == 0) 
             && in_array($fullKeyNoLang, self::$hiddenFromAnonymousFields) )
             return;
         
@@ -950,10 +950,10 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return string
      */
     public static function getLinkedValue($key) {
-        global $urlServer, $code_course;
+        global $urlServer, $course_code;
         
-        $courseinfo = $urlServer . 'modules/course_info/index.php?course=' . $code_course;
-        $coursehome = $urlServer .'courses/' . $code_course . '/index.php';
+        $courseinfo = $urlServer . 'modules/course_info/index.php?course=' . $course_code;
+        $coursehome = $urlServer .'courses/' . $course_code . '/index.php';
         
         $valArr = array(
             'course_title_el' => $courseinfo,
