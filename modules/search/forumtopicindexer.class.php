@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class ForumTopicIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a forum topic db row.
      * 
@@ -53,7 +54,7 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
     private static function makeDoc($ftopic) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'ftopic_' . $ftopic['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ftopic['id'], $encoding));
@@ -61,13 +62,12 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ftopic['course_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('forumid', $ftopic['forum_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ftopic['title']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', 
-                $urlServer .'modules/forum/viewforum.php?course='. course_id_to_code($ftopic['course_id']) 
-                           .'&amp;forum=' . intval($ftopic['forum_id']), $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewforum.php?course=' . course_id_to_code($ftopic['course_id'])
+                        . '&amp;forum=' . intval($ftopic['forum_id']), $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Forum Topic from DB.
      * 
@@ -82,7 +82,7 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $ftopic = mysql_fetch_assoc($res);
         if (!$ftopic)
             return null;
-        
+
         return $ftopic;
     }
 
@@ -96,19 +96,19 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $ftopic = $this->fetch($ftopicId);
         if (!$ftopic)
             return;
-        
+
         // delete existing forum topic from index
         $this->remove($ftopicId, false, false);
 
         // add the forum topic back to the index
         $this->__index->addDocument(self::makeDoc($ftopic));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Forum Topic from the Index.
      * 
@@ -122,18 +122,18 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
             if (!$ftopic)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('ftopic_' . $ftopicId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Forum Topics belonging to a Course.
      * 
@@ -148,16 +148,16 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $res = db_query("SELECT ft.*, f.course_id FROM forum_topic ft 
             JOIN forum f ON ft.forum_id = f.id 
             JOIN forum_category fc ON fc.id = f.cat_id 
-            WHERE fc.cat_order >= 0 AND f.course_id = ". intval($courseId));
+            WHERE fc.cat_order >= 0 AND f.course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Forum Topics belonging to a Course.
      * 
@@ -168,13 +168,13 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:ftopic AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Forum Topics belonging to a Forum.
      * 
@@ -185,13 +185,13 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:ftopic AND forumid:' . $forumId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all forum topics.
      * 
@@ -200,10 +200,10 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all forum topics from index
         $term = new Zend_Search_Lucene_Index_Term('ftopic', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all forum topics from db
         $res = db_query("SELECT ft.*, f.course_id FROM forum_topic ft 
             JOIN forum f ON ft.forum_id = f.id 
@@ -211,13 +211,13 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
             WHERE fc.cat_order >= 0");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -226,17 +226,17 @@ class ForumTopicIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term)
                 $queryStr .= 'title:' . $term . '* ';
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:ftopic';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:ftopic';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

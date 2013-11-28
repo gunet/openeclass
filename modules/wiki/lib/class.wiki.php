@@ -19,295 +19,263 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**===========================================================================
-	class.wiki.php
-	@last update: 15-05-2007 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* * ===========================================================================
+  class.wiki.php
+  @last update: 15-05-2007 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7.9 licensed under GPL
-	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7.9 licensed under GPL
+  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
-	      original file: class.wiki Revision: 1.12.2.5
+  original file: class.wiki Revision: 1.12.2.5
 
-	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================    
-*/
+  Claroline authors: Frederic Minne <zefredz@gmail.com>
+  ==============================================================================
+ */
 
-    require_once dirname(__FILE__) . "/class.dbconnection.php";
-    require_once dirname(__FILE__) . "/class.wikipage.php";
-    require_once 'include/log.php';
+require_once dirname(__FILE__) . "/class.dbconnection.php";
+require_once dirname(__FILE__) . "/class.wikipage.php";
+require_once 'include/log.php';
 
-    // Error codes
-    !defined( "WIKI_NO_TITLE_ERROR" ) && define( "WIKI_NO_TITLE_ERROR", "Missing title" );
-    !defined( "WIKI_NO_TITLE_ERRNO" ) && define( "WIKI_NO_TITLE_ERRNO", 1 );
-    !defined( "WIKI_ALREADY_EXISTS_ERROR" ) && define( "WIKI_ALREADY_EXISTS_ERROR", "Wiki already exists" );
-    !defined( "WIKI_ALREADY_EXISTS_ERRNO" ) && define( "WIKI_ALREADY_EXISTS_ERRNO", 2 );
-    !defined( "WIKI_CANNOT_BE_UPDATED_ERROR" ) && define( "WIKI_CANNOT_BE_UPDATED_ERROR", "Wiki cannot be updated" );
-    !defined( "WIKI_CANNOT_BE_UPDATED_ERRNO" ) && define( "WIKI_CANNOT_BE_UPDATED_ERRNO", 3 );
-    !defined( "WIKI_NOT_FOUND_ERROR" ) && define( "WIKI_NOT_FOUND_ERROR", "Wiki not found" );
-    !defined( "WIKI_NOT_FOUND_ERRNO" ) && define( "WIKI_NOT_FOUND_ERRNO", 4 );
+// Error codes
+!defined("WIKI_NO_TITLE_ERROR") && define("WIKI_NO_TITLE_ERROR", "Missing title");
+!defined("WIKI_NO_TITLE_ERRNO") && define("WIKI_NO_TITLE_ERRNO", 1);
+!defined("WIKI_ALREADY_EXISTS_ERROR") && define("WIKI_ALREADY_EXISTS_ERROR", "Wiki already exists");
+!defined("WIKI_ALREADY_EXISTS_ERRNO") && define("WIKI_ALREADY_EXISTS_ERRNO", 2);
+!defined("WIKI_CANNOT_BE_UPDATED_ERROR") && define("WIKI_CANNOT_BE_UPDATED_ERROR", "Wiki cannot be updated");
+!defined("WIKI_CANNOT_BE_UPDATED_ERRNO") && define("WIKI_CANNOT_BE_UPDATED_ERRNO", 3);
+!defined("WIKI_NOT_FOUND_ERROR") && define("WIKI_NOT_FOUND_ERROR", "Wiki not found");
+!defined("WIKI_NOT_FOUND_ERRNO") && define("WIKI_NOT_FOUND_ERRNO", 4);
+
+/**
+ * This class represents a Wiki
+ */
+class Wiki {
+
+    var $wikiId;
+    var $title;
+    var $desc;
+    var $accessControlList;
+    var $groupId;
+    var $con;
+    // default configuration
+    var $config = array(
+        'tbl_wiki_pages' => 'wiki_pages',
+        'tbl_wiki_pages_content' => 'wiki_pages_content',
+        'tbl_wiki_properties' => 'wiki_properties',
+        'tbl_wiki_acls' => 'wiki_acls'
+    );
+    // error handling
+    var $error = '';
+    var $errno = 0;
 
     /**
-     * This class represents a Wiki
+     * Constructor
+     * @param DatabaseConnection con connection to the database
+     * @param array config associative array containing tables name
      */
-    class Wiki
-    {
-        var $wikiId;
-        var $title;
-        var $desc;
-        var $accessControlList;
-        var $groupId;
+    function Wiki(&$con, $config = null) {
+        if (is_array($config)) {
+            $this->config = array_merge($this->config, $config);
+        }
+        $this->con = & $con;
 
-        var $con;
+        $this->wikiId = 0;
+    }
 
-        // default configuration
-        var $config = array(
-                'tbl_wiki_pages' => 'wiki_pages',
-                'tbl_wiki_pages_content' => 'wiki_pages_content',
-                'tbl_wiki_properties' => 'wiki_properties',
-                'tbl_wiki_acls' => 'wiki_acls'
-            );
+    // accessors
 
-        // error handling
-        var $error = '';
-        var $errno = 0;
+    /**
+     * Set Wiki title
+     * @param string wikiTitle
+     */
+    function setTitle($wikiTitle) {
+        $this->title = $wikiTitle;
+    }
 
-        /**
-         * Constructor
-         * @param DatabaseConnection con connection to the database
-         * @param array config associative array containing tables name
-         */
-        function Wiki( &$con, $config = null )
-        {
-            if ( is_array( $config ) )
-            {
-                $this->config = array_merge( $this->config, $config );
+    /**
+     * Get the Wiki title
+     * @return string title of the wiki
+     */
+    function getTitle() {
+        return $this->title;
+    }
+
+    /**
+     * Set the description of the Wiki
+     * @param string wikiDesc description of the wiki
+     */
+    function setDescription($wikiDesc = '') {
+        $this->desc = $wikiDesc;
+    }
+
+    /**
+     * Get the description of the Wiki
+     * @param string description of the wiki
+     */
+    function getDescription() {
+        return $this->desc;
+    }
+
+    /**
+     * Set the access control list of the Wiki
+     * @param array accessControlList wiki access control list
+     */
+    function setACL($accessControlList) {
+        $this->accessControlList = $accessControlList;
+    }
+
+    /**
+     * Get the access control list of the Wiki
+     * @return array wiki access control list
+     */
+    function getACL() {
+        return $this->accessControlList;
+    }
+
+    /**
+     * Set the group ID of the Wiki
+     * @param int groupId group ID
+     */
+    function setGroupId($groupId) {
+        $this->groupId = $groupId;
+    }
+
+    /**
+     * Get the group ID of the Wiki
+     * @return int group ID
+     */
+    function getGroupId() {
+        return $this->groupId;
+    }
+
+    /**
+     * Set the ID of the Wiki
+     * @param int wikiId ID of the Wiki
+     */
+    function setWikiId($wikiId) {
+        $this->wikiId = $wikiId;
+    }
+
+    /**
+     * Set the ID of the Wiki
+     * @return int ID of the Wiki
+     */
+    function getWikiId() {
+        return $this->wikiId;
+    }
+
+    // load and save
+
+    /**
+     * Load a Wiki
+     * @param int wikiId ID of the Wiki
+     */
+    function load($wikiId) {
+        if ($this->wikiIdExists($wikiId)) {
+            $this->loadProperties($wikiId);
+            $this->loadACL($wikiId);
+        } else {
+            $this->setError(WIKI_NOT_FOUND_ERROR, WIKI_NOT_FOUND_ERRNO);
+        }
+    }
+
+    /**
+     * Load the properties of the Wiki
+     * @param int wikiId ID of the Wiki
+     */
+    function loadProperties($wikiId) {
+        global $course_id;
+
+        $sql = "SELECT `id`, `title`, `description`, `group_id` "
+                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
+                . "WHERE `id` = " . $wikiId
+                . " AND `course_id` = $course_id"
+        ;
+
+        $result = $this->con->getRowFromQuery($sql);
+
+        $this->setWikiId($result['id']);
+        $this->setTitle(stripslashes($result['title']));
+        $this->setDescription(stripslashes($result['description']));
+        $this->setGroupId($result['group_id']);
+    }
+
+    /**
+     * Load the access control list of the Wiki
+     * @param int wikiId ID of the Wiki
+     */
+    function loadACL($wikiId) {
+
+        $sql = "SELECT `flag`, `value` "
+                . "FROM `" . $this->config['tbl_wiki_acls'] . "` "
+                . "WHERE `wiki_id` = " . $wikiId
+        ;
+
+        $result = $this->con->getAllRowsFromQuery($sql);
+
+        $acl = array();
+
+        if (is_array($result)) {
+            foreach ($result as $row) {
+                $value = ( $row['value'] == 'true' ) ? true : false;
+                $acl[$row['flag']] = $value;
             }
-            $this->con =& $con;
-
-            $this->wikiId = 0;
         }
 
-        // accessors
+        $this->setACL($acl);
+    }
 
-        /**
-         * Set Wiki title
-         * @param string wikiTitle
-         */
-        function setTitle( $wikiTitle )
-        {
-            $this->title = $wikiTitle;
-        }
+    /**
+     * Save the Wiki
+     */
+    function save() {
+        $this->saveProperties();
 
-        /**
-         * Get the Wiki title
-         * @return string title of the wiki
-         */
-        function getTitle()
-        {
-            return $this->title;
-        }
+        $this->saveACL();
 
-        /**
-         * Set the description of the Wiki
-         * @param string wikiDesc description of the wiki
-         */
-        function setDescription( $wikiDesc = '' )
-        {
-            $this->desc = $wikiDesc;
-        }
-
-        /**
-         * Get the description of the Wiki
-         * @param string description of the wiki
-         */
-        function getDescription()
-        {
-            return $this->desc;
-        }
-
-        /**
-         * Set the access control list of the Wiki
-         * @param array accessControlList wiki access control list
-         */
-        function setACL( $accessControlList )
-        {
-            $this->accessControlList = $accessControlList;
-        }
-
-        /**
-         * Get the access control list of the Wiki
-         * @return array wiki access control list
-         */
-        function getACL()
-        {
-            return $this->accessControlList;
-        }
-
-        /**
-         * Set the group ID of the Wiki
-         * @param int groupId group ID
-         */
-        function setGroupId( $groupId )
-        {
-            $this->groupId = $groupId;
-        }
-
-        /**
-         * Get the group ID of the Wiki
-         * @return int group ID
-         */
-        function getGroupId()
-        {
-            return $this->groupId;
-        }
-
-        /**
-         * Set the ID of the Wiki
-         * @param int wikiId ID of the Wiki
-         */
-        function setWikiId( $wikiId )
-        {
-            $this->wikiId = $wikiId;
-        }
-
-        /**
-         * Set the ID of the Wiki
-         * @return int ID of the Wiki
-         */
-        function getWikiId()
-        {
+        if ($this->hasError()) {
+            return 0;
+        } else {
             return $this->wikiId;
         }
+    }
 
-        // load and save
+    /**
+     * Save the access control list of the Wiki
+     */
+    function saveACL() {
 
-        /**
-         * Load a Wiki
-         * @param int wikiId ID of the Wiki
-         */
-        function load( $wikiId )
-        {
-            if( $this->wikiIdExists($wikiId) )
-            {
-                $this->loadProperties( $wikiId );
-                $this->loadACL( $wikiId );
-            }
-            else
-            {
-                $this->setError( WIKI_NOT_FOUND_ERROR, WIKI_NOT_FOUND_ERRNO );
-            }
-        }
-
-        /**
-         * Load the properties of the Wiki
-         * @param int wikiId ID of the Wiki
-         */
-        function loadProperties( $wikiId )
-        {
-            global $course_id;            
-
-            $sql = "SELECT `id`, `title`, `description`, `group_id` "
-                . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `id` = ".$wikiId
-                ." AND `course_id` = $course_id"
-                ;
-
-            $result = $this->con->getRowFromQuery( $sql );
-
-            $this->setWikiId( $result['id'] );
-            $this->setTitle( stripslashes( $result['title'] ) );
-            $this->setDescription( stripslashes( $result['description'] ) );
-            $this->setGroupId($result['group_id']);
-        }
-
-        /**
-         * Load the access control list of the Wiki
-         * @param int wikiId ID of the Wiki
-         */
-        function loadACL( $wikiId )
-        {            
-
-            $sql = "SELECT `flag`, `value` "
-                . "FROM `".$this->config['tbl_wiki_acls']."` "
-                . "WHERE `wiki_id` = " . $wikiId
-                ;
-
-            $result = $this->con->getAllRowsFromQuery( $sql );
-
-            $acl = array();
-
-            if( is_array( $result ) )
-            {
-                foreach ( $result as $row )
-                {
-                    $value = ( $row['value'] == 'true' ) ? true : false;
-                    $acl[$row['flag']] = $value;
-                }
-            }
-
-            $this->setACL( $acl );
-        }
-
-        /**
-         * Save the Wiki
-         */
-        function save()
-        {
-            $this->saveProperties();
-
-            $this->saveACL();
-
-            if ( $this->hasError() )
-            {
-                return 0;
-            }
-            else
-            {
-                return $this->wikiId;
-            }
-        }
-
-        /**
-         * Save the access control list of the Wiki
-         */
-        function saveACL()
-        {            
-
-            $sql = "SELECT `wiki_id` FROM `"
-                . $this->config['tbl_wiki_acls']."` "
+        $sql = "SELECT `wiki_id` FROM `"
+                . $this->config['tbl_wiki_acls'] . "` "
                 . "WHERE `wiki_id` = " . $this->getWikiId()
-                ;
+        ;
 
-            // wiki already exists
-            if ( $this->con->queryReturnsResult( $sql ) )
-            {
-                $acl = $this->getACL();
+        // wiki already exists
+        if ($this->con->queryReturnsResult($sql)) {
+            $acl = $this->getACL();
 
-                foreach ( $acl as $flag => $value )
-                {
-                    $value = ( $value == false ) ? 'false' : 'true';
+            foreach ($acl as $flag => $value) {
+                $value = ( $value == false ) ? 'false' : 'true';
 
-                    $sql = "UPDATE `" . $this->config['tbl_wiki_acls'] . "` "
+                $sql = "UPDATE `" . $this->config['tbl_wiki_acls'] . "` "
                         . "SET `value`='" . $value . "'"
                         . "WHERE `wiki_id`=" . $this->getWikiId() . " "
                         . "AND `flag`='" . $flag . "'"
-                        ;
+                ;
 
-                    $this->con->executeQuery( $sql );
-                }
+                $this->con->executeQuery($sql);
             }
-            // new wiki
-            else
-            {
-                $acl = $this->getACL();
+        }
+        // new wiki
+        else {
+            $acl = $this->getACL();
 
-                foreach ( $acl as $flag => $value )
-                {
-                    $value = ( $value == false ) ? 'false' : 'true';
+            foreach ($acl as $flag => $value) {
+                $value = ( $value == false ) ? 'false' : 'true';
 
-                    $sql = "INSERT INTO "
-                        . "`".$this->config['tbl_wiki_acls']."`"
+                $sql = "INSERT INTO "
+                        . "`" . $this->config['tbl_wiki_acls'] . "`"
                         . "("
                         . "`wiki_id`, `flag`, `value`"
                         . ") "
@@ -316,195 +284,180 @@
                         . "'" . $flag . "',"
                         . "'" . $value . "'"
                         . ")"
-                        ;
+                ;
 
-                    $this->con->executeQuery( $sql );
-                }
+                $this->con->executeQuery($sql);
             }
         }
+    }
 
-        /**
-         * Save the properties of the Wiki
-         */
-        function saveProperties()
-        {
-            global $course_id;            
+    /**
+     * Save the properties of the Wiki
+     */
+    function saveProperties() {
+        global $course_id;
 
-            // new wiki
-            if ( $this->getWikiId() === 0 )
-            {
-                // INSERT PROPERTIES
-                $sql = "INSERT INTO `"
+        // new wiki
+        if ($this->getWikiId() === 0) {
+            // INSERT PROPERTIES
+            $sql = "INSERT INTO `"
                     . $this->config['tbl_wiki_properties']
                     . "`("
                     . "`course_id`, `title`,`description`,`group_id`"
                     . ") "
                     . "VALUES("
-                    . "'". $course_id ."', "
-                    . "'". addslashes( $this->getTitle() ) ."', "
-                    . "'" . addslashes( $this->getDescription() ) . "', "
+                    . "'" . $course_id . "', "
+                    . "'" . addslashes($this->getTitle()) . "', "
+                    . "'" . addslashes($this->getDescription()) . "', "
                     . "'" . $this->getGroupId() . "'"
                     . ")"
-                    ;
+            ;
 
-                // GET WIKIID
-                $this->con->executeQuery( $sql );               
+            // GET WIKIID
+            $this->con->executeQuery($sql);
 
-                if ( ! $this->con->hasError() )
-                {
-                    $wikiId = $this->con->getLastInsertId();
-                    $this->setWikiId( $wikiId );
-                }
-                $log_action = LOG_INSERT;                
+            if (!$this->con->hasError()) {
+                $wikiId = $this->con->getLastInsertId();
+                $this->setWikiId($wikiId);
             }
-            // Wiki already exists
-            else
-            {
-                // UPDATE PROPERTIES
-                $sql = "UPDATE `" . $this->config['tbl_wiki_properties'] . "` "
+            $log_action = LOG_INSERT;
+        }
+        // Wiki already exists
+        else {
+            // UPDATE PROPERTIES
+            $sql = "UPDATE `" . $this->config['tbl_wiki_properties'] . "` "
                     . "SET "
-                    . "`title`='".addslashes($this->getTitle())."', "
-                    . "`description`='".addslashes($this->getDescription())."', "
-                    . "`group_id`='".$this->getGroupId()."' "
+                    . "`title`='" . addslashes($this->getTitle()) . "', "
+                    . "`description`='" . addslashes($this->getDescription()) . "', "
+                    . "`group_id`='" . $this->getGroupId() . "' "
                     . "WHERE `id`=" . $this->getWikiId()
-                    ." AND `course_id` = $course_id"
-                    ;
+                    . " AND `course_id` = $course_id"
+            ;
 
-                $this->con->executeQuery($sql);
-                $log_action = LOG_MODIFY;                
-            }
-            //record action                
-            Log::record($course_id, MODULE_ID_WIKI, $log_action, array('wiki_id' => $this->getWikiId(),
-                                                                          'title' => $this->getTitle(),
-                                                                          'description' => $this->getDescription()));
+            $this->con->executeQuery($sql);
+            $log_action = LOG_MODIFY;
         }
+        //record action                
+        Log::record($course_id, MODULE_ID_WIKI, $log_action, array('wiki_id' => $this->getWikiId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription()));
+    }
 
-        // utility methods
+    // utility methods
 
-        /**
-         * Check if a page exists in the wiki
-         * @param string title page title
-         * @return boolean
-         */
-        function pageExists( $title )
-        {            
+    /**
+     * Check if a page exists in the wiki
+     * @param string title page title
+     * @return boolean
+     */
+    function pageExists($title) {
 
-            $sql = "SELECT `id` "
-                . "FROM `".$this->config['tbl_wiki_pages']."` "
-                . "WHERE BINARY `title` = '".addslashes($title)."' "
+        $sql = "SELECT `id` "
+                . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
+                . "WHERE BINARY `title` = '" . addslashes($title) . "' "
                 . "AND `wiki_id` = " . $this->wikiId
-                ;
+        ;
 
-            return $this->con->queryReturnsResult( $sql );
-        }
+        return $this->con->queryReturnsResult($sql);
+    }
 
-        /**
-         * Check if a wiki exists using its title
-         * @param string title wiki title
-         * @return boolean
-         */
-        function wikiExists( $title )
-        {
-            global $course_id;            
+    /**
+     * Check if a wiki exists using its title
+     * @param string title wiki title
+     * @return boolean
+     */
+    function wikiExists($title) {
+        global $course_id;
 
-            $sql = "SELECT `id` "
-                . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `title` = '".addslashes($title)."' "
+        $sql = "SELECT `id` "
+                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
+                . "WHERE `title` = '" . addslashes($title) . "' "
                 . "AND `course_id` = $course_id"
-                ;
+        ;
 
-            return $this->con->queryReturnsResult( $sql );
-        }
+        return $this->con->queryReturnsResult($sql);
+    }
 
-        /**
-         * Check if a wiki exists usind its ID
-         * @param int id wiki ID
-         * @return boolean
-         */
-        function wikiIdExists( $id )
-        {
-            global $course_id;            
+    /**
+     * Check if a wiki exists usind its ID
+     * @param int id wiki ID
+     * @return boolean
+     */
+    function wikiIdExists($id) {
+        global $course_id;
 
-            $sql = "SELECT `id` "
-                . "FROM `".$this->config['tbl_wiki_properties']."` "
-                . "WHERE `id` = '".$id."' "
+        $sql = "SELECT `id` "
+                . "FROM `" . $this->config['tbl_wiki_properties'] . "` "
+                . "WHERE `id` = '" . $id . "' "
                 . "AND `course_id` = $course_id"
-                ;
+        ;
 
-            return $this->con->queryReturnsResult( $sql );
-        }
+        return $this->con->queryReturnsResult($sql);
+    }
 
-        /**
-         * Get all the pages of this wiki (at this time the method returns
-         * only the titles of the pages...)
-         * @return array containing thes pages
-         */
-        function allPages()
-        {            
+    /**
+     * Get all the pages of this wiki (at this time the method returns
+     * only the titles of the pages...)
+     * @return array containing thes pages
+     */
+    function allPages() {
 
-            $sql = "SELECT `title` "
-                . "FROM `".$this->config['tbl_wiki_pages']."` "
+        $sql = "SELECT `title` "
+                . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
                 . "WHERE `wiki_id` = " . $this->getWikiId() . " "
                 . "ORDER BY `title` ASC"
-                ;
+        ;
 
-            return $this->con->getAllRowsFromQuery( $sql );
-        }
+        return $this->con->getAllRowsFromQuery($sql);
+    }
 
-        /**
-         * Get recently modified wiki pages
-         * @param int offset start at given offset
-         * @param int count number of record to return starting at offset
-         * @return array recently modified pages (title, last_mtime, editor_id)
-         */
-        function recentChanges( $offset = 0, $count = 50 )
-        {            
+    /**
+     * Get recently modified wiki pages
+     * @param int offset start at given offset
+     * @param int count number of record to return starting at offset
+     * @return array recently modified pages (title, last_mtime, editor_id)
+     */
+    function recentChanges($offset = 0, $count = 50) {
 
-            $limit = ($count == 0 ) ? "" : "LIMIT " . $offset . ", " . $count;
+        $limit = ($count == 0 ) ? "" : "LIMIT " . $offset . ", " . $count;
 
-            $sql = "SELECT `page`.`title`, `page`.`last_mtime`, `content`.`editor_id` "
-                . "FROM `".$this->config['tbl_wiki_pages']."` `page`, "
-                . "`".$this->config['tbl_wiki_pages_content']."` `content` "
+        $sql = "SELECT `page`.`title`, `page`.`last_mtime`, `content`.`editor_id` "
+                . "FROM `" . $this->config['tbl_wiki_pages'] . "` `page`, "
+                . "`" . $this->config['tbl_wiki_pages_content'] . "` `content` "
                 . "WHERE `page`.`wiki_id` = " . $this->getWikiId() . " "
                 . "AND `page`.`last_version` = `content`.`id` "
                 . "ORDER BY `page`.`last_mtime` DESC "
                 . $limit
-                ;
+        ;
 
-            return $this->con->getAllRowsFromQuery( $sql );
-        }
+        return $this->con->getAllRowsFromQuery($sql);
+    }
 
-        // error handling
+    // error handling
 
-        function setError( $errmsg = '', $errno = 0 )
-        {
-            $this->error = ($errmsg != '') ? $errmsg : 'Unknown error';
-            $this->errno = $errno;
-        }
+    function setError($errmsg = '', $errno = 0) {
+        $this->error = ($errmsg != '') ? $errmsg : 'Unknown error';
+        $this->errno = $errno;
+    }
 
-        function getError()
-        {
-            if ( $this->con->hasError() )
-            {
-                return $this->con->getError();
-            }
-            else if ($this->error != '')
-            {
-                $errno = $this->errno;
-                $error = $this->error;
-                $this->error = '';
-                $this->errno = 0;
-                return $errno.' - '.$error;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        function hasError()
-        {
-            return ( $this->error != '' ) || $this->con->hasError();
+    function getError() {
+        if ($this->con->hasError()) {
+            return $this->con->getError();
+        } else if ($this->error != '') {
+            $errno = $this->errno;
+            $error = $this->error;
+            $this->error = '';
+            $this->errno = 0;
+            return $errno . ' - ' . $error;
+        } else {
+            return false;
         }
     }
+
+    function hasError() {
+        return ( $this->error != '' ) || $this->con->hasError();
+    }
+
+}
+
 ?>

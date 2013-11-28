@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,12 +20,20 @@
  * ======================================================================== */
 
 interface MediaResourceInterface {
+
     public function getId();
+
     public function getCourseId();
+
     public function getTitle();
+
     public function getPath();
+
     public function getAccessURL();
+
     public function setAccessURL($accessURL);
+
     public function getPlayURL();
+
     public function setPlayURL($playURL);
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -20,38 +21,36 @@
 
 
 
-/**===========================================================================
-	lib.javascript.php
-	@last update: 15-05-2007 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* * ===========================================================================
+  lib.javascript.php
+  @last update: 15-05-2007 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7.9 licensed under GPL
-	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7.9 licensed under GPL
+  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
-	      original file: lib.javascript Revision: 1.6.2.2
+  original file: lib.javascript Revision: 1.6.2.2
 
-	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
-    @Description:
+  Claroline authors: Frederic Minne <zefredz@gmail.com>
+  ==============================================================================
+  @Description:
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
-    /**
-     * returns the current document web path
-     */
-    function document_web_path()
-    {
-        return "http://" . $_SERVER['HTTP_HOST'] . dirname( $_SERVER['SCRIPT_NAME'] );
-    }
+/**
+ * returns the current document web path
+ */
+function document_web_path() {
+    return "http://" . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']);
+}
 
-    /**
-     * returns the current document system path
-     */
-    function document_sys_path()
-    {
-        return realpath( str_replace( '\\', '/', $_SERVER['DOCUMENT_ROOT'] ) . dirname( $_SERVER['SCRIPT_NAME'] ) );
-    }
+/**
+ * returns the current document system path
+ */
+function document_sys_path() {
+    return realpath(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']) . dirname($_SERVER['SCRIPT_NAME']));
+}

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -26,9 +27,9 @@ $nameTools = $contactpoint;
 $postaddress = nl2br(q(get_config('postaddress')));
 $Institution = q(get_config('institution'));
 $phone = q(get_config('phone'));
-$phonemessage = empty($phone)? '': "<tr><th>$langPhone</th><td>$phone</td></tr>";
+$phonemessage = empty($phone) ? '' : "<tr><th>$langPhone</th><td>$phone</td></tr>";
 $fax = q(get_config('fax'));
-$faxmessage = empty($fax)? '': "<tr><th>$langFax</th><td>$fax</td></tr>";
+$faxmessage = empty($fax) ? '' : "<tr><th>$langFax</th><td>$fax</td></tr>";
 $emailhelpdesk = get_config('email_helpdesk');
 
 $tool_content .= "
@@ -37,11 +38,11 @@ $tool_content .= "
 </tr>
 $phonemessage
 $faxmessage
-<tr><th><b>$langEmail:</b></th><td>".mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))."</td>
+<tr><th><b>$langEmail:</b></th><td>" . mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk)) . "</td>
 </table>";
 
 if (isset($uid) and $uid) {
-        draw($tool_content, 1);
+    draw($tool_content, 1);
 } else {
-        draw($tool_content, 0);
+    draw($tool_content, 0);
 }

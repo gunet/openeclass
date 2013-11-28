@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -47,14 +48,14 @@ $sql2 = "SELECT course.code,
                 course_user.statut as statut
            FROM course JOIN course_user ON course.id = course_user.course_id
           WHERE course_user.user_id = $uid
-            AND course.visible != ".COURSE_INACTIVE."
+            AND course.visible != " . COURSE_INACTIVE . "
        ORDER BY statut, course.title, course.prof_names";
 
 if ($_SESSION['statut'] == 1) {
-        $result = db_query($sql);
+    $result = db_query($sql);
 }
 if ($_SESSION['statut'] == 5) {
-        $result = db_query($sql2);
+    $result = db_query($sql2);
 }
 
 if ($result and mysql_num_rows($result) > 0)
@@ -90,7 +91,7 @@ function createCoursesDom($coursesArr) {
         $k = 0;
         $this_statut = 0;
 
-        foreach($coursesArr as $course) {
+        foreach ($coursesArr as $course) {
 
             $old_statut = $this_statut;
             $this_statut = $course->statut;
@@ -103,7 +104,7 @@ function createCoursesDom($coursesArr) {
 
             $c = $cg->appendChild($dom->createElement('course'));
 
-            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title .' - '. $course->public_code;
+            $titleStr = ($course->code === $course->public_code) ? $course->title : $course->title . ' - ' . $course->public_code;
 
             $c->appendChild(new DOMAttr('code', $course->code));
             $c->appendChild(new DOMAttr('title', $titleStr));
@@ -125,9 +126,9 @@ function getVisibleName($value) {
     global $m;
 
     $visibles = array(3 => $m['linactive'],
-                      2 => $m['legopen'],
-                      1 => $m['legrestricted'],
-                      0 => $m['legclosed']);
+        2 => $m['legopen'],
+        1 => $m['legrestricted'],
+        0 => $m['legclosed']);
 
     return $visibles[$value];
 }
@@ -137,7 +138,7 @@ function getTypeNames($value) {
 
     $containslang = (substr($value, 0, strlen("lang")) === "lang") ? true : false;
     if ($containslang)
-        $ret = array($GLOBALS[$value], $GLOBALS[$value."s"]);
+        $ret = array($GLOBALS[$value], $GLOBALS[$value . "s"]);
 
     return $ret;
 }

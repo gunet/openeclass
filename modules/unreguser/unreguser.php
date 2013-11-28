@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -24,65 +25,65 @@ include '../../include/baseTheme.php';
 require_once 'include/log.php';
 
 $nameTools = $langUnregUser;
-$navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifyProfile);
+$navigation[] = array("url" => "../profile/profile.php", "name" => $langModifyProfile);
 
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 
-	// admin cannot be deleted
-	if ($is_admin) {
-		$tool_content .=  "<div class='caution'>$langAdminNo";
-		$tool_content .=  "<br /><a href='../profile/profile.php'>$langBack</a></div>";
-		draw($tool_content, 1);
-		exit;
-	} else {
-		$q = db_query ("SELECT code, visible FROM course, course_user
+    // admin cannot be deleted
+    if ($is_admin) {
+        $tool_content .= "<div class='caution'>$langAdminNo";
+        $tool_content .= "<br /><a href='../profile/profile.php'>$langBack</a></div>";
+        draw($tool_content, 1);
+        exit;
+    } else {
+        $q = db_query("SELECT code, visible FROM course, course_user
 			WHERE course.id = course_user.course_id
-                        AND course.visible != ".COURSE_INACTIVE."
-			AND user_id = '$uid' LIMIT 1") ;
-		if (mysql_num_rows($q) == 0) {
-			$tool_content .=  "<p><b>$langConfirm</b></p>\n";
-			$tool_content .=  "<ul class=\"listBullet\">\n";
-			$tool_content .=  "<li>$langYes: ";
-			$tool_content .=  "<a href='$_SERVER[SCRIPT_NAME]?doit=yes'>$langDelete</a>";
-			$tool_content .=  "</li>\n";
-			$tool_content .=  "<li>$langNo: <a href='../profile/profile.php'>$langBack</a>";
-			$tool_content .=  "</li>\n        </ul>";
-			$tool_content .= "</td>\n        </tr>\n        </table>\n";
-		} else {
-			$tool_content .=  "<div class='caution'><b>$langNotice: </b> ";
-			$tool_content .=  "$langExplain<br />\n";
-			$tool_content .=  "<span class='right'><a href='../profile/profile.php'>$langBack</a></span></div>\n";
-		}
-	}  //endif is admin
+                        AND course.visible != " . COURSE_INACTIVE . "
+			AND user_id = '$uid' LIMIT 1");
+        if (mysql_num_rows($q) == 0) {
+            $tool_content .= "<p><b>$langConfirm</b></p>\n";
+            $tool_content .= "<ul class=\"listBullet\">\n";
+            $tool_content .= "<li>$langYes: ";
+            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?doit=yes'>$langDelete</a>";
+            $tool_content .= "</li>\n";
+            $tool_content .= "<li>$langNo: <a href='../profile/profile.php'>$langBack</a>";
+            $tool_content .= "</li>\n        </ul>";
+            $tool_content .= "</td>\n        </tr>\n        </table>\n";
+        } else {
+            $tool_content .= "<div class='caution'><b>$langNotice: </b> ";
+            $tool_content .= "$langExplain<br />\n";
+            $tool_content .= "<span class='right'><a href='../profile/profile.php'>$langBack</a></span></div>\n";
+        }
+    }  //endif is admin
 } else {
-	if (isset($uid)) {
-                $un = uid_to_username($uid);
-                $n = uid_to_name($uid);
-                // unregister user from inactive courses (if any)
-                db_query("DELETE from course_user WHERE user_id = $uid");
-                db_query("DELETE FROM group_members WHERE user_id = $uid");
-                 // finally delete user
-		db_query("DELETE from user WHERE user_id = $uid");
+    if (isset($uid)) {
+        $un = uid_to_username($uid);
+        $n = uid_to_name($uid);
+        // unregister user from inactive courses (if any)
+        db_query("DELETE from course_user WHERE user_id = $uid");
+        db_query("DELETE FROM group_members WHERE user_id = $uid");
+        // finally delete user
+        db_query("DELETE from user WHERE user_id = $uid");
 
-		if (mysql_affected_rows() > 0) {
-                        db_query("DELETE FROM user_department WHERE user = $uid");
-			$tool_content .= "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
-			$tool_content .= "$langThanks\n";
-			$tool_content .= "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
-                        // action logging
-                        Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,                                                             
-                                                             'username' => $un,
-                                                             'name' => $n));
-			unset($_SESSION['uid']);
-		} else {
-			$tool_content .=  "<p>$langError</p>\n";
-			$tool_content .=  "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n        <br />\n";
-                        $tool_content .=  "</div>\n";
-		}
-	}
+        if (mysql_affected_rows() > 0) {
+            db_query("DELETE FROM user_department WHERE user = $uid");
+            $tool_content .= "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
+            $tool_content .= "$langThanks\n";
+            $tool_content .= "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
+            // action logging
+            Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
+                'username' => $un,
+                'name' => $n));
+            unset($_SESSION['uid']);
+        } else {
+            $tool_content .= "<p>$langError</p>\n";
+            $tool_content .= "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n        <br />\n";
+            $tool_content .= "</div>\n";
+        }
+    }
 }
 if (isset($_SESSION['uid'])) {
-	draw($tool_content, 1);
+    draw($tool_content, 1);
 } else {
-	draw($tool_content, 0);
+    draw($tool_content, 0);
 }

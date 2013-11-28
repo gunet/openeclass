@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -20,61 +21,61 @@
 // $Id$
 // Translated by Sungkook KIM - ace@aceteam.org
 
-$text['title']          = '시스템 정보';
+$text['title'] = '시스템 정보';
 
-$text['vitals']         = '현재 시스템 상황';
-$text['hostname']       = '시스템의 호스트네임';
-$text['ip']             = '시스템의 IP 주소';
-$text['kversion']       = '커널 버젼';
-$text['uptime']         = '실행 시간';
-$text['users']          = '현재 접속자 수';
-$text['loadavg']        = '평균 로드';
+$text['vitals'] = '현재 시스템 상황';
+$text['hostname'] = '시스템의 호스트네임';
+$text['ip'] = '시스템의 IP 주소';
+$text['kversion'] = '커널 버젼';
+$text['uptime'] = '실행 시간';
+$text['users'] = '현재 접속자 수';
+$text['loadavg'] = '평균 로드';
 
-$text['hardware']       = '하드웨어 정보';
-$text['numcpu']         = '프로세서 갯수';
-$text['cpumodel']       = '프로세서 모델';
-$text['mhz']            = '칩셋 클럭';
-$text['cache']          = '케쉬 사이즈';
-$text['bogomips']       = '자체테스트 클럭';
-$text['pci']            = 'PCI 장치';
-$text['ide']            = 'IDE 장치';
-$text['scsi']           = 'SCSI 장치';
+$text['hardware'] = '하드웨어 정보';
+$text['numcpu'] = '프로세서 갯수';
+$text['cpumodel'] = '프로세서 모델';
+$text['mhz'] = '칩셋 클럭';
+$text['cache'] = '케쉬 사이즈';
+$text['bogomips'] = '자체테스트 클럭';
+$text['pci'] = 'PCI 장치';
+$text['ide'] = 'IDE 장치';
+$text['scsi'] = 'SCSI 장치';
 
-$text['netusage']       = ' 네트워크 사용정보';
-$text['device']         = '장치';
-$text['received']       = '받은 량';
-$text['sent']           = '보낸 량';
-$text['errors']         = '에러 / 실패';
+$text['netusage'] = ' 네트워크 사용정보';
+$text['device'] = '장치';
+$text['received'] = '받은 량';
+$text['sent'] = '보낸 량';
+$text['errors'] = '에러 / 실패';
 
-$text['memusage']       = '메모리 사용량';
-$text['phymem']         = '물리적 메모리';
-$text['swap']           = '스왑 디스크';
+$text['memusage'] = '메모리 사용량';
+$text['phymem'] = '물리적 메모리';
+$text['swap'] = '스왑 디스크';
 
-$text['fs']             = '마운트 현황';
-$text['mount']          = '마운트';
-$text['partition']      = '파티션';
+$text['fs'] = '마운트 현황';
+$text['mount'] = '마운트';
+$text['partition'] = '파티션';
 
-$text['percent']        = ' 퍼센트';
-$text['type']           = '타입';
-$text['free']           = '남은량';
-$text['used']           = '사용량';
-$text['size']           = '총 용량';
-$text['totals']         = '합계';
+$text['percent'] = ' 퍼센트';
+$text['type'] = '타입';
+$text['free'] = '남은량';
+$text['used'] = '사용량';
+$text['size'] = '총 용량';
+$text['totals'] = '합계';
 
-$text['kb']             = '킬로바이트(KB)';
-$text['mb']             = '메가바이트(MB)';
-$text['gb']             = '기가바이트(GB)';
+$text['kb'] = '킬로바이트(KB)';
+$text['mb'] = '메가바이트(MB)';
+$text['gb'] = '기가바이트(GB)';
 
-$text['none']           = '없음';
+$text['none'] = '없음';
 
-$text['capacity']       = '용량';
+$text['capacity'] = '용량';
 
-$text['template']       = '템플릿';
-$text['language']       = '언어';
-$text['submit']         = '적용';
-$text['created']        = '만든이';
+$text['template'] = '템플릿';
+$text['language'] = '언어';
+$text['submit'] = '적용';
+$text['created'] = '만든이';
 
-$text['days']           = '일';
-$text['hours']          = '시';
-$text['minutes']        = '분';
+$text['days'] = '일';
+$text['hours'] = '시';
+$text['minutes'] = '분';
 ?>

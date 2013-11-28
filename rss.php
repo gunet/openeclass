@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -30,16 +31,16 @@ $result = db_query("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS datefo
 		ORDER BY `date` DESC");
 list($lastbuilddate) = mysql_fetch_row($result);
 
-header ("Content-Type: application/xml;");
+header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
 echo "<atom:link href='${urlServer}rss.php' rel='self' type='application/rss+xml' />";
 echo "<title>$langAnnouncements $siteName</title>";
-echo "<link>".$urlServer."rss.php?lang=$language</link>";
+echo "<link>" . $urlServer . "rss.php?lang=$language</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
-echo "<language>".$language."</language>";
+echo "<language>" . $language . "</language>";
 
 $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
 		FROM admin_announcement
@@ -47,12 +48,12 @@ $sql = db_query("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +03
 		ORDER BY `date` DESC");
 
 while ($r = mysql_fetch_array($sql)) {
-	echo "<item>";
-	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
-	echo "<link>".$urlServer."modules/announcements/main_ann.php?aid=".$r['id']."</link>";
-	echo "<description>".htmlspecialchars($r['body'], ENT_NOQUOTES)."</description>";
-	echo "<pubDate>".$r['dateformat']."</pubDate>";
-	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
-	echo "</item>";
+    echo "<item>";
+    echo "<title>" . htmlspecialchars($r['title'], ENT_NOQUOTES) . "</title>";
+    echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r['id'] . "</link>";
+    echo "<description>" . htmlspecialchars($r['body'], ENT_NOQUOTES) . "</description>";
+    echo "<pubDate>" . $r['dateformat'] . "</pubDate>";
+    echo "<guid isPermaLink='false'>" . $r['dateformat'] . $r['id'] . "</guid>";
+    echo "</item>";
 }
 echo "</channel></rss>";

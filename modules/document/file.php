@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,10 +20,9 @@
  * ======================================================================== */
 
 /**
-@file file.php
-@brief serve files for subsystem documents
-*/
-
+  @file file.php
+  @brief serve files for subsystem documents
+ */
 // playmode is used in order to re-use this script's logic via play.php
 $is_in_playmode = false;
 $is_in_lightstyle = false;
@@ -38,17 +38,16 @@ if (isset($_SESSION['FILE_PHP__LIGHT_STYLE'])) {
 
 // save current course
 if (isset($_SESSION['course_code'])) {
-        define('old_course_code', $_SESSION['course_code']);
+    define('old_course_code', $_SESSION['course_code']);
 }
 
-$uri = preg_replace('/\?[^?]*$/', '',
-                    $_SERVER['REQUEST_URI']);
+$uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
 if (stripos($uri, '%5c') !== false) {
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . str_ireplace('%5c', '/', $uri));
-        exit;
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . str_ireplace('%5c', '/', $uri));
+    exit;
 }
 
 $uri = (!$is_in_playmode) ? str_replace('//', chr(1), preg_replace('/^.*file\.php\??\//', '', $uri)) : str_replace('//', chr(1), preg_replace('/^.*play\.php\??\//', '', $uri));
@@ -58,16 +57,16 @@ $path_components = explode('/', $uri);
 $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
 if ($cinfo_components[0] == 'common') {
-        define('COMMON_DOCUMENTS', true);
+    define('COMMON_DOCUMENTS', true);
 } else {
-        $require_current_course = true;
-        $_SESSION['course_code'] = $cinfo_components[0];
-        if (isset($cinfo_components[1])) {
-                $group_id = intval($cinfo_components[1]);
-                define('GROUP_DOCUMENTS', true);
-        } else {
-                unset($group_id);
-        }
+    $require_current_course = true;
+    $_SESSION['course_code'] = $cinfo_components[0];
+    if (isset($cinfo_components[1])) {
+        $group_id = intval($cinfo_components[1]);
+        define('GROUP_DOCUMENTS', true);
+    } else {
+        unset($group_id);
+    }
 }
 
 $guest_allowed = true;
@@ -91,40 +90,40 @@ require_once 'doc_init.php';
 require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
-        if (!$uid) {
-                error($langNoRead);
-        }
-        if (!($is_editor or $is_member)) {
-                error($langNoRead);
-        }
+    if (!$uid) {
+        error($langNoRead);
+    }
+    if (!($is_editor or $is_member)) {
+        error($langNoRead);
+    }
 }
 
 $file_info = public_path_to_disk_path($path_components);
 if (!$is_editor and !resource_access($file_info['visible'], $file_info['public'])) {
-        error($langNoRead);
+    error($langNoRead);
 }
 
 if ($file_info['extra_path']) {
-        // $disk_path is set if common file link
-        $disk_path = common_doc_path($file_info['extra_path'], true);
-        if (!$disk_path) {
-                // external file URL
-                header("Location: $file_info[extra_path]");
-                exit;
-        } elseif (!$common_doc_visible) {
-                forbidden(preg_replace('/^.*file\.php/', '', $uri));
-        }
+    // $disk_path is set if common file link
+    $disk_path = common_doc_path($file_info['extra_path'], true);
+    if (!$disk_path) {
+        // external file URL
+        header("Location: $file_info[extra_path]");
+        exit;
+    } elseif (!$common_doc_visible) {
+        forbidden(preg_replace('/^.*file\.php/', '', $uri));
+    }
 } else {
-        // Normal file
-        $disk_path = $basedir . $file_info['path'];
+    // Normal file
+    $disk_path = $basedir . $file_info['path'];
 }
 
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
         $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info['path'], $_GET['token'], 30);
         if (!$valid) {
-           not_found(preg_replace('/^.*file\.php/', '', $uri));
-           exit();
+            not_found(preg_replace('/^.*file\.php/', '', $uri));
+            exit();
         }
         send_file_to_client($disk_path, $file_info['filename']);
     } else {
@@ -132,15 +131,13 @@ if (file_exists($disk_path)) {
         require_once 'include/lib/multimediahelper.class.php';
 
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
-        $mediaURL = $urlServer .'modules/document/index.php?course='. $course_code .'&amp;download='. $file_info['path'];
+        $mediaURL = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info['path'];
         if (defined('GROUP_DOCUMENTS'))
-            $mediaURL = $urlServer .'modules/group/index.php?course='. $course_code .'&amp;group_id='.$group_id.'&amp;download='. $file_info['path'];
+            $mediaURL = $urlServer . 'modules/group/index.php?course=' . $course_code . '&amp;group_id=' . $group_id . '&amp;download=' . $file_info['path'];
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
 
-        $htmlout = (!$is_in_lightstyle) 
-            ? MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath)
-            : MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#ffffff', '#000000', $mediaPath);
+        $htmlout = (!$is_in_lightstyle) ? MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath) : MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#ffffff', '#000000', $mediaPath);
         echo $htmlout;
         exit();
     }
@@ -149,46 +146,45 @@ if (file_exists($disk_path)) {
 }
 
 function check_cours_access() {
-	global $course_code, $uid, $uri;
+    global $course_code, $uid, $uri;
 
-        if ( !$uid && !isset($course_code) )
-            $course_code = $_SESSION['course_code'];
-        
-	$qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
-	$result = db_query($qry);
+    if (!$uid && !isset($course_code))
+        $course_code = $_SESSION['course_code'];
 
-	// invalid lesson code
-	if (mysql_num_rows($result) != 1) {
-		redirect_to_home_page();
-		exit;
-	}
-        
-	$cours = mysql_fetch_array($result);
-        
-        if ( $cours['visible'] != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
-            require_once 'include/lib/forcedownload.php';
-            not_found(preg_replace('/^.*\.php/', '', $uri));
-            exit(0);
-        }
-        
-        if (!$uid) {
-            $_SESSION['course_id'] = $cours['id'];
-            return; // do not do own course check if anonymous with access token
-        }
+    $qry = "SELECT id, code, visible FROM `course` WHERE code='$course_code'";
+    $result = db_query($qry);
 
-	switch($cours['visible']) {
-		case '2': return; 	// cours is open
-		case '1':
-		case '0':
-		default:
-                // check if user has access to course
-                if (isset($_SESSION['courses'][$course_code]) && ($_SESSION['courses'][$course_code] >= 1)) {
-                        return;
-                }
-                else {                        
-                        redirect_to_home_page();
-                        exit(0);
-                }
-	}
-	exit;
+    // invalid lesson code
+    if (mysql_num_rows($result) != 1) {
+        redirect_to_home_page();
+        exit;
+    }
+
+    $cours = mysql_fetch_array($result);
+
+    if ($cours['visible'] != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
+        require_once 'include/lib/forcedownload.php';
+        not_found(preg_replace('/^.*\.php/', '', $uri));
+        exit(0);
+    }
+
+    if (!$uid) {
+        $_SESSION['course_id'] = $cours['id'];
+        return; // do not do own course check if anonymous with access token
+    }
+
+    switch ($cours['visible']) {
+        case '2': return;  // cours is open
+        case '1':
+        case '0':
+        default:
+            // check if user has access to course
+            if (isset($_SESSION['courses'][$course_code]) && ($_SESSION['courses'][$course_code] >= 1)) {
+                return;
+            } else {
+                redirect_to_home_page();
+                exit(0);
+            }
+    }
+    exit;
 }

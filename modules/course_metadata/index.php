@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -85,7 +86,6 @@ $head_content .= <<<EOF
 EOF;
 draw($tool_content, 2, null, $head_content);
 
-
 //--- HELPER FUNCTIONS ---//
 
 function displayForm() {
@@ -96,43 +96,41 @@ function displayForm() {
 
 function submitForm() {
     global $course_id, $course_code, $urlServer, $webDir,
-           $langModifDone, $langBack, $langBackCourse;
-    
+    $langModifDone, $langBack, $langBackCourse;
+
     // handle uploaded files
     $fileData = array();
-    foreach(CourseXMLElement::$binaryFields as $bkey) {
-        if (isset($_FILES[$bkey]) 
-                && is_uploaded_file($_FILES[$bkey]['tmp_name'])
-                && isValidImage($_FILES[$bkey]['type'])) {
+    foreach (CourseXMLElement::$binaryFields as $bkey) {
+        if (isset($_FILES[$bkey]) && is_uploaded_file($_FILES[$bkey]['tmp_name']) && isValidImage($_FILES[$bkey]['type'])) {
             // convert to resized jpg if possible
             $uploaded = $_FILES[$bkey]['tmp_name'];
-            $copied = $_FILES[$bkey]['tmp_name'].'.new';
+            $copied = $_FILES[$bkey]['tmp_name'] . '.new';
             $type = $_FILES[$bkey]['type'];
-            
+
             if (copy_resized_image($uploaded, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $copied)) {
                 $fileData[$bkey] = base64_encode(file_get_contents($copied));
-                $fileData[$bkey .'_mime'] = 'image/jpeg'; // copy_resized_image always outputs jpg
+                $fileData[$bkey . '_mime'] = 'image/jpeg'; // copy_resized_image always outputs jpg
             } else { // erase possible previous image or failed conversion
                 $fileData[$bkey] = '';
-                $fileData[$bkey .'_mime'] = '';
+                $fileData[$bkey . '_mime'] = '';
             }
         }
     }
-    
+
     $skeleton = $webDir . '/modules/course_metadata/skeleton.xml';
     $extraData = CourseXMLElement::getAutogenData($course_id);
     $data = array_merge($_POST, $extraData, $fileData);
     // course-based adaptation
-    $dnum  = Database::get()->querySingle("select count(id) as count from document where course_id = ?", $course_id)->count;
-    $vnum  = Database::get()->querySingle("select count(id) as count from video where course_id = ?", $course_id)->count;
+    $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?", $course_id)->count;
+    $vnum = Database::get()->querySingle("select count(id) as count from video where course_id = ?", $course_id)->count;
     $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?", $course_id)->count;
     if ($dnum + $vnum + $vlnum < 1)
         $data['course_confirmVideolectures'] = 'false';
-    
+
     $xml = simplexml_load_file($skeleton, 'CourseXMLElement');
     $xml->adapt($data);
     $xml->populate($data);
-    
+
     CourseXMLElement::save($course_code, $xml);
 
     return "<p class='success'>$langModifDone</p>
@@ -151,6 +149,6 @@ function isValidImage($type) {
     } elseif ($type == 'image/bmp') {
         $ret = true;
     }
-    
+
     return $ret;
 }

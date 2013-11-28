@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -29,7 +30,7 @@
  *
  */
 if (!defined('INDEX_START')) {
-	die('Action not allowed!');
+    die('Action not allowed!');
 }
 // jquery is already loaded via index.php and modal box
 $head_content .= "<script type='text/javascript'>

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,9 +20,9 @@
  * ======================================================================== */
 
 class CronUtil {
-    
+
     public static $dlockpath = '/courses/cron.lock';
-    
+
     public static function imgOut() {
         $img = base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7');
         header('Content-Type: image/gif');
@@ -29,34 +30,35 @@ class CronUtil {
         header('Connection: Close');
         echo $img;
     }
-    
+
     public static function flush() {
         echo(str_repeat(' ', 256));
         // check that buffer is actually set before flushing
-        if (ob_get_length()){           
+        if (ob_get_length()) {
             @ob_flush();
             @flush();
             @ob_end_flush();
-        }   
+        }
         @ob_start();
     }
-    
+
     public static function lock() {
         global $webDir;
         $lock = $webDir . self::$dlockpath;
-        
+
         if (file_exists($lock)) {
             self::imgOut();
             exit();
         }
         mkdir($lock);
     }
-    
+
     public static function unlock() {
         global $webDir;
         $lock = $webDir . self::$dlockpath;
-        
+
         if (file_exists($lock))
-            rmdir ($lock);
+            rmdir($lock);
     }
+
 }

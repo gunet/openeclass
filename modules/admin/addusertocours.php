@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,7 +23,9 @@ $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 
-if(!isset($_GET['c'])) { die(); }
+if (!isset($_GET['c'])) {
+    die();
+}
 
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
@@ -40,15 +43,15 @@ validateCourseNodes($cId, isDepartmentAdmin());
 $nameTools = $langAdminUsers;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
-$navigation[] = array('url' => 'editcours.php?c='. q($_GET['c']), 'name' => $langCourseEdit);
+$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
 // Initialize some variables
 $cid = intval(course_code_to_id($_GET['c']));
 
 // Register - Unregister students - professors to course
-if (isset($_POST['submit']))  {
-    $regstuds = isset($_POST['regstuds'])? array_map('intval', $_POST['regstuds']): array();
-    $regprofs = isset($_POST['regprofs'])? array_map('intval', $_POST['regprofs']): array();
+if (isset($_POST['submit'])) {
+    $regstuds = isset($_POST['regstuds']) ? array_map('intval', $_POST['regstuds']) : array();
+    $regprofs = isset($_POST['regprofs']) ? array_map('intval', $_POST['regprofs']) : array();
     $reglist = implode(', ', array_merge($regstuds, $regprofs));
 
     // Remove unneded users - guest user (statut == 10) is never removed
@@ -61,9 +64,7 @@ if (isset($_POST['submit']))  {
     db_query("DELETE FROM course_user
                      WHERE course_id = $cid AND statut <> 10 $reglist");
 
-
-    function regusers($cid, $users, $statut)
-    {
+    function regusers($cid, $users, $statut) {
         foreach ($users as $uid) {
             db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
                              VALUES ($cid, $uid, $statut, CURDATE())");
@@ -73,32 +74,32 @@ if (isset($_POST['submit']))  {
             db_query("UPDATE course_user SET statut = $statut WHERE user_id IN ($reglist)");
         }
     }
+
     regusers($cid, $regstuds, 5);
     regusers($cid, $regprofs, 1);
 
-    $tool_content .= "<p>".$langQuickAddDelUserToCoursSuccess."</p>";
-
+    $tool_content .= "<p>" . $langQuickAddDelUserToCoursSuccess . "</p>";
 }
 // Display form to manage users
 else {
     load_js('tools.js');
 
-    $tool_content .= "<form action='". q($_SERVER['SCRIPT_NAME'] ."?c=". q($_GET['c'])) ."' method='post'>";
+    $tool_content .= "<form action='" . q($_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c'])) . "' method='post'>";
     $tool_content .= "<table class='FormData' width='99%' align='left'><tbody>
-                          <tr><th colspan='3'>".$langFormUserManage."</th></tr>
-                          <tr><th align=left>".$langListNotRegisteredUsers."<br />
+                          <tr><th colspan='3'>" . $langFormUserManage . "</th></tr>
+                          <tr><th align=left>" . $langListNotRegisteredUsers . "<br />
                           <select id='unregusers_box' name='unregusers[]' size='20' multiple class='auth_input'>";
 
     // Registered users not registered in the selected course
-    $sqll= "SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
+    $sqll = "SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
                 LEFT JOIN course_user cu ON u.id = cu.user_id
                      AND cu.course_id = $cid
                 WHERE cu.user_id IS NULL ORDER BY nom";
 
     $resultAll = db_query($sqll);
     while ($myuser = mysql_fetch_assoc($resultAll)) {
-        $tool_content .= "<option value='". q($myuser['id']) ."'>".
-            q("$myuser[surname] $myuser[givenname]") . '</option>';
+        $tool_content .= "<option value='" . q($myuser['id']) . "'>" .
+                q("$myuser[surname] $myuser[givenname]") . '</option>';
     }
 
     $tool_content .= "</select></th>
@@ -120,7 +121,7 @@ else {
     $tool_content .= "<p align='center'><input type='button' onClick=\"move('unregusers_box','regprofs_box')\" value='   >>   ' />
         <input type='button' onClick=\"move('regprofs_box','unregusers_box')\" value='   <<   ' /></p>
         </td>
-        <th>".$langListRegisteredStudents."<br />
+        <th>" . $langListRegisteredStudents . "<br />
         <select id='regstuds_box' name='regstuds[]' size='8' multiple class='auth_input'>";
 
     // Students registered in the selected course
@@ -130,10 +131,10 @@ else {
                                 AND cu.user_id = u.id
                                 AND cu.statut=5 ORDER BY surname");
 
-    $a=0;
+    $a = 0;
     while ($myStud = mysql_fetch_assoc($resultStud)) {
-        $tool_content .= "<option value='". q($myStud['id']) ."'>".
-            q("$myStud[surname] $myStud[givenname]") . '</option>';
+        $tool_content .= "<option value='" . q($myStud['id']) . "'>" .
+                q("$myStud[surname] $myStud[givenname]") . '</option>';
         $a++;
     }
 
@@ -148,10 +149,10 @@ else {
                                 AND cu.user_id = u.id
                                 AND cu.statut = 1
                                 ORDER BY nom, givenname");
-    $a=0;
+    $a = 0;
     while ($myProf = mysql_fetch_assoc($resultProf)) {
-        $tool_content .= "<option value='". q($myProf['id']) ."'>".
-            q("$myProf[surname] $myProf[givenname]") . "</option>";
+        $tool_content .= "<option value='" . q($myProf['id']) . "'>" .
+                q("$myProf[surname] $myProf[givenname]") . "</option>";
         $a++;
     }
     $tool_content .= "</select></th></tr><tr><td>&nbsp;</td>
@@ -164,10 +165,10 @@ else {
 if (isset($_GET['c'])) {
     // If course selected go back to editcours.php
     $tool_content .= "<p align='right'>
-        <a href='editcours.php?c=".q($_GET['c'])."'>".$langBack."</a></p>";
+        <a href='editcours.php?c=" . q($_GET['c']) . "'>" . $langBack . "</a></p>";
 } else {
     // Else go back to index.php directly
-    $tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
+    $tool_content .= "<p align='right'><a href='index.php'>" . $langBackAdmin . "</a></p>";
 }
 
 draw($tool_content, 3, null, $head_content);

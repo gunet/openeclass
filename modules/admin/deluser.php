@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.6
  * E-learning and Course Management System
@@ -26,11 +27,11 @@ $nameTools = $langUnregUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // get the incoming values and initialize them
-$u    = isset($_GET['u']) ? intval($_GET['u']) : false;
+$u = isset($_GET['u']) ? intval($_GET['u']) : false;
 $doit = isset($_GET['doit']);
 
-$u_account  = $u ? q(uid_to_username($u)) : '';
-$u_realname = $u ? q(uid_to_name($u))     : '';
+$u_account = $u ? q(uid_to_username($u)) : '';
+$u_realname = $u ? q(uid_to_name($u)) : '';
 $t = 0;
 
 if (!$doit) {
@@ -42,30 +43,27 @@ if (!$doit) {
             $langConfirmDeleteQuestion3
             </div>
             <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;doit=yes'>$langDelete</a></p>";
-
     } else {
         $tool_content .= "<p>$langErrorDelete</p>";
     }
-    
-    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 
+    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 } else {
 
     if ($u == 1) {
         $tool_content .= $langTryDeleteAdmin;
     } else {
-        
+
         $success = deleteUser($u);
-    
+
         if ($success === true)
             $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
         else
             $tool_content .= "<p>$langErrorDelete</p>";
-        
     }
-    
+
     $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
 }
 
 
-draw($tool_content,3);
+draw($tool_content, 3);

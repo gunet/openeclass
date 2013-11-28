@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,61 +20,61 @@
 //
 // $Id$
 
-$text['title']          = 'System Informasjon';
+$text['title'] = 'System Informasjon';
 
-$text['vitals']         = 'Vital Informasjon';
-$text['hostname']       = 'Egentlige Tjenernavn';
-$text['ip']             = 'IP Adresse';
-$text['kversion']       = 'Kernel Versjon';
-$text['uptime']         = 'Oppetid';
-$text['users']          = 'Antall Brukere';
-$text['loadavg']        = 'Gj.Snitt Belastning';
+$text['vitals'] = 'Vital Informasjon';
+$text['hostname'] = 'Egentlige Tjenernavn';
+$text['ip'] = 'IP Adresse';
+$text['kversion'] = 'Kernel Versjon';
+$text['uptime'] = 'Oppetid';
+$text['users'] = 'Antall Brukere';
+$text['loadavg'] = 'Gj.Snitt Belastning';
 
-$text['hardware']       = 'Hardware Informasjon';
-$text['numcpu']         = 'Prosessorer';
-$text['cpumodel']       = 'Modell';
-$text['mhz']            = 'Brikke MHz';
-$text['cache']          = 'Cache St&oslash;rrelse';
-$text['bogomips']       = 'System Bogomips';
-$text['pci']            = 'PCI Enheter';
-$text['ide']            = 'IDE Enheter';
-$text['scsi']           = 'SCSI Enheter';
+$text['hardware'] = 'Hardware Informasjon';
+$text['numcpu'] = 'Prosessorer';
+$text['cpumodel'] = 'Modell';
+$text['mhz'] = 'Brikke MHz';
+$text['cache'] = 'Cache St&oslash;rrelse';
+$text['bogomips'] = 'System Bogomips';
+$text['pci'] = 'PCI Enheter';
+$text['ide'] = 'IDE Enheter';
+$text['scsi'] = 'SCSI Enheter';
 
-$text['netusage']       = 'Nettverk Bruk';
-$text['device']         = 'Enhet';
-$text['received']       = 'Mottatt';
-$text['sent']           = 'Sendt';
-$text['errors']         = 'Feil/Dropp';
+$text['netusage'] = 'Nettverk Bruk';
+$text['device'] = 'Enhet';
+$text['received'] = 'Mottatt';
+$text['sent'] = 'Sendt';
+$text['errors'] = 'Feil/Dropp';
 
-$text['memusage']       = 'Minne Bruk';
-$text['phymem']         = 'Fysisk Minne';
-$text['swap']           = 'Disk Swap';
+$text['memusage'] = 'Minne Bruk';
+$text['phymem'] = 'Fysisk Minne';
+$text['swap'] = 'Disk Swap';
 
-$text['fs']             = 'Monterte Filsystemer';
-$text['mount']          = 'Punkt';
-$text['partition']      = 'Partisjon';
+$text['fs'] = 'Monterte Filsystemer';
+$text['mount'] = 'Punkt';
+$text['partition'] = 'Partisjon';
 
-$text['percent']        = 'Kapasitet Prosent';
-$text['type']           = 'Type';
-$text['free']           = 'Ledig';
-$text['used']           = 'Brukt';
-$text['size']           = 'St&oslash;rrelse';
-$text['totals']         = 'Totalt';
+$text['percent'] = 'Kapasitet Prosent';
+$text['type'] = 'Type';
+$text['free'] = 'Ledig';
+$text['used'] = 'Brukt';
+$text['size'] = 'St&oslash;rrelse';
+$text['totals'] = 'Totalt';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'Ingen';
+$text['none'] = 'Ingen';
 
-$text['capacity']       = 'Capacity';
+$text['capacity'] = 'Capacity';
 
-$text['template']       = 'Template';
-$text['language']       = 'Language';
-$text['submit']         = 'Submit';
-$text['created']        = 'Created by';
+$text['template'] = 'Template';
+$text['language'] = 'Language';
+$text['submit'] = 'Submit';
+$text['created'] = 'Created by';
 
-$text['days']           = 'days';
-$text['hours']          = 'hours';
-$text['minutes']        = 'minutes';
+$text['days'] = 'days';
+$text['hours'] = 'hours';
+$text['minutes'] = 'minutes';
 ?>

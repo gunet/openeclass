@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,34 +20,36 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	infocours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Edit basic information of a course
+/* ===========================================================================
+  infocours.php
+  @last update: 31-05-2006 by Pitsiougas Vagelis
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Edit basic information of a course
 
- 	This script allows the administrator to edit the basic information of a
- 	selected course
+  This script allows the administrator to edit the basic information of a
+  selected course
 
- 	The user can : - Edit the basic information of a course
-                 - Return to edit course list
+  The user can : - Edit the basic information of a course
+  - Return to edit course list
 
- 	@Comments: The script is organised in four sections.
+  @Comments: The script is organised in four sections.
 
   1) Gather basic course information
   2) Edit that information
   3) Update course
   4) Display all on an HTML page
 
-==============================================================================*/
+  ============================================================================== */
 
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 
-if(!isset($_GET['c'])) { die(); }
+if (!isset($_GET['c'])) {
+    die();
+}
 
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
@@ -69,72 +72,68 @@ load_js('jstree');
 $nameTools = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
-$navigation[] = array('url' => 'editcours.php?c='.q($_GET['c']), 'name' => $langCourseEdit);
+$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
 // Update cours basic information
-if (isset($_POST['submit']))
-{
+if (isset($_POST['submit'])) {
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
-    
+
     // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
-    if (isDepartmentAdmin())
-    {
-    	$olddeps = $course->getDepartmentIds($cId);
-    	 
-    	foreach ($departments as $depId)
-    	{
-    		if (!in_array($depId, $olddeps))
-    			validateNode(intval($depId), true);
-    	}
-    	
-    	foreach ($olddeps as $depId)
-    	{
-    	    if (!in_array($depId, $departments))
-    	        validateNode($depId, true);
-    	}
+    if (isDepartmentAdmin()) {
+        $olddeps = $course->getDepartmentIds($cId);
+
+        foreach ($departments as $depId) {
+            if (!in_array($depId, $olddeps))
+                validateNode(intval($depId), true);
+        }
+
+        foreach ($olddeps as $depId) {
+            if (!in_array($depId, $departments))
+                validateNode($depId, true);
+        }
     }
-    
+
     // Update query
-    db_query("UPDATE course SET title = ". quote($_POST['title']) .",
-                    prof_names = ". quote($_POST['prof_names']) ."
-                    WHERE code = ". quote($_GET['c']));
-    
+    db_query("UPDATE course SET title = " . quote($_POST['title']) . ",
+                    prof_names = " . quote($_POST['prof_names']) . "
+                    WHERE code = " . quote($_GET['c']));
+
     $course->refresh($cId, $departments);
 
-	$tool_content .= "<p class='success'>$langModifDone</p>
+    $tool_content .= "<p class='success'>$langModifDone</p>
                 <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
 }
 // Display edit form for course basic information
 else {
-        $sql = "SELECT course.code, course.title, course.prof_names, course.id
+    $sql = "SELECT course.code, course.title, course.prof_names, course.id
 		  FROM course
-		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
-        $row = mysql_fetch_array(db_query($sql));
-	$tool_content .= "
-	<form action='".$_SERVER['SCRIPT_NAME']."?c=".htmlspecialchars($_GET['c'])."' method='post' onsubmit='return validateNodePickerForm();'>
+		 WHERE course.code = '" . mysql_real_escape_string($_GET['c']) . "'";
+    $row = mysql_fetch_array(db_query($sql));
+    $tool_content .= "
+	<form action='" . $_SERVER['SCRIPT_NAME'] . "?c=" . htmlspecialchars($_GET['c']) . "' method='post' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
-	<legend>".$langCourseInfoEdit."</legend>
+	<legend>" . $langCourseInfoEdit . "</legend>
 <table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
-        
-	    if (isDepartmentAdmin())
-	        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id']), 'allowables' => $user->getDepartmentIds($uid) ));
-	    else
-	        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id'])));
-	    
-        $head_content .= $js;
-        $tool_content .= $html;
-	$tool_content .= "</td></tr>
+
+    if (isDepartmentAdmin())
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id']), 'allowables' => $user->getDepartmentIds($uid)));
+    else
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row['id'])));
+
+    $head_content .= $js;
+    $tool_content .= $html;
+    $tool_content .= "</td></tr>
 	<tr>
-	  <th width='150'>".$langCourseCode.":</th>
-	  <td><i>".$row['code']."</i></td>
+	  <th width='150'>" . $langCourseCode . ":</th>
+	  <td><i>" . $row['code'] . "</i></td>
 	</tr>
 	<tr>
-	  <th>".$langTitle.":</th>
-	  <td><input type='text' name='title' value='". q($row['title']) ."' size='60'></td>
+	  <th>" . $langTitle . ":</th>
+	  <td><input type='text' name='title' value='" . q($row['title']) . "' size='60'></td>
 	</tr>
 	<tr>
-	  <th>".$langTeacher.":</th>
-	  <td><input type='text' name='prof_names' value='". q($row['prof_names']) ."' size='60'></td>
+	  <th>" . $langTeacher . ":</th>
+	  <td><input type='text' name='prof_names' value='" . q($row['prof_names']) . "' size='60'></td>
 	</tr>
 	<tr>
 	  <th>&nbsp;</th>
@@ -146,10 +145,10 @@ else {
 }
 // If course selected go back to editcours.php
 if (isset($_GET['c'])) {
-	$tool_content .= "<p align='right'><a href='editcours.php?c=".htmlspecialchars($_GET['c'])."'>".$langBack."</a></p>";
+    $tool_content .= "<p align='right'><a href='editcours.php?c=" . htmlspecialchars($_GET['c']) . "'>" . $langBack . "</a></p>";
 }
 // Else go back to index.php directly
 else {
-	$tool_content .= "<p align='right'><a href='index.php'>".$langBackAdmin."</a></p>";
+    $tool_content .= "<p align='right'><a href='index.php'>" . $langBackAdmin . "</a></p>";
 }
 draw($tool_content, 3, null, $head_content);

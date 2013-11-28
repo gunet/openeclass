@@ -41,7 +41,7 @@ class Debug {
         }
         /*
           if ($level > Debug::ERROR) {
-            // Store it somewhere
+          // Store it somewhere
           }
          */
     }

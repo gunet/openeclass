@@ -27,41 +27,38 @@ require_once 'modules/group/group_functions.php';
 $nameTools = $m['grades'];
 
 if ($is_editor and isset($_GET['assignment']) and isset($_GET['submission'])) {
-		$assign = get_assignment_details($_GET['assignment']);                
-		$navigation[] = array("url"=>"index.php?course=$course_code", "name"=>$langWorks);                
-		$navigation[] = array("url"=>"index.php?course=$course_code&amp;id=$_GET[assignment]", "name"=>$assign['title']);
-		show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
-		draw($tool_content, 2);
+    $assign = get_assignment_details($_GET['assignment']);
+    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
+    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$_GET[assignment]", "name" => $assign['title']);
+    show_edit_form($_GET['assignment'], $_GET['submission'], $assign);
+    draw($tool_content, 2);
 } else {
-		header('Location: index.php?course='.$course_code);
-		exit;
+    header('Location: index.php?course=' . $course_code);
+    exit;
 }
 
 // Returns an array of the details of assignment $id
-function get_assignment_details($id)
-{
+function get_assignment_details($id) {
     global $course_id;
 
     return mysql_fetch_array(db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = '$id'"));
 }
 
-
 // Show to professor details of a student's submission and allow editing of fields
 // $assign contains an array with the assignment's details
-function show_edit_form($id, $sid, $assign)
-{
-        global $m, $langGradeOk, $tool_content, $course_code;
+function show_edit_form($id, $sid, $assign) {
+    global $m, $langGradeOk, $tool_content, $course_code;
 
-        if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
-                $uid_2_name = display_user($sub['uid']);
-                if (!empty($sub['group_id'])) {
-                        $group_submission = "($m[groupsubmit] ".
-                                "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>".
-                                "$m[ofgroup] ".gid_to_name($sub['group_id'])."</a>)";
-                } else {
-                        $group_submission = '';
-                }
-                $tool_content .= "
+    if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
+        $uid_2_name = display_user($sub['uid']);
+        if (!empty($sub['group_id'])) {
+            $group_submission = "($m[groupsubmit] " .
+                    "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub[group_id]'>" .
+                    "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>)";
+        } else {
+            $group_submission = '';
+        }
+        $tool_content .= "
                 <form method='post' action='index.php?course=$course_code'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>
@@ -83,7 +80,7 @@ function show_edit_form($id, $sid, $assign)
                 </table>
                 </fieldset>
                 </form><br>";
-        } else {
-                $tool_content .= "<p class='caution'>$langSubmissionError</p>";
-        }
+    } else {
+        $tool_content .= "<p class='caution'>$langSubmissionError</p>";
+    }
 }

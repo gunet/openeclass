@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -38,10 +39,10 @@ $head_content .= <<<hContent
 
     var lang = {
 hContent;
-$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
-$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
-$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
-$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
+$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
+$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
+$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
 
@@ -58,22 +59,22 @@ hContent;
 $default_guest_username = $langGuestUserName . $course_code;
 
 if (isset($_POST['submit'])) {
-        $password = autounquote($_POST['guestpassword']);
-        createguest($default_guest_username, $course_id, $password);
-        $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
-                         "<a href='index.php?course=$course_code'>$langBack</a>";
+    $password = autounquote($_POST['guestpassword']);
+    createguest($default_guest_username, $course_id, $password);
+    $tool_content .= "<p class='success'>$langGuestSuccess</p>" .
+            "<a href='index.php?course=$course_code'>$langBack</a>";
 } else {
-        $guest_info = guestinfo($course_id);
-        if ($guest_info) {
-                $tool_content .= "<p class='caution'>$langGuestExist</p>";
-                $submit_label = $langModify;
-        } else {
-                $guest_info = array('surname' => $langGuestSurname,
-                                    'givenname' => $langGuestName,
-                                    'username' => $default_guest_username);
-                $submit_label = $langAdd;
-        }
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    $guest_info = guestinfo($course_id);
+    if ($guest_info) {
+        $tool_content .= "<p class='caution'>$langGuestExist</p>";
+        $submit_label = $langModify;
+    } else {
+        $guest_info = array('surname' => $langGuestSurname,
+            'givenname' => $langGuestName,
+            'username' => $default_guest_username);
+        $submit_label = $langAdd;
+    }
+    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>
             <legend>$langUserData</legend>
         <table width='100%' class='tbl'>
@@ -114,8 +115,6 @@ if (isset($_POST['submit'])) {
 }
 draw($tool_content, 2, null, $head_content);
 
-
-
 /**
  * @brief create guest account or update password if it already exists
  * @global type $langGuestName
@@ -125,31 +124,28 @@ draw($tool_content, 2, null, $head_content);
  * @param type $password
  * @return none
  */
-function createguest($username, $course_id, $password)
-{
-	global $langGuestName, $langGuestSurname, $langGuestFail;
-	
-	$hasher = new PasswordHash(8, false);
-	$password = $hasher->HashPassword($password);
+function createguest($username, $course_id, $password) {
+    global $langGuestName, $langGuestSurname, $langGuestFail;
 
-	$q = db_query("SELECT user_id from course_user WHERE status=".USER_GUEST." AND course_id = $course_id");
-	if (mysql_num_rows($q) > 0) {
-		list($guest_id) = mysql_fetch_array($q);
-		db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
-	} else {
-                $regtime = time();
-                $exptime = 126144000 + $regtime;
-                db_query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist)
-                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', ".USER_GUEST.", $regtime, $exptime, '')");
-                $guest_id = mysql_insert_id();
-	}
-        db_query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
-                  VALUES ($course_id, $guest_id, ".USER_GUEST.", CURDATE())")
-                or die ($langGuestFail);
-        
-        return;
+    $hasher = new PasswordHash(8, false);
+    $password = $hasher->HashPassword($password);
+
+    $q = db_query("SELECT user_id from course_user WHERE status=" . USER_GUEST . " AND course_id = $course_id");
+    if (mysql_num_rows($q) > 0) {
+        list($guest_id) = mysql_fetch_array($q);
+        db_query("UPDATE user SET password = '$password' WHERE user_id = $guest_id");
+    } else {
+        $regtime = time();
+        $exptime = 126144000 + $regtime;
+        db_query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist)
+                             VALUES ('$langGuestSurname', '$langGuestName', '$username', '$password', " . USER_GUEST . ", $regtime, $exptime, '')");
+        $guest_id = mysql_insert_id();
+    }
+    db_query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
+                  VALUES ($course_id, $guest_id, " . USER_GUEST . ", CURDATE())") or die($langGuestFail);
+
+    return;
 }
-
 
 /**
  * @brief check if guest account exists and return account information
@@ -158,13 +154,13 @@ function createguest($username, $course_id, $password)
  */
 function guestinfo($course_id) {
 
-	$q = db_query("SELECT surname, givenname, username FROM user, course_user
+    $q = db_query("SELECT surname, givenname, username FROM user, course_user
                        WHERE user.id = course_user.user_id AND
-                             course_user.status = ".USER_GUEST." AND
+                             course_user.status = " . USER_GUEST . " AND
                              course_user.course_id = $course_id");
-	if (mysql_num_rows($q) == 0) {
-		return false;
-	} else {
-		return mysql_fetch_array($q);
-	}
+    if (mysql_num_rows($q) == 0) {
+        return false;
+    } else {
+        return mysql_fetch_array($q);
+    }
 }

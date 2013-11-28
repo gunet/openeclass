@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -23,7 +24,6 @@
 // displaying needs of the learning path tool. The core
 // application logic remains the same.
 // It also contains a replicate from exercise/exercise.lib.php
-
 // Ta objects prepei na ginoun include prin thn init
 // gia logous pou sxetizontai me to object loading
 // apo to session
@@ -45,46 +45,46 @@ ModalBoxHelper::loadModalBox();
 $nameTools = $langExercice;
 $picturePath = "courses/$course_code/image";
 
-$TBL_EXERCISE           = 'exercise';
-$TBL_EXERCISE_QUESTION  = 'exercise_with_questions';
-$TBL_QUESTION           = 'exercise_question';
-$TBL_ANSWER             = 'exercise_answer';
+$TBL_EXERCISE = 'exercise';
+$TBL_EXERCISE_QUESTION = 'exercise_with_questions';
+$TBL_QUESTION = 'exercise_question';
+$TBL_ANSWER = 'exercise_answer';
 
 if (isset($_GET['course'])) {
-	$course = intval($_GET['course']);
+    $course = intval($_GET['course']);
 }
 
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = intval($_GET['exerciseId']);
 }
 
 // if the user has clicked on the "Cancel" button
-if(isset($_POST['buttonCancel'])) {
-	// returns to the exercise list
-	header('Location: backFromExercise.php?course='.$course_code.'&op=cancel');
-	exit();
+if (isset($_POST['buttonCancel'])) {
+    // returns to the exercise list
+    header('Location: backFromExercise.php?course=' . $course_code . '&op=cancel');
+    exit();
 }
 
 if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
-	$_SESSION['exercise_begin_time'][$exerciseId] = time();
+    $_SESSION['exercise_begin_time'][$exerciseId] = time();
 }
 
 
 // if the user has submitted the form
 if (isset($_POST['formSent'])) {
-    $exerciseId   = isset($_POST['exerciseId'])   ? intval($_POST['exerciseId']) : '';
+    $exerciseId = isset($_POST['exerciseId']) ? intval($_POST['exerciseId']) : '';
     $exerciseType = isset($_POST['exerciseType']) ? $_POST['exerciseType'] : '';
-    $questionNum  = isset($_POST['questionNum'])  ? $_POST['questionNum']  : '';
+    $questionNum = isset($_POST['questionNum']) ? $_POST['questionNum'] : '';
     $nbrQuestions = isset($_POST['nbrQuestions']) ? $_POST['nbrQuestions'] : '';
     $exerciseTimeConstraint = isset($_POST['exerciseTimeConstraint']) ? $_POST['exerciseTimeConstraint'] : '';
-    $eid_temp        = isset($_POST['eid_temp'])          ? $_POST['eid_temp']          : '';
+    $eid_temp = isset($_POST['eid_temp']) ? $_POST['eid_temp'] : '';
     $recordStartDate = isset($_POST['record_start_date']) ? $_POST['record_start_date'] : '';
-    $choice          = isset($_POST['choice'])            ? $_POST['choice']            : '';
+    $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
     if (isset($_SESSION['exerciseResult'][$exerciseId])) {
-		$exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
-	} else {
-		$exerciseResult = array();
-	}
+        $exerciseResult = $_SESSION['exerciseResult'][$exerciseId];
+    } else {
+        $exerciseResult = array();
+    }
 
     if (isset($exerciseTimeConstraint) and $exerciseTimeConstraint != 0) {
         $exerciseTimeConstraint = $exerciseTimeConstraint * 60;
@@ -92,67 +92,67 @@ if (isset($_POST['formSent'])) {
         $_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstraintSecs;
 
         if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
-			unset($_SESSION['exercise_begin_time']);
-			unset($_SESSION['exercise_end_time']);
-                        header('Location: ../../exercise/exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId);
-			exit();
-		}
-	}
+            unset($_SESSION['exercise_begin_time']);
+            unset($_SESSION['exercise_end_time']);
+            header('Location: ../../exercise/exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
+            exit();
+        }
+    }
     $recordEndDate = date("Y-m-d H:i:s", time());
 
-	// if the user has answered at least one question
-	if(is_array($choice)) {
-		if($exerciseType == 1) {
-			// $exerciseResult receives the content of the form.
-			// Each choice of the student is stored into the array $choice
-			$exerciseResult=$choice;
-		} else {
-			// gets the question ID from $choice. It is the key of the array
-			list($key)=array_keys($choice);
-			// if the user didn't already answer this question
-			if(!isset($exerciseResult[$key])) {
-				// stores the user answer into the array
-				$exerciseResult[$key]=$choice[$key];
-			}
-		}
-	}
+    // if the user has answered at least one question
+    if (is_array($choice)) {
+        if ($exerciseType == 1) {
+            // $exerciseResult receives the content of the form.
+            // Each choice of the student is stored into the array $choice
+            $exerciseResult = $choice;
+        } else {
+            // gets the question ID from $choice. It is the key of the array
+            list($key) = array_keys($choice);
+            // if the user didn't already answer this question
+            if (!isset($exerciseResult[$key])) {
+                // stores the user answer into the array
+                $exerciseResult[$key] = $choice[$key];
+            }
+        }
+    }
 
-	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-        $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
-	// if it is the last question (only for a sequential exercise)
-	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
-		// goes to the script that will show the result of the exercise
-		header('Location: showExerciseResult.php?course='.$course_code.'&exerciseId='.$exerciseId);
-		exit();
-	}
+    // the script "exercise_result.php" will take the variable $exerciseResult from the session
+    $_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
+    // if it is the last question (only for a sequential exercise)
+    if ($exerciseType == 1 || $questionNum >= $nbrQuestions) {
+        // goes to the script that will show the result of the exercise
+        header('Location: showExerciseResult.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
+        exit();
+    }
 } // end of submit
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
-	$objExercise = $_SESSION['objExercise'][$exerciseId];
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'][$exerciseId])) {
-	// construction of Exercise
-	$objExercise = new Exercise();
-	// if the specified exercise doesn't exist or is disabled
-	if(!$objExercise->read($exerciseId) && (!$is_editor)) {
-		$tool_content .= $langExerciseNotFound;
-		draw($tool_content, 2);
-		exit();
-	}
-	// saves the object into the session
-	$_SESSION['objExercise'][$exerciseId] = $objExercise;
+if (!isset($_SESSION['objExercise'][$exerciseId])) {
+    // construction of Exercise
+    $objExercise = new Exercise();
+    // if the specified exercise doesn't exist or is disabled
+    if (!$objExercise->read($exerciseId) && (!$is_editor)) {
+        $tool_content .= $langExerciseNotFound;
+        draw($tool_content, 2);
+        exit();
+    }
+    // saves the object into the session
+    $_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
-$exerciseTitle           = $objExercise->selectTitle();
-$exerciseDescription     = $objExercise->selectDescription();
-$randomQuestions         = $objExercise->isRandom();
-$exerciseType            = $objExercise->selectType();
-$exerciseTimeConstraint  = $objExercise->selectTimeConstraint();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
+$randomQuestions = $objExercise->isRandom();
+$exerciseType = $objExercise->selectType();
+$exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
-$eid_temp                = $objExercise->selectId();
-$recordStartDate         = date("Y-m-d H:i:s", time());
+$eid_temp = $objExercise->selectId();
+$recordStartDate = date("Y-m-d H:i:s", time());
 
 $temp_CurrentDate = date("Y-m-d H:i");
 $temp_StartDate = $objExercise->selectStartDate();
@@ -182,49 +182,49 @@ if (!$is_editor) {
 }
 
 if (isset($_SESSION['questionList'][$exerciseId])) {
-	$questionList = $_SESSION['questionList'][$exerciseId];
+    $questionList = $_SESSION['questionList'][$exerciseId];
 }
 
 if (!isset($_SESSION['questionList'][$exerciseId])) {
-	// selects the list of question ID
-	$questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
-	// saves the question list into the session
+    // selects the list of question ID
+    $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+    // saves the question list into the session
     $_SESSION['questionList'][$exerciseId] = $questionList;
 }
 
 $nbrQuestions = sizeof($questionList);
 
 // if questionNum comes from POST and not from GET
-if(!isset($questionNum) || $_POST['questionNum']) {
-	// only used for sequential exercises (see $exerciseType)
-	if(!isset($questionNum)) {
-		$questionNum=1;
-	} else {
-		$questionNum++;
-	}
+if (!isset($questionNum) || $_POST['questionNum']) {
+    // only used for sequential exercises (see $exerciseType)
+    if (!isset($questionNum)) {
+        $questionNum = 1;
+    } else {
+        $questionNum++;
+    }
 }
 
-if(@$_POST['questionNum']) {
-	$QUERY_STRING="questionNum=$questionNum";
+if (@$_POST['questionNum']) {
+    $QUERY_STRING = "questionNum=$questionNum";
 }
 
 $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w3.org/TR/html4/frameset.dtd">'
-    ."\n<html>\n"
-    .'<head>'."\n"
-    .'<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">'."\n"
-    .'<link href="../../../template/'.$theme.'/theme.css" rel="stylesheet" type="text/css" />'."\n"
-    .'<title>'.$langExercice.'</title>'."\n"
-    .$head_content
-    .'</head>'."\n"
-    .'<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">'."\n"
-    .'<div id="content">';
+ . "\n<html>\n"
+ . '<head>' . "\n"
+ . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
+ . '<link href="../../../template/' . $theme . '/theme.css" rel="stylesheet" type="text/css" />' . "\n"
+ . '<title>' . $langExercice . '</title>' . "\n"
+ . $head_content
+ . '</head>' . "\n"
+ . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
+ . '<div id="content">';
 
 echo ("
   <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <th colspan=\"2\">". q($exerciseTitle) ."</th>
+    <th colspan=\"2\">" . q($exerciseTitle) . "</th>
   </tr>
   <tr class='even'>
     <td colspan=\"2\">$exerciseDescription_temp</td>
@@ -242,49 +242,49 @@ echo ("
   <input type='hidden' name='eid_temp' value='$eid_temp' />
   <input type='hidden' name='record_start_date' value='$recordStartDate' />");
 
-    $i=0;
-    foreach($questionList as $questionId) {
-            $i++;
-            // for sequential exercises
-            if($exerciseType == 2) {
-                    // if it is not the right question, goes to the next loop iteration
-                    if($questionNum != $i) {
-                            continue;
-                    } else {
-                            // if the user has already answered this question
-                            if(isset($exerciseResult[$questionId])) {
-                                    // construction of the Question object
-                                    $objQuestionTmp=new Question();
-                                    // reads question informations
-                                    $objQuestionTmp->read($questionId);
-                                    $questionName=$objQuestionTmp->selectTitle();
-                                    // destruction of the Question object
-                                    unset($objQuestionTmp);
-                                    echo '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'. q($questionName) .'&quot;</div>';
-                                    break;
-                            }
-                    }
+$i = 0;
+foreach ($questionList as $questionId) {
+    $i++;
+    // for sequential exercises
+    if ($exerciseType == 2) {
+        // if it is not the right question, goes to the next loop iteration
+        if ($questionNum != $i) {
+            continue;
+        } else {
+            // if the user has already answered this question
+            if (isset($exerciseResult[$questionId])) {
+                // construction of the Question object
+                $objQuestionTmp = new Question();
+                // reads question informations
+                $objQuestionTmp->read($questionId);
+                $questionName = $objQuestionTmp->selectTitle();
+                // destruction of the Question object
+                unset($objQuestionTmp);
+                echo '<div class\"alert1\" ' . $langAlreadyAnswered . ' &quot;' . q($questionName) . '&quot;</div>';
+                break;
             }
-            // shows the question and its answers
-            echo ("<table width=\"100%\" class=\"tbl\">
+        }
+    }
+    // shows the question and its answers
+    echo ("<table width=\"100%\" class=\"tbl\">
           <tr class='sub_title1'>
-            <td colspan=\"2\">".$langQuestion.": ".$i);
+            <td colspan=\"2\">" . $langQuestion . ": " . $i);
 
-            if($exerciseType == 2) {
-                    echo ("/".$nbrQuestions);
-            }
-            echo ("</td></tr>");
-            showQuestion($questionId);
-            echo  "<tr><td colspan=\"2\">&nbsp;</td></tr></table>";
-            // for sequential exercises
-            if($exerciseType == 2) {
-                    // quits the loop
-                    break;
-            }
-    }	// end foreach()
+    if ($exerciseType == 2) {
+        echo ("/" . $nbrQuestions);
+    }
+    echo ("</td></tr>");
+    showQuestion($questionId);
+    echo "<tr><td colspan=\"2\">&nbsp;</td></tr></table>";
+    // for sequential exercises
+    if ($exerciseType == 2) {
+        // quits the loop
+        break;
+    }
+} // end foreach()
 
-    if (!$questionList) {
-            echo ("
+if (!$questionList) {
+    echo ("
       <table width=\"100%\">
       <tr>
         <td colspan='2'>
@@ -292,23 +292,23 @@ echo ("
         </td>
       </tr>
       </table>");
-    } else {
-	echo "<br/><table width='100%' class='tbl'><tr>
+} else {
+    echo "<br/><table width='100%' class='tbl'><tr>
                <td><div class='right'><input type='submit' value=\"";
-                if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-                        echo "$langCont\" />&nbsp;";
-                } else {
-                        echo $langNext." &gt;"."\" />";
-                }
-            echo "<input type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
+    if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+        echo "$langCont\" />&nbsp;";
+    } else {
+        echo $langNext . " &gt;" . "\" />";
+    }
+    echo "<input type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
               <tr>
                 <td colspan=\"2\">&nbsp;</td>
               </tr>
               </table>";
-    }
+}
 echo "</form>";
-echo "</div></body>"."\n";
-echo "</html>"."\n";
+echo "</div></body>" . "\n";
+echo "</html>" . "\n";
 
 // auth edw h function einai kata bash idia me thn antistoixh sto
 // exercise.lib.php, mono pou anti gia xrhsh tou tool_content kanei
@@ -319,44 +319,43 @@ echo "</html>"."\n";
 // pio panw se auto edw to php arxeio.
 function showQuestion($questionId, $onlyAnswers = false) {
 
-        global $picturePath, $urlServer;
-	global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
+    global $picturePath, $urlServer;
+    global $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
 
-	// construction of the Question object
-	$objQuestionTmp=new Question();
-	// reads question informations
-	if(!$objQuestionTmp->read($questionId)) {
-		// question not found
-		return false;
-	}
-	$answerType=$objQuestionTmp->selectType();
+    // construction of the Question object
+    $objQuestionTmp = new Question();
+    // reads question informations
+    if (!$objQuestionTmp->read($questionId)) {
+        // question not found
+        return false;
+    }
+    $answerType = $objQuestionTmp->selectType();
 
-	if(!$onlyAnswers) {
-		$questionName=$objQuestionTmp->selectTitle();
-		$questionDescription=$objQuestionTmp->selectDescription();
-		$questionDescription_temp = standard_text_escape($questionDescription);
-		echo "<tr class='even'>
-                    <td colspan='2'><b>". q($questionName) ."</b><br />
+    if (!$onlyAnswers) {
+        $questionName = $objQuestionTmp->selectTitle();
+        $questionDescription = $objQuestionTmp->selectDescription();
+        $questionDescription_temp = standard_text_escape($questionDescription);
+        echo "<tr class='even'>
+                    <td colspan='2'><b>" . q($questionName) . "</b><br />
                     $questionDescription_temp
                     </td>
                     </tr>";
-		if(file_exists($picturePath.'/quiz-'.$questionId)) {
-                    echo "<tr class='even'>
+        if (file_exists($picturePath . '/quiz-' . $questionId)) {
+            echo "<tr class='even'>
                         <td class='center' colspan='2'><img src='$urlServer/$picturePath/quiz-$questionId' /></td>
                       </tr>";
-		}
-	}  // end if(!$onlyAnswers)
+        }
+    }  // end if(!$onlyAnswers)
+    // construction of the Answer object
+    $objAnswerTmp = new Answer($questionId);
+    $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-	// construction of the Answer object
-	$objAnswerTmp=new Answer($questionId);
-	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-
-	// only used for the answer type "Matching"
-	if($answerType == MATCHING) {
-		$cpt1='A';
-		$cpt2=1;
-		$select=array();
-		echo "
+    // only used for the answer type "Matching"
+    if ($answerType == MATCHING) {
+        $cpt1 = 'A';
+        $cpt2 = 1;
+        $select = array();
+        echo "
               <tr class='even'>
                 <td colspan='2'>
                   <table class='tbl_border' width='100%'>
@@ -368,114 +367,109 @@ function showQuestion($questionId, $onlyAnswers = false) {
                   </table>
                 </td>
               </tr>";
-	}
+    }
 
-	for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		$answer = $objAnswerTmp->selectAnswer($answerId);
-		$answer = mathfilter($answer, 12, '../../courses/mathimg/');
-		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-		if($answerType == FILL_IN_BLANKS) {
-			// splits text and weightings that are joined with the character '::'
-			list($answer) = explode('::', $answer);
-			// replaces [blank] by an input field
-                        $answer = preg_replace('/\[[^]]+\]/',
-                                    '<input type="text" name="choice['.$questionId.'][]" size="10" />',
-                                    standard_text_escape($answer));
-		}
-		// unique answer
-		if($answerType == UNIQUE_ANSWER) {
-			echo "
+    for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+        $answer = $objAnswerTmp->selectAnswer($answerId);
+        $answer = mathfilter($answer, 12, '../../courses/mathimg/');
+        $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+        if ($answerType == FILL_IN_BLANKS) {
+            // splits text and weightings that are joined with the character '::'
+            list($answer) = explode('::', $answer);
+            // replaces [blank] by an input field
+            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
+        }
+        // unique answer
+        if ($answerType == UNIQUE_ANSWER) {
+            echo "
                       <tr class='even'>
                         <td class='center' width='1'>
                           <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                         </td>
-                        <td>". standard_text_escape($answer) ."</td>
+                        <td>" . standard_text_escape($answer) . "</td>
                       </tr>";
-		}
-		// multiple answers
-		elseif($answerType == MULTIPLE_ANSWER) {
-			echo ("
+        }
+        // multiple answers
+        elseif ($answerType == MULTIPLE_ANSWER) {
+            echo ("
                       <tr class='even'>
                         <td width='1' align='center'>
                           <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
                         </td>
-                        <td>". standard_text_escape($answer) ."</td>
+                        <td>" . standard_text_escape($answer) . "</td>
                       </tr>");
-		}
-		// fill in blanks
-		elseif($answerType == FILL_IN_BLANKS) {
-			echo ("
+        }
+        // fill in blanks
+        elseif ($answerType == FILL_IN_BLANKS) {
+            echo ("
                       <tr class='even'>
-                        <td colspan='2'>". $answer ."</td>
+                        <td colspan='2'>" . $answer . "</td>
                       </tr>");
-		}
-		// matching
-		elseif($answerType == MATCHING) {
-			if(!$answerCorrect) {
-				// options (A, B, C, ...) that will be put into the list-box
-				$select[$answerId]['Lettre']=$cpt1++;
-				// answers that will be shown at the right side
-				$select[$answerId]['Reponse']= standard_text_escape($answer);
-			}
-			else
-			{
-				echo "<tr class='even'>
+        }
+        // matching
+        elseif ($answerType == MATCHING) {
+            if (!$answerCorrect) {
+                // options (A, B, C, ...) that will be put into the list-box
+                $select[$answerId]['Lettre'] = $cpt1++;
+                // answers that will be shown at the right side
+                $select[$answerId]['Reponse'] = standard_text_escape($answer);
+            } else {
+                echo "<tr class='even'>
                                 <td colspan='2'>
                                   <table class='tbl'>
                                   <tr>
-                                    <td width='200'><b>${cpt2}.</b> ". standard_text_escape($answer) ."</td>
+                                    <td width='200'><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
                                     <td width='130'><div align='center'>
                                      <select name='choice[${questionId}][${answerId}]'>
                                        <option value='0'>--</option>";
 
-				// fills the list-box
-				 foreach($select as $key=>$val) {
-					 echo "<option value=\"${key}\">${val['Lettre']}</option>";
-				 }
-				 echo "</select></div></td>
+                // fills the list-box
+                foreach ($select as $key => $val) {
+                    echo "<option value=\"${key}\">${val['Lettre']}</option>";
+                }
+                echo "</select></div></td>
                                     <td width='200'>";
-				 if(isset($select[$cpt2]))
-				       echo '<b>'.$select[$cpt2]['Lettre'].'.</b> '.$select[$cpt2]['Reponse'];
-				 else
-				       echo '&nbsp;';
+                if (isset($select[$cpt2]))
+                    echo '<b>' . $select[$cpt2]['Lettre'] . '.</b> ' . $select[$cpt2]['Reponse'];
+                else
+                    echo '&nbsp;';
 
-				echo "</td></tr></table></td></tr>";
-				$cpt2++;
-				// if the left side of the "matching" has been completely shown
-				if($answerId == $nbrAnswers) {
-					// if it remains answers to shown at the right side
-					while(isset($select[$cpt2])) 	{
-						echo "<tr class='even'>
+                echo "</td></tr></table></td></tr>";
+                $cpt2++;
+                // if the left side of the "matching" has been completely shown
+                if ($answerId == $nbrAnswers) {
+                    // if it remains answers to shown at the right side
+                    while (isset($select[$cpt2])) {
+                        echo "<tr class='even'>
                                                 <td colspan='2'>
                                                   <table>
                                                   <tr>
                                                     <td width='60%' colspan='2'>&nbsp;</td>
-                                                    <td width='40%' align='right' valign='top'>".
-                                                      "<b>".$select[$cpt2]['Lettre'].".</b> ".$select[$cpt2]['Reponse']."</td>
+                                                    <td width='40%' align='right' valign='top'>" .
+                        "<b>" . $select[$cpt2]['Lettre'] . ".</b> " . $select[$cpt2]['Reponse'] . "</td>
                                                   </tr>
                                                   </table>
                                                 </td>
                                               </tr>";
-						$cpt2++;
-					}	// end while()
-				}  // end if()
-			}
-		}
-		elseif($answerType == TRUE_FALSE) {
-			echo "<tr class='even'>
+                        $cpt2++;
+                    } // end while()
+                }  // end if()
+            }
+        } elseif ($answerType == TRUE_FALSE) {
+            echo "<tr class='even'>
                                 <td width='1' align='center'>
                                 <input type='radio' name='choice[${questionId}]' value='${answerId}' />
                                 </td><td>$answer</td>
                                 </tr>";
-		}
-	}	// end for()
+        }
+    } // end for()
 
-	if(!$nbrAnswers) {
-		echo "<tr><td colspan='2'><p class='caution'>$langNoAnswer</td></tr>";
-	}
-	// destruction of the Answer object
-	unset($objAnswerTmp);
-	// destruction of the Question object
-	unset($objQuestionTmp);
-	return $nbrAnswers;
+    if (!$nbrAnswers) {
+        echo "<tr><td colspan='2'><p class='caution'>$langNoAnswer</td></tr>";
+    }
+    // destruction of the Answer object
+    unset($objAnswerTmp);
+    // destruction of the Question object
+    unset($objQuestionTmp);
+    return $nbrAnswers;
 }

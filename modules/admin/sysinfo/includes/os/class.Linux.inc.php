@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -20,21 +21,19 @@
 // $Id$
 //
 
-class sysinfo
-{
+class sysinfo {
+
     // get our apache SERVER_NAME or vhost
-    function vhostname ()
-    {
-        if (! ($result = getenv('SERVER_NAME'))) {
+    function vhostname() {
+        if (!($result = getenv('SERVER_NAME'))) {
             $result = 'N.A.';
         }
         return $result;
     }
 
     // get our canonical hostname
-    function chostname ()
-    {
-        if ($fp = fopen('/proc/sys/kernel/hostname','r')) {
+    function chostname() {
+        if ($fp = fopen('/proc/sys/kernel/hostname', 'r')) {
             $result = trim(fgets($fp, 4096));
             fclose($fp);
             $result = gethostbyaddr(gethostbyname($result));
@@ -45,18 +44,15 @@ class sysinfo
     }
 
     // get the IP address of our canonical hostname
-    function ip_addr ()
-    {
+    function ip_addr() {
         if (!($result = getenv('SERVER_ADDR'))) {
             $result = gethostbyname($this->chostname());
         }
         return $result;
     }
 
-    function kernel ()
-    {
-        if ($fd = fopen('/proc/version', 'r'))
-        {
+    function kernel() {
+        if ($fd = fopen('/proc/version', 'r')) {
             $buf = fgets($fd, 4096);
             fclose($fd);
 
@@ -75,8 +71,7 @@ class sysinfo
         return $result;
     }
 
-    function uptime ()
-    {
+    function uptime() {
         global $text;
         $fd = fopen('/proc/uptime', 'r');
         $ar_buf = explode(' ', fgets($fd, 4096));
@@ -84,44 +79,41 @@ class sysinfo
 
         $sys_ticks = trim($ar_buf[0]);
 
-        $min   = $sys_ticks / 60;
+        $min = $sys_ticks / 60;
         $hours = $min / 60;
-        $days  = floor($hours / 24);
+        $days = floor($hours / 24);
         $hours = floor($hours - ($days * 24));
-        $min   = floor($min - ($days * 60 * 24) - ($hours * 60));
+        $min = floor($min - ($days * 60 * 24) - ($hours * 60));
 
         if ($days != 0) {
-            $result = "$days ".$text['days']." ";
+            $result = "$days " . $text['days'] . " ";
         }
 
         if ($hours != 0) {
-            $result .= "$hours ".$text['hours']." ";
+            $result .= "$hours " . $text['hours'] . " ";
         }
-        $result .= "$min ".$text['minutes'];
+        $result .= "$min " . $text['minutes'];
 
         return $result;
     }
 
-    function users ()
-    {
+    function users() {
         $who = explode('=', execute_program('who', '-q'));
         $result = $who[1];
         return $result;
     }
 
-    function loadavg ()
-    {
+    function loadavg() {
         if ($fd = fopen('/proc/loadavg', 'r')) {
             $results = explode(' ', fgets($fd, 4096));
             fclose($fd);
         } else {
-            $results = array('N.A.','N.A.','N.A.');
+            $results = array('N.A.', 'N.A.', 'N.A.');
         }
         return $results;
     }
 
-    function cpu_info ()
-    {
+    function cpu_info() {
         $results = array();
         $ar_buf = array();
 
@@ -167,16 +159,14 @@ class sysinfo
         $keys2be = array('model', 'mhz', 'cache', 'bogomips', 'cpus');
 
         while ($ar_buf = each($keys2be)) {
-            if (! compat_in_array($ar_buf[1], $keys)) {
+            if (!compat_in_array($ar_buf[1], $keys)) {
                 $results[$ar_buf[1]] = 'N.A.';
             }
         }
         return $results;
-
     }
 
-    function pci ()
-    {
+    function pci() {
         $results = array();
 
         if ($fd = fopen('/proc/pci', 'r')) {
@@ -199,8 +189,7 @@ class sysinfo
         return $results;
     }
 
-    function ide ()
-    {
+    function ide() {
         $results = array();
 
         $handle = opendir('/proc/ide');
@@ -226,13 +215,10 @@ class sysinfo
                     $results[$file]['model'] = trim(fgets($fd, 4096));
                     if (preg_match('/WDC/', $results[$file]['model'])) {
                         $results[$file]['manufacture'] = 'Western Digital';
-
                     } elseif (preg_match('/IBM/', $results[$file]['model'])) {
                         $results[$file]['manufacture'] = 'IBM';
-
                     } elseif (preg_match('/FUJITSU/', $results[$file]['model'])) {
                         $results[$file]['manufacture'] = 'Fujitsu';
-
                     } else {
                         $results[$file]['manufacture'] = 'Unknown';
                     }
@@ -254,20 +240,19 @@ class sysinfo
         return $results;
     }
 
-    function scsi ()
-    {
-        $results    = array();
+    function scsi() {
+        $results = array();
         $dev_vendor = '';
-        $dev_model  = '';
-        $dev_rev    = '';
-        $dev_type   = '';
+        $dev_model = '';
+        $dev_rev = '';
+        $dev_type = '';
 
         if ($fd = fopen('/proc/scsi/scsi', 'r')) {
             while ($buf = fgets($fd, 4096)) {
                 if (preg_match('/Vendor/', $buf)) {
                     preg_match('/Vendor: (.*) Model: (.*) Rev: (.*)/i', $buf, $dev);
                     list($key, $value) = explode(': ', $buf, 2);
-                    $dev_str  = $value;
+                    $dev_str = $value;
                     $get_type = 1;
                     continue;
                 }
@@ -282,8 +267,7 @@ class sysinfo
         return $results;
     }
 
-    function network ()
-    {
+    function network() {
         $results = array();
 
         if ($fd = fopen('/proc/net/dev', 'r')) {
@@ -293,26 +277,25 @@ class sysinfo
                     $stats = preg_split('/\s+/', trim($stats_list));
                     $results[$dev_name] = array();
 
-                    $results[$dev_name]['rx_bytes']   = $stats[0];
+                    $results[$dev_name]['rx_bytes'] = $stats[0];
                     $results[$dev_name]['rx_packets'] = $stats[1];
-                    $results[$dev_name]['rx_errs']    = $stats[2];
-                    $results[$dev_name]['rx_drop']    = $stats[3];
+                    $results[$dev_name]['rx_errs'] = $stats[2];
+                    $results[$dev_name]['rx_drop'] = $stats[3];
 
-                    $results[$dev_name]['tx_bytes']   = $stats[8];
+                    $results[$dev_name]['tx_bytes'] = $stats[8];
                     $results[$dev_name]['tx_packets'] = $stats[9];
-                    $results[$dev_name]['tx_errs']    = $stats[10];
-                    $results[$dev_name]['tx_drop']    = $stats[11];
+                    $results[$dev_name]['tx_errs'] = $stats[10];
+                    $results[$dev_name]['tx_drop'] = $stats[11];
 
-                    $results[$dev_name]['errs']       = $stats[2] + $stats[10];
-                    $results[$dev_name]['drop']       = $stats[3] + $stats[11];
+                    $results[$dev_name]['errs'] = $stats[2] + $stats[10];
+                    $results[$dev_name]['drop'] = $stats[3] + $stats[11];
                 }
             }
         }
         return $results;
     }
 
-    function memory ()
-    {
+    function memory() {
         if ($fd = fopen('/proc/meminfo', 'r')) {
             while ($buf = fgets($fd, 4096)) {
                 if (preg_match('/Mem:\s+(.*)$/', $buf, $ar_buf)) {
@@ -320,15 +303,15 @@ class sysinfo
 
                     $results['ram'] = array();
 
-                    $results['ram']['total']   = $ar_buf[0] / 1024;
-                    $results['ram']['used']    = $ar_buf[1] / 1024;
-                    $results['ram']['free']    = $ar_buf[2] / 1024;
-                    $results['ram']['shared']  = $ar_buf[3] / 1024;
+                    $results['ram']['total'] = $ar_buf[0] / 1024;
+                    $results['ram']['used'] = $ar_buf[1] / 1024;
+                    $results['ram']['free'] = $ar_buf[2] / 1024;
+                    $results['ram']['shared'] = $ar_buf[3] / 1024;
                     $results['ram']['buffers'] = $ar_buf[4] / 1024;
-                    $results['ram']['cached']  = $ar_buf[5] / 1024;
+                    $results['ram']['cached'] = $ar_buf[5] / 1024;
 
-                    $results['ram']['t_used']  = $results['ram']['used'] - $results['ram']['cached'] - $results['ram']['buffers'];
-                    $results['ram']['t_free']  = $results['ram']['total'] - $results['ram']['t_used'];
+                    $results['ram']['t_used'] = $results['ram']['used'] - $results['ram']['cached'] - $results['ram']['buffers'];
+                    $results['ram']['t_free'] = $results['ram']['total'] - $results['ram']['t_used'];
                     $results['ram']['percent'] = round(($results['ram']['t_used'] * 100) / $results['ram']['total']);
                 }
 
@@ -337,23 +320,23 @@ class sysinfo
 
                     $results['swap'] = array();
 
-                    $results['swap']['total']   = $ar_buf[0] / 1024;
-                    $results['swap']['used']    = $ar_buf[1] / 1024;
-                    $results['swap']['free']    = $ar_buf[2] / 1024;
+                    $results['swap']['total'] = $ar_buf[0] / 1024;
+                    $results['swap']['used'] = $ar_buf[1] / 1024;
+                    $results['swap']['free'] = $ar_buf[2] / 1024;
                     $results['swap']['percent'] = round(($ar_buf[1] * 100) / $ar_buf[0]);
 
                     // Get info on individual swap files
-                    $swaps = file ('/proc/swaps');
+                    $swaps = file('/proc/swaps');
                     $swapdevs = explode("\n", $swaps);
 
                     for ($i = 1; $i < (sizeof($swapdevs) - 1); $i++) {
                         $ar_buf = preg_split('/\s+/', $swapdevs[$i], 6);
 
                         $results['devswap'][$i - 1] = array();
-                        $results['devswap'][$i - 1]['dev']     = $ar_buf[0];
-                        $results['devswap'][$i - 1]['total']   = $ar_buf[2];
-                        $results['devswap'][$i - 1]['used']    = $ar_buf[3];
-                        $results['devswap'][$i - 1]['free']    = ($results['devswap'][$i - 1]['total'] - $results['devswap'][$i - 1]['used']);
+                        $results['devswap'][$i - 1]['dev'] = $ar_buf[0];
+                        $results['devswap'][$i - 1]['total'] = $ar_buf[2];
+                        $results['devswap'][$i - 1]['used'] = $ar_buf[3];
+                        $results['devswap'][$i - 1]['free'] = ($results['devswap'][$i - 1]['total'] - $results['devswap'][$i - 1]['used']);
                         $results['devswap'][$i - 1]['percent'] = round(($ar_buf[3] * 100) / $ar_buf[2]);
                     }
                     break;
@@ -368,8 +351,7 @@ class sysinfo
         return $results;
     }
 
-    function filesystems ()
-    {
+    function filesystems() {
         $df = execute_program('df', '-kP');
         $mounts = explode("\n", $df);
         $fstype = array();
@@ -401,34 +383,33 @@ class sysinfo
 
     // Return an array of ofr informtaion about
     // about network connections
-    function sys_connections ()
-    {
+    function sys_connections() {
         $netstat = execute_program('netstat', '-n');
         $connections = explode("\n", $netstat);
         $return = array();
 
         reset($connections);
-        while (list(, $connection) = each ($connections)) {
+        while (list(, $connection) = each($connections)) {
             if (stristr($connection, "ESTABLISHED")) {
-                $return[$i]['prot']  = trim(substr($connection,0,5));
-                $laddr = trim(substr($connection,20,23));
+                $return[$i]['prot'] = trim(substr($connection, 0, 5));
+                $laddr = trim(substr($connection, 20, 23));
                 //$return[$i]['laddr'] = @gethostbyaddr(substr($laddr, 0, strpos($laddr, ":"))); // uncomment for dns lookup
                 $return[$i]['laddr'] = substr($laddr, 0, strpos($laddr, ":"));
-                $lport = substr(strstr($laddr,":"),1);
+                $lport = substr(strstr($laddr, ":"), 1);
 
-                 // NOTE: getservbyport is a PHP 4 >= 4.0b4) function.
-                if ($servname = getservbyport ($lport, $return[$i]['prot'])) {
+                // NOTE: getservbyport is a PHP 4 >= 4.0b4) function.
+                if ($servname = getservbyport($lport, $return[$i]['prot'])) {
                     $lport .= " ($servname)";
                 }
 
                 $return[$i]['lport'] = $lport;
-                $faddr = trim(substr($connection,44,23));
+                $faddr = trim(substr($connection, 44, 23));
                 //$return[$i]['faddr'] = @gethostbyaddr(substr($faddr, 0, strpos($faddr, ":"))); // uncomment for dns lookup
                 $return[$i]['faddr'] = substr($faddr, 0, strpos($faddr, ":"));
-                $fport = substr(strstr($faddr,":"),1);
+                $fport = substr(strstr($faddr, ":"), 1);
 
                 // NOTE: getservbyport is a PHP 4 >= 4.0b4 function.
-                if ($servname = getservbyport ($fport, $return[$i]['prot'])) {
+                if ($servname = getservbyport($fport, $return[$i]['prot'])) {
                     $fport .= " ($servname)";
                 }
 
@@ -438,4 +419,7 @@ class sysinfo
         }
         return $return;
     }
-}       // End of class
+
+}
+
+// End of class

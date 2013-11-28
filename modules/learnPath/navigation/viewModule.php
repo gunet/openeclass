@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -19,61 +20,61 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	viewModule.php
-	@last update: 05-08-2009 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-==============================================================================
-    @Description: Auto to script praktika oloklhrwnei ton kyklo
-                  zwhs ths html selidas otan perihgoumaste sta scorm paketa.
-                  Dhladh: o xrhsths zhtaei na paei se allo scorm. Opote
-                  prwta fortwnoume auto to dummy html kai meta h javascript
-                  autou tou script leei sto mainFrame na paei ekei pou o
-                  xrhsths zhthse na paei. Etsi, glitwnoume apo to bug opou
-                  o javascript kwdikas sthn onunloadpage twn scorm den
-                  etrexe epeidh den prolabaine, epeidh ananewname kateu8eian
-                  to mainFrame. Apla pros8esame auth th "stash" edw kai ola
-                  kylane pleon mia xara.
+/* ===========================================================================
+  viewModule.php
+  @last update: 05-08-2009 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+  ==============================================================================
+  @Description: Auto to script praktika oloklhrwnei ton kyklo
+  zwhs ths html selidas otan perihgoumaste sta scorm paketa.
+  Dhladh: o xrhsths zhtaei na paei se allo scorm. Opote
+  prwta fortwnoume auto to dummy html kai meta h javascript
+  autou tou script leei sto mainFrame na paei ekei pou o
+  xrhsths zhthse na paei. Etsi, glitwnoume apo to bug opou
+  o javascript kwdikas sthn onunloadpage twn scorm den
+  etrexe epeidh den prolabaine, epeidh ananewname kateu8eian
+  to mainFrame. Apla pros8esame auth th "stash" edw kai ola
+  kylane pleon mia xara.
 
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
 
 $require_current_course = true;
 require_once '../../../include/init.php';
 
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLELEARNPATH = "lp_learnPath";
+$TABLEMODULE = "lp_module";
+$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
+$TABLEASSET = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
-$clarolineRepositoryWeb = $urlServer."courses/".$course_code;
+$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
 
 // lib of this tool
 require_once 'include/lib/learnPathLib.inc.php';
 
-$unit_parm = isset($_SESSION['unit'])? ('&unit=' . $_SESSION['unit']): '';
+$unit_parm = isset($_SESSION['unit']) ? ('&unit=' . $_SESSION['unit']) : '';
 
 if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
-	$redirect = "../".$_GET['go'].".php?course=$course_code" . $unit_parm;
+    $redirect = "../" . $_GET['go'] . ".php?course=$course_code" . $unit_parm;
 } else {
-	$redirect="startModule.php?course=$course_code&viewModule_id=".$_GET['viewModule_id'];
+    $redirect = "startModule.php?course=$course_code&viewModule_id=" . $_GET['viewModule_id'];
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
 <html>
 <head>
 <script type=\"text/javascript\">
-    <!--//"."\n";
+    <!--//" . "\n";
 if (isset($_GET['go']) && strlen($_GET['go']) > 0) {
-	echo "parent.parent.window.location.href=\"".$redirect."\";"."\n";
+    echo "parent.parent.window.location.href=\"" . $redirect . "\";" . "\n";
 } else {
-	echo "parent.parent.mainFrame.location.href=\"".$redirect."\";"."\n";
+    echo "parent.parent.mainFrame.location.href=\"" . $redirect . "\";" . "\n";
 }
 echo "    //-->
     </script>

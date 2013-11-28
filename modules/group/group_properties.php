@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -40,12 +41,12 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langG
 require_once 'group_functions.php';
 initialize_group_info();
 
-$checked['self_reg'] = $self_reg? ' checked="1"': '';
-$checked['multi_reg'] = $multi_reg? ' checked="1"': '';
-$checked['has_forum'] = $has_forum? ' checked="1"': '';
-$checked['documents'] = $documents? ' checked="1"': '';
-$checked['private_forum_yes'] = $private_forum? ' checked="1"': '';
-$checked['private_forum_no'] = $private_forum? '': ' checked="1"';
+$checked['self_reg'] = $self_reg ? ' checked="1"' : '';
+$checked['multi_reg'] = $multi_reg ? ' checked="1"' : '';
+$checked['has_forum'] = $has_forum ? ' checked="1"' : '';
+$checked['documents'] = $documents ? ' checked="1"' : '';
+$checked['private_forum_yes'] = $private_forum ? ' checked="1"' : '';
+$checked['private_forum_no'] = $private_forum ? '' : ' checked="1"';
 
 $tool_content = "
 <form method='post' action='index.php?course=$course_code'>
@@ -91,5 +92,5 @@ $tool_content = "
     </table>
     </fieldset>
     </form>";
-    draw($tool_content, 2);
+draw($tool_content, 2);
 

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,11 +21,10 @@
 
 /**
  * 	@file searchuser.php
- *	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-                      Pitsiougas Vagelis <vagpits@uom.gr>
+ * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
  *      @brief: user search form based upon criteria/filters
  */
-
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
@@ -40,34 +40,33 @@ load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
 
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
 
 // get the incoming values
-$inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive')?
-        ' checked': '';
-$lname = isset($_GET['lname'])? $_GET['lname']: '';
-$fname = isset($_GET['fname'])? $_GET['fname']: '';
-$uname = isset($_GET['uname'])? canonicalize_whitespace($_GET['uname']): '';
-$am = isset($_GET['am'])? $_GET['am']: '';
-$verified_mail = isset($_GET['verified_mail'])? intval($_GET['verified_mail']): 3;
-$user_type = isset($_GET['user_type'])? intval($_GET['user_type']): '';
-$auth_type = isset($_GET['auth_type'])? intval($_GET['auth_type']): '';
-$email = isset($_GET['email'])? mb_strtolower(trim($_GET['email'])): '';
-$reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
-$hour = isset($_GET['hour'])? intval($_GET['hour']): 0;
-$minute = isset($_GET['minute'])? intval($_GET['minute']): 0;
+$inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive') ?
+        ' checked' : '';
+$lname = isset($_GET['lname']) ? $_GET['lname'] : '';
+$fname = isset($_GET['fname']) ? $_GET['fname'] : '';
+$uname = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
+$am = isset($_GET['am']) ? $_GET['am'] : '';
+$verified_mail = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
+$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
+$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
+$email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
+$reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
+$hour = isset($_GET['hour']) ? intval($_GET['hour']) : 0;
+$minute = isset($_GET['minute']) ? intval($_GET['minute']) : 0;
 
 if (isset($_GET['department'])) {
-        $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
 } else {
-        $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false);
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false);
 }
 
-if (isDepartmentAdmin())
-{
+if (isDepartmentAdmin()) {
     $allowables = array('allowables' => $user->getDepartmentIds($uid));
     $depts_defaults = array_merge($depts_defaults, $allowables);
 }
@@ -89,25 +88,25 @@ $tool_content .= "
   <table class='tbl' width='100%'>
   <tr>
     <th class='left'>$langName:</th>
-    <td><input type='text' name='fname' size='40' value='".q($fname)."'></td>
+    <td><input type='text' name='fname' size='40' value='" . q($fname) . "'></td>
   </tr>
   <tr>
     <th class='left' width='180'>$langSurname:</th>
-    <td><input type='text' name='lname' size='40' value='".q($lname)."'></td>
+    <td><input type='text' name='lname' size='40' value='" . q($lname) . "'></td>
   </tr>
   <tr>
     <th class='left'>$langAm:</th>
-    <td><input type='text' name='am' size='30' value='".q($am)."'></td>
+    <td><input type='text' name='am' size='30' value='" . q($am) . "'></td>
   </tr>
   <tr>
     <th class='left'>$langUserType:</th>
     <td>";
 
 $usertype_data = array(
-        0 => $langAllUsers,
-        USER_TEACHER => $langTeacher,
-        USER_STUDENT => $langStudent,
-        USER_GUEST => $langGuest);
+    0 => $langAllUsers,
+    USER_TEACHER => $langTeacher,
+    USER_STUDENT => $langStudent,
+    USER_GUEST => $langGuest);
 $tool_content .= selection($usertype_data, 'user_type', 0) . "
     </td>
   </tr>
@@ -127,18 +126,16 @@ $tool_content .= selection($authtype_data, 'auth_type', 0) . "
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;
-$tool_content .= selection($reg_flag_data,
-        'reg_flag', $reg_flag);
+$tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
 $start_cal = $jscalendar->make_input_field(
         array('showOthers' => true,
-               'showsTime' => true,
-              'align' => 'Tl',
-              'ifFormat' => '%Y-%m-%d %H:%M',
-              'timeFormat' => '24'),
-        array('style' => 'width: 15em; text-align: center',
-              'name' => 'user_registered_at',
-              'value' => ' '));
+    'showsTime' => true,
+    'align' => 'Tl',
+    'ifFormat' => '%Y-%m-%d %H:%M',
+    'timeFormat' => '24'), array('style' => 'width: 15em; text-align: center',
+    'name' => 'user_registered_at',
+    'value' => ' '));
 
 $tool_content .= $start_cal;
 
@@ -148,20 +145,20 @@ $tool_content .= "</td></tr>
     <td>";
 
 $verified_mail_data = array(
-        EMAIL_VERIFICATION_REQUIRED => $m['pending'],
-        EMAIL_VERIFIED => $m['yes'],
-        EMAIL_UNVERIFIED => $m['no'],
-        3 => $langAllUsers);
+    EMAIL_VERIFICATION_REQUIRED => $m['pending'],
+    EMAIL_VERIFIED => $m['yes'],
+    EMAIL_UNVERIFIED => $m['no'],
+    3 => $langAllUsers);
 $tool_content .= selection($verified_mail_data, 'verified_mail', $verified_mail) . "
     </td>
   </tr>
   <tr>
     <th class='left'>$langEmail:</th>
-    <td><input type='text' name='email' size='40' value='".q($email)."'></td>
+    <td><input type='text' name='email' size='40' value='" . q($email) . "'></td>
   </tr>
   <tr>
     <th class='left'>$langUsername:</th>
-    <td><input type='text' name='uname' size='40' value='".q($uname)."'></td>
+    <td><input type='text' name='uname' size='40' value='" . q($uname) . "'></td>
   </tr>
   <tr>
     <th class='left'>$langInactiveUsers:</th>

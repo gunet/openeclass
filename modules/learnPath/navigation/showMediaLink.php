@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.5
  * E-learning and Course Management System
@@ -28,7 +29,7 @@ $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
     $id = q($_GET['id']);
-    
+
     $res = db_query("SELECT * FROM videolink WHERE course_id = $course_id AND url = " . quote($id));
     $row = mysql_fetch_array($res);
 

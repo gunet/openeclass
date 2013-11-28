@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -37,43 +38,43 @@ require_once 'include/lib/textLib.inc.php';
 $picturePath = "courses/$course_code/image";
 
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
-$TBL_EXERCISE ='exercise';
-$TBL_QUESTION ='exercise_question';
+$TBL_EXERCISE = 'exercise';
+$TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
 
-$navigation[]=array("url" => "index.php?course=$course_code","name" => $langExercices);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-	$exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = intval($_GET['exerciseId']);
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
-	$objExercise = $_SESSION['objExercise'][$exerciseId];
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'][$exerciseId])) {
-	// construction of Exercise
-	$objExercise = new Exercise();
-	// if the specified exercise doesn't exist or is disabled
-	if(@(!$objExercise->read($exerciseId) && (!$is_editor))) {
-		$tool_content .= $langExerciseNotFound;
-		draw($tool_content, 2);
-		exit();
-	}
-	// saves the object into the session
-	$_SESSION['objExercise'][$exerciseId] = $objExercise;
+if (!isset($_SESSION['objExercise'][$exerciseId])) {
+    // construction of Exercise
+    $objExercise = new Exercise();
+    // if the specified exercise doesn't exist or is disabled
+    if (@(!$objExercise->read($exerciseId) && (!$is_editor))) {
+        $tool_content .= $langExerciseNotFound;
+        draw($tool_content, 2);
+        exit();
+    }
+    // saves the object into the session
+    $_SESSION['objExercise'][$exerciseId] = $objExercise;
 }
 
-$exerciseTitle            = $objExercise->selectTitle();
-$exerciseDescription      = $objExercise->selectDescription();
+$exerciseTitle = $objExercise->selectTitle();
+$exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
 $tool_content .= "<table class='Exercise' width='99%'>
 <thead><tr>
   <td colspan='2'>
-  <b>".stripslashes($exerciseTitle)."</b>
+  <b>" . stripslashes($exerciseTitle) . "</b>
   <br/><br/>
-  ".stripslashes($exerciseDescription_temp)."
+  " . stripslashes($exerciseDescription_temp) . "
   </td>
 </tr>
 </thead></table>";

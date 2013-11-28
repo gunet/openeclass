@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -18,13 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*==============================================================================
-    @Description: Helper Functions for validations specific to the Hierarchy Tree
+/* ==============================================================================
+  @Description: Helper Functions for validations specific to the Hierarchy Tree
 
- 	Used for validating the department manager admin role
+  Used for validating the department manager admin role
 
-==============================================================================*/
- 
+  ============================================================================== */
 
 /**
  * Validate a tree node's existence (and proper integer) based on its id value.
@@ -36,26 +36,25 @@
  */
 function validateNode($id, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
-           $langBack, $langNotAllowed;
+    $langBack, $langNotAllowed;
 
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
     if ($id <= 0)
         exitWithError($notallowed);
 
-    $result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE id = ". intval($id) );
+    $result = db_query("SELECT * FROM " . $tree->getDbtable() . " WHERE id = " . intval($id));
 
     if (mysql_num_rows($result) < 1)
         exitWithError($notallowed);
 
     if ($checkOwn) {
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-        
+
         if (!in_array($id, $subtrees))
             exitWithError($notallowed);
     }
 }
-
 
 /**
  * Validate a tree node's existence (and proper integer) based on its lft value.
@@ -67,14 +66,14 @@ function validateNode($id, $checkOwn) {
  */
 function validateParentLft($nodelft, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
-           $langBack, $langNotAllowed;
+    $langBack, $langNotAllowed;
 
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ( (!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0) )
+    if ((!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0))
         exitWithError($notallowed);
 
-    $result = db_query("SELECT * FROM ". $tree->getDbtable() ." WHERE lft = ". intval($nodelft) );
+    $result = db_query("SELECT * FROM " . $tree->getDbtable() . " WHERE lft = " . intval($nodelft));
 
     if (mysql_num_rows($result) < 1 && $nodelft > 0)
         exitWithError($notallowed);
@@ -89,7 +88,6 @@ function validateParentLft($nodelft, $checkOwn) {
     }
 }
 
-
 /**
  * Validate a user's existence (and proper integer) based on its userId value.
  * Optionally, validate that the current user has proper access for this given user
@@ -100,32 +98,31 @@ function validateParentLft($nodelft, $checkOwn) {
  */
 function validateUserNodes($userId, $checkOwn) {
     global $tool_content, $head_content, $tree, $user, $uid,
-           $langBack, $langNotAllowed;
-    
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
-    
+    $langBack, $langNotAllowed;
+
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+
     if ($userId <= 0)
         exitWithError($notallowed);
-    
+
     $deps = $user->getDepartmentIds(intval($userId));
-    
+
     if (empty($deps))
         exitWithError($notallowed);
-    
+
     if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-        
+
         foreach ($deps as $depId) {
             if (in_array($depId, $subtrees))
                 $atleastone = true;
         }
-        
+
         if (!$atleastone)
             exitWithError($notallowed);
     }
 }
-
 
 /**
  * Validate a course's existence (and proper integer) based on its courseId value.
@@ -137,31 +134,30 @@ function validateUserNodes($userId, $checkOwn) {
  */
 function validateCourseNodes($courseId, $checkOwn) {
     global $tool_content, $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
-    
-    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>".$langBack."</a></p>";
-    
+
+    $notallowed = "<p class='caution'>$langNotAllowed</p><p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+
     if ($courseId <= 0)
         exitWithError($notallowed);
-    
+
     $deps = $course->getDepartmentIds(intval($courseId));
-    
+
     if (empty($deps))
         exitWithError($notallowed);
-    
+
     if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
-        
+
         foreach ($deps as $depId) {
             if (in_array($depId, $subtrees))
                 $atleastone = true;
         }
-        
+
         if (!$atleastone)
             exitWithError($notallowed);
     }
 }
-
 
 /**
  * Terminate execution and display an (optional) error message.
@@ -176,7 +172,6 @@ function exitWithError($message) {
     exit();
 }
 
-
 /**
  * Checks if the current user's role is Department Admin.
  * The role is defined by having specific permissions (dep/user manage)
@@ -186,15 +181,12 @@ function exitWithError($message) {
  */
 function isDepartmentAdmin() {
     global $is_departmentmanage_user, $is_usermanage_user, $is_power_user, $is_admin;
-    
+
     $checkOwn = false;
-    
+
     // check if department manager
     if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin)
-    	$checkOwn = true;
-    
+        $checkOwn = true;
+
     return $checkOwn;
 }
-
-
-

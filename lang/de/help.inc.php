@@ -23,7 +23,7 @@ werden sollen, dann:
 konsultieren Sie bitte (<a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blank'>hier</a>).<br />
 Um z.B. die Quadratwurzel von a zu erhalten, geben Sie ein &lt;m>sqrt{a}&lt;/m></p>";
 $langHFor = "Foren";
-$langHFor_student = $langHFor ;
+$langHFor_student = $langHFor;
 $langForContent = "<p>Das Forum ist ein Werkzeug zur asynchronen schriftlichen Kommunikation. Während e-mail
 Dialoge nur zwischen zwei Partnern zuläßt, erlauben die Foren öffentliche Diskussionen. Aus
 technischer Sicht wird zur Benutzung eines Forums nur ein Web-Browser benötigt.</p>
@@ -76,7 +76,7 @@ Icon (<img style='border:0px;' src='template/classic/img/tools.png' width=16 hei
 $langHPortfolio_student = $langHPortfolio;
 $langPortfolio_studentContent = $langPortfolioContent;
 $langHcourse_home = 'Hauptseite des Kurses';
-$langHcourse_home_student = $langHcourse_home ;
+$langHcourse_home_student = $langHcourse_home;
 $langcourse_home_studentContent = '<p>Sie befinden sich auf der Hauptseite des Kurses. Von den
 Menupunkten auf der linken Seite des Bildschirms, können Sie übergehen auf diejenigen Subsysteme,
 welche von den Dozenten des Kurses aktiviert wurden.</p>';
@@ -211,7 +211,7 @@ desjenigen Kurses zu sehen, an dem er registriert ist und alle Werkzeuge, welche
 kann keine Aktionen ausführen wie Studienarbeiten hochladen.</p>
 ";
 $langHQuestionnaire = "Fragebogen";
-$langHQuestionnaire_student = $langHQuestionnaire ;
+$langHQuestionnaire_student = $langHQuestionnaire;
 $langQuestionnaireContent = "<p>Das Werkzeug der Fragebögen erlaubt Ihnen die Erzeugung und
 Verwaltung von Fragebögen.</p>
 <p>Um einen Fragebogen zu erzeugen, klicken Sie auf den Link 'Fragebogen erzeugen'. Geben Sie in
@@ -228,7 +228,7 @@ $langQuestionnaire_studentContent = "<p>Dieses Subsystem stellt die Möglichkeit
 Fragebögen und Umfragen zur Verfügung, die der verantwortliche Dozent des Kurses erzeugt
 hat.</p><p> Für die Teilnahme an einem Kurs reicht es aus, den Link 'Teilnahme' auszuwählen.</p>";
 $langHExercise = "Übungen";
-$langHExercise_student = $langHExercise ;
+$langHExercise_student = $langHExercise;
 $langExerciseContent = "<p>Das Werkzeug der Übungen erlaubt Ihnen die Erzeugung von Übungen, die soviele Fragen enthalten
 werden, wie Sie es wünschen.<br>
 <br>Es gibt unterschiedliche Typen von Antworten auf ihre Fragen:<br>
@@ -353,7 +353,7 @@ der Studenten mit dem Stoff des Kurses. Bei einigen Übungen kann es eine zusät
 Teilnehmerzahl.</p><p> Damit Sie eine Übung zur Selbstbewertung bearbeiten, wählen Sie diese
 durch Anklicken auf Ihren Namen aus.</p>";
 $langHWork = "Studienarbeiten";
-$langHWork_student = $langHWork ;
+$langHWork_student = $langHWork;
 $langWorkContent = "<p>Das Subsystem der Studienarbeiten stellt ein integriertes System zur
 Erzeugung / zum Vortrag / der Benotung von Studienarbeiten dar.</p>
 <p>Als Dozent können Sie eine Studienarbeit erzeugen durch Klicken auf <b>\"Studienarbeit erzeugen\"</b>.
@@ -457,7 +457,7 @@ inaktiven Werkzeugen und umgekehrt.</p>
 $langGroup_studentContent = "<p>Eine Benutzergruppe ist eine Menge von registrierten Benutzern des
 Kurses, welche das gleiche Diskussionsforum und den selben Dokumentenbereich teilen</p>";
 $langHAgenda = "Agenda";
-$langHAgenda_student = $langHAgenda ;
+$langHAgenda_student = $langHAgenda;
 $langAgendaContent = "<p>Falls Sie ein Ereignis in Ihren Terminkalender (Agenda) einfügen möchten,
 klicken Sie auf den Link 'Hinzufügen eines Ereignisses'. Geben Sie das Datum des Ereignisses, den
 Titel und die Detailinformationen in dem darauf folgenden Formular ein. Klicken Sie danach auf die
@@ -497,7 +497,7 @@ Internet, die in Kategorien gruppiert sind und relevant zum Kurs sind. Diese Lin
 verantwortlichen Dozenten des Kurses ausgewählt. Jeder Link verfügt über einen Titel und eine
 Beschreibung mit zusätzlichen Informationen.</p>";
 $langHAnnounce = "Ankündigungen";
-$langHAnnounce_student = $langHAnnounce ;
+$langHAnnounce_student = $langHAnnounce;
 $langAnnounceContent = "<p>Sie können Ankündigungen zur Seite des Kurses hinzufügen durch Anklicken
 des Links 'Ankündigung hinzufügen'. In dem darauf folgenden Formular geben Sie den Titel und den
 Hauptteil der Ankündigung ein. Danach klicken Sie auf 'Hinzufügen'. Falls sie möchten, dass die
@@ -570,7 +570,7 @@ Kurses gelöscht (aber die Benutzer werden nicht von der Plattform gelöscht).</
 <p><b>Erneuerung des Kurses :</b>Sie können selektiv einige der Daten des Kurses löschen, um den
 Kurs für ein neues akademisches Jahr vorzubereiten.</p>";
 $langHConference = "Telearbeit";
-$langHConference_student = $langHConference ;
+$langHConference_student = $langHConference;
 $langConferenceContent = "<p>Sie können Nachrichten mit allen am Kurs registrierten Benutzern
 austauschen indem Sie ihre Nachricht eintippen und danach auf die Schaltfläche '>>' klicken.
 Weiterhin können Sie alle Nachrichten während des Live-Gesprächs (Chat) löschen durch Auswahl von
@@ -583,7 +583,7 @@ Möglichkeit, Textnachrichten auszutauschen (chat). Der Auszubildende (Student) 
 mit allen am Kurs registrierten Benutzern Nachrichten auszutauschen, indem er die Nachricht eintippt
 und danach auf die Schaltfläche ">>" klickt.</p>';
 $langHVideo = "Video";
-$langHVideo_student = $langHVideo ;
+$langHVideo_student = $langHVideo;
 $langVideoContent = '<p>Ein Teil der Lehrmaterialien kann Audiovisuelles Material sein. Dieses
 Lehrmaterial kann auf zwei Arten verteilt werden. Die erste Möglichkeit besteht im Herunterladen
 der Dateien vom entfernten Rechner auf den lokalen Rechner des Benutzers und das Abspielen der lokalen
@@ -620,7 +620,7 @@ Lehrmaterialien. Es gibt Videodateien und Links auf externe Videodateien, die au
 (VOD) Server abgespeichert sind.
 </p>";
 $langHCoursedescription = "Beschreibung des Kurses";
-$langHCoursedescription_student = $langHCoursedescription ;
+$langHCoursedescription_student = $langHCoursedescription;
 $langCoursedescriptionContent = "<p>Sie haben die Möglichkeit Informationen zum Kurs hinzuzufügen
 durch Auswahl von 'Erzeugen und Korrektur'. Die Kategorien sind 'Inhalt des Kurses',
 'Unterrichtsaktivitäten', 'Hilfen', 'Personal', 'Arten von Benotungen / Prüfungen',
@@ -640,7 +640,7 @@ Identität des Kurses, der Ziele und der Lehrmaterialien, der Art der Benotung u
 unterstützenden Lehrmaterials und der Unterrichtsaktivitäten und jeglicher weiterer Informationen,
 die der Dozent für wichtig erachtet.</p>";
 $langHPath = "Hilfe - Lernkurve";
-$langHPath_student = $langHPath ;
+$langHPath_student = $langHPath;
 $langPathContent = "Das Werkzeug Lernkurve hat vier Funktionen:
 <ul>
 <li>Lernkurve erzeugen</li>
@@ -753,7 +753,7 @@ navigieren und die von Dozenten definierten Schritte mit einer bestimmten Reihen
 den Fällen, wo dies erforderlich ist, beobachtet das System den Fortschritt, die Zeit und die Benotung
 des Studenten in den unterschiedlichen Schritten der jeweiligen Lernkurve.</p>";
 $langHDropbox = "Bereich zum Austausch von Dateien";
-$langHDropbox_student = $langHDropbox ;
+$langHDropbox_student = $langHDropbox;
 $langDropboxContent = "<p>Der Bereich zum Austausch von Dateien ist ein Werkzeug zum Austausch von
 Dateien zwischen den Dozenten und den Studenten. Sie können jegliche Arten von Dateien austauschen
 (zB Word, Excel, PDF usw).</p>
@@ -812,7 +812,7 @@ Wert als Beispiel, um den Benutzer beim Ausfüllen zu unterstützen.</p><p>Im Fa
 falschen Wertes informiert das System den Benutzer und fordert Ihn auf, diesen zu beheben, so dass
 er mit dem nächsten Schritt fortfahren kann.</p>";
 $langHWiki = "Wiki-System";
-$langHWiki_student = $langHWiki ;
+$langHWiki_student = $langHWiki;
 $langWikiContent = "<p>Damit Sie ein neues Wiki erzeugen,</p>
 <ul>
 <li>klicken Sie auf den Link 'ein neues Wiki erzeugen'. Geben Sie danach die Eigenschaften des Wiki ein:</li>
@@ -1016,7 +1016,7 @@ $langEBook_studentContent = "
 $langFor_studentContent = "
 <p>The platform allows the creation of discussion forums, where all users registered to the course, both students and educators, can participate.</p> If you want to participate in a forum just click at its title. Then choose the desired topic by clicking into it. If you want to reply to a post click in 'Reply'. Type your message and then click in 'Submit'.
 </p>
-<p>If you want to be notified by email for new posts in a specific topic or forum or forum category then click in (<img src='$themeimg/email.png' width=16 height=16>) . </p>" ;
+<p>If you want to be notified by email for new posts in a specific topic or forum or forum category then click in (<img src='$themeimg/email.png' width=16 height=16>) . </p>";
 $langHMyAgenda = "My Agenda";
 $langMyAgendaContent = "<p>In 'My agenda' all events taken from 'Agenda' are displayed in a graphical calendar.</p>
 ";

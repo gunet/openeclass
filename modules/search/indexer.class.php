@@ -46,7 +46,6 @@ class Indexer {
 
     private $__index = null;
     private static $_resultSetLimit = 100;
-    
     private static $lookup = array(
         // Greek doubles
         'αι' => 'e', 'Αι' => 'E', 'ΑΙ' => 'E', 'αί' => 'e', 'Αί' => 'E', 'ει' => 'i', 'Ει' => 'i', 'ΕΙ' => 'i', 'εί' => 'i', 'Εί' => 'i',
@@ -74,12 +73,10 @@ class Indexer {
         'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u',
         'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b', 'ÿ' => 'y', 'ƒ' => 'f'
     );
-    
     private static $specials = array(
         '?', '*', '[', ']', '{', '}', '~', '"', '\'', '+', '-',
         '&&', '||', '!', '(', ')', '^', ':', '\\'
     );
-    
     private static $specialkeywords = array(
         'not', 'and', 'or'
     );
@@ -140,7 +137,6 @@ class Indexer {
 
         $this->__index->setFormatVersion(Zend_Search_Lucene::FORMAT_2_3); // Set Index Format Version
         Zend_Search_Lucene::setResultSetLimit(self::$_resultSetLimit);    // Set Result Set Limit
-        
         // write an .htaccess to prevent raw access to index files
         $htaccess = $index_path . '/.htaccess';
         if (!file_exists($htaccess)) {
@@ -159,7 +155,7 @@ class Indexer {
         return $this->__index;
     }
 
-   /**
+    /**
      * Filtered Search in the index.
      * 
      * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
@@ -185,7 +181,7 @@ class Indexer {
         }
         return array();
     }
-    
+
     /**
      * Batch store all index contents related to a Course.
      * 
@@ -194,44 +190,44 @@ class Indexer {
     public function storeAllByCourse($courseId) {
         $cidx = new CourseIndexer($this);
         $cidx->store($courseId);
-        
+
         $aidx = new AnnouncementIndexer($this);
         $aidx->storeByCourse($courseId);
-        
+
         $agdx = new AgendaIndexer($this);
         $agdx->storeByCourse($courseId);
-        
+
         $lidx = new LinkIndexer($this);
         $lidx->storeByCourse($courseId);
-        
+
         $vdx = new VideoIndexer($this);
         $vdx->storeByCourse($courseId);
-        
+
         $vldx = new VideolinkIndexer($this);
         $vldx->storeByCourse($courseId);
-        
+
         $eidx = new ExerciseIndexer($this);
         $eidx->storeByCourse($courseId);
-        
+
         $fidx = new ForumIndexer($this);
         $fidx->storeByCourse($courseId);
-        
+
         $ftdx = new ForumTopicIndexer($this);
         $ftdx->storeByCourse($courseId);
-        
+
         $fpdx = new ForumPostIndexer($this);
         $fpdx->storeByCourse($courseId);
-        
+
         $didx = new DocumentIndexer($this);
         $didx->storeByCourse($courseId);
-        
+
         $uidx = new UnitIndexer($this);
         $uidx->storeByCourse($courseId);
-        
+
         $urdx = new UnitResourceIndexer($this);
         $urdx->storeByCourse($courseId);
     }
-    
+
     /**
      * Batch remove all index contents related to a Course.
      * 
@@ -240,84 +236,84 @@ class Indexer {
     public function removeAllByCourse($courseId) {
         $cidx = new CourseIndexer($this);
         $cidx->remove($courseId);
-        
+
         $aidx = new AnnouncementIndexer($this);
         $aidx->removeByCourse($courseId);
-        
+
         $agdx = new AgendaIndexer($this);
         $agdx->removeByCourse($courseId);
-        
+
         $lidx = new LinkIndexer($this);
         $lidx->removeByCourse($courseId);
-        
+
         $vdx = new VideoIndexer($this);
         $vdx->removeByCourse($courseId);
-        
+
         $vldx = new VideolinkIndexer($this);
         $vldx->removeByCourse($courseId);
-        
+
         $eidx = new ExerciseIndexer($this);
         $eidx->removeByCourse($courseId);
-        
+
         $fidx = new ForumIndexer($this);
         $fidx->removeByCourse($courseId);
-        
+
         $ftdx = new ForumTopicIndexer($this);
         $ftdx->removeByCourse($courseId);
-        
+
         $fpdx = new ForumPostIndexer($this);
         $fpdx->removeByCourse($courseId);
-        
+
         $didx = new DocumentIndexer($this);
         $didx->removeByCourse($courseId);
-        
+
         $uidx = new UnitIndexer($this);
         $uidx->removeByCourse($courseId);
-        
+
         $urdx = new UnitResourceIndexer($this);
         $urdx->removeByCourse($courseId);
     }
-    
+
     /**
      * Batch index all possible contents.
      */
     public function reindexAll() {
         $cidx = new CourseIndexer($this);
         $cidx->reindex();
-        
+
         $aidx = new AnnouncementIndexer($this);
         $aidx->reindex();
-        
+
         $agdx = new AgendaIndexer($this);
         $agdx->reindex();
-        
+
         $lidx = new LinkIndexer($this);
         $lidx->reindex();
-        
+
         $vdx = new VideoIndexer($this);
         $vdx->reindex();
-        
+
         $vldx = new VideolinkIndexer($this);
         $vldx->reindex();
-        
+
         $eidx = new ExerciseIndexer($this);
         $eidx->reindex();
-        
+
         $fidx = new ForumIndexer($this);
         $fidx->reindex();
-        
+
         $ftdx = new ForumTopicIndexer($this);
         $ftdx->reindex();
-        
+
         $fpdx = new ForumPostIndexer($this);
         $fpdx->reindex();
-        
+
         $didx = new DocumentIndexer($this);
         $didx->reindex();
-        
+
         $uidx = new UnitIndexer($this);
         $uidx->reindex();
-        
+
         $urdx = new UnitResourceIndexer($this);
         $urdx->reindex();
     }
@@ -336,4 +332,3 @@ class Indexer {
     }
 
 }
-

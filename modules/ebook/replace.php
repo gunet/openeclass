@@ -16,31 +16,31 @@ $nameTools = $langEBookReplace;
 $lastdir = getcwd();
 $id = 0;
 if (isset($_GET['id'])) {
-        $id = intval($_GET['id']);
-        $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langEBook);
-        $navigation[] = array('url' => 'edit.php?course='.$course_code.'&amp;id=' . $id, 'name' => $langEBookEdit);
+    $id = intval($_GET['id']);
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $id, 'name' => $langEBookEdit);
 }
 $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
 
 if (!$is_editor or mysql_num_rows($r) == 0) {
-        redirect_to_home_page();
+    redirect_to_home_page();
 } elseif (isset($_FILES['file'])) {
-        
-        validateUploadedFile($_FILES['file']['name'], 2);
-        $zip = new pclZip($_FILES['file']['tmp_name']);
-        validateUploadedZipFile($zip->listContent(), 2);
-        
-        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
-        chdir($basedir);
-        if ($zip->extract()) {
-                $tool_content .= "<p class='success'>$langEBookReplaceDoneZip</p>\n";
-        } else {
-                $tool_content .= "<p class='alert1'>$langErrorReadingZipFile</p>\n";
-        }
-        $tool_content .= "<p><a href='edit.php?course=$course_code&amp;id=$id'>$langBack</a></p>\n";
+
+    validateUploadedFile($_FILES['file']['name'], 2);
+    $zip = new pclZip($_FILES['file']['tmp_name']);
+    validateUploadedZipFile($zip->listContent(), 2);
+
+    $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
+    chdir($basedir);
+    if ($zip->extract()) {
+        $tool_content .= "<p class='success'>$langEBookReplaceDoneZip</p>\n";
+    } else {
+        $tool_content .= "<p class='alert1'>$langErrorReadingZipFile</p>\n";
+    }
+    $tool_content .= "<p><a href='edit.php?course=$course_code&amp;id=$id'>$langBack</a></p>\n";
 } else {
-        list($title) = mysql_fetch_row($r);
-        $tool_content .= "<form method='post' action='replace.php?course=$course_code&amp;id=$id' enctype='multipart/form-data'>
+    list($title) = mysql_fetch_row($r);
+    $tool_content .= "<form method='post' action='replace.php?course=$course_code&amp;id=$id' enctype='multipart/form-data'>
                              <fieldset><legend>$langUpload</legend>
                                 <table width='99%' class='tbl'>
                                    <tr><th>$langTitle:</th>

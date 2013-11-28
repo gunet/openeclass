@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,17 +20,17 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	search_incourse.php
-	@version $Id$
-	@authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-==============================================================================
-        @Description: Search function that searches data within a course.
-        Requires $dbname to point to the course DB
+/* ===========================================================================
+  search_incourse.php
+  @version $Id$
+  @authors list: Agorastos Sakis <th_agorastos@hotmail.com>
+  ==============================================================================
+  @Description: Search function that searches data within a course.
+  Requires $dbname to point to the course DB
 
-   	This is an example of the MySQL queries used for searching:
-   	SELECT * FROM articles WHERE MATCH (title,body,more_fields) AGAINST ('database') OR ('Security') AND ('lala')
-==============================================================================*/
+  This is an example of the MySQL queries used for searching:
+  SELECT * FROM articles WHERE MATCH (title,body,more_fields) AGAINST ('database') OR ('Security') AND ('lala')
+  ============================================================================== */
 
 
 $require_current_course = TRUE;
@@ -53,37 +54,36 @@ require_once 'unitresourceindexer.class.php';
 $nameTools = $langSearch;
 
 if (!get_config('enable_search')) {
-        $tool_content .= "<div class='info'>$langSearchDisabled</div>";
-        draw($tool_content, 2);
-        exit;
+    $tool_content .= "<div class='info'>$langSearchDisabled</div>";
+    draw($tool_content, 2);
+    exit;
 }
 
 $found = false;
 register_posted_variables(array('announcements' => true,
-				'agenda' => true,
-			  	'course_units' => true,
-				'documents' => true,
-				'exercises' => true,
-				'forums' => true,
-				'links' => true,
-				'video' => true),
-			        'all');
+    'agenda' => true,
+    'course_units' => true,
+    'documents' => true,
+    'exercises' => true,
+    'forums' => true,
+    'links' => true,
+    'video' => true), 'all');
 
 if (isset($_GET['all'])) {
-	$all = intval($_GET['all']);
-	$announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1;
+    $all = intval($_GET['all']);
+    $announcements = $agenda = $course_units = $documents = $exercises = $forums = $links = $video = 1;
 }
 
-if(isset($_REQUEST['search_terms'])) {
-	$search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
-	$query = " AGAINST ('".$search_terms."";
-	$query .= "' IN BOOLEAN MODE)";
+if (isset($_REQUEST['search_terms'])) {
+    $search_terms = mysql_real_escape_string($_REQUEST['search_terms']);
+    $query = " AGAINST ('" . $search_terms . "";
+    $query .= "' IN BOOLEAN MODE)";
 }
 
-if(empty($search_terms)) {
+if (empty($search_terms)) {
 
-	// display form
-	$tool_content .= "
+    // display form
+    $tool_content .= "
 	    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
 	    <fieldset>
 	    <legend>$langSearchCriteria</legend>
@@ -122,11 +122,11 @@ if(empty($search_terms)) {
     // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
     $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
-    
+
     $tool_content .= "
         <div id=\"operations_container\">
 	  <ul id='opslist'>
-	    <li><a href='". $_SERVER['SCRIPT_NAME'] ."'>$langNewSearch</a></li>
+	    <li><a href='" . $_SERVER['SCRIPT_NAME'] . "'>$langNewSearch</a></li>
 	  </ul>
 	</div>
         <p class='sub_title1'>$langResults</p>";
@@ -162,7 +162,7 @@ if(empty($search_terms)) {
             $found = true;
         }
     }
-    
+
     // search in agenda
     if ($agenda) {
         $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
@@ -201,12 +201,12 @@ if(empty($search_terms)) {
 
                 $numLine++;
             }
-            
+
             $tool_content .= "</table>";
             $found = true;
         }
     }
-        
+
     // search in documents
     if ($documents) {
         $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
@@ -343,7 +343,7 @@ if(empty($search_terms)) {
             $found = true;
         }
     }
-        
+
     // search in links
     if ($links) {
         $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
@@ -368,10 +368,10 @@ if(empty($search_terms)) {
                     <td>";
                 $desc_text = (empty($link['description'])) ? "" : "<span class='smaller'>" . $link['description'] . "</span>";
                 $tool_content .= "<a href='" . $linkHit->url . "' target=_blank> " . $link['title'] . "</a> $desc_text </td></tr>";
-                
+
                 $numLine++;
             }
-            
+
             $tool_content .= "</table>";
             $found = true;
         }
@@ -499,7 +499,7 @@ if(empty($search_terms)) {
             $found = true;
         }
     }
-        
+
     // else ... no results found
     if ($found == false) {
         $tool_content .= "<p class='alert1'>$langNoResult</p>";

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -24,36 +25,36 @@ $require_course_admin = true;
 include '../../include/init.php';
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-        $charset = 'Windows-1253';
+    $charset = 'Windows-1253';
 } else {
-        $charset = 'UTF-8';
+    $charset = 'UTF-8';
 }
-$crlf="\r\n";
+$crlf = "\r\n";
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=listusers.csv");
 
 echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups))),
-     $crlf;
+ $crlf;
 $sql = db_query("SELECT user.id AS user_id, user.surname, user.givenname, user.email, user.am, user.username
                         FROM course_user, user
                         WHERE `user`.`user_id` = `course_user`.`user_id` AND
                               `course_user`.`course_id` = $course_id
                         ORDER BY user.surname, user.givenname");
-$r=0;
+$r = 0;
 while ($r < mysql_num_rows($sql)) {
-        $a = mysql_fetch_array($sql);
-        echo "$crlf";
-        $f = 1;
-        while ($f < mysql_num_fields($sql)) {
-                if ($f > 1) {
-                        echo ';';
-                }
-                echo csv_escape($a[$f]);
-                $f++;
+    $a = mysql_fetch_array($sql);
+    echo "$crlf";
+    $f = 1;
+    while ($f < mysql_num_fields($sql)) {
+        if ($f > 1) {
+            echo ';';
         }
-        echo ';';
-        echo csv_escape(user_groups($course_id, $a['user_id'], 'txt'));
-        $r++;
+        echo csv_escape($a[$f]);
+        $f++;
+    }
+    echo ';';
+    echo csv_escape(user_groups($course_id, $a['user_id'], 'txt'));
+    $r++;
 }
 echo "$crlf";

@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -20,63 +21,63 @@
 // $Id: id.php,v 1.2 2001/12/24
 // Translated by: Firman Pribadi <http://ragiel.dhs.org>
 
-$text['title']          = 'Informasi Sistem';
+$text['title'] = 'Informasi Sistem';
 
-$text['vitals']         = 'Informasi Utama';
-$text['hostname']       = 'Hostname Resmi';
-$text['ip']             = 'IP Penerima';
-$text['kversion']       = 'Versi Kernel';
-$text['uptime']         = 'Aktif Selama';
-$text['users']          = 'Pengguna Saat Ini';
-$text['loadavg']        = 'Beban Rata-rata';
+$text['vitals'] = 'Informasi Utama';
+$text['hostname'] = 'Hostname Resmi';
+$text['ip'] = 'IP Penerima';
+$text['kversion'] = 'Versi Kernel';
+$text['uptime'] = 'Aktif Selama';
+$text['users'] = 'Pengguna Saat Ini';
+$text['loadavg'] = 'Beban Rata-rata';
 
-$text['hardware']       = 'Informasi Perangkat Keras';
-$text['numcpu']         = 'Prosesor';
-$text['cpumodel']       = 'Model';
-$text['mhz']            = 'Chipset (MHz)';
-$text['cache']          = 'Ukuran Cache';
-$text['bogomips']       = 'Sistem Bogomips';
-$text['pci']            = 'Perangkat PCI';
-$text['ide']            = 'Perangkat IDE';
-$text['scsi']           = 'Perangkat SCSI';
+$text['hardware'] = 'Informasi Perangkat Keras';
+$text['numcpu'] = 'Prosesor';
+$text['cpumodel'] = 'Model';
+$text['mhz'] = 'Chipset (MHz)';
+$text['cache'] = 'Ukuran Cache';
+$text['bogomips'] = 'Sistem Bogomips';
+$text['pci'] = 'Perangkat PCI';
+$text['ide'] = 'Perangkat IDE';
+$text['scsi'] = 'Perangkat SCSI';
 
-$text['netusage']       = 'Status Penggunaan Jaringan';
-$text['device']         = 'Perangkat';
-$text['received']       = 'Diterima';
-$text['sent']           = 'Dikirim';
-$text['errors']         = 'Rusak/Drop';
+$text['netusage'] = 'Status Penggunaan Jaringan';
+$text['device'] = 'Perangkat';
+$text['received'] = 'Diterima';
+$text['sent'] = 'Dikirim';
+$text['errors'] = 'Rusak/Drop';
 
-$text['connections']	= 'Koneksi Jaringan Aktif';
+$text['connections'] = 'Koneksi Jaringan Aktif';
 
-$text['memusage']       = 'Status Penggunaan Memori';
-$text['phymem']         = 'Memori Fisik';
-$text['swap']           = 'Swap HardDisk';
+$text['memusage'] = 'Status Penggunaan Memori';
+$text['phymem'] = 'Memori Fisik';
+$text['swap'] = 'Swap HardDisk';
 
-$text['fs']             = 'Status Penggunaan Media Penyimpanan dan Filesystem';
-$text['mount']          = 'Titik Mount';
-$text['partition']      = 'Partisi';
+$text['fs'] = 'Status Penggunaan Media Penyimpanan dan Filesystem';
+$text['mount'] = 'Titik Mount';
+$text['partition'] = 'Partisi';
 
-$text['percent']        = 'Digunakan (Persen)';
-$text['type']           = 'Tipe';
-$text['free']           = 'Bebas';
-$text['used']           = 'Digunakan';
-$text['size']           = 'Ukuran';
-$text['totals']         = 'Total';
+$text['percent'] = 'Digunakan (Persen)';
+$text['type'] = 'Tipe';
+$text['free'] = 'Bebas';
+$text['used'] = 'Digunakan';
+$text['size'] = 'Ukuran';
+$text['totals'] = 'Total';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'tidak ditemukan';
+$text['none'] = 'tidak ditemukan';
 
-$text['capacity']       = 'Kapasitas';
+$text['capacity'] = 'Kapasitas';
 
-$text['template']       = 'Template';
-$text['language']       = 'Bahasa';
-$text['submit']         = 'Gunakan';
-$text['created']        = 'Dibangun menggunakan';
+$text['template'] = 'Template';
+$text['language'] = 'Bahasa';
+$text['submit'] = 'Gunakan';
+$text['created'] = 'Dibangun menggunakan';
 
-$text['days']           = 'hari';
-$text['hours']          = 'jam';
-$text['minutes']        = 'menit';
+$text['days'] = 'hari';
+$text['hours'] = 'jam';
+$text['minutes'] = 'menit';
 ?>

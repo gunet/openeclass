@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,14 +20,12 @@
  * ======================================================================== */
 
 
-if (isset($_POST['token']))
-{
+if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
     require_once ('minit.php');
 
-    if (isset($_REQUEST['logout']))
-    {
+    if (isset($_REQUEST['logout'])) {
         require_once ('include/CAS/CAS.php');
         require_once ('modules/auth/auth.inc.php');
 
@@ -37,7 +36,7 @@ if (isset($_POST['token']))
         if (isset($_SESSION['cas_uname'])) // if we are CAS user
             define('CAS', true);
 
-        foreach(array_keys($_SESSION) as $key)
+        foreach (array_keys($_SESSION) as $key)
             unset($_SESSION[$key]);
 
         session_destroy();
@@ -54,9 +53,8 @@ if (isset($_POST['token']))
         exit();
     }
 
-    if (isset($_REQUEST['redirect']))
-    {
-        header('Location: '. urldecode($_REQUEST['redirect']));
+    if (isset($_REQUEST['redirect'])) {
+        header('Location: ' . urldecode($_REQUEST['redirect']));
         exit();
     }
 
@@ -65,8 +63,7 @@ if (isset($_POST['token']))
 }
 
 
-if (isset($_POST['uname']) && isset($_POST['pass']))
-{
+if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $require_noerrors = true;
     require_once ('minit.php');
     require_once ('include/CAS/CAS.php');
@@ -76,7 +73,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     $uname = autounquote(canonicalize_whitespace($_POST['uname']));
     $pass = autounquote($_POST['pass']);
 
-    foreach(array_keys($_SESSION) as $key)
+    foreach (array_keys($_SESSION) as $key)
         unset($_SESSION[$key]);
     $_SESSION['user_perso_active'] = false;
 
@@ -105,21 +102,19 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     exit();
 }
 
-
-function set_session_mvars()
-{
+function set_session_mvars() {
     $status = array();
 
     $sql = "SELECT course.id course_id, course.code code, course.public_code,
                    course.title title, course.prof_names profs, course_user.statut statut
               FROM course JOIN course_user ON course.id = course_user.course_id
-             WHERE course_user.user_id = ". $_SESSION['uid'] ."
+             WHERE course_user.user_id = " . $_SESSION['uid'] . "
           ORDER BY statut, course.title, course.prof_names";
     $sql2 = "SELECT course.id course_id, course.code code, course.public_code,
                     course.title title, course.prof_names profs, course_user.statut statut
                FROM course JOIN course_user ON course.id = course_user.course_id
-              WHERE course_user.user_id = ". $_SESSION['uid'] ."
-                AND course.visible != ".COURSE_INACTIVE."
+              WHERE course_user.user_id = " . $_SESSION['uid'] . "
+                AND course.visible != " . COURSE_INACTIVE . "
            ORDER BY statut, course.title, course.prof_names";
 
     if ($_SESSION['statut'] == 1)

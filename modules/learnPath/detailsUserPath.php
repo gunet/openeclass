@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,63 +20,62 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	detailsUserPath.php
-	@last update: 30-06-2006 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* ===========================================================================
+  detailsUserPath.php
+  @last update: 30-06-2006 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7 licensed under GPL
+  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-	      original file: tracking/lp_modules_details.php Revision: 1.20
-==============================================================================
-    @Description: This script presents the student's progress for a learning
-                  path to the teacher.
+  original file: tracking/lp_modules_details.php Revision: 1.20
+  ==============================================================================
+  @Description: This script presents the student's progress for a learning
+  path to the teacher.
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
 
-$TABLECOURSUSER	        = "course_user";
-$TABLEUSER              = "user";
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLECOURSUSER = "course_user";
+$TABLEUSER = "user";
+$TABLELEARNPATH = "lp_learnPath";
+$TABLEMODULE = "lp_module";
+$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
+$TABLEASSET = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
-$navigation[] = array("url"=>"details.php?course=$course_code&amp;path_id=".$_REQUEST['path_id'], "name"=> $langStatsOfLearnPath);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
+$navigation[] = array("url" => "details.php?course=$course_code&amp;path_id=" . $_REQUEST['path_id'], "name" => $langStatsOfLearnPath);
 $nameTools = $langTrackUser;
 
-if( empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id']) )
-{
-	header("Location: ./index.php?course=$course_code");
-	exit();
+if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
+    header("Location: ./index.php?course=$course_code");
+    exit();
 }
 
 
 // get infos about the user
-$sql = "SELECT surname, givenname, email FROM `".$TABLEUSER."`
-               WHERE id = ". (int)$_REQUEST['uInfo'];
+$sql = "SELECT surname, givenname, email FROM `" . $TABLEUSER . "`
+               WHERE id = " . (int) $_REQUEST['uInfo'];
 $uDetails = db_query_get_single_row($sql);
 
 mysql_select_db($mysqlMainDb);
 
 // get infos about the learningPath
 $sql = "SELECT `name`
-        FROM `".$TABLELEARNPATH."`
-        WHERE `learnPath_id` = ". (int)$_REQUEST['path_id'] ."
+        FROM `" . $TABLELEARNPATH . "`
+        WHERE `learnPath_id` = " . (int) $_REQUEST['path_id'] . "
         AND `course_id` = $course_id";
 $LPresult = mysql_fetch_row(db_query($sql));
 $LPname = $LPresult[0];
@@ -87,14 +87,14 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 	UMP.`lesson_status`, UMP.`raw`,
 	UMP.`scoreMax`, UMP.`credit`,
 	UMP.`session_time`, UMP.`total_time`, A.`path`
-	FROM (`".$TABLELEARNPATHMODULE."` AS LPM, `".$TABLEMODULE."` AS M)
-	LEFT JOIN `".$TABLEUSERMODULEPROGRESS."` AS UMP
+	FROM (`" . $TABLELEARNPATHMODULE . "` AS LPM, `" . $TABLEMODULE . "` AS M)
+	LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
 		ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-		AND UMP.`user_id` = ". (int)$_REQUEST['uInfo']."
-	LEFT JOIN `".$TABLEASSET."` AS A
+		AND UMP.`user_id` = " . (int) $_REQUEST['uInfo'] . "
+	LEFT JOIN `" . $TABLEASSET . "` AS A
 		ON M.`startAsset_id` = A.`asset_id`
 	WHERE LPM.`module_id` = M.`module_id`
-		AND LPM.`learnPath_id` = ". (int)$_REQUEST['path_id']."
+		AND LPM.`learnPath_id` = " . (int) $_REQUEST['path_id'] . "
 		AND LPM.`visible` = 1
 		AND LPM.`module_id` = M.`module_id`
 		AND M.`course_id` = $course_id
@@ -104,9 +104,8 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 $moduleList = db_query_fetch_all($sql);
 
 $extendedList = array();
-foreach( $moduleList as $module )
-{
-	$extendedList[] = $module;
+foreach ($moduleList as $module) {
+    $extendedList[] = $module;
 }
 
 // build the array of modules
@@ -120,201 +119,163 @@ $global_time = "0000:00:00";
 
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
-for ( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
-{
-	if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
+for ($i = 0; $i < sizeof($flatElementList); $i++) {
+    if ($flatElementList[$i]['children'] > $maxDeep)
+        $maxDeep = $flatElementList[$i]['children'];
 }
 
 
 // -------------------- table header ----------------------------
 $tool_content .= '
-    <table width="99%" class="tbl_alt">'."\n"
-    // ------------------- some user details --------------------------
-	.'    <tr class="odd">'."\n"
-	.'      <td colspan="'.($maxDeep+1).'" class="left"><small><b>'.$langLearnPath.'</b>:&nbsp;'.$LPname.'</small></td>'."\n"
-	.'      <td colspan="'.($maxDeep+4).'" class="right"><small><b>'.$langStudent.'</b>: '.q($uDetails['surname']).' '.q($uDetails['givenname']).' ('.q($uDetails['email']).')</small></td>'."\n"
-	.'    </tr>'."\n"
-	.'    <tr>'."\n"
-	.'      <th colspan="'.($maxDeep+1).'">'.$langLearningObjects.'</th>'."\n"
-	.'      <th>'.$langLastSessionTimeSpent.'</th>'."\n"
-	.'      <th>'.$langTotalTimeSpent.'</th>'."\n"
-	.'      <th>'.$langLessonStatus.'</th>'."\n"
-	.'      <th colspan="2">'.$langProgress.'</th>'."\n"
-	.'    </tr>'."\n";
+    <table width="99%" class="tbl_alt">' . "\n"
+        // ------------------- some user details --------------------------
+        . '    <tr class="odd">' . "\n"
+        . '      <td colspan="' . ($maxDeep + 1) . '" class="left"><small><b>' . $langLearnPath . '</b>:&nbsp;' . $LPname . '</small></td>' . "\n"
+        . '      <td colspan="' . ($maxDeep + 4) . '" class="right"><small><b>' . $langStudent . '</b>: ' . q($uDetails['surname']) . ' ' . q($uDetails['givenname']) . ' (' . q($uDetails['email']) . ')</small></td>' . "\n"
+        . '    </tr>' . "\n"
+        . '    <tr>' . "\n"
+        . '      <th colspan="' . ($maxDeep + 1) . '">' . $langLearningObjects . '</th>' . "\n"
+        . '      <th>' . $langLastSessionTimeSpent . '</th>' . "\n"
+        . '      <th>' . $langTotalTimeSpent . '</th>' . "\n"
+        . '      <th>' . $langLessonStatus . '</th>' . "\n"
+        . '      <th colspan="2">' . $langProgress . '</th>' . "\n"
+        . '    </tr>' . "\n";
 
 // ---------------- display list of elements ------------------------
-foreach ($flatElementList as $module)
-{
-	if( $module['scoreMax'] > 0 )
-	{
-		$progress = @round($module['raw']/$module['scoreMax']*100);
-	}
-	else
-	{
-		$progress = 0;
-	}
+foreach ($flatElementList as $module) {
+    if ($module['scoreMax'] > 0) {
+        $progress = @round($module['raw'] / $module['scoreMax'] * 100);
+    } else {
+        $progress = 0;
+    }
 
-	if ( $module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0 )
-	{
-		if ( $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
-		{
-			$progress = 100;
-		}
-		else
-		{
-			$progress = 0;
-		}
-	}
+    if ($module['contentType'] == CTSCORM_ && $module['scoreMax'] <= 0) {
+        if ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
+            $progress = 100;
+        } else {
+            $progress = 0;
+        }
+    }
 
-	// display the current module name
-	$spacingString = '';
-	for($i = 0; $i < $module['children']; $i++)
-	$spacingString .= '      <td width="5">&nbsp;</td>'."\n";
-	$colspan = $maxDeep - $module['children']+1;
+    // display the current module name
+    $spacingString = '';
+    for ($i = 0; $i < $module['children']; $i++)
+        $spacingString .= '      <td width="5">&nbsp;</td>' . "\n";
+    $colspan = $maxDeep - $module['children'] + 1;
 
-	$tool_content .= '    <tr>'."\n".$spacingString.'      <td colspan="'.$colspan.'" align="left">';
-	//-- if chapter head
-	if ( $module['contentType'] == CTLABEL_ )
-	{
-		$tool_content .= '      <b>'. q($module['name']) .'</b>';
-	}
-	//-- if user can access module
-	else
-	{
-		if($module['contentType'] == CTEXERCISE_ )
-			$moduleImg = "exercise_on.png";
-		else if($module['contentType'] == CTLINK_ )
-        		$moduleImg = "links_on.png";
-		else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        		$moduleImg = "description_on.png";
-                else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-        		$moduleImg = "videos_on.png";
-		else
-		$moduleImg = choose_image(basename($module['path']));
-		$contentType_alt = selectAlt($module['contentType']);
-		$tool_content .= '<img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /> <small>'. q($module['name']) .'</small>';
-	}
+    $tool_content .= '    <tr>' . "\n" . $spacingString . '      <td colspan="' . $colspan . '" align="left">';
+    //-- if chapter head
+    if ($module['contentType'] == CTLABEL_) {
+        $tool_content .= '      <b>' . q($module['name']) . '</b>';
+    }
+    //-- if user can access module
+    else {
+        if ($module['contentType'] == CTEXERCISE_)
+            $moduleImg = "exercise_on.png";
+        else if ($module['contentType'] == CTLINK_)
+            $moduleImg = "links_on.png";
+        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+            $moduleImg = "description_on.png";
+        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
+            $moduleImg = "videos_on.png";
+        else
+            $moduleImg = choose_image(basename($module['path']));
+        $contentType_alt = selectAlt($module['contentType']);
+        $tool_content .= '<img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" border="0" /> <small>' . q($module['name']) . '</small>';
+    }
 
-		$tool_content .= '</td>'."\n";
+    $tool_content .= '</td>' . "\n";
 
-		if ($module['contentType'] == CTSCORM_)
-		{
-			$session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
-			$total_time = preg_replace("/\.[0-9]{0,2}/", "", $module['total_time']);
-			$global_time = addScormTime($global_time,$total_time);
-		}
-		elseif($module['contentType'] == CTLABEL_ || $module['contentType'] == CTEXERCISE_)
-		{
-			$session_time = $module['session_time'];
-			$total_time = $module['total_time'];
-		}
-		else
-		{
-			// if no progression has been recorded for this module
-			// leave
-			if($module['lesson_status'] == "")
-			{
-			$session_time = "&nbsp;";
-			$total_time = "&nbsp;";
-			}
-			else // columns are n/a
-			{
-			$session_time = "-";
-			$total_time = "-";
-			}
-		}
-		//-- session_time
-		$tool_content .= '      <td>'.$session_time.'</td>'."\n";
-		//-- total_time
-		$tool_content .= '      <td>'.$total_time.'</td>'."\n";
-		//-- status
-		$tool_content .= '      <td>';
-		if($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "" ) {
-			if ($module['lesson_status']=="NOT ATTEMPTED") {
-				$tool_content .= $langNotAttempted;
-			}
-			else if ($module['lesson_status']=="PASSED") {
-				$tool_content .= $langPassed;
-			}
-			else if ($module['lesson_status']=="FAILED") {
-				$tool_content .= $langFailed;
-			}
-			else if ($module['lesson_status']=="COMPLETED") {
-				$tool_content .= $langAlreadyBrowsed;
-			}
-			else if ($module['lesson_status']=="BROWSED") {
-				$tool_content .= $langAlreadyBrowsed;
-			}
-			else if ($module['lesson_status']=="INCOMPLETE") {
-				$tool_content .= $langNeverBrowsed;
-			}
-			else {
-				$tool_content .= strtolower($module['lesson_status']);
-			}
-		}
-		else {
-			if ($module['lesson_status']=="NOT ATTEMPTED") {
-				$tool_content .= $langNotAttempted;
-			}
-			else if ($module['lesson_status']=="PASSED") {
-				$tool_content .= $langPassed;
-			}
-			else if ($module['lesson_status']=="FAILED") {
-				$tool_content .= $langFailed;
-			}
-			else if ($module['lesson_status']=="COMPLETED") {
-				$tool_content .= $langAlreadyBrowsed;
-			}
-			else if ($module['lesson_status']=="BROWSED") {
-				$tool_content .= $langAlreadyBrowsed;
-			}
-			else if ($module['lesson_status']=="INCOMPLETE") {
-				$tool_content .= $langNeverBrowsed;
-			}
-			else {
-				$tool_content .= strtolower($module['lesson_status']);
-			}
-		}
-		$tool_content .= '</td>'."\n";
-		//-- progression
-		if($module['contentType'] != CTLABEL_ )
-		{
-			// display the progress value for current module
-			$tool_content .= '<td align="right" width="120">'.disp_progress_bar($progress, 1).'</td>'."\n";
-			$tool_content .= '<td align="left" width="10">&nbsp;'.$progress.'%</td>'."\n";
-		}
-		else // label
-		{
-		$tool_content .= '      <td colspan="2">&nbsp;</td>'."\n";
-		}
+    if ($module['contentType'] == CTSCORM_) {
+        $session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
+        $total_time = preg_replace("/\.[0-9]{0,2}/", "", $module['total_time']);
+        $global_time = addScormTime($global_time, $total_time);
+    } elseif ($module['contentType'] == CTLABEL_ || $module['contentType'] == CTEXERCISE_) {
+        $session_time = $module['session_time'];
+        $total_time = $module['total_time'];
+    } else {
+        // if no progression has been recorded for this module
+        // leave
+        if ($module['lesson_status'] == "") {
+            $session_time = "&nbsp;";
+            $total_time = "&nbsp;";
+        } else { // columns are n/a
+            $session_time = "-";
+            $total_time = "-";
+        }
+    }
+    //-- session_time
+    $tool_content .= '      <td>' . $session_time . '</td>' . "\n";
+    //-- total_time
+    $tool_content .= '      <td>' . $total_time . '</td>' . "\n";
+    //-- status
+    $tool_content .= '      <td>';
+    if ($module['contentType'] == CTEXERCISE_ && $module['lesson_status'] != "") {
+        if ($module['lesson_status'] == "NOT ATTEMPTED") {
+            $tool_content .= $langNotAttempted;
+        } else if ($module['lesson_status'] == "PASSED") {
+            $tool_content .= $langPassed;
+        } else if ($module['lesson_status'] == "FAILED") {
+            $tool_content .= $langFailed;
+        } else if ($module['lesson_status'] == "COMPLETED") {
+            $tool_content .= $langAlreadyBrowsed;
+        } else if ($module['lesson_status'] == "BROWSED") {
+            $tool_content .= $langAlreadyBrowsed;
+        } else if ($module['lesson_status'] == "INCOMPLETE") {
+            $tool_content .= $langNeverBrowsed;
+        } else {
+            $tool_content .= strtolower($module['lesson_status']);
+        }
+    } else {
+        if ($module['lesson_status'] == "NOT ATTEMPTED") {
+            $tool_content .= $langNotAttempted;
+        } else if ($module['lesson_status'] == "PASSED") {
+            $tool_content .= $langPassed;
+        } else if ($module['lesson_status'] == "FAILED") {
+            $tool_content .= $langFailed;
+        } else if ($module['lesson_status'] == "COMPLETED") {
+            $tool_content .= $langAlreadyBrowsed;
+        } else if ($module['lesson_status'] == "BROWSED") {
+            $tool_content .= $langAlreadyBrowsed;
+        } else if ($module['lesson_status'] == "INCOMPLETE") {
+            $tool_content .= $langNeverBrowsed;
+        } else {
+            $tool_content .= strtolower($module['lesson_status']);
+        }
+    }
+    $tool_content .= '</td>' . "\n";
+    //-- progression
+    if ($module['contentType'] != CTLABEL_) {
+        // display the progress value for current module
+        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
+        $tool_content .= '<td align="left" width="10">&nbsp;' . $progress . '%</td>' . "\n";
+    } else { // label
+        $tool_content .= '      <td colspan="2">&nbsp;</td>' . "\n";
+    }
 
-		if ($progress > 0)
-		{
-		$globalProg += $progress;
-		}
-		if($module['contentType'] != CTLABEL_)
-			$moduleNb++; // increment number of modules used to compute global progression except if the module is a title
+    if ($progress > 0) {
+        $globalProg += $progress;
+    }
+    if ($module['contentType'] != CTLABEL_)
+        $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-		$tool_content .= '    </tr>'."\n";
+    $tool_content .= '    </tr>' . "\n";
 }
 
-if ($moduleNb == 0)
-{
-	$tool_content .= '    <tr class="odd">'."\n".'<td align="center" colspan="7">'.$langNoModule.'</td>'."\n".'    </tr>'."\n";
-}
-elseif($moduleNb > 0)
-{
-	// display global stats
-	$tool_content .= '    <tr class="odd">'."\n"
-		.'      <td colspan="'.($maxDeep+1).'">&nbsp;</td>'."\n"
-		.'      <td align="right">'.(($global_time != "0000:00:00")? $langTimeInLearnPath : '&nbsp;').'</td>'."\n"
-		.'      <td align="center">'.(($global_time != "0000:00:00")? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;').'</td>'."\n"
-		.'<td align="right"><small>'.$langGlobalProgress.'</small></td>'."\n"
-		.'<td align="right">'
-		.disp_progress_bar(round($globalProg / ($moduleNb) ), 1)
-		.'</td>'."\n"
-		.'      <td align="left"><small>&nbsp;'.round($globalProg / ($moduleNb) ) .'%</small></td>'."\n"
-		.'    </tr>';
+if ($moduleNb == 0) {
+    $tool_content .= '    <tr class="odd">' . "\n" . '<td align="center" colspan="7">' . $langNoModule . '</td>' . "\n" . '    </tr>' . "\n";
+} elseif ($moduleNb > 0) {
+    // display global stats
+    $tool_content .= '    <tr class="odd">' . "\n"
+            . '      <td colspan="' . ($maxDeep + 1) . '">&nbsp;</td>' . "\n"
+            . '      <td align="right">' . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . '</td>' . "\n"
+            . '      <td align="center">' . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . '</td>' . "\n"
+            . '<td align="right"><small>' . $langGlobalProgress . '</small></td>' . "\n"
+            . '<td align="right">'
+            . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
+            . '</td>' . "\n"
+            . '      <td align="left"><small>&nbsp;' . round($globalProg / ($moduleNb)) . '%</small></td>' . "\n"
+            . '    </tr>';
 }
 $tool_content .= "\n</table>\n";
 

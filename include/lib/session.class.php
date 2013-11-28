@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -24,6 +25,7 @@
  * Holds information about the current logged-in user
  */
 class Session {
+
     public $user_id;
     public $username;
     public $givenname;
@@ -38,24 +40,23 @@ class Session {
 
     public function __construct() {
         if (isset($_REQUEST['localize'])) {
-            $this->language = $_SESSION['langswitch'] =
-                validate_language_code($_REQUEST['localize']);
+            $this->language = $_SESSION['langswitch'] = validate_language_code($_REQUEST['localize']);
         } elseif (isset($_SESSION['langswitch'])) {
             $this->language = $_SESSION['langswitch'];
         } else {
             $this->language = get_config('default_language');
         }
 
-        if (isset($_SESSION['uid'])) { 
-            $this->user_id = $_SESSION['uid']; 
-        } else { 
-            $this->user_id = 0; 
-        } 
-        if (isset($_SESSION['status'])) { 
-            $this->status = $_SESSION['status']; 
-        } else { 
-            $this->status = 0; 
-        } 
+        if (isset($_SESSION['uid'])) {
+            $this->user_id = $_SESSION['uid'];
+        } else {
+            $this->user_id = 0;
+        }
+        if (isset($_SESSION['status'])) {
+            $this->status = $_SESSION['status'];
+        } else {
+            $this->status = 0;
+        }
     }
 
     public function logout() {
@@ -68,4 +69,5 @@ class Session {
         unset($this->courses);
         unset($this->language);
     }
+
 }

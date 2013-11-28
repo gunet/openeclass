@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,8 +21,8 @@
 
 // if we come from the home page
 if (isset($_GET['from_home']) and ($_GET['from_home'] == TRUE) and isset($_GET['cid'])) {
-        session_start();
-        $_SESSION['dbname'] = $_GET['cid'];
+    session_start();
+    $_SESSION['dbname'] = $_GET['cid'];
 }
 
 $require_current_course = true;
@@ -66,10 +67,10 @@ function displayCoursePassword() {
 }
     var lang = {
 hContent;
-$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
-$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
-$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
-$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
+$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
+$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
+$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
 
@@ -102,109 +103,108 @@ hContent;
 $nameTools = $langModifInfo;
 
 // if the course is opencourses certified, disable visibility choice in form
-$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) 
-        ? $creview->is_certified : false;
+$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) ? $creview->is_certified : false;
 $disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
-    
+
 
 if (isset($_POST['submit'])) {
-        if (empty($_POST['title'])) {
-                $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
+    if (empty($_POST['title'])) {
+        $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-        } else {
-                if (isset($_POST['localize'])) {
-                        $language = validate_language_code($_POST['localize']);
-                        // include_messages
-                        include "lang/$language/common.inc.php";
-                        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-                        if (file_exists($extra_messages)) {
-                                include $extra_messages;
-                        } else {
-                                $extra_messages = false;
-                        }
-                        include "lang/$language/messages.inc.php";
-                        if ($extra_messages) {
-                                include $extra_messages;
-                        }
-                }
-                // update course settings
-                if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
-                        $password = $_POST['password'];
-                } else {
-                        $password = "";
-                }
-                
-                // disable visibility if it is opencourses certified
-                if (get_config('opencourses_enable') && $isOpenCourseCertified)
-                    $_POST['formvisible'] = '2';
-
-                $departments = isset($_POST['department']) ? $_POST['department'] : array();
-                $deps_valid = true;
-
-                foreach ($departments as $dep) {
-                    if ( get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)) )
-                        $deps_valid = false;
-                }
-
-                // Check if the teacher is allowed to create in the departments he chose
-                if (!$deps_valid) {
-                    $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
-                                      <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-                } else {
-                        db_query("UPDATE course
-                                    SET title = ".quote($_POST['title']).",
-                                        public_code =".quote($_POST['fcode']).",
-                                        keywords = ".quote($_POST['course_keywords']).",
-                                        visible = ".intval($_POST['formvisible']).",
-                                        prof_names = ".quote($_POST['titulary']).",
-                                        lang = ".quote($language).",
-                                        password = ".quote($password)."
-                                    WHERE id = $course_id");
-                    $course->refresh($course_id, $departments);
-                    
-                    Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
-                                                                'public_code' => $_POST['fcode'],
-                                                                'visible' => $_POST['formvisible'],
-                                                                'prof_names' => $_POST['titulary'],
-                                                                'lang' => $language));
-
-                    $tool_content .= "<p class='success'>$langModifDone</p>
-                            <p>&laquo; <a href='".$_SERVER['SCRIPT_NAME']."?course=$course_code'>$langBack</a></p>
-                            <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
-                }
+    } else {
+        if (isset($_POST['localize'])) {
+            $language = validate_language_code($_POST['localize']);
+            // include_messages
+            include "lang/$language/common.inc.php";
+            $extra_messages = "config/{$language_codes[$language]}.inc.php";
+            if (file_exists($extra_messages)) {
+                include $extra_messages;
+            } else {
+                $extra_messages = false;
+            }
+            include "lang/$language/messages.inc.php";
+            if ($extra_messages) {
+                include $extra_messages;
+            }
         }
+        // update course settings
+        if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
+            $password = $_POST['password'];
+        } else {
+            $password = "";
+        }
+
+        // disable visibility if it is opencourses certified
+        if (get_config('opencourses_enable') && $isOpenCourseCertified)
+            $_POST['formvisible'] = '2';
+
+        $departments = isset($_POST['department']) ? $_POST['department'] : array();
+        $deps_valid = true;
+
+        foreach ($departments as $dep) {
+            if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
+                $deps_valid = false;
+        }
+
+        // Check if the teacher is allowed to create in the departments he chose
+        if (!$deps_valid) {
+            $tool_content .= "<p class='caution'>$langCreateCourseNotAllowedNode</p>
+                                      <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
+        } else {
+            db_query("UPDATE course
+                                    SET title = " . quote($_POST['title']) . ",
+                                        public_code =" . quote($_POST['fcode']) . ",
+                                        keywords = " . quote($_POST['course_keywords']) . ",
+                                        visible = " . intval($_POST['formvisible']) . ",
+                                        prof_names = " . quote($_POST['titulary']) . ",
+                                        lang = " . quote($language) . ",
+                                        password = " . quote($password) . "
+                                    WHERE id = $course_id");
+            $course->refresh($course_id, $departments);
+
+            Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
+                'public_code' => $_POST['fcode'],
+                'visible' => $_POST['formvisible'],
+                'prof_names' => $_POST['titulary'],
+                'lang' => $language));
+
+            $tool_content .= "<p class='success'>$langModifDone</p>
+                            <p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
+                            <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
+        }
+    }
 } else {
-	$tool_content .= "
+    $tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
 	    <li><a href='archive_course.php?course=$course_code'>$langBackupCourse</a></li>
 	    <li><a href='delete_course.php?course=$course_code'>$langDelCourse</a></li>
 	    <li><a href='refresh_course.php?course=$course_code'>$langRefreshCourse</a></li>";
-        if (get_config('course_metadata'))
-            $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
-        if (get_config('opencourses_enable') && $is_opencourses_reviewer)
-            $tool_content .= "<li><a href='../course_metadata/control.php?course=$course_code'>$langCourseMetadataControlPanel</a></li>";
-        $tool_content .= "
+    if (get_config('course_metadata'))
+        $tool_content .= "<li><a href='../course_metadata/index.php?course=$course_code'>$langCourseMetadata</a></li>";
+    if (get_config('opencourses_enable') && $is_opencourses_reviewer)
+        $tool_content .= "<li><a href='../course_metadata/control.php?course=$course_code'>$langCourseMetadataControlPanel</a></li>";
+    $tool_content .= "
 	  </ul>
 	</div>";
 
-	$sql = "SELECT course.title, course.keywords, course.visible,
+    $sql = "SELECT course.title, course.keywords, course.visible,
 		       course.public_code, course.prof_names, course.lang,
 		       course.password, course.id
 		  FROM course
                  WHERE course.code = '$course_code'";
-	$result = db_query($sql);
-	$c = mysql_fetch_array($result);
-	$title = q($c['title']);
-	$visible = $c['visible'];
-	$visibleChecked[$visible] = " checked='checked'";
-	$public_code = q($c['public_code']);
-	$titulary = q($c['prof_names']);
-	$languageCourse	= $c['lang'];
-	$course_keywords = q($c['keywords']);
-	$password = q($c['password']);
+    $result = db_query($sql);
+    $c = mysql_fetch_array($result);
+    $title = q($c['title']);
+    $visible = $c['visible'];
+    $visibleChecked[$visible] = " checked='checked'";
+    $public_code = q($c['public_code']);
+    $titulary = q($c['prof_names']);
+    $languageCourse = $c['lang'];
+    $course_keywords = q($c['keywords']);
+    $password = q($c['password']);
 
-	$tool_content .="
+    $tool_content .="
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
 	<legend>$langCourseIden</legend>
@@ -224,11 +224,11 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
-        $head_content .= $js;
-        $tool_content .= $html;
-	@$tool_content .= "
+    $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
+    $head_content .= $js;
+    $tool_content .= $html;
+    @$tool_content .= "
                 </td>
             </tr>
 	    <tr>
@@ -273,9 +273,9 @@ if (isset($_POST['submit'])) {
 	    <tr>
 		<th width='170'>$langOptions:</th>
 		<td width='1'>";
-                $language = $c['lang'];
-                $tool_content .= lang_select_options('localize');
-                $tool_content .= "
+    $language = $c['lang'];
+    $tool_content .= lang_select_options('localize');
+    $tool_content .= "
 	        </td>
 	        <td class='smaller'>$langTipLang</td>
 	    </tr>

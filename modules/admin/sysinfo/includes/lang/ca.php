@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo -A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -18,65 +19,64 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 // $Id$
-
 // Traductor: Miquel Guillamet Montalat
 // E-mail: mikelet15@netscape.com Web: http://gitx.dhs.org
 
-$text['title']       = 'Informació del Sistema';
+$text['title'] = 'Informaciï¿½ del Sistema';
 
-$text['vitals']      = 'Vital';
-$text['hostname']    = 'Nom del Sistema';
-$text['ip']          = 'Direcció IP';
-$text['kversion']    = 'Versió del Kernel';
-$text['uptime']      = 'Uptime';
-$text['users']       = 'Usuaris actuals';
-$text['loadavg']     = 'Carrega del Servidor';
+$text['vitals'] = 'Vital';
+$text['hostname'] = 'Nom del Sistema';
+$text['ip'] = 'Direcciï¿½ IP';
+$text['kversion'] = 'Versiï¿½ del Kernel';
+$text['uptime'] = 'Uptime';
+$text['users'] = 'Usuaris actuals';
+$text['loadavg'] = 'Carrega del Servidor';
 
-$text['hardware']    = 'Informació del Hardware';
-$text['numcpu']      = 'Processadors';
-$text['cpumodel']    = 'Model';
-$text['mhz']         = 'Frequència en MHz';
-$text['cache']       = 'RAM';
-$text['bogomips']    = 'Bogomips';
-$text['pci']         = 'Dispositius PCI';
-$text['ide']         = 'Dispositius IDE';
-$text['scsi']        = 'Dispositius SCSI';
+$text['hardware'] = 'Informaciï¿½ del Hardware';
+$text['numcpu'] = 'Processadors';
+$text['cpumodel'] = 'Model';
+$text['mhz'] = 'Frequï¿½ncia en MHz';
+$text['cache'] = 'RAM';
+$text['bogomips'] = 'Bogomips';
+$text['pci'] = 'Dispositius PCI';
+$text['ide'] = 'Dispositius IDE';
+$text['scsi'] = 'Dispositius SCSI';
 
-$text['netusage']    = 'Utilització de la XARXA';
-$text['device']      = 'Dispositiu';
-$text['received']    = 'Rebut';
-$text['sent']        = 'Enviat';
-$text['errors']      = 'Errors/Perduts';
+$text['netusage'] = 'Utilitzaciï¿½ de la XARXA';
+$text['device'] = 'Dispositiu';
+$text['received'] = 'Rebut';
+$text['sent'] = 'Enviat';
+$text['errors'] = 'Errors/Perduts';
 
-$text['memusage']    = 'Utilització de la RAM';
-$text['phymem']      = 'Memoria Fisica';
-$text['swap']        = 'Swap';
+$text['memusage'] = 'Utilitzaciï¿½ de la RAM';
+$text['phymem'] = 'Memoria Fisica';
+$text['swap'] = 'Swap';
 
-$text['fs']          = 'Particions Montades';
-$text['mount']       = 'Montat a';
-$text['partition']   = 'Partició';
+$text['fs'] = 'Particions Montades';
+$text['mount'] = 'Montat a';
+$text['partition'] = 'Particiï¿½';
 
-$text['percent']     = 'Capacitat';
-$text['type']        = 'Tipus';
-$text['free']        = 'Lliure';
-$text['used']        = 'Usat';
-$text['size']        = 'Tamany';
-$text['totals']      = 'Totals';
+$text['percent'] = 'Capacitat';
+$text['type'] = 'Tipus';
+$text['free'] = 'Lliure';
+$text['used'] = 'Usat';
+$text['size'] = 'Tamany';
+$text['totals'] = 'Totals';
 
-$text['kb']          = 'KB';
-$text['mg']          = 'MB';
-$text['gb']          = 'GB';
+$text['kb'] = 'KB';
+$text['mg'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']        = 'ningun';
+$text['none'] = 'ningun';
 
-$text['capacity']    = 'Capacitat';
+$text['capacity'] = 'Capacitat';
 
-$text['template']    = 'Themes';
-$text['language']    = 'Llenguatge';
-$text['submit']      = 'Enviar';
-$text['created']     = 'Creat per';
+$text['template'] = 'Themes';
+$text['language'] = 'Llenguatge';
+$text['submit'] = 'Enviar';
+$text['created'] = 'Creat per';
 
-$text['days']        = 'dies';
-$text['hours']       = 'hores';
-$text['minutes']     = 'minuts';
+$text['days'] = 'dies';
+$text['hours'] = 'hores';
+$text['minutes'] = 'minuts';
 ?>

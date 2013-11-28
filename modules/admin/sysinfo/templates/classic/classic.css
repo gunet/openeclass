@@ -1,35 +1,35 @@
 A {
-  text-decoration: none;
+    text-decoration: none;
 }
 A:link {
-  color: #8597A5;
+    color: #8597A5;
 }
 A:visited {
-  color: #8597A5;
+    color: #8597A5;
 }
 A:hover {
-  color: 687A92;
+    color: 687A92;
 }
 body {
-  color: #777777;
-  background-color: #ffffff;
-  text-decoration: none;
-  font-family: Verdana,Helvetica,sans-serif;
-  font-size: 11px;
-  font-weight: normal;
+    color: #777777;
+    background-color: #ffffff;
+    text-decoration: none;
+    font-family: Verdana,Helvetica,sans-serif;
+    font-size: 11px;
+    font-weight: normal;
 }
 font {
-  text-decoration: none;
-  font-family: Verdana,Helvetica,sans-serif;
-  font-size: 11px;
-  font-weight: normal;
+    text-decoration: none;
+    font-family: Verdana,Helvetica,sans-serif;
+    font-size: 11px;
+    font-weight: normal;
 }
 H1 {
-  color: #777777;
-  background-color: transparent;
-  text-decoration: none;
-  font-family: Verdana,Helvetica,sans-serif;
-  font-size: 20px;
+    color: #777777;
+    background-color: transparent;
+    text-decoration: none;
+    font-family: Verdana,Helvetica,sans-serif;
+    font-size: 20px;
 }
 select {
     color: #777777;
@@ -47,24 +47,24 @@ input {
 }
 table
 {
-  border: none;
-  margin: 0px;
-  padding: 0px;
+    border: none;
+    margin: 0px;
+    padding: 0px;
 }
 table.box {
-  color: #777777;
-  background-color: #486591;
-  border: none;
-  padding: 1px;
-  width: 100%;
+    color: #777777;
+    background-color: #486591;
+    border: none;
+    padding: 1px;
+    width: 100%;
 }
 tr.boxheader {
-  background-color: #486591;
+    background-color: #486591;
 }
 td.boxheader {
-  text-align: center;
+    text-align: center;
 }
 tr.boxbody {
-  color: #777777;
-  background-color: #e6e6e6;
+    color: #777777;
+    background-color: #e6e6e6;
 }

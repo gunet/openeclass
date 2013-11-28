@@ -24,12 +24,11 @@
  * @author Yannis Exidaridis <jexi@noc.uoa.gr>
  * @brief display form for displaying course actions
  */
-
 if (isset($_GET['from_admin'])) {
-        $course_id = $_GET['c'];        
+    $course_id = $_GET['c'];
 } else {
-        $require_current_course = true;
-        $require_login = true;
+    $require_current_course = true;
+    $require_login = true;
 }
 
 $require_course_admin = true;
@@ -39,43 +38,41 @@ require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 
 if (!isset($_REQUEST['course_code'])) {
-        $course_code = course_id_to_code($course_id);
+    $course_code = course_id_to_code($course_id);
 }
 
 $nameTools = $langUsersLog;
-$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
-$logtype = isset($_REQUEST['logtype'])? intval($_REQUEST['logtype']): '0';
-$u_user_id = isset($_REQUEST['u_user_id'])?intval($_REQUEST['u_user_id']):'-1';
-$u_module_id = isset($_REQUEST['u_module_id'])? intval($_REQUEST['u_module_id']): '-1';
-$u_date_start = isset($_REQUEST['u_date_start'])? $_REQUEST['u_date_start']: strftime('%Y-%m-%d', strtotime('now -15 day'));
-$u_date_end = isset($_REQUEST['u_date_end'])? $_REQUEST['u_date_end']: strftime('%Y-%m-%d', strtotime('now +1 day'));
-$limit = isset($_GET['limit'])?$_GET['limit']:0;
+$logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
+$u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
+$u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
+$u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -15 day'));
+$u_date_end = isset($_REQUEST['u_date_end']) ? $_REQUEST['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
+$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
 
 if (isset($_REQUEST['submit'])) {
     $page_link = "&amp;logtype=$logtype&amp;u_date_start=$u_date_start&amp;u_date_end=$u_date_end&amp;u_module_id=$u_module_id&amp;u_user_id=$u_user_id&amp;submit=1";
-    $log = new Log();    
+    $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
 }
 
 //----------------------- jscalendar -----------------------------
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 $start_cal = $jscalendar->make_input_field(
-           array('showsTime'      => false,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d'),
-           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-                 'name'        => 'u_date_start',
-                 'value'       => $u_date_start));
+        array('showsTime' => false,
+    'showOthers' => true,
+    'ifFormat' => '%Y-%m-%d'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
+    'name' => 'u_date_start',
+    'value' => $u_date_start));
 
-    $end_cal = $jscalendar->make_input_field(
-           array('showsTime'      => false,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d'),
-           array('style'       => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-                 'name'        => 'u_date_end',
-                 'value'       => $u_date_end));
+$end_cal = $jscalendar->make_input_field(
+        array('showsTime' => false,
+    'showOthers' => true,
+    'ifFormat' => '%Y-%m-%d'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
+    'name' => 'u_date_end',
+    'value' => $u_date_end));
 
 $qry = "SELECT LEFT(a.surname, 1) AS first_letter
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
@@ -85,17 +82,17 @@ $result = db_query($qry);
 
 $letterlinks = '';
 while ($row = mysql_fetch_assoc($result)) {
-        $first_letter = $row['first_letter'];        
-        $letterlinks .= '<a href="?course='.$course_code.'&amp;first='.$first_letter.'">'.$first_letter.'</a> ';
+    $first_letter = $row['first_letter'];
+    $letterlinks .= '<a href="?course=' . $course_code . '&amp;first=' . $first_letter . '">' . $first_letter . '</a> ';
 }
 
 if (isset($_GET['first'])) {
-        $firstletter = mysql_real_escape_string($_GET['first']);
-        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $firstletter = mysql_real_escape_string($_GET['first']);
+    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
                 FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
                 WHERE b.course_id = $course_id AND LEFT(a.surname,1) = " . quote($firstletter);
 } else {
-        $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
+    $qry = "SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
         WHERE b.course_id = $course_id";
 }
@@ -103,13 +100,13 @@ if (isset($_GET['first'])) {
 $user_opts = "<option value='-1'>$langAllUsers</option>";
 $result = db_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
-        if ($u_user_id == $row['id']) {
-                $selected = 'selected';
-        } else {
-                $selected = '';
-        }
-        $user_opts .= '<option '.$selected.' value="'.$row['id'].'">'.
-                      q($row['givenname'].' '.$row['surname'])."</option>\n";
+    if ($u_user_id == $row['id']) {
+        $selected = 'selected';
+    } else {
+        $selected = '';
+    }
+    $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' .
+            q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
 }
 $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
@@ -121,31 +118,31 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         </tr>
         <th class='left'>$langLogModules :</th>
         <td><select name='u_module_id'>";
-        $tool_content .= "<option value='-1'>$langAllModules</option>";
-        foreach ($modules as $m => $mid) {
-                $extra = '';
-                if ($u_module_id == $m) {
-                        $extra = 'selected';
-                }
-                $tool_content .= "<option value=".$m." $extra>".$mid['title']."</option>";
-        }
-        if ($u_module_id == MODULE_ID_USERS) {
-                $extra = 'selected';
-        }
-        if ($u_module_id == MODULE_ID_TOOLADMIN) {
-                $extra = 'selected';
-        }
-        $tool_content .= "<option value = ".MODULE_ID_USERS." $extra>$langAdminUsers</option>";
-        $tool_content .= "<option value = ".MODULE_ID_TOOLADMIN." $extra>$langExternalLinks</option>";
-        $tool_content .= "</select></td></tr>
+$tool_content .= "<option value='-1'>$langAllModules</option>";
+foreach ($modules as $m => $mid) {
+    $extra = '';
+    if ($u_module_id == $m) {
+        $extra = 'selected';
+    }
+    $tool_content .= "<option value=" . $m . " $extra>" . $mid['title'] . "</option>";
+}
+if ($u_module_id == MODULE_ID_USERS) {
+    $extra = 'selected';
+}
+if ($u_module_id == MODULE_ID_TOOLADMIN) {
+    $extra = 'selected';
+}
+$tool_content .= "<option value = " . MODULE_ID_USERS . " $extra>$langAdminUsers</option>";
+$tool_content .= "<option value = " . MODULE_ID_TOOLADMIN . " $extra>$langExternalLinks</option>";
+$tool_content .= "</select></td></tr>
         <tr><th class='left'>$langLogTypes :</th>
          <td>";
-        $log_types = array(0 => $langAllActions,
-                           LOG_INSERT => $langInsert,
-                           LOG_MODIFY => $langModify,
-                           LOG_DELETE => $langDelete);
-        $tool_content .= selection($log_types, 'logtype', $logtype);
-        $tool_content .= "</td></tr>
+$log_types = array(0 => $langAllActions,
+    LOG_INSERT => $langInsert,
+    LOG_MODIFY => $langModify,
+    LOG_DELETE => $langDelete);
+$tool_content .= selection($log_types, 'logtype', $logtype);
+$tool_content .= "</td></tr>
         <tr>
         <th class='left'>$langStartDate :</th>
         <td>$start_cal</td>
@@ -171,7 +168,7 @@ $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$cour
         </form>";
 
 if (isset($_GET['from_admin'])) {
-        draw($tool_content, 3, null, $head_content);
+    draw($tool_content, 3, null, $head_content);
 } else {
-        draw($tool_content, 2, null, $head_content);
+    draw($tool_content, 2, null, $head_content);
 }

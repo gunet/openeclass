@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,12 +20,12 @@
  * ======================================================================== */
 
 class ModalBoxHelper {
-    
+
     private static $modalWidth = 680;
     private static $modalHeight = 380;
     private static $shadowBoxWidth = 700;
     private static $shadowBoxHeight = 350;
-    
+
     /**
      * Load necessary javascript initialization.
      * Decides which modal box to use based on whether it's installed under js/
@@ -51,7 +52,7 @@ class ModalBoxHelper {
 
                            window.onload = function() {
                                Shadowbox.setup(".shadowbox", {
-                               '.$shadowbox_gallery.'
+                               ' . $shadowbox_gallery . '
                                });
                            };
                            </script>';
@@ -59,8 +60,8 @@ class ModalBoxHelper {
         $fancybox2_init = '<script type="text/javascript">
                            $(document).ready(function() {
                                $(".fancybox").fancybox({
-                                       width     : '. self::$modalWidth .',
-                                       height    : '. self::$modalHeight .',
+                                       width     : ' . self::$modalWidth . ',
+                                       height    : ' . self::$modalHeight . ',
                                        padding   : 0,
                                        margin    : 0,
                                        scrolling : "no"
@@ -68,17 +69,17 @@ class ModalBoxHelper {
                            });
                            </script>';
 
-        $colorbox_gallery = ($gallery) ? 'rel: "gallery",': '';
+        $colorbox_gallery = ($gallery) ? 'rel: "gallery",' : '';
         $colorbox_init = '<script type="text/javascript">
                           $(document).ready(function() {
                               $(".colorboxframe").colorbox({
-                                      innerWidth  : '. self::$modalWidth .',
-                                      innerHeight : '. self::$modalHeight .',
+                                      innerWidth  : ' . self::$modalWidth . ',
+                                      innerHeight : ' . self::$modalHeight . ',
                                       iframe      : "true",
                                       scrolling   : "false",
                                       opacity     : 0.8,
-                                      '.$colorbox_gallery.'
-                                      current     : "'.$langColorboxCurrent.'"
+                                      ' . $colorbox_gallery . '
+                                      current     : "' . $langColorboxCurrent . '"
                              });
                              $(".colorbox").colorbox({
                                       minWidth    : 300,
@@ -88,23 +89,23 @@ class ModalBoxHelper {
                                       scrolling   : "false",
                                       opacity     : 0.8,
                                       photo       : "true",
-                                      '.$colorbox_gallery.'
-                                      current     : "'.$langColorboxCurrent.'"
+                                      ' . $colorbox_gallery . '
+                                      current     : "' . $langColorboxCurrent . '"
                              });
                           });
                           </script>';
 
-        if (file_exists( self::getShadowboxDir() ))
+        if (file_exists(self::getShadowboxDir()))
             load_js('shadowbox', $shadowbox_init);
-        else if (file_exists( self::getFancybox2Dir() )) {
+        else if (file_exists(self::getFancybox2Dir())) {
             load_js('jquery');
             load_js('fancybox2', $fancybox2_init);
-        } else if (file_exists( self::getColorboxDir() )) {
+        } else if (file_exists(self::getColorboxDir())) {
             load_js('jquery');
             load_js('colorbox', $colorbox_init);
         }
     }
-    
+
     /**
      * For some file types shadowbox fails to autodetect the necessary player to
      * use, that's why we are helping it a bit.
@@ -116,7 +117,7 @@ class ModalBoxHelper {
         $extension = get_file_extension($filename);
         $ret = "";
 
-        switch($extension) {
+        switch ($extension) {
             case "flv":
             case "m4v":
             case "mp3":
@@ -131,7 +132,7 @@ class ModalBoxHelper {
 
         return $ret;
     }
-    
+
     /**
      * 
      * @return int
@@ -139,7 +140,7 @@ class ModalBoxHelper {
     public static function getModalWidth() {
         return self::$modalWidth;
     }
-    
+
     /**
      * 
      * @return int
@@ -147,7 +148,7 @@ class ModalBoxHelper {
     public static function getModalHeight() {
         return self::$modalHeight;
     }
-    
+
     /**
      * 
      * @global string $webDir
@@ -193,4 +194,5 @@ class ModalBoxHelper {
     public static function getShadowboxHeight() {
         return self::$shadowBoxHeight;
     }
+
 }

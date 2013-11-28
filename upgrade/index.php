@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,18 +23,18 @@ define('UPGRADE', true);
 
 require_once '../include/baseTheme.php';
 
-if ($urlAppend[strlen($urlAppend)-1] != '/') {
-        $urlAppend .= '/';
+if ($urlAppend[strlen($urlAppend) - 1] != '/') {
+    $urlAppend .= '/';
 }
 
 $nameTools = $langUpgrade;
 
 if ($language == 'el') {
-	$upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';
-	$link_changes_file = 'CHANGES_el.txt';
+    $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';
+    $link_changes_file = 'CHANGES_el.txt';
 } else {
- 	$upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
-	$link_changes_file = 'CHANGES_en.txt';
+    $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
+    $link_changes_file = 'CHANGES_en.txt';
 }
 
 // Main body
@@ -64,14 +65,14 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 </fieldset>";
 
 if (isset($from_admin)) {
-        $tool_content .= "<input type='hidden' name='from_admin' value='$from_admin'>";
+    $tool_content .= "<input type='hidden' name='from_admin' value='$from_admin'>";
 }
 
 $tool_content .= "</form>";
 
 if (isset($from_admin)) {
-        $tool_content .= "<p align=right><a href='../modules/admin/index.php' class=mainpage>$langBackAdmin</a></p>";
+    $tool_content .= "<p align=right><a href='../modules/admin/index.php' class=mainpage>$langBackAdmin</a></p>";
 } else {
-        $tool_content .= "&nbsp;";
+    $tool_content .= "&nbsp;";
 }
 draw($tool_content, 0);

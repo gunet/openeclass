@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,8 +20,12 @@
  * ======================================================================== */
 
 interface ResourceIndexerInterface {
+
     public function store($id, $finalize);
+
     public function remove($id, $existCheck, $finalize);
+
     public function reindex();
+
     public static function buildQuery($data, $anonymous);
 }

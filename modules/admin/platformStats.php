@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,16 +21,16 @@
 
 
 /*
-===========================================================================
-    admin/platformStats.php
-    @last update: 23-09-2006
-    @authors list: ophelia neofytou
-==============================================================================
-    @Description:  Shows statistics conserning the number of visits on the platform in a time period.
-        Statistics can be shown for a specific user or for all users.
+  ===========================================================================
+  admin/platformStats.php
+  @last update: 23-09-2006
+  @authors list: ophelia neofytou
+  ==============================================================================
+  @Description:  Shows statistics conserning the number of visits on the platform in a time period.
+  Statistics can be shown for a specific user or for all users.
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
@@ -38,24 +39,24 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 $nameTools = $langVisitsStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$page_title = $langPlatformStats.": ".$langVisitsStats;
+$page_title = $langPlatformStats . ": " . $langVisitsStats;
 
 $tool_content .= "
   <div id='operations_container'>
     <ul id='opslist'>
-      <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
-      <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
+      <li><a href='stateclass.php'>" . $langPlatformGenStats . "</a></li>
+      <li><a href='visitsCourseStats.php?first='>" . $langVisitsCourseStats . "</a></li>
       <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>" . $langOldStats . "</a></li>
-      <li><a href='monthlyReport.php'>".$langMonthlyReport."</a></li>
+      <li><a href='monthlyReport.php'>" . $langMonthlyReport . "</a></li>
     </ul>
   </div>";
 
 // jscalendar is used in order to select the time period for the statistics
 require_once 'include/jscalendar/calendar.php';
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 
-        //show chart with statistics
+//show chart with statistics
 require_once "modules/admin/statsResults.php";
 //show form for determining time period and user
 require_once "modules/admin/statsForm.php";

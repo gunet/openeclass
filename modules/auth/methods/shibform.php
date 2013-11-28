@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -20,52 +21,52 @@
 
 
 if ($f = @fopen("${webDir}secure/index.php", "r")) {
-	while (!feof($f)) {
-		$buffer = fgets($f, 4096);
-		if (strpos($buffer, 'shib_email')) {
-			$shibemail = strstr($buffer, '=');
-			$shibemail = trim(substr($shibemail, 1, -2));
-		}
-		if (strpos($buffer, 'shib_uname')) {
-			$shibuname = strstr($buffer, '=');
-			$shibuname = trim(substr($shibuname, 1, -2));
-		}
-		if (strpos($buffer, 'shib_nom')) {
-			$shibcn = strstr($buffer, '=');
-			$shibcn = trim(substr($shibcn, 1, -2));
-		}
-	}
-        fclose($f);
+    while (!feof($f)) {
+        $buffer = fgets($f, 4096);
+        if (strpos($buffer, 'shib_email')) {
+            $shibemail = strstr($buffer, '=');
+            $shibemail = trim(substr($shibemail, 1, -2));
+        }
+        if (strpos($buffer, 'shib_uname')) {
+            $shibuname = strstr($buffer, '=');
+            $shibuname = trim(substr($shibuname, 1, -2));
+        }
+        if (strpos($buffer, 'shib_nom')) {
+            $shibcn = strstr($buffer, '=');
+            $shibcn = trim(substr($shibcn, 1, -2));
+        }
+    }
+    fclose($f);
 }
 
 $r = mysql_fetch_assoc(db_query("SELECT auth_settings, auth_instructions FROM auth WHERE auth_id = 6"));
 $shibsettings = $r['auth_settings'];
 $auth_instructions = $r['auth_instructions'];
 if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-	$shibseparator = $shibsettings;
-	$checkedshib = 'checked';
+    $shibseparator = $shibsettings;
+    $checkedshib = 'checked';
 } else {
-	$checkedshib = $shibseparator = '';
+    $checkedshib = $shibseparator = '';
 }
 $tool_content .= sprintf("<tr><td colspan='2'><div class='info'>$langExplainShib</div></td></tr>", $webDir);
 $tool_content .= "
   <tr>
     <th class='left'>$langShibEmail:</th>
-    <td><input class='FormData_InputText' name='shibemail' type='text' size='30' value='".q($shibemail)."' /></td>
+    <td><input class='FormData_InputText' name='shibemail' type='text' size='30' value='" . q($shibemail) . "' /></td>
   </tr>
   <tr><th class='left'>$langShibUsername:</th>
-    <td><input class='FormData_InputText' name='shibuname' type='text' size='30' value='".q($shibuname)."' /></td>
+    <td><input class='FormData_InputText' name='shibuname' type='text' size='30' value='" . q($shibuname) . "' /></td>
   </tr>
   <tr>
     <th class='left' rowspan='2'>$langShibCn:</th>
-    <td><input class='FormData_InputText' name='shibcn' type='text' size='30' value='".q($shibcn)."' /></td>
+    <td><input class='FormData_InputText' name='shibcn' type='text' size='30' value='" . q($shibcn) . "' /></td>
   </tr>
   <tr>
     <td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' value='on' $checkedshib />&nbsp;$langCharSeparator&nbsp;
-      <input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='".q($shibseparator)."' /></td>
+      <input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='" . q($shibseparator) . "' /></td>
   </tr>
   <tr>
     <th class='left'>$langInstructionsAuth:</th>
-    <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>".q($auth_instructions)."</textarea></td>
+    <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
   </tr>
 ";

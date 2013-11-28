@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -38,43 +39,42 @@
  * @param int $menuTypeID Type of menu to generate
  *
  */
-function getSideMenu($menuTypeID){
 
-	switch ($menuTypeID){
-		case 0: { //logged out
-			$menu = loggedOutMenu();
-			break;
-		}
+function getSideMenu($menuTypeID) {
 
-		case 1: { //logged in
-			$menu = loggedInMenu();
-			break;
-		}
+    switch ($menuTypeID) {
+        case 0: { //logged out
+                $menu = loggedOutMenu();
+                break;
+            }
 
-		case 2: { //course home (lesson tools)
-			$menu = lessonToolsMenu();
-			break;
-		}
+        case 1: { //logged in
+                $menu = loggedInMenu();
+                break;
+            }
 
-		case 3: { // admin tools
-			$menu = adminMenu();
-			break;
-		}
+        case 2: { //course home (lesson tools)
+                $menu = lessonToolsMenu();
+                break;
+            }
 
-		case 4: { // custom tools
-			$menu = customMenu();
-			break;
-		}
+        case 3: { // admin tools
+                $menu = adminMenu();
+                break;
+            }
 
-		case 5: { // tools when embedded in tinymce
-			$menu = pickerMenu();
-			break;
-		}
+        case 4: { // custom tools
+                $menu = customMenu();
+                break;
+            }
 
-	}
-	return $menu;
+        case 5: { // tools when embedded in tinymce
+                $menu = pickerMenu();
+                break;
+            }
+    }
+    return $menu;
 }
-
 
 /*
  * Function getToolsArray
@@ -86,62 +86,62 @@ function getSideMenu($menuTypeID){
  * @return mysql_resource
  * @see function lessonToolsMenu
  */
+
 function getToolsArray($cat) {
-	global $currentCourse, $course_code;
+    global $currentCourse, $course_code;
 
-	$currentCourse = $course_code;
-        $cid = course_code_to_id($currentCourse);
+    $currentCourse = $course_code;
+    $cid = course_code_to_id($currentCourse);
 
-	switch ($cat) {
-		case 'Public':
-                        $sql = "SELECT * FROM course_module
+    switch ($cat) {
+        case 'Public':
+            $sql = "SELECT * FROM course_module
                                         WHERE visible = 1 AND
                                         course_id = $cid AND
-                                        module_id NOT IN (".MODULE_ID_CHAT.",
-                                                          ".MODULE_ID_ASSIGN.",
-                                                          ".MODULE_ID_DROPBOX.",
-                                                          ".MODULE_ID_QUESTIONNAIRE.",
-                                                          ".MODULE_ID_FORUM.",
-                                                          ".MODULE_ID_GROUPS.",
-                                                          ".MODULE_ID_WIKI.",
-                                                          ".MODULE_ID_LP.")
+                                        module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                          " . MODULE_ID_ASSIGN . ",
+                                                          " . MODULE_ID_DROPBOX . ",
+                                                          " . MODULE_ID_QUESTIONNAIRE . ",
+                                                          " . MODULE_ID_FORUM . ",
+                                                          " . MODULE_ID_GROUPS . ",
+                                                          " . MODULE_ID_WIKI . ",
+                                                          " . MODULE_ID_LP . ")
                                         ORDER BY module_id";
-			if (!check_guest()) {
-				if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-					$result = db_query("SELECT * FROM course_module
+            if (!check_guest()) {
+                if (isset($_SESSION['uid']) and $_SESSION['uid']) {
+                    $result = db_query("SELECT * FROM course_module
                                                         WHERE visible = 1 AND
                                                         course_id = $cid
                                                         ORDER BY module_id");
-				} else {
-					$result = db_query($sql);
-				}
-			} else {
-				$result = db_query($sql);
-			}
-			break;
-		case 'PublicButHide':
-			$result = db_query("SELECT * FROM course_module
+                } else {
+                    $result = db_query($sql);
+                }
+            } else {
+                $result = db_query($sql);
+            }
+            break;
+        case 'PublicButHide':
+            $result = db_query("SELECT * FROM course_module
                                          WHERE visible = 0 AND
                                          course_id = $cid
                                          ORDER BY module_id");
-			break;
-                }
-	return $result;
+            break;
+    }
+    return $result;
 }
-
 
 function getExternalLinks() {
 
-        global $course_code, $course_id;
+    global $course_code, $course_id;
 
-        $result = db_query("SELECT url, title FROM link
+    $result = db_query("SELECT url, title FROM link
                                    WHERE category IN (-1, -2) AND
                                          course_id = $course_id");
-        if (mysql_num_rows($result) > 0) {
-                return $result;
-        } else {
-                return false;
-        }
+    if (mysql_num_rows($result) > 0) {
+        return $result;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -155,118 +155,115 @@ function getExternalLinks() {
  *
  * @return array
  */
-function loggedInMenu()
-{
+function loggedInMenu() {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
-           $is_departmentmanage_user, $urlServer, $course_code;
+    $is_departmentmanage_user, $urlServer, $course_code;
 
-	$sideMenuGroup = array();
+    $sideMenuGroup = array();
 
-	if ((isset($is_admin) and $is_admin) or 
-	    (isset($is_power_user) and $is_power_user) or 
-        (isset($is_usermanage_user) and ($is_usermanage_user)) or 
-        (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-	{
-		$sideMenuSubGroup = array();
-		$sideMenuText = array();
-		$sideMenuLink = array();
-		$sideMenuImg = array();
+    if ((isset($is_admin) and $is_admin) or
+            (isset($is_power_user) and $is_power_user) or
+            (isset($is_usermanage_user) and ($is_usermanage_user)) or
+            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
 
-		$arrMenuType = array();
-		$arrMenuType['type'] = 'text';
-		$arrMenuType['text'] = $GLOBALS['langAdminOptions'];
-		array_push($sideMenuSubGroup, $arrMenuType);
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'text';
+        $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
+        array_push($sideMenuSubGroup, $arrMenuType);
 
-		if ((isset($is_admin) and $is_admin) or
-		    (isset($is_power_user) and $is_power_user) or
-		    (isset($is_usermanage_user) and ($is_usermanage_user)) or
-		    (isset($is_departmentmanage_user) and $is_departmentmanage_user) )
-		{
-		    array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
-		    array_push($sideMenuLink, q($urlServer . 'modules/admin/?course=' . $course_code));
-		}
+        if ((isset($is_admin) and $is_admin) or
+                (isset($is_power_user) and $is_power_user) or
+                (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+            array_push($sideMenuText, "<b style=\"color:#a33033;\">$GLOBALS[langAdminTool]</b>");
+            array_push($sideMenuLink, q($urlServer . 'modules/admin/?course=' . $course_code));
+        }
 
-		array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "arrow.png");
 
-		array_push($sideMenuSubGroup, $sideMenuText);
-		array_push($sideMenuSubGroup, $sideMenuLink);
-		array_push($sideMenuSubGroup, $sideMenuImg);
-		array_push($sideMenuGroup, $sideMenuSubGroup);
-	}
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
 
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg = array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	array_push($sideMenuSubGroup, $arrMenuType);
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'text';
+    $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $GLOBALS['langListCourses']);
-	array_push($sideMenuLink, $urlServer."modules/auth/courses.php");
-	array_push($sideMenuImg, "arrow.png");
-        
-    	array_push($sideMenuText, $GLOBALS['langManuals']);
-	array_push($sideMenuLink, $urlServer."manuals/manual.php");
-	array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langListCourses']);
+    array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-	array_push($sideMenuLink, $urlServer."info/about.php");
-	array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langManuals']);
+    array_push($sideMenuLink, $urlServer . "manuals/manual.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuText, $GLOBALS['langContact']);
-	array_push($sideMenuLink, $urlServer."info/contact.php");
-	array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
+    array_push($sideMenuLink, $urlServer . "info/about.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
-        
-        openCoursesExtra();
+    array_push($sideMenuText, $GLOBALS['langContact']);
+    array_push($sideMenuLink, $urlServer . "info/contact.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	$sideMenuSubGroup = array();
-	$sideMenuText 	= array();
-	$sideMenuLink 	= array();
-	$sideMenuImg	= array();
+    array_push($sideMenuSubGroup, $sideMenuText);
+    array_push($sideMenuSubGroup, $sideMenuLink);
+    array_push($sideMenuSubGroup, $sideMenuImg);
+    array_push($sideMenuGroup, $sideMenuSubGroup);
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langUserOptions'];
+    openCoursesExtra();
 
-	array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	$res2 = db_query("SELECT status FROM user WHERE id = $uid");
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'text';
+    $arrMenuType['text'] = $GLOBALS['langUserOptions'];
 
-	if ($row = mysql_fetch_row($res2)) $statut = $row[0];
+    array_push($sideMenuSubGroup, $arrMenuType);
 
-	if (isset($statut) and ($statut == 1))
-	{
-		array_push($sideMenuText, $GLOBALS['langCourseCreate']);
-		array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
-		array_push($sideMenuImg, "arrow.png");
-	}
+    $res2 = db_query("SELECT status FROM user WHERE id = $uid");
 
-	array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-	array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
-	array_push($sideMenuImg, "arrow.png");
+    if ($row = mysql_fetch_row($res2))
+        $statut = $row[0];
 
-	array_push($sideMenuText, $GLOBALS['langModifyProfile']);
-	array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
-	array_push($sideMenuImg, "arrow.png");
+    if (isset($statut) and ($statut == 1)) {
+        array_push($sideMenuText, $GLOBALS['langCourseCreate']);
+        array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
 
-	array_push($sideMenuText, $GLOBALS['langMyStats']);
-	array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
-	array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langMyAgenda']);
+    array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+    array_push($sideMenuText, $GLOBALS['langModifyProfile']);
+    array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	return $sideMenuGroup;
+    array_push($sideMenuText, $GLOBALS['langMyStats']);
+    array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
+    array_push($sideMenuImg, "arrow.png");
+
+    array_push($sideMenuSubGroup, $sideMenuText);
+    array_push($sideMenuSubGroup, $sideMenuLink);
+    array_push($sideMenuSubGroup, $sideMenuImg);
+    array_push($sideMenuGroup, $sideMenuSubGroup);
+
+    return $sideMenuGroup;
 }
 
 /**
@@ -277,50 +274,51 @@ function loggedInMenu()
  * *
  * @return array
  */
-function loggedOutMenu(){
+function loggedOutMenu() {
 
-	global $urlServer;
+    global $urlServer;
 
-	$sideMenuGroup = array();
+    $sideMenuGroup = array();
 
-	$sideMenuSubGroup = array();
-	$sideMenuText 	= array();
-	$sideMenuLink 	= array();
-	$sideMenuImg	= array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	array_push($sideMenuSubGroup, $arrMenuType);
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'text';
+    $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    array_push($sideMenuSubGroup, $arrMenuType);
 
-	array_push($sideMenuText, $GLOBALS['langListCourses']);
-	array_push($sideMenuLink, $urlServer."modules/auth/listfaculte.php");
-	array_push($sideMenuImg, "arrow.png");
-        if (get_config('user_registration')) {
-                array_push($sideMenuText, $GLOBALS['langNewUser']);
-                array_push($sideMenuLink, $urlServer."modules/auth/registration.php");
-                array_push($sideMenuImg, "arrow.png");
-        }
-	array_push($sideMenuText, $GLOBALS['langManuals']);
-	array_push($sideMenuLink, $urlServer."manuals/manual.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-	array_push($sideMenuLink, $urlServer."info/about.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langContact']);
-	array_push($sideMenuLink, $urlServer."info/contact.php");
-	array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langListCourses']);
+    array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
+    array_push($sideMenuImg, "arrow.png");
+    if (get_config('user_registration')) {
+        array_push($sideMenuText, $GLOBALS['langNewUser']);
+        array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
+    array_push($sideMenuText, $GLOBALS['langManuals']);
+    array_push($sideMenuLink, $urlServer . "manuals/manual.php");
+    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
+    array_push($sideMenuLink, $urlServer . "info/about.php");
+    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langContact']);
+    array_push($sideMenuLink, $urlServer . "info/contact.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
+    array_push($sideMenuSubGroup, $sideMenuText);
+    array_push($sideMenuSubGroup, $sideMenuLink);
+    array_push($sideMenuSubGroup, $sideMenuImg);
 
-	array_push($sideMenuGroup, $sideMenuSubGroup);
-        
-        openCoursesExtra();
-        
-	return $sideMenuGroup;
+    array_push($sideMenuGroup, $sideMenuSubGroup);
+
+    openCoursesExtra();
+
+    return $sideMenuGroup;
 }
+
 /**
  * Creates the administrator menu
  * 
@@ -335,210 +333,202 @@ function loggedOutMenu(){
  * @global type $is_departmentmanage_user
  * @return array
  */
-function adminMenu(){
+function adminMenu() {
 
     global $urlAppend, $language, $phpSysInfoURL, $phpMyAdminURL;
     global $siteName, $urlServer;
     global $is_admin, $is_power_user, $is_departmentmanage_user;
 
-	$sideMenuGroup = array();
+    $sideMenuGroup = array();
 
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg = array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	//user administration
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langAdminUsers'];
-	
-	array_push($sideMenuSubGroup, $arrMenuType);
-	array_push($sideMenuText, $GLOBALS['langSearchUser']);
-	array_push($sideMenuLink, "../admin/search_user.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langProfOpen']);
-	array_push($sideMenuLink, "../admin/listreq.php");
-	array_push($sideMenuImg, "arrow.png");
+    //user administration
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'text';
+    $arrMenuType['text'] = $GLOBALS['langAdminUsers'];
 
-	// check for close user registration
-	if ((get_config('eclass_stud_reg') == 1) or get_config('alt_auth_stud_reg') == 0) {	
-                array_push($sideMenuText, $GLOBALS['langUserOpen']);
-                array_push($sideMenuLink, "../admin/listreq.php?type=user");
-                array_push($sideMenuImg, "arrow.png");
-	} else {
-                array_push($sideMenuText, $GLOBALS['langUserDetails']);
-                array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
-                array_push($sideMenuImg, "arrow.png");
-	}
+    array_push($sideMenuSubGroup, $arrMenuType);
+    array_push($sideMenuText, $GLOBALS['langSearchUser']);
+    array_push($sideMenuLink, "../admin/search_user.php");
+    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langProfOpen']);
+    array_push($sideMenuLink, "../admin/listreq.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	if (isset($is_admin) and $is_admin) {
-                array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
-                array_push($sideMenuLink, "../admin/auth.php");
-                array_push($sideMenuImg, "arrow.png");
-                array_push($sideMenuText, $GLOBALS['langMailVerification']);
-                array_push($sideMenuLink, "../admin/mail_ver_settings.php");
-                array_push($sideMenuImg, "arrow.png");
-                array_push($sideMenuText, $GLOBALS['langChangeUser']);
-                array_push($sideMenuLink, "../admin/change_user.php");
-                array_push($sideMenuImg, "arrow.png");
-	}
-	
-	array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
-	array_push($sideMenuLink, "../admin/multireguser.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
-	array_push($sideMenuLink, "../admin/multideluser.php");
-	array_push($sideMenuImg, "arrow.png");
-	array_push($sideMenuText, $GLOBALS['langInfoMail']);
-	array_push($sideMenuLink, "../admin/mailtoprof.php");
-	array_push($sideMenuImg, "arrow.png");
-	
-	if (isset($is_admin) and $is_admin)
-	{
-	    array_push($sideMenuText, $GLOBALS['langAdmins']);
-	    array_push($sideMenuLink, "../admin/addadmin.php");
-	    array_push($sideMenuImg, "arrow.png");
-	}
-	
-	array_push($sideMenuSubGroup, $sideMenuText);
-	array_push($sideMenuSubGroup, $sideMenuLink);
-	array_push($sideMenuSubGroup, $sideMenuImg);
-	array_push($sideMenuGroup, $sideMenuSubGroup);
+    // check for close user registration
+    if ((get_config('eclass_stud_reg') == 1) or get_config('alt_auth_stud_reg') == 0) {
+        array_push($sideMenuText, $GLOBALS['langUserOpen']);
+        array_push($sideMenuLink, "../admin/listreq.php?type=user");
+        array_push($sideMenuImg, "arrow.png");
+    } else {
+        array_push($sideMenuText, $GLOBALS['langUserDetails']);
+        array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
+        array_push($sideMenuImg, "arrow.png");
+    }
 
-	if ((isset($is_power_user) and $is_power_user) or
-	    (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-	{
-	    //lesson administration
-	    //reset sub-arrays so that we do not have duplicate entries
-	    $sideMenuSubGroup = array();
-	    $sideMenuText = array();
-	    $sideMenuLink = array();
-	    $sideMenuImg = array();
+    if (isset($is_admin) and $is_admin) {
+        array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
+        array_push($sideMenuLink, "../admin/auth.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langMailVerification']);
+        array_push($sideMenuLink, "../admin/mail_ver_settings.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langChangeUser']);
+        array_push($sideMenuLink, "../admin/change_user.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
 
-	    $arrMenuType = array();
-	    $arrMenuType['type'] = 'text';
-	    $arrMenuType['text'] = $GLOBALS['langAdminCours'];
-	    array_push($sideMenuSubGroup, $arrMenuType);
+    array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
+    array_push($sideMenuLink, "../admin/multireguser.php");
+    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
+    array_push($sideMenuLink, "../admin/multideluser.php");
+    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langInfoMail']);
+    array_push($sideMenuLink, "../admin/mailtoprof.php");
+    array_push($sideMenuImg, "arrow.png");
 
-	    array_push($sideMenuText, $GLOBALS['langListCours']);
-	    array_push($sideMenuLink, "../admin/listcours.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
-	    array_push($sideMenuLink, "../course_info/restore_course.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langHierarchy']);
-	    array_push($sideMenuLink, "../admin/hierarchy.php");
+    if (isset($is_admin) and $is_admin) {
+        array_push($sideMenuText, $GLOBALS['langAdmins']);
+        array_push($sideMenuLink, "../admin/addadmin.php");
+        array_push($sideMenuImg, "arrow.png");
+    }
+
+    array_push($sideMenuSubGroup, $sideMenuText);
+    array_push($sideMenuSubGroup, $sideMenuLink);
+    array_push($sideMenuSubGroup, $sideMenuImg);
+    array_push($sideMenuGroup, $sideMenuSubGroup);
+
+    if ((isset($is_power_user) and $is_power_user) or
+            (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
+        //lesson administration
+        //reset sub-arrays so that we do not have duplicate entries
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'text';
+        $arrMenuType['text'] = $GLOBALS['langAdminCours'];
+        array_push($sideMenuSubGroup, $arrMenuType);
+
+        array_push($sideMenuText, $GLOBALS['langListCours']);
+        array_push($sideMenuLink, "../admin/listcours.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
+        array_push($sideMenuLink, "../course_info/restore_course.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langHierarchy']);
+        array_push($sideMenuLink, "../admin/hierarchy.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langMultiCourse']);
+        array_push($sideMenuLink, "../admin/multicourse.php");
+
+        // check if we have betacms enabled
+        if (get_config('betacms') == TRUE) {
             array_push($sideMenuImg, "arrow.png");
-            array_push($sideMenuText, $GLOBALS['langMultiCourse']);
-            array_push($sideMenuLink, "../admin/multicourse.php");
-	    
-	    // check if we have betacms enabled
-	    if (get_config('betacms') == TRUE)
-	    {
-	        array_push($sideMenuImg, "arrow.png");
-	        array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
-	        array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
-	    }
-	    
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuSubGroup, $sideMenuText);
-	    array_push($sideMenuSubGroup, $sideMenuLink);
-	    array_push($sideMenuSubGroup, $sideMenuImg);
-	    array_push($sideMenuGroup, $sideMenuSubGroup);
-	}
+            array_push($sideMenuText, $GLOBALS['langBrowseBCMSRepo']);
+            array_push($sideMenuLink, "../betacms_bridge/browserepo.php");
+        }
 
-	//server administration
-	//reset sub-arrays so that we do not have duplicate entries
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg	= array();
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
 
-	if (isset($is_admin) and $is_admin)
-	{
-	    $arrMenuType = array();
-	    $arrMenuType['type'] = 'text';
-	    $arrMenuType['text'] = $GLOBALS['langState'];
-	    array_push($sideMenuSubGroup, $arrMenuType);
-	    array_push($sideMenuText, $GLOBALS['langCleanUp']);
-	    array_push($sideMenuLink, "../admin/cleanup.php");
-	    array_push($sideMenuImg, "arrow.png");
+    //server administration
+    //reset sub-arrays so that we do not have duplicate entries
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	    if (isset($phpSysInfoURL) && PHP_OS == "Linux")
-	    {
-	        array_push($sideMenuText, $GLOBALS['langSysInfo']);
-	        array_push($sideMenuLink, $phpSysInfoURL);
-	        array_push($sideMenuImg, "arrow.png");
-	    }
-	    array_push($sideMenuText, $GLOBALS['langPHPInfo']);
-	    array_push($sideMenuLink, "../admin/phpInfo.php");
-	    array_push($sideMenuImg, "arrow.png");
+    if (isset($is_admin) and $is_admin) {
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'text';
+        $arrMenuType['text'] = $GLOBALS['langState'];
+        array_push($sideMenuSubGroup, $arrMenuType);
+        array_push($sideMenuText, $GLOBALS['langCleanUp']);
+        array_push($sideMenuLink, "../admin/cleanup.php");
+        array_push($sideMenuImg, "arrow.png");
 
-	    if (isset($phpMyAdminURL))
-	    {
-	        array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
-	        array_push($sideMenuLink, $phpMyAdminURL);
-	        array_push($sideMenuImg, "arrow.png");
-	    }
-	    
-	    array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
-	    array_push($sideMenuLink, $urlServer."upgrade/");
-	    array_push($sideMenuImg, "arrow.png");
+        if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
+            array_push($sideMenuText, $GLOBALS['langSysInfo']);
+            array_push($sideMenuLink, $phpSysInfoURL);
+            array_push($sideMenuImg, "arrow.png");
+        }
+        array_push($sideMenuText, $GLOBALS['langPHPInfo']);
+        array_push($sideMenuLink, "../admin/phpInfo.php");
+        array_push($sideMenuImg, "arrow.png");
 
-	    array_push($sideMenuSubGroup, $sideMenuText);
-	    array_push($sideMenuSubGroup, $sideMenuLink);
-	    array_push($sideMenuSubGroup, $sideMenuImg);
-	    array_push($sideMenuGroup, $sideMenuSubGroup);
-	}
+        if (isset($phpMyAdminURL)) {
+            array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
+            array_push($sideMenuLink, $phpMyAdminURL);
+            array_push($sideMenuImg, "arrow.png");
+        }
 
-	//other tools
-	//reset sub-arrays so that we do not have duplicate entries
-	$sideMenuSubGroup = array();
-	$sideMenuText = array();
-	$sideMenuLink = array();
-	$sideMenuImg	= array();
-	
-	if (isset($is_admin) and $is_admin)
-	{
-	    $arrMenuType = array();
-	    $arrMenuType['type'] = 'text';
-	    $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
-	    array_push($sideMenuSubGroup, $arrMenuType);
+        array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
+        array_push($sideMenuLink, $urlServer . "upgrade/");
+        array_push($sideMenuImg, "arrow.png");
 
-	    array_push($sideMenuText, $GLOBALS['langConfig']);
-	    array_push($sideMenuLink, "../admin/eclassconf.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langStats']);
-	    array_push($sideMenuLink, "../admin/stateclass.php");
-	    array_push($sideMenuImg, "arrow.png");
-            if (get_config('enable_common_docs')) {
-                array_push($sideMenuText, $GLOBALS['langCommonDocs']);
-                array_push($sideMenuLink, "../admin/commondocs.php");            
-                array_push($sideMenuImg, "arrow.png");
-            }
-            array_push($sideMenuText, $GLOBALS['langAdminAn']);
-	    array_push($sideMenuLink, "../admin/adminannouncements.php");
-	    array_push($sideMenuImg, "arrow.png");
-	    array_push($sideMenuText, $GLOBALS['langAdminManual']);
-            
-	    
-	    if ($language == 'el') {
-	        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=el:admin_doc");
-	    } else {
-	        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=en:admin_doc");
-	    }
-	    array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
 
-	    array_push($sideMenuSubGroup, $sideMenuText);
-	    array_push($sideMenuSubGroup, $sideMenuLink);
-	    array_push($sideMenuSubGroup, $sideMenuImg);
-	    array_push($sideMenuGroup, $sideMenuSubGroup);
-	}
+    //other tools
+    //reset sub-arrays so that we do not have duplicate entries
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	return $sideMenuGroup;
+    if (isset($is_admin) and $is_admin) {
+        $arrMenuType = array();
+        $arrMenuType['type'] = 'text';
+        $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
+        array_push($sideMenuSubGroup, $arrMenuType);
+
+        array_push($sideMenuText, $GLOBALS['langConfig']);
+        array_push($sideMenuLink, "../admin/eclassconf.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langStats']);
+        array_push($sideMenuLink, "../admin/stateclass.php");
+        array_push($sideMenuImg, "arrow.png");
+        if (get_config('enable_common_docs')) {
+            array_push($sideMenuText, $GLOBALS['langCommonDocs']);
+            array_push($sideMenuLink, "../admin/commondocs.php");
+            array_push($sideMenuImg, "arrow.png");
+        }
+        array_push($sideMenuText, $GLOBALS['langAdminAn']);
+        array_push($sideMenuLink, "../admin/adminannouncements.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langAdminManual']);
+
+
+        if ($language == 'el') {
+            array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=el:admin_doc");
+        } else {
+            array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=en:admin_doc");
+        }
+        array_push($sideMenuImg, "arrow.png");
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
+
+    return $sideMenuGroup;
 }
-
 
 /**
  * Function lessonToolsMenu
@@ -550,102 +540,101 @@ function adminMenu(){
  * @return array
  */
 function lessonToolsMenu() {
-        global $is_editor, $is_course_admin;
-        global $course_code, $langAdministrationTools, $langExternalLinks;
-        global $modules, $admin_modules, $urlAppend;
+    global $is_editor, $is_course_admin;
+    global $course_code, $langAdministrationTools, $langExternalLinks;
+    global $modules, $admin_modules, $urlAppend;
 
-        $sideMenuGroup = array();
+    $sideMenuGroup = array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
+    $sideMenuID = array();
+
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'none';
+
+    if ($is_editor) {
+        $tools_sections = array(array('type' => 'Public',
+                'title' => $GLOBALS['langActiveTools'],
+                'iconext' => '_on.png'),
+            array('type' => 'PublicButHide',
+                'title' => $GLOBALS['langInactiveTools'],
+                'iconext' => '_off.png'));
+    } else {
+        $tools_sections = array(array('type' => 'Public',
+                'title' => $GLOBALS['langCourseOptions'],
+                'iconext' => '_on.png'));
+    }
+
+    foreach ($tools_sections as $section) {
+        $result = getToolsArray($section['type']);
+
         $sideMenuSubGroup = array();
         $sideMenuText = array();
         $sideMenuLink = array();
         $sideMenuImg = array();
         $sideMenuID = array();
 
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'none';
-
-        if ($is_editor) {
-                $tools_sections = array(array('type' => 'Public',
-                                              'title' => $GLOBALS['langActiveTools'],
-                                              'iconext' => '_on.png'),
-                                        array('type' => 'PublicButHide',
-                                              'title' => $GLOBALS['langInactiveTools'],
-                                              'iconext' => '_off.png'));
-        } else {
-                $tools_sections = array(array('type' => 'Public',
-                        'title' => $GLOBALS['langCourseOptions'],
-                        'iconext' => '_on.png'));
+        $arrMenuType = array('type' => 'text',
+            'text' => $section['title']);
+        array_push($sideMenuSubGroup, $arrMenuType);
+        while ($toolsRow = mysql_fetch_array($result)) {
+            $mid = $toolsRow['module_id'];
+            array_push($sideMenuText, q($modules[$mid]['title']));
+            array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
+                            '/?course=' . $course_code));
+            array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);
+            array_push($sideMenuID, $mid);
         }
-
-        foreach ($tools_sections as $section) {
-                $result = getToolsArray($section['type']);
-
-                $sideMenuSubGroup = array();
-                $sideMenuText = array();
-                $sideMenuLink = array();
-                $sideMenuImg = array();
-                $sideMenuID = array();
-
-                $arrMenuType = array('type' => 'text',
-                                     'text' => $section['title']);
-                array_push($sideMenuSubGroup, $arrMenuType);
-                while ($toolsRow = mysql_fetch_array($result)) {
-                        $mid = $toolsRow['module_id'];
-                        array_push($sideMenuText, q($modules[$mid]['title']));
-                        array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
-                                                    '/?course=' . $course_code));
-                        array_push($sideMenuImg, $modules[$mid]['image'].$section['iconext']);
-                        array_push($sideMenuID, $mid);
-                }
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuSubGroup, $sideMenuID);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
+    $result2 = getExternalLinks();
+    if ($result2) { // display external link (if any)
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $arrMenuType = array('type' => 'text',
+            'text' => $langExternalLinks);
+        array_push($sideMenuSubGroup, $arrMenuType);
+        while ($ex_link = mysql_fetch_array($result2)) {
+            array_push($sideMenuText, $ex_link['title']);
+            array_push($sideMenuLink, q($ex_link['url']));
+            array_push($sideMenuImg, "external_link" . $section['iconext']);
         }
-        $result2 = getExternalLinks();
-        if ($result2) { // display external link (if any)
-                $sideMenuSubGroup = array();
-                $sideMenuText = array();
-                $sideMenuLink = array();
-                $sideMenuImg = array();
-                $arrMenuType = array('type' => 'text',
-                                     'text' => $langExternalLinks);
-                array_push($sideMenuSubGroup, $arrMenuType);
-                while ($ex_link = mysql_fetch_array($result2)) {
-                        array_push($sideMenuText, $ex_link['title']);
-                        array_push($sideMenuLink, q($ex_link['url']));
-                        array_push($sideMenuImg, "external_link".$section['iconext']);
-                }
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
+    if ($is_course_admin) {  // display course admin tools
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $sideMenuID = array();
+        $arrMenuType = array('type' => 'text',
+            'text' => $langAdministrationTools);
+        array_push($sideMenuSubGroup, $arrMenuType);
+        foreach ($admin_modules as $adm_mod) {
+            array_push($sideMenuText, $adm_mod['title']);
+            array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
+                            '/?course=' . $course_code));
+            array_push($sideMenuImg, $adm_mod['image'] . $section['iconext']);
         }
-        if ($is_course_admin) {  // display course admin tools
-                $sideMenuSubGroup = array();
-                $sideMenuText = array();
-                $sideMenuLink = array();
-                $sideMenuImg = array();
-                $sideMenuID = array();
-                $arrMenuType = array('type' => 'text',
-                                     'text' => $langAdministrationTools);
-                array_push($sideMenuSubGroup, $arrMenuType);
-                foreach ($admin_modules as $adm_mod) {
-                        array_push($sideMenuText, $adm_mod['title']);
-                        array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
-                                                    '/?course=' . $course_code));
-                        array_push($sideMenuImg, $adm_mod['image'].$section['iconext']);
-                }
-                array_push($sideMenuSubGroup, $sideMenuText);
-                array_push($sideMenuSubGroup, $sideMenuLink);
-                array_push($sideMenuSubGroup, $sideMenuImg);
-                array_push($sideMenuSubGroup, $sideMenuID);
-                array_push($sideMenuGroup, $sideMenuSubGroup);
-        }
-        return $sideMenuGroup;
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }
+    return $sideMenuGroup;
 }
-
 
 /**
  * Function pickerMenu
@@ -657,60 +646,59 @@ function lessonToolsMenu() {
  */
 function pickerMenu() {
 
-	global $urlServer, $course_code, $course_id, $is_editor, $modules;
+    global $urlServer, $course_code, $course_id, $is_editor, $modules;
 
-        $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter='. q($_REQUEST['docsfilter']) : '';        
-        $params = "?course=$course_code&embedtype=tinymce". $docsfilter;
+    $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter=' . q($_REQUEST['docsfilter']) : '';
+    $params = "?course=$course_code&embedtype=tinymce" . $docsfilter;
 
-	$sideMenuGroup = array();
+    $sideMenuGroup = array();
 
-	$sideMenuSubGroup = array();
-	$sideMenuText 	= array();
-	$sideMenuLink 	= array();
-	$sideMenuImg	= array();
+    $sideMenuSubGroup = array();
+    $sideMenuText = array();
+    $sideMenuLink = array();
+    $sideMenuImg = array();
 
-	$arrMenuType = array();
-	$arrMenuType['type'] = 'text';
-	$arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	array_push($sideMenuSubGroup, $arrMenuType);
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'text';
+    $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    array_push($sideMenuSubGroup, $arrMenuType);
 
-        if (isset($course_id) and $course_id >= 1) {
-                $visible = ($is_editor) ? '' : 'AND visible = 1';
-                $sql = "SELECT * FROM course_module
+    if (isset($course_id) and $course_id >= 1) {
+        $visible = ($is_editor) ? '' : 'AND visible = 1';
+        $sql = "SELECT * FROM course_module
                                WHERE course_id = $course_id AND
-                                     module_id IN (".MODULE_ID_DOCS.', '.MODULE_ID_VIDEO.', '.MODULE_ID_LINKS.")
+                                     module_id IN (" . MODULE_ID_DOCS . ', ' . MODULE_ID_VIDEO . ', ' . MODULE_ID_LINKS . ")
                                      $visible
                                ORDER BY module_id";
 
-                $result = db_query($sql);
+        $result = db_query($sql);
 
-                while($module = mysql_fetch_assoc($result)) {
-                        $mid = $module['module_id'];
-                        array_push($sideMenuText, q($modules[$mid]['title']));
-                        array_push($sideMenuLink, q($urlServer . 'modules/' .
-                                                    $modules[$mid]['link'] . '/' . $params));
-                        array_push($sideMenuImg , $modules[$mid]['image']."_on.png");
-                }
+        while ($module = mysql_fetch_assoc($result)) {
+            $mid = $module['module_id'];
+            array_push($sideMenuText, q($modules[$mid]['title']));
+            array_push($sideMenuLink, q($urlServer . 'modules/' .
+                            $modules[$mid]['link'] . '/' . $params));
+            array_push($sideMenuImg, $modules[$mid]['image'] . "_on.png");
         }
-        /* link for common documents */
-        if (get_config('enable_common_docs')) {
-                array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
-                array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' .  $params));
-                array_push($sideMenuImg, 'docs.png');
-        }
-        
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
+    }
+    /* link for common documents */
+    if (get_config('enable_common_docs')) {
+        array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
+        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' . $params));
+        array_push($sideMenuImg, 'docs.png');
+    }
 
-        array_push($sideMenuGroup, $sideMenuSubGroup);
-	return $sideMenuGroup;
+    array_push($sideMenuSubGroup, $sideMenuText);
+    array_push($sideMenuSubGroup, $sideMenuLink);
+    array_push($sideMenuSubGroup, $sideMenuImg);
+
+    array_push($sideMenuGroup, $sideMenuSubGroup);
+    return $sideMenuGroup;
 }
-
 
 function openCoursesExtra() {
     global $urlServer;
-    
+
     if (get_config('opencourses_enable')) {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
@@ -721,13 +709,13 @@ function openCoursesExtra() {
                         <ul class="navlist">
                             <li class="category">' . q($GLOBALS['langOpenCoursesShort']) . '</li>
                         </ul><div style="text-align:center;">' .
-                             icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) .'
-                            &nbsp;<a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">' . 
-                                $GLOBALS['langListOpenCoursesShort'] . '</a>
+                    icon('open_courses_logo_small', $GLOBALS['langOpenCourses']) . '
+                            &nbsp;<a href="' . $urlServer . 'modules/course_metadata/openfaculties.php">' .
+                    $GLOBALS['langListOpenCoursesShort'] . '</a>
                             <span class="smaller">' .
-                            $openCoursesNum . ' ' . 
-                            (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . 
-                            '</span></div>
+                    $openCoursesNum . ' ' .
+                    (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) .
+                    '</span></div>
                     </div>
                 </div>';
         }

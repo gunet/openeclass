@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,61 +20,61 @@
 //
 // $Id$
 
-$text['title']          = 'Systeem Informatie';
+$text['title'] = 'Systeem Informatie';
 
-$text['vitals']         = 'Systeem overzicht';
-$text['hostname']       = 'Toegewezen naam';
-$text['ip']             = 'IP-adres';
-$text['kversion']       = 'Kernelversie';
-$text['uptime']         = 'Uptime';
-$text['users']          = 'Huidige gebruikers';
-$text['loadavg']        = 'Gemiddelde belasting';
+$text['vitals'] = 'Systeem overzicht';
+$text['hostname'] = 'Toegewezen naam';
+$text['ip'] = 'IP-adres';
+$text['kversion'] = 'Kernelversie';
+$text['uptime'] = 'Uptime';
+$text['users'] = 'Huidige gebruikers';
+$text['loadavg'] = 'Gemiddelde belasting';
 
-$text['hardware']       = 'Hardware overzicht';
-$text['numcpu']         = 'Processors';
-$text['cpumodel']       = 'Model';
-$text['mhz']            = 'Chip MHz';
-$text['cache']          = 'Buffergrootte';
-$text['bogomips']       = 'Systeem Bogomips';
-$text['pci']            = 'PCI Apparaten';
-$text['ide']            = 'IDE Apparaten';
-$text['scsi']           = 'SCSI Apparaten';
+$text['hardware'] = 'Hardware overzicht';
+$text['numcpu'] = 'Processors';
+$text['cpumodel'] = 'Model';
+$text['mhz'] = 'Chip MHz';
+$text['cache'] = 'Buffergrootte';
+$text['bogomips'] = 'Systeem Bogomips';
+$text['pci'] = 'PCI Apparaten';
+$text['ide'] = 'IDE Apparaten';
+$text['scsi'] = 'SCSI Apparaten';
 
-$text['netusage']       = 'Netwerkgebruik';
-$text['device']         = 'Apparaat';
-$text['received']       = 'Ontvangen';
-$text['sent']           = 'Verzonden';
-$text['errors']         = 'Err/Drop';
+$text['netusage'] = 'Netwerkgebruik';
+$text['device'] = 'Apparaat';
+$text['received'] = 'Ontvangen';
+$text['sent'] = 'Verzonden';
+$text['errors'] = 'Err/Drop';
 
-$text['memusage']       = 'Geheugengebruik';
-$text['phymem']         = 'Fysiek geheugen';
-$text['swap']           = 'Swap geheugen';
+$text['memusage'] = 'Geheugengebruik';
+$text['phymem'] = 'Fysiek geheugen';
+$text['swap'] = 'Swap geheugen';
 
-$text['fs']             = 'Aangesloten bestandssystemen';
-$text['mount']          = 'Mount';
-$text['partition']      = 'Partitie';
+$text['fs'] = 'Aangesloten bestandssystemen';
+$text['mount'] = 'Mount';
+$text['partition'] = 'Partitie';
 
-$text['percent']        = 'Percentage gebruikt';
-$text['type']           = 'Type';
-$text['free']           = 'Vrij';
-$text['used']           = 'Gebruikt';
-$text['size']           = 'Grootte';
-$text['totals']         = 'Totaal';
+$text['percent'] = 'Percentage gebruikt';
+$text['type'] = 'Type';
+$text['free'] = 'Vrij';
+$text['used'] = 'Gebruikt';
+$text['size'] = 'Grootte';
+$text['totals'] = 'Totaal';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'geen';
+$text['none'] = 'geen';
 
-$text['capacity']       = 'Capaciteit';
+$text['capacity'] = 'Capaciteit';
 
-$text['template']       = 'Model';
-$text['language']       = 'Language';
-$text['submit']         = 'Toepassen';
-$text['created']        = 'Gegenereerd door';
+$text['template'] = 'Model';
+$text['language'] = 'Language';
+$text['submit'] = 'Toepassen';
+$text['created'] = 'Gegenereerd door';
 
-$text['days']           = 'dagen';
-$text['hours']          = 'uren';
-$text['minutes']        = 'minuten';
+$text['days'] = 'dagen';
+$text['hours'] = 'uren';
+$text['minutes'] = 'minuten';
 ?>

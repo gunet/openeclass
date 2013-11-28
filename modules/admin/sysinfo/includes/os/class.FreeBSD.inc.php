@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -22,29 +23,26 @@
 
 require('./includes/os/class.BSD.common.inc.php');
 
-class sysinfo extends bsd_common
-{
+class sysinfo extends bsd_common {
+
     var $cpu_regexp;
     var $scsi_regexp;
 
     // Our contstructor
     // this function is run on the initialization of this class
-    function sysinfo ()
-    {
+    function sysinfo() {
         $this->cpu_regexp = "CPU: (.*) \((.*)-MHz (.*)\)";
         $this->scsi_regexp = "^(.*): <(.*)> .*SCSI.*device";
     }
 
-    function get_sys_ticks ()
-    {
+    function get_sys_ticks() {
         $s = explode(' ', $this->grab_key('kern.boottime'));
         $a = str_replace('{ ', '', $s[3]);
         $sys_ticks = time() - $a;
         return $sys_ticks;
     }
 
-    function network ()
-    {
+    function network() {
         $netstat = execute_program('netstat', '-nbdi | cut -c1-24,42- | grep Link');
         $lines = explode("\n", $netstat);
         $results = array();
@@ -69,4 +67,5 @@ class sysinfo extends bsd_common
         }
         return $results;
     }
+
 }

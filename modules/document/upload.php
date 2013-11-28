@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,70 +23,69 @@
  * @file upload.php
  * @brief upload form for subsystem documents
  */
-
 if (!defined('COMMON_DOCUMENTS')) {
-        $require_current_course = TRUE;
-        $require_login = true;
+    $require_current_course = TRUE;
+    $require_login = true;
 }
 require_once '../../include/baseTheme.php';
 
 if (isset($_GET['uploadPath'])) {
-        $uploadPath = q($_GET['uploadPath']);
+    $uploadPath = q($_GET['uploadPath']);
 } else {
-        $uploadPath = '';
+    $uploadPath = '';
 }
 
 $can_upload = $is_editor || $is_admin;
 if (defined('GROUP_DOCUMENTS')) {
-        require_once 'modules/group/group_functions.php';
-        initialize_group_id();
-        initialize_group_info($group_id);
-	$can_upload = $can_upload || $is_member;
-        $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
-        $navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langGroups);
-        $navigation[] = array ('url' => 'group_space.php?course='.$course_code.'&amp;group_id=' . $group_id, 'name' => q($group_name));
-	$navigation[] = array ('url' => "index.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
+    require_once 'modules/group/group_functions.php';
+    initialize_group_id();
+    initialize_group_info($group_id);
+    $can_upload = $can_upload || $is_member;
+    $group_hidden_input = "<input type='hidden' name='group_id' value='$group_id' />";
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
+    $navigation[] = array('url' => 'group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;group_id=$group_id&amp;openDir=$uploadPath", 'name' => $langDoc);
 } elseif (defined('EBOOK_DOCUMENTS')) {
-	if (isset($_REQUEST['ebook_id'])) {
-            $ebook_id = intval($_REQUEST['ebook_id']);
-        }
-	$subsystem = EBOOK;
-        $subsystem_id = $ebook_id;
-        $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
-        $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
-}elseif (defined('COMMON_DOCUMENTS')) {
-        $subsystem = COMMON;
-        $subsystem_id = 'NULL';
-        $groupset = '';
-        $group_sql = "course_id = -1 AND subsystem = $subsystem";
-        $group_hidden_input = '';
-        $basedir = $webDir . '/courses/commondocs';                
-        $navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
-        $navigation[] = array ('url' => 'commondocs.php', 'name' => $langCommonDocs);
-        $course_id = -1;
-        $course_code = '';
+    if (isset($_REQUEST['ebook_id'])) {
+        $ebook_id = intval($_REQUEST['ebook_id']);
+    }
+    $subsystem = EBOOK;
+    $subsystem_id = $ebook_id;
+    $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
+    $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
+} elseif (defined('COMMON_DOCUMENTS')) {
+    $subsystem = COMMON;
+    $subsystem_id = 'NULL';
+    $groupset = '';
+    $group_sql = "course_id = -1 AND subsystem = $subsystem";
+    $group_hidden_input = '';
+    $basedir = $webDir . '/courses/commondocs';
+    $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+    $navigation[] = array('url' => 'commondocs.php', 'name' => $langCommonDocs);
+    $course_id = -1;
+    $course_code = '';
 } else {
-	$navigation[] = array ('url' => "index.php?course=$course_code&amp;openDir=$uploadPath", 'name' => $langDoc);
-        $group_hidden_input = '';
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;openDir=$uploadPath", 'name' => $langDoc);
+    $group_hidden_input = '';
 }
 
 if ($can_upload) {
-        if (isset($_GET['ext'])) {
-                $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
-                $nameTools = $langExternalFile;
-                $fileinput = "<th width='200'>$langExternalFileInfo:</th>
+    if (isset($_GET['ext'])) {
+        $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
+        $nameTools = $langExternalFile;
+        $fileinput = "<th width='200'>$langExternalFileInfo:</th>
                               <td><input type='text' name='fileURL' size='40' /></td>";
-        } else {
-        	$nameTools = $langDownloadFile;
-                $fileinput = "<th width='200'>$langPathUploadFile:</th>
+    } else {
+        $nameTools = $langDownloadFile;
+        $fileinput = "<th width='200'>$langPathUploadFile:</th>
                               <td><input type='file' name='userFile' size='35' /></td>";
-        }
-        if (defined('COMMON_DOCUMENTS')) {
-                $tool_content .= "<form action='commondocs.php?course=$course_code' method='post' enctype='multipart/form-data'>";
-        } else {
-                $tool_content .= "<form action='index.php?course=$course_code' method='post' enctype='multipart/form-data'>";
-        }
-        $tool_content .= "<fieldset>
+    }
+    if (defined('COMMON_DOCUMENTS')) {
+        $tool_content .= "<form action='commondocs.php?course=$course_code' method='post' enctype='multipart/form-data'>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post' enctype='multipart/form-data'>";
+    }
+    $tool_content .= "<fieldset>
         <input type='hidden' name='uploadPath' value='$uploadPath' />
         $group_hidden_input
         <legend>$langUpload</legend>
@@ -118,7 +118,7 @@ if ($can_upload) {
           </select>
           </td>
           <td>&nbsp;</td>
-          <td><input type='hidden' name='file_creator' value='".q($_SESSION['givenname']) ." ". q($_SESSION['surname']) ."' size='40' /></td>
+          <td><input type='hidden' name='file_creator' value='" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "' size='40' /></td>
         </tr>
         <tr>
           <th>$langSubject:</th>
@@ -154,29 +154,28 @@ if ($can_upload) {
         </tr>
         <tr>
           <th>$langCopyrighted:</th>
-          <td>".
-          selection(array('0' => $langCopyrightedUnknown,
-                          '2' => $langCopyrightedFree,
-                          '1' => $langCopyrightedNotFree,
-                          '3' => $langCreativeCommonsCCBY,
-                          '4' => $langCreativeCommonsCCBYSA,
-                          '5' => $langCreativeCommonsCCBYND,
-                          '6' => $langCreativeCommonsCCBYNC,
-                          '7' => $langCreativeCommonsCCBYNCSA,
-                          '8' => $langCreativeCommonsCCBYNCND),
-                   'file_copyrighted') . "          
+          <td>" .
+            selection(array('0' => $langCopyrightedUnknown,
+                '2' => $langCopyrightedFree,
+                '1' => $langCopyrightedNotFree,
+                '3' => $langCreativeCommonsCCBY,
+                '4' => $langCreativeCommonsCCBYSA,
+                '5' => $langCreativeCommonsCCBYND,
+                '6' => $langCreativeCommonsCCBYNC,
+                '7' => $langCreativeCommonsCCBYNCSA,
+                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted') . "          
           </td>
           <td>&nbsp;</td>
         </tr>";
-        if (!isset($_GET['ext'])) {
-                $tool_content .= "
+    if (!isset($_GET['ext'])) {
+        $tool_content .= "
         <tr>
           <th>$langUncompress</th>
           <td><input type='checkbox' name='uncompress' value='1' /> </td>
           <td>&nbsp;</td>
         </tr>";
-        }
-        $tool_content .= "
+    }
+    $tool_content .= "
         <tr>
           <th>$langReplaceSameName</th>
           <td><input type='checkbox' name='replace' value='1' /> </td>
@@ -188,14 +187,14 @@ if ($can_upload) {
         </tr>
         </table>
         </fieldset>
-        <div class='right smaller'>$langNotRequired<br />$langMaxFileSize ". ini_get('upload_max_filesize')."</div>";
-	$tool_content .=  "</form>";
+        <div class='right smaller'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+    $tool_content .= "</form>";
 } else {
-	$tool_content .= "<span class='caution'>$langNotAllowed</span>";
+    $tool_content .= "<span class='caution'>$langNotAllowed</span>";
 }
 
 if (defined('COMMON_DOCUMENTS')) {
-        draw($tool_content, 3);
+    draw($tool_content, 3);
 } else {
-        draw($tool_content, 2);
+    draw($tool_content, 2);
 }

@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,61 +20,61 @@
 //
 // $Id$
 
-$text['title']          = 'Kerfisupplýsingar';
+$text['title'] = 'Kerfisupplï¿½singar';
 
-$text['vitals']         = 'Helstu Upplýsingar';
-$text['hostname']       = 'Vélarnafn';
-$text['ip']             = 'IP Tala';
-$text['kversion']       = 'Útgáfa kjarna';
-$text['uptime']         = 'Uppitími';
-$text['users']          = 'Notendur';
-$text['loadavg']        = 'Meðal álag';
+$text['vitals'] = 'Helstu Upplï¿½singar';
+$text['hostname'] = 'Vï¿½larnafn';
+$text['ip'] = 'IP Tala';
+$text['kversion'] = 'ï¿½tgï¿½fa kjarna';
+$text['uptime'] = 'Uppitï¿½mi';
+$text['users'] = 'Notendur';
+$text['loadavg'] = 'Meï¿½al ï¿½lag';
 
-$text['hardware']       = 'Upplýsingar um vélbúnað';
-$text['numcpu']         = 'Örgjörvi/Örgjörvar';
-$text['cpumodel']       = 'Týpa';
-$text['mhz']            = 'Hraði';
-$text['cache']          = 'Stærð flýtiminnis';
-$text['bogomips']       = 'Kerfis Bogomips';
-$text['pci']            = 'PCI Jaðartæki';
-$text['ide']            = 'IDE Jaðartæki';
-$text['scsi']           = 'SCSI Jaðartæki';
+$text['hardware'] = 'Upplï¿½singar um vï¿½lbï¿½naï¿½';
+$text['numcpu'] = 'ï¿½rgjï¿½rvi/ï¿½rgjï¿½rvar';
+$text['cpumodel'] = 'Tï¿½pa';
+$text['mhz'] = 'Hraï¿½i';
+$text['cache'] = 'Stï¿½rï¿½ flï¿½timinnis';
+$text['bogomips'] = 'Kerfis Bogomips';
+$text['pci'] = 'PCI Jaï¿½artï¿½ki';
+$text['ide'] = 'IDE Jaï¿½artï¿½ki';
+$text['scsi'] = 'SCSI Jaï¿½artï¿½ki';
 
-$text['netusage']       = 'Notkun Nets';
-$text['device']         = 'Jaðartæki';
-$text['received']       = 'Tekið á móti';
-$text['sent']           = 'Sent';
-$text['errors']         = 'Villur/Drop';
+$text['netusage'] = 'Notkun Nets';
+$text['device'] = 'Jaï¿½artï¿½ki';
+$text['received'] = 'Tekiï¿½ ï¿½ mï¿½ti';
+$text['sent'] = 'Sent';
+$text['errors'] = 'Villur/Drop';
 
-$text['memusage']       = 'Minnisnotkun';
-$text['phymem']         = 'Vinnsluminni';
-$text['swap']           = 'Sýndarminni';
+$text['memusage'] = 'Minnisnotkun';
+$text['phymem'] = 'Vinnsluminni';
+$text['swap'] = 'Sï¿½ndarminni';
 
-$text['fs']             = 'Tengd Skráarkerfi';
-$text['mount']          = 'Tengipunktur';
-$text['partition']      = 'Disksneið';
+$text['fs'] = 'Tengd Skrï¿½arkerfi';
+$text['mount'] = 'Tengipunktur';
+$text['partition'] = 'Disksneiï¿½';
 
-$text['percent']        = 'Prósent af Heildarstærð';
-$text['type']           = 'Týpa';
-$text['free']           = 'Laust';
-$text['used']           = 'Notað';
-$text['size']           = 'Stærð';
-$text['totals']         = 'Samtals';
+$text['percent'] = 'Prï¿½sent af Heildarstï¿½rï¿½';
+$text['type'] = 'Tï¿½pa';
+$text['free'] = 'Laust';
+$text['used'] = 'Notaï¿½';
+$text['size'] = 'Stï¿½rï¿½';
+$text['totals'] = 'Samtals';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'ekkert';
+$text['none'] = 'ekkert';
 
-$text['capacity']       = 'Heildarstærð';
+$text['capacity'] = 'Heildarstï¿½rï¿½';
 
-$text['template']       = 'Template';
-$text['language']       = 'Tungumál';
-$text['submit']         = 'Senda';
-$text['created']        = 'Búið til af';
+$text['template'] = 'Template';
+$text['language'] = 'Tungumï¿½l';
+$text['submit'] = 'Senda';
+$text['created'] = 'Bï¿½iï¿½ til af';
 
-$text['days']           = 'dagar';
-$text['hours']          = 'klukkustundir';
-$text['minutes']        = 'mínútur';
+$text['days'] = 'dagar';
+$text['hours'] = 'klukkustundir';
+$text['minutes'] = 'mï¿½nï¿½tur';
 ?>

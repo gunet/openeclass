@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,8 +23,6 @@
  * @file chat.php
  * @brief Main script for chat module
  */
-
-
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
@@ -31,18 +30,18 @@ $helpTopic = 'Conference';
 
 require_once '../../include/baseTheme.php';
 
-/**** The following is added for statistics purposes ***/
+/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_CHAT);
-/**************************************/
+/* * *********************************** */
 
 $nameTools = $langConference;
 
 // guest user not allowed
 if (check_guest()) {
-	$tool_content .= "<p class='caution'>$langNoGuest</p>";
-	draw($tool_content, 2, 'conference');
+    $tool_content .= "<p class='caution'>$langNoGuest</p>";
+    draw($tool_content, 2, 'conference');
 }
 
 $head_content = '<script type="text/javascript">
@@ -55,7 +54,7 @@ function prepare_message() {
 </script>';
 
 if ($is_editor) {
-	$tool_content .= "
+    $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
             <li><a href='messageList.php?course=$course_code&amp;reset=true' target='messageList' class=small_tools>$langWash</a></li>

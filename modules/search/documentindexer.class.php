@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class DocumentIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class DocumentIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a document db row.
      * 
@@ -53,7 +54,7 @@ class DocumentIndexer implements ResourceIndexerInterface {
     private static function makeDoc($docu) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'doc_' . $docu['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $docu['id'], $encoding));
@@ -65,18 +66,18 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('comment', Indexer::phonetics($docu['comment']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('creator', Indexer::phonetics($docu['creator']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('subject', Indexer::phonetics($docu['subject']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Text('author', Indexer::phonetics($docu['author']), $encoding));        
+        $doc->addField(Zend_Search_Lucene_Field::Text('author', Indexer::phonetics($docu['author']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $docu['visible'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('public', $docu['public'], $encoding));
 
         $urlAction = ($docu['format'] == '.dir') ? 'openDir' : 'download';
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer 
-                .'modules/document/index.php?course='. course_id_to_code($docu['course_id']) 
-                .'&amp;'. $urlAction .'='. $docu['path'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
+                        . 'modules/document/index.php?course=' . course_id_to_code($docu['course_id'])
+                        . '&amp;' . $urlAction . '=' . $docu['path'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Document from DB.
      * 
@@ -89,7 +90,7 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $doc = mysql_fetch_assoc($res);
         if (!$doc)
             return null;
-        
+
         return $doc;
     }
 
@@ -103,19 +104,19 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $doc = $this->fetch($docId);
         if (!$doc)
             return;
-        
+
         // delete existing document from index
         $this->remove($docId, false, false);
 
         // add the document back to the index
         $this->__index->addDocument(self::makeDoc($doc));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Document from the Index.
      * 
@@ -129,18 +130,18 @@ class DocumentIndexer implements ResourceIndexerInterface {
             if (!$doc)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('doc_' . $docId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Documents belonging to a Course.
      * 
@@ -152,16 +153,16 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the documents back to the index
-        $res = db_query("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\" AND course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\" AND course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Documents belonging to a Course.
      * 
@@ -172,13 +173,13 @@ class DocumentIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:doc AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all documents.
      * 
@@ -187,21 +188,21 @@ class DocumentIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all documents from index
         $term = new Zend_Search_Lucene_Index_Term('doc', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all documents from db - exclude non-main subsystems and metadata
         $res = db_query("SELECT * FROM document WHERE course_id >= 1 AND subsystem = 0 AND format <> \".meta\"");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -210,8 +211,8 @@ class DocumentIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
@@ -223,13 +224,13 @@ class DocumentIndexer implements ResourceIndexerInterface {
                 $queryStr .= 'subject:' . $term . '* ';
                 $queryStr .= 'author:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:doc AND visible:1';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:doc AND visible:1';
             if ($anonymous)
                 $queryStr .= ' AND public:1';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,18 +21,18 @@
 
 
 /*
-===========================================================================
-    usage/userlogins.php
+  ===========================================================================
+  usage/userlogins.php
  * @version $Id$
-    @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-    @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
-                    Ophelia Neofytou ophelia@ucnet.uoc.gr
-==============================================================================
-    @Description: Shows logins made by a user or all users of a course, during a specific period.
-    Takes data from table 'logins'
+  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
+  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr,
+  Ophelia Neofytou ophelia@ucnet.uoc.gr
+  ==============================================================================
+  @Description: Shows logins made by a user or all users of a course, during a specific period.
+  Takes data from table 'logins'
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -44,29 +45,27 @@ require_once 'duration_query.php';
 require_once 'modules/group/group_functions.php';
 
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
-        $format = 'csv';
+    $format = 'csv';
 
-        if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-                $charset = 'Windows-1253';
-        } else {
-                $charset = 'UTF-8';
-        }
-        $crlf="\r\n";
+    if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
+        $charset = 'Windows-1253';
+    } else {
+        $charset = 'UTF-8';
+    }
+    $crlf = "\r\n";
 
-        header("Content-Type: text/csv; charset=$charset");
-        header("Content-Disposition: attachment; filename=usersduration.csv");
+    header("Content-Type: text/csv; charset=$charset");
+    header("Content-Disposition: attachment; filename=usersduration.csv");
 
-        echo join(';', array_map("csv_escape",
-                                 array($langSurnameName, $langAm, $langGroup, $langDuration))),
-             $crlf, $crlf;
-
+    echo join(';', array_map("csv_escape", array($langSurnameName, $langAm, $langGroup, $langDuration))),
+    $crlf, $crlf;
 } else {
-        $format = 'html';
+    $format = 'html';
 
-        $nameTools = $langUserDuration;
-        $navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
+    $nameTools = $langUserDuration;
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
-        $tool_content .= "
+    $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
             <li><a href='favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
@@ -77,19 +76,19 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
           </ul>
         </div>\n";
 
-        // display number of users
-        $tool_content .= "
+    // display number of users
+    $tool_content .= "
         <div class='info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
                 2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
           </div>";
 
-        $local_style = '
+    $local_style = '
             .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
              padding-left: 15px; padding-right : 15px; }
             .content {position: relative; left: 25px; }';
 
-        $tool_content .= "
+    $tool_content .= "
         <table class='tbl_alt' width='99%'>
         <tr>
           <th class='left'>&nbsp;&nbsp;&nbsp;$langSurname $langName</th>
@@ -101,33 +100,33 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 
 $result = user_duration_query($course_id);
 if ($result) {
-        $i = 0;
-        while ($row = mysql_fetch_assoc($result)) {
-                $i++;
-                $grp_name = user_groups($course_id, $row['id'], $format);
-                if ($format == 'html') {
-                        if ($i%2 == 0) {
-                                $tool_content .= "\n<tr class='even'>";
-                        } else {
-                                $tool_content .= "\n<tr class='odd'>";
-                        }
-                        $tool_content .= "<td class='bullet'>" . display_user($row['id']) . "</td>
+    $i = 0;
+    while ($row = mysql_fetch_assoc($result)) {
+        $i++;
+        $grp_name = user_groups($course_id, $row['id'], $format);
+        if ($format == 'html') {
+            if ($i % 2 == 0) {
+                $tool_content .= "\n<tr class='even'>";
+            } else {
+                $tool_content .= "\n<tr class='odd'>";
+            }
+            $tool_content .= "<td class='bullet'>" . display_user($row['id']) . "</td>
                                 <td class='center'>$row[am]</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row['duration']) . "</td>
                                 </tr>\n";
-                } else {
-                        echo csv_escape($row['surname'] . ' ' . $row['givenname']), ';',
-                             csv_escape($row['am']), ';',
-                             csv_escape($grp_name), ';',
-                             csv_escape(format_time_duration(0 + $row['duration'])), $crlf;
-                }
+        } else {
+            echo csv_escape($row['surname'] . ' ' . $row['givenname']), ';',
+            csv_escape($row['am']), ';',
+            csv_escape($grp_name), ';',
+            csv_escape(format_time_duration(0 + $row['duration'])), $crlf;
         }
-        if ($format == 'html') {
-                $tool_content .= "</table>";
-        }
+    }
+    if ($format == 'html') {
+        $tool_content .= "</table>";
+    }
 }
 
 if ($format == 'html') {
-        draw($tool_content, 2);
+    draw($tool_content, 2);
 }

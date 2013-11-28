@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,19 +21,19 @@
 
 
 
-/**===========================================================================
-	unreguser.php
-	@last update: 27-06-2006 by Karatzidis Stratos
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================
-        @Description: Delete user from platform and from courses (eclass version)
+/* * ===========================================================================
+  unreguser.php
+  @last update: 27-06-2006 by Karatzidis Stratos
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Vagelis Pitsioygas <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Delete user from platform and from courses (eclass version)
 
- 	This script allows the admin to :
- 	- delete a user from participating into a course
+  This script allows the admin to :
+  - delete a user from participating into a course
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
@@ -44,35 +45,34 @@ $tree = new Hierarchy();
 $user = new User();
 
 $nameTools = $langUnregUser;
-$navigation[] = array ('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them
-$u = isset($_GET['u'])? intval($_GET['u']): false;
-$c = isset($_GET['c'])? intval($_GET['c']): false;
+$u = isset($_GET['u']) ? intval($_GET['u']) : false;
+$c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
 if (isDepartmentAdmin())
-	validateUserNodes(intval($u), true);
+    validateUserNodes(intval($u), true);
 
-$u_account = $u? q(uid_to_username($u)): '';
-$u_realname = $u? q(uid_to_name($u)): '';
+$u_account = $u ? q(uid_to_username($u)) : '';
+$u_realname = $u ? q(uid_to_name($u)) : '';
 $u_statut = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
-    
+
     if ($u_account && $c) {
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
         <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
-    	$langConfirmDeleteQuestion2 <em>".q(course_id_to_title($c))."</em>
+    	$langConfirmDeleteQuestion2 <em>" . q(course_id_to_title($c)) . "</em>
         </div>
         <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>";
     } else {
         $tool_content .= "<p>$langErrorUnreguser</p>";
     }
-    
+
     $tool_content .= "<div class='right'><a href='edituser.php?u=$u'>$langBack</a></div><br/>";
-    
 } else {
     if ($c and $u) {
         $q = db_query("DELETE from course_user WHERE user_id = $u AND course_id = $c");
@@ -80,31 +80,27 @@ if (!$doit) {
             db_query("DELETE FROM group_members
                             WHERE user_id = $u AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = $c)");
-            $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>".q(course_id_to_title($c))."</em></p>\n";
+            $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></p>\n";
             $m = 1;
         }
     } else {
         $tool_content .= "$langErrorDelete";
     }
     $tool_content .= "<br />&nbsp;";
-    if((isset($m)) && (!empty($m))) {
+    if ((isset($m)) && (!empty($m))) {
         $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
     }
     $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
 }
 
-function get_uid_statut($u)
-{
-	global $mysqlMainDb;
+function get_uid_statut($u) {
+    global $mysqlMainDb;
 
-	if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '".mysql_real_escape_string($u)."'",	$mysqlMainDb)))
-	{
-		return $r[0];
-	}
-	else
-	{
-		return FALSE;
-	}
+    if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '" . mysql_real_escape_string($u) . "'", $mysqlMainDb))) {
+        return $r[0];
+    } else {
+        return FALSE;
+    }
 }
 
-draw($tool_content,3);
+draw($tool_content, 3);

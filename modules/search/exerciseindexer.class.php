@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class ExerciseIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class ExerciseIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of an exercise db row.
      * 
@@ -53,7 +54,7 @@ class ExerciseIndexer implements ResourceIndexerInterface {
     private static function makeDoc($exercise) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'exercise_' . $exercise['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $exercise['id'], $encoding));
@@ -62,11 +63,11 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($exercise['title']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($exercise['description'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $exercise['active'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer .'modules/exercise/exercise_submit.php?course='. course_id_to_code($exercise['course_id']) . '&amp;exerciseId=' . $exercise['id'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/exercise/exercise_submit.php?course=' . course_id_to_code($exercise['course_id']) . '&amp;exerciseId=' . $exercise['id'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch an Exercise from DB.
      * 
@@ -78,7 +79,7 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $exercise = mysql_fetch_assoc($res);
         if (!$exercise)
             return null;
-        
+
         return $exercise;
     }
 
@@ -92,19 +93,19 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $exercise = $this->fetch($exerciseId);
         if (!$exercise)
             return;
-        
+
         // delete existing exercise from index
         $this->remove($exerciseId, false, false);
 
         // add the exercise back to the index
         $this->__index->addDocument(self::makeDoc($exercise));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove an Exercise from the Index.
      * 
@@ -118,18 +119,18 @@ class ExerciseIndexer implements ResourceIndexerInterface {
             if (!$exercise)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('exercise_' . $exerciseId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Exercises belonging to a Course.
      * 
@@ -141,16 +142,16 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the exercises back to the index
-        $res = db_query("SELECT * FROM exercise WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM exercise WHERE course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Exercises belonging to a Course.
      * 
@@ -161,13 +162,13 @@ class ExerciseIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:exercise AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all exercises.
      * 
@@ -176,21 +177,21 @@ class ExerciseIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all exercises from index
         $term = new Zend_Search_Lucene_Index_Term('exercise', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all exercises from db
         $res = db_query("SELECT * FROM exercise");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -199,19 +200,19 @@ class ExerciseIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'content:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:exercise AND visible:1';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:exercise AND visible:1';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

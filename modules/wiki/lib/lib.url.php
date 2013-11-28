@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -18,60 +19,55 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*============================================================================
-	lib.url.php
-	@last update: 15-05-2007 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* ============================================================================
+  lib.url.php
+  @last update: 15-05-2007 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7.9 licensed under GPL
-	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7.9 licensed under GPL
+  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
-	      original file: lib.url Revision: 1.7.2.2
+  original file: lib.url Revision: 1.7.2.2
 
-	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
-    @Description:
+  Claroline authors: Frederic Minne <zefredz@gmail.com>
+  ==============================================================================
+  @Description:
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
-     /**
-      * add a GET request variable to the given URL
-      * @param string url url
-      * @param string name name of the variable
-      * @param string value value of the variable
-      * @return string url
-      */
-    function add_request_variable_to_url( &$url, $name, $value )
-    {
-        if ( strstr( $url, "?" ) != false )
-        {
-            $url .= "&amp;$name=$value";
-        }
-        else
-        {
-            $url .= "?$name=$value";
-        }
-
-        return $url;
+/**
+ * add a GET request variable to the given URL
+ * @param string url url
+ * @param string name name of the variable
+ * @param string value value of the variable
+ * @return string url
+ */
+function add_request_variable_to_url(&$url, $name, $value) {
+    if (strstr($url, "?") != false) {
+        $url .= "&amp;$name=$value";
+    } else {
+        $url .= "?$name=$value";
     }
 
-    /**
-      * add a GET request variable list to the given URL
-      * @param string url url
-      * @param array variableList list of the request variables to add
-      * @return string url
-      */
-    function add_request_variable_list_to_url( &$url, $variableList )
-    {
-        foreach ( $variableList as $name => $value )
-        {
-            $url = add_request_variable_to_url( $url, $name, $value );
-        }
+    return $url;
+}
 
-        return $url;
+/**
+ * add a GET request variable list to the given URL
+ * @param string url url
+ * @param array variableList list of the request variables to add
+ * @return string url
+ */
+function add_request_variable_list_to_url(&$url, $variableList) {
+    foreach ($variableList as $name => $value) {
+        $url = add_request_variable_to_url($url, $name, $value);
     }
+
+    return $url;
+}
+
 ?>

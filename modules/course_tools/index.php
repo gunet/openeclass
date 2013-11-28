@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -33,86 +34,85 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-			 $langNoPgTitle . '";</script>';
+        $langNoPgTitle . '";</script>';
 
 if (isset($_GET['action'])) {
-        $action = intval($_GET['action']);
+    $action = intval($_GET['action']);
 }
 
 if (isset($_REQUEST['toolStatus'])) {
-        if (isset($_POST['toolStatActive'])) {
-                $tool_stat_active = $_POST['toolStatActive'];
-        }
-        if (isset($tool_stat_active)) {
-                $loopCount = count($tool_stat_active);
+    if (isset($_POST['toolStatActive'])) {
+        $tool_stat_active = $_POST['toolStatActive'];
+    }
+    if (isset($tool_stat_active)) {
+        $loopCount = count($tool_stat_active);
+    } else {
+        $loopCount = 0;
+    }
+    $i = 0;
+    $publicTools = array();
+    $tool_id = null;
+    while ($i < $loopCount) {
+        if (!isset($tool_id)) {
+            $tool_id = " (`module_id` = " . intval($tool_stat_active[$i]) . ")";
         } else {
-                $loopCount = 0;
+            $tool_id .= " OR (`module_id` = " . intval($tool_stat_active[$i]) . ")";
         }
-        $i = 0;
-        $publicTools = array();
-        $tool_id = null;
-        while ($i< $loopCount) {
-                if (!isset($tool_id)) {
-                        $tool_id = " (`module_id` = " . intval($tool_stat_active[$i]) .")" ;
-                } else {
-                        $tool_id .= " OR (`module_id` = " . intval($tool_stat_active[$i]) .")" ;
-                }
-                $i++;
-        }
-        //reset all tools
-        db_query("UPDATE course_module SET `visible` = 0
+        $i++;
+    }
+    //reset all tools
+    db_query("UPDATE course_module SET `visible` = 0
                          WHERE course_id = $course_id");
-        //and activate the ones the professor wants active, if any
-        if ($loopCount > 0) {
-                db_query("UPDATE course_module SET visible = 1
+    //and activate the ones the professor wants active, if any
+    if ($loopCount > 0) {
+        db_query("UPDATE course_module SET visible = 1
                                  WHERE $tool_id AND
                                  course_id = $course_id");
-        }
+    }
 }
 
 if (isset($_POST['delete'])) {
-        $delete = intval($_POST['delete']);
-        $r = mysql_fetch_array(db_query("SELECT url, title, category FROM link WHERE `id` = $delete"));
-        if($r['category'] == -2) { // if we want to delete html page also delete file
-                $link = explode(" ", $r['url']);
-                $path = substr($link[0], 6);
-                $file2Delete = $webDir ."/". $path;
-                unlink($file2Delete);
-        }
-        db_query("DELETE FROM link WHERE `id` = $delete");
-        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
-                                                                        'link' => $r['url'],
-                                                                        'name_link' => $r['title']));
-        unset($sql);
-        $tool_content .= "<p class='success'>$langLinkDeleted</p>";
+    $delete = intval($_POST['delete']);
+    $r = mysql_fetch_array(db_query("SELECT url, title, category FROM link WHERE `id` = $delete"));
+    if ($r['category'] == -2) { // if we want to delete html page also delete file
+        $link = explode(" ", $r['url']);
+        $path = substr($link[0], 6);
+        $file2Delete = $webDir . "/" . $path;
+        unlink($file2Delete);
+    }
+    db_query("DELETE FROM link WHERE `id` = $delete");
+    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
+        'link' => $r['url'],
+        'name_link' => $r['title']));
+    unset($sql);
+    $tool_content .= "<p class='success'>$langLinkDeleted</p>";
 }
 
 /**
  * Add external link
  */
-if (isset($_POST['submit'])) {                
-        $link = isset($_POST['link'])?$_POST['link']:'';
-        $name_link = isset($_POST['name_link'])?$_POST['name_link']:'';
-        if ((trim($link) == 'http://') or (trim($link) == 'ftp://') or empty($link) or empty($name_link))  {
-                $tool_content .= "<p class='caution'>$langInvalidLink<br />
+if (isset($_POST['submit'])) {
+    $link = isset($_POST['link']) ? $_POST['link'] : '';
+    $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
+    if ((trim($link) == 'http://') or (trim($link) == 'ftp://') or empty($link) or empty($name_link)) {
+        $tool_content .= "<p class='caution'>$langInvalidLink<br />
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2'>$langHome</a></p><br />";
-                draw($tool_content, 2, null, $head_content);
-                exit();
-        }
-        
-        db_query("INSERT INTO link (course_id, url, title, category)
-                            VALUES (".$course_id.", ".quote($link).", ".quote($name_link).", -1)");
-        $id = mysql_insert_id();
-        $tool_content .= "<p class='success'>$langLinkAdded</p>";
-        Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
-                                                                       'link' => $link,
-                                                                       'name_link' => $name_link));
-        
+        draw($tool_content, 2, null, $head_content);
+        exit();
+    }
+
+    db_query("INSERT INTO link (course_id, url, title, category)
+                            VALUES (" . $course_id . ", " . quote($link) . ", " . quote($name_link) . ", -1)");
+    $id = mysql_insert_id();
+    $tool_content .= "<p class='success'>$langLinkAdded</p>";
+    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
+        'link' => $link,
+        'name_link' => $name_link));
 } elseif (isset($_GET['action'])) { // add external link
-        $nameTools = $langAddExtLink;
-        $navigation[]= array ('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
-        $helpTopic = 'Module';
-        $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
+    $nameTools = $langAddExtLink;
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
+    $helpTopic = 'Module';
+    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
             <fieldset>
             <legend>$langExplanation_4</legend>
             <table width='100%' class='tbl'>
@@ -134,21 +134,21 @@ if (isset($_POST['submit'])) {
             </table>
             </fieldset>
           </form>";
-        draw($tool_content, 2, null, $head_content);
-        exit();
+    draw($tool_content, 2, null, $head_content);
+    exit();
 }
 
 $toolArr = getSideMenu(2);
 
 if (is_array($toolArr)) {
-        for ($i = 0; $i <= 1; $i++){
-                $toolSelection[$i] = '';
-                $numOfTools = count($toolArr[$i][1]);
-                for ($j = 0; $j < $numOfTools; $j++) {
-                        $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
-                                              $toolArr[$i][1][$j] . "</option>\n";
-                }
+    for ($i = 0; $i <= 1; $i++) {
+        $toolSelection[$i] = '';
+        $numOfTools = count($toolArr[$i][1]);
+        for ($j = 0; $j < $numOfTools; $j++) {
+            $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
+                    $toolArr[$i][1][$j] . "</option>\n";
         }
+    }
 }
 
 $tool_content .= "
@@ -207,20 +207,20 @@ $tool_content .= "<br/>
 </tr>";
 $i = 0;
 while ($externalLinks = mysql_fetch_array($sql)) {
-        if ($i % 2 == 0) {
-                $tool_content .= "<tr class='even'>\n";
-        } else {
-                $tool_content .= "<tr class='odd'>\n";
-        }
-        $tool_content .= "<th width='1'>
+    if ($i % 2 == 0) {
+        $tool_content .= "<tr class='even'>\n";
+    } else {
+        $tool_content .= "<tr class='odd'>\n";
+    }
+    $tool_content .= "<th width='1'>
         <img src='$themeimg/external_link_on.png' title='$langTitle' /></th>
         <td class='left'>$externalLinks[title]</td>
         <td align='center'><form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
            <input type='hidden' name='delete' value='$externalLinks[id]' />
            <input type='image' src='$themeimg/delete.png' name='delete_button'
-                  onClick=\"return confirmation('" .js_escape("$langConfirmDeleteLink {$externalLinks['title']}") ."');\" title='$langDelete' /></form></td>
+                  onClick=\"return confirmation('" . js_escape("$langConfirmDeleteLink {$externalLinks['title']}") . "');\" title='$langDelete' /></form></td>
      </tr>\n";
-     $i++;
+    $i++;
 }
 $tool_content .= "</table>\n";
 

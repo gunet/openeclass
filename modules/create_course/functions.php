@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.6
  * E-learning and Course Management System
@@ -18,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /**
  * @brief create course
  * @global type $mysqlMainDb
@@ -31,18 +31,17 @@
  * @param type $password
  * @return boolean
  */
-function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password = '')
-{
-        global $mysqlMainDb;
+function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password = '') {
+    global $mysqlMainDb;
 
-        $code = strtoupper(new_code($fac[0]));
-        if (!create_course_dirs($code)) {
-                return false;
-        }
-        if (!$public_code) {
-                $public_code = $code;
-        }
-        if (!db_query("INSERT INTO course
+    $code = strtoupper(new_code($fac[0]));
+    if (!create_course_dirs($code)) {
+        return false;
+    }
+    if (!$public_code) {
+        $public_code = $code;
+    }
+    if (!db_query("INSERT INTO course
                          SET code = '$code',
                              lang = '$lang',
                              title = " . quote($title) . ",
@@ -54,22 +53,20 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
                              password = " . quote($password) . ",
                              glossary_expand = 0,
                              glossary_index = 1")) {
-                return false;
+        return false;
+    }
+    $course_id = mysql_insert_id();
+    foreach ($fac as $facid) {
+        if (!isset($set_fac)) {
+            $set_fac = "INSERT INTO course_department (course, department) VALUES ";
+        } else {
+            $set_fac .= ' ,';
         }
-        $course_id = mysql_insert_id();
-        foreach ($fac as $facid) {
-                if (!isset($set_fac)) {
-                        $set_fac = "INSERT INTO course_department (course, department) VALUES ";
-                } else {
-                        $set_fac .= ' ,';
-                }
-                $set_fac .= "($course_id, $facid)";
-        }
-        db_query($set_fac);
-        return array($code, $course_id);
+        $set_fac .= "($course_id, $facid)";
+    }
+    db_query($set_fac);
+    return array($code, $course_id);
 }
-
-
 
 /**
  * @brief create main course index.php
@@ -77,21 +74,20 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
  * @param type $code
  * @return boolean
  */
-function course_index($code)
-{
-        global $webDir;
-        if (!(mkdir($webDir . "/courses/$code", 0777))) {
-                return false;
-        }
-        $fd = fopen($webDir . "/courses/$code/index.php", "w");
-        if (!$fd) {
-                return false;
-        }
-        fwrite($fd, "<?php\nsession_start();\n" .
-                    "\$_SESSION['dbname']='$code';\n" .
-                    "include '../../modules/course_home/course_home.php';\n");
-        fclose($fd);
-        return true;
+function course_index($code) {
+    global $webDir;
+    if (!(mkdir($webDir . "/courses/$code", 0777))) {
+        return false;
+    }
+    $fd = fopen($webDir . "/courses/$code/index.php", "w");
+    if (!$fd) {
+        return false;
+    }
+    fwrite($fd, "<?php\nsession_start();\n" .
+            "\$_SESSION['dbname']='$code';\n" .
+            "include '../../modules/course_home/course_home.php';\n");
+    fclose($fd);
+    return true;
 }
 
 /**
@@ -100,44 +96,41 @@ function course_index($code)
  * @param type $code
  * @return boolean
  */
-function create_course_dirs($code)
-{ 
-        global $webDir;
+function create_course_dirs($code) {
+    global $webDir;
 
-        $base = $webDir . "/courses/$code";
-        umask(0);
-        if (!(course_index($code) and
-              mkpath("$base/image") and
-              mkpath("$base/document") and
-              mkpath("$base/dropbox") and
-              mkpath("$base/page") and
-              mkpath("$base/work") and
-              mkpath("$base/group") and
-              mkpath("$base/temp") and
-              mkpath("$base/scormPackages") and
-              mkpath($webDir . "/video/$code"))) {
-                return false;
-        }
-        return true;
+    $base = $webDir . "/courses/$code";
+    umask(0);
+    if (!(course_index($code) and
+            mkpath("$base/image") and
+            mkpath("$base/document") and
+            mkpath("$base/dropbox") and
+            mkpath("$base/page") and
+            mkpath("$base/work") and
+            mkpath("$base/group") and
+            mkpath("$base/temp") and
+            mkpath("$base/scormPackages") and
+            mkpath($webDir . "/video/$code"))) {
+        return false;
+    }
+    return true;
 }
 
 // ---------------------------------------------
 // create entries in table `module`
 // ---------------------------------------------
-function create_modules($cid, $sbsystems)
-{
-        $module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS, 
-                MODULE_ID_VIDEO, MODULE_ID_ASSIGN, MODULE_ID_ANNOUNCE, 
-                MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS, 
-                MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK, 
-                MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE, 
-                MODULE_ID_LP, MODULE_ID_WIKI);
+function create_modules($cid, $sbsystems) {
+    $module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
+        MODULE_ID_VIDEO, MODULE_ID_ASSIGN, MODULE_ID_ANNOUNCE,
+        MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
+        MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
+        MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE,
+        MODULE_ID_LP, MODULE_ID_WIKI);
 
-        $values = array();
-        foreach ($module_ids as $mid) {
-                $values[] = "($mid, {$sbsystems[$mid]}, $cid)";
-        }
-        db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES " .
-                 implode(', ', $values));
+    $values = array();
+    foreach ($module_ids as $mid) {
+        $values[] = "($mid, {$sbsystems[$mid]}, $cid)";
+    }
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES " .
+            implode(', ', $values));
 }
-

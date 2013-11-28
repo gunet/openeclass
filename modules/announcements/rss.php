@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -26,38 +27,38 @@
 include '../../include/init.php';
 
 if (isset($_GET['c'])) {
-	$code = $_GET['c'];
-	$course_id = course_code_to_id($code);
+    $code = $_GET['c'];
+    $course_id = course_code_to_id($code);
 } else {
-	$code = '';
-	$course_id = false;
+    $code = '';
+    $course_id = false;
 }
 if ($course_id === false) {
-	header("HTTP/1.0 404 Not Found");
-	echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-	     '<title>404 Not Found</title></head><body>',
-	     '<h1>Not Found</h1><p>The requested course "',
-	     htmlspecialchars($code),
-	     '" does not exist.</p></body></html>';
-	exit;
+    header("HTTP/1.0 404 Not Found");
+    echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+    '<title>404 Not Found</title></head><body>',
+    '<h1>Not Found</h1><p>The requested course "',
+    htmlspecialchars($code),
+    '" does not exist.</p></body></html>';
+    exit;
 }
- if (!visible_module(MODULE_ID_ANNOUNCE)) {
-        $toolContent_ErrorExists = caution($langCheckPublicTools);
-	$_SESSION['errMessage'] = $toolContent_ErrorExists;
-	session_write_close();
-        if (!$uid) {
-                $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-                header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
-        } else {
-                header("Location:" . $urlServer . "index.php");
-        }	        
-        if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
-                $extraMessage = $_SESSION['errMessage'];
-                unset($_SESSION['errMessage']);
-        }        
-        $errorMessagePath = "../../";
-        exit;
- }
+if (!visible_module(MODULE_ID_ANNOUNCE)) {
+    $toolContent_ErrorExists = caution($langCheckPublicTools);
+    $_SESSION['errMessage'] = $toolContent_ErrorExists;
+    session_write_close();
+    if (!$uid) {
+        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+        header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+    } else {
+        header("Location:" . $urlServer . "index.php");
+    }
+    if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
+        $extraMessage = $_SESSION['errMessage'];
+        unset($_SESSION['errMessage']);
+    }
+    $errorMessagePath = "../../";
+    exit;
+}
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?", $course_id)->title, ENT_NOQUOTES);
 
@@ -65,19 +66,19 @@ $lastbuilddate = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d
                 FROM announcement WHERE course_id = ? AND visible = 1
                 ORDER BY `order` DESC", $course_id)->dateformat;
 
-header ("Content-Type: application/xml;");
+header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
-echo "<atom:link href='{$urlServer}modules/announcements/rss.php?c=".urlencode($code)."' rel='self' type='application/rss+xml' />";
+echo "<atom:link href='{$urlServer}modules/announcements/rss.php?c=" . urlencode($code) . "' rel='self' type='application/rss+xml' />";
 echo "<title>$langCourseAnnouncements " . q($title) . "</title>";
-echo "<link>{$urlServer}courses/".q($code)."/</link>";
+echo "<link>{$urlServer}courses/" . q($code) . "/</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
 Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM announcement WHERE course_id = ? AND visible = 1 ORDER BY `order` DESC", function($r) use ($code, $urlServer){
+		FROM announcement WHERE course_id = ? AND visible = 1 ORDER BY `order` DESC", function($r) use ($code, $urlServer) {
     echo "<item>";
     echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
     echo "<link>{$urlServer}modules/announcements/announcements.php?an_id=" . $r->id . "&amp;c=" . urlencode($code) . "</link>";

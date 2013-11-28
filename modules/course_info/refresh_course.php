@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -18,15 +19,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**===========================================================================
-refresh_course.php
-@last update: 23-10-2006 by Pitsiougas Vagelis
-@authors list: Karatzidis Stratos <kstratos@uom.gr>
-Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-@Description: Refresh page for a course
+/* * ===========================================================================
+  refresh_course.php
+  @last update: 23-10-2006 by Pitsiougas Vagelis
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Refresh page for a course
 
-==============================================================================*/
+  ============================================================================== */
 
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
@@ -37,50 +38,49 @@ require_once 'include/jscalendar/calendar.php';
 
 $nameTools = $langRefreshCourse;
 
-if(isset($_POST['submit'])) {
-	$output = array();
-	if (isset($_POST['delusers'])) {
-		if (isset($_POST['before_date'])) {
-			$output[] = delete_users(q($_POST['before_date']));
-		} else {
-			$output[] = delete_users();
-		}
-	}
-	if (isset($_POST['delannounces'])) {
-		$output[] = delete_announcements();
-	}
-
-	mysql_select_db($course_code);
-	if (isset($_POST['delagenda'])) {
-		$output[] = delete_agenda();
-	}
-	if (isset($_POST['hideworks'])) {
-		$output[] = hide_work();
-	}
-        if (isset($_POST['purgeexercises'])) {
-                $output[] = purge_exercises();
+if (isset($_POST['submit'])) {
+    $output = array();
+    if (isset($_POST['delusers'])) {
+        if (isset($_POST['before_date'])) {
+            $output[] = delete_users(q($_POST['before_date']));
+        } else {
+            $output[] = delete_users();
         }
-        if (isset($_POST['clearstats'])) {
-                $output[] = clear_stats();
-        }
+    }
+    if (isset($_POST['delannounces'])) {
+        $output[] = delete_announcements();
+    }
 
-	if (($count_events = count($output)) > 0 ) {
-		$tool_content .=  "<p class='success_small'>$langRefreshSuccess
+    mysql_select_db($course_code);
+    if (isset($_POST['delagenda'])) {
+        $output[] = delete_agenda();
+    }
+    if (isset($_POST['hideworks'])) {
+        $output[] = hide_work();
+    }
+    if (isset($_POST['purgeexercises'])) {
+        $output[] = purge_exercises();
+    }
+    if (isset($_POST['clearstats'])) {
+        $output[] = clear_stats();
+    }
+
+    if (($count_events = count($output)) > 0) {
+        $tool_content .= "<p class='success_small'>$langRefreshSuccess
 		<ul class='listBullet'>";
-		for ($i=0; $i< $count_events; $i++) {
-			$tool_content .= "<li>$output[$i]</li>";
-		}
-		$tool_content .= "\n</ul>\n</p><br />";
-	}
-	$tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
-
+        for ($i = 0; $i < $count_events; $i++) {
+            $tool_content .= "<li>$output[$i]</li>";
+        }
+        $tool_content .= "\n</ul>\n</p><br />";
+    }
+    $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
 } else {
-	$lang_jscalendar = langname_to_code($language);
-        $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-        $head_content .= $jscalendar->get_load_files_code();
-        $datetoday = date("Y-n-j",time());
+    $lang_jscalendar = langname_to_code($language);
+    $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
+    $head_content .= $jscalendar->get_load_files_code();
+    $datetoday = date("Y-n-j", time());
 
-	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
 	<table width='100%' class=\"FormData\">
 	<tbody>
 	<tr>
@@ -93,7 +93,7 @@ if(isset($_POST['submit'])) {
 	  <td>$langUserDelCourse </td>
 	</tr>
 	<tr>
-	  <th><td>&nbsp;</th><td>". make_calendar('before_date')."</td>
+	  <th><td>&nbsp;</th><td>" . make_calendar('before_date') . "</td>
 	</tr>
 	<tr>
 	  <th class='left'><img src='$themeimg/announcements_on.png' alt='' height='16' width='16'> $langAnnouncements</th>
@@ -127,87 +127,85 @@ if(isset($_POST['submit'])) {
 	</tbody>
 	</table>
 	</form>";
-	$tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
+    $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
 }
 
 draw($tool_content, 2, null, $head_content);
 
 function delete_users($date = '') {
-	global $course_id, $langUsersDeleted;
+    global $course_id, $langUsersDeleted;
 
-	if (isset($date)) {
-                db_query("DELETE FROM course_user
+    if (isset($date)) {
+        db_query("DELETE FROM course_user
                                  WHERE course_id = $course_id AND
                                        statut <> 1 AND
                                        statut <> 10 AND
                                        reg_date < '$date'");
-	} else {
-		db_query("DELETE FROM course_user WHERE course_id = $course_id AND statut <> 1 AND statut <> 10");
-	}
-        db_query("DELETE FROM group_members
+    } else {
+        db_query("DELETE FROM course_user WHERE course_id = $course_id AND statut <> 1 AND statut <> 10");
+    }
+    db_query("DELETE FROM group_members
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
                                user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = $course_id)");
-	return "<p>$langUsersDeleted</p>";
+    return "<p>$langUsersDeleted</p>";
 }
 
 function delete_announcements() {
-	global $course_id, $langAnnDeleted;
+    global $course_id, $langAnnDeleted;
 
-	db_query("DELETE FROM announcement WHERE course_id = $course_id");
-	return "<p>$langAnnDeleted</p>";
+    db_query("DELETE FROM announcement WHERE course_id = $course_id");
+    return "<p>$langAnnDeleted</p>";
 }
 
 function delete_agenda() {
-	global $langAgendaDeleted, $course_id;
+    global $langAgendaDeleted, $course_id;
 
-	db_query("DELETE FROM agenda WHERE course_id = $course_id");
-	return "<p>$langAgendaDeleted</p>";
+    db_query("DELETE FROM agenda WHERE course_id = $course_id");
+    return "<p>$langAgendaDeleted</p>";
 }
 
-function hide_doc()  {
-	global $langDocsDeleted, $course_id;
+function hide_doc() {
+    global $langDocsDeleted, $course_id;
 
-	db_query("UPDATE document SET visibility='i' WHERE course_id = $course_id");
-	return "<p>$langDocsDeleted</p>";
+    db_query("UPDATE document SET visibility='i' WHERE course_id = $course_id");
+    return "<p>$langDocsDeleted</p>";
 }
 
-function hide_work()  {
-	global $langWorksDeleted, $course_id;
+function hide_work() {
+    global $langWorksDeleted, $course_id;
 
-	db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
-	return "<p>$langWorksDeleted</p>";
+    db_query("UPDATE assignment SET active=0 WHERE course_id = $course_id");
+    return "<p>$langWorksDeleted</p>";
 }
 
 function purge_exercises() {
-        global $langPurgedExerciseResults;
+    global $langPurgedExerciseResults;
 
-	db_query("TRUNCATE exercise_user_record");
-	return "<p>$langPurgedExerciseResults</p>";
-        
+    db_query("TRUNCATE exercise_user_record");
+    return "<p>$langPurgedExerciseResults</p>";
 }
 
 function clear_stats() {
     global $langStatsCleared;
-    
+
     require_once 'include/action.php';
     $action = new action();
     $action->summarizeAll();
-    
+
     return "<p>$langStatsCleared</p>";
 }
 
 function make_calendar($name) {
 
-	global $datetoday, $jscalendar, $langBeforeRegDate;
+    global $datetoday, $jscalendar, $langBeforeRegDate;
 
-	return "$langBeforeRegDate ".
-		$jscalendar->make_input_field(
-		array('showOthers' => true,
-		      'showsTime' => false,
-		      'align' => 'Tl',
-		      'ifFormat' => '%Y-%m-%d'),
-		array('name' => $name,
-		      'value' => $datetoday,
-		      'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
-		"";
+    return "$langBeforeRegDate " .
+            $jscalendar->make_input_field(
+                    array('showOthers' => true,
+                'showsTime' => false,
+                'align' => 'Tl',
+                'ifFormat' => '%Y-%m-%d'), array('name' => $name,
+                'value' => $datetoday,
+                'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
+            "";
 }

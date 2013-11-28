@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,27 +20,27 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	mailtoprof.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Send mail to the users of the platform
+/* ===========================================================================
+  mailtoprof.php
+  @last update: 31-05-2006 by Pitsiougas Vagelis
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Send mail to the users of the platform
 
- 	This script allows the administrator to send a message by email to all
- 	users or just the professors of the platform
+  This script allows the administrator to send a message by email to all
+  users or just the professors of the platform
 
- 	The user can : - Send a message by email to all users or just the pofessors
-                 - Return to main administrator page
+  The user can : - Send a message by email to all users or just the pofessors
+  - Return to main administrator page
 
- 	@Comments: The script is organised in three sections.
+  @Comments: The script is organised in three sections.
 
   1) Write message and select where to send it
   2) Try to send the message by email
   3) Display all on an HTML page
 
-==============================================================================*/
+  ============================================================================== */
 
 $require_usermanage_user = TRUE;
 
@@ -53,75 +54,71 @@ $user = new User();
 $nameTools = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-/*****************************************************************************
-		MAIN BODY
-******************************************************************************/
+/* * ***************************************************************************
+  MAIN BODY
+ * **************************************************************************** */
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
-    
+
     if (isDepartmentAdmin())
-        $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid) ) . ') ';
-        
+        $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ';
+
     // Where to send the email
-    if ($_POST['sendTo'] == '0') // All users
-    {
+    if ($_POST['sendTo'] == '0') { // All users
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND ". $depwh);
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND " . $depwh);
         else
             $sql = db_query("SELECT email, user_id FROM user");
     }
-    elseif ($_POST['sendTo'] == "1") // Only professors
-    {
+    elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='1' AND ". $depwh);
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='1' AND " . $depwh);
         else
             $sql = db_query("SELECT email, user_id FROM user where statut='1'");
     }
-    elseif ($_POST['sendTo'] == "2") // Only students
-    {
+    elseif ($_POST['sendTo'] == "2") { // Only students
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='5' AND ". $depwh);
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='5' AND " . $depwh);
         else
             $sql = db_query("SELECT email, user_id FROM user where statut='5'");
     }
-    else // invalid sendTo var
-    {
+    else { // invalid sendTo var
         die();
     }
 
-        $recipients = array();
-        $emailsubject = $langInfoAboutEclass;
-		$emailbody = "".$_POST['body_mail']."
+    $recipients = array();
+    $emailsubject = $langInfoAboutEclass;
+    $emailbody = "" . $_POST['body_mail'] . "
 
 $langManager $siteName
 $administratorName $administratorSurname
 $langTel $telephone
 $langEmail : $emailhelpdesk
 ";
-	// Send email to all addresses
-	while ($m = mysql_fetch_array($sql)) {
-		$emailTo = $m["email"];
-                $user_id = $m["user_id"];
-                if (get_user_email_notification($user_id)) {
-                        // checks if user is notified by email
-                        array_push($recipients, $emailTo);
-                }
-                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
-                $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribeFromPlatform, $siteName);            
-                $emailcontent = $emailbody.$unsubscribe.$linkhere;            
-                if (count($recipients) >= 50) {                
-                      send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
-                      $recipients = array();
-                }
-        } 
-        if (count($recipients) > 0)  {                
-                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset); 
+    // Send email to all addresses
+    while ($m = mysql_fetch_array($sql)) {
+        $emailTo = $m["email"];
+        $user_id = $m["user_id"];
+        if (get_user_email_notification($user_id)) {
+            // checks if user is notified by email
+            array_push($recipients, $emailTo);
         }
-	// Display result and close table correctly
-	$tool_content .= "<p class='success'>$emailsuccess</p>";
+        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/profile.php'>$langHere</a>.";
+        $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribeFromPlatform, $siteName);
+        $emailcontent = $emailbody . $unsubscribe . $linkhere;
+        if (count($recipients) >= 50) {
+            send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
+            $recipients = array();
+        }
+    }
+    if (count($recipients) > 0) {
+        send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
+    }
+    // Display result and close table correctly
+    $tool_content .= "<p class='success'>$emailsuccess</p>";
 } else {
-        // Display form to administrator
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
+    // Display form to administrator
+    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>
         <legend>$langMessage</legend>
 	<table class='tbl' width='100%'>
@@ -138,13 +135,12 @@ $langEmail : $emailhelpdesk
 	      </select>	    </td>
 	  </tr>
 	<tr>
-	  <td class='right'><input type='submit' name='submit' value='".q($langSend)."' /></td>
+	  <td class='right'><input type='submit' name='submit' value='" . q($langSend) . "' /></td>
 	  </tr>
 	</table>
         </fieldset>
 	</form>";
-
 }
 // Display link back to index.php
-$tool_content .= "<p align='right'><a href='index.php'>".$langBack."</a></p>";
-draw($tool_content,3);
+$tool_content .= "<p align='right'><a href='index.php'>" . $langBack . "</a></p>";
+draw($tool_content, 3);

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -26,7 +27,7 @@
  * @global type $course_id
  */
 function removeUnusedFiles() {
-        
+
     global $dropbox_dir, $course_id;
 
     // select all files that aren't referenced anymore
@@ -36,8 +37,8 @@ function removeUnusedFiles() {
 			WHERE f.course_id = $course_id AND p.personId IS NULL";
     $result = db_query($sql);
     while ($res = mysql_fetch_array($result)) {
-	//delete the selected files from the post and file tables
-	$sql = "DELETE FROM dropbox_post WHERE fileId='" . $res['id'] . "'";
+        //delete the selected files from the post and file tables
+        $sql = "DELETE FROM dropbox_post WHERE fileId='" . $res['id'] . "'";
         $result1 = db_query($sql);
         $sql = "DELETE FROM dropbox_file WHERE id='" . $res['id'] . "'";
         $result1 = db_query($sql);

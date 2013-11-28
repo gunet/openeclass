@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,61 +20,61 @@
 //
 // $Id$
 
-$text['title']          = 'Informaci&oacute;n Del Sistema';
+$text['title'] = 'Informaci&oacute;n Del Sistema';
 
-$text['vitals']         = 'Vitales';
-$text['hostname']       = 'Nombre Del Sistema';
-$text['ip']             = 'N&uacute;mero de IP';
-$text['kversion']       = 'Versi&oacute;n Del Kernel';
-$text['uptime']         = 'Uptime';
-$text['users']          = 'Usuarios actuales';
-$text['loadavg']        = 'Promedio de Uso';
+$text['vitals'] = 'Vitales';
+$text['hostname'] = 'Nombre Del Sistema';
+$text['ip'] = 'N&uacute;mero de IP';
+$text['kversion'] = 'Versi&oacute;n Del Kernel';
+$text['uptime'] = 'Uptime';
+$text['users'] = 'Usuarios actuales';
+$text['loadavg'] = 'Promedio de Uso';
 
-$text['hardware']       = 'Informaci&oacute;n Del Hardware';
-$text['numcpu']         = 'Procesadores';
-$text['cpumodel']       = 'Modelo';
-$text['mhz']            = 'Frequencia en MHz';
-$text['cache']          = 'Tama&ntilde;o Del Cach&eacute;';
-$text['bogomips']       = 'Bogomips';
-$text['pci']            = 'PCI Dispositivos ';
-$text['ide']            = 'IDE Dispositivos';
-$text['scsi']           = 'SCSI Dispositivos ';
+$text['hardware'] = 'Informaci&oacute;n Del Hardware';
+$text['numcpu'] = 'Procesadores';
+$text['cpumodel'] = 'Modelo';
+$text['mhz'] = 'Frequencia en MHz';
+$text['cache'] = 'Tama&ntilde;o Del Cach&eacute;';
+$text['bogomips'] = 'Bogomips';
+$text['pci'] = 'PCI Dispositivos ';
+$text['ide'] = 'IDE Dispositivos';
+$text['scsi'] = 'SCSI Dispositivos ';
 
-$text['netusage']       = 'Utilizaci&oacute;n de la Red';
-$text['device']         = 'Dispositivo';
-$text['received']       = 'Recibidos';
-$text['sent']           = 'Enviados';
-$text['errors']         = 'Errores/Perdidos';
+$text['netusage'] = 'Utilizaci&oacute;n de la Red';
+$text['device'] = 'Dispositivo';
+$text['received'] = 'Recibidos';
+$text['sent'] = 'Enviados';
+$text['errors'] = 'Errores/Perdidos';
 
-$text['memusage']       = 'Utilizaci&oacute;n De Memoria';
-$text['phymem']         = 'Memoria F&iacute;sica';
-$text['swap']           = 'Disco Swap';
+$text['memusage'] = 'Utilizaci&oacute;n De Memoria';
+$text['phymem'] = 'Memoria F&iacute;sica';
+$text['swap'] = 'Disco Swap';
 
-$text['fs']             = 'Sistemas de Archivos Montados';
-$text['mount']          = 'Montado en';
-$text['partition']      = 'Partici&oacute;n';
+$text['fs'] = 'Sistemas de Archivos Montados';
+$text['mount'] = 'Montado en';
+$text['partition'] = 'Partici&oacute;n';
 
-$text['percent']        = 'Porcentaje de Capacidad';
-$text['type']           = 'Tipo';
-$text['free']           = 'Libre';
-$text['used']           = 'Usado';
-$text['size']           = 'Tama&ntilde;o';
-$text['totals']         = 'Totales';
+$text['percent'] = 'Porcentaje de Capacidad';
+$text['type'] = 'Tipo';
+$text['free'] = 'Libre';
+$text['used'] = 'Usado';
+$text['size'] = 'Tama&ntilde;o';
+$text['totals'] = 'Totales';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'ninguno';
+$text['none'] = 'ninguno';
 
-$text['capacity']       = 'Capacity';
+$text['capacity'] = 'Capacity';
 
-$text['template']       = 'Template';
-$text['language']       = 'Language';
-$text['submit']         = 'Submit';
-$text['created']        = 'Created by';
+$text['template'] = 'Template';
+$text['language'] = 'Language';
+$text['submit'] = 'Submit';
+$text['created'] = 'Created by';
 
-$text['days']           = 'days';
-$text['hours']          = 'hours';
-$text['minutes']        = 'minutes';
+$text['days'] = 'days';
+$text['hours'] = 'hours';
+$text['minutes'] = 'minutes';
 ?>

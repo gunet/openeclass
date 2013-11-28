@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,62 +20,61 @@
  * ======================================================================== */
 
 /**
-/*
+  /*
  * Mass change user's mail verification status
  * @author Kapetanakis Giannis <bilias@edu.physics.uoc.gr>
  * @abstract This component massively changes user's verification status.
  *
  */
-
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 $nameTools = $langMailVerification;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$mr = get_config('email_required')? $m['yes']: $m['no'];
-$mv = get_config('email_verification_required')? $m['yes']: $m['no'];
-$mm = get_config('dont_mail_unverified_mails')? $m['yes']: $m['no'];
+$mr = get_config('email_required') ? $m['yes'] : $m['no'];
+$mv = get_config('email_verification_required') ? $m['yes'] : $m['no'];
+$mm = get_config('dont_mail_unverified_mails') ? $m['yes'] : $m['no'];
 
 register_posted_variables(array(
-	'submit' => true,
-	'submit0' => true,
-	'submit1' => true,
-	'submit2' => true,
-	'old_mail_ver' => true,
-	'new_mail_ver' => true
-	));
+    'submit' => true,
+    'submit0' => true,
+    'submit1' => true,
+    'submit2' => true,
+    'old_mail_ver' => true,
+    'new_mail_ver' => true
+));
 
 $mail_ver_data[0] = $langMailVerificationPendingU;
 $mail_ver_data[1] = $langMailVerificationYesU;
 $mail_ver_data[2] = $langMailVerificationNoU;
 
 if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
-	if ($old_mail_ver != $new_mail_ver) {
-		$old_mail_ver = intval($old_mail_ver);
-		$new_mail_ver = intval($new_mail_ver);
-		$qry = "UPDATE `user` set verified_mail=$new_mail_ver WHERE verified_mail=$old_mail_ver AND user_id!=1";
-		$result = db_query($qry);
-		if ($result) {
-			$count = mysql_affected_rows();
-			if ($count > 0) {
-				$user = ($count == 1)? $langOfUser: $langUsersS;
-				$tool_content .= "<p class='success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</p>";
-			}
-			// user is admin or no user selected
-			else {
-				$tool_content .= "<p class='caution'>$langMailVerificationChangedNoAdmin</p>";
-			}
-		}
-	}
-	// no change selected
-	else {
-		$tool_content .= "<p class='info'>$langMailVerificationChangedNo</p>";
-	}
+    if ($old_mail_ver != $new_mail_ver) {
+        $old_mail_ver = intval($old_mail_ver);
+        $new_mail_ver = intval($new_mail_ver);
+        $qry = "UPDATE `user` set verified_mail=$new_mail_ver WHERE verified_mail=$old_mail_ver AND user_id!=1";
+        $result = db_query($qry);
+        if ($result) {
+            $count = mysql_affected_rows();
+            if ($count > 0) {
+                $user = ($count == 1) ? $langOfUser : $langUsersS;
+                $tool_content .= "<p class='success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</p>";
+            }
+            // user is admin or no user selected
+            else {
+                $tool_content .= "<p class='caution'>$langMailVerificationChangedNoAdmin</p>";
+            }
+        }
+    }
+    // no change selected
+    else {
+        $tool_content .= "<p class='info'>$langMailVerificationChangedNo</p>";
+    }
 }
 
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {
-	$tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[SCRIPT_NAME]'>
+    $tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<table width='100%' class='tbl_1' style='margin-top: 20px;'>
 		<tr><td class='left' colspan='3'><b>$langMailVerificationSettings</b></td></tr>
 		<tr><td class='left' colspan='2'>$lang_email_required:</td>
@@ -86,75 +86,72 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 		<tr><td colspan='3'>&nbsp;</td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFIED.";") .
-			"</b></td><td class='right'><input type='submit' name='submit1' value='{$m['edit']}'></td></tr>
+            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";") .
+            "</b></td><td class='right'><input type='submit' name='submit1' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_UNVERIFIED.";") .
-			"</b></td><td class='right'><input type='submit' name='submit2' value='{$m['edit']}'></td></tr>
+            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";") .
+            "</b></td><td class='right'><input type='submit' name='submit2' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = ".EMAIL_VERIFICATION_REQUIRED.";") .
-			"</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
-                        if (!get_config('email_required')) {
-                                $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
+            list_1Result("SELECT COUNT(*) FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";") .
+            "</b></td><td class='right'><input type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
+    if (!get_config('email_required')) {
+        $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
                                 <td class='center'><b>" .
-                                list_1Result("SELECT COUNT(*) FROM user WHERE email = '';") .
-                                "</b></td><td class='right'>&nbsp;</td></tr>";
-                        }
-                $tool_content .= "<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
+                list_1Result("SELECT COUNT(*) FROM user WHERE email = '';") .
+                "</b></td><td class='right'>&nbsp;</td></tr>";
+    }
+    $tool_content .= "<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
 			<td class='center'><b>" .
-			list_1Result("SELECT COUNT(*) FROM user;") .
-			"</b></td><td class='right'>&nbsp;</td></tr>
+            list_1Result("SELECT COUNT(*) FROM user;") .
+            "</b></td><td class='right'>&nbsp;</td></tr>
 	</table></form>";
 }
 // admin wants to change user's mail verirication value. 3 possible
 else {
-	if (!empty($submit0)) {
-		$sub = 0;
-		$msg = $langMailVerificationPending;
-	}
-	elseif (!empty($submit1)) {
-		$sub = 1;
-		$msg = $langMailVerificationYes;
-	}
-	elseif (!empty($submit2)) {
-		$sub = 2;
-		$msg = $langMailVerificationNo;
-	}
-	else {
-		$sub = NULL;
-	}
-	$c = list_1Result("SELECT count(*) FROM user WHERE verified_mail = $sub;");
+    if (!empty($submit0)) {
+        $sub = 0;
+        $msg = $langMailVerificationPending;
+    } elseif (!empty($submit1)) {
+        $sub = 1;
+        $msg = $langMailVerificationYes;
+    } elseif (!empty($submit2)) {
+        $sub = 2;
+        $msg = $langMailVerificationNo;
+    } else {
+        $sub = NULL;
+    }
+    $c = list_1Result("SELECT count(*) FROM user WHERE verified_mail = $sub;");
 
-	if (isset($sub)) {
-		$tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
+    if (isset($sub)) {
+        $tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
 		<fieldset>
 		<legend>$msg ($langNbUsers: $c)</legend>
 		<table width='100%' class='tbl'>
 		<tr><th class='left'>$langChangeTo: </th>
 			<td>";
-		$tool_content .= selection($mail_ver_data, "new_mail_ver", $sub);
+        $tool_content .= selection($mail_ver_data, "new_mail_ver", $sub);
 
-		$tool_content .= "</td>
+        $tool_content .= "</td>
 		</tr>
 		<tr><th>&nbsp;</th><td class='left'><input type='submit' name='submit' value='{$m['edit']}'></td></tr>
 		<tr><th colspan='2'><input type='hidden' name='old_mail_ver' value='$sub' /></th></tr>
 		</table>
 		</fieldset>
 		</form>";
-	}
+    }
 }
 
 $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
 $tool_content .= "<p class='info'>$langMailVerificationNoticeAdmin</p>";
 
 function list_1Result($sql) {
-   
-   $res = db_query($sql);
-   $res = mysql_fetch_array($res);
-   
-   return $res[0];
+
+    $res = db_query($sql);
+    $res = mysql_fetch_array($res);
+
+    return $res[0];
 }
 
-draw($tool_content,3);
+draw($tool_content, 3);

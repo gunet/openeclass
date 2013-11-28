@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -44,7 +45,7 @@ $tool_content .= "
 </div>\n";
 
 
-$navigation[] = array('url' => 'index.php?course='.$course_code, 'name' => $langUsage);
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 $nameTools = $langGroupUsage;
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
@@ -56,7 +57,7 @@ $q = db_query("SELECT id, name, g.description, max_members, COUNT(*) AS register
 		      WHERE g.course_id = $course_id AND g.id = gm.group_id
 		      GROUP BY g.id", $mysqlMainDb);
 if (mysql_num_rows($q) > 0) {
-        $tool_content .= "
+    $tool_content .= "
                 <table class='sortable' width='99%' id='b'>
 		<tr>
 		  <th class='left'>$langGroupName</th>
@@ -64,28 +65,28 @@ if (mysql_num_rows($q) > 0) {
 		  <th class='center'>$langRegistered</th>
 		  <th class='center'>$langMax</th>
 		</tr>\n";
-	while ($group = mysql_fetch_array($q)) {
-		if ($i % 2 == 0) {
-			$tool_content .= "<tr class='even'>\n";
-		} else {
-			$tool_content .= "<tr class='odd'>\n";
-		}
-		$tool_content .= "<td class='arrow'>
-			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group[id]'>".
-			q($group['name'])."</a></td>\n";
-		$tool_content .= "<td>".display_user(group_tutors($group['id']))."</td>\n";
-      		$tool_content .= "<td class='center'>$group[registered]</td>\n";
-		if ($group['max_members'] == 0) {
-			$tool_content .= "<td class='center'>-</td>\n";
-		} else {
-			$tool_content .= "<td class='center'>$group[max_members]</td>\n";
-		}
-    		$tool_content .= "</tr>\n";
-		$i++;
+    while ($group = mysql_fetch_array($q)) {
+        if ($i % 2 == 0) {
+            $tool_content .= "<tr class='even'>\n";
+        } else {
+            $tool_content .= "<tr class='odd'>\n";
         }
-        $tool_content .= "</table>\n";
+        $tool_content .= "<td class='arrow'>
+			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group[id]'>" .
+                q($group['name']) . "</a></td>\n";
+        $tool_content .= "<td>" . display_user(group_tutors($group['id'])) . "</td>\n";
+        $tool_content .= "<td class='center'>$group[registered]</td>\n";
+        if ($group['max_members'] == 0) {
+            $tool_content .= "<td class='center'>-</td>\n";
+        } else {
+            $tool_content .= "<td class='center'>$group[max_members]</td>\n";
+        }
+        $tool_content .= "</tr>\n";
+        $i++;
+    }
+    $tool_content .= "</table>\n";
 } else {
-	$tool_content .= "<p class='caution_small'>$langNoGroup</p>";
+    $tool_content .= "<p class='caution_small'>$langNoGroup</p>";
 }
 
 draw($tool_content, 2, null, $head_content);

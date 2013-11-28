@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class UnitIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class UnitIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a unit db row.
      * 
@@ -53,7 +54,7 @@ class UnitIndexer implements ResourceIndexerInterface {
     private static function makeDoc($unit) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unit_' . $unit['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $unit['id'], $encoding));
@@ -62,12 +63,12 @@ class UnitIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($unit['title']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit['comments'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $unit['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer 
-                .'modules/units/index.php?course='. course_id_to_code($unit['course_id']) . '&amp;id=' . $unit['id'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer
+                        . 'modules/units/index.php?course=' . course_id_to_code($unit['course_id']) . '&amp;id=' . $unit['id'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Unit from DB.
      * 
@@ -79,7 +80,7 @@ class UnitIndexer implements ResourceIndexerInterface {
         $unit = mysql_fetch_assoc($res);
         if (!$unit)
             return null;
-        
+
         return $unit;
     }
 
@@ -93,19 +94,19 @@ class UnitIndexer implements ResourceIndexerInterface {
         $unit = $this->fetch($unitId);
         if (!$unit)
             return;
-        
+
         // delete existing unit from index
         $this->remove($unitId, false, false);
 
         // add the unit back to the index
         $this->__index->addDocument(self::makeDoc($unit));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Unit from the Index.
      * 
@@ -119,18 +120,18 @@ class UnitIndexer implements ResourceIndexerInterface {
             if (!$unit)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('unit_' . $unitId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Units belonging to a Course.
      * 
@@ -142,16 +143,16 @@ class UnitIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the units back to the index
-        $res = db_query("SELECT * FROM course_units WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM course_units WHERE course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Units belonging to a Course.
      * 
@@ -162,13 +163,13 @@ class UnitIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:unit AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all units.
      * 
@@ -177,21 +178,21 @@ class UnitIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all units from index
         $term = new Zend_Search_Lucene_Index_Term('unit', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all units from db
         $res = db_query("SELECT * FROM course_units");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -200,19 +201,19 @@ class UnitIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'content:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:unit AND visible:1';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:unit AND visible:1';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

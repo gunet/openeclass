@@ -192,8 +192,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 mysql_free_result($result);
 
-$statsValueOptions =
-        '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
+$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
         '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
 
 $tool_content .= '

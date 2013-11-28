@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,63 +20,63 @@
 //
 // $Id$
 
-$text['title']          = 'Πληροφορίες συστήματος';
+$text['title'] = 'Πληροφορίες συστήματος';
 
-$text['vitals']         = 'Ζωτικές πληροφορίες';
-$text['hostname']       = 'Όνομα διακομιστή';
-$text['ip']             = 'Διεύθυνση IP';
-$text['kversion']       = 'Έκδοση πυρήνα';
-$text['uptime']         = 'Χρόνος λειτουργίας';
-$text['users']          = 'Τρέχοντες χρήστες';
-$text['loadavg']        = 'Φόρτος συστήματος';
+$text['vitals'] = 'Ζωτικές πληροφορίες';
+$text['hostname'] = 'Όνομα διακομιστή';
+$text['ip'] = 'Διεύθυνση IP';
+$text['kversion'] = 'Έκδοση πυρήνα';
+$text['uptime'] = 'Χρόνος λειτουργίας';
+$text['users'] = 'Τρέχοντες χρήστες';
+$text['loadavg'] = 'Φόρτος συστήματος';
 
-$text['hardware']       = 'Πληροφορίες υλικού';
-$text['numcpu']         = 'Αριθμός επεξεργαστών';
-$text['cpumodel']       = 'Τύπος επεξεργαστή';
-$text['mhz']            = 'Chip MHz';
-$text['cache']          = 'Cache Size';
-$text['bogomips']       = 'System Bogomips';
-$text['pci']            = 'Συσκευές PCI';
-$text['ide']            = 'Συσκευές IDE';
-$text['scsi']           = 'Συσκευές SCSI';
+$text['hardware'] = 'Πληροφορίες υλικού';
+$text['numcpu'] = 'Αριθμός επεξεργαστών';
+$text['cpumodel'] = 'Τύπος επεξεργαστή';
+$text['mhz'] = 'Chip MHz';
+$text['cache'] = 'Cache Size';
+$text['bogomips'] = 'System Bogomips';
+$text['pci'] = 'Συσκευές PCI';
+$text['ide'] = 'Συσκευές IDE';
+$text['scsi'] = 'Συσκευές SCSI';
 
-$text['netusage']       = 'Χρήση δικτύου';
-$text['device']         = 'Συσκευή';
-$text['received']       = 'Λήψη';
-$text['sent']           = 'Αποστολή';
-$text['errors']         = 'Σφάλματα';
+$text['netusage'] = 'Χρήση δικτύου';
+$text['device'] = 'Συσκευή';
+$text['received'] = 'Λήψη';
+$text['sent'] = 'Αποστολή';
+$text['errors'] = 'Σφάλματα';
 
-$text['connections']	= 'Ενεργές συνδέσεις δικτύου';
+$text['connections'] = 'Ενεργές συνδέσεις δικτύου';
 
-$text['memusage']       = 'Χρήση μνήμης';
-$text['phymem']         = 'Φυσική μνήμη';
-$text['swap']           = 'Μνήμη Swap';
+$text['memusage'] = 'Χρήση μνήμης';
+$text['phymem'] = 'Φυσική μνήμη';
+$text['swap'] = 'Μνήμη Swap';
 
-$text['fs']             = 'Συστήματα αρχείων';
-$text['mount']          = 'Mount';
-$text['partition']      = 'Partition';
+$text['fs'] = 'Συστήματα αρχείων';
+$text['mount'] = 'Mount';
+$text['partition'] = 'Partition';
 
-$text['percent']        = 'Ποσοστό χρήσης';
-$text['type']           = 'Τύπος';
-$text['free']           = 'Ελεύθερα';
-$text['used']           = 'Σε χρήση';
-$text['size']           = 'Μέγεθος';
-$text['totals']         = 'Σύνολα';
+$text['percent'] = 'Ποσοστό χρήσης';
+$text['type'] = 'Τύπος';
+$text['free'] = 'Ελεύθερα';
+$text['used'] = 'Σε χρήση';
+$text['size'] = 'Μέγεθος';
+$text['totals'] = 'Σύνολα';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'κανένα';
+$text['none'] = 'κανένα';
 
-$text['capacity']       = 'Χωρητικότητα';
+$text['capacity'] = 'Χωρητικότητα';
 
-$text['template']       = 'Template';
-$text['language']       = 'Γλώσσα';
-$text['submit']         = 'Υποβολή';
-$text['created']        = 'Δημιουργήθηκε από';
+$text['template'] = 'Template';
+$text['language'] = 'Γλώσσα';
+$text['submit'] = 'Υποβολή';
+$text['created'] = 'Δημιουργήθηκε από';
 
-$text['days']           = 'ημέρες';
-$text['hours']          = 'ώρες';
-$text['minutes']        = 'λεπτά';
+$text['days'] = 'ημέρες';
+$text['hours'] = 'ώρες';
+$text['minutes'] = 'λεπτά';
 ?>

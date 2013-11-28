@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,50 +20,50 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	detailsAll.php
-	@last update: 05-12-2006 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* ===========================================================================
+  detailsAll.php
+  @last update: 05-12-2006 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7 licensed under GPL
+  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-	      original file: tracking/learnPath_detailsAllPath.php Revision: 1.11
+  original file: tracking/learnPath_detailsAllPath.php Revision: 1.11
 
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Gioacchino Poletto <info@polettogioacchino.com>
-==============================================================================
-    @Description: This script displays the stats of all users of a course
-                  for his progression into the sum of all learning paths of
-                  the course
+  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+  Gioacchino Poletto <info@polettogioacchino.com>
+  ==============================================================================
+  @Description: This script displays the stats of all users of a course
+  for his progression into the sum of all learning paths of
+  the course
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
-$TABLELEARNPATH         = "lp_learnPath";
-$TABLECOURSUSER	        = "course_user";
-$TABLEUSER              = "user";
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLELEARNPATH = "lp_learnPath";
+$TABLECOURSUSER = "course_user";
+$TABLEUSER = "user";
+$TABLEMODULE = "lp_module";
+$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
+$TABLEASSET = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 require_once 'include/lib/learnPathLib.inc.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
-        $navigation[] = array('url' => '../usage/?course='.$course_code, 'name' => $langUsage);
-        $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
+    $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
+    $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
-        $navigation[] = array("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
-        $nameTools = $langTrackAllPathExplanation;
+    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
+    $nameTools = $langTrackAllPathExplanation;
 }
 
 // display a list of user and their respective progress
@@ -76,7 +77,7 @@ $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 $usersList = get_limited_list($sql, 30);
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
-        $tool_content .= "
+    $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
             <li><a href='../usage/favourite.php?course=$course_code&amp;first='>$langFavourite</a></li>
@@ -85,17 +86,17 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
             <li><a href='detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
             <li><a href='../usage/group.php?course=$course_code'>$langGroupUsage</a></li>
           </ul>
-        </div>";                
+        </div>";
 }
 
 // check if there are learning paths available
 $l = db_query("SELECT * FROM `$TABLELEARNPATH` WHERE course_id = $course_id");
-if ((mysql_num_rows($l) == 0)) {        
-	$tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
-	draw($tool_content, 2, null, $head_content);
-	exit;
+if ((mysql_num_rows($l) == 0)) {
+    $tool_content .= "<p class='alert1'>$langNoLearningPath</p>";
+    draw($tool_content, 2, null, $head_content);
+    exit;
 } else {
-        $tool_content .= "<div class='info'>
+    $tool_content .= "<div class='info'>
            <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
                 2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
           </div>";
@@ -115,43 +116,40 @@ $tool_content .= "
 
 // display tab content
 $k = 0;
-foreach ($usersList as $user)
-{
-	// list available learning paths
-	$sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $course_id";
+foreach ($usersList as $user) {
+    // list available learning paths
+    $sql = "SELECT LP.`learnPath_id` FROM `$mysqlMainDb`.lp_learnPath AS LP WHERE LP.`course_id` = $course_id";
 
-	$learningPathList = db_query_fetch_all($sql);
+    $learningPathList = db_query_fetch_all($sql);
 
-	$iterator = 1;
-	$globalprog = 0;
-	if ($k%2 == 0) {
-		$tool_content .= "  <tr class=\"even\">\n";
-	} else {
-		$tool_content .= "  <tr class=\"odd\">\n";
-	}
-	foreach($learningPathList as $learningPath)
-	{
-		// % progress
-		$prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
-		if ($prog >= 0)
-		{
-			$globalprog += $prog;
-		}
-		$iterator++;
-	}	
-		$total = round($globalprog/($iterator-1));
-		$tool_content .= '    <td width="1"><img src="'.$themeimg.'/arrow.png" alt=""></td>'."\n"
-		.'    <td><a href="detailsUser.php?course='.$course_code.'&amp;uInfo='.$user['id'].'">'.$user['surname'].' '.$user['givenname'].'</a></td>'."\n"
-		.'    <td class="center">'.q(uid_to_am($user['id'])).'</td>'."\n"
-		.'    <td align="center">'.user_groups($course_id, $user['id']).'</td>'."\n"
-		.'    <td class="right" width=\'120\'>'
-		.disp_progress_bar($total, 1)
-		.'</td>'."\n"
-		.'    <td align="left" width=\'10\'>'.$total.'%</td>'."\n"
-		.'</tr>'."\n";	
-	$k++;
+    $iterator = 1;
+    $globalprog = 0;
+    if ($k % 2 == 0) {
+        $tool_content .= "  <tr class=\"even\">\n";
+    } else {
+        $tool_content .= "  <tr class=\"odd\">\n";
+    }
+    foreach ($learningPathList as $learningPath) {
+        // % progress
+        $prog = get_learnPath_progress($learningPath['learnPath_id'], $user['id']);
+        if ($prog >= 0) {
+            $globalprog += $prog;
+        }
+        $iterator++;
+    }
+    $total = round($globalprog / ($iterator - 1));
+    $tool_content .= '    <td width="1"><img src="' . $themeimg . '/arrow.png" alt=""></td>' . "\n"
+            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user['id'] . '">' . $user['surname'] . ' ' . $user['givenname'] . '</a></td>' . "\n"
+            . '    <td class="center">' . q(uid_to_am($user['id'])) . '</td>' . "\n"
+            . '    <td align="center">' . user_groups($course_id, $user['id']) . '</td>' . "\n"
+            . '    <td class="right" width=\'120\'>'
+            . disp_progress_bar($total, 1)
+            . '</td>' . "\n"
+            . '    <td align="left" width=\'10\'>' . $total . '%</td>' . "\n"
+            . '</tr>' . "\n";
+    $k++;
 }
 // foot of table
-$tool_content .= '</table>'."\n\n";
+$tool_content .= '</table>' . "\n\n";
 
 draw($tool_content, 2, null, $head_content);

@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,61 +20,61 @@
 //
 // $Id$
 
-$text['title']          = 'Informace o systému';
+$text['title'] = 'Informace o systému';
 
-$text['vitals']         = 'Zásadní informace';
-$text['hostname']       = 'Jméno počítače';
-$text['ip']             = 'IP adresa';
-$text['kversion']       = 'Verze jádra';
-$text['uptime']         = 'Uptime';
-$text['users']          = 'Přihlášených uživatelů';
-$text['loadavg']        = 'Průměru loadu';
+$text['vitals'] = 'Zásadní informace';
+$text['hostname'] = 'Jméno počítače';
+$text['ip'] = 'IP adresa';
+$text['kversion'] = 'Verze jádra';
+$text['uptime'] = 'Uptime';
+$text['users'] = 'Přihlášených uživatelů';
+$text['loadavg'] = 'Průměru loadu';
 
-$text['hardware']       = 'Hardwarové informace';
-$text['numcpu']         = 'Procesory';
-$text['cpumodel']       = 'Model';
-$text['mhz']            = 'Frekvence';
-$text['cache']          = 'Velikost cache';
-$text['bogomips']       = 'Bogomipsy';
-$text['pci']            = 'PCI zařízení';
-$text['ide']            = 'IDE zařízení';
-$text['scsi']           = 'SCSI zařízení';
+$text['hardware'] = 'Hardwarové informace';
+$text['numcpu'] = 'Procesory';
+$text['cpumodel'] = 'Model';
+$text['mhz'] = 'Frekvence';
+$text['cache'] = 'Velikost cache';
+$text['bogomips'] = 'Bogomipsy';
+$text['pci'] = 'PCI zařízení';
+$text['ide'] = 'IDE zařízení';
+$text['scsi'] = 'SCSI zařízení';
 
-$text['netusage']       = 'Používání sítě';
-$text['device']         = 'Zařízení';
-$text['received']       = 'Přijato';
-$text['sent']           = 'Odesláno';
-$text['errors']         = 'Chyby/Vypuštěno';
+$text['netusage'] = 'Používání sítě';
+$text['device'] = 'Zařízení';
+$text['received'] = 'Přijato';
+$text['sent'] = 'Odesláno';
+$text['errors'] = 'Chyby/Vypuštěno';
 
-$text['memusage']       = 'Obsazení paměti';
-$text['phymem']         = 'Fyzická paměť';
-$text['swap']           = 'Swap';
+$text['memusage'] = 'Obsazení paměti';
+$text['phymem'] = 'Fyzická paměť';
+$text['swap'] = 'Swap';
 
-$text['fs']             = 'Namountované souborové systémy';
-$text['mount']          = 'Adresář';
-$text['partition']      = 'Partition';
+$text['fs'] = 'Namountované souborové systémy';
+$text['mount'] = 'Adresář';
+$text['partition'] = 'Partition';
 
-$text['percent']        = 'Obsazeno';
-$text['type']           = 'Typ';
-$text['free']           = 'Volno';
-$text['used']           = 'Použito';
-$text['size']           = 'Velikost';
-$text['totals']         = 'Celkem';
+$text['percent'] = 'Obsazeno';
+$text['type'] = 'Typ';
+$text['free'] = 'Volno';
+$text['used'] = 'Použito';
+$text['size'] = 'Velikost';
+$text['totals'] = 'Celkem';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'žádná';
+$text['none'] = 'žádná';
 
-$text['capacity']       = 'Kapacita';
+$text['capacity'] = 'Kapacita';
 
-$text['template']       = 'Šablona';
-$text['language']       = 'Jazyk';
-$text['submit']         = 'Odeslat';
-$text['created']        = 'Vytvořeno pomocí';
+$text['template'] = 'Šablona';
+$text['language'] = 'Jazyk';
+$text['submit'] = 'Odeslat';
+$text['created'] = 'Vytvořeno pomocí';
 
-$text['days']           = 'dnů';
-$text['hours']          = 'hodin';
-$text['minutes']        = 'minut';
+$text['days'] = 'dnů';
+$text['hours'] = 'hodin';
+$text['minutes'] = 'minut';
 ?>

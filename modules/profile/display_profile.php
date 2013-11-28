@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -34,13 +35,13 @@ $nameTools = $langUserProfile;
 $userdata = array();
 
 if (isset($_GET['id']) and isset($_GET['token'])) {
-        $id = intval($_GET['id']);
-        if (!token_validate($id, $_GET['token'], 3600)) {
-            forbidden($_SERVER['REQUEST_URI']);
-        }
+    $id = intval($_GET['id']);
+    if (!token_validate($id, $_GET['token'], 3600)) {
+        forbidden($_SERVER['REQUEST_URI']);
+    }
 } else {
-        $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
-        $id = $uid;
+    $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
+    $id = $uid;
 }
 
 $userdata = db_query_get_single_row("SELECT user.surname, user.givenname, user.email, user.phone, user.am,
@@ -49,20 +50,19 @@ $userdata = db_query_get_single_row("SELECT user.surname, user.givenname, user.e
                                         FROM user
                                         WHERE user.id = $id");
 
-if ($userdata !== false)
-{
+if ($userdata !== false) {
     $tool_content .= "<table class='tbl'>
             <tr>
                 <td>" . profile_image($id, IMAGESIZE_LARGE, !$userdata['has_icon']) . "</td>
                 <td><b>" . q("$userdata[givenname] $userdata[surname]") . "</b><br>";
     if (!empty($userdata['email']) and allow_access($userdata['email_public'])) {
-            $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
+        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata['email']) . "<br>";
     }
     if (!empty($userdata['am']) and allow_access($userdata['am_public'])) {
-            $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
+        $tool_content .= "<b>$langAm:</b> " . q($userdata['am']) . "<br>";
     }
     if (!empty($userdata['phone']) and allow_access($userdata['phone_public'])) {
-            $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
+        $tool_content .= "<b>$langPhone:</b> " . q($userdata['phone']) . "<br>";
     }
     $tool_content .= "<b>$langFaculty:</b> ";
 
@@ -76,22 +76,21 @@ if ($userdata !== false)
 
     $tool_content .= "<br>";
     if (!empty($userdata['description'])) {
-            $tool_content .= standard_text_escape($userdata['description']);
+        $tool_content .= standard_text_escape($userdata['description']);
     }
     $tool_content .= "</td></tr></table>";
 }
 
 draw($tool_content, 1);
 
-function allow_access($level)
-{
-        global $uid, $status;
+function allow_access($level) {
+    global $uid, $status;
 
-        if ($level == ACCESS_USERS and $uid > 0) {
-                return true;
-        } elseif ($level == ACCESS_PROFS and $status = 1) {
-                return true;
-        } else {
-                return false;
-        }
+    if ($level == ACCESS_USERS and $uid > 0) {
+        return true;
+    } elseif ($level == ACCESS_PROFS and $status = 1) {
+        return true;
+    } else {
+        return false;
+    }
 }

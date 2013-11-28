@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -31,18 +32,18 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/units/functions.php';
 
 $tool_content = $head_content = "";
-$nameTools = $langEditCourseProgram ;
-$navigation[] = array ('url' => 'index.php?course='.$course_code, 'name' => $langCourseProgram);
+$nameTools = $langEditCourseProgram;
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 mysql_select_db($mysqlMainDb);
 
 if (isset($_POST['submit'])) {
-        $unit_id = description_unit_id($course_id);
-        add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
-        // update index
-        require_once 'modules/search/courseindexer.class.php';
-        $idx = new CourseIndexer();
-        $idx->store($course_id);
+    $unit_id = description_unit_id($course_id);
+    add_unit_resource($unit_id, 'description', -1, $langDescription, trim(autounquote($_POST['description'])));
+    // update index
+    require_once 'modules/search/courseindexer.class.php';
+    $idx = new CourseIndexer();
+    $idx->store($course_id);
 }
 
 $description = '';
@@ -50,17 +51,17 @@ $unit_id = description_unit_id($course_id);
 $q = db_query("SELECT id, res_id, comments FROM unit_resources WHERE unit_id = $unit_id
                       AND (res_id < 0 OR `order` < 0)");
 if ($q and mysql_num_rows($q) > 0) {
-        while ($row = mysql_fetch_array($q)) {
-                if ($row['res_id'] == -1) {
-                        $description = $row['comments'];
-                } else {
-                        $new_order = add_unit_resource_max_order($unit_id);
-                        $new_res_id = new_description_res_id($unit_id);
-                        db_query("UPDATE unit_resources SET
+    while ($row = mysql_fetch_array($q)) {
+        if ($row['res_id'] == -1) {
+            $description = $row['comments'];
+        } else {
+            $new_order = add_unit_resource_max_order($unit_id);
+            $new_res_id = new_description_res_id($unit_id);
+            db_query("UPDATE unit_resources SET
                                          res_id = $new_res_id, visibility = 'v', `order` = $new_order
                                   WHERE id = $row[id]");
-                }
         }
+    }
 }
 
 $tool_content = "

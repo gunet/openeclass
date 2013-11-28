@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class AnnouncementIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of an announcement db row.
      * 
@@ -53,7 +54,7 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
     private static function makeDoc($announce) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'announce_' . $announce['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce['id'], $encoding));
@@ -62,11 +63,11 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce['title']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce['content'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('visible', $announce['visible'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer .'modules/announcements/index.php?course='. course_id_to_code($announce['course_id']) . '&amp;an_id=' . $announce['id'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/announcements/index.php?course=' . course_id_to_code($announce['course_id']) . '&amp;an_id=' . $announce['id'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch an Announcement from DB.
      * 
@@ -78,7 +79,7 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $announce = mysql_fetch_assoc($res);
         if (!$announce)
             return null;
-        
+
         return $announce;
     }
 
@@ -92,19 +93,19 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $announce = $this->fetch($announceId);
         if (!$announce)
             return;
-        
+
         // delete existing announcement from index
         $this->remove($announceId, false, false);
 
         // add the announcement back to the index
         $this->__index->addDocument(self::makeDoc($announce));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove an Announcement from the Index.
      * 
@@ -118,18 +119,18 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
             if (!$announce)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('announce_' . $announceId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Announcements belonging to a Course.
      * 
@@ -141,16 +142,16 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the announcements back to the index
-        $res = db_query("SELECT * FROM announcement WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM announcement WHERE course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Announcements belonging to a Course.
      * 
@@ -161,13 +162,13 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:announce AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all announcements.
      * 
@@ -176,21 +177,21 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all announcements from index
         $term = new Zend_Search_Lucene_Index_Term('announce', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all announcements from db
         $res = db_query("SELECT * FROM announcement");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -199,19 +200,19 @@ class AnnouncementIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'content:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:announce AND visible:1';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:announce AND visible:1';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

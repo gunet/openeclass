@@ -2,8 +2,8 @@
 
 // From http://htmlpurifier.org/phorum/read.php?3,4646,4646
 
-class HTMLPurifier_Filter_MyIframe extends HTMLPurifier_Filter
-{
+class HTMLPurifier_Filter_MyIframe extends HTMLPurifier_Filter {
+
     public $name = 'MyIframe';
 
     public function preFilter($html, $config, $context) {
@@ -16,7 +16,7 @@ class HTMLPurifier_Filter_MyIframe extends HTMLPurifier_Filter
     }
 
     protected function postFilterCallback($matches) {
-        return '<iframe '.$matches[1].'></iframe>';
+        return '<iframe ' . $matches[1] . '></iframe>';
     }
-}
 
+}

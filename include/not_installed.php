@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -18,13 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/** 
+/**
  * @file not_installed.php 
  * @author Evelthon Prodromou <eprodromou@upnet.gr> 
  * @abstract Outputs a message to the user's browser to inform him/her that eclass
  * is not installed. 
  */
-
 $tool_content = "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\">

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -29,36 +30,36 @@
  */
 
 if (isset($_SESSION['uid']) && isset($_GET['perso'])) {
-	$perso = $_GET['perso'];
-	$c = $_GET['c'];
-	$_SESSION['dbname'] = $c;
-	switch ($perso){
-		case 1: { //assignments
-			$i = intval($_GET['i']);
-			$url = 'modules/work/index.php?id=' . $i;
-			break;
-		}
-		case 2: { //announcements
-			$url = 'modules/announcements/index.php';
-			break;
-		}
-		case 4: { //agenda
-			$url = 'modules/agenda/index.php';
-			break;
-		}
-		case 5: { //forum
-			$url = "modules/forum/viewtopic.php?topic=" .
-			       intval($_GET['t']) . "&forum=" .
-			       intval($_GET['f']) . "&sub=" .
-			       intval($_GET['s']);
-			break;
-		}
-		case 6: { //documents
-			$url = "modules/document/index.php?openDir=" . $_GET['p'];
-			break;
-		}
-	}
-	redirect_to_home_page($url);
+    $perso = $_GET['perso'];
+    $c = $_GET['c'];
+    $_SESSION['dbname'] = $c;
+    switch ($perso) {
+        case 1: { //assignments
+                $i = intval($_GET['i']);
+                $url = 'modules/work/index.php?id=' . $i;
+                break;
+            }
+        case 2: { //announcements
+                $url = 'modules/announcements/index.php';
+                break;
+            }
+        case 4: { //agenda
+                $url = 'modules/agenda/index.php';
+                break;
+            }
+        case 5: { //forum
+                $url = "modules/forum/viewtopic.php?topic=" .
+                        intval($_GET['t']) . "&forum=" .
+                        intval($_GET['f']) . "&sub=" .
+                        intval($_GET['s']);
+                break;
+            }
+        case 6: { //documents
+                $url = "modules/document/index.php?openDir=" . $_GET['p'];
+                break;
+            }
+    }
+    redirect_to_home_page($url);
 } elseif (!isset($_SESSION['uid'])) {
-	die("UNAUTHORISED ACCESS. THIS IS AN INTERNAL SCRIPT AND CANNOT BE ACCESSED DIRECTLY. Please go back to <a href=\"$urlServer\">the login page</a>");
+    die("UNAUTHORISED ACCESS. THIS IS AN INTERNAL SCRIPT AND CANNOT BE ACCESSED DIRECTLY. Please go back to <a href=\"$urlServer\">the login page</a>");
 }

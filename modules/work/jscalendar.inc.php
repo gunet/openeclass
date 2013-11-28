@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -18,21 +19,21 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*============================================================================
-	jscalendar.inc.php
-	@last update: 19-10-2006 by Dionysios G. Synodinos
-	@authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-==============================================================================
-    @Description: Library for the pop-up calendar
+/* ============================================================================
+  jscalendar.inc.php
+  @last update: 19-10-2006 by Dionysios G. Synodinos
+  @authors list: Dionysios G. Synodinos <synodinos@gmail.com>
+  ==============================================================================
+  @Description: Library for the pop-up calendar
 
 
- 		@Comments: For this to work you need to add:
+  @Comments: For this to work you need to add:
 
-		1.) draw($tool_content, 2, '', $local_head, '');
-		2.) $tool_content .=  "<form method=\"post\"><tr><td>ΗΜΕΡΟΜΗΝΙΑ</td><td>".$start_cal."</td></tr></form>";
+  1.) draw($tool_content, 2, '', $local_head, '');
+  2.) $tool_content .=  "<form method=\"post\"><tr><td>ΗΜΕΡΟΜΗΝΙΑ</td><td>".$start_cal."</td></tr></form>";
 
 
-==============================================================================*/
+  ============================================================================== */
 
 $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
@@ -41,32 +42,29 @@ $local_style = '
 
 require_once 'include/jscalendar/calendar.php';
 
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content = $jscalendar->get_load_files_code();
 
 $u_date_end = strftime('%Y-%m-%d %H:%M', strtotime('now +2 month'));
 
 $end_cal_Work = $jscalendar->make_input_field(
-           array('showsTime'      => true,
-                 'showOthers'     => true,
-                 'ifFormat'       => '%Y-%m-%d %H:%M',
-                 'timeFormat'     => '24'),
-           array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
-                 'name'        => 'WorkEnd',
-                 'value'       => $u_date_end));
+        array('showsTime' => true,
+    'showOthers' => true,
+    'ifFormat' => '%Y-%m-%d %H:%M',
+    'timeFormat' => '24'), array('style' => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
+    'name' => 'WorkEnd',
+    'value' => $u_date_end));
 
 function getJsDeadline($deadline) {
-	global $language, $lang, $jscalendar, $head_content;
+    global $language, $lang, $jscalendar, $head_content;
 
-	$end_cal_Work_db = $jscalendar->make_input_field(
-  	array('showsTime'      => true,
-    	'showOthers'     => true,
-      'ifFormat'       => '%Y-%m-%d %H:%M',
-      'timeFormat'     => '24'),
-    array('style'       => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
-    	'name'        => 'WorkEnd',
-      'value'       => $deadline));
+    $end_cal_Work_db = $jscalendar->make_input_field(
+            array('showsTime' => true,
+        'showOthers' => true,
+        'ifFormat' => '%Y-%m-%d %H:%M',
+        'timeFormat' => '24'), array('style' => 'width: 100px; color: #840; font-weight:bold; font-size:10px; background-color: #fff; border: 1px dotted #000; text-align: center',
+        'name' => 'WorkEnd',
+        'value' => $deadline));
 
-	return $end_cal_Work_db;
-
+    return $end_cal_Work_db;
 }

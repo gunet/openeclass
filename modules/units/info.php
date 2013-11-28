@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,8 +20,8 @@
  * ======================================================================== */
 
 /*
-Units module
-*/
+  Units module
+ */
 
 $require_current_course = true;
 $require_editor = true;
@@ -33,21 +34,21 @@ $nameTools = $langEditUnit;
 load_js('tools.js');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
-        $id = intval($_GET['edit']);
-        $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
-        $cu = mysql_fetch_array($sql);
-        $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";
-        $unitdescr = $cu['comments'];
-        $unit_id = $cu['id'];
+    $id = intval($_GET['edit']);
+    $sql = db_query("SELECT id, title, comments FROM course_units WHERE id='$id'");
+    $cu = mysql_fetch_array($sql);
+    $unittitle = " value='" . htmlspecialchars($cu['title'], ENT_QUOTES) . "'";
+    $unitdescr = $cu['comments'];
+    $unit_id = $cu['id'];
 } else {
-        $nameTools = $langAddUnit;
-        $unitdescr = $unittitle = '';
+    $nameTools = $langAddUnit;
+    $unitdescr = $unittitle = '';
 }
 
 if (isset($_GET['next'])) {
-        $action = "index.php?course=$course_code&amp;id=$unit_id";
+    $action = "index.php?course=$course_code&amp;id=$unit_id";
 } else {
-        $action = "${urlServer}courses/$course_code/";
+    $action = "${urlServer}courses/$course_code/";
 }
 
 $tool_content .= "
@@ -55,7 +56,7 @@ $tool_content .= "
     <fieldset>
     <legend>$nameTools</legend>";
 if (isset($unit_id)) {
-        $tool_content .= "
+    $tool_content .= "
     <input type='hidden' name='unit_id' value='$unit_id'>";
 }
 $tool_content .= "
@@ -70,7 +71,7 @@ $tool_content .= "
       <th valign='top'>$langUnitDescr:</th>
     </tr>
     <tr>
-      <td>".rich_text_editor('unitdescr', 4, 20, $unitdescr)."</td>
+      <td>" . rich_text_editor('unitdescr', 4, 20, $unitdescr) . "</td>
     </tr>
     <tr>
       <td class='right'><input type='submit' name='edit_submit' value='$langSubmit'></td>

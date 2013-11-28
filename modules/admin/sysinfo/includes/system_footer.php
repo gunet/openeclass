@@ -22,11 +22,11 @@
 echo "<center>";
 
 $update_form = "<form method=\"POST\" action=\"$PHP_SELF\">\n"
-             . "\t" . $text['template'] . ":&nbsp;\n"
-             . "\t<select name=\"template\">\n";
+        . "\t" . $text['template'] . ":&nbsp;\n"
+        . "\t<select name=\"template\">\n";
 
 $dir = opendir('templates/');
-while (($file = readdir($dir))!=false) {
+while (($file = readdir($dir)) != false) {
     if ($file != 'CVS' && $file != '.' && $file != '..') {
         if ($template == $file) {
             $update_form .= "\t\t<option value=\"$file\" SELECTED>$file</option>\n";
@@ -40,10 +40,10 @@ $update_form .= "\t</select>\n";
 
 
 $update_form .= "\t&nbsp;" . $text['language'] . ":&nbsp;\n"
-             . "\t<select name=\"lng\">\n";
+        . "\t<select name=\"lng\">\n";
 
 $dir = opendir('includes/lang/');
-while (($file = readdir($dir))!=false) {
+while (($file = readdir($dir)) != false) {
     if ($file != 'CVS' && $file != '.' && $file != '..') {
         $file = str_replace('.php', '', $file);
         if ($lng == $file) {
@@ -57,8 +57,8 @@ closedir($dir);
 
 
 $update_form .= "\t</select>\n"
-              . "\t<input type=\"submit\" value=\"" . $text['submit']."\">\n"
-              . "</form>\n";
+        . "\t<input type=\"submit\" value=\"" . $text['submit'] . "\">\n"
+        . "</form>\n";
 
 print $update_form;
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,8 +23,6 @@
  * @file group_usage.php
  * @brief Groups usage / statistics
  */
-
-
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
@@ -35,47 +34,47 @@ require_once 'modules/usage/duration_query.php';
 $group_id = intval($_REQUEST['group_id']);
 
 if (isset($_GET['module']) and $_GET['module'] == 'usage') {
-        $navigation[] = array('url' => '../usage/?course='.$course_code, 'name'=> $langUsage);
-        $navigation[] = array('url' => '../usage/group.php?course='.$course_code, 'name'=> $langGroupUsage);
-        $module = 'module=usage&amp;';
+    $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
+    $navigation[] = array('url' => '../usage/group.php?course=' . $course_code, 'name' => $langGroupUsage);
+    $module = 'module=usage&amp;';
 } else {
-        $navigation[] = array('url' => 'index.php?course='.$course_code, 'name'=> $langGroupSpace);
-        $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name'=> $langGroupSpace);
-        $module = '';
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroupSpace);
+    $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => $langGroupSpace);
+    $module = '';
 }
 
 initialize_group_info($group_id);
 
 if (!$is_editor and !$is_tutor) {
-        header('Location: group_space.php?course='.$course_code.'&group_id=' . $group_id);
-        exit;
+    header('Location: group_space.php?course=' . $course_code . '&group_id=' . $group_id);
+    exit;
 }
 
 $nameTools = $group_name;
 
 $type = 'duration';
 if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits', 'lp'))) {
-        $type = $_GET['type'];
+    $type = $_GET['type'];
 }
 
 $head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 
-$base = $_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
+$base = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
 
-function link_current($title, $this_type)
-{
-        global $type, $base;
-        if ($type == $this_type) {
-                return "<li><b>$title</b></li>";
-        } else {
-                return "<li><a href='$base$this_type'>$title</a></li>";
-        }
+function link_current($title, $this_type) {
+    global $type, $base;
+    if ($type == $this_type) {
+        return "<li><b>$title</b></li>";
+    } else {
+        return "<li><a href='$base$this_type'>$title</a></li>";
+    }
 }
+
 if (isset($_POST['u_date_start']) and isset($_POST['u_date_end'])) {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
+    $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
 	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
 } else {
-	$link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id'>$langCodeUTF</a>
+    $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id'>$langCodeUTF</a>
 	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&enc=1253'>$langCodeWin</a>)</li>";
 }
 
@@ -92,57 +91,53 @@ $local_style = '
     .content {position: relative; left: 25px; }';
 
 if ($type == 'duration') {
-        $label = $langDuration;
-        require_once 'include/jscalendar/calendar.php';
-        $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/',
-                                         langname_to_code($language),
-                                         'calendar-blue2', false);
-        $head_content .= $jscalendar->get_load_files_code();
+    $label = $langDuration;
+    require_once 'include/jscalendar/calendar.php';
+    $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', langname_to_code($language), 'calendar-blue2', false);
+    $head_content .= $jscalendar->get_load_files_code();
 
-        list($min_date) = mysql_fetch_row(db_query('SELECT MIN(day) FROM actions_daily', $course_code));
+    list($min_date) = mysql_fetch_row(db_query('SELECT MIN(day) FROM actions_daily', $course_code));
 
-        if (isset($_POST['u_date_start']) and
+    if (isset($_POST['u_date_start']) and
             isset($_POST['u_date_end'])) {
-		$u_date_start = autounquote($_POST['u_date_start']);
-                $u_date_end = autounquote($_POST['u_date_end']);
-        } else {
-                $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
-                $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
-        }
+        $u_date_start = autounquote($_POST['u_date_start']);
+        $u_date_end = autounquote($_POST['u_date_end']);
+    } else {
+        $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
+        $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
+    }
 
-        // date range form
-        $style = 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center';
-        $start_cal = $jscalendar->make_input_field(
-                        array('showsTime' => false,
-                              'showOthers' => true,
-                              'ifFormat' => '%Y-%m-%d',
-                              'timeFormat' => '24'),
-                        array('style' => $style,
-                              'name' => 'u_date_start',
-                              'value' => $u_date_start));
-        $end_cal = $jscalendar->make_input_field(
-                        array('showsTime' => false,
-                                'showOthers' => true,
-                                'ifFormat' => '%Y-%m-%d',
-                                'timeFormat' => '24'),
-                        array('style' => $style,
-                              'name' => 'u_date_end',
-                              'value' => $u_date_end));
-        $tool_content .= '<form method="post" action="' . $base . $type .
-                '"><table class="FormData" align="left">' .
-                "<tr><th class='left'>$langStartDate:</th>" .
-                "<td>$start_cal</td></tr>" .
-                "<tr><th class='left'>$langEndDate:</th>" .
-                "<td>$end_cal</td></tr>" .
-                '<tr><th class="left">&nbsp;</th>' .
-                "<td><input type='submit' name='submit' value='$langSubmit' />" .
-                '</td></tr></table></form>';
+    // date range form
+    $style = 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center';
+    $start_cal = $jscalendar->make_input_field(
+            array('showsTime' => false,
+        'showOthers' => true,
+        'ifFormat' => '%Y-%m-%d',
+        'timeFormat' => '24'), array('style' => $style,
+        'name' => 'u_date_start',
+        'value' => $u_date_start));
+    $end_cal = $jscalendar->make_input_field(
+            array('showsTime' => false,
+        'showOthers' => true,
+        'ifFormat' => '%Y-%m-%d',
+        'timeFormat' => '24'), array('style' => $style,
+        'name' => 'u_date_end',
+        'value' => $u_date_end));
+    $tool_content .= '<form method="post" action="' . $base . $type .
+            '"><table class="FormData" align="left">' .
+            "<tr><th class='left'>$langStartDate:</th>" .
+            "<td>$start_cal</td></tr>" .
+            "<tr><th class='left'>$langEndDate:</th>" .
+            "<td>$end_cal</td></tr>" .
+            '<tr><th class="left">&nbsp;</th>' .
+            "<td><input type='submit' name='submit' value='$langSubmit' />" .
+            '</td></tr></table></form>';
 } elseif ($type == 'lp') {
-        $label = $langProgress;
-        // list available learning paths
-        $learningPathList = db_query_fetch_all("SELECT learnPath_id FROM `$course_code`.lp_learnPath");
+    $label = $langProgress;
+    // list available learning paths
+    $learningPathList = db_query_fetch_all("SELECT learnPath_id FROM `$course_code`.lp_learnPath");
 } else {
-        $label = '?';
+    $label = '?';
 }
 
 $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
@@ -155,41 +150,41 @@ $tool_content .= "<table class='FormData sortable' width='100%' id='a'>
 
 $i = 0;
 if ($type == 'duration') {
-        $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);        
-} else {    
-        $result = db_query("SELECT user_id AS id FROM group_members WHERE group_id = $group_id");
+    $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
+} else {
+    $result = db_query("SELECT user_id AS id FROM group_members WHERE group_id = $group_id");
 }
 if ($result) {
-        while ($row = mysql_fetch_array($result)) {
-                $user_id = $row['id'];
-                if ($i%2 == 0) {
-                        $tool_content .= "<tr>";
-                } else {
-                        $tool_content .= "<tr class='odd'>";
-                }
-                $i++;
-                if ($type == 'duration') {
-                	$value = format_time_duration(0 + $row['duration']);
-                        $sortkey = $row['duration'];
-                        $name = $row['surname'] . ' ' .$row['givenname'];
-                        $am = $row['am'];
-                } elseif ($type == 'lp') {
-			$name = uid_to_name($user_id);
-                        $am = uid_to_am($user_id);
-                        $iterator = 0;
-                        $progress = 0;
-                        mysql_select_db($course_code);
-                        foreach ($learningPathList as $learningPath) {
-                                $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
-                                $iterator++;
-                        }
-                        $total = round($progress / $iterator);
-                        $sortkey = $total;
-                        $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
-                }
-                $tool_content .= "<td width='30%'>".q($name)."</td><td width='30%'>".q($am)."</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
+    while ($row = mysql_fetch_array($result)) {
+        $user_id = $row['id'];
+        if ($i % 2 == 0) {
+            $tool_content .= "<tr>";
+        } else {
+            $tool_content .= "<tr class='odd'>";
         }
-        $tool_content .= "</tbody></table>";
+        $i++;
+        if ($type == 'duration') {
+            $value = format_time_duration(0 + $row['duration']);
+            $sortkey = $row['duration'];
+            $name = $row['surname'] . ' ' . $row['givenname'];
+            $am = $row['am'];
+        } elseif ($type == 'lp') {
+            $name = uid_to_name($user_id);
+            $am = uid_to_am($user_id);
+            $iterator = 0;
+            $progress = 0;
+            mysql_select_db($course_code);
+            foreach ($learningPathList as $learningPath) {
+                $progress += get_learnPath_progress($learningPath['learnPath_id'], $user_id);
+                $iterator++;
+            }
+            $total = round($progress / $iterator);
+            $sortkey = $total;
+            $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
+        }
+        $tool_content .= "<td width='30%'>" . q($name) . "</td><td width='30%'>" . q($am) . "</td><td align='center'>$group_name</td><td sorttable_customkey='$sortkey'>$value</td></tr>";
+    }
+    $tool_content .= "</tbody></table>";
 }
 
 draw($tool_content, 2, null, $head_content);

@@ -20,19 +20,19 @@
  * ======================================================================== */
 
 
-/**===========================================================================
-	document.inc.php
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* * ===========================================================================
+  document.inc.php
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7 licensed under GPL
+  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-	      original file: insertMyExercise.php Revision: 1.9.2.2
+  original file: insertMyExercise.php Revision: 1.9.2.2
 
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-==============================================================================
-*/
+  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+  Lederer Guillaume <led@cerdecam.be>
+  ==============================================================================
+ */
 
 /**
  * CLAROLINE
@@ -55,19 +55,19 @@ $TABLEDOCUMENT = "document";
 
 // Update infos about asset
 $sql = "SELECT `path`
-         FROM `".$TABLEASSET."`
-        WHERE `module_id` = ". (int)$_SESSION['lp_module_id'];
+         FROM `" . $TABLEASSET . "`
+        WHERE `module_id` = " . (int) $_SESSION['lp_module_id'];
 $assetPath = db_query_get_single_value($sql, $mysqlMainDb);
 
 $sql = "SELECT `filename`
-         FROM `".$TABLEDOCUMENT."`
-        WHERE `path` LIKE \"" .addslashes($assetPath) ."\"";
+         FROM `" . $TABLEDOCUMENT . "`
+        WHERE `path` LIKE \"" . addslashes($assetPath) . "\"";
 $fileName = db_query_get_single_value($sql, $mysqlMainDb);
 
 $baseServDir = $webDir;
-$courseDir = "courses/".$course_code."/document";
-$baseWorkDir = $baseServDir.$courseDir;
-$file = $baseWorkDir.$assetPath;
+$courseDir = "courses/" . $course_code . "/document";
+$baseWorkDir = $baseServDir . $courseDir;
+$file = $baseWorkDir . $assetPath;
 $fileSize = format_file_size(filesize($file));
 $fileDate = nice_format(date('Y-m-d', filectime($file)));
 
@@ -75,21 +75,21 @@ $fileDate = nice_format(date('Y-m-d', filectime($file)));
 //####################################################################################\\
 //######################## DISPLAY DETAILS ABOUT THE DOCUMENT ########################\\
 //####################################################################################\\
-$tool_content .= "\n\n".'<hr noshade="noshade" size="1" />'."\n\n"
-	.'<h4>'.$langDocumentInModule.'</h4>'."\n\n"
-	.'<table width="99%">'."\n"
-	.'<thead>'."\n"
-	.'<tr>'."\n"
-	.'<th>'.$langFileName.'</th>'."\n"
-    .'<th>'.$langSize.'</th>'."\n"
-    .'<th>'.$langDate.'</th>'."\n"
-	.'</tr>'."\n"
-	.'</thead>'."\n"
-	.'<tbody>'."\n"
-	.'<tr align="center">'."\n"
-	.'<td align="left">'.$fileName.'</td>'."\n"
-    .'<td>'.$fileSize.'</td>'."\n"
-    .'<td>'.$fileDate.'</td>'."\n"
-	.'</tr>'."\n"
-	.'</tbody>'."\n"
-	.'</table>'."\n";
+$tool_content .= "\n\n" . '<hr noshade="noshade" size="1" />' . "\n\n"
+        . '<h4>' . $langDocumentInModule . '</h4>' . "\n\n"
+        . '<table width="99%">' . "\n"
+        . '<thead>' . "\n"
+        . '<tr>' . "\n"
+        . '<th>' . $langFileName . '</th>' . "\n"
+        . '<th>' . $langSize . '</th>' . "\n"
+        . '<th>' . $langDate . '</th>' . "\n"
+        . '</tr>' . "\n"
+        . '</thead>' . "\n"
+        . '<tbody>' . "\n"
+        . '<tr align="center">' . "\n"
+        . '<td align="left">' . $fileName . '</td>' . "\n"
+        . '<td>' . $fileSize . '</td>' . "\n"
+        . '<td>' . $fileDate . '</td>' . "\n"
+        . '</tr>' . "\n"
+        . '</tbody>' . "\n"
+        . '</table>' . "\n";

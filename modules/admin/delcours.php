@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,36 +20,36 @@
  * ======================================================================== */
 
 
-/**===========================================================================
-	delcours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Delete a course
+/* * ===========================================================================
+  delcours.php
+  @last update: 31-05-2006 by Pitsiougas Vagelis
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Delete a course
 
- 	This script allows the administrator to delete a course
+  This script allows the administrator to delete a course
 
- 	The user can : - Confirm for course deletion
- 	               - Delete a cours
-                 - Return to course list
+  The user can : - Confirm for course deletion
+  - Delete a cours
+  - Return to course list
 
- 	@Comments: The script is organised in three sections.
+  @Comments: The script is organised in three sections.
 
   1) Confirm course deletion
   2) Delete course
   3) Display all on an HTML page
 
-==============================================================================*/
+  ============================================================================== */
 
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
 
-if(isset($_GET['c'])) {
-	$course_id = intval($_GET['c']);
+if (isset($_GET['c'])) {
+    $course_id = intval($_GET['c']);
 } else {
-	$course_id = 0;
+    $course_id = 0;
 }
 
 require_once 'include/lib/hierarchy.class.php';
@@ -68,39 +69,39 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
 // Delete course
-if (isset($_GET['delete']) && $course_id)  {
-        delete_course($course_id);
-        $tool_content .= "<p class='success'>".$langCourseDelSuccess."</p>";
+if (isset($_GET['delete']) && $course_id) {
+    delete_course($course_id);
+    $tool_content .= "<p class='success'>" . $langCourseDelSuccess . "</p>";
 }
 // Display confirmatiom message for course deletion
 else {
-	$row = mysql_fetch_array(db_query("SELECT * FROM course WHERE id = ". $course_id));
+    $row = mysql_fetch_array(db_query("SELECT * FROM course WHERE id = " . $course_id));
 
-        if ($row === false) {
-            $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
-            draw($tool_content, 3);
-            exit();
-        }
+    if ($row === false) {
+        $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
+        draw($tool_content, 3);
+        exit();
+    }
 
-	$tool_content .= "<fieldset>
-	<legend>".$langCourseDelConfirm."</legend>
+    $tool_content .= "<fieldset>
+	<legend>" . $langCourseDelConfirm . "</legend>
 	<table class='tbl' width='100%'>";
-	$tool_content .= "<tr><td>
-		<div class='caution'>".$langCourseDelConfirm2." <em>". q(course_id_to_title($course_id)) ."</em>;
-		<br /><br /><i>".$langNoticeDel."</i><br />
+    $tool_content .= "<tr><td>
+		<div class='caution'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
+		<br /><br /><i>" . $langNoticeDel . "</i><br />
 		</div></td></tr>";
-	$tool_content .= "<tr>
-	<td><ul class='custom_list'><li><a href='".$_SERVER['SCRIPT_NAME']."?c=". q($course_id) ."&amp;delete=yes'><b>$langYes</b></a></li>
+    $tool_content .= "<tr>
+	<td><ul class='custom_list'><li><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
 	<li><a href='listcours.php'><b>$langNo</b></a></li></ul></td>
 	</tr>";
-	$tool_content .= "</table></fieldset>";
+    $tool_content .= "</table></fieldset>";
 }
 // If course deleted go back to listcours.php
 if (isset($_GET['c']) && !isset($_GET['delete'])) {
-	$tool_content .= "<p class='right'><a href='listcours.php'>$langBack</a></p>";
+    $tool_content .= "<p class='right'><a href='listcours.php'>$langBack</a></p>";
 }
 // Display link to index.php
 else {
-	$tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
+    $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 }
 draw($tool_content, 3);

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -24,7 +25,7 @@ $nameTools = $langCopyright;
 $tool_content .= "<p align=justify>$langCopyrightNotice</p>";
 
 if (isset($_SESSION['uid'])) {
-	draw($tool_content,1);
+    draw($tool_content, 1);
 } else {
-	draw($tool_content, 0);
+    draw($tool_content, 0);
 }

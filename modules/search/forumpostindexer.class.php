@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class ForumPostIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class ForumPostIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a forum post row.
      * 
@@ -53,7 +54,7 @@ class ForumPostIndexer implements ResourceIndexerInterface {
     private static function makeDoc($fpost) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'fpost_' . $fpost['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $fpost['id'], $encoding));
@@ -61,14 +62,13 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $fpost['course_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost['topic_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost['post_text'])), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', 
-                $urlServer .'modules/forum/viewtopic.php?course='. course_id_to_code($fpost['course_id']) 
-                           .'&amp;topic=' . intval($fpost['topic_id']) 
-                           .'&amp;forum=' . intval($fpost['forum_id']), $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/forum/viewtopic.php?course=' . course_id_to_code($fpost['course_id'])
+                        . '&amp;topic=' . intval($fpost['topic_id'])
+                        . '&amp;forum=' . intval($fpost['forum_id']), $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Forum Post from DB.
      * 
@@ -84,7 +84,7 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         $fpost = mysql_fetch_assoc($res);
         if (!$fpost)
             return null;
-        
+
         return $fpost;
     }
 
@@ -98,19 +98,19 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         $fpost = $this->fetch($fpostId);
         if (!$fpost)
             return;
-        
+
         // delete existing forum post from index
         $this->remove($fpostId, false, false);
 
         // add the forum post back to the index
         $this->__index->addDocument(self::makeDoc($fpost));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Forum Post from the Index.
      * 
@@ -124,18 +124,18 @@ class ForumPostIndexer implements ResourceIndexerInterface {
             if (!$fpost)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('fpost_' . $fpostId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Forum Posts belonging to a Course.
      * 
@@ -151,16 +151,16 @@ class ForumPostIndexer implements ResourceIndexerInterface {
             JOIN forum_topic ft ON fp.topic_id = ft.id 
             JOIN forum f ON ft.forum_id = f.id 
             JOIN forum_category fc ON fc.id = f.cat_id 
-            WHERE fc.cat_order >= 0 AND f.course_id = ". intval($courseId));
+            WHERE fc.cat_order >= 0 AND f.course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Forum Posts belonging to a Course.
      * 
@@ -171,13 +171,13 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:fpost AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Forum Posts belonging to a Forum Topic.
      * 
@@ -188,13 +188,13 @@ class ForumPostIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:fpost AND topicid:' . $topicId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all forum posts.
      * 
@@ -203,10 +203,10 @@ class ForumPostIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all forum posts from index
         $term = new Zend_Search_Lucene_Index_Term('fpost', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all forum posts from db
         $res = db_query("SELECT fp.*, f.course_id, ft.forum_id FROM forum_post fp 
             JOIN forum_topic ft ON fp.topic_id = ft.id 
@@ -215,13 +215,13 @@ class ForumPostIndexer implements ResourceIndexerInterface {
             WHERE fc.cat_order >= 0");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -230,17 +230,17 @@ class ForumPostIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term)
                 $queryStr .= 'content:' . $term . '* ';
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:fpost';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:fpost';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

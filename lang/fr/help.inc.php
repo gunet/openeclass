@@ -458,7 +458,7 @@ and all uploaded <i>Scorm format Learning Paths</i>, as well.</p>
 
 <p>Selection of the 'Activation' / 'Inactivation' link moves the Learning Path to the 'Active' or 'Inactive Tools' correspondingly.</p>
 ";
-$langPath_studentContent =  "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
+$langPath_studentContent = "<p>It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.
 In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute <b>pre-requisites</b> for the steps
 after them (you cannot go to step 2 before step 1). That sequence can only be suggestive (steps are displayed one after the other).
 All learning objects have a status: completed or incomplete and the students progress is available through the <i>Tracking</i> tool at any time. 

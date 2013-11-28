@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -35,8 +36,7 @@ class Course {
      * @param string $ctable    - Name of courses table
      * @param string $deptable  - Name of course <-> department lookup table
      */
-    public function __construct($ctable = 'course', $deptable = 'course_department')
-    {
+    public function __construct($ctable = 'course', $deptable = 'course_department') {
         $this->ctable = $ctable;
         $this->departmenttable = $deptable;
     }
@@ -69,8 +69,7 @@ class Course {
      *
      * @param int $id - The id of the course to delete
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         db_query("DELETE FROM $this->departmenttable WHERE course = '$id'");
         db_query("DELETE FROM $this->ctable WHERE id = '$id'");
     }
@@ -81,17 +80,17 @@ class Course {
      * @param  int   $id  - Id for a given course
      * @return array $ret - Array containing the given course's nodes
      */
-    public function getDepartmentIds($id)
-    {
+    public function getDepartmentIds($id) {
         $ret = array();
         $result = db_query("SELECT cd.department AS id
                               FROM $this->ctable c, $this->departmenttable cd
-                             WHERE c.id = ". intval($id) ."
+                             WHERE c.id = " . intval($id) . "
                                AND c.id = cd.course");
 
-        while($row = mysql_fetch_assoc($result))
+        while ($row = mysql_fetch_assoc($result))
             $ret[] = $row['id'];
 
         return $ret;
     }
+
 }

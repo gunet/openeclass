@@ -22,6 +22,5 @@
  * @file upload.php
  * @brief placeholder for uploading common docs in admin tool
  */
-
 define('COMMON_DOCUMENTS', true);
 require_once '../document/upload.php';

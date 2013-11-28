@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -27,7 +28,7 @@ define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
 $tool_content .= "
-  <div class='info'>$langOnlineUsers: <b>".  getOnlineUsers() ."</b></div>
+  <div class='info'>$langOnlineUsers: <b>" . getOnlineUsers() . "</b></div>
   <br />
   <br />
   <fieldset>
@@ -48,8 +49,8 @@ $tool_content .= "
     <tr>
       <th>Data Base Server:</th>
       <td>";
-    $tool_content .= "$langMySqlVersion<b>".mysql_get_server_info()."</b>";
-    $tool_content .= "</td>
+$tool_content .= "$langMySqlVersion<b>" . mysql_get_server_info() . "</b>";
+$tool_content .= "</td>
     </tr>
     </table>
   </fieldset>
@@ -71,27 +72,26 @@ if ($count_prof_requests > 0) {
 $sql = "SELECT code, title, prof_names FROM course ORDER BY id DESC LIMIT 0, 1";
 $result = db_query($sql);
 if (mysql_num_rows($result)) {
-        $myrow = mysql_fetch_array($result);
-	$last_course_info = "<b>".q($myrow['title'])."</b> ".q($myrow['code']).", ".q($myrow['prof_names']).")";
+    $myrow = mysql_fetch_array($result);
+    $last_course_info = "<b>" . q($myrow['title']) . "</b> " . q($myrow['code']) . ", " . q($myrow['prof_names']) . ")";
 } else {
-	$last_course_info = $langNoCourses;
+    $last_course_info = $langNoCourses;
 }
 
 // Find last prof registration
 $result = db_query("SELECT givenname, surname, username, registered_at FROM user
                        WHERE status = 1 ORDER BY id DESC LIMIT 0,1");
 $myrow = mysql_fetch_array($result);
-$last_prof_info = "<b>".q($myrow['givenname'])." ".q($myrow['surname'])."</b> (".q($myrow['username']).", ".date("j/n/Y H:i", strtotime($myrow['registered_at'])).")";
+$last_prof_info = "<b>" . q($myrow['givenname']) . " " . q($myrow['surname']) . "</b> (" . q($myrow['username']) . ", " . date("j/n/Y H:i", strtotime($myrow['registered_at'])) . ")";
 
 // Find last stud registration
 $result = db_query("SELECT givenname, surname, username, registered_at FROM user
                         WHERE status = 5 ORDER BY id DESC LIMIT 0,1");
 if (($myrow = mysql_fetch_array($result)) != FALSE) {
-	$last_stud_info = "<b>".q($myrow['givenname'])." ".q($myrow['surname'])."</b> (".q($myrow['username']).", ".date("j/n/Y H:i",strtotime($myrow['registered_at'])).")";
-}
-else {
-	// no student is yet registered
-	$last_stud_info = $langLastStudNone;
+    $last_stud_info = "<b>" . q($myrow['givenname']) . " " . q($myrow['surname']) . "</b> (" . q($myrow['username']) . ", " . date("j/n/Y H:i", strtotime($myrow['registered_at'])) . ")";
+} else {
+    // no student is yet registered
+    $last_stud_info = $langLastStudNone;
 }
 
 // Find admin's last login
@@ -102,13 +102,13 @@ $myrow = mysql_fetch_array($result);
 $lastadminlogin = quote($myrow['when']);
 
 // Count profs registered after last login
-$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > ".$lastadminlogin;
+$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 1 AND registered_at > " . $lastadminlogin;
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastregisteredprofs = $myrow['cnt'];
 
 // Count studs registered after last login
-$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > ".$lastadminlogin;
+$sql = "SELECT COUNT(*) AS cnt FROM user WHERE status = 5 AND registered_at > " . $lastadminlogin;
 $result = db_query($sql);
 $myrow = mysql_fetch_array($result);
 $lastregisteredstuds = $myrow['cnt'];
@@ -120,7 +120,7 @@ $tool_content .= "
     <table width='100%' class='tbl'>
     <tr>
       <th width='260'>$langOpenRequests:</th>
-      <td>".$prof_request_msg."</td>
+      <td>" . $prof_request_msg . "</td>
     </tr>
     <tr>
       <th>$langLastLesson</th>
@@ -138,8 +138,8 @@ $tool_content .= "
       <th>$langAfterLastLoginInfo</th>
       <td>$langAfterLastLogin
         <ul class='custom_list'>
-          <li><b>".$lastregisteredprofs."</b> $langTeachers</li>
-          <li><b>".$lastregisteredstuds."</b> $langStudents </li>
+          <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
+          <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
         </ul>
       </td>
     </tr>
@@ -221,4 +221,4 @@ if (mysql_num_rows($res) >= 1) {
 }
 
 
-draw($tool_content,3);
+draw($tool_content, 3);

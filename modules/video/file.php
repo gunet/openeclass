@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,7 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
 
-if ( !isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token'])) ) {
+if (!isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token']))) {
     header("Location: ${urlServer}");
     exit();
 }
@@ -34,7 +35,7 @@ if (strpos($_GET['course'], '..') !== false) {
 
 // locate course id
 $course_id = null;
-$res1 = db_query("SELECT course.id FROM course WHERE course.code = ". quote(q($_GET['course'])));
+$res1 = db_query("SELECT course.id FROM course WHERE course.code = " . quote(q($_GET['course'])));
 $row1 = mysql_fetch_array($res1);
 if (!empty($row1))
     $course_id = intval($row1['id']);
@@ -66,8 +67,8 @@ if (empty($row2)) {
 
 $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($row2['path'], $_GET['token'], 30);
 if (!$valid) {
-   header("Location: ${urlServer}");
-   exit();
+    header("Location: ${urlServer}");
+    exit();
 }
 
 $vObj = MediaResourceFactory::initFromVideo($row2);

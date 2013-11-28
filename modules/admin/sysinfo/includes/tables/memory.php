@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -31,26 +32,22 @@ $swap .= '&nbsp;&nbsp;' . $mem['swap']['percent'] . '% ';
 
 
 $_text = '<table width="100%" align="center">'
-       . '<tr><td align="left" valign="top"><font size="-1"><b>' . $text['type'] . '</b></font></td>'
-       . '<td align="left" valign="top"><font size="-1"><b>' . $text['percent'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['free'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['used'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>'
-
-       . '<tr><td align="left" valign="top"><font size="-1">' . $text['phymem'] . '</font></td>'
-       . '<td align="left" valign="top"><font size="-1">' . $ram . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['t_free']) . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['t_used']) . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['total']) . '</font></td>'
-
-       . '<tr><td align="left" valign="top"><font size="-1">' . $text['swap'] . '</font></td>'
-       . '<td align="left" valign="top"><font size="-1">' . $swap . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['free']) . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['used']) . '</font></td>'
-       . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['total']) . '</font></td>'
-
-       . '</table>';
+        . '<tr><td align="left" valign="top"><font size="-1"><b>' . $text['type'] . '</b></font></td>'
+        . '<td align="left" valign="top"><font size="-1"><b>' . $text['percent'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['free'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['used'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>'
+        . '<tr><td align="left" valign="top"><font size="-1">' . $text['phymem'] . '</font></td>'
+        . '<td align="left" valign="top"><font size="-1">' . $ram . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['t_free']) . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['t_used']) . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['ram']['total']) . '</font></td>'
+        . '<tr><td align="left" valign="top"><font size="-1">' . $text['swap'] . '</font></td>'
+        . '<td align="left" valign="top"><font size="-1">' . $swap . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['free']) . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['used']) . '</font></td>'
+        . '<td align="right" valign="top"><font size="-1">' . format_bytesize($mem['swap']['total']) . '</font></td>'
+        . '</table>';
 
 $tpl->set_var('memory', makebox($text['memusage'], $_text, '100%'));
-
 ?>

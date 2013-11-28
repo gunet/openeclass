@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -30,22 +31,22 @@ require_once 'modules/auth/auth.inc.php';
 $auth = 7;
 cas_authenticate($auth);
 if (phpCAS::checkAuthentication()) {
-	$cas = get_auth_settings($auth);
-	$attrs = get_cas_attrs(phpCAS::getAttributes(), $cas);
-	$_SESSION['cas_uname'] = phpCAS::getUser();
+    $cas = get_auth_settings($auth);
+    $attrs = get_cas_attrs(phpCAS::getAttributes(), $cas);
+    $_SESSION['cas_uname'] = phpCAS::getUser();
 
-	if (!empty($_SESSION['cas_uname'])) {
-		$_SESSION['uname'] = $_SESSION['cas_uname'];
-	}
-	if (!empty($attrs['casuserlastattr'])) {
-		$_SESSION['cas_surname'] = $attrs['casuserlastattr'];
-	}
-	if (!empty($attrs['casuserfirstattr'])) {
-		$_SESSION['cas_givenname'] = $attrs['casuserfirstattr'];
-	}
-	if (!empty($attrs['casusermailattr'])) {
-		$_SESSION['cas_email'] = $attrs['casusermailattr'];
-	}
+    if (!empty($_SESSION['cas_uname'])) {
+        $_SESSION['uname'] = $_SESSION['cas_uname'];
+    }
+    if (!empty($attrs['casuserlastattr'])) {
+        $_SESSION['cas_surname'] = $attrs['casuserlastattr'];
+    }
+    if (!empty($attrs['casuserfirstattr'])) {
+        $_SESSION['cas_givenname'] = $attrs['casuserfirstattr'];
+    }
+    if (!empty($attrs['casusermailattr'])) {
+        $_SESSION['cas_email'] = $attrs['casusermailattr'];
+    }
 }
 
 header("Location: $urlServer");

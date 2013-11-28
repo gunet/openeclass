@@ -23,6 +23,5 @@
  * @file commondocs.php
  * @brief Admin form for uploading common documents (e.g. shared docs among all courses)
  */
-
 define('COMMON_DOCUMENTS', TRUE);
 require_once '../document/index.php';

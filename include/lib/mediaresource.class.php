@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,9 +21,8 @@
 
 require_once 'include/lib/mediaresource.interface.php';
 
-
 class MediaResource implements MediaResourceInterface {
-    
+
     private $id;
     private $courseId;
     private $title;
@@ -30,7 +30,7 @@ class MediaResource implements MediaResourceInterface {
     private $url;
     private $accessURL;
     private $playURL;
-    
+
     public function __construct($id, $courseId, $title, $path, $url, $accessURL, $playURL) {
         $this->id = $id;
         $this->courseId = $courseId;
@@ -40,9 +40,9 @@ class MediaResource implements MediaResourceInterface {
         $this->accessURL = $accessURL;
         $this->playURL = $playURL;
     }
-    
+
     // Getters and Setters
-    
+
     public function getId() {
         return $this->id;
     }
@@ -50,7 +50,7 @@ class MediaResource implements MediaResourceInterface {
     public function getCourseId() {
         return $this->courseId;
     }
-    
+
     public function getTitle() {
         return $this->title;
     }
@@ -58,15 +58,15 @@ class MediaResource implements MediaResourceInterface {
     public function getPath() {
         return $this->path;
     }
-    
+
     public function getUrl() {
         return $this->url;
     }
-    
+
     public function getAccessURL() {
         return $this->accessURL;
     }
-    
+
     public function setAccessURL($accessURL) {
         $this->accessURL = $accessURL;
     }
@@ -74,7 +74,7 @@ class MediaResource implements MediaResourceInterface {
     public function getPlayURL() {
         return $this->playURL;
     }
-    
+
     public function setPlayURL($playURL) {
         $this->playURL = $playURL;
     }

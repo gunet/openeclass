@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class LinkIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class LinkIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a link db row.
      * 
@@ -52,7 +53,7 @@ class LinkIndexer implements ResourceIndexerInterface {
      */
     private static function makeDoc($link) {
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'link_' . $link['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link['id'], $encoding));
@@ -61,10 +62,10 @@ class LinkIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link['title']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link['description'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $link['url'], $encoding));
-        
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Link from DB.
      * 
@@ -76,7 +77,7 @@ class LinkIndexer implements ResourceIndexerInterface {
         $link = mysql_fetch_assoc($res);
         if (!$link)
             return null;
-        
+
         return $link;
     }
 
@@ -90,20 +91,20 @@ class LinkIndexer implements ResourceIndexerInterface {
         $link = $this->fetch($linkId);
         if (!$link)
             return;
-        
+
         // delete existing link from index
         $this->remove($linkId, false, false);
 
         // add the link back to the index
         $this->__index->addDocument(self::makeDoc($link));
-        
+
         // commit/optimize unless not wanted
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Link from the Index.
      * 
@@ -117,18 +118,18 @@ class LinkIndexer implements ResourceIndexerInterface {
             if (!$link)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('link_' . $linkId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Links belonging to a Course.
      * 
@@ -140,16 +141,16 @@ class LinkIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the links back to the index
-        $res = db_query("SELECT * FROM link WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM link WHERE course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Links belonging to a Course.
      * 
@@ -160,13 +161,13 @@ class LinkIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:link AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all links.
      * 
@@ -175,21 +176,21 @@ class LinkIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all links from index
         $term = new Zend_Search_Lucene_Index_Term('link', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all links from db
         $res = db_query("SELECT * FROM link");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -198,19 +199,19 @@ class LinkIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'content:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:link';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:link';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

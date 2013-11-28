@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,28 +20,28 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	toc.php
-	@authors list: Yannis Exidaridis <jexi@noc.uoa.gr>
-	               Alexandros Diamantidis <adia@noc.uoa.gr>
-	               Thanos Kyritsis <atkyritsis@upnet.gr>
-==============================================================================
-    @Description: Aristerh sthlh me ta Table Of Contents mias grammhs ma8hshs,
-                  dhladh lista me ola ta modules ths.
+/* ===========================================================================
+  toc.php
+  @authors list: Yannis Exidaridis <jexi@noc.uoa.gr>
+  Alexandros Diamantidis <adia@noc.uoa.gr>
+  Thanos Kyritsis <atkyritsis@upnet.gr>
+  ==============================================================================
+  @Description: Aristerh sthlh me ta Table Of Contents mias grammhs ma8hshs,
+  dhladh lista me ola ta modules ths.
 
-    @Comments:
-==============================================================================
-*/
+  @Comments:
+  ==============================================================================
+ */
 
 $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$TABLEMODULE            = "lp_module";
-$TABLELEARNPATHMODULE   = "lp_rel_learnPath_module";
-$TABLEASSET             = "lp_asset";
-$TABLEUSERMODULEPROGRESS= "lp_user_module_progress";
+$TABLEMODULE = "lp_module";
+$TABLELEARNPATHMODULE = "lp_rel_learnPath_module";
+$TABLEASSET = "lp_asset";
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
@@ -52,35 +53,34 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <div class='menu_left'>";
 
 if ($uid) {
-        $uidCheckString = "AND UMP.`user_id` = ". (int)$uid;
+    $uidCheckString = "AND UMP.`user_id` = " . (int) $uid;
 } else {
-        // anonymous
-        $uidCheckString = "AND UMP.`user_id` IS NULL ";
+    // anonymous
+    $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`, UMP.`lesson_status`, UMP.`credit`
-        FROM (`".$TABLEMODULE."` AS M,
-             `".$TABLELEARNPATHMODULE."` AS LPM)
-        LEFT JOIN `".$TABLEASSET."` AS A ON M.`startAsset_id` = A.`asset_id`
-        LEFT JOIN `".$TABLEUSERMODULEPROGRESS."` AS UMP
+        FROM (`" . $TABLEMODULE . "` AS M,
+             `" . $TABLELEARNPATHMODULE . "` AS LPM)
+        LEFT JOIN `" . $TABLEASSET . "` AS A ON M.`startAsset_id` = A.`asset_id`
+        LEFT JOIN `" . $TABLEUSERMODULEPROGRESS . "` AS UMP
            ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
-           ".$uidCheckString."
+           " . $uidCheckString . "
         WHERE M.`module_id` = LPM.`module_id`
-          AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id']."
+          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
           AND M.`course_id` = $course_id
         ORDER BY LPM.`rank` ASC";
 
 $result = db_query($sql);
 
 if (mysql_num_rows($result) == 0) {
-	echo "<p class='alert1'>$langNoModule</p>";
-	exit;
+    echo "<p class='alert1'>$langNoModule</p>";
+    exit;
 }
 
 $extendedList = array();
-while ($list = mysql_fetch_array($result, MYSQL_ASSOC))
-{
+while ($list = mysql_fetch_array($result, MYSQL_ASSOC)) {
     $extendedList[] = $list;
 }
 
@@ -94,60 +94,49 @@ $is_blocked = false;
 
 // look for maxDeep
 $maxDeep = 1; // used to compute colspan of <td> cells
-for ($i=0 ; $i < sizeof($flatElementList) ; $i++)
-{
-    if ($flatElementList[$i]['children'] > $maxDeep) $maxDeep = $flatElementList[$i]['children'] ;
+for ($i = 0; $i < sizeof($flatElementList); $i++) {
+    if ($flatElementList[$i]['children'] > $maxDeep)
+        $maxDeep = $flatElementList[$i]['children'];
 }
 
 // -------------------------- learning path list header ----------------------------
 echo "<ul><li class='category'>$langContents</li>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
-foreach ($flatElementList as $module)
-{
+foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
-    if ($module['visible'] == 1 || $is_blocked)
-    {
-        if ($is_editor)
-        {
+    if ($module['visible'] == 1 || $is_blocked) {
+        if ($is_editor) {
             $style = " class='invisible'";
             $image_bullet = "off";
-        }
-        else
-        {
+        } else {
             continue; // skip the display of this file
         }
-    }
-    else
-    {
+    } else {
         $style = "";
         $image_bullet = "on";
     }
 
     // indent a child based on label ownership
-       $marginIndent = 0;
-       for($i = 0; $i < $module['children']; $i++)
-               $marginIndent += 10;
+    $marginIndent = 0;
+    for ($i = 0; $i < $module['children']; $i++)
+        $marginIndent += 10;
 
-    if ($module['contentType'] == CTLABEL_) // chapter head
-    {
-        echo "<li style=\"margin-left: ".$marginIndent."px;\"><font ".$style." style=\"font-weight: bold\">".htmlspecialchars($module['name'])."</font></li>";
-    }
-    else // module
-    {
-        if($module['contentType'] == CTEXERCISE_ )
+    if ($module['contentType'] == CTLABEL_) { // chapter head
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
+    } else { // module
+        if ($module['contentType'] == CTEXERCISE_)
             $moduleImg = "exercise_$image_bullet.png";
-        else if($module['contentType'] == CTLINK_ )
-        	$moduleImg = "links_$image_bullet.png";
-        else if($module['contentType'] == CTCOURSE_DESCRIPTION_ )
-        	$moduleImg = "description_$image_bullet.png";
-        else if($module['contentType'] == CTDOCUMENT_ ) {
-        	$moduleImg = choose_image(basename($module['path']));
-        }
-        else if($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-        	$moduleImg = "lp_check.png";
+        else if ($module['contentType'] == CTLINK_)
+            $moduleImg = "links_$image_bullet.png";
+        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
+            $moduleImg = "description_$image_bullet.png";
+        else if ($module['contentType'] == CTDOCUMENT_) {
+            $moduleImg = choose_image(basename($module['path']));
+        } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
+            $moduleImg = "lp_check.png";
         else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-        	$moduleImg = "videos_on.png";
+            $moduleImg = "videos_on.png";
         else
             $moduleImg = choose_image(basename($module['path']));
 
@@ -155,31 +144,30 @@ foreach ($flatElementList as $module)
 
         // eikonidio pou deixnei an perasame h oxi to sygkekrimeno module
         unset($imagePassed);
-        if($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
-                if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
-                        $moduleImg = "tick.png";
-                else
-                        $imagePassed = '<img src="'.$themeimg.'/tick.png" alt="'.$module['lesson_status'].'" title="'.$module['lesson_status'].'" />';
+        if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
+            if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_)
+                $moduleImg = "tick.png";
+            else
+                $imagePassed = '<img src="' . $themeimg . '/tick.png" alt="' . $module['lesson_status'] . '" title="' . $module['lesson_status'] . '" />';
         }
 
-        if(($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
-                $moduleImg = "lp_failed.png";
+        if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED')
+            $moduleImg = "lp_failed.png";
 
-        echo "<li style=\"margin-left: ".$marginIndent."px;\"><img src=\"".$themeimg.'/'.$moduleImg."\" alt='' title='' />";
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><img src=\"" . $themeimg . '/' . $moduleImg . "\" alt='' title='' />";
 
         // emphasize currently displayed module or not
-        if ( $_SESSION['lp_module_id'] == $module['module_id'] )
-                echo "<em>".htmlspecialchars($module['name'])."</em>";
+        if ($_SESSION['lp_module_id'] == $module['module_id'])
+            echo "<em>" . htmlspecialchars($module['name']) . "</em>";
         else
-                echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'".$style." target='scoFrame'>". htmlspecialchars($module['name']). "</a>";
-        if(isset($imagePassed))
-                echo "&nbsp;&nbsp;".$imagePassed;
+            echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
+        if (isset($imagePassed))
+            echo "&nbsp;&nbsp;" . $imagePassed;
         echo "</li>";
 
         if ($module['lock'] == 'CLOSE') {
-                $is_blocked = true;
+            $is_blocked = true;
         }
-
     }
 } // end of foreach
 

@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -21,7 +22,7 @@
 
 $ar_buf = $sysinfo->loadavg();
 
-for ($i=0;$i<3;$i++) {
+for ($i = 0; $i < 3; $i++) {
     if ($ar_buf[$i] > 2) {
         $load_avg .= '<font color="#ff0000">' . $ar_buf[$i] . '</font>';
     } else {
@@ -31,15 +32,13 @@ for ($i=0;$i<3;$i++) {
 }
 
 $_text = '<table border="0" width="90%" align="center">'
-       . '<tr><td valign="top"><font size="-1">'. $text['hostname'] .'</font></td><td><font size="-1">' . $sysinfo->chostname() . '</font></td></tr>'
-       . '<tr><td valign="top"><font size="-1">'. $text['ip'] .'</font></td><td><font size="-1">' . $sysinfo->ip_addr() . '</font></td></tr>'
-
-       . '<tr><td valign="top"><font size="-1">'. $text['kversion'] .'</font></td><td><font size="-1">' . $sysinfo->kernel() . '</font></td></tr>'
-       . '<tr><td valign="top"><font size="-1">'. $text['uptime'] .'</font></td><td><font size="-1">' . $sysinfo->uptime() . '</font></td></tr>'
-       . '<tr><td valign="top"><font size="-1">'. $text['users'] .'</font></td><td><font size="-1">' . $sysinfo->users() . '</font></td></tr>'
-       . '<tr><td valign="top"><font size="-1">'. $text['loadavg'] .'</font></td><td><font size="-1">' . $load_avg . '</font></td></tr>'
-       . '</table>';
+        . '<tr><td valign="top"><font size="-1">' . $text['hostname'] . '</font></td><td><font size="-1">' . $sysinfo->chostname() . '</font></td></tr>'
+        . '<tr><td valign="top"><font size="-1">' . $text['ip'] . '</font></td><td><font size="-1">' . $sysinfo->ip_addr() . '</font></td></tr>'
+        . '<tr><td valign="top"><font size="-1">' . $text['kversion'] . '</font></td><td><font size="-1">' . $sysinfo->kernel() . '</font></td></tr>'
+        . '<tr><td valign="top"><font size="-1">' . $text['uptime'] . '</font></td><td><font size="-1">' . $sysinfo->uptime() . '</font></td></tr>'
+        . '<tr><td valign="top"><font size="-1">' . $text['users'] . '</font></td><td><font size="-1">' . $sysinfo->users() . '</font></td></tr>'
+        . '<tr><td valign="top"><font size="-1">' . $text['loadavg'] . '</font></td><td><font size="-1">' . $load_avg . '</font></td></tr>'
+        . '</table>';
 
 $tpl->set_var('vitals', makebox($text['vitals'], $_text, '100%'));
-
 ?>

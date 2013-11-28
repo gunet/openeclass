@@ -70,7 +70,7 @@ $langSearchUser = "User Search";
 $langInfoMail = "Info email";
 $langProfReg = "$langOfTeacher registration";
 $langProfOpen = "$langOfTeacher open requests";
-$langUserOpen = "".$langOfStudents."open requests";
+$langUserOpen = "" . $langOfStudents . "open requests";
 $langPHPInfo = "PHP information";
 $langManuals = "Available Manuals";
 $langFormatPDF = "PDF format";
@@ -79,7 +79,7 @@ $langAdminManual = "Admin's Manual";
 $langConfigFile = "Configuration File";
 $langDBaseAdmin = "Database management (phpMyAdmin)";
 $langActions = "Actions";
-$langAdminProf = "".$langTeachers."administration";
+$langAdminProf = "" . $langTeachers . "administration";
 $langAdminCours = "Course Administration";
 $langGenAdmin = "Other Tools";
 $langBackAdmin = "Back to admin page";
@@ -91,7 +91,7 @@ $langOpenRequests = "Teachers Open Requests";
 $langNoOpenRequests = "There are no teachers open requests";
 $langInfoAdmin = "Info for Administrator";
 $langLastLesson = "Last created course:";
-$langLastProf = "Last ".$langsTeacher."registration:";
+$langLastProf = "Last " . $langsTeacher . "registration:";
 $langLastStud = "Last user registration:";
 $langAfterLastLogin = "After your last login, there have been registered:";
 $langAfterLastLoginInfo = "Data after your last login";
@@ -99,8 +99,8 @@ $langOtherActions = "Other Actions";
 $langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating the Open eClass platform with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
 $langTutorial = "Platform Tutorials";
 $langStat4eClass = "Platform Statistics";
-$langNbProf = "Number of ".$langsTeachers."";
-$langNbStudents = "Number of ".$langsStudents."";
+$langNbProf = "Number of " . $langsTeachers . "";
+$langNbStudents = "Number of " . $langsStudents . "";
 $langNbLogin = "Number of logins";
 $langNbCourses = "Number of courses";
 $langNbVisitors = "Number of visitors";
@@ -179,14 +179,14 @@ $langEditFacSucces = "Faculty editing completed successfully!";
 $langQuickAddDelUserToCoursSuccess = "User management finished with success!";
 $langFormUserManage = "User Management Form";
 $langListNotRegisteredUsers = "Unregistered Users List";
-$langListRegisteredStudents = "Registered ".$langStudents."List";
-$langListRegisteredProfessors = "Registered ".$langTeachers."List";
+$langListRegisteredStudents = "Registered " . $langStudents . "List";
+$langListRegisteredProfessors = "Registered " . $langTeachers . "List";
 $langErrChoose = "An error occured in selecting course!";
 $langCourseDel = "Delete course";
 $langCourseDelSuccess = "Course deleted with success!";
 $langCourseDelConfirm = "Course Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete course with code";
-$langNoticeDel = "NOTE: Course deletion will also unregister ".$langsStudents."from this course, along with course faculty correspondence snd course material.";
+$langNoticeDel = "NOTE: Course deletion will also unregister " . $langsStudents . "from this course, along with course faculty correspondence snd course material.";
 $langCourseEdit = "Course Edit";
 $langCourseInfo = "Course Information";
 $langQuota = "Course Quota Boundaries";
@@ -199,8 +199,8 @@ $langStatsCourse = "Course Statistics";
 $langCourseEditSuccess = "Course information modified with success!";
 $langCourseInfoEdit = "Modify Course Information";
 $langBackCourse = "Back to course homepage";
-$langOpenProfessorRequests = "".$langTeachers."Open Requests";
-$langProfessorRequestClosed = "".$langTeacher."request closed !";
+$langOpenProfessorRequests = "" . $langTeachers . "Open Requests";
+$langProfessorRequestClosed = "" . $langTeacher . "request closed !";
 $langReqHaveClosed = "Closed Requests";
 $langReqHaveBlocked = "Rejected Requests";
 $langReqHaveFinished = "Completed Requests";
@@ -211,7 +211,7 @@ $langReintroductionApplication = "Application retrieval was completed with succe
 $langBackRequests = "Return to the list of requests";
 $langSendMessageTo = "Send mail";
 $langToAllUsers = "to all users";
-$langProfOnly = "to ".$langsTeachers."only";
+$langProfOnly = "to " . $langsTeachers . "only";
 $langSearchCourse = "Search for Courses";
 $langNewSearch = "New search";
 $langSearchCriteria = "Search Criteria";
@@ -389,8 +389,8 @@ $langAnnTitle = "Announcement Title";
 $langAnnBody = "Announcement Body";
 $langEmptyAnn = "Clear up list of announcements";
 $professorMessage = "$langTeacher message";
-$langEmailSent = "and emailed to registered ".$langsStudents."";
-$langEmailOption = "Send announcement (via email) to registered ".$langsStudents."";
+$langEmailSent = "and emailed to registered " . $langsStudents . "";
+$langEmailOption = "Send announcement (via email) to registered " . $langsStudents . "";
 $langUp = "Up";
 $langDown = "Down";
 $langNoAnnounce = "No existing announcements";
@@ -438,11 +438,11 @@ $langButtonVideo = "Transmition";
 $langButtonPresantation = "Transmition";
 $langconference = "Activate teleconference";
 $langpresantation = "URL link Presentation ";
-$langVideo_content = "<p align='justify'>The video activated by the ".$langsTeacher."will be presented here.</p>";
+$langVideo_content = "<p align='justify'>The video activated by the " . $langsTeacher . "will be presented here.</p>";
 $langTeleconference_content1 = "<p align='justify'>Net meeting application for live chat will be activated by the $langsTeacher in this window.</p>";
 $langTeleconference_content_noIE = "<p align='justify'>Teleconference is only activated if the browser is IE.</p>";
 $langWashVideo = "Clean video";
-$langPresantation_content = "<p align='center'>A web page selected by the ".$langsTeacher."will be presented in this window.</p>";
+$langPresantation_content = "<p align='center'>A web page selected by the " . $langsTeacher . "will be presented in this window.</p>";
 $langWashPresanation = "clean presentation";
 $langSaveChat = "Save chat";
 $langSaveMessage = "Chat has been saved in Documents.";
@@ -452,7 +452,7 @@ $langNoGuest = "Guest Users cannot access 'Chat'";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
-Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
+Platform ' . $siteName . ' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
@@ -465,8 +465,8 @@ content, please contact the persons in charge of the respective course.';
 $langCourseProgram = "Course Description";
 $langThisCourseDescriptionIsEmpty = "This course is presently not described";
 $langEditCourseProgram = "Create and edit";
-$langQuestionPlan = "Question to ".$langsTeacher."";
-$langInfo2Say = "Information to give to ".$langsStudents."";
+$langQuestionPlan = "Question to " . $langsTeacher . "";
+$langInfo2Say = "Information to give to " . $langsStudents . "";
 $langAddCat = "Category";
 $langBackAndForget = "Cancel changes and return";
 $langBlockDeleted = "Description deleted!";
@@ -501,7 +501,7 @@ $langNoCourseTitle = "You didn't type course title";
 $langModifGroups = "Groups";
 $langTheCourse = "Course";
 $langHasDel = "has been deleted";
-$langByDel = "Deleting the course will permanently delete all the documents it contains and unregister all its ".$langsStudents."(will not unregister them from other courses).";
+$langByDel = "Deleting the course will permanently delete all the documents it contains and unregister all its " . $langsStudents . "(will not unregister them from other courses).";
 $langByDel_A = "Do you really want to delete the course: ";
 $langTipLang = "Choose the course language.";
 $langTipLang2 = "Choose the language of the platform.";
@@ -593,7 +593,7 @@ $langWiki = "Wiki";
 $langToolManagement = "Tool Management";
 $langUsage = "Usage Statistics";
 $langStats = "Statistics";
-$langVideoText = "This is an example of a RealVideo file. You can upload any audio and video file type (.mov, .rm, .mpeg...), as far as your ".$langsStudents."have the corresponding plug-in to read them";
+$langVideoText = "This is an example of a RealVideo file. You can upload any audio and video file type (.mov, .rm, .mpeg...), as far as your " . $langsStudents . "have the corresponding plug-in to read them";
 $langGoogle = "Quick and powerfull search engine";
 $langIntroductionText = "This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
 $langJustCreated = "You just created the course titled ";
@@ -616,12 +616,12 @@ $langFinalize = "Create Course!";
 $langCourseCategory = "The category the course belongs to";
 $langProfessorsInfo = "Full names of the instructors of the course;seperated by commas (e.g.<i>John Doe, George Smith</i>)";
 $langPublic = "Public access, even without login";
-$langPrivate = "Private (Access is granted only to ".$langsStudents."added in the Users List)";
+$langPrivate = "Private (Access is granted only to " . $langsStudents . "added in the Users List)";
 $langPrivate_1 = "Access to group forums";
 $langPrivate_2 = "granted only to group members";
 $langPrivate_3 = "granted to everybody (read only)";
 $langAlertTitle = "Please fill the course title!";
-$langAlertProf = "Please fill the course ".$langsTeacher."!";
+$langAlertProf = "Please fill the course " . $langsTeacher . "!";
 $langUpload = "Upload";
 $langDownloadFile = "Upload file";
 $langPathUploadFile = "File path";
@@ -758,7 +758,7 @@ $dropbox_lang['mailingFileFunny'] = "no name, or extension not 1-4 letters or di
 $dropbox_lang['mailingFileNoPrefix'] = "name does not start with ";
 $dropbox_lang['mailingFileNoPostfix'] = "name does not end with ";
 $dropbox_lang['mailingFileNoRecip'] = "name does not contain any recipient-id";
-$dropbox_lang['mailingFileRecipNotFound'] = "no such ".$langsStudent."with ";
+$dropbox_lang['mailingFileRecipNotFound'] = "no such " . $langsStudent . "with ";
 $dropbox_lang['mailingFileRecipDup'] = "multiple users have ";
 $dropbox_lang['mailingFileIsFor'] = "is for ";
 $dropbox_lang['mailingFileSentTo'] = "sent to ";
@@ -941,7 +941,7 @@ $langBack = "Back";
 $langCatAdded = "Category added";
 $langEmptyCat = "Enter category name";
 $langForCategories = "Forum categories";
-$langAddForums = "To add forums,click on \"Forums\"in the category of your choice. An empty category (without forums) won't be visible for ".$langsStudents."";
+$langAddForums = "To add forums,click on \"Forums\"in the category of your choice. An empty category (without forums) won't be visible for " . $langsStudents . "";
 $langCategories = "Categories";
 $langNbFor = "Number of forums";
 $langAddCategory = "Add category";
@@ -971,8 +971,8 @@ $langEmtpyGroups = "Empty all groups";
 $langGroupsFilled = "All groups have been filled";
 $langFillGroups = "Fill groups";
 $langGroupsProperties = "Groups settings";
-$langStudentRegAllowed = "".$langStudents."are allowed to self-register in groups";
-$langStudentRegNotAllowed = "".$langStudent."are not allowed to self-register in groups";
+$langStudentRegAllowed = "" . $langStudents . "are allowed to self-register in groups";
+$langStudentRegNotAllowed = "" . $langStudent . "are not allowed to self-register in groups";
 $langTools = "Course tools";
 $langExistingGroups = "Groups";
 $langEdit = "Edit";
@@ -980,7 +980,7 @@ $langDeleteGroupWarn = "Are you sure you want to delete this group";
 $langDeleteGroupAllWarn = "Are you sure you want to delete all groups";
 $langEmptyGroupName = "You must fill group name";
 $langGroupProperties = "Groups settings";
-$langGroupAllowStudentRegistration = "".$langStudents."are allowed to self-register in groups";
+$langGroupAllowStudentRegistration = "" . $langStudents . "are allowed to self-register in groups";
 $langGroupStudentRegistrationType = "Registration Type";
 $langGroupPrivatise = "Group forums private";
 $langGroupForum = "Forum";
@@ -989,16 +989,16 @@ $langGroupThisSpace = "Area for this group";
 $langGroupName = "Group name";
 $langEditGroup = "Edit this group";
 $langUncompulsory = "(optional)";
-$langNoGroupStudents = "Unassigned ".$langsStudents."";
+$langNoGroupStudents = "Unassigned " . $langsStudents . "";
 $langGroupMembers = "Group members";
 $langGroupValidate = "validate";
 $langGroupCancel = "cancel";
 $langGroupSettingsModified = "Group settings modified";
 $langNameSurname = "Name Surname";
 $langEmail = "Email";
-$langGroupStudentsInGroup = "".$langsStudents."registered in groups";
-$langGroupStudentsRegistered = "".$langsStudents."registered to this course";
-$langGroupNoGroup = "unassigned ".$langsStudents."";
+$langGroupStudentsInGroup = "" . $langsStudents . "registered in groups";
+$langGroupStudentsRegistered = "" . $langsStudents . "registered to this course";
+$langGroupNoGroup = "unassigned " . $langsStudents . "";
 $langGroupUsersList = "See <a href=../user/user.php>Users</a>";
 $langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below).
  Group composition has not been modified";
@@ -1016,7 +1016,7 @@ $langPublicAccess = "open";
 $langForumType = "Forum type";
 $langPropModify = "Modify settings";
 $langGroupAccess = "Access";
-$langGroupFilledGroups = "Groups have been filled (or completed) by ".$langsStudents."present in the 'Users'list.";
+$langGroupFilledGroups = "Groups have been filled (or completed) by " . $langsStudents . "present in the 'Users'list.";
 $langGroupInfo = "Group Info";
 $langEmailGroup = "Email to group";
 $langTypeMessage = "Type your message below";
@@ -1037,12 +1037,12 @@ $langGuestSuccess = "Guest account created succesfully!";
 $langGuestFail = "An error occured during guest account creation!";
 $langGuestChange = "Guest account password successfully changed!";
 $infoprof = "An e-mail with your account details will be sent to you as soon as possible by the Administrators of Asynchronous eLearning Platform.";
-$profinfo = "Platform $siteName provides two ways of registration to ".$langsTeachers."";
+$profinfo = "Platform $siteName provides two ways of registration to " . $langsTeachers . "";
 $userinfo = "Platform $siteName provides two ways of registration";
-$regprofldap = "Registration for ".$langsTeachers."with account in the LDAP Directory Service of their institution";
+$regprofldap = "Registration for " . $langsTeachers . "with account in the LDAP Directory Service of their institution";
 $regldap = "Registration for users with account in the LDAP Directory Service of their institution";
-$regprofnoldap = "Registration for ".$langsTeachers."without an account in the LDAP Directory Service of their institution";
-$regnoldap = "Registration for ".$langsTeachers."without an account in the LDAP Directory Service of their institution";
+$regprofnoldap = "Registration for " . $langsTeachers . "without an account in the LDAP Directory Service of their institution";
+$regnoldap = "Registration for " . $langsTeachers . "without an account in the LDAP Directory Service of their institution";
 $mailbody1 = "\n$Institution\n\n";
 $mailbody2 = "User\n\n";
 $mailbody3 = "desires access ";
@@ -1053,9 +1053,9 @@ $mailbody7 = "Faculty / Department:";
 $mailbody8 = "as a $langsStudent.";
 $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
-$sendinfomail = "Send information e-mail to ".$langsTeachers."";
+$sendinfomail = "Send information e-mail to " . $langsTeachers . "";
 $infoabouteclass = "Update information about $siteName";
-$introcontact = "You can contact with the Asynchronous eLearning Group of <b>".$siteName."</b> using the
+$introcontact = "You can contact with the Asynchronous eLearning Group of <b>" . $siteName . "</b> using the
  following ways:";
 $langPostMail = "<b>Post Office Address:</b>";
 $langPhone = "Telephone";
@@ -1083,15 +1083,15 @@ $langInvalidId = "Login failed.<br>If you are not registered, create a new accou
 $langInvalidGuestAccount = "Course with guest account not exists anymore.";
 $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please contact the administrator to activate your account.";
-$langMyCoursesProf = "My courses (".$langsTeachers.")";
-$langMyCoursesUser = "My registered courses (".$langStudent.")";
+$langMyCoursesProf = "My courses (" . $langsTeachers . ")";
+$langMyCoursesUser = "My registered courses (" . $langStudent . ")";
 $langNoCourses = "There are no courses";
 $langCourseCreate = "Create Course";
 $langMyAgenda = "My Calendar";
 $langMyStats = "User Statistics";
 $langMyAnnouncements = "My Announcements";
 $langWelcome = "courses are freely available below. Other  courses require
-a username and a password, which you can obtain by clicking on 'registration'. ".$langTeachers."
+a username and a password, which you can obtain by clicking on 'registration'. " . $langTeachers . "
 can create course websites clicking on registration too, but selecting then 'Create course site'.";
 $langAdminTool = "Admin Tool";
 $langPass = "Password";
@@ -1220,8 +1220,8 @@ $langContents = "Contents";
 $langLearningPathUploadFile = "Browse Learning Path file name for upload";
 $langAddModulesButton = "Add selection";
 $langAddOneModuleButton = "Add module";
-$langAlertBlockingMakedInvisible = "This module is blocked. Making it invisible will allow ".$langsStudents."to access the next module without having to complete this one. Confirm ?";
-$langAlertBlockingPathMadeInvisible = "This path is blocking. Making it invisible will allow ".$langsStudents."to access the next path without having to complete this one. Confirm?";
+$langAlertBlockingMakedInvisible = "This module is blocked. Making it invisible will allow " . $langsStudents . "to access the next module without having to complete this one. Confirm ?";
+$langAlertBlockingPathMadeInvisible = "This path is blocking. Making it invisible will allow " . $langsStudents . "to access the next path without having to complete this one. Confirm?";
 $langAlreadyBrowsed = "Already browsed";
 $langAltMakeNotBlocking = "Unblock";
 $langAltScorm = "Scorm";
@@ -1312,7 +1312,7 @@ $langInsertMyModuleToolName = "Insert my module";
 $langInsertMyModulesTitle = "Reuse a module of the course";
 $langInsertNewModuleName = "Insert new name";
 $langInstalled = "Learning path has been successfully imported.";
-$langIntroLearningPath = "Use this tool to provide your ".$langsStudents."with a sequential path between documents, exercises, HTML pages, links,...<br /><br />If you want to present your learning path to ".$langsStudents.", click on the button below.<br />";
+$langIntroLearningPath = "Use this tool to provide your " . $langsStudents . "with a sequential path between documents, exercises, HTML pages, links,...<br /><br />If you want to present your learning path to " . $langsStudents . ", click on the button below.<br />";
 $langLINKTypeDesc = "Link";
 $langLastName = "Last Name";
 $langLastSessionTimeSpent = "Last session time";
@@ -1386,7 +1386,7 @@ $langTextEditorEnable = "Enable text editor";
 $langTimeInLearnPath = "Time in learning path";
 $langTo = "to";
 $langTotalTimeSpent = "Total time";
-$langTrackAllPathExplanation = "Progression of  ".$langsOfStudents;
+$langTrackAllPathExplanation = "Progression of  " . $langsOfStudents;
 $langTrackUser = "User Tracking";
 $langTracking = "Tracking";
 $langTypeOfModule = "Module type";
@@ -1433,7 +1433,7 @@ $langCategorisedLinks = "Categorised links";
 $showall = "Show all";
 $shownone = "Show none";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
-$langNoLinksExist = "The ".$langsTeacher."has not added any links.";
+$langNoLinksExist = "The " . $langsTeacher . "has not added any links.";
 $langEmptyLinkURL = "Link URL is empty";
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
@@ -1511,11 +1511,11 @@ $m['nolessons'] = 'There are no available courses!';
 $m['name'] = "Course";
 $m['code'] = "Course password";
 $m['prof'] = "$langTeacher";
-$m['mailprof'] = "To enroll to this lesson you need to send an email to the ".$langsTeacher."by clicking ";
+$m['mailprof'] = "To enroll to this lesson you need to send an email to the " . $langsTeacher . "by clicking ";
 $m['here'] = "here.";
 $m['unsub'] = "Course is closed. Unregistration is not allowed";
 $titreBloc = array("Course Content", "Educational Activities", "Books",
-"Human Resources", "Evaluation Methods / Exams", "Supplementary Information");
+    "Human Resources", "Evaluation Methods / Exams", "Supplementary Information");
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modify portfolio view";
 $langMyPersoLessons = "MY COURSES";
@@ -1636,75 +1636,75 @@ $langSurveyInfo = "You may choose from a the list of the following COLLES/ATTL q
 $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
 $langQuestion1 = array('In this unit, my effort was focused in subjects that interested me.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion2 = array('In this unit, what I learn have they make with my profession.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion3 = array('In this unit, I practise critical thought.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion4 = array('In this unit, I collaborate with my colleagues'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion5 = array('In this unit, the teaching is judged satisfactory.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion6 = array('In this unit, exists right communication with the ".$langTeacher.".'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion7 = array('Try to find errors in  my interlocutor thoughts'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion8 = array('When I discuss I enter in the place of my interlocutor.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion9 = array('I remain objective at the analysis of situations.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langQuestion10 = array('I like  taking  the role of advocate of devil.'
-                                        ,'Almost never.'
-                                        ,'Seldom.'
-                                        ,'Sometimes.'
-                                        ,'Often.'
-                                        ,'Almost always.'
-                                        );
+    , 'Almost never.'
+    , 'Seldom.'
+    , 'Sometimes.'
+    , 'Often.'
+    , 'Almost always.'
+);
 $langPollsActive = "Active Questionnaires";
 $langPollsInactive = "Inactive Questionnaires";
 $langPollStart = "Start Date";
@@ -1752,9 +1752,9 @@ $langSurname = "Last Name";
 $langUsername = "Username";
 $langConfirmation = "Confirmation";
 $langUserNotice = "(max 30 characters)";
-$langEmailNotice = "e-mail address is not required but, keep in mind that without it, ".$langsTeacher."cannot send
+$langEmailNotice = "e-mail address is not required but, keep in mind that without it, " . $langsTeacher . "cannot send
 announcements to your mail box, neither you can use the feature 'forgot your password'";
-$langAm = $langStudent."ID";
+$langAm = $langStudent . "ID";
 $langUserDetails = "$langOfStudent Registration";
 $langSubmitNew = "Submit";
 $langPassTwice = "You typed two different passwords";
@@ -1889,8 +1889,8 @@ $langProfEmail = "User E-mail";
 $reguserldap = "LDAP User Registration";
 $langByLdap = "LDAP authentication";
 $langNewProf = "New $langsOfTeacher account details";
-$profsuccess = "".$langTeacher."new account has been created succesfully!";
-$langDearProf = "Dear ".$langTeacher."!";
+$profsuccess = "" . $langTeacher . "new account has been created succesfully!";
+$langDearProf = "Dear " . $langTeacher . "!";
 $success = "Your personal info has been sent succesfully!";
 $click = "Click";
 $langBackPage = "to go back to home page";
@@ -1911,8 +1911,8 @@ $ldaperror = "Cannot establish a connection with LDAP server";
 $ldapmailpass = "Your password is the same as the one of the e-mail service.";
 $ldapback = "Return to";
 $ldaplastpage = "previous page";
-$mailsubject = $langTeacher." Application - Asynchronous eLearning Service";
-$mailsubject2 = "Request ".$langOfStudent."- Asynchronous eLearning Group";
+$mailsubject = $langTeacher . " Application - Asynchronous eLearning Service";
+$mailsubject2 = "Request " . $langOfStudent . "- Asynchronous eLearning Group";
 $contactphone = "Contact Tel.";
 $contactpoint = "Contact";
 $searchuser = 'Search for users / ".$langsTeachers."';
@@ -1921,7 +1921,7 @@ $emailsuccess = "E-mail has been sent!";
 $langTheTeacher = 'The ".$langsTeacher."';
 $langTheUser = 'The user';
 $langDestination = 'Destination:';
-$langAsProf = "as a ".$langsTeacher;
+$langAsProf = "as a " . $langsTeacher;
 $langTel = 'Phone';
 $langPassSameAuth = "Your password is the same of the account authentication service.";
 $langLdapRequest = "There is already a request for the user";
@@ -1939,15 +1939,15 @@ $langCannotUseAuthMethods = "You cannot use the platform at the moment. Please i
 $langConfirmUser = "User Details Confirmation";
 $langUserData = "User Personal Data";
 $langUsersData = "Users Data";
-$langUserAccount = "".$langStudent."Account";
-$langProfAccount = "".$langTeacher."Account";
+$langUserAccount = "" . $langStudent . "Account";
+$langProfAccount = "" . $langTeacher . "Account";
 $langUserAccountInfo1 = 'New Account Request&nbsp;';
 $langUserAccountInfo2 = 'New Account Registration&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
 $langNewAccount = 'New Account';
 $langNewAccountActivation = 'Account Αctivation';
-$langNewUserAccountActivation = $langStudent.'Account Αctivation';
-$langNewProfAccountActivation = $langTeacher.'Account Αctivation';
+$langNewUserAccountActivation = $langStudent . 'Account Αctivation';
+$langNewProfAccountActivation = $langTeacher . 'Account Αctivation';
 $langNewAccountActivation1 = '(existing account)';
 $langUserExistingAccount = 'Login';
 $langDateRequest = "Date of Request";
@@ -1960,13 +1960,13 @@ $langDateClosed_small = "Close";
 $langDateCompleted_small = "Completed";
 $langRejectRequest = "Reject";
 $langListRequest = "List Requests";
-$langTeacherRequestHasDeleted = "".$langTeacher."Request is now deleted!";
+$langTeacherRequestHasDeleted = "" . $langTeacher . "Request is now deleted!";
 $langRejectRequestSubject = "Reject Request for registration in the plaform of asynchronous e-learning";
 $langGoingRejectRequest = "You are going to reject the $langsTeacher request with the following info:";
 $langRequestSendMessage = "Send message to the user - e-mail address:";
 $langRequestDisplayMessage = "the message will also include the above comment";
 $langNoSuchRequest = "No such prof request with this ID. Cannot Proceed";
-$langTeacherRequestHasRejected = "".$langTeacher."Request is now rejected";
+$langTeacherRequestHasRejected = "" . $langTeacher . "Request is now rejected";
 $langRequestMessageHasSent = "and a message was sent in the address ";
 $langRequestHasRejected = "Your request for registration to platform has rejected.";
 $langRegistrationDate = "Registration Date";
@@ -1989,7 +1989,7 @@ $langStar2 = "In the fields with (**)";
 $langEditUser = "Edit User";
 $langUnregForbidden = "You are not allowed to delete the user";
 $langUnregFirst = "You should unregister the user from the following list of courses:";
-$langUnregTeacher = "User is a ".$langsTeacher."in the following courses:";
+$langUnregTeacher = "User is a " . $langsTeacher . "in the following courses:";
 $langPlease = "Please";
 $langOtherDepartments = "Enroll to courses from other faculties";
 $langNoLessonsAvailable = "No courses available.";
@@ -1999,7 +1999,7 @@ $langUserFillData = "User Details";
 $langUserOpenRequests = "$langStudents Open Requests";
 $langWarnReject = "You are to reject the $langsOfStudent application";
 $langWithDetails = "with details";
-$langNewUserDetails = "Account Details of User-".$langStudent."";
+$langNewUserDetails = "Account Details of User-" . $langStudent . "";
 $langInfoProfReq = "If you wish to access the platform as a $langsTeacher, please complete the form below. Your request will be sent to an administrator who will create your account and send you an informational email.";
 $langInfoStudReg = "If you wish to access the platform as a $langsStudent, please complete the form below. Your account will be created automatically.";
 $langReason = "Describe your reasons of using platform";
@@ -2047,7 +2047,7 @@ $langUName = "It is named";
 $langInfo1 = "The course backup you uploaded contains the following
 	course information.";
 $langInfo2 = "You can change the course code as well as all other
-	information (eg. description, ".$langsTeacher.", etc.)";
+	information (eg. description, " . $langsTeacher . ", etc.)";
 $langCourseOldFac = "Old department";
 $langCourseVis = "Access type";
 $langCourseType = "Pre/postgraduate";
@@ -2409,7 +2409,7 @@ $m['delete'] = "Delete";
 $m['edit'] = "Modify";
 $m['start_date'] = "Start date";
 $m['grade'] = "Grade";
-$m['am'] = "".$langStudent."ID";
+$m['am'] = "" . $langStudent . "ID";
 $m['yes'] = "Yes";
 $m['no'] = "No";
 $m['in'] = "in";
@@ -2471,11 +2471,11 @@ $langDelWarn1 = "You are going to delete the assignment";
 $langDelSure = "Are you sure you want to delete the assignment?";
 $langWorkFile = "File";
 $langZipDownload = "Download assignments (in .zip format)";
-$langDelWarn2 = "There is a ".$langsStudent."submission. This file will be deleted!";
+$langDelWarn2 = "There is a " . $langsStudent . "submission. This file will be deleted!";
 $langDelTitle = "Warning!";
 $langDelMany1 = "Have submitted";
-$langDelMany2 = "".$langsStudents."assignments. These files will be deleted!";
-$langSubmissions = "".$langStudent."Submissions";
+$langDelMany2 = "" . $langsStudents . "assignments. These files will be deleted!";
+$langSubmissions = "" . $langStudent . "Submissions";
 $langSubmitted = "A file has already been submitted for this assignment";
 $langNotice2 = "Submission date";
 $langNotice3 = "If you submit another file, the old file will be replaced by the new one.";
@@ -2504,7 +2504,7 @@ $langAssignmentDeactivated = "The assignment was deactivated";
 $langSaved = "The assignment details were saved";
 $langExerciseNotPermit = "The submission of the assignment is forbidden!";
 $langGraphResults = "Assignment Results";
-$langRequestStudent = "The application of ".$langsStudent."closed!";
+$langRequestStudent = "The application of " . $langsStudent . "closed!";
 $langRequestReject = "The application was rejected";
 $langInformativeEmail = "It was sent informative message in the address";
 $langErrorDataOne = "Error retrieving data from database (1)";
@@ -2701,7 +2701,7 @@ $langFileAdmin = "File administration";
 $langInCourses = "In course";
 $langOfSite = "of platform";
 $langElaboration = "Edit";
-$langStudentsOnly = "only in ".$langsOfStudentss."";
+$langStudentsOnly = "only in " . $langsOfStudentss . "";
 $langChangeUserAs = 'Login as';
 $langCASRetAttr = "CAS server returned the following atrributes";
 $langRSSFeed = 'RSS feed';
@@ -2807,7 +2807,7 @@ $langTraining = "Training";
 $langEnterPlatform = "Enter platform by clicking here";
 $langUserAltAuth = "Your username is authenticated with alternative method. Please contact platform administrators";
 $langProfileInfoPrivate = 'private';
-$langProfileInfoProfs = 'available to '.$langsTeachers;
+$langProfileInfoProfs = 'available to ' . $langsTeachers;
 $langProfileInfoUsers = 'available to all';
 $langMetaOther = "Other";
 $langMetaNarrativetext = "Narrative text";

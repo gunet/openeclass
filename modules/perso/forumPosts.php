@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -41,52 +42,50 @@
  * @param string $type (data, html)
  * @return array
  */
-function getUserForumPosts($param, $type)
-{
-	global $mysqlMainDb, $uid, $course_code;
+function getUserForumPosts($param, $type) {
+    global $mysqlMainDb, $uid, $course_code;
 
-	$uid				= $param['uid'];
-	$lesson_code		= $param['lesson_code'];
-	$max_repeat_val		= $param['max_repeat_val'];
-	$lesson_title		= $param['lesson_titles'];
-	$lesson_code		= $param['lesson_code'];
-	$lesson_professor	= $param['lesson_professor'];
+    $uid = $param['uid'];
+    $lesson_code = $param['lesson_code'];
+    $max_repeat_val = $param['max_repeat_val'];
+    $lesson_title = $param['lesson_titles'];
+    $lesson_code = $param['lesson_code'];
+    $lesson_professor = $param['lesson_professor'];
 
-	$last_month = strftime('%Y %m %d', strtotime('now -1 month'));
+    $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
 
-	$forumPosts = array();
+    $forumPosts = array();
 
-	for ($i=0; $i < $max_repeat_val; $i++) {
-                $forum_query_new = createForumQueries($last_month, $lesson_code[$i]);
-		$mysql_query_result = db_query($forum_query_new);
+    for ($i = 0; $i < $max_repeat_val; $i++) {
+        $forum_query_new = createForumQueries($last_month, $lesson_code[$i]);
+        $mysql_query_result = db_query($forum_query_new);
 
-		if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
-			$forumData = array();
-			$forumSubData = array();
-			$forumContent = array();
-			array_push($forumData, $lesson_title[$i]);
-			array_push($forumData, $lesson_code[$i]);
-		}
+        if ($num_rows = mysql_num_rows($mysql_query_result) > 0) {
+            $forumData = array();
+            $forumSubData = array();
+            $forumContent = array();
+            array_push($forumData, $lesson_title[$i]);
+            array_push($forumData, $lesson_code[$i]);
+        }
 
-		while ($myForumPosts = mysql_fetch_row($mysql_query_result)) {
-			if ($myForumPosts){
-				array_push($forumContent, $myForumPosts);
-			}
-		}
-		if ($num_rows > 0) {
-			array_push($forumSubData, $forumContent);
-			array_push($forumData, $forumSubData);
-			array_push($forumPosts, $forumData);
-		}
-	}
+        while ($myForumPosts = mysql_fetch_row($mysql_query_result)) {
+            if ($myForumPosts) {
+                array_push($forumContent, $myForumPosts);
+            }
+        }
+        if ($num_rows > 0) {
+            array_push($forumSubData, $forumContent);
+            array_push($forumData, $forumSubData);
+            array_push($forumPosts, $forumData);
+        }
+    }
 
-	if($type == "html") {
-		return forumHtmlInterface($forumPosts);
-	} elseif ($type == "data") {
-		return $forumPosts;
-	}
+    if ($type == "html") {
+        return forumHtmlInterface($forumPosts);
+    } elseif ($type == "data") {
+        return $forumPosts;
+    }
 }
-
 
 /**
  * Function forumHtmlInterface
@@ -97,35 +96,32 @@ function getUserForumPosts($param, $type)
  * @return string HTML content for the documents block
  * @see function getUserForumPosts()
  */
-function forumHtmlInterface($data)
-{
-	global $langNoPosts, $langMore, $langSender, $urlServer;
+function forumHtmlInterface($data) {
+    global $langNoPosts, $langMore, $langSender, $urlServer;
 
-	$content = "";
-        $numOfLessons = count($data);
-	if($numOfLessons > 0) {
-		$content .= "<table width='100%'>";
-		for ($i=0; $i <$numOfLessons; $i++) {
-			$content .= "<tr><td class='sub_title1'>".$data[$i][0]."</td></tr>";
-			$iterator =  count($data[$i][2][0]);
-			for ($j=0; $j < $iterator; $j++){
-				$url = $urlServer."index.php?perso=5&amp;c=".$data[$i][1]."&amp;t=".$data[$i][2][0][$j][2]."&amp;f=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];                                
-				$content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
-				<b>".q($data[$i][2][0][$j][3])." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
-                                </a><div class='smaller grey'><b>".q(uid_to_name($data[$i][2][0][$j][6])).
-                                "</b></div><div class='smaller'>" .
-                                standard_text_escape(ellipsize_html($data[$i][2][0][$j][7], 150,
-                                                     "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
-                                "</div></li></ul></td></tr>";
-			}
-		}
-		$content .= "</table>";
-	} else {
-		$content .= "<p class='alert1'>$langNoPosts</p>";
-	}
-	return $content;
+    $content = "";
+    $numOfLessons = count($data);
+    if ($numOfLessons > 0) {
+        $content .= "<table width='100%'>";
+        for ($i = 0; $i < $numOfLessons; $i++) {
+            $content .= "<tr><td class='sub_title1'>" . $data[$i][0] . "</td></tr>";
+            $iterator = count($data[$i][2][0]);
+            for ($j = 0; $j < $iterator; $j++) {
+                $url = $urlServer . "index.php?perso=5&amp;c=" . $data[$i][1] . "&amp;t=" . $data[$i][2][0][$j][2] . "&amp;f=" . $data[$i][2][0][$j][0] . "&amp;s=" . $data[$i][2][0][$j][4];
+                $content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
+				<b>" . q($data[$i][2][0][$j][3]) . " (" . nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))) . ")</b>
+                                </a><div class='smaller grey'><b>" . q(uid_to_name($data[$i][2][0][$j][6])) .
+                        "</b></div><div class='smaller'>" .
+                        standard_text_escape(ellipsize_html($data[$i][2][0][$j][7], 150, "<b>&nbsp;...<a href='$url'>[$langMore]</a></b>")) .
+                        "</div></li></ul></td></tr>";
+            }
+        }
+        $content .= "</table>";
+    } else {
+        $content .= "<p class='alert1'>$langNoPosts</p>";
+    }
+    return $content;
 }
-
 
 /**
  * Function createForumQueries
@@ -137,9 +133,9 @@ function forumHtmlInterface($data)
  */
 function createForumQueries($dateVar, $code) {
 
-        $course_id = course_code_to_id($code);
+    $course_id = course_code_to_id($code);
 
-        $forum_query = 'SELECT forum.id,
+    $forum_query = 'SELECT forum.id,
                                forum.name,
                                forum_topic.id,
                                forum_topic.title,
@@ -151,12 +147,12 @@ function createForumQueries($dateVar, $code) {
                         WHERE CONCAT(forum_topic.title, forum_post.post_text) != \'\'
                                AND forum.id = forum_topic.forum_id
                                AND forum_post.topic_id = forum_topic.id
-                               AND forum.course_id = '.$course_id.'
-                               AND DATE_FORMAT(forum_post.post_time, \'%Y %m %d\') >= "'.$dateVar.'"
+                               AND forum.course_id = ' . $course_id . '
+                               AND DATE_FORMAT(forum_post.post_time, \'%Y %m %d\') >= "' . $dateVar . '"
                                AND course_module.visible = 1
-                               AND course_module.module_id = '.MODULE_ID_FORUM.'
-                               AND course_module.course_id = '.$course_id.'
+                               AND course_module.module_id = ' . MODULE_ID_FORUM . '
+                               AND course_module.course_id = ' . $course_id . '
                         ORDER BY forum_post.post_time LIMIT 15';
 
-	return $forum_query;
+    return $forum_query;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -27,29 +28,29 @@ require_once 'include/sendMail.inc.php';
 
 $nameTools = $langAddDescription;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
-$group_id = isset($_REQUEST['group_id'])?intval($_REQUEST['group_id']):'';
+$group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 
 if (isset($_GET['delete'])) {
-	$sql = db_query("UPDATE group_members SET description = ''
+    $sql = db_query("UPDATE group_members SET description = ''
 		WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-	if (mysql_affected_rows() > 0) {
-		$tool_content .= "<div class='success'>$langBlockDeleted<br /><br />";
-	}
-	$tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
+    if (mysql_affected_rows() > 0) {
+        $tool_content .= "<div class='success'>$langBlockDeleted<br /><br />";
+    }
+    $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else if (isset($_POST['submit'])) {
-		$sql = db_query("UPDATE group_members SET description = ".autoquote($_POST['group_desc'])."
+    $sql = db_query("UPDATE group_members SET description = " . autoquote($_POST['group_desc']) . "
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-		if (mysql_affected_rows() > 0) {
-			$tool_content .= "<div class='success'>$langRegDone<br /><br />";
-		} else {
-			$tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
-		}
-		$tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
+    if (mysql_affected_rows() > 0) {
+        $tool_content .= "<div class='success'>$langRegDone<br /><br />";
+    } else {
+        $tool_content .= "<div class='caution'>$langNoChanges<br /><br />";
+    }
+    $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
 } else { // display form
-	$sql = db_query("SELECT description FROM group_members
+    $sql = db_query("SELECT description FROM group_members
 			WHERE group_id = $group_id AND user_id = $uid", $mysqlMainDb);
-	list($description) = mysql_fetch_array($sql);
-	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    list($description) = mysql_fetch_array($sql);
+    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	  <table class='FormData' width='99%' align='left'>
 	  <tbody>
 	  <tr>
@@ -58,12 +59,12 @@ if (isset($_GET['delete'])) {
 	  </tr>
 	  <tr>
 	    <th class='left'>$langDescription</th>
-		<td><textarea class=auth_input name='group_desc' rows='10' cols='80'>".@$description."</textarea></td>
+		<td><textarea class=auth_input name='group_desc' rows='10' cols='80'>" . @$description . "</textarea></td>
 	  </tr>
 	  <tr>
 	    <th>&nbsp;</th>
 	    <input type='hidden' name='group_id' value='$group_id'>
-	<td><input type='submit' name='submit' value='".q($langAddModify)."' /></td>
+	<td><input type='submit' name='submit' value='" . q($langAddModify) . "' /></td>
 	  </tr>
 	  </tbody>
 	  </table>

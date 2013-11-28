@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -30,28 +31,27 @@
  */
 
 if (!defined('INDEX_START')) {
-	die("Action not allowed!");
+    die("Action not allowed!");
 }
 
 require_once 'include/lib/textLib.inc.php';
 
-function course_table_header($status)
-{
-        global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
-               $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
+function course_table_header($status) {
+    global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
+    $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
 
-        if ($status == 1) {
-                $legend = $langMyCoursesProf;
-                $manage = $langAdm;
-        } elseif ($status == 5) {
-                $legend = $langMyCoursesUser;
-                $manage = $langUnCourse;
-        } else {
-                $legend = "(? $status ?)";
-                $manage = '';
-        }
+    if ($status == 1) {
+        $legend = $langMyCoursesProf;
+        $manage = $langAdm;
+    } elseif ($status == 5) {
+        $legend = $langMyCoursesUser;
+        $manage = $langUnCourse;
+    } else {
+        $legend = "(? $status ?)";
+        $manage = '';
+    }
 
-	$tool_content .= "
+    $tool_content .= "
         <script type='text/javascript' src='modules/auth/sorttable.js'></script>
         <table width='99%' class='sortable' id='t1'>
         <tr>
@@ -61,9 +61,8 @@ function course_table_header($status)
         </tr>\n";
 }
 
-function course_table_end()
-{
-        $GLOBALS['tool_content'] .= "\n</table><br />\n";
+function course_table_end() {
+    $GLOBALS['tool_content'] .= "\n</table><br />\n";
 }
 
 $courses = array();
@@ -76,117 +75,117 @@ $sql2 = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
                 WHERE course_user.user_id = $uid
-                AND course.visible != ".COURSE_INACTIVE."
+                AND course.visible != " . COURSE_INACTIVE . "
                 ORDER BY status, course.title, course.prof_names";
 
 if ($_SESSION['status'] == 1) {
-        $result2 = db_query($sql);
+    $result2 = db_query($sql);
 }
 if ($_SESSION['status'] == 5) {
-        $result2 = db_query($sql2);
+    $result2 = db_query($sql2);
 }
 if ($result2 and mysql_num_rows($result2) > 0) {
-	$k = 0;
-        $this_status = 0;
-	// display courses
-	while ($mycours = mysql_fetch_array($result2)) {
-                $old_status = $this_status;
-                $this_status = $mycours['status'];
-                if ($k == 0 or $old_status <> $this_status) {
-                        if ($k > 0) {
-                                course_table_end();
-                        }
-                        course_table_header($this_status);
-                }
-		$code = $mycours['code'];
-                $title = $mycours['title'];
-		$courses[$code] = $this_status;
-		$course_id_map[$code] = $mycours['cid'];
-                $profs[$code] = $mycours['profs'];
-                $titles[$code] = $mycours['title'];
-		if ($k%2==0) {
-			$tool_content .= "<tr class='even'>\n";
-		} else {
-			$tool_content .= "<tr class='odd'>\n";
-		}
-                if ($this_status == 1) {
-                        $manage_link = "${urlServer}modules/course_info/?from_home=true&amp;cid=$code";
-                        $manage_icon = $themeimg . '/tools.png';
-                        $manage_title = $langAdm;
-                } else {
-                        $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
-                        $manage_icon = $themeimg . '/cunregister.png';
-                        $manage_title = $langUnregCourse;
-                }
-		$tool_content .= "<td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
-		$tool_content .= "<td><a href='${urlServer}courses/$code'>".q($title)."</a> <span class='smaller'>(".q($mycours['public_code']).")</span></td>";
-		$tool_content .= "<td class='smaller'>".q($mycours['profs'])."</td>";
-		$tool_content .= "<td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
-		$tool_content .= "</tr>";
-		$k++;
-	}
-        course_table_end();
-}  elseif ($_SESSION['status'] == 5) {
-        // if are loging in for the first time as student...
-	$tool_content .= "<p class='success'>$langWelcomeStud</p>\n";
-}  elseif ($_SESSION['status'] == 1) {
-        // ...or as professor
-        $tool_content .= "<p class='success'>$langWelcomeProf</p>\n";
+    $k = 0;
+    $this_status = 0;
+    // display courses
+    while ($mycours = mysql_fetch_array($result2)) {
+        $old_status = $this_status;
+        $this_status = $mycours['status'];
+        if ($k == 0 or $old_status <> $this_status) {
+            if ($k > 0) {
+                course_table_end();
+            }
+            course_table_header($this_status);
+        }
+        $code = $mycours['code'];
+        $title = $mycours['title'];
+        $courses[$code] = $this_status;
+        $course_id_map[$code] = $mycours['cid'];
+        $profs[$code] = $mycours['profs'];
+        $titles[$code] = $mycours['title'];
+        if ($k % 2 == 0) {
+            $tool_content .= "<tr class='even'>\n";
+        } else {
+            $tool_content .= "<tr class='odd'>\n";
+        }
+        if ($this_status == 1) {
+            $manage_link = "${urlServer}modules/course_info/?from_home=true&amp;cid=$code";
+            $manage_icon = $themeimg . '/tools.png';
+            $manage_title = $langAdm;
+        } else {
+            $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
+            $manage_icon = $themeimg . '/cunregister.png';
+            $manage_title = $langUnregCourse;
+        }
+        $tool_content .= "<td width='5'><img src='$themeimg/arrow.png' alt='' /></td>";
+        $tool_content .= "<td><a href='${urlServer}courses/$code'>" . q($title) . "</a> <span class='smaller'>(" . q($mycours['public_code']) . ")</span></td>";
+        $tool_content .= "<td class='smaller'>" . q($mycours['profs']) . "</td>";
+        $tool_content .= "<td align='center'><a href='$manage_link'><img src='$manage_icon' title='$manage_title' alt='$manage_title' /></a></td>";
+        $tool_content .= "</tr>";
+        $k++;
+    }
+    course_table_end();
+} elseif ($_SESSION['status'] == 5) {
+    // if are loging in for the first time as student...
+    $tool_content .= "<p class='success'>$langWelcomeStud</p>\n";
+} elseif ($_SESSION['status'] == 1) {
+    // ...or as professor
+    $tool_content .= "<p class='success'>$langWelcomeProf</p>\n";
 }
 
 if (count($status) > 0) {
-        $announce_table_header = "
+    $announce_table_header = "
         <table width='100%' class='sortable' id='t3'>
         <tr>
            <th colspan='2'>$langMyPersoAnnouncements</th>
         </tr>\n";
 
-        $logindate = last_login($uid);
-        $table_begin = true;
-        $result = db_query("SELECT announcement.id, announcement.content, announcement.`date`, announcement.title, announcement.course_id
+    $logindate = last_login($uid);
+    $table_begin = true;
+    $result = db_query("SELECT announcement.id, announcement.content, announcement.`date`, announcement.title, announcement.course_id
                         FROM announcement, course_module, course_user
                         WHERE course_user.course_id = announcement.course_id AND
                               course_module.course_id = announcement.course_id AND
                               course_user.user_id = $uid AND
                               announcement.visible = 1 AND
                               course_module.visible = 1 AND
-                              course_module.module_id = ".MODULE_ID_ANNOUNCE." AND
+                              course_module.module_id = " . MODULE_ID_ANNOUNCE . " AND
                               announcement.`date` > DATE_SUB('$logindate', INTERVAL 10 DAY)
                         ORDER BY announcement.`date` DESC");
-        
 
-        if ($result and mysql_num_rows($result) > 0) {
-                if ($table_begin) {
-                        $table_begin = false;
-                        $tool_content .= $announce_table_header;
-                }
-                $la = 0;
-                while ($ann = mysql_fetch_array($result)) {                        
-                        $course_title = course_id_to_title($ann['course_id']);
-                        $code = course_id_to_code($ann['course_id']);
-                        $content = standard_text_escape($ann['content']);
-                        if ($la % 2 == 0) {
-                                $tool_content .= "<tr class='even'>\n";
-                        } else {
-                                $tool_content .= "<tr class='odd'>\n";
-                        }
-                        $tool_content .= "
+
+    if ($result and mysql_num_rows($result) > 0) {
+        if ($table_begin) {
+            $table_begin = false;
+            $tool_content .= $announce_table_header;
+        }
+        $la = 0;
+        while ($ann = mysql_fetch_array($result)) {
+            $course_title = course_id_to_title($ann['course_id']);
+            $code = course_id_to_code($ann['course_id']);
+            $content = standard_text_escape($ann['content']);
+            if ($la % 2 == 0) {
+                $tool_content .= "<tr class='even'>\n";
+            } else {
+                $tool_content .= "<tr class='odd'>\n";
+            }
+            $tool_content .= "
                         <td width='16'>
                             <img src='$themeimg/arrow.png' alt='' /></td><td>
-                                <b><a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>".q($ann['title'])."</a></b>
+                                <b><a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>" . q($ann['title']) . "</a></b>
                                 <br>" . "<span class='smaller'>" .
-                            claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
-                            "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
-                            q($profs[$code]) . "</b></span>)<br />".
-                            standard_text_escape(ellipsize_html($content, 250, "<strong>&nbsp;...<a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>
-                                <span class='smaller'>[$langMore]</span></a></strong>"))."</td></tr>\n";
-                        $la++;
-                }
+                    claro_format_locale_date($dateFormatLong, strtotime($ann['date'])) .
+                    "&nbsp;($langCourse: <b>" . q($code) . "</b>, $langTutor: <b>" .
+                    q($profs[$code]) . "</b></span>)<br />" .
+                    standard_text_escape(ellipsize_html($content, 250, "<strong>&nbsp;...<a href='modules/announcements/index.php?course=$code&amp;an_id=$ann[id]'>
+                                <span class='smaller'>[$langMore]</span></a></strong>")) . "</td></tr>\n";
+            $la++;
         }
-        if (!$table_begin) {
-                $tool_content .= "</table>";
-        }
+    }
+    if (!$table_begin) {
+        $tool_content .= "</table>";
+    }
 }
 if (isset($courses)) {
-	$_SESSION['courses'] = $courses;
+    $_SESSION['courses'] = $courses;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class CourseIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class CourseIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a course db row.
      * 
@@ -53,7 +54,7 @@ class CourseIndexer implements ResourceIndexerInterface {
     private static function makeDoc($course) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'course_' . $course['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $course['id'], $encoding));
@@ -66,11 +67,11 @@ class CourseIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Text('public_code', Indexer::phonetics($course['public_code']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('units', Indexer::phonetics(strip_tags($course['units'])), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::UnIndexed('created', $course['created'], $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/'. $course['code'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'courses/' . $course['code'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Course from DB.
      * 
@@ -82,7 +83,7 @@ class CourseIndexer implements ResourceIndexerInterface {
         $course = mysql_fetch_assoc($res);
         if (!$course)
             return null;
-        
+
         // visible units
         $course['units'] = '';
         $res = db_query("SELECT id, title, comments
@@ -90,21 +91,21 @@ class CourseIndexer implements ResourceIndexerInterface {
                           WHERE visible > 0
                             AND course_id = " . intval($courseId));
         $unitIds = array();
-        while($row = mysql_fetch_assoc($res)) {
+        while ($row = mysql_fetch_assoc($res)) {
             $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
             $unitIds[] = $row['id'];
         }
-        
+
         // visible unit resources
         foreach ($unitIds as $unitId) {
             $res = db_query("SELECT title, comments
                                FROM unit_resources
                               WHERE visible > 0
                                 AND unit_id = " . intval($unitId));
-            while($row = mysql_fetch_assoc($res))
+            while ($row = mysql_fetch_assoc($res))
                 $course['units'] .= $row['title'] . ' ' . $row['comments'] . ' ';
         }
-        
+
         // invisible but useful units and resources
         $res = db_query("SELECT id
                            FROM course_units
@@ -112,17 +113,17 @@ class CourseIndexer implements ResourceIndexerInterface {
                             AND `order` = -1
                             AND course_id  = " . intval($courseId));
         $unitIds = array();
-        while($row = mysql_fetch_assoc($res))
+        while ($row = mysql_fetch_assoc($res))
             $unitIds[] = $row['id'];
-        foreach($unitIds as $unitId) {
+        foreach ($unitIds as $unitId) {
             $res = db_query("SELECT comments
                                FROM unit_resources
                               WHERE visible >= 0
                                 AND unit_id = " . intval($unitId));
-            while($row = mysql_fetch_assoc($res))
+            while ($row = mysql_fetch_assoc($res))
                 $course['units'] .= $row['comments'] . ' ';
         }
-        
+
         return $course;
     }
 
@@ -136,19 +137,19 @@ class CourseIndexer implements ResourceIndexerInterface {
         $course = $this->fetch($courseId);
         if (!$course)
             return;
-        
+
         // delete existing course from index
         $this->remove($courseId, false, false);
 
         // add the course back to the index
         $this->__index->addDocument(self::makeDoc($course));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Course from the Index.
      * 
@@ -162,18 +163,18 @@ class CourseIndexer implements ResourceIndexerInterface {
             if (!$course)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('course_' . $courseId, 'pk');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all courses.
      * 
@@ -182,23 +183,23 @@ class CourseIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all courses from index
         $term = new Zend_Search_Lucene_Index_Term('course', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all courses from db
         $res = db_query("SELECT id FROM course");
         while ($row = mysql_fetch_assoc($res)) {
             $course = $this->fetch($row['id']);
             $this->__index->addDocument(self::makeDoc($course));
         }
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Return the detailed search form for courses.
      * 
@@ -218,10 +219,10 @@ class CourseIndexer implements ResourceIndexerInterface {
      * @return string - The form's HTML representation
      */
     public static function getDetailedSearchForm() {
-        global $langSearchCriteria, $langTitle, $langTitle_Descr, $langDescription, 
-               $langDescription_Descr, $langKeywords, $langKeywords_Descr, $langTeacher, 
-               $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
-               $langNewSearch;
+        global $langSearchCriteria, $langTitle, $langTitle_Descr, $langDescription,
+        $langDescription_Descr, $langKeywords, $langKeywords_Descr, $langTeacher,
+        $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
+        $langNewSearch;
 
         return "
         <form method='post' action='$_SERVER[SCRIPT_NAME]'>
@@ -261,7 +262,7 @@ class CourseIndexer implements ResourceIndexerInterface {
         </fieldset>
         </form>";
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -322,5 +323,5 @@ class CourseIndexer implements ResourceIndexerInterface {
         }
         return array($queryStr, $needsOR);
     }
-    
+
 }

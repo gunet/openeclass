@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -48,4 +49,4 @@ else if (count($roots) == 1) {
     $tool_content = $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
 
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0);
+draw($tool_content, (isset($uid) and $uid) ? 1 : 0);

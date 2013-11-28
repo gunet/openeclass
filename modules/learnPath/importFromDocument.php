@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -19,15 +20,15 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	importFromDocument.php
-	@last update: 25-03-2010 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
-==============================================================================
-    @Description: This script handles importing of SCORM packages
-                  from Open eClass document files.
-==============================================================================
-*/
+/* ===========================================================================
+  importFromDocument.php
+  @last update: 25-03-2010 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+  ==============================================================================
+  @Description: This script handles importing of SCORM packages
+  from Open eClass document files.
+  ==============================================================================
+ */
 
 
 $require_current_course = TRUE;
@@ -35,28 +36,27 @@ $require_editor = TRUE;
 
 require_once("../../include/baseTheme.php");
 
-$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langLearningPaths);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $nameTools = $langimportLearningPath;
 
 mysql_select_db($course_code);
 
 if (isset($_POST) && isset($_POST['selectedDocument'])) {
-	require_once("./importLearningPathLib.php");
+    require_once("./importLearningPathLib.php");
 
-	$filename = basename($_POST['selectedDocument']);
-	$srcFile = "../../courses/".$course_code."/document/".$_POST['selectedDocument'];
-	$destFile = "../../courses/".$course_code."/temp/".$filename;
+    $filename = basename($_POST['selectedDocument']);
+    $srcFile = "../../courses/" . $course_code . "/document/" . $_POST['selectedDocument'];
+    $destFile = "../../courses/" . $course_code . "/temp/" . $filename;
 
-	copy($srcFile, $destFile);
+    copy($srcFile, $destFile);
 
-	list($messages, $lpid) = doImport($course_code, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
-	$tool_content .= $messages;
-	$tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$course_code\">$langBack</a></p>";
+    list($messages, $lpid) = doImport($course_code, $mysqlMainDb, $webDir, filesize($destFile), $filename, true);
+    $tool_content .= $messages;
+    $tool_content .= "\n<br /><a href=\"importLearningPath.php?course=$course_code\">$langBack</a></p>";
 
-	unlink($destFile);
-}
-else {
-	$tool_content .= "Error, please try again!";
+    unlink($destFile);
+} else {
+    $tool_content .= "Error, please try again!";
 }
 
 draw($tool_content, 2);

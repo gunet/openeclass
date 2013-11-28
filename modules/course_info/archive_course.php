@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -27,7 +28,7 @@ $nameTools = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langModifInfo);
 
 if (extension_loaded('zlib')) {
-	include 'include/pclzip/pclzip.lib.php';
+    include 'include/pclzip/pclzip.lib.php';
 }
 
 $basedir = "$webDir/courses/archive/$course_code";
@@ -48,113 +49,106 @@ $tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'>
 // backup subsystems from main db
 $sql_course = "course_id = $course_id";
 $archive_conditions = array(
-        'course' => "id = $course_id",
-        'user' => "user_id IN (SELECT user_id FROM course_user
+    'course' => "id = $course_id",
+    'user' => "user_id IN (SELECT user_id FROM course_user
                                       WHERE course_id = $course_id)",
-        'course_user' => "course_id = $course_id",
-        'course_department' => "course = $course_id",
-        'course_module' => $sql_course,
-        'hierarchy' => "id IN (SELECT department FROM course_department
+    'course_user' => "course_id = $course_id",
+    'course_department' => "course = $course_id",
+    'course_module' => $sql_course,
+    'hierarchy' => "id IN (SELECT department FROM course_department
                                       WHERE course = $course_id)",
-        'announcement' => $sql_course,
-        'group_properties' => $sql_course,
-        'group' => $sql_course,
-        'group_members' => "group_id IN (SELECT id FROM `group`
+    'announcement' => $sql_course,
+    'group_properties' => $sql_course,
+    'group' => $sql_course,
+    'group_members' => "group_id IN (SELECT id FROM `group`
                                                 WHERE course_id = $course_id)",
-        'document' => $sql_course,
-        'link_category' => $sql_course,
-        'link' => $sql_course,
-        'ebook' => $sql_course,
-        'ebook_section' => "ebook_id IN (SELECT id FROM ebook
+    'document' => $sql_course,
+    'link_category' => $sql_course,
+    'link' => $sql_course,
+    'ebook' => $sql_course,
+    'ebook_section' => "ebook_id IN (SELECT id FROM ebook
                                                 WHERE course_id = $course_id)",
-        'ebook_subsection' => "section_id IN (SELECT ebook_section.id
+    'ebook_subsection' => "section_id IN (SELECT ebook_section.id
                                                      FROM ebook, ebook_section
                                                      WHERE ebook.id = ebook_id AND
                                                            course_id = $course_id)",
-        'course_units' => $sql_course,
-        'unit_resources' => "unit_id IN (SELECT id FROM course_units
+    'course_units' => $sql_course,
+    'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                 WHERE course_id = $course_id)",
-        'forum' => $sql_course,
-        'forum_category' => $sql_course,
-        'forum_topic' => "forum_id IN (SELECT id FROM forum
+    'forum' => $sql_course,
+    'forum_category' => $sql_course,
+    'forum_topic' => "forum_id IN (SELECT id FROM forum
                                               WHERE course_id = $course_id)",
-        'forum_post' => "topic_id IN (SELECT forum_topic.id
+    'forum_post' => "topic_id IN (SELECT forum_topic.id
                                              FROM forum, forum_topic
                                              WHERE forum.id = forum_id AND
                                                    course_id = $course_id)",
-        'forum_notify' => $sql_course,
-        'glossary' => $sql_course,
-        'glossary_category' => $sql_course,
-
-        'video' => $sql_course,
-        'videolink' => $sql_course,
-        'dropbox_file' => $sql_course,
-        'dropbox_person' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",
-        'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",
-        'lp_learnPath' => $sql_course,
-        'lp_module' => $sql_course,
-        'lp_asset' => "module_id IN (SELECT module_id FROM lp_module WHERE course_id = $course_id)",
-        'lp_rel_learnPath_module' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $course_id)",
-        'lp_user_module_progress' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $course_id)",
-        'wiki_properties' => $sql_course,
-        'wiki_acls' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $course_id)",
-        'wiki_pages' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $course_id)",
-        'wiki_pages_content' => "pid IN (SELECT id FROM wiki_pages
+    'forum_notify' => $sql_course,
+    'glossary' => $sql_course,
+    'glossary_category' => $sql_course,
+    'video' => $sql_course,
+    'videolink' => $sql_course,
+    'dropbox_file' => $sql_course,
+    'dropbox_person' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",
+    'dropbox_post' => "fileId IN (SELECT id from dropbox_file WHERE course_id = $course_id)",
+    'lp_learnPath' => $sql_course,
+    'lp_module' => $sql_course,
+    'lp_asset' => "module_id IN (SELECT module_id FROM lp_module WHERE course_id = $course_id)",
+    'lp_rel_learnPath_module' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $course_id)",
+    'lp_user_module_progress' => "learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $course_id)",
+    'wiki_properties' => $sql_course,
+    'wiki_acls' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $course_id)",
+    'wiki_pages' => "wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $course_id)",
+    'wiki_pages_content' => "pid IN (SELECT id FROM wiki_pages
                                                 WHERE wiki_id IN (SELECT id FROM wiki_properties
                                                                          WHERE course_id = $course_id))",
-        'poll' => $sql_course,
-        'poll_question' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
-        'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
-        'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question
+    'poll' => $sql_course,
+    'poll_question' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
+    'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
+    'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question
                                                    WHERE pid IN (SELECT pid FROM poll
                                                                         WHERE course_id = $course_id))",
-        'assignment' => $sql_course,
-        'assignment_submit' => "assignment_id IN (SELECT id FROM assignment
+    'assignment' => $sql_course,
+    'assignment_submit' => "assignment_id IN (SELECT id FROM assignment
                                                          WHERE course_id = $course_id)",
-        'agenda' => $sql_course,
-        'exercise' => $sql_course,
-        'exercise_question' => $sql_course,
-        'exercise_answer' => "question_id IN (SELECT id FROM exercise_question
+    'agenda' => $sql_course,
+    'exercise' => $sql_course,
+    'exercise_question' => $sql_course,
+    'exercise_answer' => "question_id IN (SELECT id FROM exercise_question
                                                      WHERE course_id = $course_id)",
-        'exercise_user_record' => "eid IN (SELECT id FROM exercise WHERE course_id = $course_id)",
-        'exercise_with_questions' => "question_id IN (SELECT id FROM exercise_question
+    'exercise_user_record' => "eid IN (SELECT id FROM exercise WHERE course_id = $course_id)",
+    'exercise_with_questions' => "question_id IN (SELECT id FROM exercise_question
                                                              WHERE course_id = $course_id) OR
                                       exercise_id IN (SELECT id FROM exercise
                                                              WHERE course_id = $course_id)");
 
 foreach ($archive_conditions as $table => $condition) {
-        backup_table($archivedir, $table, $condition);
+    backup_table($archivedir, $table, $condition);
 }
-file_put_contents("$archivedir/config_vars",
-        serialize(array('urlServer' => $urlServer,
-                        'urlAppend' => $urlAppend,
-                        'siteName' => $siteName,
-                        'version' => get_config('version'))));
+file_put_contents("$archivedir/config_vars", serialize(array('urlServer' => $urlServer,
+    'urlAppend' => $urlAppend,
+    'siteName' => $siteName,
+    'version' => get_config('version'))));
 
 $htmldir = $archivedir . '/html';
 $tool_content .= "<li>$langBUCourseDataOfMainBase $course_code</li>\n";
 
 // create zip file
 $zipCourse = new PclZip($zipfile);
-$result = $zipCourse->create($archivedir,
-        PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
-$result = $zipCourse->add("$webDir/courses/$course_code",
-        PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code",
-        PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
-$result = $zipCourse->add("$webDir/video/$course_code",
-        PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code",
-        PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
+$result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
+$result = $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
+$result = $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
 
 removeDir($archivedir);
 
 $tool_content .= "<li>$langBackupOfDataBase $course_code</li></ol></th>
         <td>&nbsp;</td></tr></tbody></table>";
 if (!$result) {
-        $tool_content .= "Error: ".$zipCourse->errorInfo(true);
-        draw($tool_content, 2);
-        exit;
+    $tool_content .= "Error: " . $zipCourse->errorInfo(true);
+    draw($tool_content, 2);
+    exit;
 } else {
-        $tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='{$urlAppend}courses/archive/$course_code/$course_code-$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
+    $tool_content .= "<br /><p class='success_small'>$langBackupSuccesfull</p><div align=\"left\"><a href='{$urlAppend}courses/archive/$course_code/$course_code-$backup_date_short.zip'>$langDownloadIt <img src='$themeimg/download.png' title='$langDownloadIt' alt=''></a></div>";
 }
 
 $tool_content .= "<p align='right'>
@@ -162,38 +156,36 @@ $tool_content .= "<p align='right'>
 
 draw($tool_content, 2);
 
-
 function backup_table($basedir, $table, $condition) {
-        $q = db_query("SELECT * FROM `$table` WHERE $condition");
-        $backup = array();
-        $num_fields = mysql_num_fields($q);
-        while ($data = mysql_fetch_assoc($q)) {
-                for ($i=0; $i < $num_fields; $i++) {
-                        $type = mysql_field_type($q, $i);
-                        if ($type == 'int') {
-                                $name = mysql_field_name($q, $i);
-                                $data[$name] = intval($data[$name]);
-                        }
-                }
-                $backup[] = $data;
+    $q = db_query("SELECT * FROM `$table` WHERE $condition");
+    $backup = array();
+    $num_fields = mysql_num_fields($q);
+    while ($data = mysql_fetch_assoc($q)) {
+        for ($i = 0; $i < $num_fields; $i++) {
+            $type = mysql_field_type($q, $i);
+            if ($type == 'int') {
+                $name = mysql_field_name($q, $i);
+                $data[$name] = intval($data[$name]);
+            }
         }
-        file_put_contents("$basedir/$table", serialize($backup));
+        $backup[] = $data;
+    }
+    file_put_contents("$basedir/$table", serialize($backup));
 }
 
 // Delete everything in $basedir older than $age seconds
-function cleanup($basedir, $age)
-{
-        if ($handle = opendir($basedir)) {
-                while (($file = readdir($handle)) !== false) {
-                        $entry = "$basedir/$file";
-                        if ($file != '.' and $file != '..' and
-                            (time() - filemtime($entry) > $age)) {
-                                if (is_dir($entry)) {
-                                        removeDir($entry);
-                                } else {
-                                        unlink($entry);
-                                }
-                        }
+function cleanup($basedir, $age) {
+    if ($handle = opendir($basedir)) {
+        while (($file = readdir($handle)) !== false) {
+            $entry = "$basedir/$file";
+            if ($file != '.' and $file != '..' and
+                    (time() - filemtime($entry) > $age)) {
+                if (is_dir($entry)) {
+                    removeDir($entry);
+                } else {
+                    unlink($entry);
                 }
+            }
         }
+    }
 }

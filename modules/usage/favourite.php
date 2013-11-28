@@ -91,7 +91,7 @@ foreach ($usage_defaults as $key => $val) {
 
 $date_fmt = '%Y-%m-%d';
 $date_where = " (day BETWEEN " . quote("$u_date_start 00:00:00") .
-                 ' AND ' . quote("$u_date_end 23:59:59") . ") ";
+        ' AND ' . quote("$u_date_end 23:59:59") . ") ";
 
 if ($u_user_id != -1) {
     $user_where = "AND id = " . intval($u_user_id) . " AND";
@@ -205,8 +205,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $user_opts .= '<option ' . $selected . ' value="' . $row['id'] . '">' . q($row['givenname'] . ' ' . $row['surname']) . "</option>\n";
 }
 
-$statsValueOptions =
-        '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
+$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
         '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
 
 $tool_content .= '

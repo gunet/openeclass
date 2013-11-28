@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,7 +26,7 @@ require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
 class VideoIndexer implements ResourceIndexerInterface {
-    
+
     private $__indexer = null;
     private $__index = null;
 
@@ -39,10 +40,10 @@ class VideoIndexer implements ResourceIndexerInterface {
             $this->__indexer = new Indexer();
         else
             $this->__indexer = $idxer;
-        
+
         $this->__index = $this->__indexer->getIndex();
     }
-    
+
     /**
      * Construct a Zend_Search_Lucene_Document object out of a video db row.
      * 
@@ -53,7 +54,7 @@ class VideoIndexer implements ResourceIndexerInterface {
     private static function makeDoc($video) {
         global $urlServer;
         $encoding = 'utf-8';
-        
+
         $doc = new Zend_Search_Lucene_Document();
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'video_' . $video['id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video['id'], $encoding));
@@ -61,11 +62,11 @@ class VideoIndexer implements ResourceIndexerInterface {
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video['course_id'], $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video['title']), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video['description']), $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer .'modules/video/file.php?course='. course_id_to_code($video['course_id']) . '&amp;id=' . $video['id'], $encoding));
-        
+        $doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $urlServer . 'modules/video/file.php?course=' . course_id_to_code($video['course_id']) . '&amp;id=' . $video['id'], $encoding));
+
         return $doc;
     }
-    
+
     /**
      * Fetch a Video from DB.
      * 
@@ -77,7 +78,7 @@ class VideoIndexer implements ResourceIndexerInterface {
         $video = mysql_fetch_assoc($res);
         if (!$video)
             return null;
-        
+
         return $video;
     }
 
@@ -91,19 +92,19 @@ class VideoIndexer implements ResourceIndexerInterface {
         $video = $this->fetch($videoId);
         if (!$video)
             return;
-        
+
         // delete existing video from index
         $this->remove($videoId, false, false);
 
         // add the video back to the index
         $this->__index->addDocument(self::makeDoc($video));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove a Video from the Index.
      * 
@@ -117,18 +118,18 @@ class VideoIndexer implements ResourceIndexerInterface {
             if (!$video)
                 return;
         }
-        
+
         $term = new Zend_Search_Lucene_Index_Term('video_' . $videoId, 'pk');
         $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Store all Videos belonging to a Course.
      * 
@@ -140,16 +141,16 @@ class VideoIndexer implements ResourceIndexerInterface {
         $this->removeByCourse($courseId);
 
         // add the videos back to the index
-        $res = db_query("SELECT * FROM video WHERE course_id = ". intval($courseId));
+        $res = db_query("SELECT * FROM video WHERE course_id = " . intval($courseId));
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Remove all Videos belonging to a Course.
      * 
@@ -160,13 +161,13 @@ class VideoIndexer implements ResourceIndexerInterface {
         $hits = $this->__index->find('doctype:video AND courseid:' . $courseId);
         foreach ($hits as $hit)
             $this->__index->delete($hit->getDocument()->id);
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Reindex all videos.
      * 
@@ -175,21 +176,21 @@ class VideoIndexer implements ResourceIndexerInterface {
     public function reindex($optimize = false) {
         // remove all videos from index
         $term = new Zend_Search_Lucene_Index_Term('video', 'doctype');
-        $docIds  = $this->__index->termDocs($term);
+        $docIds = $this->__index->termDocs($term);
         foreach ($docIds as $id)
             $this->__index->delete($id);
-        
+
         // get/index all videos from db
         $res = db_query("SELECT * FROM video");
         while ($row = mysql_fetch_assoc($res))
             $this->__index->addDocument(self::makeDoc($row));
-        
+
         if ($optimize)
             $this->__index->optimize();
         else
             $this->__index->commit();
     }
-    
+
     /**
      * Build a Lucene Query.
      * 
@@ -198,19 +199,19 @@ class VideoIndexer implements ResourceIndexerInterface {
      * @return string             - the returned query string
      */
     public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) && 
-            isset($data['course_id']   ) && !empty($data['course_id']   ) ) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
             foreach ($terms as $term) {
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'content:' . $term . '* ';
             }
-            $queryStr .= ') AND courseid:'. $data['course_id'] .' AND doctype:video';
+            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:video';
             return $queryStr;
-        } 
-        
+        }
+
         return null;
     }
-    
+
 }

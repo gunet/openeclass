@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,62 +20,62 @@
 //
 // $Id$
 
-$text['title']		= 'S&uuml;steemi Informatsioon';
+$text['title'] = 'S&uuml;steemi Informatsioon';
 
-$text['vitals']         = 'System Vital';
-$text['hostname']       = 'Kanooniline masinanimi';
-$text['ip']             = 'Vastav IP';
-$text['kversion']       = 'Kernel Versioon';
-$text['uptime']         = 'Masin elus juba';
-$text['users']          = 'Hetkel kasutajaid';
-$text['loadavg']        = 'Koormuse keskmised';
+$text['vitals'] = 'System Vital';
+$text['hostname'] = 'Kanooniline masinanimi';
+$text['ip'] = 'Vastav IP';
+$text['kversion'] = 'Kernel Versioon';
+$text['uptime'] = 'Masin elus juba';
+$text['users'] = 'Hetkel kasutajaid';
+$text['loadavg'] = 'Koormuse keskmised';
 
-$text['hardware']       = 'Riistvara Informatsioon';
-$text['numcpu']         = 'Protsessoreid';
-$text['cpumodel']       = 'Mudel';
-$text['mhz']            = 'Taktsagedus MHz';
-$text['cache']          = 'Vahem&auml;lu suurus';
-$text['bogomips']       = 'S&uuml;steemi Bogomips';
-$text['pci']            = 'PCI Seadmed';
-$text['ide']            = 'IDE Seadmed';
-$text['scsi']           = 'SCSI Seadmed';
-$text['None']           = 'Puudub';
+$text['hardware'] = 'Riistvara Informatsioon';
+$text['numcpu'] = 'Protsessoreid';
+$text['cpumodel'] = 'Mudel';
+$text['mhz'] = 'Taktsagedus MHz';
+$text['cache'] = 'Vahem&auml;lu suurus';
+$text['bogomips'] = 'S&uuml;steemi Bogomips';
+$text['pci'] = 'PCI Seadmed';
+$text['ide'] = 'IDE Seadmed';
+$text['scsi'] = 'SCSI Seadmed';
+$text['None'] = 'Puudub';
 
-$text['netusage']       = 'V&otilde;rguteenuse kasutamine';
-$text['device']         = 'Seade';
-$text['received']       = 'Saadud';
-$text['sent']           = 'Saadetud';
-$text['errors']         = 'Vigu/H&uuml;ljatud';
+$text['netusage'] = 'V&otilde;rguteenuse kasutamine';
+$text['device'] = 'Seade';
+$text['received'] = 'Saadud';
+$text['sent'] = 'Saadetud';
+$text['errors'] = 'Vigu/H&uuml;ljatud';
 
-$text['memusage']       = 'M&auml;lu kasutamine';
-$text['phymem']         = 'F&uuml;&uuml;siline m&auml;lu';
-$text['swap']           = 'Saalem&auml;lu kettal';
+$text['memusage'] = 'M&auml;lu kasutamine';
+$text['phymem'] = 'F&uuml;&uuml;siline m&auml;lu';
+$text['swap'] = 'Saalem&auml;lu kettal';
 
-$text['fs']             = '&Uuml;hendatud failis&uuml;steemid';
-$text['mount']          = '&Uuml;hendus';
-$text['partition']      = 'Partitsioon';
+$text['fs'] = '&Uuml;hendatud failis&uuml;steemid';
+$text['mount'] = '&Uuml;hendus';
+$text['partition'] = 'Partitsioon';
 
-$text['percent']        = 'Protsendiline h&otilde;ivatus';
-$text['type']           = 'T&uuml;&uuml;p';
-$text['free']           = 'Vaba';
-$text['used']           = 'Kasutusel';
-$text['size']           = 'Suurus';
-$text['totals']         = 'Kokku';
+$text['percent'] = 'Protsendiline h&otilde;ivatus';
+$text['type'] = 'T&uuml;&uuml;p';
+$text['free'] = 'Vaba';
+$text['used'] = 'Kasutusel';
+$text['size'] = 'Suurus';
+$text['totals'] = 'Kokku';
 
-$text['kb']             = 'KB';
-$text['mb']             = 'MB';
-$text['gb']             = 'GB';
+$text['kb'] = 'KB';
+$text['mb'] = 'MB';
+$text['gb'] = 'GB';
 
-$text['none']           = 'puudub';
+$text['none'] = 'puudub';
 
-$text['capacity']       = 'H&otilde;ivatus';
+$text['capacity'] = 'H&otilde;ivatus';
 
-$text['template']       = 'Template';
-$text['language']       = 'Keel';
-$text['submit']         = 'Kehtesta';
-$text['created']        = 'Looja: ';
+$text['template'] = 'Template';
+$text['language'] = 'Keel';
+$text['submit'] = 'Kehtesta';
+$text['created'] = 'Looja: ';
 
-$text['days']           = 'p&auml;eva';
-$text['hours']          = 'tundi';
-$text['minutes']        = 'minutit';
+$text['days'] = 'p&auml;eva';
+$text['hours'] = 'tundi';
+$text['minutes'] = 'minutit';
 ?>

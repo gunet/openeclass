@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -18,17 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+function display_text_form() {
+    global $tool_content, $id, $langContent, $langAdd, $course_code;
 
-
-function display_text_form()
-{
-	global $tool_content, $id, $langContent, $langAdd, $course_code;
-
-	$tool_content .= "
+    $tool_content .= "
         <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>";
-	$tool_content .= "
+    $tool_content .= "
         <fieldset>
-        <legend>$langContent:</legend>".  rich_text_editor('comments', 4, 20, '') ."
+        <legend>$langContent:</legend>" . rich_text_editor('comments', 4, 20, '') . "
 	<br />
         <input type='submit' name='submit_text' value='$langAdd'>
 	</fieldset>

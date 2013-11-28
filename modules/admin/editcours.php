@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,22 +20,22 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	editcours.php
-	@last update: 31-05-2006 by Pitsiougas Vagelis
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
-        @Description: Show all information of a course and give links to edit
+/* ===========================================================================
+  editcours.php
+  @last update: 31-05-2006 by Pitsiougas Vagelis
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
+  @Description: Show all information of a course and give links to edit
 
- 	This script allows the administrator to see all available information of
- 	a course and select other links to edit that information
+  This script allows the administrator to see all available information of
+  a course and select other links to edit that information
 
- 	The user can : - See all available course information
- 	               - Select a link to edit some information
-                 - Return to course list
+  The user can : - See all available course information
+  - Select a link to edit some information
+  - Return to course list
 
- 	@Comments: The script is organised in three sections.
+  @Comments: The script is organised in three sections.
 
   1) Gather course information
   2) Embed available choices
@@ -42,7 +43,7 @@
 
   @todo: Create a valid link for course statistics
 
-==============================================================================*/
+  ============================================================================== */
 
 $require_departmentmanage_user = true;
 
@@ -58,12 +59,12 @@ $course = new Course();
 $user = new User();
 
 if (isset($_GET['c'])) {
-	$c = q($_GET['c']);
-	$_SESSION['c_temp'] = $c;
+    $c = q($_GET['c']);
+    $_SESSION['c_temp'] = $c;
 }
 
-if(!isset($c)) {
-	$c = $_SESSION['c_temp'];
+if (!isset($c)) {
+    $c = $_SESSION['c_temp'];
 }
 
 // validate course Id
@@ -80,162 +81,162 @@ $searchurl = '';
 
 // A course has been selected
 if (isset($c)) {
-	// Define $searchurl to go back to search results
-	if (isset($search) && ($search=='yes')) {
-		$searchurl = '&search=yes';
-	}
-	// Get information about selected course
-        $sql = "SELECT course.code, course.title, course.prof_names, course.visible
+    // Define $searchurl to go back to search results
+    if (isset($search) && ($search == 'yes')) {
+        $searchurl = '&search=yes';
+    }
+    // Get information about selected course
+    $sql = "SELECT course.code, course.title, course.prof_names, course.visible
 		  FROM course
-		 WHERE course.code = '".mysql_real_escape_string($_GET['c'])."'";
-	$result = db_query($sql);
-	$row = mysql_fetch_array($result);
+		 WHERE course.code = '" . mysql_real_escape_string($_GET['c']) . "'";
+    $result = db_query($sql);
+    $row = mysql_fetch_array($result);
 
-        if ($row === false) {
-            // Print an error message
-            $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
-            // Display link to go back to listcours.php
-            $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
-            draw($tool_content, 3);
-            exit();
-        }
+    if ($row === false) {
+        // Print an error message
+        $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
+        // Display link to go back to listcours.php
+        $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
+        draw($tool_content, 3);
+        exit();
+    }
 
-	// Display course information and link to edit
-	$tool_content .= "<fieldset>
-                <legend>".$langCourseInfo." <a href=\"infocours.php?c=".htmlspecialchars($c)."".$searchurl."\">
-                <img src='$themeimg/edit.png' alt='' border='0' title='".$langModify."'></a></legend>
+    // Display course information and link to edit
+    $tool_content .= "<fieldset>
+                <legend>" . $langCourseInfo . " <a href=\"infocours.php?c=" . htmlspecialchars($c) . "" . $searchurl . "\">
+                <img src='$themeimg/edit.png' alt='' border='0' title='" . $langModify . "'></a></legend>
 	<table class='tbl' width='100%'>";
 
-        $departments = $course->getDepartmentIds($cId);
-        $i = 1;
-        foreach ($departments as $dep) {
-            $thtitle = ($i == 1) ? $langFaculty .':' : '';
-            $tool_content .= "
+    $departments = $course->getDepartmentIds($cId);
+    $i = 1;
+    foreach ($departments as $dep) {
+        $thtitle = ($i == 1) ? $langFaculty . ':' : '';
+        $tool_content .= "
             <tr>
                 <th width='250'>$thtitle</th>
-                <td>". $tree->getFullPath($dep) ."</td>
+                <td>" . $tree->getFullPath($dep) . "</td>
             </tr>";
-            $i++;
-        }
+        $i++;
+    }
 
-        $tool_content .= "
+    $tool_content .= "
         <tr>
 	  <th>$langCode:</th>
-	  <td>".q($row['code'])."</td>
+	  <td>" . q($row['code']) . "</td>
 	</tr>
 	<tr>
 	  <th><b>$langTitle:</b></th>
-	  <td>".q($row['title'])."</td>
+	  <td>" . q($row['title']) . "</td>
 	</tr>
 	<tr>
-	  <th><b>".$langTutor.":</b></th>
-	  <td>".q($row['prof_names'])."</td>
+	  <th><b>" . $langTutor . ":</b></th>
+	  <td>" . q($row['prof_names']) . "</td>
 	</tr>
 	</table>
 	</fieldset>";
-	// Display course quota and link to edit
-	$tool_content .= "<fieldset>
-	<legend>".$langQuota." <a href=\"quotacours.php?c=".q($c).$searchurl."\"><img src='$themeimg/edit.png' border='0' alt='' title='".$langModify."'></a></legend>
+    // Display course quota and link to edit
+    $tool_content .= "<fieldset>
+	<legend>" . $langQuota . " <a href=\"quotacours.php?c=" . q($c) . $searchurl . "\"><img src='$themeimg/edit.png' border='0' alt='' title='" . $langModify . "'></a></legend>
 <table width='100%' class='tbl'>
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row['title']) . " $langMaxQuota</div></td>
 	  </tr>";
-	// Get information about course quota
-	$q = mysql_fetch_array(db_query("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM course WHERE code='".mysql_real_escape_string($c)."'"));
-	$dq = format_file_size($q['doc_quota']);
-	$vq = format_file_size($q['video_quota']);
-	$gq = format_file_size($q['group_quota']);
-	$drq = format_file_size($q['dropbox_quota']);
+    // Get information about course quota
+    $q = mysql_fetch_array(db_query("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM course WHERE code='" . mysql_real_escape_string($c) . "'"));
+    $dq = format_file_size($q['doc_quota']);
+    $vq = format_file_size($q['video_quota']);
+    $gq = format_file_size($q['group_quota']);
+    $drq = format_file_size($q['dropbox_quota']);
 
-	$tool_content .= "
+    $tool_content .= "
 	<tr>
 	  <td>$langLegend <b>$langDoc</b>:</td>
-	  <td>".$dq."</td>
+	  <td>" . $dq . "</td>
 	</tr>";
-	$tool_content .= "
+    $tool_content .= "
 	<tr>
 	  <td>$langLegend <b>$langVideo</b>:</td>
-	  <td>".$vq."</td>
+	  <td>" . $vq . "</td>
 	</tr>";
-	$tool_content .= "
+    $tool_content .= "
 	<tr>
 	  <td width='250'>$langLegend <b>$langGroups</b>:</td>
-	  <td>".$gq."</td>
+	  <td>" . $gq . "</td>
 	</tr>";
-	$tool_content .= "
+    $tool_content .= "
 	<tr>
 	  <td>$langLegend <b>$langDropBox</b>:</td>
-	  <td>".$drq."</td>
+	  <td>" . $drq . "</td>
 	</tr>";
-	$tool_content .= "</table></fieldset>";
-	// Display course type and link to edit
-	$tool_content .= "<fieldset>
+    $tool_content .= "</table></fieldset>";
+    // Display course type and link to edit
+    $tool_content .= "<fieldset>
                 <legend>$langCourseStatus
-                        <a href='statuscours.php?c=".q($c).
-                                "$searchurl'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify'></a>
+                        <a href='statuscours.php?c=" . q($c) .
+            "$searchurl'><img src='$themeimg/edit.png' alt='$langModify' title='$langModify'></a>
                 </legend>
                 <table width='100%' class='tbl'>";
-	$tool_content .= "<tr><th width='250'>".$langCurrentStatus.":</th><td>";
-	switch ($row['visible']) {
-                case COURSE_CLOSED:
-                        $tool_content .= $langClosedCourse;
-                        break;
-                case COURSE_OPEN:
-                        $tool_content .= $langOpenCourse;
-                        break;
-                case COURSE_REGISTRATION:
-                        $tool_content .= $langRegCourse;
-                        break;
-                case COURSE_INACTIVE:
-                        $tool_content .= $langCourseInactive;
-                        break;
-	}
-	$tool_content .= "</td></tr></table></fieldset>";
-	// Display other available choices
-	$tool_content .= "
+    $tool_content .= "<tr><th width='250'>" . $langCurrentStatus . ":</th><td>";
+    switch ($row['visible']) {
+        case COURSE_CLOSED:
+            $tool_content .= $langClosedCourse;
+            break;
+        case COURSE_OPEN:
+            $tool_content .= $langOpenCourse;
+            break;
+        case COURSE_REGISTRATION:
+            $tool_content .= $langRegCourse;
+            break;
+        case COURSE_INACTIVE:
+            $tool_content .= $langCourseInactive;
+            break;
+    }
+    $tool_content .= "</td></tr></table></fieldset>";
+    // Display other available choices
+    $tool_content .= "
 	<fieldset>
-	<legend>".$langOtherActions."</legend>
+	<legend>" . $langOtherActions . "</legend>
         <table width='100%' class='tbl'>";
-	// Users list
-	$tool_content .= "
+    // Users list
+    $tool_content .= "
 	<tr>
-	  <td><a href=\"listusers.php?c=".$cId."\">".$langListUsersActions."</a></td>
+	  <td><a href=\"listusers.php?c=" . $cId . "\">" . $langListUsersActions . "</a></td>
 	</tr>";
-  // Register unregister users
-	$tool_content .= "
+    // Register unregister users
+    $tool_content .= "
 	<tr>
-	  <td><a href=\"addusertocours.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langAdminUsers."</a></td>
+	  <td><a href=\"addusertocours.php?c=" . htmlspecialchars($c) . "" . $searchurl . "\">" . $langAdminUsers . "</a></td>
 	</tr>";
-  // Backup course
-	$tool_content .= "<tr>
-	  <td><a href=\"../course_info/archive_course.php?c=".htmlspecialchars($c)."".$searchurl."\">".$langTakeBackup."</a></td>
+    // Backup course
+    $tool_content .= "<tr>
+	  <td><a href=\"../course_info/archive_course.php?c=" . htmlspecialchars($c) . "" . $searchurl . "\">" . $langTakeBackup . "</a></td>
 	</tr>";
-  // Course metadata 
+    // Course metadata 
     if (get_config('course_metadata'))
         $tool_content .= "<tr>
-          <td><a href=\"../course_metadata/index.php?course=".htmlspecialchars($c)."\">".$langCourseMetadata."</a></td>
+          <td><a href=\"../course_metadata/index.php?course=" . htmlspecialchars($c) . "\">" . $langCourseMetadata . "</a></td>
         </tr>";
-  // Delete course
-	$tool_content .= "
+    // Delete course
+    $tool_content .= "
 	<tr>
-	  <td><a href=\"delcours.php?c=".$cId."".$searchurl."\">".$langCourseDel."</a></td>
+	  <td><a href=\"delcours.php?c=" . $cId . "" . $searchurl . "\">" . $langCourseDel . "</a></td>
 	</tr>";
-	$tool_content .= "</table></fieldset>";
+    $tool_content .= "</table></fieldset>";
 
-	// If a search is on display link to go back to listcours with search results
-	if (isset($search) && ($search=="yes")) {
-		$tool_content .= "<br><p align=\"right\"><a href=\"listcours.php?search=yes\">".$langReturnToSearch."</a></p>";
-	}
-	// Display link to go back to listcours.php
-	$tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">".$langBack."</a></p>";
+    // If a search is on display link to go back to listcours with search results
+    if (isset($search) && ($search == "yes")) {
+        $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php?search=yes\">" . $langReturnToSearch . "</a></p>";
+    }
+    // Display link to go back to listcours.php
+    $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">" . $langBack . "</a></p>";
 }
 // If $c is not set we have a problem
 else {
-	// Print an error message
-	$tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
-	// Display link to go back to listcours.php
-	$tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
+    // Print an error message
+    $tool_content .= "<br><p align=\"right\">$langErrChoose</p>";
+    // Display link to go back to listcours.php
+    $tool_content .= "<br><p align=\"right\"><a href=\"listcours.php\">$langBack</a></p>";
 }
 
 draw($tool_content, 3);

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -26,23 +27,23 @@ $nameTools = $langAdmins;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Initialize the incoming variables
-$username = isset($_POST['username'])?$_POST['username']:'';
+$username = isset($_POST['username']) ? $_POST['username'] : '';
 
 if (isset($_POST['submit']) and !empty($username)) {
 
-    $res = db_query("SELECT id FROM user WHERE username=". quote($username));
+    $res = db_query("SELECT id FROM user WHERE username=" . quote($username));
 
     if (mysql_num_rows($res) == 1) {
         list($user_id) = mysql_fetch_array($res);
         switch ($_POST['adminrights']) {
             case 'admin': $privilege = '0'; // platform admin user
-            break;
+                break;
             case 'poweruser': $privilege = '1'; // power user
-            break;
+                break;
             case 'manageuser': $privilege = '2'; //  manage user accounts
-            break;
+                break;
             case 'managedepartment' : $privilege = '3'; // manage departments
-            break;
+                break;
         }
 
         if (isset($privilege)) {
@@ -55,26 +56,24 @@ if (isset($_POST['submit']) and !empty($username)) {
                 $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");
             }
             if (isset($sql) or mysql_affected_rows() > 0) {
-                    $tool_content .= "<p class='success'>
-                    $langTheUser ". q($username) ." $langWith id=".q($user_id) ." $langDone</p>";
+                $tool_content .= "<p class='success'>
+                    $langTheUser " . q($username) . " $langWith id=" . q($user_id) . " $langDone</p>";
             }
         } else {
             $tool_content .= "<p class='caution'>$langError</p>";
         }
     } else {
-        $tool_content .= "<p class='caution'>$langTheUser ". q($username) ." $langNotFound.</p>";
+        $tool_content .= "<p class='caution'>$langTheUser " . q($username) . " $langNotFound.</p>";
     }
-
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        $sql = db_query("DELETE FROM admin WHERE admin.user_id = ". $aid);
+        $sql = db_query("DELETE FROM admin WHERE admin.user_id = " . $aid);
         if (!$sql) {
-            $tool_content .= "<center><br />$langDeleteAdmin". q($aid) ." $langNotFeasible  <br /></center>";
+            $tool_content .= "<center><br />$langDeleteAdmin" . q($aid) . " $langNotFeasible  <br /></center>";
         } else {
             $tool_content .= "<p class='success'>$langNotAdmin</p>";
         }
-
     } else {
         $tool_content .= "<p class='caution'>$langCannotDeleteAdmin</p>";
     }
@@ -98,11 +97,11 @@ $tool_content .= "
     <th class='center'>$langActions</th>
   </tr>";
 
-while($row = mysql_fetch_array($r1)) {
+while ($row = mysql_fetch_array($r1)) {
     $tool_content .= "<tr>
-        <td align='right'>". q($row['id']) .".</td>
-        <td>". q($row['givenname']) ." ". q($row['surname']) ."</td>
-        <td>". q($row['username']) ."</td>";
+        <td align='right'>" . q($row['id']) . ".</td>
+        <td>" . q($row['givenname']) . " " . q($row['surname']) . "</td>
+        <td>" . q($row['username']) . "</td>";
     switch ($row['privilege']) {
         case '0': $message = $langAdministrator;
             break;
@@ -114,9 +113,9 @@ while($row = mysql_fetch_array($r1)) {
             break;
     }
     $tool_content .= "<td align='center'>$message</td>";
-    if($row['id'] != 1) {
+    if ($row['id'] != 1) {
         $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=". q($row['id']) ."'>
+                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row['id']) . "'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
                       </td>";
@@ -132,20 +131,21 @@ $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
 
 draw($tool_content, 3);
 
-/*****************************************************************************
-                                function printform()
-******************************************************************************
+/* * ***************************************************************************
+  function printform()
+ * *****************************************************************************
   This method constructs a simple form where the administrator searches for
   a user by username to give user administrator permissions
 
   @returns
   $ret: (String) The constructed form
-******************************************************************************/
-function printform ($message) {
+ * **************************************************************************** */
+
+function printform($message) {
 
     global $langAdd, $themeimg, $langAdministrator, $langPowerUser, $langManageUser, $langAddRole,
-            $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData,
-            $langManageDepartment, $langHelpManageDepartment;
+    $langHelpAdministrator, $langHelpPowerUser, $langHelpManageUser, $langUserFillData,
+    $langManageDepartment, $langHelpManageDepartment;
 
     $ret = "<form method='post' name='makeadmin' action='$_SERVER[SCRIPT_NAME]'>";
     $ret .= "
@@ -153,7 +153,7 @@ function printform ($message) {
         <legend>$langUserFillData</legend>
         <table class='tbl' width='100%'>
         <tr>
-            <th class='left'>".$message."</th>
+            <th class='left'>" . $message . "</th>
             <td><input type='text' name='username' size='30' maxlength='30'></td>
         </tr>
         <tr><th rowspan='4'>$langAddRole</th>

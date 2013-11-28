@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -33,19 +34,19 @@ $tool_content .= "<table class='tbl_1' width='100%'>
 <th class='left'><strong>$langCoursesHeader:</strong></th>
 <td>";
 
-  /*
-  * Make table with general platform information
-  * ophelia neofytou - 2006/09/26
-  */
+/*
+ * Make table with general platform information
+ * ophelia neofytou - 2006/09/26
+ */
 
-  mysql_select_db($mysqlMainDb);
+mysql_select_db($mysqlMainDb);
 
-  $a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible != ".COURSE_INACTIVE));
-  $a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_OPEN));
-  $a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_REGISTRATION));
-  $a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = ".COURSE_CLOSED));
+$a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible != " . COURSE_INACTIVE));
+$a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_OPEN));
+$a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_REGISTRATION));
+$a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_CLOSED));
 
-  $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
+$tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
   <ul>
     <li><b>$a1[0]</b> $langOpen,</li>
     <li><b>$a2[0]</b> $langSemiopen,</li>
@@ -71,12 +72,12 @@ $tool_content .= "
   </tr>
       <tr>
         <th class='left'><strong>$langSupportUser</strong></th>
-        <td>".q(get_config('admin_name'))."</td>
+        <td>" . q(get_config('admin_name')) . "</td>
   </tr>
    </table>";
 
 if (isset($uid) and $uid) {
-        draw($tool_content, 1);
+    draw($tool_content, 1);
 } else {
-        draw($tool_content, 0);
+    draw($tool_content, 0);
 }

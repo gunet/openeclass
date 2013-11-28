@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -23,13 +24,13 @@ require_once '../../include/init.php';
 $course_id = course_code_to_id($_GET['c']);
 $id = intval($_GET['id']);
 if ($course_id !== false) {
-        db_query("UPDATE link SET hits = hits + 1 WHERE course_id = $course_id AND id = $id");
-        $q = db_query("SELECT url FROM link WHERE course_id = $course_id AND id = $id");
-        if ($q and mysql_num_rows($q) > 0) {
-                list($url) = mysql_fetch_row($q);
-                header('Location: ' . $url);
-                exit;
-        }
+    db_query("UPDATE link SET hits = hits + 1 WHERE course_id = $course_id AND id = $id");
+    $q = db_query("SELECT url FROM link WHERE course_id = $course_id AND id = $id");
+    if ($q and mysql_num_rows($q) > 0) {
+        list($url) = mysql_fetch_row($q);
+        header('Location: ' . $url);
+        exit;
+    }
 }
 $_SESSION['errMessage'] = $langAccountResetInvalidLink;
 header('Location: ' . $urlServer);

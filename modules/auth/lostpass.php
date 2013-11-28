@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -44,10 +45,10 @@ $head_content .= <<<hContent
 
     var lang = {
 hContent;
-$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
-$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
-$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
-$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
+$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
+$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
+$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
 
@@ -67,47 +68,46 @@ define('TOKEN_VALID_TIME', 3600);
 $emailhelpdesk = q(get_config('email_helpdesk'));
 $homelink = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
 
-function password_is_editable($password)
-{
-        global $auth_ids;
+function password_is_editable($password) {
+    global $auth_ids;
 
-        if (in_array($password, $auth_ids)) {
-                return false; // not editable, external auth method
-        } else {
-                return true;  // editable
-        }
+    if (in_array($password, $auth_ids)) {
+        return false; // not editable, external auth method
+    } else {
+        return true;  // editable
+    }
 }
 
 if (isset($_REQUEST['u']) and
-    isset($_REQUEST['h'])) {
-        $change_ok = false;
-	$userUID = intval($_REQUEST['u']);
-        $valid = token_validate('password'.$userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
-	$res = db_query("SELECT id FROM user
+        isset($_REQUEST['h'])) {
+    $change_ok = false;
+    $userUID = intval($_REQUEST['u']);
+    $valid = token_validate('password' . $userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
+    $res = db_query("SELECT id FROM user
                                 WHERE id = $userUID AND
                                       password NOT IN ('" .
-                                      implode("', '", $auth_ids) . "')");
-        $error_messages = array();
-	if ($valid and mysql_num_rows($res) == 1) {
-                if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
-                    count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
-                            $hasher = new PasswordHash(8, false);
-                            if (db_query("UPDATE user SET `password` = ". quote($hasher->HashPassword($_POST['newpass'])) ."
+            implode("', '", $auth_ids) . "')");
+    $error_messages = array();
+    if ($valid and mysql_num_rows($res) == 1) {
+        if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
+                count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
+            $hasher = new PasswordHash(8, false);
+            if (db_query("UPDATE user SET `password` = " . quote($hasher->HashPassword($_POST['newpass'])) . "
                                                       WHERE id = $userUID")) {
-                                      $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
+                $tool_content = "<div class='success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";
-                                      $change_ok = true;
-                        }
-                } elseif (count($error_messages)) {
-                        $tool_content .= "<div class='alert1'><ul><li>" .
-                                implode("</li>\n<li>", $error_messages) .
-                                "</li></ul></div>";
-                }
-		if (!$change_ok) {
-                        $tool_content .= "
+                $change_ok = true;
+            }
+        } elseif (count($error_messages)) {
+            $tool_content .= "<div class='alert1'><ul><li>" .
+                    implode("</li>\n<li>", $error_messages) .
+                    "</li></ul></div>";
+        }
+        if (!$change_ok) {
+            $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <input type='hidden' name='u' value='$userUID'>
-        <input type='hidden' name='h' value='".q($_REQUEST['h'])."'>
+        <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
         <fieldset>
         <legend>$langPassword</legend>
         <table class='tbl'>
@@ -126,83 +126,82 @@ if (isset($_REQUEST['u']) and
         </table>
         </fieldset>
         </form>";
-		}
-	} else {
-		$tool_content = "<div class='caution'>$langAccountResetInvalidLink</div>
+        }
+    } else {
+        $tool_content = "<div class='caution'>$langAccountResetInvalidLink</div>
                                  $homelink";
-	}
+    }
 } elseif (isset($_POST['send_link'])) {
 
-	$email = isset($_POST['email'])? mb_strtolower(trim($_POST['email'])): '';
-	$userName = isset($_POST['userName'])? canonicalize_whitespace($_POST['userName']): '';
-	/***** If valid e-mail address was entered, find user and send email *****/
-	$res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+    $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
+    $userName = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
+    /*     * *** If valid e-mail address was entered, find user and send email **** */
+    $res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
 	                LEFT JOIN admin a ON (a.idUser = u.id)
 	                WHERE u.email = " . quote($email) . " AND
-	                BINARY u.username = " . quote($userName) ." AND 
+	                BINARY u.username = " . quote($userName) . " AND 
 	                a.idUser IS NULL AND  
 	                (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)"); //exclude admins and currently pending requests
 
-        $found_editable_password = false;
-	if (mysql_num_rows($res) == 1) {
-		$text = $langPassResetIntro. $emailhelpdesk;
-		$text .= $langHowToResetTitle;
-		while ($s = mysql_fetch_assoc($res)) {
-			if (password_is_editable($s['password'])) {
-                                $found_editable_password = true;
-				//prepare instruction for password reset
-				$text .= $langPassResetGoHere;
-                                $text .= $urlServer . "modules/auth/lostpass.php?u=$s[id]&h=" .
-                                         token_generate('password'.$s['id'], true);
+    $found_editable_password = false;
+    if (mysql_num_rows($res) == 1) {
+        $text = $langPassResetIntro . $emailhelpdesk;
+        $text .= $langHowToResetTitle;
+        while ($s = mysql_fetch_assoc($res)) {
+            if (password_is_editable($s['password'])) {
+                $found_editable_password = true;
+                //prepare instruction for password reset
+                $text .= $langPassResetGoHere;
+                $text .= $urlServer . "modules/auth/lostpass.php?u=$s[id]&h=" .
+                        token_generate('password' . $s['id'], true);
                 // store the timestamp of this action (password reminding and token generation)
-                db_query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ". $s['id']);
-
-			} else { //other type of auth...
-                                $auth = array_search($s['password'], $auth_ids) or 1;
-				$tool_content = "<div class='caution'>
+                db_query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = " . $s['id']);
+            } else { //other type of auth...
+                $auth = array_search($s['password'], $auth_ids) or 1;
+                $tool_content = "<div class='caution'>
 				    <p><strong>$langPassCannotChange1</strong></p>
-                                    <p>$langPassCannotChange2 ".get_auth_info($auth).
-                                    ". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
+                                    <p>$langPassCannotChange2 " . get_auth_info($auth) .
+                        ". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
                                     $homelink</div>";
-			}
-		}
+            }
+        }
 
-                /***** Account details found, now send e-mail *****/
-                if ($found_editable_password) {
-                        $emailsubject = $lang_remind_pass;
-                        if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
-                                $tool_content = "<div class='caution'>
+        /*         * *** Account details found, now send e-mail **** */
+        if ($found_editable_password) {
+            $emailsubject = $lang_remind_pass;
+            if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
+                $tool_content = "<div class='caution'>
                                 <p><strong>$langAccountEmailError1</strong></p>
                                 <p>$langAccountEmailError2 $email.</p>
                                 <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
                                 $homelink";
-                        } elseif (!isset($auth)) {
-                                $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>".
-                                        q($email)."</strong></div>$homelink";
-                        }
-                }
-        } else {
-                $res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+            } elseif (!isset($auth)) {
+                $tool_content .= "<div class='success'>$lang_pass_email_ok <strong>" .
+                        q($email) . "</strong></div>$homelink";
+            }
+        }
+    } else {
+        $res = db_query("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
 	                LEFT JOIN admin a ON (a.idUser = u.id)
 	                WHERE u.email = " . quote($email) . " AND
-	                BINARY u.username = " . quote($userName) ." AND 
+	                BINARY u.username = " . quote($userName) . " AND 
 	                a.idUser IS NULL AND  
 	                (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)");
-                if (mysql_num_rows($res) == 1) {
-                    $tool_content .= "<div class='caution'>
+        if (mysql_num_rows($res) == 1) {
+            $tool_content .= "<div class='caution'>
                         <p>$langLostPassPending</p></div>
                         $homelink";
-                } else {
-                    $tool_content .= "<div class='caution'>
-                        <p><strong>$langAccountNotFound1 (".q("$userName / $email").")</strong></p>
+        } else {
+            $tool_content .= "<div class='caution'>
+                        <p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
                         <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
                         $homelink";
-                }
         }
+    }
 } else {
-	/***** Email address entry form *****/
-	$tool_content .= "<div class='info'>$lang_pass_intro</div><br>";
-	$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    /*     * *** Email address entry form **** */
+    $tool_content .= "<div class='info'>$lang_pass_intro</div><br>";
+    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
           <legend>$langUserData</legend>
 	  <table class='tbl' width='100%'>

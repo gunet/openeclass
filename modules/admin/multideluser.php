@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.6
  * E-learning and Course Management System
@@ -30,22 +31,22 @@ $tree = new Hierarchy();
 $user = new User();
 
 $nameTools = $langMultiDelUser;
-$navigation[]= array ('url' => "index.php", 'name' => $langAdmin);
+$navigation[] = array('url' => "index.php", 'name' => $langAdmin);
 load_js('tools.js');
 
 
 if (isset($_POST['submit'])) {
-    
+
     $line = strtok($_POST['user_names'], "\n");
-    
+
     while ($line !== false) {
         // strip comments
         $line = preg_replace('/#.*/', '', trim($line));
-        
+
         if (!empty($line)) {
             // fetch uid
             $u = usernameToUid($line);
-            
+
             // for real uids not equal to admin
             if ($u !== false && $u > 1) {
                 // full deletion
@@ -57,20 +58,19 @@ if (isset($_POST['submit'])) {
                     $tool_content .= "<p>$langErrorDelete: $line.</p>\n";
             }
         }
-        
+
         $line = strtok("\n");
     }
-    
 } else {
-    
+
     $usernames = '';
-    
+
     if (isset($_POST['dellall_submit'])) {
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
-        $c = isset($_POST['c']) ? intval($_POST['c'])  :'';
+        $c = isset($_POST['c']) ? intval($_POST['c']) : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
-        $fname = isset($_POST['fname']) ? $_POST['fname']: '';
+        $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $uname = isset($_POST['uname']) ? canonicalize_whitespace($_POST['uname']) : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
         $verified_mail = isset($_POST['verified_mail']) ? intval($_POST['verified_mail']) : 3;
@@ -80,26 +80,26 @@ if (isset($_POST['submit'])) {
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
         $hour = isset($_POST['hour']) ? $_POST['hour'] : 0;
         $minute = isset($_POST['minute']) ? $_POST['minute'] : 0;
-        
+
         // Criteria/Filters
         $criteria = array();
-        
+
         if (isset($_POST['date']) or $hour or $minute) {
-        	$date = explode('-',  $_POST['date']);
-        	if (count($date) == 3) {
-        		$day = intval($date[0]);
-        		$month = intval($date[1]);
-        		$year = intval($date[2]);
-        		$user_registered_at = mktime($hour, $minute, 0, $month, $day, $year);
-        	} else {
-        		$user_registered_at = mktime($hour, $minute, 0, 0, 0, 0);
-        	}
-        	$criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . $user_registered_at;
+            $date = explode('-', $_POST['date']);
+            if (count($date) == 3) {
+                $day = intval($date[0]);
+                $month = intval($date[1]);
+                $year = intval($date[2]);
+                $user_registered_at = mktime($hour, $minute, 0, $month, $day, $year);
+            } else {
+                $user_registered_at = mktime($hour, $minute, 0, 0, 0, 0);
+            }
+            $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . $user_registered_at;
         }
-        
+
         if (!empty($lname))
             $criteria[] = "surname LIKE " . quote('%' . $lname . '%');
-        
+
         if (!empty($fname))
             $criteria[] = "givenname LIKE " . quote('%' . $fname . '%');
 
@@ -117,82 +117,80 @@ if (isset($_POST['submit'])) {
 
         if (!empty($auth_type)) {
             if ($auth_type >= 2)
-                $criteria[] = "password = ". quote($auth_ids[$auth_type]);
+                $criteria[] = "password = " . quote($auth_ids[$auth_type]);
             elseif ($auth_type == 1)
                 $criteria[] = "password NOT IN ('" . implode("', '", $auth_ids) . "')";
         }
 
         if (!empty($email))
             $criteria[] = " email LIKE " . quote('%' . $email . '%');
-        
+
         if ($search == 'inactive')
-            $criteria[] = "expires_at < ".time()." AND user.id <> 1";
-        
+            $criteria[] = "expires_at < " . time() . " AND user.id <> 1";
+
         // Department search
         $depqryadd = '';
         $dep = (isset($_POST['department'])) ? intval($_POST['department']) : 0;
-        if ( $dep || isDepartmentAdmin() )
-        {
-        	$depqryadd = ', user_department';
-        
-        	$subs = array();
-        	if ( $dep ) {
-        		$subs = $tree->buildSubtrees(array($dep));
-        	} else if (isDepartmentAdmin())
-        		$subs = $user->getDepartmentIds($uid);
-        
-        	$ids = '';
-        	foreach ($subs as $key => $id)
-        	{
-        		$ids .= $id .',';
-        		validateNode($id, isDepartmentAdmin());
-        	}
-        	// remove last ',' from $ids
-        	$deps = substr($ids , 0, -1);
-        
-        	$pref = ($c) ? 'a' : 'user';
-        	$criteria[] = $pref . '.user.id = user_department.user';
-        	$criteria[] = 'department IN ('. $deps .')';
+        if ($dep || isDepartmentAdmin()) {
+            $depqryadd = ', user_department';
+
+            $subs = array();
+            if ($dep) {
+                $subs = $tree->buildSubtrees(array($dep));
+            } else if (isDepartmentAdmin())
+                $subs = $user->getDepartmentIds($uid);
+
+            $ids = '';
+            foreach ($subs as $key => $id) {
+                $ids .= $id . ',';
+                validateNode($id, isDepartmentAdmin());
+            }
+            // remove last ',' from $ids
+            $deps = substr($ids, 0, -1);
+
+            $pref = ($c) ? 'a' : 'user';
+            $criteria[] = $pref . '.user.id = user_department.user';
+            $criteria[] = 'department IN (' . $deps . ')';
         }
-        
+
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';
         // end filter/criteria
-        
+
         if (!empty($c)) {
             $qry_base = " FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id $depqryadd WHERE b.course_id = $c ";
             if ($qry_criteria)
-        	    $qry_base .= ' AND '. $qry_criteria;
-            $qry = "SELECT DISTINCT a.username ". $qry_base ." ORDER BY a.username ASC";
+                $qry_base .= ' AND ' . $qry_criteria;
+            $qry = "SELECT DISTINCT a.username " . $qry_base . " ORDER BY a.username ASC";
         } elseif ($search == 'no_login') {
             $qry_base = " FROM user LEFT JOIN loginout ON user.id = loginout.id_user $depqryadd WHERE loginout.id_user IS NULL ";
             if ($qry_criteria)
-                $qry_base .= ' AND '. $qry_criteria;
-        	$qry = "SELECT DISTINCT username ". $qry_base .' ORDER BY username ASC';
+                $qry_base .= ' AND ' . $qry_criteria;
+            $qry = "SELECT DISTINCT username " . $qry_base . ' ORDER BY username ASC';
         } else {
-            $qry_base = ' FROM user'. $depqryadd;
+            $qry_base = ' FROM user' . $depqryadd;
             if ($qry_criteria)
-            	$qry_base .= ' WHERE '. $qry_criteria;
-            $qry = 'SELECT DISTINCT username '. $qry_base .' ORDER BY username ASC';
+                $qry_base .= ' WHERE ' . $qry_criteria;
+            $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
-        
+
         $sql = db_query($qry);
-        while($users = mysql_fetch_array($sql))
+        while ($users = mysql_fetch_array($sql))
             $usernames .= $users['username'] . "\n";
     }
-    
-    
-    $tool_content .= "<div class='noteit'>". $langMultiDelUserInfo ."</div>
-        <form method='post' action='". $_SERVER['SCRIPT_NAME'] ."'>
+
+
+    $tool_content .= "<div class='noteit'>" . $langMultiDelUserInfo . "</div>
+        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
         <fieldset>
-        <legend>". $langMultiDelUserData ."</legend>
+        <legend>" . $langMultiDelUserData . "</legend>
         <table class='tbl' width='100%'>
         <tr>
-            <th>". $langUsersData .":</th>
+            <th>" . $langUsersData . ":</th>
             <td><textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea></td>
         </tr>
         <tr>
             <th>&nbsp;</th>
-            <td class='right'><input type='submit' name='submit' value='". $langSubmit ."' onclick='return confirmation(\"". $langMultiDelUserConfirm ."\");' /></td>
+            <td class='right'><input type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' /></td>
         </tr>
         </table>
         </fieldset>
@@ -202,13 +200,11 @@ if (isset($_POST['submit'])) {
 $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
 draw($tool_content, 3, 'admin', $head_content);
 
-
 // Translate username to uid
-function usernameToUid($uname)
-{
-	if ($r = mysql_fetch_row(db_query("SELECT id FROM user WHERE username = ". quote($uname)))) {
-		return intval($r[0]);
-	} else {
-		return false;
-	}
+function usernameToUid($uname) {
+    if ($r = mysql_fetch_row(db_query("SELECT id FROM user WHERE username = " . quote($uname)))) {
+        return intval($r[0]);
+    } else {
+        return false;
+    }
 }

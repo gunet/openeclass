@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -34,65 +35,62 @@ include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 $nameTools = $langMailVerify;
 
-$uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid']))? $_SESSION['uid']: NULL;
+$uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 
 if (empty($uid)) {
-	$tool_content .= "<div class='caution'>$langMailVerificationError2</div> ";
-	draw($tool_content,0);
-	exit;
+    $tool_content .= "<div class='caution'>$langMailVerificationError2</div> ";
+    draw($tool_content, 0);
+    exit;
 }
 
 // user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or
-     get_mail_ver_status($uid) == EMAIL_VERIFIED) {
-	if (isset($_SESSION['mail_verification_required'])) {
-		unset($_SESSION['mail_verification_required']);
-	}
-	header("Location:" . $urlServer);
+        get_mail_ver_status($uid) == EMAIL_VERIFIED) {
+    if (isset($_SESSION['mail_verification_required'])) {
+        unset($_SESSION['mail_verification_required']);
+    }
+    header("Location:" . $urlServer);
 }
 
 if (!empty($_POST['submit'])) {
-	if (!empty($_POST['email']) && email_seems_valid($_POST['email'])) {
-		$email = $_POST['email'];
-		// user put a new email address update db and session
-		if ($email != $_SESSION['email']) {
-			$_SESSION['email'] = $email;
-			$qry = "UPDATE `user` set email=".autoquote($email). " WHERE user_id=$uid";
-			db_query($qry);
-		}
-		//send new code
-                $hmac = token_generate($_SESSION['uname'].$email.$uid);
+    if (!empty($_POST['email']) && email_seems_valid($_POST['email'])) {
+        $email = $_POST['email'];
+        // user put a new email address update db and session
+        if ($email != $_SESSION['email']) {
+            $_SESSION['email'] = $email;
+            $qry = "UPDATE `user` set email=" . autoquote($email) . " WHERE user_id=$uid";
+            db_query($qry);
+        }
+        //send new code
+        $hmac = token_generate($_SESSION['uname'] . $email . $uid);
 
-		$subject = $langMailChangeVerificationSubject;
-		$MailMessage = sprintf($mailbody1.$langMailVerificationChangeBody, $urlServer.'modules/auth/mail_verify.php?h='.$hmac.'&id='.$uid);
-                $emailhelpdesk = get_config('email_helpdesk');
-		if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
-			$mail_ver_error = sprintf("<p class='alert1'>".$langMailVerificationError,$email,$urlServer."auth/registration.php",
-				"<a href='mailto:".q($emailhelpdesk)."' class='mainpage'>".q($emailhelpdesk)."</a>.</p>");
-			$tool_content .= $mail_ver_error;
-		}
-		else {
-			$tool_content .= "<div class='success'>$langMailVerificationSuccess4</div> ";
-		}
-	}
-	// email wrong or empty
-	else {
-		$tool_content .= "<div class='caution'>$langMailVerificationWrong</div> ";
-	}
-}
-elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required']===1) ) {
-	$tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
+        $subject = $langMailChangeVerificationSubject;
+        $MailMessage = sprintf($mailbody1 . $langMailVerificationChangeBody, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&id=' . $uid);
+        $emailhelpdesk = get_config('email_helpdesk');
+        if (!send_mail('', $emailhelpdesk, '', $email, $subject, $MailMessage, $charset)) {
+            $mail_ver_error = sprintf("<p class='alert1'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</p>");
+            $tool_content .= $mail_ver_error;
+        } else {
+            $tool_content .= "<div class='success'>$langMailVerificationSuccess4</div> ";
+        }
+    }
+    // email wrong or empty
+    else {
+        $tool_content .= "<div class='caution'>$langMailVerificationWrong</div> ";
+    }
+} elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
+    $tool_content .= "<div class='info'>$langMailVerificationReq</div> ";
 }
 
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
-$tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
                 <legend>$langUserData</legend>
                 <table class='tbl' with='100%'>
                 <br />
                 <tr>
                         <th class='left'>$lang_email:</th>
-                        <td><input type='text' name='email' size='30' maxlength='40' value='". q($_SESSION['email']) ."' /></td>
+                        <td><input type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' /></td>
                         <td><small>($langMailVerificationAddrChange)</small></td>
                 </tr>
                 <tr>
@@ -106,9 +104,9 @@ $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'
 }
 
 if (isset($_GET['from_profile'])) {
-        draw($tool_content, 1);
+    draw($tool_content, 1);
 } else {
-draw($tool_content, 0);
+    draw($tool_content, 0);
 }
 
 exit;

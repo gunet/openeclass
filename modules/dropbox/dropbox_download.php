@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -21,7 +22,6 @@
  * @file dropbox_download.php
  * @brief Download files from dropbox
  */
-
 $require_login = TRUE;
 $require_current_course = TRUE;
 
@@ -29,17 +29,17 @@ include '../../include/baseTheme.php';
 require_once 'dropbox_class.inc.php';
 require_once 'include/lib/forcedownload.php';
 
-$dropbox_dir = $webDir."/courses/".$course_code."/dropbox";
+$dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
 
 if (isset($_GET['id'])) {
-        $id = intval($_GET['id']);
+    $id = intval($_GET['id']);
 } else {
-        header("Location: $urlServer");
+    header("Location: $urlServer");
 }
 
 $work = new Dropbox_work($id);
 
-$path = $dropbox_dir . "/" . $work -> filename; //path to file as stored on server
+$path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
 $file = $work->title;
 
 send_file_to_client($path, $file, null, true);

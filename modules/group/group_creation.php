@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -35,7 +36,7 @@ $require_editor = true;
 require_once '../../include/baseTheme.php';
 
 $nameTools = $langNewGroupCreate;
-$navigation[]= array ("url"=>"index.php?course=$course_code", "name"=> $langGroups);
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
 $tool_content = <<<tCont
 

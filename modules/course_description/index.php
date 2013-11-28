@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -41,73 +42,71 @@ require_once 'modules/units/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
-/**** The following is added for statistics purposes ***/
+/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
-/**************************************/
+/* * *********************************** */
 $nameTools = $langCourseDescription;
 
 $unit_id = description_unit_id($course_id);
 
 ModalBoxHelper::loadModalBox();
 if ($is_editor) {
-        load_js('tools.js');
-	$tool_content .= "
+    load_js('tools.js');
+    $tool_content .= "
 	<div id='operations_container'>
 	  <ul id='opslist'>
 		<li><a href='edit.php?course=$course_code'>$langEditCourseProgram</a></li>
 	  </ul>
 	</div>";
-        
-        process_actions();
 
-        if (isset($_POST['edIdBloc'])) {
-                // Save results from block edit (save action)
-                $res_id = intval($_POST['edIdBloc']);
-                add_unit_resource($unit_id, 'description', $res_id,
-                                  autounquote($_POST['edTitleBloc']),
-                                  autounquote($_POST['edContentBloc']));
-                $id = mysql_insert_id();
-                
-                // update index
-                require_once 'modules/search/courseindexer.class.php';
-                $idx = new CourseIndexer();
-                $idx->store($course_id);
-                
-                $log_action = ($id > 0)?LOG_INSERT:LOG_MODIFY;                
-                Log::record($course_id, MODULE_ID_DESCRIPTION, $log_action, array('id' => $id,
-                                                                                 'title' => $_POST['edTitleBloc'],
-                                                                                 'content' => $_POST['edContentBloc']));
-                if ($res_id == -1) {
-                        header("Location: {$urlServer}courses/$course_code");
-                        exit;
-                }
+    process_actions();
+
+    if (isset($_POST['edIdBloc'])) {
+        // Save results from block edit (save action)
+        $res_id = intval($_POST['edIdBloc']);
+        add_unit_resource($unit_id, 'description', $res_id, autounquote($_POST['edTitleBloc']), autounquote($_POST['edContentBloc']));
+        $id = mysql_insert_id();
+
+        // update index
+        require_once 'modules/search/courseindexer.class.php';
+        $idx = new CourseIndexer();
+        $idx->store($course_id);
+
+        $log_action = ($id > 0) ? LOG_INSERT : LOG_MODIFY;
+        Log::record($course_id, MODULE_ID_DESCRIPTION, $log_action, array('id' => $id,
+            'title' => $_POST['edTitleBloc'],
+            'content' => $_POST['edContentBloc']));
+        if ($res_id == -1) {
+            header("Location: {$urlServer}courses/$course_code");
+            exit;
         }
+    }
 }
 
 $q = db_query("SELECT id, title, comments, res_id, visible FROM unit_resources WHERE
                         unit_id = $unit_id AND `order` >= 0 ORDER BY `order`");
 if ($q and mysql_num_rows($q) > 0) {
-        list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
+    list($max_resource_id) = mysql_fetch_row(db_query("SELECT id FROM unit_resources
                                         WHERE unit_id = $unit_id ORDER BY `order` DESC LIMIT 1"));
-	while ($row = mysql_fetch_array($q)) {
-                $tool_content .= "
+    while ($row = mysql_fetch_array($q)) {
+        $tool_content .= "
                 <table width='100%' class='tbl_border'>
                 <tr class='odd'>
                  <td class='bold'>" . q($row['title']) . "</td>\n" .
-                 actions('description', $row['id'], $row['visible'], $row['res_id']) . "
+                actions('description', $row['id'], $row['visible'], $row['res_id']) . "
                 </tr>
                 <tr>";
-                if ($is_editor) {
-                        $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
-                } else {
-                        $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
-                }
-                $tool_content .= "</tr></table><br />\n";
-	}
+        if ($is_editor) {
+            $tool_content .= "\n<td colspan='6'>" . standard_text_escape($row['comments']) . "</td>";
+        } else {
+            $tool_content .= "\n<td>" . standard_text_escape($row['comments']) . "</td>";
+        }
+        $tool_content .= "</tr></table><br />\n";
+    }
 } else {
-	$tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
+    $tool_content .= "<p class='alert1'>$langThisCourseDescriptionIsEmpty</p>";
 }
 
 add_units_navigation(true);

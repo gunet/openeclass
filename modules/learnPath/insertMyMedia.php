@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -24,10 +25,10 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-$TABLELEARNPATH          = 'lp_learnPath';
-$TABLEMODULE             = 'lp_module';
-$TABLELEARNPATHMODULE    = 'lp_rel_learnPath_module';
-$TABLEASSET              = 'lp_asset';
+$TABLELEARNPATH = 'lp_learnPath';
+$TABLEMODULE = 'lp_module';
+$TABLELEARNPATHMODULE = 'lp_rel_learnPath_module';
+$TABLEASSET = 'lp_asset';
 $TABLEUSERMODULEPROGRESS = 'lp_user_module_progress';
 
 include '../../include/baseTheme.php';
@@ -39,8 +40,8 @@ require_once 'include/lib/mediaresource.factory.php';
 
 $dialogBox = '';
 
-$navigation[] = array('url' => "index.php?course=$course_code", 'name'=> $langLearningPath);
-$navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id'], 'name' => $langAdm);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
+$navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $nameTools = $langInsertMyMediaToolName;
 
 ModalBoxHelper::loadModalBox(true);
@@ -60,111 +61,97 @@ EOF;
 
 $iterator = 1;
 
-if (!isset($_POST['maxMediaForm'])) $_POST['maxMediaForm'] = 0;
+if (!isset($_POST['maxMediaForm']))
+    $_POST['maxMediaForm'] = 0;
 
-while ($iterator <= $_POST['maxMediaForm'])
-{
-    if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMedia_'.$iterator]))
-    {
+while ($iterator <= $_POST['maxMediaForm']) {
+    if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMedia_' . $iterator])) {
         // get from DB everything related to the media
-        $sql = "SELECT * FROM video WHERE id = '". intval($_POST['insertMedia_'.$iterator]) ."'";
+        $sql = "SELECT * FROM video WHERE id = '" . intval($_POST['insertMedia_' . $iterator]) . "'";
         $row = db_query_get_single_row($sql);
 
         // check if this media is already a module
-        $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+        $sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
-                           AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
-                           AND A.`path` LIKE \"" .addslashes($row['path']) ."\"
-                           AND M.`contentType` = \"".CTMEDIA_."\"";
+                           AND M.`name` LIKE \"" . addslashes($row['title']) . "\"
+                           AND M.`comment` LIKE \"" . addslashes($row['description']) . "\"
+                           AND A.`path` LIKE \"" . addslashes($row['path']) . "\"
+                           AND M.`contentType` = \"" . CTMEDIA_ . "\"";
         $query0 = db_query($sql);
         $num = mysql_numrows($query0);
 
-        if ($num == 0)
-        {
+        if ($num == 0) {
             create_new_module($row['title'], $row['description'], $row['path'], CTMEDIA_);
 
-            $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
+            $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
             $style = "success";
-        }
-        else
-        {
+        } else {
             // check if this is this LP that used this media as a module
-            $sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-                                  `".$TABLEMODULE."` AS M,
-                                  `".$TABLEASSET."` AS A
+            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
+                                  `" . $TABLEMODULE . "` AS M,
+                                  `" . $TABLEASSET . "` AS A
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
-                               AND A.`path` = '". addslashes($row['path'])."'
-                               AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+                               AND A.`path` = '" . addslashes($row['path']) . "'
+                               AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
             $query2 = db_query($sql);
             $num = mysql_numrows($query2);
 
-            if ($num == 0)
-            { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                    $thisLinkModule = mysql_fetch_array($query0);
+            if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+                $thisLinkModule = mysql_fetch_array($query0);
 
-                    reuse_module($thisLinkModule['module_id']);
+                reuse_module($thisLinkModule['module_id']);
 
-                    $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
-                    $style = "success";
-            }
-            else
-            {
-                $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
+                $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
+                $style = "success";
+            } else {
+                $dialogBox .= q($row['title']) . " : " . $langMediaAlreadyUsed . "<br />";
                 $style = "caution";
             }
         }
     }
 
-    if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMediaLink_'.$iterator]))
-    {
+    if (isset($_POST['submitInsertedMedia']) && isset($_POST['insertMediaLink_' . $iterator])) {
         // get from DB everything related to the medialink
-        $sql = "SELECT * FROM videolink WHERE id = '". intval($_POST['insertMediaLink_'.$iterator]) ."'";
+        $sql = "SELECT * FROM videolink WHERE id = '" . intval($_POST['insertMediaLink_' . $iterator]) . "'";
         $row = db_query_get_single_row($sql);
 
         // check if this medialink is already a module
-        $sql = "SELECT * FROM `".$TABLEMODULE."` AS M, `".$TABLEASSET."` AS A
+        $sql = "SELECT * FROM `" . $TABLEMODULE . "` AS M, `" . $TABLEASSET . "` AS A
                          WHERE A.`module_id` = M.`module_id`
-                           AND M.`name` LIKE \"" .addslashes($row['title']) ."\"
-                           AND M.`comment` LIKE \"" .addslashes($row['description']) ."\"
-                           AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
-                           AND M.`contentType` = \"".CTMEDIALINK_."\"";
+                           AND M.`name` LIKE \"" . addslashes($row['title']) . "\"
+                           AND M.`comment` LIKE \"" . addslashes($row['description']) . "\"
+                           AND A.`path` LIKE \"" . addslashes($row['url']) . "\"
+                           AND M.`contentType` = \"" . CTMEDIALINK_ . "\"";
         $query0 = db_query($sql);
         $num = mysql_numrows($query0);
 
-        if ($num == 0)
-        {
+        if ($num == 0) {
             create_new_module($row['title'], $row['description'], $row['url'], CTMEDIALINK_);
 
-            $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
+            $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
             $style = "success";
-        }
-        else
-        {
+        } else {
             // check if this is this LP that used this medialink as a module
-            $sql = "SELECT * FROM `".$TABLELEARNPATHMODULE."` AS LPM,
-                                  `".$TABLEMODULE."` AS M,
-                                  `".$TABLEASSET."` AS A
+            $sql = "SELECT * FROM `" . $TABLELEARNPATHMODULE . "` AS LPM,
+                                  `" . $TABLEMODULE . "` AS M,
+                                  `" . $TABLEASSET . "` AS A
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
-                               AND A.`path` = '". addslashes($row['url'])."'
-                               AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+                               AND A.`path` = '" . addslashes($row['url']) . "'
+                               AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
             $query2 = db_query($sql);
             $num = mysql_numrows($query2);
 
-            if ($num == 0)
-            { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                    $thisLinkModule = mysql_fetch_array($query0);
+            if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+                $thisLinkModule = mysql_fetch_array($query0);
 
-                    reuse_module($thisLinkModule['module_id']);
+                reuse_module($thisLinkModule['module_id']);
 
-                    $dialogBox .= q($row['title'])." : ".$langMediaInsertedAsModule."<br />";
-                    $style = "success";
-            }
-            else
-            {
-                $dialogBox .= q($row['title'])." : ".$langMediaAlreadyUsed."<br />";
+                $dialogBox .= q($row['title']) . " : " . $langMediaInsertedAsModule . "<br />";
+                $style = "success";
+            } else {
+                $dialogBox .= q($row['title']) . " : " . $langMediaAlreadyUsed . "<br />";
                 $style = "caution";
             }
         }
@@ -186,12 +173,10 @@ $tool_content .= showmedia();
 
 $tool_content .= "
     <br />
-    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=".(int)$_SESSION['path_id']."\">$langBackToLPAdmin</a>";
+    <p align=\"right\"><a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\">$langBackToLPAdmin</a>";
 draw($tool_content, 2, null, $head_content);
 
-
-function showmedia()
-{
+function showmedia() {
     global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
 
     $sqlMedia = "SELECT * FROM video ORDER BY title";
@@ -208,37 +193,35 @@ function showmedia()
                </tr>
                <tbody>";
 
-    $i=1;
-    while ($myrow = mysql_fetch_array($resultMedia))
-    {
+    $i = 1;
+    while ($myrow = mysql_fetch_array($resultMedia)) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". MultimediaHelper::chooseMediaAhref($vObj) ."
+                    <td align='left' valign='top'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
-                    <small class='comments'>".q($myrow['description'])."</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_".$i."' id='insertMedia_".$i."' value='".$myrow['id']."' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow['id'] . "' /></div></td></tr>";
         $i++;
     }
 
-    $j=1;
-    while($myrow = mysql_fetch_array($resultMediaLinks))
-    {
+    $j = 1;
+    while ($myrow = mysql_fetch_array($resultMediaLinks)) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
                     <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
-                    <td align='left' valign='top'>". MultimediaHelper::chooseMedialinkAhref($vObj) ."
+                    <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
-                    <small class='comments'>".q($myrow['description'])."</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_".$j."' id='insertMediaLink_".$j."' value='".$myrow['id']."' /></div></td></tr>";
+                    <small class='comments'>" . q($myrow['description']) . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow['id'] . "' /></div></td></tr>";
         $j++;
     }
 
     $output .= "<tr>
                 <th colspan='3'>
                 <div align='right'>
-                  <input type='hidden' name='maxMediaForm' value ='" . ($i+$j-2) ."' />
+                  <input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "' />
                   <input type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
                 </div></th>
                 </tr>
@@ -248,64 +231,62 @@ function showmedia()
     return $output;
 }
 
-function create_new_module($title, $description, $path, $contentType)
-{
+function create_new_module($title, $description, $path, $contentType) {
     global $TABLEMODULE, $TABLEASSET, $TABLELEARNPATHMODULE, $course_id;
 
     // create new module
-    $sql = "INSERT INTO `".$TABLEMODULE."`
+    $sql = "INSERT INTO `" . $TABLEMODULE . "`
                     (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
-                    VALUES ($course_id, '". addslashes($title) ."' , '"
-                    .addslashes($description) . "', '".$contentType."','')";
+                    VALUES ($course_id, '" . addslashes($title) . "' , '"
+            . addslashes($description) . "', '" . $contentType . "','')";
     $query = db_query($sql);
 
     $insertedModule_id = mysql_insert_id();
 
     // create new asset
-    $sql = "INSERT INTO `".$TABLEASSET."`
+    $sql = "INSERT INTO `" . $TABLEASSET . "`
                     (`path` , `module_id` , `comment`)
-                    VALUES ('". addslashes($path)."', "
-                    . (int)$insertedModule_id . ", '')";
+                    VALUES ('" . addslashes($path) . "', "
+            . (int) $insertedModule_id . ", '')";
     $query = db_query($sql);
 
     $insertedAsset_id = mysql_insert_id();
 
-    $sql = "UPDATE `".$TABLEMODULE."`
-            SET `startAsset_id` = " . (int)$insertedAsset_id . "
-            WHERE `module_id` = " . (int)$insertedModule_id . "";
+    $sql = "UPDATE `" . $TABLEMODULE . "`
+            SET `startAsset_id` = " . (int) $insertedAsset_id . "
+            WHERE `module_id` = " . (int) $insertedModule_id . "";
     $query = db_query($sql);
 
     // determine the default order of this Learning path
-    $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
+    $sql = "SELECT MAX(`rank`) FROM `" . $TABLELEARNPATHMODULE . "`";
     $result = db_query($sql);
 
     list($orderMax) = mysql_fetch_row($result);
     $order = $orderMax + 1;
 
     // finally : insert in learning path
-    $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
             (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-            VALUES ('". (int)$_SESSION['path_id']."', '".(int)$insertedModule_id."','"
-            ."', ".(int)$order.", 'OPEN', 1)";
+            VALUES ('" . (int) $_SESSION['path_id'] . "', '" . (int) $insertedModule_id . "','"
+            . "', " . (int) $order . ", 'OPEN', 1)";
     $query = db_query($sql);
 }
 
-function reuse_module($module_id)
-{
+function reuse_module($module_id) {
     global $TABLELEARNPATHMODULE;
 
     // determine the default order of this Learning path
-    $sql = "SELECT MAX(`rank`) FROM `".$TABLELEARNPATHMODULE."`";
+    $sql = "SELECT MAX(`rank`) FROM `" . $TABLELEARNPATHMODULE . "`";
     $result = db_query($sql);
 
     list($orderMax) = mysql_fetch_row($result);
     $order = $orderMax + 1;
 
     // finally : insert in learning path
-    $sql = "INSERT INTO `".$TABLELEARNPATHMODULE."`
+    $sql = "INSERT INTO `" . $TABLELEARNPATHMODULE . "`
                     (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-                    VALUES ('". (int)$_SESSION['path_id']."', '"
-                    .(int)$module_id."','"
-                    ."', ".(int)$order.",'OPEN', 1)";
+                    VALUES ('" . (int) $_SESSION['path_id'] . "', '"
+            . (int) $module_id . "','"
+            . "', " . (int) $order . ",'OPEN', 1)";
     $query = db_query($sql);
 }

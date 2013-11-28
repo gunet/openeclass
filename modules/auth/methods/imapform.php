@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -30,13 +31,13 @@ if (!empty($imapdata)) {
     $imaphost = $imapsettings;
 }
 
-$imaphost = isset($_POST['imaphost'])?$_POST['imaphost']:$imaphost;
-$auth_instructions = isset($_POST['auth_instructions'])?$_POST['auth_instructions']:$auth_instructions;
+$imaphost = isset($_POST['imaphost']) ? $_POST['imaphost'] : $imaphost;
+$auth_instructions = isset($_POST['auth_instructions']) ? $_POST['auth_instructions'] : $auth_instructions;
 
 $tool_content .= "
     <tr>
       <th class='left'>$langimaphost:</th>
-      <td><input class='FormData_InputText' name='imaphost' type='text' size='30' value='".q($imaphost)."' /></td>
+      <td><input class='FormData_InputText' name='imaphost' type='text' size='30' value='" . q($imaphost) . "' /></td>
     </tr>
     <tr>
       <th class='left'>$langimapport:</th>
@@ -44,6 +45,6 @@ $tool_content .= "
     </tr>
     <tr>
       <th class='left'>$langInstructionsAuth:</th>
-      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>".q($auth_instructions)."</textarea></td>
+      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
     </tr>
 ";

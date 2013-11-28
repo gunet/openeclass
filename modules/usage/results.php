@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -29,7 +30,7 @@
 
 require_once 'modules/graphics/plotter.php';
 
-$usage_defaults = array (
+$usage_defaults = array(
     'u_stats_value' => 'visits',
     'u_interval' => 'daily',
     'u_module_id' => -1,
@@ -54,30 +55,30 @@ if ($u_module_id != -1) {
 
 $date_fmt = '%d-%m-%Y';
 $date_where = "(`day` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
-$date_what  = "";
+$date_what = "";
 
 switch ($u_interval) {
     case "summary":
         $date_group = ' ';
         $date_what = ' ';
-    break;
+        break;
     case "daily":
         $date_what .= " DATE_FORMAT(`day`, '$date_fmt') AS `date`, ";
         $date_group = " GROUP BY `day` ";
-    break;
+        break;
     case "weekly":
-        $date_what .= " DATE_FORMAT(`day` - INTERVAL WEEKDAY(`day`) DAY, '$date_fmt') AS week_start ".
-                      ", DATE_FORMAT(`day` + INTERVAL (6 - WEEKDAY(`day`)) DAY, '$date_fmt') AS week_end, ";
+        $date_what .= " DATE_FORMAT(`day` - INTERVAL WEEKDAY(`day`) DAY, '$date_fmt') AS week_start " .
+                ", DATE_FORMAT(`day` + INTERVAL (6 - WEEKDAY(`day`)) DAY, '$date_fmt') AS week_end, ";
         $date_group = " GROUP BY WEEK(`day`) ";
-    break;
+        break;
     case "monthly":
         $date_what .= " MONTH(`day`) AS `month`, ";
         $date_group = " GROUP BY MONTH(`day`) ";
-    break;
+        break;
     case "yearly":
         $date_what .= " YEAR(`day`) AS `year`, ";
         $date_group = " GROUP BY YEAR(`day`) ";
-    break;
+        break;
 }
 
 

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -18,206 +19,170 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*============================================================================
-	class.clarodbconnection.php
-	@last update: 15-05-2007 by Thanos Kyritsis
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* ============================================================================
+  class.clarodbconnection.php
+  @last update: 15-05-2007 by Thanos Kyritsis
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7.9 licensed under GPL
-	      copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7.9 licensed under GPL
+  copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
-	      original file: class.clarodbconnection Revision: 1.6.2.2
+  original file: class.clarodbconnection Revision: 1.6.2.2
 
-	Claroline authors: Frederic Minne <zefredz@gmail.com>
-==============================================================================
-    @Description:
+  Claroline authors: Frederic Minne <zefredz@gmail.com>
+  ==============================================================================
+  @Description:
 
-    @Comments:
+  @Comments:
 
-    @todo:
-==============================================================================
-*/
+  @todo:
+  ==============================================================================
+ */
 
-    require_once dirname(__FILE__) . "/class.dbconnection.php";
+require_once dirname(__FILE__) . "/class.dbconnection.php";
 
-    class ClarolineDatabaseConnection extends DatabaseConnection
-    {
-        function ClarolineDatabaseConnection()
-        {
-            // use only in claroline tools
+class ClarolineDatabaseConnection extends DatabaseConnection {
+
+    function ClarolineDatabaseConnection() {
+        // use only in claroline tools
+    }
+
+    function setError($errmsg = '', $errno = 0) {
+        if ($errmsg != '') {
+            $this->error = $errmsg;
+            $this->errno = $errno;
+        } else {
+            $this->error = ( @mysql_error() !== false ) ? @mysql_error() : 'Unknown error';
+            $this->errno = ( @mysql_errno() !== false ) ? @mysql_errno() : 0;
         }
 
-        function setError( $errmsg = '', $errno = 0 )
-        {
-            if ( $errmsg != '' )
-            {
-                $this->error = $errmsg;
-                $this->errno = $errno;
-            }
-            else
-            {
-                $this->error = ( @mysql_error() !== false ) ? @mysql_error() : 'Unknown error';
-                $this->errno = ( @mysql_errno() !== false ) ? @mysql_errno() : 0;
-            }
+        $this->connected = false;
+    }
 
-            $this->connected = false;
+    function connect() {
+        
+    }
+
+    function close() {
+        
+    }
+
+    function executeQuery($sql) {
+        db_query($sql);
+
+        if (@mysql_errno() != 0) {
+            $this->setError();
+
+            return 0;
         }
 
-        function connect()
-        {
+        return @mysql_affected_rows();
+    }
 
+    function getAllObjectsFromQuery($sql) {
+        $result = db_query($sql);
+
+        if (@mysql_num_rows($result) > 0) {
+            $ret = array();
+
+            while (( $item = @mysql_fetch_object($result) ) != false) {
+                $ret[] = $item;
+            }
+        } else {
+            $this->setError();
+
+            @mysql_free_result($result);
+
+            return null;
         }
 
-        function close()
-        {
+        @mysql_free_result($result);
 
+        return $ret;
+    }
+
+    function getObjectFromQuery($sql) {
+        $result = db_query($sql);
+
+        if (( $item = @mysql_fetch_object($result) ) != false) {
+            @mysql_free_result($result);
+
+            return $item;
+        } else {
+            $this->setError();
+
+            @mysql_free_result($result);
+            return null;
+        }
+    }
+
+    function getAllRowsFromQuery($sql) {
+        $result = db_query($sql);
+
+        if (@mysql_num_rows($result) > 0) {
+            $ret = array();
+
+            while (( $item = @mysql_fetch_array($result) ) != false) {
+                $ret[] = $item;
+            }
+        } else {
+            $this->setError();
+
+            @mysql_free_result($result);
+
+            return null;
         }
 
-        function executeQuery( $sql )
-        {
-            db_query( $sql );
+        @mysql_free_result($result);
 
-            if( @mysql_errno() != 0 )
-            {
-                $this->setError();
+        return $ret;
+    }
 
-                return 0;
-            }
+    function getRowFromQuery($sql) {
+        $result = db_query($sql);
 
-            return @mysql_affected_rows( );
+        if (( $item = @mysql_fetch_array($result) ) != false) {
+            @mysql_free_result($result);
+
+            return $item;
+        } else {
+            $this->setError();
+
+            @mysql_free_result($result);
+
+            return null;
         }
+    }
 
-        function getAllObjectsFromQuery( $sql )
-        {
-            $result = db_query( $sql );
+    function queryReturnsResult($sql) {
+        $result = db_query($sql);
 
-            if ( @mysql_num_rows( $result ) > 0 )
-            {
-                $ret= array();
+        if (@mysql_errno() == 0) {
 
-                while( ( $item = @mysql_fetch_object( $result ) ) != false )
-                {
-                    $ret[] = $item;
-                }
-            }
-            else
-            {
-                $this->setError();
+            if (@mysql_num_rows($result) > 0) {
+                @mysql_free_result($result);
 
-                @mysql_free_result( $result );
-
-                return null;
-            }
-
-            @mysql_free_result( $result );
-
-            return $ret;
-        }
-
-        function getObjectFromQuery( $sql )
-        {
-            $result = db_query( $sql );
-
-            if ( ( $item = @mysql_fetch_object( $result ) ) != false )
-            {
-                @mysql_free_result( $result );
-
-                return $item;
-            }
-            else
-            {
-                $this->setError();
-
-                @mysql_free_result( $result );
-                return null;
-            }
-        }
-
-        function getAllRowsFromQuery( $sql )
-        {
-            $result = db_query( $sql );
-
-            if ( @mysql_num_rows( $result ) > 0 )
-            {
-                $ret= array();
-
-                while ( ( $item = @mysql_fetch_array( $result ) ) != false )
-                {
-                    $ret[] = $item;
-                }
-            }
-            else
-            {
-                $this->setError();
-
-                @mysql_free_result( $result );
-
-                return null;
-            }
-
-            @mysql_free_result( $result );
-
-            return $ret;
-        }
-
-        function getRowFromQuery( $sql )
-        {
-            $result = db_query( $sql );
-
-            if ( ( $item = @mysql_fetch_array( $result ) ) != false )
-            {
-                @mysql_free_result( $result );
-
-                return $item;
-            }
-            else
-            {
-                $this->setError();
-
-                @mysql_free_result( $result );
-
-                return null;
-            }
-        }
-
-        function queryReturnsResult( $sql )
-        {
-            $result = db_query( $sql );
-
-            if ( @mysql_errno() == 0 )
-            {
-
-                if ( @mysql_num_rows( $result ) > 0 )
-                {
-                    @mysql_free_result( $result );
-
-                    return true;
-                }
-                else
-                {
-                    @mysql_free_result( $result );
-
-                    return false;
-                }
-            }
-            else
-            {
-                $this->setError();
+                return true;
+            } else {
+                @mysql_free_result($result);
 
                 return false;
             }
-        }
+        } else {
+            $this->setError();
 
-        function getLastInsertID()
-        {
-            if ( $this->hasError() )
-            {
-                return 0;
-            }
-            else
-            {
-                return mysql_insert_id();
-            }
+            return false;
         }
     }
+
+    function getLastInsertID() {
+        if ($this->hasError()) {
+            return 0;
+        } else {
+            return mysql_insert_id();
+        }
+    }
+
+}
+
 ?>

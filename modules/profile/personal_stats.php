@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -116,7 +117,7 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
 // End of chart display; chart unlinked at end of script.
 
 $sql = "SELECT * FROM loginout
-    WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
+    WHERE id_user = '" . $_SESSION["uid"] . "' ORDER by idLog DESC LIMIT 10";
 
 $leResultat = db_query($sql);
 $tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
@@ -127,21 +128,21 @@ $tool_content .= "<table class='tbl_alt' width='550'>
             </tr>";
 $nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
 $nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
-$i=0;
+$i = 0;
 while ($leRecord = mysql_fetch_array($leResultat)) {
-        $when = $leRecord["when"];
-        $action = $leRecord["action"];
-        if ($i%2 == 0) {
-                $tool_content .= "<tr class='even'>";
-        } else {
-                $tool_content .= "<tr class='odd'>";
-        }
-        $tool_content .= "
+    $when = $leRecord["when"];
+    $action = $leRecord["action"];
+    if ($i % 2 == 0) {
+        $tool_content .= "<tr class='even'>";
+    } else {
+        $tool_content .= "<tr class='odd'>";
+    }
+    $tool_content .= "
         <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
-        <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-        <td>".$nomAction[$action]."</td>
+        <td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
+        <td>" . $nomAction[$action] . "</td>
         </tr>";
-        $i++;
+    $i++;
 }
 $tool_content .= "</table>";
 $tool_content .= "</td></tr></table></fieldset>";

@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -37,7 +38,7 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $nameTools = $langResults;
-$navigation[]=array('url' => "index.php?course=$course_code", 'name' => $langExercices);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);
@@ -48,7 +49,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
     // construction of Exercise
     $objExercise = new Exercise();
     // if the specified exercise doesn't exist or is disabled
-    if(!$objExercise->read($exerciseId) && (!$is_editor)) {
+    if (!$objExercise->read($exerciseId) && (!$is_editor)) {
         $tool_content .= "<p>$langExerciseNotFound</p>";
         draw($tool_content, 2);
         exit();
@@ -56,7 +57,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
-        $objExercise = $_SESSION['objExercise'][$exerciseId];
+    $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
 $exerciseTitle = $objExercise->selectTitle();
@@ -66,62 +67,64 @@ $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $tool_content .= "
     <table class='tbl_border' width='100%'>
     <tr>
-    <th>". q($exerciseTitle) ."</th>
+    <th>" . q($exerciseTitle) . "</th>
     </tr>
     <tr>
-    <td>". standard_text_escape($exerciseDescription_temp) ."</td>
+    <td>" . standard_text_escape($exerciseDescription_temp) . "</td>
     </tr>
     </table>
     <br/>";
 
 $sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid in (SELECT id FROM exercise WHERE course_id = $course_id)";
 $result = db_query($sql);
-while($row=mysql_fetch_array($result)) {
-        $sid = $row['uid'];
-        $StudentName = db_query("SELECT surname, givenname, am FROM user WHERE id = $sid");
-        $theStudent = mysql_fetch_array($StudentName);
+while ($row = mysql_fetch_array($result)) {
+    $sid = $row['uid'];
+    $StudentName = db_query("SELECT surname, givenname, am FROM user WHERE id = $sid");
+    $theStudent = mysql_fetch_array($StudentName);
 
-        $sql2="SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
+    $sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, record_end_date,
                 TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date))
                 AS time_duration, total_score, total_weighting
                 FROM `exercise_user_record` WHERE uid = $sid AND eid = $exerciseId";
-        $result2 = db_query($sql2);
-        if (mysql_num_rows($result2) > 0) { // if users found
-                $tool_content .= "<table class='tbl_alt' width='100%'>";
-                $tool_content .= "<tr><td colspan='3'>";
-                if (!$sid) {
-                        $tool_content .= "$langNoGroupStudents";
-                } else {
-                        if ($theStudent['am'] == '') $studentam = '-';
-                        else $studentam = $theStudent['am'];
-                        $tool_content .= "<b>$langUser:</b> $theStudent[surname] $theStudent[givenname]  <div class='smaller'>($langAm: $studentam)</div>";
-                }
-                $tool_content .= "</td>
+    $result2 = db_query($sql2);
+    if (mysql_num_rows($result2) > 0) { // if users found
+        $tool_content .= "<table class='tbl_alt' width='100%'>";
+        $tool_content .= "<tr><td colspan='3'>";
+        if (!$sid) {
+            $tool_content .= "$langNoGroupStudents";
+        } else {
+            if ($theStudent['am'] == '')
+                $studentam = '-';
+            else
+                $studentam = $theStudent['am'];
+            $tool_content .= "<b>$langUser:</b> $theStudent[surname] $theStudent[givenname]  <div class='smaller'>($langAm: $studentam)</div>";
+        }
+        $tool_content .= "</td>
                 </tr>
                 <tr>
-                  <th width='150' class='center'>".$langExerciseStart."</td>
-                  <th width='150' class='center'>".$langExerciseDuration."</td>
-                  <th width='150' class='center'>".$langYourTotalScore2."</td>
+                  <th width='150' class='center'>" . $langExerciseStart . "</td>
+                  <th width='150' class='center'>" . $langExerciseDuration . "</td>
+                  <th width='150' class='center'>" . $langYourTotalScore2 . "</td>
                 </tr>";
 
-        $k=0;
-        while($row2=mysql_fetch_array($result2)) {
-                if ($k%2 == 0) {
-                        $tool_content .= "<tr class='even'>";
-                } else {
-                        $tool_content .= "<tr class='odd'>";
-                }
-                $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
-                        if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
-                                $tool_content .= "<td class='center'>$langNotRecorded</td>";
-                        } else {
-                                $tool_content .= "<td class='center'>".format_time_duration($row2['time_duration'])."</td>";
-                        }
-                        $tool_content .= "<td class='center'>".$row2['total_score']. "/".$row2['total_weighting']."</td>
+        $k = 0;
+        while ($row2 = mysql_fetch_array($result2)) {
+            if ($k % 2 == 0) {
+                $tool_content .= "<tr class='even'>";
+            } else {
+                $tool_content .= "<tr class='odd'>";
+            }
+            $tool_content .= "<td class='center'>$row2[record_start_date]</td>";
+            if ($row2['time_duration'] == '00:00:00' or empty($row2['time_duration'])) { // for compatibility
+                $tool_content .= "<td class='center'>$langNotRecorded</td>";
+            } else {
+                $tool_content .= "<td class='center'>" . format_time_duration($row2['time_duration']) . "</td>";
+            }
+            $tool_content .= "<td class='center'>" . $row2['total_score'] . "/" . $row2['total_weighting'] . "</td>
                         </tr>";
-                        $k++;
-                }
-        $tool_content .= "</table><br/>";
+            $k++;
         }
+        $tool_content .= "</table><br/>";
+    }
 }
 draw($tool_content, 2, null, $head_content);

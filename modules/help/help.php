@@ -21,44 +21,43 @@
 session_start();
 
 if (isset($_GET['language'])) {
-	$language = preg_replace('/[^a-z-]/', '', $_GET['language']);
+    $language = preg_replace('/[^a-z-]/', '', $_GET['language']);
 } else {
-        $language = 'el';
+    $language = 'el';
 }
 if (isset($_SESSION['theme'])) {
-        $theme = $_SESSION['theme'];
+    $theme = $_SESSION['theme'];
 } else {
-        $theme = 'classic';
+    $theme = 'classic';
 }
 $themeimg = '../../template/' . $theme . '/img';
 
 if (file_exists("../../lang/$language/help.inc.php")) {
-        $siteName = '';
-	include "../../lang/$language/common.inc.php";
-	include "../../lang/$language/help.inc.php";
+    $siteName = '';
+    include "../../lang/$language/common.inc.php";
+    include "../../lang/$language/help.inc.php";
 } else {
-	die("$langNoHelpTopic");
+    die("$langNoHelpTopic");
 }
 
 // Default topic
 if (!isset($_GET['topic']) or !isset($GLOBALS["lang$_GET[topic]Content"])) {
-	$_GET['topic'] = 'Default';
+    $_GET['topic'] = 'Default';
 }
 
 header('Content-Type: text/html; charset=UTF-8');
 
 $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
-
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
         <title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
-            <link href="../../template/<?php echo $theme ?>/help.css" rel="stylesheet" type="text/css" />
-        </head>
-        <body>
-            <h3><?php echo $title; ?></h3>
-            <?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
-            <div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
-            <br />
-        </body>
+        <link href="../../template/<?php echo $theme ?>/help.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h3><?php echo $title; ?></h3>
+        <?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
+        <div align="right"><a href='javascript:window.close();'><?php echo $langWindowClose; ?></a>&nbsp;&nbsp;</div>
+        <br />
+    </body>
 </html>

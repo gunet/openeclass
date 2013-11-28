@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -20,16 +21,16 @@
 
 
 /*
-===========================================================================
-    admin/monthlyReport.php
-    @last update: 23-09-2006
-    @authors list: ophelia neofytou
-==============================================================================
-    @Description: Shows a form in order for the user to choose a month and display
-    a report regarding this month. The report is based on information stored in table
-    'monthly_summary' in database.
-==============================================================================
-*/
+  ===========================================================================
+  admin/monthlyReport.php
+  @last update: 23-09-2006
+  @authors list: ophelia neofytou
+  ==============================================================================
+  @Description: Shows a form in order for the user to choose a month and display
+  a report regarding this month. The report is based on information stored in table
+  'monthly_summary' in database.
+  ==============================================================================
+ */
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
@@ -48,46 +49,45 @@ $tool_content .= "
   </div>";
 
 $months = "";
-for ($i=0; $i<12; $i++)
-{
-  $mon = mktime(0, 0, 0, date('m')-$i-1, date('d'),  date('Y'));
-  $mval = date('m Y', $mon);
-  $months .= "<option value='$mval'>".$langMonths[date('m', $mon)] . date(' Y', $mon);
+for ($i = 0; $i < 12; $i++) {
+    $mon = mktime(0, 0, 0, date('m') - $i - 1, date('d'), date('Y'));
+    $mval = date('m Y', $mon);
+    $months .= "<option value='$mval'>" . $langMonths[date('m', $mon)] . date(' Y', $mon);
 }
 
 $tool_content .= '
 <form method="post">
-<div><select name="selectedMonth">'.$months.'</select>
-<input type="submit" name="btnUsage" value="'.$langSubmit.'">
+<div><select name="selectedMonth">' . $months . '</select>
+<input type="submit" name="btnUsage" value="' . $langSubmit . '">
 </div>
 </form>';
 
 if (isset($_POST["selectedMonth"])) {
-        $month = q($_POST["selectedMonth"]);
-        list($m, $y) = explode(' ', $month);  //only month
-        $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
-                       FROM monthly_summary WHERE `month` = ".quote($month);
+    $month = q($_POST["selectedMonth"]);
+    list($m, $y) = explode(' ', $month);  //only month
+    $sql = "SELECT profesNum, studNum, visitorsNum, coursNum, logins, details
+                       FROM monthly_summary WHERE `month` = " . quote($month);
 
-        $result = db_query($sql);
-        $coursNum='';
-        while ($row = mysql_fetch_assoc($result)) {
-                $profesNum = $row['profesNum'];
-                $studNum = $row['studNum'];
-                $visitorsNum = $row['visitorsNum'];
-                $coursNum = $row['coursNum'];
-                $logins = $row['logins'];
-                $details = $row['details'];
-        }
-        mysql_free_result($result);
+    $result = db_query($sql);
+    $coursNum = '';
+    while ($row = mysql_fetch_assoc($result)) {
+        $profesNum = $row['profesNum'];
+        $studNum = $row['studNum'];
+        $visitorsNum = $row['visitorsNum'];
+        $coursNum = $row['coursNum'];
+        $logins = $row['logins'];
+        $details = $row['details'];
+    }
+    mysql_free_result($result);
 
-        if (isset($localize) and $localize == 'greek') {
-                $msg_of_month = substr($langMonths[$m], 0, -1);
-        } else {
-                $msg_of_month = $langMonths[$m];
-        }
+    if (isset($localize) and $localize == 'greek') {
+        $msg_of_month = substr($langMonths[$m], 0, -1);
+    } else {
+        $msg_of_month = $langMonths[$m];
+    }
 
-        if ($coursNum) {
-            $tool_content .= '
+    if ($coursNum) {
+        $tool_content .= '
 		<table class="FormData" width="99%" align="left">
 		<tbody>
 		<tr>
@@ -96,35 +96,35 @@ if (isset($_POST["selectedMonth"])) {
 		</tr>
 		<tr>
 		<th width="220"  class="left">&nbsp;</th>
-		<td>'.$langReport.': '.$msg_of_month.' '.$y.'</td>
+		<td>' . $langReport . ': ' . $msg_of_month . ' ' . $y . '</td>
 		</tr>
 		<tr>
-		<th class="left">'.$langNbProf.': </th>
-		<td>'.$profesNum.'</td>
+		<th class="left">' . $langNbProf . ': </th>
+		<td>' . $profesNum . '</td>
 		</tr>
 		<tr>
-		<th class="left">'.$langNbStudents.': </th>
-		<td>'.$studNum.'</td>
+		<th class="left">' . $langNbStudents . ': </th>
+		<td>' . $studNum . '</td>
 		</tr>
 		<tr>
-		<th class="left">'.$langNbVisitors.': </th>
-		<td>'.$visitorsNum.'</td>
+		<th class="left">' . $langNbVisitors . ': </th>
+		<td>' . $visitorsNum . '</td>
 		</tr>
 		<tr>
-		<th class="left">'.$langNbCourses.':  </th>
-		<td>'.$coursNum.'</td>
+		<th class="left">' . $langNbCourses . ':  </th>
+		<td>' . $coursNum . '</td>
 		</tr>
 		<tr>
-		<th class="left">'.$langNbLogin.': </th>
-		<td>'.$logins.'</td>
+		<th class="left">' . $langNbLogin . ': </th>
+		<td>' . $logins . '</td>
 		</tr>
 		<tr>
-		<td colspan="2">'.$details. '</td>
+		<td colspan="2">' . $details . '</td>
 		</tr>
 		</tbody>
 		</table>';           // $details includes an html table with all details
     } else {
-        $tool_content .= '<div class="alert1">'.$langNoReport.': '.$msg_of_month.' '.$y.'</div>';
+        $tool_content .= '<div class="alert1">' . $langNoReport . ': ' . $msg_of_month . ' ' . $y . '</div>';
     }
 }
 load_js('tools.js');

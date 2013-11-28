@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -35,8 +36,7 @@ class User {
      * @param string  $utable   - Name of users table
      * @param string  $deptable - Name of user <-> department lookup table
      */
-    public function __construct($utable = 'user', $deptable = 'user_department')
-    {
+    public function __construct($utable = 'user', $deptable = 'user_department') {
         $this->utable = $utable;
         $this->departmenttable = $deptable;
     }
@@ -48,14 +48,11 @@ class User {
      * @param int   $id          - Id for a given user
      * @param array $departments - Array containing the node ids that the given user should belong to
      */
-    public function refresh($id, $departments)
-    {
-        if ($departments != null)
-        {
-            db_query("DELETE FROM ". $this->departmenttable ." WHERE user = ". intval($id));
-            foreach (array_unique($departments) as $key => $department)
-            {
-                db_query("INSERT INTO ". $this->departmenttable ." (user, department) VALUES (". intval($id) .",". intval($department) .")");
+    public function refresh($id, $departments) {
+        if ($departments != null) {
+            db_query("DELETE FROM " . $this->departmenttable . " WHERE user = " . intval($id));
+            foreach (array_unique($departments) as $key => $department) {
+                db_query("INSERT INTO " . $this->departmenttable . " (user, department) VALUES (" . intval($id) . "," . intval($department) . ")");
             }
         }
     }
@@ -65,8 +62,7 @@ class User {
      *
      * @param int $id - The id of the user to delete
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         db_query("DELETE FROM $this->departmenttable WHERE user = $id");
         db_query("DELETE FROM $this->utable WHERE id = $id");
     }
@@ -77,19 +73,19 @@ class User {
      * @param  int   $id  - The id of a given user
      * @return array $ret - Array containing the given user's nodes
      */
-    public function getDepartmentIds($id)
-    {
+    public function getDepartmentIds($id) {
         $ret = array();
         $result = db_query("SELECT ud.department AS id
                               FROM $this->utable u, $this->departmenttable ud
-                             WHERE u.id = ". intval($id) ."
+                             WHERE u.id = " . intval($id) . "
                                AND u.id = ud.user");
 
-        while($row = mysql_fetch_assoc($result))
+        while ($row = mysql_fetch_assoc($result))
             $ret[] = $row['id'];
 
         return $ret;
     }
 
 }
+
 ?>

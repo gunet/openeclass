@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -27,41 +28,41 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-/**** The following is added for statistics purposes ***/
+/* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_EBOOK);
-/**************************************/
+/* * *********************************** */
 
 $nameTools = $langEBook;
 
 if ($is_editor) {
-        $tool_content .= "
+    $tool_content .= "
    <div id='operations_container'>
      <ul id='opslist'>
        <li><a href='index.php?course=$course_code&amp;create=1'>$langCreate</a>
      </ul>
    </div>";
 
-        if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
-                $id = intval($_POST['id']);
-                $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
-                if (mysql_num_rows($r) > 0) {
-                        list($title) = mysql_fetch_row($r);
-                        db_query("DELETE FROM ebook_subsection WHERE section_id IN
+    if (isset($_POST['delete']) or isset($_POST['delete_x'])) {
+        $id = intval($_POST['id']);
+        $r = db_query("SELECT title FROM ebook WHERE course_id = $course_id AND id = $id");
+        if (mysql_num_rows($r) > 0) {
+            list($title) = mysql_fetch_row($r);
+            db_query("DELETE FROM ebook_subsection WHERE section_id IN
                                          (SELECT id FROM ebook_section WHERE ebook_id = $id)");
-                        db_query("DELETE FROM ebook_section WHERE ebook_id = $id");
-                        db_query("DELETE FROM ebook WHERE id = $id");
-                        $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
-                        my_delete($basedir);
-                        db_query("DELETE FROM document WHERE
-                                 subsystem = ".EBOOK." AND
+            db_query("DELETE FROM ebook_section WHERE ebook_id = $id");
+            db_query("DELETE FROM ebook WHERE id = $id");
+            $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $id;
+            my_delete($basedir);
+            db_query("DELETE FROM document WHERE
+                                 subsystem = " . EBOOK . " AND
                                  subsystem_id = $id AND
                                  course_id = $course_id");
-                        $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
-                }
-        } elseif (isset($_GET['create'])) {
-                $tool_content .= "
+            $tool_content .= "\n    <p class='success'>" . q(sprintf($langEBookDeleted, $title)) . "</p>";
+        }
+    } elseif (isset($_GET['create'])) {
+        $tool_content .= "
    <form method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
      <fieldset>
      <legend>$langUpload</legend>
@@ -81,21 +82,21 @@ if ($is_editor) {
      </table>
      </fieldset>
    </form>";
-        } elseif (isset($_GET['down'])) {
-                move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
-        } elseif (isset($_GET['up'])) {
-                move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
-        } elseif (isset($_GET['vis'])) {
-                db_query("UPDATE ebook SET visible = NOT visible
+    } elseif (isset($_GET['down'])) {
+        move_order('ebook', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
+    } elseif (isset($_GET['up'])) {
+        move_order('ebook', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
+    } elseif (isset($_GET['vis'])) {
+        db_query("UPDATE ebook SET visible = NOT visible
                                  WHERE course_id = $course_id AND
                                        id = " . intval($_GET['vis']));
-        }
+    }
 }
 
 if ($is_editor) {
-        $visibility_check = '';
+    $visibility_check = '';
 } else {
-        $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
+    $visibility_check = "AND visible = 1 AND ebook_subsection.id IS NOT NULL";
 }
 $q = db_query("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) AS sid
                       FROM ebook LEFT JOIN ebook_section ON ebook.id = ebook_id
@@ -106,71 +107,70 @@ $q = db_query("SELECT ebook.id, ebook.title, visible, MAX(ebook_subsection.id) A
                       ORDER BY `order`");
 
 if (mysql_num_rows($q) == 0) {
-        $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
+    $tool_content .= "\n    <p class='alert1'>$langNoEBook</p>\n";
 } else {
-        $tool_content .= "
+    $tool_content .= "
      <script type='text/javascript' src='../auth/sorttable.js'></script>
      <table width='100%' class='sortable' id='t1'>
      <tr>
        <th colspan='2'><div align='left'>$langEBook</div></th>" .
-       ($is_editor?
-        "<th width='70' colspan='2' class='center'>$langActions</th>":
-        '') . "
+            ($is_editor ?
+                    "<th width='70' colspan='2' class='center'>$langActions</th>" :
+                    '') . "
      </tr>\n";
 
-        $k = 0;
-        $num = mysql_num_rows($q);
-        while ($r = mysql_fetch_array($q)) {
-                $vis_class = $r['visible']? '': 'invisible';
-                if (is_null($r['sid'])) {
-                        $title_link = q($r['title']) . ' <i>(' . $langEBookNoSections . ')</i>';
-                } else {
-                        $title_link = "<a href='show.php/$course_code/$r[id]/'>" .
-                                      q($r['title']) . "</a>";
-                }
-                $warning = is_null($r['sid'])? " <i>($langInactive)</i>": '';
-                $tool_content .= "
+    $k = 0;
+    $num = mysql_num_rows($q);
+    while ($r = mysql_fetch_array($q)) {
+        $vis_class = $r['visible'] ? '' : 'invisible';
+        if (is_null($r['sid'])) {
+            $title_link = q($r['title']) . ' <i>(' . $langEBookNoSections . ')</i>';
+        } else {
+            $title_link = "<a href='show.php/$course_code/$r[id]/'>" .
+                    q($r['title']) . "</a>";
+        }
+        $warning = is_null($r['sid']) ? " <i>($langInactive)</i>" : '';
+        $tool_content .= "
      <tr" . odd_even($k, $vis_class) . ">
        <td width='16' valign='top'>
           <img style='padding-top:3px;' src='$themeimg/arrow.png' alt='' /></td>
        <td>$title_link</td>" .
-       tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
+                tools($r['id'], $r['title'], $k, $num, $r['visible']) . "
      </tr>\n";
-                $k++;
-        }
-        $tool_content .= "
+        $k++;
+    }
+    $tool_content .= "
      </table>\n";
 }
 
 draw($tool_content, 2, null, $head_content);
 
-function tools($id, $title, $k, $num, $vis)
-{
-        global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
-               $course_code, $themeimg, $langVisibility;
+function tools($id, $title, $k, $num, $vis) {
+    global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, $langEBookDelConfirm,
+    $course_code, $themeimg, $langVisibility;
 
-        if (!$is_editor) {
-                return '';
-        } else {
-                $icon_vis = $vis? 'visible.png': 'invisible.png';
-                $num--;
-                return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>\n" .
-                       "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$course_code&amp;id=$id'>" .
-                       "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
-                       "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
+    if (!$is_editor) {
+        return '';
+    } else {
+        $icon_vis = $vis ? 'visible.png' : 'invisible.png';
+        $num--;
+        return "\n        <td width='60' class='center'>\n<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>\n" .
+                "<input type='hidden' name='id' value='$id' />\n<a href='edit.php?course=$course_code&amp;id=$id'>" .
+                "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />" .
+                "</a>&nbsp;<input type='image' src='$themeimg/delete.png'
                                          alt='$langDelete' title='$langDelete' name='delete' value='$id'
-                                         onclick=\"javascript:if(!confirm('".
-                       js_escape(sprintf($langEBookDelConfirm, $title)) ."')) return false;\" />" .
-                       "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id'>
+                                         onclick=\"javascript:if(!confirm('" .
+                js_escape(sprintf($langEBookDelConfirm, $title)) . "')) return false;\" />" .
+                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id'>
                            <img src='$themeimg/$icon_vis' alt='$langVisibility' title='$langVisibility'></a>
                         </form></td><td class='right' width='40'>" .
-                       (($k < $num)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id'>
+                (($k < $num) ? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id'>
                                       <img class='displayed' src='$themeimg/down.png'
-                                           title='$langMove $langDown' alt='$langMove $langDown' /></a>":
-                                     '') .
-                       (($k > 0)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id'>
+                                           title='$langMove $langDown' alt='$langMove $langDown' /></a>" :
+                        '') .
+                (($k > 0) ? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id'>
                                    <img class='displayed' src='$themeimg/up.png'
-                                        title='$langMove $langUp' alt='$langMove $langUp' /></a>":
-                                  '') . "</td>\n";
-        }
+                                        title='$langMove $langUp' alt='$langMove $langUp' /></a>" :
+                        '') . "</td>\n";
+    }
 }

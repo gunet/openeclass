@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -28,7 +29,7 @@ $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
     $id = q($_GET['id']);
-    
+
     $res = db_query("SELECT * FROM video WHERE course_id = $course_id AND path = " . quote($id));
     $row = mysql_fetch_array($res);
 

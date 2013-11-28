@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,58 +20,53 @@
  * ======================================================================== */
 
 
-/**===========================================================================
-	scorm.inc.php
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* * ===========================================================================
+  scorm.inc.php
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7 licensed under GPL
+  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-	      original file: scorm.inc.php Revision: 1.12.2.3
+  original file: scorm.inc.php Revision: 1.12.2.3
 
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-==============================================================================
-*/
+  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+  Lederer Guillaume <led@cerdecam.be>
+  ==============================================================================
+ */
 
 // change raw if value is a number between 0 and 100
-if( isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0 )
-{
-	$sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
+if (isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0) {
+    $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
 			SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
 			WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
 			AND `learnPath_id` = " . (int) $_SESSION['path_id'];
-	db_query($sql, $mysqlMainDb);
+    db_query($sql, $mysqlMainDb);
 
-	$dialogBox = $langRawHasBeenChanged;
+    $dialogBox = $langRawHasBeenChanged;
 }
 
 
 //####################################################################################\\
 //############################### DIALOG BOX SECTION #################################\\
 //####################################################################################\\
-if( !empty($dialogBox) )
-{
-	$tool_content .= $dialogBox;
+if (!empty($dialogBox)) {
+    $tool_content .= $dialogBox;
 }
 
 // form to change raw needed to pass the exercise
 $sql = "SELECT `lock`, `raw_to_pass`
-        FROM `" . $TABLELEARNPATHMODULE."` AS LPM
+        FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
        WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
          AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
 
 $learningPath_module = db_query_fetch_all($sql);
 
-if( isset($learningPath_module[0]['lock'])
-	&& $learningPath_module[0]['lock'] == 'CLOSE'
-	&& isset($learningPath_module[0]['raw_to_pass']) ) // this module blocks the user if he doesn't complete
-{
-	$tool_content .= "\n\n" . '<hr noshade="noshade" size="1" />' . "\n"
-	.    '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] .'?course='.$course_code.'">' . "\n"
-	.    '<label for="newRaw">' . $langChangeRaw . '</label>'."\n"
-	.    '<input type="text" value="' . htmlspecialchars($learningPath_module[0]['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
-	.    '<input type="submit" value="' . $langOk . '" />'."\n"
-	.    '</form>'."\n\n"
+if (isset($learningPath_module[0]['lock']) && $learningPath_module[0]['lock'] == 'CLOSE' && isset($learningPath_module[0]['raw_to_pass'])) { // this module blocks the user if he doesn't complete
+    $tool_content .= "\n\n" . '<hr noshade="noshade" size="1" />' . "\n"
+            . '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n"
+            . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
+            . '<input type="text" value="' . htmlspecialchars($learningPath_module[0]['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
+            . '<input type="submit" value="' . $langOk . '" />' . "\n"
+            . '</form>' . "\n\n"
     ;
 }

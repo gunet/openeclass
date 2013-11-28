@@ -26,31 +26,27 @@ $require_current_course = true;
 require_once '../../../include/init.php';
 
 $TOCurl = "../viewer_toc.php?course=$course_code";
-
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
- <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset?>">
- <title>-</title>
- <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
- <script type='text/javascript'>
-  <!-- //
-   parent.tocFrame.location.href="<?php echo $TOCurl; ?>";
-  //-->
- </script>
-</head>
-<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
-    <div id="content">
-  <br /><br /><br />
-<?php
-    if($_GET['op'] == 'cancel')
-    {
-        echo "<div class='alert1'>$langExerciseCancelled</div>";
-    }
-    elseif($_GET['op'] == 'finish') // exercise done
-    {
-        echo "<div class='success'>$langExerciseDone</div>";
-    }
-?>
-    </div>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
+        <title>-</title>
+        <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
+        <script type='text/javascript'>
+            <!-- //
+          parent.tocFrame.location.href = "<?php echo $TOCurl; ?>";
+//-->
+        </script>
+    </head>
+    <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
+        <div id="content">
+            <br /><br /><br />
+            <?php
+            if ($_GET['op'] == 'cancel') {
+                echo "<div class='alert1'>$langExerciseCancelled</div>";
+            } elseif ($_GET['op'] == 'finish') { // exercise done
+                echo "<div class='success'>$langExerciseDone</div>";
+            }
+            ?>
+        </div>
 </html>

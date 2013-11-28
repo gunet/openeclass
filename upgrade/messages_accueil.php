@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -22,16 +23,16 @@
 // New titles for table accueil, used during upgrade
 // Warning: This file must be encoded in ISO-8859-7, not UTF-8!
 
-$langDropBox = array('greek' => "ÁíôáëëáãÞ Áñ÷åßùí", 'english' => "DropBox");
-$langCourseAdmin = array('greek' => "Äéá÷åßñéóç ÌáèÞìáôïò", 'english' => "Course Admin");
-$langUsers = array('greek' => "Äéá÷åßñéóç ×ñçóôþí", 'english' => "Users Admin");
-$langForums = array('greek' => "Ðåñéï÷Þ ÓõæçôÞóåùí", 'english' => "Forum");
-$langWork = array('greek' => "Åñãáóßåò", 'english' => "Assignments");
-$langWiki = array('greek' => "Óýóôçìá Wiki", 'english' => "Wiki");
-$langToolManagement = array('greek' => "Åíåñãïðïßçóç Åñãáëåßùí", 'english' => "Tools Management");
-$langCourseStat = array('greek' => "ÓôáôéóôéêÜ ×ñÞóçò", 'english' => "Usage Statistics");
-$langQuestionnaire = array('greek' => "Åñùôçìáôïëüãéï", 'english' => "Questionnaire");
-$langConference = array('greek' => "Ôçëåóõíåñãáóßá", 'english' => "Teleconference");
-$langLearnPath = array('greek' => "ÃñáììÞ ÌÜèçóçò", 'english' => "Learning Path");
-$langExercises = array('greek' => "ÁóêÞóåéò", 'english' => "Exercises");
+$langDropBox = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "DropBox");
+$langCourseAdmin = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Course Admin");
+$langUsers = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Users Admin");
+$langForums = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Forum");
+$langWork = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Assignments");
+$langWiki = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Wiki", 'english' => "Wiki");
+$langToolManagement = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Tools Management");
+$langCourseStat = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Usage Statistics");
+$langQuestionnaire = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Questionnaire");
+$langConference = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Teleconference");
+$langLearnPath = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Learning Path");
+$langExercises = array('greek' => "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", 'english' => "Exercises");
 

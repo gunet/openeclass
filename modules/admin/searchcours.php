@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,13 +20,12 @@
  * ======================================================================== */
 
 /**
-*       @file searchcours.php
-*	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-*		       Pitsiougas Vagelis <vagpits@uom.gr>
-*       @brief: This script allows the administrator to perform a search on courses by
-* 	title, code, type and faculte
-*/
-
+ *       @file searchcours.php
+ * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
+ * 		       Pitsiougas Vagelis <vagpits@uom.gr>
+ *       @brief: This script allows the administrator to perform a search on courses by
+ * 	title, code, type and faculte
+ */
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -40,7 +40,7 @@ $user = new User();
 load_js('jquery');
 load_js('jquery-ui-new');
 load_js('jstree');
-$jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $language, 'calendar-blue2', false);
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();
 
 $nameTools = $langSearchCourse;
@@ -48,64 +48,64 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // Destroy search variables from session
 if (isset($_GET['new']) && ($_GET['new'] == "yes")) {
-	unset($_SESSION['searchtitle']);
-	unset($_SESSION['searchcode']);
-	unset($_SESSION['searchtype']);
-	unset($_SESSION['searchfaculte']);
-	unset($searchtitle);
-	unset($searchcode);
-	unset($searchtype);
-	unset($searchfaculte);
+    unset($_SESSION['searchtitle']);
+    unset($_SESSION['searchcode']);
+    unset($_SESSION['searchtype']);
+    unset($_SESSION['searchfaculte']);
+    unset($searchtitle);
+    unset($searchcode);
+    unset($searchtype);
+    unset($searchfaculte);
 }
 
-$reg_flag = isset($_GET['reg_flag'])? intval($_GET['reg_flag']): '';
+$reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 
 // search form
 $tool_content .= "<form action='listcours.php?search=yes' method='post'>
     <fieldset>
-      <legend>".$langSearchCriteria." ".@$newsearch."</legend>
+      <legend>" . $langSearchCriteria . " " . @$newsearch . "</legend>
       <table width='100%' class='tbl'>
       <tr>
         <th class='left' width='150'>$langTitle:</th>
-        <td><input type='text' name='formsearchtitle' size='40' value='".@$searchtitle."'></td>
+        <td><input type='text' name='formsearchtitle' size='40' value='" . @$searchtitle . "'></td>
       </tr>
       <tr>
         <th class='left'><b>$langCourseCode:</b></th>
-        <td><input type='text' name='formsearchcode' size='40' value='".@$searchcode."'></td>
+        <td><input type='text' name='formsearchcode' size='40' value='" . @$searchcode . "'></td>
       </tr>";
 
 if (isset($_GET['searchcode'])) {
-        switch ($searchcode) {
-                case "2":
-                        $typeSel[2] = "selected";
-                        break;
-                case "1":
-                        $typeSel[1] = "selected";
-                        break;
-                case "0":
-                        $typeSel[0] = "selected";
-                        break;
-                case "3":
-                        $typeSel[0] = "selected";
-                        break;
-                default:
-                        $typeSel[-1] = "selected";
-                        break;
-        }
+    switch ($searchcode) {
+        case "2":
+            $typeSel[2] = "selected";
+            break;
+        case "1":
+            $typeSel[1] = "selected";
+            break;
+        case "0":
+            $typeSel[0] = "selected";
+            break;
+        case "3":
+            $typeSel[0] = "selected";
+            break;
+        default:
+            $typeSel[-1] = "selected";
+            break;
+    }
 }
 
 $tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></th>
         <td>
           <select name='formsearchtype'>
-           <option value='-1' ".@$typeSel[-1].">$langAllTypes</option>
-           <option value='2' ".@$typeSel[2].">$langTypeOpen</option>
-           <option value='1' ".@$typeSel[1].">$langTypeRegistration</option>
-           <option value='0' ".@$typeSel[0].">$langTypeClosed</option>
-           <option value='3' ".@$typeSel[3].">$langCourseInactiveShort</option>
+           <option value='-1' " . @$typeSel[-1] . ">$langAllTypes</option>
+           <option value='2' " . @$typeSel[2] . ">$langTypeOpen</option>
+           <option value='1' " . @$typeSel[1] . ">$langTypeRegistration</option>
+           <option value='0' " . @$typeSel[0] . ">$langTypeClosed</option>
+           <option value='3' " . @$typeSel[3] . ">$langCourseInactiveShort</option>
           </select>
         </td>
       </tr>";
-  
+
 $tool_content .= "<tr><th class='left'>$langRegistrationDate:</th><td>";
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
@@ -113,20 +113,19 @@ $reg_flag_data[2] = $langBefore;
 $tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
 $start_cal = $jscalendar->make_input_field(
-	array('showOthers' => true,
-               'showsTime' => true,
-	        'align' => 'Tl',
-                'ifFormat' => '%Y-%m-%d %H:%M',
-                'timeFormat' => '24'),
-	array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
-                 'name' => 'date',
-                 'value' => ''));
+        array('showOthers' => true,
+    'showsTime' => true,
+    'align' => 'Tl',
+    'ifFormat' => '%Y-%m-%d %H:%M',
+    'timeFormat' => '24'), array('style' => 'font-weight: bold; font-size: 10px; width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center',
+    'name' => 'date',
+    'value' => ''));
 
 $tool_content .= $start_cal;
 $tool_content .= "</td></tr>";
-$tool_content .= "<tr><th class='left'><b>".$langFaculty.":</b></th><td>";
+$tool_content .= "<tr><th class='left'><b>" . $langFaculty . ":</b></th><td>";
 
-if (isDepartmentAdmin()) 
+if (isDepartmentAdmin())
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
 else
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false));
@@ -140,6 +139,6 @@ $tool_content .= "<tr><th>&nbsp;</th>
       </tr>";
 $tool_content .= "</table></fieldset></form>";
 
-$tool_content .= "<p align='right'><a href='index.php'>".$langBack."</a></p>";
+$tool_content .= "<p align='right'><a href='index.php'>" . $langBack . "</a></p>";
 
 draw($tool_content, 3, null, $head_content);

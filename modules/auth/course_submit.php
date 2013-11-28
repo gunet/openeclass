@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -25,42 +26,40 @@ require_once 'include/log.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
 if (isset($_POST['cid']) and isset($_POST['state'])) {
-        $cid = intval($_POST['cid']);
-        $state = $_POST['state'];
-        if (isset($_POST['password'])) {
-                $password = $_POST['password'];
-        } else {
-                $password = '';
-        }
+    $cid = intval($_POST['cid']);
+    $state = $_POST['state'];
+    if (isset($_POST['password'])) {
+        $password = $_POST['password'];
+    } else {
+        $password = '';
+    }
 } else {
-        die('invalid');
+    die('invalid');
 }
 
 $q = db_query("SELECT visible, password FROM course WHERE id = $cid");
 if ($q and mysql_num_rows($q)) {
-        list($visible, $course_password) = mysql_fetch_row($q);
-        if ($state == 'true') {
-                if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
-                    $password == $course_password) {
-                        db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                         VALUES ($cid, $uid, ".USER_STUDENT.", CURDATE())");
-                        Log::record($cid, MODULE_ID_USERS, LOG_INSERT,
-                                   array('uid' => $uid, 'right' => 5));
+    list($visible, $course_password) = mysql_fetch_row($q);
+    if ($state == 'true') {
+        if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
+                $password == $course_password) {
+            db_query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
+                                         VALUES ($cid, $uid, " . USER_STUDENT . ", CURDATE())");
+            Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => 5));
 
-                        die('registered');
-                } else {
-                        die('unauthorized');
-                }
+            die('registered');
         } else {
-                db_query("DELETE FROM group_members
+            die('unauthorized');
+        }
+    } else {
+        db_query("DELETE FROM group_members
                                  WHERE user_id = $uid AND
                                        group_id IN (SELECT id FROM `group` WHERE course_id = $cid)");
-                db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
-                Log::record($cid, MODULE_ID_USERS, LOG_DELETE,
-                            array('uid' => $uid, 'right' => 0));
-                die('unregistered');
-        }
+        db_query("DELETE FROM `course_user` WHERE course_id = $cid AND user_id = $uid");
+        Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
+        die('unregistered');
+    }
 } else {
-        die('invalid');
+    die('invalid');
 }
 

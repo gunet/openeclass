@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.6
  * E-learning and Course Management System
@@ -28,97 +29,95 @@ require_once 'modules/admin/hierarchy_validations.php';
 require_once 'modules/create_course/functions.php';
 
 $nameTools = $langMultiCourse;
-$navigation[]= array ('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['submit'])) {
-        $line = strtok($_POST['courses'], "\n");
-        $fac = intval($_POST['faculte']);
-        $vis = intval($_POST['formvisible']);
-        $lang = langcode_to_name($_POST['lang']);
-        while ($line !== false) {
-                $line = canonicalize_whitespace($line);
-                if (!empty($line)) {
-                        $info = explode('|', $line);
-                        $title = $info[0];
-                        $prof_uid = null;
-                        $prof_not_found = false;
-                        if (isset($info[1])) {
-                                $prof_info = trim($info[1]);
-                                $prof_uid = find_prof(trim($info[1]));
-                                if ($prof_info and !$prof_uid) {
-                                        $prof_not_found = true;
-                                }
-                        }
-                        if ($prof_uid) {
-                                $prof_name = uid_to_name($prof_uid);
-                        } else {
-                                $prof_name = '';
-                        }
-                        $cid = create_course('', $lang, $title, $fac, $vis, $prof_name,
-                                             $_POST['type'], $_POST['password']);
-                        if ($cid) {
-                                activate_subsystems($lang, $_POST['subsystems']);
-                                if ($prof_uid) {
-                                        db_query("INSERT INTO cours_user
+    $line = strtok($_POST['courses'], "\n");
+    $fac = intval($_POST['faculte']);
+    $vis = intval($_POST['formvisible']);
+    $lang = langcode_to_name($_POST['lang']);
+    while ($line !== false) {
+        $line = canonicalize_whitespace($line);
+        if (!empty($line)) {
+            $info = explode('|', $line);
+            $title = $info[0];
+            $prof_uid = null;
+            $prof_not_found = false;
+            if (isset($info[1])) {
+                $prof_info = trim($info[1]);
+                $prof_uid = find_prof(trim($info[1]));
+                if ($prof_info and !$prof_uid) {
+                    $prof_not_found = true;
+                }
+            }
+            if ($prof_uid) {
+                $prof_name = uid_to_name($prof_uid);
+            } else {
+                $prof_name = '';
+            }
+            $cid = create_course('', $lang, $title, $fac, $vis, $prof_name, $_POST['type'], $_POST['password']);
+            if ($cid) {
+                activate_subsystems($lang, $_POST['subsystems']);
+                if ($prof_uid) {
+                    db_query("INSERT INTO cours_user
                                                          SET cours_id = $cid,
                                                              user_id = $prof_uid,
                                                              status = 1,
                                                              tutor = 1,
                                                              reg_date = NOW()");
-                                }
-                        }
-                        $class = $prof_not_found? 'alert1': 'success';
-                        $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: '. q($langBetaCMSLessonCreatedOK);
-                        if ($prof_uid) {
-                                $tool_content .= '<br>' . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
-                        } elseif ($prof_not_found) {
-                                $tool_content .= '<br>' . q($langTeacher) . ': <b>' .
-                                        q($prof_info) . '</b>: ' . q($langNoUsersFound2);
-                        }
-                        $tool_content .= '</p>';
                 }
-                $line = strtok("\n");
+            }
+            $class = $prof_not_found ? 'alert1' : 'success';
+            $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: ' . q($langBetaCMSLessonCreatedOK);
+            if ($prof_uid) {
+                $tool_content .= '<br>' . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
+            } elseif ($prof_not_found) {
+                $tool_content .= '<br>' . q($langTeacher) . ': <b>' .
+                        q($prof_info) . '</b>: ' . q($langNoUsersFound2);
+            }
+            $tool_content .= '</p>';
         }
-
+        $line = strtok("\n");
+    }
 } else {
-        $tree = new hierarchy();
-        $course = new course();
-        $user = new user();
+    $tree = new hierarchy();
+    $course = new course();
+    $user = new user();
 
-        // validate course Id
-        //
+    // validate course Id
+    //
         // $cId = course_code_to_id($_GET['c']);
-        //
+    //
         // validateCourseNodes($cId, isDepartmentAdmin());
-        //
+    //
         load_js('jquery');
-        load_js('jquery-ui-new');
-        load_js('jstree');
+    load_js('jquery-ui-new');
+    load_js('jstree');
 
-        $tool_content .= "<div class='noteit'>". $langMultiCourseInfo ."</div>
-        <form method='post' action='". $_SERVER['SCRIPT_NAME'] ."'>
+    $tool_content .= "<div class='noteit'>" . $langMultiCourseInfo . "</div>
+        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
         <fieldset>
-        <legend>". $langMultiCourseData ."</legend>
+        <legend>" . $langMultiCourseData . "</legend>
         <table class='tbl' width='100%'>
         <tr>
             <th>$langMultiCourseTitles:</th>
-            <td>".text_area('courses', 20, 80, '')."</td>
+            <td>" . text_area('courses', 20, 80, '') . "</td>
         </tr>
 	<tr>
 	  <th>$langFaculty:</th>
           <td>";
 
-        list($js, $html) = $tree->buildCourseNodePicker(
-                array('allowables' => $user->getDepartmentIds($uid)));
-        $head_content .= $js;
-        $tool_content .= $html;
+    list($js, $html) = $tree->buildCourseNodePicker(
+            array('allowables' => $user->getDepartmentIds($uid)));
+    $head_content .= $js;
+    $tool_content .= $html;
 
-	$tool_content .= "</td>
+    $tool_content .= "</td>
           <td>&nbsp;</td>
         </tr>
 	<tr>
 	  <th class='left'>$langType:</th>
-	  <td>" .  selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
+	  <td>" . selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
 	  <td>&nbsp;</td>
         </tr>
         <tr>
@@ -126,12 +125,12 @@ if (isset($_POST['submit'])) {
 	<td>
 	  <table class='tbl' width='100%'>
 	  <tr class='smaller'>
-	    <th width='130'><img src='$themeimg/lock_open.png' title='".$m['legopen']."' alt='".$m['legopen']."'width='16' height='16' /> ".$m['legopen']."</th>
+	    <th width='130'><img src='$themeimg/lock_open.png' title='" . $m['legopen'] . "' alt='" . $m['legopen'] . "'width='16' height='16' /> " . $m['legopen'] . "</th>
 	    <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
 	    <td>$langPublic</td>
 	  </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_registration.png' title='".$m['legrestricted']."' alt='".$m['legrestricted']."' width='16' height='16' /> ".$m['legrestricted']."</th>
+	    <th valign='top'><img src='$themeimg/lock_registration.png' title='" . $m['legrestricted'] . "' alt='" . $m['legrestricted'] . "' width='16' height='16' /> " . $m['legrestricted'] . "</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
 	    <td>
               $langPrivOpen<br />
@@ -139,12 +138,12 @@ if (isset($_POST['submit'])) {
             </td>
           </tr>
 	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_closed.png' title='".$m['legclosed']."' alt='".$m['legclosed']."' width=\"16\" height=\"16\" /> ".$m['legclosed']."</th>
+	    <th valign='top'><img src='$themeimg/lock_closed.png' title='" . $m['legclosed'] . "' alt='" . $m['legclosed'] . "' width=\"16\" height=\"16\" /> " . $m['legclosed'] . "</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
 	    <td>$langPrivate</td>
 	  </tr>
           <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_inactive.png' title='".$m['linactive']."' alt='".$m['linactive']."' width='16' height='16' /> ".$m['linactive']."</th>
+	    <th valign='top'><img src='$themeimg/lock_inactive.png' title='" . $m['linactive'] . "' alt='" . $m['linactive'] . "' width='16' height='16' /> " . $m['linactive'] . "</th>
 	    <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
 	    <td>$langCourseInactive</td>
 	  </tr>
@@ -251,7 +250,7 @@ if (isset($_POST['submit'])) {
         <tr>
             <th>&nbsp;</th>
             <td class='right'>
-            <input type='submit' name='submit' value='". q($langSubmit) ."'></td>
+            <input type='submit' name='submit' value='" . q($langSubmit) . "'></td>
         </tr>
         </table>
         </fieldset>
@@ -261,28 +260,25 @@ if (isset($_POST['submit'])) {
 $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
 draw($tool_content, 3, null, $head_content);
 
-
 // Helper function
-function prof_query($sql)
-{
-        return db_query_get_single_value("SELECT id FROM user
+function prof_query($sql) {
+    return db_query_get_single_value("SELECT id FROM user
                                                  WHERE status = 1 AND $sql");
 }
 
 // Find a professor by name ("Name surname") or username
-function find_prof($uname)
-{
-        if ($uid = prof_query('username = ' . quote($uname))) {
-		return $uid;
-        } else {
-                $names = explode(' ', $uname);
-                if (count($names) == 2 and
-                    $uid = prof_query('(surname = ' . quote($names[0]) .
-                                      ' AND givenname = ' . quote($names[1]) .
-                                      ') OR (givenname = ' . quote($names[0]) .
-                                      ' AND surname = ' . quote($names[1]) . ')')) {
-                        return $uid;
-                }
-	}
-        return false;
+function find_prof($uname) {
+    if ($uid = prof_query('username = ' . quote($uname))) {
+        return $uid;
+    } else {
+        $names = explode(' ', $uname);
+        if (count($names) == 2 and
+                $uid = prof_query('(surname = ' . quote($names[0]) .
+                ' AND givenname = ' . quote($names[1]) .
+                ') OR (givenname = ' . quote($names[0]) .
+                ' AND surname = ' . quote($names[1]) . ')')) {
+            return $uid;
+        }
+    }
+    return false;
 }

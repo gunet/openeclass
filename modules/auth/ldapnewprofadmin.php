@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -19,15 +20,15 @@
  * ======================================================================== */
 
 
-/*===========================================================================
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Vagelis Pitsioygas <vagpits@uom.gr>
-==============================================================================
+/* ===========================================================================
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Vagelis Pitsioygas <vagpits@uom.gr>
+  ==============================================================================
   @Description: This script/file tries to authenticate the user, using
   his user/pass pair and the authentication method defined by the admin
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 $require_usermanage_user = TRUE;
 
@@ -45,9 +46,9 @@ load_js('jquery-ui-new');
 load_js('jstree');
 
 
-$auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '' ;
+$auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '';
 
-$msg = "$langProfReg (".(get_auth_info($auth)).")";
+$msg = "$langProfReg (" . (get_auth_info($auth)) . ")";
 
 $nameTools = $msg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
@@ -56,7 +57,7 @@ $tool_content = "";
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 // professor registration
-if ($submit)  {
+if ($submit) {
 
     $pn = $_POST['pn'];
     $ps = $_POST['ps'];
@@ -71,7 +72,7 @@ if ($submit)  {
     }
 
     // check if user name exists
-    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=". quote($pu));
+    $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=" . quote($pu));
 
     if (mysql_num_rows($username_check) > 0) {
         $tool_content .= "<p class='caution'>$langUserFree</p><br><br><p align='right'>
@@ -80,22 +81,21 @@ if ($submit)  {
         exit();
     }
 
-    switch($auth)
-    {
+    switch ($auth) {
         case '2': $password = "pop3";
-        break;
+            break;
         case '3': $password = "imap";
-        break;
+            break;
         case '4': $password = "ldap";
-        break;
+            break;
         case '5': $password = "db";
-        break;
+            break;
         case '6': $password = "shibboleth";
-        break;
+            break;
         case '7': $password = "cas";
-        break;
-        default:  $password = "";
-        break;
+            break;
+        default: $password = "";
+            break;
     }
 
     $registered_at = time();
@@ -106,135 +106,134 @@ if ($submit)  {
                     (surname, givenname, username, password, email, status,
                     am, registered_at, expires_at, lang, verified_mail)
                     VALUES (" .
-                    quote($ps) .', '.
-                    quote($pn) .', '.
-                    quote($pu) .', '.
-                    quote($password) .', '.
-                    quote($pe) .', 1, '.
-                    quote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
+            quote($ps) . ', ' .
+            quote($pn) . ', ' .
+            quote($pu) . ', ' .
+            quote($password) . ', ' .
+            quote($pe) . ', 1, ' .
+            quote($comment) . ", $registered_at, $expires_at, '$lang', $verified_mail)");
 
     $last_id = mysql_insert_id();
     $userObj->refresh($last_id, array(intval($department)));
 
-	// Close user request
-	$rid = intval($_POST['rid']);
-	db_query("UPDATE user_request set state = 2, date_closed = NOW(), verified_mail = $verified_mail WHERE id = $rid");
-	$emailbody = "$langDestination $pn $ps\n" .
-            	"$langYouAreReg $siteName $langSettings $pu\n" .
-            	"$langPass: $langPassSameAuth\n$langAddress $siteName: " .
-            	"$urlServer\n$langProblem\n$langFormula" .
-            	"$administratorName $administratorSurname\n" .
-            	"$langManager $siteName \n$langTel $telephone \n" .
-            	"$langEmail: $emailhelpdesk";
+    // Close user request
+    $rid = intval($_POST['rid']);
+    db_query("UPDATE user_request set state = 2, date_closed = NOW(), verified_mail = $verified_mail WHERE id = $rid");
+    $emailbody = "$langDestination $pn $ps\n" .
+            "$langYouAreReg $siteName $langSettings $pu\n" .
+            "$langPass: $langPassSameAuth\n$langAddress $siteName: " .
+            "$urlServer\n$langProblem\n$langFormula" .
+            "$administratorName $administratorSurname\n" .
+            "$langManager $siteName \n$langTel $telephone \n" .
+            "$langEmail: $emailhelpdesk";
 
-	if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset))  {
-	    $tool_content .= "<table width='99%'><tbody><tr>
+    if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset)) {
+        $tool_content .= "<table width='99%'><tbody><tr>
 	    <td class='caution' height='60'>
 	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
 	    </td></tr></tbody></table>";
-	    draw($tool_content, 3);
-	    exit();
-	}
+        draw($tool_content, 3);
+        exit();
+    }
 
-	// user message
-	$tool_content .= "
+    // user message
+    $tool_content .= "
 	<p class='success'>$profsuccess<br><br>
 	<a href='../admin/listreq.php'>$langBackRequests</a></p>";
-
 } else {
-	// if not submit then display the form
-	if (isset($_GET['id'])) { // if we come from prof request
-		$id = intval($_GET['id']);
-		// display actions toolbar
-		$tool_content .= "<div id='operations_container'>
+    // if not submit then display the form
+    if (isset($_GET['id'])) { // if we come from prof request
+        $id = intval($_GET['id']);
+        // display actions toolbar
+        $tool_content .= "<div id='operations_container'>
 		<ul id='opslist'>
 		<li><a href='../admin/listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
 		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
         if (isset($_GET['id'])) {
-                $tool_content .= "
+            $tool_content .= "
                 <li><a href='../admin/listreq.php'>$langBackRequests</a>";
         }
-                $tool_content .= "
+        $tool_content .= "
 		</ul></div>";
-		$res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email,
+        $res = mysql_fetch_array(db_query("SELECT givenname, surname, username, email,
 			faculty_id, comment, lang, date_open, phone, am, verified_mail FROM user_request WHERE id = $id"));
-		$ps = $res['surname'];
-		$pn = $res['givenname'];
-		$pu = $res['username'];
-		$pe = $res['email'];
-		$pt = intval($res['faculty_id']);
-		$pcom = $res['comment'];
-		$pam = $res['am'];
-		$pphone = $res['phone'];
-		$lang = $res['lang'];
-		$pvm = intval($res['verified_mail']);
-		$pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
-	}
+        $ps = $res['surname'];
+        $pn = $res['givenname'];
+        $pu = $res['username'];
+        $pe = $res['email'];
+        $pt = intval($res['faculty_id']);
+        $pcom = $res['comment'];
+        $pam = $res['am'];
+        $pphone = $res['phone'];
+        $lang = $res['lang'];
+        $pvm = intval($res['verified_mail']);
+        $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
+    }
 
-	@$tool_content .= "
+    @$tool_content .= "
       <form action='$_SERVER[SCRIPT_NAME]' method='post'>
       <fieldset>
       <legend>$langNewProf</legend>
 	<table width='100%' class='tbl'>
 	<tr>
-	<th class='left' width='180'><b>".$langSurname."</b></th>
-	<td>". q($ps) ."<input type='hidden' name='ps' value='". q($ps) ."'></td>
+	<th class='left' width='180'><b>" . $langSurname . "</b></th>
+	<td>" . q($ps) . "<input type='hidden' name='ps' value='" . q($ps) . "'></td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langName</b></th>
-	<td>". q($pn) ."<input type='hidden' name='pn' value='". q($pn) ."'></td>
+	<td>" . q($pn) . "<input type='hidden' name='pn' value='" . q($pn) . "'></td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langUsername</b></th>
-	<td>". q($pu) ."<input type='hidden' name='pu' value='". q($pu) ."'></td>
+	<td>" . q($pu) . "<input type='hidden' name='pu' value='" . q($pu) . "'></td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langEmail</b></th>
-	<td>". q($pe) ."<input type='hidden' name='pe' value='". q($pe) ."' ></td>
+	<td>" . q($pe) . "<input type='hidden' name='pe' value='" . q($pe) . "' ></td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langEmailVerified</b></th>
 	<td>";
 
-	$verified_mail_data = array();
-	$verified_mail_data[0] = $m['pending'];
-	$verified_mail_data[1] = $m['yes'];
-	$verified_mail_data[2] = $m['no'];
+    $verified_mail_data = array();
+    $verified_mail_data[0] = $m['pending'];
+    $verified_mail_data[1] = $m['yes'];
+    $verified_mail_data[2] = $m['no'];
 
-	$tool_content .= selection($verified_mail_data,"verified_mail",$pvm);
+    $tool_content .= selection($verified_mail_data, "verified_mail", $pvm);
 
-	$tool_content .= "</td>
+    $tool_content .= "</td>
 	</tr>
 	<tr>
 	<th class='left'>$langFaculty</th>
 	<td>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
-        $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "</td></tr>";
-	$tool_content .= "<tr>
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+    $head_content .= $js;
+    $tool_content .= $html;
+    $tool_content .= "</td></tr>";
+    $tool_content .= "<tr>
 	<th class='left'>$langLanguage</th>
 	<td>";
-	$tool_content .= lang_select_options('language', '', $lang);
-	$tool_content .= "</td></tr>";
-	$tool_content .= "<tr><th class='left'><b>$langPhone</b></th>
-	<td>".@q($pphone)."&nbsp;</td></tr>
+    $tool_content .= lang_select_options('language', '', $lang);
+    $tool_content .= "</td></tr>";
+    $tool_content .= "<tr><th class='left'><b>$langPhone</b></th>
+	<td>" . @q($pphone) . "&nbsp;</td></tr>
 	<tr>
 	<th class='left'><b>$langComments</b></th>
-	<td>".@q($pcom)."&nbsp;</td>
+	<td>" . @q($pcom) . "&nbsp;</td>
 	</tr>
 	<tr>
 	<th class='left'><b>$langDate</b></th>
-	<td>".@q($pdate)."&nbsp;</td>
+	<td>" . @q($pdate) . "&nbsp;</td>
 	</tr>
 	<tr><th>&nbsp;</th>
-	<td><input type='submit' name='submit' value='".$langSubmit."' >
+	<td><input type='submit' name='submit' value='" . $langSubmit . "' >
 	<input type='hidden' name='auth' value='$auth' >
 	</td></tr>
 	</table>
-	<input type='hidden' name='rid' value='".@$id."'>
+	<input type='hidden' name='rid' value='" . @$id . "'>
       </fieldset>
       </form>";
-	$tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
- }
+    $tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
+}
 draw($tool_content, 3, null, $head_content);

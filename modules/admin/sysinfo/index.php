@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -19,10 +20,13 @@
 //
 // $Id$
 //
-
 // reassign HTTP variables (incase register_globals is off)
-if (!empty($_GET)) while(list($name, $value) = each($_GET)) $$name = $value;
-if (!empty($_POST)) while(list($name, $value) = each($_POST)) $$name = $value;
+if (!empty($_GET))
+    while (list($name, $value) = each($_GET))
+        $$name = $value;
+if (!empty($_POST))
+    while (list($name, $value) = each($_POST))
+        $$name = $value;
 
 // Check to see if where running inside of phpGroupWare
 if (isset($sessionid) && $sessionid && $kp3 && $domain) {
@@ -40,13 +44,13 @@ define('APP_ROOT', dirname(__FILE__));
 // default to english, but this is negotiable.
 if (!(isset($lng) && file_exists('./includes/lang/' . $lng . '.php'))) {
     // see if the browser knows the right languange.
-    if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
         $plng = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-        if(count($plng) > 0) {
-            while(list($k,$v) = each($plng)) {
+        if (count($plng) > 0) {
+            while (list($k, $v) = each($plng)) {
                 $k = explode(';', $v, 1);
                 $k = explode('-', $k[0]);
-                if(file_exists('./includes/lang/' . $k[0] . '.php')) {
+                if (file_exists('./includes/lang/' . $k[0] . '.php')) {
                     $lng = $k[0];
                     break;
                 }
@@ -56,7 +60,7 @@ if (!(isset($lng) && file_exists('./includes/lang/' . $lng . '.php'))) {
             $lng = 'en';
         }
     } else {
-       $lng = 'en';
+        $lng = 'en';
     }
 }
 
@@ -84,7 +88,6 @@ if (PHPGROUPWARE != 1) {
     require('./includes/class.Template.inc.php');  // template library
 }
 require('./includes/common_functions.php');    // Set of common functions used through out the app
-
 // Figure out which OS where running on, and detect support
 if (file_exists(dirname(__FILE__) . '/includes/os/class.' . PHP_OS . '.inc.php')) {
     require('./includes/os/class.' . PHP_OS . '.inc.php');
@@ -101,14 +104,12 @@ $tpl->set_file(array(
     'form' => 'form.tpl'
 ));
 
-
 // print out a box of information
-function makebox ($title, $content)
-{
+function makebox($title, $content) {
     $t = new Template(dirname(__FILE__) . '/templates/' . TEMPLATE_SET);
 
     $t->set_file(array(
-        'box'  => 'box.tpl'
+        'box' => 'box.tpl'
     ));
 
     $t->set_var('title', $title);
@@ -116,7 +117,6 @@ function makebox ($title, $content)
 
     return $t->parse('out', 'box');
 }
-
 
 // let the page begin.
 require('./includes/system_header.php');
@@ -138,5 +138,4 @@ if (PHPGROUPWARE == 1) {
 } else {
     require('./includes/system_footer.php');
 }
-
 ?>

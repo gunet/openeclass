@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -36,7 +37,7 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
 $tree = new Hierarchy();
 
 $nameTools = $langListCourses;
-$navigation[] = array ('url' => 'listfaculte.php', 'name' => $langSelectFac);
+$navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
 
 if (isset($_GET['fc']))
@@ -60,9 +61,9 @@ if (!($fac = $fac[0]))
 
 // use the following array for the legend icons
 $icons = array(
-    2 => "<img src='$themeimg/lock_open.png'         alt='". $m['legopen']       ."' title='". $m['legopen']       ."' width='16' height='16' />",
-    1 => "<img src='$themeimg/lock_registration.png' alt='". $m['legrestricted'] ."' title='". $m['legrestricted'] ."' width='16' height='16' />",
-    0 => "<img src='$themeimg/lock_closed.png'       alt='". $m['legclosed']     ."' title='". $m['legclosed']     ."' width='16' height='16' />"
+    2 => "<img src='$themeimg/lock_open.png'         alt='" . $m['legopen'] . "' title='" . $m['legopen'] . "' width='16' height='16' />",
+    1 => "<img src='$themeimg/lock_registration.png' alt='" . $m['legrestricted'] . "' title='" . $m['legrestricted'] . "' width='16' height='16' />",
+    0 => "<img src='$themeimg/lock_closed.png'       alt='" . $m['legclosed'] . "' title='" . $m['legclosed'] . "' width='16' height='16' />"
 );
 
 if (count($tree->buildRootsArray()) > 1)
@@ -70,7 +71,7 @@ if (count($tree->buildRootsArray()) > 1)
 
 $tool_content .= "<table width=100% class='tbl_border'>
                     <tr>
-                    <th><a name='top'></a>$langFaculty:&nbsp;<b>". $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'].'?fc=') ."</b></th>
+                    <th><a name='top'></a>$langFaculty:&nbsp;<b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b></th>
                     </tr>
                   </table><br/>\n\n";
 
@@ -100,7 +101,7 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
         $commaIds .= $courseId;
         $i++;
     }
-    
+
     if (count($opencourses) > 0)
         $queryCourseIds = " AND course.id IN ($commaIds) ";
     else {
@@ -121,58 +122,58 @@ if ($runQuery) {
                          WHERE course.id = course_department.course
                            AND course.id = course_review.course_id
                            AND course_department.department = $fc
-                           AND course.visible != ".COURSE_INACTIVE."
+                           AND course.visible != " . COURSE_INACTIVE . "
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names");
     $numrows = mysql_num_rows($result);
 }
 
 if ($numrows > 0) {
-    
+
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
             <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>";
-    
+
     if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
         $tool_content .= "
                 <th class='left' width='220'>" . $m['professor'] . "</th>
                 <th width='30'>$langOpenCoursesLevel</th>";
     } else {
         $tool_content .= "
-                <th class='left' width='200'>" . $m['professor']  . "</th>
+                <th class='left' width='200'>" . $m['professor'] . "</th>
                 <th width='30'>$langType</th>";
     }
-    
+
     $tool_content .= "</tr>";
-    
+
     $k = 0;
     while ($mycours = mysql_fetch_array($result)) {
         if ($mycours['visible'] == 2) {
-            $codelink = "<a href='../../courses/$mycours[k]/'>". q($mycours['i']) ."</a>&nbsp;<small>(". $mycours['c'] .")</small>";
+            $codelink = "<a href='../../courses/$mycours[k]/'>" . q($mycours['i']) . "</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
         } else {
             $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
         }
 
-        if ($k%2 == 0) {
+        if ($k % 2 == 0) {
             $tool_content .= "\n<tr class='even'>";
         } else {
             $tool_content .= "\n<tr class='odd'>";
         }
 
         $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
-        $tool_content .= "\n<td>". $codelink ."</td>";
-        $tool_content .= "\n<td>". $mycours['t'] ."</td>";
+        $tool_content .= "\n<td>" . $codelink . "</td>";
+        $tool_content .= "\n<td>" . $mycours['t'] . "</td>";
         $tool_content .= "\n<td align='center'>";
-        
+
         if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
             // metadata are displayed in click-to-open modal dialogs
             $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
             $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['level']) .
-                "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" . 
-                $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" . 
-                "<img src='${themeimg}/lom.png'/></a>";
+                    "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" .
+                    $metadata->asDiv() . "</div>
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" .
+                    "<img src='${themeimg}/lom.png'/></a>";
         } else {
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
@@ -181,7 +182,7 @@ if ($numrows > 0) {
                 }
             }
         }
-        
+
         $tool_content .= "</td>\n";
         $tool_content .= "</tr>";
         $k++;
@@ -242,4 +243,4 @@ EOF;
 }
 
 
-draw($tool_content, (isset($uid) and $uid)? 1: 0, null, $head_content);
+draw($tool_content, (isset($uid) and $uid) ? 1 : 0, null, $head_content);

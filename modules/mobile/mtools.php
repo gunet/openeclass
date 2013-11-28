@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -39,7 +40,7 @@ $groupsArr[] = $group;
 $tool = new stdClass();
 $tool->id = 0;
 $tool->name = $langCourseProgram;
-$tool->link = $urlMobile .'courses/'. $currentCourse;
+$tool->link = $urlMobile . 'courses/' . $currentCourse;
 $tool->img = 'coursedescription';
 $tool->type = 'coursedescription';
 $tool->active = true;
@@ -52,7 +53,7 @@ list($first_unit_id) = mysql_fetch_row(db_query("SELECT id FROM course_units
 $tool = new stdClass();
 $tool->id = 1;
 $tool->name = $langCourseUnits;
-$tool->link = $urlMobile .'modules/units/index.php?course='. $currentCourse .'&id='. $first_unit_id;
+$tool->link = $urlMobile . 'modules/units/index.php?course=' . $currentCourse . '&id=' . $first_unit_id;
 $tool->img = 'courseunits';
 $tool->type = 'courseunits';
 $tool->active = true;
@@ -90,36 +91,34 @@ if (is_array($toolArr)) {
 echo createDom($groupsArr, $toolsArr);
 exit();
 
-
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createDom($groupsArr, $toolsArr) {
-	$dom = new DomDocument('1.0', 'utf-8');
+    $dom = new DomDocument('1.0', 'utf-8');
 
-        $root = $dom->appendChild($dom->createElement('tools'));
+    $root = $dom->appendChild($dom->createElement('tools'));
 
-        foreach ($groupsArr as $group) {
+    foreach ($groupsArr as $group) {
 
-            if (isset($toolsArr[$group->id])) {
+        if (isset($toolsArr[$group->id])) {
 
-                $g = $root->appendChild($dom->createElement('toolgroup'));
-                $gname = $g->appendChild(new DOMAttr('name', $group->name));
+            $g = $root->appendChild($dom->createElement('toolgroup'));
+            $gname = $g->appendChild(new DOMAttr('name', $group->name));
 
-                foreach($toolsArr[$group->id] as $tool) {
-                    $t = $g->appendChild($dom->createElement('tool'));
+            foreach ($toolsArr[$group->id] as $tool) {
+                $t = $g->appendChild($dom->createElement('tool'));
 
-                    $name = $t->appendChild(new DOMAttr('name', $tool->name));
-                    $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
-                    $type = $t->appendChild(new DOMAttr('type', $tool->type));
-                    $acti = $t->appendChild(new DOMAttr('active', $tool->active));
-
-                }
+                $name = $t->appendChild(new DOMAttr('name', $tool->name));
+                $link = $t->appendChild(new DOMAttr('link', correctLink($tool->link)));
+                $type = $t->appendChild(new DOMAttr('type', $tool->type));
+                $acti = $t->appendChild(new DOMAttr('active', $tool->active));
             }
         }
+    }
 
-	$dom->formatOutput = true;
-        $ret = $dom->saveXML();
-        return $ret;
+    $dom->formatOutput = true;
+    $ret = $dom->saveXML();
+    return $ret;
 }
 
 function correctLink($value) {
@@ -131,10 +130,10 @@ function correctLink($value) {
     if ($containsRelPath)
         $ret = $urlMobile . substr($value, strlen("../../"), strlen($value));
 
-    $profile = (isset($_SESSION['profile'])) ? '?profile='.$_SESSION['profile'].'&' : '?' ;
-    $redirect = 'redirect='. urlencode($ret);
+    $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
+    $redirect = 'redirect=' . urlencode($ret);
 
-    $ret = $urlMobile .'modules/mobile/mlogin.php'. $profile . $redirect;
+    $ret = $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
 
     return $ret;
 }

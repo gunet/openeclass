@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -38,7 +39,7 @@ require_once 'include/phpass/PasswordHash.php';
 
 $nameTools = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array ('url' => 'edituser.php', 'name'=> $langEditUser);
+$navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
 
 // javascript
 load_js('jquery');
@@ -49,10 +50,10 @@ $head_content .= <<<hContent
 
     var lang = {
 hContent;
-$head_content .= "pwStrengthTooShort: '". js_escape($langPwStrengthTooShort) ."', ";
-$head_content .= "pwStrengthWeak: '". js_escape($langPwStrengthWeak) ."', ";
-$head_content .= "pwStrengthGood: '". js_escape($langPwStrengthGood) ."', ";
-$head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
+$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
+$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
+$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
+$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
 
@@ -69,17 +70,17 @@ hContent;
 check_uid();
 
 if (!isset($urlSecure)) {
-	$passurl = $urlServer.'modules/admin/password.php';
+    $passurl = $urlServer . 'modules/admin/password.php';
 } else {
-	$passurl = $urlSecure.'modules/admin/password.php';
+    $passurl = $urlSecure . 'modules/admin/password.php';
 }
 
 if (!isset($_POST['changePass'])) {
-        if (!isset($_GET['userid'])) {
-                header("Location: {$urlServer}modules/admin/");
-                exit;
-        }
-	$tool_content .= "
+    if (!isset($_GET['userid'])) {
+        header("Location: {$urlServer}modules/admin/");
+        exit;
+    }
+    $tool_content .= "
 <form method='post' action='$passurl'>
 <fieldset>
   <legend>$lang_remind_pass</legend>
@@ -101,33 +102,33 @@ if (!isset($_POST['changePass'])) {
 </fieldset>
 </form>";
 } else {
-	$userid = intval($_POST['userid']);
-	if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-		$tool_content .= mes($langFieldsMissing, '', 'caution');
-		draw($tool_content, 3);
-		exit();
-	}
-	if ($_POST['password_form1'] !== $_POST['password_form']) {
-		$tool_content .= mes($langPassTwo, '', 'caution_small');
-		draw($tool_content, 3);
-		exit();
-	}
-	// All checks ok. Change password!
-	$hasher = new PasswordHash(8, false);
-	$new_pass = $hasher->HashPassword($_POST['password_form']);
-	$sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `id` = $userid";
-	db_query($sql, $mysqlMainDb);
-	$tool_content .= mes($langPassChanged, $langHome, 'success');
-	draw($tool_content, 3);
-	exit();
+    $userid = intval($_POST['userid']);
+    if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
+        $tool_content .= mes($langFieldsMissing, '', 'caution');
+        draw($tool_content, 3);
+        exit();
+    }
+    if ($_POST['password_form1'] !== $_POST['password_form']) {
+        $tool_content .= mes($langPassTwo, '', 'caution_small');
+        draw($tool_content, 3);
+        exit();
+    }
+    // All checks ok. Change password!
+    $hasher = new PasswordHash(8, false);
+    $new_pass = $hasher->HashPassword($_POST['password_form']);
+    $sql = "UPDATE `user` SET `password` = '$new_pass' WHERE `id` = $userid";
+    db_query($sql, $mysqlMainDb);
+    $tool_content .= mes($langPassChanged, $langHome, 'success');
+    draw($tool_content, 3);
+    exit();
 }
 
 draw($tool_content, 3, null, $head_content);
 
 // display message
 function mes($message, $urlText, $type) {
-	global $urlServer, $langBack, $userid;
+    global $urlServer, $langBack, $userid;
 
- 	$str = "<p class='$type'>$message</p><br /><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
-	return $str;
+    $str = "<p class='$type'>$message</p><br /><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
+    return $str;
 }

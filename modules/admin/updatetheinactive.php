@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -20,46 +21,42 @@
 
 
 
-/**===========================================================================
-	serachuser.php
-	@last update: 15-10-2006 by Karatzidis Stratos
-	@authors list: Karatzidis Stratos <kstratos@uom.gr>
-		       Pitsiougas Vagelis <vagpits@uom.gr>
-==============================================================================
+/* * ===========================================================================
+  serachuser.php
+  @last update: 15-10-2006 by Karatzidis Stratos
+  @authors list: Karatzidis Stratos <kstratos@uom.gr>
+  Pitsiougas Vagelis <vagpits@uom.gr>
+  ==============================================================================
   @Description: Activate the inactive accounts
 
 
-==============================================================================
-*/
+  ==============================================================================
+ */
 
 
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'admin.inc.php';
-$nameTools = $langAddTime;		// Define $nameTools
+$nameTools = $langAddTime;  // Define $nameTools
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // Main body
-$activate = isset($_GET['activate'])?$_GET['activate']:'';	//variable of declaring the activation update
+$activate = isset($_GET['activate']) ? $_GET['activate'] : ''; //variable of declaring the activation update
 // update process for all the inactive records/users
-if((!empty($activate)) && ($activate==1)) {
-	// do the update
-	$newtime = time() + 15552000;
-	$qry = "UPDATE user SET expires_at=".$newtime." WHERE expires_at<=".time();
-	$sql = db_query($qry);
-	if($sql)
-	{
-		$countinactive = mysql_affected_rows();
-		if ($countinactive > 0)
-		{
-			$tool_content .= " ".$langRealised." ".$countinactive." ".$langChanges." <br><br>";
-			$tool_content .= "<a href='index.php'>$langBack</a>";
-		}
-	}
-	else
-	{
-		$tool_content .= $langNoChanges;
-		$tool_content .= "<a href='index.php'>$langBack</a>";
-	}
+if ((!empty($activate)) && ($activate == 1)) {
+    // do the update
+    $newtime = time() + 15552000;
+    $qry = "UPDATE user SET expires_at=" . $newtime . " WHERE expires_at<=" . time();
+    $sql = db_query($qry);
+    if ($sql) {
+        $countinactive = mysql_affected_rows();
+        if ($countinactive > 0) {
+            $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";
+            $tool_content .= "<a href='index.php'>$langBack</a>";
+        }
+    } else {
+        $tool_content .= $langNoChanges;
+        $tool_content .= "<a href='index.php'>$langBack</a>";
+    }
 }
-draw($tool_content,3);
+draw($tool_content, 3);

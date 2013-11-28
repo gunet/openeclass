@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -33,11 +34,11 @@ if (!get_config('enable_search')) {
 
 // exit if no POST data
 if (!register_posted_variables(array('search_terms' => false,
-                                     'search_terms_title' => false,
-                                     'search_terms_keywords' => false,
-                                     'search_terms_instructor' => false,
-                                     'search_terms_coursecode' => false,
-                                     'search_terms_description' => false), 'any')) {
+            'search_terms_title' => false,
+            'search_terms_keywords' => false,
+            'search_terms_instructor' => false,
+            'search_terms_coursecode' => false,
+            'search_terms_description' => false), 'any')) {
     $tool_content .= CourseIndexer::getDetailedSearchForm();
     draw($tool_content, 0);
     exit();
@@ -46,36 +47,37 @@ if (!register_posted_variables(array('search_terms' => false,
 // search in the index
 $idx = new Indexer();
 $hits1 = $idx->searchRaw(CourseIndexer::buildQuery($_POST));            // courses with visible 1 or 2
-
 // Additional Access Rights
 $anonymous = false;
 if (isset($uid) and $uid) {
     $anonymous = true;
     $hits2 = $idx->searchRaw(CourseIndexer::buildQuery($_POST, false)); // courses with visible 0 or 3
-    
+
     if ($uid == 0)
         $hits = array_merge($hits1, $hits2); // admin has access to all
     else {
         $res = db_query("SELECT course.id 
                            FROM course 
                            JOIN course_user ON course.id = course_user.course_id 
-                            AND course_user.user_id = ". $uid);
+                            AND course_user.user_id = " . $uid);
         $subscribed = array();
         while ($row = mysql_fetch_assoc($res))
             $subscribed[] = $row['id'];
-        
+
         $hits3 = array();
-        foreach($hits2 as $hit2) {
+        foreach ($hits2 as $hit2) {
             if (in_array($hit2->pkid, $subscribed))
                 $hits3[] = $hit2;
         }
-        
+
         $hits = array_merge($hits1, $hits3); // eponymous user can also search for his subscribed courses
     }
 } else
     $hits = $hits1;                          // anonymous can only access with visible 1 or 2
 
 
+
+    
 // exit if not results
 if (count($hits) <= 0) {
     $tool_content .= "<p class='alert1'>$langNoResult</p>";
@@ -93,7 +95,7 @@ $tool_content .= "
     </div>";
 
 $tool_content .= "
-    <p>$langDoSearch:&nbsp;<b>" .  count($hits) . " $langResults</b></p>
+    <p>$langDoSearch:&nbsp;<b>" . count($hits) . " $langResults</b></p>
     <script type='text/javascript' src='../auth/sorttable.js'></script>
     <table width='100%' class='sortable' id='t1' align='left'>
     <tr>
@@ -105,18 +107,18 @@ $tool_content .= "
 
 $k = 0;
 foreach ($hits as $hit) {
-    $res = db_query("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ". intval($hit->pkid));
+    $res = db_query("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = " . intval($hit->pkid));
     $course = mysql_fetch_assoc($res);
-    
+
     // search in-course
     $urlParam = '';
-    if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous) )
+    if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous))
         $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
-    
+
     $class = ($k % 2) ? 'odd' : 'even';
     $tool_content .= "<tr class='$class'>
                       <td><img src='$themeimg/arrow.png' alt='' /></td><td>
-                      <a href='../../courses/" . q($course['code']) . "/" . $urlParam . "'>" . q($course['title']) ."
+                      <a href='../../courses/" . q($course['code']) . "/" . $urlParam . "'>" . q($course['title']) . "
                       </a> (" . q($course['public_code']) . ")</td>
                       <td>" . q($course['prof_names']) . "</td>
                       <td>" . q($course['keywords']) . "</td></tr>";
@@ -125,69 +127,68 @@ foreach ($hits as $hit) {
 $tool_content .= "</table>";
 draw($tool_content, 0);
 
-
 // search in-course
 function search_in_course($searchTerms, $courseId, $anonymous) {
     global $idx;
-    
+
     $data = array();
     $data['search_terms'] = $searchTerms;
     $data['course_id'] = $courseId;
-    
+
     require_once 'announcementindexer.class.php';
     $hits = $idx->searchRaw(AnnouncementIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'agendaindexer.class.php';
     $hits = $idx->searchRaw(AgendaIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'documentindexer.class.php';
     $hits = $idx->searchRaw(DocumentIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'exerciseindexer.class.php';
     $hits = $idx->searchRaw(ExerciseIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'forumindexer.class.php';
     $hits = $idx->searchRaw(ForumIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'forumtopicindexer.class.php';
     $hits = $idx->searchRaw(ForumTopicIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'linkindexer.class.php';
     $hits = $idx->searchRaw(LinkIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'videoindexer.class.php';
     $hits = $idx->searchRaw(VideoIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'videolinkindexer.class.php';
     $hits = $idx->searchRaw(VideolinkIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'unitindexer.class.php';
     $hits = $idx->searchRaw(UnitIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     require_once 'unitresourceindexer.class.php';
     $hits = $idx->searchRaw(UnitResourceIndexer::buildQuery($data, $anonymous));
     if (count($hits) > 0)
         return true;
-    
+
     return false;
 }

@@ -1,4 +1,5 @@
 <?php
+
 //
 // phpSysInfo - A PHP System Information Script
 // http://phpsysinfo.sourceforge.net/
@@ -22,17 +23,17 @@
 $scale_factor = 2;
 
 $_text = '<table width="100%" align="center">'
-       . '<tr><td align="left" valign="top"><font size="-1"><b>' . $text['mount'] . '</b></font></td>'
-       . '<td align="left" valign="top"><font size="-1"><b>' . $text['type'] . '</b></font></td>'
-       . '<td align="left" valign="top"><font size="-1"><b>' . $text['partition'] . '</b></font></td>'
-       . '<td align="left" valign="top"><font size="-1"><b>' . $text['percent'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['free'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['used'] . '</b></font></td>'
-       . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>';
+        . '<tr><td align="left" valign="top"><font size="-1"><b>' . $text['mount'] . '</b></font></td>'
+        . '<td align="left" valign="top"><font size="-1"><b>' . $text['type'] . '</b></font></td>'
+        . '<td align="left" valign="top"><font size="-1"><b>' . $text['partition'] . '</b></font></td>'
+        . '<td align="left" valign="top"><font size="-1"><b>' . $text['percent'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['free'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['used'] . '</b></font></td>'
+        . '<td align="right" valign="top"><font size="-1"><b>' . $text['size'] . '</b></font></td></tr>';
 
 $fs = $sysinfo->filesystems();
 
-for ($i=0; $i<sizeof($fs); $i++) {
+for ($i = 0; $i < sizeof($fs); $i++) {
     $sum['size'] += $fs[$i]['size'];
     $sum['used'] += $fs[$i]['used'];
     $sum['free'] += $fs[$i]['free'];
@@ -58,7 +59,7 @@ $_text .= "\t\t<td align=\"left\" valign=\"top\"><font size=\"-1\">";
 $sum_percent = round(($sum['used'] * 100) / $sum['size']);
 $_text .= create_bargraph($sum_percent, $sum_percent, $scale_factor);
 
-$_text .= "&nbsp;" . $sum_percent . "%" .  "</font></td>\n";
+$_text .= "&nbsp;" . $sum_percent . "%" . "</font></td>\n";
 
 $_text .= '<td align="right" valign="top"><font size="-1">' . format_bytesize($sum['free']) . '</font></td>'
         . '<td align="right" valign="top"><font size="-1">' . format_bytesize($sum['used']) . '</font></td>'
@@ -66,5 +67,4 @@ $_text .= '<td align="right" valign="top"><font size="-1">' . format_bytesize($s
         . '</table>';
 
 $tpl->set_var('filesystems', makebox($text['fs'], $_text, '100%'));
-
 ?>

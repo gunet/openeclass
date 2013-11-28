@@ -20,33 +20,31 @@
  * ======================================================================== */
 
 
-/**===========================================================================
-	exercise
-	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+/* * ===========================================================================
+  exercise
+  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-	based on Claroline version 1.7 licensed under GPL
-	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+  based on Claroline version 1.7 licensed under GPL
+  copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
 
-	      original file: exercise.inc.php Revision: 1.14.2.3
+  original file: exercise.inc.php Revision: 1.14.2.3
 
-	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
-                      Lederer Guillaume <led@cerdecam.be>
-==============================================================================
-*/
+  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+  Lederer Guillaume <led@cerdecam.be>
+  ==============================================================================
+ */
 
-if( isset($cmd) && $cmd = "raw" )
-{
-	// change raw if value is a number between 0 and 100
-	if (isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0 )
-	{
-		$sql = "UPDATE `".$TABLELEARNPATHMODULE."`
-				SET `raw_to_pass` = ". (int)$_POST['newRaw']."
-				WHERE `module_id` = ". (int)$_SESSION['lp_module_id']."
-				AND `learnPath_id` = ". (int)$_SESSION['path_id'];
-		db_query($sql, $mysqlMainDb);
+if (isset($cmd) && $cmd = "raw") {
+    // change raw if value is a number between 0 and 100
+    if (isset($_POST['newRaw']) && is_num($_POST['newRaw']) && $_POST['newRaw'] <= 100 && $_POST['newRaw'] >= 0) {
+        $sql = "UPDATE `" . $TABLELEARNPATHMODULE . "`
+				SET `raw_to_pass` = " . (int) $_POST['newRaw'] . "
+				WHERE `module_id` = " . (int) $_SESSION['lp_module_id'] . "
+				AND `learnPath_id` = " . (int) $_SESSION['path_id'];
+        db_query($sql, $mysqlMainDb);
 
-		$dialogBox = $langRawHasBeenChanged;
-	}
+        $dialogBox = $langRawHasBeenChanged;
+    }
 }
 
 
@@ -55,53 +53,48 @@ $tool_content .= '<hr noshade="noshade" size="1" />';
 //####################################################################################\\
 //############################### DIALOG BOX SECTION #################################\\
 //####################################################################################\\
-if( !empty($dialogBox) )
-{
-	$tool_content .= disp_message_box($dialogBox);
+if (!empty($dialogBox)) {
+    $tool_content .= disp_message_box($dialogBox);
 }
 
 // form to change raw needed to pass the exercise
 $sql = "SELECT `lock`, `raw_to_pass`
-        FROM `".$TABLELEARNPATHMODULE."` AS LPM
-       WHERE LPM.`module_id` = ". (int)$_SESSION['lp_module_id']."
-         AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
+        FROM `" . $TABLELEARNPATHMODULE . "` AS LPM
+       WHERE LPM.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
+         AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'];
 
 $learningPath_module = db_query_get_single_row($sql, $mysqlMainDb);
 
 // if this module blocks the user if he doesn't complete
-if( isset($learningPath_module['lock'])
-	&& $learningPath_module['lock'] == 'CLOSE'
-	&& isset($learningPath_module['raw_to_pass']) )
-{
-	$tool_content .= '<form method="POST" action="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'">'."\n"
-		.'<label for="newRaw">'.$langChangeRaw.'</label>'."\n"
-		.'<input type="text" value="'.htmlspecialchars( $learningPath_module['raw_to_pass'] ).'" name="newRaw" id="newRaw" size="3" maxlength="3" /> % '."\n"
-		.'<input type="hidden" name="cmd" value="raw" />'."\n"
-		.'<input type="submit" value="'.$langOk.'" />'."\n"
-		.'</form>'."\n\n";
+if (isset($learningPath_module['lock']) && $learningPath_module['lock'] == 'CLOSE' && isset($learningPath_module['raw_to_pass'])) {
+    $tool_content .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n"
+            . '<label for="newRaw">' . $langChangeRaw . '</label>' . "\n"
+            . '<input type="text" value="' . htmlspecialchars($learningPath_module['raw_to_pass']) . '" name="newRaw" id="newRaw" size="3" maxlength="3" /> % ' . "\n"
+            . '<input type="hidden" name="cmd" value="raw" />' . "\n"
+            . '<input type="submit" value="' . $langOk . '" />' . "\n"
+            . '</form>' . "\n\n";
 }
 
 // display current exercise info and change comment link
 $sql = "SELECT `E`.`id` AS `exerciseId`, `M`.`name`
-        FROM `$mysqlMainDb`.`".$TABLEMODULE."` AS `M`,
-             `$mysqlMainDb`.`".$TABLEASSET."`  AS `A`,
-             `$mysqlMainDb`.`".$TABLEQUIZTEST."` AS `E`
+        FROM `$mysqlMainDb`.`" . $TABLEMODULE . "` AS `M`,
+             `$mysqlMainDb`.`" . $TABLEASSET . "`  AS `A`,
+             `$mysqlMainDb`.`" . $TABLEQUIZTEST . "` AS `E`
        WHERE `A`.`module_id` = M.`module_id`
-         AND `M`.`module_id` = ". (int) $_SESSION['lp_module_id']."
+         AND `M`.`module_id` = " . (int) $_SESSION['lp_module_id'] . "
          AND `M`.`course_id` = $course_id
          AND `E`.`id` = `A`.`path`";
 
 $module = db_query_get_single_row($sql);
-if( $module )
-{
-	$tool_content .= "\n\n".'<h4>'.$langExerciseInModule.' :</h4>'."\n"
-		.'<p>'."\n"
-		.htmlspecialchars($module['name'])
-		.'&nbsp;'."\n"
-		.'<a href="../exercise/admin.php?course='.$course_code.'&amp;exerciseId='.$module['exerciseId'].'">'
-		.'<img src="'.$imgRepositoryWeb.'edit.png" border="0" alt="'.$langModify.'" title="'.$langModify.'" />'
-		.'</a>'."\n"
-		.'</p>'."\n";
+if ($module) {
+    $tool_content .= "\n\n" . '<h4>' . $langExerciseInModule . ' :</h4>' . "\n"
+            . '<p>' . "\n"
+            . htmlspecialchars($module['name'])
+            . '&nbsp;' . "\n"
+            . '<a href="../exercise/admin.php?course=' . $course_code . '&amp;exerciseId=' . $module['exerciseId'] . '">'
+            . '<img src="' . $imgRepositoryWeb . 'edit.png" border="0" alt="' . $langModify . '" title="' . $langModify . '" />'
+            . '</a>' . "\n"
+            . '</p>' . "\n";
 
-	$tool_content .= '<hr noshade="noshade" size="1" />';
+    $tool_content .= '<hr noshade="noshade" size="1" />';
 } // else sql error, do nothing except in debug mode, where claro_sql_query_fetch_all will show the error

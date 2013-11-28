@@ -11,20 +11,20 @@ process_login();
 
 $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
 if ($shibactive['auth_default'] == 1) {
-	$shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
+    $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
 } else {
-	$shibboleth_link = "";
+    $shibboleth_link = "";
 }
 
 $casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
 if ($casactive['auth_default'] == 1) {
-	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
+    $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
 } else {
-	$cas_link = "";
+    $cas_link = "";
 }
 
-$next = isset($_GET['next'])?
-        ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>"):
+$next = isset($_GET['next']) ?
+        ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
         '';
 
 $tool_content .= "<form action='$urlSecure' method='post'>
@@ -46,7 +46,7 @@ $tool_content .= "<form action='$urlSecure' method='post'>
 	   </td>
 	 </tr>";
 if (!empty($shibboleth_link) or !empty($cas_link)) {
-        $tool_content .= "<tr><th colspan='2' class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
+    $tool_content .= "<tr><th colspan='2' class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
 }
 $tool_content .= "<tr><td colspan='2' class='LoginData'>$shibboleth_link
                       $cas_link</td></tr></table></form>";
