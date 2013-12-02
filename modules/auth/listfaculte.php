@@ -38,7 +38,7 @@ if (isset($result))  {
 		<img src='$themeimg/arrow.png' alt='arrow'></th>
 		<td><a href='opencourses.php?fc=$fac[id]'>$fac[name]</a>&nbsp;&nbsp;<small>
 		($fac[code])";
-		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id]");
+		$n = db_query("SELECT COUNT(*) FROM cours WHERE faculteid = $fac[id] AND visible != ".COURSE_INACTIVE."");
 		$r = mysql_fetch_array($n);
 		$tool_content .= "&nbsp;&nbsp;-&nbsp;&nbsp;$r[0]&nbsp;".  ($r[0] == 1? $langAvCours: $langAvCourses) . "</small></td>
 		</tr>";
