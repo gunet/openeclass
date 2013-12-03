@@ -265,7 +265,7 @@ if ($numSent == 0) {
                 if (isset($_GET['d']) and $_GET['d'] == 'all') {
                         $tool_content .= $recipients_names;
                 } else {
-                        $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
+                        $tool_content .= ellipsize_html($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                 }
                 $tool_content .= "</td>
                                 <td><small>$w->uploadDate</small></td>
@@ -334,7 +334,7 @@ if ($is_editor) {
                         if (isset($_GET['d']) and $_GET['d'] == 'all') {
                                 $tool_content .= $recipients_names;
                         } else {
-                                $tool_content .= ellipsize($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
+                                $tool_content .= ellipsize_html($recipients_names, 89, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;d=all'> <span class='smaller'>[$langMore]</span></a></strong>");
                         }
                         $tool_content .= "</td>
                                         <td><small>$w->uploadDate</small></td>

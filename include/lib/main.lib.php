@@ -1465,6 +1465,16 @@ function ellipsize($string, $maxlen, $postfix = '...')
         }
 }
 
+/*
+ * Cut a string to be no more than $maxlen characters long, appending
+ * the $postfix (default: ellipsis "...") if so respecting html tags
+ */
+
+function ellipsize_html($string, $maxlen, $postfix = '&hellip;') {
+    $output = new HtmlCutString($string, $maxlen, $postfix);
+    return $output->cut();
+}
+
 // Find the title of a course from its code
 function course_code_to_title($code)
 {
@@ -2391,6 +2401,82 @@ function token_validate($info, $token, $ts_valid_time=0)
         }
         $code_key = get_config('code_key');
         return $token == hash_hmac('ripemd160', $ts.$info, $code_key);
+}
+
+/**
+ * This is a class for cutting a string to be no more than $maxlen characters long, respecting the html tags
+ * Based on code provided by prajwala 
+ * http://code.google.com/p/cut-html-string/	
+ */
+class HtmlCutString {
+
+    function __construct($string, $limit, $postfix) {
+        // create dom element using the html string
+        $this->tempDiv = new DomDocument;
+        $this->tempDiv->loadXML('<div>' . $string . '</div>');
+        // keep the characters count till now
+        $this->charCount = 0;
+        // put the postfix at the end
+        $this->postfix = FALSE;
+        $this->postfix_text = $postfix;
+        $this->encoding = 'UTF-8';
+        // character limit need to check
+        $this->limit = $limit;
+    }
+
+    function cut() {
+        // create empty document to store new html
+        $this->newDiv = new DomDocument;
+        // cut the string by parsing through each element
+        $this->searchEnd($this->tempDiv->documentElement, $this->newDiv);
+        $newhtml = $this->newDiv->saveHTML();
+        if ($this->postfix)
+            return $newhtml . $this->postfix_text;
+        else
+            return $newhtml;
+    }
+
+    function deleteChildren($node) {
+        while (isset($node->firstChild)) {
+            $this->deleteChildren($node->firstChild);
+            $node->removeChild($node->firstChild);
+        }
+    }
+
+    function searchEnd($parseDiv, $newParent) {
+        foreach ($parseDiv->childNodes as $ele) {
+            // not text node
+            if ($ele->nodeType != 3) {
+                $newEle = $this->newDiv->importNode($ele, true);
+                if (count($ele->childNodes) === 0) {
+                    $newParent->appendChild($newEle);
+                    continue;
+                }
+                $this->deleteChildren($newEle);
+                $newParent->appendChild($newEle);
+                $res = $this->searchEnd($ele, $newEle);
+                if ($res)
+                    return $res;
+                else {
+                    continue;
+                }
+            }
+
+            // the limit of the char count reached
+            if (mb_strlen($ele->nodeValue, $this->encoding) + $this->charCount >= $this->limit) {
+                $newEle = $this->newDiv->importNode($ele);
+                $newEle->nodeValue = mb_substr($newEle->nodeValue, 0, $this->limit - $this->charCount, $this->encoding);
+                $newParent->appendChild($newEle);
+                $this->postfix = TRUE;
+                return true;
+            }
+            $newEle = $this->newDiv->importNode($ele);
+            $newParent->appendChild($newEle);
+            $this->charCount += mb_strlen($newEle->nodeValue, $this->encoding);
+        }
+        return false;
+    }
+
 }
 
 // check if username match for both case sensitive/insensitive
