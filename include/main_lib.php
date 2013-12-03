@@ -288,7 +288,7 @@ function load_js($file, $init = '') {
         $file = 'fancybox2/jquery.fancybox.pack.js?v=2.0.3';
     } elseif ($file == 'colorbox') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/colorbox/colorbox.css'>\n";
-        $file = 'colorbox/jquery.colorbox-min.js';
+        $file = 'colorbox/jquery.colorbox.min.js';
     } elseif ($file == 'flot') {
         $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
         $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";

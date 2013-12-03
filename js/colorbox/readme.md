@@ -3,6 +3,10 @@ A customizable lightbox plugin for jQuery.  See the [project page](http://jacklm
 
 ## Changelog:
 
+### Version 1.4.33 - 2013/10/31
+
+* Fixed an issue where private events propagated to the document in versions of jQuery prior to 1.7.  Fixes #525, Fixes #526
+
 ### Version 1.4.32 - 2013/10/16
 
 * Updated stylesheets to avoid issue with using `div {max-width:100%}` (Fixes #520)
@@ -200,7 +204,7 @@ A customizable lightbox plugin for jQuery.  See the [project page](http://jacklm
 ### Version 1.3.21 - 2013/1/15
 Files Changed: *.js
 
-* Fixed compatability issues with jQuery 1.9
+* Fixed compatibility issues with jQuery 1.9
 
 ### Version 1.3.20 - August 15 2012
 Files Changed:jquery.colorbox.js
