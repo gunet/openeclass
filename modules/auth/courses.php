@@ -145,7 +145,7 @@ var lang = {
 };</script>";
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('tools.js');
 
 draw($tool_content, 1, null, $head_content);

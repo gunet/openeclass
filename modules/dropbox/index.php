@@ -409,7 +409,6 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
                 uncheckAllText: '$langJQUncheckAll'
         });
 });</script>
-<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
 draw($tool_content, 2, null, $head_content);

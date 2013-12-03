@@ -38,7 +38,7 @@ $tree = new Hierarchy();
 $user = new User();
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('jstree');
 $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
 $head_content .= $jscalendar->get_load_files_code();

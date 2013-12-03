@@ -36,7 +36,7 @@ $tree = new Hierarchy();
 $user = new User();
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('jstree');
 
 $nameTools = $langMultiRegUser;

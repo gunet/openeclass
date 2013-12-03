@@ -195,9 +195,8 @@ if ($numrows > 0) {
 $head_content = '';
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
-    $head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
     load_js('jquery');
-    load_js('jquery-ui-new');
+    load_js('jquery-ui');
     $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */

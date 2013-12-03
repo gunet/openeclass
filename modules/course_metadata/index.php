@@ -38,7 +38,7 @@ else
     $tool_content .= displayForm();
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('jquery-multiselect');
 $head_content .= <<<EOF
 <script type='text/javascript'>

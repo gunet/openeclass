@@ -55,7 +55,6 @@ $head_content .= "<script type='text/javascript'>$(document).ready(function () {
         });
         $('<input type=hidden name=jsCheck value=1>').appendTo('form[name=groupedit]');
 });</script>
-<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>
 <link href='../../js/jquery.multiselect.css' rel='stylesheet' type='text/css'>";
 
 if (!($is_editor or $is_tutor)) {

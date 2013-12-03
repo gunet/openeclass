@@ -266,15 +266,14 @@ function load_js($file, $init = '') {
     global $head_content, $urlAppend, $theme;
 
     if ($file == 'jquery') {
-        $file = 'jquery-1.8.3.min.js';
+        $file = 'jquery-1.10.2.min.js';
     } elseif ($file == 'jquery-ui') {
-        $file = 'jquery-ui-1.8.1.custom.min.js';
-    } elseif ($file == 'jquery-ui-new') {
         if ($theme == 'modern' || $theme == 'ocean')
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/redmond/jquery-ui-1.9.2.custom.min.css'>\n";
+            $uiTheme = 'redmond';
         else
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/smoothness/jquery-ui-1.9.2.custom.min.css'>\n";
-        $file = 'jquery-ui-1.9.2.custom.min.js';
+            $uiTheme = 'smoothness';
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-css/{$uiTheme}/jquery-ui-1.10.3.custom.min.css'>\n";
+        $file = 'jquery-ui-1.10.3.custom.min.js';
     } elseif ($file == 'jquery-multiselect') {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery.multiselect.css'>\n";
         $file = 'jquery.multiselect.min.js';
@@ -293,11 +292,14 @@ function load_js($file, $init = '') {
     } elseif ($file == 'flot') {
         $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
         $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-1.8.3.min.js'></script>\n";
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-1.10.2.min.js'></script>\n";
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
+        if ($file == 'jquery-1.10.2.min.js')
+            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.js'></script>\n";
 
     if (strlen($init) > 0)
         $head_content .= $init;

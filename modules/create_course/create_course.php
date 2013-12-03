@@ -48,7 +48,7 @@ $user = new User();
 $nameTools = $langCreateCourse . " (" . $langCreateCourseStep . " 1 " . $langCreateCourseStep2 . " 3)";
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('jstree');
 load_js('pwstrength.js');
 

@@ -35,7 +35,7 @@ $xml = CourseXMLElement::init($course_id, $course_code);
 $tool_content .= $xml->asDiv();
 
 load_js('jquery');
-load_js('jquery-ui-new');
+load_js('jquery-ui');
 load_js('jquery-multiselect');
 $head_content .= <<<EOF
 <script type='text/javascript'>
