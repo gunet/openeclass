@@ -132,9 +132,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
         <td><input type='input' name='message_title' size='50' value='$message_title' />	      
         </td>
         </tr>";
-    $tool_content .= "<tr>
+    @$tool_content .= "<tr>
               <th>" . $langMessage . ":</th>
-              <td><textarea name='description' cols='37' rows='4'></textarea><small>&nbsp;&nbsp;$langMaxMessageSize</small></td>
+              <td>".rich_text_editor('description', 4, 20, $description)."
+              <small>&nbsp;&nbsp;$langMaxMessageSize</small></td>           
             </tr>";
     $tool_content .= "<tr>
 	  <th width='120'>$langFileName:</th>
@@ -235,9 +236,9 @@ if (!isset($_GET['mailing'])) {
             if (($w->filename != '') and ($w->filesize != 0)) {
                 $tool_content .= "<td><a href='dropbox_download.php?course=$course_code&amp;id=" . urlencode($w->id) . "' target=_blank>" . $w->title . "&nbsp;<img src='$themeimg/inbox.png' /></a>";
                 $tool_content .= "<small>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</small><br />" .
-                        "<small>" . q($w->description) . "</small></td>";
+                        "<small>" . standard_text_escape($w->description) . "</small></td>";
             } else {
-                $tool_content .= "<td>" . q($w->title) . "<br /><small>" . q($w->description) . "</small></td>";
+                $tool_content .= "<td>" . q($w->title) . "<br /><small>" . standard_text_escape($w->description) . "</small></td>";
             }
             $tool_content .= "<td>" . display_user($w->uploaderId, false, false) . "</td>
                                           <td><small>" . $w->uploadDate;
@@ -301,9 +302,9 @@ if ($numSent == 0) {
         if (($w->filename != '') and ($w->filesize != 0)) {
             $tool_content .= "<td><a href='$ahref' target='_blank'>" . q($w->title) . "&nbsp;<img src='$themeimg/inbox.png' /></a>
                                 <small>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</small><br />
-                                <small>" . q($w->description) . "</small></td>";
+                                <small>" . standard_text_escape($w->description) . "</small></td>";
         } else {
-            $tool_content .= "<td>" . q($w->title) . "<br /><small>" . q($w->description) . "</small></td>";
+            $tool_content .= "<td>" . q($w->title) . "<br /><small>" . standard_text_escape($w->description) . "</small></td>";
         }
         $tool_content .= "<td>";
         $recipients_names = '';
@@ -365,9 +366,9 @@ if ($is_editor) {
             if (($w->filename != '') and ($w->filesize != 0)) {
                 $tool_content .= "<td><a href='$ahref' target='_blank'>" . q($w->title) . "&nbsp;<img src='$themeimg/inbox.png' /></a>
                                                 <small>&nbsp;&nbsp;&nbsp;(" . format_file_size($w->filesize) . ")</small><br />
-                                                <small>" . q($w->description) . "</small></td>";
+                                                <small>" . standard_text_escape($w->description) . "</small></td>";
             } else {
-                $tool_content .= "<td>" . q($w->title) . "<br /><small>" . q($w->description) . "</small></td>";
+                $tool_content .= "<td>" . q($w->title) . "<br /><small>" . standard_text_escape($w->description) . "</small></td>";
             }
             $tool_content .= "<td>" . display_user($w->uploaderId, false, false) . "</td>";
             $tool_content .= "<td>";
