@@ -40,16 +40,15 @@ if (!empty($row1))
     $course_id = intval($row1['cours_id']);
 
 if ($course_id == null) {
-    //header("Location: ${urlServer}");
-    //exit();
-    echo "null cid";
+    header("Location: ${urlServer}");
+    exit();
 }
 
-/*if ($uid) {
+if ($uid) {
     require_once '../../include/action.php';
     $action = new action();
     $action->record('MODULE_ID_VIDEO');
-}*/
+}
 
 $dbname = q($_GET['course']);
 mysql_select_db($dbname);
@@ -62,16 +61,14 @@ $res2 = db_query("SELECT *
 $row2 = mysql_fetch_array($res2);
 
 if (empty($row2)) {
-    //header("Location: ${urlServer}");
-    //exit();
-    echo "no video found";
+    header("Location: ${urlServer}");
+    exit();
 }
 
 $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($row2['path'], $_GET['token'], 30);
 if (!$valid) {
-   //header("Location: ${urlServer}");
-   //exit();
-    echo "invalid access";
+   header("Location: ${urlServer}");
+   exit();
 }
 
 $row2['course_id'] = course_code_to_id($dbname);
