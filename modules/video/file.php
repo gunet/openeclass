@@ -23,7 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
 
-if (!isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token']))) {
+if (!isset($_GET['course']) || !isset($_GET['id']) ) {
     header("Location: ${urlServer}");
     exit();
 }
@@ -40,15 +40,15 @@ $row1 = mysql_fetch_array($res1);
 if (!empty($row1))
     $course_id = intval($row1['id']);
 
-if ($course_id != null && $uid) {
-    require_once 'include/action.php';
-    $action = new action();
-    $action->record(MODULE_ID_VIDEO);
-}
-
 if ($course_id == null) {
     header("Location: ${urlServer}");
     exit();
+}
+
+if ($uid) {
+    require_once 'include/action.php';
+    $action = new action();
+    $action->record(MODULE_ID_VIDEO);
 }
 
 // ----------------------

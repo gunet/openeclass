@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -77,6 +77,7 @@ if (isset($_SESSION['givenname'])) {
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 $menuTypeID = ($is_in_tinymce) ? 5 : 2;
+list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ? select_proper_filters($_REQUEST['docsfilter']) : array('', '', true);
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
@@ -85,8 +86,6 @@ if ($is_in_tinymce) {
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
-
-list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ? select_proper_filters($_REQUEST['docsfilter']) : array('', '', true);
 
 if ($is_editor) {
     load_js('tools.js');
