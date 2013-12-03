@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -72,51 +72,16 @@ if (isset($_SESSION['prenom'])) {
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 $menuTypeID = ($is_in_tinymce) ? 5: 2;
+list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
+        ? select_proper_filters($_REQUEST['docsfilter']) 
+        : array('', '', true);
 
-if ($is_in_tinymce) {
-    
+if ($is_in_tinymce) {    
     $_SESSION['embedonce'] = true; // necessary for baseTheme
 
     load_js('jquery');
     load_js('tinymce/jscripts/tiny_mce/tiny_mce_popup.js');
     load_js('tinymce.popup.urlgrabber.min.js');
-}
-
-function select_proper_filters($requestDocsFilter) {
-    $filterv = '';
-    $filterl = '';
-    $compatiblePlugin = true;
-    
-    switch ($requestDocsFilter) {
-        case 'image':
-            $ors = '';
-            $first = true;
-            foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
-            {
-                if ($first)
-                {
-                    $ors .= "path LIKE '%$imgfmt%'";
-                    $first = false;
-                } else
-                    $ors .= " OR path LIKE '%$imgfmt%'";
-            }
-
-            $filterv = "AND ( $ors )";
-            $filterl = "AND false";
-            break;
-        case 'zip':
-            $filterv = $filterl = "AND false";
-            break;
-        case 'media':
-            $compatiblePlugin = false;
-            break;
-        case 'eclmedia':
-        case 'file':
-        default:
-            break;
-    }
-    
-    return array($filterv, $filterl, $compatiblePlugin);
 }
 
 if($is_editor) {
@@ -452,10 +417,6 @@ if (!isset($_GET['form_input']) && !$is_in_tinymce ) {
 	</div>";
 }
 
-list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) 
-        ? select_proper_filters($_REQUEST['docsfilter']) 
-        : array('', '', true);
-
 $count_video = mysql_fetch_array(db_query("SELECT COUNT(*) FROM video $filterv ORDER BY titre", $currentCourseID));
 $count_video_links = mysql_fetch_array(db_query("SELECT COUNT(*) FROM videolinks $filterl
 				ORDER BY titre", $currentCourseID));
@@ -654,4 +615,41 @@ function select_table($table)
         } else {
                 return 'video';
         }
+}
+
+function select_proper_filters($requestDocsFilter) {
+    $filterv = '';
+    $filterl = '';
+    $compatiblePlugin = true;
+    
+    switch ($requestDocsFilter) {
+        case 'image':
+            $ors = '';
+            $first = true;
+            foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
+            {
+                if ($first)
+                {
+                    $ors .= "path LIKE '%$imgfmt%'";
+                    $first = false;
+                } else
+                    $ors .= " OR path LIKE '%$imgfmt%'";
+            }
+
+            $filterv = "AND ( $ors )";
+            $filterl = "AND false";
+            break;
+        case 'zip':
+            $filterv = $filterl = "AND false";
+            break;
+        case 'media':
+            $compatiblePlugin = false;
+            break;
+        case 'eclmedia':
+        case 'file':
+        default:
+            break;
+    }
+    
+    return array($filterv, $filterl, $compatiblePlugin);
 }

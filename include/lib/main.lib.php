@@ -1010,7 +1010,7 @@ function randomkeys($length) {
     $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
     $codeAlphabet.= "0123456789";
     for ($i = 0; $i < $length; $i++) {
-        $key .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet))];
+        $key .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet)-1)];
     }
     return $key;
 }

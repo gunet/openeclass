@@ -22,7 +22,7 @@ require_once '../../include/baseTheme.php';
 require_once '../../include/lib/forcedownload.php';
 require_once '../../include/lib/mediaresource.factory.php';
 
-if ( !isset($_GET['course']) || !isset($_GET['id']) || (!$uid && !isset($_GET['token'])) ) {
+if ( !isset($_GET['course']) || !isset($_GET['id']) ) {
     header("Location: ${urlServer}");
     exit();
 }
@@ -39,17 +39,17 @@ $row1 = mysql_fetch_array($res1);
 if (!empty($row1))
     $course_id = intval($row1['cours_id']);
 
-if ($course_id != null && $uid) {
+if ($course_id == null) {
+    //header("Location: ${urlServer}");
+    //exit();
+    echo "null cid";
+}
+
+/*if ($uid) {
     require_once '../../include/action.php';
     $action = new action();
     $action->record('MODULE_ID_VIDEO');
-}
-
-if ($course_id == null) {
-    header("Location: ${urlServer}");
-    exit();
-}
-
+}*/
 
 $dbname = q($_GET['course']);
 mysql_select_db($dbname);
@@ -62,14 +62,16 @@ $res2 = db_query("SELECT *
 $row2 = mysql_fetch_array($res2);
 
 if (empty($row2)) {
-    header("Location: ${urlServer}");
-    exit();
+    //header("Location: ${urlServer}");
+    //exit();
+    echo "no video found";
 }
 
-$valid = ($uid) ? true : token_validate($row2['path'], $_GET['token'], 30);
+$valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($row2['path'], $_GET['token'], 30);
 if (!$valid) {
-   header("Location: ${urlServer}");
-   exit();
+   //header("Location: ${urlServer}");
+   //exit();
+    echo "invalid access";
 }
 
 $row2['course_id'] = course_code_to_id($dbname);
