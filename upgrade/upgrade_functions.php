@@ -351,7 +351,7 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
         if (mysql_index_exists('dropbox_file', 'UN_filename')) {
             db_query("ALTER TABLE dropbox_file DROP index UN_filename");
         }
-        db_query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
+        db_query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(1000)");        
         db_query("UPDATE accueil SET rubrique = " .quote($global_messages['langDropBox'][$lang]) . "
                                     WHERE id = 16 AND define_var = 'MODULE_ID_DROPBOX'");
 }

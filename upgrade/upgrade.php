@@ -633,7 +633,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
         }
         
         if ($oldversion < '2.8.1') {
-            db_query("CREATE TABLE course_review (
+            db_query("CREATE TABLE IF NOT EXISTS course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
                 `is_certified` BOOL NOT NULL DEFAULT 0,
@@ -737,7 +737,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 if ($oldversion < '2.5') {
 			upgrade_course_2_5($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.8') {
+                if ($oldversion < '2.8.3') {
 			upgrade_course_2_8($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";

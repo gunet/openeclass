@@ -180,18 +180,22 @@ if (isset($_POST["submitWork"]))
                         }                
                     chdir ($cwd);
                 }
-                if (isset($_POST['mailing']) and $_POST['mailing']) {	// send mail to recipients of dropbox file
+                // send mail to recipients
+                if (isset($_POST['mailing']) and $_POST['mailing']) {
                         $c = course_code_to_title($currentCourseID);
-                        $subject_dropbox = "$logo - $dropbox_lang[newDropboxFile]";
+                        $subject_dropbox = "$c ($currentCourseID) - $dropbox_lang[newDropboxFile]";                        
                         foreach($newWorkRecipients as $userid) {
-                                if (get_user_email_notification($userid, $cours_id)) {  
+                                if (get_user_email_notification($userid, $cours_id)) {
                                         $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
                                         $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
-                                        $body_dropbox_message = "$langInCourses '" .
-                                                q($c) . "' $dropbox_lang[mailnotify] <br /><br />$gunet<br /><a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
-                                        $plain_body_dropbox_message = "$langInCourses '$c' $dropbox_lang[mailnotify] \n\n$gunet\n<a href='$urlServer'>$urlServer</a> $unsubscribe$linkhere";
+                                        $body_dropbox_message = "$langSender: $_SESSION[prenom] $_SESSION[nom] <br /><br /> $dropbox_title <br /><br />" . ellipsize_html($_POST['description'], 50, "...&nbsp;<a href='${urlServer}modules/dropbox/index.php?course=$currentCourseID'>[$langMore]</a>") . "<br /><br />";                                        
+                                        if ($dropbox_filesize > 0) {
+                                            $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/index.php?course=$currentCourseID'>[$langAttachedFile]</a><br />";
+                                        }
+                                        $body_dropbox_message .= "$unsubscribe $linkhere";
+                                        $plain_body_dropbox_message = html2text($body_dropbox_message);
                                         $emailaddr = uid_to_email($userid);
-                                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);	        
+                                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
                                 }                                  					
                         }
                 }
@@ -199,9 +203,7 @@ if (isset($_POST["submitWork"]))
 	if (!$error) {
 		$tool_content .= "<p class='success'>".$dropbox_lang["docAdd"]."<br />
 		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a></p><br/>";
-	}
-	else
-	{
+	} else {
 		$tool_content .= "<p class='caution'>".$errormsg."<br /><br />
 		<a href='index.php?course=$code_cours'>".$dropbox_lang['backList']."</a><br/>";
 	}

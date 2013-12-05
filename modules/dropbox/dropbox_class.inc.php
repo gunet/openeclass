@@ -140,7 +140,7 @@ class Dropbox_Work {
 						, '".addslashes($this->filename)."'
 						, '".addslashes($this->filesize)."'
 						, '".addslashes($this->title)."'
-						, '".addslashes($this->description)."'
+						, ".quote(purify($this->description))."
 						, '".addslashes($this->author)."'
 						, '".addslashes($this->uploadDate)."'
 						, '".addslashes($this->lastUploadDate)."'
@@ -171,7 +171,7 @@ class Dropbox_Work {
 		settype($id, 'integer');
 		/*
 		* get the data from DB
-		*/
+		*/                
                 if ($GLOBALS['language'] == 'greek') {
                         $sql="SELECT uploaderId, filename, filesize, title, description, author,
                                 DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i') AS uploadDate, 
@@ -187,10 +187,7 @@ class Dropbox_Work {
                 }
 	        $result = db_query($sql, $currentCourseID);
 		$res = mysql_fetch_array($result);;
-		
-		/*
-		* Check if uploader is still in claroline system
-		*/
+				
 		$uploaderId = stripslashes($res["uploaderId"]);    
 		$uploaderName = uid_to_name($uploaderId);
 		if ($uploaderName == FALSE) {

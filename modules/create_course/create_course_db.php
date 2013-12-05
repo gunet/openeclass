@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -557,8 +557,7 @@ db_query("CREATE TABLE `assignment_submit` (
       filename varchar(250) NOT NULL default '',
       filesize int(11) unsigned NOT NULL default '0',
       title varchar(250) default '',
-      description varchar(500) default '',
-      author varchar(250) default '',
+      description varchar(1000) default '',      
       uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
       lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
       PRIMARY KEY (id))
