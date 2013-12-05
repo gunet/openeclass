@@ -632,7 +632,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 }
         }
         
-        if ($oldversion < '2.8.1') {
+        if ($oldversion < '2.8.3') {
             db_query("CREATE TABLE IF NOT EXISTS course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
