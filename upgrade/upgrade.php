@@ -652,7 +652,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
                 }
 
-                if ($oldversion < '2.8.1') {
+                if ($oldversion < '2.8.3') {
                     db_query("CREATE TABLE course_review (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
