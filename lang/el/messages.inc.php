@@ -1807,6 +1807,7 @@ $langErrorNoZlibExtension = "Η επέκταση Zlib της php απαιτεί�
 $langErrorOpeningManifest = "Δεν μπορεί να βρεθεί το αρχείο <i>manifest</i> στο πακέτο.<br /> Αρχείο που δε βρέθηκε: imsmanifest.xml";
 $langErrorOpeningXMLFile = "Δεν μπορεί να βρεθεί το δευτερεύον αρχείο έναρξης στο πακέτο.<br /> Αρχείο που δε βρέθηκε: ";
 $langErrorReadingManifest = "Σφάλμα ανάγνωσης αρχείου <i>manifest</i>";
+$langErrorValidatingManifest = "Το αρχείο <i>manifest</i> περιέχει σφάλματα: ";
 $langErrorReadingXMLFile = "Σφάλμα ανάγνωσης δευτερεύοντος αρχείου ρύθμισης έναρξης: ";
 $langErrorReadingZipFile = "Σφάλμα ανάγνωσης αρχείου zip.";
 $langErrorSql = "Σφάλμα στη δήλωση SQL";
@@ -1824,6 +1825,7 @@ $langExercises = "Ασκήσεις";
 $langExport = "Εξαγωγή";
 $langExport2004 = "Εξαγωγή σε πρότυπο SCORM 2004";
 $langExport12 = "Εξαγωγή σε πρότυπο SCORM 1.2";
+$langExportIMSCP = "Εξαγωγή σε πρότυπο IMS CP 1.1.4";
 $langFailed = "Ολοκληρώθηκε ανεπιτυχώς";
 $langFileScormError = "Το αρχείο που θα ενημερωθεί δεν είναι έγκυρο.";
 $langFileName = "Όνομα αρχείου";
@@ -1913,7 +1915,8 @@ $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
 $langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με:
    <ul class='right smaller'>
      <li> το SCORM 2004 ή</li>
-     <li> το SCORM 1.2.</li>
+     <li> το SCORM 1.2</li>
+     <li> το IMS CP 1.1.4</li>
    </ul>";
 $langScormEmptyDocsList = "Ανεβάστε πακέτα SCORM στα έγγραφα του μαθήματος ώστε να σας εμφανιστεί η αντίστοιχη επιλογή εισαγωγής τους";
 $langSecondShort = "δευτ.";

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,8 +22,9 @@
 
 /* ===========================================================================
   importLearningPath.php
-  @last update: 25-03-2010 by Thanos Kyritsis
-  @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	@last update: 02-12-2013 by Sakis Agorastos
+    @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
+	               Sakis Agorastos <th_agorastos@hotmail.com>
 
   based on Claroline version 1.7 licensed under GPL
   copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
@@ -89,7 +90,8 @@ $errorFound = false;
  * @param $attributes array with the attributes of the element
  */
 
-function startElement($parser, $name, $attributes) {
+function startElement($parser, $name, $attributes)
+{
     global $elementsPile;
     global $itemsPile;
     global $manifestData;
@@ -172,10 +174,11 @@ function startElement($parser, $name, $attributes) {
             break;
 
         case "ORGANIZATIONS" :
-            if (isset($attributes['DEFAULT']))
+            if (isset($attributes['DEFAULT'])) {
                 $manifestData['defaultOrganization'] = $attributes['DEFAULT'];
-            else
+            } else {
                 $manifestData['defaultOrganization'] = '';
+            }
             break;
         case "ORGANIZATION" :
             $flagTag['type'] = "organization";
@@ -197,7 +200,8 @@ function startElement($parser, $name, $attributes) {
  * @param $parser xml parser created with "xml_parser_create()"
  * @param $name name of the element
  */
-function endElement($parser, $name) {
+function endElement($parser, $name)
+{
     global $elementsPile;
     global $itemsPile;
     global $flagTag;
@@ -228,7 +232,8 @@ function endElement($parser, $name) {
  * @param $parser xml parser created with "xml_parser_create()"
  * @param $data "what is not a tag"
  */
-function elementData($parser, $data) {
+function elementData($parser, $data)
+{
     global $elementsPile;
     global $itemsPile;
     global $manifestData;
@@ -680,6 +685,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
                     $errorFound = true;
                     array_push($errorMsgs, $langErrorReadingManifest);
+                    // Since manifest.xml cannot be parsed, test versus IMS CP 1.4.4 XSD (compatible with all SCORM packages as well)
+                    require_once 'include/validateXML.php';
+                    libxml_use_internal_errors(true);
+                    
+                    $xml = new DOMDocument();
+                    $xml->load($manifestPath."imsmanifest.xml");
+                    
+                    if (!$xml->schemaValidate($urlServer.'modules/learnPath/export/imscp_v1p2.xsd')) {
+                        $messages = libxml_display_errors();
+                        
+                        array_push($errorMsgs, $langErrorValidatingManifest . $messages);
+                    }
                     break;
                 }
             }

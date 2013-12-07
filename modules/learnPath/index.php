@@ -104,6 +104,21 @@ if (isset($_GET['cmd']) and $_GET['cmd'] == 'export12' and isset($_GET['path_id'
     }
 } // endif $cmd == export12
 
+if (isset($_GET['cmd']) and $_GET['cmd'] == 'exportIMSCP'
+    and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {
+
+    require_once "include/IMSCPExport.inc.php";
+
+    $imscp = new IMSCPExport(intval($_GET['path_id']), $language);
+    if (!$imscp->export()) {
+        $dialogBox = '<b>' . $langScormErrorExport . '</b><br />' . "\n" . '<ul>' . "\n";
+        foreach ($imscp->getError() as $error) {
+            $dialogBox .= '<li>' . $error . '</li>'."\n";
+        }
+        $dialogBox .= '<ul>'."\n";
+    }
+}
+
 if ($is_editor) {
     $head_content .= "<script type='text/javascript'>
           function confirmation (name)
@@ -463,8 +478,9 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
         if (mysql_num_rows($resultmodules) > 0) {
             $firstmodule = mysql_fetch_array($resultmodules, MYSQL_ASSOC);
             $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list['learnPath_id'] . "&amp;module_id=" . $firstmodule['module_id'] . "'>$play_img</a>";
-        } else
+        } else {
             $play_button = $play_img;
+        }
 
         $tool_content .= "
       <td width='20'>$play_button</td>
@@ -551,6 +567,8 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
                 . '<img src="' . $themeimg . '/export.png" alt="' . $langExport2004 . '" title="' . $langExport2004 . '" /></a>' . ""
                 . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
                 . '<img src="' . $themeimg . '/export.png" alt="' . $langExport12 . '" title="' . $langExport12 . '" /></a>' . ""
+            .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;cmd=exportIMSCP&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="'.$themeimg.'/export.png" alt="'.$langExportIMSCP.'" title="'.$langExportIMSCP.'" /></a>' .""
                 . '</td>' . "\n";
 
         // statistics links
@@ -623,8 +641,9 @@ while ($list = mysql_fetch_array($result)) { // while ... learning path list
     } elseif ($uid) {
         // % progress
         $prog = get_learnPath_progress($list['learnPath_id'], $uid);
-        if (!isset($globalprog))
+        if (!isset($globalprog)) {
             $globalprog = 0;
+        }
         if ($prog >= 0) {
             $globalprog += $prog;
         }
