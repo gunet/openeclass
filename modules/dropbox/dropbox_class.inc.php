@@ -111,7 +111,7 @@ class Dropbox_Work {
                                  " . quote($this->filename) . ",
                                  $this->filesize,
                                  " . quote($this->title) . ",
-                                 " . quote($this->description) . ",
+                                 " . quote(purify($this->description)) . ",
                                  " . quote($this->uploadDate) . ",
                                  " . quote($this->lastUploadDate) . "
                                 )";

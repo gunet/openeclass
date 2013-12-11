@@ -896,7 +896,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
                                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                                 `title` VARCHAR(250) NOT NULL DEFAULT '',
-                                `description` VARCHAR(250) NOT NULL DEFAULT '',                            
+                                `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
                                 `uploadDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                 `lastUploadDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP)");
 
