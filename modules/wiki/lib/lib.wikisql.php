@@ -77,9 +77,9 @@ function init_wiki_tables(&$con, $drop_tables = false) {
             `wiki_id` int(11) unsigned NOT NULL default '0',
             `owner_id` int(11) unsigned NOT NULL default '0',
             `title` varchar(255) NOT NULL default '',
-            `ctime` datetime NOT NULL default CURRENT_TIMESTAMP,
+            `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
             `last_version` int(11) unsigned NOT NULL default '0',
-            `last_mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
+            `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
             PRIMARY KEY  (`id`)
             )"
     ;
@@ -92,7 +92,7 @@ function init_wiki_tables(&$con, $drop_tables = false) {
             `id` int(11) unsigned NOT NULL auto_increment,
             `pid` int(11) unsigned NOT NULL default '0',
             `editor_id` int(11) NOT NULL default '0',
-            `mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
+            `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
             `content` text NOT NULL,
             PRIMARY KEY  (`id`)
             )"

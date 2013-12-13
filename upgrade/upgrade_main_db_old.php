@@ -40,7 +40,7 @@ if (!mysql_field_exists("$mysqlMainDb", 'cours', 'course_keywords'))
 if (!mysql_field_exists("$mysqlMainDb", 'cours', 'course_addon'))
     echo add_field('cours', 'course_addon', "TEXT");
 if (!mysql_field_exists("$mysqlMainDb", 'cours', 'first_create'))
-    echo add_field('cours', 'first_create', "datetime not null default CURRENT_TIMESTAMP");
+    echo add_field('cours', 'first_create', "datetime not null default '0000-00-00 00:00:00'");
 
 // delete useless fields
 if (mysql_field_exists("$mysqlMainDb", 'cours', 'cahier_charges'))
@@ -99,8 +99,8 @@ if (!mysql_table_exists($mysqlMainDb, 'loginout_summary')) {
     mysql_query("CREATE TABLE loginout_summary (
                         id mediumint unsigned NOT NULL auto_increment,
                            login_sum int(11) unsigned  NOT NULL default '0',
-                           start_date datetime NOT NULL default CURRENT_TIMESTAMP,
-                           end_date datetime NOT NULL default CURRENT_TIMESTAMP,
+                           start_date datetime NOT NULL default '0000-00-00 00:00:00',
+                           end_date datetime NOT NULL default '0000-00-00 00:00:00',
                            PRIMARY KEY  (id))
                                 TYPE=MyISAM DEFAULT CHARACTER SET=utf8");
 }

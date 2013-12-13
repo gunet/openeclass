@@ -1098,31 +1098,31 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
 
     db_query("ALTER TABLE `assignments`
                         CHANGE `deadline` `deadline` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `assignments`
                         CHANGE `submission_date` `submission_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `assignment_submit`
                         CHANGE `submission_date` `submission_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `poll`
                         CHANGE `start_date` `start_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `poll`
                         CHANGE `end_date` `end_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `poll`
                         CHANGE `creation_date` `creation_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `poll_answer_record`
                         CHANGE `submit_date` `submit_date` DATETIME
-                        NOT NULL DEFAULT CURRENT_TIMESTAMP");
+                        NOT NULL DEFAULT '0000-00-00 00:00:00'");
 
     db_query("ALTER TABLE `exercices`
                         CHANGE `StartDate` `StartDate` DATETIME
@@ -1294,9 +1294,9 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
 
     // upgrade exercises
     db_query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", $code);
+		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'", $code);
     db_query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP", $code);
+		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'", $code);
     if (!mysql_field_exists("$code", 'exercices', 'results'))
         echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
     db_query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
@@ -1500,8 +1500,8 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                            title varchar(250) default '',
                            description varchar(250) default '',
                            author varchar(250) default '',
-                           uploadDate datetime NOT NULL default CURRENT_TIMESTAMP,
-                           lastUploadDate datetime NOT NULL default CURRENT_TIMESTAMP,
+                           uploadDate datetime NOT NULL default '0000-00-00 00:00:00',
+                           lastUploadDate datetime NOT NULL default '0000-00-00 00:00:00',
                            PRIMARY KEY (id),
                            UNIQUE KEY UN_filename (filename))", $code);
     }
@@ -1660,9 +1660,9 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         `wiki_id` int(11) unsigned NOT NULL default '0',
                         `owner_id` int(11) unsigned NOT NULL default '0',
                         `title` varchar(255) NOT NULL default '',
-                        `ctime` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `ctime` datetime NOT NULL default '0000-00-00 00:00:00',
                         `last_version` int(11) unsigned NOT NULL default '0',
-                        `last_mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `last_mtime` datetime NOT NULL default '0000-00-00 00:00:00',
                         PRIMARY KEY  (`id`)
                                 ) ", $code);
     }
@@ -1672,7 +1672,7 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         `id` int(11) unsigned NOT NULL auto_increment,
                         `pid` int(11) unsigned NOT NULL default '0',
                         `editor_id` int(11) NOT NULL default '0',
-                        `mtime` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `mtime` datetime NOT NULL default '0000-00-00 00:00:00',
                         `content` text NOT NULL,
                         PRIMARY KEY  (`id`)
                                 ) ", $code);
@@ -1685,9 +1685,9 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         `creator_id` mediumint(8) unsigned NOT NULL default '0',
                         `course_id` varchar(20) NOT NULL default '0',
                         `name` varchar(255) NOT NULL default '',
-                        `creation_date` datetime NOT NULL default CURRENT_TIMESTAMP,
-                        `start_date` datetime NOT NULL default CURRENT_TIMESTAMP,
-                        `end_date` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `creation_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                        `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
                         `type` int(11) NOT NULL default '0',
                         `active` int(11) NOT NULL default '0',
                         PRIMARY KEY  (`sid`)
@@ -1698,7 +1698,7 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         `aid` bigint(12) NOT NULL default '0',
                         `creator_id` mediumint(8) unsigned NOT NULL default '0',
                         `sid` bigint(12) NOT NULL default '0',
-                        `date` datetime NOT NULL default CURRENT_TIMESTAMP,
+                        `date` datetime NOT NULL default '0000-00-00 00:00:00',
                         PRIMARY KEY  (`aid`)
                                 ) ", $code); //TYPE=MyISAM COMMENT='For the questionnaire module';
     }
@@ -1804,7 +1804,7 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                            user_id int(11) NOT NULL,
                            module_id int(11) NOT NULL,
                            action_type_id int(11) NOT NULL,
-                           date_time DATETIME NOT NULL default CURRENT_TIMESTAMP,
+                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
                            duration int(11) NOT NULL,
                            PRIMARY KEY (id))", $code);
     }
@@ -1814,7 +1814,7 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         id int(11) NOT NULL auto_increment,
                            user_id int(11) NOT NULL,
                            ip char(16) NOT NULL default '0.0.0.0',
-                           date_time DATETIME NOT NULL default CURRENT_TIMESTAMP,
+                           date_time DATETIME NOT NULL default '0000-00-00 00:00:00',
                            PRIMARY KEY (id))", $code);
     }
 
@@ -1823,8 +1823,8 @@ function upgrade_course_old($code, $lang, $extramessage = '') {
                         id int(11) NOT NULL auto_increment,
                            module_id int(11) NOT NULL,
                            visits int(11) NOT NULL,
-                           start_date DATETIME NOT NULL default CURRENT_TIMESTAMP,
-                           end_date DATETIME NOT NULL default CURRENT_TIMESTAMP,
+                           start_date DATETIME NOT NULL default '0000-00-00 00:00:00',
+                           end_date DATETIME NOT NULL default '0000-00-00 00:00:00',
                            duration int(11) NOT NULL,
                            PRIMARY KEY (id))", $code);
     }
