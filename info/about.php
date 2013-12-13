@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2013  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,6 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file about.php
+ * @brief Displays general platform information.
+ * @author original developed by Ophelia Neofytou.
+ */
 
 require_once '../include/baseTheme.php';
 $nameTools = $langInfo;
@@ -34,17 +39,10 @@ $tool_content .= "<table class='tbl_1' width='100%'>
 <th class='left'><strong>$langCoursesHeader:</strong></th>
 <td>";
 
-/*
- * Make table with general platform information
- * ophelia neofytou - 2006/09/26
- */
-
-mysql_select_db($mysqlMainDb);
-
-$a = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible != " . COURSE_INACTIVE));
-$a1 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_OPEN));
-$a2 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_REGISTRATION));
-$a3 = mysql_fetch_row(db_query("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_CLOSED));
+$a = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible != " . COURSE_INACTIVE);
+$a1 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_OPEN);
+$a2 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_REGISTRATION);
+$a3 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_CLOSED);
 
 $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
   <ul>
@@ -55,21 +53,21 @@ $tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
 </td>
 </tr>";
 
-$e = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user'));
-$b = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=1'));
-$c = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=5'));
-$d = mysql_fetch_row(db_query('SELECT COUNT(*) FROM user WHERE statut=10'));
+$e = db_query_get_single_value('SELECT COUNT(*) FROM user');
+$b = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_TEACHER);
+$c = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_STUDENT);
+$d = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_GUEST);
 
 $tool_content .= "
-      <tr>
-        <th class='left'><strong>$langUsers:</strong></th>
-        <td>$langAboutUsers <b>$e[0]</b> $langUsers
-          <ul>
-            <li><b>$b[0]</b> $langTeachers, </li>
-            <li><b>$c[0]</b> $langStudents $langAnd </li>
-            <li><b>$d[0]</b> $langGuest </li>
-        </ul></td>
-  </tr>
+    <tr>
+      <th class='left'><strong>$langUsers:</strong></th>
+      <td>$langAboutUsers <b>$e[0]</b> $langUsers
+        <ul>
+          <li><b>$b[0]</b> $langTeachers, </li>
+          <li><b>$c[0]</b> $langStudents $langAnd </li>
+          <li><b>$d[0]</b> $langGuest </li>
+      </ul></td>
+    </tr>
       <tr>
         <th class='left'><strong>$langSupportUser</strong></th>
         <td>" . q(get_config('admin_name')) . "</td>
