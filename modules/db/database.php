@@ -120,7 +120,7 @@ class Database {
         $offset = 2;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, $callback_function, $callback_error, 0, array_slice($args, $offset));
+        $this->queryImpl($statement, $callback_function, $callback_error, 0, array_slice($args, $offset));
     }
 
     /**
