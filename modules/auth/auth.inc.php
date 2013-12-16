@@ -471,15 +471,9 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
  * ************************************************************** */
 
 function check_activity($userid) {
-    $qry = "SELECT registered_at, expires_at FROM user WHERE id=" . $userid;
-    $res = db_query($qry);
-    if ($res and mysql_num_rows($res) == 1) {
-        $row = mysql_fetch_row($res);
-        if ($row[1] > time()) {
-            return 1;
-        } else {
-            return 0;
-        }
+    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?", intval($userid));
+    if (!empty($result) && strtotime($result->expires_at) > time()) {
+        return 1;
     } else {
         return 0;
     }
