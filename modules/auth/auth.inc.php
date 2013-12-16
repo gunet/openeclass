@@ -771,7 +771,7 @@ function login($user_info_array, $posted_uname, $pass) {
             $auth_allow = 1;
         } else {
             $auth_allow = 3;
-            $GLOBALS['inactive_uid'] = $user_info_array['user_id'];
+            $GLOBALS['inactive_uid'] = $user_info_array['id'];
         }
     } else {
         $auth_allow = 4; // means wrong password
