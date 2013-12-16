@@ -298,8 +298,8 @@ function load_js($file, $init = '') {
         $file = 'flot/jquery.flot.categories.min.js';
     }
     $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-        if ($file == 'jquery-1.10.2.min.js')
-            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.js'></script>\n";
+    if ($file == 'jquery-1.10.2.min.js')
+        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
 
     if (strlen($init) > 0)
         $head_content .= $init;
