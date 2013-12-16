@@ -961,9 +961,6 @@ function shib_cas_login($type) {
         }
     } elseif ($autoregister and !get_config('am_required')) {
         // else create him automatically
-        $registered_at = time();
-        $expires_at = time() + get_config('account_duration');
-
         if (get_config('email_verification_required')) {
             $verified_mail = 0;
             $_SESSION['mail_verification_required'] = 1;
@@ -971,19 +968,13 @@ function shib_cas_login($type) {
             $verified_mail = 2;
         }
 
-        db_query("INSERT INTO user SET surname = " . quote($surname) . ",
-							givenname = " . quote($givenname) . ",
-							password = '$type',
-							username = " . quote($uname) . ",
-							email = " . quote($email) . ",
-							status = " . USER_STUDENT . ", 
-                                                        lang = 'el', 
-                                                        perso = 'yes',
-							registered_at = $registered_at,
-							verified_mail = $verified_mail,
-							expires_at = $expires_at,
-                                                        whitelist = ''");
-        $_SESSION['uid'] = mysql_insert_id();
+        Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
+                                       username = ?, email = ?, status = ?, lang = 'el', perso = 'yes', 
+                                       registered_at = ?,  verified_mail = ?, expires_at = ?, whitelist = ''", 
+                $surname, $givenname, $type, $uname, $email, USER_STUDENT, 
+                DBHelper::timeAfter(), DBHelper::timeAfter(get_config('account_duration')));
+        
+        $_SESSION['uid'] = Database::get()->lastInsertID();
         $userPerso = 'yes';
         $language = $_SESSION['langswitch'] = 'el';
     } else {
