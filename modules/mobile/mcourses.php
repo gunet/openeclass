@@ -27,40 +27,33 @@ require_once('minit.php');
 
 $courses = array();
 
-$sql = "SELECT course.code,
+$from = "SELECT course.code,
                course.lang,
                course.title,
                course.keywords,
                course.visible,
                course.prof_names,
                course.public_code,
-               course_user.statut as statut
+               course_user.status as status
           FROM course JOIN course_user ON course.id = course_user.course_id
-         WHERE course_user.user_id = $uid
-      ORDER BY statut, course.title, course.prof_names";
-$sql2 = "SELECT course.code,
-                course.lang,
-                course.title,
-                course.keywords,
-                course.visible,
-                course.prof_names,
-                course.public_code,
-                course_user.statut as statut
-           FROM course JOIN course_user ON course.id = course_user.course_id
-          WHERE course_user.user_id = $uid
-            AND course.visible != " . COURSE_INACTIVE . "
-       ORDER BY statut, course.title, course.prof_names";
+         WHERE course_user.user_id = ? ";
+$visible = " AND course.visible != ? ";
+$order = " ORDER BY status, course.title, course.prof_names";
 
-if ($_SESSION['statut'] == 1) {
-    $result = db_query($sql);
-}
-if ($_SESSION['statut'] == 5) {
-    $result = db_query($sql2);
-}
+$callback = function($course) use (&$courses) {
+    $courses[] = $course;
+};
 
-if ($result and mysql_num_rows($result) > 0)
-    while ($course = mysql_fetch_object($result))
-        $courses[] = $course;
+if ($_SESSION['status'] == 1) {
+    $sql = $from . $order;
+    Database::get()->queryFunc($sql, $callback, intval($uid));
+} else if ($_SESSION['status'] == 5) {
+    $sql = $from . $visible . $order;
+    Database::get()->queryFunc($sql, $callback, intval($uid), intval(COURSE_INACTIVE));
+} else {
+    echo RESPONSE_FAILED;
+    exit();
+}
 
 
 list($coursesDom, $coursesDomRoot) = createCoursesDom($courses);
@@ -89,16 +82,16 @@ function createCoursesDom($coursesArr) {
     if (isset($coursesArr) && count($coursesArr) > 0) {
 
         $k = 0;
-        $this_statut = 0;
+        $this_status = 0;
 
         foreach ($coursesArr as $course) {
 
-            $old_statut = $this_statut;
-            $this_statut = $course->statut;
+            $old_status = $this_status;
+            $this_status = $course->status;
 
-            if ($k == 0 || ($old_statut != $this_statut)) {
+            if ($k == 0 || ($old_status != $this_status)) {
                 $cg = $root->appendChild($dom->createElement('coursegroup'));
-                $gname = ($this_statut == 1) ? $langMyCoursesProf : $langMyCoursesUser;
+                $gname = ($this_status == 1) ? $langMyCoursesProf : $langMyCoursesUser;
                 $cg->appendChild(new DOMAttr('name', $gname));
             }
 

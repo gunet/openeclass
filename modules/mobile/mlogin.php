@@ -29,9 +29,10 @@ if (isset($_POST['token'])) {
         require_once ('include/CAS/CAS.php');
         require_once ('modules/auth/auth.inc.php');
 
-        if (isset($_SESSION['uid']))
-            db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                    VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+        if (isset($_SESSION['uid'])) {
+            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                                                  VALUES (?, ?, NOW(), 'LOGOUT')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+        }
 
         if (isset($_SESSION['cas_uname'])) // if we are CAS user
             define('CAS', true);
@@ -91,8 +92,8 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
         $ok = login($myrow, $uname, $pass);
 
     if (isset($_SESSION['uid']) && $ok == 1) {
-        db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+        Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                                              VALUES (?, ?, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
 
         set_session_mvars();
         echo session_id();
@@ -105,29 +106,29 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
 function set_session_mvars() {
     $status = array();
 
-    $sql = "SELECT course.id course_id, course.code code, course.public_code,
-                   course.title title, course.prof_names profs, course_user.statut statut
-              FROM course JOIN course_user ON course.id = course_user.course_id
-             WHERE course_user.user_id = " . $_SESSION['uid'] . "
-          ORDER BY statut, course.title, course.prof_names";
-    $sql2 = "SELECT course.id course_id, course.code code, course.public_code,
-                    course.title title, course.prof_names profs, course_user.statut statut
+    $from = "SELECT course.id course_id, course.code code, course.public_code,
+                    course.title title, course.prof_names profs, course_user.status status
                FROM course JOIN course_user ON course.id = course_user.course_id
-              WHERE course_user.user_id = " . $_SESSION['uid'] . "
-                AND course.visible != " . COURSE_INACTIVE . "
-           ORDER BY statut, course.title, course.prof_names";
+              WHERE course_user.user_id = ? ";
+    $visible = " AND course.visible != ? ";
+    $order = " ORDER BY status, course.title, course.prof_names";
+    
+    $callback = function($course) use (&$status) {
+        $status[$course->code] = $course->status;
+    };
 
-    if ($_SESSION['statut'] == 1)
-        $result = db_query($sql);
+    if ($_SESSION['status'] == 1) {
+        $sql = $from . $order;
+        Database::get()->queryFunc($sql, $callback, intval($_SESSION['uid']));
+    } else if ($_SESSION['status'] == 5) {
+        $sql = $from . $visible . $order;
+        Database::get()->queryFunc($sql, $callback, intval($_SESSION['uid']), intval(COURSE_INACTIVE));
+    } else {
+        echo RESPONSE_FAILED;
+        exit();
+    }
 
-    if ($_SESSION['statut'] == 5)
-        $result = db_query($sql2);
-
-    if ($result and mysql_num_rows($result) > 0)
-        while ($mycours = mysql_fetch_array($result))
-            $status[$mycours['code']] = $mycours['statut'];
-
-    $_SESSION['status'] = $status;
+    $_SESSION['courses'] = $status;
     $_SESSION['mobile'] = true;
 
     if ($GLOBALS['userPerso'] == 'no')
