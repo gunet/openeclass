@@ -23,8 +23,9 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
 $countCallback = null;
+$isInOpenCoursesMode = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
 
-if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+if ($isInOpenCoursesMode) {
     require_once 'modules/course_metadata/CourseXML.php';
     $countCallback = CourseXMLElement::getCountCallback();
     // exit if feature disabled
@@ -35,22 +36,17 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
 }
 
 $tree = new Hierarchy();
-
 $nameTools = $langListCourses;
 $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
-
 if (isset($_GET['fc']))
     $fc = intval($_GET['fc']);
-
 
 // parse the faculte id in a session
 // This is needed in case the user decides to switch language.
 if (isset($fc))
     $_SESSION['fc_memo'] = $fc;
-
-
-if (!isset($fc))
+else
     $fc = $_SESSION['fc_memo'];
 
 
@@ -78,9 +74,12 @@ $tool_content .= "<table width=100% class='tbl_border'>
 $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback);
 
 $queryCourseIds = '';
+$queryExtraSelect = '';
+$queryExtraJoin = '';
+$queryExtraJoinWhere = '';
 $runQuery = true;
 
-if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+if ($isInOpenCoursesMode) {
     // find subnode's certified opencourses
     $opencourses = array();
     Database::get()->queryFunc("SELECT course.id, course.code
@@ -102,40 +101,45 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
         $i++;
     }
 
-    if (count($opencourses) > 0)
+    if (count($opencourses) > 0) {
         $queryCourseIds = " AND course.id IN ($commaIds) ";
-    else {
-        $runQuery = false;
-        $numrows = 0;
+        $queryExtraJoin = ", course_review ";
+        $queryExtraJoinWhere = " AND course.id = course_review.course_id ";
+        $queryExtraSelect = " , course_review.level level ";
+    } else {
+        $runQuery = false; // left the rest of the code fail safely
     }
 }
 
+$courses = array();
+
 if ($runQuery) {
-    $result = db_query("SELECT course.code k,
+    Database::get()->queryFunc("SELECT course.code k,
                                course.public_code c,
                                course.title i,
                                course.visible visible,
                                course.prof_names t,
-                               course.id id,
-                               course_review.level level
-                          FROM course, course_department, course_review
+                               course.id id
+                               $queryExtraSelect
+                          FROM course, course_department $queryExtraJoin
                          WHERE course.id = course_department.course
-                           AND course.id = course_review.course_id
-                           AND course_department.department = $fc
-                           AND course.visible != " . COURSE_INACTIVE . "
+                           $queryExtraJoinWhere
+                           AND course_department.department = ?
+                           AND course.visible != ?
                            $queryCourseIds
-                      ORDER BY course.title, course.prof_names");
-    $numrows = mysql_num_rows($result);
+                      ORDER BY course.title, course.prof_names", function ($course) use (&$courses) {
+        $courses[] = $course;
+    }, intval($fc), intval(COURSE_INACTIVE) );
 }
 
-if ($numrows > 0) {
+if (count($courses) > 0) {
 
     $tool_content .= "
         <table width='100%' class='tbl_border'>
         <tr>
             <th class='left' colspan='2'>" . $m['lessoncode'] . "</th>";
 
-    if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+    if ($isInOpenCoursesMode) {
         $tool_content .= "
                 <th class='left' width='220'>" . $m['professor'] . "</th>
                 <th width='30'>$langOpenCoursesLevel</th>";
@@ -148,11 +152,12 @@ if ($numrows > 0) {
     $tool_content .= "</tr>";
 
     $k = 0;
-    while ($mycours = mysql_fetch_array($result)) {
-        if ($mycours['visible'] == 2) {
-            $codelink = "<a href='../../courses/$mycours[k]/'>" . q($mycours['i']) . "</a>&nbsp;<small>(" . $mycours['c'] . ")</small>";
+    //while ($mycours = mysql_fetch_array($result)) {
+    foreach ($courses as $mycours) {
+        if ($mycours->visible == 2) {
+            $codelink = "<a href='../../courses/" . $mycours->k . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . $mycours->c . ")</small>";
         } else {
-            $codelink = "$mycours[i]&nbsp;<small>(" . $mycours['c'] . ")</small>";
+            $codelink = $mycours->i . "&nbsp;<small>(" . $mycours->c . ")</small>";
         }
 
         if ($k % 2 == 0) {
@@ -163,21 +168,21 @@ if ($numrows > 0) {
 
         $tool_content .= "\n<td width='16'><img src='$themeimg/arrow.png' title='bullet'></td>";
         $tool_content .= "\n<td>" . $codelink . "</td>";
-        $tool_content .= "\n<td>" . $mycours['t'] . "</td>";
+        $tool_content .= "\n<td>" . $mycours->t . "</td>";
         $tool_content .= "\n<td align='center'>";
 
-        if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+        if ($isInOpenCoursesMode) {
             // metadata are displayed in click-to-open modal dialogs
-            $metadata = CourseXMLElement::init($mycours['id'], $mycours['k']);
-            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours['level']) .
-                    "<div id='modaldialog-" . $mycours['id'] . "' class='modaldialog' title='$langCourseMetadata'>" .
+            $metadata = CourseXMLElement::init($mycours->id, $mycours->k);
+            $tool_content .= "\n" . CourseXMLElement::getLevel($mycours->level) .
+                    "<div id='modaldialog-" . $mycours->id . "' class='modaldialog' title='$langCourseMetadata'>" .
                     $metadata->asDiv() . "</div>
-                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours['id'] . "\");'>" .
+                <a href='javascript:modalOpen(\"#modaldialog-" . $mycours->id . "\");'>" .
                     "<img src='${themeimg}/lom.png'/></a>";
         } else {
             // show the necessary access icon
             foreach ($icons as $visible => $image) {
-                if ($visible == $mycours['visible']) {
+                if ($visible == $mycours->visible) {
                     $tool_content .= $image;
                 }
             }
@@ -194,7 +199,7 @@ if ($numrows > 0) {
 
 $head_content = '';
 
-if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
+if ($isInOpenCoursesMode) {
     load_js('jquery');
     load_js('jquery-ui');
     $head_content .= <<<EOF
