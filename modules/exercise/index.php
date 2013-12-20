@@ -128,7 +128,7 @@ if ($is_editor) {
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?", $course_id)->count;
 } else {
 	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed " .
-            "FROM exercise WHERE course_id = ? ORDER BY id LIMIT ?, ?", $course_id, $from, $limitExPage);
+            "FROM exercise WHERE course_id = ? AND active = 1 ORDER BY id LIMIT ?, ?", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ? AND active = 1", $course_id)->count;
 }
 
