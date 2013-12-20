@@ -278,7 +278,7 @@ $langEmail: $emailhelpdesk";
 // -----------------------------------
 else {
     // show username as well (useful)
-    $sql = db_query("SELECT id, name, surname, uname, faculty_id, date_open, comment, password FROM user_request
+    $sql = db_query("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password FROM user_request
                                 WHERE (state = 1 AND status = $list_status $depqryadd)");
     if (mysql_num_rows($sql) > 0) {
         $tool_content .= "<table class='tbl_alt' width='100%'>";
