@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -38,7 +37,6 @@ $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'admin.inc.php';
 require_once 'modules/auth/auth.inc.php';
-require_once 'include/jscalendar/calendar.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
@@ -57,14 +55,20 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-$lang_editor = $lang_jscalendar = langname_to_code($language);
-
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
+load_js('jquery-ui-timepicker-addon.min.js');
 
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-$head_content .= $jscalendar->get_load_files_code();
+$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+<script>
+$(function() {
+$('input[name=expires_at]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
@@ -73,15 +77,14 @@ $nameTools = $langEditUser;
 $u_submitted = isset($_POST['u_submitted']) ? $_POST['u_submitted'] : '';
 
 if ($u) {
-
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
     $q = db_query("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am,
                               verified_mail, whitelist
-                         FROM user WHERE id = $u");
-    $info = mysql_fetch_assoc($q);
+                         FROM user WHERE id = $u");    
+    $info = mysql_fetch_assoc($q);    
     if (isset($_POST['submit_editauth'])) {
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info['password'], $auth_ids);
@@ -129,20 +132,17 @@ if ($u) {
         exit;
     }
     if (!$u_submitted) { // if the form was not submitted
-        $tool_content .= "
-                    <div id='operations_container'>
+        $tool_content .= "<div id='operations_container'>
                      <ul id='opslist'>";
         if ($u != 1 and get_admin_rights($u) < 0) {
             $tool_content .= "<li><a href='mergeuser.php?u=$u'>$langUserMerge</a></li>\n";
         }
         if (!in_array($info['password'], $auth_ids)) {
-            $tool_content .= "
-                        <li><a href='password.php?userid=$u'>" . $langChangePass . "</a></li>";
+            $tool_content .= "<li><a href='password.php?userid=$u'>" . $langChangePass . "</a></li>";
         }
-        $tool_content .= "
-              <li><a href='./edituser.php?u=$u&amp;edit=auth'>$langEditAuth</a></li>
+        $tool_content .= "<li><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;edit=auth'>$langEditAuth</a></li>
               <li><a href='deluser.php?u=$u'>$langDelUser</a></li>
-              <li><a href='./listusers.php'>$langBack</a></li>";
+              <li><a href='listusers.php'>$langBack</a></li>";
         $tool_content .= "</ul></div>";
         $tool_content .= "
                     <form name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();'>
@@ -188,12 +188,11 @@ if ($u) {
                 <td><b>" . autoquote($info['username']) . "</b> [" . $auth_text . "] <input type='hidden' name='username' value=" . autoquote($info['username']) . " /> </td>
                 </tr>";
         }
-
         $tool_content .= "
-   <tr>
-     <th class='left'>e-mail: </th>
-     <td><input type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info['email']))) . "' /></td>
-   </tr>";
+        <tr>
+          <th class='left'>e-mail: </th>
+          <td><input type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info['email']))) . "' /></td>
+        </tr>";
 
         $tool_content .= "<tr>
        <th>$langEmailVerified: </th>
@@ -204,22 +203,20 @@ if ($u) {
         $verified_mail_data[2] = $m['no'];
 
         $tool_content .= selection($verified_mail_data, "verified_mail", intval($info['verified_mail']));
-        $tool_content .= "
-                  </td>
-             </tr>";
+        $tool_content .= "</td></tr>";
 
         $tool_content .= "
-   <tr>
-     <th class='left'>$langAm: </th>
-     <td><input type='text' name='am' size='50' value='" . q($info['am']) . "' /></td>
-   </tr>
-   <tr>
-     <th class='left'>$langTel: </th>
-     <td><input type='text' name='phone' size='50' value='" . q($info['phone']) . "' /></td>
-   </tr>
-   <tr>
-     <th class='left'>$langFaculty:</th>
-   <td>\n";
+        <tr>
+          <th class='left'>$langAm: </th>
+          <td><input type='text' name='am' size='50' value='" . q($info['am']) . "' /></td>
+        </tr>
+        <tr>
+          <th class='left'>$langTel: </th>
+          <td><input type='text' name='phone' size='50' value='" . q($info['phone']) . "' /></td>
+        </tr>
+        <tr>
+          <th class='left'>$langFaculty:</th>
+        <td>";
         if (isDepartmentAdmin())
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
         else
@@ -227,61 +224,37 @@ if ($u) {
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "\n</td></tr>
-    <tr>
-      <th class='left'>$langProperty:</th>
-      <td>";
-        if ($info['status'] == '10') { // if we are guest user do not display selection
-            $tool_content .= selection(array(10 => $langGuest), 'newstatus', intval($info['status']));
+        <tr>
+          <th class='left'>$langProperty:</th>
+          <td>";
+        if ($info['status'] == USER_GUEST) { // if we are guest user do not display selection
+            $tool_content .= selection(array(USER_GUEST => $langGuest), 'newstatus', intval($info['status']));
         } else {
-            $tool_content .= selection(array(1 => $langTeacher, 5 => $langStudent), 'newstatus', intval($info['status']));
+            $tool_content .= selection(array(USER_TEACHER => $langTeacher, 
+                                             USER_STUDENT => $langStudent), 'newstatus', intval($info['status']));
         }
         $tool_content .= "</td>";
-
         $tool_content .= "
-     <tr>
-       <th class='left'>$langRegistrationDate:</th>
-       <td>" . date("j/n/Y H:i", $info['registered_at']) . "</td>
-     </tr>
-     <tr>
-      <th class='left'>$langExpirationDate: </th>
-      <td>";
-        $dateregistration = date("j-n-Y", $info['expires_at']);
-        $hour = date("H", $info['expires_at']);
-        $minute = date("i", $info['expires_at']);
-
-        // -- jscalendar ------
-        $start_cal = $jscalendar->make_input_field(
-                array('showOthers' => true,
-            'align' => 'Tl',
-            'ifFormat' => '%d-%m-%Y'), array('name' => 'date',
-            'value' => $dateregistration));
-
-        $tool_content .= $start_cal . "&nbsp;&nbsp;&nbsp;";
-        $tool_content .= "<select name='hour'>
-	        <option value='$hour'>$hour</option>
-        	<option value='--'>--</option>";
-        for ($h = 0; $h <= 24; $h++)
-            $tool_content .= "<option value='$h'>$h</option>";
-        $tool_content .= "</select>&nbsp;&nbsp;&nbsp;";
-        $tool_content .= "<select name='minute'>
-                          <option value='$minute'>$minute</option>
-                          <option value='--'>--</option>";
-        for ($m = 0; $m <= 55; $m = $m + 5)
-            $tool_content .= "<option value='$m'>$m</option>";
-        $tool_content .= "</select></td>";
-
-        $tool_content .= "</tr>
-     <tr>
-       <th>$langUserID: </th>
-       <td>$u</td>
-     </tr>
-     <tr>
-       <th>$langUserWhitelist</th>
-       <td><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info['whitelist']) . "</textarea></td>
-     </tr>
-     <tr>
-       <th>&nbsp;</th>
-       <td class='right'>
+        <tr>
+          <th class='left'>$langRegistrationDate:</th>
+          <td>" . datetime_remove_seconds($info['registered_at']) . "</td>
+        </tr>
+        <tr>
+         <th class='left'>$langExpirationDate: </th>
+         <td>
+             <input type='text' name='expires_at' value='" . datetime_remove_seconds($info['expires_at']) . "'>
+         </td></tr>
+        <tr>
+          <th>$langUserID: </th>
+          <td>$u</td>
+        </tr>
+        <tr>
+          <th>$langUserWhitelist</th>
+          <td><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info['whitelist']) . "</textarea></td>
+        </tr>
+        <tr>
+        <th>&nbsp;</th>
+        <td class='right'>
 	    <input type='hidden' name='u' value='$u' />
 	    <input type='hidden' name='u_submitted' value='1' />
 	    <input type='hidden' name='registered_at' value='" . $info['registered_at'] . "' />
@@ -291,7 +264,6 @@ if ($u) {
      </table>
      </fieldset>
      </form>";
-
         $sql = db_query("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.status
                             FROM course AS a
                             JOIN course_department ON a.id = course_department.course
@@ -301,14 +273,13 @@ if ($u) {
 
         // user is registered to courses
         if (mysql_num_rows($sql) > 0) {
-            $tool_content .= "
-                        <p class='title1'>$langStudentParticipation</p>
-			<table class='tbl_alt' width='100%'>
-			<tr>
-			<th colspan='2'><div align='left'>$langCode</div></th>
-			<th><div align='left'>$langLessonName</div></th>
-			<th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
-			</tr>";
+            $tool_content .= "<p class='title1'>$langStudentParticipation</p>
+                    <table class='tbl_alt' width='100%'>
+                    <tr>
+                    <th colspan='2'><div align='left'>$langCode</div></th>
+                    <th><div align='left'>$langLessonName</div></th>
+                    <th>$langCourseRegistrationDate</th><th>$langProperty</th><th>$langActions</th>
+                    </tr>";
             $k = 0;
             for ($j = 0; $j < mysql_num_rows($sql); $j++) {
                 $logs = mysql_fetch_array($sql);
@@ -321,10 +292,9 @@ if ($u) {
                         $tool_content .= "<tr class='odd'>";
                     }
                 }
-                $tool_content .= "
-                                        <td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
-					<td><a href='{$urlServer}courses/$logs[code]/'>" . q($logs['code']) . "</a></td>
-					<td>" . q($logs['title']) . "</td><td align='center'>";
+                $tool_content .= "<td width='1'><img src='$themeimg/arrow.png' title='bullet'></td>
+                        <td><a href='{$urlServer}courses/$logs[code]/'>" . q($logs['code']) . "</a></td>
+                        <td>" . q($logs['title']) . "</td><td align='center'>";
                 if ($logs['reg_date'] == '0000-00-00') {
                     $tool_content .= $langUnknownDate;
                 } else {
@@ -373,14 +343,7 @@ if ($u) {
         $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
-        $date = isset($_POST['date']) ? $_POST['date'] : '';
-        $hour = isset($_POST['hour']) ? $_POST['hour'] : '';
-        $minute = isset($_POST['minute']) ? $_POST['minute'] : '';
-        $date = explode("-", $date);
-        $day = $date[0];
-        $year = $date[2];
-        $month = $date[1];
-        $expires_at = mktime($hour, $minute, 0, $month, $day, $year);
+        $expires_at = isset($_POST['expires_at']) ? $_POST['expires_at'] : '';        
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
         $user_exist = FALSE;
         // check if username is free
@@ -408,7 +371,8 @@ if ($u) {
             exit();
         }
         if ($registered_at > $expires_at) {
-            $tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br /><a href='edituser.php?u=$u'>$langAgain</a></b><br />";
+                $tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br />
+                    <a href='edituser.php?u=$u'>$langAgain</a></b><br />";
         } else {
             if ($u == 1)
                 $departments = array();
@@ -433,20 +397,19 @@ if ($u) {
                         validateNode($depId, true);
                     }
                 }
-
-                $sql = "UPDATE user SET surname = " . autoquote($lname) . ",
-                                        givenname = " . autoquote($fname) . ",
-                                        username = $username,
-                                        email = " . autoquote($email) . ",
-                                        status = " . intval($newstatus) . ",
-                                        phone = " . autoquote($phone) . ",
-                                        expires_at = " . $expires_at . ",
-                                        am = " . autoquote($am) . ",
-                                        verified_mail = " . intval($verified_mail) . ",
-                                        whitelist = " . quote($user_upload_whitelist) . "
-                              WHERE id = " . intval($u);
             }
-
+            $sql = "UPDATE user SET surname = " . autoquote($lname) . ",
+                                    givenname = " . autoquote($fname) . ",
+                                    username = $username,
+                                    email = " . autoquote($email) . ",
+                                    status = " . intval($newstatus) . ",
+                                    phone = " . autoquote($phone) . ",
+                                    expires_at = '$expires_at',
+                                    am = " . autoquote($am) . ",
+                                    verified_mail = " . intval($verified_mail) . ",
+                                    whitelist = " . quote($user_upload_whitelist) . "
+                          WHERE id = " . intval($u);            
+            
             $qry = db_query($sql);
             $user->refresh(intval($u), $departments);
 
@@ -464,7 +427,7 @@ if ($u) {
         }
     }
 } else {
-    $tool_content .= "<h1>$langError</h1>\n<p><a href='listcours.php'>$back</p>\n";
+    $tool_content .= "<h1>$langError</h1><p><a href='listcours.php'>$back</p>\n";
 }
 
 draw($tool_content, 3, null, $head_content);

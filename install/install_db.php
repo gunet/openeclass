@@ -140,11 +140,9 @@ db_query("CREATE TABLE `agenda` (
 	`course_id` INT(11) NOT NULL,
 	`title` VARCHAR(200) NOT NULL,
 	`content` TEXT,
-	`day` DATE NOT NULL DEFAULT '1000-10-10',
-	`hour` TIME NOT NULL DEFAULT '00:00:00',
-	`lasting` VARCHAR(20),
+	`start` DATETIME NOT NULL DEFAULT '0000-00-00',
+	`duration` VARCHAR(20),
 	`visible` TINYINT(4)) $charset_spec");
-
 
 #
 # table `course`
