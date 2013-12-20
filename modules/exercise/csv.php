@@ -41,7 +41,7 @@ if ($is_editor) {
     while ($row = mysql_fetch_array($result)) {
         $sid = $row['uid'];
         $surname = uid_to_surname($sid);
-        $name = uid_to_name($sid);
+        $name = uid_to_name($sid,1);
 
         $sql2 = "SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
 			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
