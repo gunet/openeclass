@@ -261,10 +261,10 @@ if (mysql_num_rows($result) > 0) {
                     (($d < time()) and ($sens == " DESC "))) {
                 if ($barMonth != date("m", time())) {
                     $barMonth = date("m", time());
-                    $tool_content .= "\n<tr>";
+                    $tool_content .= "<tr>";
                     // current month
-                    $tool_content .= "\n<td colspan='2' class='monthLabel'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
-                    $tool_content .= "\n</tr>";
+                    $tool_content .= "<td colspan='2' class='monthLabel'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
+                    $tool_content .= "</tr>";
                 }
                 $nowBarShowed = TRUE;
                 $tool_content .= "<tr>";
@@ -284,27 +284,24 @@ if (mysql_num_rows($result) > 0) {
             $tool_content .= "<div align='center'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
             $tool_content .= "</tr>";
         }
-        $classvis = 'class="visible"';
+        if ($numLine % 2 == 0) {
+            $classvis = "class='even'";
+        } else {
+            $classvis = "class='odd'";
+        }                
         if ($is_editor) {
             if ($myrow["visible"] == 0) {
                 $classvis = 'class="invisible"';
-            } else {
-                if ($numLine % 2 == 0) {
-                    $classvis = 'class="even"';
-                } else {
-                    $classvis = 'class="odd"';
-                }
             }
-            $tool_content .= "<tr $classvis><td valign='top'>";
+        }
+        $tool_content .= "<tr $classvis>";
+        if ($is_editor) {
+            $tool_content .= "<td valign='top'>";
         } else {
-            if ($numLine % 2 == 0) {
-                $tool_content .= "<tr class='even'>";
-            } else {
-                $tool_content .= "<tr class='odd'>";
-            }
             $tool_content .= "<td valign='top' colspan='2'>";
         }        
-        $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date("", $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
+        
+        $tool_content .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
         if ($myrow['duration'] != '') {
             if ($myrow['duration'] == 1) {
                 $message = $langHour;
@@ -315,7 +312,7 @@ if (mysql_num_rows($result) > 0) {
         } else {
             $msg = '';
         }
-        $tool_content .= "<br><b><div class='event'><b>";
+        $tool_content .= "<br><b><div class='event'>";
         if ($myrow['title'] == '') {
             $tool_content .= $langAgendaNoTitle;
         } else {
