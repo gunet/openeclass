@@ -362,9 +362,13 @@ function display_user($user, $print_email = false, $icon = true) {
 }
 
 // Translate uid to real name / surname
-function uid_to_name($uid) {
-    $r = mysql_fetch_row(db_query("SELECT CONCAT(surname, ' ', givenname)
-                                          FROM user WHERE id = " . intval($uid)));
+function uid_to_name($uid, $only_givenname = NULL) {
+	if($only_givenname){
+		$r = mysql_fetch_row(db_query("SELECT givenname FROM user WHERE id = " . intval($uid)));
+	}else{
+        $r = mysql_fetch_row(db_query("SELECT CONCAT(surname, ' ', givenname)
+                                              FROM user WHERE id = " . intval($uid)));		
+	}
     if ($r !== false) {
         return $r[0];
     } else {
