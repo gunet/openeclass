@@ -738,34 +738,37 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     }
 
                     db_query("CREATE TABLE `cron_params` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `name` VARCHAR(255) NOT NULL UNIQUE,
-                `last_run` DATETIME NOT NULL) $charset_spec");
+                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `name` VARCHAR(255) NOT NULL UNIQUE,
+                        `last_run` DATETIME NOT NULL)
+                        $charset_spec");
 
                     db_query("DROP TABLE IF EXISTS passwd_reset");
 
                     db_query("CREATE TABLE IF NOT EXISTS `log` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT,
-                    `user_id` INT(11) NOT NULL DEFAULT 0,
-                    `course_id` INT(11) NOT NULL DEFAULT 0,
-                    `module_id` INT(11) NOT NULL default 0,
-                    `details` TEXT NOT NULL,
-                    `action_type` INT(11) NOT NULL DEFAULT 0,
-                    `ts` DATETIME NOT NULL,
-                    `ip` VARCHAR(45) NOT NULL DEFAULT '',
-                    PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
+                        `id` INT(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` INT(11) NOT NULL DEFAULT 0,
+                        `course_id` INT(11) NOT NULL DEFAULT 0,
+                        `module_id` INT(11) NOT NULL default 0,
+                        `details` TEXT NOT NULL,
+                        `action_type` INT(11) NOT NULL DEFAULT 0,
+                        `ts` DATETIME NOT NULL,
+                        `ip` VARCHAR(45) NOT NULL DEFAULT '',
+                        PRIMARY KEY (`id`))
+                        $charset_spec");
 
 
                     db_query("CREATE TABLE IF NOT EXISTS `log_archive` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT,
-                    `user_id` INT(11) NOT NULL DEFAULT 0,
-                    `course_id` INT(11) NOT NULL DEFAULT 0,
-                    `module_id` INT(11) NOT NULL default 0,
-                    `details` TEXT NOT NULL,
-                    `action_type` INT(11) NOT NULL DEFAULT 0,
-                    `ts` DATETIME NOT NULL,
-                    `ip` VARCHAR(45) NOT NULL DEFAULT '',
-                    PRIMARY KEY (`id`)) DEFAULT CHARSET=utf8");
+                        `id` INT(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` INT(11) NOT NULL DEFAULT 0,
+                        `course_id` INT(11) NOT NULL DEFAULT 0,
+                        `module_id` INT(11) NOT NULL default 0,
+                        `details` TEXT NOT NULL,
+                        `action_type` INT(11) NOT NULL DEFAULT 0,
+                        `ts` DATETIME NOT NULL,
+                        `ip` VARCHAR(45) NOT NULL DEFAULT '',
+                        PRIMARY KEY (`id`))
+                        $charset_spec");
 
                     // add index on `loginout`.`id_user` for performace
                     db_query("ALTER TABLE `loginout` ADD INDEX (`id_user`)");
@@ -809,11 +812,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         db_query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
                         db_query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
                         db_query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
-                                                   CHANGE `temps` `date` DATETIME,
-                                                   CHANGE `cours_id` `course_id` INT(11),
-                                                   CHANGE `ordre` `order` MEDIUMINT(11),
-                                                   CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0,
-                                                   DROP INDEX annonces");
+                                       CHANGE `temps` `date` DATETIME,
+                                       CHANGE `cours_id` `course_id` INT(11),
+                                       CHANGE `ordre` `order` MEDIUMINT(11),
+                                       CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0,
+                                       DROP INDEX annonces");
                     }
 
                     // create forum tables
@@ -826,14 +829,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `last_post_id` INT(10) DEFAULT 0 NOT NULL,
                             `cat_id` INT(10) DEFAULT 0 NOT NULL,
                             `course_id` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)) $charset_spec");
+                            PRIMARY KEY (`id`))
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `forum_category` (
                             `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `cat_title` VARCHAR(100) DEFAULT '' NOT NULL,
                             `cat_order` INT(11) DEFAULT 0 NOT NULL,
                             `course_id` INT(11) NOT NULL,
-                            KEY `forum_category_index` (`id`, `course_id`)) $charset_spec");
+                            KEY `forum_category_index` (`id`, `course_id`))
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `forum_notify` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -842,7 +847,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `forum_id` INT(11) DEFAULT 0 NOT NULL,
                             `topic_id` INT(11) DEFAULT 0 NOT NULL ,
                             `notify_sent` BOOL DEFAULT 0 NOT NULL ,
-                            `course_id` INT(11) DEFAULT 0 NOT NULL) $charset_spec");
+                            `course_id` INT(11) DEFAULT 0 NOT NULL)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `forum_post` (
                             `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -851,7 +857,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `poster_id` INT(10) NOT NULL DEFAULT 0,
                             `post_time` DATETIME,
                             `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
-                            `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
+                            `parent_post_id` INT(10) NOT NULL DEFAULT 0)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `forum_topic` (
                             `id` int(10) NOT NULL auto_increment,
@@ -862,279 +869,302 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `num_replies` int(10) NOT NULL default '0',
                             `last_post_id` int(10) NOT NULL default '0',
                             `forum_id` int(10) NOT NULL default '0',
-                            PRIMARY KEY  (`id`)) $charset_spec");
-
+                            PRIMARY KEY (`id`))
+                            $charset_spec");
 
                     // create video tables
-                    db_query('CREATE TABLE IF NOT EXISTS video (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `path` VARCHAR(255),
-                                `url` VARCHAR(200),
-                                `title` VARCHAR(200),
-                                `description` TEXT,
-                                `creator` VARCHAR(200),
-                                `publisher` VARCHAR(200),
-                                `date` DATETIME,
-                                `public` TINYINT(4) NOT NULL DEFAULT 1)');
+                    db_query("CREATE TABLE IF NOT EXISTS video (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `path` VARCHAR(255),
+                            `url` VARCHAR(200),
+                            `title` VARCHAR(200),
+                            `description` TEXT,
+                            `creator` VARCHAR(200),
+                            `publisher` VARCHAR(200),
+                            `date` DATETIME,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS videolink (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `url` VARCHAR(200) NOT NULL DEFAULT '',
-                                `title` VARCHAR(200) NOT NULL DEFAULT '',
-                                `description` TEXT NOT NULL,
-                                `creator` VARCHAR(200) NOT NULL DEFAULT '',
-                                `publisher` VARCHAR(200) NOT NULL DEFAULT '',
-                                `date` DATETIME,
-                                `public` TINYINT(4) NOT NULL DEFAULT 1)");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `url` VARCHAR(200) NOT NULL DEFAULT '',
+                            `title` VARCHAR(200) NOT NULL DEFAULT '',
+                            `description` TEXT NOT NULL,
+                            `creator` VARCHAR(200) NOT NULL DEFAULT '',
+                            `publisher` VARCHAR(200) NOT NULL DEFAULT '',
+                            `date` DATETIME,
+                            `public` TINYINT(4) NOT NULL DEFAULT 1)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
-                                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `uploaderId` INT(11) NOT NULL DEFAULT 0,
-                                `filename` VARCHAR(250) NOT NULL DEFAULT '',
-                                `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `title` VARCHAR(250) NOT NULL DEFAULT '',
-                                `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
-                                `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')");
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `uploaderId` INT(11) NOT NULL DEFAULT 0,
+                            `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `title` VARCHAR(250) NOT NULL DEFAULT '',
+                            `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
+                            `uploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `lastUploadDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS dropbox_person (
-                                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
-                                `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                                PRIMARY KEY (fileId, personId))");
+                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `personId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            PRIMARY KEY (fileId, personId))");
 
                     db_query("CREATE TABLE IF NOT EXISTS dropbox_post (
-                                `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                PRIMARY KEY (fileId, recipientId))");
+                            `fileId` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `recipientId` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            PRIMARY KEY (fileId, recipientId))");
 
                     db_query("CREATE TABLE IF NOT EXISTS `lp_module` (
-                                `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                                `comment` TEXT NOT NULL,
-                                `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
-                                `startAsset_id` INT(11) NOT NULL DEFAULT 0,
-                                `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
-                                `launch_data` TEXT NOT NULL)");
+                            `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` TEXT NOT NULL,
+                            `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
+                            `startAsset_id` INT(11) NOT NULL DEFAULT 0,
+                            `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
+                            `launch_data` TEXT NOT NULL)
+                            $charset_spec");
                     //COMMENT='List of available modules used in learning paths';
                     db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
-                                `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                                `comment` TEXT NOT NULL,
-                                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                                `visible` TINYINT(4),
-                                `rank` INT(11) NOT NULL DEFAULT 0)");
+                            `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` TEXT NOT NULL,
+                            `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                            `visible` TINYINT(4),
+                            `rank` INT(11) NOT NULL DEFAULT 0)
+                            $charset_spec");
                     //COMMENT='List of learning Paths';
                     db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
-                                `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `learnPath_id` INT(11) NOT NULL DEFAULT 0,
-                                `module_id` INT(11) NOT NULL DEFAULT 0,
-                                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                                `visible` TINYINT(4),
-                                `specificComment` TEXT NOT NULL,
-                                `rank` INT(11) NOT NULL DEFAULT '0',
-                                `parent` INT(11) NOT NULL DEFAULT '0',
-                                `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')");
+                            `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `learnPath_id` INT(11) NOT NULL DEFAULT 0,
+                            `module_id` INT(11) NOT NULL DEFAULT 0,
+                            `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+                            `visible` TINYINT(4),
+                            `specificComment` TEXT NOT NULL,
+                            `rank` INT(11) NOT NULL DEFAULT '0',
+                            `parent` INT(11) NOT NULL DEFAULT '0',
+                            `raw_to_pass` TINYINT(4) NOT NULL DEFAULT '50')
+                            $charset_spec");
                     //COMMENT='This table links module to the learning path using them';
                     db_query("CREATE TABLE IF NOT EXISTS `lp_asset` (
-                                `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `module_id` INT(11) NOT NULL DEFAULT '0',
-                                `path` VARCHAR(255) NOT NULL DEFAULT '',
-                                `comment` VARCHAR(255) default NULL)");
+                            `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `module_id` INT(11) NOT NULL DEFAULT '0',
+                            `path` VARCHAR(255) NOT NULL DEFAULT '',
+                            `comment` VARCHAR(255) default NULL)
+                            $charset_spec");
                     //COMMENT='List of resources of module of learning paths';
                     db_query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
-                                `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                                `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
-                                `learnPath_id` INT(11) NOT NULL DEFAULT '0',
-                                `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
-                                `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
-                                `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
-                                `raw` TINYINT(4) NOT NULL DEFAULT '-1',
-                                `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
-                                `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
-                                `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
-                                `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
-                                `suspend_data` TEXT NOT NULL,
-                                `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')");
+                            `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `learnPath_module_id` INT(11) NOT NULL DEFAULT '0',
+                            `learnPath_id` INT(11) NOT NULL DEFAULT '0',
+                            `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
+                            `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
+                            `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
+                            `raw` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
+                            `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                            `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+                            `suspend_data` TEXT NOT NULL,
+                            `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')
+                            $charset_spec");
                     //COMMENT='Record the last known status of the user in the course';
                     mysql_index_exists('lp_user_module_progress', 'optimize') or
                             db_query('CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)');
 
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
-                                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                `description` TEXT NULL,
-                                `group_id` INT(11) NOT NULL DEFAULT 0 )");
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `description` TEXT NULL,
+                            `group_id` INT(11) NOT NULL DEFAULT 0 )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
-                                `wiki_id` INT(11) UNSIGNED NOT NULL,
-                                `flag` VARCHAR(255) NOT NULL,
-                                `value` ENUM('false','true') NOT NULL DEFAULT 'false' )");
+                            `wiki_id` INT(11) UNSIGNED NOT NULL,
+                            `flag` VARCHAR(255) NOT NULL,
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false' )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
-                                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                                `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
-                                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                                `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-                                `content` TEXT NOT NULL )");
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+                            `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+                            `content` TEXT NOT NULL)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
-                                `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                                `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `active` INT(11) NOT NULL DEFAULT 0 )");
+                            `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `name` VARCHAR(255) NOT NULL DEFAULT '',
+                            `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `active` INT(11) NOT NULL DEFAULT 0)
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
-                                `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `pid` INT(11) NOT NULL DEFAULT 0,
-                                `qid` INT(11) NOT NULL DEFAULT 0,
-                                `aid` INT(11) NOT NULL DEFAULT 0,
-                                `answer_text` TEXT NOT NULL,
-                                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )");
+                            `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) NOT NULL DEFAULT 0,
+                            `qid` INT(11) NOT NULL DEFAULT 0,
+                            `aid` INT(11) NOT NULL DEFAULT 0,
+                            `answer_text` TEXT NOT NULL,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00')
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `poll_question` (
-                                `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `pid` INT(11) NOT NULL DEFAULT 0,
-                                `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                                `qtype` ENUM('multiple', 'fill') NOT NULL )");
+                            `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pid` INT(11) NOT NULL DEFAULT 0,
+                            `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+                            `qtype` ENUM('multiple', 'fill') NOT NULL)
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
-                                `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `pqid` INT(11) NOT NULL DEFAULT 0,
-                                `answer_text` TEXT NOT NULL )");
+                            `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `pqid` INT(11) NOT NULL DEFAULT 0,
+                            `answer_text` TEXT NOT NULL)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `assignment` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `title` VARCHAR(200) NOT NULL DEFAULT '',
-                                `description` TEXT NOT NULL,
-                                `comments` TEXT NOT NULL,
-                                `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `active` CHAR(1) NOT NULL DEFAULT '1',
-                                `secret_directory` VARCHAR(30) NOT NULL,
-                                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL )");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(200) NOT NULL DEFAULT '',
+                            `description` TEXT NOT NULL,
+                            `comments` TEXT NOT NULL,
+                            `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `active` CHAR(1) NOT NULL DEFAULT '1',
+                            `secret_directory` VARCHAR(30) NOT NULL,
+                            `group_submissions` CHAR(1) DEFAULT '0' NOT NULL )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `assignment_id` INT(11) NOT NULL DEFAULT 0,
-                                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                                `file_path` VARCHAR(200) NOT NULL DEFAULT '',
-                                `file_name` VARCHAR(200) NOT NULL DEFAULT '',
-                                `comments` TEXT NOT NULL,
-                                `grade` VARCHAR(50) NOT NULL DEFAULT '',
-                                `grade_comments` TEXT NOT NULL,
-                                `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
-                                `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                                `group_id` INT( 11 ) NOT NULL DEFAULT 0)");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `assignment_id` INT(11) NOT NULL DEFAULT 0,
+                            `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
+                            `file_path` VARCHAR(200) NOT NULL DEFAULT '',
+                            `file_name` VARCHAR(200) NOT NULL DEFAULT '',
+                            `comments` TEXT NOT NULL,
+                            `grade` VARCHAR(50) NOT NULL DEFAULT '',
+                            `grade_comments` TEXT NOT NULL,
+                            `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
+                            `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
+                            `group_id` INT( 11 ) NOT NULL DEFAULT 0)
+                            $charset_spec");
 
                     db_query("DROP TABLE IF EXISTS agenda");
                     db_query("CREATE TABLE IF NOT EXISTS `agenda` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `title` VARCHAR(200) NOT NULL,
-                                `content` TEXT,
-                                `start` DATETIME NOT NULL DEFAULT '0000-00-00',                                
-                                `duration` VARCHAR(20),
-                                `visible` TINYINT(4))");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(200) NOT NULL,
+                            `content` TEXT NOT NULL,
+                            `start` DATETIME NOT NULL DEFAULT '0000-00-00',                                
+                            `duration` VARCHAR(20) NOT NULL,
+                            `visible` TINYINT(4))
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `exercise` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `title` VARCHAR(250) DEFAULT NULL,
-                                `description` TEXT,
-                                `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
-                                `start_date` DATETIME DEFAULT NULL,
-                                `end_date` DATETIME DEFAULT NULL,
-                                `time_constraint` INT(11) DEFAULT 0,
-                                `attempts_allowed` INT(11) DEFAULT 0,
-                                `random` SMALLINT(6) NOT NULL DEFAULT 0,
-                                `active` TINYINT(4) NOT NULL DEFAULT 1,
-                                `results` TINYINT(1) NOT NULL DEFAULT 1,
-                                `score` TINYINT(1) NOT NULL DEFAULT 1)");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `title` VARCHAR(250) DEFAULT NULL,
+                            `description` TEXT,
+                            `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT '1',
+                            `start_date` DATETIME DEFAULT NULL,
+                            `end_date` DATETIME DEFAULT NULL,
+                            `time_constraint` INT(11) DEFAULT 0,
+                            `attempts_allowed` INT(11) DEFAULT 0,
+                            `random` SMALLINT(6) NOT NULL DEFAULT 0,
+                            `active` TINYINT(4) NOT NULL DEFAULT 1,
+                            `results` TINYINT(1) NOT NULL DEFAULT 1,
+                            `score` TINYINT(1) NOT NULL DEFAULT 1)
+                            $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
-                                `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `eid` INT(11) NOT NULL DEFAULT '0',
-                                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
-                                `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                                `total_score` INT(11) NOT NULL DEFAULT '0',
-                                `total_weighting` INT(11) DEFAULT '0',
-                                `attempt` INT(11) NOT NULL DEFAULT '0' )");
+                            `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `eid` INT(11) NOT NULL DEFAULT '0',
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
+                            `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `total_score` INT(11) NOT NULL DEFAULT '0',
+                            `total_weighting` INT(11) DEFAULT '0',
+                            `attempt` INT(11) NOT NULL DEFAULT '0' )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `exercise_question` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `course_id` INT(11) NOT NULL,
-                                `question` TEXT,
-                                `description` TEXT,
-                                `weight` FLOAT(11,2) DEFAULT NULL,
-                                `q_position` INT(11) DEFAULT 1,
-                                `type` INT(11) DEFAULT 1 )");
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `course_id` INT(11) NOT NULL,
+                            `question` TEXT,
+                            `description` TEXT,
+                            `weight` FLOAT(11,2) DEFAULT NULL,
+                            `q_position` INT(11) DEFAULT 1,
+                            `type` INT(11) DEFAULT 1 )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
-                                `id` INT(11) NOT NULL DEFAULT '0',
-                                `question_id` INT(11) NOT NULL DEFAULT '0',
-                                `answer` TEXT,
-                                `correct` INT(11) DEFAULT NULL,
-                                `comment` TEXT,
-                                `weight` FLOAT(5,2),
-                                `r_position` INT(11) DEFAULT NULL,
-                                PRIMARY KEY (id, question_id) )");
+                            `id` INT(11) NOT NULL DEFAULT '0',
+                            `question_id` INT(11) NOT NULL DEFAULT '0',
+                            `answer` TEXT,
+                            `correct` INT(11) DEFAULT NULL,
+                            `comment` TEXT,
+                            `weight` FLOAT(5,2),
+                            `r_position` INT(11) DEFAULT NULL,
+                            PRIMARY KEY (id, question_id) )
+                            $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
-                                `question_id` INT(11) NOT NULL DEFAULT '0',
-                                `exercise_id` INT(11) NOT NULL DEFAULT '0',
-                                PRIMARY KEY (question_id, exercise_id) )");
+                            `question_id` INT(11) NOT NULL DEFAULT '0',
+                            `exercise_id` INT(11) NOT NULL DEFAULT '0',
+                            PRIMARY KEY (question_id, exercise_id) )");
 
                     db_query("CREATE TABLE IF NOT EXISTS `course_module` (
-                                `id` int(11) NOT NULL auto_increment,
-                                `module_id` int(11) NOT NULL,
-                                `visible` tinyint(4) NOT NULL,
-                                `course_id` int(11) NOT NULL,
-                                PRIMARY KEY  (`id`),
-                                UNIQUE KEY `module_course` (`module_id`,`course_id`))");
+                            `id` int(11) NOT NULL auto_increment,
+                            `module_id` int(11) NOT NULL,
+                            `visible` tinyint(4) NOT NULL,
+                            `course_id` int(11) NOT NULL,
+                            PRIMARY KEY  (`id`),
+                            UNIQUE KEY `module_course` (`module_id`,`course_id`))");
 
                     db_query("CREATE TABLE IF NOT EXISTS `actions` (
-                              `id` int(11) NOT NULL auto_increment,
-                              `user_id` int(11) NOT NULL,
-                              `module_id` int(11) NOT NULL,
-                              `action_type_id` int(11) NOT NULL,
-                              `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-                              `duration` int(11) NOT NULL default '900',
-                              `course_id` INT(11) NOT NULL,
-                              PRIMARY KEY  (`id`),
-                              KEY `actionsindex` (`module_id`,`date_time`))");
+                          `id` int(11) NOT NULL auto_increment,
+                          `user_id` int(11) NOT NULL,
+                          `module_id` int(11) NOT NULL,
+                          `action_type_id` int(11) NOT NULL,
+                          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `duration` int(11) NOT NULL default '900',
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`),
+                          KEY `actionsindex` (`module_id`,`date_time`))");
 
                     db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
-                              `id` int(11) NOT NULL auto_increment,
-                              `module_id` int(11) NOT NULL,
-                              `visits` int(11) NOT NULL,
-                              `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                              `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
-                              `duration` int(11) NOT NULL,
-                              `course_id` INT(11) NOT NULL,
-                              PRIMARY KEY  (`id`))");
+                          `id` int(11) NOT NULL auto_increment,
+                          `module_id` int(11) NOT NULL,
+                          `visits` int(11) NOT NULL,
+                          `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `duration` int(11) NOT NULL,
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`))");
 
                     db_query("CREATE TABLE IF NOT EXISTS `logins` (
-                              `id` int(11) NOT NULL auto_increment,
-                              `user_id` int(11) NOT NULL,
-                              `ip` char(45) NOT NULL default '0.0.0.0',
-                              `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-                              `course_id` INT(11) NOT NULL,
-                              PRIMARY KEY  (`id`))");
+                          `id` int(11) NOT NULL auto_increment,
+                          `user_id` int(11) NOT NULL,
+                          `ip` char(45) NOT NULL default '0.0.0.0',
+                          `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+                          `course_id` INT(11) NOT NULL,
+                          PRIMARY KEY  (`id`))");
 
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
