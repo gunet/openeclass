@@ -22,6 +22,8 @@
 
 define("DB_TYPE", "MYSQL");
 
+require_once 'modules/db/dbhelper.php';
+
 class Database {
 
     /**

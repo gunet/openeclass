@@ -223,27 +223,19 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $hasher = new PasswordHash(8, false);
     $password_encrypted = $hasher->HashPassword($password);
 
-    $req = db_query("INSERT INTO user
+    Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
-                 email_public, phone_public, am_public)
-                VALUES (" .
-            quote($surname) . ', ' .
-            quote($givenname) . ', ' .
-            quote($uname) . ", '$password_encrypted', " .
-            quote(mb_strtolower(trim($email))) .
-            ", $status, " .
-            "NOW(), DATE_ADD(NOW(), INTERVAL $account_duration SECOND), " .
-            quote($lang) . ", " .
-            quote($am) . ', ' .
-            quote($phone) . ", $email_public, $phone_public, $am_public)");
-    $id = mysql_insert_id();
+                 email_public, phone_public, am_public, description, whitelist)
+                VALUES (?,?,?,?,?,?," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?,?,?,?,?,?,'','')"
+            , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public);
+    $id = Database::get()->lastInsertID();
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
 
     $emailsubject = "$langYourReg $siteName $type_message";
     $emailbody = "
-$langDestination $givenname $nom
+$langDestination $givenname $surname
 
 $langYouAreReg $siteName $type_message, $langSettings $uname
 $langPass : $password
@@ -259,7 +251,7 @@ $langEmail : $emailhelpdesk
         send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
     }
 
-    return array($id, $nom, $givenname, $email, $phone, $am, $uname, $password);
+    return array($id, $surname, $givenname, $email, $phone, $am, $uname, $password);
 }
 
 function create_username($status, $departments, $nom, $givenname, $prefix) {

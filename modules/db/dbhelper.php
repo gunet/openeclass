@@ -20,8 +20,6 @@
  * ======================================================================== 
  */
 
-define("DB_TYPE", "MYSQL");
-
 abstract class DBHelper {
 
     private static $helper_impl;
