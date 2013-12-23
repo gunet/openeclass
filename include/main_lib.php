@@ -361,19 +361,19 @@ function display_user($user, $print_email = false, $icon = true) {
             ($print_email ? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')') : '');
 }
 
-// Translate uid to real name / surname
-function uid_to_name($uid, $only_givenname = NULL) {
-	if($only_givenname){
-		$r = mysql_fetch_row(db_query("SELECT givenname FROM user WHERE id = " . intval($uid)));
+// Translate uid to givenname , surname, fullname or nickname
+function uid_to_name($uid, $name_type='fullname') {
+	if($name_type=='fullname'){
+		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?", intval($uid))->fullname;									  				
+	}elseif($name_type='givenname'){
+		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?", intval($uid))->givenname;
+	}elseif($name_type='surname'){
+		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?", intval($uid))->surname;
+	}elseif($name_type='username'){
+		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
 	}else{
-        $r = mysql_fetch_row(db_query("SELECT CONCAT(surname, ' ', givenname)
-                                              FROM user WHERE id = " . intval($uid)));		
+		return false;
 	}
-    if ($r !== false) {
-        return $r[0];
-    } else {
-        return false;
-    }
 }
 
 // Translate uid to real surname
