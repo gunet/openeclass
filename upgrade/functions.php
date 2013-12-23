@@ -878,16 +878,17 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
         db_query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
         db_query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");
 
-        list($agendaid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.agenda"));
+        list($agendaid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.agenda"));
         $agendaid_offset = (!$agendaid_offset) ? 0 : intval($agendaid_offset);
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.agenda
-                         (`id`, `course_id`, `title`, `content`, `day`, `hour`, `lasting`, `visible`)
-                         SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, `day`, `hour`, `lasting`,
+                         (`id`, `course_id`, `title`, `content`, `start`, `duration`, `visible`)
+                         SELECT `id` + $agendaid_offset, $course_id, `titre`, `contenu`, CONCAT(day,' ',hour), `lasting`,
                                 `visibility` FROM agenda ORDER BY id");
 
-        if (false !== $ok)
+        if (false !== $ok) {
             db_query("DROP TABLE agenda");
+        }
     }
 
     $exercise_map = array();
@@ -900,7 +901,7 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
             mysql_table_exists($code, 'exercice_question')) {
 
         // ----- exercices DB Table ----- //
-        list($exerciseid_offset) = mysql_fetch_row(db_query("SELECT max(id) FROM `$mysqlMainDb`.exercise"));
+        list($exerciseid_offset) = mysql_fetch_row(db_query("SELECT MAX(id) FROM `$mysqlMainDb`.exercise"));
         $exerciseid_offset = (!$exerciseid_offset) ? 0 : intval($exerciseid_offset);
 
         if ($return_mapping) {

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,9 +35,7 @@ $u_realname = $u ? q(uid_to_name($u)) : '';
 $t = 0;
 
 if (!$doit) {
-
     if ($u_account) {
-
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
             <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em><br/>
             $langConfirmDeleteQuestion3
@@ -46,24 +44,19 @@ if (!$doit) {
     } else {
         $tool_content .= "<p>$langErrorDelete</p>";
     }
-
     $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 } else {
-
     if ($u == 1) {
         $tool_content .= $langTryDeleteAdmin;
     } else {
-
         $success = deleteUser($u);
-
-        if ($success === true)
-            $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>\n";
-        else
+        if ($success === true) {
+            $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>";
+        } else {
             $tool_content .= "<p>$langErrorDelete</p>";
+        }
     }
-
-    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>\n";
+    $tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 }
-
 
 draw($tool_content, 3);

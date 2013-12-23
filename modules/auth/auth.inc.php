@@ -809,9 +809,9 @@ function alt_login($user_info_array, $uname, $pass) {
     if (($user_info_array['password'] == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
-            $is_active = check_activity($user_info_array['user_id']);
+            $is_active = check_activity($user_info_array['id']);
             // check for admin privileges
-            $admin_rights = get_admin_rights($user_info_array['user_id']);
+            $admin_rights = get_admin_rights($user_info_array['id']);
             if ($admin_rights == ADMIN_USER) {
                 $is_active = 1;   // admin user is always active
                 $_SESSION['is_admin'] = 1;
@@ -826,7 +826,7 @@ function alt_login($user_info_array, $uname, $pass) {
                 $auth_allow = 1;
             } else {
                 $auth_allow = 3;
-                $user = $user_info_array["user_id"];
+                $user = $user_info_array["id"];
             }
         } else {
             $auth_allow = 2;
@@ -835,14 +835,14 @@ function alt_login($user_info_array, $uname, $pass) {
                 'pass' => $pass));
         }
         if ($auth_allow == 1) {
-            $_SESSION['uid'] = $user_info_array['user_id'];
+            $_SESSION['uid'] = $user_info_array['id'];
             $_SESSION['uname'] = $user_info_array['username'];
             // if ldap entries have changed update database
             if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_array['givenname'] != $auth_user_info['firstname']) or
                     ($user_info_array['surname'] != $auth_user_info['lastname']))) {
                 db_query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
                                                           surname = '" . $auth_user_info['lastname'] . "'
-                                                      WHERE user_id = " . $user_info_array['user_id'] . "");
+                                                      WHERE id = " . $user_info_array['id'] . "");
                 $_SESSION['surname'] = $auth_user_info['firstname'];
                 $_SESSION['givenname'] = $auth_user_info['lastname'];
             } else {
@@ -897,7 +897,7 @@ function shib_cas_login($type) {
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
-    $sqlLogin = "SELECT user_id, surname, username, password, givenname, status, email, perso, lang, verified_mail
+    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, perso, lang, verified_mail
 						FROM user WHERE username ";
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin .= "= " . quote($uname);
@@ -933,9 +933,9 @@ function shib_cas_login($type) {
             db_query("UPDATE user SET surname = " . quote($surname) . ",
 							givenname = " . quote($givenname) . ",
 							email = " . quote($email) . "
-							WHERE user_id = $info[user_id]");
+							WHERE id = $info[id]");
             // check for admin privileges
-            $admin_rights = get_admin_rights($info['user_id']);
+            $admin_rights = get_admin_rights($info['id']);
             if ($admin_rights == ADMIN_USER) {
                 $is_active = 1;   // admin user is always active
                 $_SESSION['is_admin'] = 1;
@@ -950,7 +950,7 @@ function shib_cas_login($type) {
                 $_SESSION['is_departmentmanage_user'] = 1;
                 $is_departmentmanage_user = 1;
             }
-            $_SESSION['uid'] = $info['user_id'];
+            $_SESSION['uid'] = $info['id'];
             //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
             $userPerso = $info['perso'];
             if (isset($_SESSION['langswitch'])) {
@@ -970,10 +970,9 @@ function shib_cas_login($type) {
 
         Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
                                        username = ?, email = ?, status = ?, lang = 'el', perso = 'yes', 
-                                       registered_at = ?,  verified_mail = ?, expires_at = ?, whitelist = ''", 
-                $surname, $givenname, $type, $uname, $email, USER_STUDENT, 
-                DBHelper::timeAfter(), DBHelper::timeAfter(get_config('account_duration')));
-        
+                                       registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
+                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT);
+
         $_SESSION['uid'] = Database::get()->lastInsertID();
         $userPerso = 'yes';
         $language = $_SESSION['langswitch'] = 'el';

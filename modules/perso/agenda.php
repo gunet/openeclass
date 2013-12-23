@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,7 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
 
 
 /**
@@ -43,7 +42,7 @@
  * @return array
  */
 function getUserAgenda($param, $type) {
-    global $mysqlMainDb, $uid;
+    global $uid;
 
     //number of unique dates to collect data for
     $uniqueDates = 5;
@@ -67,35 +66,17 @@ function getUserAgenda($param, $type) {
     $tbl_course_ids = implode(",", $tbl_course_ids);
     if (empty($tbl_course_ids)) // in case there aren't any enabled agenda modules
         return;
-
-    //mysql version 4.x query
-    $sql_4 = "SELECT agenda.title, agenda.content, agenda.day, agenda.hour, agenda.lasting, course.code, course.title
+       
+    $sql = "SELECT agenda.title, agenda.content, agenda.start,
+		agenda.duration, course.code, course.title
 		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids)
 		AND agenda.course_id = course.id
 		AND agenda.visible = 1
-		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
-		ORDER BY day, hour DESC
+		HAVING (TO_DAYS(start) - TO_DAYS(NOW())) >= '0'
+		ORDER BY start DESC
 		LIMIT $uniqueDates";
-
-    //mysql version 5.x query
-    $sql_5 = "SELECT agenda.title, agenda.content, agenda.day, DATE_FORMAT(agenda.hour, '%H:%i'),
-		agenda.lasting, course.code, course.title
-		FROM agenda, course WHERE agenda.course_id IN ($tbl_course_ids)
-		AND agenda.course_id = course.id
-		AND agenda.visible = 1
-		HAVING (TO_DAYS(day) - TO_DAYS(NOW())) >= '0'
-		ORDER BY day, hour DESC
-		LIMIT $uniqueDates";
-
-    $ver = mysql_get_server_info();
-
-    if (version_compare("5.0", $ver) <= 0) {
-        $sql = $sql_5; //mysql 4 compatible query
-    } elseif (version_compare("4.1", $ver) <= 0) {
-        $sql = $sql_4; //mysql 5 compatible query
-    }
-
-    $mysql_query_result = db_query($sql, $mysqlMainDb);
+    
+    $mysql_query_result = db_query($sql);
     $agendaDateData = array();
     $previousDate = "0000-00-00";
     $firstRun = true;
@@ -150,21 +131,20 @@ function agendaHtmlInterface($data) {
             $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2])) . "</td></tr>";
             $iterator = count($data[$i]);
             for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][5];
-                if (strlen($data[$i][$j][4]) == 0) {
-                    $data[$i][$j][4] = "$langUnknown";
-                } elseif ($data[$i][$j][4] == 1) {
-                    $data[$i][$j][4] = $data[$i][$j][4] . " $langHour";
+                $url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][4];
+                if (strlen($data[$i][$j][3]) == 0) {
+                    $data[$i][$j][3] = "$langUnknown";
+                } elseif ($data[$i][$j][3] == 1) {
+                    $data[$i][$j][3] = $data[$i][$j][3] . " $langHour";
                 } else {
-                    $data[$i][$j][4] = $data[$i][$j][4] . " $langHours";
-                }
+                    $data[$i][$j][3] = $data[$i][$j][3] . " $langHours";
+                }                
                 $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-                $data[$i][$j][1] = ellipsize_html($data[$i][$j][1], 150, "... <a href=\"$url\">[$langMore]</a>");
-                $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
+                $data[$i][$j][1] = ellipsize_html($data[$i][$j][1], 150, "... <a href='$url'>[$langMore]</a>");                
                 $agenda_content .= "<tr><td><ul class='custom_list'>
-                                                <li><a href=\"$url\"><b>" . q($data[$i][$j][0]) . "</b></a><br /><b>" . q($data[$i][$j][6]) . "</b>
-                                                <div class='smaller'>" . $langExerciseStart . ": <b>" . $data[$i][$j][3] . "</b> | $langDuration: <b>" . $data[$i][$j][4] . "</b>
-                                                <br />" . standard_text_escape($data[$i][$j][1]) . "</div></li></ul></td></tr>";
+                                <li><a href=\"$url\"><b>" . q($data[$i][$j][0]) . "</b></a><br /><b>" . q($data[$i][$j][5]) . "</b>
+                                <div class='smaller'>" . $langExerciseStart . ": <b>" . date('H:i', strtotime($data[$i][$j][2])) . "</b> | $langDuration: <b>" . $data[$i][$j][3] . "</b>
+                                <br />" . standard_text_escape($data[$i][$j][1]) . "</div></li></ul></td></tr>";
             }
         }
         $agenda_content .= "</table>";

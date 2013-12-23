@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -198,35 +198,32 @@ function deleteUser($id) {
         return false;
     } else {
         // validate if this is an existing user
-        $q = db_query("SELECT * FROM user WHERE user_id = " . $u);
+        $q = db_query("SELECT * FROM user WHERE id = " . $u);
 
         if (mysql_num_rows($q)) {
             // delete everything
-            db_query("DELETE FROM actions_daily WHERE user_id = " . $u);
-            db_query("DELETE FROM admin WHERE idUser = " . $u);
-            db_query("DELETE FROM assignment_submit WHERE uid = " . $u);
-            db_query("DELETE FROM course_user WHERE user_id = " . $u);
-            db_query("DELETE FROM dropbox_file WHERE uploaderId = " . $u);
-            db_query("DELETE FROM dropbox_person WHERE personId = " . $u);
-            db_query("DELETE FROM dropbox_post WHERE recipientId = " . $u);
-            db_query("DELETE FROM exercise_user_record WHERE uid = " . $u);
-            db_query("DELETE FROM forum_notify WHERE user_id = " . $u);
-            db_query("DELETE FROM forum_post WHERE poster_id = " . $u);
-            db_query("DELETE FROM forum_topic WHERE poster_id = " . $u);
-            db_query("DELETE FROM group_members WHERE user_id = " . $u);
-            db_query("DELETE FROM log WHERE user_id = " . $u);
-            db_query("DELETE FROM loginout WHERE id_user = " . $u);
-            db_query("DELETE FROM logins WHERE user_id = " . $u);
-            db_query("DELETE FROM lp_user_module_progress WHERE user_id = " . $u);
-            db_query("DELETE FROM poll WHERE creator_id = " . $u);
-            db_query("DELETE FROM poll_answer_record WHERE user_id = " . $u);
-            db_query("DELETE FROM user_department WHERE user = " . $u);
-            db_query("DELETE FROM wiki_pages WHERE owner_id = " . $u);
-            db_query("DELETE FROM wiki_pages_content WHERE editor_id = " . $u);
-
-            db_query("DELETE FROM user WHERE user_id = " . $u);
-
-
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
             return true;
         } else {
             return false;
