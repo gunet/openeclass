@@ -34,7 +34,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 
 // For using with the pop-up calendar
-require_once 'jscalendar.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
@@ -81,6 +80,22 @@ $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' 
 
 if ($is_editor) {
     load_js('tools.js');
+    load_js('jquery');
+    load_js('jquery-ui');
+    load_js('jquery-ui-timepicker-addon.min.js');  
+    global $themeimg;
+    $head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+    <script>
+    $(function() {
+    $('input[name=WorkEnd]').datetimepicker({
+        showOn: 'both',
+        buttonImage: '{$themeimg}/calendar.png',
+        buttonImageOnly: true,
+        dateFormat: 'dd-mm-yy', 
+        timeFormat: 'hh:mm'
+        });
+    });
+    </script>";    
     $email_notify = isset($_POST['email']) and $_POST['email'];
     if (isset($_POST['grade_comments'])) {
         $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $_POST[assignment]");
@@ -215,7 +230,9 @@ function show_submission($sid) {
 // insert the assignment into the database
 function add_assignment($title, $desc, $deadline, $group_submissions) {
     global $tool_content, $workPath, $course_id;
-
+    if($deadline){
+        $deadline = date('Y-m-d H:i', strtotime($deadline));
+    }
     $secret = uniqid('');
     $desc = purify($desc);
     if (@mkdir("$workPath/$secret", 0777)) {
@@ -258,7 +275,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                         FROM assignment WHERE id = " . intval($id));
                 $row = mysql_fetch_array($res);
-                if ($row['time'] < 0 and !$on_behalf_of) {
+                if (($row['time'] < 0 && (int) $row['deadline']) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
                     $submit_ok = TRUE; // before deadline
@@ -382,12 +399,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code;
     global $desc;
-    global $end_cal_Work;
     global $langBack;
-
-    $day = date("d");
-    $month = date("m");
-    $year = date("Y");
 
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
@@ -404,7 +416,7 @@ function new_assignment() {
         </tr>
         <tr>
           <th>$m[deadline]:</th>
-          <td>$end_cal_Work</td>
+          <td><input type='text' name='WorkEnd' />&nbsp $m[deadline_notif]</td>
         </tr>
         <tr>
           <th>$m[group_or_user]:</th>
@@ -429,9 +441,12 @@ function show_edit_assignment($id) {
 
     $res = db_query("SELECT * FROM assignment WHERE id = " . intval($id));
     $row = mysql_fetch_array($res);
-
-    $deadline = $row['deadline'];
-
+    
+    if((int)$row['deadline']){
+        $deadline = date('d-m-Y H:i',strtotime($row['deadline']));
+    }else{
+        $deadline = '';
+    }
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
     $tool_content .= <<<cData
     <form action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" onsubmit="return checkrequired(this, 'title');">
@@ -468,7 +483,7 @@ cData;
     $tool_content .= "
     <tr>
       <th valign='top'>$m[deadline]:</th>
-      <td>" . getJsDeadline($deadline) . "</td>
+      <td><input type='text' name='WorkEnd' value='$deadline'/></td>
     </tr>
     <tr>
       <th valign='top'>$m[group_or_user]:</th>
@@ -499,7 +514,9 @@ function edit_assignment($id) {
 
     $title = trim($_POST['title']);
     $description = purify($_POST['desc']);
-    $deadline = $_POST['WorkEnd'];
+    if($_POST['WorkEnd']){
+        $deadline = date('Y-m-d H:i',strtotime($_POST['WorkEnd']));
+    }
     $group_submissions = $_POST['group_submissions'];
 
     if (!isset($_POST['comments'])) {
@@ -605,7 +622,7 @@ function show_student_assignment($id) {
 
     assignment_details($id, $row);
 
-    $submit_ok = ($row['time'] > 0);
+    $submit_ok = ($row['time'] > 0 || !(int) $row['deadline']);
 
     if (!$uid) {
         $tool_content .= "<p>$langUserOnly</p>";
@@ -739,6 +756,11 @@ function assignment_details($id, $row, $message = null) {
                   <td>$row[comments]</td>
                 </tr>";
     }
+    if((int)$row['deadline']){
+        $deadline = nice_format($row['deadline'], true);
+    }else{
+        $deadline = $m['no_deadline'];
+    }
     $tool_content .= "
         <tr>
           <th>$m[start_date]:</th>
@@ -746,12 +768,12 @@ function assignment_details($id, $row, $message = null) {
         </tr>
         <tr>
           <th valign='top'>$m[deadline]:</th>
-          <td>" . nice_format($row['deadline'], true) . " <br />";
+          <td>" . $deadline . " <br />";
 
     if ($row['time'] > 0) {
         $tool_content .= "<span>($langDaysLeft " . format_time_duration($row['time']) . ")</span></td>
                 </tr>";
-    } else {
+    } else if((int)$row['deadline']){
         $tool_content .= "<span class='expired'>$langEndDeadline</span></td>
                 </tr>";
     }
@@ -993,7 +1015,7 @@ function show_student_assignments() {
     $result = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                    FROM assignment
                                            WHERE course_id = $course_id AND active = 1
-                                           ORDER BY deadline");
+                                           ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline");
 
     if (mysql_num_rows($result)) {
         $tool_content .= "<table class='tbl_alt' width='100%'>
@@ -1007,14 +1029,20 @@ function show_student_assignments() {
         while ($row = mysql_fetch_array($result)) {
             $title_temp = q($row['title']);
             $class = $k % 2 ? 'odd' : 'even';
+            $test = (int)$row['deadline'];
+            if((int)$row['deadline']){
+                $deadline = nice_format($row['deadline'], true);
+            }else{
+                $deadline = $m['no_deadline'];
+            }
             $tool_content .= "
                                 <tr class='$class'>
                                     <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
                                     <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]'>$title_temp</a></td>
-                                    <td width='150' align='center'>" . nice_format($row['deadline'], TRUE);
+                                    <td width='150' align='center'>" . $deadline ;
             if ($row['time'] > 0) {
                 $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row['time']) . ")</span>";
-            } else {
+            } else if((int)$row['deadline']){
                 $tool_content .= " (<span class='expired'>$m[expired]</span>)";
             }
             $tool_content .= "</td><td width='170' align='center'>";
@@ -1056,7 +1084,7 @@ function show_assignments($message = null) {
     global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langConfirmDelete;
 
-    $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY deadline");
+    $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline");
 
     if (isset($message)) {
         $tool_content .="<p class='success'>$message</p><br />";
@@ -1104,7 +1132,11 @@ function show_assignments($message = null) {
                     $tool_content .= "\n<tr class='odd'>";
                 }
             }
-
+            if((int)$row['deadline']){
+                $deadline = nice_format($row['deadline'], true);
+            }else{
+                $deadline = $m['no_deadline'];
+            }
             $tool_content .= "
 			  <td><img src='$themeimg/arrow.png' alt=''>
 			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=${row['id']}' ";
@@ -1113,7 +1145,7 @@ function show_assignments($message = null) {
             $tool_content .= "</a></td>
 			  <td class='center'>$num_submitted</td>
 			  <td class='center'>$num_ungraded</td>
-			  <td class='center'>" . nice_format($row['deadline'], true) . "</td>
+			  <td class='center'>" . $deadline . "</td>
 			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
 			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
