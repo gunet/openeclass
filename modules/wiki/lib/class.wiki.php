@@ -410,6 +410,21 @@ class Wiki {
 
         return $this->con->getAllRowsFromQuery($sql);
     }
+	
+	/**
+     * Get all the pages of this wiki (at this time the method returns
+     * only the titles of the pages...) ordered by creation date
+     * @return array containing thes pages
+     */
+    public function allPagesByCreationDate() {
+        $sql = "SELECT `title` "
+                . "FROM `" . $this->config['tbl_wiki_pages'] . "` "
+                . "WHERE `wiki_id` = " . $this->getWikiId() . " "
+                . "ORDER BY `ctime` ASC"
+        ;
+
+        return $this->con->getAllRowsFromQuery($sql);
+    }
 
     /**
      * Get recently modified wiki pages
@@ -431,6 +446,17 @@ class Wiki {
         ;
 
         return $this->con->getAllRowsFromQuery($sql);
+    }
+	
+	public function getNumberOfPages() {
+        $sql = "
+            SELECT count( `id` ) as `pages` 
+            FROM `" . $this->config['tbl_wiki_pages'] . "` 
+            WHERE `wiki_id` = " . $this->getWikiId();
+
+        $result = $this->con->getRowFromQuery($sql);
+
+        return $result['pages'];
     }
 
     // error handling

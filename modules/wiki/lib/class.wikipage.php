@@ -107,7 +107,7 @@ class WikiPage {
      *      to database if set to true (default false)
      * @return boolean true on success, false on failure
      */
-    function edit($editorId, $content = '', $mtime = '', $auto_save = false) {
+    function edit($editorId, $content = '', $changelog = '', $mtime = '', $auto_save = false) {
         if (( $auto_save === true ) && (!$this->pageExists($this->getTitle()) )) {
             $this->setError(PAGE_NOT_FOUND_ERROR, PAGE_NOT_FOUND_ERROR);
             return false;
@@ -119,7 +119,7 @@ class WikiPage {
             $this->setLastEditTime($mtime);
             $this->setContent($content);
             if ($auto_save === true) {
-                return $this->save();
+                return $this->save($changelog);
             } else {
                 return true;
             }
@@ -136,7 +136,7 @@ class WikiPage {
      *      to database if set to true (default false)
      * @return boolean true on success, false on failure
      */
-    function create($ownerId, $title, $content = '', $ctime = '', $auto_save = false) {
+    function create($ownerId, $title, $content = '', $changelog = '', $ctime = '', $auto_save = false) {
         if (!$title) {
             $this->setError(PAGE_NO_TITLE_ERROR, PAGE_NO_TITLE_ERRNO);
             return false;
@@ -153,7 +153,7 @@ class WikiPage {
                 $this->setLastEditTime($ctime);
 
                 if ($auto_save === true) {
-                    return $this->save();
+                    return $this->save($changelog);
                 } else {
                     return true;
                 }
@@ -200,7 +200,7 @@ class WikiPage {
      * Save the page
      * @return boolean true on success, false on failure
      */
-    function save() {
+    function save($changelog = '') {
         // reconnect if needed
         if (!$this->con->isConnected()) {
             $this->con->connect();
@@ -238,11 +238,11 @@ class WikiPage {
                 $this->_setPageId($pageId);
 
                 // 3rd update version
-                return $this->_updateVersion();
+                return $this->_updateVersion($changelog);
             }
         } else {
             // update version
-            return $this->_updateVersion();
+            return $this->_updateVersion($changelog);
         }
     }
 
@@ -256,13 +256,13 @@ class WikiPage {
             $this->con->connect();
         }
 
-        $limit = ( $limit == 0 ) ? "" : "LIMIT " . $offset . "," . $limit . " ";
+        $limit = ($limit == 0 && $offset == 0) ? "" : "LIMIT " . $offset . "," . $limit . " ";
 
         $order = ($order === 'ASC') ? " ORDER BY `id` ASC " : " ORDER BY `id` DESC ";
         // retreive versionId and editorId and mtime for each version
         // of the page
 
-        $sql = "SELECT `id`, `editor_id`, `mtime` "
+        $sql = "SELECT `id`, `editor_id`, `mtime`, `changelog` "
                 . "FROM `" . $this->config['tbl_wiki_pages_content'] . "` "
                 . "WHERE `pid` = " . $this->getPageId()
                 . $order
@@ -275,6 +275,20 @@ class WikiPage {
             return $result;
         } else {
             return null;
+        }
+    }
+	
+    function countVersion() {
+        $sql =  "SELECT COUNT(`id`) as `nbversion` 
+            FROM `" . $this->config['tbl_wiki_pages_content'] . "` 
+            WHERE `pid` = " . (int) $this->getPageId();
+        
+	    $result = $this->con->getRowFromQuery($sql);
+
+        if (is_array($result)) {
+            return $result['nbversion'];
+        } else {
+            return 0;
         }
     }
 
@@ -394,17 +408,17 @@ class WikiPage {
      * @access private
      * @return boolean true on success, false on failure
      */
-    function _updateVersion() {
+    function _updateVersion($changelog = '') {
         // 1st insert page content
         $sql = "INSERT INTO `" . $this->config['tbl_wiki_pages_content'] . "`"
-                . "(`pid`,`editor_id`,`mtime`, `content`) "
+                . "(`pid`,`editor_id`,`mtime`, `content`, `changelog`) "
                 . "VALUES("
                 . $this->getPageId() . ", "
                 . "'" . $this->getEditorId() . "', "
                 . "'" . $this->getLastEditTime() . "', "
-                . "'" . addslashes($this->getContent()) . "'"
-                . ")"
-        ;
+                . "'" . addslashes($this->getContent()) . "', "
+                . "'" . $changelog . "'"       
+                . ")";
 
         $this->con->executeQuery($sql);
 
@@ -579,6 +593,7 @@ class WikiPage {
 #                    str_replace( "\'", "'", $str ) ) );
 
         return str_replace('\\', "\\", str_replace('\"', '"', $str));
+		
     }
 
 }

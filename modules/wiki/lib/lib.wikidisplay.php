@@ -58,7 +58,7 @@ require_once dirname(__FILE__) . "/lib.url.php";
 function claro_disp_wiki_editor($wikiId, $title, $versionId
 , $content, $script = null, $showWikiToolBar = true
 , $forcePreview = true) {
-    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $course_code;
+    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langWikiNotes, $course_code;
 
     // create script
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -69,7 +69,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 
     // display title
     $out = '<div class="wikiTitle">' . "\n";
-    $out .= '<h2>' . $localtitle . '</h2>' . "\n";
+    $out .= '<h1>' . $localtitle . '</h1>' . "\n";
     $out .= '</div>' . "<br />";
 
     // display editor
@@ -88,6 +88,13 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
         $out .= q($content);
         $out .= '</textarea>' . "\n";
     }
+	
+    //notes
+    $out .= '<div style="padding:10px;">' . "\n";
+    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value=""'. 
+	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
+    $out .= '</div>' . "\n";
+    //end notes
 
     $out .= '<div style="padding:10px;">' . "\n";
 

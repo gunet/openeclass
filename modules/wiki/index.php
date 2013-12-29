@@ -88,7 +88,7 @@ require_once 'lib/lib.wikidisplay.php';
 // filter request variables
 // filter allowed actions using user status
 if ($is_allowedToAdmin) {
-    $valid_actions = array('list', 'rqEdit', 'exEdit', 'exDelete');
+    $valid_actions = array('list', 'rqEdit', 'exEdit', 'exDelete', 'exExport');
 } else {
     $valid_actions = array('list');
 }
@@ -97,17 +97,17 @@ $_CLEAN = filter_by_key('action', $valid_actions, 'R', false);
 
 $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'list';
 
-$wikiId = ( isset($_REQUEST['wikiId']) ) ? (int) $_REQUEST['wikiId'] : 0;
+$wikiId = (isset($_REQUEST['wikiId'])) ? (int) $_REQUEST['wikiId'] : 0;
 
 $creatorId = $uid;
 
 // get request variable for wiki edition
 if ($action == 'exEdit') {
-    $wikiTitle = ( isset($_POST['title']) ) ? strip_tags($_POST['title']) : '';
-    $wikiDesc = ( isset($_POST['desc']) ) ? strip_tags($_POST['desc']) : '';
+    $wikiTitle = (isset($_POST['title'])) ? strip_tags($_POST['title']) : '';
+    $wikiDesc = (isset($_POST['desc'])) ? strip_tags($_POST['desc']) : '';
 
 
-    $acl = ( isset($_POST['acl']) ) ? $_POST['acl'] : null;
+    $acl = (isset($_POST['acl'])) ? $_POST['acl'] : null;
 
     // initialise access control list
 
@@ -168,6 +168,37 @@ $wikiList = array();
 // --------- Start of command processing ----------------
 
 switch ($action) {
+	case 'exExport':
+    {
+        require_once "lib/class.wiki2xhtmlexport.php";
+
+        if (!$wikiStore->wikiIdExists($wikiId)){
+            $message = $langWikiInvalidWikiId;
+            $action = "error";
+            $style = "caution";
+        }
+        else{
+            $wiki = $wikiStore->loadWiki($wikiId);
+            $wikiTitle = $wiki->getTitle();
+            $renderer = new WikiToSingleHTMLExporter($wiki);
+
+            $contents = $renderer->export();
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename=WikiExport.html');
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            ob_clean();
+            flush();
+            echo $contents;
+            exit;
+        }
+
+        break;
+    }
     // execute delete
     case "exDelete": {
             if ($wikiStore->wikiIdExists($wikiId)) {
@@ -316,7 +347,7 @@ switch ($action) {
     // an error occurs
     case "error": {
             break;
-        }
+    }
     // edit form
     case "rqEdit": {
             $tool_content .= claro_disp_wiki_properties_form($wikiId, $wikiTitle, $wikiDesc, $groupId, $wikiACL);
@@ -365,7 +396,7 @@ switch ($action) {
                             . '          <th width="250"><div align="left">' . $langTitle . '</div></th>' . "\n"
                             . '          <th>' . $langDescription . '</th>' . "\n"
                             . '          <th width="70"><div align="center">' . $langPages . '</div></th>' . "\n"
-                            . '          <th colspan="3" ><div align="center">' . $langActions . '</div></th>'
+                            . '          <th colspan="4" ><div align="center">' . $langActions . '</div></th>'
                             . '        </tr>' . "\n";
                 }
                 // else display title only
@@ -452,6 +483,14 @@ switch ($action) {
                         $tool_content .= '<td width="5" style="text-align: center;">';
                         $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry[id]&amp;action=exDelete'>
                                     <img src='$themeimg/delete.png' alt=" . q($langDelete) . " title=" . q($langDelete) . " onClick=\"return confirmation('$langConfirmDelete');\"/>
+                                    </a>";
+                        $tool_content .= '</td>' . "\n";
+						
+						// export link
+						
+						$tool_content .= '<td width="5" style="text-align: center;">';
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry[id]&amp;action=exExport'>
+                                    <img src='$themeimg/export.png' alt=" . q($langWikiExport) . " title=" . q($langWikiExport) . "/>
                                     </a>";
                         $tool_content .= '</td>' . "\n";
                     }

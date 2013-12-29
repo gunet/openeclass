@@ -1489,3 +1489,45 @@ dt {
 .cmetalabel a:hover, .cmetalabelinaccordion a:hover {
     border-bottom: none;
 }
+
+/* Wiki table of contents and diff */
+#toc {
+    padding:5px;
+    background-color:#f0f0f0;
+    border:1px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right:auto;
+    text-align:center;
+}
+
+#toc div {
+    text-align:left;
+}
+
+#toc tr, #toc td, #toc th, #toc caption {
+    background-color:#f0f0f0;
+    border:none;
+}
+
+.diff {
+    font-family: monospace;
+    padding: 5px;
+    margin: 5px;
+}
+
+.diffEqual {
+    background-color: white;
+}
+
+.diffMoved {
+    background-color: #00CCFF;
+}
+
+.diffAdded {
+    background-color: #A3FF9C;
+}
+
+.diffDeleted {
+    background-color: #FFA59C;
+}
