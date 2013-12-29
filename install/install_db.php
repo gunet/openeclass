@@ -139,12 +139,10 @@ db_query("CREATE TABLE `agenda` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`course_id` INT(11) NOT NULL,
 	`title` VARCHAR(200) NOT NULL,
-	`content` TEXT,
-	`day` DATE NOT NULL DEFAULT '1000-10-10',
-	`hour` TIME NOT NULL DEFAULT '00:00:00',
-	`lasting` VARCHAR(20),
+	`content` TEXT NOT NULL,
+	`start` DATETIME NOT NULL DEFAULT '0000-00-00',
+	`duration` VARCHAR(20) NOT NULL,
 	`visible` TINYINT(4)) $charset_spec");
-
 
 #
 # table `course`

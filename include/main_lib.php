@@ -306,8 +306,8 @@ function load_js($file, $init = '') {
 }
 
 // Translate uid to username
-function uid_to_username($uid) {
-    return Database::get()->querySingle("SELECT username FROM user WHERE user_id = ?", intval($uid))->username;
+function uid_to_username($uid) {    
+    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
@@ -844,13 +844,28 @@ function greek_format($date, $time = FALSE, $dont_display_time = FALSE) {
     }
 }
 
-// format the date according to language
+/**
+ * @brief format the date according to language
+ * @param type $date
+ * @param type $time
+ * @param type $dont_display_time
+ * @return type
+ */
 function nice_format($date, $time = FALSE, $dont_display_time = FALSE) {
     if ($GLOBALS['language'] == 'el') {
         return greek_format($date, $time, $dont_display_time);
     } else {
         return $date;
     }
+}
+
+/**
+ * @brief remove seoconds from a given datetime
+ * @param type $datetime
+ * @return datetime without seconds
+ */
+function datetime_remove_seconds($datetime) {
+    return preg_replace('/:\d\d$/', '', $datetime);
 }
 
 // Returns user's previous login date, or today's date if no previous login

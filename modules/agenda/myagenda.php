@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,8 +23,7 @@
 /*
  * My-Agenda Component
  *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
+ * @author Evelthon Prodromou <eprodromou@upnet.gr> 
  *
  * @abstract This component generates a month-view agenda of all items of the courses
  * 	the user is enrolled in
@@ -39,42 +38,36 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $nameTools = $langMyAgenda;
-
-if (isset($uid)) {
-    $year = '';
-    $month = '';
-    $query = db_query("SELECT course.code k, course.public_code fc,
-                             course.title i, course.prof_names t, course.id id
-	                        FROM course, course_user, course_module
-	                        WHERE course.id = course_user.course_id
-                                AND course.visible != " . COURSE_INACTIVE . "
-	                        AND course_user.user_id = $uid
-                                AND course_module.module_id  = " . MODULE_ID_AGENDA . "
-                                AND course_module.visible = 1
-                                AND course_module.course_id = course.id");
-    $today = getdate();
-    if (isset($_GET['year'])) {
-        $year = intval($_GET['year']);
-    } else {
-        $year = $today['year'];
-    }
-    if (isset($_GET['month'])) {
-        $month = intval($_GET['month']);
-    } else {
-        $month = $today['mon'];
-    }
-
-    $agendaitems = get_agendaitems($query, $month, $year);
-    $monthName = $langMonthNames['long'][$month - 1];
-    display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName, $langToday);
+$year = '';
+$month = '';
+$query = db_query("SELECT course.code k, course.public_code fc,
+                         course.title i, course.prof_names t, course.id id
+                            FROM course, course_user, course_module
+                            WHERE course.id = course_user.course_id
+                            AND course.visible != " . COURSE_INACTIVE . "
+                            AND course_user.user_id = $uid
+                            AND course_module.module_id  = " . MODULE_ID_AGENDA . "
+                            AND course_module.visible = 1
+                            AND course_module.course_id = course.id");
+$today = getdate();
+if (isset($_GET['year'])) {
+    $year = intval($_GET['year']);
+} else {
+    $year = $today['year'];
+}
+if (isset($_GET['month'])) {
+    $month = intval($_GET['month']);
+} else {
+    $month = $today['mon'];
 }
 
-// -----------------------
-// function list
-// -----------------------
+$agendaitems = get_agendaitems($query, $month, $year);
+$monthName = $langMonthNames['long'][$month - 1];
+display_monthcalendar($agendaitems, $month, $year, $langDay_of_weekNames['long'], $monthName, $langToday);
+
 
 /*
- * Function get_agendaitems
+ * @brief getagenda items
  *
  * @param resource $query MySQL resource
  * @param string $month
@@ -82,33 +75,30 @@ if (isset($uid)) {
  * @return array of agenda items
  */
 function get_agendaitems($query, $month, $year) {
-    global $urlServer, $mysqlMainDb;
+    global $urlServer;
 
-    $items = array();
-    // get agenda-items for every course
+    $items = array();    
     while ($mycours = mysql_fetch_array($query)) {
         $result = db_query("SELECT * FROM agenda WHERE course_id = " . $mycours['id'] . "
-                                        AND MONTH(DAY)='$month'
-                                        AND YEAR(DAY)='$year'
+                                        AND DATE_FORMAT(start, '%m') = '$month'
+                                        AND DATE_FORMAT(start, '%Y') = '$year'
                                         AND visible = 1");
 
         while ($item = mysql_fetch_array($result)) {
             $URL = $urlServer . "modules/agenda/index.php?course=" . $mycours['k'];
-            $agendadate = explode("-", $item['day']);
-            $agendatime = explode(":", $item['hour']);
-            $time = $agendatime[0] . ":" . $agendatime[1];
-            $agendaday = intval($agendadate[2]);
-            $items[$agendaday][$item['hour']] = "<br /><small>($time) <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[title]</small>";
+            $agendadate = date('d', strtotime($item['start']));
+            $time = date('H:i', strtotime($item['start']));
+            $items[$agendadate][$time] = "<br /><small>($time) <a href='$URL' title='$mycours[i] ($mycours[fc])'>$mycours[i]</a> $item[title]</small>";
         }
     }
 
     // sorting by hour for every day
     $agendaitems = array();
-    while (list($agendaday, $tmpitems) = each($items)) {
+    while (list($agendadate, $tmpitems) = each($items)) {
         sort($tmpitems);
-        $agendaitems[$agendaday] = '';
+        $agendaitems[$agendadate] = '';
         while (list($key, $val) = each($tmpitems)) {
-            $agendaitems[$agendaday] .= $val;
+            $agendaitems[$agendadate] .= $val;
         }
     }
     return $agendaitems;
@@ -144,7 +134,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
     $backwardsURL = "$_SERVER[SCRIPT_NAME]?month=" . ($month == 1 ? 12 : $month - 1) . "&amp;year=" . ($month == 1 ? $year - 1 : $year);
     $forewardsURL = "$_SERVER[SCRIPT_NAME]?month=" . ($month == 12 ? 1 : $month + 1) . "&amp;year=" . ($month == 12 ? $year + 1 : $year);
 
-    $tool_content .= "<table width=100% class=\"title1\">\n";
+    $tool_content .= "<table width=100% class='title1'>";
     $tool_content .= "<tr>";
     $tool_content .= "<td width='250'><a href=$backwardsURL>&laquo;</a></td>";
     $tool_content .= "<td class='center'><b>$monthName $year</b></td>";
@@ -174,7 +164,7 @@ function display_monthcalendar($agendaitems, $month, $year, $weekdaynames, $mont
                     $dayheader = "<b>$curday</b> <small>($langToday)</small>";
                     $class_style = "class='today'";
                 }
-                $tool_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
+                $tool_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";                
                 if (!empty($agendaitems[$curday])) {
                     $tool_content .= "$agendaitems[$curday]</td>";
                 }
