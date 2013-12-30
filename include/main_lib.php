@@ -100,6 +100,7 @@ define('COMMON', 3);
 define('MAX_IDLE_TIME', 10);
 
 require_once 'lib/session.class.php';
+require_once 'modules/admin/admin.inc.php';
 
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false) {
@@ -1465,12 +1466,17 @@ function course_id_to_public_code($cid) {
     }
 }
 
-// Delete course with id = $cid
+
+/**  
+ * @global type $webDir
+ * @param type $cid
+ * @brief Delete course with id = $cid
+ */
 function delete_course($cid) {
     global $webDir;
 
     $course_code = course_id_to_code($cid);
-
+       
     db_query("DELETE FROM announcement WHERE course_id = $cid");
     db_query("DELETE FROM document WHERE course_id = $cid");
     db_query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1493,6 +1499,13 @@ function delete_course($cid) {
     db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
+    // check if we have guest account. If yes delete him.
+    $sql = db_query("SELECT user_id FROM course_user WHERE course_id = $cid AND status = ".USER_GUEST);
+    if (mysql_affected_rows() > 0) {        
+        $r = mysql_fetch_row($sql);        
+        $guest_id = $r[0];        
+        deleteUser($guest_id);
+    }
     db_query("DELETE FROM course_user WHERE course_id = $cid");
     db_query("DELETE FROM course_department WHERE course = $cid");
     db_query("DELETE FROM course WHERE id = $cid");
