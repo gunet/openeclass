@@ -3159,6 +3159,11 @@ $wiki_toolbar['Unorderedlist'] = "Μη διατεταγμένη λίστα";
 $wiki_toolbar['Orderedlist'] = "Διατεταγμένη λίστα";
 $wiki_toolbar['Externalimage'] = "Εξωτερική εικόνα";
 $wiki_toolbar['Link'] = "Σύνδεσμος";
+$wiki_toolbar['Hr'] = "Οριζόντια Γραμμή";
+$wiki_toolbar['H1'] = "Επικεφαλίδα 1";
+$wiki_toolbar['H2'] = "Επικεφαλίδα 2";
+$wiki_toolbar['H3'] = "Επικεφαλίδα 3";
+$wiki_toolbar['H4'] = "Επικεφαλίδα 4";
 
 /* * ***********************************************************
  * work.php

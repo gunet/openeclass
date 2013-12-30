@@ -114,6 +114,16 @@ function dcToolBar(textarea, format, img_path)
     }
     this.insImg = function() {
     }
+    this.btHr = function() {
+    }
+    this.btH1 = function() {
+    }
+    this.btH2 = function() {
+    }
+    this.btH3 = function() {
+    }
+    this.btH4 = function() {
+    }
 
     if (!document.createElement) {
         return;
@@ -412,6 +422,58 @@ function dcToolBar(textarea, format, img_path)
                     });
         }
     }
+    
+    function btHr(label) {
+        addButton(img_path + 'bt_hr.png', label,
+                function() {
+                    var tag = getFormat() == 'wiki' ? "----" : "<hr />";
+                    encloseSelection('', tag);
+                });
+    }
+    
+    function btH1(label) {
+        addButton(img_path + 'bt_h1.png', label,
+                function() {
+                    if(getFormat() == 'wiki') {
+                        encloseSelection('!!!!', '');
+                    } else {
+                        encloseSelection('<h1>', '</h1>');
+                    }
+                });
+    }
+    
+    function btH2(label) {
+        addButton(img_path + 'bt_h2.png', label,
+                function() {
+                    if(getFormat() == 'wiki') {
+                        encloseSelection('!!!', '');
+                    } else {
+                        encloseSelection('<h2>', '</h2>');
+                    }
+                });
+    }
+    
+    function btH3(label) {
+        addButton(img_path + 'bt_h3.png', label,
+                function() {
+                    if(getFormat() == 'wiki') {
+                        encloseSelection('!!', '');
+                    } else {
+                        encloseSelection('<h3>', '</h3>');
+                    }
+                });
+    }
+    
+    function btH4(label) {
+        addButton(img_path + 'bt_h4.png', label,
+                function() {
+                    if(getFormat() == 'wiki') {
+                        encloseSelection('!', '');
+                    } else {
+                        encloseSelection('<h4>', '</h4>');
+                    }
+                });
+    }
 
     // methods
     this.addButton = addButton;
@@ -431,4 +493,9 @@ function dcToolBar(textarea, format, img_path)
     this.btImgLink = btImgLink;
     this.btImg = btImg;
     this.insImg = insImg;
+    this.btHr = btHr;
+    this.btH1 = btH1;
+    this.btH2 = btH2;
+    this.btH3 = btH3;
+    this.btH4 = btH4;
 }
