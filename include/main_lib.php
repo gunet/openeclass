@@ -100,7 +100,6 @@ define('COMMON', 3);
 define('MAX_IDLE_TIME', 10);
 
 require_once 'lib/session.class.php';
-require_once 'modules/admin/admin.inc.php';
 
 // Show query string and then do MySQL query
 function db_query2($sql, $db = false) {
@@ -1548,6 +1547,55 @@ function delete_course($cid) {
     $idx = new Indexer();
     $idx->removeAllByCourse($cid);
 }
+
+
+/**
+ * Delete a user and all his dependencies.
+ * 
+ * @param  integer $id - the id of the user.
+ * @return boolean     - returns true if deletion was successful, false otherwise.
+ */
+function deleteUser($id) {
+
+    $u = intval($id);
+
+    if ($u == 1) {
+        return false;
+    } else {
+        // validate if this is an existing user
+        $q = db_query("SELECT * FROM user WHERE id = " . $u);
+
+        if (mysql_num_rows($q)) {
+            // delete everything
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 function csv_escape($string, $force = false) {
     global $charset;
