@@ -49,7 +49,7 @@ require_once 'include/lib/textLib.inc.php';
 $style = '';
 $_gid = null;
 
-if (isset($_SESSION['statut']) && $_SESSION['statut'] != 0) {
+if (isset($_SESSION['status']) && $_SESSION['status'] != 0) {
     $is_courseMember = true;
 } else {
     $is_courseMember = false;
@@ -577,7 +577,7 @@ switch ($action) {
 if (!empty($message)) {
     $tool_content .= "<table width=\"99%\">
 	<tbody><tr>
-	<td class='success'>
+	<td class='$style'>
 	    <p><b>$message</b></p>
 	  </td>
 	</tr>
