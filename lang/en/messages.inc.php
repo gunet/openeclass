@@ -2452,6 +2452,7 @@ $m['WorkInfo'] = 'Assignment info';
 $m['WorkView'] = 'Assignment view';
 $m['WorkDelete'] = 'Assignment delete';
 $m['WorkEdit'] = 'Assignment edit';
+$m['WorkTitleValidation'] = 'Please enter Assignment Title';
 $m['SubmissionWorkInfo'] = 'Submission info';
 $m['SubmissionStatusWorkInfo'] = 'Submission status';
 $langGroupWorkIntro = '

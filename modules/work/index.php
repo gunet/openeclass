@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -109,8 +109,13 @@ if ($is_editor) {
     } elseif (isset($_POST['sid'])) {
         show_submission(intval($_POST['sid']));
     } elseif (isset($_POST['new_assign'])) {
-        add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
-        show_assignments();
+        if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)){
+            add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
+            show_assignments($_POST);
+        } else{
+            Session::set_flashdata('error_msg', $m['WorkTitleValidation']);
+            new_assignment($m['WorkTitleValidation'], $_POST);
+        }
     } elseif (isset($_GET['as_id'])) {
         $as_id = $_GET['as_id'];
         delete_user_assignment($as_id);
@@ -157,7 +162,11 @@ if ($is_editor) {
                 $nameTools = $langWorks;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
-                edit_assignment($id);
+                if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)){
+                    edit_assignment($id);
+                } else{
+                    show_edit_assignment($id, $m['WorkTitleValidation']);
+                }                
             } elseif ($choice = 'add') {
                 $nameTools = $langAddGrade;
                 $navigation[] = $works_url;
@@ -396,16 +405,18 @@ function submit_work($id, $on_behalf_of = null) {
 }
 
 //  assignment - prof view only
-function new_assignment() {
+function new_assignment($error_msg=NULL, $posted_data = NULL) {
     global $tool_content, $m, $langAdd, $course_code;
     global $desc;
     global $langBack;
-
+    if($error_msg = Session::render_flashdata('error_msg')){
+        $tool_content .= "<p class='caution'>$error_msg</p>";
+    }    
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
         <fieldset>
         <legend>$m[WorkInfo]</legend>
-        <table class='tbl' width='100%'>
+        <table class='tbl' width='100%'>    
         <tr>
           <th>$m[title]:</th>
           <td><input type='text' name='title' size='55' /></td>
@@ -414,9 +425,12 @@ function new_assignment() {
           <th>$m[description]:</th>
           <td>" . rich_text_editor('desc', 4, 20, $desc) . " </td>
         </tr>
-        <tr>
-          <th>$m[deadline]:</th>
-          <td><input type='text' name='WorkEnd' />&nbsp $m[deadline_notif]</td>
+        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($posted_data['WorkEnd']) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". (($posted_data['WorkEnd']) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <td></tr>
+        <tr id='example'". (($posted_data['WorkEnd']) ? "" : "style=\"display:none\"") .">
+          <th></th>
+          <td><input id='deadline' type='text' name='WorkEnd' value='{$posted_data['WorkEnd']}' />&nbsp $m[deadline_notif]</td>
         </tr>
         <tr>
           <th>$m[group_or_user]:</th>
@@ -435,7 +449,7 @@ function new_assignment() {
 }
 
 //form for editing
-function show_edit_assignment($id) {
+function show_edit_assignment($id, $error_msg=NULL) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
     $urlAppend, $works_url, $end_cal_Work_db;
 
@@ -448,22 +462,22 @@ function show_edit_assignment($id) {
         $deadline = '';
     }
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
-    $tool_content .= <<<cData
-    <form action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" onsubmit="return checkrequired(this, 'title');">
-    <input type="hidden" name="id" value="$id" />
-    <input type="hidden" name="choice" value="do_edit" />
+    $tool_content .= "
+    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, 'title');'>
+    <input type='hidden' name='id' value='$id' />
+    <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
     <legend>$m[WorkInfo]</legend>
     <table class='tbl'>
+    ". (($error_msg) ? "<tr><td colspan='2' class='caution'>$error_msg</td></tr>" : "") ."
     <tr>
       <th>$m[title]:</th>
-      <td><input type="text" name="title" size="45" value="${row['title']}" /></td>
+      <td><input type='text' name='title' size='45' value='${row['title']}' /></td>
     </tr>
     <tr>
       <th valign='top'>$m[description]:</th>
       <td>$textarea</td>
-    </tr>
-cData;
+    </tr>";
     $comments = trim($row['comments']);
     if (!empty($comments)) {
         $tool_content .= "
@@ -482,9 +496,13 @@ cData;
     }
     $tool_content .= "
     <tr>
-      <th valign='top'>$m[deadline]:</th>
-      <td><input type='text' name='WorkEnd' value='$deadline'/></td>
-    </tr>
+        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($deadline) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". (($deadline) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <td></tr>
+        <tr id='example'". (($deadline) ? "" : "style=\"display:none\"") .">
+          <th></th>
+          <td><input id='deadline' type='text' name='WorkEnd' value='{$deadline}' />&nbsp $m[deadline_notif]</td>
+    </tr>        
     <tr>
       <th valign='top'>$m[group_or_user]:</th>
       <td><input type='radio' id='user_button' name='group_submissions' value='0'$group_checked_0 />
@@ -660,7 +678,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                         selection($user_group_info, 'group_id') . "</td></tr>";
             } else {
-                $group_link = $urlAppend . '/modules/group/group.php';
+                $group_link = $urlAppend . 'modules/group/';
                 $tool_content .= "<p class='alert1'>$m[this_is_group_assignment] <br />" .
                         sprintf(count($user_group_info) ?
                                         $m['group_assignment_publish'] :

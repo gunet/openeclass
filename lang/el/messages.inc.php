@@ -3212,6 +3212,7 @@ $m['WorkInfo'] = 'Στοιχεία εργασίας';
 $m['WorkView'] = 'Εργασίες μαθήματος';
 $m['WorkDelete'] = 'Διαγραφή εργασίας';
 $m['WorkEdit'] = 'Τροποποίηση εργασίας';
+$m['WorkTitleValidation'] = 'Παρακαλώ εισάγετε Τίτλο Εργασίας';
 $m['SubmissionWorkInfo'] = 'Στοιχεία υποβολής εργασίας';
 $m['SubmissionStatusWorkInfo'] = 'Κατάσταση υποβολής εργασίας';
 $m['subm'] = 'Υποβλ.';
