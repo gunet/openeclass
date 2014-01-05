@@ -75,13 +75,10 @@ if ($_gid and $is_groupAllowed) {
 }
 
 // require wiki files
-
-require_once 'lib/class.clarodbconnection.php';
 require_once 'lib/class.wiki.php';
 require_once 'lib/class.wikistore.php';
 require_once 'lib/class.wikipage.php';
 require_once 'lib/lib.requestfilter.php';
-require_once 'lib/lib.wikisql.php';
 require_once 'lib/lib.javascript.php';
 require_once 'lib/lib.wikidisplay.php';
 
@@ -144,25 +141,9 @@ if ($action == 'exEdit') {
     }
 }
 
-// Database initialisation
-
-$config = array();
-$config['tbl_wiki_properties'] = 'wiki_properties';
-$config['tbl_wiki_pages'] = 'wiki_pages';
-$config['tbl_wiki_pages_content'] = 'wiki_pages_content';
-$config['tbl_wiki_acls'] = 'wiki_acls';
-
-$con = new ClarolineDatabaseConnection();
-
-// DEVEL_MODE database initialisation
-// DO NOT FORGET TO REMOVE FOR PROD !!!
-if (defined('DEVEL_MODE') and (DEVEL_MODE == true)) {
-    init_wiki_tables($con, false);
-}
-
 // Objects instantiation
 
-$wikiStore = new WikiStore($con, $config);
+$wikiStore = new WikiStore();
 $wikiList = array();
 
 // --------- Start of command processing ----------------
@@ -244,7 +225,7 @@ switch ($action) {
     // execute edit
     case "exEdit": {
             if ($wikiId == 0) {
-                $wiki = new Wiki($con, $config);
+                $wiki = new Wiki();
                 $wiki->setTitle($wikiTitle);
                 $wiki->setDescription($wikiDesc);
                 $wiki->setACL($wikiACL);
@@ -253,8 +234,8 @@ switch ($action) {
 
                 $mainPageContent = $langWikiMainPageContent;
 
-                $wikiPage = new WikiPage($con, $config, $wikiId);
-                $wikiPage->create($creatorId, '__MainPage__', $mainPageContent, date("Y-m-d H:i:s"), true);
+                $wikiPage = new WikiPage($wikiId);
+                $wikiPage->create($creatorId, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
 
                 $message = $langWikiCreationSucceed;
                 $style = "success";
@@ -355,15 +336,6 @@ switch ($action) {
         }
     // list wiki
     case "list": {
-            //find the wiki with recent modification from the notification system
-
-            if (isset($_uid)) {
-                $date = $claro_notifier->get_notification_date($_uid);
-                $modified_wikis = $claro_notifier->get_notified_ressources($_cid, $date, $_uid, $_gid, 12);
-            } else {
-                $modified_wikis = array();
-            }
-
             // if admin, display add new wiki link
 
             if (!empty($message)) {
@@ -420,13 +392,6 @@ switch ($action) {
                     }
 
                     // display title for all users
-                    //modify style if the wiki is recently added or modified since last login
-
-                    if ((isset($_uid) && $claro_notifier->is_a_notified_ressource($_cid, $date, $_uid, $_gid, $_tid, $entry['id']))) {
-                        $classItem = " hot";
-                    } else { // otherwise just display its title normally
-                        $classItem = "";
-                    }
 
                     $tool_content .= '<td>';
                     $tool_content .= '<img src="' . $themeimg . '/arrow.png" alt="' . $langWiki . '" title="' . $langWiki . '" border="0" />';
@@ -434,31 +399,31 @@ switch ($action) {
 
                     $tool_content .= '<td>';
                     // display direct link to main page
-                    $tool_content .= '<a class="item' . $classItem . '" href="page.php?course=' . $course_code . '&amp;wikiId='
-                            . $entry['id'] . '&amp;action=show'
+                    $tool_content .= '<a class="item" href="page.php?course=' . $course_code . '&amp;wikiId='
+                            . $entry->id . '&amp;action=show'
                             . '">'
-                            . $entry['title'] . '</a>'
+                            . $entry->title . '</a>'
                     ;
                     ;
                     $tool_content .= '</td>' . "\n";
 
                     $tool_content .= '<td>';
-                    if (!empty($entry['description'])) {
+                    if (!empty($entry->description)) {
                         $tool_content .= ''
-                                . $entry['description'] . ''
+                                . $entry->description . ''
                         ;
                     }
                     $tool_content .= '</td>' . "\n";
                     $tool_content .= '<td><div align="center">';
-                    $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId=' . $entry['id'] . '&amp;action=all">';
-                    $tool_content .= $wikiStore->getNumberOfPagesInWiki($entry['id']);
+                    $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId=' . $entry->id . '&amp;action=all">';
+                    $tool_content .= $wikiStore->getNumberOfPagesInWiki($entry->id);
                     $tool_content .= '</a>';
                     $tool_content .= '</div></td>' . "\n";
 
                     $tool_content .= '<td width="5" style="text-align: center;">';
                     // display direct link to main page
                     $tool_content .= '<a href="page.php?course=' . $course_code . '&amp;wikiId='
-                            . $entry['id'] . '&amp;action=recent'
+                            . $entry->id . '&amp;action=recent'
                             . '">'
                             . '<img src="' . $themeimg . '/history.png" border="0" alt="' . $langWikiRecentChanges . '" title="' . $langWikiRecentChanges . '" />'
                             . '</a>'
@@ -471,7 +436,7 @@ switch ($action) {
 
                         $tool_content .= '<td width="5" style="text-align: center;">';
                         $tool_content .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
-                                . $entry['id'] . '&amp;action=rqEdit'
+                                . $entry->id . '&amp;action=rqEdit'
                                 . '">'
                                 . '<img src="' . $themeimg . '/edit.png" border="0" alt="' . $langWikiEditProperties . '" title="' . $langWikiEditProperties . '" />'
                                 . '</a>';
@@ -481,7 +446,7 @@ switch ($action) {
                         // delete link
 
                         $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry[id]&amp;action=exDelete'>
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry->id&amp;action=exDelete'>
                                     <img src='$themeimg/delete.png' alt=" . q($langDelete) . " title=" . q($langDelete) . " onClick=\"return confirmation('$langConfirmDelete');\"/>
                                     </a>";
                         $tool_content .= '</td>' . "\n";
@@ -489,7 +454,7 @@ switch ($action) {
 						// export link
 						
 						$tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry[id]&amp;action=exExport'>
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry->id&amp;action=exExport'>
                                     <img src='$themeimg/export.png' alt=" . q($langWikiExport) . " title=" . q($langWikiExport) . "/>
                                     </a>";
                         $tool_content .= '</td>' . "\n";

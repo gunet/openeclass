@@ -79,14 +79,12 @@ if ($_gid && $is_groupAllowed) {
 }
 
 // Wiki specific classes and libraries
-require_once 'modules/wiki/lib/class.clarodbconnection.php';
 require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
 require_once 'modules/wiki/lib/class.wiki.php';
 require_once "modules/wiki/lib/class.wikisearchengine.php";
 require_once 'modules/wiki/lib/lib.requestfilter.php';
-require_once 'modules/wiki/lib/lib.wikisql.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/wiki/lib/lib.javascript.php';
 
@@ -94,29 +92,19 @@ require_once 'modules/wiki/lib/lib.javascript.php';
 if (isset($_REQUEST['wikiId'])) {
     $wikiId = (int) $_REQUEST['wikiId'];
 
-    // Database initialisation
-
-    $tblList = array();
-    $tblList["wiki_properties"] = "wiki_properties";
-    $tblList["wiki_pages"] = "wiki_pages";
-    $tblList["wiki_pages_content"] = "wiki_pages_content";
-    $tblList["wiki_acls"] = "wiki_acls";
-
-    $con = new ClarolineDatabaseConnection();
-
     $sql = "SELECT `group_id` "
-            . "FROM `" . $tblList["wiki_properties"] . "` "
-            . "WHERE `id` = " . $wikiId
-            . " AND `course_id` = $course_id"
+            . "FROM `wiki_properties` "
+            . "WHERE `id` = ?"
+            . " AND `course_id` = ?"
     ;
 
-    $result = $con->getRowFromQuery($sql);
+    $result = Database::get()->querySingle($sql, intval($wikiId), intval($course_id));
 
-    $wikiGroupId = (int) $result['group_id'];
+    $wikiGroupId = (int) $result->group_id;
 
     if (isset($_gid) && $_gid != $wikiGroupId) {
         die($langNotAllowed);
-    } elseif (!isset($_gid) && $result['group_id'] != 0) {
+    } elseif (!isset($_gid) && $result->group_id != 0) {
         die($langNotAllowed);
     }
 }
@@ -125,22 +113,8 @@ if (isset($_REQUEST['wikiId'])) {
 $wikiId = (isset($_REQUEST['wikiId'])) ? (int) $_REQUEST['wikiId'] : 0;
 //$title = (isset($_REQUEST['title'])) ? strip_tags(rawurldecode($_REQUEST['title'])) : '';
 
-// Database nitialisation
-$config = array();
-$config["tbl_wiki_properties"] = $tblList["wiki_properties"];
-$config["tbl_wiki_pages"] = $tblList["wiki_pages"];
-$config["tbl_wiki_pages_content"] = $tblList["wiki_pages_content"];
-$config["tbl_wiki_acls"] = $tblList["wiki_acls"];
-
-$con = new ClarolineDatabaseConnection();
-
-// auto create wiki in devel mode
-if (defined("DEVEL_MODE") && ( DEVEL_MODE == true )) {
-    init_wiki_tables($con, false);
-}
-
 // Objects instantiation
-$wikiStore = new WikiStore($con, $config);
+$wikiStore = new WikiStore();
 
 if (!$wikiStore->wikiIdExists($wikiId)) {
     die($langWikiInvalidWikiId);
@@ -148,7 +122,7 @@ if (!$wikiStore->wikiIdExists($wikiId)) {
 }
 
 $wiki = $wikiStore->loadWiki($wikiId);
-$wikiPage = new WikiPage($con, $config, $wikiId);
+$wikiPage = new WikiPage($wikiId);
 $wikiRenderer = new Wiki2xhtmlRenderer($wiki);
 
 $accessControlList = $wiki->getACL();
@@ -248,10 +222,6 @@ if ($wiki_title === '') {
 
     if ($wikiStore->pageExists($wikiId, $wiki_title)) {
         // do nothing
-    }
-    // auto create wiki in devel mode
-    elseif ((!$wikiStore->pageExists($wikiId, $wiki_title) ) && ( defined("DEVEL_MODE") && ( DEVEL_MODE == true ) )) {
-        init_wiki_main_page($con, $wikiId, $creatorId);
     } else {
         // something weird's happened
         die("$langWrongWikiPageTitle");
@@ -271,13 +241,9 @@ switch ($action) {
         $pattern = isset($_REQUEST['searchPattern']) ? trim($_REQUEST['searchPattern']) : null;
         
         if (!empty($pattern)) {
-            $searchEngine = new WikiSearchEngine($con, $config);
+            $searchEngine = new WikiSearchEngine();
             $searchResult = $searchEngine->searchInWiki($pattern, $wikiId, CLWIKI_SEARCH_ANY);
 
-            if ($searchEngine->hasError()) {
-                die($searchEngine->getError());
-            }
-        
             if (is_null( $searchResult )) {
                 $searchResult = array();
             }
@@ -317,72 +283,6 @@ switch ($action) {
     //case 'history':
     // recent changes
     case 'recent': {
-        /*$wikiPage->loadPage($title);
-        $title = $wikiPage->getTitle();
-        
-        ###### CHANGE AND MOVE DEFAULT VALUE TO CONFIG #####
-        $defaultStep = 10;
-        
-        $offset = isset($_REQUEST['offset']) ? (int) $_REQUEST['offset'] : 0;
-        
-        $step = isset($_REQUEST['step']) ? (int) $_REQUEST['step'] : $defaultStep;
-        
-        if ('history' == $action) {
-        	$nbEntries = $wikiPage->countVersion();
-        }
-        
-        if ('recent' == $action) {
-        	$nbEntries = $wiki->getNumberOfPages();
-        }
-        
-        $last = $first = 0;
-        
-        if ($step === 0) {
-            $offset = 0;
-        
-            while ($last < $nbEntries) {
-                $last += $defaultStep;
-            }
-        
-            $last = $last > $nbEntries ? $last - $defaultStep : $last;
-        
-            $previous = $next =false;
-        }
-        else {
-            while ($last < $nbEntries) {
-                $last += $step;
-            }
-        
-            $last = $last > $nbEntries ? $last - $step : $last;
-        
-            $previous = ($offset - $step) < 0 ? false : $offset - $step;
-        
-            $next = ($offset + $step) >= $nbEntries ? false : $offset + $step;
-        
-            if ($next > $nbEntries) {
-                $next = false;
-            }
-        
-            if ($previous < 0) {
-                $previous = false;
-            }
-        }
-        
-        // get page history
-        if ('history' == $action) {
-            $history = $wikiPage->history($offset, $step, 'DESC');
-        }
-        // get recent changes
-        if ('recent' == $action) {
-            $recentChanges = $wiki->recentChanges($offset, $step);
-        }
-        
-        if (0 === $step) {
-            $step = $defaultStep;
-        }
-        
-        break;
-        */
         $recentChanges = $wiki->recentChanges();
         break;
     }
@@ -819,18 +719,18 @@ switch ($action) {
                 $tool_content .= '<ul>' . "\n";
 
                 foreach ($recentChanges as $recentChange) {
-                    $pgtitle = ( $recentChange['title'] == "__MainPage__" ) ? $langWikiMainPage : $recentChange['title']
+                    $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title
                     ;
 
                     $entry = '<strong><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
-                            . $wikiId . '&amp;title=' . rawurlencode($recentChange['title'])
+                            . $wikiId . '&amp;title=' . rawurlencode($recentChange->title)
                             . '&amp;action=show"'
                             . '>' . $pgtitle . '</a></strong>'
                     ;
 
-                    $time = nice_format($recentChange['last_mtime'],TRUE);
+                    $time = nice_format($recentChange->last_mtime,TRUE);
 
-                    $userInfo = user_get_data($recentChange['editor_id']);
+                    $userInfo = user_get_data($recentChange->editor_id);
 
                     $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
                     $userUrl = $userStr;
@@ -862,16 +762,16 @@ switch ($action) {
                 $tool_content .= '<ul>' . "\n";
 
                 foreach ($allPages as $page) {
-                    if ($page['title'] == "__MainPage__") {
+                    if ($page->title == "__MainPage__") {
                         // skip main page
                         continue;
                     }
 
-                    $pgtitle = rawurlencode($page['title']);
+                    $pgtitle = rawurlencode($page->title);
 
                     $link = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
-                            . '>' . $page['title'] . '</a>'
+                            . '>' . $page->title . '</a>'
                     ;
 
                     $tool_content .= '<li>' . $link . '</li>' . "\n";
@@ -1050,18 +950,18 @@ switch ($action) {
                 }
 
                 $tool_content .= '<td>'
-                        . '<input type="radio" name="old" value="' . $version['id'] . '"' . $checked . ' />' . "\n"
+                        . '<input type="radio" name="old" value="' . $version->id . '"' . $checked . ' />' . "\n"
                         . '</td>'
                         . "\n"
                 ;
 
                 $tool_content .= '<td>'
-                        . '<input type="radio" name="new" value="' . $version['id'] . '"' . $checked . ' />' . "\n"
+                        . '<input type="radio" name="new" value="' . $version->id . '"' . $checked . ' />' . "\n"
                         . '</td>'
                         . "\n"
                 ;
 
-                $userInfo = user_get_data($version['editor_id']);
+                $userInfo = user_get_data($version->editor_id);
                 mysql_select_db($mysqlMainDb);
 
                 $userStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
@@ -1070,9 +970,9 @@ switch ($action) {
 
                 $versionUrl = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                         . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
-                        . '&amp;action=show&amp;versionId=' . $version['id']
+                        . '&amp;action=show&amp;versionId=' . $version->id
                         . '">'
-                        . nice_format($version['mtime'],TRUE)
+                        . nice_format($version->mtime,TRUE)
                         . '</a>'
                 ;
 
@@ -1082,8 +982,8 @@ switch ($action) {
                         . "\n"
                 ;
                 
-                if ($version['changelog'] != '') {
-                	$tool_content .='<td colspan="4">(<i>'.$version['changelog']
+                if ($version->changelog != '') {
+                	$tool_content .='<td colspan="4">(<i>'.$version->changelog
                 	. '</i>)</td>'
                 	. "\n";
                 }
@@ -1103,14 +1003,14 @@ switch ($action) {
         $tool_content .= '<ul>' . "\n";
 
         foreach ($searchResult as $page) {
-            if ('__MainPage__' == $page['title']) {
+            if ('__MainPage__' == $page->title) {
                 $title = $langWikiMainPage;
             }
             else {
-                $title = $page['title'];
+                $title = $page->title;
             }
 
-            $urltitle = rawurlencode($page['title']);
+            $urltitle = rawurlencode($page->title);
 
             $link = '<a href="'
                     . htmlspecialchars($_SERVER['SCRIPT_NAME'] . '?wikiId='

@@ -77,25 +77,22 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
 
         foreach ( $pageList as $page )
         {
-            $wikiPage = new WikiPage(
-                $this->wiki->con
-                , $this->wiki->config
-                , $this->wiki->getWikiId() );
+            $wikiPage = new WikiPage($this->wiki->getWikiId());
 
-            $wikiPage->loadPage($page['title']);
+            $wikiPage->loadPage($page->title);
 
-            $this->setOpt('note_prefix', $page['title']);
+            $this->setOpt('note_prefix', $page->title);
 
             if ( $wikiPage->hasError() )
             {
                 $result .= '<h2><a name="'
-                    . $this->_makePageTitleAnchor( $page['title'] ) .'">'
-                    . $page['title']
+                    . $this->_makePageTitleAnchor($page->title).'">'
+                    . $page->title
                     . '</a></h2>'
                     . "\n"
                     ;
 
-                $result .= sprintf($langWikiPageNotLoaded,$page['title']);
+                $result .= sprintf($langWikiPageNotLoaded,$page->title);
                 $wikiPage = null;
             }
             else
@@ -108,7 +105,7 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
                 }
 
                 $result .= '<h2><a name="'
-                    . $this->_makePageTitleAnchor( $page['title'] ) .'">'
+                    . $this->_makePageTitleAnchor($page->title) .'">'
                     . $pgTitle
                     .'</a></h2>'
                     . "\n"
