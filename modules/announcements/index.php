@@ -145,12 +145,11 @@ if ($is_editor) {
                                                    WHERE course_id = ?", $course_id)->maxorder;
             $order = $orderMax + 1;
             // insert
-            Database::get()->query("INSERT INTO announcement
+            $id = Database::get()->query("INSERT INTO announcement
                                          SET content = ?,
                                              title = ?, `date` = NOW(),
                                              course_id = ?, `order` = ?,
                                              visible = 1", $newContent, $antitle, $course_id, $order);
-            $id = Database::get()->lastInsertID();
             $log_type = LOG_INSERT;
         }
         $aidx->store($id);
