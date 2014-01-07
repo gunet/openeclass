@@ -57,11 +57,11 @@ if (isDepartmentAdmin())
 
 $u_account = $u ? q(uid_to_username($u)) : '';
 $u_realname = $u ? q(uid_to_name($u)) : '';
-$u_statut = get_uid_statut($u);
-$t = 0;
+$userdata = user_get_data($u);
+$u_statut = $userdata['status'];
+
 
 if (!$doit) {
-
     if ($u_account && $c) {
         $tool_content .= "<p class='title1'>$langConfirmDelete</p>
         <div class='alert1'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
@@ -84,23 +84,13 @@ if (!$doit) {
             $m = 1;
         }
     } else {
-        $tool_content .= "$langErrorDelete";
+        $tool_content .= $langErrorDelete;
     }
     $tool_content .= "<br />&nbsp;";
     if ((isset($m)) && (!empty($m))) {
         $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
     }
     $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
-}
-
-function get_uid_statut($u) {
-    global $mysqlMainDb;
-
-    if ($r = mysql_fetch_row(db_query("SELECT statut FROM user WHERE user_id = '" . mysql_real_escape_string($u) . "'", $mysqlMainDb))) {
-        return $r[0];
-    } else {
-        return FALSE;
-    }
 }
 
 draw($tool_content, 3);

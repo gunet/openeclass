@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,22 +19,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Perso Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component is the central controller of eclass personalised.
+/**
+ * @file perso.php
+ * @brief This component is the central controller of eclass personalised.
  * It controls personalisation and initialises several variables used by it.
- *
- * It is based on the diploma thesis of Evelthon Prodromou
- *
+ * @abstract  It is based on the diploma thesis of Evelthon Prodromou
+ * @author Evelthon Prodromou <eprodromou@upnet.gr>
  */
-
-if (!defined('INDEX_START')) {
-    die("Action not allowed!");
-}
 
 require_once 'include/redirector.php';
 $sql = "SELECT course.id cid, course.code code, course.public_code,
