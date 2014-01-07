@@ -94,7 +94,7 @@ $_CLEAN = filter_by_key('action', $valid_actions, 'R', false);
 
 $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'list';
 
-$wikiId = (isset($_REQUEST['wikiId'])) ? (int) $_REQUEST['wikiId'] : 0;
+$wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
 
 $creatorId = $uid;
 

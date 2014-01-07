@@ -56,7 +56,7 @@ require_once dirname(__FILE__) . "/lib.url.php";
  * @return string HTML code of the wiki editor
  */
 function claro_disp_wiki_editor($wikiId, $title, $versionId
-, $content, $script = null, $showWikiToolBar = true
+, $content, $changelog = '', $script = null, $showWikiToolBar = true
 , $forcePreview = true) {
     global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langWikiNotes, $course_code;
 
@@ -91,7 +91,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 	
     //notes
     $out .= '<div style="padding:10px;">' . "\n";
-    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value=""'. 
+    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value="'.htmlspecialchars($changelog).'"'. 
 	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
     $out .= '</div>' . "\n";
     //end notes
@@ -174,7 +174,7 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
  * @param string script callback script url
  * @return string html code of the preview pannel button bar
  */
-function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $script = null) {
+function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog = '', $script = null) {
     global $langSave, $langEdit, $langCancel, $course_code;
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -186,6 +186,10 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $script = nu
             . htmlspecialchars($content) . '" />' . "\n"
     ;
 
+    $out .= '<input type="hidden" name="changelog" value="'
+            . htmlspecialchars($changelog) . '" />' . "\n"
+    ;
+    				
     $out .= '<input type="hidden" name="title" value="'
             . htmlspecialchars($title)
             . '" />' . "\n"

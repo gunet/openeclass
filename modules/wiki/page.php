@@ -90,7 +90,7 @@ require_once 'modules/wiki/lib/lib.javascript.php';
 
 // security fix : disable access to other groups wiki
 if (isset($_REQUEST['wikiId'])) {
-    $wikiId = (int) $_REQUEST['wikiId'];
+    $wikiId =  intval($_REQUEST['wikiId']);
 
     $sql = "SELECT `group_id` "
             . "FROM `wiki_properties` "
@@ -110,7 +110,7 @@ if (isset($_REQUEST['wikiId'])) {
 }
 
 // set request variables
-$wikiId = (isset($_REQUEST['wikiId'])) ? (int) $_REQUEST['wikiId'] : 0;
+$wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
 //$title = (isset($_REQUEST['title'])) ? strip_tags(rawurldecode($_REQUEST['title'])) : '';
 
 // Objects instantiation
@@ -183,15 +183,15 @@ $action = ( isset($_CLEAN['action']) ) ? $_CLEAN['action'] : 'show';
 
 $creatorId = $uid;
 
-$versionId = ( isset($_REQUEST['versionId']) ) ? (int) $_REQUEST['versionId'] : 0;
+$versionId = ( isset($_REQUEST['versionId']) ) ? intval($_REQUEST['versionId']) : 0;
 
 $wiki_title = ( isset($_REQUEST['title']) ) ? strip_tags($_REQUEST['title']) : '';
 
 $changelog = ( isset($_POST['changelog']) ) ? strip_tags($_POST['changelog']) : '';
 
 if ($action == "diff") {
-    $old = ( isset($_REQUEST['old']) ) ? (int) $_REQUEST['old'] : 0;
-    $new = ( isset($_REQUEST['new']) ) ? (int) $_REQUEST['new'] : 0;
+    $old = ( isset($_REQUEST['old']) ) ? intval($_REQUEST['old']) : 0;
+    $new = ( isset($_REQUEST['new']) ) ? intval($_REQUEST['new']) : 0;
 }
 
 // get content
@@ -338,6 +338,13 @@ switch ($action) {
     }
     // save page
     case 'save': {
+        if(isset($_REQUEST['current']) AND $_REQUEST['current']=='yes') {
+            $wikiPage->loadPageVersion($versionId);
+            $content = $wikiPage->getContent();
+            $changelog = $langWikiPageRevertedVersion;
+            $versionId = 0;
+        }
+        
         if (isset($content)) {
             $time = date('Y-m-d H:i:s');
 
@@ -668,16 +675,12 @@ switch ($action) {
                 $displaytitle = '';
             }
 
-            $oldTime = claro_format_locale_date($dateTimeFormatLong
-                    , strtotime($oldTime))
-            ;
+            $oldTime = nice_format($oldTime, true);
 
             $userInfo = user_get_data($oldEditor);
             $oldEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
 
-            $newTime = claro_format_locale_date($dateTimeFormatLong
-                    , strtotime($newTime))
-            ;
+            $newTime = nice_format($newTime, TRUE);
 
             $userInfo = user_get_data($newEditor);
             $newEditorStr = q($userInfo['givenname']) . "&nbsp;" . q($userInfo['surname']);
@@ -789,7 +792,7 @@ switch ($action) {
             } else {
                 $script = $_SERVER['SCRIPT_NAME'] . "?course=$course_code";
 
-                $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $script
+                $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
                         , true, false)
                 ;
             }
@@ -822,7 +825,7 @@ switch ($action) {
             }
 
             $tool_content .= claro_disp_wiki_preview($wikiRenderer, $wiki_title, $content);
-            $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content);
+            $tool_content .= claro_disp_wiki_preview_buttons($wikiId, $wiki_title, $content, $changelog);
             break;
         }
     // view page
@@ -848,8 +851,7 @@ switch ($action) {
 
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
 
-                    $mtime = claro_format_locale_date($dateTimeFormatLong
-                            , strtotime($wikiPage->getCurrentVersionMtime()))
+                    $mtime = nice_format($wikiPage->getCurrentVersionMtime(), true);
                     ;
 
                     $versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
@@ -944,9 +946,14 @@ switch ($action) {
 
                 if ($firstPass == true) {
                     $checked = ' checked="checked"';
+                    $makecurrent = '';
                     $firstPass = false;
                 } else {
                     $checked = '';
+                    $makecurrent = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;wikiId='
+                        . $wikiId . '&amp;title=' . rawurlencode($title)
+                        . '&amp;action=save&amp;current=yes&amp;versionId=' . $version->id
+                        . '" onClick="return confirm(\''.$langSureToMakeWikiPageCurrent.'\');">'.$langWikiPageMakeCurrent.'</a>';
                 }
 
                 $tool_content .= '<td>'
@@ -978,7 +985,7 @@ switch ($action) {
 
                 $tool_content .= '<td>'
                         . sprintf($langWikiVersionPattern, $versionUrl, $userUrl)
-                        . '</td>'
+                        . '</td><td>'.$makecurrent.'</td><td colspan="3"></td>'
                         . "\n"
                 ;
                 
