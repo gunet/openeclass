@@ -203,12 +203,11 @@ class WikiPage {
                 ;
                 
                 $that = $this;
-                Database::get()->query($sql, function ($errormsg) use ($that) {
+                $pageId = Database::get()->query($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
                 }, $this->getWikiId(), $this->getOwnerId(), $this->getTitle(), $this->getCreationTime(), $this->getLastEditTime());
 
                 // 2nd update pageId
-                $pageId = Database::get()->lastInsertID();
                 $this->_setPageId($pageId);
 
                 // 3rd update version
@@ -378,13 +377,11 @@ class WikiPage {
                 . "VALUES(?,?,?,?,?)";
 
         $that = $this;
-        Database::get()->query($sql, function ($errormsg) use ($that) {
+        $lastVersionId = Database::get()->query($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
                 }, $this->getPageId(), $this->getEditorId(), $this->getLastEditTime(), $this->getContent(), $changelog);
 
         // update last version id
-        $lastVersionId = Database::get()->lastInsertID();
-
         $this->_setLastVersionId($lastVersionId);
         $this->_setCurrentVersionId($lastVersionId);
 
