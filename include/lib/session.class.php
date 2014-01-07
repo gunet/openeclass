@@ -69,5 +69,22 @@ class Session {
         unset($this->courses);
         unset($this->language);
     }
+    public static function render_flashdata($item='default') {
+        if (!isset($_SESSION['messages'][$item])) {
+            return null;
+        }
+        $item_messages = $_SESSION['messages'][$item];
+        unset($_SESSION['messages'][$item]);
+        foreach($item_messages as $row => $value){
+            $msg_boxes .= "<div class='$row'><ul><li>".implode('</li><li>', $value)."</li></ul></div>";
+        }
+        return $msg_boxes;
+    }
 
+    public static function set_flashdata($message, $class, $item='default') {
+        if (!isset($_SESSION['messages'])) {
+            $_SESSION['messages'] = array();
+        }
+        $_SESSION['messages'][$item][$class][] = $message;
+    }
 }

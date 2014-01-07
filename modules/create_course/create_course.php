@@ -371,7 +371,7 @@ if (isset($_POST['create_course'])) {
 
     // validation in case it skipped JS validation
     if (count($departments) < 1 || empty($departments[0])) {
-        $_SESSION['errMessage'] = caution($langEmptyAddNode);
+        Session::set_flashdata($langEmptyAddNode, 'alert1');
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
         exit;
     }

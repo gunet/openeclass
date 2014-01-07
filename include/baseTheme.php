@@ -45,10 +45,8 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
                         course_id = $cid");
 }
 
-$extraMessage = '';
-
 if (isset($toolContent_ErrorExists)) {
-    $_SESSION['errMessage'] = $toolContent_ErrorExists;
+    Session::set_flashdata($toolContent_ErrorExists, 'alert1');
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
@@ -59,10 +57,6 @@ if (isset($toolContent_ErrorExists)) {
     exit();
 }
 
-if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
-    $extraMessage = $_SESSION['errMessage'];
-    unset($_SESSION['errMessage']);
-}
 
 require_once 'template/template.inc.php';
 require_once 'tools.php';
@@ -80,7 +74,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $courseHome, $course_code, $extraMessage, $helpTopic,
+    global $courseHome, $course_code, $helpTopic,
     $homePage, $title, $is_editor, $langActivate,
     $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
     $langChooseLang, $langCopyrightFooter, $langDeactivate,
@@ -105,13 +99,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $forum_content = $perso_tool_content ['forum_content'];
     }
 
-    $messageBox = '';
 
-    //if an error exists (ex., sessions is lost...)
-    //show the error message above the normal tool content
-    if (strlen($extraMessage) > 0) {
-        $messageBox = $extraMessage;
-    }
 
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
@@ -193,9 +181,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('SITE_NAME', $siteName);
 
+    
         //If there is a message to display, show it (ex. Session timeout)
-        if (strlen($messageBox) > 1) {
-            $t->set_var('EXTRA_MSG', $messageBox);
+        if ($messages = Session::render_flashdata()) {
+            $t->set_var('EXTRA_MSG', $messages);
         }
 
         $t->set_var('TOOL_CONTENT', $toolContent);
