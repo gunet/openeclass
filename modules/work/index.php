@@ -109,12 +109,14 @@ if ($is_editor) {
     } elseif (isset($_POST['sid'])) {
         show_submission(intval($_POST['sid']));
     } elseif (isset($_POST['new_assign'])) {
-        if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)){
-            add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions']);
-            show_assignments($_POST);
-        } else{
-            Session::set_flashdata('error_msg', $m['WorkTitleValidation']);
-            new_assignment($m['WorkTitleValidation'], $_POST);
+        if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)) {
+            if(add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions'])) {
+                Session::set_flashdata('mpike megale','success');
+            }
+            show_assignments();
+        } else {
+            Session::set_flashdata($m['WorkTitleValidation'],'caution');
+            new_assignment($_POST);
         }
     } elseif (isset($_GET['as_id'])) {
         $as_id = $_GET['as_id'];
@@ -143,16 +145,21 @@ if ($is_editor) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
                 db_query("UPDATE assignment SET active = 0 WHERE id = $id");
-                show_assignments($langAssignmentDeactivated);
+                Session::set_flashdata($langAssignmentDeactivated, 'success');
+                show_assignments();
             } elseif ($choice == 'enable') {
                 db_query("UPDATE assignment SET active = 1 WHERE id = $id");
-                show_assignments($langAssignmentActivated);
+                Session::set_flashdata($langAssignmentActivated, 'success');
+                show_assignments();
             } elseif ($choice == 'delete') {
                 die("invalid option");
             } elseif ($choice == 'do_delete') {
-                $nameTools = $m['WorkDelete'];
-                $navigation[] = $works_url;
-                delete_assignment($id);
+                if(delete_assignment($id)) {
+                    Session::set_flashdata($langDeleted, 'success');
+                } else {
+                    Session::set_flashdata($langDelError, 'caution');
+                }
+                show_assignments();
             } elseif ($choice == 'edit') {
                 $nameTools = $m['WorkEdit'];
                 $navigation[] = $works_url;
@@ -163,10 +170,14 @@ if ($is_editor) {
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)){
-                    edit_assignment($id);
-                } else{
-                    show_edit_assignment($id, $m['WorkTitleValidation']);
-                }                
+                    if(edit_assignment($id)) {
+                        Session::set_flashdata($langEditSuccess,'success');
+                    }
+                    show_assignments();
+                } else {
+                    Session::set_flashdata($m['WorkTitleValidation'],'caution');
+                    show_edit_assignment($id);
+                }         
             } elseif ($choice = 'add') {
                 $nameTools = $langAddGrade;
                 $navigation[] = $works_url;
@@ -405,13 +416,10 @@ function submit_work($id, $on_behalf_of = null) {
 }
 
 //  assignment - prof view only
-function new_assignment($error_msg=NULL, $posted_data = NULL) {
+function new_assignment($posted_data = NULL) {
     global $tool_content, $m, $langAdd, $course_code;
     global $desc;
     global $langBack;
-    if($error_msg = Session::render_flashdata('error_msg')){
-        $tool_content .= "<p class='caution'>$error_msg</p>";
-    }    
     $tool_content .= "
         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
         <fieldset>
@@ -449,7 +457,7 @@ function new_assignment($error_msg=NULL, $posted_data = NULL) {
 }
 
 //form for editing
-function show_edit_assignment($id, $error_msg=NULL) {
+function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
     $urlAppend, $works_url, $end_cal_Work_db;
 
@@ -469,7 +477,6 @@ function show_edit_assignment($id, $error_msg=NULL) {
     <fieldset>
     <legend>$m[WorkInfo]</legend>
     <table class='tbl'>
-    ". (($error_msg) ? "<tr><td colspan='2' class='caution'>$error_msg</td></tr>" : "") ."
     <tr>
       <th>$m[title]:</th>
       <td><input type='text' name='title' size='45' value='${row['title']}' /></td>
@@ -527,8 +534,8 @@ function edit_assignment($id) {
     global $tool_content, $langBackAssignment, $langEditSuccess,
     $langEditError, $course_code, $works_url, $course_id;
 
-    $nav[] = $works_url;
-    $nav[] = array("url" => "$_SERVER[SCRIPT_NAME]?id=$id", "name" => $_POST['title']);
+//    $nav[] = $works_url;
+//    $nav[] = array("url" => "$_SERVER[SCRIPT_NAME]?id=$id", "name" => $_POST['title']);
 
     $title = trim($_POST['title']);
     $description = purify($_POST['desc']);
@@ -550,17 +557,22 @@ function edit_assignment($id) {
                                 deadline = " . quote($deadline) . "
                         WHERE course_id = $course_id AND id='$id'")) {
         $title = autounquote($_POST['title']);
-        $tool_content .= "<p class='success'>$langEditSuccess<br />
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a>
-                                        </p><br />";
-
+//        $tool_content .= "<p class='success'>$langEditSuccess<br />
+//                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a>
+//                                        </p><br />";
+//        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id";
+//        header("Location: $link");
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
             'title' => $title,
             'description' => $description,
             'deadline' => $deadline,
             'group' => $group_submissions));
+        //Session::set_flashdata($langEditSuccess, 'success');
+        return true;
     } else {
-        $tool_content .="<p class='caution'>$langEditError<br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id'>$langBackAssignment '$title'</a></p><br />";
+        return false;
+        //Session::set_flashdata($langEditError, 'caution');
+        //$tool_content .="<p class='caution'><br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id'>$langBackAssignment '$title'</a></p><br />";
     }
 }
 
@@ -580,18 +592,19 @@ function delete_assignment($id) {
     global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
 
     $secret = work_secret($id);
-    $q = db_query("SELECT title FROM assignment WHERE course_id = " . quote($course_id) . " AND id = " . quote($id));
-    $row = mysql_fetch_row($q);
-    $title = $row[0];
-    db_query("DELETE FROM assignment WHERE course_id = $course_id AND id = $id");
-    db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
-    move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+    if($q = db_query("SELECT title FROM assignment WHERE course_id = " . quote($course_id) . " AND id = " . quote($id))) {
+        $row = mysql_fetch_row($q);
+        $title = $row[0];
+        db_query("DELETE FROM assignment WHERE course_id = $course_id AND id = $id");
+        db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
+        move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
-    Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
-        'title' => $title));
-
-    $tool_content .= "<p class='success'>$langDeleted<br />
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+        Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
+            'title' => $title));
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -1098,15 +1111,11 @@ function show_student_assignments() {
 }
 
 // show all the assignments
-function show_assignments($message = null) {
+function show_assignments() {
     global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langConfirmDelete;
 
     $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline");
-
-    if (isset($message)) {
-        $tool_content .="<p class='success'>$message</p><br />";
-    }
 
     $tool_content .="
             <div id='operations_container'>

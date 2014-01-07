@@ -2471,6 +2471,7 @@ $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";
 $langNewAssign = "New assignment";
 $langDeleted = "Assignment deleted";
+$langDelError = "Assignment was not deleted. Please try again.";
 $langDelAssign = "Delete Assignment";
 $langDelWarn1 = "You are going to delete the assignment";
 $langDelSure = "Are you sure you want to delete the assignment?";
