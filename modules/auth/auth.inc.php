@@ -470,7 +470,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
   return $testauth (boolean: true-is authenticated, false-is not)
  * ************************************************************** */
 
-function check_activity($userid) {    
+function check_activity($userid) {
     $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?", intval($userid));
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
@@ -738,7 +738,7 @@ function login($user_info_array, $posted_uname, $pass) {
         }
     }
 
-    if ($pass_match) {        
+    if ($pass_match) {
         // check if account is active
         $is_active = check_activity($user_info_array['id']);
         // check for admin privileges
@@ -968,13 +968,10 @@ function shib_cas_login($type) {
             $verified_mail = 2;
         }
 
-        Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
+        $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
                                        username = ?, email = ?, status = ?, lang = 'el', perso = 'yes', 
-                                       registered_at = ?,  verified_mail = ?, expires_at = ?, whitelist = ''", 
-                $surname, $givenname, $type, $uname, $email, USER_STUDENT, 
-                DBHelper::timeAfter(), DBHelper::timeAfter(get_config('account_duration')));
-        
-        $_SESSION['uid'] = Database::get()->lastInsertID();
+                                       registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
+                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT);
         $userPerso = 'yes';
         $language = $_SESSION['langswitch'] = 'el';
     } else {

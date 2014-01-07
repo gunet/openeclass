@@ -434,7 +434,7 @@ elseif (isset($_REQUEST['install5']) OR isset($_REQUEST['back5'])) {
 		<td>" . checkbox_input('restrict_teacher_owndep') . "</td>
 	  </tr>
           <tr>
-		<th class='left'><b>$lang_disable_log_user_actions</b></th>
+		<th class='left'><b>$lang_disable_log_actions</b></th>
 		<td>" . checkbox_input('disable_log_user_actions') . "</td>
 	  </tr>
           <tr>

@@ -206,7 +206,7 @@ function loggedInMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "manuals/manual.php");
+    array_push($sideMenuLink, $urlServer . "info/manual.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
@@ -299,7 +299,7 @@ function loggedOutMenu() {
         array_push($sideMenuImg, "arrow.png");
     }
     array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "manuals/manual.php");
+    array_push($sideMenuLink, $urlServer . "info/manual.php");
     array_push($sideMenuImg, "arrow.png");
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");

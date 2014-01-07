@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,19 +19,26 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Logged In Component
- *
+/**
+ * @file portfolio.php
+ * @brief This component creates the content of the start page when the user is logged in
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This component creates the content of the start page when the
- * user is logged in
- *
  */
-if (!defined('INDEX_START')) {
-    die('Action not allowed!');
-}
+
+$require_login = true;
+
+$require_help = true;
+$helpTopic = 'Portfolio';
+
+include 'baseTheme.php';
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+
+$nameTools = $langWelcomeToPortfolio;
+
+ModalBoxHelper::loadModalBox();
+
 // jquery is already loaded via index.php and modal box
 $head_content .= "<script type='text/javascript'>
 jQuery(document).ready(function() {
@@ -75,3 +82,5 @@ $tool_content = "
 <div class='panel_content'>{%FORUM_CONTENT%}</div>
 
 </div>";
+
+draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

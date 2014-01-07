@@ -20,15 +20,13 @@
  * ======================================================================== 
  */
 
-define("DB_TYPE", "MYSQL");
-
 abstract class DBHelper {
 
     private static $helper_impl;
 
     private static function impl() {
         if (!DBHelper::$helper_impl) {
-            switch (DB_TYPE) {
+            switch ('DB_TYPE') {
                 case "MYSQL":
                 default :
                     DBHelper::$helper_impl = new _DBHelper_MYSQL();

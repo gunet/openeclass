@@ -22,7 +22,14 @@
 
 define("DB_TYPE", "MYSQL");
 
+require_once 'modules/db/dbhelper.php';
+
 class Database {
+
+    private static $REQ_LASTID = 1;
+    private static $REQ_OBJECT = 2;
+    private static $REQ_ARRAY = 3;
+    private static $REQ_FUNCTION = 4;
 
     /**
      *
@@ -33,7 +40,7 @@ class Database {
     /**
      * Get a database on its name: this is a static method
      * @param type $dbase The name of the database. Could be missing (or null) for the default database.
-     * @return \Database|null THe database object
+     * @return Database|null The database object
      */
     public static function get($dbase = null) {
         global $mysqlServer, $mysqlUser, $mysqlPassword, $mysqlMainDb;
@@ -101,12 +108,13 @@ class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
+     * @return int Last inserted ID
      */
     public function query($statement) {
         $offset = 1;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        $this->queryImpl($statement, null, $callback_error, 0, array_slice($args, $offset));
+        $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
     }
 
     /**
@@ -120,7 +128,7 @@ class Database {
         $offset = 2;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        $this->queryImpl($statement, $callback_function, $callback_error, 0, array_slice($args, $offset));
+        return $this->queryImpl($statement, $callback_function, $callback_error, Database::$REQ_FUNCTION, array_slice($args, $offset));
     }
 
     /**
@@ -134,7 +142,7 @@ class Database {
         $offset = 1;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, null, $callback_error, 2, array_slice($args, $offset));
+        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_ARRAY, array_slice($args, $offset));
     }
 
     /**
@@ -148,7 +156,7 @@ class Database {
         $offset = 1;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, null, $callback_error, 1, array_slice($args, $offset));
+        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_OBJECT, array_slice($args, $offset));
     }
 
     private function findErrorCallback($arguments, &$offset) {
@@ -160,7 +168,7 @@ class Database {
         return null;
     }
 
-    private function queryImpl($statement, $callback_fetch, $callback_error, $arrayType, $variables) {
+    private function queryImpl($statement, $callback_fetch, $callback_error, $requestType, $variables) {
         $init_time = microtime();
         if (is_null($statement) || !is_string($statement) || empty($statement))
             return $this->errorFound($callback_error, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time);
@@ -206,31 +214,27 @@ class Database {
 
         /* fetch results */
         $result = null;
-        if ($arrayType == 1) {
+        if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
             if (!is_object($result))
                 return $this->errorFound($callback_error, "Unable to fetch single result as object", $statement, $init_time);
-        } else if ($arrayType == 2) {
+        } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
                 return $this->errorFound($callback_error, "Unable to fetch all results as objects", $statement, $init_time);
-        } else if ($callback_fetch)
-            while (TRUE)
-                if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
-                    break;
+        } else if ($requestType == Database::$REQ_LASTID) {
+            $result = $this->dbh->lastInsertId();
+        } else if ($requestType == Database::$REQ_FUNCTION) {
+            if ($callback_fetch)
+                while (TRUE)
+                    if (!($res = $stm->fetch(PDO::FETCH_OBJ)) || $callback_fetch($res))
+                        break;
+        }
         /* Close transaction, if required */
         if ($this->isTransactional)
             $this->dbh->commit();
         Database::dbg("Succesfully performed query", $statement, $init_time, Debug::INFO);
         return $result;
-    }
-
-    /**
-     * 
-     * @return integer the last inserted id
-     */
-    public function lastInsertID() {
-        return $this->dbh->lastInsertId();
     }
 
     private function errorFound($callback_error, $error_msg, $statement, $init_time, $close_transaction = true) {

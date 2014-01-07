@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,7 +62,7 @@ if ($is_editor) {
             $langEmptyAnTitle . '";</script>';
     $aidx = new AnnouncementIndexer();
 
-    $announcementNumber = Database::get()->querySingle("SELECT COUNT(*) as count FROM announcement WHERE course_id = ?", $course_id)->count;
+    $announcementNumber = Database::get()->querySingle("SELECT COUNT(*) AS count FROM announcement WHERE course_id = ?", $course_id)->count;
 
     $displayForm = true;
     /* up and down commands */
@@ -77,23 +77,26 @@ if ($is_editor) {
 
     $thisAnnouncementOrderFound = false;
     if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-        Database::get()->queryFunc("SELECT id, `order` FROM announcement
+        //Debug::setLevel(Debug::INFO);
+        $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
                                            WHERE course_id = ?
-                                           ORDER BY `order` ?", function($announcement) use (&$thisAnnouncementOrderFound, &$thisAnnouncementOrder, $thisAnnouncementId) {
+                                           ORDER BY `order` $sortDirection",$course_id );
+        foreach ($ids as $announcement) {   
             if ($thisAnnouncementOrderFound) {
                 $nextAnnouncementId = $announcement->id;
                 $nextAnnouncementOrder = $announcement->order;
                 Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $nextAnnouncementOrder, $thisAnnouncementId);
                 Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $thisAnnouncementOrder, $nextAnnouncementId);
-                return true;
+                break;
             }
             // find the order
             if ($announcement->id == $thisAnnouncementId) {
                 $thisAnnouncementOrder = $announcement->order;
                 $thisAnnouncementOrderFound = true;
             }
-        }, $course_id, $sortDirection);
+       }       
     }
+   
 
     /* modify visibility */
     if (isset($_GET['mkvis'])) {
@@ -129,8 +132,8 @@ if ($is_editor) {
     /* submit */
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
-        $antitle = autoquote($_POST['antitle']);
-        $newContent = autoquote(purify($_POST['newContent']));
+        $antitle = $_POST['antitle'];       
+        $newContent = purify($_POST['newContent']);
         $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
@@ -138,16 +141,15 @@ if ($is_editor) {
             $log_type = LOG_MODIFY;
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
-            $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM announcement
+            $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?", $course_id)->maxorder;
             $order = $orderMax + 1;
             // insert
-            Database::get()->query("INSERT INTO announcement
+            $id = Database::get()->query("INSERT INTO announcement
                                          SET content = ?,
                                              title = ?, `date` = NOW(),
                                              course_id = ?, `order` = ?,
                                              visible = 1", $newContent, $antitle, $course_id, $order);
-            $id = Database::get()->lastInsertID();
             $log_type = LOG_INSERT;
         }
         $aidx->store($id);
@@ -281,7 +283,7 @@ if ($announcementNumber > 0) {
     if ($is_editor) {
         $tool_content .= "<th width='60' colspan='$colsNum' class='center'>$langActions</th>";
     }
-    $tool_content .= "</tr>\n";
+    $tool_content .= "</tr>";
 }
 $k = 0;
 if ($result)
@@ -323,14 +325,14 @@ if ($result)
 
         if ($is_editor) {
             $tool_content .= "
-			<td width='70' class='right'>
-			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
-			      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
-			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">
-			      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
-			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;mkvis=$announce->id&amp;vis=$visibility'>
-			      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
-			</td>";
+                <td width='70' class='right'>
+                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id'>
+                      <img src='$themeimg/edit.png' title='" . $langModify . "' /></a>&nbsp;
+                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id' onClick=\"return confirmation('$langSureToDelAnnounce');\">
+                      <img src='$themeimg/delete.png' title='" . $langDelete . "' /></a>&nbsp;
+                      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;mkvis=$announce->id&amp;vis=$visibility'>
+                      <img src='$themeimg/$vis_icon' title='$langVisible' /></a>
+                </td>";
             if ($announcementNumber > 1) {
                 $tool_content .= "<td align='center' width='35' class='right'>";
             }
@@ -368,4 +370,5 @@ if ($announcementNumber < 1) {
 }
 
 add_units_navigation(TRUE);
+
 draw($tool_content, 2, null, $head_content);

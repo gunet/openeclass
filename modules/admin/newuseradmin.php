@@ -112,8 +112,6 @@ if ($submit) {
                         <br /><br /><p align='right'><a href='$backlink'>$langAgain</a></p>";
     } else {
         validateNode(intval($depid), isDepartmentAdmin());
-        $registered_at = time();
-        $expires_at = time() + get_config('account_duration');
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
         $inscr_user = db_query("INSERT INTO user
@@ -123,7 +121,10 @@ if ($submit) {
                 autoquote($givenname_form) . ', ' .
                 autoquote($uname) . ", '$password_encrypted', " .
                 autoquote($email_form) .
-                ", $pstatut, " . autoquote($phone) . ", " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage', '', $verified_mail, '')");
+                ", $pstatut, " . autoquote($phone) . ", " . autoquote($am) . "
+                 , ".DBHelper::timeAfter()."
+                 , ".DBHelper::timeAfter(get_config('account_duration'))."
+                 , '$proflanguage', '', $verified_mail, '')");
         $uid = mysql_insert_id();
         $user->refresh($uid, array(intval($depid)));
 
