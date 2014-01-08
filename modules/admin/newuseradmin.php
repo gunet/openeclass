@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -181,7 +181,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         $pphone = $res['phone'];
         $pcom = $res['comment'];
         $language = $res['lang'];
-        $pstatut = intval($res['statut']);
+        $pstatut = intval($res['status']);
         $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 
         // faculty id validation
