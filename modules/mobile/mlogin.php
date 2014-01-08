@@ -75,8 +75,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $pass = autounquote($_POST['pass']);
 
     foreach (array_keys($_SESSION) as $key)
-        unset($_SESSION[$key]);
-    $_SESSION['user_perso_active'] = false;
+        unset($_SESSION[$key]);    
 
     $sqlLogin = "SELECT *
                    FROM user
@@ -130,7 +129,5 @@ function set_session_mvars() {
 
     $_SESSION['courses'] = $status;
     $_SESSION['mobile'] = true;
-
-    if ($GLOBALS['userPerso'] == 'no')
-        $_SESSION['user_perso_active'] = true;
+    
 }

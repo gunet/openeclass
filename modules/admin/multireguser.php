@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -46,11 +46,9 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
-    register_posted_variables(array('perso' => true,
-        'email_public' => true,
+    register_posted_variables(array('email_public' => true,
         'am_public' => true,
-        'phone_public' => true), 'all', 'intval');
-    $perso = $perso ? 'no' : 'yes';
+        'phone_public' => true), 'all', 'intval');    
     $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
     $unparsed_lines = '';
     $new_users_info = array();
@@ -104,7 +102,7 @@ if (isset($_POST['submit'])) {
                 if (!isset($info['password'])) {
                     $info['password'] = genPass();
                 }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $perso);
+                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
                 if ($new === false) {
                     $unparsed_lines .= q($line . "\n" . $error . "\n");
                 } else {
@@ -196,8 +194,8 @@ if (isset($_POST['submit'])) {
 
 draw($tool_content, 3, null, $head_content);
 
-function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public, $perso) {
-    global $charset, $langAsUser, $langAsProf,
+function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
+    global $charset, $langAsProf,
     $langYourReg, $siteName, $langDestination, $langYouAreReg,
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
     $langProblem, $administratorName, $administratorSurname,
@@ -210,8 +208,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $type_message = $langAsProf;
     } else {
         $message = $usersuccess;
-        $type_message = '';
-        // $langAsUser;
+        $type_message = '';        
     }
 
     $req = db_query('SELECT * FROM user WHERE username = ' . quote($uname));
@@ -223,13 +220,12 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $hasher = new PasswordHash(8, false);
     $password_encrypted = $hasher->HashPassword($password);
 
-    Database::get()->query("INSERT INTO user
+    $id = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
                  email_public, phone_public, am_public, description, whitelist)
                 VALUES (?,?,?,?,?,?," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?,?,?,?,?,?,'','')"
             , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public);
-    $id = Database::get()->lastInsertID();
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
 

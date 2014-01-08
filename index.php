@@ -124,15 +124,10 @@ if ($uid AND !isset($_GET['logout'])) {
             header("Location: {$urlServer}courses/$dbname/index.php");
             exit;
         }
-    }    
-    if (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active']) {
-        // if user is not guest redirect him to portfolio
-        header("Location: {$urlServer}include/portfolio.php");                
-    } else {
-        // load classic view
-        require_once "include/classic.php";
-        draw($tool_content, 1, null, $head_content);
-    }
+    }        
+    // if user is not guest redirect him to portfolio
+    header("Location: {$urlServer}include/portfolio.php");                
+    
 } else {    
     $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";

@@ -267,8 +267,7 @@ if ($is_valid) {
                           registered_at = $registered_at,
                           expires_at = $expires_at,
                           lang = '$language',
-                          verified_mail = $verified_mail,
-                          perso = 'yes',
+                          verified_mail = $verified_mail,                          
                           whitelist='',
                           description = ''";
 
@@ -313,8 +312,7 @@ if ($is_valid) {
             $_SESSION['status'] = 5;
             $_SESSION['givenname'] = $givenname;
             $_SESSION['surname'] = $surname;
-            $_SESSION['uname'] = canonicalize_whitespace($username);
-            $_SESSION['user_perso_active'] = false;
+            $_SESSION['uname'] = canonicalize_whitespace($username);            
 
             $tool_content .= "<div class='success'><p>$greeting,</p><p>";
             $tool_content .=!empty($email) ? $langPersonalSettings : $langPersonalSettingsLess;

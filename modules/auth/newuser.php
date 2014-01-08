@@ -296,11 +296,10 @@ if (!isset($_POST['submit'])) {
             db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                              VALUES ($uid, " . quote($_SERVER['REMOTE_ADDR']) . ", NOW(), 'LOGIN')");
             $_SESSION['uid'] = $uid;
-            $_SESSION['status'] = 5;
+            $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
-            $_SESSION['uname'] = $uname;
-            $_SESSION['user_perso_active'] = true;
+            $_SESSION['uname'] = $uname;            
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg
