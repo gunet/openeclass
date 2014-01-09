@@ -934,7 +934,7 @@ switch ($action) {
                 } else {
                     $checked = '';
                     $makecurrent = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;wikiId='
-                        . $wikiId . '&amp;title=' . rawurlencode($title)
+                        . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
                         . '&amp;action=save&amp;current=yes&amp;versionId=' . $version->id
                         . '" onClick="return confirm(\''.$langSureToMakeWikiPageCurrent.'\');">'.$langWikiPageMakeCurrent.'</a>';
                 }
