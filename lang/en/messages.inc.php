@@ -2321,11 +2321,7 @@ $langWikiAccessControl = "Access control management";
 $langWikiAccessControlText = "You can set access rights for users using the following grid : ";
 $langWikiAllPages = "All pages";
 $langWikiBackToPage = "Back to page";
-$langWikiConflictHowTo = "<p><strong>Edit conflict</strong> : The page you try to save seems to have been changed since you modify it.<br /><br />
-What to do now ?<ul>
-<li>You can copy/paste your modification to a text editor (like notepad) and click on 'edit last version' to try to add your modification to the new version of the page.</li>
-<li>You can also click on cancel to cancel your changes.</li>
-</ul></p>";
+$langWikiLockInfo = "<p>The page you try to save is locked, as it is been processed by some other user. Please try again later.</p>";
 $langWikiContentEmpty = "This page is empty, click on 'Edit this page' to add a content";
 $langWikiCourseMembers = "Course members";
 $langWikiCreateNewWiki = "Create a new Wiki";
@@ -2349,7 +2345,7 @@ $langWikiDiffUnchangedLine = "Unchanged line";
 $langWikiDifferenceKeys = "Keys :";
 $langWikiDifferencePattern = "differences between version of %1\$s modified by %2\$s and version of %3\$s modified by %4\$s";
 $langWikiDifferenceTitle = "Differences :";
-$langWikiEditConflict = "Edit conflict";
+$langWikiEditLock = "Locked Page";
 $langWikiEditLastVersion = "Edit last version";
 $langWikiEditPage = "Edit this page";
 $langWikiEditPrivilege = "Edit Pages";

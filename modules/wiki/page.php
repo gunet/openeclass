@@ -84,6 +84,7 @@ require_once 'modules/wiki/lib/class.wikipage.php';
 require_once 'modules/wiki/lib/class.wikistore.php';
 require_once 'modules/wiki/lib/class.wiki.php';
 require_once "modules/wiki/lib/class.wikisearchengine.php";
+require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/wiki/lib/lib.javascript.php';
@@ -293,33 +294,43 @@ switch ($action) {
     }
     // edit page content
     case 'edit': {
-        if ($wikiStore->pageExists($wikiId, $wiki_title)) {
-            if ($versionId == 0) {
-                $wikiPage->loadPage($wiki_title);
+        
+        $lock_duration = 300; //5-minutes lock
+        $lock_manager = new LockManager($lock_duration);
+        
+        //require a lock for this page
+        $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
+        
+        if ($gotLock) {//succesfully locked page
+            
+            if ($wikiStore->pageExists($wikiId, $wiki_title)) {
+            	if ($versionId == 0) {
+            		$wikiPage->loadPage($wiki_title);
+            	} else {
+            		$wikiPage->loadPageVersion($versionId);
+            	}
+            	if ($content == '') {
+            		$content = $wikiPage->getContent();
+            	}
+            	if ($content == "__CONTENT__EMPTY__") {
+            		$content = '';
+            	}
+            
+            	$wiki_title = $wikiPage->getTitle();
             } else {
-                $wikiPage->loadPageVersion($versionId);
+            	if ($content == '') {
+            		$message = $langWikiNoContent;
+            		$style = 'caution';
+            	}
             }
-            if ($content == '') {
-                $content = $wikiPage->getContent();
-            }
-            if ($content == "__CONTENT__EMPTY__") {
-                $content = '';
-            }
-
-            $wiki_title = $wikiPage->getTitle();
-            $_SESSION['wikiLastVersion'] = $wikiPage->getLastVersionId();
-        } else {
-            if ($content == '') {
-                $message = $langWikiNoContent;
-                $style = 'caution';
-            }
+        } else {//already locked by another user
+            $action = 'conflict';
         }
+        
         break;
     }
     // view page
     case 'show': {
-        unset($_SESSION['wikiLastVersion']);
-
         if ($wikiStore->pageExists($wikiId, $wiki_title)) {
             if ($versionId == 0) {
                 $wikiPage->loadPage($wiki_title);
@@ -338,52 +349,59 @@ switch ($action) {
     }
     // save page
     case 'save': {
-        if(isset($_REQUEST['current']) AND $_REQUEST['current']=='yes') {
-            $wikiPage->loadPageVersion($versionId);
-            $content = $wikiPage->getContent();
-            $changelog = $langWikiPageRevertedVersion;
-            $versionId = 0;
+        $lock_duration = 300; //5-minutes lock
+        $lock_manager = new LockManager($lock_duration);
+        
+        //require a lock for this page
+        $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
+        
+        if ($gotLock) {//a lock was acquired, so we can proceed in saving
+            if(isset($_REQUEST['current']) AND $_REQUEST['current']=='yes') {
+            	$wikiPage->loadPageVersion($versionId);
+            	$content = $wikiPage->getContent();
+            	$changelog = $langWikiPageRevertedVersion;
+            	$versionId = 0;
+            }
+            
+            if (isset($content)) {
+            	$time = date('Y-m-d H:i:s');
+            
+            	if ($wikiPage->pageExists($wiki_title)) {
+            		$wikiPage->loadPage($wiki_title);
+            		if ($content == $wikiPage->getContent()) {
+            
+            			$message = $langWikiIdenticalContent;
+            			$style = 'caution';
+            			$action = 'show';
+            		} else {
+            			$wikiPage->edit($creatorId, $content, $changelog, $time, true);
+            			if ($wikiPage->hasError()) {
+            				$message = "Database error : " . $wikiPage->getError();
+            				$style = "caution";
+            			} else {
+            				$message = $langWikiPageSaved;
+            				$style = "success";
+            			}
+            			$action = 'show';
+            		}
+            	} else {
+            		$wikiPage->create($creatorId, $wiki_title, $content, $changelog, $time, true);
+            		if ($wikiPage->hasError()) {
+            			$message = 'Database error : ' . $wikiPage->getError();
+            			$style = 'caution';
+            		} else {
+            			$message = $langWikiPageSaved;
+            			$style = 'success';
+            		}
+            		$action = 'show';
+            	}
+            }
+            //release the lock after finishing saving
+            $lock_manager->releaseLock($wiki_title, $wikiId);
+        } else {//failed to lock, unable to save
+            $action = 'conflict';
         }
         
-        if (isset($content)) {
-            $time = date('Y-m-d H:i:s');
-
-            if ($wikiPage->pageExists($wiki_title)) {
-                $wikiPage->loadPage($wiki_title);
-                if ($content == $wikiPage->getContent()) {
-                    unset($_SESSION['wikiLastVersion']);
-
-                    $message = $langWikiIdenticalContent;
-                    $style = 'caution';
-                    $action = 'show';
-                } else {
-                    if (isset($_SESSION['wikiLastVersion']) && $wikiPage->getLastVersionId() != $_SESSION['wikiLastVersion']) {
-                        $action = 'conflict';
-                    } else {
-                        $wikiPage->edit($creatorId, $content, $changelog, $time, true);
-                        unset($_SESSION['wikiLastVersion']);
-                        if ($wikiPage->hasError()) {
-                            $message = "Database error : " . $wikiPage->getError();
-                            $style = "caution";
-                        } else {
-                            $message = $langWikiPageSaved;
-                            $style = "success";
-                        }
-                        $action = 'show';
-                    }
-                }
-            } else {
-                $wikiPage->create($creatorId, $wiki_title, $content, $changelog, $time, true);
-                if ($wikiPage->hasError()) {
-                    $message = 'Database error : ' . $wikiPage->getError();
-                    $style = 'caution';
-                } else {
-                    $message = $langWikiPageSaved;
-                    $style = 'success';
-                }
-                $action = 'show';
-            }
-        }
         break;
     }
     // page history
@@ -547,7 +565,7 @@ $tool_content .= '</ul></div>';
 if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action != 'exSearch') {
 
     $tool_content .= '<p align="right">';
-    if ($action == "edit" || $action == "diff" || $action == "history") {
+    if ($action == "edit" || $action == "diff" || $action == "history" || $action == "conflict") {
         $tool_content .= ''
                 . '<img src="' . $themeimg . '/back.png" align="middle" />&nbsp;'
                 . '<a class="claroCmd" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
@@ -628,53 +646,19 @@ if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action 
 
 switch ($action) {
     case "conflict": {
-            if ($wiki_title === '__MainPage__') {
-                //$displaytitle = $langWikiMainPage;
-                $displaytitle = '';
-            } else {
-                //$displaytitle = $wiki_title;
-                $displaytitle = '';
-            }
+            
 
             $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $displaytitle
-                    . ' : ' . $langWikiEditConflict
+            $tool_content .= '<h2>' . $langWikiEditLock
                     . '</h2>'
                     . "\n"
             ;
             $tool_content .= '</div>' . "\n";
-            $message = $langWikiConflictHowTo;
+            $message = $langWikiLockInfo;
             $tool_content .= "<div class='caution'>$message</div></br />";
-            $tool_content .= '<form id="editConflict" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
-            $tool_content .= '<textarea name="conflictContent" id="wiki_content"'
-                    . ' cols="80" rows="15" wrap="virtual">'
-            ;
-            $tool_content .= q($content);
-            $tool_content .= '</textarea><br /><br />' . "\n";
-            $tool_content .= '<div>' . "\n";
-            $tool_content .= '<input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n";
-            $tool_content .= '<input type="hidden" name="title" value="' . $wiki_title . '" />' . "\n";
-            $tool_content .= '<input type="submit" name="action[edit]" value="' . $langWikiEditLastVersion . '" />' . "\n";
-            $url = $_SERVER['SCRIPT_NAME']
-                    . '?course=' . $course_code
-                    . '&amp;wikiId=' . $wikiId
-                    . '&amp;title=' . $wiki_title
-                    . '&amp;action=show'
-            ;
-            $tool_content .= disp_button($url, $langCancel) . "\n";
-            $tool_content .= '</div>' . "\n";
-            $tool_content .= '</form>';
             break;
         }
     case "diff": {
-            if ($wiki_title === '__MainPage__') {
-                //$displaytitle = $langWikiMainPage;
-                $displaytitle = '';
-            } else {
-                //$displaytitle = $wiki_title;
-                $displaytitle = '';
-            }
-
             $oldTime = nice_format($oldTime, true);
 
             $userInfo = user_get_data($oldEditor);
@@ -695,8 +679,7 @@ switch ($action) {
             ;
 
             $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $displaytitle
-                    . $versionInfo
+            $tool_content .= '<h2>' . $versionInfo
                     . '</h2>'
                     . "\n"
             ;
