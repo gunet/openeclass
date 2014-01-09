@@ -114,7 +114,7 @@ class Database {
         $offset = 1;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
+        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
     }
 
     /**
