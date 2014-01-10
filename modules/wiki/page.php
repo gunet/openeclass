@@ -295,7 +295,7 @@ switch ($action) {
     // edit page content
     case 'edit': {
         
-        $lock_duration = 300; //5-minutes lock
+        $lock_duration = 305; //5-minutes lock + 5 seconds safety interval
         $lock_manager = new LockManager($lock_duration);
         
         //require a lock for this page
@@ -349,7 +349,7 @@ switch ($action) {
     }
     // save page
     case 'save': {
-        $lock_duration = 300; //5-minutes lock
+        $lock_duration = 305; //5-minutes lock
         $lock_manager = new LockManager($lock_duration);
         
         //require a lock for this page
@@ -510,8 +510,6 @@ if (!empty($message)) {
 	</table><br />";
 }
 
-// Check for javascript
-$javascriptEnabled = is_javascript_enabled();
 // user is not allowed to read this page
 
 if (!$is_allowedToRead) {
@@ -645,19 +643,6 @@ if ($action != 'recent' && $action != 'all' && $action != 'rqSearch' && $action 
 }
 
 switch ($action) {
-    case "conflict": {
-            
-
-            $tool_content .= '<div class="wikiTitle">' . "\n";
-            $tool_content .= '<h2>' . $langWikiEditLock
-                    . '</h2>'
-                    . "\n"
-            ;
-            $tool_content .= '</div>' . "\n";
-            $message = $langWikiLockInfo;
-            $tool_content .= "<div class='caution'>$message</div></br />";
-            break;
-        }
     case "diff": {
             $oldTime = nice_format($oldTime, true);
 
@@ -766,6 +751,27 @@ switch ($action) {
             }
             break;
         }
+    case "conflict": {
+   
+    	$tool_content .= '<div class="wikiTitle">' . "\n";
+    	$tool_content .= '<h2>' . $langWikiEditLock
+    	. '</h2>'
+        . "\n"
+    	;
+    	
+		$tool_content .= '</div>' . "\n";
+		$message = $langWikiLockInfo;
+		$tool_content .= "<div class='caution'>$message</div></br />";
+
+
+		if (isset($content) && $content != '') {
+		    //proceed to edit for, in order to save the content later
+			$action = 'edit';
+			$pre_action = 'conflict';
+		} else {
+		    break;
+		}
+    }    
     // edit page
     case "edit": {
             if (!$wiki->pageExists($wiki_title) && !$is_allowedToCreate) {
@@ -774,7 +780,50 @@ switch ($action) {
                 $tool_content .= $langWikiNotAllowedToEdit;
             } else {
                 $script = $_SERVER['SCRIPT_NAME'] . "?course=$course_code";
-
+                
+                //Do not show progress bar if a lock conflict was detected
+                if (!isset($pre_action) || $pre_action != 'conflict') {
+                    //add lock time progress bar
+                    load_js('jquery');
+                    
+                    $head_content .= "<script type='text/javascript'>
+                        function secondsToHms(d) {
+                        d = Number(d);
+                        var h = Math.floor(d / 3600);
+                        var m = Math.floor(d % 3600 / 60);
+                        var s = Math.floor(d % 3600 % 60);
+                        return ((h > 0 ? h + \":\" : \"\") + (m > 0 ? (h > 0 && m < 10 ? \"0\" : \"\") + m + \":\" : \"0:\") + (s < 10 ? \"0\" : \"\") + s); }
+                    </script>\n\n";
+                    
+                    $head_content .= "<script type='text/javascript'>
+                                        $(document).ready(function(){
+                                        	function countdown(callback) {
+                                        	    var bar = document.getElementById('progress'),
+                                        	    timer = document.getElementById('progresstime'),
+                                        	    time = max = ".($lock_duration-5).",
+                                        	    int = setInterval(function() {
+                                        	    	timer.innerHTML = secondsToHms(time);
+                                        	        bar.style.width = Math.floor(100 * time-- / max) + '%';
+                                        	        if (time + 1 == 0) {
+                                        	            clearInterval(int);
+                                        	            // 600ms - width animation time
+                                        	            callback && setTimeout(callback, 600);
+                                        	        }
+                                        	    }, 1000);
+                                        	}
+                                        	
+                                        	countdown(function() {
+                                        	    alert('".$langWikiLockTimeEnd."');
+                                        	});
+                                        })
+                                    </script>\n";
+                    
+                    $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_duration-5)).":".gmdate('s', $lock_duration-5)."</span></div>
+                                      <div class='progress'>
+                                        <div class='bar' id='progress'></div>
+                                      </div>";
+                }
+                
                 $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
                         , true, false)
                 ;
