@@ -62,6 +62,7 @@ define('EBOOK_DOCUMENTS', true);
 include '../../include/baseTheme.php';
 include '../../include/lib/forcedownload.php';
 include '../../include/lib/fileDisplayLib.inc.php';
+include '../../include/DOMDocumentCharset.php';
 include '../document/doc_init.php';
 
 if ($not_found) {
@@ -205,8 +206,8 @@ if (isset($next_section_id)) {
 
 $ebook_body = '';
 $ebook_head = '';
-$dom = new DOMDocument();
-@$dom->loadHTMLFile($basedir . $subsection_path[$current_sid][$current_ssid]);
+$dom = new DOMDocumentCharset();
+@$dom->loadHTMLFileCharset($basedir . $subsection_path[$current_sid][$current_ssid]);
 
 if (isset($_SESSION['glossary_terms_regexp']) and !empty($_SESSION['glossary_terms_regexp'])) {
 	$xpath = new DOMXpath($dom);

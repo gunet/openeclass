@@ -26,6 +26,7 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include '../../include/lib/fileDisplayLib.inc.php';
+include '../../include/DOMDocumentCharset.php';
 
 mysql_select_db($mysqlMainDb);
 
@@ -290,8 +291,8 @@ function find_html_files()
 
 function get_html_title($file)
 {
-        $dom = new DOMDocument();
-        @$dom->loadHTMLFile($file);
+        $dom = new DOMDocumentCharset();
+        @$dom->loadHTMLFileCharset($file);
         if (!is_object($dom)) {
                 return '';
         }
