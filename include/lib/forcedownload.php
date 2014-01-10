@@ -25,7 +25,7 @@
 ==============================================================================        
     @Description: Support functions used by document, document_upgrade, video.php
 
-    This script contains the function that forces the web browser to donwload
+    This script contains the function that forces the web browser to download
     a file instead of just opening it. This happens for security reasons.
     
     The function's arguments go as follow:

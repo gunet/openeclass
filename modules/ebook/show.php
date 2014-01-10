@@ -22,7 +22,7 @@ $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
 $uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '',
-                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) : 
+                    strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) :
                             preg_replace('/\?[^?]*$/', '',
                     strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
 $path_components = explode('/', $uri);
@@ -78,15 +78,15 @@ if ($show_orphan_file and $file_path) {
         send_file_by_url_file_path($file_path);
     else {
         require_once '../../include/lib/multimediahelper.class.php';
-        
+
         $path_components = explode('/', str_replace('//', chr(1), $file_path));
         $file_info = public_path_to_disk_path($path_components, '');
-        
+
         $mediaPath = file_url($file_info['path'], $file_info['filename']);
         $mediaURL = $urlServer .'modules/ebook/document.php?course='. $code_cours .'&amp;ebook_id='.$ebook_id.'&amp;download='. $file_info['path'];
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
-        
+
         echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath);
         exit();
     }
@@ -125,42 +125,42 @@ if (!$q or mysql_num_rows($q) == 0) {
 $last_section_id = null;
 $sections = array();
 while ($row = mysql_fetch_array($q)) {
-        $url_filename = public_file_path($row['path'], $row['filename']);
-	$sid = $row['sid'];
-	$ssid = $row['ssid'];
-	if (!isset($current_sid)) {
-		$current_sid = $sid;
-	}
+    $url_filename = public_file_path($row['path'], $row['filename']);
+    $sid = $row['sid'];
+    $ssid = $row['ssid'];
+    if (!isset($current_sid)) {
+        $current_sid = $sid;
+    }
 	if ($current_sid == $sid and !isset($current_ssid)) {
 		$current_ssid = $row['ssid'];
 	}
-        if (!isset($current_display_id) and isset($current_sid) and isset($current_ssid)) {
-                $current_display_id = $sid . ',' . $ssid;
-        }
-        $display_id = $sid . ',' . $ssid;
-        if ($last_section_id != $row['sid']) {
-                $sections[] = array('id' => $display_id,
-                                    'title' => $row['section_title'],
-                                    'current' => false,
-                                    'indent' => false);
-        }
+    if (!isset($current_display_id) and isset($current_sid) and isset($current_ssid)) {
+        $current_display_id = $sid . ',' . $ssid;
+    }
+    $display_id = $sid . ',' . $ssid;
+    if ($last_section_id != $row['sid']) {
         $sections[] = array('id' => $display_id,
-                            'title' => $row['subsection_title'],
-                            'indent' => true,
-                            'current' => (isset($current_display_id) and $current_display_id == $display_id));
-	$subsection_path[$sid][$ssid] = $row['path'];
-	if (isset($last_display_id) and isset($current_display_id)) {
-		if ($current_display_id == $display_id) {
-			$back_section_id = $last_display_id;
-			$back_title = $last_title;
-		} elseif ($current_display_id == $last_display_id) {
-			$next_section_id = $display_id;
-			$next_title = $row['subsection_title'];
-		}
-	}
-	$last_section_id = $sid;
-	$last_display_id = $display_id;
-	$last_title = $row['subsection_title'];
+                            'title' => $row['section_title'],
+                            'current' => false,
+                            'indent' => false);
+    }
+    $sections[] = array('id' => $display_id,
+                        'title' => $row['subsection_title'],
+                        'indent' => true,
+                        'current' => (isset($current_display_id) and $current_display_id == $display_id));
+    $subsection_path[$sid][$ssid] = $row['path'];
+    if (isset($last_display_id) and isset($current_display_id)) {
+        if ($current_display_id == $display_id) {
+            $back_section_id = $last_display_id;
+            $back_title = $last_title;
+        } elseif ($current_display_id == $last_display_id) {
+            $next_section_id = $display_id;
+            $next_title = $row['subsection_title'];
+        }
+    }
+    $last_section_id = $sid;
+    $last_display_id = $display_id;
+    $last_title = $row['subsection_title'];
 }
 
 if (!$full_url_found) {
@@ -261,19 +261,20 @@ $t->pparse('Output', 'page');
 
 function send_file_by_url_file_path($file_path, $initial_path = '')
 {
-        global $basedir, $uid;
+    global $basedir, $uid, $cours_id;
 
-        $path_components = explode('/', str_replace('//', chr(1), $file_path));
-        $file_info = public_path_to_disk_path($path_components, $initial_path);
-        
-        $valid = ($uid) ? true : token_validate($file_info['path'], $_GET['token'], 30);
-        if (!$valid) {
-           header("Location: ${urlServer}");
-           exit();
-        }
-        
-	if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], null, false)) {
-                not_found($file_path);
-	}
-	exit;
+    $path_components = explode('/', str_replace('//', chr(1), $file_path));
+    $file_info = public_path_to_disk_path($path_components, $initial_path);
+
+    $valid = ($uid or course_status($cours_id) == COURSE_OPEN or
+        token_validate($file_info['path'], $_GET['token'], 30));
+    if (!$valid) {
+        header("Location: ${urlServer}");
+        exit();
+    }
+
+    if (!send_file_to_client($basedir . $file_info['path'], $file_info['filename'], null, false)) {
+        not_found($file_path);
+    }
+    exit;
 }
