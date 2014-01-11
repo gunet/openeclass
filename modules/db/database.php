@@ -24,7 +24,19 @@ define("DB_TYPE", "MYSQL");
 
 require_once 'modules/db/dbhelper.php';
 
-class Database {
+final class DBResult {
+
+    var $lastInsertID;
+    var $affectedRows;
+
+    public function __construct($lastInsertID, $affectedRows) {
+        $this->lastInsertID = $lastInsertID;
+        $this->affectedRows = $affectedRows;
+    }
+
+}
+
+final class Database {
 
     private static $REQ_LASTID = 1;
     private static $REQ_OBJECT = 2;
@@ -114,7 +126,7 @@ class Database {
         $offset = 1;
         $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
+        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
     }
 
     /**
@@ -184,6 +196,14 @@ class Database {
         if (!$stm)
             return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
 
+        /* flatten array */
+        $flatten = array();
+        $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables));
+        foreach ($it as $v) {
+            $flatten[] = $v;
+        }
+        $variables = $flatten;
+
         /* Bind values - use '?' notation  */
         $howmanyvalues = count($variables);
         for ($i = 1; $i <= $howmanyvalues; $i++) {
@@ -223,7 +243,7 @@ class Database {
             if (!is_array($result))
                 return $this->errorFound($callback_error, "Unable to fetch all results as objects", $statement, $init_time);
         } else if ($requestType == Database::$REQ_LASTID) {
-            $result = $this->dbh->lastInsertId();
+            $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
             if ($callback_fetch)
                 while (TRUE)

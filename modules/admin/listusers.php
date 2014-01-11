@@ -4,7 +4,7 @@
  *   Open eClass 3.0
  *   E-learning and Course Management System
  * ========================================================================
- *  Copyright(c) 2003-2013  Greek Universities Network - GUnet
+ *  Copyright(c) 2003-2014  Greek Universities Network - GUnet
  *  A full copyright notice can be read in "/info/copyright.txt".
  *
  *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -83,7 +83,7 @@ if (!empty($user_registered_at)) {
     add_param('reg_flag');
     add_param('user_registered_at');
     // join the above with registered at search
-    $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' UNIX_TIMESTAMP(' . quote($user_registered_at) . ')';
+    $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ' . quote($user_registered_at);
 }
 // surname search
 if (!empty($lname)) {

@@ -45,10 +45,8 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
                         course_id = $cid");
 }
 
-$extraMessage = '';
-
 if (isset($toolContent_ErrorExists)) {
-    $_SESSION['errMessage'] = $toolContent_ErrorExists;
+    Session::set_flashdata($toolContent_ErrorExists, 'alert1');
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
@@ -59,10 +57,6 @@ if (isset($toolContent_ErrorExists)) {
     exit();
 }
 
-if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
-    $extraMessage = $_SESSION['errMessage'];
-    unset($_SESSION['errMessage']);
-}
 
 require_once 'template/template.inc.php';
 require_once 'tools.php';
@@ -80,7 +74,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $courseHome, $course_code, $extraMessage, $helpTopic,
+    global $courseHome, $course_code, $helpTopic,
     $homePage, $title, $is_editor, $langActivate,
     $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
     $langChooseLang, $langCopyrightFooter, $langDeactivate,
@@ -105,13 +99,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $forum_content = $perso_tool_content ['forum_content'];
     }
 
-    $messageBox = '';
 
-    //if an error exists (ex., sessions is lost...)
-    //show the error message above the normal tool content
-    if (strlen($extraMessage) > 0) {
-        $messageBox = $extraMessage;
-    }
 
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true) ? true : false;
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true) ? true : false;
@@ -193,9 +181,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('SITE_NAME', $siteName);
 
+    
         //If there is a message to display, show it (ex. Session timeout)
-        if (strlen($messageBox) > 1) {
-            $t->set_var('EXTRA_MSG', $messageBox);
+        if ($messages = Session::render_flashdata()) {
+            $t->set_var('EXTRA_MSG', $messages);
         }
 
         $t->set_var('TOOL_CONTENT', $toolContent);
@@ -234,10 +223,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } elseif ($menuTypeID == 3) {
             $t->set_var('THIRD_BAR_TEXT', $langAdmin);
             $t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
-        } elseif ($menuTypeID > 0 and $menuTypeID < 3 and (!isset($_SESSION['user_perso_active']) or !$_SESSION['user_perso_active'])) {
+        } elseif ($menuTypeID > 0 and $menuTypeID < 3 ) {
             $t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
             $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
-        } elseif ($menuTypeID > 0 and $_SESSION['user_perso_active']) {
+        } elseif ($menuTypeID > 0) {
             $t->set_var('THIRD_BAR_TEXT', $langPersonalisedBriefcase);
             $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
         } else {
@@ -298,13 +287,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
-        if ($status != 10) {
-            $perso_breadcrumb = (isset($_SESSION['user_perso_active']) and $_SESSION['user_perso_active']) ?
-                    $langPersonalisedBriefcase : $langUserBriefcase;
+        if ($status != USER_GUEST) {            
             if (!isset($_SESSION['uid'])) {
                 $t->set_var('BREAD_TEXT', $langHomePage);
             } else {
-                $t->set_var('BREAD_TEXT', $perso_breadcrumb);
+                $t->set_var('BREAD_TEXT', $langPersonalisedBriefcase);
             }
 
             if (!$homePage) {
@@ -574,5 +561,6 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     if ($default_langcode === false) {
         $default_langcode = $language;
     }
+ 
     return selection($native_language_names, $name, $default_langcode, $onchange_js);
 }

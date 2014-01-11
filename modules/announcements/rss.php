@@ -43,20 +43,15 @@ if ($course_id === false) {
     exit;
 }
 if (!visible_module(MODULE_ID_ANNOUNCE)) {
-    $toolContent_ErrorExists = caution($langCheckPublicTools);
-    $_SESSION['errMessage'] = $toolContent_ErrorExists;
+    Session::set_flashdata($langCheckPublicTools, 'alert1');
     session_write_close();
+    $errorMessagePath = "../../";    
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
-    if (isset($_SESSION['errMessage']) && strlen($_SESSION['errMessage']) > 0) {
-        $extraMessage = $_SESSION['errMessage'];
-        unset($_SESSION['errMessage']);
-    }
-    $errorMessagePath = "../../";
     exit;
 }
 

@@ -852,7 +852,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                 assignment_submit.uid, assignments_map.new_id,
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
-                                assignment_submit.comments, assignment_submit.grade, assignment_submit.grade_comments,
+                                assignment_submit.comments,
+                                CAST(assignment_submit.grade, DECIMAL(10,2), assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
                            FROM assignment_submit, assignments_map

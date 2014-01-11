@@ -619,8 +619,7 @@ function process_login() {
     $is_eclass_unique = is_eclass_unique();
 
     if (isset($_POST['submit'])) {
-        unset($_SESSION['uid']);
-        $_SESSION['user_perso_active'] = false;
+        unset($_SESSION['uid']);        
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
@@ -697,8 +696,7 @@ function process_login() {
         } else {
             db_query("INSERT INTO loginout
 						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
-						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-            $_SESSION['user_perso_active'] = true;
+						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");            
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
@@ -875,8 +873,7 @@ function shib_cas_login($type) {
     } else {
         $autoregister = FALSE;
     }
-
-    $_SESSION['user_perso_active'] = false;
+    
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
         $email = $_SESSION['shib_email'];
@@ -897,7 +894,7 @@ function shib_cas_login($type) {
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
-    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, perso, lang, verified_mail
+    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
 						FROM user WHERE username ";
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin .= "= " . quote($uname);
@@ -918,7 +915,7 @@ function shib_cas_login($type) {
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
             unset($_SESSION['cas_givenname']);
-            $_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
+            Session::set_flashdata($langUserAltAuth, 'caution');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
@@ -951,8 +948,7 @@ function shib_cas_login($type) {
                 $is_departmentmanage_user = 1;
             }
             $_SESSION['uid'] = $info['id'];
-            //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
-            $userPerso = $info['perso'];
+            //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL            
             if (isset($_SESSION['langswitch'])) {
                 $language = $_SESSION['langswitch'];
             } else {
@@ -969,10 +965,9 @@ function shib_cas_login($type) {
         }
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?, email = ?, status = ?, lang = 'el', perso = 'yes', 
+                                       username = ?, email = ?, status = ?, lang = 'el', 
                                        registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
-                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT);
-        $userPerso = 'yes';
+                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
         $language = $_SESSION['langswitch'] = 'el';
     } else {
         // user not registered, automatic registration disabled
@@ -991,10 +986,7 @@ function shib_cas_login($type) {
     $_SESSION['email'] = $email;
     $_SESSION['status'] = $status;
     //$_SESSION['is_admin'] = $is_admin;
-    $_SESSION['shib_user'] = 1; // now we are shibboleth user
-    if ($userPerso == 'no') {
-        $_SESSION['user_perso_active'] = true;
-    }
+    $_SESSION['shib_user'] = 1; // now we are shibboleth user    
 
     db_query("INSERT INTO loginout
 					(loginout.id_user, loginout.ip, loginout.when, loginout.action)

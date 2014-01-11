@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,9 +39,18 @@ $user = new User();
 load_js('jquery');
 load_js('jquery-ui');
 load_js('jstree');
+load_js('jquery-ui-timepicker-addon.min.js');
 
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content .= $jscalendar->get_load_files_code();
+$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+<script>
+$(function() {
+$('input[name=user_registered_at]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langSearchUser;
 
@@ -57,8 +66,7 @@ $user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
 $auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
 $email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-$hour = isset($_GET['hour']) ? intval($_GET['hour']) : 0;
-$minute = isset($_GET['minute']) ? intval($_GET['minute']) : 0;
+$user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
 
 if (isset($_GET['department'])) {
     $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
@@ -107,6 +115,7 @@ $usertype_data = array(
     USER_TEACHER => $langTeacher,
     USER_STUDENT => $langStudent,
     USER_GUEST => $langGuest);
+
 $tool_content .= selection($usertype_data, 'user_type', 0) . "
     </td>
   </tr>
@@ -123,21 +132,10 @@ $tool_content .= selection($authtype_data, 'auth_type', 0) . "
     <tr>
     <th class='left'>$langRegistrationDate:</th>
     <td>";
-$reg_flag_data = array();
-$reg_flag_data[1] = $langAfter;
-$reg_flag_data[2] = $langBefore;
-$tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
 
-$start_cal = $jscalendar->make_input_field(
-        array('showOthers' => true,
-    'showsTime' => true,
-    'align' => 'Tl',
-    'ifFormat' => '%Y-%m-%d %H:%M',
-    'timeFormat' => '24'), array('style' => 'width: 15em; text-align: center',
-    'name' => 'user_registered_at',
-    'value' => ' '));
+$tool_content .= selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag);
 
-$tool_content .= $start_cal;
+$tool_content .= "<input type='text' name='user_registered_at' value='" . $user_registered_at . "'>";
 
 $tool_content .= "</td></tr>
   <tr>

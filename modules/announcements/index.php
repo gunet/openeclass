@@ -149,7 +149,7 @@ if ($is_editor) {
                                          SET content = ?,
                                              title = ?, `date` = NOW(),
                                              course_id = ?, `order` = ?,
-                                             visible = 1", $newContent, $antitle, $course_id, $order);
+                                             visible = 1", $newContent, $antitle, $course_id, $order)->lastInsertID;
             $log_type = LOG_INSERT;
         }
         $aidx->store($id);

@@ -589,7 +589,8 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` CHAR(1) NOT NULL DEFAULT 1,
                 `secret_directory` VARCHAR(30) NOT NULL,
-                `group_submissions` CHAR(1) DEFAULT 0 NOT NULL ) $charset_spec");
+                `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
+                `max_grade` FLOAT DEFAULT NULL ) $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -599,7 +600,7 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                 `comments` TEXT NOT NULL,
-                `grade` VARCHAR(50) NOT NULL DEFAULT '',
+                `grade` FLOAT DEFAULT NULL,
                 `grade_comments` TEXT NOT NULL,
                 `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
