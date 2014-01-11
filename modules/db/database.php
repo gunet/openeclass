@@ -24,7 +24,19 @@ define("DB_TYPE", "MYSQL");
 
 require_once 'modules/db/dbhelper.php';
 
-class Database {
+final class DBResult {
+
+    var $lastInsertID;
+    var $affectedRows;
+
+    public function __construct($lastInsertID, $affectedRows) {
+        $this->lastInsertID = $lastInsertID;
+        $this->affectedRows = $affectedRows;
+    }
+
+}
+
+final class Database {
 
     private static $REQ_LASTID = 1;
     private static $REQ_OBJECT = 2;
@@ -223,7 +235,7 @@ class Database {
             if (!is_array($result))
                 return $this->errorFound($callback_error, "Unable to fetch all results as objects", $statement, $init_time);
         } else if ($requestType == Database::$REQ_LASTID) {
-            $result = $this->dbh->lastInsertId();
+            $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
             if ($callback_fetch)
                 while (TRUE)
