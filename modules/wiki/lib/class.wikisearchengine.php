@@ -74,7 +74,7 @@ class WikiSearchEngine {
             AND " 
                 .$searchArr[0];
 		
-		return Database::get()->queryArray($sql, array_merge((array)$wikiId, $searchArr[1]));
+		return Database::get()->queryArray($sql, $wikiId, $searchArr[1]);
     }
 
     // utility functions
