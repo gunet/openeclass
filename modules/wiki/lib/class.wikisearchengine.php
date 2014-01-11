@@ -60,7 +60,7 @@ class WikiSearchEngine {
      * @return Array of Wiki pages
      */
     function searchInWiki($pattern, $wikiId, $mode = CLWIKI_SEARCH_ANY) {
-        $searchStr = $this->makePageSearchQuery( $pattern, null, $mode );
+        $searchArr = $this->makePageSearchQuery( $pattern, null, $mode );
 
         $sql =  "
             SELECT 
@@ -70,11 +70,11 @@ class WikiSearchEngine {
                 `wiki_pages` AS p, 
                 `wiki_pages_content` AS c 
             WHERE 
-                p.`wiki_id` = ".$wikiId."
+                p.`wiki_id` = ?
             AND " 
-                .$searchStr;
+                .$searchArr[0];
 		
-		return Database::get()->queryArray($sql);
+		return Database::get()->queryArray($sql, array_merge((array)$wikiId, $searchArr[1]));
     }
 
     // utility functions
@@ -124,22 +124,35 @@ class WikiSearchEngine {
      * Generate search string for a given pattern in wiki pages
      * @param String pattern
      * @param Const mode
-     * @return String
+     * @return Array, first position searchstr, second position array of search query arguments
      */
     function makePageSearchQuery($pattern, $groupId = null, $mode = CLWIKI_SEARCH_ANY) {
         list($keywords, $impl) = $this->splitPattern($pattern, $mode);
 
         $searchTitleArr = array();
         $searchPageArr = array();
+        $ret_array = array();
+        
+        $ret_array[0] = ''; //search string
+        $ret_array[1] = array(); //search query arguments
+        
+        //helper arrays to store arguments before putting them in correct order
+        $groupstr_args = array();
+        $searchTitleArr_args = array();
+        $searchPageArr_args = array();
 
-        $groupstr = ( ! is_null( $groupId ) )
-            ? "( w.`group_id` = ".$groupId."  AND w.`id` = p.`wiki_id`)"
-            : "(w.`id` = p.`wiki_id`)"
-            ;
+        if (!is_null($groupId)) {
+            $groupstr = "( w.`group_id` = ?  AND w.`id` = p.`wiki_id`)";
+            $groupstr[] = $groupId;
+        } else {
+            $groupstr = "(w.`id` = p.`wiki_id`)";
+        }
 
         foreach ($keywords as $keyword) {
-            $searchTitleArr[] = " p.`title` LIKE '%".$keyword."%' ";
-            $searchPageArr[] = " c.`content` LIKE '%".$keyword."%' ";
+            $searchTitleArr[] = " p.`title` LIKE ? ";
+            $searchTitleArr_args[] = '%'.$keyword.'%';
+            $searchPageArr[] = " c.`content` LIKE ? ";
+            $searchPageArr_args[] = '%'.$keyword.'%';
         }
 
         $searchTitle = implode($impl, $searchTitleArr);
@@ -157,8 +170,11 @@ class WikiSearchEngine {
         $searchStr = "( ".$groupstr." AND c.`id` = p.`last_version` AND " . $searchTitle . " ) OR "
             . "( ".$groupstr." AND c.`id` = p.`last_version` AND " . $searchPage . " )"
             ;
-
-        return "($searchStr)";
+        
+        $ret_array[0] = "($searchStr)";
+        $ret_array[1] = array_merge($groupstr_args, $searchTitleArr_args, $groupstr_args, $searchPageArr_args);
+        
+        return $ret_array;
     }
 
 }

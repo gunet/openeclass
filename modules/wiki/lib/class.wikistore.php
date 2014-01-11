@@ -203,11 +203,11 @@ class WikiStore {
                     . " AND `course_id` = ?"
             ;
 
-            Database::get()->query($sql, function ($errormsg) use ($that) {
+            $result = Database::get()->query($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
                 }, intval($wikiId), intval($course_id));
 
-            if ($this->hasError()) {
+            if ($result->affectedRows < 1) {
                 return false;
             }
 
@@ -216,11 +216,11 @@ class WikiStore {
                     . "WHERE `wiki_id` = ?"
             ;
 
-            Database::get()->query($sql, function ($errormsg) use ($that) {
+            $result = Database::get()->query($sql, function ($errormsg) use ($that) {
             	$that->setError($errormsg);
             }, intval($wikiId));
 
-            if ($this->hasError()) {
+            if ($result->affectedRows < 1) {
                 return false;
             }
 

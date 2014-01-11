@@ -289,11 +289,12 @@ class Wiki {
 
             // GET WIKIID
             $that = $this;
-            $wikiId = Database::get()->query($sql, function ($errormsg) use ($that) {
+            $result = Database::get()->query($sql, function ($errormsg) use ($that) {
             	    $that->setError($errormsg);
                 }, $course_id, $this->getTitle(), $this->getDescription(), $this->getGroupId());
 
             if (!$this->hasError()) {
+                $wikiId = $result->lastInsertID;
                 $this->setWikiId($wikiId);
             }
             $log_action = LOG_INSERT;
