@@ -196,6 +196,14 @@ final class Database {
         if (!$stm)
             return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
 
+        /* flatten array */
+        $flatten = array();
+        $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables));
+        foreach ($it as $v) {
+            $flatten[] = $v;
+        }
+        $variables = $flatten;
+
         /* Bind values - use '?' notation  */
         $howmanyvalues = count($variables);
         for ($i = 1; $i <= $howmanyvalues; $i++) {
