@@ -865,6 +865,14 @@ switch ($action) {
             if ($wikiPage->hasError()) {
                 $tool_content .= $wikiPage->getError();
             } else {
+                
+                //unlock after edit cancellation
+                //only if current user is the lock owner (to avoid unlocking with GET)
+                $lock_duration = 305;
+                $lock_manager = new LockManager($lock_duration);
+                if ($lock_manager->getLockOwner($wiki_title, $wikiId) == $uid) {
+                    $lock_manager->releaseLock($wiki_title, $wikiId);
+                } 
 
                 // get localized value for wiki main page title
                 if ($wiki_title === '__MainPage__') {
