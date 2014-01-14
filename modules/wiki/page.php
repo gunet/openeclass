@@ -47,7 +47,16 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 $style = '';
-$_gid = null;
+
+//check if groups are enabled for this course
+//if not user will be shown the course wiki page
+$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?";
+$result = Database::get()->querySingle($sql, $course_id);
+if (is_object($result) && $result->wiki == 1) {
+    $is_groupAllowed = true;
+} else {
+    $is_groupAllowed = false;
+}
 
 if (isset($_SESSION['status']) && $_SESSION['status'] != 0) {
     $is_courseMember = true;
@@ -62,21 +71,8 @@ if (!isset($_REQUEST['wikiId'])) {
     exit();
 }
 
-// set admin mode and groupId
-
+// set admin mode
 $is_allowedToAdmin = $is_editor;
-
-if ($_gid && $is_groupAllowed) {
-    // group context
-    $grouId = $_gid;
-    $navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
-    $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $_group['name']);
-} elseif ($_gid && !$is_groupAllowed) {
-    die($langNotAllowed);
-} else {
-    // course context
-    $groupId = 0;
-}
 
 // Wiki specific classes and libraries
 require_once 'modules/wiki/lib/class.wiki2xhtmlrenderer.php';
@@ -89,30 +85,48 @@ require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/wiki/lib/lib.javascript.php';
 
-// security fix : disable access to other groups wiki
-if (isset($_REQUEST['wikiId'])) {
-    $wikiId =  intval($_REQUEST['wikiId']);
-
-    $sql = "SELECT `group_id` "
-            . "FROM `wiki_properties` "
-            . "WHERE `id` = ?"
-            . " AND `course_id` = ?"
-    ;
-
-    $result = Database::get()->querySingle($sql, intval($wikiId), intval($course_id));
-
-    $wikiGroupId = (int) $result->group_id;
-
-    if (isset($_gid) && $_gid != $wikiGroupId) {
-        die($langNotAllowed);
-    } elseif (!isset($_gid) && $result->group_id != 0) {
-        die($langNotAllowed);
-    }
-}
-
 // set request variables
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
-//$title = (isset($_REQUEST['title'])) ? strip_tags(rawurldecode($_REQUEST['title'])) : '';
+
+// security fix : disable access to other groups wiki
+// and to wikis from non-existent groups or disabled group wikis
+$sql = "SELECT `group_id` "
+        . "FROM `wiki_properties` "
+        . "WHERE `id` = ?"
+        . " AND `course_id` = ?"
+;
+
+$result = Database::get()->querySingle($sql, $wikiId, $course_id);
+
+if (is_object($result)) {
+    $groupId = $result->group_id;
+    if ($groupId != 0) {
+        
+        if ($is_groupAllowed) {
+            //check if user is group member
+            $sql = "SELECT `user_id` FROM `group_members`  WHERE user_id = ? and group_id = ?";
+            $result = Database::get()->querySingle($sql, $uid, $groupId);
+            if (is_object($result)) {
+            	$is_groupMember = true;
+            } else {
+            	$is_groupMember = false;
+            }
+            
+            $sql = "SELECT `name` FROM `group` WHERE `id` = ?";
+            $result = Database::get()->querySingle($sql, $groupId);
+            if (is_object($result)) {
+            	$group_name = $result->name;
+            	$navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
+            	$navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
+            }    
+        } else {//redirect user to course wiki
+            header("Location: index.php?course=$course_code");
+            exit();
+        }
+    }
+} else {
+    $groupId = 0;
+}
 
 // Objects instantiation
 $wikiStore = new WikiStore();
@@ -137,7 +151,7 @@ $is_allowedToCreate = false;
 
 // set user access rights using user status and wiki access control list
 
-if ($_gid && $is_groupAllowed) {
+if ($groupId != 0 && $is_groupAllowed) {
     // group_context
     if (is_array($accessControlList)) {
         $is_allowedToRead = $is_allowedToAdmin || ( $is_groupMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'group') ) || ( $is_courseMember && WikiAccessControl::isAllowedToReadPage($accessControlList, 'course') ) || WikiAccessControl::isAllowedToReadPage($accessControlList, 'other');
@@ -432,7 +446,7 @@ $head_content .= "<script type=\"text/javascript\">"
 ;
 //navigation bar
 if (!add_units_navigation()) {
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langWiki);
+    $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;gid=' . $groupId, 'name' => $langWiki);
     $navigation[] = array('url' => 'page.php?course=' . $course_code . '&amp;wikiId=' . $wikiId . '&amp;action=show', 'name' => $wiki->getTitle());
 }
 
@@ -472,8 +486,8 @@ switch ($action) {
 $toolTitle = array();
 $toolTitle['mainTitle'] = sprintf($langWikiTitlePattern, $wiki->getTitle());
 
-if ($_gid) {
-    $toolTitle['supraTitle'] = $_group['name'];
+if ($groupId != 0) {
+    $toolTitle['supraTitle'] = $group_name;
 }
 
 switch ($action) {
@@ -546,7 +560,7 @@ $tool_content .= '          <li>'
 ;
 
 $tool_content .= '<li>'
-        . '<img src="' . $themeimg . '/list.png" align="middle" />&nbsp;<a class="claroCmd" href="' . 'index.php?course=' . $course_code
+        . '<img src="' . $themeimg . '/list.png" align="middle" />&nbsp;<a class="claroCmd" href="' . 'index.php?course=' . $course_code . '&amp;gid=' . $groupId
         . '">'
         . $langWikiList . '</a></li>' . "\n"
 ;
@@ -1073,17 +1087,16 @@ switch ($action) {
     case 'rqSearch':
     {
         $searchForm = '<form method="post" action="'
-            . htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.(int)$wikiId)
+            . htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)
             .'">'."\n"
             . '<input type="hidden" name="action" value="exSearch" />'. "\n"
-    	    //. claro_form_relay_context() . "\n"
             . '<label for="searchPattern">'
             . $langSearch
             . '</label><br />'."\n"
             . '<input type="text" id="searchPattern" name="searchPattern" />'."\n"
             . '<input type="submit" value="'.$langSubmit.'" />'."\n"
             . disp_button(
-                htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId), $langCancel)
+                htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code), $langCancel)
             . '</form>'."\n";
         
         $tool_content .= $searchForm;

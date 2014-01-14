@@ -270,7 +270,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
             . '        <td>' . "\n"
             . '        <input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
             . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
-            . '        <input type="hidden" name="groupId" value="' . $groupId . '" />' . "\n"
+            . '        <input type="hidden" name="gid" value="' . $groupId . '" />' . "\n"
             . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . htmlspecialchars($title) . '" />' . "\n"
             . '        </td>' . "\n"
             . '      </tr>' . "\n"
@@ -299,7 +299,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
       . '</div>' . "\n"
       . '</fieldset>' . "\n"
      */
-    ; // atkyritsis, for the moment we skip wiki ACL
+     // atkyritsis, for the moment we skip wiki ACL
 // commenting below and hardwiring the default ACL properties
     /*            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
       . '<legend>' . $langWikiAccessControl . '</legend>' . "\n"
@@ -343,24 +343,32 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
       ; */
 // atkyritsis
 // hardwiring
-    $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[course_edit]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[course_create]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_read]" value="on" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
-    $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    if ($groupId == 0) {
+        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_edit]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_create]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    } else {//default values for group wikis
+        $form .= '<input type="hidden" name="acl[group_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[group_edit]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[group_create]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_read]" value="on" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[course_create]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_read]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_edit]" value="off" />' . "\n";
+        $form .= '<input type="hidden" name="acl[other_create]" value="off" />' . "\n";
+    }
 
 // hardwiring over
     //$form .= '<div style="padding: 10px">' . "\n" ;
 
-    if ($groupId != 0) {
-        $form .= '<input type="hidden" name="gidReq" value="' . $groupId . '" />' . "\n";
-    }
-
     $form .= '</td></tr><tr><th>&nbsp;</th><td>';
 
     $form .= '<input type="submit" name="action[exEdit]" value="' . $langSave . '" />' . "\n"
-            . disp_button($_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;action=list', $langCancel) . "\n"
+            . disp_button($_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid=' . $groupId . 'action=list', $langCancel) . "\n"
     ;
 
     $form .= '</td></tr></table></fieldset></form>';

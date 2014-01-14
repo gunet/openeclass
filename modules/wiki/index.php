@@ -51,8 +51,18 @@ load_js('tools.js');
 
 $style = '';
 
-// temporary
-$_gid = null;
+$_gid = isset($_REQUEST['gid']) ? $_REQUEST['gid'] : null;
+
+//check if groups are enabled for this course
+//if not user will be shown the course wiki page
+$sql = "SELECT `wiki` FROM `group_properties` WHERE course_id = ?";
+$result = Database::get()->querySingle($sql, $course_id);
+if (is_object($result) && $result->wiki == 1) {
+    $is_groupAllowed = true;
+} else {
+    $is_groupAllowed = false;
+}
+
 
 $nameTools = $langWiki;
 
@@ -61,14 +71,19 @@ $nameTools = $langWiki;
 // set admin mode and groupId
 $is_allowedToAdmin = $is_editor;
 
-if ($_gid and $is_groupAllowed) {
+if ($_gid && $_gid != 0 && $is_groupAllowed) {
     // group context
-    $groupId = (int) $_gid;
-
-    $navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
-    $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $_group['name']);
-} elseif ($_gid && !$is_groupAllowed) {
-    die($langNotAllowed);
+    $groupId = intval($_gid);
+    
+    $sql = "SELECT `name` FROM `group` WHERE `id` = ?";
+    $result = Database::get()->querySingle($sql, $groupId);
+    if (is_object($result)) {
+        $group_name = $result->name;
+        $navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
+        $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
+    } else {
+        $groupId = 0;
+    }    
 } else {
     // course context
     $groupId = 0;
@@ -283,7 +298,7 @@ if ($action == 'rqEdit') {
 
 switch ($action) {
     case "rqEdit": {
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWiki);
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
             $nameTools = $langWikiProperties;
             $noPHP_SELF = true;
             break;
@@ -300,8 +315,8 @@ switch ($action) {
 
 $toolTitle = array();
 
-if ($_gid) {
-    $toolTitle['supraTitle'] = $_group['name'];
+if ($groupId != 0) {
+    $toolTitle['supraTitle'] = $group_name;
 }
 
 switch ($action) {
@@ -346,7 +361,7 @@ switch ($action) {
                 $tool_content .= '
               <div id="operations_container">
                 <ul id="opslist">
-                  <li><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;action=rqEdit'
+                  <li><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid=' . $groupId . '&amp;action=rqEdit'
                         . '">'
                         . $langWikiCreateNewWiki
                         . '</a></li>
@@ -435,7 +450,7 @@ switch ($action) {
                         // edit link
 
                         $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                        $tool_content .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;gid='. $groupId . '&amp;wikiId='
                                 . $entry->id . '&amp;action=rqEdit'
                                 . '">'
                                 . '<img src="' . $themeimg . '/edit.png" border="0" alt="' . $langWikiEditProperties . '" title="' . $langWikiEditProperties . '" />'
@@ -446,7 +461,7 @@ switch ($action) {
                         // delete link
 
                         $tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry->id&amp;action=exDelete'>
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete'>
                                     <img src='$themeimg/delete.png' alt=" . q($langDelete) . " title=" . q($langDelete) . " onClick=\"return confirmation('$langConfirmDelete');\"/>
                                     </a>";
                         $tool_content .= '</td>' . "\n";
@@ -454,7 +469,7 @@ switch ($action) {
 						// export link
 						
 						$tool_content .= '<td width="5" style="text-align: center;">';
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=$entry->id&amp;action=exExport'>
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport'>
                                     <img src='$themeimg/export.png' alt=" . q($langWikiExport) . " title=" . q($langWikiExport) . "/>
                                     </a>";
                         $tool_content .= '</td>' . "\n";
