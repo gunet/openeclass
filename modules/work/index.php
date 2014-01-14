@@ -173,13 +173,13 @@ if ($is_editor) {
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 if($_POST['title']){
-                    if(edit_assignment($id)) {
+                    if (edit_assignment($id)) {
                         Session::set_flashdata($langEditSuccess,'success');
                     }
-                    show_assignments();
+                    redirect_to_home_page('modules/work/index.php?course='.$course_code);
                 } else {
                     Session::set_flashdata($m['WorkTitleValidation'],'caution');
-                    show_edit_assignment($id);
+                    redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');
                 }         
             } elseif ($choice = 'add') {
                 $nameTools = $langAddGrade;
@@ -258,17 +258,23 @@ function add_assignment() {
     $desc = purify($_POST['desc']);
     $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
     $group_submissions = $_POST['group_submissions'];
+    $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
     $secret = uniqid('');
 
     if (@mkdir("$workPath/$secret", 0777)) {
-        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions);
-        Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
-            'title' => $title,
-            'description' => $desc,
-            'deadline' => $deadline,
-            'secret' => $secret,
-            'group' => $group_submissions));
-       return true;
+        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade)->lastInsertID;
+        if ($id) {
+            Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
+                'title' => $title,
+                'description' => $desc,
+                'deadline' => $deadline,
+                'secret' => $secret,
+                'group' => $group_submissions));
+            return true;
+        } else {
+            @rmdir("$workPath/$secret");
+            return false;
+        }
     } else {
        return false;
     }
@@ -435,7 +441,7 @@ function new_assignment($posted_data = NULL) {
         </tr>
         <tr>
           <th>$m[max_grade]:</th>
-          <td><input type='text' name='max_grade' size='5' /></td>
+          <td><input type='text' name='max_grade' size='5' value='10'/></td>
         </tr>        
         <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($posted_data['WorkEnd']) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
         <br /><input type='radio' name='is_deadline' value='1'". (($posted_data['WorkEnd']) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
@@ -465,15 +471,14 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
     $urlAppend, $works_url, $end_cal_Work_db;
 
-    $res = db_query("SELECT * FROM assignment WHERE id = " . intval($id));
-    $row = mysql_fetch_array($res);
-    
-    if((int)$row['deadline']){
-        $deadline = date('d-m-Y H:i',strtotime($row['deadline']));
-    }else{
+    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?", $id);
+    if ((int)$row->deadline) {
+        $deadline = date('d-m-Y H:i',strtotime($row->deadline));
+    } else {
         $deadline = '';
     }
-    $textarea = rich_text_editor('desc', 4, 20, $row['description']);
+    $textarea = rich_text_editor('desc', 4, 20, $row->description);
+    $tool_content .= "<h1>".$row->title."</h1>";
     $tool_content .= "
     <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, 'title');'>
     <input type='hidden' name='id' value='$id' />
@@ -483,13 +488,13 @@ function show_edit_assignment($id) {
     <table class='tbl'>
     <tr>
       <th>$m[title]:</th>
-      <td><input type='text' name='title' size='45' value='${row['title']}' /></td>
+      <td><input type='text' name='title' size='45' value='$row->title' /></td>
     </tr>
     <tr>
       <th valign='top'>$m[description]:</th>
       <td>$textarea</td>
     </tr>";
-    $comments = trim($row['comments']);
+    $comments = trim($row->comments);
     if (!empty($comments)) {
         $tool_content .= "
                 <tr>
@@ -498,7 +503,7 @@ function show_edit_assignment($id) {
                 </tr>";
     }
 
-    if ($row['group_submissions'] == '0') {
+    if ($row->group_submissions == '0') {
         $group_checked_0 = ' checked="1"';
         $group_checked_1 = '';
     } else {
@@ -506,6 +511,10 @@ function show_edit_assignment($id) {
         $group_checked_1 = ' checked="1"';
     }
     $tool_content .= "
+    <tr>
+        <th>$m[max_grade]:</th>
+        <td><input type='text' name='max_grade' size='5' value='$row->max_grade'/></td>
+    </tr>           
     <tr>
         <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($deadline) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
         <br /><input type='radio' name='is_deadline' value='1'". (($deadline) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
@@ -538,45 +547,30 @@ function edit_assignment($id) {
     global $tool_content, $langBackAssignment, $langEditSuccess,
     $langEditError, $course_code, $works_url, $course_id;
 
-//    $nav[] = $works_url;
-//    $nav[] = array("url" => "$_SERVER[SCRIPT_NAME]?id=$id", "name" => $_POST['title']);
-
-    $title = trim($_POST['title']);
-    $description = purify($_POST['desc']);
-    if($_POST['WorkEnd']){
-        $deadline = date('Y-m-d H:i',strtotime($_POST['WorkEnd']));
-    }
+    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+    $desc = purify($_POST['desc']);
+    $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
     $group_submissions = $_POST['group_submissions'];
-
+    $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
+    
     if (!isset($_POST['comments'])) {
-        $comments = "''";
+        $comments = "";
     } else {
         $comments = quote(purify($_POST['comments']));
     }
-    if (db_query("UPDATE assignment SET
-                                title = " . quote($title) . ",
-                                description = " . quote($description) . ",
-                                group_submissions = " . quote($group_submissions) . ",
-                                comments = $comments,
-                                deadline = " . quote($deadline) . "
-                        WHERE course_id = $course_id AND id='$id'")) {
-        $title = autounquote($_POST['title']);
-//        $tool_content .= "<p class='success'>$langEditSuccess<br />
-//                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBackAssignment '$title'</a>
-//                                        </p><br />";
-//        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id";
-//        header("Location: $link");
+    if (Database::get()->query("UPDATE assignment SET title = ?, description = ?, 
+        group_submissions = ?, comments = ?, deadline = ?, max_grade = ?
+        WHERE course_id = ? AND id = ?", $title, $desc, $group_submissions, 
+        $comments, $deadline, $max_grade, $course_id, $id)->affectedRows > 0) {
+       
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
             'title' => $title,
             'description' => $description,
             'deadline' => $deadline,
             'group' => $group_submissions));
-        //Session::set_flashdata($langEditSuccess, 'success');
         return true;
     } else {
         return false;
-        //Session::set_flashdata($langEditError, 'caution');
-        //$tool_content .="<p class='caution'><br /><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id'>$langBackAssignment '$title'</a></p><br />";
     }
 }
 
