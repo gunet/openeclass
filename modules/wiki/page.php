@@ -58,7 +58,9 @@ if (is_object($result) && $result->wiki == 1) {
     $is_groupAllowed = false;
 }
 
-if (isset($_SESSION['status']) && $_SESSION['status'] != 0) {
+$sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ? AND `user_id` = ?";
+$result = Database::get()->querySingle($sql, $course_id, $uid);
+if ($result->c > 0) {
     $is_courseMember = true;
 } else {
     $is_courseMember = false;
