@@ -39,7 +39,28 @@ $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
+
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
+<script>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
+
+/*$head_content .= "
+<script>
+$(function() {
+$('#datepicker').datepicker();
+});
+</script>";*/
 
 $tool_content .= "
 <div id='operations_container'>
@@ -51,7 +72,7 @@ $tool_content .= "
     <li><a href='../learnPath/detailsAll.php?course=$course_code&amp;from_stats=1'>$langLearningPaths</a></li>
     <li><a href='group.php?course=$course_code'>$langGroupUsage</a></li>
   </ul>
-</div>\n";
+</div>";
 
 $dateNow = date("d-m-Y / H:i:s", time());
 $nameTools = $langUsage;
@@ -59,8 +80,6 @@ $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #edecdf; padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
 
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
 if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] != -1) {
     require_once "analyze.php";
 } else {
@@ -70,5 +89,4 @@ if (isset($_POST['u_analyze']) && isset($_POST['user_id']) && $_POST['user_id'] 
     require_once "form.php";
 }
 add_units_navigation(true);
-load_js('tools.js');
 draw($tool_content, 2, null, $head_content);

@@ -61,7 +61,7 @@ if (isset($_GET['get'])) {
 }
 
 // Only course admins can download all assignments in a zip file
-if ($is_editor) {
+if ($is_editor) {    
     if (isset($_GET['download'])) {
         include 'include/pclzip/pclzip.lib.php';
         $as_id = intval($_GET['download']);
@@ -1307,11 +1307,11 @@ function send_file($id) {
 
 // Zip submissions to assignment $id and send it to user
 function download_assignments($id) {
-    global $workPath;
+    global $workPath, $course_code;
     $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?', $id)->count;
     if ($counter>0) {
         $secret = work_secret($id);
-        $filename = "$GLOBALS[currentCourseID]_work_$id.zip";
+        $filename = "{$course_code}_work_$id.zip";  
         chdir($workPath);
         create_zip_index("$secret/index.html", $id);
         $zip = new PclZip($filename);

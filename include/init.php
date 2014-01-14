@@ -45,7 +45,6 @@ if (!session_id()) {
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$active_ui_languages = array('el', 'en', 'es', 'de');
 
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
