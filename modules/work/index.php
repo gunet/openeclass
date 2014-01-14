@@ -24,7 +24,6 @@
   ============================================================================
  */
 
-
 $require_current_course = true;
 $require_login = true;
 $require_help = true;
@@ -32,11 +31,6 @@ $helpTopic = 'Work';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
-
-// For using with the pop-up calendar
-require_once 'include/lib/modalboxhelper.class.php';
-require_once 'include/lib/multimediahelper.class.php';
-ModalBoxHelper::loadModalBox();
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -53,10 +47,16 @@ require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
+$works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
+$nameTools = $langWorks;
+
+//-------------------------------------------
+// main program
+//-------------------------------------------
 
 if (isset($_GET['get'])) {
     if (!send_file(intval($_GET['get']))) {
-        $tool_content .= "<p class='caution'>$langFileNotFound</p>";
+        Session::set_flashdata($langFileNotFound, 'caution');
     }
 }
 
@@ -64,19 +64,15 @@ if (isset($_GET['get'])) {
 if ($is_editor) {
     if (isset($_GET['download'])) {
         include 'include/pclzip/pclzip.lib.php';
+        $as_id = intval($_GET['download']);
         // Allow unlimited time for creating the archive
         set_time_limit(0);
-        download_assignments(intval($_GET['download']));
+        if (!download_assignments($as_id)) {          
+            Session::set_flashdata($langNoAssignmentsExist, 'caution');
+            redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$as_id);
+        }
     }
 }
-
-$nameTools = $langWorks;
-
-//-------------------------------------------
-// main program
-//-------------------------------------------
-
-$works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
 
 if ($is_editor) {
     load_js('tools.js');
@@ -96,9 +92,9 @@ if ($is_editor) {
         });
     });
     </script>";    
-    $email_notify = isset($_POST['email']) and $_POST['email'];
+    $email_notify = isset($_POST['email']);
     if (isset($_POST['grade_comments'])) {
-        $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $_POST[assignment]");
+        $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", intval($_POST[assignment]))->title;
         $nameTools = $work_title;
         $navigation[] = $works_url;
         submit_grade_comments($_POST['assignment'], $_POST['submission'], $_POST['grade'], $_POST['comments'], $email_notify);
@@ -107,20 +103,27 @@ if ($is_editor) {
         $navigation[] = $works_url;
         new_assignment();
     } elseif (isset($_POST['sid'])) {
-        show_submission(intval($_POST['sid']));
+        echo 'It comes in here after all!!!!!!';
+//        show_submission(intval($_POST['sid']));
     } elseif (isset($_POST['new_assign'])) {
-        if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)) {
-            if(add_assignment($_POST['title'], $_POST['desc'], $_POST['WorkEnd'], $_POST['group_submissions'])) {
-                Session::set_flashdata('mpike megale','success');
+        if($_POST['title']) {
+            if(add_assignment()) {
+                Session::set_flashdata($langNewAssignSuccess,'success');
             }
             show_assignments();
         } else {
             Session::set_flashdata($m['WorkTitleValidation'],'caution');
-            new_assignment($_POST);
+            redirect_to_home_page('modules/work/index.php?course='.$course_code.'&add=1');
         }
     } elseif (isset($_GET['as_id'])) {
-        $as_id = $_GET['as_id'];
-        delete_user_assignment($as_id);
+        $as_id = intval($_GET['as_id']);
+        $id = intval($_GET['id']);
+        if(delete_user_assignment($as_id)){
+            Session::set_flashdata($langDeleted, 'success');
+        } else {
+            Session::set_flashdata($langDelError, 'caution');
+        }
+        redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades'])) {
         $nameTools = $langWorks;
         $navigation[] = $works_url;
@@ -169,7 +172,7 @@ if ($is_editor) {
                 $nameTools = $langWorks;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
-                if(filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING)){
+                if($_POST['title']){
                     if(edit_assignment($id)) {
                         Session::set_flashdata($langEditSuccess,'success');
                     }
@@ -248,29 +251,26 @@ function show_submission($sid) {
 }
 
 // insert the assignment into the database
-function add_assignment($title, $desc, $deadline, $group_submissions) {
+function add_assignment() {
     global $tool_content, $workPath, $course_id;
-    if($deadline){
-        $deadline = date('Y-m-d H:i', strtotime($deadline));
-    }
+    
+    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+    $desc = purify($_POST['desc']);
+    $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
+    $group_submissions = $_POST['group_submissions'];
     $secret = uniqid('');
-    $desc = purify($desc);
+
     if (@mkdir("$workPath/$secret", 0777)) {
-        db_query("INSERT INTO assignment
-                        (course_id, title, description, deadline, comments, submission_date, secret_directory,
-                        group_submissions) VALUES
-                        ($course_id, " . quote($title) . ", " . quote($desc) . ", " . quote($deadline) . ", ' ', NOW(),
-                         '$secret', " . quote($group_submissions) . ")");
-        $id = mysql_insert_id();
+        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions);
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $id,
             'title' => $title,
             'description' => $desc,
             'deadline' => $deadline,
             'secret' => $secret,
             'group' => $group_submissions));
-        return true;
+       return true;
     } else {
-        return false;
+       return false;
     }
 }
 
@@ -322,7 +322,7 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             $group_id = 0;
             $local_name = uid_to_name($user_id);
-            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = $user_id"));
+            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $user_id"));
             if (!empty($am[0])) {
                 $local_name .= $am[0];
             }
@@ -433,6 +433,10 @@ function new_assignment($posted_data = NULL) {
           <th>$m[description]:</th>
           <td>" . rich_text_editor('desc', 4, 20, $desc) . " </td>
         </tr>
+        <tr>
+          <th>$m[max_grade]:</th>
+          <td><input type='text' name='max_grade' size='5' /></td>
+        </tr>        
         <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($posted_data['WorkEnd']) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
         <br /><input type='radio' name='is_deadline' value='1'". (($posted_data['WorkEnd']) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
@@ -595,8 +599,8 @@ function delete_assignment($id) {
     if($q = db_query("SELECT title FROM assignment WHERE course_id = " . quote($course_id) . " AND id = " . quote($id))) {
         $row = mysql_fetch_row($q);
         $title = $row[0];
-        db_query("DELETE FROM assignment WHERE course_id = $course_id AND id = $id");
-        db_query("DELETE FROM assignment_submit WHERE assignment_id = $id");
+        Database::get()->query("DELETE FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
+        Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?", $id);
         move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
@@ -620,12 +624,16 @@ function delete_assignment($id) {
 function delete_user_assignment($id) {
     global $tool_content, $course_code, $webDir, $langBack, $langDeleted;
 
-    $filename = db_query_get_single_value("SELECT file_path FROM assignment_submit WHERE id = $id");
-    $file = $webDir . "/courses/" . $course_code . "/work/" . $filename;
+    $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?", $id);
+    $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
     if (my_delete($file)) {
-        db_query("DELETE FROM assignment_submit WHERE id = $id");
-        $tool_content .= "<p class='success'>$langDeleted<br />
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>" . $langBack . "</a></p>";
+        //need to return affected rows
+//        if ($result = Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", intval($id))) {
+            Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", $id);
+            return true;
+//        } else {
+
+//        }
     }
 }
 
@@ -702,6 +710,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
             $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                     selection(groups_with_no_submissions($id), 'group_id') . "</td></tr>";
         }
+    } elseif ($on_behalf_of) {
+            $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
+                    selection(users_with_no_submissions($id), 'user_id') . "</td></tr>";
     }
     $notice = $on_behalf_of ? '' : "<br />$langNotice3";
     $extra = $on_behalf_of ? "<tr><th class='left'>$m[grade]</th>
@@ -922,10 +933,15 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
             }
         }
         if (!$display_graph_results) {
-            $result = db_query("SELECT * FROM assignment_submit AS assign, user
-                                                   WHERE assign.assignment_id='$id' AND
-                                                         user.id = assign.uid
-                                                   ORDER BY $order $rev");
+            $result = db_query("SELECT assign.id id, assign.file_name file_name,
+                                    assign.uid uid, assign.group_id group_id,
+                                    assign.submission_date submission_date,
+                                    assign.grade grade, assign.comments comments,
+                                    assign.grade_comments grade_comments
+                                    FROM assignment_submit AS assign, user
+                                    WHERE assign.assignment_id='$id' AND
+                                    user.id = assign.uid
+                                    ORDER BY $order $rev");
 
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -952,9 +968,8 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
                 } else {
                     $subContentGroup = '';
                 }
-
                 $uid_2_name = display_user($row['uid']);
-                $stud_am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = $row[uid]"));
+                $stud_am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $row[uid]"));
                 if ($i % 2 == 1) {
                     $row_color = "class='even'";
                 } else {
@@ -969,7 +984,7 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am[0]) . "</td>
                                 <td width='180'>$filelink
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;as_id=$row[id]' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row[id]' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
                                  <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
                                 </a>                                        
                                 </td>
@@ -1020,8 +1035,8 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
                 $chart = new Plotter();
                 $chart->setTitle("$langGraphResults");
                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
-                    $percentage = 100.0 * $gradeOccurance / $graded_submissions_count;
-                    $chart->growWithPoint("$gradeValue ($percentage)", $percentage);
+                    $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
+                    $chart->growWithPoint("$gradeValue ($percentage%)", $percentage);
                 }
                 $tool_content .= $chart->plot();
             }
@@ -1293,19 +1308,23 @@ function send_file($id) {
 // Zip submissions to assignment $id and send it to user
 function download_assignments($id) {
     global $workPath;
-
-    $secret = work_secret($id);
-    $filename = "$GLOBALS[currentCourseID]_work_$id.zip";
-    chdir($workPath);
-    create_zip_index("$secret/index.html", $id);
-    $zip = new PclZip($filename);
-    $flag = $zip->create($secret, "work_$id", $secret);
-    header("Content-Type: application/x-zip");
-    header("Content-Disposition: attachment; filename=$filename");
-    stop_output_buffering();
-    @readfile($filename);
-    @unlink($filename);
-    exit;
+    $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?', $id)->count;
+    if ($counter>0) {
+        $secret = work_secret($id);
+        $filename = "$GLOBALS[currentCourseID]_work_$id.zip";
+        chdir($workPath);
+        create_zip_index("$secret/index.html", $id);
+        $zip = new PclZip($filename);
+        $flag = $zip->create($secret, "work_$id", $secret);
+        header("Content-Type: application/x-zip");
+        header("Content-Disposition: attachment; filename=$filename");
+        stop_output_buffering();
+        @readfile($filename);
+        @unlink($filename);
+        exit;
+    }else{
+        return false;
+    }
 }
 
 // Create an index.html file for assignment $id listing user submissions
@@ -1340,35 +1359,33 @@ function create_zip_index($path, $id, $online = FALSE) {
 				<th>' . $m['grade'] . '</th>
 			</tr>');
 
-    $result = db_query("SELECT * FROM assignment_submit
-		WHERE assignment_id='$id' ORDER BY id");
+    $result = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ? ORDER BY id", $id);
 
-
-    while ($row = mysql_fetch_array($result)) {
-        $filename = basename($row['file_path']);
+    foreach ($result as $row) {
+        $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
         fputs($fp, '
 			<tr class="sep">
-				<td>' . q(uid_to_name($row['uid'])) . '</td>
-				<td>' . q(uid_to_am($row['uid'])) . '</td>
+				<td>' . q(uid_to_name($row->uid)) . '</td>
+				<td>' . q(uid_to_am($row->uid)) . '</td>
 				<td align="center">' . $filelink . '</td>
-				<td align="center">' . $row['submission_date'] . '</td>
-				<td align="center">' . $row['grade'] . '</td>
+				<td align="center">' . $row->submission_date . '</td>
+				<td align="center">' . $row->grade . '</td>
 			</tr>');
-        if (trim($row['comments'] != '')) {
+        if (trim($row->comments != '')) {
             fputs($fp, "
 			<tr><td colspan='6'><b>$m[comments]: " .
-                    "</b>$row[comments]</td></tr>");
+                    "</b>$row->comments</td></tr>");
         }
-        if (trim($row['grade_comments'] != '')) {
+        if (trim($row->grade_comments != '')) {
             fputs($fp, "
 			<tr><td colspan='6'><b>$m[gradecomments]: " .
-                    "</b>$row[grade_comments]</td></tr>");
+                    "</b>$row->grade_comments</td></tr>");
         }
-        if (!empty($row['group_id'])) {
+        if (!empty($row->group_id)) {
             fputs($fp, "<tr><td colspan='6'>$m[groupsubmit] " .
-                    "$m[ofgroup] $row[group_id]</td></tr>\n");
+                    "$m[ofgroup] $row->group_id</td></tr>\n");
         }
     }
     fputs($fp, ' </table></body></html>');
