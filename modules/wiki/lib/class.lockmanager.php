@@ -28,16 +28,16 @@ class LockManager {
     //time period before a lock expires
     var $lock_duration;
     //time period for which a lock is considered alive before an update is 
-    //var $keep_lock_alive_duration;
+    var $keep_lock_alive_duration;
     //current time
     var $curr_time;
     
     /**
      * Constructor
      */
-    function LockManager($lock_duration) {
+    function LockManager($lock_duration, $keep_alive_duration) {
     	$this->lock_duration = $lock_duration;
-    	//$this->keep_lock_alive_duration = $keep_alive_duration;
+    	$this->keep_lock_alive_duration = $keep_alive_duration;
     	$this->curr_time = time();
     }
     
@@ -51,10 +51,11 @@ class LockManager {
         $sql = "SELECT COUNT(*) as c FROM wiki_locks "
                ."WHERE ptitle = ? "
                ."AND wiki_id = ? "
-               ."AND ? - unix_timestamp(ltime_created) <= ?"
+               ."AND (? - unix_timestamp(ltime_created) <= ?) "
+               ."AND (? - unix_timestamp(ltime_alive) <= ?)"
         ;
         
-        $result = Database::get()->querySingle($sql, $page_title, $wiki_id, $this->curr_time, $this->lock_duration);
+        $result = Database::get()->querySingle($sql, $page_title, $wiki_id, $this->curr_time, $this->lock_duration, $this->curr_time, $this->keep_lock_alive_duration);
         
         if ($result->c > 0) {
             return true;
@@ -85,17 +86,37 @@ class LockManager {
         } else {
             if ($this->getLockOwner($page_title, $wiki_id) == $uid) { 
                 $sql = "UPDATE wiki_locks "
-                       ."SET ltime_created = FROM_UNIXTIME(?) "
+                       ."SET ltime_created = FROM_UNIXTIME(?), "
+                       ."ltime_alive = FROM_UNIXTIME(?)"
                        ."WHERE ptitle = ? "
                        ."AND wiki_id = ?"
                 ;
                 
-                Database::get()->query($sql, $this->curr_time, $page_title, $wiki_id);
+                Database::get()->query($sql, $this->curr_time, $this->curr_time, $page_title, $wiki_id);
                 
                 return true;
             } else {
                 return false;
             }
+        }
+    }
+    
+    /**
+     * Update lock alive timestamp after ajax polling
+     * @param string page_title the title of the wiki page
+     * @param int wiki_id the id of the wiki
+     * @param uid the lock requester user id
+     * @return boolean
+     */
+    function alive($page_title, $wiki_id, $uid) {
+        if ($this->getLockOwner($page_title, $wiki_id) == $uid) {
+            $sql = "UPDATE wiki_locks "
+                   ."SET ltime_alive = FROM_UNIXTIME(?)"
+                   ."WHERE ptitle = ? "
+                   ."AND wiki_id = ?"
+            ;
+            
+            Database::get()->query($sql, $this->curr_time, $page_title, $wiki_id);
         }
     }
     
@@ -114,7 +135,7 @@ class LockManager {
     }
     
     /**
-     * Returns the owner of a valdi wiki page lock if one exists
+     * Returns the owner of a valid wiki page lock if one exists
      * @param page_title the title of the wiki page
      * @param wiki_id the wiki id
      * @return int the lock owner id or -1 if resource not locked
@@ -124,10 +145,11 @@ class LockManager {
                ."FROM wiki_locks "
                ."WHERE ptitle = ? "
                ."AND wiki_id = ? "
-               ."AND ? - unix_timestamp(ltime_created) <= ?" 
+               ."AND (? - unix_timestamp(ltime_created) <= ?)"
+               ."AND (? - unix_timestamp(ltime_alive) <= ?)" 
         ;
         
-        $result = Database::get()->querySingle($sql, $page_title, $wiki_id, $this->curr_time, $this->lock_duration);
+        $result = Database::get()->querySingle($sql, $page_title, $wiki_id, $this->curr_time, $this->lock_duration, $this->curr_time, $this->keep_lock_alive_duration);
         
         if (is_object($result)) {
             return $result->uid;
@@ -141,10 +163,11 @@ class LockManager {
      */
     function releaseExpiredLocks() {
         $sql = "DELETE FROM wiki_locks "
-               ."WHERE ? - unix_timestamp(ltime_created) > ?"
+               ."WHERE (? - unix_timestamp(ltime_created) > ?) "
+               ."OR (? - unix_timestamp(ltime_alive) > ?)"
         ;
         
-        Database::get()->query($sql, $this->curr_time, $this->lock_duration);
+        Database::get()->query($sql, $this->curr_time, $this->lock_duration, $this->curr_time, $this->keep_lock_alive_duration);
     }
     
     

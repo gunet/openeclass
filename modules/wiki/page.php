@@ -312,7 +312,8 @@ switch ($action) {
     case 'edit': {
         
         $lock_duration = 305; //5-minutes lock + 5 seconds safety interval
-        $lock_manager = new LockManager($lock_duration);
+        $keep_lock_alive = 60;
+        $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
         
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
@@ -366,7 +367,8 @@ switch ($action) {
     // save page
     case 'save': {
         $lock_duration = 305; //5-minutes lock
-        $lock_manager = new LockManager($lock_duration);
+        $keep_lock_alive = 60;
+        $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
         
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
@@ -812,12 +814,15 @@ switch ($action) {
                     </script>\n\n";
                     
                     $head_content .= "<script type='text/javascript'>
-                                        $(document).ready(function(){
                                         	function countdown(callback) {
                                         	    var bar = document.getElementById('progress'),
                                         	    timer = document.getElementById('progresstime'),
                                         	    time = max = ".($lock_duration-5).",
-                                        	    int = setInterval(function() {
+                                        	            
+                                        	    url = 'lib/confirmlock.php'
+                                        	    data = { uid : ".$uid.", page_title : \"".$wiki_title."\", wiki_id : ".$wikiId." }
+                                        	            
+                                        	    int = setInterval(function() {    
                                         	    	timer.innerHTML = secondsToHms(time);
                                         	        bar.style.width = Math.floor(100 * time-- / max) + '%';
                                         	        if (time + 1 == 0) {
@@ -825,13 +830,17 @@ switch ($action) {
                                         	            // 600ms - width animation time
                                         	            callback && setTimeout(callback, 600);
                                         	        }
+                                        	        if ((max - time) % 25 == 0) {//ajax polling to keep lock alive   
+                                        	            $.post(url, data);    
+                                        	        }
                                         	    }, 1000);
                                         	}
-                                        	
-                                        	countdown(function() {
-                                        	    alert('".$langWikiLockTimeEnd."');
-                                        	});
-                                        })
+                                        	            
+                                        	$(document).ready(function(){
+                                        	    countdown(function() {
+                                        	        alert('".$langWikiLockTimeEnd."');
+                                        	    });
+                                            })
                                     </script>\n";
                     
                     $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_duration-5)).":".gmdate('s', $lock_duration-5)."</span></div>
@@ -885,7 +894,8 @@ switch ($action) {
                 //unlock after edit cancellation
                 //only if current user is the lock owner (to avoid unlocking with GET)
                 $lock_duration = 305;
-                $lock_manager = new LockManager($lock_duration);
+                $keep_lock_alive = 60;
+                $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
                 if ($lock_manager->getLockOwner($wiki_title, $wikiId) == $uid) {
                     $lock_manager->releaseLock($wiki_title, $wikiId);
                 } 
