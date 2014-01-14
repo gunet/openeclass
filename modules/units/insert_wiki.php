@@ -25,7 +25,7 @@ function list_wikis() {
     $langWikiDescriptionForm, $course_code, $themeimg;
 
 
-    $result = db_query("SELECT * FROM wiki_properties WHERE course_id = $course_id", $mysqlMainDb);
+    $result = db_query("SELECT * FROM wiki_properties WHERE group_id = 0 AND course_id = $course_id", $mysqlMainDb);
     $wikiinfo = array();
     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
         $wikiinfo[] = array(
