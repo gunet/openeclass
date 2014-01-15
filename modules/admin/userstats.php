@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -50,17 +50,17 @@ if (isDepartmentAdmin())
     validateUserNodes(intval($u), true);
 
 if (!empty($u)) {
-    $sql = db_query("SELECT username FROM user WHERE user_id = $u");
+    $sql = db_query("SELECT username FROM user WHERE id = $u");
     $info = mysql_fetch_array($sql);
     $tool_content .= "<p class='title1'>$langUserStats: <b>$info[username]</b></p>
 		<p><b>$langStudentParticipation</b></p>";
-    $sql = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+    $sql = db_query("SELECT DISTINCT a.code, a.title, b.status, a.id
                            FROM course AS a
                            JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
                            LEFT JOIN course_user AS b ON a.id = b.course_id
                            WHERE b.user_id = $u
-                           ORDER BY b.statut, hierarchy.name");
+                           ORDER BY b.status, hierarchy.name");
 
     // display user courses (if any)
     if (mysql_num_rows($sql) > 0) {
@@ -81,7 +81,7 @@ if (!empty($u)) {
             $tool_content .= "<td class='bullet' width='1'></td>
 				<td align=''>" . htmlspecialchars($logs['code']) . " (" . htmlspecialchars($logs['title']) . ")</td>
 				<td><div align='left'>";
-            switch ($logs['statut']) {
+            switch ($logs['status']) {
                 case USER_TEACHER:
                     $tool_content .= $langTeacher;
                     break;
@@ -101,13 +101,13 @@ if (!empty($u)) {
     $tool_content .= "<p><b>$langTotalVisits</b>: ";
     // Chart display added - haniotak
     $totalHits = 0;
-    $result = db_query("SELECT DISTINCT a.code, a.title, b.statut, a.id
+    $result = db_query("SELECT DISTINCT a.code, a.title, b.status, a.id
                                      FROM course AS a
                                      JOIN course_department ON a.id = course_department.course
                                      JOIN hierarchy ON course_department.department = hierarchy.id
                                 LEFT JOIN course_user AS b ON a.id = b.course_id
                                     WHERE b.user_id = $u
-                                 ORDER BY b.statut, hierarchy.name");
+                                 ORDER BY b.status, hierarchy.name");
     $hits = array();
     if (mysql_num_rows($result) > 0) {
         while ($row = mysql_fetch_assoc($result)) {
