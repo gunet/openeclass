@@ -539,7 +539,8 @@ function array2html($TheArray) {
  */
 
 function lang_selections() {
-    if (count($GLOBALS['active_ui_languages']) < 2) {
+    global $session;
+    if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
     $html = '<form name="langform" action="' . $_SERVER ['SCRIPT_NAME'] . '" method="get" >';
@@ -556,11 +557,12 @@ function lang_selections() {
  */
 
 function lang_select_options($name, $onchange_js = '', $default_langcode = false) {
-    global $language, $native_language_names;
+    global $session;
 
     if ($default_langcode === false) {
-        $default_langcode = $language;
+        $default_langcode = $session->language;
     }
  
-    return selection($native_language_names, $name, $default_langcode, $onchange_js);
+    return selection($session->native_language_names,
+            $name, $default_langcode, $onchange_js);
 }

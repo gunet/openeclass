@@ -909,6 +909,19 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
+$langCopyrighted="Πνευματικά Δικαιώματα";
+$langWithoutCopyright="Ελεύθερο δικαιωμάτων";
+$langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
+$langCopyrightedUnknown="Άγνωστο";
+$langLicenseUnset = 'Δεν έχει οριστεί';
+$langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
+$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
+$langCommercialUse = "Εμπορική χρήση";
+$langAllowModification = "Επιτρέψτε διασκευή";
 
 // Groups
 $langCreateCourseGroups = "Ομάδες Χρηστών";

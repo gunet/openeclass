@@ -1271,15 +1271,6 @@ function langname_to_code($langname) {
     }
 }
 
-// Make sure a language code is valid - if not, default language is Greek
-function validate_language_code($langcode, $default = 'el') {
-    global $active_ui_languages;
-    if (array_search($langcode, $active_ui_languages) === false) {
-        return $default;
-    } else {
-        return $langcode;
-    }
-}
 
 function append_units($amount, $singular, $plural) {
     if ($amount == 1) {
@@ -2566,6 +2557,32 @@ function getOnlineUsers() {
     }
     @closedir($directory_handle);
     return $count;
+}
+
+/**
+ * Initialize copyright/license global arrays
+ */
+function copyright_info($cid)
+{
+
+    global $language, $license, $themeimg;
+    
+    $lang = langname_to_code($language);
+
+    $lic = db_query_get_single_value("SELECT course_license FROM course WHERE id = $cid");
+    if (($lic == 0) or ($lic >= 10)) {
+        $link_suffix = '';
+    } else {
+        if ($language != 'en') {
+                    $link_suffix = 'deed.' . $lang;
+        } else {
+                    $link_suffix = '';
+        }
+    }
+    $link = "<a href='".$license[$lic]['link']."$link_suffix'>
+            <img src='$themeimg/".$license[$lic]['image'].".png' title='".$license[$lic]['title']."' alt='".$license[$lic]['title']."' /></a>";
+
+    return $link . '<br>' . q($license[$lic]['title']);
 }
 
 /**

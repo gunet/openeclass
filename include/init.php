@@ -87,8 +87,8 @@ if (isset($language)) {
     $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;
-    $active_ui_languages = explode(' ', get_config('active_ui_languages'));
+    $language = $session->language;     
+    
 }
 
 // HTML Purifier
@@ -105,13 +105,7 @@ $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
 define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
-// Set active user interface languages
-$native_language_names = array();
-foreach ($active_ui_languages as $langcode) {
-    if (isset($native_language_names_init[$langcode])) {
-        $native_language_names[$langcode] = $native_language_names_init[$langcode];
-    }
-}
+
 if (!isset($urlSecure)) {
     $urlSecure = $urlServer;
 }
@@ -335,6 +329,8 @@ if (isset($require_current_course) and $require_current_course) {
     }
 }
 
+// get message array for copyright info
+require_once "license_info.php";
 // ----------------------------------------
 // Course modules array
 // user modules
