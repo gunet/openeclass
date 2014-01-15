@@ -19,6 +19,8 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+$img = file_get_contents("dot.png");
+
 require_once '../../../include/baseTheme.php';
 require_once 'class.lockmanager.php';
 
@@ -28,4 +30,7 @@ $wikiId = intval($_REQUEST['wiki_id']);
 
 $lock_manager = new LockManager();
 
-$lock_manager->alive($page_title, $wikiId, $uid);
+$lock_manager->nojslock($page_title, $wikiId, $uid);
+
+header('Content-Type: image/png');
+echo $img;

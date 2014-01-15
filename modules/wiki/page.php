@@ -311,9 +311,7 @@ switch ($action) {
     // edit page content
     case 'edit': {
         
-        $lock_duration = 305; //5-minutes lock + 5 seconds safety interval
-        $keep_lock_alive = 60;
-        $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
+        $lock_manager = new LockManager();
         
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
@@ -366,9 +364,7 @@ switch ($action) {
     }
     // save page
     case 'save': {
-        $lock_duration = 305; //5-minutes lock
-        $keep_lock_alive = 60;
-        $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
+        $lock_manager = new LockManager();
         
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
@@ -817,10 +813,10 @@ switch ($action) {
                                         	function countdown(callback) {
                                         	    var bar = document.getElementById('progress'),
                                         	    timer = document.getElementById('progresstime'),
-                                        	    time = max = ".($lock_duration-5).",
+                                        	    time = max = ".($lock_manager->lock_duration-5).",
                                         	            
                                         	    url = 'lib/confirmlock.php'
-                                        	    data = { uid : ".$uid.", page_title : \"".$wiki_title."\", wiki_id : ".$wikiId." }
+                                        	    data = { uid : ".$uid.", page_title : \"".rawurlencode($wiki_title)."\", wiki_id : ".$wikiId." }
                                         	            
                                         	    int = setInterval(function() {    
                                         	    	timer.innerHTML = secondsToHms(time);
@@ -843,10 +839,11 @@ switch ($action) {
                                             })
                                     </script>\n";
                     
-                    $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_duration-5)).":".gmdate('s', $lock_duration-5)."</span></div>
+                    $tool_content .= "<div>".$langWikiLockTimeRemaining."<span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span></div>
                                       <div class='progress'>
                                         <div class='bar' id='progress'></div>
                                       </div>";
+                    $tool_content .= "<noscript><div><img src='lib/nojslock.php?uid=$uid&amp;page_title=".urlencode($wiki_title)."&amp;wiki_id=$wikiId' /></div></noscript>";
                 }
                 
                 $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
@@ -893,9 +890,7 @@ switch ($action) {
                 
                 //unlock after edit cancellation
                 //only if current user is the lock owner (to avoid unlocking with GET)
-                $lock_duration = 305;
-                $keep_lock_alive = 60;
-                $lock_manager = new LockManager($lock_duration, $keep_lock_alive);
+                $lock_manager = new LockManager();
                 if ($lock_manager->getLockOwner($wiki_title, $wikiId) == $uid) {
                     $lock_manager->releaseLock($wiki_title, $wikiId);
                 } 

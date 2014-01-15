@@ -26,18 +26,16 @@
 class LockManager {
     
     //time period before a lock expires
-    var $lock_duration;
+    var $lock_duration = 305; //5-minutes lock + 5 seconds safety interval
     //time period for which a lock is considered alive before an update is 
-    var $keep_lock_alive_duration;
+    var $keep_lock_alive_duration = 60;
     //current time
     var $curr_time;
     
     /**
      * Constructor
      */
-    function LockManager($lock_duration, $keep_alive_duration) {
-    	$this->lock_duration = $lock_duration;
-    	$this->keep_lock_alive_duration = $keep_alive_duration;
+    function LockManager() {
     	$this->curr_time = time();
     }
     
@@ -155,6 +153,24 @@ class LockManager {
             return $result->uid;
         } else {//no valid lock found
             return -1;
+        }
+    }
+    
+    /**
+     * Disable lock alive timestamp when js is disabled
+     * @param string page_title the title of the wiki page
+     * @param int wiki_id the id of the wiki
+     * @param uid the lock requester user id
+     */
+    function nojslock($page_title, $wiki_id, $uid) {
+        if($this->getLockOwner($page_title, $wiki_id) == $uid) {
+            $sql = "UPDATE wiki_locks "
+                   ."SET ltime_alive = FROM_UNIXTIME(UNIX_TIMESTAMP(ltime_created) + ?) "
+                   ."WHERE ptitle = ? "
+                   ."AND wiki_id = ?"
+            ;
+            
+            Database::get()->query($sql, $this->lock_duration, $page_title, $wiki_id);
         }
     }
     

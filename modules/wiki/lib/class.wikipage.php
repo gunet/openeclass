@@ -248,20 +248,6 @@ class WikiPage {
         }
     }
 	
-    function countVersion() {
-        $sql =  "SELECT COUNT(`id`) as `nbversion` 
-            FROM `wiki_pages_content` 
-            WHERE `pid` = ?";
-        
-	    $result = Database::get()->querySingle($sql, $this->getPageId());
-
-        if (is_array($result)) {
-            return $result->nbversion;
-        } else {
-            return 0;
-        }
-    }
-
     /**
      * Check if a page exists in the wiki
      * @param string title page title

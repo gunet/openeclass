@@ -120,7 +120,6 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "action", "show");
-    $location = add_request_variable_to_url($location, "unlock", "yes");
 
     $out .= disp_button($location, $langCancel);
 
