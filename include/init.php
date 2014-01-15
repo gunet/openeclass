@@ -449,7 +449,6 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                                                   " . MODULE_ID_QUESTIONNAIRE . ",
                                                   " . MODULE_ID_FORUM . ",
                                                   " . MODULE_ID_GROUPS . ",
-                                                  " . MODULE_ID_WIKI . ",
                                                   " . MODULE_ID_LP . ")", $course_id);
     }
     $publicModules = array();
