@@ -154,6 +154,7 @@ db_query("CREATE TABLE `course` (
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
   `title` VARCHAR(250) NOT NULL DEFAULT '',
   `keywords` TEXT NOT NULL,
+  `course_license` TINYINT(4) NOT NULL DEFAULT 0,
   `visible` TINYINT(4) NOT NULL,
   `prof_names` VARCHAR(200) NOT NULL DEFAULT '',
   `public_code` VARCHAR(20) NOT NULL DEFAULT '',

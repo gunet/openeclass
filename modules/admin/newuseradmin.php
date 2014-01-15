@@ -85,10 +85,7 @@ $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 if ($submit) {
     // register user
     $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
-    $proflanguage = isset($_POST['language']) ? $_POST['language'] : '';
-    if (!isset($native_language_names[$proflanguage])) {        
-        $proflanguage = $language;
-    }
+    $proflanguage = $session->validate_language_code(@$_POST['language']);
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : 2;
 
     $backlink = $_SERVER['SCRIPT_NAME'] .
