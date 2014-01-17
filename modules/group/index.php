@@ -22,8 +22,7 @@
 /*
  * Groups Component
  *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id: group.php,v 1.84 2011-06-24 13:40:33 adia Exp $
+ * @author Evelthon Prodromou <eprodromou@upnet.gr> 
  *
  * @abstract This module is responsible for the user groups of each lesson
  *
@@ -65,11 +64,12 @@ function confirmation (name)
                 else
                 {return false;}
         } else {
-                if (confirm("$langDeleteGroupWarn ("+ name + ") "))
-        {return true;}
-        else
-        {return false;}
-    }
+                if (confirm("$langConfirmDelete")) {
+                    return true;
+                } else {
+                        return false;
+                }
+            }
 }
 </script>
 END;
@@ -495,7 +495,7 @@ if ($is_editor) {
             if ($user_group_description) {
                 $tool_content .= "<br />" . q($user_group_description) . "&nbsp;&nbsp;" .
                         icon('edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$row[0]") . "&nbsp;" .
-                        icon('delete', $langDelete, "group_description.php?course=$course_code&amp;group_id=$row[0]&amp;delete=true", 'onClick="return confirmation();');
+                        icon('delete', $langDelete, "group_description.php?course=$course_code&amp;group_id=$row[0]&amp;delete=true", 'onClick="return confirmation();"');
             } elseif ($is_member) {
                 $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$row[0]'><i>$langAddDescription</i></a>";
             }
