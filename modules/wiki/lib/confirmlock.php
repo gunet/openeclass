@@ -22,10 +22,12 @@
 require_once '../../../include/baseTheme.php';
 require_once 'class.lockmanager.php';
 
-$page_title = rawurldecode($_REQUEST['page_title']);
-$uid = intval($_REQUEST['uid']);
+$page_title = strip_tags(rawurldecode($_REQUEST['page_title']));
+$userid = intval($_REQUEST['uid']);
 $wikiId = intval($_REQUEST['wiki_id']);
 
-$lock_manager = new LockManager();
+if ($uid != 0 && $userid == $uid) {
+    $lock_manager = new LockManager();
 
-$lock_manager->alive($page_title, $wikiId, $uid);
+    $lock_manager->alive($page_title, $wikiId, $userid);
+}

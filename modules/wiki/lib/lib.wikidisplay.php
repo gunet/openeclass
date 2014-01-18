@@ -91,7 +91,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 	
     //notes
     $out .= '<div style="padding:10px;">' . "\n";
-    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value="'.htmlspecialchars($changelog).'"'. 
+    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
 	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
     $out .= '</div>' . "\n";
     //end notes
@@ -183,15 +183,15 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
             . '" name="previewform" id="previewform">' . "\n"
     ;
     $out .= '<input type="hidden" name="wiki_content" value="'
-            . htmlspecialchars($content) . '" />' . "\n"
+            . q($content) . '" />' . "\n"
     ;
 
     $out .= '<input type="hidden" name="changelog" value="'
-            . htmlspecialchars($changelog) . '" />' . "\n"
+            . q($changelog) . '" />' . "\n"
     ;
     				
     $out .= '<input type="hidden" name="title" value="'
-            . htmlspecialchars($title)
+            . q($title)
             . '" />' . "\n"
     ;
 
@@ -270,7 +270,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
             . '        <input type="hidden" name="wikiId" value="' . $wikiId . '" />' . "\n"
             . '        <!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
             . '        <input type="hidden" name="gid" value="' . $groupId . '" />' . "\n"
-            . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . htmlspecialchars($title) . '" />' . "\n"
+            . '        <input type="text" name="title" id="wikiTitle" size="53" maxlength="254" value="' . q($title) . '" />' . "\n"
             . '        </td>' . "\n"
             . '      </tr>' . "\n"
             . '      <tr>' . "\n"
