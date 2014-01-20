@@ -194,7 +194,7 @@ class WikiStore {
             $that = $this;
             $result = Database::get()->querySingle($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
-                }, intval($course_id), intval($wikiId));
+                }, $course_id, $wikiId);
             $wiki_title = $result->title;
             
             // delete properties
@@ -205,7 +205,7 @@ class WikiStore {
 
             $result = Database::get()->query($sql, function ($errormsg) use ($that) {
                     $that->setError($errormsg); 
-                }, intval($wikiId), intval($course_id));
+                }, $wikiId, $course_id);
 
             if ($result->affectedRows < 1) {
                 return false;
@@ -218,7 +218,7 @@ class WikiStore {
 
             $result = Database::get()->query($sql, function ($errormsg) use ($that) {
             	$that->setError($errormsg);
-            }, intval($wikiId));
+            }, $wikiId);
 
             if ($result->affectedRows < 1) {
                 return false;
@@ -231,7 +231,7 @@ class WikiStore {
 
             $pageIds = Database::get()->queryArray($sql, function ($errormsg) use ($that) {
             	    $that->setError($errormsg);
-                }, intval($wikiId));
+                }, $wikiId);
 
             if ($this->hasError()) {
                 return false;
@@ -245,7 +245,7 @@ class WikiStore {
 
                 Database::get()->query($sql, function ($errormsg) use ($that) {
                 	$that->setError($errormsg);
-                }, intval($pageId->id));
+                }, $pageId->id);
 
                 if ($this->hasError()) {
                     return false;
@@ -274,7 +274,7 @@ class WikiStore {
 
             Database::get()->query($sql, function ($errormsg) use ($that) {
                 	$that->setError($errormsg);
-                }, intval($wikiId));
+                }, $wikiId);
 
             if ($this->hasError()) {
                 return false;

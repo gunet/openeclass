@@ -171,8 +171,8 @@ class Wiki {
         $result = Database::get()->querySingle($sql, $wikiId, $course_id);
 
         $this->setWikiId($result->id);
-        $this->setTitle(stripslashes($result->title));
-        $this->setDescription(stripslashes($result->description));
+        $this->setTitle($result->title);
+        $this->setDescription($result->description);
         $this->setGroupId($result->group_id);
     }
 

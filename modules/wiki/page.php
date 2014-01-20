@@ -218,7 +218,7 @@ if ($action == "edit") {
         if (!get_magic_quotes_gpc()) {
             $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
         } else {
-            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : stripslashes($_REQUEST['wiki_content']);
+            $content = ( $_REQUEST['wiki_content'] == '' ) ? "__CONTENT__EMPTY__" : $_REQUEST['wiki_content'];
         }
     } else {
         $content = '';
@@ -227,7 +227,7 @@ if ($action == "edit") {
     if (!get_magic_quotes_gpc()) {
         $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
     } else {
-        $content = ( isset($_REQUEST['wiki_content']) ) ? stripslashes($_REQUEST['wiki_content']) : '';
+        $content = ( isset($_REQUEST['wiki_content']) ) ? $_REQUEST['wiki_content'] : '';
     }
 }
 
