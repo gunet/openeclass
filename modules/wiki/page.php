@@ -1020,10 +1020,12 @@ switch ($action) {
                     $firstPass = false;
                 } else {
                     $checked = '';
-                    $makecurrent = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;wikiId='
-                        . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
-                        . '&amp;action=save&amp;current=yes&amp;versionId=' . $version->id
-                        . '" onClick="return confirm(\''.$langSureToMakeWikiPageCurrent.'\');">'.$langWikiPageMakeCurrent.'</a>';
+                    if ($is_allowedToEdit || $is_allowedToCreate) {
+                        $makecurrent = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$course_code.'&amp;wikiId='
+                            . $wikiId . '&amp;title=' . rawurlencode($wiki_title)
+                            . '&amp;action=save&amp;current=yes&amp;versionId=' . $version->id
+                            . '" onClick="return confirm(\''.$langSureToMakeWikiPageCurrent.'\');">'.$langWikiPageMakeCurrent.'</a>';
+                    }
                 }
 
                 $tool_content .= '<td>'
