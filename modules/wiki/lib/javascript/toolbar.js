@@ -1,11 +1,8 @@
-/**=============================================================================
- GUnet eClass 2.0 
- E-learning and Course Management Program  
- /*===========================================================================
- *   Open eClass 2.1
+ /**===========================================================================
+ *   Open eClass 3.0
  *   E-learning and Course Management System
  * ===========================================================================
- *	Copyright(c) 2003-2008  Greek Universities Network - GUnet
+ *	Copyright(c) 2003-2014  Greek Universities Network - GUnet
  *	A full copyright notice can be read in "/info/copyright.txt".
  *
  *  	Authors:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>

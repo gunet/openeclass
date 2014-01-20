@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,7 +24,7 @@
   @last update: 15-05-2007 by Thanos Kyritsis
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
 
-  based on Claroline version 1.7.9 licensed under GPL
+  based on Claroline version 1.7.9 licensed under GPL, updated from version 1.11
   copyright (c) 2001, 2007 Universite catholique de Louvain (UCL)
 
   original file: class.wiki2xhtmlrenderer Revision: 1.8.2.6
@@ -172,13 +172,13 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
             # table start
             if (preg_match('/^\s*{\|(.+)\s*/', $line, $cap)) {
                 $type = null;
-                $line = '<table>';
+                $line = '<table class="wikitable">';
                 $caption = trim($cap[1]);
                 $line .= '<caption>'.$caption.'</caption>';
             }
             elseif (preg_match('/^\s*{\|\s*/', $line, $cap)) {
                 $type = null;
-                $line = '<table>';
+                $line = '<table class="wikitable">';
             }
             # table end
             elseif (preg_match('/^\s*\|}\s*$/', $line, $cap)) {

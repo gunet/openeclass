@@ -1,5 +1,5 @@
 /* ========================================================================
- * Open eClass 
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,6 +17,16 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
+
+/* * ===========================================================================
+ toc.js
+
+ based on Claroline version 1.11 licensed under GPL
+ copyright (c) 2001-2012 Universite catholique de Louvain (UCL)
+
+ Claroline authors: Frederic Minne <zefredz@gmail.com>
+==============================================================================
+*/
 
 function createTOC()
 {

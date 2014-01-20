@@ -1,41 +1,36 @@
 <?php 
 
 /* ========================================================================
- * Open eClass
-* E-learning and Course Management System
-* ========================================================================
-* Copyright 2003-2014  Greek Universities Network - GUnet
-* A full copyright notice can be read in "/info/copyright.txt".
-* For a full list of contributors, see "credits.txt".
-*
-* Open eClass is an open platform distributed in the hope that it will
-* be useful (without any warranty), under the terms of the GNU (General
-		* Public License) as published by the Free Software Foundation.
-* The full license can be read in "/info/license/license_gpl.txt".
-*
-* Contact address: GUnet Asynchronous eLearning Group,
-*                  Network Operations Center, University of Athens,
-*                  Panepistimiopolis Ilissia, 15784, Athens, Greece
-*                  e-mail: info@openeclass.org
-* ========================================================================
-*/
-// $Id: class.wikisearchengine.php 14094 2012-03-22 13:34:16Z zefredz $
-/**
- * CLAROLINE
+ * Open eClass 3.0
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2014  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
  *
- * @version 1.11 $Revision: 14094 $
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
  *
- * @copyright   (c) 2001-2012, Universite catholique de Louvain (UCL)
- *
- * @license GENERAL PUBLIC LICENSE (GPL)
- * This program is under the terms of the GENERAL PUBLIC LICENSE (GPL)
- * as published by the FREE SOFTWARE FOUNDATION. The GPL is available
- * through the world-wide-web at http://www.gnu.org/copyleft/gpl.html
- *
- * @author Frederic Minne <zefredz@gmail.com>
- *
- * @package Wiki
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ========================================================================
  */
+
+/* * ===========================================================================
+ class.wikisearchengine.php
+
+ based on Claroline version 1.11 licensed under GPL
+ copyright (c) 2001-2012 Universite catholique de Louvain (UCL)
+
+ original file: class.wiki2xhtmlexport.php Revision: 14094
+
+ Claroline authors: Frederic Minne <zefredz@gmail.com>
+==============================================================================
+*/
 
 !defined ( "CLWIKI_SEARCH_ANY" ) && define ( "CLWIKI_SEARCH_ANY", "CLWIKI_SEARCH_ANY" );
 !defined ( "CLWIKI_SEARCH_ALL" ) && define ( "CLWIKI_SEARCH_ALL", "CLWIKI_SEARCH_ALL" );
