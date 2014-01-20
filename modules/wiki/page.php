@@ -931,14 +931,22 @@ switch ($action) {
                     else {
                         $wikiPage->loadPageVersion($versionId);
                     }
-                    if($title=='__MainPage__') {
-                        $printable_content = '<h1>'.$langWikiMainPage. '</h1>'."\n";
-                    }
-                    else
-                        $printable_content = '<h1>'.$title. '</h1>'."\n";
-                
+                    
+                    $htmltitle = ($title=='__MainPage__') ? $langWikiMainPage : $title;
+                    
+                    $style = '<style type="text/css">
+                            table { border: black solid 1px; }
+                            td { border: black solid 1px; }
+                              </style>';
+                    $printable_content = '<html><head><meta charset="utf-8"><title>'.
+                                          $htmltitle.'</title>'.
+                                          $style.'</head><body>';
+                    
+                    $printable_content .= '<h1>'.$htmltitle. '</h1>'."\n";
+                    
                     $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
-                    $printable_content .= $wikiRenderer->render($wikiPage->getContent())."\n";
+                    //remove the toc script (if it exists) with preg_replace
+                    $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
                     $printable_content .= '<hr/>';
                 		
                     $editorInfo = user_get_data($wikiPage->getEditorId());
@@ -952,6 +960,7 @@ switch ($action) {
                 
                 	$versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
                 	$printable_content .= $versionInfo;
+                	$printable_content .= '</body></html>';
                 }
                 else {
                     $tool_content .= '<div class="wikiTitle">' . "\n";
