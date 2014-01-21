@@ -195,7 +195,7 @@ if (isset($_POST['submit'])) {
                 "' $langInCat '". q($cat_name) . "' $langTo $langCourseS '" .
                 "<a href='{$urlServer}courses/$currentCourseID'>" . q($intitule) . "</a>" .
                 "' <hr>". "<b>$langSender:</b> " . q("$prenom $nom") .
-                "<br><b>$langBodyMessage:</b><br>" .  "\n" . $message . "<hr>$gunet<br>" .
+                "<br><b>$langBodyMessage:</b><br>" .  "\n" . $message . "<hr>$gunet<br>$langNote:" .
                 $unsubscribe . " <a href='$linkhere'>$langHere</a>\n";
 
         $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '$topic_title' " .

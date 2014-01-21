@@ -168,7 +168,7 @@ if ($is_editor) {
 	    $recipients = array();
             $emailBody = html2text($emailContent);
             $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, q($intitule));
+            $unsubscribe = "<br /><br />$langNote:".sprintf($langLinkUnsubscribe, q($intitule));
             $emailContent .= $unsubscribe.$linkhere;
             $general_to = 'Members of course ' . $currentCourseID;
             while ($myrow = mysql_fetch_array($result)) {
