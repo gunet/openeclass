@@ -139,7 +139,11 @@ if (isset($_POST['submit'])) {
                 } else {
                         $password = "";
                 }
-
+                
+                // if it is opencourses certified keeep the current course_license
+                if (isset($_POST['course_license'])) {
+                    $course_license = $_POST['course_license'];
+                }
                 // update course_license
                 if (isset($_POST['l_radio'])) {
                     $l = $_POST['l_radio'];
@@ -159,8 +163,9 @@ if (isset($_POST['submit'])) {
                 }
 
                 // disable visibility if it is opencourses certified
-                if (get_config('opencourses_enable') && $isOpenCourseCertified)
+                if (get_config('opencourses_enable') && $isOpenCourseCertified) {
                     $_POST['formvisible'] = '2';
+                }
 
                 $department = intval($_POST['department']);
 
@@ -231,26 +236,26 @@ if (isset($_POST['submit'])) {
 	$title = q($c['intitule']);
 	$department = $c['faculteid'];
 	$type = $c['type'];
-    $visible = $c['visible'];
-    $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
+        $visible = $c['visible'];
+        $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
 	$visibleChecked[$visible] = " checked";
 	$fake_code = q($c['fake_code']);
 	$titulary = q($c['titulaires']);
 	$languageCourse	= $c['languageCourse'];
 	$course_keywords = q($c['course_keywords']);
-    $password = q($c['password']);
-    $course_license = $c['course_license'];
-    if ($course_license > 0 and $course_license < 10) {
-        $cc_checked = ' checked';
-    } else {
-        $cc_checked = '';
-    }
-    foreach ($license as $id => $l_info) {
-        $license_checked[$id] = ($course_license == $id)? ' checked': '';
-        if ($id and $id < 10) {
-            $cc_license[$id] = $l_info['title'];
+        $password = q($c['password']);
+        $course_license = $c['course_license'];
+        if ($course_license > 0 and $course_license < 10) {
+            $cc_checked = ' checked';
+        } else {
+            $cc_checked = '';
         }
-    }
+        foreach ($license as $id => $l_info) {
+            $license_checked[$id] = ($course_license == $id)? ' checked': '';
+            if ($id and $id < 10) {
+                $cc_license[$id] = $l_info['title'];
+            }
+        }
 
 	$tool_content .="
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
@@ -288,8 +293,11 @@ if (isset($_POST['submit'])) {
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-	</fieldset>
-        <fieldset>
+	</fieldset>";
+        if ($isOpenCourseCertified) {
+            $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
+        }
+        $tool_content .= "<fieldset>
         <legend>$langOpenCoursesLicense</legend>
             <table class='tbl' width='100%'>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
