@@ -2453,6 +2453,7 @@ $m['WorkInfo'] = 'Assignment info';
 $m['WorkView'] = 'Assignment view';
 $m['WorkDelete'] = 'Assignment delete';
 $m['WorkEdit'] = 'Assignment edit';
+$m['WorkNoSubmission'] = 'The assignment submission you are looking for does not exist.';
 $m['WorkTitleValidation'] = 'Please enter Assignment Title';
 $m['SubmissionWorkInfo'] = 'Submission info';
 $m['SubmissionStatusWorkInfo'] = 'Submission status';

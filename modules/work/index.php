@@ -32,6 +32,10 @@ $helpTopic = 'Work';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 
+// For using with the pop-up calendar
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
+ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -88,7 +92,7 @@ if ($is_editor) {
         buttonImage: '{$themeimg}/calendar.png',
         buttonImageOnly: true,
         dateFormat: 'dd-mm-yy', 
-        timeFormat: 'hh:mm'
+        timeFormat: 'HH:mm'
         });
     });
     </script>";    
@@ -102,9 +106,6 @@ if ($is_editor) {
         $nameTools = $langNewAssign;
         $navigation[] = $works_url;
         new_assignment();
-    } elseif (isset($_POST['sid'])) {
-        echo 'It comes in here after all!!!!!!';
-//        show_submission(intval($_POST['sid']));
     } elseif (isset($_POST['new_assign'])) {
         if($_POST['title']) {
             if(add_assignment()) {
@@ -130,8 +131,7 @@ if ($is_editor) {
         submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
     } elseif (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
-        $work_title = db_query_get_single_value("SELECT title FROM assignment
-                                                                WHERE id = $id");
+        $work_title = q(Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title);
         $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id",
             'name' => $work_title);
         if (isset($_POST['on_behalf_of'])) {
@@ -147,22 +147,22 @@ if ($is_editor) {
         } elseif (isset($_REQUEST['choice'])) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
-                db_query("UPDATE assignment SET active = 0 WHERE id = $id");
-                Session::set_flashdata($langAssignmentDeactivated, 'success');
-                show_assignments();
+                if (Database::get()->query("UPDATE assignment SET active = 0 WHERE id = ?", $id)->affectedRows > 0) {
+                    Session::set_flashdata($langAssignmentDeactivated, 'success');
+                }
+                redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
-                db_query("UPDATE assignment SET active = 1 WHERE id = $id");
-                Session::set_flashdata($langAssignmentActivated, 'success');
-                show_assignments();
-            } elseif ($choice == 'delete') {
-                die("invalid option");
+                if (Database::get()->query("UPDATE assignment SET active = 1 WHERE id = ?", $id)->affectedRows > 0) {
+                    Session::set_flashdata($langAssignmentActivated, 'success');
+                }
+                redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete') {
                 if(delete_assignment($id)) {
                     Session::set_flashdata($langDeleted, 'success');
                 } else {
                     Session::set_flashdata($langDelError, 'caution');
                 }
-                show_assignments();
+                redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
                 $nameTools = $m['WorkEdit'];
                 $navigation[] = $works_url;
@@ -211,7 +211,7 @@ if ($is_editor) {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
-            $work_title = db_query_get_single_value("SELECT title FROM assignment WHERE id = $id");
+            $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title;
             $nameTools = $work_title;
             $navigation[] = $works_url;
             show_student_assignment($id);
@@ -227,34 +227,12 @@ draw($tool_content, 2, null, $head_content);
 //-------------------------------------
 // end of main program
 //-------------------------------------
-// Show details of a student's submission to professor
-function show_submission($sid) {
-    global $tool_content, $works_url, $langSubmissionDescr, $langNotice3, $course_code;
-
-    $nameTools = $langWorks;
-    $navigation[] = $works_url;
-
-    if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
-
-        $tool_content .= "<p>$langSubmissionDescr" .
-                q(uid_to_name($sub['uid'])) .
-                $sub['submission_date'] .
-                "<a href='$GLOBALS[urlServer]$GLOBALS[currentCourseID]" .
-                "/work/$sub[file_path]'>$sub[file_name]</a>";
-        if (!empty($sub['comments'])) {
-            $tool_content .= " $langNotice3: $sub[comments]";
-        }
-        $tool_content .= "</p>\n";
-    } else {
-        $tool_content .= "<p class='caution'>error - no such submission with id $sid</p>\n";
-    }
-}
 
 // insert the assignment into the database
 function add_assignment() {
     global $tool_content, $workPath, $course_id;
     
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+    $title = $_POST['title'];
     $desc = purify($_POST['desc']);
     $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
     $group_submissions = $_POST['group_submissions'];
@@ -298,10 +276,9 @@ function submit_work($id, $on_behalf_of = null) {
         } else { // user NOT guest
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
                 // user is registered to this lesson
-                $res = db_query("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                        FROM assignment WHERE id = " . intval($id));
-                $row = mysql_fetch_array($res);
-                if (($row['time'] < 0 && (int) $row['deadline']) and !$on_behalf_of) {
+                $row = Database::get()->querySingle("SELECT CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                              FROM assignment WHERE id = ?", $id);
+                if (($row->time < 0 && (int) $row->deadline) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
                     $submit_ok = TRUE; // before deadline
@@ -312,13 +289,12 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
     } //checks for submission validity end here
-
-    $res = db_query("SELECT title, group_submissions FROM assignment WHERE course_id = " . intval($course_id) . " AND id = " . intval($id));
-    $row = mysql_fetch_array($res);
-    $title = $row['title'];
-    $group_sub = $row['group_submissions'];
+    
+    $row = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
+    $title = q($row->title);
+    $group_sub = $row->group_submissions;
     $nav[] = $works_url;
-    $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $row['title']);
+    $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $title);
 
     if ($submit_ok) {
         if ($group_sub) {
@@ -328,9 +304,9 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             $group_id = 0;
             $local_name = uid_to_name($user_id);
-            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $user_id"));
-            if (!empty($am[0])) {
-                $local_name .= $am[0];
+            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?", $user_id)->am;
+            if (!empty($am)) {
+                $local_name .= $am;
             }
             $local_name = greek_to_latin($local_name);
         }
@@ -380,24 +356,22 @@ function submit_work($id, $on_behalf_of = null) {
                 }
                 $stud_comments = quote($auto_comments);
                 $grade_comments = quote($_POST['stud_comments']);
-                $grade = quote($_POST['grade']);
+                
+                $grade_valid = filter_input(INPUT_POST, 'grade', FILTER_VALIDATE_FLOAT);
+                (isset($_POST['grade']) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
+             
                 $grade_ip = $submit_ip;
             } else {
                 $stud_comments = $_POST['stud_comments'];
-                $grade_comments = $grade = $grade_ip = "''";
+                $grade_comments = $grade = $grade_ip = "''";            
             }
             if (!$group_sub or array_key_exists($group_id, $gids)) {
                 $file_name = $_FILES['userfile']['name'];
-                db_query("INSERT INTO assignment_submit
-                                                 (uid, assignment_id, submission_date, submission_ip, file_path,
-                                                  file_name, comments, grade, grade_comments, grade_submission_ip,
-                                                  grade_submission_date, group_id)
-                                          VALUES ($user_id, $id, NOW(), $submit_ip,
-                                                        " . quote($filename) . ",
-                                                        " . quote($file_name) . ",
-                                                        " . quote($stud_comments) . ",
-                                                        $grade, $grade_comments, $grade_ip, NOW(), $group_id)");
-                $sid = mysql_insert_id();
+                $sid = Database::get()->query("INSERT INTO assignment_submit
+                                        (uid, assignment_id, submission_date, submission_ip, file_path,
+                                         file_name, comments, grade, grade_comments, grade_submission_ip,
+                                         grade_submission_date, group_id)
+                                         VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, NOW(), ?)", $user_id, $id, $submit_ip, $filename, $file_name, $stud_comments, $grade, $grade_comments, $grade_ip, $group_id)->lastInsertID;
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                     'title' => $title,
                     'assignment_id' => $id,
@@ -488,7 +462,7 @@ function show_edit_assignment($id) {
     <table class='tbl'>
     <tr>
       <th>$m[title]:</th>
-      <td><input type='text' name='title' size='45' value='$row->title' /></td>
+      <td><input type='text' name='title' size='45' value='".q($row->title)."' /></td>
     </tr>
     <tr>
       <th valign='top'>$m[description]:</th>
@@ -547,7 +521,7 @@ function edit_assignment($id) {
     global $tool_content, $langBackAssignment, $langEditSuccess,
     $langEditError, $course_code, $works_url, $course_id;
 
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
+    $title = $_POST['title'];
     $desc = purify($_POST['desc']);
     $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
     $group_submissions = $_POST['group_submissions'];
@@ -590,19 +564,21 @@ function delete_assignment($id) {
     global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
 
     $secret = work_secret($id);
-    if($q = db_query("SELECT title FROM assignment WHERE course_id = " . quote($course_id) . " AND id = " . quote($id))) {
-        $row = mysql_fetch_row($q);
-        $title = $row[0];
-        Database::get()->query("DELETE FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
-        Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?", $id);
-        move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
+    $row = Database::get()->querySingle("SELECT title FROM assignment WHERE course_id = ?
+                                        AND id = ?", $course_id, $id);
+    if (count($row) > 0) {
+        if (Database::get()->query("DELETE FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id)->affectedRows > 0){
+            Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?", $id);     
+            
+            move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
-        Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
-            'title' => $title));
-        return true;
-    } else {
+            Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
+                'title' => $row->title));
+            return true;
+        }
         return false;
     }
+    return false;
 }
 
 /**
@@ -620,14 +596,11 @@ function delete_user_assignment($id) {
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?", $id);
     $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
-    if (my_delete($file)) {
-        //need to return affected rows
-//        if ($result = Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", intval($id))) {
-            Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", $id);
+    if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", $id)->affectedRows > 0) {
+        if (my_delete($file)) {            
             return true;
-//        } else {
-
-//        }
+        }
+        return false;
     }
 }
 
@@ -648,14 +621,12 @@ function show_student_assignment($id) {
     $course_code, $course_id, $course_code;
 
     $user_group_info = user_group_info($uid, $course_id);
-    $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment WHERE course_id = $course_id AND id = $id");
-
-    $row = mysql_fetch_array($res);
+    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                         FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
 
     assignment_details($id, $row);
 
-    $submit_ok = ($row['time'] > 0 || !(int) $row['deadline']);
+    $submit_ok = ($row->time > 0 || (int) $row->deadline);
 
     if (!$uid) {
         $tool_content .= "<p>$langUserOnly</p>";
@@ -664,7 +635,7 @@ function show_student_assignment($id) {
         $tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
         $submit_ok = FALSE;
     } else {
-        foreach (find_submissions($row['group_submissions'], $uid, $id, $user_group_info) as $sub) {
+        foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
             if ($sub['grade'] != '') {
                 $submit_ok = false;
             }
@@ -701,12 +672,24 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         "</p>\n";
             }
         } else {
-            $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
-                    selection(groups_with_no_submissions($id), 'group_id') . "</td></tr>";
+            $groups_with_no_submissions = groups_with_no_submissions($id);
+            if (count($groups_with_no_submissions)>0) {
+                $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
+                        selection($groups_with_no_submissions, 'group_id') . "</td></tr>";
+            }else{
+                Session::set_flashdata('Δεν υπάρχουν εγγεγραμένες στο μάθημα ομάδες που να μην έχουν υποβάλει εργασία', 'caution');
+                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);                
+            }
         }
     } elseif ($on_behalf_of) {
-            $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
-                    selection(users_with_no_submissions($id), 'user_id') . "</td></tr>";
+            $users_with_no_submissions = users_with_no_submissions($id);
+            if (count($users_with_no_submissions)>0) {
+                $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
+                        selection($users_with_no_submissions, 'user_id') . "</td></tr>";
+            } else {
+                Session::set_flashdata('Δεν υπάρχουν εγγεγραμένοι στο μάθημα χρήστες που να μην έχουν υποβάλει εργασία', 'caution');
+                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
+            }
     }
     $notice = $on_behalf_of ? '' : "<br />$langNotice3";
     $extra = $on_behalf_of ? "<tr><th class='left'>$m[grade]</th>
@@ -778,38 +761,38 @@ function assignment_details($id, $row, $message = null) {
         <table class='tbl'>
         <tr>
           <th width='150'>$m[title]:</th>
-          <td>$row[title]</td>
+          <td>".q($row->title)."</td>
         </tr>";
     $tool_content .= "
         <tr>
           <th valign='top'>$m[description]:</th>
-          <td>$row[description]</td>
+          <td>".purify($row->description)."</td>
         </tr>";
-    if (!empty($row['comments'])) {
+    if (!empty($row->comments)) {
         $tool_content .= "
                 <tr>
                   <th class='left'>$m[comments]:</th>
-                  <td>$row[comments]</td>
+                  <td>".purify($row->comments)."</td>
                 </tr>";
     }
-    if((int)$row['deadline']){
-        $deadline = nice_format($row['deadline'], true);
+    if((int)$row->deadline){
+        $deadline = nice_format($row->deadline, true);
     }else{
         $deadline = $m['no_deadline'];
     }
     $tool_content .= "
         <tr>
           <th>$m[start_date]:</th>
-          <td>" . nice_format($row['submission_date'], true) . "</td>
+          <td>" . nice_format($row->submission_date, true) . "</td>
         </tr>
         <tr>
           <th valign='top'>$m[deadline]:</th>
           <td>" . $deadline . " <br />";
 
-    if ($row['time'] > 0) {
-        $tool_content .= "<span>($langDaysLeft " . format_time_duration($row['time']) . ")</span></td>
+    if ($row->time > 0) {
+        $tool_content .= "<span>($langDaysLeft " . format_time_duration($row->time) . ")</span></td>
                 </tr>";
-    } else if((int)$row['deadline']){
+    } else if((int)$row->deadline){
         $tool_content .= "<span class='expired'>$langEndDeadline</span></td>
                 </tr>";
     }
@@ -817,7 +800,7 @@ function assignment_details($id, $row, $message = null) {
         <tr>
           <th>$m[group_or_user]:</th>
           <td>";
-    if ($row['group_submissions'] == '0') {
+    if ($row->group_submissions == '0') {
         $tool_content .= "$m[user_work]</td>
         </tr>";
     } else {
@@ -860,11 +843,9 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, $langDelWarnUserAssignment;
 
-
-    $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment
-                                 WHERE course_id = $course_id AND id = $id");
-    $row = mysql_fetch_array($res);
+    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                FROM assignment
+                                WHERE course_id = ? AND id = ?", $course_id, $id);
 
     $nav[] = $works_url;
     if ($message) {
@@ -890,20 +871,14 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
         $order = 'surname';
     }
 
-    $result = db_query("SELECT *
-		FROM assignment_submit AS assign, user
-		WHERE assign.assignment_id = $id AND user.id = assign.uid
-		ORDER BY $order $rev");
-
+    $result = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
+                                 WHERE assign.assignment_id = ? AND user.id = assign.uid
+                                 ORDER BY ? ?", $id, $order, $rev);
     // Used to display grades distribution chart
-    list($graded_submissions_count) = mysql_fetch_row(
-            db_query("SELECT COUNT(*)
-                                                 FROM assignment_submit AS assign, user
-                                                 WHERE assign.assignment_id = $id AND
-                                                       user.id = assign.uid AND
-                                                       assign.grade <> ''"));
-
-    $num_results = mysql_num_rows($result);
+    $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
+                                                 WHERE assign.assignment_id = ? AND user.id = assign.uid AND
+                                                 assign.grade <> ''", $id)->count;
+    $num_results = count($result);
     if ($num_results > 0) {
         if ($num_results == 1) {
             $num_of_submissions = $m['one_submission'];
@@ -913,8 +888,8 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
 
         $gradeOccurances = array(); // Named array to hold grade occurances/stats
         $gradesExists = 0;
-        while ($row = mysql_fetch_array($result)) {
-            $theGrade = $row['grade'];
+        foreach ($result as $row) {
+            $theGrade = $row->grade;
             if ($theGrade) {
                 $gradesExists = 1;
                 if (!isset($gradeOccurances[$theGrade])) {
@@ -927,15 +902,14 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
             }
         }
         if (!$display_graph_results) {
-            $result = db_query("SELECT assign.id id, assign.file_name file_name,
-                                    assign.uid uid, assign.group_id group_id,
-                                    assign.submission_date submission_date,
-                                    assign.grade grade, assign.comments comments,
-                                    assign.grade_comments grade_comments
-                                    FROM assignment_submit AS assign, user
-                                    WHERE assign.assignment_id='$id' AND
-                                    user.id = assign.uid
-                                    ORDER BY $order $rev");
+            $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
+                                                   assign.uid uid, assign.group_id group_id, 
+                                                   assign.submission_date submission_date,
+                                                   assign.grade grade, assign.comments comments,
+                                                   assign.grade_comments grade_comments
+                                                   FROM assignment_submit AS assign, user
+                                                   WHERE assign.assignment_id = ? AND user.id = assign.uid
+                                                   ORDER BY ? ?", $id, $order, $rev);
 
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -953,61 +927,61 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
             $tool_content .= "</tr>";
 
             $i = 1;
-            while ($row = mysql_fetch_array($result)) {
+            foreach ($result as $row) {
                 //is it a group assignment?
-                if (!empty($row['group_id'])) {
+                if (!empty($row->group_id)) {
                     $subContentGroup = "$m[groupsubmit] " .
-                            "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row[group_id]'>" .
-                            "$m[ofgroup] " . gid_to_name($row['group_id']) . "</a>";
+                            "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                            "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                 } else {
                     $subContentGroup = '';
                 }
-                $uid_2_name = display_user($row['uid']);
-                $stud_am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $row[uid]"));
+                $uid_2_name = display_user($row->uid);
+                $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?", $row->uid)->am;
                 if ($i % 2 == 1) {
                     $row_color = "class='even'";
                 } else {
                     $row_color = "class='odd'";
                 }
-                $filelink = empty($row['file_name']) ? '&nbsp;' :
-                        ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row[id]'>" .
-                        q($row['file_name']) . "</a>");
+                $filelink = empty($row->file_name) ? '&nbsp;' :
+                        ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                        q($row->file_name) . "</a>");
                 $tool_content .= "
                                 <tr $row_color>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
-                                <td width='85'>" . q($stud_am[0]) . "</td>
+                                <td width='85'>" . q($stud_am) . "</td>
                                 <td width='180'>$filelink
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row[id]' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
                                  <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
                                 </a>                                        
                                 </td>
-                                <td width='100'>" . nice_format($row['submission_date'], TRUE) . "</td>
+                                <td width='100'>" . nice_format($row->submission_date, TRUE) . "</td>
                                 <td width='5'>
-                                <div align='center'><input type='text' value='{$row['grade']}' maxlength='3' size='3' name='grades[{$row['id']}]'></div>
+                                <div align='center'><input type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'></div>
                                 </td>
                                 </tr>
                                 <tr $row_color>
                                 <td colspan='5'>
                                 <div>$subContentGroup</div>";
-                if (trim($row['comments'] != '')) {
+                if (trim($row->comments != '')) {
                     $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
-                            q($row['comments']) . '</div>';
+                            q($row->comments) . '</div>';
                 }
                 //professor comments
-                $gradelink = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row[id]";
-                if (trim($row['grade_comments'])) {
+                $gradelink = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                if (trim($row->grade_comments)) {
                     $label = $m['gradecomments'] . ':';
                     $icon = 'edit.png';
-                    $comments = "<div class='smaller'>" . standard_text_escape($row['grade_comments']) . "</div>";
+                    $comments = "<div class='smaller'>" . standard_text_escape($row->grade_comments) . "</div>";
                 } else {
                     $label = $m['addgradecomments'];
                     $icon = 'add.png';
                     $comments = '';
                 }
-                if ($row['grade_comments'] or $row['grade'] != '') {
+                if ($row->grade_comments || $row->grade != '') {
                     $comments .= "<div class='smaller'><i>($m[grade_comment_date]: " .
-                            nice_format($row['grade_submission_date']) . ")</i></div>";
+                            nice_format($row->grade_submission_date) . ")</i></div>";
                 }
                 $tool_content .= "<div style='padding-top: .5em;'><a href='$gradelink'><b>$label</b></a>
 				  <a href='$gradelink'><img src='$themeimg/$icon'></a>
@@ -1015,7 +989,7 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
                                 </td>
                                 </tr>";
                 $i++;
-            } //END of While
+            } //END of Foreach
 
             $tool_content .= "</table>
                         <p class='smaller right'><img src='$themeimg/email.png' alt='' >
@@ -1052,12 +1026,10 @@ function show_student_assignments() {
 
     $gids = user_group_info($uid, $course_id);
 
-    $result = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                   FROM assignment
-                                           WHERE course_id = $course_id AND active = 1
-                                           ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline");
-
-    if (mysql_num_rows($result)) {
+    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                 FROM assignment WHERE course_id = ? AND active = 1 
+                                 ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+    if (count($result)>0) {
         $tool_content .= "<table class='tbl_alt' width='100%'>
                                   <tr>
                                       <th colspan='2'>$m[title]</th>
@@ -1066,28 +1038,28 @@ function show_student_assignments() {
                                       <th>$m[grade]</th>
                                   </tr>";
         $k = 0;
-        while ($row = mysql_fetch_array($result)) {
-            $title_temp = q($row['title']);
+        foreach ($result as $row) {
+            $title_temp = q($row->title);
             $class = $k % 2 ? 'odd' : 'even';
-            $test = (int)$row['deadline'];
-            if((int)$row['deadline']){
-                $deadline = nice_format($row['deadline'], true);
+            $test = (int)$row->deadline;
+            if((int)$row->deadline){
+                $deadline = nice_format($row->deadline, true);
             }else{
                 $deadline = $m['no_deadline'];
             }
             $tool_content .= "
                                 <tr class='$class'>
                                     <td width='16'><img src='$themeimg/arrow.png' title='bullet' /></td>
-                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]'>$title_temp</a></td>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'>$title_temp</a></td>
                                     <td width='150' align='center'>" . $deadline ;
-            if ($row['time'] > 0) {
-                $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row['time']) . ")</span>";
-            } else if((int)$row['deadline']){
+            if ($row->time > 0) {
+                $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
+            } else if((int)$row->deadline){
                 $tool_content .= " (<span class='expired'>$m[expired]</span>)";
             }
             $tool_content .= "</td><td width='170' align='center'>";
 
-            if ($submission = find_submissions(is_group_assignment($row['id']), $uid, $row['id'], $gids)) {
+            if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
                 foreach ($submission as $sub) {
                     if (isset($sub['group_id'])) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
@@ -1124,8 +1096,8 @@ function show_assignments() {
     global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langConfirmDelete;
 
-    $result = db_query("SELECT * FROM assignment WHERE course_id = $course_id ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline");
-
+    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ? ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+    
     $tool_content .="
             <div id='operations_container'>
               <ul id='opslist'>
@@ -1133,7 +1105,7 @@ function show_assignments() {
               </ul>
             </div>";
 
-    if (mysql_num_rows($result)) {
+    if (count($result)>0) {
         $tool_content .= "
                     <table width='100%' class='tbl_alt'>
                     <tr>
@@ -1144,22 +1116,18 @@ function show_assignments() {
                       <th width='60'>$langCommands</th>
                     </tr>";
         $index = 0;
-        while ($row = mysql_fetch_array($result)) {
+        foreach ($result as $row) {
             // Check if assignement contains submissions
-            $AssignementId = $row['id'];
-
-            $num_submitted = db_query_get_single_value("SELECT COUNT(*) FROM assignment_submit
-                                                WHERE assignment_id = $AssignementId");
+            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?", $row->id)->count;
             if (!$num_submitted) {
                 $num_submitted = '&nbsp;';
             }
-
-            $num_ungraded = db_query_get_single_value("SELECT COUNT(*) FROM assignment_submit
-                                                WHERE assignment_id = $AssignementId AND grade=''");
+                    
+            $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ? AND grade = ''", $row->id)->count;            
             if (!$num_ungraded) {
                 $num_ungraded = '&nbsp;';
             }
-            if (!$row['active']) {
+            if (!$row->active) {
                 $tool_content .= "\n<tr class = 'invisible'>";
             } else {
                 if ($index % 2 == 0) {
@@ -1168,38 +1136,38 @@ function show_assignments() {
                     $tool_content .= "\n<tr class='odd'>";
                 }
             }
-            if((int)$row['deadline']){
-                $deadline = nice_format($row['deadline'], true);
+            if((int)$row->deadline){
+                $deadline = nice_format($row->deadline, true);
             }else{
                 $deadline = $m['no_deadline'];
             }
+            $deadline_style = deadline_styling($row->deadline);
             $tool_content .= "
 			  <td><img src='$themeimg/arrow.png' alt=''>
-			      <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=${row['id']}' ";
+                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'";
             $tool_content .= ">";
-            $tool_content .= $row_title = q($row['title']);
+            $tool_content .= q($row->title);
             $tool_content .= "</a></td>
 			  <td class='center'>$num_submitted</td>
 			  <td class='center'>$num_ungraded</td>
-			  <td class='center'>" . $deadline . "</td>
-			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
+			  <td class='center' $deadline_style>" . $deadline . "</td>
+			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
+			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirm_delete_assignment();'>
 			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
-            if ($row['active']) {
-                $deactivate_temp = htmlspecialchars($m['deactivate']);
-                $activate_temp = htmlspecialchars($m['activate']);
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
+            if ($row->active) {
+                $deactivate_temp = q($m['deactivate']);
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
             } else {
-                $activate_temp = htmlspecialchars($m['activate']);
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
+                $activate_temp = q($m['activate']);
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
             }
             $tool_content .= "&nbsp;</td></tr>";
             $index++;
         }
         $tool_content .= '</table>';
     } else {
-        $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";
+        $tool_content .= "\n<p class='alert1'>$langNoAssign</p>";        
     }
 }
 
@@ -1215,19 +1183,18 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
         $tool_content .= $langWorkWrongInput;
         $stupid_user = 1;
     } else {
-        db_query("UPDATE assignment_submit
-                                 SET grade = " . quote($grade) . ",
-                                     grade_comments = " . quote($comment) . ",
-                                     grade_submission_date = NOW(),
-                                     grade_submission_ip = '$_SERVER[REMOTE_ADDR]'
-                                 WHERE id = $sid");
-        list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment WHERE id = $id"));
-        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-            'title' => $title,
-            'grade' => $grade,
-            'comments' => $comment));
-        if ($email) {
-            grade_email_notify($id, $sid, $grade, $comment);
+        if (Database::get()->query("UPDATE assignment_submit 
+                                SET grade = ?, grade_comments = ?,
+                                grade_submission_date = NOW(), grade_submission_ip = ?
+                                WHERE id = ?", $grade, $comment, $_SERVER[REMOTE_ADDR], $sid)->affectedRows>0) {
+            $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title;
+            Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                'title' => $title,
+                'grade' => $grade,
+                'comments' => $comment));
+            if ($email) {
+                grade_email_notify($id, $sid, $grade, $comment);
+            }
         }
     }
     if (!$stupid_user) {
@@ -1243,8 +1210,8 @@ function submit_grades($grades_id, $grades, $email = false) {
 
     foreach ($grades as $sid => $grade) {
         $sid = intval($sid);
-        $val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = $sid"));
-        if ($val[0] != $grade) {
+        $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?", $sid)->grade;
+        if ($val != $grade) {
             /*  If check expression is changed by nikos, in order to give to teacher
              * the ability to assign comments to a work without assigning grade. */
             if (!is_numeric($grade) && '' != $grade) {
@@ -1256,22 +1223,20 @@ function submit_grades($grades_id, $grades, $email = false) {
     if (!$stupid_user) {
         foreach ($grades as $sid => $grade) {
             $sid = intval($sid);
-            $val = mysql_fetch_row(db_query("SELECT grade from assignment_submit WHERE id = $sid"));
-            if ($val[0] != $grade) {
-                db_query("UPDATE assignment_submit
-                                                 SET grade = " . quote($grade) . ",
-                                                     grade_submission_date = NOW(),
-                                                     grade_submission_ip = '$_SERVER[REMOTE_ADDR]'
-                                                 WHERE id = $sid");
-                list($assign_id) = mysql_fetch_row(db_query("SELECT assignment_id FROM assignment_submit WHERE id = $sid"));
-                list($title) = mysql_fetch_row(db_query("SELECT title FROM assignment
-                                                                        WHERE assignment.id = $assign_id"));
-                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                    'title' => $title,
-                    'grade' => $grade));
-                if ($email) {
-                    grade_email_notify($grades_id, $sid, $grade, '');
-                }
+            $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?", $sid)->grade;
+            if ($val != $grade) {
+                if (Database::get()->query("UPDATE assignment_submit
+                                        SET grade = ?, grade_submission_date = NOW(), grade_submission_ip = ?
+                                        WHERE id = ?", $grade, $_SERVER[REMOTE_ADDR], $sid)->affectedRows > 0) {
+                    $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?", $sid)->assignment_id;
+                    $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?", $assign_id)->title;
+                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                        'title' => $title,
+                        'grade' => $grade));
+                    if ($email) {
+                        grade_email_notify($grades_id, $sid, $grade, '');
+                    }
+                 }
             }
         }
         show_assignment($grades_id, $langGrades);
@@ -1284,18 +1249,17 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id) {
     global $course_code, $uid, $is_editor;
 
-    $q = db_query("SELECT * FROM assignment_submit WHERE id = $id");
-    if (!$q or !mysql_num_rows($q)) {
+    $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?", $id);
+    if (count($info)==0) {
         return false;
     }
-    $info = mysql_fetch_array($q);
-    if ($info['group_id']) {
-        initialize_group_info($info['group_id']);
+    if ($info->group_id) {
+        initialize_group_info($info->group_id);
     }
-    if (!($is_editor or $info['uid'] == $uid or $GLOBALS['is_member'])) {
+    if (!($is_editor or $info->uid == $uid or $GLOBALS['is_member'])) {
         return false;
     }
-    send_file_to_client("$GLOBALS[workPath]/$info[file_path]", $info['file_name'], null, true);
+    send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
     exit;
 }
 
@@ -1405,13 +1369,13 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     static $title, $group;
 
     if (!isset($title)) {
-        $res = db_query("SELECT title, group_submissions FROM assignment WHERE id = $assignment_id");
-        list($title, $group) = mysql_fetch_row($res);
+        $res = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE id = ?", $assignment_id);
+        $title = $res->title;
+        $group = $res->group_submissions;
     }
-    $res = db_query("SELECT uid, group_id, file_name, grade, grade_comments
-                                FROM assignment_submit
-                                WHERE id = $submission_id");
-    $info = mysql_fetch_assoc($res);
+    $info = Database::get()->querySingle("SELECT uid, group_id
+                                         FROM assignment_submit WHERE id= ?", $submission_id);
+
     $subject = sprintf($m['work_email_subject'], $title);
     $body = sprintf($m['work_email_message'], $title, $currentCourseName) . "\n\n";
     if ($grade != '') {
@@ -1421,45 +1385,43 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
         $body .= "$m[gradecomments]: $comments\n";
     }
     $body .= "\n$m[link_follows]\n{$urlServer}modules/work/work.php?course=$course_code&id=$assignment_id\n";
-    if (!$group or !$info['group_id']) {
-        send_mail_to_user_id($info['uid'], $subject, $body);
+    if (!$group or !$info->group_id) {
+        send_mail_to_user_id($info->uid, $subject, $body);
     } else {
-        send_mail_to_group_id($info['group_id'], $subject, $body);
+        send_mail_to_group_id($info->group_id, $subject, $body);
     }
 }
 
 function send_mail_to_group_id($gid, $subject, $body) {
     global $charset;
-    $res = db_query("SELECT surname, givenname, email
-                                FROM user, group_members AS members
-                                WHERE members.group_id = $gid AND
-                                      user.id = members.user_id");
-    while ($info = mysql_fetch_assoc($res)) {
-        send_mail('', '', "$info[givenname] $info[surname]", $info['email'], $subject, $body, $charset);
+    $res = Database::get()->queryArray("SELECT surname, givenname, email
+                                 FROM user, group_members AS members
+                                 WHERE members.group_id = ? 
+                                 AND user.id = members.user_id", $gid);
+    foreach ($res as $info) {
+        send_mail('', '', "$info->givenname $info->surname", $info->email, $subject, $body, $charset);
     }
 }
 
 function send_mail_to_user_id($uid, $subject, $body) {
     global $charset;
-    list($surname, $givenname, $email) = mysql_fetch_row(db_query("SELECT surname, givenname, email
-                FROM user WHERE id = $uid"));
-    send_mail('', '', "$givenname $surname", $email, $subject, $body, $charset);
+    $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?", $uid);
+    send_mail('', '', "$user->givenname $user->surname", $user->email, $subject, $body, $charset);
 }
 
 // Return a list of users with no submissions for assignment $id
 function users_with_no_submissions($id) {
     global $course_id;
 
-    $q = db_query("SELECT user.id AS id, surname, givenname
-                              FROM user, course_user
-                              WHERE user.id = course_user.user_id AND
-                                    course_user.course_id = $course_id AND
-                                    course_user.status = 5 AND
-                                    user.id NOT IN (SELECT uid FROM assignment_submit
-                                                          WHERE assignment_id = $id)");
+    $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                FROM user, course_user
+                                WHERE user.id = course_user.user_id 
+                                AND course_user.course_id = ? AND course_user.status = 5 
+                                AND user.id NOT IN (SELECT uid FROM assignment_submit
+                                                    WHERE assignment_id = ?)", $course_id, $id);
     $users = array();
-    while ($row = mysql_fetch_row($q)) {
-        $users[$row[0]] = "$row[1] $row[2]";
+    foreach ($q as $row) {
+        $users[$row->id] = "$row->surname $row->givenname";
     }
     return $users;
 }
@@ -1468,11 +1430,31 @@ function users_with_no_submissions($id) {
 function groups_with_no_submissions($id) {
     global $course_id;
 
-    $groups = user_group_info(null, $course_id);
-    $q = db_query("SELECT group_id FROM assignment_submit
-                              WHERE assignment_id = $id");
-    while ($row = mysql_fetch_row($q)) {
-        unset($groups[$row[0]]);
+    $q = Database::get()->queryArray('SELECT group_id FROM assignment_submit WHERE assignment_id = ?', $id);
+    if (count($q)>0) {
+        $groups = user_group_info(null, $course_id);
+        foreach ($q as $row) {
+            unset($groups[$row->group_id]);
+        }
+    } else {
+        $groups = array();
     }
     return $groups;
+}
+//Colors deadlines with red (deadline passed) and orange (days left to deadline <=3 )
+function deadline_styling($deadline){
+    if((int)$deadline){
+        $db_datetime = new DateTime($deadline);
+        $db_datetime_minus_3d = new DateTime($deadline);
+        $db_datetime_minus_3d->sub(new DateInterval('P3D'));
+        $now_datetime = new DateTime();
+        if ($db_datetime_minus_3d < $now_datetime) {
+            if ($db_datetime < $now_datetime){
+                return "style='color:red'";
+            }
+            return "style='color:orange'";
+        }
+        return;
+    }
+    return;
 }
