@@ -132,7 +132,10 @@ if (isset($_POST['submit'])) {
         } else {
             $password = "";
         }
-        
+        // if it is opencourses certified keeep the current course_license
+        if (isset($_POST['course_license'])) {
+            $course_license = $_POST['course_license'];
+        }
         // update course_license
         if (isset($_POST['l_radio'])) {
             $l = $_POST['l_radio'];
@@ -152,8 +155,9 @@ if (isset($_POST['submit'])) {
         }
 
         // disable visibility if it is opencourses certified
-        if (get_config('opencourses_enable') && $isOpenCourseCertified)
+        if (get_config('opencourses_enable') && $isOpenCourseCertified) {
             $_POST['formvisible'] = '2';
+        }
 
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
@@ -251,18 +255,21 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-    $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
-    $head_content .= $js;
-    $tool_content .= $html;
-    @$tool_content .= "</td></tr>
+            $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
+            $head_content .= $js;
+            $tool_content .= $html;
+            @$tool_content .= "</td></tr>
 	    <tr>
 		<th>$langCourseKeywords</th>
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-         </fieldset>
-         <fieldset>
+         </fieldset>";
+        if ($isOpenCourseCertified) {
+            $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
+        }
+         $tool_content .= "<fieldset>
         <legend>$langOpenCoursesLicense</legend>
             <table class='tbl' width='100%'>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
