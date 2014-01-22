@@ -47,7 +47,7 @@ function getUserLessonInfo($uid, $type) {
     global $session;
 
     //	TODO: add the new fields for memory in the db
-    if ($session->status == USER_STUDENT) {
+    if ($session->status == USER_STUDENT) {    
         $user_courses = "SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,
@@ -64,7 +64,7 @@ function getUserLessonInfo($uid, $type) {
                                    user.id = $uid AND
                                    course.visible != " . COURSE_INACTIVE . "
                              ORDER BY course.title, course.prof_names";
-    } elseif ($session->status == USER_TEACHER) {
+    } elseif ($session->status == USER_TEACHER) {            
         $user_courses = "SELECT course.id course_id,
                                 course.code code,
                                 course.public_code,

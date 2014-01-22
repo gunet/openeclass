@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,8 +29,7 @@ require_once 'functions.php';
 class Dropbox_Work {
 
     var $id;
-    var $uploaderId;
-    var $uploaderName;
+    var $uploaderId;    
     var $filename;
     var $filesize;
     var $title;
@@ -61,8 +60,7 @@ class Dropbox_Work {
         /*
          * Fill in the properties
          */
-        $this->uploaderId = $uploaderId;
-        $this->uploaderName = uid_to_name($this->uploaderId);
+        $this->uploaderId = $uploaderId;        
         $this->filename = $filename;
         $this->filesize = $filesize;
         $this->title = $title;
@@ -101,7 +99,7 @@ class Dropbox_Work {
                         title = " . quote($this->title) . ",
                         description = " . quote($this->description) . ",
                         last_upload_date = " . quote($this->lastUploadDate) . "
-					WHERE id= $this->id";
+                    WHERE id= $this->id";
             $result = db_query($sql);
         } else {
             $this->uploadDate = $this->lastUploadDate;
@@ -118,11 +116,12 @@ class Dropbox_Work {
 
             $result = db_query($sql);
             $this->id = mysql_insert_id();
-            Log::record($course_id, MODULE_ID_DROPBOX, LOG_INSERT, array('id' => $this->id,
-                'user_id' => $this->uploaderId,
-                'filename' => $this->filename,
-                'title' => $this->title,
-                'description' => $this->description));
+            Log::record($course_id, MODULE_ID_DROPBOX, LOG_INSERT, 
+                  array('id' => $this->id,
+                        'user_id' => $this->uploaderId,
+                        'filename' => $this->filename,
+                        'title' => $this->title,
+                        'description' => $this->description));
         }
 
         /*
@@ -138,9 +137,7 @@ class Dropbox_Work {
      */
 
     private function createExistingWork($id) {
-
-        global $langAnonymous;
-
+        
         /*
          * get the data from DB
          */
@@ -159,17 +156,6 @@ class Dropbox_Work {
         }
         $result = db_query($sql);
         $res = mysql_fetch_array($result);
-        $uploaderId = stripslashes($res["uploader_id"]);
-        $uploaderName = uid_to_name($uploaderId);
-        if ($uploaderName == FALSE) {
-            //deleted user
-            $this->uploaderId = -1;
-            $this->uploaderName = $langAnonymous;
-        } else {
-            $this->uploaderId = $uploaderId;
-            $this->uploaderName = $uploaderName;
-        }
-
         /*
          * Fill in properties
          */
@@ -186,7 +172,7 @@ class Dropbox_Work {
 
 class Dropbox_SentWork extends Dropbox_Work {
 
-    var $recipients; //array of ["id"]["name"] arrays
+    var $recipients; //array of ["id"] arrays
 
     /*
      * Constructor calls private functions to create a new work or retreive an existing work from DB
@@ -218,7 +204,7 @@ class Dropbox_SentWork extends Dropbox_Work {
             $recipientIds = array($uploaderId);
         }
         foreach ($recipientIds as $rec) {
-            $this->recipients[] = array("id" => $rec, "name" => uid_to_name($rec));
+            $this->recipients[] = array("id" => $rec);
         }
         /*
          * insert data in dropbox_post and dropbox_person table for each recipient
@@ -237,11 +223,7 @@ class Dropbox_SentWork extends Dropbox_Work {
     /*
      * private function creating existing object by retreiving info from db
      */
-
-    private function createExistingSentWork($id) {
-
-        global $langAnonymous;
-
+    private function createExistingSentWork($id) {     
         /*
          * Call constructor of Dropbox_Work object
          */
@@ -252,20 +234,11 @@ class Dropbox_SentWork extends Dropbox_Work {
         $this->recipients = array();
         $sql = "SELECT recipientId FROM dropbox_post WHERE fileId = $id";
         $result = db_query($sql);
-        while ($res = mysql_fetch_array($result)) {
-            /*
-             * check for deleted users
-             */
-            $recipientId = $res["recipientId"];
-            $recipientName = uid_to_name($recipientId);
-            if ($recipientName == FALSE) {
-                $this->recipients[] = array("id" => -1, "name" => $langAnonymous);
-            } else {
-                $this->recipients[] = array("id" => $recipientId, "name" => $recipientName);
-            }
+        while ($res = mysql_fetch_array($result)) {            
+            $recipientId = $res["recipientId"];                        
+            $this->recipients[] = array("id" => $recipientId);            
         }
     }
-
 }
 
 class Dropbox_Person {
@@ -278,40 +251,59 @@ class Dropbox_Person {
 
     //the receivedWork and the sentWork arrays are sorted
 
-    public function Dropbox_Person($userId) {
+    public function Dropbox_Person($userId, $displayallrecieved = true, $displayallsent = true) {
         /*
          * Constructor for recreating the Dropbox_Person object
          */
-        global $course_id;
+        global $course_id, $r_message_id, $s_message_id;
         /*
          * Fill in properties
          */
-        $this->userId = intval($userId);
+        $this->userId = intval($userId);        
         $this->receivedWork = array();
         $this->sentWork = array();
         $this->allsentWork = array();
-        /*
-         * find all entries where this person is the recipient
-         */
-        $sql = "SELECT r.fileId FROM dropbox_post r, dropbox_person p, dropbox_file f
+        
+        if (!$displayallrecieved) {
+            $sql = "SELECT r.fileId FROM dropbox_post r, dropbox_person p, dropbox_file f
+				WHERE r.recipientId = $this->userId
+					AND r.recipientId = p.personId
+					AND r.fileId = p.fileId
+					AND r.fileId = f.id
+                                        AND f.id = $r_message_id
+					AND f.course_id = $course_id";
+            
+        } else {        
+            /*
+            * find all entries where this person is the recipient
+            */
+            $sql = "SELECT r.fileId FROM dropbox_post r, dropbox_person p, dropbox_file f
 				WHERE r.recipientId = $this->userId
 					AND r.recipientId = p.personId
 					AND r.fileId = p.fileId
 					AND r.fileId = f.id
 					AND f.course_id = $course_id";
-
+        }
         $result = db_query($sql);
         while ($res = mysql_fetch_array($result)) {
             $this->receivedWork[] = new Dropbox_Work($res["fileId"]);
         }
-        /*
-         * find all entries where this person is the sender/uploader
-         */
-        $sql = "SELECT f.id FROM dropbox_file f, dropbox_person p
-				WHERE f.course_id = $course_id
-				AND f.uploader_id = $this->userId
-				AND f.uploader_id = p.personId
-				AND f.id = p.fileId";
+        
+        if (!$displayallsent) {
+            $sql = "SELECT f.id FROM dropbox_file f
+                                    WHERE f.course_id = $course_id
+                                    AND f.uploader_id = $this->userId                                    
+                                    AND f.id = $s_message_id";            
+        } else {            
+            /*
+             * find all entries where this person is the sender/uploader
+             */
+            $sql = "SELECT f.id FROM dropbox_file f, dropbox_person p
+                                    WHERE f.course_id = $course_id
+                                    AND f.uploader_id = $this->userId
+                                    AND f.uploader_id = p.personId
+                                    AND f.id = p.fileId";
+        }
         $result = db_query($sql);
         while ($res = mysql_fetch_array($result)) {
             $this->sentWork[] = new Dropbox_SentWork($res["id"]);
@@ -346,8 +338,9 @@ class Dropbox_Person {
 				WHERE personId = $this->userId AND fileId = $w->id");
 
             $title = db_query_get_single_value("SELECT title from dropbox_file WHERE id = $w->id");
-            Log::record($course_id, MODULE_ID_DROPBOX, LOG_DELETE, array('user_id' => $this->userId,
-                'title' => $title));
+            Log::record($course_id, MODULE_ID_DROPBOX, LOG_DELETE, 
+                        array('user_id' => $this->userId,
+                              'title' => $title));
         }
         removeUnusedFiles(); //check for unused files
     }

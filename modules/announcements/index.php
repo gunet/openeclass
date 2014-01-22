@@ -172,7 +172,7 @@ if ($is_editor) {
             $recipients = array();
             $emailBody = html2text($emailContent);
             $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribe, $title);
+            $unsubscribe = "<br /><br />$langNote" . sprintf($langLinkUnsubscribe, $title);
             $emailContent .= $unsubscribe . $linkhere;
             $general_to = 'Members of course ' . $course_code;
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email

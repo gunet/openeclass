@@ -603,7 +603,7 @@ $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
-$langLinkUnsubscribe = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br />
+$langLinkUnsubscribe = "Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails από το συγκεκριμένο μάθημα κάντε κλικ";
 $langLinkUnsubscribeFromPlatform = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στην πλατφόρμα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails κάντε κλικ";
@@ -909,6 +909,19 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
+$langCopyrighted="Πνευματικά Δικαιώματα";
+$langWithoutCopyright="Ελεύθερο δικαιωμάτων";
+$langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
+$langCopyrightedUnknown="Άγνωστο";
+$langLicenseUnset = 'Δεν έχει οριστεί';
+$langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
+$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
+$langCommercialUse = "Εμπορική χρήση";
+$langAllowModification = "Επιτρέψτε διασκευή";
 
 // Groups
 $langCreateCourseGroups = "Ομάδες Χρηστών";
@@ -1145,6 +1158,7 @@ $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
 $langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συννημένο αρχείο";
+$langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
 
 /* * ********************************************************
  * exercise
