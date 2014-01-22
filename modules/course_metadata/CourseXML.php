@@ -254,6 +254,11 @@ class CourseXMLElement extends SimpleXMLElement {
             return $html;
         }
         
+        // array fields
+        if (in_array($fullKeyNoLang, self::$arrayFields)) {
+            return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."[]' value='". q((string) $this) ."' $readonly>". $fieldEnd;
+        }
+        
         // all others get a typical input type box
         return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."' value='". q((string) $this) ."' $readonly>". $fieldEnd;
     }
@@ -394,8 +399,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 
                 if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
                     $this['mime'] = isset($data[$fullKey .'_mime']) ? $data[$fullKey .'_mime'] : '';
-            }
-            else { // multiple entities (multiEnum and units) use associative indexed arrays
+            } else { // multiple entities (multiEnum and units) use associative indexed arrays
                 if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
                     $this->{0} = implode(',', $data[$fullKey]); // comma separated
                 else { // units
@@ -410,12 +414,35 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     /**
-     * Convert the XML as a flat array (key => value).
+     * Convert the XML as a flat array (key => value) and do special post-processing.
      * 
      * @param  string $parentKey
      * @return array
      */
-    public function asFlatArray($parentKey = '') {
+    public function asFlatArray() {
+        $data = $this->asFlatArrayRec();
+
+        // special post processing for unit properties
+        $extra = array();
+        $unitsCount = 0;
+        foreach ($this->unit as $unit) {
+            foreach ($unit->keywords as $keyword) {
+                $extra['course_unit_keywords_' . $keyword->getAttribute('lang')][$unitsCount] = (string) $keyword;
+            }
+            $unitsCount++;
+        }
+
+        $ret = array_merge($data, $extra);
+        return $ret;
+    }
+    
+    /**
+     * Convert the XML recursively as a flat array (key => value).
+     * 
+     * @param  string $parentKey
+     * @return array
+     */
+    private function asFlatArrayRec($parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
         
         $children = $this->children();
@@ -433,7 +460,7 @@ class CourseXMLElement extends SimpleXMLElement {
         
         $out = array();
         foreach ($children as $ele)
-            $out = array_merge($out, $ele->asFlatArray($fullKey));
+            $out = array_merge($out, $ele->asFlatArrayRec($fullKey));
         
         return $out;
     }
@@ -551,14 +578,15 @@ class CourseXMLElement extends SimpleXMLElement {
 
         if (file_exists($xmlFile)) {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
-            if (!$xml) // fallback if xml is broken
+            if (!$xml) { // fallback if xml is broken
                 return $skeletonXML;
-            else { // xml is valid, merge autogen data and current xml data
+            } else { // xml is valid, merge autogen data and current xml data
                 $new_data = array_merge($xml->asFlatArray(), $data);
                 $data = $new_data;
             }
-        } else // fallback if starting fresh
+        } else { // fallback if starting fresh
             return $skeletonXML;
+        }
 
         $xml->adapt($data);
         $xml->populate($data);
@@ -928,6 +956,14 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_language', 'course_keywords_el', 
         'course_unit_title_el', 'course_unit_description_el',
         'course_numberOfUnits', 'course_license'
+    );
+    
+    /**
+     * Array HTML Form fields.
+     * @var array
+     */
+    public static $arrayFields = array(
+        'course_unit_keywords'
     );
     
     /**
