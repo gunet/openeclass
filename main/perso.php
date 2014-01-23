@@ -50,12 +50,12 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
 //include personalised component files (announcemets.php etc.) from /modules/perso
-require_once 'modules/perso/lessons.php';
-require_once 'modules/perso/assignments.php';
-require_once 'modules/perso/announcements.php';
-require_once 'modules/perso/documents.php';
-require_once 'modules/perso/agenda.php';
-require_once 'modules/perso/forumPosts.php';
+require_once 'main/lessons.php';
+require_once 'main/assignments.php';
+require_once 'main/announcements.php';
+require_once 'main/documents.php';
+require_once 'main/agenda.php';
+require_once 'main/forumPosts.php';
 
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);

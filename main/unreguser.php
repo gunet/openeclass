@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,14 +21,13 @@
 
 
 $require_login = TRUE;
-include '../../include/baseTheme.php';
+include '../include/baseTheme.php';
 require_once 'include/log.php';
 
 $nameTools = $langUnregUser;
-$navigation[] = array("url" => "../profile/profile.php", "name" => $langModifyProfile);
+$navigation[] = array("url" => "profile/profile.php", "name" => $langModifyProfile);
 
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
-
     // admin cannot be deleted
     if ($is_admin) {
         $tool_content .= "<div class='caution'>$langAdminNo";
@@ -39,46 +38,46 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
         $q = db_query("SELECT code, visible FROM course, course_user
 			WHERE course.id = course_user.course_id
                         AND course.visible != " . COURSE_INACTIVE . "
-			AND user_id = '$uid' LIMIT 1");
+			AND user_id = $uid LIMIT 1");
         if (mysql_num_rows($q) == 0) {
-            $tool_content .= "<p><b>$langConfirm</b></p>\n";
-            $tool_content .= "<ul class=\"listBullet\">\n";
+            $tool_content .= "<p><b>$langConfirm</b></p>";
+            $tool_content .= "<ul class='listBullet'>";
             $tool_content .= "<li>$langYes: ";
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?doit=yes'>$langDelete</a>";
-            $tool_content .= "</li>\n";
-            $tool_content .= "<li>$langNo: <a href='../profile/profile.php'>$langBack</a>";
-            $tool_content .= "</li>\n        </ul>";
-            $tool_content .= "</td>\n        </tr>\n        </table>\n";
+            $tool_content .= "</li>";
+            $tool_content .= "<li>$langNo: <a href='profile/profile.php'>$langBack</a>";
+            $tool_content .= "</li></ul>";
+            $tool_content .= "</td></tr></table>";
         } else {
             $tool_content .= "<div class='caution'><b>$langNotice: </b> ";
-            $tool_content .= "$langExplain<br />\n";
-            $tool_content .= "<span class='right'><a href='../profile/profile.php'>$langBack</a></span></div>\n";
+            $tool_content .= "$langExplain<br />";
+            $tool_content .= "<span class='right'><a href='profile/profile.php'>$langBack</a></span></div>\n";
         }
     }  //endif is admin
 } else {
     if (isset($uid)) {
-        $un = uid_to_username($uid);
+        $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);
         // unregister user from inactive courses (if any)
         db_query("DELETE from course_user WHERE user_id = $uid");
         db_query("DELETE FROM group_members WHERE user_id = $uid");
         // finally delete user
-        db_query("DELETE from user WHERE user_id = $uid");
+        db_query("DELETE from user WHERE id = $uid");
 
         if (mysql_affected_rows() > 0) {
             db_query("DELETE FROM user_department WHERE user = $uid");
-            $tool_content .= "<div class=\"success\"><b>$langDelSuccess</b><br />\n";
-            $tool_content .= "$langThanks\n";
-            $tool_content .= "<br /><a href='../../index.php?logout=yes'>$langLogout</a></div>";
+            $tool_content .= "<div class='success'><b>$langDelSuccess</b><br />";
+            $tool_content .= "$langThanks";
+            $tool_content .= "<br /><a href='../index.php?logout=yes'>$langLogout</a></div>";
             // action logging
             Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
-                'username' => $un,
-                'name' => $n));
+                                                     'username' => $un,
+                                                     'name' => $n));
             unset($_SESSION['uid']);
         } else {
-            $tool_content .= "<p>$langError</p>\n";
-            $tool_content .= "<p class='right'><a href='../profile/profile.php'>$langBack</a></p>\n        <br />\n";
-            $tool_content .= "</div>\n";
+            $tool_content .= "<p>$langError</p>";
+            $tool_content .= "<p class='right'><a href='profile/profile.php'>$langBack</a></p><br />";
+            $tool_content .= "</div>";
         }
     }
 }

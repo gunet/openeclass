@@ -68,7 +68,7 @@ hContent;
 
 check_uid();
 
-$passurl = $urlSecure . 'modules/profile/password.php';
+$passurl = $urlSecure . 'main/profile/password.php';
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['password_form']) or empty($_POST['password_form1']) or empty($_POST['old_pass'])) {
