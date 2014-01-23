@@ -27,15 +27,16 @@
  * @abstract Password change component
  *
  */
+$path2add = 2;
 $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
-require_once '../../include/phpass/PasswordHash.php';
-include '../../include/baseTheme.php';
+require_once '../include/phpass/PasswordHash.php';
+include '../include/baseTheme.php';
 
 $nameTools = $langChangePass;
-$navigation[]= array ("url"=>"../profile/profile.php", "name"=> $langModifyProfile);
+$navigation[]= array ("url"=>"profile.php", "name"=> $langModifyProfile);
 
 // javascript
 load_js('jquery');

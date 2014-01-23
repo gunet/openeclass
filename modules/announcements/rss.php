@@ -49,7 +49,7 @@ if (!visible_module(7)) {
 	session_write_close();
         if (!$uid) {
                 $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-                header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+                header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
         } else {
                 header("Location:" . $urlServer . "index.php");
         }	        

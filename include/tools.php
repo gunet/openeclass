@@ -246,11 +246,11 @@ function loggedInMenu(){
 	array_push($sideMenuImg, "arrow.png");
 
 	array_push($sideMenuText, $GLOBALS['langModifyProfile']);
-	array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
+	array_push($sideMenuLink, $urlServer . "main/profile.php");
 	array_push($sideMenuImg, "arrow.png");
 
 	array_push($sideMenuText, $GLOBALS['langMyStats']);
-	array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
+	array_push($sideMenuLink, $urlServer . "main/personal_stats.php");
 	array_push($sideMenuImg, "arrow.png");
 	
 	array_push($sideMenuSubGroup, $sideMenuText);

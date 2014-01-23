@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,8 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-include '../../include/baseTheme.php';
-include "../auth/auth.inc.php";
+$path2add = 2;
+include '../include/baseTheme.php';
+include '../modules/auth/auth.inc.php';
 $require_valid_uid = TRUE;
 $require_help = TRUE;
 $helpTopic = 'PersonalStats';
@@ -36,7 +37,7 @@ if (!extension_loaded('gd')) {
 } else {
 	$totalHits = 0;
         $totalDuration = 0;
-	require_once '../../include/libchart/libchart.php';
+	require_once '../include/libchart/libchart.php';
         $sql = "SELECT a.code code, a.intitule intitule
                 FROM cours AS a LEFT JOIN cours_user AS b
                      ON a.cours_id = b.cours_id
@@ -78,8 +79,8 @@ if (!extension_loaded('gd')) {
 			}
 		}
 		$chart->setTitle($langCourseVisits);
-		if (!file_exists("../../courses/temp")) {
-			mkdir("../../courses/temp", 0777);
+		if (!file_exists("../courses/temp")) {
+			mkdir("../courses/temp", 0777);
 		}
 		$chart_path = 'courses/temp/chart_'.md5(serialize($chart)).'.png';
 		if ($chart_content) {

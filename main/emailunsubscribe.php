@@ -18,9 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+$path2add = 2;
 $require_login = true;
 $require_valid_uid = TRUE;
-include '../../include/baseTheme.php';
+include '../include/baseTheme.php';
 load_js('jquery');
 load_js('tools.js');
 
@@ -55,7 +56,7 @@ if (isset($_POST['submit'])) {
                         }
                 }
                 $tool_content .= "<div class='success'>$langWikiEditionSucceed. <br />
-                                <a href='../profile/profile.php'>$langBack</a></div>";
+                                <a href='profile.php'>$langBack</a></div>";
         }        
         
 } else {
@@ -64,7 +65,7 @@ if (isset($_POST['submit'])) {
                 $user_email_status = get_mail_ver_status($uid);
                 if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                     $user_email_status == EMAIL_UNVERIFIED) {
-                        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+                        $link = "<a href = '../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
                         $tool_content .= "<div class='alert1'>$langMailNotVerified $link</div>";
                 }
         }

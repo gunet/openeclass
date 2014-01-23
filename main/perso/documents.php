@@ -18,8 +18,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'include/lib/mediaresource.factory.php';
-require_once 'include/lib/multimediahelper.class.php';
 
 /*
  * Personalised Documents Component, eClass Personalised

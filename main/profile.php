@@ -18,14 +18,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+$path2add = 2;
 $require_help = true;
 $require_login = true;
 $helpTopic = 'Profile';
-include '../../include/baseTheme.php';
-include '../auth/auth.inc.php';
-require_once '../../include/lib/fileUploadLib.inc.php';
-require_once '../../include/lib/pwgen.inc.php';
+include '../include/baseTheme.php';
+include '../modules/auth/auth.inc.php';
+require_once '../include/lib/fileUploadLib.inc.php';
+require_once '../include/lib/pwgen.inc.php';
 $require_valid_uid = TRUE;
 
 check_uid();
@@ -242,8 +242,8 @@ if ($myrow['perso'] == 'yes')  {
 	$checkedPerso = " checked='yes'";
 }
 
-$sec = $urlSecure . 'modules/profile/profile.php';
-$passurl = $urlSecure . 'modules/profile/password.php';
+$sec = $urlSecure . 'main/profile.php';
+$passurl = $urlSecure . 'main/password.php';
 
 $tool_content .= "
   <div id='operations_container'>
@@ -254,7 +254,7 @@ if ($allow_password_change) {
         <li><a href='$passurl'>$langChangePass</a></li> ";
 }
 $tool_content .= "<li><a href='emailunsubscribe.php'>$langEmailUnsubscribe</a></li>
-        <li><a href='../unreguser/unreguser.php'>$langUnregUser</a></li>
+        <li><a href='unreguser.php'>$langUnregUser</a></li>
     </ul>
   </div>\n";
 $tool_content .= "
@@ -358,14 +358,14 @@ if (get_config('email_verification_required')) {
         $user_email_status = get_mail_ver_status($uid);
         switch($user_email_status) {
                 case EMAIL_VERIFICATION_REQUIRED:
-                        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+                        $link = "<a href = '../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
                         $message = "<div class='alert1'>$langMailNotVerified $link</div>";                        
                         break;
                 case EMAIL_VERIFIED: 
                         $message = "<img src='$themeimg/tick_1.png' title='".q($langMailVerificationYesU)."' />";
                         break;
                 case EMAIL_UNVERIFIED:                        
-                        $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+                        $link = "<a href = '../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
                         $message = "<div class='alert1'>$langMailNotVerified $link</div>";                                                
                 default:	
                         break;

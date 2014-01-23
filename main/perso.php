@@ -31,23 +31,20 @@
  *
  */
 
-if (!defined('INDEX_START')) {
-	die("Action not allowed!");
-}
-
 include 'redirector.php';
 
 $subsystem = MAIN;
 
-include "lib/textLib.inc.php";
-include "lib/fileDisplayLib.inc.php";
+include "../include/lib/textLib.inc.php";
+include "../include/lib/fileDisplayLib.inc.php";
 //include personalised component files (announcemets.php etc.) from /modules/perso
-include "$webDir/modules/perso/lessons.php";
-include "$webDir/modules/perso/assignments.php";
-include "$webDir/modules/perso/announcements.php";
-include "$webDir/modules/perso/documents.php";
-include "$webDir/modules/perso/agenda.php";
-include "$webDir/modules/perso/forumPosts.php";
+include "$webDir/main/perso/lessons.php";
+include "$webDir/main/perso/assignments.php";
+include "$webDir/main/perso/announcements.php";
+include "$webDir/main/perso/documents.php";
+include "$webDir/main/perso/agenda.php";
+include "$webDir/main/perso/forumPosts.php";
+include '../include/lib/mediaresource.factory.php';
 
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);

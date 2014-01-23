@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,16 +29,12 @@
  *
  */
 
-if (!defined('INDEX_START')) {
-	die("Action not allowed!");
-}
-
-include("./include/lib/textLib.inc.php");
+include "../include/lib/textLib.inc.php";
 
 function cours_table_header($statut)
 {
         global $langCourseCode, $langMyCoursesProf, $langMyCoursesUser, $langCourseCode,
-               $langTeacher, $langAdm, $langUnregCourse, $langUnCourse, $tool_content;
+               $langTeacher, $langAdm, $langUnCourse, $tool_content;
 
         if ($statut == 1) {
                 $legend = $langMyCoursesProf;
@@ -52,18 +48,18 @@ function cours_table_header($statut)
         }
 
 	$tool_content .= "
-        <script type='text/javascript' src='modules/auth/sorttable.js'></script>
+        <script type='text/javascript' src='../modules/auth/sorttable.js'></script>
         <table width='99%' class='sortable' id='t1'>
         <tr>
           <th colspan='2'>$legend</th>
           <th width='190'>$langTeacher</th>
           <th width='50' class='center'>$manage</th>
-        </tr>\n";
+        </tr>";
 }
 
 function cours_table_end()
 {
-        $GLOBALS['tool_content'] .= "\n</table><br />\n";
+        $GLOBALS['tool_content'] .= "</table><br />";
 }
 
 $status = array();
@@ -96,16 +92,16 @@ if ($result2 and mysql_num_rows($result2) > 0) {
                 $profs[$code] = $mycours['profs'];
                 $titles[$code] = $mycours['title'];
 		if ($k%2==0) {
-			$tool_content .= "<tr class='even'>\n";
+			$tool_content .= "<tr class='even'>";
 		} else {
-			$tool_content .= "<tr class='odd'>\n";
+			$tool_content .= "<tr class='odd'>";
 		}
                 if ($this_statut == 1) {
                         $manage_link = "${urlServer}modules/course_info/infocours.php?from_home=TRUE&amp;cid=$code";
                         $manage_icon = $themeimg . '/tools.png';
                         $manage_title = $langAdm;
                 } else {
-                        $manage_link = "${urlServer}modules/unreguser/unregcours.php?cid=$code&amp;u=$uid";
+                        $manage_link = "${urlServer}main/unregcours.php?cid=$code&amp;u=$uid";
                         $manage_icon = $themeimg . '/cunregister.png';
                         $manage_title = $langUnregCourse;
                 }
@@ -119,10 +115,10 @@ if ($result2 and mysql_num_rows($result2) > 0) {
         cours_table_end();
 }  elseif ($_SESSION['statut'] == '5') {
         // if are loging in for the first time as student...
-	$tool_content .= "\n        <p class='success'>$langWelcomeStud</p>\n";
+	$tool_content .= "<p class='success'>$langWelcomeStud</p>";
 }  elseif ($_SESSION['statut'] == '1') {
         // ...or as professor
-        $tool_content .= "\n<p class='success'>$langWelcomeProf</p>\n";
+        $tool_content .= "<p class='success'>$langWelcomeProf</p>";
 }
 
 $announcements = array();
@@ -174,5 +170,5 @@ if (count($announcements)) {
                             "<br>$ann[preview]</td></tr>\n";
                 $la++;
         }
-        $tool_content .= "\n</table>\n";
+        $tool_content .= "</table>";
 }

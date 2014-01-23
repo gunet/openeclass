@@ -121,7 +121,7 @@ function htmlInterface($data, $lesson_fCode)
 {
 	global $statut, $is_admin, $urlAppend, $urlServer, $langCourseCreate, $langOtherCourses;
 	global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
-	global $langCourse, $langActions, $langUnregCourse, $langAdm, $uid, $themeimg;
+	global $langUnregCourse, $langAdm, $uid, $themeimg;
 	
 	$lesson_content = '';
 	if ($data[0] > 0) {
@@ -134,7 +134,7 @@ function htmlInterface($data, $lesson_fCode)
 			  $lesson_content .= "<td align='center'>";
 			if ($data[4][$i] == '5') {
 				$lesson_content .= "
-				<a href='${urlServer}modules/unreguser/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
+				<a href='${urlServer}main/unregcours.php?cid=".$data[2][$i]."&amp;uid=".$uid."'>
 				<img src='$themeimg/cunregister.png' title='".q($langUnregCourse)."' alt='".q($langUnregCourse)."'></a>";
 			} elseif ($data[4][$i] == '1') {
 				$lesson_content .= "

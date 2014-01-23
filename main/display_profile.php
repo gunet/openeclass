@@ -18,9 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+$path2add = 2;
 $require_login = true;
-include '../../include/baseTheme.php';
+include '../include/baseTheme.php';
 $require_valid_uid = TRUE;
 
 $nameTools = $langUserProfile;

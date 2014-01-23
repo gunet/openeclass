@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,9 +18,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+$path2add = 2;
 $require_login = TRUE;
-include '../../include/baseTheme.php';
+include '../include/baseTheme.php';
 
 $nameTools = $langUnregCourse;
 
@@ -43,7 +43,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
 	<li>$langYes: 
 	<a href='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
 	</li>
-	<li>$langNo: <a href='../../index.php' class=mainpage>$langBack</a>
+	<li>$langNo: <a href='../index.php' class=mainpage>$langBack</a>
 	</li></ul>
       </td>
     </tr>
@@ -73,7 +73,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
                     }
                 }
         }
-        $tool_content .= "<br><br><div align=right><a href='../../index.php' class=mainpage>$langBack</a></div>";
+        $tool_content .= "<br><br><div align=right><a href='../index.php' class=mainpage>$langBack</a></div>";
 }
 
 if (isset($_SESSION['uid'])) {
