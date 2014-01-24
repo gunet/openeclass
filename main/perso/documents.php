@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -62,8 +62,7 @@ function getUserDocuments($param)
  */
 function docsHtmlInterface($date)
 {
-	global $urlServer, $langNoDocsExist, $uid, $cours_id;
-	global $mysqlMainDb, $maxValue, $group_sql;
+	global $langNoDocsExist, $uid, $mysqlMainDb, $group_sql;
 
 	$q = db_query("SELECT document.path, document.course_id, document.filename, document.title, document.date_modified, 
                         cours.intitule as course_title, cours.code, document.format, document.visibility, document.id

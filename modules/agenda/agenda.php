@@ -254,7 +254,7 @@ if ($is_editor) {
                   </tr>                  
                   <tr>
                     <th>$langDuration <small> $langInHour</small>:</td>
-                    <td><input type='text' name='lasting' value='".q($myrow['lasting'])."' size='2' maxlength='2' /></td>
+                    <td><input type='text' name='lasting' value='".@q($myrow['lasting'])."' size='2' maxlength='2' /></td>
                   </tr>";
     		if (!isset($contenu)) {
 			$contenu = '';

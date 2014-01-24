@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,10 +43,10 @@
  */
 function getUserAgenda($param, $type)
 {
-
-	//number of unique dates to collect data for
-	$uniqueDates = 5;
-	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
+        global $mysqlMainDb, $uid;
+	
+        //number of unique dates to collect data for
+	$uniqueDates = 5;	        
 	$uid			= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
 	$max_repeat_val		= $param['max_repeat_val'];
@@ -143,7 +143,7 @@ function agendaHtmlInterface($data)
 			$agenda_content .= "<tr><td class='sub_title1'>".claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2]))."</td></tr>";
 			$iterator =  count($data[$i]);
 			for ($j=0; $j < $iterator; $j++){
-				$url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][5];
+				$url = $urlServer . "modules/agenda/agenda.php?c=" . $data[$i][$j][5];
 				if (strlen($data[$i][$j][4]) == 0) {
 					$data[$i][$j][4] = "$langUnknown";
 				}
@@ -153,10 +153,9 @@ function agendaHtmlInterface($data)
 				else {
 					$data[$i][$j][4] = $data[$i][$j][4]." $langHours";
 				}
-        $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
-        $data[$i][$j][1] = ellipsize(q(strip_tags($data[$i][$j][1])), 150, "... <a href=\"$url\">[$langMore]</a>");
-        $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
-
+                                $data[$i][$j][0] = ellipsize($data[$i][$j][0], 80);
+                                $data[$i][$j][1] = ellipsize(q(strip_tags($data[$i][$j][1])), 150, "... <a href=\"$url\">[$langMore]</a>");
+                                $data[$i][$j][6] = ellipsize($data[$i][$j][6], 60);
 				$agenda_content .= "<tr><td><ul class='custom_list'><li><a href=\"$url\"><b>".q($data[$i][$j][0])."</b></a><br /><b>".q($data[$i][$j][6])."</b><div class='smaller'>".$langExerciseStart.": <b>".$data[$i][$j][3]."</b> | $langDuration: <b>".$data[$i][$j][4]."</b><br />".$data[$i][$j][1]."</div></li></ul></td></tr>";
 			}
 		}

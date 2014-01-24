@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -117,7 +117,7 @@ function getUserAssignments($param, $type)
 
 function assignHtmlInterface($data)
 {
-	global  $langCourse, $langAssignment, $langDeadline, $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $langExerciseEnd, $urlServer;
+	global $langNoAssignmentsExist, $langGroupWorkSubmitted1, $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $urlServer;
 
         $assign_content = '';
 	$assignmentsExist = false;
@@ -131,7 +131,7 @@ function assignHtmlInterface($data)
 		if ($iterator > 0) {
 			$assignmentsExist = true;
 			for ($j=0; $j < $iterator; $j++) {
-                                $url = $urlServer . "index.php?perso=1&amp;c=" .
+                                $url = $urlServer . "modules/work/work.php?c=" .
                                        $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
 
 				if($data[$i][2][$j][6] == 1) {

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.8
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -43,7 +43,7 @@
  */
 function getUserForumPosts($param, $type)
 {
-	global $mysqlMainDb, $uid, $dbname, $currentCourseID;
+	global $uid;
 
 	$uid				= $param['uid'];
 	$lesson_code		= $param['lesson_code'];
@@ -98,10 +98,9 @@ function getUserForumPosts($param, $type)
  */
 function forumHtmlInterface($data)
 {
-	global $langNoPosts, $langMore, $langSender, $urlServer;
+	global $langNoPosts, $langMore, $urlServer;
 
 	$content = "";
-
 	if($numOfLessons = count($data) > 0) {
 		$content .= "<table width='100%'>";
 		$numOfLessons = count($data);
@@ -109,9 +108,7 @@ function forumHtmlInterface($data)
 			$content .= "<tr><td class='sub_title1'>".q($data[$i][0])."</td></tr>";
 			$iterator =  count($data[$i][2][0]);
 			for ($j=0; $j < $iterator; $j++){
-				$url = $urlServer."index.php?perso=5&amp;c=".$data[$i][1]."&amp;t=".$data[$i][2][0][$j][2]."&amp;f=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];
-                                //$data[$i][2][0][$j][8] = ellipsize($data[$i][2][0][$j][8], 150,
-                                //        "... <b>[$langMore]</b>");
+				$url = $urlServer."modules/phpbb/viewtopic.php?course=".$data[$i][1]."&amp;topic=".$data[$i][2][0][$j][2]."&amp;forum=".$data[$i][2][0][$j][0]."&amp;s=".$data[$i][2][0][$j][4];
 				$content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
 				<b>".q($data[$i][2][0][$j][3])." (".nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))).")</b>
                                 </a><div class='smaller grey'><b>".q($data[$i][2][0][$j][6]." ".$data[$i][2][0][$j][7]).
