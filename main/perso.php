@@ -27,7 +27,7 @@
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
  */
 
-require_once 'include/redirector.php';
+//require_once 'include/redirector.php';
 $sql = "SELECT course.id cid, course.code code, course.public_code,
                         course.title title, course.prof_names profs, course_user.status status
                 FROM course JOIN course_user ON course.id = course_user.course_id
@@ -156,55 +156,3 @@ $perso_tool_content = array(
 );
 
 // == END create array with personalised content
-
-
-/*
- * Function autoCloseTags
- *
- * It is used by the announcements and agenda personalised components. These
- * tools offer the ability to the professor to add content by using a WYSIWYG editor.
- * Thus, the professor can add several HTML tags to the content.
- *
- * The personalised logic limits this content to an X number of characters. This can
- * cause several tags to be in a not-closed state.
- *
- * This function makes sure ALL tags are closed so that no errors are presented to
- * the personalised interface
- *
- * @param string $string HTML code parsed by the personalised components
- * @return string HTML code with all html tag elements closed properly
- */
-function autoCloseTags($string) {
-    $donotclose = array('br', 'img', 'input'); // Tags that are not to be closed
-    //prepare vars and arrays
-    $tagstoclose = '';
-    $tags = array();
-
-    //put all opened tags into an array
-    preg_match_all("/<(([A-Z]|[a-z]).*)(( )|(>))/isU", $string, $result);
-
-    $openedtags = $result[1];
-
-    // this is just done so that the order of the closed tags in the end will be better
-    $openedtags = array_reverse($openedtags);
-
-    // put all closed tags into an array
-    preg_match_all("/<\/(([A-Z]|[a-z]).*)(( )|(>))/isU", $string, $result2);
-    $closedtags = $result2[1];
-
-    // look up which tags still have to be closed and put them in an array
-    for ($i = 0; $i < count($openedtags); $i++) {
-        if (in_array($openedtags[$i], $closedtags)) {
-            unset($closedtags[array_search($openedtags[$i], $closedtags)]);
-        } else
-            array_push($tags, $openedtags[$i]);
-    }
-    // prepare the close-tags for output
-    for ($x = 0; $x < count($tags); $x++) {
-        $add = strtolower(trim($tags[$x]));
-
-        if (!in_array($add, $donotclose))
-            $tagstoclose.='</' . $add . '>';
-    }
-    return $tagstoclose;
-}
