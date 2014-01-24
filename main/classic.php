@@ -164,7 +164,7 @@ if (count($announcements)) {
                         <tr class='$class'>
                             <td width='16'>" . icon('arrow', '') . "</td>
                             <td>
-                            <b><a href='modules/announcements/announcements.php?course=$ann[code]&amp;an_id=$ann[id]'>".q($ann['title']) .
+                            <b><a href=". $urlServer . "modules/announcements/announcements.php?course=$ann[code]&amp;an_id=$ann[id]>".q($ann['title']) .
                             "</a></b><br>" .
                             claro_format_locale_date($dateFormatLong, strtotime($ann['temps'])) .
                             "<br>$ann[preview]</td></tr>\n";
