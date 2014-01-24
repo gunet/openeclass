@@ -710,7 +710,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department');
+                        'course_department', 'user_department', 'wiki_locks');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -1006,8 +1006,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-                            `content` TEXT NOT NULL)
-                            $charset_spec");
+                            `content` TEXT NOT NULL,
+                            `changelog` VARCHAR(200) )  $charset_spec");
+                    db_query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
+                            `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
+                            `wiki_id` INT(11) UNSIGNED NOT NULL,
+                            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `ltime_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `ltime_alive` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
