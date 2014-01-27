@@ -126,10 +126,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (is_dir($restoreThis . '/video_files')) {
         move_dir($restoreThis . '/video_files', $videodir);
     }
-    course_index($coursedir, $new_course_code);
+    course_index($new_course_code);
     $tool_content .= "<p>$langCopyFiles $coursedir</p>";
-    $data = parse_backup_php($_POST['restoreThis'] . '/backup.php');
+    //$data = parse_backup_php($_POST['restoreThis'] . '/backup.php'); // TODO: remove (?)
 
+    require_once 'upgrade/functions.php';
     load_global_messages();
 
     //        map_db_field('dropbox_file', 'uploader_id', $userid_map);
@@ -321,7 +322,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 'aid' => $poll_answer_map,
                 'user_id' => $userid_map)));
     }
-    if (file_exists("$restoreThis/assignments") &&
+    if (file_exists("$restoreThis/assignment") &&
             file_exists("$restoreThis/assignment_submit")) {
         if (!isset($group_map[0])) {
             $group_map[0] = 0;
@@ -692,17 +693,6 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
     $langOk, $langAll, $langsTeachers, $langMultiRegType,
     $langNone, $langOldValue, $treeObj;
 
-    // find available languages
-    $languages = array();
-    foreach ($GLOBALS['active_ui_languages'] as $langcode) {
-        $entry = langcode_to_name($langcode);
-        if (isset($langNameOfLang[$entry])) {
-            $languages[$entry] = $langNameOfLang[$entry];
-        } else {
-            $languages[$entry] = $entry;
-        }
-    }
-
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
         if (isset($GLOBALS['lang' . $type])) {
@@ -729,7 +719,7 @@ function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $d
                    <tr><th>$langCourseCode:</th>
                        <td><input type='text' name='course_code' value='" . q($code) . "' /></td></tr>
                    <tr><th>$langLanguage:</th>
-                       <td>" . selection($languages, 'course_lang', $lang) . "</td></tr>
+                       <td>" . lang_select_options('languages') . "</td>
                    <tr><th>$langTitle:</th>
                        <td><input type='text' name='course_title' value='" . q($title) . "' size='50' /></td></tr>
                    <tr><th>$langCourseDescription:</th>

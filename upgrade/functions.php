@@ -2500,8 +2500,9 @@ function touch_or_error($filename) {
 
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages() {
-    global $global_messages, $session, $webDir, $siteName,
-           $InstitutionUrl, $Institution;
+    global $global_messages, $session, $webDir, $language_codes;
+    // these may seem unused, but they are needed when including messages.inc.php
+    global $siteName, $InstitutionUrl, $Institution;
 
     foreach ($session->native_language_names as $code => $name) {
         // include_messages
