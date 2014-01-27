@@ -126,7 +126,7 @@ function create_modules($cid) {
                             MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
                             MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
                             MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-                            MODULE_ID_LP, MODULE_ID_WIKI);
+                            MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG);
 
     $values = array();
     foreach ($vis_module_ids as $mid) {

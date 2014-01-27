@@ -545,6 +545,15 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
                 `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
                 `content` TEXT NOT NULL )  $charset_spec");
 
+db_query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `title` VARCHAR(255) NOT NULL DEFAULT '',
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `course_id` INT(11) NOT NULL) $charset_spec");
+
 db_query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,

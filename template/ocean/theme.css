@@ -1489,3 +1489,21 @@ dt {
 .cmetalabel a:hover, .cmetalabelinaccordion a:hover {
     border-bottom: none;
 }
+
+.blog_posts {
+    float: left; 
+    width: 75%; 
+    word-wrap:break-word;
+}
+
+.blog_post {
+    margin-bottom: 10px;
+}
+
+.blog_post_content {
+    margin-bottom: 10px;
+}
+
+.blog_post_title {
+    margin-bottom: 10px;
+}

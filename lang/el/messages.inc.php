@@ -3693,3 +3693,28 @@ $langCMeta['course_unit_description'] = "Αναλυτική περιγραφή �
 $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ενότητα";
 $langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
 $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
+
+/* * ***********************************************************
+ * blog.php
+ * ************************************************************ */
+$langBlog = "Ιστολόγιο";
+$langCourseBlog = "Ιστολόγιο μαθήματος";
+$langBlogPosts = "Αναρτήσεις ιστολογίου";
+$langBlogPopular = "Δημοφιλείς αναρτήσεις";
+$langBlogPostDelSucc = "Η διαγραφή της ανάρτησης ήταν επιτυχής";
+$langBlogPostDelFail = "Η διαγραφή της ανάρτησης απέτυχε";
+$langBlogPostNotFound = "Η ανάρτηση δεν ήταν εφικτό να βρεθεί";
+$langBlogAddPost = "Προσθήκη ανάρτησης";
+$langBlogEmpty = "Δεν υπάρχουν αναρτήσες ιστολογίου";
+$langBlogNewerPosts = "Νεότερες αναρτήσεις";
+$langBlogOlderPosts = "Παλαιότερες αναρτήσεις";
+$langBlogPopular = "Δημοφιλείς Αναρτήσεις";
+$langBlogPostUser = " - από τον χρήστη ";
+$langSureToDelBlogPost = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανάρτηση";
+$langBlogPostBody = "Σώμα Ανάρτησης";
+$langBlogPostTitle = "Τίτλος Ανάρτησης";
+$langBlogPost = "Ανάρτηση Ιστολογίου";
+$langModifBlogPost = "Αλλαγή της ανάρτησης";
+$langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
+$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε επιτυχώς";
+$langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
