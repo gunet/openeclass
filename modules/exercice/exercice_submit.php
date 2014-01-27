@@ -49,6 +49,8 @@ $picturePath='../../courses/'.$currentCourseID.'/image';
 require_once '../../include/lib/modalboxhelper.class.php';
 require_once '../../include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
+load_js('tools.js');
+$head_content .= "<script type='text/javascript'>$(exercise_enter_handler);</script>";
 
 if (isset($_GET['exerciseId'])) {
 	$exerciseId = intval($_GET['exerciseId']);
@@ -245,7 +247,7 @@ $tool_content .= "
 
   <br />
 
-  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours'>
+  <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours' class='exercise'>
   <input type='hidden' name='formSent' value='1' />
   <input type='hidden' name='exerciseId' value='$exerciseId' />	
   <input type='hidden' name='exerciseType' value='$exerciseType' />	
@@ -342,6 +344,6 @@ if (!$questionList) {
     <td colspan=\"2\">&nbsp;</td>
   </tr>
   </table>";
-}	
+}
 $tool_content .= "</form>";
 draw($tool_content, 2, null, $head_content);

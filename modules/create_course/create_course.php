@@ -330,7 +330,7 @@ if (!isset($_POST['create_course'])) {
                         video_quota = $video_quota*1024*1024,
                         group_quota = $group_quota*1024*1024,
                         dropbox_quota = $dropbox_quota*1024*1024,
-                        password = " . quote($_POST['password']) . ",
+                        password = " . quote(isset($_POST['password']) ? $_POST['password'] : "") . ",
                         faculteid = $facid,
                         first_create = NOW()");
         $new_cours_id = mysql_insert_id();
