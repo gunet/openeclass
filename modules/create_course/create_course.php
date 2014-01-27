@@ -150,7 +150,7 @@ $password = isset($_POST['password'])?$_POST['password']:'';
 
 $default_prof = "$_SESSION[givenname] $_SESSION[surname]";
 
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"checkrequired(this, 'title', 'prof_names');\">";
+$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
 
 if (get_config("betacms")) { // added support for betacms
     // Import from BetaCMS Bridge
@@ -280,7 +280,6 @@ if (!isset($_POST['create_course'])) {
     
 } else  { // create the course and the course database    
     // validation in case it skipped JS validation
-
     if (count($departments) < 1 || empty($departments[0])) {
         Session::set_flashdata($langEmptyAddNode, 'alert1');
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
