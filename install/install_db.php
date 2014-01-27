@@ -549,8 +549,8 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
                 `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
                 `wiki_id` INT(11) UNSIGNED NOT NULL,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `ltime_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `ltime_alive` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
                 PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `poll` (

@@ -74,11 +74,11 @@ class LockManager {
         $this->releaseExpiredLocks();
         
         if (!$this->isLocked($page_title, $wiki_id)) { //page not locked, so add a new lock
-            $sql = "INSERT INTO wiki_locks (ptitle, wiki_id, uid) "
-                   ."VALUES(?,?,?)"
+            $sql = "INSERT INTO wiki_locks (ptitle, wiki_id, uid, ltime_created, ltime_alive) "
+                   ."VALUES(?,?,?,FROM_UNIXTIME(?),FROM_UNIXTIME(?))"
             ;
             
-            Database::get()->query($sql, $page_title, $wiki_id, $uid);
+            Database::get()->query($sql, $page_title, $wiki_id, $uid, $this->curr_time, $this->curr_time);
             
             return true;
         } else {
