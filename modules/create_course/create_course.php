@@ -158,13 +158,12 @@ if (get_config("betacms")) { // added support for betacms
 }
 
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
-$faculte_html = '';
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
+    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid))) {
         $deps_valid = false;
-    $faculte_html .= '<input type="hidden" name="department[]" value="' . $dep . '" />';
+    }
 }
 
 // Check if the teacher is allowed to create in the departments he chose
@@ -198,8 +197,6 @@ if (!isset($_POST['create_course'])) {
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>";
-        
-        unset($code); // ->????
         
         $tool_content .= "
         <tr>
@@ -280,8 +277,18 @@ if (!isset($_POST['create_course'])) {
     
 } else  { // create the course and the course database    
     // validation in case it skipped JS validation
+    $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::set_flashdata($langEmptyAddNode, 'alert1');
+        $validationFailed = true;
+    }
+    
+    if (empty($title) || empty($prof_names)) {
+        Session::set_flashdata($langFieldsMissing, 'alert1');
+        $validationFailed = true;
+    }
+    
+    if ($validationFailed) {
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
         exit;
     }
