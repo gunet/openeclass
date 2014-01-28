@@ -264,6 +264,13 @@ function js_escape($s) {
 // Include a JavaScript file from the main js directory
 function load_js($file, $init = '') {
     global $head_content, $urlAppend, $theme;
+    static $loaded;
+
+    if (isset($loaded[$file])) {
+        return;
+    } else {
+        $loaded[$file] = true;
+    }
 
     if ($file == 'jquery') {
         $file = 'jquery-1.10.2.min.js';
