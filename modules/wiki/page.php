@@ -468,6 +468,14 @@ switch ($action) {
             $nameTools = $langWikiRecentChanges;
             break;
         }
+    case "rqSearch": {
+        	$nameTools = $langSearch;
+        	break;
+        }
+    case "exSearch": {
+        	$nameTools = $langSearch;
+        	break;
+        }   
     case "history": {
             $dispTitle = ( $wiki_title == "__MainPage__" ) ? $langWikiMainPage : $wiki_title;
             $navigation[] = array('url' => 'page.php?course=' . $course_code . '&amp;action=show&amp;wikiId='
@@ -1079,27 +1087,31 @@ switch ($action) {
     {
         $tool_content .= '<h3>'.$langWikiSearchResults.'</h3>' . "\n";
 
-        $tool_content .= '<ul>' . "\n";
-
-        foreach ($searchResult as $page) {
-            if ('__MainPage__' == $page->title) {
-                $title = $langWikiMainPage;
+        if (!empty($searchResult)) {
+            $tool_content .= '<ul>' . "\n";
+    
+            foreach ($searchResult as $page) {
+                if ('__MainPage__' == $page->title) {
+                    $title = $langWikiMainPage;
+                }
+                else {
+                    $title = $page->title;
+                }
+    
+                $urltitle = rawurlencode($page->title);
+    
+                $link = '<a href="'
+                        . htmlspecialchars($_SERVER['SCRIPT_NAME'] . '?wikiId='
+                        . $wikiId . '&title=' . $urltitle
+                        . '&action=show') . '">' . $title . '</a>';
+    
+                $tool_content .= '<li>' . $link. '</li>' . "\n";
             }
-            else {
-                $title = $page->title;
-            }
-
-            $urltitle = rawurlencode($page->title);
-
-            $link = '<a href="'
-                    . htmlspecialchars($_SERVER['SCRIPT_NAME'] . '?wikiId='
-                    . $wikiId . '&title=' . $urltitle
-                    . '&action=show') . '">' . $title . '</a>';
-
-            $tool_content .= '<li>' . $link. '</li>' . "\n";
+            $tool_content .= '</ul>' . "\n";
+        } else {
+            $tool_content .= $langNoResult;
         }
-        $tool_content .= '</ul>' . "\n";
-
+        
         break;
     }
     case 'rqSearch':

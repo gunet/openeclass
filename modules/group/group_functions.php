@@ -23,12 +23,12 @@ function initialize_group_id($param = 'group_id') {
 function initialize_group_info($group_id = false) {
     global $course_id, $statut, $self_reg, $multi_reg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
-    $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb, $user_group_description, $course_code;
+    $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
 
     if (!(isset($self_reg) and isset($multi_reg) and isset($has_forum) and isset($private_forum) and isset($documents) and isset($wiki))) {
         list($self_reg, $multi_reg, $has_forum, $private_forum, $documents, $wiki) = mysql_fetch_row(db_query(
                         "SELECT self_registration, multiple_registration, forum, private_forum, documents, wiki
-                         FROM `$mysqlMainDb`.group_properties WHERE course_id = $course_id"));
+                         FROM group_properties WHERE course_id = $course_id"));
     }
 
     // Guest users aren't allowed to register in a group

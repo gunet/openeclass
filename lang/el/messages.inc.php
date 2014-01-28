@@ -3124,7 +3124,6 @@ $langWikiNoWiki = "Δεν υπάρχει Wiki";
 $langWikiNotAllowedToCreate = " Δεν επιτρέπεται να δημιουργήσετε σελίδα";
 $langWikiNotAllowedToEdit = " Δεν επιτρέπεται να αλλάξετε τη σελίδα";
 $langWikiNotAllowedToRead = "Δεν επιτρέπεται να διαβάσετε τη σελίδα";
-$langWikiNotes = "Σημειώσεις";
 $langWikiNumberOfPages = "Αριθμός σελίδων";
 $langWikiOtherUsers = "Άλλοι χρήστες (*)";
 $langWikiOtherUsersText = "(*) ανώνυμοι χρήστες και χρήστες που δεν είναι μέλη αυτού του μαθήματος...";

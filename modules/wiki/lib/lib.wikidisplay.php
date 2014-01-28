@@ -58,7 +58,7 @@ require_once dirname(__FILE__) . "/lib.url.php";
 function claro_disp_wiki_editor($wikiId, $title, $versionId
 , $content, $changelog = '', $script = null, $showWikiToolBar = true
 , $forcePreview = true) {
-    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langWikiNotes, $course_code;
+    global $langPreview, $langCancel, $langSave, $langWikiMainPage, $langNote, $course_code;
 
     // create script
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
@@ -91,7 +91,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
 	
     //notes
     $out .= '<div style="padding:10px;">' . "\n";
-    $out .= '<b>'.$langWikiNotes.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
+    $out .= '<b>'.$langNote.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
 	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
     $out .= '</div>' . "\n";
     //end notes

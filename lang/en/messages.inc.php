@@ -2364,7 +2364,6 @@ $langWikiNoWiki = "No Wiki has been created";
 $langWikiNotAllowedToCreate = "You are not allowed to create pages";
 $langWikiNotAllowedToEdit = "You are not allowed to edit this page";
 $langWikiNotAllowedToRead = "You are not allowed to read this page";
-$langWikiNotes = "Notes";
 $langWikiNumberOfPages = "Number of pages";
 $langWikiOtherUsers = "Others (*)";
 $langWikiOtherUsersText = "(*) anonymous users, users who are not members of this course...";
