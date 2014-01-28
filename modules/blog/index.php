@@ -40,8 +40,8 @@ $pId = isset($_REQUEST['pId']) ? intval($_REQUEST['pId']) : 0;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 
 $posts_per_page = 10;
-$num_popular = 5;
-$num_chars_teaser_break = 200;
+$num_popular = 5;//number of popular blog posts to show in sidebar
+$num_chars_teaser_break = 500;//chars before teaser break
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
@@ -126,7 +126,7 @@ if ($action == "savePost") {
     
     if (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langAdd) {
         $post = new BlogPost();
-        if ($post->create($_POST['blogPostTitle'], $_POST['newContent'], $uid, $course_id)) {
+        if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
             $message = "<p class='success'>$langBlogPostSaveSucc</p>";
         } else {
             $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
@@ -134,7 +134,7 @@ if ($action == "savePost") {
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
-            if ($post->edit($_POST['blogPostTitle'], $_POST['newContent'])) {
+            if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
                 $message = "<p class='success'>$langBlogPostSaveSucc</p>";
             } else {
                 $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
@@ -158,7 +158,7 @@ if ($action == "showPost") {
         $post->incViews();
         
         $tool_content .= "<div class='blog_post'>";
-        $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".$post->getTitle()."</a>";
+        $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
         
         //if ($is_editor) {
         $tool_content .= "
@@ -170,7 +170,7 @@ if ($action == "showPost") {
         
         $tool_content .= "</h2></div>";
         
-        $tool_content .= "<div class='blog_post_content'><p>".$post->getContent()."</p></div>";
+        $tool_content .= "<div class='blog_post_content'><p>".standard_text_escape($post->getContent())."</p></div>";
         $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
         $tool_content .= "</div>";
     } else {
@@ -206,7 +206,7 @@ if ($action == "showBlog") {
         $tool_content .= "<div class='blog_posts'>";
         foreach ($posts as $post) {
             $tool_content .= "<div class='blog_post'>";
-            $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".$post->getTitle()."</a>";
+            $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
             
             //if ($is_editor) {
                 $tool_content .= "
@@ -218,7 +218,7 @@ if ($action == "showBlog") {
             
             $tool_content .= "</h2></div>";
             
-            $tool_content .= "<div class='blog_post_content'><p>".ellipsize_html($post->getContent(), $num_chars_teaser_break)."</p></div>";
+            $tool_content .= "<div class='blog_post_content'><p>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</p></div>";
             $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
             $tool_content .= "</div>";
         }

@@ -113,7 +113,7 @@ Class Blog {
         $posts = $this->getPopularBlogPostsDB($num);
         $out = "<table><tr><th style=\"border:0px;\">$langBlogPopular</th></tr>";
         foreach ($posts as $post) {
-            $out .= "<tr><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".$post->getTitle()."</a></td></tr>";
+            $out .= "<tr><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></td></tr>";
         }
         $out .= "</table><br>";
         return $out;
