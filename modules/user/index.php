@@ -334,7 +334,7 @@ while ($myrow = mysql_fetch_array($result)) {
             $control = icon('teacher', '$langTutor');
         } else {
             $class = 'add_user';
-            $control = icon('add', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[user_id]$extra_link");
+            $control = icon('add', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow[id]$extra_link");
         }
     }
     $tool_content .= "<td class='$class center' width='30'>$control</td>";

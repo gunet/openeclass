@@ -131,7 +131,7 @@ function assignHtmlInterface($data) {
         if ($iterator > 0) {
             $assignmentsExist = true;
             for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "index.php?perso=1&amp;c=" .
+                $url = $urlServer . "modules/work/index.php?c=" .
                         $data[$i][1] . "&amp;i=" . $data[$i][2][$j][0];
 
                 if ($data[$i][2][$j][6] == 1) {

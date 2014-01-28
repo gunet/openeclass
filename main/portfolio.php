@@ -30,7 +30,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'Portfolio';
 
-include 'baseTheme.php';
+include '../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
@@ -57,7 +57,7 @@ jQuery(document).ready(function() {
 });
 </script>";
 
-require_once 'include/perso.php';
+require_once 'perso.php';
 
 $tool_content = "
 <div class='panel_left'>

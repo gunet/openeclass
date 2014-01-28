@@ -546,20 +546,20 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_)
-            $moduleImg = "exercise_$image_bullet.png";
+            $moduleImg = "exercise_$image_bullet";
         else if ($module['contentType'] == CTLINK_)
-            $moduleImg = "links_$image_bullet.png";
+            $moduleImg = "links_$image_bullet";
         else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-            $moduleImg = "description_$image_bullet.png";
+            $moduleImg = "description_$image_bullet";
         else if ($module['contentType'] == CTDOCUMENT_)
-            $moduleImg = "docs_$image_bullet.png";
+            $moduleImg = "docs_$image_bullet";
         else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-            $moduleImg = "videos_$image_bullet.png";
+            $moduleImg = "videos_$image_bullet";
         else
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\"><img src=\"" . $themeimg . '/' . $moduleImg . "\" alt=\"" . $contentType_alt . "\" title=\"" . $contentType_alt . "\" border=\"0\" /></span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
     // LOCK

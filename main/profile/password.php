@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,15 +19,13 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/**
- * Index
- *
+/** 
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
+ * @file password.php 
  * @abstract Password change component
  *
  */
+
 $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
@@ -39,6 +37,8 @@ require_once 'include/log.php';
 
 $nameTools = $langChangePass;
 $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
+
+check_uid();
 
 // javascript
 load_js('jquery');
@@ -66,26 +66,21 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-check_uid();
-
-$passurl = $urlSecure . 'modules/profile/password.php';
+$passurl = $urlSecure . 'main/profile/password.php';
 
 if (isset($_POST['submit'])) {
     if (empty($_POST['password_form']) or empty($_POST['password_form1']) or empty($_POST['old_pass'])) {
         header("Location:" . $passurl . "?msg=2");
         exit();
     }
-    if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {
-        $_SESSION['password_error_text'] = "<ul><li>" .
-                implode("</li>\n<li>", $error_messages) .
-                "</li></ul>";
+    if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {        
         header("Location:" . $passurl . "?msg=1");
         exit();
     }
 
     //all checks ok. Change password!
-    $sql = "SELECT `password` FROM `user` WHERE `user_id`=" . $_SESSION["uid"] . " ";
-    $result = db_query($sql, $mysqlMainDb);
+    $sql = "SELECT `password` FROM `user` WHERE `id`=" . $_SESSION["uid"] . " ";
+    $result = db_query($sql);
     $myrow = mysql_fetch_array($result);
 
     $hasher = new PasswordHash(8, false);
@@ -93,9 +88,9 @@ if (isset($_POST['submit'])) {
 
     if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow['password'])) {
         db_query("UPDATE `user` SET `password` = '$new_pass'
-                                 WHERE `user_id` = " . $_SESSION["uid"]);
+                                 WHERE `id` = " . $_SESSION["uid"]);
         Log::record(0, 0, LOG_PROFILE, array('uid' => $_SESSION['uid'],
-            'pass_change' => 1));
+                                             'pass_change' => 1));
         header("Location:" . $passurl . "?msg=4");
         exit();
     } else {
@@ -110,9 +105,7 @@ if (isset($_GET['msg'])) {
     switch ($msg) {
 
         case 1: { // Passwords not acceptable
-                $message = isset($_SESSION['password_error_text']) ?
-                        $_SESSION['password_error_text'] : '';
-                unset($_SESSION['password_error_text']);
+                $message = $langPassTwo;               
                 $urlText = '';
                 $type = 'alert1';
                 break;

@@ -146,7 +146,7 @@ function htmlInterface($data, $lesson_code) {
             $lesson_content .= "<td align='center'>";
             if ($data[4][$i] == USER_STUDENT) {
                 $lesson_content .= "
-				<a href='${urlServer}modules/unreguser/unregcours.php?cid=" . $data[8][$i] . "&amp;uid=" . $uid . "'>
+				<a href='${urlServer}main/unregcours.php?cid=" . $data[8][$i] . "&amp;uid=" . $uid . "'>
 				<img src='$themeimg/cunregister.png' title='$langUnregCourse' alt='$langUnregCourse'></a>";
             } elseif ($data[4][$i] == USER_TEACHER) {
                 $lesson_content .= "

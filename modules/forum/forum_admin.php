@@ -221,7 +221,7 @@ elseif (isset($_GET['forumgoadd'])) {
     while ($r = mysql_fetch_array($sql)) {
         if (get_user_email_notification($r['user_id'], $course_id)) {
             $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribe, $title);
+            $unsubscribe = "<br /><br />$langNote" . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
             $emailaddr = uid_to_email($r['user_id']);
             send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);

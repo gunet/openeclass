@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.8
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -21,19 +21,19 @@
 
 /**
  * @brief create course
- * @global type $mysqlMainDb
- * @param type $fake_code
- * @param type $lang
- * @param type $title
- * @param type $fac
- * @param type $vis
- * @param type $prof
- * @param type $password
+ * @global type  $mysqlMainDb
+ * @param  type  $fake_code
+ * @param  type  $lang
+ * @param  type  $title
+ * @param  array $departments
+ * @param  type  $vis
+ * @param  type  $prof
+ * @param  type  $password
  * @return boolean
  */
-function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password = '') {    
+function create_course($public_code, $lang, $title, $departments, $vis, $prof, $password = '') {    
 
-    $code = strtoupper(new_code($fac[0]));
+    $code = strtoupper(new_code($departments[0]));
     if (!create_course_dirs($code)) {
         return false;
     }
@@ -42,7 +42,7 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
     }
     if (!db_query("INSERT INTO course
                          SET code = '$code',
-                             lang = '$lang',
+                             lang = " . quote($lang) . ",
                              title = " . quote($title) . ",
                              keywords = '',
                              visible = $vis,
@@ -55,15 +55,11 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
         return false;
     }
     $course_id = mysql_insert_id();
-    foreach ($fac as $facid) {
-        if (!isset($set_fac)) {
-            $set_fac = "INSERT INTO course_department (course, department) VALUES ";
-        } else {
-            $set_fac .= ' ,';
-        }
-        $set_fac .= "($course_id, $facid)";
-    }
-    db_query($set_fac);
+    
+    require_once 'include/lib/course.class.php';
+    $course = new Course();
+    $course->refresh($course_id, $departments);
+    
     return array($code, $course_id);
 }
 
