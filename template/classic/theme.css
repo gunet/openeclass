@@ -1461,7 +1461,7 @@ dt {
 }
 
 .blog_post {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .blog_post_content {
@@ -1469,5 +1469,37 @@ dt {
 }
 
 .blog_post_title {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.blog_tree {
+    list-style-type: none; 
+    padding: 0;
+    margin-left: 0;
+}
+
+.blog_tree_m_cur {
+    list-style-type: disk;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_m {
+    display:none;
+    list-style-type: disk;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_y_cur {
+    list-style-type: none;
+    padding: 0;
+    margin-left: 15px;
+}
+
+.blog_tree_y {
+    display:none;
+    list-style-type: none;
+    padding: 0;
+    margin-left: 15px;
 }

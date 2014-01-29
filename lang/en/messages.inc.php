@@ -3038,3 +3038,4 @@ $langModifBlogPost = "Modify blog post";
 $langEmptyBlogPostTitle = "Blog post title cannot be left empty";
 $langBlogPostSaveSucc = "The blog post was successfully saved";
 $langBlogPostSaveFail = "There was a problem while trying to save the blog post";
+$langBlogPostHistory = "Blog posts history";

@@ -234,6 +234,7 @@ if ($action == "showBlog") {
         /***sidebar area***/
         $tool_content .= "<div style=\"float: right; width: 25%;\">";
         $tool_content .= $blog->popularBlogPostsHTML($num_popular);
+        $tool_content .= $blog->chronologicalTreeHTML(date('n',strtotime($posts[0]->getTime())), date('Y',strtotime($posts[0]->getTime())));
         
         $tool_content .= "</div>";
         /***end of sidebar area***/

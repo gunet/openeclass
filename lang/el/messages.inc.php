@@ -3719,3 +3719,4 @@ $langModifBlogPost = "Αλλαγή της ανάρτησης";
 $langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
 $langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε επιτυχώς";
 $langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
+$langBlogPostHistory = "Ιστορικό αναρτήσεων";

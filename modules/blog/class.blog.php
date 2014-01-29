@@ -143,8 +143,56 @@ Class Blog {
         return $out;
     }
     
-    public function chronologicalTreeHTML() {
+    public function chronologicalTreeHTML($tree_month, $tree_year) {
+        global $course_id, $course_code, $langBlogPostHistory, $langMonthNames;
+        $out = '';
         
+        if ($this->blogPostsNumber()>0) {
+            $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ? ORDER BY `time` DESC";
+            $result = Database::get()->queryArray($sql, $course_id);
+            
+            $tree = array();
+            
+            $out .= "<div id='indentmenu'><b>$langBlogPostHistory</b><ul class='blog_tree'>";
+            //chronological array
+            foreach ($result as $obj) {
+                $tree[$obj->y][$obj->m][$obj->id] = $obj->title;
+            }
+            
+            foreach ($tree as $year => $yearard) {
+                $count_month = 0;
+                $out_m="";
+                foreach ($yearard as $month => $monthard) {
+            	    $count_month += count($monthard);
+            	    $count_id = 0;
+            
+            	    $out_p="";
+                    foreach ($monthard as $id => $title) {
+                    	$count_id += 1;
+                    	$out_p .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$id."'>".$title."</a></li>";
+            	    }
+                    $m = $langMonthNames['long'][$month-1];
+                    if ($month == $tree_month && $year == $tree_year) {
+                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"_".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
+                        $out_m .= "<ul class='blog_tree_m_cur' id=\"_".$month."y".$year."\">".$out_p."</ul></li>";
+                    } else {
+                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"_".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
+                        $out_m .= "<ul class='blog_tree_m' id=\"_".$month."y".$year."\">".$out_p."</ul></li>";
+                    }
+                }
+                if ($year == $tree_year){
+                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(".$year.")'>".$year." (".$count_month.")</a>";
+                	$out .= "<ul class='blog_tree_y_cur' id=\"".$year."\">".$out_m."</ul></li>";
+                }
+                else{
+                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(".$year.")'>".$year." (".$count_month.")</a>";
+                	$out .= "<ul class='blog_tree_y' id=\"".$year."\">".$out_m."</ul></li>";
+                }
+            }
+            $out .= "</ul></div>";
+        }
+        
+        return $out;
     }
     
     /**
