@@ -710,7 +710,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department');
+                        'course_department', 'user_department', 'blog_post');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -1008,6 +1008,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
                             `content` TEXT NOT NULL)
                             $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `blog_post` (
+                            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `title` VARCHAR(255) NOT NULL DEFAULT '',
+                            `content` TEXT NOT NULL,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `course_id` INT(11) NOT NULL) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
