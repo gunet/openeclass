@@ -196,4 +196,27 @@ Class BlogPost {
     public function getTime() {
     	return $this->creationTime;
     }
+    
+    /**
+     * Check if a user has permission to edit/delete blog posts
+     * @param isEditor boolean showing if user is teacher
+     * @param studConfigVal boolean based on the config value allowing users to create posts
+     * @param uid the user id
+     * @return boolean
+     */
+    public function permEdit($isEditor, $studConfigVal, $uid) {
+        if ($isEditor) {//teacher is always allowed to edit
+            return true;
+        } else {
+            if ($studConfigVal) {//students allowed to edit
+                if ($this->authorId == $uid) {//current user is post author
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+    }
 }

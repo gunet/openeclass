@@ -119,6 +119,12 @@ Class Blog {
         return $out;
     }
     
+    /**
+     * HTML code for the navigation links
+     * @param page the number of blog page show
+     * @param postsPerPage the number of posts per page
+     * @return string HMTL code
+     */
     public function navLinksHTML($page, $postsPerPage) {
         global $course_code, $langBlogNewerPosts, $langBlogOlderPosts;
         
@@ -143,6 +149,12 @@ Class Blog {
         return $out;
     }
     
+    /**
+     * HTML code for the chronological tree of blog posts
+     * @param tree_month the month of the most recent blog post
+     * @param tree_year the year of the most recent blog post
+     * @return string HMTL code
+     */
     public function chronologicalTreeHTML($tree_month, $tree_year) {
         global $course_id, $course_code, $langBlogPostHistory, $langMonthNames;
         $out = '';
@@ -209,5 +221,30 @@ Class Blog {
      */
     public function getUser() {
     	return $this->user_id;
+    }
+    
+    /**
+     * Check if a user has permission to create blog posts
+     * @param isEditor boolean showing if user is teacher
+     * @param studConfigVal boolean based on the config value allowing users to create posts
+     * @param uid the user id
+     * @return boolean
+     */
+    public function permCreate($isEditor, $studConfigVal, $uid) {
+        if ($isEditor) {//teacher is always allowed to create
+            return true;
+        } else {
+            if ($studConfigVal) {//students allowed to create
+                $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ? AND `user_id` = ?";
+                $result = Database::get()->querySingle($sql, $this->course_id, $uid);
+                if ($result->c > 0) {//user is course member
+                	return true;
+                } else {//user is not course member
+                	return false;
+                }
+            } else {//students are not allowed to create
+                return false;
+            }
+        }
     }
 }

@@ -3720,3 +3720,6 @@ $langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον 
 $langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε επιτυχώς";
 $langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
 $langBlogPostHistory = "Ιστορικό αναρτήσεων";
+$langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
+$langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφής της ανάρτησης";
+$langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";

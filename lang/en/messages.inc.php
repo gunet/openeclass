@@ -3039,3 +3039,6 @@ $langEmptyBlogPostTitle = "Blog post title cannot be left empty";
 $langBlogPostSaveSucc = "The blog post was successfully saved";
 $langBlogPostSaveFail = "There was a problem while trying to save the blog post";
 $langBlogPostHistory = "Blog posts history";
+$langBlogPostNotAllowedCreate = "You don't have permission to create a blog post";
+$langBlogPostNotAllowedDel = "You don't have permission to delete the blog post";
+$langBlogPostNotAllowedEdit = "You don't have permission to edit the blog post";

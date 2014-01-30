@@ -39,20 +39,31 @@ $action = (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $allowed_
 $pId = isset($_REQUEST['pId']) ? intval($_REQUEST['pId']) : 0;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 
+//config setting allowing students to create posts and edit/delete own posts
+//leaving it static for now
+$stud_allow_create = false;
+
 $posts_per_page = 10;
 $num_popular = 5;//number of popular blog posts to show in sidebar
 $num_chars_teaser_break = 500;//chars before teaser break
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
 
+//instantiate the object representing this blog
+$blog = new Blog($course_id, 0);
+
 //delete post
 if ($action == "delPost") {
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
-        if($post->delete()) {
-            $message = "<p class='success'>$langBlogPostDelSucc</p>";
+        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+            if($post->delete()) {
+                $message = "<p class='success'>$langBlogPostDelSucc</p>";
+            } else {
+                $message = "<p class='alert1'>$langBlogPostDelFail</p>";
+            }
         } else {
-            $message = "<p class='alert1'>$langBlogPostDelFail</p>";
+            $message = "<p class='alert1'>$langBlogPostNotAllowedDel</p>";
         }
     } else {
         $message = "<p class='alert1'>$langBlogPostNotFound</p>";
@@ -62,35 +73,7 @@ if ($action == "delPost") {
 
 //create blog post form
 if ($action == "createPost") {
-    $tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
-    <fieldset>
-    <legend>$langBlogPost</legend>
-    <table class='tbl' width='100%'>
-    <tr>
-    <th>$langBlogPostTitle:</th>
-    </tr>
-    <tr>
-    <td><input type='text' name='blogPostTitle' size='50' /></td>
-    </tr>
-    <tr>
-    <th>$langBlogPostBody:</th>
-    </tr>
-    <tr>
-    <td>".rich_text_editor('newContent', 4, 20, '')."</td>
-    </tr>
-    <tr><td class='right'><input type='submit' name='submitBlogPost' value='$langAdd' /></td>
-    </tr>
-    </table>
-    <input type='hidden' name='action' value='savePost' />
-    </fieldset>
-    </form>";
-}
-
-//edit blog post form
-if ($action == "editPost") {
-    $post = new BlogPost();
-    if ($post->loadFromDB($pId)) {
+    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
         $tool_content .= "
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
         <fieldset>
@@ -100,21 +83,58 @@ if ($action == "editPost") {
         <th>$langBlogPostTitle:</th>
         </tr>
         <tr>
-        <td><input type='text' name='blogPostTitle' value='".$post->getTitle()."' size='50' /></td>
+        <td><input type='text' name='blogPostTitle' size='50' /></td>
         </tr>
         <tr>
         <th>$langBlogPostBody:</th>
         </tr>
         <tr>
-        <td>".rich_text_editor('newContent', 4, 20, $post->getContent())."</td>
-		</tr>
-		<tr><td class='right'><input type='submit' name='submitBlogPost' value='$langModifBlogPost' /></td>
-		</tr>
-		</table>
-		<input type='hidden' name='action' value='savePost' />
-		<input type='hidden' name='pId' value='".$post->getId()."' />
-		</fieldset>
-		</form>";
+        <td>".rich_text_editor('newContent', 4, 20, '')."</td>
+        </tr>
+        <tr><td class='right'><input type='submit' name='submitBlogPost' value='$langAdd' /></td>
+        </tr>
+        </table>
+        <input type='hidden' name='action' value='savePost' />
+        </fieldset>
+        </form>";
+    } else {
+        $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
+    }
+    
+}
+
+//edit blog post form
+if ($action == "editPost") {
+    $post = new BlogPost();
+    if ($post->loadFromDB($pId)) {
+        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+            $tool_content .= "
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+            <fieldset>
+            <legend>$langBlogPost</legend>
+            <table class='tbl' width='100%'>
+            <tr>
+            <th>$langBlogPostTitle:</th>
+            </tr>
+            <tr>
+            <td><input type='text' name='blogPostTitle' value='".$post->getTitle()."' size='50' /></td>
+            </tr>
+            <tr>
+            <th>$langBlogPostBody:</th>
+            </tr>
+            <tr>
+            <td>".rich_text_editor('newContent', 4, 20, $post->getContent())."</td>
+    		</tr>
+    		<tr><td class='right'><input type='submit' name='submitBlogPost' value='$langModifBlogPost' /></td>
+    		</tr>
+    		</table>
+    		<input type='hidden' name='action' value='savePost' />
+    		<input type='hidden' name='pId' value='".$post->getId()."' />
+    		</fieldset>
+    		</form>";
+        } else {
+            $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
+        }
     } else {
         $message = "<p class='alert1'>$langBlogPostNotFound</p>";
     }
@@ -125,19 +145,27 @@ if ($action == "editPost") {
 if ($action == "savePost") {
     
     if (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langAdd) {
-        $post = new BlogPost();
-        if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
-            $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+        if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
+            $post = new BlogPost();
+            if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
+                $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+            } else {
+                $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+            }
         } else {
-            $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+            $message = "<p class='alert1'>$langBlogPostNotAllowedCreate</p>";
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
-            if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
-                $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+            if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+                if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
+                    $message = "<p class='success'>$langBlogPostSaveSucc</p>";
+                } else {
+                    $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                }
             } else {
-                $message = "<p class='alert1'>$langBlogPostSaveFail</p>";
+                $message = "<p class='alert1'>$langBlogPostNotAllowedEdit</p>";
             }
         } else {
             $message = "<p class='alert1'>$langBlogPostNotFound</p>";
@@ -153,6 +181,15 @@ if (isset($message) && $message) {
 
 //show blog post
 if ($action == "showPost") {
+    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
+        $tool_content .= "
+        <div id='operations_container'>
+        <ul id='opslist'>
+        <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>
+            </ul>
+        </div>";
+    }
+    
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         $post->incViews();
@@ -160,13 +197,13 @@ if ($action == "showPost") {
         $tool_content .= "<div class='blog_post'>";
         $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
         
-        //if ($is_editor) {
-        $tool_content .= "
-        <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-        <img src='$themeimg/edit.png' title='".$langModify."'/></a>
-        <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-        <img src='$themeimg/delete.png' title='".$langDelete."' /></a>";
-        //}
+        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+            $tool_content .= "
+            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
+            <img src='$themeimg/edit.png' title='".$langModify."'/></a>
+            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
+            <img src='$themeimg/delete.png' title='".$langDelete."' /></a>";
+        }
         
         $tool_content .= "</h2></div>";
         
@@ -181,15 +218,15 @@ if ($action == "showPost") {
 
 //show all blog posts
 if ($action == "showBlog") {
-    $tool_content .= "
-    <div id='operations_container'>
-        <ul id='opslist'>
-            <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>
-        </ul>
-    </div>";
+    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
+        $tool_content .= "
+        <div id='operations_container'>
+            <ul id='opslist'>
+                <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost'>" . $langBlogAddPost . "</a></li>
+            </ul>
+        </div>";
+    }
     
-    //create new blog object for this course
-    $blog = new Blog($course_id, 0);
     $num_posts = $blog->blogPostsNumber();
     if ($num_posts == 0) {//no blog posts
         $tool_content .= "<p class='alert1'>$langBlogEmpty</p>";
@@ -208,13 +245,13 @@ if ($action == "showBlog") {
             $tool_content .= "<div class='blog_post'>";
             $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
             
-            //if ($is_editor) {
+            if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 $tool_content .= "
                 <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
                 <img src='$themeimg/edit.png' title='".$langModify."'/></a>
                 <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
                 <img src='$themeimg/delete.png' title='".$langDelete."' /></a>";
-            //}
+            }
             
             $tool_content .= "</h2></div>";
             
