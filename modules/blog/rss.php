@@ -54,10 +54,13 @@ if (!visible_module(MODULE_ID_BLOG)) {
 }
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?", $course_id)->title, ENT_NOQUOTES);
-$lastbuilddate = Database::get()->querySingle("SELECT DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
+$lastbuilddateobj = Database::get()->querySingle("SELECT DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
                 FROM blog_post WHERE course_id = ?
-                ORDER BY `time` DESC", $course_id)->dateformat;
-
+                ORDER BY `time` DESC", $course_id);
+if (is_object($lastbuilddateobj)) {
+    $lastbuilddate = $lastbuilddateobj->dateformat;
+}
+    
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
