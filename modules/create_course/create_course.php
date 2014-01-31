@@ -61,7 +61,7 @@ $head_content .= <<<hContent
                     activate_input_password ();
             }
     }
-        
+
     function checkrequired(which, entry, entry2) {
             var pass=true;
             if (document.images) {
@@ -91,21 +91,21 @@ hContent;
     $head_content .= "pwStrengthStrong: '". js_escape($langPwStrengthStrong) ."'";
 $head_content .= <<<hContent
     };
-   
-    function showCCFields() {           
-        $('#cc').show();        
+
+    function showCCFields() {
+        $('#cc').show();
     }
-    function hideCCFields() {           
-        $('#cc').hide();        
+    function hideCCFields() {
+        $('#cc').hide();
     }
-                
+
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
-        
+
         displayCoursePassword();
-        
+
         $('#courseopen').click(function(event) {
                 activate_input_password();
         });
@@ -118,7 +118,7 @@ $head_content .= <<<hContent
         $('#courseinactive').click(function(event) {
                 deactivate_input_password();
         });
-       
+
         $('input[name=l_radio]').change(function () {
             if ($('#cc_license').is(":checked")) {
                 showCCFields();
@@ -127,10 +127,10 @@ $head_content .= <<<hContent
             }
         }).change();
 
-    });  
-        
+    });
+
 /* ]]> */
-    
+
 </script>
 hContent;
 
@@ -152,13 +152,13 @@ $teacher = "$_SESSION[prenom] $_SESSION[nom]";
 // --------------------------
 // display form
 // --------------------------
-if (!isset($_POST['create_course'])) {  
+if (!isset($_POST['create_course'])) {
     $tool_content .= "
     <fieldset><legend>$langCreateCourseStep1Title</legend>
         <table class='tbl'>
 	<tr>
 	  <th>$langTitle:</th>
-	  <td><input type='text' name='intitule' size='60' value='".@$intitule."' /></td>	  
+	  <td><input type='text' name='intitule' size='60' value='".@$intitule."' /></td>
 	</tr>
 	<tr><th>$langFaculty:</th><td>";
 	$facs = db_query("SELECT id, name FROM faculte order by id");
@@ -167,21 +167,21 @@ if (!isset($_POST['create_course'])) {
 	}
 	$tool_content .= selection($fac, 'faculte', $homefac);
 	$tool_content .= "</td></tr>";
-	unset($repertoire);        
+	unset($repertoire);
 	$tool_content .= "
         <tr>
 	  <th>$langTeachers:</th>
-	  <td><input type='text' name='titulaires' size='60' value='" . q($teacher) . "' /></td>	  
+	  <td><input type='text' name='titulaires' size='60' value='" . q($teacher) . "' /></td>
         </tr>
 	<tr>
 	  <th class='left'>$langType:</th>
-	  <td>" .  selection(array('pre' => $langpre, 
-                                   'post' => $langpost, 
+	  <td>" .  selection(array('pre' => $langpre,
+                                   'post' => $langpost,
                                    'other' => $langother), 'type') . "</td>
         </tr>
 	<tr>
 	  <th class='left'>$langLanguage:</th>
-	  <td>" . lang_select_options('localize') . "</td>          
+	  <td>" . lang_select_options('localize') . "</td>
         </tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         @$tool_content .= "<tr><th colspan='2'>$langDescrInfo <span class='smaller'>$langUncompulsory</span><br /> ".  rich_text_editor('description', 4, 20, $description)."</th></tr>";
@@ -197,7 +197,7 @@ if (!isset($_POST['create_course'])) {
             <tr><td colspan='2'><input type='radio' name='l_radio' value='0' checked>
                 {$license[0]['title']}
             </td>
-            </tr>           
+            </tr>
             <tr><td colspan='2'><input type='radio' name='l_radio' value='10'>
                 {$license[10]['title']}
             </td>
@@ -205,17 +205,17 @@ if (!isset($_POST['create_course'])) {
             <tr><td colspan='2'><input id = 'cc_license' type='radio' name='l_radio' value='cc'/>
                 $langCMeta[course_license]
             </td>
-            </tr>            
+            </tr>
             <tr id = 'cc'><td>&nbsp;</td><td>" . selection($cc_license, 'cc_use') . "</td></tr>";
         $tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr>";
         $tool_content .= "<tr><th class='left' colspan='2'>$langAvailableTypes</th></tr>
           <tr>
-            <td colspan='2'>        
+            <td colspan='2'>
 	    <table class='sub_title1' width='100%'>
-            <tr>		            
+            <tr>
 		<th width='170'>$langOptPassword</th>
                 <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' /></td>
-	    </tr>            
+	    </tr>
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
 		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2'checked='checked' /></td>
@@ -225,7 +225,7 @@ if (!isset($_POST['create_course'])) {
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
 		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' /></td>
 		<td class='smaller'>$langPrivOpen</td>
-	    </tr>	    
+	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_closed.png' alt='$m[legclosed]' title='$m[legclosed]' width='16' height='16' />&nbsp;$m[legclosed]:</th>
 		<td><input id='courseclose' type='radio' name='formvisible' value='0' /></td>
@@ -236,23 +236,24 @@ if (!isset($_POST['create_course'])) {
 		<td><input id='courseinactive' type='radio' name='formvisible' value='3' /></td>
 		<td class='smaller'>$langCourseInactive</td>
 	    </tr>
-	    </table>";       
+	    </table>";
             $tool_content .= "</td>
-          </tr>            
+          </tr>
           <tr>
             <td class='right'>&nbsp;
               <input type='submit' name='create_course' value='".q($langCourseCreate)."' />
             </td>
           </tr>
           </table>";
-        
+
         $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
         $tool_content .= "</fieldset>";
         $tool_content .= "</form>";
 
 } else { // create the course and the course database
-
-   
+        if (isset($_POST['titulaires'])) {
+            $teacher = $_POST['titulaires'];
+        }
         $nameTools = $langCourseCreate;
         $facid = intval($_POST['faculte']);
         $facname = find_faculty_by_id($facid);
@@ -294,14 +295,14 @@ if (!isset($_POST['create_course'])) {
         // ---------------------------------------------------------
         require "create_course_db.php";
         // ------------- update main Db------------
-        mysql_select_db($mysqlMainDb);        
+        mysql_select_db($mysqlMainDb);
         // get default quota values
         $doc_quota = get_config('doc_quota');
         $group_quota = get_config('group_quota');
         $video_quota = get_config('video_quota');
         $dropbox_quota = get_config('dropbox_quota');
         // get course_license
-        if (isset($_POST['l_radio'])) {           
+        if (isset($_POST['l_radio'])) {
             $l = $_POST['l_radio'];
             switch ($l) {
                 case 'cc':
@@ -314,9 +315,9 @@ if (!isset($_POST['create_course'])) {
                     break;
                 default:
                     $course_license = 0;
-                    break;                                        
+                    break;
                 }
-            }        
+            }
         db_query("INSERT INTO cours SET
                         code = '$code',
                         languageCourse =" . quote($language) . ",

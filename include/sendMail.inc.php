@@ -26,7 +26,7 @@ function send_mail($from, $from_address, $to, $to_address,
 {
         if (count($to_address) > 1) {
                 $to_header = '(undisclosed-recipients)';
-                $bcc = 'Bcc: ' . join(', ', $to_address) . "\n";
+                $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
         } else {
                 if (empty($to)) {
                         $to_header = $to_address;
@@ -36,12 +36,12 @@ function send_mail($from, $from_address, $to, $to_address,
                 $bcc = '';
         }
 	$headers = from($from, $from_address) . $bcc .
-		"MIME-Version: 1.0\r\n" .
-		"Content-Type: text/plain; charset=$charset\r\n" .
+		"MIME-Version: 1.0" . PHP_EOL
+		"Content-Type: text/plain; charset=$charset" . PHP_EOL
 		"Content-Transfer-Encoding: 8bit" .
                 reply_to($from, $from_address);
 	if ($extra_headers) {
-		$headers .= "\r\n" . preg_replace('/\n+/', "\n", $extra_headers);
+		$headers .= PHP_EOL . preg_replace('/\n+/', PHP_EOL, $extra_headers);
 	}
 
 	return @mail($to_header, qencode($subject, $charset),
@@ -74,7 +74,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
                                 $to_header = "($to)";
                         }
                 }
-                $bcc = 'Bcc: ' . join(', ', $to_address) . "\r\n";
+                $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
         } else {
                 if (empty($to)) {
                      if (is_array($to_address)) {
@@ -94,23 +94,23 @@ function send_mail_multipart($from, $from_address, $to, $to_address,
         $separator = uniqid('==eClass-Multipart_Boundary_0_', true) . '_' .
                      md5(time());
 	$headers = from($from, $from_address) . $bcc .
-		   "MIME-Version: 1.0\r\n" .
-                   "Content-Type: multipart/alternative;" .
-                   "\r\n\tboundary=\"$separator\"" .
+		   "MIME-Version: 1.0" . PHP_EOL .
+           "Content-Type: multipart/alternative;" . PHP_EOL .
+           "    boundary=\"$separator\"" .
                    reply_to($from, $from_address);
 
-	$body = "This is a multi-part message in MIME format.\n\n" .
-		"--$separator\r\n" .
-		"Content-Type: text/plain; charset=$charset\n" .
-		"Content-Transfer-Encoding: 8bit\n\n$body_plain\n\n" .
-		"--$separator\r\n" .
-		"Content-Type: text/html; charset=$charset\n" .
-		"Content-Transfer-Encoding: 8bit\n\n" .
+	$body = "This is a multi-part message in MIME format." . PHP_EOL . PHP_EOL .
+		"--$separator" . PHP_EOL .
+		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
+		"Content-Transfer-Encoding: 8bit\n\n$body_plain" . PHP_EOL . PHP_EOL .
+		"--$separator" . PHP_EOL .
+		"Content-Type: text/html; charset=$charset" . PHP_EOL .
+		"Content-Transfer-Encoding: 8bit" . PHP_EOL . PHP_EOL .
 		"<html><head><meta http-equiv='Content-Type' " .
 		"content='text/html; charset=\"$charset\"'>" .
 		"<title>message</title></head><body>\n" .
-		"$body_html\n</body></html>\n\n" .
-		"--$separator--\r\n";
+		"$body_html\n</body></html>" . PHP_EOL .
+		"--$separator--" . PHP_EOL;
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);
 }
@@ -123,11 +123,11 @@ function from($from, $from_address)
 
         if (empty($from_address) or !get_config('email_from')) {                
                 return "From: " . qencode($siteName, $charset) .
-                       " <$emailAdministrator>\r\n";
+                       " <$emailAdministrator>" . PHP_EOL;
         } else {                
 		return "From: " .
                        qencode("$from ($langVia: $siteName)", $charset) .
-                       " <$from_address>\r\n";
+                       " <$from_address>" . PHP_EOL;
         }
 }
 
@@ -139,9 +139,9 @@ function reply_to($from, $from_address)
 
         if (!get_config('email_from') and $emailAdministrator <> $from_address) {
                 if (empty($from)) {
-                        return "\r\nReply-To: $from_address";
+                        return PHP_EOL . "Reply-To: $from_address";
                 } else {
-                        return "\r\nReply-To: " .
+                        return PHP_EOL . "Reply-To: " .
                                     qencode($from, $charset) .
                                     " <$from_address>";
                 }
