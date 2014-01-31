@@ -36,8 +36,8 @@ function send_mail($from, $from_address, $to, $to_address,
                 $bcc = '';
         }
 	$headers = from($from, $from_address) . $bcc .
-		"MIME-Version: 1.0" . PHP_EOL
-		"Content-Type: text/plain; charset=$charset" . PHP_EOL
+		"MIME-Version: 1.0" . PHP_EOL .
+		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
 		"Content-Transfer-Encoding: 8bit" .
                 reply_to($from, $from_address);
 	if ($extra_headers) {
