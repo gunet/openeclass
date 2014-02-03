@@ -583,7 +583,9 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `active` CHAR(1) NOT NULL DEFAULT 1,
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
-                `max_grade` FLOAT DEFAULT NULL ) $charset_spec");
+                `max_grade` FLOAT DEFAULT NULL,                
+                `assign_to_specific` CHAR(1) NOT NULL) $charset_spec");
+
 db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -599,6 +601,13 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
 
+
+db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
+                `user_id` int(11) NOT NULL,
+                `group_id` int(11) NOT NULL,
+                `assignment_id` int(11) NOT NULL
+              ) $charset_spec");        
+        
 db_query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
