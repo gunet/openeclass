@@ -498,10 +498,10 @@ function new_assignment() {
           <th>$m[max_grade]:</th>
           <td><input type='text' name='max_grade' size='5' value='10'/></td>
         </tr>        
-        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($posted_data['WorkEnd']) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". (($posted_data['WorkEnd']) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($posted_data['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". ((isset($posted_data['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
-        <tr id='example'". (($posted_data['WorkEnd']) ? "" : "style=\"display:none\"") .">
+        <tr id='example'". ((isset($posted_data['WorkEnd'])) ? "" : "style=\"display:none\"") .">
           <th></th>
           <td><input id='deadline' type='text' name='WorkEnd' value='{$posted_data['WorkEnd']}' />&nbsp $m[deadline_notif]</td>
         </tr>
@@ -1345,7 +1345,7 @@ function show_assignments() {
 			  <td class='center' $deadline_style>" . $deadline . "</td>
 			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
-			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirm_delete_assignment();'>
+			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"$langConfirmDelete\");'>
 			  <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
             if ($row->active) {
                 $deactivate_temp = q($m['deactivate']);
