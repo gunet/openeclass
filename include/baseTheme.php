@@ -50,7 +50,7 @@ if (isset($toolContent_ErrorExists)) {
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
@@ -211,7 +211,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } else {
             if (!get_config('dont_display_login_form')) {
                 $t->set_var('LANG_LOGOUT', $langLogin);
-                $t->set_var('LOGOUT_LINK', $urlSecure . 'login_form.php');
+                $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
             } else {
                 $t->set_var('LOGOUT_LINK', '#');
             }

@@ -145,12 +145,12 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$title = isset($_POST['title'])?$_POST['title']:'';
-$password = isset($_POST['password'])?$_POST['password']:'';
+register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
+if (empty($prof_names)) {
+    $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
+}
 
-$default_prof = "$_SESSION[givenname] $_SESSION[surname]";
-
-$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"checkrequired(this, 'title', 'prof_names');\">";
+$tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
 
 if (get_config("betacms")) { // added support for betacms
     // Import from BetaCMS Bridge
@@ -158,13 +158,12 @@ if (get_config("betacms")) { // added support for betacms
 }
 
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
-$faculte_html = '';
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
+    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid))) {
         $deps_valid = false;
-    $faculte_html .= '<input type="hidden" name="department[]" value="' . $dep . '" />';
+    }
 }
 
 // Check if the teacher is allowed to create in the departments he chose
@@ -176,9 +175,6 @@ if (!$deps_valid) {
     exit();
 }
 
-if (empty($prof_names)) {
-    $prof_names = $default_prof;
-}
    
 // display form   
 if (!isset($_POST['create_course'])) {
@@ -198,8 +194,6 @@ if (!isset($_POST['create_course'])) {
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</td></tr>";
-        
-        unset($code); // ->????
         
         $tool_content .= "
         <tr>
@@ -280,9 +274,18 @@ if (!isset($_POST['create_course'])) {
     
 } else  { // create the course and the course database    
     // validation in case it skipped JS validation
-
+    $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::set_flashdata($langEmptyAddNode, 'alert1');
+        $validationFailed = true;
+    }
+    
+    if (empty($title) || empty($prof_names)) {
+        Session::set_flashdata($langFieldsMissing, 'alert1');
+        $validationFailed = true;
+    }
+    
+    if ($validationFailed) {
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
         exit;
     }

@@ -1136,13 +1136,13 @@ if ($doc_count == 0) {
                 $style = ' class="invisible"';
             }
             if ($is_dir) {
-                $image = $themeimg . '/folder.png';
+                $img_href = icon('folder');
                 $file_url = $base_url . "openDir=$cmdDirName";
                 $link_title = q($entry['filename']);
                 $dload_msg = $langDownloadDir;
                 $link_href = "<a href='$file_url'>$link_title</a>";
             } else {
-                $image = $urlAppend . '/modules/document/img/' . choose_image('.' . $entry['format']);
+                $img_href = icon(choose_image('.' . $entry['format']));
                 $file_url = file_url($cmdDirName, $entry['filename']);
                 if ($entry['extra_path']) {
                     $cdpath = common_doc_path($entry['extra_path']);
@@ -1174,7 +1174,6 @@ if ($doc_count == 0) {
 
                 $link_href = MultimediaHelper::chooseMediaAhref($dObj);
             }
-            $img_href = "<img src='$image' alt=''>";
             if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
                 // Normal or common document
                 $download_url = $base_url . "download=$cmdDirName";

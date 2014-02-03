@@ -87,6 +87,7 @@ class Session {
         }
         $item_messages = $_SESSION['messages'][$item];
         unset($_SESSION['messages'][$item]);
+        $msg_boxes = '';
         foreach($item_messages as $row => $value){
             $msg_boxes .= "<div class='$row'><ul><li>".implode('</li><li>', $value)."</li></ul></div>";
         }

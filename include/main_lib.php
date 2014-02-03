@@ -264,6 +264,13 @@ function js_escape($s) {
 // Include a JavaScript file from the main js directory
 function load_js($file, $init = '') {
     global $head_content, $urlAppend, $theme;
+    static $loaded;
+
+    if (isset($loaded[$file])) {
+        return;
+    } else {
+        $loaded[$file] = true;
+    }
 
     if ($file == 'jquery') {
         $file = 'jquery-1.10.2.min.js';
@@ -291,8 +298,7 @@ function load_js($file, $init = '') {
         $file = 'colorbox/jquery.colorbox.min.js';
     } elseif ($file == 'flot') {
         $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-1.10.2.min.js'></script>\n";
+        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";        
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
@@ -356,7 +362,7 @@ function display_user($user, $print_email = false, $icon = true) {
     }
 
     $token = token_generate($user['id'], true);
-    return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
+    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
             q("$user[givenname] $user[surname]") . "</a>" .
             ($print_email ? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')') : '');
 }
@@ -371,7 +377,7 @@ function uid_to_name($uid, $name_type='fullname') {
 		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?", intval($uid))->surname;
 	}elseif($name_type=='username'){
 		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
-	}else{
+	}else{            
 		return false;
 	}
 }

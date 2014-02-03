@@ -455,21 +455,19 @@ function display_path_content() {
             $output .= '<b>' . $module['name'] . '</b>';
         } else { // module
             if ($module['contentType'] == CTEXERCISE_)
-                $moduleImg = 'exercise_on.png';
+                $moduleImg = 'exercise_on';
             else if ($module['contentType'] == CTLINK_)
-                $moduleImg = "links_on.png";
+                $moduleImg = 'links_on';
             else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-                $moduleImg = "description_on.png";
+                $moduleImg = 'description_on';
             else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-                $moduleImg = "videos_on.png";
+                $moduleImg = 'videos_on';
             else
                 $moduleImg = choose_image(basename($module['path']));
 
             $contentType_alt = selectAlt($module['contentType']);
 
-            $output .= '<img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" />'
-                    . $module['name']
-            ;
+            $output .= icon($moduleImg, $contentType_alt) . $module['name'];
         }
         $output .= '</td>' . "\n"
                 . '</tr>' . "\n\n";
@@ -796,7 +794,7 @@ function display_my_documents($dialogBox, $style) {
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
                 $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
             } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
-                $image = 'folder.png';
+                $image = 'folder';
                 $size = '&nbsp;';
                 $date = '&nbsp;';
                 $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';
@@ -804,7 +802,7 @@ function display_my_documents($dialogBox, $style) {
 
             $output .= '
                 <tr ' . $style . '>
-                <td class="center" width="1"><img src="' . $themeimg . '/' . $image . '" hspace="5" /></td>
+                <td class="center" width="1">' . icon($image, '') . '</td>
                 <td align="left">' . $urlFileName . '</td>
                 <td width="80" class="center">' . $size . '</td>
                 <td width="80" class="center">' . $date . '</td>';

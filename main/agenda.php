@@ -131,7 +131,7 @@ function agendaHtmlInterface($data) {
             $agenda_content .= "<tr><td class='sub_title1'>" . claro_format_locale_date($dateFormatLong, strtotime($data[$i][0][2])) . "</td></tr>";
             $iterator = count($data[$i]);
             for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "index.php?perso=4&amp;c=" . $data[$i][$j][4];
+                $url = $urlServer . "modules/agenda/index.php?course=" . $data[$i][$j][4];
                 if (strlen($data[$i][$j][3]) == 0) {
                     $data[$i][$j][3] = "$langUnknown";
                 } elseif ($data[$i][$j][3] == 1) {

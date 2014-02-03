@@ -337,7 +337,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 $emailnotification = '';
 if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
     $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
-        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course
 $receive_mail = FALSE;

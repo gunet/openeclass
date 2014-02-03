@@ -170,18 +170,19 @@ foreach ($flatElementList as $module) {
     }
     //-- if user can access module
     else {
-        if ($module['contentType'] == CTEXERCISE_)
-            $moduleImg = "exercise_on.png";
-        else if ($module['contentType'] == CTLINK_)
-            $moduleImg = "links_on.png";
-        else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-            $moduleImg = "description_on.png";
-        else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-            $moduleImg = "videos_on.png";
-        else
+        if ($module['contentType'] == CTEXERCISE_) {
+            $moduleImg = 'exercise_on';
+        } elseif ($module['contentType'] == CTLINK_) {
+            $moduleImg = 'links_on';
+        } elseif ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
+            $moduleImg = 'description_on';
+        } elseif ($module['contentType'] == CTMEDIA_ or $module['contentType'] == CTMEDIALINK_) {
+            $moduleImg = 'videos_on';
+        } else {
             $moduleImg = choose_image(basename($module['path']));
+        }
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= '<img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" border="0" /> <small>' . q($module['name']) . '</small>';
+        $tool_content .= icon($themeimg, $contentType_alt) . q($module['name']) . '</small>';
     }
 
     $tool_content .= '</td>' . "\n";

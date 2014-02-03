@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,19 +20,10 @@
  * ======================================================================== */
 
 
-/*
-  ===========================================================================
-  usage/oldStats.php
- * @version $Id$
-  @last update: 2006-12-27 by Evelthon Prodromou <eprodromou@upnet.gr>
-  @authors list: Vangelis Haniotakis haniotak@ucnet.uoc.gr
-  Ophelia Neofytou    ophelia@ucnet.uoc.gr
-  ==============================================================================
-  @Description:
-  Show old statistics for the course, taken from table "action_summary" of the course's database.
-
-  ==============================================================================
- */
+/**
+ * @file oldStats.php
+ * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
+ */  
 
 $require_current_course = true;
 $require_course_admin = true;

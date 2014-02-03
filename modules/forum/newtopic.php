@@ -124,8 +124,8 @@ if (isset($_POST['submit'])) {
                                $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' <br /><br />" . q($forum_message) . "<br />
                                <br />$gunet<br /><a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
     $plain_body_topic_notify = "$langBodyForumNotify $langInForums '$forum_name' $langInCat '$cat_name' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
-    $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-    $unsubscribe = "<br /><br />$langNote" . sprintf($langLinkUnsubscribe, $title);
+    $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+    $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
     $plain_body_topic_notify .= $unsubscribe . $linkhere;
     $body_topic_notify .= $unsubscribe . $linkhere;
     while ($r = mysql_fetch_array($sql)) {
