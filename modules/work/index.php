@@ -826,18 +826,19 @@ function show_student_assignment($id) {
 
     assignment_details($id, $row);
 
-    $submit_ok = ($row->time > 0 || (int) $row->deadline);
+    $submit_ok = ($row->time > 0 || !(int) $row->deadline);
 
     if (!$uid) {
         $tool_content .= "<p>$langUserOnly</p>";
         $submit_ok = FALSE;
     } elseif ($GLOBALS['status'] == 10) {
         $tool_content .= "\n  <p class='alert1'>$m[noguest]</p>";
-        $submit_ok = FALSE;
+        $submit_ok = FALSE;;
     } else {
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
             if ($sub['grade'] != '') {
                 $submit_ok = false;
+            var_dump($submit_ok);
             }
             show_submission_details($sub['id']);
         }
