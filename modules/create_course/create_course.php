@@ -349,7 +349,9 @@ elseif (isset($_POST['create2']) or isset($_POST['back2'])) {
     $tool_content .= create_td($modules[MODULE_ID_GLOSSARY], MODULE_ID_GLOSSARY, 1);
     $tool_content .= "</tr><tr>";
     $tool_content .= create_td($modules[MODULE_ID_EBOOK], MODULE_ID_EBOOK, 0);
-    $tool_content .= "<th>&nbsp;</th><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_ATTENDANCE], MODULE_ID_ATTENDANCE, 0);
+    $tool_content .= "
                 </tr>
                 </table>
                 <br />
@@ -529,6 +531,7 @@ function create_modules($cid, $sbsystems) {
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_QUESTIONNAIRE . ", " . $sbsystems[MODULE_ID_QUESTIONNAIRE] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_LP . ", " . $sbsystems[MODULE_ID_LP] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_WIKI . ", " . $sbsystems[MODULE_ID_WIKI] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_ATTENDANCE . ", " . $sbsystems[MODULE_ID_ATTENDANCE] . ", $cid)");
 }
 
 /**
