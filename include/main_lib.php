@@ -2207,7 +2207,7 @@ function profile_image($uid, $size, $default = false) {
     if (!$default) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='" . q(uid_to_name($uid)) . "'>";
     } else {
-        $name = q(uid_to_name($uid));
+        $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
         return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
     }
 }
