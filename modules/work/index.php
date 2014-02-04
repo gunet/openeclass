@@ -173,11 +173,13 @@ if ($is_editor) {
         if($_POST['title']) {
             if(add_assignment()) {
                 Session::set_flashdata($langNewAssignSuccess,'success');
+                show_assignments();
             }
-            show_assignments();
         } else {
             Session::set_flashdata($m['WorkTitleValidation'],'caution');
-            redirect_to_home_page('modules/work/index.php?course='.$course_code.'&add=1');
+            $nameTools = $langNewAssign;
+            $navigation[] = $works_url;
+            new_assignment();
         }
     } elseif (isset($_GET['as_id'])) {
         $as_id = intval($_GET['as_id']);
@@ -297,13 +299,13 @@ function add_assignment() {
     
     $title = $_POST['title'];
     $desc = purify($_POST['desc']);
-    $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
-    $group_submissions = $_POST['group_submissions'];
+    $deadline = (trim($_POST['WorkEnd'])!='') ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '';
+    $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
     $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
-    $assigned_to = $_POST['ingroup'];
+    $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
     $secret = uniqid('');
-    
+
     if ($assign_to_specific == 1 && empty($assigned_to)) {
         $assign_to_specific = 0;
     }
@@ -482,7 +484,7 @@ function new_assignment() {
     global $langBack, $langStudents, $langMove;
 
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
         <fieldset>
         <legend>$m[WorkInfo]</legend>
         <table class='tbl' width='100%'>    
@@ -496,14 +498,14 @@ function new_assignment() {
         </tr>
         <tr>
           <th>$m[max_grade]:</th>
-          <td><input type='text' name='max_grade' size='5' value='10'/></td>
+          <td><input type='text' name='max_grade' size='5' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'/></td>
         </tr>        
-        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($posted_data['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". ((isset($posted_data['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <tr><th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
-        <tr id='example'". ((isset($posted_data['WorkEnd'])) ? "" : "style=\"display:none\"") .">
+        <tr id='example' ". ((isset($_POST['WorkEnd'])) ? "" : "style=\"display:none\"") .">
           <th></th>
-          <td><input id='deadline' type='text' name='WorkEnd' value='{$posted_data['WorkEnd']}' />&nbsp $m[deadline_notif]</td>
+          <td><input id='deadline' type='text' name='WorkEnd' value='".(isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "")."' />&nbsp $m[deadline_notif]</td>
         </tr>
         <tr>
           <th>$m[group_or_user]:</th>
@@ -556,11 +558,13 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
-    $urlAppend, $works_url, $end_cal_Work_db, $course_id;
+    $urlAppend, $works_url, $end_cal_Work_db, $course_id, $langStudents, $langMove;
 
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?", $id);
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
+        $assignee_options='';
+        $unassigned_options='';
         if ($row->group_submissions) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group` 
@@ -607,7 +611,7 @@ function show_edit_assignment($id) {
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $tool_content .= "<h1>".$row->title."</h1>";
     $tool_content .= "
-    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, 'title');'>
+    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
@@ -636,8 +640,8 @@ function show_edit_assignment($id) {
         <td><input type='text' name='max_grade' size='5' value='$row->max_grade'/></td>
     </tr>           
     <tr>
-        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". (($deadline) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
-        <br /><input type='radio' name='is_deadline' value='1'". (($deadline) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
+        <th>$m[deadline]:</th><td><input type='radio' name='is_deadline' value='0'". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#example\").hide();$(\"#deadline\").val(\"\");' /><label for='user_button'>Χωρίς προθεσμία</label>
+        <br /><input type='radio' name='is_deadline' value='1'". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#example\").show()' /><label for='user_button'>Με προθεσμία Υποβολής</label>       
         <td></tr>
         <tr id='example'". (($deadline) ? "" : "style=\"display:none\"") .">
           <th></th>
@@ -645,17 +649,17 @@ function show_edit_assignment($id) {
     </tr>        
     <tr>
       <th valign='top'>$m[group_or_user]:</th>
-      <td><input type='radio' id='user_button' name='group_submissions' value='0'".(($row->group_submissions) ? '' : 'checked')." />
+      <td><input type='radio' id='user_button' name='group_submissions' value='0'".(($row->group_submissions==1) ? '' : 'checked')." />
           <label for='user_button'>$m[user_work]</label><br />
-          <input type='radio' id='group_button' name='group_submissions' value='1'".(($row->group_submissions) ? 'checked' : '')." />
+          <input type='radio' id='group_button' name='group_submissions' value='1'".(($row->group_submissions==1) ? 'checked' : '')." />
           <label for='group_button'>$m[group_work]</label></td>
     </tr>
         <tr>
           <th>$m[WorkAssignTo]:</th>
-          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".(($row->assign_to_specific) ? '' : 'checked')."  /><label for='assign_button_all'>Όλους</label>
-          <br /><input type='radio' id='assign_button_some' name='assign_to_specific' value='1'".(($row->assign_to_specific) ? 'checked' : '')." /><label for='assign_button_some'>".(($row->group_submissions) ? $m[WorkToGroup] : $m[WorkToUser])."</label></td>
+          <td><input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".(($row->assign_to_specific==1) ? '' : 'checked')."  /><label for='assign_button_all'>Όλους</label>
+          <br /><input type='radio' id='assign_button_some' name='assign_to_specific' value='1'".(($row->assign_to_specific==1) ? 'checked' : '')." /><label for='assign_button_some'>".(($row->group_submissions) ? $m['WorkToGroup'] : $m['WorkToUser'])."</label></td>
         </tr>        
-        <tr id='assignees_tbl'".(($row->assign_to_specific) ? '' : 'style="display:none;"').">
+        <tr id='assignees_tbl'".(($row->assign_to_specific==1) ? '' : 'style="display:none;"').">
           <th class='left' valign='top'></th>
           <td>
               <table width='99%' align='center' class='tbl_white'>
@@ -667,9 +671,7 @@ function show_edit_assignment($id) {
               <tr>
                 <td>
                   <select id='assign_box' size='15' style='width:180px' multiple>
-
-                    $unassigned_options
-
+                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
                   </select>
                 </td>
                 <td class='center'>
@@ -677,7 +679,7 @@ function show_edit_assignment($id) {
                 </td>
                 <td class='right'>
                   <select id='assignee_box' name='ingroup[]' size='15' style='width:180px' multiple>
-                        $assignee_options
+                        ".((isset($assignee_options)) ? $assignee_options : '')."
                   </select>
                 </td>
               </tr>
@@ -686,7 +688,7 @@ function show_edit_assignment($id) {
         </tr>            
     <tr>
       <th>&nbsp;</th>
-      <td><input type='submit' name='do_edit' value='$langEdit' /></td>
+      <td><input type='submit' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" /></td>
     </tr>
     </table>
     </fieldset>
@@ -706,26 +708,42 @@ function edit_assignment($id) {
     $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
     $group_submissions = $_POST['group_submissions'];
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
+    $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
+    $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
     
+    if ($assign_to_specific == 1 && empty($assigned_to)) {
+        $assign_to_specific = 0;
+    }
+
     if (!isset($_POST['comments'])) {
         $comments = "";
     } else {
         $comments = quote(purify($_POST['comments']));
     }
-    if (Database::get()->query("UPDATE assignment SET title = ?, description = ?, 
-        group_submissions = ?, comments = ?, deadline = ?, max_grade = ?
+    Database::get()->query("UPDATE assignment SET title = ?, description = ?, 
+        group_submissions = ?, comments = ?, deadline = ?, max_grade = ?, assign_to_specific = ?
         WHERE course_id = ? AND id = ?", $title, $desc, $group_submissions, 
-        $comments, $deadline, $max_grade, $course_id, $id)->affectedRows > 0) {
-       
-        Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
+        $comments, $deadline, $max_grade, $assign_to_specific, $course_id, $id);
+    
+    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?", $id);
+   
+    if ($assign_to_specific && !empty($assigned_to)) {
+        if ($group_submissions==1) {
+            foreach ($assigned_to as $group_id) {
+                Database::get()->query("INSERT INTO assignment_to_specific (group_id , assignment_id) VALUES (?,?)", $group_id, $id);
+            }
+        } else {
+            foreach ($assigned_to as $user_id) {
+                Database::get()->query("INSERT INTO assignment_to_specific (user_id , assignment_id) VALUES (?,?)", $user_id, $id);
+            }
+        }
+    }    
+    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
             'title' => $title,
-            'description' => $description,
+            'description' => $desc,
             'deadline' => $deadline,
             'group' => $group_submissions));
         return true;
-    } else {
-        return false;
-    }
 }
 
 /**
