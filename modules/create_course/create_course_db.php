@@ -115,7 +115,7 @@ db_query("CREATE TABLE exercices (
       eid tinyint(4) NOT NULL default '0',
       uid mediumint(8) NOT NULL default '0',
       RecordStartDate datetime NOT NULL default '0000-00-00',
-      RecordEndDate datetime NOT NULL default '0000-00-00',
+      RecordEndDate datetime default NULL,
       TotalScore int(11) NOT NULL default '0',
       TotalWeighting int(11) default '0',
       attempt int(11) NOT NULL default '0',

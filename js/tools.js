@@ -129,13 +129,11 @@ function control_deactivate() {
 
 // Course registration UI
 
-function course_checkbox_disabled(id, state)
-{
+function course_checkbox_disabled(id, state) {
         $('input[type=checkbox][value='+id+']').prop('disabled', state);
 }
 
-function course_list_init()
-{
+function course_list_init() {
         $.course_closed = [];
         var $dialog = $('<div></div>')
                         .html(lang.reregisterImpossible)
@@ -184,8 +182,7 @@ function course_list_init()
         });
 }
 
-function course_list_handler()
-{
+function course_list_handler() {
         var cid = $(this).attr('value');
         var td = $(this).parent().next();
         $('#res'+cid).remove();
@@ -225,8 +222,7 @@ function course_list_handler()
 
 // User profile UI
 
-function profile_init()
-{
+function profile_init() {
         $('#delete').live('click', function() {
                 if (confirm(lang.confirmDelete)) {
                         var tr = $(this).closest('tr');
@@ -237,8 +233,7 @@ function profile_init()
         });
 }
 
-function exercise_enter_handler()
-{
+function exercise_enter_handler() {
     /* 
      * Make an array of possible inputs and everytime
      * ENTER is pressed, iterate to next availiable input
@@ -246,10 +241,10 @@ function exercise_enter_handler()
      */
     var inputs = $(this).find('.exercise input:not([type=hidden]), .exercise select');
     inputs.pivot = 0;
-    $(inputs).keydown(function(event){
-        if(event.which == 13){
+    $(inputs).keydown(function(event) {
+        if(event.which == 13) {
             event.preventDefault();
-            if($(this)[0].type != 'submit'){
+            if($(this)[0].type != 'submit') {
                 ++inputs.pivot;
                 /*
                  * In order to avoid just going to next input, 
@@ -269,11 +264,40 @@ function exercise_enter_handler()
      * to the input clicked so when ENTER is pressed
      * will move to correct next input.
      */
-    $(inputs).click(function(){
+    $(inputs).click(function() {
         pivot2 = 0;
         while(inputs[pivot2].name != $(this)[0].name)
             pivot2++;
         inputs[pivot2].select();
         inputs.pivot = pivot2;
+        ck = $(':checked');
+        answers = [];
+        for(i = 0; i < ck.length; i++) {
+        	ans = {
+        		name : ck[i].name,
+        		value : ck[i].value
+        	}
+        	answers.push(ans);
+        }
+        localStorage["answers"] = JSON.stringify(answers);
     });
+}
+
+function countdown(timer, callback) {
+    int = setInterval(function() {
+    	timer.text(secondsToHms(timer.time--));
+        if (timer.time + 1 == 0) {
+            clearInterval(int);
+            // 600ms - width animation time
+            callback && setTimeout(callback, 600);
+        }
+    }, 1000);
+}
+
+function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+    return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }

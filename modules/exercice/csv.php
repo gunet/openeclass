@@ -21,6 +21,7 @@
 
 $require_current_course = TRUE;
 include '../../include/init.php';
+$TBL_RECORDS='exercise_user_record';
 
 if ($is_editor) {
 	header("Content-disposition: filename=".$currentCourse."_".$_GET['exerciseId']."_".date("Y-m-d").".xls");
@@ -35,7 +36,7 @@ if ($is_editor) {
 	$output .=  "$crlf";
 	
 	mysql_select_db($currentCourseID);
-	$sql = "SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid=".intval($_GET['exerciseId']);
+	$sql = "SELECT DISTINCT uid FROM `$TBL_RECORDS` WHERE eid=".intval($_GET['exerciseId']);
 	$result = db_query($sql);
 	while ($row=mysql_fetch_array($result)) {
 		$sid = $row['uid'];
@@ -47,7 +48,7 @@ if ($is_editor) {
 		$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, 
 			RecordEndDate, TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate)) AS TimeDuration, 
 			TotalScore, TotalWeighting 
-			FROM `exercise_user_record` WHERE uid='$sid' AND eid=".intval($_GET['exerciseId']);
+			FROM `$TBL_RECORDS` WHERE uid='$sid' AND eid=".intval($_GET['exerciseId']);
 		$result2 = db_query($sql2);
 		while ($row2=mysql_fetch_array($result2)) {
 			$output .= csv_escape($prenom) ."\t";

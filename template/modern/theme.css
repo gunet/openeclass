@@ -1462,3 +1462,7 @@ td.subsection {
 .cmetalabel a:hover, .cmetalabelinaccordion a:hover {
     border-bottom: none;
 }
+
+.flt_right{
+    float: right;
+}

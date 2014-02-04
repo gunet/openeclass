@@ -182,6 +182,11 @@ if (!defined('ECLASS_VERSION')) {
         if (!mysql_field_exists("$mysqlMainDb",'user','lang'))
                 echo add_field('user', 'lang', "ENUM('el', 'en') DEFAULT 'el' NOT NULL");
 
+        //TODO must apply to every lesson table 
+        // small change to exercise_user_record table to add new functionality
+        //db_query("ALTER TABLE `exercise_user_record`
+        //			MODIFY COLUMN `RecordEndDate`  datetime NULL DEFAULT NULL AFTER `RecordStartDate`", $mysqlMainDb);
+        
         // add full text indexes for search operation
         @mysql_query("ALTER TABLE `annonces` ADD FULLTEXT `annonces` (`contenu` ,`code_cours`)");
         @mysql_query("ALTER TABLE `cours` ADD FULLTEXT `cours` (`code`, `description`, `intitule`, `course_keywords`)");

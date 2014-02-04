@@ -59,6 +59,7 @@ if (isset($_SESSION['exerciseResult']))  { unset($_SESSION['exerciseResult']); }
 $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
+$TBL_RECORDS='exercise_user_record';
 
 // maximum number of exercises on a same page
 $limitExPage = 15;
@@ -227,7 +228,7 @@ if(!$nbrExercises) {
 				<img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=${row['id']}\">". q($row['titre']) ."</a>$descr</td>";
 			$eid = $row['id'];
-			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record 
+			$NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS` 
 				WHERE eid='$eid'", $currentCourseID));
 	
 			if ($NumOfResults[0]) {
@@ -302,7 +303,7 @@ if(!$nbrExercises) {
                                 ".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)." / 
                                 ".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
                         // how many attempts we have.
-                        $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
+                        $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS`
                                                                       WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
                         if ($row['TimeConstrain'] > 0) {
                                 $tool_content .= "<td align='center'>
@@ -317,10 +318,10 @@ if(!$nbrExercises) {
                         }
                         // user last exercise score
                         $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
-                                FROM exercise_user_record WHERE uid=$uid 
+                                FROM `$TBL_RECORDS` WHERE uid=$uid 
                                 AND eid=$row[id] 
                                 ORDER BY eurid DESC LIMIT 1", $currentCourseID));
-                        if (empty($r['TotalScore'])) {
+                        if (empty($r)) {
                                 $tool_content .= "<td align='center'>&dash;</td>";
                         } else {
                                 $tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";

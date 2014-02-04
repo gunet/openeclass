@@ -50,14 +50,30 @@ if (isset($_GET['exerciseId'])) {
 if (isset($_SESSION['objExercise'][$exerciseId])) {
 	$objExercise = $_SESSION['objExercise'][$exerciseId];
 }
+
+if (isset($_GET['error'])) {
+	$error = $_GET['error'];
+}
+
+$tool_content_extra = "<br/><table width='99%' class='Question'>
+<thead><tr>
+<td class='alert1'>".${$error}."</td>
+</tr>
+<tr>
+<td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
+</tr>
+</thead></table>"; 
+
+
 // if the object is not in the session
-if(!isset($_SESSION['objExercise'][$exerciseId])) {
+if (!isset($_SESSION['objExercise'][$exerciseId])) {
 	// construction of Exercise
 	$objExercise=new Exercise();
 	// if the specified exercise doesn't exist or is disabled
+	//TODO remove the @, we should not use it
 	if(@(!$objExercise->read($exerciseId) && (!$is_editor))) {
-		$tool_content .= $langExerciseNotFound;
-		draw($tool_content, 2);
+		$error = 'langExerciseNotFound';
+		draw($tool_content_extra, 2);
 		exit();
 	}
 	// saves the object into the session
@@ -78,14 +94,6 @@ $tool_content .= "<table class='Exercise' width='99%'>
 </tr>
 </thead></table>";
 
-$tool_content .= "<br/><table width='99%' class='Question'>
-<thead><tr>
-<td class='alert1'>$langExerciseExpiredTime</td>
-</tr>
-<tr>
-<td><br/><br/><br/><div align='center'><a href='exercice.php?course=$code_cours'>$langBack</a></div></td>
-</tr>
-</thead></table>"; 
-
+$tool_content .= $tool_content_extra;
 draw($tool_content, 2);
 ?>

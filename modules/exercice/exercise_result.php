@@ -29,6 +29,7 @@ $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
+$TBL_RECORDS='exercise_user_record';
 
 include('exercise.class.php');
 include('question.class.php');
@@ -324,13 +325,13 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 			} 
 		} // end of if
 	}	// end for()
-	 if ($displayScore == 1) {
-                 if (intval($questionScore) == $questionScore) {
-                         $questionScore = intval($questionScore);
-                 }
-                 if (intval($questionWeighting) == $questionWeighting) {
-                         $questionWeighting = intval($questionWeighting);
-                 }
+	if ($displayScore == 1) {
+        if (intval($questionScore) == $questionScore) {
+        	$questionScore = intval($questionScore);
+        }
+		if (intval($questionWeighting) == $questionWeighting) {
+        	$questionWeighting = intval($questionWeighting);
+		}
 		$tool_content .= "
 		<tr class='even'>
 		  <th colspan='$colspan' class='odd'><div align='right'>
@@ -346,21 +347,14 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 }	// end foreach()
 
 // update db with results
-$eid=$objExercise->selectId();
-mysql_select_db($currentCourseID);
-
-$sql="SELECT RecordStartDate FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result=db_query($sql);
-$attempt = count($result);
-
-$sql="SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid='$eid' AND uid='$uid'";
-$result = db_query($sql);
-$row= mysql_fetch_row($result);
+$eid = $objExercise->selectId();
+$sql = "SELECT MAX(eurid) FROM `$TBL_RECORDS` WHERE eid = '$eid' AND uid = '$uid'";
+$result = db_query($sql, $currentCourseID);
+$row = mysql_fetch_row($result);
 $eurid = $row[0];
 
 // record results of exercise
-$sql="UPDATE exercise_user_record SET TotalScore='$totalScore', TotalWeighting='$totalWeighting',
-	attempt='$attempt' WHERE eurid='$eurid'";
+$sql = "UPDATE `$TBL_RECORDS` SET TotalScore = '$totalScore', TotalWeighting = '$totalWeighting' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
 if ($displayScore == 1) {

@@ -307,7 +307,7 @@ while ($myrow = mysql_fetch_array($result)) {
         if ($myrow['editor'] == '0') {
             $tool_content .= "<td valign='top' align='center' class='add_user'>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;giveEditor=$myrow[user_id]$extra_link'>
-                                <img src='$themeimg/assistant_add.png' title='".q($langGiveRightΕditor)."' alt='".q($langGiveRightΕditor)."' /></a></td>";
+                                <img src='$themeimg/assistant_add.png' title='".q($langGiveRightEditor)."' alt='".q($langGiveRightEditor)."' /></a></td>";
         } else {
                 $tool_content .= "<td class='add_teacherLabel' align='center' width='30'><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;removeEditor=$myrow[user_id]$extra_link' title='$langRemoveRightEditor'>
                                 <img src='$themeimg/assistant_remove.png' title ='".q($langRemoveRightEditor)."' alt='".q($langRemoveRightEditor)."' /></a></td>";

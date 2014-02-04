@@ -23,7 +23,7 @@ $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses'; 
-
+$TBL_RECORDS='exercise_user_record';
 
 $require_current_course = TRUE;
 $require_help = TRUE;
@@ -75,7 +75,7 @@ $tool_content .= "
     <br/>";
 
 mysql_select_db($currentCourseID);
-$sql="SELECT DISTINCT uid FROM `exercise_user_record`";
+$sql="SELECT DISTINCT uid FROM `$TBL_RECORDS`";
 $result = db_query($sql);
 while($row=mysql_fetch_array($result)) {
 	$sid = $row['uid'];
@@ -86,7 +86,7 @@ while($row=mysql_fetch_array($result)) {
 	$sql2="SELECT DATE_FORMAT(RecordStartDate, '%Y-%m-%d / %H:%i') AS RecordStartDate, RecordEndDate,
 		TIME_TO_SEC(TIMEDIFF(RecordEndDate,RecordStartDate))
 		AS TimeDuration, TotalScore, TotalWeighting 
-		FROM `exercise_user_record` WHERE uid='$sid' AND eid='$exerciseId'";
+		FROM `$TBL_RECORDS` WHERE uid='$sid' AND eid='$exerciseId'";
 	$result2 = db_query($sql2);
 	if (mysql_num_rows($result2) > 0) { // if users found
 		$tool_content .= "
