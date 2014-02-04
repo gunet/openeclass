@@ -19,7 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once '../../include/log.php';
+if (file_exists('../../include/log.php'))
+    require_once '../../include/log.php';
+if (file_exists('../../../include/log.php'))
+    require_once '../../../include/log.php';
 
 if (!class_exists('Exercise')):
     /* >>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<< */
