@@ -483,7 +483,7 @@ db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
                 `comment` TEXT NOT NULL,
                 `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4),
+                `visible` TINYINT(4) NOT NULL DEFAULT 0,
                 `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
                 //COMMENT='List of learning Paths';
 db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
