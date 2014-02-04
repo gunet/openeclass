@@ -265,68 +265,86 @@ if(!$nbrExercises) {
 					<img src='$themeimg/invisible.png' alt='".q($langVisible)."' title='".q($langVisible)."' /></a>&nbsp;";
 				}
 			}
-                        if (course_status($cours_id) == COURSE_OPEN) {
-                                if ($row['public']) {
-                                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=limited&amp;exerciseId=".$row['id']."'>" .
-                                                                "<img src='$themeimg/access_public.png' " .
-                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
-                                } else {
-                                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=public&amp;exerciseId=".$row['id']."'>" .
-                                                                "<img src='$themeimg/access_limited.png' " .
-                                                                "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
-                                }
-                                $tool_content .= "&nbsp;";
-                        }
+            if (course_status($cours_id) == COURSE_OPEN) {
+            	if ($row['public']) {
+                	$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=limited&amp;exerciseId=".$row['id']."'>" .
+                    					"<img src='$themeimg/access_public.png' " .
+                                        "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+                } else {
+                	$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;choice=public&amp;exerciseId=".$row['id']."'>" .
+                    					"<img src='$themeimg/access_limited.png' " .
+                                        "title='".q($langResourceAccess)."' alt='".q($langResourceAccess)."' /></a>";
+				}
+				$tool_content .= "&nbsp;";
+			}
 			$tool_content .= "</td></tr>";
 		}
 		// student only
 		else {
-                        if (!resource_access($row['active'], $row['public'])) {
-                                continue;
-                        }
-                        $CurrentDate = date("Y-m-d H:i");
-                        $temp_StartDate = mktime(substr($row['StartDate'], 11, 2), substr($row['StartDate'], 14, 2), 0, substr($row['StartDate'], 5, 2), substr($row['StartDate'], 8, 2), substr($row['StartDate'], 0, 4));
-                        $temp_EndDate = mktime(substr($row['EndDate'], 11, 2), substr($row['EndDate'], 14, 2), 0, substr($row['EndDate'], 5, 2), substr($row['EndDate'], 8, 2), substr($row['EndDate'], 0, 4));
-                        $CurrentDate = mktime(substr($CurrentDate, 11, 2), substr($CurrentDate, 14, 2), 0, substr($CurrentDate, 5, 2), substr($CurrentDate, 8, 2), substr($CurrentDate, 0, 4));
-                        if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) { // exercise is ok
-                                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">". q($row['titre']) ."</a>";
-                        } elseif ($CurrentDate <= $temp_StartDate) { // exercise has not yet started
-                                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
-                                        <td class='invisible'>". q($row['titre']) ."&nbsp;&nbsp;";
-                        } else { // exercise has expired
-                                $tool_content .= "<td width='16'>
+        	if (!resource_access($row['active'], $row['public'])) {
+            	continue;
+			}
+			$CurrentDate = date("Y-m-d H:i");
+            $temp_StartDate = mktime(substr($row['StartDate'], 11, 2), substr($row['StartDate'], 14, 2), 0, substr($row['StartDate'], 5, 2), substr($row['StartDate'], 8, 2), substr($row['StartDate'], 0, 4));
+            $temp_EndDate = mktime(substr($row['EndDate'], 11, 2), substr($row['EndDate'], 14, 2), 0, substr($row['EndDate'], 5, 2), substr($row['EndDate'], 8, 2), substr($row['EndDate'], 0, 4));
+            $CurrentDate = mktime(substr($CurrentDate, 11, 2), substr($CurrentDate, 14, 2), 0, substr($CurrentDate, 5, 2), substr($CurrentDate, 8, 2), substr($CurrentDate, 0, 4));
+            if (($CurrentDate >= $temp_StartDate) && ($CurrentDate <= $temp_EndDate)) { // exercise is ok
+                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
+                                  <td><a href=\"exercice_submit.php?course=$code_cours&amp;exerciseId=".$row['id']."\">". q($row['titre']) ."</a>";
+            } elseif ($CurrentDate <= $temp_StartDate) { // exercise has not yet started
+                $tool_content .= "<td width='16'><img src='$themeimg/arrow.png' alt='' /></td>
+                                  <td class='invisible'>". q($row['titre']) ."&nbsp;&nbsp;";
+            } else { // exercise has expired
+                $tool_content .= "<td width='16'>
                                 <img src='$themeimg/arrow.png' alt='' />
                                 </td><td>". q($row['titre']) ."&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
-                        }
-                        $tool_content .= "<br />$row[description]</td><td class='smaller' align='center'>
-                                ".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)." / 
-                                ".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
-                        // how many attempts we have.
-                        $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS`
-                                                                      WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
-                        if ($row['TimeConstrain'] > 0) {
-                                $tool_content .= "<td align='center'>
-                                $row[TimeConstrain] $langExerciseConstrainUnit</td>";
-                        } else {
-                                $tool_content .= "<td align='center'> - </td>";
-                        }
-                        if ($row['AttemptsAllowed'] > 0) {
-                                $tool_content .= "<td align='center'>$CurrentAttempt[0]/$row[AttemptsAllowed]</td>";
-                        } else {
-                                $tool_content .= "<td align='center'> - </td>";
-                        }
-                        // user last exercise score
-                        $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
+            }
+            $tool_content .= "<br />$row[description]</td><td class='smaller' align='center'>
+                             ".nice_format(date("Y-m-d H:i", strtotime($row['StartDate'])), true)." / 
+                             ".nice_format(date("Y-m-d H:i", strtotime($row['EndDate'])), true)."</td>";
+			// how many attempts we have.
+            $CurrentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS`
+            												WHERE eid='$row[id]' AND uid='$uid'", $currentCourseID));
+            if ($row['TimeConstrain'] > 0) {
+            	$tool_content .= "<td align='center'>";
+
+                // if there is an active attempt
+            	$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND RecordEndDate is NULL";
+            	$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
+            	if ($tmp[0] > 0) {
+            		$RecordStartDate = strtotime($tmp[1]);
+            		$temp_CurrentDate = time();
+            		// if exerciseTimeConstrain has not passed yet calculate the remaining time
+            		if ($RecordStartDate + ($row['TimeConstrain']*60) >= $temp_CurrentDate) {
+            			$_SESSION['exercise_begin_time'][$row['id']] = $RecordStartDate;
+            			$timeleft = ($row['TimeConstrain']*60) - ($temp_CurrentDate - $RecordStartDate);
+            		} else {
+            			$timeleft = $row['TimeConstrain']*60;
+            		}
+            		$tool_content .= "<span id=\"progresstime\">$timeleft</span></td>";
+            		$exerciseId = $row['id'];
+            	} else {
+                	$tool_content .= "{$row['TimeConstrain']} $langExerciseConstrainUnit</td>";
+            	}
+            } else {
+                $tool_content .= "<td align='center'> - </td>";
+            }
+            if ($row['AttemptsAllowed'] > 0) {
+                $tool_content .= "<td align='center'>$CurrentAttempt[0]/$row[AttemptsAllowed]</td>";
+            } else {
+                $tool_content .= "<td align='center'> - </td>";
+            }
+            // user last exercise score
+            $r = mysql_fetch_array(db_query("SELECT TotalScore, TotalWeighting 
                                 FROM `$TBL_RECORDS` WHERE uid=$uid 
                                 AND eid=$row[id] 
                                 ORDER BY eurid DESC LIMIT 1", $currentCourseID));
-                        if (empty($r)) {
-                                $tool_content .= "<td align='center'>&dash;</td>";
-                        } else {
-                                $tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
-                        }
-                        $tool_content .= "</tr>";
+            if (empty($r)) {
+                $tool_content .= "<td align='center'>&dash;</td>";
+            } else {
+            	$tool_content .= "<td align='center'>$r[TotalScore]/$r[TotalWeighting]</td>";
+            }
+            $tool_content .= "</tr>";
 		}
 		// skips the last exercise, that is only used to know if we have or not to create a link "Next page"
 		if ($k+1 == $limitExPage) {
@@ -337,5 +355,26 @@ if(!$nbrExercises) {
 	$tool_content .= "</table>";
 }
 add_units_navigation(TRUE);
+//if there is an active attempt, countdown leftime
+if(isset($timeleft)){
+	load_js('tools.js');
+	$head_content .= "<script type='text/javascript'>";
+	// If not editor, enable countdown mechanism
+	if (!$is_editor) {
+		$head_content .= "
+			$(document).ready(function(){
+				timer = $('#progresstime');
+				timer.time = timer.text();
+				timer.text(secondsToHms(timer.time--));
+			    countdown(timer, function() {
+			        alert('$langExerciseEndTime');
+			        url = \"exercise_redirect.php?course=$code_cours&exerciseId=$exerciseId&error=langExerciseExpiredTime\";
+			        $(location).attr('href',url);
+			    });
+			});";
+	}
+	
+	$head_content .="$(exercise_enter_handler);</script>";
+}
 draw($tool_content, 2, null, $head_content);
 

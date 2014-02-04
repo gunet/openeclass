@@ -40,6 +40,7 @@ $TBL_EXERCICE_QUESTION='exercice_question';
 $TBL_EXERCICES='exercices';
 $TBL_QUESTIONS='questions';
 $TBL_REPONSES='reponses';
+$TBL_RECORDS='exercise_user_record';
 
 $navigation[]=array("url" => "exercice.php?course=$code_cours","name" => $langExercices);
 
@@ -53,6 +54,8 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 
 if (isset($_GET['error'])) {
 	$error = $_GET['error'];
+	unset($_SESSION['exercise_begin_time']);
+	unset($_SESSION['exercise_end_time']);
 }
 
 $tool_content_extra = "<br/><table width='99%' class='Question'>
@@ -78,6 +81,14 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 	}
 	// saves the object into the session
 	$_SESSION['objExercise'][$exerciseId] = $objExercise;
+}
+
+// if there is an active attempt and it's time passed. Complete the record to finish attempt
+$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND RecordEndDate is NULL";
+$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
+if ($tmp[0] > 0) {
+	$sql = "UPDATE `$TBL_RECORDS` SET RecordEndDate = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid'";
+	db_query($sql, $currentCourseID);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

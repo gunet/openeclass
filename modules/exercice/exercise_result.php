@@ -354,7 +354,7 @@ $row = mysql_fetch_row($result);
 $eurid = $row[0];
 
 // record results of exercise
-$sql = "UPDATE `$TBL_RECORDS` SET TotalScore = '$totalScore', TotalWeighting = '$totalWeighting' WHERE eurid='$eurid'";
+$sql = "UPDATE `$TBL_RECORDS` SET RecordEndDate = '".date('Y-m-d H:i:s', time())."', TotalScore = '$totalScore', TotalWeighting = '$totalWeighting' WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
 if ($displayScore == 1) {

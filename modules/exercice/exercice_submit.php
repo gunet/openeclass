@@ -134,7 +134,6 @@ if (isset($_POST['formSent'])) {
 		$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
 		$attempt = $tmp[0] + 1;
 		$sql = "UPDATE `$TBL_RECORDS` SET `RecordEndDate` = '$RecordEndDate' WHERE eid = '$eid_temp' AND uid = '$uid'";
-		$result = db_query($sql);
 	}
 	
 	// if the user has answered at least one question
