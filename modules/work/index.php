@@ -1304,10 +1304,12 @@ function show_student_assignments() {
 // show all the assignments
 function show_assignments() {
     global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands,
-    $course_code, $themeimg, $course_id, $langConfirmDelete;
+    $course_code, $themeimg, $course_id, $langConfirmDelete, $langDaysLeft;
     
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ? ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+              FROM assignment WHERE course_id = ? 
+              ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
  
     $tool_content .="
             <div id='operations_container'>
@@ -1352,16 +1354,22 @@ function show_assignments() {
             }else{
                 $deadline = $m['no_deadline'];
             }
-            $deadline_style = deadline_styling($row->deadline);
             $tool_content .= "
 			  <td><img src='$themeimg/arrow.png' alt=''>
                               <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'";
             $tool_content .= ">";
             $tool_content .= q($row->title);
+
             $tool_content .= "</a></td>
 			  <td class='center'>$num_submitted</td>
 			  <td class='center'>$num_ungraded</td>
-			  <td class='center' $deadline_style>" . $deadline . "</td>
+			  <td class='center'>" . $deadline; 
+            if ($row->time > 0) {
+                $tool_content .= " (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
+            } else if((int)$row->deadline){
+                $tool_content .= " (<span class='expired'>$m[expired]</span>)";
+            }                         
+           $tool_content .= "</td>
 			  <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit'>
 			  <img src='$themeimg/edit.png' alt='$m[edit]' />
 			  </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete' onClick='return confirmation(\"$langConfirmDelete\");'>
@@ -1651,21 +1659,4 @@ function groups_with_no_submissions($id) {
         $groups = array();
     }
     return $groups;
-}
-//Colors deadlines with red (deadline passed) and orange (days left to deadline <=3 )
-function deadline_styling($deadline){
-    if((int)$deadline){
-        $db_datetime = new DateTime($deadline);
-        $db_datetime_minus_3d = new DateTime($deadline);
-        $db_datetime_minus_3d->sub(new DateInterval('P3D'));
-        $now_datetime = new DateTime();
-        if ($db_datetime_minus_3d < $now_datetime) {
-            if ($db_datetime < $now_datetime){
-                return "style='color:red'";
-            }
-            return "style='color:orange'";
-        }
-        return;
-    }
-    return;
 }
