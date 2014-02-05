@@ -120,6 +120,7 @@ if (isset($_POST["submitWork"]))
 	if (!$error) {
                 if ($thisisJustMessage) {
                         $dropbox_filename = '';
+                        $real_dropbox_filename = '';
                         $dropbox_filesize = 0;
                         $newWorkRecipients = $_POST["recipients"];
                         if (isset($_POST['title']) and $_POST['title'] != '') {
@@ -127,7 +128,7 @@ if (isset($_POST["submitWork"]))
                         } else {
                                 $dropbox_title = $langMessage;
                         }
-                        $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);                        
+                        $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);                        
                 } else {
                         $cwd = getcwd();
                         if (is_dir($dropbox_cnf["sysPath"])) {
@@ -154,9 +155,11 @@ if (isset($_POST["submitWork"]))
                                 $dropbox_title = $_POST['title'];
                         } else {
                                 $dropbox_title = $dropbox_filename;
-                        }                        
+                        }
                         $format = get_file_extension($dropbox_filename);
+                        $real_dropbox_filename = $dropbox_filename;
                         $dropbox_filename = safe_filename($format);
+                        
                         // set author
                         if ($_POST['authors'] == '')
                         {
@@ -175,7 +178,7 @@ if (isset($_POST["submitWork"]))
                                 move_uploaded_file($dropbox_filetmpname, $filename_final)
                                         or die($dropbox_lang["uploadError"]);
                                 @chmod($filename_final, 0644);
-                                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);                                
+                                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $_POST['authors'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);                                
                         }                
                     chdir ($cwd);
                 }

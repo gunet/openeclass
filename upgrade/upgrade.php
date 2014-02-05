@@ -740,6 +740,9 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 if ($oldversion < '2.8.3') {
 			upgrade_course_2_8($code[0], $lang, "($i / $total)");
                 }
+                if ($oldversion < '2.8.5') {
+			upgrade_course_2_8_5($code[0], $lang, "($i / $total)");
+                }
                 echo "</p>\n";
                 $i++;
         }

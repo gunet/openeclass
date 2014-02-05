@@ -54,6 +54,7 @@ class Dropbox_Work {
 	var $uploaderId;
 	var $uploaderName;
 	var $filename;
+        var $real_filename;
 	var $filesize;
 	var $title;
 	var $description;
@@ -66,10 +67,10 @@ class Dropbox_Work {
         * Constructor calls private functions to create a new work or retreive an existing work from DB
         * depending on the number of parameters
         */
-	public function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
+	public function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
 		
 		if (func_num_args()>1) {
-		    $this->createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
+		    $this->createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
 		} else {
 			$this->createExistingWork($arg1);
 		}
@@ -77,7 +78,7 @@ class Dropbox_Work {
 	/*
         * private function creating a new work object
         */
-	private function createNewWork ($uploaderId, $title, $description, $author, $filename, $filesize) {
+	private function createNewWork ($uploaderId, $title, $description, $author, $filename, $real_filename, $filesize) {
 		
 		global $dropbox_cnf, $dropbox_lang, $currentCourseID, $thisisJustMessage;
 		
@@ -89,9 +90,10 @@ class Dropbox_Work {
 		/*
 		* Fill in the properties
 		*/
-		$this->uploaderId = $uploaderId; 
-		$this->uploaderName = uid_to_name($this->uploaderId);               
+		$this->uploaderId = $uploaderId;
+		$this->uploaderName = uid_to_name($this->uploaderId);
                 $this->filename = $filename;
+                $this->real_filename = $real_filename;
                 $this->filesize = $filesize;                
 		$this->title = $title;
 		$this->description = $description;
@@ -135,9 +137,10 @@ class Dropbox_Work {
 		} else {                    
 			$this->uploadDate = $this->lastUploadDate;
 			$sql="INSERT INTO `".$dropbox_cnf["fileTbl"]."` 
-				(uploaderId, filename, filesize, title, description, author, uploadDate, lastUploadDate)
+				(uploaderId, filename, real_filename, filesize, title, description, author, uploadDate, lastUploadDate)
 				VALUES ('".addslashes($this->uploaderId)."'
 						, '".addslashes($this->filename)."'
+                                                , '".addslashes($this->real_filename)."'
 						, '".addslashes($this->filesize)."'
 						, '".addslashes($this->title)."'
 						, ".quote(purify($this->description))."
@@ -173,13 +176,13 @@ class Dropbox_Work {
 		* get the data from DB
 		*/                
                 if ($GLOBALS['language'] == 'greek') {
-                        $sql="SELECT uploaderId, filename, filesize, title, description, author,
+                        $sql="SELECT uploaderId, filename, real_filename, filesize, title, description, author,
                                 DATE_FORMAT(uploadDate, '%d-%m-%Y / %H:%i') AS uploadDate, 
                                 DATE_FORMAT(lastUploadDate, '%d-%m-%Y / %H:%i') AS lastUploadDate
                                 FROM `".$dropbox_cnf["fileTbl"]."`
                                 WHERE id='".addslashes($id)."'";
                 } else {
-                        $sql="SELECT uploaderId, filename, filesize, title, description, author,
+                        $sql="SELECT uploaderId, filename, real_filename, filesize, title, description, author,
                                 DATE_FORMAT(uploadDate, '%Y-%m-%d / %H:%i') AS uploadDate, 
                                 DATE_FORMAT(lastUploadDate, '%Y-%m-%d / %H:%i') AS lastUploadDate
                                 FROM `".$dropbox_cnf["fileTbl"]."`
@@ -204,6 +207,7 @@ class Dropbox_Work {
 		*/
 		$this->id = $id;
 		$this->filename = stripslashes($res["filename"]);
+                $this->real_filename = stripslashes($res["real_filename"]);
 		$this->filesize = stripslashes($res["filesize"]);
 		$this->title = stripslashes($res["title"]);
 		$this->description = stripslashes($res["description"]);
@@ -220,10 +224,10 @@ class Dropbox_SentWork extends Dropbox_Work {
         * Constructor calls private functions to create a new work or retreive an existing work from DB
         * depending on the number of parameters
         */
-	public function Dropbox_SentWork($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
+	public function Dropbox_SentWork($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null, $arg8=null) {
 		
 		if (func_num_args() > 1) {
-                        $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
+                        $this->createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7, $arg8);
 		} else {
 			$this->createExistingSentWork ($arg1);
 		}
@@ -232,13 +236,13 @@ class Dropbox_SentWork extends Dropbox_Work {
         /*
         * private function creating a new SentWork object
         */
-	private function createNewSentWork ($uploaderId, $title, $description, $author, $filename, $filesize, $recipientIds) {
+	private function createNewSentWork ($uploaderId, $title, $description, $author, $filename, $real_filename, $filesize, $recipientIds) {
 			
 		global $dropbox_cnf, $dropbox_lang, $currentCourseID;
 		/*
 		* Call constructor of Dropbox_Work object
 		*/
-		$this->Dropbox_Work($uploaderId, $title, $description, $author, $filename, $filesize);
+		$this->Dropbox_Work($uploaderId, $title, $description, $author, $filename, $real_filename, $filesize);
 
 		/*
 		* Do sanity checks on recipientIds array & property fillin

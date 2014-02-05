@@ -327,7 +327,22 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_3($code);
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
-        upgrade_course_2_8($code, $lang);        
+        upgrade_course_2_8($code, $lang);
+        upgrade_course_2_8_5($code, $lang);
+}
+
+function upgrade_course_2_8_5($code, $lang, $extramessage = '') {
+
+    global $langUpgCourse, $global_messages;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8.5) $extramessage<br>";
+    flush();
+    
+    if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
+            db_query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+            db_query("UPDATE dropbox_file SET real_filename = filename");
+    }            
 }
 
 function upgrade_course_2_8($code, $lang, $extramessage = '') {
