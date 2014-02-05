@@ -171,14 +171,14 @@ if ($is_editor) {
             $invalid = 0;
             $recipients = array();
             $emailBody = html2text($emailContent);
-            $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />$langNote" . sprintf($langLinkUnsubscribe, $title);
+            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+            $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $emailContent .= $unsubscribe . $linkhere;
             $general_to = 'Members of course ' . $course_code;
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
                                                    WHERE course_id = ? AND
-                                                         course_user.user_id = user.user_id", function ($person)
+                                                         course_user.user_id = user.id", function ($person)
                     use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
                 $countEmail++;
                 $emailTo = $person->email;

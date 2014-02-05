@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,22 +19,30 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* * ===========================================================================
-  refresh_course.php
-  @last update: 23-10-2006 by Pitsiougas Vagelis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Refresh page for a course
-
-  ============================================================================== */
+/**
+ * @file refresh_course.php 
+ * @brief course clean up
+ */
 
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
 $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
+
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=before_date]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 $nameTools = $langRefreshCourse;
 
@@ -71,29 +79,22 @@ if (isset($_POST['submit'])) {
         for ($i = 0; $i < $count_events; $i++) {
             $tool_content .= "<li>$output[$i]</li>";
         }
-        $tool_content .= "\n</ul>\n</p><br />";
+        $tool_content .= "</ul></p><br />";
     }
     $tool_content .= "<p align='right'><a href='index.php?course=$course_code'>$langBack</a></p>";
-} else {
-    $lang_jscalendar = langname_to_code($language);
-    $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-    $head_content .= $jscalendar->get_load_files_code();
-    $datetoday = date("Y-n-j", time());
-
+} else {        
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-	<table width='100%' class=\"FormData\">
+	<table width='100%' class='FormData'>
 	<tbody>
 	<tr>
 	  <th width='220'>&nbsp;</th>
 	  <td colspan='2'>$langRefreshInfo<br /><br /><b>$langRefreshInfo_A :</b></td>
 	</tr>
 	<tr>
-	  <th class='left'><img src=\"$themeimg/groups_on.png\" alt=\"\" height=\"16\" width=\"16\"> $langUsers</th>
+	  <th class='left'><img src='$themeimg/groups_on.png' alt='' height='16' width='16'> $langUsers</th>
 	  <td width='1%'><input type='checkbox' name='delusers'></td>
-	  <td>$langUserDelCourse </td>
-	</tr>
-	<tr>
-	  <th><td>&nbsp;</th><td>" . make_calendar('before_date') . "</td>
+	  <td>$langUserDelCourse&nbsp;&nbsp;
+	  <input type='text' name='before_date' value='" .date("Y-n-j", time()) ."'></td>              
 	</tr>
 	<tr>
 	  <th class='left'><img src='$themeimg/announcements_on.png' alt='' height='16' width='16'> $langAnnouncements</th>
@@ -132,17 +133,22 @@ if (isset($_POST['submit'])) {
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * 
+ * @global type $course_id
+ * @global type $langUsersDeleted
+ * @param type $date
+ * @return type
+ */
 function delete_users($date = '') {
     global $course_id, $langUsersDeleted;
 
     if (isset($date)) {
-        db_query("DELETE FROM course_user
-                                 WHERE course_id = $course_id AND
-                                       statut <> 1 AND
-                                       statut <> 10 AND
-                                       reg_date < '$date'");
+        db_query("DELETE FROM course_user WHERE course_id = $course_id AND
+                                status != ". USER_TEACHER ." AND
+                                reg_date < '$date'");
     } else {
-        db_query("DELETE FROM course_user WHERE course_id = $course_id AND statut <> 1 AND statut <> 10");
+        db_query("DELETE FROM course_user WHERE course_id = $course_id AND status != " . USER_TEACHER);
     }
     db_query("DELETE FROM group_members
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = $course_id) AND
@@ -150,6 +156,12 @@ function delete_users($date = '') {
     return "<p>$langUsersDeleted</p>";
 }
 
+/**
+ * 
+ * @global type $course_id
+ * @global type $langAnnDeleted
+ * @return type
+ */
 function delete_announcements() {
     global $course_id, $langAnnDeleted;
 
@@ -157,6 +169,12 @@ function delete_announcements() {
     return "<p>$langAnnDeleted</p>";
 }
 
+/**
+ * 
+ * @global type $langAgendaDeleted
+ * @global type $course_id
+ * @return type
+ */
 function delete_agenda() {
     global $langAgendaDeleted, $course_id;
 
@@ -164,13 +182,25 @@ function delete_agenda() {
     return "<p>$langAgendaDeleted</p>";
 }
 
+/**
+ * 
+ * @global type $langDocsDeleted
+ * @global type $course_id
+ * @return type
+ */
 function hide_doc() {
     global $langDocsDeleted, $course_id;
 
-    db_query("UPDATE document SET visibility='i' WHERE course_id = $course_id");
+    db_query("UPDATE document SET visible=0, public=0 WHERE course_id = $course_id");
     return "<p>$langDocsDeleted</p>";
 }
 
+/**
+ * 
+ * @global type $langWorksDeleted
+ * @global type $course_id
+ * @return type
+ */
 function hide_work() {
     global $langWorksDeleted, $course_id;
 
@@ -178,6 +208,11 @@ function hide_work() {
     return "<p>$langWorksDeleted</p>";
 }
 
+/**
+ * 
+ * @global type $langPurgedExerciseResults
+ * @return type
+ */
 function purge_exercises() {
     global $langPurgedExerciseResults;
 
@@ -185,6 +220,11 @@ function purge_exercises() {
     return "<p>$langPurgedExerciseResults</p>";
 }
 
+/**
+ * 
+ * @global type $langStatsCleared
+ * @return type
+ */
 function clear_stats() {
     global $langStatsCleared;
 
@@ -193,19 +233,4 @@ function clear_stats() {
     $action->summarizeAll();
 
     return "<p>$langStatsCleared</p>";
-}
-
-function make_calendar($name) {
-
-    global $datetoday, $jscalendar, $langBeforeRegDate;
-
-    return "$langBeforeRegDate " .
-            $jscalendar->make_input_field(
-                    array('showOthers' => true,
-                'showsTime' => false,
-                'align' => 'Tl',
-                'ifFormat' => '%Y-%m-%d'), array('name' => $name,
-                'value' => $datetoday,
-                'style' => 'width: 8em; color: #727266; background-color: #fbfbfb; border: 1px solid #C0C0C0; text-align: center')) .
-            "";
 }

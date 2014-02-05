@@ -272,7 +272,7 @@ draw($tool_content, 3, null, $head_content);
 // Helper function
 function prof_query($sql) {
     return db_query_get_single_value("SELECT id FROM user
-                                                 WHERE status = 1 AND $sql");
+                                                 WHERE status = 1 AND ( $sql )");
 }
 
 // Find a professor by name ("Name surname") or username

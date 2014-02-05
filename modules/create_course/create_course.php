@@ -145,10 +145,10 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$title = isset($_POST['title'])?$_POST['title']:'';
-$password = isset($_POST['password'])?$_POST['password']:'';
-
-$default_prof = "$_SESSION[givenname] $_SESSION[surname]";
+register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
+if (empty($prof_names)) {
+    $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
+}
 
 $tool_content .= "<form method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">";
 
@@ -175,9 +175,6 @@ if (!$deps_valid) {
     exit();
 }
 
-if (empty($prof_names)) {
-    $prof_names = $default_prof;
-}
    
 // display form   
 if (!isset($_POST['create_course'])) {

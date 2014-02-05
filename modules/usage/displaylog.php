@@ -33,9 +33,29 @@ if (isset($_GET['from_admin'])) {
 
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/jscalendar/calendar.php';
 require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
+
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=u_date_start]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=u_date_end]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
@@ -47,7 +67,7 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
-$u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -15 day'));
+$u_date_start = isset($_REQUEST['u_date_start']) ? $_REQUEST['u_date_start'] : strftime('%Y-%m-%d', strtotime('now -30 day'));
 $u_date_end = isset($_REQUEST['u_date_end']) ? $_REQUEST['u_date_end'] : strftime('%Y-%m-%d', strtotime('now +1 day'));
 $limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
 
@@ -56,23 +76,6 @@ if (isset($_REQUEST['submit'])) {
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
 }
-
-//----------------------- jscalendar -----------------------------
-$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
-$head_content = $jscalendar->get_load_files_code();
-$start_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_start',
-    'value' => $u_date_start));
-
-$end_cal = $jscalendar->make_input_field(
-        array('showsTime' => false,
-    'showOthers' => true,
-    'ifFormat' => '%Y-%m-%d'), array('style' => 'width: 10em; color: #727266; background-color: #fbfbfb; border: 1px solid #CAC3B5; text-align: center',
-    'name' => 'u_date_end',
-    'value' => $u_date_end));
 
 $qry = "SELECT LEFT(a.surname, 1) AS first_letter
         FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
@@ -145,11 +148,11 @@ $tool_content .= selection($log_types, 'logtype', $logtype);
 $tool_content .= "</td></tr>
         <tr>
         <th class='left'>$langStartDate :</th>
-        <td>$start_cal</td>
+        <td><input type='text' name ='u_date_start' value='$u_date_start'></td>
         </tr>
         <tr>
         <th class='left'>$langEndDate :</th>
-        <td>$end_cal</td>
+        <td><input type='text' name ='u_date_end' value='$u_date_end'></td>
         </tr>
         <tr>
         <th class='left' rowspan='2' valign='top'>$langUser:</td>
