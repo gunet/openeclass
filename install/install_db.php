@@ -554,6 +554,14 @@ db_query("CREATE TABLE IF NOT EXISTS `blog_post` (
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `course_id` INT(11) NOT NULL) $charset_spec");
 
+db_query("CREATE TABLE IF NOT EXISTS `comments` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `content` TEXT NOT NULL,
+                `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+
 db_query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
