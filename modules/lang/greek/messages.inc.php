@@ -1209,6 +1209,7 @@ $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίων ερωτήσεων από το σύνολο";
 $langPurgeExercises = "Διαγραφή αποτελεσμάτων";
 $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτελεσμάτων";
+$langRemainingTime = "Υπολειπόμενος χρόνος";
 
 // admin.php
 $langExerciseManagement="Διαχείριση Άσκησης";

@@ -54,12 +54,12 @@ ModalBoxHelper::loadModalBox();
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>";
 	// If not editor, enable countdown mechanism
-	if (!$is_editor) {
+	if (!$is_editor) {            
 	$head_content .= "
 		$(document).ready(function(){
-			timer = $('#progresstime');
-			timer.time = timer.text();
-			timer.text(secondsToHms(timer.time--));
+			timer = $('#progresstime');                        
+			timer.time = timer.text();                        
+                        timer.text(secondsToHms(timer.time--));
 		    countdown(timer, function() {
 		        alert('$langExerciseEndTime');
 		        $('.exercise').submit();
@@ -283,13 +283,13 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
-    <th colspan=\"2\">". q($exerciseTitle);
-    if(!$is_editor){
-    	$tool_content .= "<span id=\"progresstime\" style=\"float: right;\">".($timeleft)."</span>";
+    <th colspan='2'>";
+    if (!$is_editor and isset($timeleft)) {
+    	$tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
     }
-  $tool_content .= "</th></tr>
+  $tool_content .= q($exerciseTitle). "</th></tr>
   <tr class='even'>
-    <td colspan=\"2\">$exerciseDescription_temp</td>
+    <td colspan='2'>$exerciseDescription_temp</td>
   </tr>
   </table>
 

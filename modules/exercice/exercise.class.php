@@ -612,7 +612,7 @@ class Exercise
 	 */
 	function delete()
 	{
-		global $TBL_EXERCICE_QUESTION, $TBL_EXERCICES, $TBL_RECORDS;
+		global $TBL_EXERCICE_QUESTION, $TBL_EXERCICES;
 
 		$id=$this->id;
 
@@ -625,6 +625,8 @@ class Exercise
         
         function purge() 
         {
+                global $TBL_RECORDS;
+                
                 $id = $this->id;
                 
                 $sql = "DELETE FROM `$TBL_RECORDS` WHERE eid = $id";

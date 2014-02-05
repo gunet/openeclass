@@ -1463,6 +1463,9 @@ td.subsection {
     border-bottom: none;
 }
 
-.flt_right{
+#timedisplay {
+    padding-left: 1em;
     float: right;
 }
+
+
