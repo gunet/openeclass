@@ -335,6 +335,25 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `description` TEXT NOT NULL,
                `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
+ db_query("CREATE TABLE IF NOT EXISTS `attendance` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `course_id` INT(11) NOT NULL,
+               `limit` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ db_query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_id` MEDIUMINT(11) NOT NULL,
+               `title` VARCHAR(250) DEFAULT NULL,
+               `date` DATE DEFAULT NULL,
+               `description` TEXT NOT NULL,
+               `module_auto_id` MEDIUMINT(11) DEFAULT NULL,
+               `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ db_query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_activity_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0,
+               `attend` TINYINT(4) NOT NULL DEFAULT 0,
+               `comments` TEXT NOT NULL) $charset_spec");
+  
 db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
