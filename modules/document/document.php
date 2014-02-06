@@ -989,13 +989,13 @@ if ($doc_count == 0) {
         $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
                          "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
                          "<th width='60' class='center'><b>$langSize</b></th>" .
-                         "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
+                         "<th class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
         if (!$is_in_tinymce and !defined('EXPORTING')) {
             if($can_upload) {                    
-		$width = (get_config("insert_xml_metadata")) ? 185 : 135;                
+		$width = (get_config("insert_xml_metadata")) ? 185 : 165;                
 		$tool_content .= "\n      <th width='$width' class='center'><b>$langCommands</b></th>";
             } else {
-		$tool_content .= "\n      <th width='50' class='center'><b>$langCommands</b></th>";
+		$tool_content .= "\n      <th width='135' class='center'><b>$langCommands</b></th>";
             }
         }
 	$tool_content .= "\n    </tr>";
