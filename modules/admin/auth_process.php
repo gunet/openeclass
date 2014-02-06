@@ -58,7 +58,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
                                 'ldap_login_attr' => true, 'ldap_login_attr2' => true,
                                 'dbhost' => true, 'dbtype' => true, 'dbname' => true,
                                 'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
-                                'dbfielduser' => true, 'dbfieldpass' => true,
+                                'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
                                 'shibemail' => true, 'shibuname' => true,
                                 'shibcn' => true, 'checkseparator' => true,
                                 'submit' => true, 'auth_instructions' => true,
@@ -157,7 +157,8 @@ if ($submit or !empty($_SESSION['cas_do'])) {
                                                   'dbpass' => $dbpass,
                                                   'dbtable' => $dbtable,
                                                   'dbfielduser' => $dbfielduser,
-                                                  'dbfieldpass' => $dbfieldpass);
+                                                  'dbfieldpass' => $dbfieldpass,
+                                				  'dbpassencr' => $dbpassencr);
                                 break;
                         case '6':
                                 if ($checkseparator) {
@@ -224,15 +225,16 @@ if ($submit or !empty($_SESSION['cas_do'])) {
                         if ($auth != 6) {
                                 $auth_settings = pack_settings($settings);
                         }
-                        $qry = "REPLACE INTO auth
+                        $qry = "UPDATE auth
                                         SET auth_settings = '".mysql_real_escape_string($auth_settings)."',
                                             auth_instructions = ".autoquote($auth_instructions).",
                                             auth_default = 1,
-                                            auth_name = '$auth_ids[$auth]',
-                                            auth_id = ".$auth;
+                                            auth_name = '$auth_ids[$auth]'
+                                        WHERE
+                        				    auth_id = ".$auth;
 			$sql2 = db_query($qry); // do the update as the default method
 			if($sql2) {
-				if(mysql_affected_rows()==1) {
+				if (mysql_affected_rows() == 1) {
 					$tool_content .= "<p class='success'>$langHasActivate</p>";
 				} else {
 					$tool_content .= "<p class='alert1'>$langAlreadyActiv</p>";

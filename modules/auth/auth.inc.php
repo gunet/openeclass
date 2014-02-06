@@ -94,8 +94,8 @@ function check_auth_active($auth)
 		$authrow = mysql_fetch_row($active_auth);
 		// return true only if method is valid,not empty settings
 		if (($authrow[0] == 1) && !empty($authrow[1])) {
-                        return true;
-                }
+        	return true;
+        }
 	}
 	return false;
 }
@@ -210,39 +210,40 @@ function get_auth_settings($auth)
 	$result = db_query("SELECT * FROM auth WHERE auth_id = " . $auth);
 	if ($result) {
 		if (mysql_num_rows($result) == 1) {
-                        $settings = mysql_fetch_assoc($result);
-                        $auth_settings = $settings['auth_settings'];
-                        switch ($auth) {
-                            case 2:
-                                $settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
-                                break;
-                            case 3:
-                                $settings['imaphost'] = str_replace('imaphost=', '', $auth_settings);
-                                break;
-                            case 4:
-                                $ldap = explode('|', $auth_settings);
-                                $settings = array_merge($settings, array(
+        		$settings = mysql_fetch_assoc($result);
+                $auth_settings = $settings['auth_settings'];
+                switch ($auth) {
+                	case 2:
+                    	$settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
+                        break;
+                    case 3:
+                        $settings['imaphost'] = str_replace('imaphost=', '', $auth_settings);
+                        break;
+                    case 4:
+                        $ldap = explode('|', $auth_settings);
+                        $settings = array_merge($settings, array(
                                         'ldaphost' => str_replace('ldaphost=', '', @$ldap[0]),
                                         'ldap_base' => str_replace('ldap_base=', '', @$ldap[1]),
                                         'ldapbind_dn' => str_replace('ldapbind_dn=', '', @$ldap[2]),
                                         'ldapbind_pw' => str_replace('ldapbind_pw=', '', @$ldap[3]),
                                         'ldap_login_attr' => str_replace('ldap_login_attr=', '', @$ldap[4]),
                                         'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', @$ldap[5])));
-                                break;
-                            case 5:
-                                $edb = explode('|', $auth_settings);
-                                $settings = array_merge($settings, array(
+                        break;
+                    case 5:
+                        $edb = explode('|', $auth_settings);
+                        $settings = array_merge($settings, array(
                                         'dbhost' => str_replace('dbhost=', '', @$edb[0]),
                                         'dbname' => str_replace('dbname=', '', @$edb[1]),
                                         'dbuser' => str_replace('dbuser=', '', @$edb[2]),
                                         'dbpass' => str_replace('dbpass=', '', @$edb[3]),
                                         'dbtable' => str_replace('dbtable=', '', @$edb[4]),
                                         'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6])));
-                                break;
-                            case 7:
-                                $cas = explode('|', $auth_settings);
-                                $settings = array_merge($settings, array(
+                                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
+                                		'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
+                         break;
+                    case 7:
+                         $cas = explode('|', $auth_settings);
+                         $settings = array_merge($settings, array(
                                         'cas_host' => str_replace('cas_host=', '', @$cas[0]),
                                         'cas_port' => str_replace('cas_port=', '', @$cas[1]),
                                         'cas_context' => str_replace('cas_context=', '', @$cas[2]),
@@ -253,13 +254,13 @@ function get_auth_settings($auth)
                                         'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
                                         'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
                                         'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
-                                break;
-                        }
-                        $settings['auth_name'] = $auth_ids[$auth];
+                         break;
+            }
+            $settings['auth_name'] = $auth_ids[$auth];
 			return $settings;
-                }
-        }
-        return 0;
+    	}
+	}
+    return 0;
 }
 
 /****************************************************************
@@ -279,10 +280,10 @@ email (LDAP attribute: mail)
 ****************************************************************/
 function auth_user_login($auth, $test_username, $test_password, $settings)
 {
-        global $mysqlMainDb, $webDir;
-        $testauth = false;
-        switch($auth) {
-	case '1':
+	global $mysqlMainDb, $webDir;
+    $testauth = false;
+    switch($auth) {
+		case '1':
 			$sql = "SELECT password FROM user WHERE username ";
 			if (get_config('case_insensitive_usernames')) {
 				$sql .= "= ".quote($test_username);
@@ -315,7 +316,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
 			}
             break;
 
-	case '2':
+		case '2':
             $pop3 = new pop3_class;
             $pop3->hostname = $settings['pop3host'];                // POP 3 server host name
             $pop3->port = 110;                          // POP 3 server host port
@@ -341,132 +342,130 @@ function auth_user_login($auth, $test_username, $test_password, $settings)
             }
             break;
         
-	case '3':
-	    $imaphost = $settings['imaphost'];
-	    $imapauth = imap_auth($imaphost, $test_username, $test_password);
-            if ($imapauth) {
+		case '3':
+	    	$imaphost = $settings['imaphost'];
+	    	$imapauth = imap_auth($imaphost, $test_username, $test_password);
+            	if ($imapauth) {
                     $testauth = true;
-            }
+            	}
             break;
 
-	case '4':
-		$ldap = ldap_connect($settings['ldaphost']);
-		if (!$ldap) {
-			$GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
-			return false;
-		} else {
-			// LDAP connection established - now search for user dn
-			@ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
-			if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
-				if (empty($settings['ldap_login_attr2'])) {
-					$search_filter = "($settings[ldap_login_attr]=${test_username})";
-                                } else {
-                                        $search_filter = "(|($settings[ldap_login_attr]=${test_username})
-                                                            ($settings[ldap_login_attr2]=${test_username}))";
-                                }
-					
-				$userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
-				if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
-					 $user_dn = ldap_get_dn($ldap, $entry_id);
-					 if (@ldap_bind($ldap, $user_dn, $test_password)) {
-						$testauth = true;
-						$userinfo = ldap_get_entries($ldap, $userinforequest);
-						if ($userinfo['count'] == 1) {
-                                                        $lastname = get_ldap_attribute($userinfo, 'sn');
-                                                        $firstname = get_ldap_attribute($userinfo, 'givenname');
-                                                        if (empty($firstname)) {
-                                                                $cn = get_ldap_attribute($userinfo, 'cn');
-                                                                $firstname = trim(str_replace($lastname, '', $cn));
-                                                        }
-							$GLOBALS['auth_user_info'] = array(
-								'firstname' => $firstname,
-								'lastname' => $lastname,
-								'email' => get_ldap_attribute($userinfo, 'mail'));
-						}
-                                         }
-                                }
-			 } else {
-				 $GLOBALS['auth_errors'] = ldap_error($ldap);
-				 return false;
-			}
-			@ldap_unbind($ldap);
-		}
-		break;
-
-	case '5':
-            $link = mysql_connect($settings['dbhost'], $settings['dbuser'], $settings['dbpass'], true);
-	    if ($link) {
-		$db_ext = mysql_select_db($settings['dbname'], $link);
-		if ($db_ext) {
-		    	$qry = "SELECT * FROM `$settings[dbname]`.`$settings[dbtable]`
-                                       WHERE `$settings[dbfielduser]` = ".quote($test_username)." AND
-                                             `$settings[dbfieldpass]` = ".quote($test_password);
-		    	$res = mysql_query($qry, $link);
-		    	if ($res) {
-				if(mysql_num_rows($res)>0) {
-			     		$testauth = true;
-			    		mysql_close($link);
-                                        // Reconnect to main database
-                                        $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
-                                                                       $GLOBALS['mysqlUser'],
-                                                                       $GLOBALS['mysqlPassword']);
-					if (mysql_version()) mysql_query('SET NAMES utf8');
-					mysql_select_db($mysqlMainDb);
+		case '4':
+			$ldap = ldap_connect($settings['ldaphost']);
+			if (!$ldap) {
+				$GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
+				return false;
+			} else {
+				// LDAP connection established - now search for user dn
+				@ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+				if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
+					if (empty($settings['ldap_login_attr2'])) {
+						$search_filter = "($settings[ldap_login_attr]=${test_username})";
+	                } else {
+	                	$search_filter = "(|($settings[ldap_login_attr]=${test_username})
+	                					($settings[ldap_login_attr2]=${test_username}))";
+	                }
+					$userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
+					if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
+						 $user_dn = ldap_get_dn($ldap, $entry_id);
+						 if (@ldap_bind($ldap, $user_dn, $test_password)) {
+							$testauth = true;
+							$userinfo = ldap_get_entries($ldap, $userinforequest);
+							if ($userinfo['count'] == 1) {
+	                        	$lastname = get_ldap_attribute($userinfo, 'sn');
+	                            $firstname = get_ldap_attribute($userinfo, 'givenname');
+	                            if (empty($firstname)) {
+	                            	$cn = get_ldap_attribute($userinfo, 'cn');
+	                            	$firstname = trim(str_replace($lastname, '', $cn));
+	                            }
+								$GLOBALS['auth_user_info'] = array(
+												'firstname' => $firstname,
+												'lastname' => $lastname,
+												'email' => get_ldap_attribute($userinfo, 'mail'));
+							}
+	                	}
+	                }
+				 } else {
+					 $GLOBALS['auth_errors'] = ldap_error($ldap);
+					 return false;
 				}
-                        }
-                }
-            }
-	    break;
-
-	case '6':
-		$path = "${webDir}secure/";
-		if (!file_exists($path)) {
-			if (!mkdir($path, 0700)) {
-				$testauth = false;
+				@ldap_unbind($ldap);
 			}
-		} else {
-			$indexfile = $path.'index.php';
-			$index_regfile = $path.'index_reg.php';
+			break;
 
-                        // creation of secure/index.php file
-                        $f = fopen($indexfile, 'w');
-                        $filecontents = '<?php
-session_start();
-$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
-$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
-$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
-header("Location: ../index.php");
-';
-                        if (fwrite($f, $filecontents)) {
-                                $testauth = true;
+		case '5':
+	        $link = mysql_connect($settings['dbhost'], $settings['dbuser'], $settings['dbpass'], true);
+		    if ($link) {
+				$db_ext = mysql_select_db($settings['dbname'], $link);
+				if ($db_ext) {
+			    	$qry = "SELECT * FROM `$settings[dbname]`.`$settings[dbtable]`
+	                                       WHERE `$settings[dbfielduser]` = ".quote($test_username);
+			    	$res = mysql_query($qry, $link);
+			    	if ($res) {
+						if (($row = mysql_fetch_assoc($res)) > 0) {
+							$testauth = external_DB_Check_Pass($test_password, $row[$settings['dbfieldpass']], $settings['dbpassencr']);
+				    		mysql_close($link);
+	                       // Reconnect to main database
+	                       $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
+	                                                      $GLOBALS['mysqlUser'],
+	                                                      $GLOBALS['mysqlPassword']);
+							if (mysql_version()){ 
+								mysql_query('SET NAMES utf8');
+							}
+							mysql_select_db($mysqlMainDb);
+						}
+	                }
+	            }
+	        }
+		    break;
+
+		case '6':
+			$path = "${webDir}secure/";
+			if (!file_exists($path)) {
+				if (!mkdir($path, 0700)) {
+					$testauth = false;
+				}
+			} else {
+				$indexfile = $path.'index.php';
+				$index_regfile = $path.'index_reg.php';
+				// creation of secure/index.php file
+				$f = fopen($indexfile, 'w');
+				$filecontents = '<?php
+								session_start();
+								$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
+								$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
+								$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
+								header("Location: ../index.php");
+								';
+				if (fwrite($f, $filecontents)) {
+					$testauth = true;
+				}
+				fclose($f);
+	            // creation of secure/index_reg.php
+	            // used in professor request registration process via shibboleth
+	            $f = fopen($index_regfile, "w");
+	            $filecontents = '<?php
+								session_start();
+								$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
+								$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
+								$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
+								$_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
+								$_SESSION[\'shib_auth\'] = true;
+								header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
+								';
+	            if (fwrite($f, $filecontents)) {
+	            	$testauth = true;
+	            }
+	            fclose($f);
 			}
-                        fclose($f);
+			break;
 
-                        // creation of secure/index_reg.php
-                        // used in professor request registration process via shibboleth
-                        $f = fopen($index_regfile, "w");
-                        $filecontents = '<?php
-session_start();
-$_SESSION[\'shib_email\'] = '.$settings['shibemail'].';
-$_SESSION[\'shib_uname\'] = '.$settings['shibuname'].';
-$_SESSION[\'shib_nom\'] = '.$settings['shibcn'].';
-$_SESSION[\'shib_statut\'] = $_SERVER[\'unscoped-affiliation\'];
-$_SESSION[\'shib_auth\'] = true;
-header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
-';
-                        if (fwrite($f, $filecontents)) {
-                                $testauth = true;
-                        }
-                        fclose($f);
-		}
-		break;
-
-	case '7':
-		cas_authenticate($auth);
-		if (phpCAS::checkAuthentication()) {
-			$testauth = true;
-		}
-		break;
+		case '7':
+			cas_authenticate($auth);
+			if (phpCAS::checkAuthentication()) {
+				$testauth = true;
+			}
+			break;
     }
     return $testauth;
 }
@@ -502,11 +501,11 @@ LDAP search, converted to the current charset.
 ****************************************************************/
 function get_ldap_attribute($search_result, $attribute)
 {
-        if (isset($search_result[0][$attribute][0])) {
-                return iconv('UTF-8', $GLOBALS['charset'], $search_result[0][$attribute][0]);
-        } else {
-                return '';
-        }
+	if (isset($search_result[0][$attribute][0])) {
+        return iconv('UTF-8', $GLOBALS['charset'], $search_result[0][$attribute][0]);
+    } else {
+    	return '';
+    }
 }
 
 
@@ -537,45 +536,45 @@ function cas_authenticate($auth, $new = false, $cas_host=null, $cas_port=null, $
 			$cas_altauth = $cas['cas_altauth'];
 		}
 	}
-        if ($new or $cas) {
-                $cas_url = 'https://'.$cas_host;
-                $cas_port = intval($cas_port);
-                if ($cas_port != '443') {
+	if ($new or $cas) {
+    	$cas_url = 'https://'.$cas_host;
+        $cas_port = intval($cas_port);
+        if ($cas_port != '443') {
                         $cas_url = $cas_url.':'.$cas_port;
-                }
-                $cas_url = $cas_url.$cas_context;
-
-                // The "real" hosts that send SAML logout messages
-                // Assumes the cas server is load balanced across multiple hosts
-                $cas_real_hosts = array($cas_host);
-
-                // Uncomment to enable debugging
-                // phpCAS::setDebug();
-
-                // Initialize phpCAS - keep session in application
-                $ret['message'] = "$langConnectWith $cas_url";
-                phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
-
-                // Set the CA certificate that is the issuer of the cert on the CAS server
-                if (isset($cas_cachain) && !empty($cas_cachain) && is_readable($cas_cachain))
-                        phpCAS::setCasServerCACert($cas_cachain);
-                else {
-                        phpCAS::setNoCasServerValidation();
-                        $ret['error'] = "$langNotSSL";
-                }
-                // Single Sign Out
-                //phpCAS::handleLogoutRequests(true, $cas_real_hosts);
-                // Force CAS authentication on any page that includes this file
-                phpCAS::forceAuthentication();
-
-                //$ret['attrs'] = get_cas_attrs(phpCAS::getAttributes(), $cas);
-                if (phpCAS::checkAuthentication())
-                        $ret['attrs'] = phpCAS::getAttributes();
-
-                return $ret;
-        } else {
-                return null;
         }
+        $cas_url = $cas_url.$cas_context;
+
+        // The "real" hosts that send SAML logout messages
+        // Assumes the cas server is load balanced across multiple hosts
+        $cas_real_hosts = array($cas_host);
+
+        // Uncomment to enable debugging
+        // phpCAS::setDebug();
+
+        // Initialize phpCAS - keep session in application
+        $ret['message'] = "$langConnectWith $cas_url";
+        phpCAS::client(SAML_VERSION_1_1, $cas_host, $cas_port, $cas_context, FALSE);
+
+        // Set the CA certificate that is the issuer of the cert on the CAS server
+        if (isset($cas_cachain) && !empty($cas_cachain) && is_readable($cas_cachain))
+        	phpCAS::setCasServerCACert($cas_cachain);
+        else {
+            phpCAS::setNoCasServerValidation();
+            $ret['error'] = "$langNotSSL";
+        }
+        // Single Sign Out
+        //phpCAS::handleLogoutRequests(true, $cas_real_hosts);
+        // Force CAS authentication on any page that includes this file
+        phpCAS::forceAuthentication();
+
+        //$ret['attrs'] = get_cas_attrs(phpCAS::getAttributes(), $cas);
+		if (phpCAS::checkAuthentication())
+        	$ret['attrs'] = phpCAS::getAttributes();
+
+        return $ret;
+	} else {
+    	return null;
+	}
 }
 
 /****************************************************************
@@ -642,13 +641,13 @@ function process_login()
 		unset($_SESSION['uid']);
 		$_SESSION['user_perso_active'] = false;
 		$auth_allow = 0;
-		
-                if (get_config('login_fail_check'))
-                    $r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' and count > ". intval(get_config('login_fail_threshold')) . " and DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
+		if (get_config('login_fail_check'))
+			$r = db_query("SELECT 1 FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] 
+							."' AND count > ". intval(get_config('login_fail_threshold')) 
+							." AND DATE_SUB(CURRENT_TIMESTAMP, interval ". intval(get_config('login_fail_deny_interval')) ." minute) < last_fail");
 		if (get_config('login_fail_check') && $r && mysql_num_rows($r) > 0) {
 		    $auth_allow = 8;
 		} else {
-		
     		$sqlLogin = "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang, verified_mail
                                         FROM user 
                                         WHERE username ";
@@ -687,7 +686,6 @@ function process_login()
     			$auth_allow = 4;
     		}
 		}
-		
 		if (!isset($_SESSION['uid'])) {
 			switch($auth_allow) {
 				case 1: $warning .= ""; 
@@ -752,8 +750,8 @@ function login($user_info_array, $posted_uname, $pass)
 				// password is in old md5 format, update transparently
 				$password_encrypted = $hasher->HashPassword($pass);
 				$user_info_array['password'] = $password_encrypted;
-				
-                                db_query('SET sql_mode = TRADITIONAL');
+
+				db_query('SET sql_mode = TRADITIONAL');
 				$sql = "UPDATE user SET password = ". quote($password_encrypted) ." WHERE user_id = ". intval($user_info_array['user_id']);
 				db_query($sql, $mysqlMainDb);
 			}
@@ -881,15 +879,14 @@ function shib_cas_login($type)
 	global $nom, $prenom, $email, $statut, $language, $durationAccount, $urlServer,
 		$is_admin, $is_power_user, $is_usermanage_user, $langUserAltAuth;
 
-        $alt_auth_stud_reg = get_config('alt_auth_stud_reg');        
+	$alt_auth_stud_reg = get_config('alt_auth_stud_reg');        
 	//$autoregister = !(get_config('close_user_registration') && get_config('alt_auth_student_req'));
 
-        if ($alt_auth_stud_reg == 2) {
-                $autoregister = TRUE;
-        } else {
-                $autoregister = FALSE;
-        }
-        
+    if ($alt_auth_stud_reg == 2) {
+    	$autoregister = TRUE;
+	} else {
+    	$autoregister = FALSE;
+    }
 	$_SESSION['user_perso_active'] = false;
 	if ($type == 'shibboleth') {
 		$uname = $_SESSION['shib_uname'];
@@ -997,7 +994,7 @@ function shib_cas_login($type)
 			$_SESSION['uid'] = mysql_insert_id();
 			$userPerso = 'yes';
 			$language = $_SESSION['langswitch'] = langcode_to_name('el');
-		} else {
+	} else {
 			// user not registered, automatic registration disabled
 			// redirect to registration screen
 			foreach(array_keys($_SESSION) as $key) {
@@ -1006,8 +1003,7 @@ function shib_cas_login($type)
 			session_destroy();
 			header("Location: {$urlServer}modules/auth/registration.php");
 			exit;
-		}
-
+	}
 	$_SESSION['uname'] = $uname;
 	$_SESSION['nom'] = $nom;
 	$_SESSION['prenom'] = $prenom;
@@ -1054,3 +1050,18 @@ function resetLoginFailure()
     db_query("DELETE FROM login_failure WHERE ip = '". $_SERVER['REMOTE_ADDR'] ."' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL ". intval(get_config('login_fail_forgive_interval')) ." HOUR) >= last_fail"); // de-penalize only after 24 hours
 }
 
+function external_DB_Check_Pass($test_password, $hash, $encryption) {
+	switch ($encryption) {
+		case 'none':
+			return ($test_password == $hash);
+			break;
+		case 'md5':
+			return (md5($test_password) == $hash);
+		case 'ehasher':
+			require_once '../../include/phpass/PasswordHash.php';
+			$hasher = new PasswordHash(8, false);
+			return $hasher->CheckPassword($test_password, $hash);
+		default:
+			/* Maybe append an error message to tool_content, telling not supported encryption */
+	}
+}
