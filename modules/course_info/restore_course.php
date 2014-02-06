@@ -98,6 +98,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         draw($tool_content, 3);
         exit;
     }
+    
     $cours_file = $_POST['restoreThis'] . '/course';
     if (file_exists($cours_file)) {
         $data = unserialize(file_get_contents($cours_file));
@@ -210,6 +211,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         return true;
     }
 
+    restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $course_id),
+        'delete' => array('id')));
     restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id),
         'delete' => array('id')));
     restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $course_id)));
@@ -217,9 +220,56 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'return_mapping' => 'id'));
     restore_table($restoreThis, 'group_members', array('map' => array('group_id' => $group_map,
             'user_id' => $userid_map)));
+    
+    // Forums Restore
+    $forum_category_map = restore_table($restoreThis, 'forum_category', array('set' => array('course_id' => $course_id),
+        'return_mapping' => 'id'));
+    $forum_category_map[0] = 0;
+    $forum_map = restore_table($restoreThis, 'forum', array('set' => array('course_id' => $course_id),
+        'return_mapping' => 'id',
+        'map' => array('cat_id' => $forum_category_map)));
+    $forum_map[0] = 0;
+    $forum_topic_map = restore_table($restoreThis, 'forum_topic', array('return_mapping' => 'id',
+        'map' => array('forum_id' => $forum_map, 'poster_id' => $userid_map)));
+    $forum_topic_map[0] = 0;
+    $forum_post_map = restore_table($restoreThis, 'forum_post', array('return_mapping' => 'id',
+        'map' => array('topic_id' => $forum_topic_map, 'poster_id' => $userid_map)));
+    $forum_post_map[0] = 0;
     restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $course_id),
-        'map' => array('user_id' => $userid_map),
+        'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
+
+    $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ? ", intval($course_id));
+    if (is_array($forumLastPosts) && count($forumLastPosts) > 0) {
+        foreach ($forumLastPosts as $lastPost) {
+            Database::get()->query("UPDATE forum SET last_post_id = ? WHERE course_id = ? AND last_post_id = ?", intval($forum_post_map[$lastPost->last_post_id]), intval($course_id), intval($lastPost->last_post_id));
+        }
+    }
+
+    $topicLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum_topic WHERE course_id = ?", intval($course_id));
+    if (is_array($topicLastPosts) && count($topicLastPosts) > 0) {
+        foreach ($topicLastPosts as $lastPost) {
+            Database::get()->query("UPDATE forum_topic SET last_post_id = ? WHERE course_id = ? AND last_post_id = ?", intval($forum_post_map[$lastPost->last_post_id]), intval($course_id), intval($lastPost->last_post_id));
+        }
+    }
+
+    $parentPosts = Database::get()->queryArray("SELECT DISTINCT parent_post_id FROM forum_post WHERE course_id = ?", intval($course_id));
+    if (is_array($parentPosts) && count($parentPosts) > 0) {
+        foreach ($parentPosts as $parentPost) {
+            Database::get()->query("UPDATE forum_post SET parent_post_id = ? WHERE course_id = ? AND parent_post_id = ?", intval($foum_post_map[$parentPost->parent_post_id]), intval($course_id), intval($parentPost->parent_post_id));
+        }
+    }
+    // Forums Restore End
+    
+    // Glossary Restore
+    $glossary_category_map = restore_table($restoreThis, 'glossary_category', array('set' => array('course_id' => $course_id),
+        'return_mapping' => 'id'));
+    $glossary_category_map[0] = 0;
+    restore_table($restoreThis, 'glossary', array('set' => array('course_id' => $course_id),
+        'delete' => array('id'),
+        'map' => array('category_id' => $glossary_category_map)));
+    // Glossary Restore End
+
     $link_category_map = restore_table($restoreThis, 'link_category', array('set' => array('course_id' => $course_id),
         'return_mapping' => 'id'));
     $link_category_map[0] = 0;
@@ -769,13 +819,13 @@ function restore_users($course_id, $users, $cours_user) {
 
     foreach ($users as $data) {
 
-        if ($add_only_profs and !$is_prof[$data['user_id']]) {
+        if ($add_only_profs and !$is_prof[$data['id']]) {
             continue;
         }
         $u = db_query("SELECT * FROM user WHERE BINARY username=" . quote($data['username']));
         if (mysql_num_rows($u) > 0) {
             $res = mysql_fetch_array($u);
-            $userid_map[$data['user_id']] = $res['user_id'];
+            $userid_map[$data['id']] = $res['id'];
             $tool_content .= "<p>" .
                     sprintf($langRestoreUserExists, '<b>' . q($data['username']) . '</b>', '<i>' . q("$res[givenname] $res[surname]") . '</i>', '<i>' . q("$data[givenname] $data[surname]") . '</i>') .
                     "</p>\n";
@@ -791,7 +841,7 @@ function restore_users($course_id, $users, $cours_user) {
                                              department = " . quote($data['department']) . ",
                                              registered_at = " . quote($data['registered_at']) . ",
                                              expires_at = " . quote($data['registered_at'] + get_config('account_duration')));
-            $userid_map[$data['user_id']] = mysql_insert_id();
+            $userid_map[$data['id']] = mysql_insert_id();
             $tool_content .= "<p>" .
                     sprintf($langRestoreUserNew, '<b>' . q($data['username']) . '</b>', '<i>' . q("$data[givenname] $data[surname]") . '</i>') .
                     "</p>\n";
@@ -808,6 +858,8 @@ function register_users($course_id, $userid_map, $cours_user) {
         if (isset($userid_map[$old_id])) {
             $status[$old_id] = $cudata['status'];
             $tutor[$old_id] = $cudata['tutor'];
+            $editor[$old_id] = $cudata['editor'];
+            $reviewer[$old_id] = $cudata['reviewer'];
             $reg_date[$old_id] = $cudata['reg_date'];
             $receive_mail[$old_id] = $cudata['receive_mail'];
         }
@@ -817,9 +869,12 @@ function register_users($course_id, $userid_map, $cours_user) {
         db_query("INSERT INTO course_user
                                  SET course_id = $course_id,
                                      user_id = $new_id,
-                                     status = {$status[$old_id]},
+                                     status = " . intval($status[$old_id]) . ",
+                                     tutor = " . intval($tutor[$old_id]) . ",
+                                     editor = " . intval($editor[$old_id]) . ",
+                                     reviewer = " . intval($reviewer[$old_id]) . ",
                                      reg_date = " . quote($reg_date[$old_id]) . ",
-                                     receive_mail = {$receive_mail[$old_id]}");
+                                     receive_mail = " . intval($receive_mail[$old_id]) );
         $tool_content .= "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
     }
 }
