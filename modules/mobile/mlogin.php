@@ -91,9 +91,14 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
 
     $result = db_query($sqlLogin);
     
-    while ($myrow = mysql_fetch_assoc($result)) 
-        $ok = login($myrow, $uname, $pass);
-    
+    while ($myrow = mysql_fetch_assoc($result)) {
+        if (in_array($myrow['password'], $auth_ids)) {
+            $ok = alt_login($myrow, $uname, $pass);
+        } else {
+            $ok = login($myrow, $uname, $pass);
+        }
+    }
+
     if (isset($_SESSION['uid']) && $ok == 1) {
         db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                 VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
