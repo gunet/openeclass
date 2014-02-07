@@ -588,7 +588,7 @@ function upgrade_course_2_2($code, $lang, $extramessage = '')
  	db_query("ALTER TABLE `exercise_user_record`
 		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
  	db_query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00'", $code);
+		CHANGE `RecordEndDate` `RecordEndDate` DATETIME DEFAULT NULL", $code);
 	if (!mysql_field_exists("$code",'exercices','results'))
                 echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
 	db_query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
@@ -1142,7 +1142,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
                         `eid` tinyint(4) NOT NULL default '0',
                         `uid` mediumint(8) NOT NULL default '0',
                         `RecordStartDate` date NOT NULL default '0000-00-00',
-                        `RecordEndDate` date NOT NULL default '0000-00-00',
+                        `RecordEndDate` date default NULL,
                         `TotalScore` int(11) NOT NULL default '0',
                         `TotalWeighting` int(11) default '0',
                         `attempt` int(11) NOT NULL default '0',

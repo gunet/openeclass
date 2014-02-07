@@ -61,7 +61,7 @@ $head_content .= "<script type='text/javascript'>";
 			timer.time = timer.text();                        
                         timer.text(secondsToHms(timer.time--));
 		    countdown(timer, function() {
-		        alert('$langExerciseEndTime');
+		        alert('$langExerciseEndTimeResults');
 		        $('.exercise').submit();
 		    });
 		});";
@@ -126,14 +126,6 @@ if (isset($_POST['formSent'])) {
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
 		} 
-	}
-	$RecordEndDate = date("Y-m-d H:i:s", time());
-	// complete attempt's record by setting it's end time
-	if (($exerciseType == 1) or (($exerciseType == 2) and ($nbrQuestions == $questionNum))) {
-		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$eid_temp' AND uid='$uid'";
-		$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
-		$attempt = $tmp[0] + 1;
-		$sql = "UPDATE `$TBL_RECORDS` SET `RecordEndDate` = '$RecordEndDate' WHERE eid = '$eid_temp' AND uid = '$uid'";
 	}
 	
 	// if the user has answered at least one question
@@ -203,7 +195,7 @@ if (!$is_editor) {
 	// either from a previews attempt meaning that user hasn't sumbited his answers    
 	// 		and exerciseTimeConstrain hasn't yet passed,
 	// either start a new attempt and count now() as begin time.
-	$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND RecordEndDate is NULL";
+	$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND (RecordEndDate is NULL OR RecordEndDate = 0)";
 	$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
 	if ($tmp[0] > 0) {
 		$RecordStartDate = strtotime($tmp[1]);
@@ -225,7 +217,7 @@ if (!$is_editor) {
 		$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
 		$attempt = $tmp[0] + 1;
 		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
-		if ($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) {			
+		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {			
 			$sql = "INSERT INTO `$TBL_RECORDS` (eid, uid, RecordStartDate, TotalScore, TotalWeighting, attempt)
 		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
 			$result = db_query($sql);

@@ -309,7 +309,7 @@ if(!$nbrExercises) {
             	$tool_content .= "<td align='center'>";
 
                 // if there is an active attempt
-            	$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND RecordEndDate is NULL";
+            	$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND (RecordEndDate is NULL OR RecordEndDate = 0) ";
             	$tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
             	if ($tmp[0] > 0) {
             		$RecordStartDate = strtotime($tmp[1]);
@@ -318,11 +318,16 @@ if(!$nbrExercises) {
             		if ($RecordStartDate + ($row['TimeConstrain']*60) >= $temp_CurrentDate) {
             			$_SESSION['exercise_begin_time'][$row['id']] = $RecordStartDate;
             			$timeleft = ($row['TimeConstrain']*60) - ($temp_CurrentDate - $RecordStartDate);
+            			$passed = false;
             		} else {
-            			$timeleft = $row['TimeConstrain']*60;
+            			$timeleft = "{$row['TimeConstrain']} $langExerciseConstrainUnit";
+            			$passed = true;
             		}
             		$tool_content .= "<span id=\"progresstime\">$timeleft</span></td>";
             		$exerciseId = $row['id'];
+            		if($passed){
+            		    unset($timeleft);
+            		}
             	} else {
                 	$tool_content .= "{$row['TimeConstrain']} $langExerciseConstrainUnit</td>";
             	}

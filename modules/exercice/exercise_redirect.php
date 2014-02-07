@@ -84,7 +84,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 // if there is an active attempt and it's time passed. Complete the record to finish attempt
-$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND RecordEndDate is NULL";
+$sql = "SELECT COUNT(*), RecordStartDate FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND (RecordEndDate is NULL OR RecordEndDate = 0)";
 $tmp = mysql_fetch_row(db_query($sql, $currentCourseID));
 if ($tmp[0] > 0) {
 	$sql = "UPDATE `$TBL_RECORDS` SET RecordEndDate = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid'";
@@ -107,4 +107,4 @@ $tool_content .= "<table class='Exercise' width='99%'>
 
 $tool_content .= $tool_content_extra;
 draw($tool_content, 2);
-?>
+

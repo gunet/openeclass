@@ -345,7 +345,6 @@ foreach($_SESSION['questionList'][$exerciseId] as $questionId) {
 	$i++;
 	$totalWeighting += $questionWeighting;
 }	// end foreach()
-
 // update db with results
 $eid = $objExercise->selectId();
 $sql = "SELECT MAX(eurid) FROM `$TBL_RECORDS` WHERE eid = '$eid' AND uid = '$uid'";
@@ -354,7 +353,9 @@ $row = mysql_fetch_row($result);
 $eurid = $row[0];
 
 // record results of exercise
-$sql = "UPDATE `$TBL_RECORDS` SET RecordEndDate = '".date('Y-m-d H:i:s', time())."', TotalScore = '$totalScore', TotalWeighting = '$totalWeighting' WHERE eurid='$eurid'";
+$sql = "UPDATE `$TBL_RECORDS` SET RecordEndDate = '".date('Y-m-d H:i:s', time())."', TotalScore = '$totalScore',
+			TotalWeighting = '$totalWeighting' 
+		WHERE eurid='$eurid'";
 db_query($sql, $currentCourseID);
 
 if ($displayScore == 1) {
