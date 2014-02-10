@@ -238,14 +238,17 @@ final class Database {
 
     private function queryImpl($statement, $isTransactional, $callback_fetch, $callback_error, $requestType, $variables) {
         $init_time = microtime();
+        $backtrace_entry = debug_backtrace();
+        $backtrace_info = $backtrace_entry[2];
+
         if (is_null($statement) || !is_string($statement) || empty($statement))
-            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))
-            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time, $backtrace_info);
 
         /* Start transaction, if required */
         if ($isTransactional && !$this->dbh->beginTransaction())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", $statement, $init_time, $backtrace_info);
 
         /* flatten parameter array */
         $flatten = array();
@@ -260,7 +263,7 @@ final class Database {
         /* Construct actual statement */
         $statement_parts = explode("?", $statement);
         if ($variable_size != (count($statement_parts) - 1)) {  // Do not take into account first part
-            Database::dbg("Parameter size and counted parameters do not match", $statement, $init_time, Debug::CRITICAL);
+            Database::dbg("Parameter size and counted parameters do not match", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
             die();
         }
         // Type safe input parameters
@@ -305,35 +308,35 @@ final class Database {
         }
         if (strlen($warning_parts) > 0) {
             $warning_parts = substr($warning_parts, 1);
-            Database::dbg("Warning: parts [ $warning_parts ] of query '$statement' have undefined type.", $statement, $init_time, Debug::ERROR);
+            Database::dbg("Warning: parts [ $warning_parts ] of query '$statement' have undefined type.", $statement, $init_time, $backtrace_info, Debug::ERROR);
         }
         $statement = implode("?", $statement_parts);
 
         /* Prepare statement */
         $stm = $this->dbh->prepare($statement);
         if (!$stm)
-            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time, $backtrace_info);
 
         /* Bind values - with type safety and '?' notation  */
         for ($i = 0; $i < $variable_size; $i++) {
             if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
-                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, false);
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, $backtrace_info, false);
         }
 
         /* Execute statement */
         if (!$stm->execute())
-            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time, $backtrace_info);
 
         /* fetch results */
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
             if (!is_object($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
-                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
@@ -345,24 +348,24 @@ final class Database {
         /* Close transaction, if required */
         if ($isTransactional)
             $this->dbh->commit();
-        Database::dbg("Succesfully performed query", $statement, $init_time, Debug::INFO);
+        Database::dbg("Succesfully performed query", $statement, $init_time, null, Debug::INFO);
         return $result;
     }
 
-    private function errorFound($callback_error, $isTransactional, $error_msg, $statement, $init_time, $close_transaction = true) {
+    private function errorFound($callback_error, $isTransactional, $error_msg, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
         if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-        Database::dbg("Error: " . $error_msg, $statement, $init_time);
+        Database::dbg("Error: " . $error_msg, $statement, $init_time, $backtrace_info);
         return null;
     }
 
     /**
      * Private function to call master Debug object
      */
-    private static function dbg($message, $statement, $init_time, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level);
+    private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
+        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }
