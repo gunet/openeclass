@@ -113,8 +113,8 @@ function set_session_mvars() {
     $from = "SELECT course.id course_id, course.code code, course.public_code,
                     course.title title, course.prof_names profs, course_user.status status
                FROM course JOIN course_user ON course.id = course_user.course_id
-              WHERE course_user.user_id = ? ";
-    $visible = " AND course.visible != ? ";
+              WHERE course_user.user_id = ?d ";
+    $visible = " AND course.visible != ?d ";
     $order = " ORDER BY status, course.title, course.prof_names";
     
     $callback = function($course) use (&$status) {

@@ -239,21 +239,21 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
 
-    $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ? ", intval($course_id));
+    $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ?d ", intval($course_id));
     if (is_array($forumLastPosts) && count($forumLastPosts) > 0) {
         foreach ($forumLastPosts as $lastPost) {
             Database::get()->query("UPDATE forum SET last_post_id = ?d WHERE course_id = ?d AND last_post_id = ?d", intval($forum_post_map[$lastPost->last_post_id]), intval($course_id), intval($lastPost->last_post_id));
         }
     }
 
-    $topicLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum_topic WHERE course_id = ?", intval($course_id));
+    $topicLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum_topic WHERE course_id = ?d", intval($course_id));
     if (is_array($topicLastPosts) && count($topicLastPosts) > 0) {
         foreach ($topicLastPosts as $lastPost) {
             Database::get()->query("UPDATE forum_topic SET last_post_id = ?d WHERE course_id = ?d AND last_post_id = ?d", intval($forum_post_map[$lastPost->last_post_id]), intval($course_id), intval($lastPost->last_post_id));
         }
     }
 
-    $parentPosts = Database::get()->queryArray("SELECT DISTINCT parent_post_id FROM forum_post WHERE course_id = ?", intval($course_id));
+    $parentPosts = Database::get()->queryArray("SELECT DISTINCT parent_post_id FROM forum_post WHERE course_id = ?d", intval($course_id));
     if (is_array($parentPosts) && count($parentPosts) > 0) {
         foreach ($parentPosts as $parentPost) {
             Database::get()->query("UPDATE forum_post SET parent_post_id = ?d WHERE course_id = ?d AND parent_post_id = ?d", intval($foum_post_map[$parentPost->parent_post_id]), intval($course_id), intval($parentPost->parent_post_id));

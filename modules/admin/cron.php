@@ -36,7 +36,7 @@ function monthlycronjob() {
     $monthlyname = 'admin_monthly';
     $lastmonth = mktime(date("H"), date("i"), date("s"), date("n") - 1, date("j"), date("Y"));
 
-    $lastrunmonthly = ($res = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(last_run) as last_run FROM cron_params WHERE name = ?", $monthlyname)) ? $res->last_run : 0;
+    $lastrunmonthly = ($res = Database::get()->querySingle("SELECT UNIX_TIMESTAMP(last_run) as last_run FROM cron_params WHERE name = ?s", $monthlyname)) ? $res->last_run : 0;
     $nevermonthly = ($lastrunmonthly > 0) ? false : true;
 
     if ($lastmonth > $lastrunmonthly) {
@@ -109,13 +109,13 @@ function summarizeMonthlyData() {
     // Check if data for last month have already been inserted in 'monthly_summary'...
     $lmon = mktime(0, 0, 0, date('m') - 1, date('d'), date('Y'));
     $last_month = date('m Y', $lmon);
-    $res = Database::get()->querySingle("SELECT id FROM monthly_summary WHERE `month` = ?", $last_month);
+    $res = Database::get()->querySingle("SELECT id FROM monthly_summary WHERE `month` = ?s", $last_month);
 
     if (empty($res)) {
         $current_month = date('Y-m-01 00:00:00');
         $prev_month = date('Y-m-01 00:00:00', $lmon);
 
-        $login_sum = Database::get()->querySingle("SELECT COUNT(idLog) as sum_id FROM loginout WHERE `when` >= ? AND `when`< ? AND action = 'LOGIN'", $prev_month, $current_month)->sum_id;
+        $login_sum = Database::get()->querySingle("SELECT COUNT(idLog) as sum_id FROM loginout WHERE `when` >= ?t AND `when`< ?t AND action = 'LOGIN'", $prev_month, $current_month)->sum_id;
         $cours_sum = Database::get()->querySingle("SELECT COUNT(id) as cours_sum FROM course")->cours_sum;
         $prof_sum = Database::get()->querySingle("SELECT COUNT(id) as prof_sum FROM user WHERE status = 1")->prof_sum;
         $stud_sum = Database::get()->querySingle("SELECT COUNT(id) as stud_sum FROM user WHERE status = 5")->stud_sum;
@@ -163,7 +163,7 @@ function summarizeMonthlyActions() {
     require_once 'include/action.php';
     $action = new action();
     Database::get()->queryFunc("SELECT id FROM course", function($course) use (&$action) {
-        $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?", intval($course->id))) ? $res->min_time : time();
+        $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?d", intval($course->id))) ? $res->min_time : time();
         if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) {
             $action->summarize($course_id);
         }

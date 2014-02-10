@@ -35,15 +35,15 @@ if (!get_config('opencourses_enable') || !$is_opencourses_reviewer) {
 // initialize data from xml and db
 $xml = CourseXMLElement::init($course_id, $course_code);
 $xmlData = $xml->asFlatArray();
-$visible = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?", $course_id)->visible;
+$visible = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
 $hasOpenAccess = ($visible == 2);
 $hasMandatoryMetadata = $xml->hasMandatoryMetadata();
 $hasLicense = (isset($xmlData['course_license']) && !empty($xmlData['course_license']));
 $hasTeacherConfirm = (isset($xmlData['course_confirmCurriculum']) && $xmlData['course_confirmCurriculum'] == 'true');
-$numDocs = Database::get()->querySingle("SELECT count(id) as count FROM document WHERE course_id = ?", $course_id)->count;
-$numUnits = Database::get()->querySingle("SELECT count(id) as count FROM course_units WHERE course_id = ? AND `order` >= 1 AND visible = 1", $course_id)->count;
-$numVideo = Database::get()->querySingle("SELECT count(id) as count FROM video WHERE course_id = ?", $course_id)->count;
-$numVideoLinks = Database::get()->querySingle("SELECT count(id) as count FROM videolink WHERE course_id = ?", $course_id)->count;
+$numDocs = Database::get()->querySingle("SELECT count(id) as count FROM document WHERE course_id = ?d", $course_id)->count;
+$numUnits = Database::get()->querySingle("SELECT count(id) as count FROM course_units WHERE course_id = ?d AND `order` >= 1 AND visible = 1", $course_id)->count;
+$numVideo = Database::get()->querySingle("SELECT count(id) as count FROM video WHERE course_id = ?d", $course_id)->count;
+$numVideoLinks = Database::get()->querySingle("SELECT count(id) as count FROM videolink WHERE course_id = ?d", $course_id)->count;
 $numMedia = $numVideo + $numVideoLinks;
 $hasTeacherConfirmVideo = (isset($xmlData['course_confirmVideolectures']) && $xmlData['course_confirmVideolectures'] == 'true');
 
@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
     CourseXMLElement::save($course_code, $xml);
     $xmlData = $xml->asFlatArray(); // reload data
     // insert or update db
-    $exists = ($exres = Database::get()->querySingle("SELECT 1 as `exists` FROM course_review WHERE course_id = ?", $course_id)) ? $exres->exists : false;
+    $exists = ($exres = Database::get()->querySingle("SELECT 1 as `exists` FROM course_review WHERE course_id = ?d", $course_id)) ? $exres->exists : false;
     if ($exists) {
         Database::get()->query("UPDATE course_review SET is_certified = ?d, level = ?d, 
             last_review = ?t, last_reviewer = ?d WHERE course_id = ?d", $is_certified, $level, $last_review, $uid, $course_id);

@@ -62,7 +62,7 @@ if ($is_editor) {
             $langEmptyAnTitle . '";</script>';
     $aidx = new AnnouncementIndexer();
 
-    $announcementNumber = Database::get()->querySingle("SELECT COUNT(*) AS count FROM announcement WHERE course_id = ?", $course_id)->count;
+    $announcementNumber = Database::get()->querySingle("SELECT COUNT(*) AS count FROM announcement WHERE course_id = ?d", $course_id)->count;
 
     $displayForm = true;
     /* up and down commands */
@@ -79,7 +79,7 @@ if ($is_editor) {
     if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
         //Debug::setLevel(Debug::INFO);
         $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
-                                           WHERE course_id = ?
+                                           WHERE course_id = ?d
                                            ORDER BY `order` $sortDirection",$course_id );
         foreach ($ids as $announcement) {   
             if ($thisAnnouncementOrderFound) {
@@ -108,7 +108,7 @@ if ($is_editor) {
     /* delete */
     if (isset($_GET['delete'])) {
         $delete = intval($_GET['delete']);
-        $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ? ", $delete);
+        $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $delete);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
         Database::get()->query("DELETE FROM announcement WHERE id = ?d", $delete);
         $aidx->remove($delete);
@@ -121,7 +121,7 @@ if ($is_editor) {
     /* modify */
     if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
-        $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?", $modify);
+        $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?d", $modify);
         if ($announce) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
@@ -142,7 +142,7 @@ if ($is_editor) {
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
-                                                   WHERE course_id = ?", $course_id)->maxorder;
+                                                   WHERE course_id = ?d", $course_id)->maxorder;
             $order = $orderMax + 1;
             // insert
             $id = Database::get()->query("INSERT INTO announcement
@@ -177,7 +177,7 @@ if ($is_editor) {
             $general_to = 'Members of course ' . $course_code;
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
-                                                   WHERE course_id = ? AND
+                                                   WHERE course_id = ?d AND
                                                          course_user.user_id = user.id", function ($person)
                     use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
                 $countEmail++;
@@ -265,7 +265,7 @@ if ($is_editor) {
 /* display announcements */
 $limit_sql = ($is_editor ? '' : ' AND visible = 1') .
         (isset($_GET['an_id']) ? ' AND id = ' . intval($_GET['an_id']) : '');
-$result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ? " . $limit_sql . " ORDER BY `order` DESC", $course_id);
+$result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d " . $limit_sql . " ORDER BY `order` DESC", $course_id);
 
 $iterator = 1;
 $bottomAnnouncement = $announcementNumber = count($result);
