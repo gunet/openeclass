@@ -471,7 +471,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
  * ************************************************************** */
 
 function check_activity($userid) {
-    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?", intval($userid));
+    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", intval($userid));
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
     } else {
@@ -965,7 +965,7 @@ function shib_cas_login($type) {
         }
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?, email = ?, status = ?, lang = 'el', 
+                                       username = ?s, email = ?s, status = ?d, lang = 'el', 
                                        registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
                 DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
         $language = $_SESSION['langswitch'] = 'el';
