@@ -16,7 +16,7 @@
 
 class Debug {
 
-    private static $level = Debug::CRITICAL;
+    private static $level = Debug::ERROR;
     private static $default_level = Debug::ERROR;
 
     const LOW = 0;

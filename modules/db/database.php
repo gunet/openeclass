@@ -191,43 +191,73 @@ final class Database {
         if ($this->isTransactional && !$this->dbh->beginTransaction())
             return $this->errorFound($callback_error, "Unable to initialize transaction", $statement, $init_time);
 
-        /* Prepare statement */
-        $stm = $this->dbh->prepare($statement);
-        if (!$stm)
-            return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
-
-        /* flatten array */
+        /* flatten parameter array */
         $flatten = array();
         $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables));
         foreach ($it as $v) {
             $flatten[] = $v;
         }
         $variables = $flatten;
+        $variable_size = count($variables);
+        $variable_types = array($variable_size);
 
-        /* Bind values - use '?' notation  */
-        $howmanyvalues = count($variables);
-        for ($i = 1; $i <= $howmanyvalues; $i++) {
-            $bound = $variables[$i - 1];
-            if (is_bool($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_BOOL))
-                    $this->errorFound($callback_error, "Unable to bind boolean parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_int($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_INT))
-                    $this->errorFound($callback_error, "Unable to bind integer parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_float($bound)) {
-                if (!$stm->bindValue($i, strval($bound), PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind float parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_string($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind string parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            } else {
-                if (!$stm->bindValue($i, $bound))
-                    $this->errorFound($callback_error, "Unable to bind generic parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
+        /* Construct actual statement */
+        $statement_parts = explode("?", $statement);
+        if ($variable_size != (count($statement_parts) - 1)) {  // Do not take into account first part
+            Database::dbg("Parameter size and counted parameters do not match", $statement, $init_time, Debug::CRITICAL);
+            die();
         }
+        // Type safe input parameters
+        $warning_parts = "";
+        for ($i = 0; $i < $variable_size; $i++) {
+            $entry = $statement_parts[$i + 1];
+            $first = substr($entry, 0, 1);
+            $value = $variables[$i];
+            if ($first === "d") {   // Decimal
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = intval($value);
+                $type = PDO::PARAM_INT;
+            } else if ($first === "b") {    // Boolean
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = ($value == true);
+                $type = PDO::PARAM_BOOL;
+            } else if ($first === "f") {    // Floating point
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = floatval($value);
+                $type = PDO::PARAM_STR;
+            } else if ($first === "s") {    // String
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $type = PDO::PARAM_STR;
+            } else {    // Auto-guess
+                $warning_parts .= "," . $i;
+                if (is_int($value)) {
+                    $type = PDO::PARAM_INT;
+                } else if (is_bool($value)) {
+                    $type = PDO::PARAM_BOOL;
+                } else {
+                    $type = PDO::PARAM_STR;
+                }
+            }
+            $variables[$i] = $value;
+            $variable_types[$i] = $type;
+        }
+        if (strlen($warning_parts) > 0) {
+            $warning_parts = substr($warning_parts, 1);
+            Database::dbg("Warning: parts [$warning_parts] of query '$statement' have undefined type.", $statement, $init_time, Debug::ERROR);
+        }
+        $statement = implode("?", $statement_parts);
+
+        /* Prepare statement */
+        $stm = $this->dbh->prepare($statement);
+        if (!$stm)
+            return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
+
+        /* Bind values - with type safety and '?' notation  */
+        for ($i = 0; $i < $variable_size; $i++) {
+            if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
+                $this->errorFound($callback_error, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, false);
+        }
+
         /* Execute statement */
         if (!$stm->execute())
             return $this->errorFound($callback_error, "Unable to execute statement", $statement, $init_time);
