@@ -331,7 +331,7 @@ final class Database {
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
-            if (!is_object($result))
+            if ($result != false && !is_object($result))
                 return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
