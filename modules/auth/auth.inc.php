@@ -965,7 +965,7 @@ function shib_cas_login($type) {
         }
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?, email = ?, status = ?, lang = 'el', 
+                                       username = ?s, email = ?s, status = ?d, lang = 'el', 
                                        registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
                 DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
         $language = $_SESSION['langswitch'] = 'el';

@@ -281,6 +281,9 @@ final class Database {
                 $statement_parts[$i + 1] = substr($entry, 1);
                 $value = floatval($value);
                 $type = PDO::PARAM_STR;
+            } else if ($first === "t") {    // Date/time
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $type = PDO::PARAM_STR;
             } else if ($first === "s") {    // String
                 $statement_parts[$i + 1] = substr($entry, 1);
                 $type = PDO::PARAM_STR;

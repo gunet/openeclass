@@ -1491,7 +1491,7 @@ function delete_course($cid) {
     db_query("DELETE FROM link WHERE course_id = $cid");
     db_query("DELETE FROM link_category WHERE course_id = $cid");
     db_query("DELETE FROM agenda WHERE course_id = $cid");
-    Database::get()->query("DELETE FROM course_review WHERE course_id = ?", $cid);
+    Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
     db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
@@ -1564,28 +1564,28 @@ function deleteUser($id) {
 
         if (mysql_num_rows($q)) {
             // delete everything
-            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
-            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
-            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
-            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
-            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
-            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?d" , $u);
             return true;
         } else {
             return false;

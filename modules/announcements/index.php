@@ -85,8 +85,8 @@ if ($is_editor) {
             if ($thisAnnouncementOrderFound) {
                 $nextAnnouncementId = $announcement->id;
                 $nextAnnouncementOrder = $announcement->order;
-                Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $nextAnnouncementOrder, $thisAnnouncementId);
-                Database::get()->query("UPDATE announcement SET `order` = ? WHERE id = ?", $thisAnnouncementOrder, $nextAnnouncementId);
+                Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $nextAnnouncementOrder, $thisAnnouncementId);
+                Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $thisAnnouncementOrder, $nextAnnouncementId);
                 break;
             }
             // find the order
@@ -102,7 +102,7 @@ if ($is_editor) {
     if (isset($_GET['mkvis'])) {
         $mkvis = intval($_GET['mkvis']);
         $vis = $_GET['vis'] ? 1 : 0;
-        Database::get()->query("UPDATE announcement SET visible = ? WHERE id = ?", $vis, $mkvis);
+        Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $vis, $mkvis);
         $aidx->store($mkvis);
     }
     /* delete */
@@ -110,7 +110,7 @@ if ($is_editor) {
         $delete = intval($_GET['delete']);
         $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ? ", $delete);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
-        Database::get()->query("DELETE FROM announcement WHERE id = ?", $delete);
+        Database::get()->query("DELETE FROM announcement WHERE id = ?d", $delete);
         $aidx->remove($delete);
         Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $delete,
             'title' => $announce->title,
@@ -137,7 +137,7 @@ if ($is_editor) {
         $send_mail = !!(isset($_POST['emailOption']) and $_POST['emailOption']);
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE announcement SET content = ?, title = ?, `date` = NOW() WHERE id = ?", $newContent, $antitle, $id);
+            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = NOW() WHERE id = ?d", $newContent, $antitle, $id);
             $log_type = LOG_MODIFY;
             $message = "<p class='success'>$langAnnModify</p>";
         } else { // add new announcement
@@ -146,9 +146,9 @@ if ($is_editor) {
             $order = $orderMax + 1;
             // insert
             $id = Database::get()->query("INSERT INTO announcement
-                                         SET content = ?,
-                                             title = ?, `date` = NOW(),
-                                             course_id = ?, `order` = ?,
+                                         SET content = ?s,
+                                             title = ?s, `date` = NOW(),
+                                             course_id = ?d, `order` = ?d,
                                              visible = 1", $newContent, $antitle, $course_id, $order)->lastInsertID;
             $log_type = LOG_INSERT;
         }

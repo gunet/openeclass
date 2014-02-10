@@ -50,9 +50,9 @@ function monthlycronjob() {
 
         // update last run time
         if ($nevermonthly) {
-            Database::get()->query("INSERT INTO cron_params (name, last_run) VALUES (?, CURRENT_TIMESTAMP)", $monthlyname);
+            Database::get()->query("INSERT INTO cron_params (name, last_run) VALUES (?s, CURRENT_TIMESTAMP)", $monthlyname);
         } else {
-            Database::get()->query("UPDATE cron_params SET last_run = CURRENT_TIMESTAMP WHERE name = ?", $monthlyname);
+            Database::get()->query("UPDATE cron_params SET last_run = CURRENT_TIMESTAMP WHERE name = ?s", $monthlyname);
         }
     }
 }
@@ -77,18 +77,18 @@ function summarizeLogins() {
 
             while ($end_date < $stop_month) {
                 $sql_1 = "SELECT count(idLog) as visits FROM loginout " .
-                         " WHERE `when` >= ? AND `when` < ? AND action = 'LOGIN'";
+                         " WHERE `when` >= ?t AND `when` < ?t AND action = 'LOGIN'";
                 $visits = Database::get()->querySingle($sql_1, $start_date, $end_date)->visits;
 
                 $sql_2 = "INSERT INTO loginout_summary SET " .
-                         " login_sum = ?, " .
-                         " start_date = ?, " .
-                         " end_date = ?";
+                         " login_sum = ?d, " .
+                         " start_date = ?t, " .
+                         " end_date = ?t";
                 Database::get()->query($sql_2, $visits, $start_date, $end_date);
 
                 $sql_3 = "DELETE FROM loginout " .
-                         " WHERE `when` >= ? AND " .
-                         " `when` < ? ";
+                         " WHERE `when` >= ?t AND " .
+                         " `when` < ?t ";
                 Database::get()->query($sql_3, $start_date, $end_date);
 
                 // next month
@@ -152,8 +152,8 @@ function summarizeMonthlyData() {
         });
         
         $mtext .= '</table>';
-        $sql = "INSERT INTO monthly_summary SET month = ?, profesNum = ?, studNum = ?,
-            visitorsNum = ?, coursNum = ?, logins = ?, details = ?";
+        $sql = "INSERT INTO monthly_summary SET month = ?s, profesNum = ?d, studNum = ?d,
+            visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
         Database::get()->query($sql, $last_month, $prof_sum, $stud_sum, $vis_sum, $cours_sum, $login_sum, $mtext);
         db_query($sql);
     }

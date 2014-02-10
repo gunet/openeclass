@@ -120,11 +120,11 @@ if (isset($_POST['submit'])) {
     // insert or update db
     $exists = ($exres = Database::get()->querySingle("SELECT 1 as `exists` FROM course_review WHERE course_id = ?", $course_id)) ? $exres->exists : false;
     if ($exists) {
-        Database::get()->query("UPDATE course_review SET is_certified = ?, level = ?, 
-            last_review = ?, last_reviewer = ? WHERE course_id = ?", $is_certified, $level, $last_review, $uid, $course_id);
+        Database::get()->query("UPDATE course_review SET is_certified = ?d, level = ?d, 
+            last_review = ?t, last_reviewer = ?d WHERE course_id = ?d", $is_certified, $level, $last_review, $uid, $course_id);
     } else {
         Database::get()->query("INSERT INTO course_review (course_id, is_certified, level, last_review, last_reviewer)
-            VALUES (?, ?, ?, ?, ?)", $course_id, $is_certified, $level, $last_review, $uid);
+            VALUES (?d, ?d, ?d, ?s, ?d)", $course_id, $is_certified, $level, $last_review, $uid);
     }
 }
 
