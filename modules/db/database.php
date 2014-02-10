@@ -275,7 +275,7 @@ final class Database {
                 $type = PDO::PARAM_INT;
             } else if ($first === "b") {    // Boolean
                 $statement_parts[$i + 1] = substr($entry, 1);
-                $value = ($value == true);
+                $value = (($value) ? true : false);
                 $type = PDO::PARAM_BOOL;
             } else if ($first === "f") {    // Floating point
                 $statement_parts[$i + 1] = substr($entry, 1);
