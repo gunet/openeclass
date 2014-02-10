@@ -25,12 +25,11 @@
 $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
+$TBL_RECORDS = 'exercise_user_record';
 
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-
-
 $require_current_course = TRUE;
 
 $require_help = TRUE;
@@ -292,11 +291,34 @@ if (!$nbrExercises) {
                                 " . nice_format(date("Y-m-d H:i", strtotime($row['start_date'])), true) . " /
                                 " . nice_format(date("Y-m-d H:i", strtotime($row['end_date'])), true) . "</td>";
             // how many attempts we have.
-            $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-                                                                      WHERE eid = '$row[id]' AND uid = '$uid'", $mysqlMainDb));
+            $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS`
+															WHERE eid = '$row[id]' AND uid = '$uid'", $mysqlMainDb));
             if ($row['time_constraint'] > 0) {
-                $tool_content .= "<td align='center'>
-                                $row[time_constraint] $langExerciseConstrainUnit</td>";
+                $tool_content .= "<td align='center'>";
+                
+                // if there is an active attempt
+                $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND record_end_date is NULL";
+               	$tmp = mysql_fetch_row(db_query($sql, $course_code));
+                if ($tmp[0] > 0) {
+                    $recordStartDate = strtotime($tmp[1]);
+                    $temp_CurrentDate = time();
+                    // if exerciseTimeConstraint has not passed yet calculate the remaining time
+                    if ($recordStartDate + ($row['time_constraint']*60) >= $temp_CurrentDate) {
+                        $_SESSION['exercise_begin_time'][$row['id']] = $recordStartDate;
+                        $timeleft = ($row['time_constraint']*60) - ($temp_CurrentDate - $recordStartDate);
+                        $passed = false;
+                    } else {
+                        $timeleft = "{$row['time_constraint']} $langExerciseConstrainUnit";
+                        $passed = true;
+                    }
+                    $tool_content .= "<span id=\"progresstime\">$timeleft</span></td>";
+                    $xId = $row['id'];
+                    if($passed){
+                        unset($timeleft);
+                    }
+                } else {
+                        $tool_content .= "{$row['time_constraint']} $langExerciseConstrainUnit</td>";
+                }
             } else {
                 $tool_content .= "<td align='center'> - </td>";
             }
@@ -307,10 +329,10 @@ if (!$nbrExercises) {
             }
             // user last exercise score
             $r = mysql_fetch_array(db_query("SELECT total_score, total_weighting
-                                        FROM exercise_user_record WHERE uid=$uid
-                                        AND eid=$row[id]
+                                        FROM `$TBL_RECORDS` WHERE uid = $uid
+                                        AND eid = $row[id]
                                         ORDER BY eurid DESC LIMIT 1", $mysqlMainDb));
-            if (empty($r['total_score'])) {
+            if (empty($r)) {
                 $tool_content .= "<td align='center'>&dash;</td>";
             } else {
                 $tool_content .= "<td align='center'>$r[total_score]/$r[total_weighting]</td>";
@@ -326,4 +348,25 @@ if (!$nbrExercises) {
     $tool_content .= "</table>";
 }
 add_units_navigation(TRUE);
+//if there is an active attempt, countdown leftime
+if(isset($timeleft)){
+    load_js('tools.js');
+    $head_content .= "<script type='text/javascript'>";
+    // If not editor, enable countdown mechanism
+    if (!$is_editor) {
+        $head_content .= "
+			$(document).ready(function(){
+				timer = $('#progresstime');
+				timer.time = timer.text();
+				timer.text(secondsToHms(timer.time--));
+			    countdown(timer, function() {
+			        alert('$langExerciseEndTime');
+			        url = \"exercise_redirect.php?course=$course_code&exerciseId=$xId&error=langExerciseExpiredTime\";
+			        $(location).attr('href',url);
+			    });
+			});";
+    }
+
+    $head_content .="$(exercise_enter_handler);</script>";
+}
 draw($tool_content, 2, null, $head_content);

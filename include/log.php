@@ -737,7 +737,7 @@ class Log {
     private function course_user_action_details($details) {
 
         global $langUnCourse, $langOfUser, $langToUser, $langNewUser,
-        $langGiveRightAdmin, $langGiveRightΕditor, $langGiveRightTutor,
+        $langGiveRightAdmin, $langGiveRightEditor, $langGiveRightTutor,
         $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
 
         $details = unserialize($details);

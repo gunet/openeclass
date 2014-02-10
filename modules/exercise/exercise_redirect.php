@@ -41,6 +41,7 @@ $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
+$TBL_RECORDS = 'exercise_user_record';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
@@ -51,18 +52,43 @@ if (isset($_GET['exerciseId'])) {
 if (isset($_SESSION['objExercise'][$exerciseId])) {
     $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
+
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
+    unset($_SESSION['exercise_begin_time']);
+    unset($_SESSION['exercise_end_time']);
+}
+
+$tool_content_extra = "<br/>
+	<table width='99%' class='Question'>
+		<thead>
+			<td class='alert1'>".${$error}."</td>
+		</tr><tr>
+			<td><br/><br/><br/>
+				<div align='center'><a href='index.php?course=$course_code'>$langBack</a></div>
+			</td>
+	</tr></thead></table>"; 
+
 // if the object is not in the session
 if (!isset($_SESSION['objExercise'][$exerciseId])) {
     // construction of Exercise
     $objExercise = new Exercise();
     // if the specified exercise doesn't exist or is disabled
     if (@(!$objExercise->read($exerciseId) && (!$is_editor))) {
-        $tool_content .= $langExerciseNotFound;
-        draw($tool_content, 2);
+        $error = 'langExerciseNotFound';
+		draw($tool_content_extra, 2);
         exit();
     }
     // saves the object into the session
     $_SESSION['objExercise'][$exerciseId] = $objExercise;
+}
+
+// if there is an active attempt and it's time passed. Complete the record to finish attempt
+$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
+$tmp = mysql_fetch_row(db_query($sql, $course_code));
+if ($tmp[0] > 0) {
+	$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid'";
+	db_query($sql, $course_code);
 }
 
 $exerciseTitle = $objExercise->selectTitle();
@@ -79,13 +105,7 @@ $tool_content .= "<table class='Exercise' width='99%'>
 </tr>
 </thead></table>";
 
-$tool_content .= "<br/><table width='99%' class='Question'>
-<thead><tr>
-<td class='alert1'>$langExerciseExpiredTime</td>
-</tr>
-<tr>
-<td><br/><br/><br/><div align='center'><a href='index.php?course=$course_code'>$langBack</a></div></td>
-</tr>
-</thead></table>";
-
+$tool_content .= $tool_content_extra;
 draw($tool_content, 2);
+
+
