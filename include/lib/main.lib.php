@@ -264,7 +264,7 @@ function load_js($file, $init = '')
         global $head_content, $urlAppend, $theme;
 
         if ($file == 'jquery') {
-		$file = 'jquery-1.8.3.min.js';
+		$file = 'jquery-1.10.2.min.js';
         } elseif ($file == 'jquery-ui') {
                 $file = 'jquery-ui-1.8.23.custom.min.js';
         } elseif ($file == 'jquery-ui-new') {
@@ -287,6 +287,9 @@ function load_js($file, $init = '')
             $file = 'colorbox/jquery.colorbox-min.js';
         }
         $head_content .= "<script type='text/javascript' src='$urlAppend/js/$file'></script>\n";
+        if ($file == 'jquery-1.10.2.min.js') {
+            $head_content .= "<script type='text/javascript' src='$urlAppend/js/jquery-migrate-1.2.1.min.js'></script>\n";
+        }
 
         if (strlen($init) > 0)
             $head_content .= $init;
