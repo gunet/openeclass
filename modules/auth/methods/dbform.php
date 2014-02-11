@@ -34,6 +34,7 @@ if (!empty($dbdata)) {
         $dbtable = str_replace('dbtable=', '', $edb[4]);
         $dbfielduser = str_replace('dbfielduser=', '', $edb[5]);
         $dbfieldpass = str_replace('dbfieldpass=', '', $edb[6]);
+        $dbpassencr = str_replace('dbpassencr=', '', $edb[7]);
     } else {
         $dbhost = '';
         $dbname = '';
@@ -42,6 +43,7 @@ if (!empty($dbdata)) {
         $dbtable = '';
         $dbfielduser = '';
         $dbfieldpass = '';
+        $dbpassencr = '';
     }
 } else {
     $dbsettings = $dbdata['auth_settings'];
@@ -79,7 +81,21 @@ $tool_content .= "
     <td><input class='FormData_InputText' name='dbfieldpass' type='text' size='30' value='" . q($dbfieldpass) . "' /></td>
     </tr>
     <tr>
+      <th class='left'>$langdbpassencr:</th>
+    	<td><select name='dbpassencr'>
+    		<option value='none'>Plain Text</option>
+			<option value='md5'>MD5</option>
+			<option value='ehasher'>Eclass Hasher</option>
+    	</select></td>
+    </tr>
+    <tr>
       <th class='left'>$langInstructionsAuth:</th>
       <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
     </tr>
 ";
+
+if($dbpassencr != ""){
+    $search = "$dbpassencr'";
+    $replace = "$dbpassencr' Selected";
+    $tool_content = str_replace($search, $replace, $tool_content);
+}
