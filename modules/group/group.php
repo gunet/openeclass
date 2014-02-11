@@ -149,7 +149,7 @@ if ($is_editor) {
                                  multiple_registration = $multi_reg,
                                  private_forum = $private_forum,
                                  forum = $has_forum,
-                                 documents = $documents WHERE course_id = $cours_id");
+                                 documents = $documents WHERE course_id = $cours_id");                
                 $message = $langGroupPropertiesModified;
 
         } elseif (isset($_REQUEST['delete_all'])) {

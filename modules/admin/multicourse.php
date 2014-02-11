@@ -62,6 +62,15 @@ if (isset($_POST['submit'])) {
                                                              tutor = 1,
                                                              reg_date = NOW()");
                                 }
+                                db_query("INSERT INTO `$mysqlMainDb`.group_properties SET
+                                            course_id = $cid,
+                                            self_registration = 1,
+                                            multiple_registration = 0,
+                                            forum = 1,
+                                            private_forum = 0,
+                                            documents = 1,
+                                            wiki = 0,
+                                            agenda = 0");
                         }
                         $class = $prof_not_found? 'alert1': 'success';
                         $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: '. q($langBetaCMSLessonCreatedOK);
