@@ -216,7 +216,7 @@ if (!$nbrExercises) {
 				<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=${row['id']}'>" . q($row['title']) . "</a>$descr</td>";
             $eid = $row['id'];
             $NumOfResults = mysql_fetch_array(db_query("SELECT COUNT(*) FROM exercise_user_record
-                                                WHERE eid = '$eid'", $mysqlMainDb));
+                                                WHERE eid = '$eid'"));
 
             if ($NumOfResults[0]) {
                 $tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId=" . $row['id'] . "'>" .
@@ -292,13 +292,13 @@ if (!$nbrExercises) {
                                 " . nice_format(date("Y-m-d H:i", strtotime($row['end_date'])), true) . "</td>";
             // how many attempts we have.
             $currentAttempt = mysql_fetch_array(db_query("SELECT COUNT(*) FROM `$TBL_RECORDS`
-															WHERE eid = '$row[id]' AND uid = '$uid'", $mysqlMainDb));
+															WHERE eid = '$row[id]' AND uid = '$uid'"));
             if ($row['time_constraint'] > 0) {
                 $tool_content .= "<td align='center'>";
                 
                 // if there is an active attempt
                 $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND record_end_date is NULL";
-               	$tmp = mysql_fetch_row(db_query($sql, $course_code));
+               	$tmp = mysql_fetch_row(db_query($sql));
                 if ($tmp[0] > 0) {
                     $recordStartDate = strtotime($tmp[1]);
                     $temp_CurrentDate = time();
@@ -331,7 +331,7 @@ if (!$nbrExercises) {
             $r = mysql_fetch_array(db_query("SELECT total_score, total_weighting
                                         FROM `$TBL_RECORDS` WHERE uid = $uid
                                         AND eid = $row[id]
-                                        ORDER BY eurid DESC LIMIT 1", $mysqlMainDb));
+                                        ORDER BY eurid DESC LIMIT 1"));
             if (empty($r)) {
                 $tool_content .= "<td align='center'>&dash;</td>";
             } else {

@@ -85,10 +85,10 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 
 // if there is an active attempt and it's time passed. Complete the record to finish attempt
 $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
-$tmp = mysql_fetch_row(db_query($sql, $course_code));
+$tmp = mysql_fetch_row(db_query($sql));
 if ($tmp[0] > 0) {
-	$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid'";
-	db_query($sql, $course_code);
+	$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."' WHERE eid = '$exerciseId' AND uid = '$uid' AND record_end_date is NULL";
+	db_query($sql);
 }
 
 $exerciseTitle = $objExercise->selectTitle();

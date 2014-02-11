@@ -189,7 +189,7 @@ if (!$is_editor) {
 	// 		and exerciseTimeConstrain hasn't yet passed,
 	// either start a new attempt and count now() as begin time.
 	$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
-	$tmp = mysql_fetch_row(db_query($sql, $course_code));
+	$tmp = mysql_fetch_row(db_query($sql));
 	if ($tmp[0] > 0) {
 		$recordStartDate = strtotime($tmp[1]);
 		// if exerciseTimeConstrain has not passed yet calculate the remaining time
@@ -199,7 +199,7 @@ if (!$is_editor) {
 		}
 		// what # of attempt is this?
 		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
-		$tmp = mysql_fetch_row(db_query($sql, $course_code));
+		$tmp = mysql_fetch_row(db_query($sql));
 		$attempt = $tmp[0];
 	}
 	if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
@@ -207,7 +207,7 @@ if (!$is_editor) {
 		// save begin time in db
 		$start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
 		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
-		$tmp = mysql_fetch_row(db_query($sql, $course_code));
+		$tmp = mysql_fetch_row(db_query($sql));
 		$attempt = $tmp[0] + 1;
 		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
 		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
@@ -234,7 +234,7 @@ if (!$is_editor) {
     if ($error) {
     	unset($_SESSION['exercise_begin_time']);
     	unset($_SESSION['exercise_end_time']);
-    	header('Location: exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId.'&error='.$error);
+    	header('Location: exercise_redirect.php?course='.$course_code.'&exerciseId='.$exerciseId.'&error='.$error);
     	exit();
     }
 }
