@@ -26,12 +26,12 @@
 include '../../include/init.php';
 
 if (isset($_GET['c'])) {
-	$code = $_GET['c'];
-	$cours_id = course_code_to_id(escapeSimple($code));
-        $currentCourseID = escapeSimple($code); 
+    $code = $_GET['c'];
+    $cours_id = course_code_to_id(escapeSimple($code));
+    $currentCourseID = escapeSimple($code); 
 } else {
-	$code = '';
-	$cours_id = false;
+    $code = '';
+    $cours_id = false;
 }
 if ($cours_id === false) {
 	header("HTTP/1.0 404 Not Found");
@@ -85,7 +85,7 @@ $sql = db_query("SELECT id, title, contenu, DATE_FORMAT(temps,'%a, %d %b %Y %T +
 while ($r = mysql_fetch_array($sql)) {
 	echo "<item>";
 	echo "<title>".htmlspecialchars($r['title'], ENT_NOQUOTES)."</title>";
-	echo "<link>".$urlServer."modules/announcements/announcements.php?an_id=".$r['id']."&amp;c=".$code."</link>";
+	echo "<link>".$urlServer."modules/announcements/announcements.php?an_id=".$r['id']."&amp;course=".$code."</link>";
 	echo "<description>".htmlspecialchars($r['contenu'], ENT_NOQUOTES)."</description>";	
 	echo "<pubDate>".$r['dateformat']."</pubDate>";
 	echo "<guid isPermaLink='false'>".$r['dateformat'].$r['id']."</guid>";
