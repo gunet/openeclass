@@ -47,10 +47,10 @@ Class Blog {
     public function blogPostsNumber() {
         $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE ';
         if ($this->course_id != 0) {//course blog
-            $sql .= '`course_id` = ?';
+            $sql .= '`course_id` = ?d';
             $param = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ?';
+            $sql .= '`course_id` = 0 AND `user_id` = ?d';
             $param = $this->user_id;
         }
         $numPosts = Database::get()->querySingle($sql, $param)->c;
@@ -67,10 +67,10 @@ Class Blog {
         $offset = $page*$postsPerPage;
         $sql = 'SELECT * FROM `blog_post` WHERE ';
         if ($this->course_id != 0) {//course blog
-            $sql .= '`course_id` = ? ORDER BY `time` DESC LIMIT ?,?';
+            $sql .= '`course_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
             $param = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ? ORDER BY `time` DESC LIMIT ?,?';
+            $sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
             $param = $this->user_id;
         }
         $result = Database::get()->queryArray($sql, $param, $offset, $postsPerPage);
@@ -89,10 +89,10 @@ Class Blog {
     private function getPopularBlogPostsDB($num) {
         $sql = 'SELECT * FROM `blog_post` WHERE ';
         if ($this->course_id != 0) {//course blog
-        	$sql .= '`course_id` = ? ORDER BY `views` DESC LIMIT ?';
+        	$sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
         	$param = $this->course_id;
         } else {//user blog
-        	$sql .= '`course_id` = 0 AND `user_id` = ? ORDER BY `views` DESC LIMIT ?';
+        	$sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
         	$param = $this->user_id;
         }
         $result = Database::get()->queryArray($sql, $param, $num);
@@ -162,7 +162,7 @@ Class Blog {
         $out = '';
         
         if ($this->blogPostsNumber()>0) {
-            $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ? ORDER BY `time` DESC";
+            $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
             $result = Database::get()->queryArray($sql, $course_id);
             
             $tree = array();
@@ -237,7 +237,7 @@ Class Blog {
             return true;
         } else {
             if ($studConfigVal) {//students allowed to create
-                $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ? AND `user_id` = ?";
+                $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
                 $result = Database::get()->querySingle($sql, $this->course_id, $uid);
                 if ($result->c > 0) {//user is course member
                 	return true;

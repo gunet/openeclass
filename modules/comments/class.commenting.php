@@ -42,7 +42,7 @@ Class Commenting {
      * @return int
      */
     public function getCommentsNum() {
-        $sql = "SELECT COUNT(`id`) as c FROM `comments` WHERE `rtype` = ? AND `rid` = ?";
+        $sql = "SELECT COUNT(`id`) as c FROM `comments` WHERE `rtype` = ?s AND `rid` = ?d";
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid);
         return $res->c;
     }
@@ -53,8 +53,8 @@ Class Commenting {
      */
     public function getCommentsDB() {
     	$sql = 'SELECT * FROM `comments` WHERE '
-    	      .'`rtype` = ? AND '
-    	      .'`rid` = ? '
+    	      .'`rtype` = ?s AND '
+    	      .'`rid` = ?d '
     	      .'ORDER BY `time` ASC';
     	$result = Database::get()->queryArray($sql, $this->rtype, $this->rid);
     	$ret = array();

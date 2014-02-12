@@ -37,7 +37,7 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function loadFromDB($postId) {
-        $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?';
+        $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d';
         $result = Database::get()->querySingle($sql, $postId);
         if (is_object($result)) {
             $this->authorId = $result->user_id;
@@ -85,7 +85,7 @@ Class BlogPost {
      */
     public function create($title, $content, $authorId, $course_id) {
         $sql = 'INSERT INTO `blog_post` (`title`, `content`, `user_id`, `course_id`, `time`, `views`) '
-                .'VALUES(?,?,?,?,NOW(),0)';
+                .'VALUES(?s,?s,?d,?d,NOW(),0)';
         $id = Database::get()->query($sql, $title, $content, $authorId, $course_id)->lastInsertID;
         //load the blog post after creation
         if ($this->loadFromDB($id)) {
@@ -100,7 +100,7 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function delete() {
-        $sql = 'DELETE FROM `blog_post` WHERE `id` = ?';
+        $sql = 'DELETE FROM `blog_post` WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
             return true;
@@ -116,7 +116,7 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function edit($title, $content) {
-        $sql = 'UPDATE `blog_post` SET `title` = ?, `content` = ? WHERE `id` = ?';
+        $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $title, $content, $this->id)->affectedRows;
         if ($numrows == 1) {
             $this->title = $title;
@@ -132,7 +132,7 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function incViews() {
-        $sql = 'UPDATE `blog_post` SET `views` = `views` + 1 WHERE `id` = ?';
+        $sql = 'UPDATE `blog_post` SET `views` = `views` + 1 WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
         	return true;

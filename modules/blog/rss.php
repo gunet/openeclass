@@ -53,9 +53,9 @@ if (!visible_module(MODULE_ID_BLOG)) {
     exit;
 }
 
-$title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?", $course_id)->title, ENT_NOQUOTES);
+$title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $course_id)->title, ENT_NOQUOTES);
 $lastbuilddateobj = Database::get()->querySingle("SELECT DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
-                FROM blog_post WHERE course_id = ?
+                FROM blog_post WHERE course_id = ?d
                 ORDER BY `time` DESC", $course_id);
 if (is_object($lastbuilddateobj)) {
     $lastbuilddate = $lastbuilddateobj->dateformat;
