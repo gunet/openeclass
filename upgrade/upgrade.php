@@ -1124,7 +1124,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `eid` INT(11) NOT NULL DEFAULT '0',
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                             `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `record_end_date` DATETIME DEFAULT NULL,
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0' )

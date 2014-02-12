@@ -137,7 +137,7 @@ class Hierarchy {
             db_query("CALL update_node($id, " . quote($name) . ", $nodelft, $lft, $rgt, $parentlft, " . quote($code) . ", $allow_course, $allow_user, $order_priority)");
         } else {
             $query = "UPDATE " . $this->dbtable . " SET name = " . quote($name) . ",  lft = $lft, rgt = $rgt,
-                    code = " . quote($code) . ", allow_course = $allow_course, allow_user = $allow_user
+                    code = " . quote($code) . ", allow_course = $allow_course, allow_user = $allow_user, 
                     order_priority = $order_priority WHERE id = $id";
             db_query($query);
 

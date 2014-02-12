@@ -307,7 +307,7 @@ while ($myrow = mysql_fetch_array($result)) {
     // editor right
     if ($myrow['editor'] == '0') {
         $class = 'add_user';
-        $control = icon('assistant_add', $langGiveRightΕditor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[id]$extra_link");
+        $control = icon('assistant_add', $langGiveRightEditor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow[id]$extra_link");
     } else {
         $class = 'add_teacherLabel';
         $control = icon('assistant_remove', $langRemoveRightEditor, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow[id]$extra_link");

@@ -348,6 +348,7 @@ if (!isset($_POST['create_course'])) {
                         group_quota = $group_quota*1024*1024,
                         dropbox_quota = $dropbox_quota*1024*1024,
                         password = " . quote($password) . ",
+                        keywords = '',
                         created = NOW()");
     $new_course_id = mysql_insert_id();        
     

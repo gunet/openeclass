@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -66,12 +66,21 @@ if (isset($_POST['submit'])) {
             if ($cid) {
                 if ($prof_uid) {
                     db_query("INSERT INTO course_user
-                                                         SET course_id = $cid,
-                                                             user_id = $prof_uid,
-                                                             status = 1,
-                                                             tutor = 1,
-                                                             reg_date = NOW()");
+                                SET course_id = $cid,
+                                    user_id = $prof_uid,
+                                    status = 1,
+                                    tutor = 1,
+                                    reg_date = NOW()");
                 }
+                db_query("INSERT INTO group_properties SET
+                            course_id = $cid,
+                            self_registration = 1,
+                            multiple_registration = 0,
+                            forum = 1,
+                            private_forum = 0,
+                            documents = 1,
+                            wiki = 0,
+                            agenda = 0");
                 create_modules($cid);
             }
             if ($code) {

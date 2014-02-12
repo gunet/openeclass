@@ -1453,6 +1453,10 @@ td.subsection {
     border-bottom: none;
 }
 
+#timedisplay {
+    padding-left: 1em;
+    float: right;
+}
 .blog_posts {
     float: left; 
     width: 75%; 
