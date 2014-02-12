@@ -315,7 +315,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         // Check for empty fields
 
         $names = array();
-        foreach ($active_ui_languages as $key => $langcode) {
+        foreach ($session->active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
             if (!empty($n)) {
                 $names[$langcode] = $n;
