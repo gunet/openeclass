@@ -78,7 +78,7 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        	} else if (action == 'editSave') {
 	        		response = JSON.parse(xmlHttpReq.responseText);
 	        		if (response[0] == 'OK') {
-	        			document.getElementById('comment_content-'+cid).innerHTML = response[2];
+	        			document.getElementById('comment_content-'+cid).innerHTML = response[1]+response[2];
 	        		} else if (response[0] == 'ERROR') {
 	        			document.getElementById('comment-'+cid).innerHTML += response[1];
 	        		}
