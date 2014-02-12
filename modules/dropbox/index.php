@@ -100,7 +100,7 @@ if(isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {
 	/*
 	*  if current user is a teacher then show all users of current course
 	*/
-	if ($dropbox_cnf["allowStudentToStudent"])
+	if ($is_editor or $dropbox_cnf["allowStudentToStudent"])
 	{
 		// select all users except yourself
 		$sql = "SELECT DISTINCT u.user_id , CONCAT(u.nom,' ', u.prenom) AS name
