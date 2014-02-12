@@ -67,8 +67,8 @@ if (isset($_GET['action'])) {
 }
 
 // handle current lang missing from active langs
-if (!in_array($language, $active_ui_languages))
-    array_unshift($active_ui_languages, $language);
+if (!in_array($language, $session->active_ui_languages))
+    array_unshift($session->active_ui_languages, $language);
 
 // link to add a new node
 $tool_content .= "
@@ -365,7 +365,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $is_serialized = true;
 
         $i = 0;
-        foreach ($active_ui_languages as $key => $langcode) {
+        foreach ($session->active_ui_languages as $key => $langcode) {
             $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
             if (!$is_serialized && $key == 0)
                 $n = $myrow['name'];
