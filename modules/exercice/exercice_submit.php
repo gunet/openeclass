@@ -116,7 +116,7 @@ if (isset($_POST['formSent'])) {
 		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
 		$_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstrainSecs;
 		if (!$is_editor) {
-			if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {
+			if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {                            
 				unset($_SESSION['exercise_begin_time']);
 				unset($_SESSION['exercise_end_time']);
 				$error = 'langExerciseExpiredTime';
@@ -276,7 +276,7 @@ $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
     <th colspan='2'>";
-    if (!$is_editor and isset($timeleft)) {
+    if (!$is_editor and isset($timeleft) and $timeleft > 0) {
     	$tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
     }
   $tool_content .= q($exerciseTitle). "</th></tr>

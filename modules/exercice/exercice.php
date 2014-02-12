@@ -361,7 +361,7 @@ if(!$nbrExercises) {
 }
 add_units_navigation(TRUE);
 //if there is an active attempt, countdown leftime
-if(isset($timeleft)){
+if(isset($timeleft) and $timeleft > 0) {
 	load_js('tools.js');
 	$head_content .= "<script type='text/javascript'>";
 	// If not editor, enable countdown mechanism
