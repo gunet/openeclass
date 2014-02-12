@@ -36,7 +36,7 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function loadFromDB($commentId) {
-    	$sql = 'SELECT * FROM `comment` WHERE `id` = ?';
+    	$sql = 'SELECT * FROM `comments` WHERE `id` = ?';
     	$result = Database::get()->querySingle($sql, $commentId);
     	if (is_object($result)) {
     		$this->authorId = $result->user_id;
@@ -52,6 +52,27 @@ Class Comment {
     }
     
     /**
+     * Load multiple comments from a PDO array
+     * @param arr the array with the data retrieved from DB
+     * @return array with loaded comments
+     */
+    public static function loadFromPDOArr($arr) {
+    	$ret = array();
+    	$i = 0;
+    	foreach ($arr as $a) {
+    		$ret[$i] = new Comment();
+    		$ret[$i]->id = $a->id;
+    		$ret[$i]->content = $a->content;
+    		$ret[$i]->authorId = $a->user_id;
+    		$ret[$i]->rid = $a->rid;
+    		$ret[$i]->rtype = $a->rtype;
+    		$ret[$i]->creationTime = $a->time;
+    		$i++;
+    	}
+    	return $ret;
+    }
+    
+    /**
      * Save a comment in database
      * @param content the blog post content
      * @param authorId the user id of the author
@@ -60,8 +81,8 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function create($content, $authorId, $rtype, $rid) {
-        $sql = 'INSERT INTO `comment` (`content`, `user_id`, `rtype`, `rid`) '
-                .'VALUES(?,?,?,?,?)';
+        $sql = 'INSERT INTO `comments` (`content`, `user_id`, `rtype`, `rid`) '
+                .'VALUES(?,?,?,?)';
         $id = Database::get()->query($sql, $content, $authorId, $rtype, $rid)->lastInsertID;
         //load the comment after creation
         if ($this->loadFromDB($id)) {
@@ -76,7 +97,7 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function delete() {
-        $sql = 'DELETE FROM `comment` WHERE `id` = ?';
+        $sql = 'DELETE FROM `comments` WHERE `id` = ?';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
         	return true;
@@ -93,7 +114,7 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function edit($content) {
-        $sql = 'UPDATE `comment` SET `content` = ? WHERE `id` = ?';
+        $sql = 'UPDATE `comments` SET `content` = ? WHERE `id` = ?';
         $numrows = Database::get()->query($sql, $content, $this->id)->affectedRows;
         if ($numrows == 1) {
             $this->content = $content;

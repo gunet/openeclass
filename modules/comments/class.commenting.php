@@ -46,4 +46,74 @@ Class Commenting {
         $res = Database::get()->querySingle($sql, $this->rtype, $this->rid);
         return $res->c;
     }
+    
+    /**
+     * Get comments from DB
+     * @return array with Comment objects
+     */
+    public function getCommentsDB() {
+    	$sql = 'SELECT * FROM `comments` WHERE '
+    	      .'`rtype` = ? AND '
+    	      .'`rid` = ? '
+    	      .'ORDER BY `time` ASC';
+    	$result = Database::get()->queryArray($sql, $this->rtype, $this->rid);
+    	$ret = array();
+    	if (is_array($result)) {
+    		$ret = Comment::loadFromPDOArr($result);
+    	}
+    	return $ret;
+    }
+    
+    /**
+     * Injects all commenting module code in other subsystems
+     * @return string
+     */
+    public function put() {
+        global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
+        $langCommentsDelConfirm, $langCommentsSaveConfirm;
+        
+        $commentsNum = $this->getCommentsNum();
+        
+        //the array is declared in commenting.js
+        $out = '<script type="text/javascript">showCommentArea['.$this->rid.'] = false;</script>';
+        
+        $out .= '<div class="commenting">';
+        $out .= '<a href="javascript:void(0)" onclick="showComments('.$this->rid.')">'.$langComments.' (<span id="commentsNum-'.$this->rid.'">'.$commentsNum.'</span>)</a><br/>';
+        $out .= '<div class="commentArea" id="commentArea-'.$this->rid.'">';
+        $out .= '<div id="comments-'.$this->rid.'">';
+        
+        if ($commentsNum != 0) {
+            //retrieve comments
+            $comments = $this->getCommentsDB();
+            foreach ($comments as $comment) {
+                $out .= '<div class="comment" id="comment-'.$comment->getId().'">';
+                $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
+                $out .= '<div id="comment_content-'.$comment->getId().'">'.standard_text_escape($comment->getContent()).'</div>';
+                $out .= '<div class="comment_actions">';
+                $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')"><img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
+                $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                $out .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
+                $out .='</div>';
+                $out .= '</div>';
+            }
+        }
+        $out .= "</div>";
+        $out .= '<form action="" onsubmit="xmlhttpPost(\'../comments/comments.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+        $out .= '<textarea name="textarea" id="textarea-'.$this->rid.'" cols="40" rows="5"></textarea><br/>';
+        $out .= '<input name="send_button" type="submit" value="'.$langSubmit.'" />';
+        $out .= '</form>';
+        
+        $out .= '</div>';
+        $out .= '</div>';
+        
+        return $out;
+    }
+}
+
+/**
+ * Add necessary javascript to head section of an html document
+ */
+function commenting_add_js() {
+    global $head_content;
+    $head_content .= '<script src="../comments/commenting.js" type="text/javascript"></script>';
 }

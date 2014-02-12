@@ -21,6 +21,8 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Blog';
+require_once '../comments/class.comment.php';
+require_once '../comments/class.commenting.php';
 require_once '../../include/baseTheme.php';
 require_once 'class.blog.php';
 require_once 'class.blogpost.php';
@@ -30,6 +32,8 @@ load_js('tools.js');
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
+
+commenting_add_js(); //add js files needed for comments
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost");
@@ -200,16 +204,19 @@ if ($action == "showPost") {
         if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
             $tool_content .= "
             <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-            <img src='$themeimg/edit.png' title='".$langModify."'/></a>
+            <img src='$themeimg/edit.png' alt='".$langModify."' title='".$langModify."'/></a>
             <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-            <img src='$themeimg/delete.png' title='".$langDelete."' /></a>";
+            <img src='$themeimg/delete.png' alt='".$langDelete."' title='".$langDelete."' /></a>";
         }
         
         $tool_content .= "</h2></div>";
         
-        $tool_content .= "<div class='blog_post_content'><p>".standard_text_escape($post->getContent())."</p></div>";
+        $tool_content .= "<div class='blog_post_content'>".standard_text_escape($post->getContent())."</div>";
         $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
         $tool_content .= "</div>";
+        
+        $comm = new Commenting('blogpost', $post->getId());
+        $tool_content .= $comm->put();
     } else {
         $tool_content .= "<p class='alert1'>$langBlogPostNotFound</p>";
     }
@@ -248,16 +255,19 @@ if ($action == "showBlog") {
             if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 $tool_content .= "
                 <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-                <img src='$themeimg/edit.png' title='".$langModify."'/></a>
+                <img src='$themeimg/edit.png' alt='".$langModify."' title='".$langModify."'/></a>
                 <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-                <img src='$themeimg/delete.png' title='".$langDelete."' /></a>";
+                <img src='$themeimg/delete.png' alt='".$langDelete."' title='".$langDelete."' /></a>";
             }
             
             $tool_content .= "</h2></div>";
             
-            $tool_content .= "<div class='blog_post_content'><p>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</p></div>";
+            $tool_content .= "<div class='blog_post_content'>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</div>";
             $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
             $tool_content .= "</div>";
+            
+            $comm = new Commenting('blogpost', $post->getId());
+            $tool_content .= $comm->put();
         }
         
         

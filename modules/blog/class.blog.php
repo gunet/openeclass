@@ -138,13 +138,15 @@ Class Blog {
          
         if($page > 0)
         	$newer = TRUE;
-        
-        $out = "<table id='navcontainer' width='100%'><tr>";
-        if(isset($newer) && $newer)
-        	$out .= "<td class='left'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts."</a>&nbsp;</td>";
-        if(isset($older) && $older)
-        	$out .= "<td class='right'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page+1)."'>".$langBlogOlderPosts."</a>&nbsp;</td>";
-        $out .= "</tr></table>";
+        $out = '';
+        if ((isset($newer) && $newer) || (isset($older) && $older)) {
+            $out = "<table id='navcontainer' width='100%'><tr>";
+            if(isset($newer) && $newer)
+            	$out .= "<td class='left'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts."</a>&nbsp;</td>";
+            if(isset($older) && $older)
+            	$out .= "<td class='right'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page+1)."'>".$langBlogOlderPosts."</a>&nbsp;</td>";
+            $out .= "</tr></table>";
+        }
         
         return $out;
     }
@@ -185,20 +187,20 @@ Class Blog {
             	    }
                     $m = $langMonthNames['long'][$month-1];
                     if ($month == $tree_month && $year == $tree_year) {
-                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"_".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
-                        $out_m .= "<ul class='blog_tree_m_cur' id=\"_".$month."y".$year."\">".$out_p."</ul></li>";
+                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"m".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
+                        $out_m .= "<ul class='blog_tree_m_cur' id=\"m".$month."y".$year."\">".$out_p."</ul></li>";
                     } else {
-                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"_".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
-                        $out_m .= "<ul class='blog_tree_m' id=\"_".$month."y".$year."\">".$out_p."</ul></li>";
+                        $out_m .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"m".$month."y".$year."\")'>".$m." (".$count_id.")</a>";
+                        $out_m .= "<ul class='blog_tree_m' id=\"m".$month."y".$year."\">".$out_p."</ul></li>";
                     }
                 }
                 if ($year == $tree_year){
-                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(".$year.")'>".$year." (".$count_month.")</a>";
-                	$out .= "<ul class='blog_tree_y_cur' id=\"".$year."\">".$out_m."</ul></li>";
+                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"y".$year."\")'>".$year." (".$count_month.")</a>";
+                	$out .= "<ul class='blog_tree_y_cur' id=\"y".$year."\">".$out_m."</ul></li>";
                 }
                 else{
-                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(".$year.")'>".$year." (".$count_month.")</a>";
-                	$out .= "<ul class='blog_tree_y' id=\"".$year."\">".$out_m."</ul></li>";
+                	$out .= "<li><a href='javascript:void(0)' onclick='toggleMenu(\"y".$year."\")'>".$year." (".$count_month.")</a>";
+                	$out .= "<ul class='blog_tree_y' id=\"y".$year."\">".$out_m."</ul></li>";
                 }
             }
             $out .= "</ul></div>";
