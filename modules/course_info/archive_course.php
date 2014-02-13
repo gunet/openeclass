@@ -120,7 +120,9 @@ $archive_conditions = array(
     'exercise_with_questions' => "question_id IN (SELECT id FROM exercise_question
                                                              WHERE course_id = $course_id) OR
                                       exercise_id IN (SELECT id FROM exercise
-                                                             WHERE course_id = $course_id)");
+                                                             WHERE course_id = $course_id)",
+    'blog_post' => "id IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
+    'comments' => "rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)");
 
 foreach ($archive_conditions as $table => $condition) {
     backup_table($archivedir, $table, $condition);

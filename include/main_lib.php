@@ -1496,6 +1496,9 @@ function delete_course($cid) {
     db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
+    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
+                            WHERE `comments`.`rtype` = ?s AND `course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $sql = db_query("SELECT user_id FROM course_user WHERE course_id = $cid AND status = ".USER_GUEST);
     if (mysql_affected_rows() > 0) {        
