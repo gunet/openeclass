@@ -295,6 +295,7 @@ else {
 	    <option value='en' $enSel>$langEnglish</option>
 	  </select></td>
 	</tr>";
+    $active_ui_languages = explode(' ', get_config('active_ui_languages'));
     $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
     $sel = array();
     foreach ($language_codes as $langcode => $langname) {
