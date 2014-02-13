@@ -257,13 +257,15 @@ final class Database {
             $flatten[] = $v;
         }
         $variables = $flatten;
-        $variable_size = count($variables);
-        $variable_types = array($variable_size);
 
         /* Construct actual statement */
         $statement_parts = explode("?", $statement);
-        if ($variable_size != (count($statement_parts) - 1)) {  // Do not take into account first part
-            Database::dbg("Parameter size and counted parameters do not match", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
+        $variable_size = count($statement_parts) - 1;   // Do not take into account first part
+        $variable_types = array($variable_size);
+        if ($variable_size < count($variables)) {
+            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::INFO);
+        } else if ($variable_size > count($variables)) {
+            Database::dbg("Provided variables are <b>less</b> than the required statement fields", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
             die();
         }
         // Type safe input parameters
