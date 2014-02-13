@@ -2508,18 +2508,15 @@ function check_username_sensitivity($posted, $dbuser) {
 function getOnlineUsers() {
 
         $count = 0;
-        $me = getmyuid();
         if ($directory_handle = @opendir(session_save_path())) {
                 while (false !== ($file = readdir($directory_handle))) {
-					if ($file != '.' and $file != '..') {
-                        if (strpos($file, "sess_") === 0){
-							if($me == fileowner(session_save_path() . '/' . $file)){
-								if(time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60){
-									$count++;
-								}
-							}
-						}
-                    }
+			if ($file != '.' and $file != '..') {
+		                if (strpos($file, "sess_") === 0) {
+					if(time() - fileatime(session_save_path() . '/' . $file) < MAX_IDLE_TIME * 60){
+						$count++;
+					}
+				}
+                    	}
                 }
         }
         @closedir($directory_handle);
