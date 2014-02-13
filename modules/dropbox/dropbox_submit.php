@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -59,6 +59,7 @@ if (isset($_POST["submitWork"])) {
     if (!$error) {
         if ($thisisJustMessage) {
             $dropbox_filename = '';
+            $real_dropbox_filename = '';
             $dropbox_filesize = 0;
             $newWorkRecipients = $_POST["recipients"];
             if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
@@ -66,7 +67,7 @@ if (isset($_POST["submitWork"])) {
             } else {
                 $dropbox_title = $langMessage;
             }
-            $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);            
+            $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);            
         } else {
             $cwd = getcwd();
             if (is_dir($dropbox_dir)) {
@@ -92,6 +93,7 @@ if (isset($_POST["submitWork"])) {
                 $dropbox_title = $dropbox_filename;
             }
             $format = get_file_extension($dropbox_filename);
+            $real_dropbox_filename = $dropbox_filename;
             $dropbox_filename = safe_filename($format);
             $newWorkRecipients = $_POST["recipients"];
             //After uploading the file, create the db entries
@@ -99,7 +101,7 @@ if (isset($_POST["submitWork"])) {
                 $filename_final = $dropbox_dir . '/' . $dropbox_filename;
                 move_uploaded_file($dropbox_filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
-                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
+                $dsentwork = new Dropbox_SentWork($uid, $dropbox_title, $_POST['description'], $dropbox_filename, $real_dropbox_filename, $dropbox_filesize, $newWorkRecipients);
             }            
             chdir($cwd);
         }        

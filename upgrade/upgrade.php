@@ -903,6 +903,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `uploaderId` INT(11) NOT NULL DEFAULT 0,
                             `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `real_filename` varchar(255) NOT NULL default ''                           
                             `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `title` VARCHAR(250) NOT NULL DEFAULT '',
                             `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
