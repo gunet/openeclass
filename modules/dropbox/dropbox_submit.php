@@ -114,9 +114,9 @@ if (isset($_POST["submitWork"])) {
                             $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
                             $body_dropbox_message = "$langSender: $_SESSION[givenname] $_SESSION[surname] <br /><br /> $dropbox_title <br /><br />" . $_POST['description']. "<br />";
                             if ($dropbox_filesize > 0) {
-                                    $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/index.php?course=$course_code&amp;sm_id=$dsentwork->id'>[$langAttachedFile]</a><br /><br />";
+                                    $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/index.php?course=$course_code&amp;rm_id=$dsentwork->id'>[$langAttachedFile]</a><br /><br />";
                             }
-                            $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php?course=$course_code&amp;sm_id=$dsentwork->id'>$langHere</a>.<br />";
+                            $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php?course=$course_code&amp;rm_id=$dsentwork->id'>$langHere</a>.<br />";
                             $body_dropbox_message .= "$unsubscribe $linkhere";
                             $plain_body_dropbox_message = html2text($body_dropbox_message);
                             $emailaddr = uid_to_email($userid);
