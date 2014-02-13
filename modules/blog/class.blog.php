@@ -183,7 +183,7 @@ Class Blog {
             	    $out_p="";
                     foreach ($monthard as $id => $title) {
                     	$count_id += 1;
-                    	$out_p .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$id."'>".$title."</a></li>";
+                    	$out_p .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$id."'>".q($title)."</a></li>";
             	    }
                     $m = $langMonthNames['long'][$month-1];
                     if ($month == $tree_month && $year == $tree_year) {

@@ -33,7 +33,7 @@ if ($_POST['action'] == 'new') {
         $response[1] = "<p class='success'>".$langCommentsSaveSuccess."</p>";
         $response[2] = $comment->getId();
         $response[3] = '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
-        $response[3] .= '<div id="comment_content-'.$comment->getId().'">'.standard_text_escape($comment->getContent()).'</div>';
+        $response[3] .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
         $response[3] .= '<div class="comment_actions">';
         $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
         $response[3] .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
@@ -65,7 +65,7 @@ if ($_POST['action'] == 'new') {
     if ($comment->loadFromDB(intval($_POST['cid']))) {
         $response[0] = 'OK';
         $response[1] = '';
-        $response[2] = '<textarea id="edit-textarea-'.$_POST['cid'].'" cols="40" rows="5">'.$comment->getContent().'</textarea><br/>';
+        $response[2] = '<textarea id="edit-textarea-'.$_POST['cid'].'" cols="40" rows="5">'.q($comment->getContent()).'</textarea><br/>';
         $response[2] .= '<input type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\'../comments/comments.php\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
     } else {
         $response[0] = 'ERROR';

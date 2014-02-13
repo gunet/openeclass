@@ -88,7 +88,7 @@ Class Commenting {
             foreach ($comments as $comment) {
                 $out .= '<div class="comment" id="comment-'.$comment->getId().'">';
                 $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
-                $out .= '<div id="comment_content-'.$comment->getId().'">'.standard_text_escape($comment->getContent()).'</div>';
+                $out .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 $out .= '<div class="comment_actions">';
                 $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')"><img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
                 $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
