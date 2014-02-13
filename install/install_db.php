@@ -1114,7 +1114,7 @@ db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
         `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
         `duration` int(11) NOT NULL,
         `course_id` INT(11) NOT NULL,
-        PRIMARY KEY  (`id`))");
+        PRIMARY KEY (`id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `id` int(11) NOT NULL auto_increment,
@@ -1122,8 +1122,13 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `ip` char(45) NOT NULL default '0.0.0.0',
         `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
         `course_id` INT(11) NOT NULL,
-        PRIMARY KEY  (`id`))");
+        PRIMARY KEY (`id`))");
 
+db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
+        `setting_id` INT(11) NOT NULL,
+        `course_id` INT(11) NOT NULL,
+        `value` INT(11) NOT NULL DEFAULT 0,
+        PRIMARY KEY (`setting_id`, `course_id`))");
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
