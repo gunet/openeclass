@@ -116,14 +116,20 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function edit($title, $content) {
-        $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s WHERE `id` = ?d';
-        $numrows = Database::get()->query($sql, $title, $content, $this->id)->affectedRows;
-        if ($numrows == 1) {
-            $this->title = $title;
-            $this->content = $content;
-        	return true;
+        $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE `title` = ?s AND `content` = ?s AND `id`= ?d';
+        $result = Database::get()->querySingle($sql, $title, $content, $this->id);
+        if ($result->c == 0) {
+            $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s WHERE `id` = ?d';
+            $numrows = Database::get()->query($sql, $title, $content, $this->id)->affectedRows;
+            if ($numrows == 1) {
+                $this->title = $title;
+                $this->content = $content;
+            	return true;
+            } else {
+            	return false;
+            }
         } else {
-        	return false;
+            return true;
         }
     }
     

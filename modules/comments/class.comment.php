@@ -114,13 +114,19 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function edit($content) {
-        $sql = 'UPDATE `comments` SET `content` = ?s WHERE `id` = ?d';
-        $numrows = Database::get()->query($sql, $content, $this->id)->affectedRows;
-        if ($numrows == 1) {
-            $this->content = $content;
-        	return true;
-        } else {
-        	return false;
+        $sql = 'SELECT COUNT(`id`) as c FROM `comments` WHERE `content` = ?s AND `id`= ?d';
+        $result = Database::get()->querySingle($sql, $content, $this->id);
+        if ($result->c == 0) {
+            $sql = 'UPDATE `comments` SET `content` = ?s WHERE `id` = ?d';
+            $numrows = Database::get()->query($sql, $content, $this->id)->affectedRows;
+            if ($numrows == 1) {
+                $this->content = $content;
+            	return true;
+            } else {
+            	return false;
+            }
+        } else {//same content
+            return true;
         }
     }
     
