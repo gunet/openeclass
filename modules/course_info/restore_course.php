@@ -355,6 +355,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map' => array('pid' => $wiki_pages_map,
                 'editor_id' => $userid_map)));
     }
+    if (file_exists("$restoreThis/blog_post")) {
+        $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $course_id),
+        'return_mapping' => 'id'));
+        if (file_exists("$restoreThis/comments")) {
+            restore_table($restoreThis, 'comments', array('map' => array('rid' => $blog_map),'return_mapping' => 'id'));
+        }
+    }
     if (file_exists("$restoreThis/poll") &&
             file_exists("$restoreThis/poll_question") &&
             file_exists("$restoreThis/poll_question_answer") &&
