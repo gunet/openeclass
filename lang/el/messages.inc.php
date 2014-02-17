@@ -3738,3 +3738,6 @@ $langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργ
  $langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
  $langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε επιτυχώς";
  $langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
+ $langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
+ $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
+ $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";

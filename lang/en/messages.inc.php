@@ -3053,3 +3053,6 @@ $langCommentsLoadFail = "Could not load comment";
 $langCommentsSaveConfirm = "Are you sure you want to save this comment?";
 $langCommentsSaveSuccess = "The comment was successfully saved";
 $langCommentsSaveFail = "Could not save comment";
+$langCommentsNewNoPerm = "You do not have permission to submit a comment";
+$langCommentsDelNoPerm = "You do not have permission to delete this comment";
+$langCommentsEditNoPerm = "You do not have permission to edit this comment";

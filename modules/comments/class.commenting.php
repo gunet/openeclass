@@ -66,9 +66,12 @@ Class Commenting {
     
     /**
      * Injects all commenting module code in other subsystems
+     * @param courseCode the course code
+     * @param $isEditor
+     * @param $uid the user id
      * @return string
      */
-    public function put() {
+    public function put($courseCode, $isEditor, $uid) {
         global $langComments, $langBlogPostUser, $langSubmit, $themeimg, $langModify, $langDelete,
         $langCommentsDelConfirm, $langCommentsSaveConfirm;
         
@@ -89,25 +92,56 @@ Class Commenting {
                 $out .= '<div class="comment" id="comment-'.$comment->getId().'">';
                 $out .= '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.uid_to_name($comment->getAuthor()).':</div>';
                 $out .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
-                $out .= '<div class="comment_actions">';
-                $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')"><img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
-                $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $out .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
-                $out .='</div>';
+                
+                if ($comment->permEdit($isEditor, $uid)) {
+                    $out .= '<div class="comment_actions">';
+                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                    $out .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
+                    $out .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                    $out .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
+                    $out .='</div>';
+                }
+                
                 $out .= '</div>';
             }
         }
         $out .= "</div>";
-        $out .= '<form action="" onsubmit="xmlhttpPost(\'../comments/comments.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
-        $out .= '<textarea name="textarea" id="textarea-'.$this->rid.'" cols="40" rows="5"></textarea><br/>';
-        $out .= '<input name="send_button" type="submit" value="'.$langSubmit.'" />';
-        $out .= '</form>';
+        
+        if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
+            $out .= '<form action="" onsubmit="xmlhttpPost(\'../comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+            $out .= '<textarea name="textarea" id="textarea-'.$this->rid.'" cols="40" rows="5"></textarea><br/>';
+            $out .= '<input name="send_button" type="submit" value="'.$langSubmit.'" />';
+            $out .= '</form>';
+        }
         
         $out .= '</div>';
         $out .= '</div>';
         
         return $out;
     }
+    
+    /**
+     * Check if a user has permission to create comments
+     * @param isEditor boolean showing if user is teacher
+     * @param uid the user id
+     * @param courseId the course id
+     * @return boolean
+     */
+    public static function permCreate($isEditor, $uid, $courseId) {
+        if ($isEditor) {//teacher is always allowed to create
+            return true;
+        } else {
+            //students allowed to create
+            $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
+            $result = Database::get()->querySingle($sql, $courseId, $uid);
+            if ($result->c > 0) {//user is course member
+                return true;
+    	    } else {//user is not course member
+                return false;
+            }
+        } 
+    }
+    
 }
 
 /**

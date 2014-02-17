@@ -45,7 +45,7 @@ $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 
 //config setting allowing students to create posts and edit/delete own posts
 //leaving it static for now
-$stud_allow_create = false;
+$stud_allow_create = true;
 
 $posts_per_page = 10;
 $num_popular = 5;//number of popular blog posts to show in sidebar
@@ -216,7 +216,7 @@ if ($action == "showPost") {
         $tool_content .= "</div>";
         
         $comm = new Commenting('blogpost', $post->getId());
-        $tool_content .= $comm->put();
+        $tool_content .= $comm->put($course_code, $is_editor, $uid);
     } else {
         $tool_content .= "<p class='alert1'>$langBlogPostNotFound</p>";
     }
@@ -267,7 +267,7 @@ if ($action == "showBlog") {
             $tool_content .= "</div>";
             
             $comm = new Commenting('blogpost', $post->getId());
-            $tool_content .= $comm->put();
+            $tool_content .= $comm->put($course_code, $is_editor, $uid);
         }
         
         

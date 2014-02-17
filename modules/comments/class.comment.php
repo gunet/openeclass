@@ -177,4 +177,22 @@ Class Comment {
     public function getRid() {
     	return $this->rid;
     }
+    
+    /**
+     * Check if a user has permission to edit/delete the comment
+     * @param isEditor boolean showing if user is teacher
+     * @param uid the user id
+     * @return boolean
+     */
+    public function permEdit($isEditor, $uid) {
+        if ($isEditor) {//teacher is always allowed to edit
+            return true;
+        } else {
+	        if ($this->authorId == $uid) {//current user is comment author
+	            return true;
+	        } else {
+	            return false;
+	        }
+        }
+    }
 }
