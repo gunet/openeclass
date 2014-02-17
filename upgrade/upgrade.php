@@ -903,6 +903,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `uploaderId` INT(11) NOT NULL DEFAULT 0,
                             `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `real_filename` varchar(255) NOT NULL default ''                           
                             `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `title` VARCHAR(250) NOT NULL DEFAULT '',
                             `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
@@ -1189,6 +1190,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
+
+                    db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
+                          `setting_id` INT(11) NOT NULL,
+                          `course_id` INT(11) NOT NULL,
+                          `value` INT(11) NOT NULL DEFAULT 0,
+                          PRIMARY KEY (`setting_id`, `course_id`))");
 
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
