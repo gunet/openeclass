@@ -148,7 +148,7 @@ if ($is_editor) {
 
     $email_notify = (isset($_POST['email']) && $_POST['email']);
     if (isset($_POST['grade_comments'])) {
-        $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", intval($_POST['assignment']))->title;
+        $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
         $nameTools = $work_title;
         $navigation[] = $works_url;
         submit_grade_comments($_POST['assignment'], $_POST['submission'], $_POST['grade'], $_POST['comments'], $email_notify);
@@ -158,12 +158,12 @@ if ($is_editor) {
         new_assignment();
     } elseif (isset($_POST['assign_type'])) {
         if ($_POST['assign_type']) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?", $course_id);                
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);                
         } else {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id 
-                                    AND course_user.course_id = ? AND course_user.status = 5 
+                                    AND course_user.course_id = ?d AND course_user.status = 5 
                                     AND user.id", $course_id);                
                
         }
@@ -196,7 +196,7 @@ if ($is_editor) {
         submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
     } elseif (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
-        $work_title = q(Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title);
+        $work_title = q(Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title);
         $work_id_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&id=$id",
             'name' => $work_title);
         if (isset($_POST['on_behalf_of'])) {
@@ -212,12 +212,12 @@ if ($is_editor) {
         } elseif (isset($_REQUEST['choice'])) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
-                if (Database::get()->query("UPDATE assignment SET active = 0 WHERE id = ?", $id)->affectedRows > 0) {
+                if (Database::get()->query("UPDATE assignment SET active = 0 WHERE id = ?d", $id)->affectedRows > 0) {
                     Session::set_flashdata($langAssignmentDeactivated, 'success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
-                if (Database::get()->query("UPDATE assignment SET active = 1 WHERE id = ?", $id)->affectedRows > 0) {
+                if (Database::get()->query("UPDATE assignment SET active = 1 WHERE id = ?d", $id)->affectedRows > 0) {
                     Session::set_flashdata($langAssignmentActivated, 'success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
@@ -278,7 +278,7 @@ if ($is_editor) {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
-            $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title;
+            $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $nameTools = $work_title;
             $navigation[] = $works_url;
             show_student_assignment($id);
@@ -313,16 +313,16 @@ function add_assignment() {
     }
     
     if (@mkdir("$workPath/$secret", 0777)) {
-        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) VALUES (?d, ?s, ?s, ?t, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
         if ($id) {
             if ($assign_to_specific && !empty($assigned_to)) {
                 if ($group_submissions==1) {
                     foreach ($assigned_to as $group_id) {
-                        Database::get()->query("INSERT INTO assignment_to_specific (group_id , assignment_id) VALUES (?,?)", $group_id, $id);
+                        Database::get()->query("INSERT INTO assignment_to_specific (group_id , assignment_id) VALUES (?d,?d)", $group_id, $id);
                     }
                 } else {
                     foreach ($assigned_to as $user_id) {
-                        Database::get()->query("INSERT INTO assignment_to_specific (user_id , assignment_id) VALUES (?,?)", $user_id, $id);
+                        Database::get()->query("INSERT INTO assignment_to_specific (user_id , assignment_id) VALUES (?d,?d)", $user_id, $id);
                     }
                 }
             }    
@@ -361,7 +361,7 @@ function submit_work($id, $on_behalf_of = null) {
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
                 // user is registered to this lesson
                 $row = Database::get()->querySingle("SELECT deadline, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                              FROM assignment WHERE id = ?", $id);
+                                              FROM assignment WHERE id = ?d", $id);
                 if (($row->time < 0 && (int) $row->deadline) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
@@ -374,7 +374,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
     } //checks for submission validity end here
     
-    $row = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
+    $row = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $title = q($row->title);
     $group_sub = $row->group_submissions;
     $nav[] = $works_url;
@@ -388,7 +388,7 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             $group_id = 0;
             $local_name = uid_to_name($user_id);
-            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?", $user_id)->am;
+            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
             if (!empty($am)) {
                 $local_name .= $am;
             }
@@ -456,7 +456,7 @@ function submit_work($id, $on_behalf_of = null) {
                                         (uid, assignment_id, submission_date, submission_ip, file_path,
                                          file_name, comments, grade, grade_comments, grade_submission_ip,
                                          grade_submission_date, group_id)
-                                         VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, NOW(), ?)", $user_id, $id, $submit_ip, $filename, $file_name, $stud_comments, $grade, $grade_comments, $grade_ip, $group_id)->lastInsertID;
+                                         VALUES (?d, ?d, NOW(), ?s, ?s, ?s, ?s, ?f, ?s, ?s, NOW(), ?d)", $user_id, $id, $submit_ip, $filename, $file_name, $stud_comments, $grade, $grade_comments, $grade_ip, $group_id)->lastInsertID;
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                     'title' => $title,
                     'assignment_id' => $id,
@@ -567,7 +567,7 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
     $urlAppend, $works_url, $end_cal_Work_db, $course_id, $langStudents, $langMove;
 
-    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?", $id);
+    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
         $assignee_options='';
@@ -575,8 +575,8 @@ function show_edit_assignment($id) {
         if ($row->group_submissions) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group` 
-                                   WHERE `group`.id = assignment_to_specific.group_id AND assignment_to_specific.assignment_id = ?", $id);
-            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?", $course_id);
+                                   WHERE `group`.id = assignment_to_specific.group_id AND assignment_to_specific.assignment_id = ?d", $id);
+            $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
             }
@@ -591,11 +591,11 @@ function show_edit_assignment($id) {
         } else {
             $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                    FROM assignment_to_specific, user 
-                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?", $id);
+                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?d", $id);
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id 
-                                    AND course_user.course_id = ? AND course_user.status = 5 
+                                    AND course_user.course_id = ?d AND course_user.status = 5 
                                     AND user.id", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
@@ -727,21 +727,21 @@ function edit_assignment($id) {
     } else {
         $comments = quote(purify($_POST['comments']));
     }
-    Database::get()->query("UPDATE assignment SET title = ?, description = ?, 
-        group_submissions = ?, comments = ?, deadline = ?, max_grade = ?, assign_to_specific = ?
-        WHERE course_id = ? AND id = ?", $title, $desc, $group_submissions, 
+    Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
+        group_submissions = ?d, comments = ?s, deadline = ?t, max_grade = ?d, assign_to_specific = ?d
+        WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
         $comments, $deadline, $max_grade, $assign_to_specific, $course_id, $id);
     
-    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?", $id);
+    Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
    
     if ($assign_to_specific && !empty($assigned_to)) {
         if ($group_submissions==1) {
             foreach ($assigned_to as $group_id) {
-                Database::get()->query("INSERT INTO assignment_to_specific (group_id , assignment_id) VALUES (?,?)", $group_id, $id);
+                Database::get()->query("INSERT INTO assignment_to_specific (group_id , assignment_id) VALUES (?d,?d)", $group_id, $id);
             }
         } else {
             foreach ($assigned_to as $user_id) {
-                Database::get()->query("INSERT INTO assignment_to_specific (user_id , assignment_id) VALUES (?,?)", $user_id, $id);
+                Database::get()->query("INSERT INTO assignment_to_specific (user_id , assignment_id) VALUES (?d,?d)", $user_id, $id);
             }
         }
     }    
@@ -769,13 +769,13 @@ function delete_assignment($id) {
     global $tool_content, $workPath, $course_code, $webDir, $langBack, $langDeleted, $course_id;
 
     $secret = work_secret($id);
-    $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?
-                                        AND id = ?", $course_id, $id);
+    $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?d
+                                        AND id = ?d", $course_id, $id);
     if (count($row) > 0) {
-        if (Database::get()->query("DELETE FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id)->affectedRows > 0){
-            Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?", $id);
+        if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
+            Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
             if ($row->assign_to_specific) {
-                Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?", $id);
+                Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
             move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
 
@@ -801,9 +801,9 @@ function delete_assignment($id) {
 function delete_user_assignment($id) {
     global $tool_content, $course_code, $webDir, $langBack, $langDeleted;
 
-    $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?", $id);
+    $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
     $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
-    if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?", $id)->affectedRows > 0) {
+    if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
         if (my_delete($file)) {            
             return true;
         }
@@ -829,7 +829,7 @@ function show_student_assignment($id) {
 
     $user_group_info = user_group_info($uid, $course_id);
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                         FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
+                                         FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
     assignment_details($id, $row);
 
@@ -1051,7 +1051,7 @@ function show_assignment($id, $display_graph_results = false) {
 
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
-                                WHERE course_id = ? AND id = ?", $course_id, $id);
+                                WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
     $nav[] = $works_url;
     assignment_details($id, $row);
@@ -1074,8 +1074,8 @@ function show_assignment($id, $display_graph_results = false) {
     }
 
     $result = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
-                                 WHERE assign.assignment_id = ? AND user.id = assign.uid
-                                 ORDER BY ? ?", $id, $order, $rev);
+                                 WHERE assign.assignment_id = ?d AND user.id = assign.uid
+                                 ORDER BY ?s ?s", $id, $order, $rev);
 
     $num_results = count($result);
     if ($num_results > 0) {
@@ -1108,8 +1108,8 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assign.grade grade, assign.comments comments,
                                                    assign.grade_comments grade_comments
                                                    FROM assignment_submit AS assign, user
-                                                   WHERE assign.assignment_id = ? AND user.id = assign.uid
-                                                   ORDER BY ? ?", $id, $order, $rev);
+                                                   WHERE assign.assignment_id = ?d AND user.id = assign.uid
+                                                   ORDER BY ?s ?s", $id, $order, $rev);
 
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -1137,7 +1137,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $subContentGroup = '';
                 }
                 $uid_2_name = display_user($row->uid);
-                $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?", $row->uid)->am;
+                $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
                 if ($i % 2 == 1) {
                     $row_color = "class='even'";
                 } else {
@@ -1202,7 +1202,7 @@ function show_assignment($id, $display_graph_results = false) {
             if ($gradesExists) {
                 // Used to display grades distribution chart
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
-                                                             WHERE assign.assignment_id = ? AND user.id = assign.uid AND
+                                                             WHERE assign.assignment_id = ?d AND user.id = assign.uid AND
                                                              assign.grade <> ''", $id)->count;                
                 $chart = new Plotter();
                 $chart->setTitle("$langGraphResults");
@@ -1227,7 +1227,7 @@ function show_non_submitted($id) {
             $langGroup, $course_code;    
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
-                                WHERE course_id = ? AND id = ?", $course_id, $id);
+                                WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
     $nav[] = $works_url;
     assignment_details($id, $row);
@@ -1323,9 +1323,9 @@ function show_student_assignments() {
     }
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment WHERE course_id = ? AND active = 1 AND 
+                                 FROM assignment WHERE course_id = ?d AND active = 1 AND 
                                  (assign_to_specific = 0 OR assign_to_specific = 1 AND id IN
-                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ? UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id IN ($gids_sql_ready))
+                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id IN ($gids_sql_ready))
                                  )
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
     
@@ -1398,8 +1398,7 @@ function show_assignments() {
     
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-              FROM assignment WHERE course_id = ? 
-              ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
+              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
  
     $tool_content .="
             <div id='operations_container'>
@@ -1421,12 +1420,12 @@ function show_assignments() {
         $index = 0;
         foreach ($result as $row) {
             // Check if assignement contains submissions
-            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?", $row->id)->count;
+            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
             if (!$num_submitted) {
                 $num_submitted = '&nbsp;';
             }
                     
-            $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ? AND grade = ''", $row->id)->count;            
+            $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;            
             if (!$num_ungraded) {
                 $num_ungraded = '&nbsp;';
             }
@@ -1488,10 +1487,10 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
     (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
         
     if (Database::get()->query("UPDATE assignment_submit 
-                                SET grade = ?, grade_comments = ?,
-                                grade_submission_date = NOW(), grade_submission_ip = ?
-                                WHERE id = ?", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
-        $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?", $id)->title;
+                                SET grade = ?d, grade_comments = ?s,
+                                grade_submission_date = NOW(), grade_submission_ip = ?s
+                                WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
+        $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                 'title' => $title,
                 'grade' => $grade,
@@ -1512,15 +1511,15 @@ function submit_grades($grades_id, $grades, $email = false) {
 
     foreach ($grades as $sid => $grade) {
         $sid = intval($sid);
-        $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?", $sid)->grade;
+        $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
         $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
         (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;             
         if ($val != $grade) {
             if (Database::get()->query("UPDATE assignment_submit
-                                        SET grade = ?, grade_submission_date = NOW(), grade_submission_ip = ?
-                                        WHERE id = ?", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
-                $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?", $sid)->assignment_id;
-                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?", $assign_id)->title;
+                                        SET grade = ?d, grade_submission_date = NOW(), grade_submission_ip = ?s
+                                        WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
+                $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
+                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
                 Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                         'title' => $title,
                         'grade' => $grade));
@@ -1538,7 +1537,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 function send_file($id) {
     global $course_code, $uid, $is_editor;
 
-    $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?", $id);
+    $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (count($info)==0) {
         return false;
     }
@@ -1555,7 +1554,7 @@ function send_file($id) {
 // Zip submissions to assignment $id and send it to user
 function download_assignments($id) {
     global $workPath, $course_code;
-    $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?', $id)->count;
+    $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d', $id)->count;
     if ($counter>0) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";  
@@ -1606,7 +1605,7 @@ function create_zip_index($path, $id, $online = FALSE) {
 				<th>' . $m['grade'] . '</th>
 			</tr>');
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ? ORDER BY id", $id);
+    $result = Database::get()->queryArray("SELECT * FROM assignment_submit WHERE assignment_id = ?d ORDER BY id", $id);
 
     foreach ($result as $row) {
         $filename = basename($row->file_path);
@@ -1658,12 +1657,12 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     static $title, $group;
 
     if (!isset($title)) {
-        $res = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE id = ?", $assignment_id);
+        $res = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE id = ?d", $assignment_id);
         $title = $res->title;
         $group = $res->group_submissions;
     }
     $info = Database::get()->querySingle("SELECT uid, group_id
-                                         FROM assignment_submit WHERE id= ?", $submission_id);
+                                         FROM assignment_submit WHERE id= ?d", $submission_id);
 
     $subject = sprintf($m['work_email_subject'], $title);
     $body = sprintf($m['work_email_message'], $title, $currentCourseName) . "\n\n";
@@ -1685,7 +1684,7 @@ function send_mail_to_group_id($gid, $subject, $body) {
     global $charset;
     $res = Database::get()->queryArray("SELECT surname, givenname, email
                                  FROM user, group_members AS members
-                                 WHERE members.group_id = ? 
+                                 WHERE members.group_id = ?d 
                                  AND user.id = members.user_id", $gid);
     foreach ($res as $info) {
         send_mail('', '', "$info->givenname $info->surname", $info->email, $subject, $body, $charset);
@@ -1694,27 +1693,27 @@ function send_mail_to_group_id($gid, $subject, $body) {
 
 function send_mail_to_user_id($uid, $subject, $body) {
     global $charset;
-    $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?", $uid);
+    $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?d", $uid);
     send_mail('', '', "$user->givenname $user->surname", $user->email, $subject, $body, $charset);
 }
 
 // Return a list of users with no submissions for assignment $id
 function users_with_no_submissions($id) {
     global $course_id;
-    if (Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?", $id)->assign_to_specific) {   
+    if (Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?d", $id)->assign_to_specific) {   
         $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id 
-                                AND course_user.course_id = ? AND course_user.status = 5 
+                                AND course_user.course_id = ?d AND course_user.status = 5 
                                 AND user.id NOT IN (SELECT uid FROM assignment_submit
-                                                    WHERE assignment_id = ?) AND user.id IN (SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?)", $course_id, $id, $id);       
+                                                    WHERE assignment_id = ?d) AND user.id IN (SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?d)", $course_id, $id, $id);       
     } else {
         $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id 
-                                AND course_user.course_id = ? AND course_user.status = 5 
+                                AND course_user.course_id = ?d AND course_user.status = 5 
                                 AND user.id NOT IN (SELECT uid FROM assignment_submit
-                                                    WHERE assignment_id = ?)", $course_id, $id);
+                                                    WHERE assignment_id = ?d)", $course_id, $id);
     }
     $users = array();
     foreach ($q as $row) {
@@ -1727,7 +1726,7 @@ function users_with_no_submissions($id) {
 function groups_with_no_submissions($id) {
     global $course_id;
     
-    $q = Database::get()->queryArray('SELECT group_id FROM assignment_submit WHERE assignment_id = ?', $id);
+    $q = Database::get()->queryArray('SELECT group_id FROM assignment_submit WHERE assignment_id = ?d', $id);
     $groups = user_group_info(null, $course_id, $id);
     if (count($q)>0) {
         foreach ($q as $row) {

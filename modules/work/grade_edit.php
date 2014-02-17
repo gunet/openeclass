@@ -42,7 +42,7 @@ if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
 // Returns an array of the details of assignment $id
 function get_assignment_details($id) {
     global $course_id;
-    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ? AND id = ?", $course_id, $id);
+    return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
 //    return mysql_fetch_array(db_query("SELECT * FROM assignment WHERE course_id = $course_id AND id = '$id'"));
 }
 
@@ -50,7 +50,7 @@ function get_assignment_details($id) {
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
     global $m, $langGradeOk, $tool_content, $course_code;
-    $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?",$sid);
+    $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
         if (!empty($sub->group_id)) {
