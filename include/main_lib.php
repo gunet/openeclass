@@ -1590,6 +1590,8 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM user_department WHERE user = ?d" , $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d" , $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d" , $u);
+            Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d" , $u);
             return true;
         } else {
