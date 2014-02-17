@@ -75,17 +75,22 @@ function group_tutors($group_id) {
 }
 
 // fills an array with user groups (group_id => group_name)
-function user_group_info($uid, $course_id) {
+// passing $as_id will give back only the groups that have been given the specific assignment
+function user_group_info($uid, $course_id, $as_id=NULL) {
     $gids = array();
 
     if ($uid != null) {
-        $extra_sql = "AND group_members.user_id = $uid";
-    } else {
-        $extra_sql = "";
-    }
-    $q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
+        $q = db_query("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
 			WHERE group_members.group_id = `group`.id
-			AND `group`.course_id = $course_id $extra_sql");
+			AND `group`.course_id = $course_id AND group_members.user_id = $uid");
+    } else {
+        if (Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?", $as_id)->assign_to_specific) {
+            $q = db_query("SELECT `group`.name AS grp_name,`group`.id AS grp_id FROM `group`, assignment_to_specific WHERE `group`.id = assignment_to_specific.group_id AND `group`.course_id = $course_id AND assignment_to_specific.assignment_id = $as_id");
+        } else {
+            $q = db_query("SELECT name AS grp_name,id AS grp_id FROM `group` WHERE course_id = $course_id");
+        }
+    }
+
 
     while ($r = mysql_fetch_array($q)) {
         $gids[$r['grp_id']] = $r['grp_name'];

@@ -68,18 +68,32 @@ function show_edit_form($id, $sid, $assign) {
                 <fieldset>
                 <legend>$m[addgradecomments]</legend>
                 <table width='99%' class='tbl'>
-                <tr><th class='left' width='180'>${m['username']}:</th>
-                        <td>${uid_2_name} $group_submission</td></tr>
-                <tr><th class='left'>${m['sub_date']}:</th>
-                        <td>$sub->submission_date</td></tr>
-                <tr><th class='left'>${m['filename']}:</th>
-                        <td><a href='index.php?course=$course_code&amp;get=$sub->id'>$sub->file_name</a></td></tr>
-                <tr><th class='left'>$m[grade]:</th>
-                        <td><input type='text' name='grade' maxlength='3' size='3' value='$sub->grade'></td></tr>
-                <tr><th class='left'>$m[gradecomments]:</th>
-                        <td><textarea cols='60' rows='3' name='comments'>$sub->grade_comments</textarea></td></tr>
-                <tr><th class='left'>&nbsp;</th>
-                        <td><input type='submit' name='grade_comments' value='$langGradeOk'></td></tr>
+                <tr>
+                    <th class='left' width='180'>${m['username']}:</th>
+                    <td>${uid_2_name} $group_submission</td>
+                </tr>
+                <tr>
+                    <th class='left'>${m['sub_date']}:</th>
+                    <td>$sub->submission_date</td></tr>
+                <tr>
+                    <th class='left'>${m['filename']}:</th>
+                    <td><a href='index.php?course=$course_code&amp;get=$sub->id'>$sub->file_name</a></td>
+                </tr>
+                <tr>
+                    <th class='left'>$m[grade]:</th>
+                    <td><input type='text' name='grade' maxlength='3' size='3' value='$sub->grade'></td></tr>
+                <tr>
+                    <th class='left'>$m[gradecomments]:</th>
+                    <td><textarea cols='60' rows='3' name='comments'>$sub->grade_comments</textarea></td>
+                </tr>
+                <tr>
+                    <th><label for='email_button'>$m[email_users]:</label></th>
+                    <td><input type='checkbox' value='1' id='email_button' name='email'></td>
+                </tr>
+                <tr>
+                    <th class='left'>&nbsp;</th>
+                    <td><input type='submit' name='grade_comments' value='$langGradeOk'></td>
+                </tr>
                 </table>
                 </fieldset>
                 </form><br>";
