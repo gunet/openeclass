@@ -313,7 +313,7 @@ function load_js($file, $init = '') {
 
 // Translate uid to username
 function uid_to_username($uid) {    
-    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
+    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", intval($uid))->username;
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
@@ -370,13 +370,13 @@ function display_user($user, $print_email = false, $icon = true) {
 // Translate uid to givenname , surname, fullname or nickname
 function uid_to_name($uid, $name_type='fullname') {
 	if($name_type=='fullname'){
-		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?", intval($uid))->fullname;									  				
+		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid)->fullname;									  				
 	}elseif($name_type=='givenname'){
-		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?", intval($uid))->givenname;
+		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid)->givenname;
 	}elseif($name_type=='surname'){
-		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?", intval($uid))->surname;
+		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid)->surname;
 	}elseif($name_type=='username'){
-		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
+		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid)->username;
 	}else{            
 		return false;
 	}
@@ -1491,7 +1491,7 @@ function delete_course($cid) {
     db_query("DELETE FROM link WHERE course_id = $cid");
     db_query("DELETE FROM link_category WHERE course_id = $cid");
     db_query("DELETE FROM agenda WHERE course_id = $cid");
-    Database::get()->query("DELETE FROM course_review WHERE course_id = ?", $cid);
+    Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
     db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
@@ -1564,28 +1564,28 @@ function deleteUser($id) {
 
         if (mysql_num_rows($q)) {
             // delete everything
-            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
-            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
-            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
-            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
-            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
-            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?d" , $u);
             return true;
         } else {
             return false;
@@ -2207,7 +2207,7 @@ function profile_image($uid, $size, $default = false) {
     if (!$default) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='" . q(uid_to_name($uid)) . "'>";
     } else {
-        $name = q(uid_to_name($uid));
+        $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
         return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
     }
 }

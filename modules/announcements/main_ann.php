@@ -30,7 +30,7 @@ $nameTools = $langAnnouncements;
 $isaid = isset($_GET['aid']);
 $announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?" :
                 "SELECT `date`, `title` , `body` FROM `admin_announcement`
-	        WHERE `visible` = 1 AND lang= ? ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
+	        WHERE `visible` = 1 AND lang= ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
 
 $numOfAnnouncements = count($announceArr);
 if ($numOfAnnouncements > 0) {

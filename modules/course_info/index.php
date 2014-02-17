@@ -117,7 +117,7 @@ hContent;
 $nameTools = $langModifInfo;
 
 // if the course is opencourses certified, disable visibility choice in form
-$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) ? $creview->is_certified : false;
+$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?d", $course_id)) ? $creview->is_certified : false;
 $disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
 
 

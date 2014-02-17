@@ -451,6 +451,7 @@ db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `course_id` INT(11) NOT NULL,
                 `uploader_id` INT(11) NOT NULL DEFAULT 0,
                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                 real_filename varchar(255) NOT NULL default '',
                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) NOT NULL DEFAULT '',
                 `description` VARCHAR(1000) NOT NULL DEFAULT '',                
@@ -483,7 +484,7 @@ db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
                 `comment` TEXT NOT NULL,
                 `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4),
+                `visible` TINYINT(4) NOT NULL DEFAULT 0,
                 `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
                 //COMMENT='List of learning Paths';
 db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
@@ -628,7 +629,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eid` INT(11) NOT NULL DEFAULT 0,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `record_end_date` DATETIME DEFAULT NULL,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
                 `attempt` INT(11) NOT NULL DEFAULT 0) $charset_spec");

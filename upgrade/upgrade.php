@@ -903,6 +903,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `uploaderId` INT(11) NOT NULL DEFAULT 0,
                             `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `real_filename` varchar(255) NOT NULL default ''                           
                             `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `title` VARCHAR(250) NOT NULL DEFAULT '',
                             `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
@@ -937,7 +938,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
                             `comment` TEXT NOT NULL,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visible` TINYINT(4),
+                            `visible` TINYINT(4) NOT NULL DEFAULT 0,
                             `rank` INT(11) NOT NULL DEFAULT 0)
                             $charset_spec");
                     //COMMENT='List of learning Paths';
@@ -1107,7 +1108,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `eid` INT(11) NOT NULL DEFAULT '0',
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                             `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `record_end_date` DATETIME DEFAULT NULL,
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0' )

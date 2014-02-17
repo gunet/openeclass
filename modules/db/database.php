@@ -77,11 +77,6 @@ final class Database {
     private $dbh;
 
     /**
-     * @var boolean
-     */
-    private $isTransactional;
-
-    /**
      * @param string $server
      * @param string $dbase
      * @param string $user
@@ -102,20 +97,13 @@ final class Database {
                     Debug::message("Unknown database backend: " . DB_TYPE, Debug::ALWAYS);
             }
             $this->dbh = new PDO($dsn, $user, $password, $params);
-            $this->setTransactional(true);
         } catch (PDOException $e) {
             throw new Exception($e->getMessage());
         }
     }
 
-    /**
-     * @param boolean $transactional Set whether this database is transactional or not.
-     */
-    public function setTransactional($transactional) {
-        $this->isTransactional = $transactional;
-    }
-
-    /**
+    /** This is a transactional version of queryNT.
+     * 
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
@@ -123,13 +111,30 @@ final class Database {
      * @return int Last inserted ID
      */
     public function query($statement) {
-        $offset = 1;
-        $args = func_get_args();
-        $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
+        return $this->queryI(func_get_args(), true);
     }
 
-    /**
+    /** This is a non-transactional version of query.
+     * 
+     * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
+     * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
+     * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
+     * @param anytype $argument... A variable argument list of each binded argument
+     * @return int Last inserted ID
+     */
+    public function queryNT($statement) {
+        return $this->queryI(func_get_args(), false);
+    }
+
+    private function queryI($args, $transactional) {
+        $statement = $args[0];
+        $offset = 1;
+        $callback_error = $this->findErrorCallback($args, $offset);
+        return $this->queryImpl($statement, $transactional, null, $callback_error, Database::$REQ_LASTID, array_slice($args, $offset));
+    }
+
+    /** This is a transactional version of queryFuncNT.
+     *
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_function A function which as first argument gets an object constructed by each row of the result set. Can be null
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
@@ -137,13 +142,31 @@ final class Database {
      * @param anytype $argument... A variable argument list of each binded argument
      */
     public function queryFunc($statement, $callback_function) {
-        $offset = 2;
-        $args = func_get_args();
-        $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, $callback_function, $callback_error, Database::$REQ_FUNCTION, array_slice($args, $offset));
+        return $this->queryFuncI(func_get_args(), true);
     }
 
-    /**
+    /** This is a non-transactional version of queryFunc.
+     *
+     * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
+     * @param function $callback_function A function which as first argument gets an object constructed by each row of the result set. Can be null
+     * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
+     * If the third argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
+     * @param anytype $argument... A variable argument list of each binded argument
+     */
+    public function queryFuncNT($statement, $callback_function) {
+        return $this->queryFuncI(func_get_args(), false);
+    }
+
+    private function queryFuncI($args, $transactional) {
+        $statement = $args[0];
+        $callback_function = $args[1];
+        $offset = 2;
+        $callback_error = $this->findErrorCallback($args, $offset);
+        return $this->queryImpl($statement, $transactional, $callback_function, $callback_error, Database::$REQ_FUNCTION, array_slice($args, $offset));
+    }
+
+    /** This is a transactional version of queryArrayNT.
+     *
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
@@ -151,13 +174,30 @@ final class Database {
      * @return array An array of all objects as a result of this statement
      */
     public function queryArray($statement) {
-        $offset = 1;
-        $args = func_get_args();
-        $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_ARRAY, array_slice($args, $offset));
+        return $this->queryArrayI(func_get_args(), true);
     }
 
-    /**
+    /** This is a non-transactional version of queryArray.
+     *
+     * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
+     * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
+     * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
+     * @param anytype $argument... A variable argument list of each binded argument
+     * @return array An array of all objects as a result of this statement
+     */
+    public function queryArrayNT($statement) {
+        return $this->queryArrayI(func_get_args(), false);
+    }
+
+    private function queryArrayI($args, $transactional) {
+        $statement = $args[0];
+        $offset = 1;
+        $callback_error = $this->findErrorCallback($args, $offset);
+        return $this->queryImpl($statement, $transactional, null, $callback_error, Database::$REQ_ARRAY, array_slice($args, $offset));
+    }
+
+    /** This is a transactional version of querySingleNT.
+     *
      * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
@@ -165,10 +205,26 @@ final class Database {
      * @return array A single object as a result of this statement
      */
     public function querySingle($statement) {
+        return $this->querySingleI(func_get_args(), true);
+    }
+
+    /** This is a non-transactional version of querySingle.
+     *
+     * @param string $statement a non-empty string forming the prepared function: use ? for variables bound to this statement
+     * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
+     * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
+     * @param anytype $argument... A variable argument list of each binded argument
+     * @return array A single object as a result of this statement
+     */
+    public function querySingleNT($statement) {
+        return $this->querySingleI(func_get_args(), false);
+    }
+
+    private function querySingleI($args, $transactional) {
+        $statement = $args[0];
         $offset = 1;
-        $args = func_get_args();
         $callback_error = $this->findErrorCallback($args, $offset);
-        return $this->queryImpl($statement, null, $callback_error, Database::$REQ_OBJECT, array_slice($args, $offset));
+        return $this->queryImpl($statement, $transactional, null, $callback_error, Database::$REQ_OBJECT, array_slice($args, $offset));
     }
 
     private function findErrorCallback($arguments, &$offset) {
@@ -180,23 +236,21 @@ final class Database {
         return null;
     }
 
-    private function queryImpl($statement, $callback_fetch, $callback_error, $requestType, $variables) {
+    private function queryImpl($statement, $isTransactional, $callback_fetch, $callback_error, $requestType, $variables) {
         $init_time = microtime();
+        $backtrace_entry = debug_backtrace();
+        $backtrace_info = $backtrace_entry[2];
+
         if (is_null($statement) || !is_string($statement) || empty($statement))
-            return $this->errorFound($callback_error, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))
-            return $this->errorFound($callback_error, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Second parameter of query should be a closure, or null; found " . gettype($callback_fetch), $statement, $init_time, $backtrace_info);
 
         /* Start transaction, if required */
-        if ($this->isTransactional && !$this->dbh->beginTransaction())
-            return $this->errorFound($callback_error, "Unable to initialize transaction", $statement, $init_time);
+        if ($isTransactional && !$this->dbh->beginTransaction())
+            return $this->errorFound($callback_error, $isTransactional, "Unable to initialize transaction", $statement, $init_time, $backtrace_info);
 
-        /* Prepare statement */
-        $stm = $this->dbh->prepare($statement);
-        if (!$stm)
-            return $this->errorFound($callback_error, "Unable to prepare statement", $statement, $init_time);
-
-        /* flatten array */
+        /* flatten parameter array */
         $flatten = array();
         $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($variables));
         foreach ($it as $v) {
@@ -204,44 +258,87 @@ final class Database {
         }
         $variables = $flatten;
 
-        /* Bind values - use '?' notation  */
-        $howmanyvalues = count($variables);
-        for ($i = 1; $i <= $howmanyvalues; $i++) {
-            $bound = $variables[$i - 1];
-            if (is_bool($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_BOOL))
-                    $this->errorFound($callback_error, "Unable to bind boolean parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_int($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_INT))
-                    $this->errorFound($callback_error, "Unable to bind integer parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_float($bound)) {
-                if (!$stm->bindValue($i, strval($bound), PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind float parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
-            else if (is_string($bound)) {
-                if (!$stm->bindValue($i, $bound, PDO::PARAM_STR))
-                    $this->errorFound($callback_error, "Unable to bind string parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            } else {
-                if (!$stm->bindValue($i, $bound))
-                    $this->errorFound($callback_error, "Unable to bind generic parameter '$bound' at location #" . $i, $statement, $init_time, false);
-            }
+        /* Construct actual statement */
+        $statement_parts = explode("?", $statement);
+        $variable_size = count($statement_parts) - 1;   // Do not take into account first part
+        $variable_types = array($variable_size);
+        if ($variable_size < count($variables)) {
+            Database::dbg("Provided variables are more than the required statement fields", $statement, $init_time, $backtrace_info, Debug::INFO);
+        } else if ($variable_size > count($variables)) {
+            Database::dbg("Provided variables are <b>less</b> than the required statement fields", $statement, $init_time, $backtrace_info, Debug::CRITICAL);
+            die();
         }
+        // Type safe input parameters
+        $warning_parts = "";
+        for ($i = 0; $i < $variable_size; $i++) {
+            $entry = $statement_parts[$i + 1];
+            $first = substr($entry, 0, 1);
+            $value = $variables[$i];
+            if ($first === "d") {   // Decimal
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = intval($value);
+                $type = PDO::PARAM_INT;
+            } else if ($first === "b") {    // Boolean
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = (($value) ? true : false);
+                $type = PDO::PARAM_BOOL;
+            } else if ($first === "f") {    // Floating point
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $value = floatval($value);
+                $type = PDO::PARAM_STR;
+            } else if ($first === "t") {    // Date/time
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $type = PDO::PARAM_STR;
+            } else if ($first === "s") {    // String
+                $statement_parts[$i + 1] = substr($entry, 1);
+                $type = PDO::PARAM_STR;
+            } else {    // Auto-guess
+                $warning_parts .= ", ";
+                if (is_int($value)) {
+                    $type = PDO::PARAM_INT;
+                    $warning_parts .="int_" . $i . "=" . $value;
+                } else if (is_bool($value)) {
+                    $type = PDO::PARAM_BOOL;
+                    $warning_parts .="bool_" . $i . "=" . $value;
+                } else {
+                    $type = PDO::PARAM_STR;
+                    $warning_parts .="string_" . $i . "=\"" . $value . "\"";
+                }
+            }
+            $variables[$i] = $value;
+            $variable_types[$i] = $type;
+        }
+        if (strlen($warning_parts) > 0) {
+            $warning_parts = substr($warning_parts, 1);
+            Database::dbg("Warning: parts [ $warning_parts ] of query '$statement' have undefined type.", $statement, $init_time, $backtrace_info, Debug::ERROR);
+        }
+        $statement = implode("?", $statement_parts);
+
+        /* Prepare statement */
+        $stm = $this->dbh->prepare($statement);
+        if (!$stm)
+            return $this->errorFound($callback_error, $isTransactional, "Unable to prepare statement", $statement, $init_time, $backtrace_info);
+
+        /* Bind values - with type safety and '?' notation  */
+        for ($i = 0; $i < $variable_size; $i++) {
+            if (!$stm->bindValue($i + 1, $variables[$i], $variable_types[$i]))
+                $this->errorFound($callback_error, $isTransactional, "Unable to bind boolean parameter '$variables[$i]' with type $variable_types[$i] at location #$i", $statement, $init_time, $backtrace_info, false);
+        }
+
         /* Execute statement */
         if (!$stm->execute())
-            return $this->errorFound($callback_error, "Unable to execute statement", $statement, $init_time);
+            return $this->errorFound($callback_error, $isTransactional, "Unable to execute statement", $statement, $init_time, $backtrace_info);
 
         /* fetch results */
         $result = null;
         if ($requestType == Database::$REQ_OBJECT) {
             $result = $stm->fetch(PDO::FETCH_OBJ);
-            if (!is_object($result))
-                return $this->errorFound($callback_error, "Unable to fetch single result as object", $statement, $init_time);
+            if ($result != false && !is_object($result))
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch single result as object", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_ARRAY) {
             $result = $stm->fetchAll(PDO::FETCH_OBJ);
             if (!is_array($result))
-                return $this->errorFound($callback_error, "Unable to fetch all results as objects", $statement, $init_time);
+                return $this->errorFound($callback_error, $isTransactional, "Unable to fetch all results as objects", $statement, $init_time, $backtrace_info);
         } else if ($requestType == Database::$REQ_LASTID) {
             $result = new DBResult($this->dbh->lastInsertId(), $stm->rowCount());
         } else if ($requestType == Database::$REQ_FUNCTION) {
@@ -251,26 +348,26 @@ final class Database {
                         break;
         }
         /* Close transaction, if required */
-        if ($this->isTransactional)
+        if ($isTransactional)
             $this->dbh->commit();
-        Database::dbg("Succesfully performed query", $statement, $init_time, Debug::INFO);
+        Database::dbg("Succesfully performed query", $statement, $init_time, null, Debug::INFO);
         return $result;
     }
 
-    private function errorFound($callback_error, $error_msg, $statement, $init_time, $close_transaction = true) {
+    private function errorFound($callback_error, $isTransactional, $error_msg, $statement, $init_time, $backtrace_info, $close_transaction = true) {
         if ($callback_error && is_callable($callback_error))
             $callback_error($error_msg);
-        if ($close_transaction && $this->isTransactional && $this->dbh->inTransaction())
+        if ($close_transaction && $isTransactional && $this->dbh->inTransaction())
             $this->dbh->rollBack();
-        Database::dbg("Error: " . $error_msg, $statement, $init_time);
+        Database::dbg("Error: " . $error_msg, $statement, $init_time, $backtrace_info);
         return null;
     }
 
     /**
      * Private function to call master Debug object
      */
-    private static function dbg($message, $statement, $init_time, $level = Debug::ERROR) {
-        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level);
+    private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
+        Debug::message($message . " [Statement='$statement' Elapsed='" . (microtime() - $init_time) . "]", $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }

@@ -300,6 +300,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_4($code, $lang);
     upgrade_course_2_5($code, $lang);
     upgrade_course_2_8($code, $lang);
+    upgrade_course_2_8_5($code, $lang);
     upgrade_course_3_0($code);
 }
 
@@ -435,9 +436,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                      FROM dropbox_file AS old ORDER by id");
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,
+                        (`id`, `course_id`, `uploaderId`, `filename`, `real_filename`, `filesize`, `title`,
                          `description`, `uploadDate`, `lastUploadDate`)
-                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
+                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`, `real_filename`, 
                                `filesize`, `title`, `description`, `uploadDate`,
                                `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
 
@@ -1058,6 +1059,19 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
+}
+
+function upgrade_course_2_8_5($code, $lang, $extramessage = '') {
+
+    global $langUpgCourse, $global_messages;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8.5) $extramessage<br>";
+    flush();   
+     if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
+             db_query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+             db_query("UPDATE dropbox_file SET real_filename = filename");
+     }
 }
 
 function upgrade_course_2_8($code, $lang, $extramessage = '') {

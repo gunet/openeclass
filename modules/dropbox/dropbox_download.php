@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
 $work = new Dropbox_work($id);
 
 $path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
-$file = $work->title;
+$file = $work->real_filename;
 
 send_file_to_client($path, $file, null, true);
 exit;
