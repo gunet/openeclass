@@ -19,17 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-
-/** ===========================================================================
-  userstats.php
-  @last update: 04-09-2006 by Ophelia Neofytou
-  @authors list:
-  ==============================================================================
-  @Description: user statistics
-
-  ==============================================================================
+/**
+  @file: userstats.php    
+  @brief: user statistics  
  */
+
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/graphics/plotter.php';
@@ -39,6 +33,8 @@ require_once 'hierarchy_validations.php';
 
 $tree = new Hierarchy();
 $user = new User();
+
+load_js('jquery');
 
 $nameTools = $langUserStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
@@ -94,12 +90,11 @@ if (!empty($u)) {
             }
             $k++;
         }
-        $tool_content .= "</div></td></tr></table>\n";
+        $tool_content .= "</div></td></tr></table>";
     } else {
         $tool_content .= "<p>$langNoStudentParticipation </p>";
     }
-    $tool_content .= "<p><b>$langTotalVisits</b>: ";
-    // Chart display added - haniotak
+    $tool_content .= "<p><b>$langTotalVisits</b>: ";    
     $totalHits = 0;
     $result = db_query("SELECT DISTINCT a.code, a.title, b.status, a.id
                                      FROM course AS a
@@ -109,15 +104,16 @@ if (!empty($u)) {
                                     WHERE b.user_id = $u
                                  ORDER BY b.status, hierarchy.name");
     $hits = array();
-    if (mysql_num_rows($result) > 0) {
+    if (mysql_num_rows($result) > 0) {        
         while ($row = mysql_fetch_assoc($result)) {
             $course_codes[] = $row['code'];
             $course_names[$row['code']] = $row['title'];
         }
         mysql_free_result($result);
-        foreach ($course_codes as $code) {
+        foreach ($course_codes as $code) {            
             $sql = "SELECT SUM(hits) AS cnt FROM actions_daily
                                        WHERE user_id = $u AND course_id = " . course_code_to_id($code);
+                       
             $result = db_query($sql);
             while ($row = mysql_fetch_assoc($result)) {
                 $totalHits += $row['cnt'];
@@ -126,11 +122,11 @@ if (!empty($u)) {
             mysql_free_result($result);
         }
     }
-    $tool_content .= "<b>$totalHits</b></p>";
-    $chart = new Plotter();
-    $chart->setTitle($langCourseVisits);
-    foreach ($hits as $code => $count) {
-        $chart->addPoint($course_names[$code], $count);
+    $tool_content .= "<b>$totalHits</b></p>";    
+    $chart = new Plotter(220, 200);
+    $chart->setTitle($langCourseVisits);    
+    foreach ($hits as $code => $count) {        
+        $chart->growWithPoint($course_names[$code], $count);
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
