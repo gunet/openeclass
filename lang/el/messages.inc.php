@@ -3727,17 +3727,24 @@ $langBlogPostHistory = "Ιστορικό αναρτήσεων";
 $langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
 $langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφής της ανάρτησης";
 $langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";
+$langReturnBlog = "Επιστροφή στο ιστολόγιο";
+$langBlogPerm = "Δικαιώματα σύνταξης";
+$langBlogPermStudents = "Ο καθηγητής και οι μαθητές έχουν δικαίωμα σύνταξης";
+$langBlogPermTeacher = "Ο καθηγητής μόνο έχει δικαίωμα σύνταξης";
 
 /* * ***********************************************************
  * comments
  * ************************************************************ */
- $langCommentsDelConfirm = "Είστε σίγουροι πως θέλετε να διαγράψετε το σχόλιο;";
- $langCommentsDelSuccess = "Το σχόλιο διαγράφηκε επιτυχώς";
- $langCommentsDelFail = "Η διαγραφή του σχολίου απέτυχε";
- $langCommentsLoadFail = "Το σχόλιο δεν ήταν δυνατό να βρεθεί";
- $langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
- $langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε επιτυχώς";
- $langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
- $langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
- $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
- $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
+$langCommentsDelConfirm = "Είστε σίγουροι πως θέλετε να διαγράψετε το σχόλιο;";
+$langCommentsDelSuccess = "Το σχόλιο διαγράφηκε επιτυχώς";
+$langCommentsDelFail = "Η διαγραφή του σχολίου απέτυχε";
+$langCommentsLoadFail = "Το σχόλιο δεν ήταν δυνατό να βρεθεί";
+$langCommentsSaveConfirm = "Είστε σίγουροι πως θέλετε να αποθηκεύσετε το σχόλιο;";
+$langCommentsSaveSuccess = "Το σχόλιο αποθηκεύθηκε επιτυχώς";
+$langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτυχε";
+$langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
+$langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
+$langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
+$langCommenting = "Σχολιασμός";
+$langCommentsEn = "Ενεργοποιημένος σχολιασμός";
+$langCommentsDis = "Απενεργοποιημένος σχολιασμός";

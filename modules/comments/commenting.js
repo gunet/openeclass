@@ -50,6 +50,7 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	        	if (action == 'new') {
 	        		response = JSON.parse(xmlHttpReq.responseText);
 	        		if (response[0] == 'OK') {
+	        			document.getElementById('textarea-'+rid).value = "";
 	        			document.getElementById('commentsNum-'+rid).textContent = parseInt(document.getElementById('commentsNum-'+rid).textContent)+1;
 	        			numDivs = document.getElementById('comments-'+rid).childNodes.length;
 	        			var addedDiv = document.createElement('div');
@@ -89,13 +90,11 @@ function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 	    if (action == 'new') {
 	    	var commentText = encodeURIComponent(document.getElementById('textarea-'+rid).value);
 	    	var params = 'commentText='+commentText+'&action='+action+'&rid='+rid+'&rtype='+rtype;
-	    } else if (action == 'delete') {
-	    	var params = 'action='+action+'&cid='+cid;
-	    } else if (action == 'editLoad') {
-	    	var params = 'action='+action+'&cid='+cid;
+	    } else if (action == 'delete' || action == 'editLoad') {
+	    	var params = 'action='+action+'&cid='+cid+'&rid='+rid+'&rtype='+rtype;
 	    } else if (action == 'editSave') {
 	    	var commentText = encodeURIComponent(document.getElementById('edit-textarea-'+cid).value);
-	    	var params = 'commentText='+commentText+'&action='+action+'&cid='+cid;
+	    	var params = 'commentText='+commentText+'&action='+action+'&cid='+cid+'&rid='+rid+'&rtype='+rtype;
 	    }
 	    
 	    xmlHttpReq.send(params);
