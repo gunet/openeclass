@@ -142,6 +142,16 @@ Class Commenting {
         } 
     }
     
+    /**
+     * Delete all comments of a resource
+     * @param rtype the resource type
+     * @param rid the resource id
+     * @return boolean
+     */
+    public static function deleteComments($rtype, $rid) {
+        Database::get()->query("DELETE FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
+    }
+    
 }
 
 /**

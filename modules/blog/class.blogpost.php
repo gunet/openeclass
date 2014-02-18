@@ -103,6 +103,7 @@ Class BlogPost {
         $sql = 'DELETE FROM `blog_post` WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
+            Commenting::deleteComments('blogpost', $this->id);
             return true;
         } else {
             return false;
