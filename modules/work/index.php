@@ -58,8 +58,15 @@ $nameTools = $langWorks;
 // main program
 //-------------------------------------------
 
+//Gets the student's assignment file ($file_type=NULL) 
+//or the teacher's assignment ($file_type=1)
 if (isset($_GET['get'])) {
-    if (!send_file(intval($_GET['get']))) {
+    if (isset($_GET['file_type']) && $_GET['file_type']==1) {
+        $file_type = intval($_GET['file_type']);
+    } else {
+        $file_type = NULL;
+    }
+    if (!send_file(intval($_GET['get']), $file_type)) {
         Session::set_flashdata($langFileNotFound, 'caution');
     }
 }
@@ -228,6 +235,13 @@ if ($is_editor) {
                     Session::set_flashdata($langDelError, 'caution');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
+            } elseif ($choice == 'do_delete_file') {
+                if(delete_teacher_assignment_file($id)){
+                    Session::set_flashdata($langDelF, 'success');
+                } else {
+                    Session::set_flashdata($langDelF, 'caution');
+                }
+                redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id.'&choice=edit');             
             } elseif ($choice == 'edit') {
                 $nameTools = $m['WorkEdit'];
                 $navigation[] = $works_url;
@@ -297,10 +311,10 @@ draw($tool_content, 2, null, $head_content);
 
 // insert the assignment into the database
 function add_assignment() {
-    global $tool_content, $workPath, $course_id;
+    global $tool_content, $workPath, $course_id, $uid;
     
     $title = $_POST['title'];
-    $desc = purify($_POST['desc']);
+    $desc = $_POST['desc'];
     $deadline = (trim($_POST['WorkEnd'])!='') ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '';
     $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
     $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
@@ -311,10 +325,41 @@ function add_assignment() {
     if ($assign_to_specific == 1 && empty($assigned_to)) {
         $assign_to_specific = 0;
     }
-    
-    if (@mkdir("$workPath/$secret", 0777)) {
-        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) VALUES (?d, ?s, ?s, ?t, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, ' ', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+    if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
+        $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) VALUES (?d, ?s, ?s, ?t, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
         if ($id) {
+            if (!isset($_FILES) || !$_FILES['userfile']['size']) {
+                $_FILES['userfile']['name'] = '';
+                $_FILES['userfile']['tmp_name'] = '';
+                $no_files = true;
+            } else {
+                $no_files = false;
+            }
+            validateUploadedFile($_FILES['userfile']['name'], 2);
+            if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                return;
+            }
+            
+            $local_name = uid_to_name($uid);
+            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+            if (!empty($am)) {
+                $local_name .= $am;
+            }
+            $local_name = greek_to_latin($local_name);
+            $local_name = replace_dangerous_char($local_name);
+            
+            $secret = work_secret($id);
+            $ext = get_file_extension($_FILES['userfile']['name']);
+            $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+            if (!$no_files) {
+                if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+                    @chmod("$workPath/admin_files/$filename", 0644);
+                    $file_name = $_FILES['userfile']['name'];
+                    Database::get()->query("UPDATE assignment SET file_path = ?s, file_name = ?s WHERE id = ?d", $filename, $file_name, $id);
+                }
+            }            
             if ($assign_to_specific && !empty($assigned_to)) {
                 if ($group_submissions==1) {
                     foreach ($assigned_to as $group_id) {
@@ -414,6 +459,7 @@ function submit_work($id, $on_behalf_of = null) {
         $secret = work_secret($id);
         $ext = get_file_extension($_FILES['userfile']['name']);
         $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+        
         if (!isset($on_behalf_of)) {
             $msg1 = delete_submissions_by_uid($user_id, -1, $id);
             if ($group_sub) {
@@ -565,7 +611,8 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code,
-    $urlAppend, $works_url, $end_cal_Work_db, $course_id, $langStudents, $langMove;
+    $urlAppend, $works_url, $end_cal_Work_db, $course_id, 
+    $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment;
 
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     if ($row->assign_to_specific) {
@@ -618,7 +665,7 @@ function show_edit_assignment($id) {
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $tool_content .= "<h1>".$row->title."</h1>";
     $tool_content .= "
-    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+    <form enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
@@ -640,7 +687,13 @@ function show_edit_assignment($id) {
                 <td>" . rich_text_editor('comments', 5, 65, $comments) . "</td>
                 </tr>";
     }
-    
+    $tool_content .= "
+        <tr>
+            <th class='left' width='150'>$langWorkFile:</th>
+            <td>".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>"
+            . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
+                                 <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' name='userfile' />")."</td>
+        </tr>";
     $tool_content .= "
     <tr>
         <th>$m[max_grade]:</th>
@@ -708,8 +761,9 @@ function show_edit_assignment($id) {
 function edit_assignment($id) {
 
     global $tool_content, $langBackAssignment, $langEditSuccess,
-    $langEditError, $course_code, $works_url, $course_id;
+    $langEditError, $course_code, $works_url, $course_id, $uid, $workPath;
 
+    $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     $title = $_POST['title'];
     $desc = purify($_POST['desc']);
     $deadline = ($_POST['WorkEnd']) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : $_POST['WorkEnd'];
@@ -727,11 +781,45 @@ function edit_assignment($id) {
     } else {
         $comments = quote(purify($_POST['comments']));
     }
-    Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-        group_submissions = ?d, comments = ?s, deadline = ?t, max_grade = ?d, assign_to_specific = ?d
-        WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-        $comments, $deadline, $max_grade, $assign_to_specific, $course_id, $id);
     
+    if (!isset($_FILES) || !$_FILES['userfile']['size']) {
+        $_FILES['userfile']['name'] = '';
+        $_FILES['userfile']['tmp_name'] = '';
+        $no_files = true;
+    } else {
+        $no_files = false;
+    }
+    validateUploadedFile($_FILES['userfile']['name'], 2);
+    if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+        $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+        $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+        return;
+     }         
+     if (!$no_files) {
+        $local_name = uid_to_name($uid);
+        $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+        if (!empty($am)) {
+            $local_name .= $am;
+        }                
+        $local_name = greek_to_latin($local_name);
+        $local_name = replace_dangerous_char($local_name);
+        $secret = $row->secret_directory;
+        $ext = get_file_extension($_FILES['userfile']['name']);
+        $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);                
+        if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+            @chmod("$workPath/admin_files/$filename", 0644);
+            $file_name = $_FILES['userfile']['name'];
+        }
+    } else {
+        $filename = $row->file_path;
+        $file_name = $row->file_name;
+    }        
+    Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
+        group_submissions = ?d, comments = ?s, deadline = ?t, max_grade = ?d, 
+        assign_to_specific = ?d, file_path = ?s, file_name = ?s
+        WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
+        $comments, $deadline, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
+
     Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
    
     if ($assign_to_specific && !empty($assigned_to)) {
@@ -794,23 +882,40 @@ function delete_assignment($id) {
  * @global type $course_id
  * @global type $course_code
  * @global type $webDir
- * @global type $langBack
- * @global type $langDeleted
  * @param type $id
  */
 function delete_user_assignment($id) {
-    global $tool_content, $course_code, $webDir, $langBack, $langDeleted;
+    global $tool_content, $course_code, $webDir;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
     $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
-        if (my_delete($file)) {            
+        if (my_delete($file)) {
             return true;
         }
         return false;
     }
 }
+/**
+ * @brief delete teacher assignment file
+ * @global string $tool_content
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @param type $id
+ */
+function delete_teacher_assignment_file($id) {
+    global $tool_content, $course_code, $webDir;
 
+    $filename = Database::get()->querySingle("SELECT file_path FROM assignment WHERE id = ?d", $id);
+    $file = $webDir . "/courses/" . $course_code . "/work/admin_files/" . $filename->file_path;
+    if (Database::get()->query("UPDATE assignment SET file_path='', file_name='' WHERE id = ?d", $id)->affectedRows > 0) {
+        if (my_delete($file)) {
+            return true;
+        }
+        return false;
+    }
+}
 /**
  * @brief display user assignment
  * @global type $tool_content
@@ -885,7 +990,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_select_form = "<tr><th class='left'>$langGroupSpaceLink:</th><td>" .
                         selection($groups_with_no_submissions, 'group_id') . "</td></tr>";
             }else{
-                Session::set_flashdata('Δεν υπάρχουν εγγεγραμένες στο μάθημα ομάδες που να μην έχουν υποβάλει εργασία', 'caution');
+                Session::set_flashdata($m['NoneWorkGroupNoSubmission'], 'caution');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);                
             }
         }
@@ -895,7 +1000,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 $group_select_form = "<tr><th class='left'>$langOnBehalfOf:</th><td>" .
                         selection($users_with_no_submissions, 'user_id') . "</td></tr>";
             } else {
-                Session::set_flashdata('Δεν υπάρχουν εγγεγραμένοι στο μάθημα χρήστες που να μην έχουν υποβάλει εργασία', 'caution');
+                Session::set_flashdata($m['NoneWorkUserNoSubmission'], 'caution');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
@@ -939,7 +1044,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langConfirmDelete;
+    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile;
 
     if ($is_editor) {
         $tool_content .= "
@@ -948,7 +1053,7 @@ function assignment_details($id, $row) {
               <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>$langDelAssign</a></li>
                 <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id'>$langZipDownload</a></li>
 		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_results=true'>$langGraphResults</a></li>
-                    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true'>test</a></li>
+                    <li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;disp_non_submitted=true'>$m[WorkUserGroupNoSubmission]</a></li>
 		<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=add'>$langAddGrade</a></li>
               </ul>
             </div>";
@@ -969,11 +1074,13 @@ function assignment_details($id, $row) {
           <th width='150'>$m[title]:</th>
           <td>".q($row->title)."</td>
         </tr>";
-    $tool_content .= "
-        <tr>
-          <th valign='top'>$m[description]:</th>
-          <td>".purify($row->description)."</td>
-        </tr>";
+    if (!empty($row->description)) {
+        $tool_content .= "
+                <tr>
+                  <th class='left'>$m[description]:</th>
+                  <td>".purify($row->description)."</td>
+                </tr>";
+    }    
     if (!empty($row->comments)) {
         $tool_content .= "
                 <tr>
@@ -981,6 +1088,13 @@ function assignment_details($id, $row) {
                   <td>".purify($row->comments)."</td>
                 </tr>";
     }
+    if (!empty($row->file_name)) {
+        $tool_content .= "
+                <tr>
+                  <th class='left'>$langWorkFile:</th>
+                  <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a></td>
+                </tr>";
+    }    
     if((int)$row->deadline){
         $deadline = nice_format($row->deadline, true);
     }else{
@@ -1534,20 +1648,30 @@ function submit_grades($grades_id, $grades, $email = false) {
 }
 
 // functions for downloading
-function send_file($id) {
+function send_file($id, $file_type) {
     global $course_code, $uid, $is_editor;
-
-    $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
-    if (count($info)==0) {
-        return false;
+    if (isset($file_type)) {
+        $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+        if (count($info)==0) {
+            return false;
+        }
+        if (!($is_editor || $GLOBALS['is_member'])) {
+            return false;
+        }        
+        send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
+    } else {
+        $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
+        if (count($info)==0) {
+            return false;
+        }
+        if ($info->group_id) {
+            initialize_group_info($info->group_id);
+        }
+        if (!($is_editor or $info->uid == $uid or $GLOBALS['is_member'])) {
+            return false;
+        }
+        send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);        
     }
-    if ($info->group_id) {
-        initialize_group_info($info->group_id);
-    }
-    if (!($is_editor or $info->uid == $uid or $GLOBALS['is_member'])) {
-        return false;
-    }
-    send_file_to_client("$GLOBALS[workPath]/$info->file_path", $info->file_name, null, true);
     exit;
 }
 
