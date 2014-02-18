@@ -345,7 +345,10 @@ if ($action == "showBlog") {
             if ($comments_enabled == 1) {
                 $comm = new Commenting('blogpost', $post->getId());
                 $tool_content .= $comm->put($course_code, $is_editor, $uid);
+            } else {
+                $tool_content .= "<div class=\"blog_post_empty_space\"></div>";
             }
+            
         }
         
         

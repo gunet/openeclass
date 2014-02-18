@@ -1513,6 +1513,10 @@ dt {
     margin-bottom: 10px;
 }
 
+.blog_post_empty_space {
+    margin-bottom: 40px;
+}
+
 .blog_tree {
     list-style-type: none; 
     padding: 0;
