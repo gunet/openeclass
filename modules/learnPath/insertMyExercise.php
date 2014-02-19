@@ -107,7 +107,7 @@ while ($listex = mysql_fetch_array($resultex) )
                   AND M.`contentType` = \"".CTEXERCISE_."\"";
 
         $query = db_query($sql);
-        $num = mysql_numrows($query);
+        $num = mysql_num_rows($query);
 
         if($num == 0)
         {
@@ -172,7 +172,7 @@ while ($listex = mysql_fetch_array($resultex) )
                        AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
 
             $query2 = db_query($sql);
-            $num = mysql_numrows($query2);
+            $num = mysql_num_rows($query2);
 
             if ($num == 0)     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
             {

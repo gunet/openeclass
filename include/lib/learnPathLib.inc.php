@@ -2019,25 +2019,20 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		exit();
 	}
 	
-	if (!$is_editor) {
-		$lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '".(int)$_SESSION['path_id']."' ORDER BY `rank`", $code_cours);
-		if ($lpms != false) {
-			$block_met = false;
-			foreach ($lpms as $lpm) {
-				if ($lpm['module_id'] == $_SESSION['lp_module_id']) {
-					if ($block_met) {
-						// if a previous learning path module was blocked, don't allow users in it
-						header("Location: ".$depth."learningPathList.php?course=$code_cours");
-						exit();
-					}
-					else
-						break; // our lp module is surely not in the block list
-				}
-				if ($lpm['lock'] == "CLOSE")
-					$block_met = true;
-			}
-		}
+	if (!$is_editor) {           
+		$lpm_id = db_query_get_single_row("SELECT `lock` FROM lp_rel_learnPath_module 
+                                WHERE `learnPath_id` = ".intval($_SESSION['path_id'])."
+                                AND module_id = " .intval($_SESSION['lp_module_id'])."", $code_cours);                
+                $module = db_query_get_single_row("SELECT credit, lesson_status from lp_user_module_progress 
+                                    WHERE user_id = $_SESSION[uid] 
+                                    AND learnPath_id = $_SESSION[path_id] 
+                                    AND learnPath_module_id = $_SESSION[lp_module_id]");
+                if (($lpm_id['lock'] == 'CLOSE') 
+                    and ($module['credit'] != 'CREDIT' 
+                    or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
+                    // TODO: if a previous learning path module was blocked, don't allow users in it
+                    //	header("Location: ".$depth."learningPathList.php?course=$code_cours");
+                    //	exit();
+                }
 	}
 }
-
-?>

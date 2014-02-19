@@ -80,7 +80,7 @@ while ($iterator <= $_POST['maxMediaForm'])
                            AND A.`path` LIKE \"" .addslashes($row['path']) ."\"
                            AND M.`contentType` = \"".CTMEDIA_."\"";
         $query0 = db_query($sql);
-        $num = mysql_numrows($query0);
+        $num = mysql_num_rows($query0);
 
         if ($num == 0)
         {
@@ -100,7 +100,7 @@ while ($iterator <= $_POST['maxMediaForm'])
                                AND A.`path` = '". addslashes($row['path'])."'
                                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
             $query2 = db_query($sql);
-            $num = mysql_numrows($query2);
+            $num = mysql_num_rows($query2);
 
             if ($num == 0)
             { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
@@ -133,7 +133,7 @@ while ($iterator <= $_POST['maxMediaForm'])
                            AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
                            AND M.`contentType` = \"".CTMEDIALINK_."\"";
         $query0 = db_query($sql);
-        $num = mysql_numrows($query0);
+        $num = mysql_num_srows($query0);
 
         if ($num == 0)
         {
@@ -153,7 +153,7 @@ while ($iterator <= $_POST['maxMediaForm'])
                                AND A.`path` = '". addslashes($row['url'])."'
                                AND LPM.`learnPath_id` = ". (int)$_SESSION['path_id'];
             $query2 = db_query($sql);
-            $num = mysql_numrows($query2);
+            $num = mysql_num_rows($query2);
 
             if ($num == 0)
             { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one

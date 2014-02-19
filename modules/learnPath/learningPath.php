@@ -265,7 +265,7 @@ foreach ($flatElementList as $module)
         $tool_content .= '<b>'.htmlspecialchars($module['name']).'</b>'."";
     }
     //-- if user can access module
-    elseif ( !$is_blocked )
+    elseif (!$is_blocked )
     {
         if($module['contentType'] == CTEXERCISE_ )
             $moduleImg = 'exercise_on.png';
@@ -285,18 +285,13 @@ foreach ($flatElementList as $module)
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
-
-        if($module['lock'] == 'CLOSE')
-        {
-            if($uid)
-            {
-                $is_blocked = true; // following modules will be unlinked
-            }
-            else // anonymous : don't display the modules that are unreachable
-            {
-                break ;
-            }
-        }
+        
+            if (($module['lock'] == 'CLOSE') 
+                and ($module['credit'] != 'CREDIT' 
+                or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED')))
+                {
+                    $is_blocked = true; // following modules will be unlinked
+            }        
     }
     //-- user is blocked by previous module, don't display link
     else
@@ -315,7 +310,7 @@ foreach ($flatElementList as $module)
         $tool_content .= '<span style="vertical-align: middle;"><img src="'.$themeimg.'/'.$moduleImg.'" alt="'.$contentType_alt.'" title="'.$contentType_alt.'" border="0" /></span>'." "
              .htmlspecialchars($module['name']);
     }
-    $tool_content .= '</td>'."\n";
+    $tool_content .= '</td>';
 
     if( $uid && ($module['contentType'] != CTLABEL_) )
     {
@@ -346,7 +341,7 @@ foreach ($flatElementList as $module)
     if($module['contentType'] != CTLABEL_)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-    $tool_content .= '    </tr>'."\n";
+    $tool_content .= '</tr>';
     $ind++;
 }
 
