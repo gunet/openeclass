@@ -274,7 +274,12 @@ final class Database {
             $entry = $statement_parts[$i + 1];
             $first = substr($entry, 0, 1);
             $value = $variables[$i];
-            if ($first === "d") {   // Decimal
+            if (is_null($value)) {
+                if ($first === "d" || $first === "b" || $first === "f" || $first === "t" || $first === "s") {
+                    $statement_parts[$i + 1] = substr($entry, 1);
+                }
+                $type = PDO::PARAM_NULL;
+            } else if ($first === "d") {   // Decimal
                 $statement_parts[$i + 1] = substr($entry, 1);
                 $value = intval($value);
                 $type = PDO::PARAM_INT;
