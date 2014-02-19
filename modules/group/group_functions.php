@@ -21,7 +21,7 @@ function initialize_group_id($param = 'group_id') {
 }
 
 function initialize_group_info($group_id = false) {
-    global $course_id, $statut, $self_reg, $multi_reg, $has_forum, $private_forum, $documents,
+    global $course_id, $status, $self_reg, $multi_reg, $has_forum, $private_forum, $documents,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $mysqlMainDb, $user_group_description, $course_code;
 
@@ -32,7 +32,7 @@ function initialize_group_info($group_id = false) {
     }
 
     // Guest users aren't allowed to register in a group
-    if ($statut == 10) {
+    if ($status == 10) {
         $self_reg = 0;
     }
 
