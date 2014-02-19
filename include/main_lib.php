@@ -1491,12 +1491,9 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     // check if we have guest account. If yes delete him.
-    $sql = db_query("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid , USER_GUEST);
-    if (mysql_affected_rows() > 0) {        
-        $r = mysql_fetch_row($sql);        
-        $guest_id = $r[0];        
-        deleteUser($guest_id);
-    }
+    $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
+    if ($guest_user)
+        deleteUser($guest_user->user_id);
     db_query("DELETE FROM course_user WHERE course_id = $cid");
     db_query("DELETE FROM course_department WHERE course = $cid");
     db_query("DELETE FROM course WHERE id = $cid");
