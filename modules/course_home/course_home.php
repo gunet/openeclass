@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,6 +36,8 @@ require_once 'include/lib/course.class.php';
 $tree = new Hierarchy();
 $course = new Course();
 
+$require_help = TRUE;
+$helpTopic = 'course_home';
 $nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";
 
@@ -58,16 +60,17 @@ if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
 
-$res = db_query("SELECT course.keywords, course.visible, course.prof_names, course.public_code
-                  FROM course
-                 WHERE course.id = $course_id");
+$res = db_query("SELECT keywords, visible, prof_names, public_code, course_license
+                  FROM course WHERE id = $course_id");
 $result = mysql_fetch_array($res);
 
 $keywords = q(trim($result['keywords']));
 $visible = $result['visible'];
 $professor = $result['prof_names'];
 $public_code = $result['public_code'];
+$course_license = $result['course_license'];
 $main_extra = $description = $addon = '';
+
 $res = db_query("SELECT res_id, title, comments FROM unit_resources WHERE unit_id =
                         (SELECT id FROM course_units WHERE course_id = $course_id AND `order` = -1)
                         AND (visible = 1 OR res_id < 0)
@@ -252,9 +255,6 @@ foreach ($departments as $dep) {
 
 $bar_content .= "</li>\n";
 
-$require_help = TRUE;
-$helpTopic = 'course_home';
-
 $sql = "SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = $course_id";
@@ -289,9 +289,21 @@ if ($is_course_admin) {
 }
 $bar_content .= "<li><b>$langUsers</b>: $link</li></ul>";
 
+// display course license
+if ($course_license) {
+    $license_info_box = "<table class='tbl_courseid' width='200'>
+        <tr class='title1'>
+            <td class='title1'>${langOpenCoursesLicense}</td></tr>
+        <tr><td><div align='center'><small>".copyright_info($course_id)."</small></div></td></tr>
+        </table>
+        <br/>";
+} else {
+    $license_info_box = '';
+}
+
 // display opencourses level in bar
 require_once 'modules/course_metadata/CourseXML.php';
-$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
+$level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $opencourses_level = '';
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -325,7 +337,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 $emailnotification = '';
 if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
     $emailnotification = "<div class='alert1'>$langNoUserEmailNotification
-        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 // display `contact teacher via email` link if teacher actually receives email from his course
 $receive_mail = FALSE;
@@ -357,6 +369,7 @@ $tool_content .= "
   </tr>
   </table>
   <br />
+  $license_info_box
   $opencourses_level
   <table class='tbl_courseid' width='200'>
   <tr class='title1'>

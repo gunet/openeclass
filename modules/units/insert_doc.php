@@ -151,13 +151,13 @@ function list_docs() {
                 }
                 $dir = $entry['path'];
                 if ($is_dir) {
-                    $image = $themeimg . '/folder.png';
+                    $image = 'folder';
                     $file_url = $urlbase . $dir;
                     $link_text = $entry['name'];
 
                     $link_href = "<a href='$file_url'>$link_text</a>";
                 } else {
-                    $image = '../document/img/' . choose_image('.' . $entry['format']);
+                    $image = choose_image('.' . $entry['format']);
                     $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
 
                     $dObj = $entry['object'];
@@ -176,7 +176,7 @@ function list_docs() {
                     }
                 }
                 $tool_content .= "\n    <tr class='$vis'>";
-                $tool_content .= "\n      <td width='1' class='center'><img src='$image' alt=''/></td>";
+                $tool_content .= "\n      <td width='1' class='center'>" . icon($image, '') . "</td>";
                 $tool_content .= "\n      <td>$link_href";
 
                 /*                 * * comments ** */

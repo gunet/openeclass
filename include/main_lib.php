@@ -81,6 +81,8 @@ define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_SETTINGS', 31);
+
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -265,6 +267,13 @@ function js_escape($s) {
 // Include a JavaScript file from the main js directory
 function load_js($file, $init = '') {
     global $head_content, $urlAppend, $theme;
+    static $loaded;
+
+    if (isset($loaded[$file])) {
+        return;
+    } else {
+        $loaded[$file] = true;
+    }
 
     if ($file == 'jquery') {
         $file = 'jquery-1.10.2.min.js';
@@ -292,8 +301,7 @@ function load_js($file, $init = '') {
         $file = 'colorbox/jquery.colorbox.min.js';
     } elseif ($file == 'flot') {
         $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
-        $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-1.10.2.min.js'></script>\n";
+        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";        
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
@@ -308,7 +316,7 @@ function load_js($file, $init = '') {
 
 // Translate uid to username
 function uid_to_username($uid) {    
-    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
+    return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", intval($uid))->username;
 }
 
 // Return HTML for a user - first parameter is either a user id (so that the
@@ -357,7 +365,7 @@ function display_user($user, $print_email = false, $icon = true) {
     }
 
     $token = token_generate($user['id'], true);
-    return "$icon<a href='{$urlAppend}modules/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
+    return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
             q("$user[givenname] $user[surname]") . "</a>" .
             ($print_email ? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')') : '');
 }
@@ -365,14 +373,14 @@ function display_user($user, $print_email = false, $icon = true) {
 // Translate uid to givenname , surname, fullname or nickname
 function uid_to_name($uid, $name_type='fullname') {
 	if($name_type=='fullname'){
-		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?", intval($uid))->fullname;									  				
+		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid)->fullname;									  				
 	}elseif($name_type=='givenname'){
-		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?", intval($uid))->givenname;
+		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid)->givenname;
 	}elseif($name_type=='surname'){
-		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?", intval($uid))->surname;
+		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid)->surname;
 	}elseif($name_type=='username'){
-		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?", intval($uid))->username;
-	}else{
+		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid)->username;
+	}else{            
 		return false;
 	}
 }
@@ -1272,15 +1280,6 @@ function langname_to_code($langname) {
     }
 }
 
-// Make sure a language code is valid - if not, default language is Greek
-function validate_language_code($langcode, $default = 'el') {
-    global $active_ui_languages;
-    if (array_search($langcode, $active_ui_languages) === false) {
-        return $default;
-    } else {
-        return $langcode;
-    }
-}
 
 function append_units($amount, $singular, $plural) {
     if ($amount == 1) {
@@ -1495,7 +1494,7 @@ function delete_course($cid) {
     db_query("DELETE FROM link WHERE course_id = $cid");
     db_query("DELETE FROM link_category WHERE course_id = $cid");
     db_query("DELETE FROM agenda WHERE course_id = $cid");
-    Database::get()->query("DELETE FROM course_review WHERE course_id = ?", $cid);
+    Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
     db_query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
@@ -1568,28 +1567,28 @@ function deleteUser($id) {
 
         if (mysql_num_rows($q)) {
             // delete everything
-            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
-            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
-            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
-            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
-            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
-            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
-            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
-            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
-            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
-            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?d" , $u);
             return true;
         } else {
             return false;
@@ -2211,7 +2210,7 @@ function profile_image($uid, $size, $default = false) {
     if (!$default) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='" . q(uid_to_name($uid)) . "'>";
     } else {
-        $name = q(uid_to_name($uid));
+        $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
         return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
     }
 }
@@ -2567,6 +2566,32 @@ function getOnlineUsers() {
     }
     @closedir($directory_handle);
     return $count;
+}
+
+/**
+ * Initialize copyright/license global arrays
+ */
+function copyright_info($cid)
+{
+
+    global $language, $license, $themeimg;
+    
+    $lang = langname_to_code($language);
+
+    $lic = db_query_get_single_value("SELECT course_license FROM course WHERE id = $cid");
+    if (($lic == 0) or ($lic >= 10)) {
+        $link_suffix = '';
+    } else {
+        if ($language != 'en') {
+                    $link_suffix = 'deed.' . $lang;
+        } else {
+                    $link_suffix = '';
+        }
+    }
+    $link = "<a href='".$license[$lic]['link']."$link_suffix'>
+            <img src='$themeimg/".$license[$lic]['image'].".png' title='".$license[$lic]['title']."' alt='".$license[$lic]['title']."' /></a>";
+
+    return $link . '<br>' . q($license[$lic]['title']);
 }
 
 /**

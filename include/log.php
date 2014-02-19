@@ -495,12 +495,12 @@ class Log {
         global $langTitle, $langContent, $langDuration, $langhours, $langDate;
 
         $details = unserialize($details);
-        $date = $details['day'] . " " . $details['hour'];
+        $date = $details['date'];
 
         $content = "$langTitle &laquo" . $details['title'] .
                 "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "&raquo
                              &nbsp;&mdash;&nbsp;$langDate: " . nice_format($date, true) . "
-                             &nbsp;&mdash;&nbsp;$langDuration: " . $details['lasting'] . " $langhours";
+                             &nbsp;&mdash;&nbsp;$langDuration: " . $details['duration'] . " $langhours";
         return $content;
     }
 
@@ -577,7 +577,7 @@ class Log {
         global $langFileName, $langTitle, $langComments;
 
         $details = unserialize($details);
-
+        
         $content = "$langTitle &laquo" . $details['title'] . "&raquo";
         if (!empty($details['filename'])) {
             $content .= "&nbsp;&mdash;&nbsp;$langFileName &laquo" . $details['filename'] . "&raquo";
@@ -737,7 +737,7 @@ class Log {
     private function course_user_action_details($details) {
 
         global $langUnCourse, $langOfUser, $langToUser, $langNewUser,
-        $langGiveRightAdmin, $langGiveRightΕditor, $langGiveRightTutor,
+        $langGiveRightAdmin, $langGiveRightEditor, $langGiveRightTutor,
         $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
 
         $details = unserialize($details);

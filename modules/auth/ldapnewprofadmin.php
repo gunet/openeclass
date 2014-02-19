@@ -65,11 +65,8 @@ if ($submit) {
     $pe = $_POST['pe'];
     $department = $_POST['department'];
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
-    $lang = $_POST['language'];
-
-    if (!isset($native_language_names[$lang])) {
-        $lang = langname_to_code($language);
-    }
+    $lang = $session->validate_language_code(@$_POST['language']);
+    
 
     // check if user name exists
     $username_check = db_query("SELECT username FROM `$mysqlMainDb`.user WHERE username=" . quote($pu));

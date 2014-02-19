@@ -50,7 +50,7 @@ if (isset($toolContent_ErrorExists)) {
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
@@ -211,7 +211,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } else {
             if (!get_config('dont_display_login_form')) {
                 $t->set_var('LANG_LOGOUT', $langLogin);
-                $t->set_var('LOGOUT_LINK', $urlSecure . 'login_form.php');
+                $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
             } else {
                 $t->set_var('LOGOUT_LINK', '#');
             }
@@ -539,7 +539,8 @@ function array2html($TheArray) {
  */
 
 function lang_selections() {
-    if (count($GLOBALS['active_ui_languages']) < 2) {
+    global $session;
+    if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
     $html = '<form name="langform" action="' . $_SERVER ['SCRIPT_NAME'] . '" method="get" >';
@@ -556,11 +557,12 @@ function lang_selections() {
  */
 
 function lang_select_options($name, $onchange_js = '', $default_langcode = false) {
-    global $language, $native_language_names;
+    global $session;
 
     if ($default_langcode === false) {
-        $default_langcode = $language;
+        $default_langcode = $session->language;
     }
  
-    return selection($native_language_names, $name, $default_langcode, $onchange_js);
+    return selection($session->native_language_names,
+            $name, $default_langcode, $onchange_js);
 }

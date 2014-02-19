@@ -36,8 +36,8 @@ $from = "SELECT course.code,
                course.public_code,
                course_user.status as status
           FROM course JOIN course_user ON course.id = course_user.course_id
-         WHERE course_user.user_id = ? ";
-$visible = " AND course.visible != ? ";
+         WHERE course_user.user_id = ?d ";
+$visible = " AND course.visible != ?d ";
 $order = " ORDER BY status, course.title, course.prof_names";
 
 $callback = function($course) use (&$courses) {

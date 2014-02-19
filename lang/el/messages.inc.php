@@ -336,6 +336,7 @@ $langdbpass = "Συνθηματικό χρήστη Βάσης Δεδομένων
 $langdbtable = "Όνομα πίνακα Βάσης Δεδομένων";
 $langdbfielduser = "Όνομα πεδίου Χρήστη στον πίνακα";
 $langdbfieldpass = "Όνομα πεδίου Συνθηματικού Χρήστη στον πίνακα";
+$langdbpassencr = "Κρυπτογράφηση πεδίου συνθηματικού";
 $langInstructionsAuth = "Οδηγίες διασύνδεσης και χρήσης";
 $langTestAccount = "Για να ενεργοποιηθεί ο τρόπος πιστοποίησης είναι απαραίτητο να κάνετε μια δοκιμαστική χρήση με ένα λογαριασμό της μεθόδου που επιλέξατε";
 $langpop3host = "Εξυπηρέτης POP3";
@@ -603,7 +604,7 @@ $langAnn = "Ανακοινώθηκε την";
 $langEmptyAnTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανακοίνωσης";
 $langAnnouncementNoTille = "Ανακοίνωση χωρίς τίτλο";
 $langCourseAnnouncements = "Ανακοινώσεις μαθήματος";
-$langLinkUnsubscribe = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br />
+$langLinkUnsubscribe = "Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στο μάθημα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails από το συγκεκριμένο μάθημα κάντε κλικ";
 $langLinkUnsubscribeFromPlatform = "Σημείωση: Λάβατε αυτό το μήνυμα επειδή είστε γραμμένος στην πλατφόρμα '%s'.<br />
                 Αν δεν επιθυμείτε να σας αποστέλλονται άλλα e-mails κάντε κλικ";
@@ -909,7 +910,27 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του μαθήματος. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <b>Αλλαγή</b>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το μάθημα με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
+
 $langAttendance = "Παρουσιολόγιο";
+$langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
+$langAttendanceΑbsences = "Απουσίες";
+$langAttendanceEdit = "Επεξεργασία";
+$langAttendanceAddActivity = "Προσθήκη υποχρεωτικής δραστηριότητας";
+
+$langCopyrighted="Πνευματικά Δικαιώματα";
+$langWithoutCopyright="Ελεύθερο δικαιωμάτων";
+$langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώματα";
+$langCopyrightedUnknown="Άγνωστο";
+$langLicenseUnset = 'Δεν έχει οριστεί';
+$langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
+$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
+$langCommercialUse = "Εμπορική χρήση";
+$langAllowModification = "Επιτρέψτε διασκευή";
+
 
 // Groups
 $langCreateCourseGroups = "Ομάδες Χρηστών";
@@ -1146,6 +1167,7 @@ $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
 $langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συννημένο αρχείο";
+$langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
 
 /* * ********************************************************
  * exercise
@@ -1176,6 +1198,7 @@ $langQuestCreate = "Δημιουργία ερωτήσεων";
 $langExRecord = "Η άσκησή σας αποθηκεύτηκε";
 $langBackModif = "Επιστροφή στη διόρθωση της άσκησης";
 $langDoEx = "Κάντε την άσκηση";
+$langRemainingTime = "Υπολειπόμενος χρόνος";
 $langDefScor = "Καθορίστε τις ρυθμίσεις βαθμών";
 $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεων";
 $langSub = "Υπότιτλος";
@@ -1310,6 +1333,8 @@ $langExerciseMaxAttemptsReached = "Έχετε φτάσει τον μέγιστο
 $langExerciseExpiredTime = "Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο εκτέλεσης της άσκησης.";
 $langExerciseExpired = "Η άσκηση έχει λήξει ή δεν έχει ενεργοποιηθεί";
 $langExerciseLis = "Λίστα ασκήσεων";
+$langExerciseEndTime = "Τέλος χρόνου";
+$langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults = "Αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langYourTotalScore2 = "Συνολική βαθμολογία";
@@ -2426,7 +2451,7 @@ $langUserAddExplanation = "κάθε γραμμή του αρχείου που θ
 $langDownloadUserList = "Ανέβασμα καταλόγου";
 $langUserNumber = "αριθμός";
 $langGiveRightTutor = "Προσθήκη δικαιώματος υπεύθυνου ομάδας";
-$langGiveRightΕditor = "Προσθήκη δικαιώματος βοηθού εκπαιδευτή";
+$langGiveRightEditor = "Προσθήκη δικαιώματος βοηθού εκπαιδευτή";
 $langGiveRightAdmin = "Προσθήκη δικαιώματος εκπαιδευτή";
 $langGiveRightReviewer = "Προσθήκη δικαιώματος OpenCourses Reviewer";
 $langRemoveRightTutor = "Αφαίρεση δικαιώματος υπεύθυνου ομάδας";

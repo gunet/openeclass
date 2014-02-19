@@ -236,7 +236,8 @@ function get_auth_settings($auth) {
                         'dbpass' => str_replace('dbpass=', '', @$edb[3]),
                         'dbtable' => str_replace('dbtable=', '', @$edb[4]),
                         'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6])));
+                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
+                        'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
                     break;
                 case 7:
                     $cas = explode('|', $auth_settings);
@@ -390,15 +391,16 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 $db_ext = mysql_select_db($settings['dbname'], $link);
                 if ($db_ext) {
                     $qry = "SELECT * FROM `$settings[dbname]`.`$settings[dbtable]`
-                                           WHERE `$settings[dbfielduser]` = " . quote($test_username) . " AND
-                                                 `$settings[dbfieldpass]` = " . quote($test_password);
+                                           WHERE `$settings[dbfielduser]` = " . quote($test_username);
                     $res = mysql_query($qry, $link);
                     if ($res) {
-                        if (mysql_num_rows($res) > 0) {
-                            $testauth = true;
+                        if (($row = mysql_fetch_assoc($res)) > 0) {
+                            $testauth = external_DB_Check_Pass($test_password, $row[$settings['dbfieldpass']], $settings['dbpassencr']);
                             mysql_close($link);
                             // Reconnect to main database
-                            $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+                            $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
+                                                           $GLOBALS['mysqlUser'],
+                                                           $GLOBALS['mysqlPassword']);
                             if (mysql_version())
                                 mysql_query('SET NAMES utf8');
                             mysql_select_db($mysqlMainDb);
@@ -471,7 +473,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
  * ************************************************************** */
 
 function check_activity($userid) {
-    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?", intval($userid));
+    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", intval($userid));
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
     } else {
@@ -965,7 +967,7 @@ function shib_cas_login($type) {
         }
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?, email = ?, status = ?, lang = 'el', 
+                                       username = ?s, email = ?s, status = ?d, lang = 'el', 
                                        registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
                 DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
         $language = $_SESSION['langswitch'] = 'el';
@@ -1042,4 +1044,20 @@ function resetLoginFailure() {
         return;
 
     db_query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
+}
+
+function external_DB_Check_Pass($test_password, $hash, $encryption) {
+    switch ($encryption) {
+        case 'none':
+            return ($test_password == $hash);
+            break;
+        case 'md5':
+            return (md5($test_password) == $hash);
+        case 'ehasher':
+            require_once 'include/phpass/PasswordHash.php';
+            $hasher = new PasswordHash(8, false);
+            return $hasher->CheckPassword($test_password, $hash);
+        default:
+            /* Maybe append an error message to tool_content, telling not supported encryption */
+    }
 }

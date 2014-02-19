@@ -126,7 +126,7 @@ if ($uid AND !isset($_GET['logout'])) {
         }
     }        
     // if user is not guest redirect him to portfolio
-    header("Location: {$urlServer}include/portfolio.php");                
+    header("Location: {$urlServer}main/portfolio.php");                
     
 } else {    
     $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .

@@ -31,10 +31,9 @@ $username = isset($_POST['username']) ? $_POST['username'] : '';
 
 if (isset($_POST['submit']) and !empty($username)) {
 
-    $res = db_query("SELECT id FROM user WHERE username=" . quote($username));
-
-    if (mysql_num_rows($res) == 1) {
-        list($user_id) = mysql_fetch_array($res);
+    $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
+    if ($res) {
+        $user_id = $res->id;
         switch ($_POST['adminrights']) {
             case 'admin': $privilege = '0'; // platform admin user
                 break;
@@ -48,14 +47,13 @@ if (isset($_POST['submit']) and !empty($username)) {
 
         if (isset($privilege)) {
             $user_id = intval($user_id);
-            $s = db_query("SELECT * FROM admin WHERE user_id = $user_id");
-            if (mysql_num_rows($s) > 0) {
-                db_query("UPDATE admin SET privilege = $privilege
-                                WHERE user_id = $user_id");
+            if (Database::get()->querySingle("SELECT * FROM admin WHERE user_id = ?d", $user_id)) {
+                $affected = Database::get()->query("UPDATE admin SET privilege = ?d
+                                WHERE user_id = ?d", $privilege, $user_id)->affectedRows;
             } else {
-                $sql = db_query("INSERT INTO admin VALUES($user_id, $privilege)");
+                $affected = Database::get()->query("INSERT INTO admin VALUES(?d,?d)", $user_id, $privilege)->affectedRows;
             }
-            if (isset($sql) or mysql_affected_rows() > 0) {
+            if ($affected > 0) {
                 $tool_content .= "<p class='success'>
                     $langTheUser " . q($username) . " $langWith id=" . q($user_id) . " $langDone</p>";
             }
@@ -68,8 +66,7 @@ if (isset($_POST['submit']) and !empty($username)) {
 } else if (isset($_GET['delete'])) { // delete admin users
     $aid = intval($_GET['aid']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
-        $sql = db_query("DELETE FROM admin WHERE admin.user_id = " . $aid);
-        if (!$sql) {
+        if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
             $tool_content .= "<center><br />$langDeleteAdmin" . q($aid) . " $langNotFeasible  <br /></center>";
         } else {
             $tool_content .= "<p class='success'>$langNotAdmin</p>";
@@ -81,12 +78,6 @@ if (isset($_POST['submit']) and !empty($username)) {
 
 $tool_content .= printform($langUsername);
 
-// Display the list of admins
-$r1 = db_query("SELECT id, givenname, surname, username, admin.privilege
-                    FROM user, admin
-                    WHERE user.id = admin.user_id
-                    ORDER BY id");
-
 $tool_content .= "
   <table class='tbl_alt' width='100%'>
   <tr>
@@ -97,12 +88,16 @@ $tool_content .= "
     <th class='center'>$langActions</th>
   </tr>";
 
-while ($row = mysql_fetch_array($r1)) {
+// Display the list of admins
+Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privilege as privilege
+                    FROM user, admin
+                    WHERE user.id = admin.user_id
+                    ORDER BY id", function ($row) use (&$tool_content, $langAdministrator, $langPowerUser, $langManageUser, $langManageDepartment, $themeimg, $langDelete) {
     $tool_content .= "<tr>
-        <td align='right'>" . q($row['id']) . ".</td>
-        <td>" . q($row['givenname']) . " " . q($row['surname']) . "</td>
-        <td>" . q($row['username']) . "</td>";
-    switch ($row['privilege']) {
+        <td align='right'>" . q($row->id) . ".</td>
+        <td>" . q($row->givenname) . " " . q($row->surname) . "</td>
+        <td>" . q($row->username) . "</td>";
+    switch ($row->privilege) {
         case '0': $message = $langAdministrator;
             break;
         case '1': $message = $langPowerUser;
@@ -113,9 +108,9 @@ while ($row = mysql_fetch_array($r1)) {
             break;
     }
     $tool_content .= "<td align='center'>$message</td>";
-    if ($row['id'] != 1) {
+    if ($row->id != 1) {
         $tool_content .= "<td class='center'>
-                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row['id']) . "'>
+                        <a href='$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row->id) . "'>
                         <img src='$themeimg/delete.png' title='$langDelete' />
                         </a>
                       </td>";
@@ -123,7 +118,7 @@ while ($row = mysql_fetch_array($r1)) {
         $tool_content .= "<td class='center'>---</td>";
     }
     $tool_content .= "</tr>";
-}
+});
 $tool_content .= "</table><br />";
 
 // Display link back to index.php

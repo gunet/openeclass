@@ -224,7 +224,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
                  email_public, phone_public, am_public, description, whitelist)
-                VALUES (?,?,?,?,?,?," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?,?,?,?,?,?,'','')"
+                VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'','')"
             , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
