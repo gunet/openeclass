@@ -241,6 +241,7 @@ final class Database {
         $backtrace_entry = debug_backtrace();
         $backtrace_info = $backtrace_entry[2];
 
+        $isTransactional &= !$this->dbh->inTransaction();
         if (is_null($statement) || !is_string($statement) || empty($statement))
             return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))

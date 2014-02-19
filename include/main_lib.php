@@ -102,12 +102,6 @@ define('MAX_IDLE_TIME', 10);
 
 require_once 'lib/session.class.php';
 
-// Show query string and then do MySQL query
-function db_query2($sql, $db = false) {
-    echo "<hr /><pre>" . q($sql) . "</pre><hr />";
-    return db_query($sql, $db);
-}
-
 /*
   Debug MySQL queries
   -------------------------------------------------------------------------
@@ -1474,30 +1468,30 @@ function delete_course($cid) {
 
     $course_code = course_id_to_code($cid);
        
-    db_query("DELETE FROM announcement WHERE course_id = $cid");
-    db_query("DELETE FROM document WHERE course_id = $cid");
-    db_query("DELETE FROM ebook_subsection WHERE section_id IN
+    Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
                          (SELECT ebook_section.id FROM ebook_section, ebook
                                  WHERE ebook_section.ebook_id = ebook.id AND
-                                       ebook.course_id = $cid)");
-    db_query("DELETE FROM ebook_section WHERE id IN
-                         (SELECT id FROM ebook WHERE course_id = $cid)");
-    db_query("DELETE FROM ebook WHERE course_id = $cid");
-    db_query("DELETE FROM forum_notify WHERE course_id = $cid");
-    db_query("DELETE FROM glossary WHERE course_id = $cid");
-    db_query("DELETE FROM group_members WHERE group_id IN
-                         (SELECT id FROM `group` WHERE course_id = $cid)");
-    db_query("DELETE FROM `group` WHERE course_id = $cid");
-    db_query("DELETE FROM group_properties WHERE course_id = $cid");
-    db_query("DELETE FROM link WHERE course_id = $cid");
-    db_query("DELETE FROM link_category WHERE course_id = $cid");
-    db_query("DELETE FROM agenda WHERE course_id = $cid");
+                                       ebook.course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM ebook_section WHERE id IN
+                         (SELECT id FROM ebook WHERE course_id = ?d)",$cid);
+    Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM group_members WHERE group_id IN
+                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM link WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM link_category WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_review WHERE course_id = ?d", $cid);
-    db_query("DELETE FROM unit_resources WHERE unit_id IN
-                         (SELECT id FROM course_units WHERE course_id = $cid)");
-    db_query("DELETE FROM course_units WHERE course_id = $cid");
+    Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
+                         (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     // check if we have guest account. If yes delete him.
-    $sql = db_query("SELECT user_id FROM course_user WHERE course_id = $cid AND status = ".USER_GUEST);
+    $sql = db_query("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid , USER_GUEST);
     if (mysql_affected_rows() > 0) {        
         $r = mysql_fetch_row($sql);        
         $guest_id = $r[0];        
