@@ -293,7 +293,7 @@ function load_js($file, $init = '') {
         $file = 'colorbox/jquery.colorbox.min.js';
     } elseif ($file == 'flot') {
         $head_content .= "\n<link href=\"{$urlAppend}js/flot/flot.css\" rel=\"stylesheet\" type=\"text/css\">\n";
-        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";        
+        $head_content .= "<!--[if lte IE 8]><script language=\"javascript\" type=\"text/javascript\" src=\"{$urlAppend}js/flot/excanvas.min.js\"></script><![endif]-->\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/flot/jquery.flot.min.js'></script>\n";
         $file = 'flot/jquery.flot.categories.min.js';
@@ -307,7 +307,7 @@ function load_js($file, $init = '') {
 }
 
 // Translate uid to username
-function uid_to_username($uid) {    
+function uid_to_username($uid) {
     return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", intval($uid))->username;
 }
 
@@ -363,18 +363,18 @@ function display_user($user, $print_email = false, $icon = true) {
 }
 
 // Translate uid to givenname , surname, fullname or nickname
-function uid_to_name($uid, $name_type='fullname') {
-	if($name_type=='fullname'){
-		return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid)->fullname;									  				
-	}elseif($name_type=='givenname'){
-		return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid)->givenname;
-	}elseif($name_type=='surname'){
-		return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid)->surname;
-	}elseif($name_type=='username'){
-		return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid)->username;
-	}else{            
-		return false;
-	}
+function uid_to_name($uid, $name_type = 'fullname') {
+    if ($name_type == 'fullname') {
+        return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid)->fullname;
+    } elseif ($name_type == 'givenname') {
+        return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid)->givenname;
+    } elseif ($name_type == 'surname') {
+        return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid)->surname;
+    } elseif ($name_type == 'username') {
+        return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid)->username;
+    } else {
+        return false;
+    }
 }
 
 // Translate uid to real surname
@@ -939,7 +939,7 @@ function randomkeys($length) {
     $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
     $codeAlphabet.= "0123456789";
     for ($i = 0; $i < $length; $i++) {
-        $key .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet)-1)];
+        $key .= $codeAlphabet[crypto_rand_secure(0, strlen($codeAlphabet) - 1)];
     }
     return $key;
 }
@@ -1272,7 +1272,6 @@ function langname_to_code($langname) {
     }
 }
 
-
 function append_units($amount, $singular, $plural) {
     if ($amount == 1) {
         return $amount . ' ' . $singular;
@@ -1457,8 +1456,7 @@ function course_id_to_public_code($cid) {
     }
 }
 
-
-/**  
+/**
  * @global type $webDir
  * @param type $cid
  * @brief Delete course with id = $cid
@@ -1467,7 +1465,7 @@ function delete_course($cid) {
     global $webDir;
 
     $course_code = course_id_to_code($cid);
-       
+
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM document WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM ebook_subsection WHERE section_id IN
@@ -1475,7 +1473,7 @@ function delete_course($cid) {
                                  WHERE ebook_section.ebook_id = ebook.id AND
                                        ebook.course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook_section WHERE id IN
-                         (SELECT id FROM ebook WHERE course_id = ?d)",$cid);
+                         (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
@@ -1494,36 +1492,36 @@ function delete_course($cid) {
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user)
         deleteUser($guest_user->user_id);
-    db_query("DELETE FROM course_user WHERE course_id = $cid");
-    db_query("DELETE FROM course_department WHERE course = $cid");
-    db_query("DELETE FROM course WHERE id = $cid");
-    db_query("DELETE FROM video WHERE course_id = $cid");
-    db_query("DELETE FROM videolink WHERE course_id = $cid");
-    db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
-    db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
-    db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
-    db_query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cid)");
-    db_query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
-    db_query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
-    db_query("DELETE FROM lp_module WHERE course_id = $cid");
-    db_query("DELETE FROM lp_learnPath WHERE course_id = $cid");
-    db_query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid))");
-    db_query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
-    db_query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
-    db_query("DELETE FROM wiki_properties WHERE course_id = $cid");
-    db_query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid))");
-    db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
-    db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
-    db_query("DELETE FROM poll WHERE course_id = $cid");
-    db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = $cid)");
-    db_query("DELETE FROM assignment WHERE course_id = $cid");
-    db_query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
-    db_query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = $cid)");
-    db_query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
-    db_query("DELETE FROM exercise_question WHERE course_id = $cid");
-    db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
-    db_query("DELETE FROM exercise WHERE course_id = $cid");
-    db_query("DELETE FROM course_module WHERE course_id = $cid");
+    Database::get()->query("DELETE FROM course_user WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_department WHERE course = ?d", $cid);
+    Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
+    Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM videolink WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM dropbox_file WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM lp_module WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM lp_learnPath WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM wiki_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM assignment WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM exercise_question WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {
@@ -1536,7 +1534,6 @@ function delete_course($cid) {
     $idx = new Indexer();
     $idx->removeAllByCourse($cid);
 }
-
 
 /**
  * Delete a user and all his dependencies.
@@ -1552,39 +1549,36 @@ function deleteUser($id) {
         return false;
     } else {
         // validate if this is an existing user
-        $q = db_query("SELECT * FROM user WHERE id = " . $u);
-
-        if (mysql_num_rows($q)) {
+        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {
             // delete everything
             Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);            
-            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d" , $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d" , $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d" , $u);
-            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d" , $u);
-            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d" , $u);
-            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d" , $u);
-            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d" , $u);
-            Database::get()->query("DELETE FROM logins WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d" , $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d" , $u);
-            Database::get()->query("DELETE FROM user_department WHERE user = ?d" , $u);
-            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d" , $u);
-            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d" , $u);
-            Database::get()->query("DELETE FROM user WHERE id = ?d" , $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d", $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d", $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d", $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d", $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
             return true;
         } else {
             return false;
         }
     }
 }
-
 
 function csv_escape($string, $force = false) {
     global $charset;
@@ -2560,11 +2554,10 @@ function getOnlineUsers() {
 /**
  * Initialize copyright/license global arrays
  */
-function copyright_info($cid)
-{
+function copyright_info($cid) {
 
     global $language, $license, $themeimg;
-    
+
     $lang = langname_to_code($language);
 
     $lic = db_query_get_single_value("SELECT course_license FROM course WHERE id = $cid");
@@ -2572,13 +2565,13 @@ function copyright_info($cid)
         $link_suffix = '';
     } else {
         if ($language != 'en') {
-                    $link_suffix = 'deed.' . $lang;
+            $link_suffix = 'deed.' . $lang;
         } else {
-                    $link_suffix = '';
+            $link_suffix = '';
         }
     }
-    $link = "<a href='".$license[$lic]['link']."$link_suffix'>
-            <img src='$themeimg/".$license[$lic]['image'].".png' title='".$license[$lic]['title']."' alt='".$license[$lic]['title']."' /></a>";
+    $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'>
+            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a>";
 
     return $link . '<br>' . q($license[$lic]['title']);
 }
