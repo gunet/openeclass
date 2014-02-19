@@ -66,12 +66,12 @@ if (isset($_POST['submit'])) {
 
     function regusers($cid, $users, $status) {
         foreach ($users as $uid) {
-            db_query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
-                             VALUES ($cid, $uid, $status, CURDATE())");
+            Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
+                             VALUES (?d, ?d, ?d, CURDATE())", $cid, $uid, $status);
         }
         $reglist = implode(', ', $users);
         if ($reglist) {
-            db_query("UPDATE course_user SET status = $status WHERE user_id IN ($reglist)");
+            Database::get()->query("UPDATE course_user SET status = ?d WHERE user_id IN ($reglist)", $status);
         }
     }
 
@@ -91,16 +91,13 @@ else {
                           <select id='unregusers_box' name='unregusers[]' size='20' multiple class='auth_input'>";
 
     // Registered users not registered in the selected course
-    $sqll = "SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
+    Database::get()->queryFunc("SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
                 LEFT JOIN course_user cu ON u.id = cu.user_id
-                     AND cu.course_id = $cid
-                WHERE cu.user_id IS NULL ORDER BY nom";
-
-    $resultAll = db_query($sqll);
-    while ($myuser = mysql_fetch_assoc($resultAll)) {
-        $tool_content .= "<option value='" . q($myuser['id']) . "'>" .
-                q("$myuser[surname] $myuser[givenname]") . '</option>';
-    }
+                     AND cu.course_id = ?d
+                WHERE cu.user_id IS NULL ORDER BY nom", function($myuser) use (&$tool_content) {
+        $tool_content .= "<option value='" . q($myuser->id) . "'>" .
+                q("$myuser->surname $myuser->givenname") . '</option>';
+    }, $cid);
 
     $tool_content .= "</select></th>
         <td width='3%' class='center' nowrap>
