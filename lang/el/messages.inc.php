@@ -446,6 +446,7 @@ $langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού:
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
 $langEclassConf = "Αρχείο ρυθμίσεων του $siteName";
+$langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία αρχείου ρυθμίσεων (config.php)";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
@@ -477,6 +478,7 @@ $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού"
 $langCourseSettings = "Ρυθμίσεις μαθημάτων";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
+$langAvailableBBBServers = "Διαθέσιμοι BigBlueButton servers";
 $langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημένων εισόδων";
 $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
@@ -3445,6 +3447,7 @@ $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
+$langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langGlossaryToCsv = "Όροι σε μορφή csv";
 $langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s), ως εκ τούτου οι ορισμοί των όρων δεν θα εμφανίζονται στις σελίδες του μαθήματος.';
 
