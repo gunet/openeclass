@@ -44,6 +44,7 @@ if (isset($_REQUEST['fc'])) {
 }
 $_SESSION['fc_memo'] = $fc;
 
+$courses_list = array();
 $restrictedCourses = array();
 if (isset($_POST['changeCourse']) and is_array($_POST['changeCourse'])) {
         $changeCourse = $_POST['changeCourse'];
@@ -162,6 +163,7 @@ if (isset($_POST['submit'])) {
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
 var themeimg = '".js_escape($themeimg)."';
+var urlAppend = '".js_escape($urlAppend)."';
 var lang = {
         unCourse: '".js_escape($langUnCourse)."',
         cancel: '".js_escape($langCancel)."',
@@ -169,7 +171,8 @@ var lang = {
         unregCourse: '".js_escape($langUnregCourse)."',
         reregisterImpossible: '".js_escape($langReregisterImpossible)."',
         invalidCode: '".js_escape($langInvalidCode)."',
-};</script>";
+};
+var courses = ".(json_encode($courses_list, JSON_UNESCAPED_UNICODE)).";</script>";
 
 $head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
 
@@ -204,7 +207,7 @@ function getdepnumcourses($fac) {
 function expanded_faculte($fac_name, $facid, $uid) {
 	global $m, $icons, $langTutor, $langBegin, $langRegistration, $mysqlMainDb,
                $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-               $langpres, $langposts, $langothers, $themeimg;
+               $langpres, $langposts, $langothers, $themeimg, $courses_list;
 
 	$retString = "";
 
@@ -306,7 +309,8 @@ function expanded_faculte($fac_name, $facid, $uid) {
                 while ($mycours = mysql_fetch_array($result)) {
                         $cid = $mycours['cid'];
                         $course_title = q($mycours['i']);
-                        $password = q($mycours['password']);
+                        $courses_list[$cid] = array($mycours['k'], $mycours['visible']);
+                        $password = $mycours['password'];
 			// link creation
                         if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
                                 $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
@@ -327,6 +331,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
 
                         if (isset($myCourses[$cid])) {
                                 if ($myCourses[$cid]['statut'] != 1) { // display registered courses
+                                        $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
                                         // password needed
                                         if (!empty($password)) {
                                                 $requirepassword = "<br />$m[code]: <input type='password' name='pass$cid' value='".
@@ -335,9 +340,6 @@ function expanded_faculte($fac_name, $facid, $uid) {
                                                 $requirepassword = '';
                                         }
                                         $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
-					if ($mycours['visible'] == 0) {
-						$codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
-					}
                                 } else {
                                         $retString .= "<img src='$themeimg/teacher.png' alt='".q($langTutor)."' title='".q($langTutor)."' />";
                                 }
@@ -352,7 +354,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         }
 
                         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
-                                   <td>$codelink (" . q($mycours['fake_code']) .")$requirepassword</td>
+                                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours['fake_code']) .")$requirepassword</td>
                                    <td>". q($mycours['t']) ."</td>
                                    <td align='center'>";
                         // show the necessary access icon
@@ -364,7 +366,7 @@ function expanded_faculte($fac_name, $facid, $uid) {
                         $retString .= "</td>\n    </tr>";
                         $k++;
                 } // END of while
-                $retString .= "\n    </table>";
+                $retString .= "\n    </table>\n";
         } // end of foreach
         return $retString;
 }

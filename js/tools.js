@@ -197,13 +197,20 @@ function course_list_handler() {
         $.post('course_submit.php',
                submit_info,
                function (result) {
+                       var title_span = $('#cid'+cid);
                        $('#ind'+cid).remove();
                        if (result == 'registered') {
                                td.append(' <img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');
+                               title_span.html($('<a>', {
+                                   href: urlAppend + '/courses/' + courses[cid][0] + '/',
+                                   text: title_span.text() }));
                        } else {
                                $('input[type=checkbox][value='+cid+']').prop('checked', false);
+                               if (courses[cid][1] != 2) {
+                                   title_span.text(title_span.text());
+                               }
                                if ($.course_closed[cid]) {
-                                       course_checkbox_disabled(cid, true);
+                                   course_checkbox_disabled(cid, true);
                                }
                                if (passfield.length && result == 'unauthorized') {
                                        $('<div></div>').html(lang.invalidCode)
