@@ -172,7 +172,7 @@ var lang = {
         reregisterImpossible: '".js_escape($langReregisterImpossible)."',
         invalidCode: '".js_escape($langInvalidCode)."',
 };
-var courses = ".(json_encode($courses_list, JSON_UNESCAPED_UNICODE)).";</script>";
+var courses = ".(json_encode($courses_list)).";</script>";
 
 $head_content .= "<link href='../../js/jquery-ui.css' rel='stylesheet' type='text/css'>";
 
