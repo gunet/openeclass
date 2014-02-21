@@ -2019,20 +2019,23 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		exit();
 	}
 	
-	if (!$is_editor) {           
-		$lpm_id = db_query_get_single_row("SELECT `lock` FROM lp_rel_learnPath_module 
+	if (!$is_editor) { // check if we try to overwrite a blocked module
+		$lpm_id = db_query_get_single_row("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
                                 WHERE `learnPath_id` = ".intval($_SESSION['path_id'])."
-                                AND module_id = " .intval($_SESSION['lp_module_id'])."", $code_cours);                
-                $module = db_query_get_single_row("SELECT credit, lesson_status from lp_user_module_progress 
-                                    WHERE user_id = $_SESSION[uid] 
-                                    AND learnPath_id = $_SESSION[path_id] 
-                                    AND learnPath_module_id = $_SESSION[lp_module_id]");
-                if (($lpm_id['lock'] == 'CLOSE') 
-                    and ($module['credit'] != 'CREDIT' 
-                    or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
-                    // TODO: if a previous learning path module was blocked, don't allow users in it
-                    //	header("Location: ".$depth."learningPathList.php?course=$code_cours");
-                    //	exit();
+                                AND learnPath_module_id = " .intval($_SESSION['lp_module_id'])."", $code_cours);
+                $q = db_query("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = " . $_SESSION['path_id'] . " 
+                                                AND `rank` < " . $lpm_id['rank'] . "", $code_cours);                
+                while ($m = mysql_fetch_array($q)) {
+                    $progress = db_query_get_single_row("SELECT credit, lesson_status FROM lp_user_module_progress 
+                                                        WHERE learnPath_module_id = $m[module_id]
+                                                            AND learnPath_id = $_SESSION[path_id] 
+                                                            AND user_id= $_SESSION[uid]", $code_cours);
+                        if (($lpm_id['lock'] == 'CLOSE') 
+                            and ($progress['credit'] != 'CREDIT' 
+                            or ($progress['lesson_status'] != 'COMPLETED' and $progress['lesson_status'] != 'PASSED'))) {
+                            header("Location: ".$depth."learningPathList.php?course=$code_cours");
+                            exit();
+                        }
                 }
 	}
 }

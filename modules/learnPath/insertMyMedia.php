@@ -133,7 +133,7 @@ while ($iterator <= $_POST['maxMediaForm'])
                            AND A.`path` LIKE \"" .addslashes($row['url']) ."\"
                            AND M.`contentType` = \"".CTMEDIALINK_."\"";
         $query0 = db_query($sql);
-        $num = mysql_num_srows($query0);
+        $num = mysql_num_rows($query0);
 
         if ($num == 0)
         {
