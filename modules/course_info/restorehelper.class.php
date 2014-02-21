@@ -30,12 +30,14 @@ class RestoreHelper {
     private $backupVersion;
     private $files;
     private $fields;
+    private $values;
 
     public function __construct($eclassVersion) {
         $this->eclassVersion = $eclassVersion;
-        $this->backupVersion = self::getBackupVersion($eclassVersion);
+        $this->backupVersion = self::resolveBackupVersion($eclassVersion);
         $this->populateFiles();
         $this->populateFields();
+        $this->populateValues();
     }
 
     public function getFile($obj) {
@@ -57,8 +59,22 @@ class RestoreHelper {
             return $field;
         }
     }
+    
+    public function getValue($obj, $field, $value) {
+        if (isset($this->values[$this->eclassVersion][$obj][$field]) && is_callable($this->values[$this->eclassVersion][$obj][$field])) {
+            return $this->values[$this->eclassVersion][$obj][$field]($value);
+        } else if (isset($this->values[$this->backupVersion][$obj][$field]) && is_callable($this->values[$this->backupVersion][$obj][$field])) {
+            return $this->values[$this->backupVersion][$obj][$field]($value);
+        } else {
+            return $value;
+        }
+    }
+    
+    public function getBackupVersion() {
+        return $this->backupVersion;
+    }
 
-    public static function getBackupVersion($eclassVersion) {
+    public static function resolveBackupVersion($eclassVersion) {
         if ($eclassVersion >= self::STYLE_3X_MIN) {
             return self::STYLE_3X;
         } else {
@@ -70,6 +86,7 @@ class RestoreHelper {
         $this->files = array();
         $this->files[self::STYLE_2X]['course'] = 'cours';
         $this->files[self::STYLE_2X]['course_user'] = 'cours_user';
+        $this->files[self::STYLE_2X]['announcement'] = 'annonces';
     }
 
     private function populateFields() {
@@ -80,6 +97,21 @@ class RestoreHelper {
         $this->fields[self::STYLE_2X]['user']['id'] = 'user_id';
         $this->fields[self::STYLE_2X]['user']['givenname'] = 'prenom';
         $this->fields[self::STYLE_2X]['user']['surname'] = 'nom';
+        $this->fields[self::STYLE_2X]['announcement']['contenu'] = 'content';
+        $this->fields[self::STYLE_2X]['announcement']['temps'] = 'date';
+        $this->fields[self::STYLE_2X]['announcement']['cours_id'] = 'course_id';
+        $this->fields[self::STYLE_2X]['announcement']['ordre'] = 'order';
+        $this->fields[self::STYLE_2X]['announcement']['visibility'] = 'visible';
+    }
+    
+    private function populateValues() {
+        $this->values[self::STYLE_2X]['announcement']['visibility'] = function($value) {
+            if ($value === 'v') {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 
 }

@@ -87,10 +87,10 @@ function find_backup_folders($basedir) {
 }
 
 function restore_table($basedir, $table, $options) {
-    global $url_prefix_map;
+    global $url_prefix_map, $restoreHelper;
 
     $set = get_option($options, 'set');
-    $backup = unserialize(file_get_contents("$basedir/$table"));
+    $backup = unserialize(file_get_contents($basedir . "/" . $restoreHelper->getFile($table)));
     $i = 0;
     $mapping = array();
     if (isset($options['return_mapping'])) {
@@ -111,7 +111,7 @@ function restore_table($basedir, $table, $options) {
             }
         }
         if (!isset($sql_intro)) {
-            $sql_intro = "INSERT INTO `$table` " . field_names($data) . ' VALUES ';
+            $sql_intro = "INSERT INTO `$table` " . field_names($data, $table) . ' VALUES ';
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
@@ -131,8 +131,8 @@ function restore_table($basedir, $table, $options) {
             }
         }
         if ($do_insert) {
-            $field_args = field_args($data, $set, $url_prefix_map);
-            $lastid = Database::get()->query($sql_intro . field_placeholders($data, $set), $field_args)->lastInsertID;
+            $field_args = field_args($data, $table, $set, $url_prefix_map);
+            $lastid = Database::get()->query($sql_intro . field_placeholders($data, $table, $set), $field_args)->lastInsertID;
         }
         if ($return_mapping) {
             $mapping[$old_id] = $lastid;
@@ -143,17 +143,19 @@ function restore_table($basedir, $table, $options) {
     }
 }
 
-function field_names($data) {
+function field_names($data, $table) {
+    global $restoreHelper;
     foreach ($data as $name => $value) {
-        $keys[] = '`' . $name . '`';
+        $keys[] = '`' . $restoreHelper->getField($table, $name) . '`';
     }
     return '(' . implode(', ', $keys) . ')';
 }
 
-function field_placeholders($data, $set) {
+function field_placeholders($data, $table, $set) {
+    global $restoreHelper;
     foreach ($data as $name => $value) {
-        if (isset($set[$name])) {
-            $value = $set[$name];
+        if (isset($set[$restoreHelper->getField($table, $name)])) {
+            $value = $set[$restoreHelper->getField($table, $name)];
         }
         if (is_int($value)) {
             $values[] = '?d';
@@ -164,13 +166,18 @@ function field_placeholders($data, $set) {
     return '(' . implode(', ', $values) . ')';
 }
 
-function field_args($data, $set, $url_prefix_map) {
+function field_args($data, $table, $set, $url_prefix_map) {
+    global $restoreHelper;
     $values = array();
     foreach ($data as $name => $value) {
-        if (isset($set[$name])) {
-            $value = $set[$name];
+        if (isset($set[$restoreHelper->getField($table, $name)])) {
+            $value = $set[$restoreHelper->getField($table, $name)];
         }
-        $values[] = (isset($url_prefix_map)) ? strtr($value, $url_prefix_map) : $value;
+        if (isset($url_prefix_map)) {
+            $values[] = strtr($restoreHelper->getValue($table, $name, $value), $url_prefix_map);
+        } else {
+            $values[] = $restoreHelper->getValue($table, $name, $value);
+        }
     }
     return $values;
 }
@@ -280,15 +287,15 @@ function restore_users($users, $cours_user, $departments) {
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
                     . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
                     . "registered_at = ?t, expires_at = ?t", 
-                    $data[$restoreHelper->getField('user', 'surname')], 
-                    $data[$restoreHelper->getField('user', 'givenname')], 
+                    (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '', 
+                    (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '', 
                     $data['username'], 
-                    $data['password'], 
-                    $data['email'], 
+                    (isset($data['password'])) ? $data['password'] : 'empty', 
+                    (isset($data['email'])) ? $data['email'] : '', 
                     intval($data[$restoreHelper->getField('course_user', 'status')]), 
-                    $data['phone'], 
-                    $registered_at, 
-                    $expires_at)->lastInsertID;
+                    (isset($data['phone'])) ? $data['phone'] : '', 
+                    (isset($registered_at)) ? $registered_at : '', 
+                    (isset($expires_at)) ? $expires_at : '')->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             require_once 'include/lib/user.class.php';
             $user = new User();

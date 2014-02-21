@@ -162,10 +162,12 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $course_data['code'] =>
         $new_course_code);
 
-    restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $course_id),
-        'delete' => array('id')));
-    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id),
-        'delete' => array('id')));
+    if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
+        restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $course_id), 'delete' => array('id')));
+    } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
+        create_modules($course_id);
+    }
+    restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $course_id), 'delete' => array('id')));
     restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $course_id)));
     $group_map = restore_table($restoreThis, 'group', array('set' => array('course_id' => $course_id),
         'return_mapping' => 'id'));
