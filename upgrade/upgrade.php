@@ -710,7 +710,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         'exercise', 'exercise_user_record', 'exercise_question',
                         'exercise_answer', 'exercise_with_questions', 'course_module',
                         'actions', 'actions_summary', 'logins', 'hierarchy',
-                        'course_department', 'user_department', 'blog_post', 'comments');
+                        'course_department', 'user_department', 'blog_post', 'comments', 'rating', 
+                        'rating_cache');
                     foreach ($new_tables as $table_name) {
                         if (mysql_table_exists($mysqlMainDb, $table_name)) {
                             if (db_query_get_single_value("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -1026,6 +1027,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `content` TEXT NOT NULL,
                             `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `rating` (
+                            `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `value` TINYINT NOT NULL,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            INDEX `rating_index_1` (`rid`, `rtype`),
+                            INDEX `rating_index_2` (`rid`, `rtype`, `user_id`)) $charset_spec");
+                    
+                    db_query("CREATE TABLE IF NOT EXISTS `rating_cache` (
+                            `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `value` INT(11) NOT NULL DEFAULT 0,
+                            `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            INDEX `rating_cache_index_1` (`rid`, `rtype`)) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
                             `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
