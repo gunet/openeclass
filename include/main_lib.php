@@ -81,7 +81,7 @@ define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_SETTINGS', 30);
-define('MODULE_ID_GRADEBOOK', 31);
+define('MODULE_ID_GRADEBOOK', 32);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);

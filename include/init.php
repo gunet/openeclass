@@ -353,6 +353,7 @@ $modules = array(
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
+    MODULE_ID_WIKI => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
 );
 // ----------------------------------------
 // course admin modules
@@ -446,6 +447,7 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                                                   " . MODULE_ID_FORUM . ",
                                                   " . MODULE_ID_GROUPS . ",
                                                   " . MODULE_ID_WIKI . ",
+                                                  " . MODULE_ID_GRADEBOOK . ",
                                                   " . MODULE_ID_LP . ")", $course_id);
     }
     $publicModules = array();

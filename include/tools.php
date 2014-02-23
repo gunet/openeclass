@@ -105,6 +105,7 @@ function getToolsArray($cat) {
                                                           " . MODULE_ID_FORUM . ",
                                                           " . MODULE_ID_GROUPS . ",
                                                           " . MODULE_ID_WIKI . ",
+                                                          " . MODULE_ID_GRADEBOOK . ",
                                                           " . MODULE_ID_LP . ")
                                         ORDER BY module_id";
             if (!check_guest()) {
