@@ -410,7 +410,7 @@ if ($uid) {
     if ($row['raw'] < $totalScore) {
         // update raw
         $sql .= "`raw` = $totalScore,";
-        // update credit and statut if needed ( score is better than raw_to_pass )
+        // update credit and status if needed ( score is better than raw_to_pass )
         if ($newRaw >= $row['raw_to_pass']) {
             $sql .= "`credit` = 'CREDIT',`lesson_status` = 'PASSED',";
         } else { // minimum raw to pass needed to get credit

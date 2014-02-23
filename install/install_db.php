@@ -344,9 +344,10 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
                `title` VARCHAR(250) DEFAULT NULL,
-               `date` DATE DEFAULT NULL,
+               `date` DATETIME DEFAULT NULL,
                `description` TEXT NOT NULL,
-               `module_auto_id` MEDIUMINT(11) DEFAULT NULL,
+               `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+               `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
                `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
  db_query("CREATE TABLE IF NOT EXISTS `attendance_book` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

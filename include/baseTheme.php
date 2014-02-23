@@ -40,9 +40,9 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
     $eclass_module_id = intval($_GET['eclass_module_id']);
     $cid = course_code_to_id($course_code);
     $visible = ($_GET['hide'] == 0) ? 0 : 1;
-    db_query("UPDATE course_module SET visible = $visible
-                        WHERE module_id = $eclass_module_id AND
-                        course_id = $cid");
+    Database::get()->query("UPDATE course_module SET visible = ?d
+                        WHERE module_id = ?d AND
+                        course_id = ?d", $visible, $eclass_module_id, $cid);
 }
 
 if (isset($toolContent_ErrorExists)) {
@@ -181,7 +181,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('SITE_NAME', $siteName);
 
-    
+
         //If there is a message to display, show it (ex. Session timeout)
         if ($messages = Session::render_flashdata()) {
             $t->set_var('EXTRA_MSG', $messages);
@@ -223,7 +223,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } elseif ($menuTypeID == 3) {
             $t->set_var('THIRD_BAR_TEXT', $langAdmin);
             $t->set_var('THIRDBAR_LEFT_ICON', 'admin_bar_icon');
-        } elseif ($menuTypeID > 0 and $menuTypeID < 3 ) {
+        } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
             $t->set_var('THIRD_BAR_TEXT', $langUserBriefcase);
             $t->set_var('THIRDBAR_LEFT_ICON', 'briefcase_icon');
         } elseif ($menuTypeID > 0) {
@@ -287,7 +287,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
 
-        if ($status != USER_GUEST) {            
+        if ($status != USER_GUEST) {
             if (!isset($_SESSION['uid'])) {
                 $t->set_var('BREAD_TEXT', $langHomePage);
             } else {
@@ -562,7 +562,6 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
     if ($default_langcode === false) {
         $default_langcode = $session->language;
     }
- 
-    return selection($session->native_language_names,
-            $name, $default_langcode, $onchange_js);
+
+    return selection($session->native_language_names, $name, $default_langcode, $onchange_js);
 }

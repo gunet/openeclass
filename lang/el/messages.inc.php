@@ -913,9 +913,13 @@ $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές 
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
-$langAttendanceΑbsences = "Απουσίες";
-$langAttendanceEdit = "Επεξεργασία";
+$langAttendanceΑbsences = "Παρουσίες";
+$langAttendanceEdit = "Ενεργείες";
 $langAttendanceAddActivity = "Προσθήκη υποχρεωτικής δραστηριότητας";
+$langAttendanceActivityTitle = "Τίτλος";
+$langAttendanceActivityDescription = "Περιγραφή";
+$langAttendanceActivityDate = "Ημερομηνία διεξαγωγής";
+$langAttendanceBook = "Καταχώρηση παρουσιών";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";

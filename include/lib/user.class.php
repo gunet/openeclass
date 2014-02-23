@@ -50,9 +50,9 @@ class User {
      */
     public function refresh($id, $departments) {
         if ($departments != null) {
-            db_query("DELETE FROM " . $this->departmenttable . " WHERE user = " . intval($id));
+            Database::get()->query("DELETE FROM " . $this->departmenttable . " WHERE user = ?d", $id);
             foreach (array_unique($departments) as $key => $department) {
-                db_query("INSERT INTO " . $this->departmenttable . " (user, department) VALUES (" . intval($id) . "," . intval($department) . ")");
+                Database::get()->query("INSERT INTO " . $this->departmenttable . " (user, department) VALUES (?d, ?d)", $id, $department);
             }
         }
     }
@@ -63,8 +63,8 @@ class User {
      * @param int $id - The id of the user to delete
      */
     public function delete($id) {
-        db_query("DELETE FROM $this->departmenttable WHERE user = $id");
-        db_query("DELETE FROM $this->utable WHERE id = $id");
+        Database::get()->query("DELETE FROM $this->departmenttable WHERE user = ?d", $id);
+        Database::get()->query("DELETE FROM $this->utable WHERE id = ?d", $id);
     }
 
     /**
@@ -75,14 +75,12 @@ class User {
      */
     public function getDepartmentIds($id) {
         $ret = array();
-        $result = db_query("SELECT ud.department AS id
+        Database::get()->queryFunc("SELECT ud.department AS id
                               FROM $this->utable u, $this->departmenttable ud
-                             WHERE u.id = " . intval($id) . "
-                               AND u.id = ud.user");
-
-        while ($row = mysql_fetch_assoc($result))
-            $ret[] = $row['id'];
-
+                             WHERE u.id = ?d
+                               AND u.id = ud.user", function($row) use (&$ret) {
+            $ret[] = $row->id;
+        }, $id);
         return $ret;
     }
 

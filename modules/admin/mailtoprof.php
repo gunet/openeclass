@@ -72,15 +72,15 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     }
     elseif ($_POST['sendTo'] == "1") { // Only professors
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='1' AND " . $depwh);
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='1' AND " . $depwh);
         else
-            $sql = db_query("SELECT email, user_id FROM user where statut='1'");
+            $sql = db_query("SELECT email, user_id FROM user where status='1'");
     }
     elseif ($_POST['sendTo'] == "2") { // Only students
         if (isDepartmentAdmin())
-            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.statut='5' AND " . $depwh);
+            $sql = db_query("SELECT email, user_id FROM user, user_department WHERE user.user_id = user_department.user AND user.status='5' AND " . $depwh);
         else
-            $sql = db_query("SELECT email, user_id FROM user where statut='5'");
+            $sql = db_query("SELECT email, user_id FROM user where status='5'");
     }
     else { // invalid sendTo var
         die();
