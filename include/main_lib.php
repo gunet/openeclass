@@ -83,6 +83,7 @@ define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_SETTINGS', 30);
 define('MODULE_ID_BLOG', 31);
 define('MODULE_ID_COMMENTS', 32);
+define('MODULE_ID_RATING', 33);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
