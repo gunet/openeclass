@@ -70,6 +70,7 @@ if ($is_editor) {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
             setting_set(SETTING_BLOG_COMMENT_ENABLE, $_POST['2_radio'], $course_id);
+            setting_set(SETTING_BLOG_RATING_ENABLE, $_POST['3_radio'], $course_id);
             $message = "<p class='success'>$langRegDone</p>";
         }
         
@@ -110,6 +111,23 @@ if ($is_editor) {
         $tool_content .= "<tbody>";
         $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"2_radio\" $checkEn/>$langCommentsEn</td></tr>";
         $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"2_radio\" $checkDis/>$langCommentsDis</td></tr>";
+        $tool_content .= "</tbody>";
+        $tool_content .= "</table>";
+        $tool_content .= "</fieldset>";
+        
+        if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
+        	$checkDis = "";
+        	$checkEn = "checked ";
+        } else {
+        	$checkDis = "checked ";
+        	$checkEn = "";
+        }
+        
+        $tool_content .= "<fieldset><legend>$langRating</legend>";
+        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
+        $tool_content .= "<tbody>";
+        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"3_radio\" $checkEn/>$langRatingEn</td></tr>";
+        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"3_radio\" $checkDis/>$langRatingDis</td></tr>";
         $tool_content .= "</tbody>";
         $tool_content .= "</table>";
         $tool_content .= "</fieldset>";

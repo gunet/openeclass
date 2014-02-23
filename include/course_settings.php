@@ -28,6 +28,7 @@ require_once 'include/log.php';
 // Available settings
 define('SETTING_BLOG_COMMENT_ENABLE', 1);
 define('SETTING_BLOG_STUDENT_POST', 2);
+define('SETTING_BLOG_RATING_ENABLE', 3);
 
 /** Get the default value of a course setting.
  * 
@@ -37,7 +38,8 @@ define('SETTING_BLOG_STUDENT_POST', 2);
 function setting_default($setting_id) {
     $defaults = array(
         SETTING_BLOG_COMMENT_ENABLE => 1,
-        SETTING_BLOG_STUDENT_POST => 1);
+        SETTING_BLOG_STUDENT_POST => 1,
+        SETTING_BLOG_RATING_ENABLE => 1);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

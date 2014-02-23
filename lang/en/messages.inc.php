@@ -3063,3 +3063,6 @@ $langCommentsEditNoPerm = "You do not have permission to edit this comment";
 $langCommenting = "Commenting";
 $langCommentsEn = "Commenting enabled";
 $langCommentsDis = "Commenting disabled";
+$langRating = "Rating";
+$langRatingEn = "Rating enabled";
+$langRatingDis = "Rating disabled";
