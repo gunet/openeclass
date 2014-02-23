@@ -246,19 +246,20 @@ foreach ($flatElementList as $module) {
     //-- if user can access module
     elseif (!$is_blocked) {
         if ($module['contentType'] == CTEXERCISE_)
-            $moduleImg = 'exercise_on.png';
+            $moduleImg = 'exercise_on';
         else if ($module['contentType'] == CTLINK_)
-            $moduleImg = "links_on.png";
+            $moduleImg = "links_on";
         else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-            $moduleImg = "description_on.png";
+            $moduleImg = "description_on";
         else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-            $moduleImg = "videos_on.png";
+            $moduleImg = "videos_on";
         else
             $moduleImg = choose_image(basename($module['path']));
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= '<span style="vertical-align: middle;"><img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" border="0" /></span>&nbsp;'
-                . '<a href="viewer.php?course=' . $course_code . '&amp;path_id=' . (int) $_SESSION['path_id'] . '&amp;module_id=' . $module['module_id'] . '">' . htmlspecialchars($module['name']) . '</a>' . "";
+        $tool_content .= '<span style="vertical-align: middle;">' .
+                icon($moduleImg, $contentType_alt) . '</span>&nbsp;' .
+                '<a href="viewer.php?course=' . $course_code . '&amp;path_id=' . (int) $_SESSION['path_id'] . '&amp;module_id=' . $module['module_id'] . '">' . htmlspecialchars($module['name']) . '</a>';
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'
@@ -275,25 +276,25 @@ foreach ($flatElementList as $module) {
     //-- user is blocked by previous module, don't display link
     else {
         if ($module['contentType'] == CTEXERCISE_)
-            $moduleImg = 'exercise_on.png';
+            $moduleImg = 'exercise_on';
         else if ($module['contentType'] == CTLINK_)
-            $moduleImg = "links_on.png";
+            $moduleImg = "links_on";
         else if ($module['contentType'] == CTCOURSE_DESCRIPTION_)
-            $moduleImg = "description_on.png";
+            $moduleImg = "description_on";
         else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_)
-            $moduleImg = "videos_on.png";
+            $moduleImg = "videos_on";
         else
             $moduleImg = choose_image(basename($module['path']));
 
-        $tool_content .= '<span style="vertical-align: middle;"><img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" title="' . $contentType_alt . '" border="0" /></span>' . " "
-                . htmlspecialchars($module['name']);
+        $tool_content .= '<span style="vertical-align: middle;">' . icon($moduleImg, $contentType_alt) . '</span> ' .
+            htmlspecialchars($module['name']);
     }
     $tool_content .= '</td>' . "\n";
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked)
-            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\"><img src='$themeimg/monitor.png' alt='$langTracking' title='$langTracking' /></a></td>";
+            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('monitor', $langTracking) . "</a></td>";
         else
             $tool_content .= "<td></td>";
         if ($is_blocked)

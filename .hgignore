@@ -5,3 +5,10 @@ syntax: regexp
 ^html/
 ^nbproject/private/
 ^\.htaccess
+
+syntax: regexp
+^\.buildpath$
+syntax: regexp
+^\.project$
+syntax: regexp
+^\.settings$

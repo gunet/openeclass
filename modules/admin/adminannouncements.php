@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,21 +23,17 @@
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'include/jscalendar/calendar.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $nameTools = $langAdminAn;
 
+load_js('tools.js');
+load_js('jquery');
+load_js('jquery-ui');
+load_js('jquery-ui-timepicker-addon.min.js');
+
 $head_content .= <<<hContent
 <script type='text/javascript'>
-function confirmation ()
-{
-        if (confirm('$langConfirmDelete'))
-                {return true;}
-        else
-                {return false;}
-}
-
 function toggle(id, checkbox, name)
 {
         var f = document.getElementById('f-calendar-field-' + id);
@@ -45,6 +41,23 @@ function toggle(id, checkbox, name)
 }
 </script>
 hContent;
+
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
+$(function() {
+$('input[name=start_date]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+
+$(function() {
+$('input[name=end_date]').datetimepicker({
+    dateFormat: 'yy-mm-dd', 
+    timeFormat: 'hh:mm'
+    });
+});
+</script>";
 
 // display settings
 $displayAnnouncementList = true;
@@ -83,7 +96,7 @@ if (isset($_GET['delete'])) {
         $displayAnnouncementList = true;
         $begindate = $myrow['begin'];
         $enddate = $myrow['end'];
-    }
+    }    
 } elseif (isset($_POST['submitAnnouncement'])) {
     // submit announcement command
     $start_sql = 'begin = ' . ((isset($_POST['start_date_active']) and isset($_POST['start_date']) and $_POST['start_date']) ? autoquote($_POST['start_date']) : 'NULL');
@@ -157,8 +170,8 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             rich_text_editor('newContent', 5, 40, $contentToModify)
             . "</td></tr>";
     $tool_content .= "<tr><td><b>$langLanguage:</b><br />";
-    if (isset($_GET['modify'])) {
-        if (isset($begindate)) {
+    if (isset($_GET['modify'])) {        
+        if (isset($begindate)) {            
             $start_checkbox = 'checked';
             $start_date = $begindate;
         } else {
@@ -171,7 +184,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         } else {
             $end_checkbox = '';
             $end_date = date("Y-n-j", time());
-        }
+        }        
         $tool_content .= lang_select_options('lang_admin_ann', '', $myrow['lang']);
     } else {
         $start_checkbox = $end_checkbox = $end_date = $start_date = '';
@@ -179,13 +192,13 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     }
     $tool_content .= "<span class='smaller'> $langTipLangAdminAnn</span></td></tr>";
 
-    $lang_jscalendar = langname_to_code($language);
+    /*$lang_jscalendar = langname_to_code($language);
     $jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $lang_jscalendar, 'calendar-blue2', false);
-    $head_content .= $jscalendar->get_load_files_code();
+    $head_content .= $jscalendar->get_load_files_code(); */
 
-    $datetoday = date("Y-n-j", time());
+    //$datetoday = date("Y-n-j", time());
 
-    function make_calendar($id, $label, $name, $checkbox, $datetoday) {
+/*    function make_calendar($id, $label, $name, $checkbox, $datetoday) {
         global $jscalendar, $langActivate;
 
         return "<tr><td><b>" . $label . ":</b><br />" .
@@ -201,8 +214,17 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     }
 
     $tool_content .= make_calendar(1, $langStartDate, 'start_date', $start_checkbox, $start_date) .
-            make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) .
-            "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
+            make_calendar(2, $langEndDate, 'end_date', $end_checkbox, $end_date) . */
+            
+    $tool_content .= "<tr><td><b>$langStartDate:</b><br />
+            <input type='text' name='start_date' value='$start_date'>";
+    $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='start_date_active' $end_checkbox onClick=\"toggle(1,this,'start_date')\" />
+                    &nbsp;$langActivate</span></td></tr>";
+    $tool_content .= "<tr><td><b>$langEndDate:</b><br />
+            <input type='text' name='end_date' value='$end_date'>";
+    $tool_content .= "&nbsp;<span class='smaller'><input type='checkbox' name='end_date_active' $end_checkbox onClick=\"toggle(2,this,'end_date')\" />
+                    &nbsp;$langActivate</span></td></tr>";                
+    $tool_content .= "<tr><td class='right'><input type='submit' name='submitAnnouncement' value='$langSubmit' />" .
             "</td></tr></table></fieldset></form>";
 }
 
@@ -252,18 +274,13 @@ if ($displayAnnouncementList == true) {
         $tool_content .= "<div id='operations_container'>
                 <ul id='opslist'><li>";
         $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1'>" . $langAdminAddAnn . "</a>";
-        $tool_content .= "</li></ul></div>\n";
+        $tool_content .= "</li></ul></div>";
     }
     if ($announcementNumber > 0) {
         $tool_content .= "<table class='tbl_alt' width='100%'>
                         <tr><th colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langTitle</th>
                             <th>$langAnnouncement</th>
-                            <th colspan='2'><div align='center'>$langActions</div></th>\n";
-        /*
-          if ($announcementNumber > 1) {
-          $tool_content .= "<th width='70'>$langMove</th>\n";
-          }
-         */
+                            <th colspan='2'><div align='center'>$langActions</div></th>";        
         while ($myrow = mysql_fetch_array($result)) {
             if ($myrow['visible'] == 1) {
                 $visibility = 0;
@@ -288,7 +305,7 @@ if ($displayAnnouncementList == true) {
 			<a href='$_SERVER[SCRIPT_NAME]?modify=$myrow[id]'>
 			<img src='$themeimg/edit.png' title='$langModify' style='vertical-align:middle;' />
 			</a>
-			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick='return confirmation();'>
+			<a href='$_SERVER[SCRIPT_NAME]?delete=$myrow[id]' onClick=\"return confirmation('$langConfirmDelete');\">
 			<img src='$themeimg/delete.png' title='$langDelete' style='vertical-align:middle;' /></a>
 
 			<a href='$_SERVER[SCRIPT_NAME]?id=$myrow[id]&amp;vis=$visibility'>
@@ -304,10 +321,10 @@ if ($displayAnnouncementList == true) {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?down=" . $myrow["id"] . "'>
 				<img class='displayed' src='$themeimg/down.png' title='" . $langDown . "' /></a>";
             }
-            $tool_content .= "</td>\n</tr>\n";
+            $tool_content .= "</td></tr>";
             $iterator ++;
         } // end of while
-        $tool_content .= "</table>\n";
+        $tool_content .= "</table>";
     }
 }
 

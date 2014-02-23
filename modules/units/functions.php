@@ -178,7 +178,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             return '';
         }
         $status = 'del';
-        $image = $themeimg . '/delete.png';
+        $image = 'delete';
         $link = "<span class='invisible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         $file = mysql_fetch_array($r, MYSQL_ASSOC);
@@ -187,11 +187,10 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             return '';
         }
         if ($file['format'] == '.dir') {
-            $image = $themeimg . '/folder.png';
+            $image = 'folder';
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file[path]&amp;unit=$id'>";
         } else {
-            $image = '../document/img/' .
-                    choose_image('.' . $file['format']);
+            $image = choose_image('.' . $file['format']);
             $link = "<a href='" . file_url($file['path'], $file['filename']) . "' target='_blank'>";
         }
     }
@@ -203,7 +202,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     }
     return "
         <tr$class_vis>
-          <td width='1'>$link<img src='$image' alt='' /></a></td>
+          <td width='1'>$link" . icon($image, '') . "</a></td>
           <td align='left'>$link$title</a>$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';

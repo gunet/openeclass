@@ -24,6 +24,7 @@ $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
 $TBL_EXERCISE = 'exercise';
 $TBL_QUESTION = 'exercise_question';
 $TBL_ANSWER = 'exercise_answer';
+$TBL_RECORDS = 'exercise_user_record';
 
 include('exercise.class.php');
 include('question.class.php');
@@ -332,20 +333,15 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 } // end foreach()
 // update db with results
 $eid = $objExercise->selectId();
-mysql_select_db($mysqlMainDb);
-
-$sql = "SELECT record_start_date FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
-$result = db_query($sql);
-$attempt = count($result);
-
-$sql = "SELECT MAX(eurid) FROM `exercise_user_record` WHERE eid = '$eid' AND uid = '$uid'";
+$sql = "SELECT MAX(eurid) FROM `$TBL_RECORDS` WHERE eid = '$eid' AND uid = '$uid'";
 $result = db_query($sql);
 $row = mysql_fetch_row($result);
 $eurid = $row[0];
 
 // record results of exercise
-$sql = "UPDATE exercise_user_record SET total_score = '$totalScore', total_weighting = '$totalWeighting',
-	attempt = '$attempt' WHERE eurid = '$eurid'";
+$sql = "UPDATE `$TBL_RECORDS` SET record_end_date = '".date('Y-m-d H:i:s', time())."', total_score = '$totalScore', 
+			total_weighting = '$totalWeighting'
+		WHERE eurid = '$eurid'";
 db_query($sql);
 
 if ($displayScore == 1) {

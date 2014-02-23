@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 /* ========================================================================
  * Open eClass 3.0
@@ -72,9 +73,9 @@ if (isset($_SESSION['uid'])) {
 }
 
 if (isset($_GET['logout']) and $uid) {
-    db_query("INSERT INTO loginout (loginout.id_user,
+    Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
-                VALUES ($uid, '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGOUT')");
+                VALUES (?d, ?s, NOW(), 'LOGOUT')", $uid, $_SERVER['REMOTE_ADDR']);
     if (isset($_SESSION['cas_uname'])) { // if we are CAS user
         define('CAS', true);
     }
@@ -114,40 +115,33 @@ if (isset($language)) {
 if ($uid AND !isset($_GET['logout'])) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
-        $guestSQL = db_query("SELECT code FROM course_user, course
+        $guest = Database::get()->querySingle("SELECT code FROM course_user, course
                                       WHERE course.id = course_user.course_id AND
-                                            user_id = $uid");
-        if (mysql_num_rows($guestSQL) > 0) {
-            $sql_row = mysql_fetch_row($guestSQL);
-            $dbname = $sql_row[0];
+                                            user_id = ?d", $uid);
+        if ($guest) {
+            $dbname = $guest->code;
             $_SESSION['dbname'] = $dbname;
             header("Location: {$urlServer}courses/$dbname/index.php");
             exit;
         }
-    }        
+    }
     // if user is not guest redirect him to portfolio
-    header("Location: {$urlServer}include/portfolio.php");                
-    
-} else {    
+    header("Location: {$urlServer}main/portfolio.php");
+} else {
     $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
-        
-        $tool_content .= "<p align='justify'>$langInfoAbout</p>";
 
-        $sql = "SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+    $tool_content .= "<p align='justify'>$langInfoAbout</p>";
+
+    $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
             WHERE `visible` = 1
-                    AND lang='$language'
+                    AND lang=?s
                     AND (`begin` <= NOW() or `begin` IS null)
                     AND (NOW() <= `end` or `end` IS null)
-            ORDER BY `order` DESC";
-        $result = db_query($sql);
-        
-        if (mysql_num_rows($result) > 0) {
-            $announceArr = array();
-            while ($eclassAnnounce = mysql_fetch_array($result)) {
-                array_push($announceArr, $eclassAnnounce);
-            }
-            $tool_content .= "
+            ORDER BY `order` DESC", $language);
+
+    if ($announceArr && sizeof($announceArr) > 0) {
+        $tool_content .= "
                 <br />
                 <table width='100%' class='tbl_alt'>
                 <tr>
@@ -157,40 +151,40 @@ if ($uid AND !isset($_GET['logout'])) {
                   </th>
                 </tr>";
 
-            $numOfAnnouncements = count($announceArr);
-            for ($i = 0; $i < $numOfAnnouncements; $i++) {
-                $aid = $announceArr[$i]['id'];
-                $tool_content .= "
+        $numOfAnnouncements = sizeof($announceArr);
+        for ($i = 0; $i < $numOfAnnouncements; $i++) {
+            $aid = $announceArr[$i]->id;
+            $tool_content .= "
                         <tr>
                           <td width='1'><img style='border:0px;' src='$themeimg/arrow.png' alt='' /></td>
                           <td>
-                        <b><a href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]['title']) . "</a></b>
-                                &nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]['date'])) . ")</span>
-                        " . standard_text_escape(ellipsize_html($announceArr[$i]['body'], 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>")) . "
+                        <b><a href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></b>
+                                &nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . ")</span>
+                        " . standard_text_escape(ellipsize_html($announceArr[$i]->body, 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>")) . "
                         </td>
                       </tr>";
-            }
-            $tool_content .= "</table>";
         }
+        $tool_content .= "</table>";
+    }
 
-        // check for shibboleth authentication
-        $shibactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='shibboleth'"));
-        if ($shibactive['auth_default'] == 1) {
-            $shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
-        } else {
-            $shibboleth_link = "";
-        }
+    // check for shibboleth authentication
+    $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'")->auth_default;
+    if ($shibactive == 1) {
+        $shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
+    } else {
+        $shibboleth_link = "";
+    }
 
-        // check for CAS authentication
-        $casactive = mysql_fetch_array(db_query("SELECT auth_default FROM auth WHERE auth_name='cas'"));
-        if ($casactive['auth_default'] == 1) {
-            $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
-        } else {
-            $cas_link = "";
-        }
+    // check for CAS authentication
+    $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'")->auth_default;
+    if ($casactive == 1) {
+        $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
+    } else {
+        $cas_link = "";
+    }
 
-        if (!get_config('dont_display_login_form')) {
-            $tool_content .= "</div><div id='rightbar'>
+    if (!get_config('dont_display_login_form')) {
+        $tool_content .= "</div><div id='rightbar'>
                 <form action='$urlSecure' method='post'>
                  <table width='100%' class='tbl'>
                  <tr>
@@ -207,19 +201,19 @@ if ($uid AND !isset($_GET['logout'])) {
                    <tr><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p>
                    </td>
                  </tr>";
-            if (!empty($shibboleth_link) or !empty($cas_link)) {
-                $tool_content .= "<tr><th class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
-            }
-            $tool_content .= "<tr><td class='LoginData'>
+        if (!empty($shibboleth_link) or !empty($cas_link)) {
+            $tool_content .= "<tr><th class='LoginHead'><b>$langAlternateLogin </b></th></tr>";
+        }
+        $tool_content .= "<tr><td class='LoginData'>
                    $shibboleth_link
                    $cas_link</td></tr>";
-            $online_users = getOnlineUsers();
-            if ($online_users > 0) {
-                $tool_content .= "<th class='LoginHead'><br />$langOnlineUsers: $online_users</th>";
-            }
-            $tool_content .= "</table></form>";
+        $online_users = getOnlineUsers();
+        if ($online_users > 0) {
+            $tool_content .= "<th class='LoginHead'><br />$langOnlineUsers: $online_users</th>";
         }
-        $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
-                
+        $tool_content .= "</table></form>";
+    }
+    $tool_content .= "<div id='extra'>{%ECLASS_HOME_EXTRAS_RIGHT%}</div>";
+
     draw($tool_content, 0, null, $rss_link);
 }

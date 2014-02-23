@@ -62,7 +62,7 @@ if (isset($_GET['get'])) {
 }
 
 // Only course admins can download all assignments in a zip file
-if ($is_editor) {
+if ($is_editor) {    
     if (isset($_GET['download'])) {
         include 'include/pclzip/pclzip.lib.php';
         // Allow unlimited time for creating the archive
@@ -285,7 +285,7 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             $group_id = 0;
             $local_name = uid_to_name($user_id);
-            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = $user_id"));
+            $am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $user_id"));
             if (!empty($am[0])) {
                 $local_name .= $am[0];
             }
@@ -901,7 +901,7 @@ function show_assignment($id, $message = false, $display_graph_results = false) 
                 }
 
                 $uid_2_name = display_user($row['uid']);
-                $stud_am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = $row[uid]"));
+                $stud_am = mysql_fetch_array(db_query("SELECT am FROM user WHERE id = $row[uid]"));
                 if ($i % 2 == 1) {
                     $row_color = "class='even'";
                 } else {
@@ -1233,10 +1233,11 @@ function send_file($id) {
 
 // Zip submissions to assignment $id and send it to user
 function download_assignments($id) {
-    global $workPath;
-
+    
+    global $workPath, $course_code;
+    
     $secret = work_secret($id);
-    $filename = "$GLOBALS[currentCourseID]_work_$id.zip";
+    $filename = "{$course_code}_work_$id.zip";  
     chdir($workPath);
     create_zip_index("$secret/index.html", $id);
     $zip = new PclZip($filename);

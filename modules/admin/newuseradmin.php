@@ -76,7 +76,7 @@ $all_set = register_posted_variables(array(
     'am' => false,
     'phone' => false,
     'password' => true,
-    'pstatut' => true,
+    'pstatus' => true,
     'rid' => false,
     'submit' => true));
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
@@ -85,10 +85,7 @@ $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 if ($submit) {
     // register user
     $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
-    $proflanguage = isset($_POST['language']) ? $_POST['language'] : '';
-    if (!isset($native_language_names[$proflanguage])) {        
-        $proflanguage = $language;
-    }
+    $proflanguage = $session->validate_language_code(@$_POST['language']);
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : 2;
 
     $backlink = $_SERVER['SCRIPT_NAME'] .
@@ -120,7 +117,7 @@ if ($submit) {
                 autoquote($givenname_form) . ', ' .
                 autoquote($uname) . ", '$password_encrypted', " .
                 autoquote($email_form) .
-                ", $pstatut, " . autoquote($phone) . ", " . autoquote($am) . "
+                ", $pstatus, " . autoquote($phone) . ", " . autoquote($am) . "
                  , ".DBHelper::timeAfter()."
                  , ".DBHelper::timeAfter(get_config('account_duration'))."
                  , '$proflanguage', '', $verified_mail, '')");
@@ -133,7 +130,7 @@ if ($submit) {
             db_query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = $rid");
         }
 
-        if ($pstatut == 1) {
+        if ($pstatus == 1) {
             $message = $profsuccess;
             $reqtype = '';
             $type_message = $langAsProf;
@@ -180,7 +177,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         $pphone = $res['phone'];
         $pcom = $res['comment'];
         $language = $res['lang'];
-        $pstatut = intval($res['status']);
+        $pstatus = intval($res['status']);
         $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 
         // faculty id validation
@@ -194,12 +191,12 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
                 <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
                 </ul></div>";
     } elseif (@$_GET['type'] == 'user') {
-        $pstatut = 5;
+        $pstatus = 5;
     } else {
-        $pstatut = 1;
+        $pstatus = 1;
     }
 
-    if ($pstatut == 5) {
+    if ($pstatus == 5) {
         $nameTools = $langUserDetails;
         $title = $langInsertUserInfo;
     } else {
@@ -265,10 +262,10 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         </table>
       </fieldset><div class='right smaller'>$langRequiredFields</div>
         $id_html
-        <input type='hidden' name='pstatut' value='$pstatut' />
+        <input type='hidden' name='pstatus' value='$pstatus' />
         <input type='hidden' name='auth' value='1' />
         </form>";
-    if ($pstatut == 5) {
+    if ($pstatus == 5) {
         $reqtype = '?type=user';
     } else {
         $reqtype = '';

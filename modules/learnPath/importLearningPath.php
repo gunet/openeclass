@@ -1198,7 +1198,7 @@ EOF;
 
             $cmdDirName = $entry['path'];
             $copyright_icon = '';
-            $image = '../document/img/' . choose_image('.' . $entry['format']);
+            $image = choose_image('.' . $entry['format']);
             $size = format_file_size($entry['size']);
             $date = nice_format($entry['date'], true, true);
 
@@ -1217,7 +1217,7 @@ EOF;
 
             $tool_content .= "\n  <tr$style>";
             $tool_content .= "\n    <td><input type='radio' name='selectedDocument' value='" . $entry['path'] . "'/></td>";
-            $tool_content .= "\n    <td width='1%' valign='top' align='center' style='padding-top: 7px;'><img src='$image' border='0' /></td>";
+            $tool_content .= "\n    <td width='1%' valign='top' align='center' style='padding-top: 7px;'>" . icon($image, '') . "</td>";
             $tool_content .= "\n    <td><div align='left'>$link_text";
 
             if (!empty($entry['comment']))

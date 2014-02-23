@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,9 +33,16 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['submit'])) {
     $line = strtok($_POST['courses'], "\n");
-    $fac = intval($_POST['faculte']);
+    
+    $departments = isset($_POST['department']) ? $_POST['department'] : array();
+    // validation in case it skipped JS validation for department(s)
+    if (count($departments) < 1 || empty($departments[0])) {
+        Session::set_flashdata($langEmptyAddNode, 'alert1');
+        header("Location:" . $urlServer . "modules/admin/multicourse.php");
+        exit;
+    }
+    
     $vis = intval($_POST['formvisible']);
-    $lang = langcode_to_name($_POST['lang']);
     while ($line !== false) {
         $line = canonicalize_whitespace($line);
         if (!empty($line)) {
@@ -55,17 +62,29 @@ if (isset($_POST['submit'])) {
             } else {
                 $prof_name = '';
             }
-            $cid = create_course('', $lang, $title, $fac, $vis, $prof_name, $_POST['type'], $_POST['password']);
+            list($code, $cid) = create_course('', $_POST['lang'], $title, $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
-                activate_subsystems($lang, $_POST['subsystems']);
                 if ($prof_uid) {
-                    db_query("INSERT INTO cours_user
-                                                         SET cours_id = $cid,
-                                                             user_id = $prof_uid,
-                                                             status = 1,
-                                                             tutor = 1,
-                                                             reg_date = NOW()");
+                    db_query("INSERT INTO course_user
+                                SET course_id = $cid,
+                                    user_id = $prof_uid,
+                                    status = 1,
+                                    tutor = 1,
+                                    reg_date = NOW()");
                 }
+                db_query("INSERT INTO group_properties SET
+                            course_id = $cid,
+                            self_registration = 1,
+                            multiple_registration = 0,
+                            forum = 1,
+                            private_forum = 0,
+                            documents = 1,
+                            wiki = 0,
+                            agenda = 0");
+                create_modules($cid);
+            }
+            if ($code) {
+                course_index($code);
             }
             $class = $prof_not_found ? 'alert1' : 'success';
             $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: ' . q($langBetaCMSLessonCreatedOK);
@@ -84,18 +103,12 @@ if (isset($_POST['submit'])) {
     $course = new course();
     $user = new user();
 
-    // validate course Id
-    //
-    // $cId = course_code_to_id($_GET['c']);
-    //
-    // validateCourseNodes($cId, isDepartmentAdmin());
-    //
     load_js('jquery');
     load_js('jquery-ui');
     load_js('jstree');
 
     $tool_content .= "<div class='noteit'>" . $langMultiCourseInfo . "</div>
-        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
+        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "' onsubmit=\"return validateNodePickerForm();\">
         <fieldset>
         <legend>" . $langMultiCourseData . "</legend>
         <table class='tbl' width='100%'>
@@ -114,13 +127,16 @@ if (isset($_POST['submit'])) {
 
     $tool_content .= "</td>
           <td>&nbsp;</td>
-        </tr>
-	<tr>
-	  <th class='left'>$langType:</th>
-	  <td>" . selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
-	  <td>&nbsp;</td>
-        </tr>
-        <tr>
+        </tr>";
+        
+// Type field is not available in 3.0
+//    $tool_content .= "<tr>
+//	  <th class='left'>$langType:</th>
+//	  <td>" . selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
+//	  <td>&nbsp;</td>
+//        </tr>";
+    
+    $tool_content .= "<tr>
           <th>$langAvailableTypes:</th>
 	<td>
 	  <table class='tbl' width='100%'>
@@ -150,95 +166,97 @@ if (isset($_POST['submit'])) {
 	  </table>      
 	  <br />
 	</td>
-      </tr>
-      <tr>
-	<th colspan='2'>$langSubsystems</td>
-      </tr>
-      <tr>
-	<td colspan='2'>
- 	  <table class='tbl smaller' width='100%'>
-	  <tr>
-	    <td width='10' ><img src='$themeimg/calendar_on.png' alt='' height='16' width='16' /></td>
-	    <td width='150'>$langAgenda</td>
-	    <td width='30' ><input name='subsystems[]' type='checkbox' value='1' checked='checked' /></td>
-	    <th width='2' >&nbsp;</th>
-	    <td width='10' >&nbsp;<img src='$themeimg/dropbox_on.png' alt='' height='16' width='16' /></td>
-	    <td width='150'>$langDropBox</td>
- 	    <td width='30' ><input type='checkbox' name='subsystems[]' value='16' /></td>
-	  </tr>
-	  <tr  class='even'>
-	    <td><img src='$themeimg/links_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langLinks</td>
-	    <td><input name='subsystems[]' type='checkbox' value='2' checked='checked' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/groups_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langGroups</td>
-	    <td><input type='checkbox' name='subsystems[]' value='15' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/docs_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langDoc</td>
-	    <td><input name='subsystems[]' type='checkbox' value='3' checked='checked' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/conference_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langConference</td>
-	    <td><input type='checkbox' name='subsystems[]' value='19' /></td>
-	  </tr>
-	  <tr class='even'>
-	    <td><img src='$themeimg/videos_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langVideo</td>
-	    <td><input name='subsystems[]' type='checkbox' value='4'  /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/description_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langCourseDescription</td>
-	    <td><input type='checkbox' name='subsystems[]' value='20' checked='checked' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/assignments_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langWorks</td>
-	    <td><input type='checkbox' name='subsystems[]' value='5' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/questionnaire_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langQuestionnaire</td>
-	    <td><input type='checkbox' name='subsystems[]' value='21' /></td>
-	  </tr>
-	  <tr  class='even'>
-	    <td><img src='$themeimg/announcements_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langAnnouncements</td>
-	    <td><input type='checkbox' name='subsystems[]' value='7' checked='checked'/></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/lp_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langLearnPath</td>
-	    <td><input type='checkbox' name='subsystems[]'  value='23' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/forum_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langForums</td>
-	    <td><input type='checkbox' name='subsystems[]' value='9' /></td>
-	    <th>&nbsp;</th>
-	    <td>&nbsp;<img src='$themeimg/wiki_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langWiki</td>
-	    <td><input type='checkbox' name='subsystems[]' value='26' /></td>
-	  </tr>
-	  <tr class='even'>
-	    <td><img src='$themeimg/exercise_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langExercices</td>
-	    <td><input type='checkbox' name='subsystems[]' value='10' /></td>
-	    <th>&nbsp;</th>
-            <td>&nbsp;<img src='$themeimg/glossary_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langGlossary</td>
-	    <td><input type='checkbox' name='subsystems[]' value='17' checked='checked' /></td>
-	  </tr>
-	  <tr>
-	    <td><img src='$themeimg/ebook_on.png' alt='' height='16' width='16' /></td>
-	    <td>$langEBook</td>
-	    <td><input type='checkbox' name='subsystems[]' value='18' /></td>
-	    <th>&nbsp;</th>
-            <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	    <td>&nbsp;</td>
-	  </tr>
-	  </table>
+      </tr>";
+    
+// Subsystems are created in a different way in 3.0
+//    $tool_content .= "<tr>
+//	<th colspan='2'>$langSubsystems</td>
+//      </tr>
+//      <tr>
+//	<td colspan='2'>
+// 	  <table class='tbl smaller' width='100%'>
+//	  <tr>
+//	    <td width='10' ><img src='$themeimg/calendar_on.png' alt='' height='16' width='16' /></td>
+//	    <td width='150'>$langAgenda</td>
+//	    <td width='30' ><input name='subsystems[]' type='checkbox' value='1' checked='checked' /></td>
+//	    <th width='2' >&nbsp;</th>
+//	    <td width='10' >&nbsp;<img src='$themeimg/dropbox_on.png' alt='' height='16' width='16' /></td>
+//	    <td width='150'>$langDropBox</td>
+// 	    <td width='30' ><input type='checkbox' name='subsystems[]' value='16' /></td>
+//	  </tr>
+//	  <tr  class='even'>
+//	    <td><img src='$themeimg/links_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langLinks</td>
+//	    <td><input name='subsystems[]' type='checkbox' value='2' checked='checked' /></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/groups_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langGroups</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='15' /></td>
+//	  </tr>
+//	  <tr>
+//	    <td><img src='$themeimg/docs_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langDoc</td>
+//	    <td><input name='subsystems[]' type='checkbox' value='3' checked='checked' /></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/conference_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langConference</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='19' /></td>
+//	  </tr>
+//	  <tr class='even'>
+//	    <td><img src='$themeimg/videos_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langVideo</td>
+//	    <td><input name='subsystems[]' type='checkbox' value='4'  /></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/description_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langCourseDescription</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='20' checked='checked' /></td>
+//	  </tr>
+//	  <tr>
+//	    <td><img src='$themeimg/assignments_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langWorks</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='5' /></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/questionnaire_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langQuestionnaire</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='21' /></td>
+//	  </tr>
+//	  <tr  class='even'>
+//	    <td><img src='$themeimg/announcements_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langAnnouncements</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='7' checked='checked'/></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/lp_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langLearnPath</td>
+//	    <td><input type='checkbox' name='subsystems[]'  value='23' /></td>
+//	  </tr>
+//	  <tr>
+//	    <td><img src='$themeimg/forum_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langForums</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='9' /></td>
+//	    <th>&nbsp;</th>
+//	    <td>&nbsp;<img src='$themeimg/wiki_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langWiki</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='26' /></td>
+//	  </tr>
+//	  <tr class='even'>
+//	    <td><img src='$themeimg/exercise_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langExercices</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='10' /></td>
+//	    <th>&nbsp;</th>
+//            <td>&nbsp;<img src='$themeimg/glossary_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langGlossary</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='17' checked='checked' /></td>
+//	  </tr>
+//	  <tr>
+//	    <td><img src='$themeimg/ebook_on.png' alt='' height='16' width='16' /></td>
+//	    <td>$langEBook</td>
+//	    <td><input type='checkbox' name='subsystems[]' value='18' /></td>
+//	    <th>&nbsp;</th>
+//            <td>&nbsp;</td>
+//	    <td>&nbsp;</td>
+//	    <td>&nbsp;</td>
+//	  </tr>";
+        $tool_content .= "</table>
         <br />
 	</td>
       </tr>
@@ -263,7 +281,7 @@ draw($tool_content, 3, null, $head_content);
 // Helper function
 function prof_query($sql) {
     return db_query_get_single_value("SELECT id FROM user
-                                                 WHERE status = 1 AND $sql");
+                                                 WHERE status = 1 AND ( $sql )");
 }
 
 // Find a professor by name ("Name surname") or username

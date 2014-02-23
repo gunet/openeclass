@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -177,15 +177,15 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUsers</th></tr>
                                 <tr><td>$langNbProf</td>
                                     <td class='right' width='200'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = " . USER_TEACHER . ";") .
+                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_TEACHER . ";") .
                     "</b></td></tr>
                                 <tr><td>$langNbStudents</td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = " . USER_STUDENT . ";") .
+                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_STUDENT . ";") .
                     "</b></td></tr>
                                 <tr><td>$langNumGuest</td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE statut = " . USER_GUEST . ";") .
+                    db_query_get_single_value("SELECT COUNT(*) FROM user WHERE status = " . USER_GUEST . ";") .
                     "</b></td></tr>
                                 <tr><td>$langTotal</td>
                                     <td class='right'><b>" .
@@ -194,7 +194,7 @@ if (isset($_GET['stats'])) {
                                 <tr><th class='left' colspan='2'>$langUserNotLogin</th></tr>
 				<tr><td><img src='$themeimg/arrow.png' alt=''><a href='listusers.php?search=no_login'>$langFrom " . db_query_get_single_value("SELECT loginout.when FROM loginout ORDER BY loginout.when LIMIT 1") . "</a></td>
                                     <td class='right'><b>" .
-                    db_query_get_single_value("SELECT COUNT(*) FROM `user` LEFT JOIN `loginout` ON `user`.`user_id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
+                    db_query_get_single_value("SELECT COUNT(*) FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;") .
                     "</b></td></tr>
                             </table>";
             break;
@@ -245,12 +245,12 @@ if (isset($_GET['stats'])) {
             $teachers = $students = $visitors = 0;
             $result = db_query("SELECT id, code, title, prof_names FROM course ORDER BY title");
             while ($row = mysql_fetch_array($result)) {
-                $result_numb = db_query("SELECT user.user_id, course_user.statut FROM course_user, user, course
+                $result_numb = db_query("SELECT user.id, course_user.status FROM course_user, user, course
                                                         WHERE course.id = $row[id] 
-                                                        AND course_user.user_id = user.user_id");
+                                                        AND course_user.user_id = user.id");
                 $cu_key = q("$row[title] ($row[code]) -- $row[prof_names]");
                 while ($numrows = mysql_fetch_array($result_numb)) {
-                    switch ($numrows['statut']) {
+                    switch ($numrows['status']) {
                         case USER_TEACHER: $teachers++;
                             break;
                         case USER_STUDENT: $students++;

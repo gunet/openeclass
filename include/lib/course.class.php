@@ -50,9 +50,9 @@ class Course {
      */
     public function refresh($id, $departments) {
         if ($departments != null) {
-            db_query("DELETE FROM $this->departmenttable WHERE course = '$id'");
+            Database::get()->query("DELETE FROM $this->departmenttable WHERE course = ?d", $id);
             foreach (array_unique($departments) as $key => $department)
-                db_query("INSERT INTO $this->departmenttable (course, department) VALUES ($id, $department)");
+                Database::get()->query("INSERT INTO $this->departmenttable (course, department) VALUES (?d,?d)", $id, $department);
         }
         // refresh index
         global $webDir;
@@ -70,8 +70,8 @@ class Course {
      * @param int $id - The id of the course to delete
      */
     public function delete($id) {
-        db_query("DELETE FROM $this->departmenttable WHERE course = '$id'");
-        db_query("DELETE FROM $this->ctable WHERE id = '$id'");
+        Database::get()->query("DELETE FROM $this->departmenttable WHERE course = ?d", $id);
+        Database::get()->query("DELETE FROM $this->ctable WHERE id = ?d", $id);
     }
 
     /**
@@ -82,14 +82,12 @@ class Course {
      */
     public function getDepartmentIds($id) {
         $ret = array();
-        $result = db_query("SELECT cd.department AS id
+        Database::get()->queryFunc("SELECT cd.department AS id
                               FROM $this->ctable c, $this->departmenttable cd
-                             WHERE c.id = " . intval($id) . "
-                               AND c.id = cd.course");
-
-        while ($row = mysql_fetch_assoc($result))
-            $ret[] = $row['id'];
-
+                             WHERE c.id = ?d
+                               AND c.id = cd.course", function($row) use (&$ret) {
+            $ret[] = $row->id;
+        }, $id);
         return $ret;
     }
 

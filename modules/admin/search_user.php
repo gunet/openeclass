@@ -41,8 +41,8 @@ load_js('jquery-ui');
 load_js('jstree');
 load_js('jquery-ui-timepicker-addon.min.js');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='$urlAppend/js/jquery-ui-timepicker-addon.min.css'>
-<script>
+$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+<script type='text/javascript'>
 $(function() {
 $('input[name=user_registered_at]').datetimepicker({
     dateFormat: 'yy-mm-dd', 

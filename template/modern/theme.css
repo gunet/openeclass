@@ -1452,3 +1452,8 @@ td.subsection {
 .cmetalabel a:hover, .cmetalabelinaccordion a:hover {
     border-bottom: none;
 }
+
+#timedisplay {
+    padding-left: 1em;
+    float: right;
+}

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,20 +21,19 @@
 
 /**
  * @brief create course
- * @global type $mysqlMainDb
- * @param type $fake_code
- * @param type $lang
- * @param type $title
- * @param type $fac
- * @param type $vis
- * @param type $prof
- * @param type $password
+ * @global type  $mysqlMainDb
+ * @param  type  $fake_code
+ * @param  type  $lang
+ * @param  type  $title
+ * @param  array $departments
+ * @param  type  $vis
+ * @param  type  $prof
+ * @param  type  $password
  * @return boolean
  */
-function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password = '') {
-    global $mysqlMainDb;
+function create_course($public_code, $lang, $title, $departments, $vis, $prof, $password = '') {    
 
-    $code = strtoupper(new_code($fac[0]));
+    $code = strtoupper(new_code($departments[0]));
     if (!create_course_dirs($code)) {
         return false;
     }
@@ -43,7 +42,7 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
     }
     if (!db_query("INSERT INTO course
                          SET code = '$code',
-                             lang = '$lang',
+                             lang = " . quote($lang) . ",
                              title = " . quote($title) . ",
                              keywords = '',
                              visible = $vis,
@@ -56,15 +55,11 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
         return false;
     }
     $course_id = mysql_insert_id();
-    foreach ($fac as $facid) {
-        if (!isset($set_fac)) {
-            $set_fac = "INSERT INTO course_department (course, department) VALUES ";
-        } else {
-            $set_fac .= ' ,';
-        }
-        $set_fac .= "($course_id, $facid)";
-    }
-    db_query($set_fac);
+    
+    require_once 'include/lib/course.class.php';
+    $course = new Course();
+    $course->refresh($course_id, $departments);
+    
     return array($code, $course_id);
 }
 
@@ -76,9 +71,7 @@ function create_course($public_code, $lang, $title, $fac, $vis, $prof, $password
  */
 function course_index($code) {
     global $webDir;
-    if (!(mkdir($webDir . "/courses/$code", 0777))) {
-        return false;
-    }
+    
     $fd = fopen($webDir . "/courses/$code/index.php", "w");
     if (!$fd) {
         return false;
@@ -101,7 +94,7 @@ function create_course_dirs($code) {
 
     $base = $webDir . "/courses/$code";
     umask(0);
-    if (!(course_index($code) and
+    if (!(mkpath("$base") and
             mkpath("$base/image") and
             mkpath("$base/document") and
             mkpath("$base/dropbox") and
@@ -116,21 +109,36 @@ function create_course_dirs($code) {
     return true;
 }
 
-// ---------------------------------------------
-// create entries in table `module`
-// ---------------------------------------------
-function create_modules($cid, $sbsystems) {
-    $module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
-        MODULE_ID_VIDEO, MODULE_ID_ASSIGN, MODULE_ID_ANNOUNCE,
-        MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
-        MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
-        MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI);
 
-    $values = array();
-    foreach ($module_ids as $mid) {
-        $values[] = "($mid, {$sbsystems[$mid]}, $cid)";
+/**
+ * @brief create modules entries
+ * @param type $cid
+ */
+function create_modules($cid) {
+    $vis_module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
+                            MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION);
+    
+    $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
+                            MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
+                            MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
+                            MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
+                            MODULE_ID_LP, MODULE_ID_WIKI);
+
+    $vis_placeholders = array();
+    $vis_args = array();
+    foreach ($vis_module_ids as $mid) {
+        $vis_placeholders[] = "(?d, 1, ?d)";
+        $vis_args[] = intval($mid);
+        $vis_args[] = intval($cid);
     }
-    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES " .
-            implode(', ', $values));
+    $invis_placeholders = array();
+    $invis_args = array();
+    foreach ($invis_module_ids as $mid) {
+        $invis_placeholders[] = "(?d, 0, ?d)";
+        $invis_args[] = intval($mid);
+        $invis_args[] = intval($cid);
+    }
+    
+    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $vis_placeholders), $vis_args);
+    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $invis_placeholders), $invis_args);
 }

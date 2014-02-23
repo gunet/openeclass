@@ -238,9 +238,9 @@ function loggedInMenu() {
     $res2 = db_query("SELECT status FROM user WHERE id = $uid");
 
     if ($row = mysql_fetch_row($res2))
-        $statut = $row[0];
+        $status = $row[0];
 
-    if (isset($statut) and ($statut == 1)) {
+    if (isset($status) and ($status == 1)) {
         array_push($sideMenuText, $GLOBALS['langCourseCreate']);
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
         array_push($sideMenuImg, "arrow.png");
@@ -251,11 +251,11 @@ function loggedInMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langModifyProfile']);
-    array_push($sideMenuLink, $urlServer . "modules/profile/profile.php");
+    array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
-    array_push($sideMenuLink, $urlServer . "modules/profile/personal_stats.php");
+    array_push($sideMenuLink, $urlServer . "main/profile/personal_stats.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuSubGroup, $sideMenuText);

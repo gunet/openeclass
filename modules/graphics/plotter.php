@@ -72,8 +72,7 @@ class Plotter {
         if ($this->isEmpty()) {
             return $emptyerror;
         } else {
-
-            //     load_js('jquery');
+            
             load_js('flot');
 
             $dataset = '[';
