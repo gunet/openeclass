@@ -69,6 +69,10 @@ if (isset($_GET['delete_server']))
 {
     $id = $_GET['delete_server'] ;
     db_query("DELETE FROM bbb_servers WHERE id=".quote($id));
+    // Display result message
+    $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
+    // Display link to go back to index.php
+    $tool_content .= "<p class='right'><a href='bbbmoduleconf.php'>$langBack</a></p>";
 }
 // Save new config.php
 else if (isset($_POST['submit'])) {
