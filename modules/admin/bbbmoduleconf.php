@@ -65,7 +65,32 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
-if (isset($_GET['delete_server']))
+if (isset($_GET['add_server']))
+{
+    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= '<fieldset><legend>';
+    $tool_content .=  $langAddBBBServer;
+    $tool_content .='</legend>
+    <table width="100%" align="left" class="tbl">';
+    $tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="id_form" />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form"  />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="ip_form"  />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>Pre shared key:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="key_form"  />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>API URL:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="api_url_form"  />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>Max rooms:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form"  />&nbsp;(*)</td></tr>';
+    $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
+    <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" />&nbsp;(*)</td></tr>';
+    $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
+
+    $tool_content .= '</fieldset></form>';    
+}
+else if (isset($_GET['delete_server']))
 {
     $id = $_GET['delete_server'] ;
     db_query("DELETE FROM bbb_servers WHERE id=".quote($id));
@@ -142,18 +167,12 @@ else {
 	<tbody>
 	</tbody>
 	<tfoot>
-</table></fieldset></legend>
-<fieldset><legend>';
-    if($bbb_server<>'')
-        { 
-            $tool_content .=  $langAvailableBBBServers;
-        } else
-        {
-            $tool_content .= "Add new BigBlueButton server";
-        }
-$tool_content .='</legend>
-<table width="100%" align="left" class="tbl">';
-    if ($bbb_server<>'') {
+</table></fieldset></legend>';
+if (isset($_GET['edit_server'])) {
+    $tool_content .= '<fieldset><legend>';
+    $tool_content .=  $langUpdateBBBServer;
+    $tool_content .='</legend>
+    <table width="100%" align="left" class="tbl">';
         $sql = db_query("SELECT * FROM bbb_servers WHERE id=$bbb_server");
         while ($server = mysql_fetch_array($sql)) {
             $tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
@@ -170,25 +189,15 @@ $tool_content .='</legend>
             <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form" value="'.q($server['max_rooms']).'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
             <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="'.q($server['max_users']).'" />&nbsp;(*)</td></tr>';
+            $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
-    }
-    else
-    {
-        $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form" value="" />&nbsp;(*)</td></tr>';
-        $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="ip_form" value="" />&nbsp;(*)</td></tr>';
-        $tool_content .= '<tr><th class="left" width="100"><b>Pre shared key:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="key_form" value="" />&nbsp;(*)</td></tr>';
-        $tool_content .= '<tr><th class="left" width="100"><b>API URL:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="api_url_form" value="" />&nbsp;(*)</td></tr>';
-        $tool_content .= '<tr><th class="left" width="100"><b>Max rooms:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form" value="" />&nbsp;(*)</td></tr>';
-        $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
-        <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="" />&nbsp;(*)</td></tr>';
+            $tool_content .= '</fieldset></form>';    
     }
     
-    $tool_content .= '</table></fieldset><input type="submit" name="submit" value="'.$langModify.'"></form>';
+
+
+    
+    //$tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div></fieldset></form>';
     
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
