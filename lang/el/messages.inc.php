@@ -3687,5 +3687,11 @@ $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξει�
 
 $langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
 $langAddBBBServer = "Προσθήκη εξυπηρετητή";
-$langAvailableBBBServers = "Διαθέσιμοι BigBlueButton servers";
+$langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlueButton";
+$langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
+$langAvailableBBBServers = "Διαθέσιμοι εξπυρετητές BigBlueButton";
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
+$langBBBEnabled = 'Διαθέσιμος';
+$langBBBOptions = 'Τροποποίηση';
+$langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
+$langBBBRemoveServer = 'Κατάργηση';
