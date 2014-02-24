@@ -156,12 +156,12 @@ else {
     <table cellpadding="0" cellspacing="0" border="0" class="display" id="bbb_servers" width="100%">
 	<thead>
 		<tr>
-			<th>Server hostname</th>
-			<th>Server IP</th>
-			<th>Enabled</th>
-			<th>Options</th>
-			<th>Connected users</th>
-                        <th>Remove server</th>
+			<th>Ηostname</th>
+			<th>IP</th>
+			<th>'.$langBBBEnabled.'</th>
+			<th>'.$langBBBOptions.'</th>
+			<th>'.$langBBBConnectedUsers.'</th>
+                        <th>'.$langBBBRemoveServer.'</th>
 		</tr>
 	</thead>
 	<tbody>
