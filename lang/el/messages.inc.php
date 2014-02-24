@@ -446,7 +446,6 @@ $langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού:
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
 $langEclassConf = "Αρχείο ρυθμίσεων του $siteName";
-$langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία αρχείου ρυθμίσεων (config.php)";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
@@ -478,7 +477,6 @@ $langMinPasswordLen = "Ελάχιστο μέγεθος συνθηματικού"
 $langCourseSettings = "Ρυθμίσεις μαθημάτων";
 $langLoginFailCheck = "Έλεγχος αποτυχημένων εισόδων";
 $langEnableLoginFailCheck = "Ενεργοποίηση ελέγχου αποτυχημένων εισόδων";
-$langAvailableBBBServers = "Διαθέσιμοι BigBlueButton servers";
 $langLoginFailThreshold = "Αριθμός επιτρεπτών αποτυχημένων εισόδων";
 $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
@@ -3447,7 +3445,6 @@ $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
-$langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langGlossaryToCsv = "Όροι σε μορφή csv";
 $langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s), ως εκ τούτου οι ορισμοί των όρων δεν θα εμφανίζονται στις σελίδες του μαθήματος.';
 
@@ -3683,3 +3680,12 @@ $langCMeta['course_unit_description'] = "Αναλυτική περιγραφή �
 $langCMeta['course_unit_keywords'] = "Λέξεις – κλειδιά ανά ενότητα";
 $langCMeta['course_confirmCurriculum'] = "Το ψηφιακό μάθημα καλύπτει το 100% της διδακτέας ύλης";
 $langCMeta['course_confirmVideolectures'] = "Οι βιντεο-διαλέξεις καλύπτουν το 80% της διδακτέας ύλης";
+
+/* * ******************************************
+  Messages for Big Blue Button
+ * ***************************************** */
+
+$langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
+$langAddBBBServer = "Προσθήκη εξυπηρετητή";
+$langAvailableBBBServers = "Διαθέσιμοι BigBlueButton servers";
+$langBBBConfig = 'Ρυθμίσεις BigBlueButton';

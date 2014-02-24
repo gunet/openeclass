@@ -121,6 +121,13 @@ else {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
     $tool_content .= '<fieldset><legend>'.$langAvailableBBBServers.'</legend>
+    <div id="operations_container">
+    <ul id="opslist">
+    <li>
+    <a href="?add_server">'.$langAddBBBServer .'</a>
+    </li>
+    </ul>
+    </div>
     <table cellpadding="0" cellspacing="0" border="0" class="display" id="bbb_servers" width="100%">
 	<thead>
 		<tr>
