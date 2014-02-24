@@ -59,12 +59,6 @@ function confirmation ()
         else
                 {return false;}
 }
-
-function toggle(id, checkbox, name)
-{
-        var f = document.getElementById('f-calendar-field-' + id);
-        f.disabled = !checkbox.checked;
-}
 </script>";
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
