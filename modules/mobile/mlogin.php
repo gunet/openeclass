@@ -31,7 +31,7 @@ if (isset($_POST['token'])) {
 
         if (isset($_SESSION['uid'])) {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                                  VALUES (?, ?, NOW(), 'LOGOUT')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+                                                  VALUES (?d, ?s, NOW(), 'LOGOUT')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
         }
 
         if (isset($_SESSION['cas_uname'])) // if we are CAS user
@@ -75,8 +75,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $pass = autounquote($_POST['pass']);
 
     foreach (array_keys($_SESSION) as $key)
-        unset($_SESSION[$key]);
-    $_SESSION['user_perso_active'] = false;
+        unset($_SESSION[$key]);    
 
     $sqlLogin = "SELECT *
                    FROM user
@@ -88,12 +87,17 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     }
     $result = db_query($sqlLogin);
 
-    while ($myrow = mysql_fetch_assoc($result))
-        $ok = login($myrow, $uname, $pass);
+    while ($myrow = mysql_fetch_assoc($result)) {
+        if (in_array($myrow['password'], $auth_ids)) {
+            $ok = alt_login($myrow, $uname, $pass);
+        } else {
+            $ok = login($myrow, $uname, $pass);
+        }
+    }
 
     if (isset($_SESSION['uid']) && $ok == 1) {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                              VALUES (?, ?, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+                                              VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
 
         set_session_mvars();
         echo session_id();
@@ -109,8 +113,8 @@ function set_session_mvars() {
     $from = "SELECT course.id course_id, course.code code, course.public_code,
                     course.title title, course.prof_names profs, course_user.status status
                FROM course JOIN course_user ON course.id = course_user.course_id
-              WHERE course_user.user_id = ? ";
-    $visible = " AND course.visible != ? ";
+              WHERE course_user.user_id = ?d ";
+    $visible = " AND course.visible != ?d ";
     $order = " ORDER BY status, course.title, course.prof_names";
     
     $callback = function($course) use (&$status) {
@@ -130,7 +134,5 @@ function set_session_mvars() {
 
     $_SESSION['courses'] = $status;
     $_SESSION['mobile'] = true;
-
-    if ($GLOBALS['userPerso'] == 'no')
-        $_SESSION['user_perso_active'] = true;
+    
 }

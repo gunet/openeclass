@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -56,7 +56,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
         continue;
     }
 
-    $res = mysql_query($qry);
+    $res = db_query($qry);
     if (!$res) {
         $user_error_msg = $langMailVerifyNoDB;
         continue;
@@ -71,7 +71,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                 // update user's application
                 if (!empty($req_id) and ($verified_mail !== 1)) {
                     $qry = "UPDATE `user_request` SET verified_mail=1 WHERE id = $req_id";
-                    mysql_query($qry);
+                    db_query($qry);
 
                     $department = find_faculty_by_id($ar['faculty_id']);
                     $prof = isset($ar['status']) && intval($ar['status']) === 1 ? 1 : NULL;
@@ -99,8 +99,8 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                 }
                 // update user's account
                 elseif (!empty($u_id) and ($verified_mail !== 1)) {
-                    $qry = "UPDATE `user` SET verified_mail=1 WHERE user_id=$u_id";
-                    mysql_query($qry);
+                    $qry = "UPDATE `user` SET verified_mail = 1 WHERE id = $u_id";
+                    db_query($qry);
                     $user_msg = $langMailVerifySuccessU;
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);

@@ -200,7 +200,7 @@ function move_dir($src, $dest) {
             die("<br>Error! a file named $dest already exists\n");
         }
     } else {
-        mkdir($dest, 0775);
+        mkdir($dest, 0775, true);
     }
 
     $handle = opendir($src);

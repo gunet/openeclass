@@ -236,7 +236,8 @@ function get_auth_settings($auth) {
                         'dbpass' => str_replace('dbpass=', '', @$edb[3]),
                         'dbtable' => str_replace('dbtable=', '', @$edb[4]),
                         'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6])));
+                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
+                        'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
                     break;
                 case 7:
                     $cas = explode('|', $auth_settings);
@@ -390,15 +391,16 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 $db_ext = mysql_select_db($settings['dbname'], $link);
                 if ($db_ext) {
                     $qry = "SELECT * FROM `$settings[dbname]`.`$settings[dbtable]`
-                                           WHERE `$settings[dbfielduser]` = " . quote($test_username) . " AND
-                                                 `$settings[dbfieldpass]` = " . quote($test_password);
+                                           WHERE `$settings[dbfielduser]` = " . quote($test_username);
                     $res = mysql_query($qry, $link);
                     if ($res) {
-                        if (mysql_num_rows($res) > 0) {
-                            $testauth = true;
+                        if (($row = mysql_fetch_assoc($res)) > 0) {
+                            $testauth = external_DB_Check_Pass($test_password, $row[$settings['dbfieldpass']], $settings['dbpassencr']);
                             mysql_close($link);
                             // Reconnect to main database
-                            $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'], $GLOBALS['mysqlUser'], $GLOBALS['mysqlPassword']);
+                            $GLOBALS['db'] = mysql_connect($GLOBALS['mysqlServer'],
+                                                           $GLOBALS['mysqlUser'],
+                                                           $GLOBALS['mysqlPassword']);
                             if (mysql_version())
                                 mysql_query('SET NAMES utf8');
                             mysql_select_db($mysqlMainDb);
@@ -471,7 +473,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
  * ************************************************************** */
 
 function check_activity($userid) {
-    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?", intval($userid));
+    $result = Database::get()->querySingle("SELECT expires_at FROM user WHERE id = ?d", intval($userid));
     if (!empty($result) && strtotime($result->expires_at) > time()) {
         return 1;
     } else {
@@ -619,8 +621,7 @@ function process_login() {
     $is_eclass_unique = is_eclass_unique();
 
     if (isset($_POST['submit'])) {
-        unset($_SESSION['uid']);
-        $_SESSION['user_perso_active'] = false;
+        unset($_SESSION['uid']);        
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
@@ -697,8 +698,7 @@ function process_login() {
         } else {
             db_query("INSERT INTO loginout
 						(loginout.id_user, loginout.ip, loginout.when, loginout.action)
-						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-            $_SESSION['user_perso_active'] = true;
+						VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");            
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
@@ -875,8 +875,7 @@ function shib_cas_login($type) {
     } else {
         $autoregister = FALSE;
     }
-
-    $_SESSION['user_perso_active'] = false;
+    
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
         $email = $_SESSION['shib_email'];
@@ -897,7 +896,7 @@ function shib_cas_login($type) {
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
-    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, perso, lang, verified_mail
+    $sqlLogin = "SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
 						FROM user WHERE username ";
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin .= "= " . quote($uname);
@@ -918,7 +917,7 @@ function shib_cas_login($type) {
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
             unset($_SESSION['cas_givenname']);
-            $_SESSION['errMessage'] = "<div class='caution'>$langUserAltAuth</div>";
+            Session::set_flashdata($langUserAltAuth, 'caution');
             redirect_to_home_page();
         } else {
             // don't force email address from CAS/Shibboleth.
@@ -951,8 +950,7 @@ function shib_cas_login($type) {
                 $is_departmentmanage_user = 1;
             }
             $_SESSION['uid'] = $info['id'];
-            //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL
-            $userPerso = $info['perso'];
+            //$is_admin = !(!($info['is_admin'])); // double 'not' to handle NULL            
             if (isset($_SESSION['langswitch'])) {
                 $language = $_SESSION['langswitch'];
             } else {
@@ -968,13 +966,10 @@ function shib_cas_login($type) {
             $verified_mail = 2;
         }
 
-        Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?, email = ?, status = ?, lang = 'el', perso = 'yes', 
+        $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
+                                       username = ?s, email = ?s, status = ?d, lang = 'el', 
                                        registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
-                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT);
-
-        $_SESSION['uid'] = Database::get()->lastInsertID();
-        $userPerso = 'yes';
+                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
         $language = $_SESSION['langswitch'] = 'el';
     } else {
         // user not registered, automatic registration disabled
@@ -993,10 +988,7 @@ function shib_cas_login($type) {
     $_SESSION['email'] = $email;
     $_SESSION['status'] = $status;
     //$_SESSION['is_admin'] = $is_admin;
-    $_SESSION['shib_user'] = 1; // now we are shibboleth user
-    if ($userPerso == 'no') {
-        $_SESSION['user_perso_active'] = true;
-    }
+    $_SESSION['shib_user'] = 1; // now we are shibboleth user    
 
     db_query("INSERT INTO loginout
 					(loginout.id_user, loginout.ip, loginout.when, loginout.action)
@@ -1052,4 +1044,20 @@ function resetLoginFailure() {
         return;
 
     db_query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
+}
+
+function external_DB_Check_Pass($test_password, $hash, $encryption) {
+    switch ($encryption) {
+        case 'none':
+            return ($test_password == $hash);
+            break;
+        case 'md5':
+            return (md5($test_password) == $hash);
+        case 'ehasher':
+            require_once 'include/phpass/PasswordHash.php';
+            $hasher = new PasswordHash(8, false);
+            return $hasher->CheckPassword($test_password, $hash);
+        default:
+            /* Maybe append an error message to tool_content, telling not supported encryption */
+    }
 }

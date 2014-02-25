@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     $regprofs = isset($_POST['regprofs']) ? array_map('intval', $_POST['regprofs']) : array();
     $reglist = implode(', ', array_merge($regstuds, $regprofs));
 
-    // Remove unneded users - guest user (statut == 10) is never removed
+    // Remove unneded users - guest user (status == 10) is never removed
     if ($reglist) {
         $reglist = "AND user_id NOT IN ($reglist)";
         db_query("DELETE FROM group_members
@@ -62,16 +62,16 @@ if (isset($_POST['submit'])) {
                                $reglist");
     }
     db_query("DELETE FROM course_user
-                     WHERE course_id = $cid AND statut <> 10 $reglist");
+                     WHERE course_id = $cid AND status <> 10 $reglist");
 
-    function regusers($cid, $users, $statut) {
+    function regusers($cid, $users, $status) {
         foreach ($users as $uid) {
-            db_query("INSERT IGNORE INTO course_user (course_id, user_id, statut, reg_date)
-                             VALUES ($cid, $uid, $statut, CURDATE())");
+            Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
+                             VALUES (?d, ?d, ?d, CURDATE())", $cid, $uid, $status);
         }
         $reglist = implode(', ', $users);
         if ($reglist) {
-            db_query("UPDATE course_user SET statut = $statut WHERE user_id IN ($reglist)");
+            Database::get()->query("UPDATE course_user SET status = ?d WHERE user_id IN ($reglist)", $status);
         }
     }
 
@@ -91,16 +91,13 @@ else {
                           <select id='unregusers_box' name='unregusers[]' size='20' multiple class='auth_input'>";
 
     // Registered users not registered in the selected course
-    $sqll = "SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
+    Database::get()->queryFunc("SELECT DISTINCT u.id , u.surname, u.givenname FROM user u
                 LEFT JOIN course_user cu ON u.id = cu.user_id
-                     AND cu.course_id = $cid
-                WHERE cu.user_id IS NULL ORDER BY nom";
-
-    $resultAll = db_query($sqll);
-    while ($myuser = mysql_fetch_assoc($resultAll)) {
-        $tool_content .= "<option value='" . q($myuser['id']) . "'>" .
-                q("$myuser[surname] $myuser[givenname]") . '</option>';
-    }
+                     AND cu.course_id = ?d
+                WHERE cu.user_id IS NULL ORDER BY nom", function($myuser) use (&$tool_content) {
+        $tool_content .= "<option value='" . q($myuser->id) . "'>" .
+                q("$myuser->surname $myuser->givenname") . '</option>';
+    }, $cid);
 
     $tool_content .= "</select></th>
         <td width='3%' class='center' nowrap>
@@ -129,7 +126,7 @@ else {
                                 FROM user u, course_user cu
                                 WHERE cu.course_id = $cid
                                 AND cu.user_id = u.id
-                                AND cu.statut=5 ORDER BY surname");
+                                AND cu.status=5 ORDER BY surname");
 
     $a = 0;
     while ($myStud = mysql_fetch_assoc($resultStud)) {
@@ -147,7 +144,7 @@ else {
                                 FROM user u, course_user cu
                                 WHERE cu.course_id = $cid
                                 AND cu.user_id = u.id
-                                AND cu.statut = 1
+                                AND cu.status = 1
                                 ORDER BY nom, givenname");
     $a = 0;
     while ($myProf = mysql_fetch_assoc($resultProf)) {

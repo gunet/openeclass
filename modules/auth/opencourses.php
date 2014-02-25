@@ -50,7 +50,7 @@ else
     $fc = $_SESSION['fc_memo'];
 
 
-$fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?", $fc)->name;
+$fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $fc)->name;
 if (!($fac = $fac[0]))
     die("ERROR: no faculty with id $fc");
 
@@ -86,7 +86,7 @@ if ($isInOpenCoursesMode) {
                                   FROM course, course_department, course_review
                                  WHERE course.id = course_department.course
                                    AND course.id = course_review.course_id
-                                   AND course_department.department = ?
+                                   AND course_department.department = ?d
                                    AND course_review.is_certified = 1", function($course) use (&$opencourses) {
         $opencourses[$course->id] = $course->code;
     }, $fc);
@@ -124,12 +124,12 @@ if ($runQuery) {
                           FROM course, course_department $queryExtraJoin
                          WHERE course.id = course_department.course
                            $queryExtraJoinWhere
-                           AND course_department.department = ?
-                           AND course.visible != ?
+                           AND course_department.department = ?d
+                           AND course.visible != ?d
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names", function ($course) use (&$courses) {
         $courses[] = $course;
-    }, intval($fc), intval(COURSE_INACTIVE) );
+    }, $fc, COURSE_INACTIVE );
 }
 
 if (count($courses) > 0) {

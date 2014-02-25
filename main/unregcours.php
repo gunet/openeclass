@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,7 +21,7 @@
 
 
 $require_login = TRUE;
-include '../../include/baseTheme.php';
+include '../include/baseTheme.php';
 require_once 'include/log.php';
 
 $nameTools = $langUnregCourse;
@@ -47,7 +47,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
               <li>$langYes:
               <a href='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
               </li>
-              <li>$langNo: <a href='../../index.php' class=mainpage>$langBack</a>
+              <li>$langNo: <a href='../index.php' class=mainpage>$langBack</a>
               </li></ul>
             </td>
           </tr>
@@ -60,7 +60,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
                         AND user_id='$_GET[u]'");
         if (mysql_affected_rows() > 0) {
             Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $_GET['u'],
-                'right' => 0));
+                                                                 'right' => 0));
             $code = course_id_to_code($cid);
             // clear session access to lesson
             unset($_SESSION['dbname']);
@@ -71,7 +71,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             $tool_content .= "<p class='caution_small'>$langCoursError</p>";
         }
     }
-    $tool_content .= "<br><br><div align=right><a href='../../index.php' class=mainpage>$langBack</a></div>";
+    $tool_content .= "<br><br><div align=right><a href='../index.php' class=mainpage>$langBack</a></div>";
 }
 
 if (isset($_SESSION['uid'])) {

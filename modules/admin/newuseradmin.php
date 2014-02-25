@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -76,7 +76,7 @@ $all_set = register_posted_variables(array(
     'am' => false,
     'phone' => false,
     'password' => true,
-    'pstatut' => true,
+    'pstatus' => true,
     'rid' => false,
     'submit' => true));
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
@@ -85,11 +85,7 @@ $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 if ($submit) {
     // register user
     $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
-    $proflanguage = isset($_POST['language']) ? $_POST['language'] : '';
-    if (!isset($native_language_names[$proflanguage])) {
-        //$proflanguage = langname_to_code($language);
-        $proflanguage = $language;
-    }
+    $proflanguage = $session->validate_language_code(@$_POST['language']);
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : 2;
 
     $backlink = $_SERVER['SCRIPT_NAME'] .
@@ -112,8 +108,6 @@ if ($submit) {
                         <br /><br /><p align='right'><a href='$backlink'>$langAgain</a></p>";
     } else {
         validateNode(intval($depid), isDepartmentAdmin());
-        $registered_at = time();
-        $expires_at = time() + get_config('account_duration');
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
         $inscr_user = db_query("INSERT INTO user
@@ -123,7 +117,10 @@ if ($submit) {
                 autoquote($givenname_form) . ', ' .
                 autoquote($uname) . ", '$password_encrypted', " .
                 autoquote($email_form) .
-                ", $pstatut, " . autoquote($phone) . ", " . autoquote($am) . ", $registered_at, $expires_at, '$proflanguage', '', $verified_mail, '')");
+                ", $pstatus, " . autoquote($phone) . ", " . autoquote($am) . "
+                 , ".DBHelper::timeAfter()."
+                 , ".DBHelper::timeAfter(get_config('account_duration'))."
+                 , '$proflanguage', '', $verified_mail, '')");
         $uid = mysql_insert_id();
         $user->refresh($uid, array(intval($depid)));
 
@@ -133,7 +130,7 @@ if ($submit) {
             db_query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = $rid");
         }
 
-        if ($pstatut == 1) {
+        if ($pstatus == 1) {
             $message = $profsuccess;
             $reqtype = '';
             $type_message = $langAsProf;
@@ -180,7 +177,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         $pphone = $res['phone'];
         $pcom = $res['comment'];
         $language = $res['lang'];
-        $pstatut = intval($res['statut']);
+        $pstatus = intval($res['status']);
         $pdate = nice_format(date('Y-m-d', strtotime($res['date_open'])));
 
         // faculty id validation
@@ -194,12 +191,12 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
                 <li><a href='../admin/listreq.php$reqtype'>$langBackRequests</a></li>
                 </ul></div>";
     } elseif (@$_GET['type'] == 'user') {
-        $pstatut = 5;
+        $pstatus = 5;
     } else {
-        $pstatut = 1;
+        $pstatus = 1;
     }
 
-    if ($pstatut == 5) {
+    if ($pstatus == 5) {
         $nameTools = $langUserDetails;
         $title = $langInsertUserInfo;
     } else {
@@ -265,10 +262,10 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         </table>
       </fieldset><div class='right smaller'>$langRequiredFields</div>
         $id_html
-        <input type='hidden' name='pstatut' value='$pstatut' />
+        <input type='hidden' name='pstatus' value='$pstatus' />
         <input type='hidden' name='auth' value='1' />
         </form>";
-    if ($pstatut == 5) {
+    if ($pstatus == 5) {
         $reqtype = '?type=user';
     } else {
         $reqtype = '';

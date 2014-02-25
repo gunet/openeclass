@@ -254,6 +254,11 @@ class CourseXMLElement extends SimpleXMLElement {
             $html .= "<input type='file' size='30' name='" . q($fullKey) . "'>" . $fieldEnd;
             return $html;
         }
+        
+        // array fields
+        if (in_array($fullKeyNoLang, self::$arrayFields)) {
+            return $fieldStart ."<input type='text' size='55' name='". q($fullKey) ."[]' value='". q((string) $this) ."' $readonly>". $fieldEnd;
+        }
 
         // all others get a typical input type box
         return $fieldStart . "<input type='text' size='55' name='" . q($fullKey) . "' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
@@ -394,8 +399,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
                 if (in_array($fullKeyNoLang, self::$binaryFields)) // mime attribute for mime fields
                     $this['mime'] = isset($data[$fullKey . '_mime']) ? $data[$fullKey . '_mime'] : '';
-            }
-            else { // multiple entities (multiEnum and units) use associative indexed arrays
+            } else { // multiple entities (multiEnum and units) use associative indexed arrays
                 if (in_array($fullKeyNoLang, self::$multiEnumerationFields))
                     $this->{0} = implode(',', $data[$fullKey]); // comma separated
                 else { // units
@@ -410,12 +414,35 @@ class CourseXMLElement extends SimpleXMLElement {
     }
 
     /**
-     * Convert the XML as a flat array (key => value).
+     * Convert the XML as a flat array (key => value) and do special post-processing.
      * 
      * @param  string $parentKey
      * @return array
      */
-    public function asFlatArray($parentKey = '') {
+    public function asFlatArray() {
+        $data = $this->asFlatArrayRec();
+
+        // special post processing for unit properties
+        $extra = array();
+        $unitsCount = 0;
+        foreach ($this->unit as $unit) {
+            foreach ($unit->keywords as $keyword) {
+                $extra['course_unit_keywords_' . $keyword->getAttribute('lang')][$unitsCount] = (string) $keyword;
+            }
+            $unitsCount++;
+        }
+
+        $ret = array_merge($data, $extra);
+        return $ret;
+    }
+    
+    /**
+     * Convert the XML recursively as a flat array (key => value).
+     * 
+     * @param  string $parentKey
+     * @return array
+     */
+    private function asFlatArrayRec($parentKey = '') {
         $fullKey = $this->mendFullKey($parentKey);
 
         $children = $this->children();
@@ -433,7 +460,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         $out = array();
         foreach ($children as $ele)
-            $out = array_merge($out, $ele->asFlatArray($fullKey));
+            $out = array_merge($out, $ele->asFlatArrayRec($fullKey));
 
         return $out;
     }
@@ -535,9 +562,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $xmlFile = self::getCourseXMLPath($courseCode);
         $data = self::getAutogenData($courseId); // preload xml with auto-generated data
         // course-based adaptation
-        $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?", intval($courseId))->count;
-        $vnum = Database::get()->querySingle("select count(id) as count from video where course_id = ?", intval($courseId))->count;
-        $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?", intval($courseId))->count;
+        $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?d", intval($courseId))->count;
+        $vnum = Database::get()->querySingle("select count(id) as count from video where course_id = ?d", intval($courseId))->count;
+        $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?d", intval($courseId))->count;
         if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
@@ -549,14 +576,15 @@ class CourseXMLElement extends SimpleXMLElement {
 
         if (file_exists($xmlFile)) {
             $xml = simplexml_load_file($xmlFile, 'CourseXMLElement');
-            if (!$xml) // fallback if xml is broken
+            if (!$xml) { // fallback if xml is broken
                 return $skeletonXML;
-            else { // xml is valid, merge autogen data and current xml data
+            } else { // xml is valid, merge autogen data and current xml data
                 $new_data = array_merge($xml->asFlatArray(), $data);
                 $data = $new_data;
             }
-        } else // fallback if starting fresh
+        } else { // fallback if starting fresh
             return $skeletonXML;
+        }
 
         $xml->adapt($data);
         $xml->populate($data);
@@ -629,7 +657,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $license;
         $data = array();
 
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?", intval($courseId));
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
         if (!$course)
             return array();
 
@@ -649,11 +677,11 @@ class CourseXMLElement extends SimpleXMLElement {
         $unitsCount = 0;
         DataBase::get()->queryFunc("SELECT title, comments 
                                       FROM course_units
-                                     WHERE visible > 0 AND course_id = ?", function($unit) use (&$data, &$unitsCount, $clang) {
+                                     WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount, $clang) {
             $data['course_unit_title_' . $clang][$unitsCount] = $unit->title;
             $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($unit->comments);
             $unitsCount++; // also serves as array index, starting from 0
-        }, intval($courseId));
+        }, $courseId);
         $data['course_numberOfUnits'] = $unitsCount;
 
         return $data;
@@ -770,7 +798,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $count = Database::get()->querySingle("SELECT COUNT(course_review.id) as count
                                                      FROM course, course_department, course_review
                                                     WHERE course.id = course_department.course
-                                                      AND course.id = course_review.course_id AND course_department.department = ?
+                                                      AND course.id = course_review.course_id AND course_department.department = ?d
                                                       AND course_review.is_certified = 1", intval($subnode))->count;
             return $count;
         };
@@ -942,6 +970,14 @@ class CourseXMLElement extends SimpleXMLElement {
         'course_numberOfUnits', 'course_license'
     );
 
+    /**
+     * Array HTML Form fields.
+     * @var array
+     */
+    public static $arrayFields = array(
+        'course_unit_keywords'
+    );
+    
     /**
      * Link value for HTML Form labels.
      * 

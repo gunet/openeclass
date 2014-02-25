@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -74,6 +74,13 @@ $head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
 $head_content .= <<<hContent
     };
 
+    function showCCFields() {
+        $('#cc').show();
+    }
+    function hideCCFields() {
+        $('#cc').hide();
+    }
+        
     $(document).ready(function() {
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
@@ -94,6 +101,13 @@ $head_content .= <<<hContent
                 deactivate_input_password();
         });
         
+        $('input[name=l_radio]').change(function () {
+            if ($('#cc_license').is(":checked")) {
+                showCCFields();
+            } else {
+                hideCCFields();
+            }
+        }).change();
     });
 
 /* ]]> */
@@ -103,7 +117,7 @@ hContent;
 $nameTools = $langModifInfo;
 
 // if the course is opencourses certified, disable visibility choice in form
-$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) ? $creview->is_certified : false;
+$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?d", $course_id)) ? $creview->is_certified : false;
 $disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
 
 
@@ -111,32 +125,39 @@ if (isset($_POST['submit'])) {
     if (empty($_POST['title'])) {
         $tool_content .= "<p class='caution'>$langNoCourseTitle</p>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
-    } else {
-        if (isset($_POST['localize'])) {
-            $language = validate_language_code($_POST['localize']);
-            // include_messages
-            include "lang/$language/common.inc.php";
-            $extra_messages = "config/{$language_codes[$language]}.inc.php";
-            if (file_exists($extra_messages)) {
-                include $extra_messages;
-            } else {
-                $extra_messages = false;
-            }
-            include "lang/$language/messages.inc.php";
-            if ($extra_messages) {
-                include $extra_messages;
-            }
-        }
+    } else {        
         // update course settings
         if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
             $password = "";
         }
+        // if it is opencourses certified keeep the current course_license
+        if (isset($_POST['course_license'])) {
+            $course_license = $_POST['course_license'];
+        }
+        // update course_license
+        if (isset($_POST['l_radio'])) {
+            $l = $_POST['l_radio'];
+            switch ($l) {
+                case 'cc':
+                    if (isset($_POST['cc_use'])) {
+                        $course_license = intval($_POST['cc_use']);
+                    }
+                    break;
+                case '10':
+                    $course_license = 10;
+                    break;
+                default:
+                    $course_license = 0;
+                    break;
+            }
+        }
 
         // disable visibility if it is opencourses certified
-        if (get_config('opencourses_enable') && $isOpenCourseCertified)
+        if (get_config('opencourses_enable') && $isOpenCourseCertified) {
             $_POST['formvisible'] = '2';
+        }
 
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
@@ -152,14 +173,15 @@ if (isset($_POST['submit'])) {
                                       <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
         } else {
             db_query("UPDATE course
-                                    SET title = " . quote($_POST['title']) . ",
-                                        public_code =" . quote($_POST['fcode']) . ",
-                                        keywords = " . quote($_POST['course_keywords']) . ",
-                                        visible = " . intval($_POST['formvisible']) . ",
-                                        prof_names = " . quote($_POST['titulary']) . ",
-                                        lang = " . quote($language) . ",
-                                        password = " . quote($password) . "
-                                    WHERE id = $course_id");
+                            SET title = " . quote($_POST['title']) . ",
+                                public_code =" . quote($_POST['fcode']) . ",
+                                keywords = " . quote($_POST['course_keywords']) . ",
+                                visible = " . intval($_POST['formvisible']) . ",
+                                course_license = $course_license,
+                                prof_names = " . quote($_POST['titulary']) . ",
+                                lang = " . quote($session->language) . ",
+                                password = " . quote($password) . "
+                            WHERE id = $course_id");
             $course->refresh($course_id, $departments);
 
             Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
@@ -187,22 +209,32 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
 	  </ul>
 	</div>";
-
-    $sql = "SELECT course.title, course.keywords, course.visible,
-		       course.public_code, course.prof_names, course.lang,
-		       course.password, course.id
-		  FROM course
-                 WHERE course.code = '$course_code'";
-    $result = db_query($sql);
+         
+    $result = db_query("SELECT title, keywords, visible, public_code, prof_names, lang,
+                	       course_license, password, id
+                      FROM course WHERE code = '$course_code'");
     $c = mysql_fetch_array($result);
     $title = q($c['title']);
     $visible = $c['visible'];
+    $visibleChecked = array(COURSE_CLOSED => '', COURSE_REGISTRATION => '', COURSE_OPEN => '', COURSE_INACTIVE => '');
     $visibleChecked[$visible] = " checked='checked'";
     $public_code = q($c['public_code']);
     $titulary = q($c['prof_names']);
     $languageCourse = $c['lang'];
     $course_keywords = q($c['keywords']);
     $password = q($c['password']);
+    $course_license = $c['course_license'];
+    if ($course_license > 0 and $course_license < 10) {
+        $cc_checked = ' checked';
+    } else {
+        $cc_checked = '';
+    }
+    foreach ($license as $id => $l_info) {
+        $license_checked[$id] = ($course_license == $id)? ' checked': '';
+        if ($id and $id < 10) {
+            $cc_license[$id] = $l_info['title'];
+        }
+    }
 
     $tool_content .="
 	<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -224,19 +256,40 @@ if (isset($_POST['submit'])) {
 	    <tr>
                 <th>$langFaculty:</th>
                 <td>";
-    $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
-    $head_content .= $js;
-    $tool_content .= $html;
-    @$tool_content .= "
-                </td>
-            </tr>
+            $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c['id']), 'allow_only_defaults' => $allow_only_defaults));
+            $head_content .= $js;
+            $tool_content .= $html;
+            @$tool_content .= "</td></tr>
 	    <tr>
 		<th>$langCourseKeywords</th>
 		<td><input type='text' name='course_keywords' value='$course_keywords' size='60' /></td>
 	    </tr>
 	    </table>
-	</fieldset>        
+         </fieldset>";
+        if ($isOpenCourseCertified) {
+            $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
+        }
+         $tool_content .= "<fieldset>
+        <legend>$langOpenCoursesLicense</legend>
+            <table class='tbl' width='100%'>
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='0'$license_checked[0]$disabledVisibility>
+            {$license[0]['title']}
+            </td>
+            </tr>
+            <tr><td colspan='2'><input type='radio' name='l_radio' value='10'$license_checked[10]$disabledVisibility>
+            {$license[10]['title']}
+            </td>
+            </tr>
+            <tr><td colspan='2'><input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>
+                $langCMeta[course_license]
+            </td>
+            </tr>
+            <tr id = 'cc'><td>
+                ".selection($cc_license, 'cc_use', $course_license, $disabledVisibility)."
+             </td></tr>
+             </table>
+        </fieldset>
 	<fieldset>
 	<legend>$langConfidentiality</legend>
 	    <table class='tbl' width='100%'>

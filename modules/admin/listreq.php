@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -175,9 +175,9 @@ if (!empty($show) and $show == 'closed') {
         $k = 0;
         while ($req = mysql_fetch_array($sql)) {
             if ($k % 2 == 0) {
-                $tool_content .= "\n  <tr class='even'>";
+                $tool_content .= "<tr class='even'>";
             } else {
-                $tool_content .= "\n  <tr class=\"odd\">";
+                $tool_content .= "<tr class='odd'>";
             }
             $tool_content .= "<td width='1'>
 			<img src='$themeimg/arrow.png' title='bullet'></td>";
@@ -292,8 +292,8 @@ else {
             }
             $tool_content .= "<td align='right' width='1'>
                         <img src='$themeimg/arrow.png' title='bullet'></td>";
-            $tool_content .= "<td>" . q($req['name']) . "&nbsp;" . q($req['surname']) . "</td>";
-            $tool_content .= "<td>" . q($req['uname']) . "</td>";
+            $tool_content .= "<td>" . q($req['givenname']) . "&nbsp;" . q($req['surname']) . "</td>";
+            $tool_content .= "<td>" . q($req['username']) . "</td>";
             $tool_content .= "<td>" . q(find_faculty_by_id($req['faculty_id'])) . "</td>";
             $tool_content .= "<td align='center'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req['date_open']))) . "</small></td>";

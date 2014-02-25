@@ -176,7 +176,11 @@ if ($total_categories) {
                         $tool_content .= "<td width='2'><img src='$folder_image' /></td>\n";
                     }
                     $forum_name = q($forum_row[$x]['name']);
-                    $last_user_post = uid_to_name($forum_row[$x]['poster_id']);
+                    if ($forum_row[$x]['poster_id']) {
+                        $last_user_post = uid_to_name($forum_row[$x]['poster_id']);
+                    } else {
+                        $last_user_post = '';
+                    }
                     $last_post_topic_id = $forum_row[$x]['topic_id'];
                     $total_posts = $forum_row[$x]['num_posts'];
                     $total_topics = $forum_row[$x]['num_topics'];

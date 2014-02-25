@@ -43,7 +43,7 @@
  * @return array
  */
 function getUserForumPosts($param, $type) {
-    global $mysqlMainDb, $uid, $course_code;
+    global $uid;
 
     $uid = $param['uid'];
     $lesson_code = $param['lesson_code'];
@@ -97,7 +97,7 @@ function getUserForumPosts($param, $type) {
  * @see function getUserForumPosts()
  */
 function forumHtmlInterface($data) {
-    global $langNoPosts, $langMore, $langSender, $urlServer;
+    global $langNoPosts, $langMore, $urlServer;
 
     $content = "";
     $numOfLessons = count($data);
@@ -107,7 +107,7 @@ function forumHtmlInterface($data) {
             $content .= "<tr><td class='sub_title1'>" . $data[$i][0] . "</td></tr>";
             $iterator = count($data[$i][2][0]);
             for ($j = 0; $j < $iterator; $j++) {
-                $url = $urlServer . "index.php?perso=5&amp;c=" . $data[$i][1] . "&amp;t=" . $data[$i][2][0][$j][2] . "&amp;f=" . $data[$i][2][0][$j][0] . "&amp;s=" . $data[$i][2][0][$j][4];
+                $url = $urlServer . "modules/forum/viewtopic.php?course=" . $data[$i][1] . "&amp;topic=" . $data[$i][2][0][$j][2] . "&amp;forum=" . $data[$i][2][0][$j][0] . "&amp;s=" . $data[$i][2][0][$j][4];
                 $content .= "<tr><td><ul class='custom_list'><li><a href='$url'>
 				<b>" . q($data[$i][2][0][$j][3]) . " (" . nice_format(date("Y-m-d", strtotime($data[$i][2][0][$j][5]))) . ")</b>
                                 </a><div class='smaller grey'><b>" . q(uid_to_name($data[$i][2][0][$j][6])) .

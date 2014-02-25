@@ -441,7 +441,7 @@ if (!class_exists('Question')):
          * @return - integer - ID of the new question
          */
         function duplicate() {
-            global $TBL_QUESTION, $picturePath, $mysqlMainDb, $course_id;
+            global $TBL_QUESTION, $picturePath, $course_id;
 
             $question = addslashes($this->question);
             $description = addslashes($this->description);
@@ -451,7 +451,7 @@ if (!class_exists('Question')):
 
             $sql = "INSERT INTO `$TBL_QUESTION` (course_id, question, description, weight, q_position, type)
 						VALUES ($course_id, '$question', '$description', '$weighting', '$position', '$type')";
-            db_query($sql, $mysqlMainDb);
+            db_query($sql);
 
             $id = mysql_insert_id();
             // duplicates the picture

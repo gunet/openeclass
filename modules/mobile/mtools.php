@@ -47,8 +47,8 @@ $tool->active = true;
 $toolsArr[0][] = $tool;
 
 $first_unit_id = Database::get()->querySingle("SELECT id FROM course_units
-                                                WHERE course_id = ? AND `order` >= 0
-                                             ORDER BY `order` ASC LIMIT 1", intval($course_id));
+                                                WHERE course_id = ?d AND `order` >= 0
+                                             ORDER BY `order` ASC LIMIT 1", $course_id);
 
 $tool = new stdClass();
 $tool->id = 1;

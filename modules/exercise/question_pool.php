@@ -97,7 +97,7 @@ if ($is_editor) {
     } else {
         $sql = "SELECT * from`$TBL_QUESTION` WHERE course_id = $course_id";
     }
-    $result = db_query($sql, $mysqlMainDb);
+    $result = db_query($sql);
     $num_of_questions = mysql_num_rows($result);
 
     $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\"><li>";

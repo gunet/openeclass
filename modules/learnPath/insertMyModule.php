@@ -187,13 +187,13 @@ while ($list = mysql_fetch_array($result)) {
 
     //CHECKBOX, NAME, RENAME, COMMENT
     if ($list['contentType'] == CTEXERCISE_)
-        $moduleImg = "exercise_on.png";
+        $moduleImg = 'exercise_on';
     else if ($list['contentType'] == CTLINK_)
-        $moduleImg = "links_on.png";
+        $moduleImg = 'links_on';
     else if ($list['contentType'] == CTCOURSE_DESCRIPTION_)
-        $moduleImg = "description_on.png";
+        $moduleImg = 'description_on';
     else if ($list['contentType'] == CTMEDIA_ || $list['contentType'] == CTMEDIALINK_)
-        $moduleImg = "videos_on.png";
+        $moduleImg = 'videos_on';
     else
         $moduleImg = choose_image(basename($list['path']));
 
@@ -201,7 +201,7 @@ while ($list = mysql_fetch_array($result)) {
 
     $tool_content .= '    <tr ' . $style . '>' . "\n"
             . '      <td align="left">' . "\n"
-            . '        <label for="check_' . $list['module_id'] . '" ><img src="' . $themeimg . '/' . $moduleImg . '" alt="' . $contentType_alt . '" />&nbsp;<b>' . $list['name'] . '</b></label>' . "\n";
+            . '        <label for="check_' . $list['module_id'] . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list['name'] . '</b></label>' . "\n";
 
     // COMMENT
     if ($list['comment'] != null) {

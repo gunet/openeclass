@@ -1,9 +1,6 @@
 <?php
-
-define('INDEX_START', 1);
-require_once 'include/baseTheme.php';
+require_once '../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$tool_content = '';
 $warning = '';
 $login_user = FALSE;
 

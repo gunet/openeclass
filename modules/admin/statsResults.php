@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,7 +25,7 @@ $usage_defaults = array(
     'u_stats_type' => 'visits',
     'u_interval' => 'daily',
     'u_user_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -15 day')),
+    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
     'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
 );
 
@@ -42,9 +42,8 @@ foreach ($usage_defaults as $key => $val) {
 $date_fmt = '%Y-%m-%d';
 $u_date_start = mysql_real_escape_string($u_date_start);
 $u_date_end = mysql_real_escape_string($u_date_end);
-$date_where = " (`when` BETWEEN '$u_date_start 00:00:00' AND '$u_date_end 23:59:59') ";
+$date_where = " (`when` BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "DATE_FORMAT(MIN(`when`), '$date_fmt') AS date_start, DATE_FORMAT(MAX(`when`), '$date_fmt') AS date_end ";
-
 
 switch ($u_interval) {
     case "summary":

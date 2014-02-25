@@ -65,8 +65,8 @@ if (isset($_REQUEST['u'])) {
                                           <tr><th width='170' class='left'>$langEditAuthMethod</th>
                                               <td>" . get_auth_info($target_auth_id) . "</td></tr>
                                           <tr><th width='170' class='left'>$langProperty:</th>
-                                              <td>" . q($status_names[$target['statut']]) . "</td></tr>";
-            if ($info['statut'] == 1 and $target['statut'] != 1) {
+                                              <td>" . q($status_names[$target['status']]) . "</td></tr>";
+            if ($info['status'] == 1 and $target['status'] != 1) {
                 $target = false;
                 $target_field .= "<tr><td colspan='2' class='alert1'>$langUserMergeForbidden</td></tr>";
             } else {
@@ -91,7 +91,7 @@ if (isset($_REQUEST['u'])) {
                      <tr><th width='170' class='left'>$langEditAuthMethod</th>
                          <td>" . get_auth_info($auth_id) . "</td></tr>
                      <tr><th width='170' class='left'>$langProperty:</th>
-                         <td>" . q($status_names[$info['statut']]) . "</td></tr>
+                         <td>" . q($status_names[$info['status']]) . "</td></tr>
                      $target_field
                      <tr><th>&nbsp;</th>
                          <td class='right'>
@@ -123,7 +123,7 @@ function do_user_merge($source, $target) {
     $tmp_table = "user_merge_{$source_id}_{$target_id}";
     $q = db_query("CREATE TEMPORARY TABLE `$tmp_table` AS
                               SELECT course_id, $target_id AS user_id,
-                                     MIN(statut) AS statut, MAX(team) AS team, MAX(tutor) AS tutor,
+                                     MIN(status) AS status, MAX(team) AS team, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail
                                  FROM course_user

@@ -231,7 +231,7 @@ function is_admin($username, $password) {
         $_SESSION['prenom'] = $row['prenom'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['uname'] = $username;
-        $_SESSION['statut'] = $row['statut'];
+        $_SESSION['status'] = $row['status'];
         $_SESSION['is_admin'] = true;
 
         return true;
@@ -300,6 +300,7 @@ function upgrade_course($code, $lang) {
     upgrade_course_2_4($code, $lang);
     upgrade_course_2_5($code, $lang);
     upgrade_course_2_8($code, $lang);
+    upgrade_course_2_8_5($code, $lang);
     upgrade_course_3_0($code);
 }
 
@@ -435,9 +436,9 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                      FROM dropbox_file AS old ORDER by id");
 
         $ok = db_query("INSERT INTO `$mysqlMainDb`.dropbox_file
-                        (`id`, `course_id`, `uploaderId`, `filename`, `filesize`, `title`,
+                        (`id`, `course_id`, `uploaderId`, `filename`, `real_filename`, `filesize`, `title`,
                          `description`, `uploadDate`, `lastUploadDate`)
-                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`,
+                        SELECT `id` + $fileid_offset, $course_id, `uploaderId`, `filename`, `real_filename`, 
                                `filesize`, `title`, `description`, `uploadDate`,
                                `lastUploadDate` FROM dropbox_file ORDER BY id") && $ok;
 
@@ -852,7 +853,8 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
                                 assignment_submit.uid, assignments_map.new_id,
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
-                                assignment_submit.comments, assignment_submit.grade, assignment_submit.grade_comments,
+                                assignment_submit.comments,
+                                CAST(assignment_submit.grade, DECIMAL(10,2), assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
                            FROM assignment_submit, assignments_map
@@ -1057,6 +1059,19 @@ function upgrade_course_3_0($code, $extramessage = '', $return_mapping = false) 
     if ($return_mapping) {
         return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
+}
+
+function upgrade_course_2_8_5($code, $lang, $extramessage = '') {
+
+    global $langUpgCourse, $global_messages;
+
+    mysql_select_db($code);
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8.5) $extramessage<br>";
+    flush();   
+     if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {
+             db_query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
+             db_query("UPDATE dropbox_file SET real_filename = filename");
+     }
 }
 
 function upgrade_course_2_8($code, $lang, $extramessage = '') {
@@ -2499,10 +2514,11 @@ function touch_or_error($filename) {
 
 // We need some messages from all languages to upgrade course accueil table
 function load_global_messages() {
-    global $global_messages, $native_language_names, $language_codes,
-    $webDir, $siteName, $InstitutionUrl, $Institution;
+    global $global_messages, $session, $webDir, $language_codes;
+    // these may seem unused, but they are needed when including messages.inc.php
+    global $siteName, $InstitutionUrl, $Institution;
 
-    foreach ($native_language_names as $code => $name) {
+    foreach ($session->native_language_names as $code => $name) {
         // include_messages
         include "$webDir/lang/$code/common.inc.php";
         $extra_messages = "config/{$language_codes[$code]}.inc.php";

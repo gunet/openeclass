@@ -53,7 +53,6 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am,
                             null as registered_at,
                             null as expires_at,
-                            null as perso,
                             null as lang,
                             null as announce_flag,
                             null as doc_flag,
