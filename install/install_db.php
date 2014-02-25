@@ -1130,6 +1130,30 @@ db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
         `value` INT(11) NOT NULL DEFAULT 0,
         PRIMARY KEY (`setting_id`, `course_id`))");
 
+
+db_query("CREATE TABLE IF NOT EXISTS `gradebook` (
+        `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `course_id` INT(11) NOT NULL) $charset_spec");
+
+db_query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
+        `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `gradebook_id` MEDIUMINT(11) NOT NULL,
+        `title` VARCHAR(250) DEFAULT NULL,
+        `activity_type` INT(11) DEFAULT NULL,
+        `date` DATETIME DEFAULT NULL,
+        `description` TEXT NOT NULL,
+        `weight` MEDIUMINT(11) NOT NULL DEFAULT 0,
+        `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+        `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+        `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+
+db_query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
+        `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
+        `uid` int(11) NOT NULL DEFAULT 0,
+        `grade` TINYINT(4) NOT NULL DEFAULT 0,
+        `comments` TEXT NOT NULL) $charset_spec");
+
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
