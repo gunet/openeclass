@@ -1094,13 +1094,17 @@ function assignment_details($id, $row) {
                   <th class='left'>$langWorkFile:</th>
                   <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a></td>
                 </tr>";
-    }    
+    }   
     if((int)$row->deadline){
         $deadline = nice_format($row->deadline, true);
     }else{
         $deadline = $m['no_deadline'];
     }
     $tool_content .= "
+        <tr>
+            <th class='left'>$m[max_grade]:</th>
+            <td>$row->max_grade</td>
+        </tr>        
         <tr>
           <th>$m[start_date]:</th>
           <td>" . nice_format($row->submission_date, true) . "</td>
