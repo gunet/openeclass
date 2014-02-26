@@ -151,7 +151,8 @@ if ($is_editor) {
            <li><a href='$base_url&amp;add=1'>$langAddGlossaryTerm</a></li>
            <li><a href='$cat_url&amp;add=1'>$langCategoryAdd</a></li>
            <li><a href='$base_url&amp;config=1'>$langConfig</a></li>
-           <li>$langGlossaryToCsv (<a href='dumpglossary.php?course=$code_cours'>UTF8</a>&nbsp;-&nbsp;<a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>Windows 1253</a>)</li>  
+           <li><a href='dumpglossary.php?course=$code_cours'>$langGlossaryToCsv (UTF8)</a></li>
+           <li><a href='dumpglossary.php?course=$code_cours&amp;enc=1253'>$langGlossaryToCsv (Windows 1253)</a></li>  
          </ul>
        </div>";
 

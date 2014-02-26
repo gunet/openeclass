@@ -147,11 +147,10 @@ $nbrExercises = mysql_num_rows($result);
 
 if($is_editor) {
 	$tool_content .= "
-    <div align=\"left\" id=\"operations_container\">
-      <ul id=\"opslist\">
-	<li><a href='admin.php?course=$code_cours&amp;NewExercise=Yes'>$langNewEx</a>&nbsp;|
-			&nbsp;<a href='question_pool.php?course=$code_cours'>$langQuestionPool</a></li>";
-	$tool_content .= "
+    <div id='operations_container'>
+      <ul id='opslist'>
+        <li><a href='admin.php?course=$code_cours&amp;NewExercise=Yes'>$langNewEx</a></li>
+        <li><a href='question_pool.php?course=$code_cours'>$langQuestionPool</a></li>
       </ul>
     </div>";
 } else  {
