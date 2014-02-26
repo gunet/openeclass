@@ -162,9 +162,18 @@ Class Rating {
         global $langUserHasRated;
         
         $out = "<div class=\"rating\">";
-        $out .= "<img src=\"../rating/up.png\" onclick=\"Rate(".$this->rid.",'".$this->rtype."',1)\" />&nbsp;";
+        
+        $onclick_up = $onclick_down = "";
+        
+        //disable icons when user hasn't permission to vote
+        if (Rating::permRate($isEditor, $uid, $courseId)) {
+            $onclick_up = "onclick=\"Rate(".$this->rid.",'".$this->rtype."',1)\"";
+            $onclick_down = "onclick=\"Rate(".$this->rid.",'".$this->rtype."',-1)\"";
+        }
+        
+        $out .= "<img src=\"../rating/up.png\" ".$onclick_up."/>&nbsp;";
         $out .= "<span id=\"rate_".$this->rid."_up\">".$this->getUpRating()."</span>&nbsp;&nbsp;";
-        $out .= "<img src=\"../rating/down.png\" onclick=\"Rate(".$this->rid.",'".$this->rtype."',-1)\" />&nbsp;";
+        $out .= "<img src=\"../rating/down.png\" ".$onclick_down."/>&nbsp;";
         $out .= "<span id=\"rate_".$this->rid."_down\">".$this->getDownRating()."</span>";
         $out .= "<div class=\"smaller\" id=\"rate_msg_".$this->rid."\">";
         
