@@ -26,11 +26,15 @@ function Rate(rid,rtype,value) {
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
     xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             response = JSON.parse(xmlhttp.responseText);
-            document.getElementById('rate_'+rid+'_up').innerHTML=response[0];
-            document.getElementById('rate_'+rid+'_down').innerHTML=response[1];
-            document.getElementById('rate_msg_'+rid).innerHTML=response[2];
+            document.getElementById('rate_'+rid+'_up').innerHTML = response[0];
+            document.getElementById('rate_'+rid+'_down').innerHTML = response[1];
+            if (response[2] == 'ins') {
+                document.getElementById('rate_msg_'+rid).innerHTML = response[3];
+            } else if (response[2] == 'del' ) {
+            	document.getElementById('rate_msg_'+rid).innerHTML = '';
+            }
         }
     }
 

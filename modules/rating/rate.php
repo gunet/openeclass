@@ -38,14 +38,16 @@ if (setting_get($setting_id, $course_id) == 1) {
         $response = array();
         
         $rating = new Rating($rtype, $rid);
-        $rating->castRating($value, $uid);
+        $action = $rating->castRating($value, $uid);
         
         $up_value = $rating->getUpRating();
         $down_value = $rating->getDownRating();
         
-        $response[0] = $up_value;
-        $response[1] = $down_value;
-        $response[2] = $langUserHasRated;
+        $response[0] = $up_value;//positive rating
+        $response[1] = $down_value;//negative rating
+        $response[2] = $action;//new rating or deletion of old one
+        $response[3] = $langUserHasRated;//necessary string
+        
         
         echo json_encode($response);
     }

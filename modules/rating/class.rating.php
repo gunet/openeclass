@@ -62,29 +62,37 @@ Class Rating {
     }
     
     /**
-     * Cast a new rating
+     * Cast a new rating (or delete an old one)
      * @param value the rating value
      * @param user_id the user id
+     * @return string the action that took place
      */
     public function castRating($value, $user_id) {
-        //delete old rating of the same user on this resource
-        $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `user_id`=?d";
-        Database::get()->query($sql, $this->rid, $this->rtype, $user_id);
+        $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `user_id`=?d AND `value`=?d";
+        $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $user_id, $value);
         
-        //cast new rating
-        $sql = "INSERT INTO `rating` (`rid`,`rtype`,`value`,`user_id`) VALUES(?d,?s,?d,?d)";
-        Database::get()->query($sql, $this->rid, $this->rtype, $value, $user_id);
+        if ($res->c > 0) {//clicking again the same icon deletes the rating
+            $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `user_id`=?d AND `value`=?d";
+            Database::get()->query($sql, $this->rid, $this->rtype, $user_id, $value);
+            
+            $action = "del";
+        } else {//either casting a new rating or changing the rating
+            //delete old rating of the same user on this resource if it exists
+            $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `user_id`=?d";
+            Database::get()->query($sql, $this->rid, $this->rtype, $user_id);
+            
+            //cast new rating
+            $sql = "INSERT INTO `rating` (`rid`,`rtype`,`value`,`user_id`) VALUES(?d,?s,?d,?d)";
+            Database::get()->query($sql, $this->rid, $this->rtype, $value, $user_id);
+            
+            $action = "ins";
+        }
         
         //update cache table records for this resource
         $this->updateUpCache();
         $this->updateDownCache();
         
-        if ($value == 1) {
-            return $this->getUpRating();
-        }
-        elseif ($value == -1) {
-            return $this->getDownRating();
-        }
+        return $action;
     }
     
     /**
