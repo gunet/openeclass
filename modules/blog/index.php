@@ -32,6 +32,8 @@ require_once 'include/course_settings.php';
 define ('RSS', 'modules/blog/rss.php?course='.$course_code);
 load_js('tools.js');
 
+$nameTools = $langBlog;
+
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 
