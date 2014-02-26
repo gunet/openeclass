@@ -148,7 +148,6 @@ if (empty($faculte)) {
         $homefac = intval($faculte);
 }
 
-$teacher = "$_SESSION[prenom] $_SESSION[nom]";
 // --------------------------
 // display form
 // --------------------------
@@ -168,6 +167,7 @@ if (!isset($_POST['create_course'])) {
 	$tool_content .= selection($fac, 'faculte', $homefac);
 	$tool_content .= "</td></tr>";
 	unset($repertoire);
+        $teacher = "$_SESSION[prenom] $_SESSION[nom]";
 	$tool_content .= "
         <tr>
 	  <th>$langTeachers:</th>
