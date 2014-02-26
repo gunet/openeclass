@@ -104,6 +104,7 @@ Class BlogPost {
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
             Commenting::deleteComments('blogpost', $this->id);
+            Rating::deleteRatings('blogpost', $this->id);
             return true;
         } else {
             return false;

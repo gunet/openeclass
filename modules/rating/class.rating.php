@@ -196,6 +196,17 @@ Class Rating {
     }
     
     /**
+     * Delete all comments of a resource
+     * @param rtype the resource type
+     * @param rid the resource id
+     * @return boolean
+     */
+    public static function deleteRatings($rtype, $rid) {
+    	Database::get()->query("DELETE FROM `rating` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
+    	Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
+    }
+    
+    /**
      * Check if a user has permission to rate course resources
      * @param isEditor boolean showing if user is teacher
      * @param uid the user id
