@@ -165,7 +165,7 @@ switch ($cmd) {
                     AND `course_id` = $course_id";
 
             $query = db_query($sql);
-            $num = mysql_numrows($query);
+            $num = mysql_num_rows($query);
             if ($num == 0) { // "name" doesn't already exist
                 // if no error occurred, update module's name in the database
                 $query = "UPDATE `" . $TABLEMODULE . "`
@@ -247,7 +247,7 @@ $result = db_query($sql);
 $atleastOne = false;
 
 $query_num_results = db_query($sql);
-$num_results = mysql_numrows($query_num_results);
+$num_results = mysql_num_rows($query_num_results);
 
 if (!$num_results == 0) {
     $tool_content .= "

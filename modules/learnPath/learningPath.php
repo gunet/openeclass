@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -169,15 +169,15 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 // comment
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= "
-  <table width=\"99%\" class=\"tbl\">
-  <tr>
-    <th><div align=\"left\">" . $langComments . "&nbsp;" . $langLearningPath1 . ":</div></th>
-  </tr>
-  <tr class=\"odd\">
-    <td><small>" . commentBox(LEARNINGPATH_, DISPLAY_) . "</small></td>
-  </tr>
-  </table>
-  <br />";
+    <table width='100%' class='tbl'>
+    <tr>
+      <th><div align='left'>" . $langComments . "&nbsp;" . $langLearningPath1 . ":</div></th>
+    </tr>
+    <tr class='odd'>
+      <td><small>" . commentBox(LEARNINGPATH_, DISPLAY_) . "</small></td>
+    </tr>
+    </table>
+    <br />";
 }
 
 // --------------------------- module table header --------------------------
@@ -229,7 +229,7 @@ foreach ($flatElementList as $module) {
     // display the current module name (and link if allowed)
     $spacingString = "";
     for ($i = 0; $i < $module['children']; $i++) {
-        $spacingString .= "\n<td width='5'>&nbsp;</td>";
+        $spacingString .= "<td width='5'>&nbsp;</td>";
     }
 
     $colspan = $maxDeep - $module['children'] + 1;
@@ -265,13 +265,12 @@ foreach ($flatElementList as $module) {
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if ($module['lock'] == 'CLOSE') {
-            if ($uid) {
-                $is_blocked = true; // following modules will be unlinked
-            } else { // anonymous : don't display the modules that are unreachable
-                break;
+        if (($module['lock'] == 'CLOSE') 
+            and ($module['credit'] != 'CREDIT' 
+            or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED')))
+            {
+                    $is_blocked = true; // following modules will be unlinked
             }
-        }
     }
     //-- user is blocked by previous module, don't display link
     else {
@@ -289,7 +288,7 @@ foreach ($flatElementList as $module) {
         $tool_content .= '<span style="vertical-align: middle;">' . icon($moduleImg, $contentType_alt) . '</span> ' .
             htmlspecialchars($module['name']);
     }
-    $tool_content .= '</td>' . "\n";
+    $tool_content .= "</td>";
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
@@ -300,13 +299,13 @@ foreach ($flatElementList as $module) {
         if ($is_blocked)
             $first_blocked = true;
         // display the progress value for current module
-        $tool_content .= '      <td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n"
+        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n"
                 . '      <td align="left" width="10">'
                 . '&nbsp;' . $progress . '%'
                 . '</td>' . "\n";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
-        $tool_content .= '      <td colspan="2">&nbsp;</td>' . "\n";
+        $tool_content .= '<td colspan="2">&nbsp;</td>' . "\n";
     }
 
     if ($progress > 0) {
@@ -316,22 +315,22 @@ foreach ($flatElementList as $module) {
     if ($module['contentType'] != CTLABEL_)
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
 
-    $tool_content .= '    </tr>' . "\n";
+    $tool_content .= "</tr>";
     $ind++;
 }
 
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= '    <tr class="odd">' . "\n"
-            . '      <th colspan="' . ($maxDeep + 2) . '" align="right"><div align="right">' . $langGlobalProgress . '</div></th>' . "\n"
-            . '      <th align="right" width="120"><div align="right">'
+    $tool_content .= '<tr class="odd">' . "\n"
+            . '<th colspan="' . ($maxDeep + 2) . '" align="right"><div align="right">' . $langGlobalProgress . '</div></th>' . "\n"
+            . '<th align="right" width="120"><div align="right">'
             . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
             . '</div></th>' . "\n"
-            . '      <th align="left" width="10"><div class="center">'
+            . '<th align="left" width="10"><div class="center">'
             . '&nbsp;' . round($globalProg / ($moduleNb)) . '%'
             . '</div></th>' . "\n"
-            . '    </tr>' . "\n\n";
+            . '</tr>' . "";
 }
-$tool_content .= '</table>' . "\n\n";
+$tool_content .= "</table>";
 draw($tool_content, 2);
