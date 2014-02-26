@@ -328,15 +328,15 @@ function upgrade_course($code, $lang)
 	upgrade_course_2_4($code, $lang);
         upgrade_course_2_5($code, $lang);
         upgrade_course_2_8($code, $lang);
-        upgrade_course_2_8_5($code, $lang);
+        upgrade_course_2_9($code, $lang);
 }
 
-function upgrade_course_2_8_5($code, $lang, $extramessage = '') {
+function upgrade_course_2_9($code, $lang, $extramessage = '') {
 
     global $langUpgCourse, $global_messages;
 
     mysql_select_db($code);
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8.5) $extramessage<br>";
+    echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
     flush();
     
     if (!mysql_field_exists(null, 'dropbox_file', 'real_filename')) {

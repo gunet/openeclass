@@ -146,13 +146,19 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 if ($eclass_version < '2.5') {
                         upgrade_course_2_5($new_course_code, $course_lang);
                 }
+                if ($eclass_version < '2.8') {
+                        upgrade_course_2_8($new_course_code, $course_lang);
+                }
+                if ($eclass_version < '2.9') {
+                        upgrade_course_2_9($new_course_code, $course_lang);
+                }
 	}
         convert_description_to_units($new_course_code, $course_id);
 	$tool_content .= ob_get_contents();
 	ob_end_clean();
         
         if (file_exists("$restoreThis/cours")) {
-                // New-style backup - restore intividual tables
+                // New-style backup - restore individual tables
 
                 if (file_exists("$restoreThis/config_vars")) {
                         $config_data = unserialize(file_get_contents("$restoreThis/config_vars"));
