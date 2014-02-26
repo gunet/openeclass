@@ -118,20 +118,8 @@ $previousModule = ""; // module id that will be used in the previous link
 $nextModule = ""; // module id that will be used in the next link
 
 foreach ($flatElementList as $module) {
-    if ($module['contentType'] == CTEXERCISE_)
-        $passExercise = ($module['credit'] == 'CREDIT');
-    else
-        $passExercise = false;
-
-    if ($module['contentType'] == CTSCORM_) {
-        if ($module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED')
-            $passExercise = true;
-        else
-            $passExercise = false;
-    }
-
     // spacing col
-    if (!$is_blocked || $is_editor) {
+    if (!$is_blocked or $is_editor) {
         if ($module['contentType'] != CTLABEL_) { // chapter head
             // bold the title of the current displayed module
             if ($_SESSION['lp_module_id'] == $module['module_id']) {
@@ -147,11 +135,10 @@ foreach ($flatElementList as $module) {
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if ($module['lock'] == 'CLOSE') {
-            if ($uid)
-                $is_blocked = true; // following modules will be unlinked
-            else // anonymous : don't display the modules that are unreachable
-                break;
+        if (($module['lock'] == 'CLOSE') 
+            and ($module['credit'] != 'CREDIT' 
+            or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED'))) {
+                    $is_blocked = true; // following modules will be unlinked
         }
     }
 

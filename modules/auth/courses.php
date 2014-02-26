@@ -240,15 +240,13 @@ function expanded_faculte($fac_name, $facid, $uid) {
     $retString .= "\n      <th width='220'>$langTeacher</th>";
     $retString .= "\n      <th width='30' align='center'>$langType</th>";
     $retString .= "\n    </tr>";
-
     $k = 0;
     while ($mycours = mysql_fetch_array($result)) {
         $cid = $mycours['cid'];
         $course_title = q($mycours['i']);
-        $password = q($mycours['password']);
-
+        $password = q($mycours['password']);                
         // link creation
-        if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course
+        if ($mycours['visible'] == COURSE_OPEN or $uid == COURSE_REGISTRATION) { //open course                
             $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
         } elseif ($mycours['visible'] == COURSE_CLOSED) { //closed course
             $codelink = "<a href='../contact/index.php?from_reg=true&course_id=$cid'>$course_title</a>";
@@ -266,7 +264,6 @@ function expanded_faculte($fac_name, $facid, $uid) {
         $retString .= "<td align='center'>";
         $requirepassword = '';
         $vis_class = ($mycours['visible'] == 0) ? 'class="reg_closed"' : '';
-
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]['status'] != 1) { // display registered courses
                 // password needed
@@ -276,9 +273,9 @@ function expanded_faculte($fac_name, $facid, $uid) {
                     $requirepassword = '';
                 }
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
-                if ($mycours['visible'] == 0) {
-                    $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
-                }
+                //if ($mycours['visible'] == 0) {
+                $codelink = "<a href='../../courses/$mycours[k]/'>$course_title</a>";
+                //}
             } else {
                 $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
             }

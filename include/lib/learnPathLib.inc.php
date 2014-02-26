@@ -1734,22 +1734,23 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
         exit();
     }
 
-    if (!$is_editor) {
-        $lpms = db_query_fetch_all("SELECT `module_id`, `lock` FROM lp_rel_learnPath_module WHERE `learnPath_id` = '" . (int) $_SESSION['path_id'] . "' ORDER BY `rank`");
-        if ($lpms != false) {
-            $block_met = false;
-            foreach ($lpms as $lpm) {
-                if ($lpm['module_id'] == $_SESSION['lp_module_id']) {
-                    if ($block_met) {
-                        // if a previous learning path module was blocked, don't allow users in it
-                        header("Location: " . $depth . "index.php?course=$course_code");
-                        exit();
-                    } else
-                        break; // our lp module is surely not in the block list
+    if (!$is_editor) { // check if we try to overwrite a blocked module
+            $lpm_id = db_query_get_single_row("SELECT `lock`, `rank` FROM lp_rel_learnPath_module 
+                                    WHERE `learnPath_id` = ".intval($_SESSION['path_id'])."
+                                    AND module_id = " .intval($_SESSION['lp_module_id'])."");
+                    $q = db_query("SELECT learnPath_module_id FROM lp_rel_learnPath_module WHERE learnPath_id = " . $_SESSION['path_id'] . " 
+                                                    AND `rank` < " . $lpm_id['rank'] . "");
+                while ($m = mysql_fetch_array($q)) {
+                    $progress = db_query_get_single_row("SELECT credit, lesson_status FROM lp_user_module_progress 
+                                                        WHERE learnPath_module_id = $m[learnPath_module_id]
+                                                            AND learnPath_id = $_SESSION[path_id] 
+                                                            AND user_id= $_SESSION[uid]");
+                        if (($lpm_id['lock'] == 'CLOSE') 
+                            and ($progress['credit'] != 'CREDIT' 
+                            or ($progress['lesson_status'] != 'COMPLETED' and $progress['lesson_status'] != 'PASSED'))) {
+                                header("Location: ".$depth."index.php?course=$course_code");
+                                exit();
+                        }
                 }
-                if ($lpm['lock'] == "CLOSE")
-                    $block_met = true;
-            }
         }
-    }
 }

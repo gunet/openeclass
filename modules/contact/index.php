@@ -138,7 +138,7 @@ function email_profs($course_id, $content, $from_name, $from_address) {
     $profs = db_query("SELECT user.id AS prof_uid, user.email AS email,
                                   user.surname, user.givenname
                                FROM course_user JOIN user ON user.id = course_user.user_id
-                               WHERE course_id = $course_id AND course_user.statut = " . USER_TEACHER);
+                               WHERE course_id = $course_id AND course_user.status = " . USER_TEACHER);
 
     $message = sprintf($langContactIntro, $from_name, $from_address, $content);
     $subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";

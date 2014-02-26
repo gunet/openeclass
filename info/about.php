@@ -39,33 +39,33 @@ $tool_content .= "<table class='tbl_1' width='100%'>
 <th class='left'><strong>$langCoursesHeader:</strong></th>
 <td>";
 
-$a = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible != " . COURSE_INACTIVE);
-$a1 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_OPEN);
-$a2 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_REGISTRATION);
-$a3 = db_query_get_single_value("SELECT COUNT(*) FROM course WHERE visible = " . COURSE_CLOSED);
+$a = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
+$a1 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
+$a2 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
+$a3 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
 
-$tool_content .= "$langAboutCourses <b>$a[0]</b> $langCourses<br />
+$tool_content .= "$langAboutCourses <b>$a</b> $langCourses<br />
   <ul>
-    <li><b>$a1[0]</b> $langOpen,</li>
-    <li><b>$a2[0]</b> $langSemiopen,</li>
-    <li><b>$a3[0]</b> $langClosed </li>
+    <li><b>$a1</b> $langOpen,</li>
+    <li><b>$a2</b> $langSemiopen,</li>
+    <li><b>$a3</b> $langClosed </li>
   </ul>
 </td>
 </tr>";
 
-$e = db_query_get_single_value('SELECT COUNT(*) FROM user');
-$b = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_TEACHER);
-$c = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_STUDENT);
-$d = db_query_get_single_value('SELECT COUNT(*) FROM user WHERE status = '.USER_GUEST);
+$e = Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
+$b = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_TEACHER)->count;
+$c = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_STUDENT)->count;
+$d = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_GUEST)->count;
 
 $tool_content .= "
     <tr>
       <th class='left'><strong>$langUsers:</strong></th>
-      <td>$langAboutUsers <b>$e[0]</b> $langUsers
+      <td>$langAboutUsers <b>$e</b> $langUsers
         <ul>
-          <li><b>$b[0]</b> $langTeachers, </li>
-          <li><b>$c[0]</b> $langStudents $langAnd </li>
-          <li><b>$d[0]</b> $langGuest </li>
+          <li><b>$b</b> $langTeachers, </li>
+          <li><b>$c</b> $langStudents $langAnd </li>
+          <li><b>$d</b> $langGuest </li>
       </ul></td>
     </tr>
       <tr>

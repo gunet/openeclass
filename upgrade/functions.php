@@ -231,7 +231,7 @@ function is_admin($username, $password) {
         $_SESSION['prenom'] = $row['prenom'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['uname'] = $username;
-        $_SESSION['statut'] = $row['statut'];
+        $_SESSION['status'] = $row['status'];
         $_SESSION['is_admin'] = true;
 
         return true;

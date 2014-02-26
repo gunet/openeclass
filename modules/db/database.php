@@ -120,6 +120,7 @@ final class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
+     * @deprecated
      * @return int Last inserted ID
      */
     public function queryNT($statement) {
@@ -151,6 +152,7 @@ final class Database {
      * @param function $callback_function A function which as first argument gets an object constructed by each row of the result set. Can be null
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the third argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
+     * @deprecated
      * @param anytype $argument... A variable argument list of each binded argument
      */
     public function queryFuncNT($statement, $callback_function) {
@@ -183,6 +185,7 @@ final class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
+     * @deprecated
      * @return array An array of all objects as a result of this statement
      */
     public function queryArrayNT($statement) {
@@ -214,6 +217,7 @@ final class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
+     * @deprecated
      * @return array A single object as a result of this statement
      */
     public function querySingleNT($statement) {
@@ -241,6 +245,7 @@ final class Database {
         $backtrace_entry = debug_backtrace();
         $backtrace_info = $backtrace_entry[2];
 
+        $isTransactional &= !$this->dbh->inTransaction();
         if (is_null($statement) || !is_string($statement) || empty($statement))
             return $this->errorFound($callback_error, $isTransactional, "First parameter of query should be a non-empty string; found " . gettype($statement), $statement, $init_time, $backtrace_info);
         if (!is_callable($callback_fetch) && !is_null($callback_fetch))
@@ -274,7 +279,12 @@ final class Database {
             $entry = $statement_parts[$i + 1];
             $first = substr($entry, 0, 1);
             $value = $variables[$i];
-            if ($first === "d") {   // Decimal
+            if (is_null($value)) {
+                if ($first === "d" || $first === "b" || $first === "f" || $first === "t" || $first === "s") {
+                    $statement_parts[$i + 1] = substr($entry, 1);
+                }
+                $type = PDO::PARAM_NULL;
+            } else if ($first === "d") {   // Decimal
                 $statement_parts[$i + 1] = substr($entry, 1);
                 $value = intval($value);
                 $type = PDO::PARAM_INT;
