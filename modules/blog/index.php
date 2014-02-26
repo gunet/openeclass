@@ -23,6 +23,7 @@ $require_help = TRUE;
 $helpTopic = 'Blog';
 require_once '../comments/class.comment.php';
 require_once '../comments/class.commenting.php';
+require_once '../rating/class.rating.php';
 require_once '../../include/baseTheme.php';
 require_once 'class.blog.php';
 require_once 'class.blogpost.php';
@@ -36,9 +37,14 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 
 //check if commenting is enabled for blogs
 $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
+//check if rating is enabled for blogs
+$ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
 
 if ($comments_enabled == 1) {
     commenting_add_js(); //add js files needed for comments
+}
+if ($ratings_enabled ==1) {
+    rating_add_js(); //add js file needed for rating
 }
 
 //define allowed actions
@@ -304,10 +310,16 @@ if ($action == "showPost") {
         $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
         $tool_content .= "</div>";
         
+        if ($ratings_enabled == 1) {
+        	$rating = new Rating('blogpost', $post->getId());
+        	$tool_content .= $rating->put($is_editor, $uid, $course_id);
+        }
+        
         if ($comments_enabled == 1) {
             $comm = new Commenting('blogpost', $post->getId());
             $tool_content .= $comm->put($course_code, $is_editor, $uid);
         }
+        
     } else {
         $tool_content .= "<p class='alert1'>$langBlogPostNotFound</p>";
     }
@@ -359,6 +371,11 @@ if ($action == "showBlog") {
             $tool_content .= "<div class='blog_post_content'>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</div>";
             $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.uid_to_name($post->getAuthor())."</div>";
             $tool_content .= "</div>";
+            
+            if ($ratings_enabled == 1) {
+            	$rating = new Rating('blogpost', $post->getId());
+            	$tool_content .= $rating->put($is_editor, $uid, $course_id);
+            }
             
             if ($comments_enabled == 1) {
                 $comm = new Commenting('blogpost', $post->getId());

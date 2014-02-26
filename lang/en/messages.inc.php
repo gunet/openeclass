@@ -3066,3 +3066,4 @@ $langCommentsDis = "Commenting disabled";
 $langRating = "Rating";
 $langRatingEn = "Rating enabled";
 $langRatingDis = "Rating disabled";
+$langUserHasRated = "You have rated the resource";

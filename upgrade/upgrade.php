@@ -1044,6 +1044,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `rtype` VARCHAR(50) NOT NULL,
                             `value` INT(11) NOT NULL DEFAULT 0,
                             `time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `tag` VARCHAR(50),
                             INDEX `rating_cache_index_1` (`rid`, `rtype`)) $charset_spec");
 
                     db_query("CREATE TABLE IF NOT EXISTS `poll` (
