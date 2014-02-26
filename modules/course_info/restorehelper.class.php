@@ -25,6 +25,7 @@ class RestoreHelper {
     const STYLE_2X = 2;
     const STYLE_3X = 3;
     const STYLE_3X_MIN = '2.99';
+    const FIELD_DROP = 901;
 
     private $eclassVersion;
     private $backupVersion;
@@ -84,13 +85,29 @@ class RestoreHelper {
 
     private function populateFiles() {
         $this->files = array();
+        // syntax is: new name = old name
         $this->files[self::STYLE_2X]['course'] = 'cours';
         $this->files[self::STYLE_2X]['course_user'] = 'cours_user';
         $this->files[self::STYLE_2X]['announcement'] = 'annonces';
+        $this->files[self::STYLE_2X]['forum_category'] = 'catagories';
+        $this->files[self::STYLE_2X]['forum'] = 'forums';
+        $this->files[self::STYLE_2X]['forum_topic'] = 'topics';
+        $this->files[self::STYLE_2X]['forum_post'] = 'posts';
+        $this->files[self::STYLE_2X]['videolink'] = 'videolinks';
+        $this->files[self::STYLE_2X]['assignment'] = 'assignments';
+        $this->files[self::STYLE_2X]['exercise'] = 'exercices';
+        $this->files[self::STYLE_2X]['exercise_user_record']  = 'exercise_user_record';
+        $this->files[self::STYLE_2X]['exercise_question'] = 'questions';
+        $this->files[self::STYLE_2X]['exercise_answer'] = 'reponses';
+        $this->files[self::STYLE_2X]['exercise_with_questions'] = 'exercice_question';
     }
 
     private function populateFields() {
         $this->fields = array();
+        // syntax is: [new table][old field] = [new table][new field]
+        // notice that some fields need also reverse lookup:
+        // [new table][new field] = [new table][old field]
+        // those are the fields used for return_mapping and map, possibly for delete option as well
         $this->fields[self::STYLE_2X]['course']['keywords'] = 'course_keywords';
         $this->fields[self::STYLE_2X]['course']['glossary_expand'] = 'expand_glossary';
         $this->fields[self::STYLE_2X]['course_user']['status'] = 'statut';
@@ -102,16 +119,92 @@ class RestoreHelper {
         $this->fields[self::STYLE_2X]['announcement']['cours_id'] = 'course_id';
         $this->fields[self::STYLE_2X]['announcement']['ordre'] = 'order';
         $this->fields[self::STYLE_2X]['announcement']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['forum_category']['cat_id'] = 'id';
+        $this->fields[self::STYLE_2X]['forum_category']['id'] = 'cat_id';
+        $this->fields[self::STYLE_2X]['forum']['forum_id'] = 'id';
+        $this->fields[self::STYLE_2X]['forum']['id'] = 'forum_id';
+        $this->fields[self::STYLE_2X]['forum']['forum_name'] = 'name';
+        $this->fields[self::STYLE_2X]['forum']['forum_desc'] = 'desc';
+        $this->fields[self::STYLE_2X]['forum']['forum_access'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum']['forum_moderator'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum']['forum_topics'] = 'num_topics';
+        $this->fields[self::STYLE_2X]['forum']['forum_posts'] = 'num_posts';
+        $this->fields[self::STYLE_2X]['forum']['forum_last_post_id'] = 'last_post_id';
+        $this->fields[self::STYLE_2X]['forum']['forum_type'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_id'] = 'id';
+        $this->fields[self::STYLE_2X]['forum_topic']['id'] = 'topic_id';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_title'] = 'title';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_poster'] = 'poster_id';
+        $this->fields[self::STYLE_2X]['forum_topic']['poster_id'] = 'topic_poster';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_views'] = 'num_views';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_replies'] = 'num_replies';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_last_post_id'] = 'last_post_id';
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_status'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_topic']['topic_notify'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_topic']['nom'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_topic']['prenom'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_post']['post_id'] = 'id';
+        $this->fields[self::STYLE_2X]['forum_post']['id'] = 'post_id';
+        $this->fields[self::STYLE_2X]['forum_post']['forum_id'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_post']['nom'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['forum_post']['prenom'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['document']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['video']['titre'] = 'title';
+        $this->fields[self::STYLE_2X]['videolink']['titre'] = 'title';
+        $this->fields[self::STYLE_2X]['dropbox_file']['uploaderId'] = 'uploader_id';
+        $this->fields[self::STYLE_2X]['dropbox_file']['uploader_id'] = 'uploaderId';
+        $this->fields[self::STYLE_2X]['dropbox_file']['author'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['dropbox_file']['uploadDate'] = 'upload_date';
+        $this->fields[self::STYLE_2X]['dropbox_file']['lastUploadDate'] = 'last_upload_date';
+        $this->fields[self::STYLE_2X]['lp_learnPath']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['lp_rel_learnPath_module']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['agenda']['titre'] = 'title';
+        $this->fields[self::STYLE_2X]['agenda']['contenu'] = 'content';
+        $this->fields[self::STYLE_2X]['agenda']['day'] = 'start';
+        $this->fields[self::STYLE_2X]['agenda']['hour'] = self::FIELD_DROP;
+        $this->fields[self::STYLE_2X]['agenda']['lasting'] = 'duration';
+        $this->fields[self::STYLE_2X]['agenda']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['exercise']['titre'] = 'title';
+        $this->fields[self::STYLE_2X]['exercise']['StartDate'] = 'start_date';
+        $this->fields[self::STYLE_2X]['exercise']['EndDate'] = 'end_date';
+        $this->fields[self::STYLE_2X]['exercise']['TimeConstrain'] = 'time_constraint';
+        $this->fields[self::STYLE_2X]['exercise']['AttemptsAllowed'] = 'attempts_allowed';
+        $this->fields[self::STYLE_2X]['exercise_user_record']['RecordStartDate'] = 'record_start_date';
+        $this->fields[self::STYLE_2X]['exercise_user_record']['RecordEndDate'] = 'record_end_date';
+        $this->fields[self::STYLE_2X]['exercise_user_record']['TotalScore'] = 'total_score';
+        $this->fields[self::STYLE_2X]['exercise_user_record']['TotalWeighting'] = 'total_weighting';
+        $this->fields[self::STYLE_2X]['exercise_question']['ponderation'] = 'weight';
+        $this->fields[self::STYLE_2X]['exercise_answer']['reponse'] = 'answer';
+        $this->fields[self::STYLE_2X]['exercise_answer']['ponderation'] = 'weight';
+        $this->fields[self::STYLE_2X]['exercise_with_questions']['exercice_id'] = 'exercise_id';
+        $this->fields[self::STYLE_2X]['exercise_with_questions']['exercise_id'] = 'exercice_id';
+        $this->fields[self::STYLE_2X]['course_units']['visibility'] = 'visible';
+        $this->fields[self::STYLE_2X]['unit_resources']['visibility'] = 'visible';
     }
     
     private function populateValues() {
-        $this->values[self::STYLE_2X]['announcement']['visibility'] = function($value) {
+        $visibility = function($value) {
             if ($value === 'v') {
                 return 1;
             } else {
                 return 0;
             }
         };
+        $lp_visibility = function($value) {
+            if ($value === 'SHOW') {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
+        // syntax is: [new table][old field]
+        $this->values[self::STYLE_2X]['announcement']['visibility'] = $visibility;
+        $this->values[self::STYLE_2X]['document']['visibility'] = $visibility;
+        $this->values[self::STYLE_2X]['lp_learnPath']['visibility'] = $lp_visibility;
+        $this->values[self::STYLE_2X]['lp_rel_learnPath_module']['visibility'] = $lp_visibility;
+        $this->values[self::STYLE_2X]['agenda']['visibility'] = $visibility;
+        $this->values[self::STYLE_2X]['course_units']['visibility'] = $visibility;
+        $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
     }
 
 }

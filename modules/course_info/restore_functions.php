@@ -87,15 +87,44 @@ function find_backup_folders($basedir) {
 }
 
 function restore_table($basedir, $table, $options) {
-    global $url_prefix_map, $restoreHelper;
+    global $url_prefix_map, $restoreHelper, $backupData;
 
     $set = get_option($options, 'set');
-    $backup = unserialize(file_get_contents($basedir . "/" . $restoreHelper->getFile($table)));
-    $i = 0;
+    if (!file_exists($basedir . "/" . $restoreHelper->getFile($table)) 
+            && $restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
+            && isset($backupData) && is_array($backupData) 
+            && isset($backupData['query']) && is_array($backupData['query'])) {
+        // look into backupData for our data
+        $backup = array();
+        foreach ($backupData['query'] as $tableData) {
+            if (is_array($tableData) && isset($tableData['table']) 
+                    && $tableData['table'] === $restoreHelper->getFile($table)
+                    && is_array($tableData['fields']) && is_array($tableData['values'])) {
+                $row = array();
+                foreach ($tableData['values'] as $tableValue) {
+                    for ($i = 0; $i < count($tableData['fields']); $i++) {
+                        if ($restoreHelper->getField($table, $tableData['fields'][$i]) !== RestoreHelper::FIELD_DROP) {
+                            $row[$tableData['fields'][$i]] = $tableValue[$i];
+                        }
+                    }
+                    foreach ($set as $setKey => $setValue) {
+                        if (!isset($row[$setKey])) {
+                            $row[$setKey] = $setValue;
+                        }
+                    }
+                    $backup[] = $row;
+                }   
+            }
+        }
+    } else if (file_exists($basedir . "/" . $restoreHelper->getFile($table))) {
+        $backup = unserialize(file_get_contents($basedir . "/" . $restoreHelper->getFile($table)));
+    } else {
+        $backup = array();
+    }
     $mapping = array();
     if (isset($options['return_mapping'])) {
         $return_mapping = true;
-        $id_var = $options['return_mapping'];
+        $id_var = $restoreHelper->getField($table, $options['return_mapping']); // map needs reverse resolution
     } else {
         $return_mapping = false;
     }
@@ -115,8 +144,8 @@ function restore_table($basedir, $table, $options) {
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
-                if (isset($map[$data[$field]])) {
-                    $data[$field] = $map[$data[$field]];
+                if (isset($map[$data[$restoreHelper->getField($table, $field)]])) { // map needs reverse resolution
+                    $data[$restoreHelper->getField($table, $field)] = $map[$data[$restoreHelper->getField($table, $field)]];
                 } else {
                     continue 2;
                 }
