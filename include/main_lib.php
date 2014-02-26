@@ -1500,7 +1500,11 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
-                            WHERE `comments`.`rtype` = ?s AND `course_id` = ?d", 'blogpost', $cid);
+                            WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `blog_post` ON `rating_cache`.`rid` = `blog_post`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $sql = db_query("SELECT user_id FROM course_user WHERE course_id = $cid AND status = ".USER_GUEST);

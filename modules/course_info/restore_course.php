@@ -359,7 +359,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $course_id),
         'return_mapping' => 'id'));
         if (file_exists("$restoreThis/comments")) {
-            restore_table($restoreThis, 'comments', array('map' => array('rid' => $blog_map),'return_mapping' => 'id'));
+            restore_table($restoreThis, 'comments', array('map' => array('rid' => $blog_map, 'user_id' => $userid_map),'return_mapping' => 'id'));
+        }
+        if (file_exists("$restoreThis/rating")) {
+        	restore_table($restoreThis, 'rating', array('map' => array('rid' => $blog_map, 'user_id' => $userid_map),'return_mapping' => 'rate_id'));
+        }
+        if (file_exists("$restoreThis/rating_cache")) {
+        	restore_table($restoreThis, 'rating_cache', array('map' => array('rid' => $blog_map),'return_mapping' => 'rate_cache_id'));
         }
     }
     if (file_exists("$restoreThis/poll") &&

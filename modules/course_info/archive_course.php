@@ -122,7 +122,9 @@ $archive_conditions = array(
                                       exercise_id IN (SELECT id FROM exercise
                                                              WHERE course_id = $course_id)",
     'blog_post' => "id IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
-    'comments' => "rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)");
+    'comments' => "rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
+    'rating' => "rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
+    'rating_cache' => "rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)");
 
 foreach ($archive_conditions as $table => $condition) {
     backup_table($archivedir, $table, $condition);
