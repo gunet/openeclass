@@ -190,6 +190,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $course_id),
         'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
         'delete' => array('id')));
+    if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
+            && isset($backupData) && is_array($backupData) 
+            && isset($backupData['query']) && is_array($backupData['query'])) {
+        $postsText = get_tabledata_from_parsed('posts_text');
+        foreach ($postsText as $ptData) {
+            Database::get()->query("UPDATE forum_post SET post_text = ?s WHERE id = ?d", $ptData['post_text'], intval($forum_post_map[$ptData['post_id']]));
+        }
+    }
 
     $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ?d ", intval($course_id));
     if (is_array($forumLastPosts) && count($forumLastPosts) > 0) {
