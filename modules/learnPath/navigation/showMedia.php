@@ -39,7 +39,7 @@ if (isset($_GET['id']))
     if (!empty($row)) {
         $row['course_id'] = $cours_id;
         $vObj = MediaResourceFactory::initFromVideo($row);
-        echo MultimediaHelper::mediaHtmlObject($vObj, '#ffffff', '#000000');
+        echo MultimediaHelper::mediaHtmlObject($vObj);
     }
 }
 

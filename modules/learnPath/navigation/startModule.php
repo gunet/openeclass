@@ -134,7 +134,6 @@ switch ($module['contentType'])
                 $furl = $file_url;
                 if (MultimediaHelper::isSupportedMedia($module['name'])) {
                     $furl = $play_url;
-                    $_SESSION['FILE_PHP__LIGHT_STYLE'] = true;
                 }
                 
                 $moduleStartAssetPage = $furl;

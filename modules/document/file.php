@@ -25,16 +25,11 @@
 
 // playmode is used in order to re-use this script's logic via play.php
 $is_in_playmode = false;
-$is_in_lightstyle = false;
-if (defined('FILE_PHP__PLAY_MODE'))
+if (defined('FILE_PHP__PLAY_MODE')) {
     $is_in_playmode = true;
+}
 
 session_start();
-
-if (isset($_SESSION['FILE_PHP__LIGHT_STYLE'])) {
-    $is_in_lightstyle = true;
-    unset($_SESSION['FILE_PHP__LIGHT_STYLE']);
-}
 
 // save current course
 if (isset($_SESSION['dbname'])) {
@@ -135,10 +130,7 @@ if (file_exists($disk_path)) {
         $token = token_generate($file_info['path'], true);
         $mediaAccess = $mediaPath . '?token=' . $token;
         
-        $htmlout = (!$is_in_lightstyle) 
-            ? MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#000000', '#ffffff', $mediaPath)
-            : MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, '#ffffff', '#000000', $mediaPath);
-        echo $htmlout;
+        echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
         exit();
     }
 } else {

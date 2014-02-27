@@ -112,16 +112,12 @@ class MultimediaHelper {
      * Construct a proper <object> html tag for each type of media.
      *
      * @global MediaResource $mediaRsrc
-     * @param  string $bgcolor
-     * @param  string $color
      * @return string
      */
-    public static function mediaHtmlObject($mediaRsrc, $bgcolor = '#000000', $color = '#ffffff') {
+    public static function mediaHtmlObject($mediaRsrc) {
         return self::mediaHtmlObjectRaw(
                 $mediaRsrc->getAccessURL(), 
                 $mediaRsrc->getAccessURL(), 
-                $bgcolor, 
-                $color, 
                 $mediaRsrc->getPath());
     }
     
@@ -131,12 +127,10 @@ class MultimediaHelper {
      * @global string $urlAppend
      * @param  string $mediaPlay
      * @param  string $mediaDL
-     * @param  string $bgcolor
-     * @param  string $color
      * @param  string $mediaPath
      * @return string
      */
-    public static function mediaHtmlObjectRaw($mediaPlay, $mediaDL, $bgcolor = '#000000', $color = '#ffffff', $mediaPath = null) {
+    public static function mediaHtmlObjectRaw($mediaPlay, $mediaDL, $mediaPath = null) {
         global $urlAppend;
 
         if ($mediaPath == null)
@@ -147,7 +141,7 @@ class MultimediaHelper {
                 <html><head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">';
 
-        $startdiv = '</head><body style="background-color: '.$bgcolor.'; color: '.$color.'; font-weight: bold"><div align="center">';
+        $startdiv = '</head><body style="font-weight: bold"><div align="center">';
         $enddiv = '</div></body>';
 
         switch($extension) {
@@ -294,17 +288,15 @@ class MultimediaHelper {
      * Construct a proper <iframe> html tag for each type of medialink.
      *
      * @param  MediaResource $mediaRsrc
-     * @param  string $bgcolor
-     * @param  string $color
      * @return string
      */
-    public static function medialinkIframeObject($mediaRsrc, $bgcolor = '#000000', $color = '#ffffff') {
+    public static function medialinkIframeObject($mediaRsrc) {
         $mediaURL = q(urldecode(self::makeEmbeddableMedialink($mediaRsrc->getAccessURL())));
         $ret = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
                 <html><head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
                 </head>
-                <body style="background-color: '.$bgcolor.'; color: '.$color.'; font-weight: bold">
+                <body style="font-weight: bold">
                 <div align="center">';
 
         $needEmbed = array_merge(self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns());

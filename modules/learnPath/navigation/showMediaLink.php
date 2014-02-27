@@ -39,7 +39,7 @@ if (isset($_GET['id']))
     if (!empty($row)) {
         $row['course_id'] = $cours_id;
         $vObj = MediaResourceFactory::initFromVideoLink($row);
-        echo MultimediaHelper::medialinkIframeObject($vObj, '#ffffff', '#000000');
+        echo MultimediaHelper::medialinkIframeObject($vObj);
     }
 }
 
