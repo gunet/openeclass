@@ -81,32 +81,28 @@ if (!add_units_navigation(TRUE)) {
 
 // permissions (only for the viewmode, there is nothing to edit here )
 if ($is_editor) {
-    // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
-    header("Location: ./learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
-    exit();
-} else {
-    if ($lp['visible'] == 0) {
-        // if the learning path is invisible, don't allow users in it
-        header("Location: ./index.php?course=$course_code");
+        // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
+        header("Location: ./learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
         exit();
-    }
-
-    $lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `course_id` = $course_id ORDER BY `rank`");
-    if ($lps != false) {
-        $block_met = false;
-        foreach ($lps as $lp) {
-            if ($lp['learnPath_id'] == $_SESSION['path_id']) {
-                if ($block_met) {
-                    // if a previous learning path was blocked, don't allow users in it
-                    header("Location: ./index.php?course=$course_code");
-                    exit();
-                } else
-                    break; // our lp is surely not in the block list
-            }
-            if ($lp['lock'] == "CLOSE")
-                $block_met = true;
+} else {
+        if ($lp['visible'] == 0) {
+            // if the learning path is invisible, don't allow users in it
+            header("Location: ./index.php?course=$course_code");
+            exit();
         }
-    }
+
+        // check for blocked learning path        
+	$lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM $TABLELEARNPATH 
+                            WHERE learnPath_id = $_SESSION[path_id] AND course_id = $course_id ORDER BY `rank`");        
+         $q = db_query("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE course_id = $course_id AND `rank` < $lps[rank]");
+        while ($lp = mysql_fetch_array($q)) {
+                if ($lp['lock'] == 'CLOSE') {
+                    $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                    
+                    if ($prog < 100) {                                                    
+                        header("Location: ./index.php?course=$course_code");
+                    }
+                }
+        }
 }
 
 // main page
