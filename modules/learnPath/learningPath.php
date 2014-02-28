@@ -71,48 +71,39 @@ if (isset($_GET['path_id'])) {
     exit();
 }
 
-$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $currentCourseID);
+mysql_select_db($currentCourseID);
+$q = db_query("SELECT name, visibility FROM $TABLELEARNPATH WHERE learnPath_id = '".(int)$_SESSION['path_id']."'");
 $lp = mysql_fetch_array($q);
 $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
 	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 }
 
-
 // permissions (only for the viewmode, there is nothing to edit here )
-if ( $is_editor )
-{
+if ($is_editor) {
     // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
     header("Location: ./learningPathAdmin.php?course=$code_cours&path_id=".$_SESSION['path_id']);
     exit();
-}
-else {
+} else {
 	if ($lp['visibility'] == "HIDE") {
 		// if the learning path is invisible, don't allow users in it
 		header("Location: ./learningPathList.php?course=$code_cours");
 		exit();
 	}
-	
-	$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH ORDER BY `rank`", $currentCourseID);
-	if ($lps != false) {
-		$block_met = false;
-		foreach ($lps as $lp) {
-			if ($lp['learnPath_id'] == $_SESSION['path_id']) {
-				if ($block_met) {
-					// if a previous learning path was blocked, don't allow users in it
-					header("Location: ./learningPathList.php?course=$code_cours");
-					exit();
-				}
-				else
-					break; // our lp is surely not in the block list
-			}
-			if ($lp['lock'] == "CLOSE")
-				$block_met = true;
-		}
-	}
+	// check for blocked learning path        
+	$lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM $TABLELEARNPATH 
+                            WHERE learnPath_id = $_SESSION[path_id] ORDER BY `rank`");        
+         $q = db_query("SELECT `learnPath_id`, `lock` FROM $TABLELEARNPATH WHERE `rank` < $lps[rank]");
+        while ($lp = mysql_fetch_array($q)) {
+                if ($lp['lock'] == 'CLOSE') {
+                    $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                    
+                    if ($prog < 100) {                                                    
+                        header("Location: ./learningPathList.php?course=$code_cours");
+                    }
+                }
+        }
 }
 
-mysql_select_db($currentCourseID);
 
 // main page
 if ($uid) {
@@ -175,11 +166,11 @@ for( $i = 0 ; $i < sizeof($flatElementList) ; $i++ )
 // comment
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
 $tool_content .= "
-  <table width=\"99%\" class=\"tbl\">
+  <table width='100%' class='tbl'>
   <tr>
-    <th><div align=\"left\">".$langComments."&nbsp;".$langLearningPath1.":</div></th>
+    <th><div align='left'>".$langComments."&nbsp;".$langLearningPath1.":</div></th>
   </tr>
-  <tr class=\"odd\">
+  <tr class='odd'>
     <td><small>".commentBox(LEARNINGPATH_, DISPLAY_)."</small></td>
   </tr>
   </table>
@@ -187,19 +178,17 @@ $tool_content .= "
 }
 
 // --------------------------- module table header --------------------------
-$tool_content .= "
-    <table width=\"99%\" class=\"tbl_alt\">";
-$tool_content .= "
-    <tr>
-      <th colspan=\"".($maxDeep+2)."\"><div align=\"left\">&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>\n";
+$tool_content .= "<table width='100%' class='tbl_alt'>";
+$tool_content .= "<tr>
+      <th colspan='".($maxDeep+2)."'><div align='left'>&nbsp;&nbsp;<b>".$langLearningObjects."</b></div></th>";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '      <th colspan="2"><b>'.$langProgress.'</b></th>'."\n";
+    $tool_content .= "<th colspan='2'><b>$langProgress</b></th>";
 }
 
-$tool_content .= "    </tr>\n";
+$tool_content .= "</tr>";
 
 // ------------------ module table list display -----------------------------------
 if (!isset($globalProg)) $globalProg = 0;
@@ -249,15 +238,15 @@ foreach ($flatElementList as $module)
     $spacingString = "";
     for($i = 0; $i < $module['children']; $i++)
     {
-        $spacingString .= "\n      <td width=\"5\">&nbsp;</td>";
+        $spacingString .= "<td width='5'>&nbsp;</td>";
     }
 
     $colspan = $maxDeep - $module['children']+1;
     if ( $module['contentType'] == CTLABEL_ )
         $colspan++;
 
-    $tool_content .= "    <tr $style>".$spacingString."
-      <td colspan=\"".$colspan."\" align=\"left\">";
+    $tool_content .= "<tr $style>".$spacingString."
+      <td colspan='".$colspan."' align='left'>";
 
     //-- if chapter head
     if ( $module['contentType'] == CTLABEL_ )
@@ -323,14 +312,14 @@ foreach ($flatElementList as $module)
         if ($is_blocked)
           $first_blocked = true;
         // display the progress value for current module
-        $tool_content .= '      <td align="right" width="120">'.disp_progress_bar ($progress, 1).'</td>'."\n"
-        	.'      <td align="left" width="10">'
+        $tool_content .= '<td align="right" width="120">'.disp_progress_bar ($progress, 1).'</td>'."\n"
+                        .'<td align="left" width="10">'
 			.'&nbsp;'.$progress.'%'
 			.'</td>'."\n";
     }
     elseif( $uid && $module['contentType'] == CTLABEL_ )
     {
-        $tool_content .= '      <td colspan="2">&nbsp;</td>'."\n";
+        $tool_content .= "<td colspan='2'>&nbsp;</td>";
     }
 
     if ($progress > 0)
@@ -350,16 +339,15 @@ foreach ($flatElementList as $module)
 
 if($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= '    <tr class="odd">'."\n"
-		.'      <th colspan="'.($maxDeep+2).'" align="right"><div align="right">'.$langGlobalProgress.'</div></th>'."\n"
-		.'      <th align="right" width="120"><div align="right">'
+    $tool_content .= '<tr class="odd">'."\n"
+		.'<th colspan="'.($maxDeep+2).'" align="right"><div align="right">'.$langGlobalProgress.'</div></th>'."\n"
+		.'<th align="right" width="120"><div align="right">'
         .disp_progress_bar(round($globalProg / ($moduleNb) ), 1 )
 		.'</div></th>'."\n"
-		.'      <th align="left" width="10"><div class="center">'
+		.'<th align="left" width="10"><div class="center">'
 		.'&nbsp;'.round($globalProg / ($moduleNb) ) .'%'
 		.'</div></th>'."\n"
-		.'    </tr>'."\n\n";
+		.'</tr>'."\n\n";
 }
-$tool_content .= '    </table>'."\n\n";
+$tool_content .= "</table>";
 draw($tool_content, 2);
-?>

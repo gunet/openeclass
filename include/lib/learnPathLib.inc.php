@@ -1975,13 +1975,15 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 	
 	$depth = ($extraDepth) ? "../" : "./" ;
 	
-	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) || empty($_SESSION['path_id']) || empty($_SESSION['lp_module_id']) ) {
+	if (!isset($_SESSION['path_id']) || !isset($_SESSION['lp_module_id']) 
+                                         || empty($_SESSION['path_id']) 
+                                         || empty($_SESSION['lp_module_id'])) {
 		header("Location: ".$depth."learningPathList.php?course=$code_cours");
 		exit();
 	}
 	
 	if ($extraQuery) {
-		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".(int)$_SESSION['path_id']."'", $code_cours);
+		$q = db_query("SELECT visibility FROM lp_learnPath WHERE learnPath_id = '".$_SESSION['path_id']."'", $code_cours);
 		$lp = mysql_fetch_array($q);
 		
 		if ( !$is_editor && $lp['visibility'] == "HIDE" ) {
@@ -1991,27 +1993,23 @@ function check_LPM_validity($is_editor, $code_cours, $extraQuery = false, $extra
 		}
 		
 		if (!$is_editor) {
-			$lps = db_query_fetch_all("SELECT `learnPath_id`, `lock` FROM lp_learnPath ORDER BY `rank`", $code_cours);
-			if ($lps != false) {
-				$block_met = false;
-				foreach ($lps as $lp) {
-					if ($lp['learnPath_id'] == $_SESSION['path_id']) {
-						if ($block_met) {
-							// if a previous learning path was blocked, don't allow users in it
-							header("Location: ".$depth."learningPathList.php?course=$code_cours");
-							exit();
-						}
-						else
-							break; // our lp is surely not in the block list
-					}
-					if ($lp['lock'] == "CLOSE")
-						$block_met = true;
-				}
-			}
-		}
+			// check for blocked learning path
+                        $lps = db_query_get_single_row("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
+                                            WHERE learnPath_id = $_SESSION[path_id] ORDER BY `rank`", $code_cours);
+                         $q = db_query("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE `rank` < $lps[rank]", $code_cours);
+                        while ($lp = mysql_fetch_array($q)) {
+                            if ($lp['lock'] == 'CLOSE') {
+                                $prog = get_learnPath_progress($lp['learnPath_id'], $_SESSION['uid']);                                
+                                if ($prog < 100) {                                
+                                    header("Location: ./learningPathList.php?course=$code_cours");
+                                }
+                         }
+                    }
+               }
 	}
 		
-	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".(int)$_SESSION['path_id']."' AND module_id = '".(int)$_SESSION['lp_module_id']."'", $code_cours);
+	$q2 = db_query("SELECT visibility FROM lp_rel_learnPath_module WHERE learnPath_id = '".$_SESSION['path_id']."' 
+                                            AND module_id = '".$_SESSION['lp_module_id']."'", $code_cours);
 	$lpm = mysql_fetch_array($q2);
 	if (mysql_num_rows($q2) <= 0 || (!$is_editor && $lpm['visibility'] == "HIDE")) {
 		// if the combination path/module is invalid, don't allow users in it
