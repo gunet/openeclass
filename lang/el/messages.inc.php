@@ -3695,3 +3695,5 @@ $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
 $langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
 $langBBBRemoveServer = 'Κατάργηση';
+
+$langBBB = "Τηλεδιάσκεψη";
