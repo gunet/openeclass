@@ -512,7 +512,7 @@ draw($tool_content, 1, null, $head_content);
  * @param type $sbsystems
  */
 function create_modules($cid, $sbsystems) {
-
+    
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_AGENDA . ", " . $sbsystems[MODULE_ID_AGENDA] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_LINKS . ", " . $sbsystems[MODULE_ID_LINKS] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_DOCS . ", " . $sbsystems[MODULE_ID_DOCS] . ", $cid)");
@@ -530,7 +530,8 @@ function create_modules($cid, $sbsystems) {
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_QUESTIONNAIRE . ", " . $sbsystems[MODULE_ID_QUESTIONNAIRE] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_LP . ", " . $sbsystems[MODULE_ID_LP] . ", $cid)");
     db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_WIKI . ", " . $sbsystems[MODULE_ID_WIKI] . ", $cid)");
-    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_ΒΒΒ . ", " . $sbsystems[MODULE_ID_ΒΒΒ] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_BBB . ", " . $sbsystems[MODULE_ID_BBB] . ", $cid)");
+
 }
 
 /**
