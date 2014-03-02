@@ -125,7 +125,7 @@ function create_modules($cid, $sbsystems) {
         MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
         MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
         MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI);
+        MODULE_ID_LP, MODULE_ID_WIKI,MODULE_ID_BBB);
 
     $values = array();
     foreach ($module_ids as $mid) {
