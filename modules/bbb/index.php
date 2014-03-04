@@ -32,6 +32,9 @@ $helpTopic = 'bbb';
 require_once '../../include/baseTheme.php';
 // For using with the pop-up calendar
 require_once 'jscalendar.inc.php';
+// For creating bbb urls & params
+require_once 'bbb-api.php';
+
 require_once 'include/lib/modalboxhelper.class.php';
 ModalBoxHelper::loadModalBox();
 
@@ -51,6 +54,8 @@ if (check_guest()) {
 
 $head_content = '';
 
+//atsaloux temp function calls
+create_meeting();
 
 if ($is_editor) {
     $tool_content .= "
@@ -167,6 +172,7 @@ function bbb_session_details() {
                             $activate_temp = htmlspecialchars($m['activate']);
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
                         }
+                        $tool_content .= "<a href='".bbb_join_moderator($_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'><img src='$themeimg/bbb.png' title='$langBBBSessionJoin' /></a>";
                 } else
                 {
                     $tool_content .= "
@@ -175,7 +181,7 @@ function bbb_session_details() {
                     <td align='center'>$type</td>
                     <td class='center'>";
                     if ($row['active']=='1') {
-                        $tool_content .= "<a href=''>$langBBBSessionJoin</a>";
+                        $tool_content .= "<a href='".bbb_join_user($_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
                     } else {
                         $tool_content .= $langBBBSessionJoin;
                     }
@@ -188,5 +194,150 @@ function bbb_session_details() {
         </fieldset>";
 }
 
+function create_meeting(){
+    $query = db_query("SELECT * 
+                        FROM bbb_servers
+                        WHERE id=1");
+
+    if (mysql_num_rows($query)) {
+        while ($row = mysql_fetch_array($query)) {
+            $salt = $row['server_key'];
+            $bbb_url = $row['api_url'];
+        }
+    }
+    
+    $bbb = new BigBlueButton($salt,$bbb_url);
+    
+    $creationParams = array(
+        'meetingId' => '1234', // REQUIRED
+        'meetingName' => 'Test Meeting Name', // REQUIRED
+        'attendeePw' => 'ap', // Match this value in getJoinMeetingURL() to join as attendee.
+        'moderatorPw' => 'mp', // Match this value in getJoinMeetingURL() to join as moderator.
+        'welcomeMsg' => '', // ''= use default. Change to customize.
+        'dialNumber' => '', // The main number to call into. Optional.
+        'voiceBridge' => '', // PIN to join voice. Optional.
+        'webVoice' => '', // Alphanumeric to join voice. Optional.
+        'logoutUrl' => '', // Default in bigbluebutton.properties. Optional.
+        'maxParticipants' => '-1', // Optional. -1 = unlimitted. Not supported in BBB. [number]
+        'record' => 'false', // New. 'true' will tell BBB to record the meeting.
+        'duration' => '0', // Default = 0 which means no set duration in minutes. [number]
+        //'meta_category' => '', // Use to pass additional info to BBB server. See API docs.
+    );
+
+    // Create the meeting and get back a response:
+    $itsAllGood = true;
+    try {$result = $bbb->createMeetingWithXmlResponseArray($creationParams);}
+    catch (Exception $e) {
+    echo 'Caught exception: ', $e->getMessage(), "\n";
+    $itsAllGood = false;
+    }
+
+    if ($itsAllGood == true) {
+        // If it's all good, then we've interfaced with our BBB php api OK:
+        if ($result == null) {
+        // If we get a null response, then we're not getting any XML back from BBB.
+        echo "Failed to get any response. Maybe we can't contact the BBB server.";
+        }	
+        else {
+            // We got an XML response, so let's see what it says:
+            //print_r($result);
+            if ($result['returncode'] == 'SUCCESS') {
+                // Then do stuff ...
+                //echo "<p>Meeting succesfullly created.</p>";
+            }
+            else {
+                echo "<p>Meeting creation failed.</p>";
+            }
+        }
+    }
+}
+
+function bbb_join_moderator($surname,$name){
+    $query = db_query("SELECT * 
+                        FROM bbb_servers
+                        WHERE id=1");
+
+    if (mysql_num_rows($query)) {
+        while ($row = mysql_fetch_array($query)) {
+            $salt = $row['server_key'];
+            $bbb_url = $row['api_url'];
+        }
+    }
+    
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    /* ___________ JOIN MEETING w/ OPTIONS ______ */
+    /* Determine the meeting to join via meetingId and join it.
+    */
+
+    $joinParams = array(
+        'meetingId' => '1234', // REQUIRED - We have to know which meeting to join.
+        'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
+        'password' => 'mp',	// REQUIRED - Must match either attendee or moderator pass for meeting.
+        'createTime' => '',	// OPTIONAL - string
+        'userId' => '',	// OPTIONAL - string
+        'webVoiceConf' => ''	// OPTIONAL - string
+    );
+
+    // Get the URL to join meeting:
+    $itsAllGood = true;
+    try {$result = $bbb->getJoinMeetingURL($joinParams);}
+        catch (Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            $itsAllGood = false;
+    }
+
+    if ($itsAllGood == true) {
+        //Output results to see what we're getting:
+        //print_r($result);
+    }
+    
+    return $result;
+}
+
+function bbb_join_user($surname,$name){
+    $query = db_query("SELECT * 
+                        FROM bbb_servers
+                        WHERE id=1");
+
+    if (mysql_num_rows($query)) {
+        while ($row = mysql_fetch_array($query)) {
+            $salt = $row['server_key'];
+            $bbb_url = $row['api_url'];
+        }
+    }
+    
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    /* ___________ JOIN MEETING w/ OPTIONS ______ */
+    /* Determine the meeting to join via meetingId and join it.
+    */
+
+    $joinParams = array(
+        'meetingId' => '1234', // REQUIRED - We have to know which meeting to join.
+        'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
+        'password' => 'mp',	// REQUIRED - Must match either attendee or moderator pass for meeting.
+        'createTime' => '',	// OPTIONAL - string
+        'userId' => '',	// OPTIONAL - string
+        'webVoiceConf' => ''	// OPTIONAL - string
+    );
+
+    // Get the URL to join meeting:
+    $itsAllGood = true;
+    try {$result = $bbb->getJoinMeetingURL($joinParams);}
+        catch (Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+            $itsAllGood = false;
+    }
+
+    if ($itsAllGood == true) {
+        //Output results to see what we're getting:
+        //print_r($result);
+    }
+    
+    return $result;
+}
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
