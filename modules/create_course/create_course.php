@@ -350,7 +350,7 @@ elseif (isset($_POST['create2']) or isset($_POST['back2'])) {
     $tool_content .= "</tr><tr>";
     $tool_content .= create_td($modules[MODULE_ID_EBOOK], MODULE_ID_EBOOK, 0);    
     $tool_content .= "<th>&nbsp;</th>";
-    $tool_content .= create_td($modules[MODULE_ID_BBB], MODULE_ID_BBB, 1);    
+    $tool_content .= create_td($modules[MODULE_ID_BBB], MODULE_ID_BBB, 0);    
     $tool_content .= "</tr>
                 </table>
                 <br />
