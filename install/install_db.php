@@ -230,7 +230,7 @@ db_query("CREATE TABLE user (
       last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 db_query("CREATE TABLE admin (
-      user_id INT(11) NOT NULL UNIQUE KEY,
+      user_id INT(11) NOT NULL PRIMARY KEY,
       privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE login_failure (
@@ -530,7 +530,9 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
 db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                 `wiki_id` INT(11) UNSIGNED NOT NULL,
                 `flag` VARCHAR(255) NOT NULL,
-                `value` ENUM('false','true') NOT NULL DEFAULT 'false' )  $charset_spec");
+                `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+                PRIMARY KEY (wiki_id, flag) )
+                $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,

@@ -114,7 +114,7 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
                         CHANGE whitelist whitelist TEXT NOT NULL,
                         DROP KEY user_username");
     db_query("ALTER TABLE admin
-                        CHANGE idUser user_id INT(11) NOT NULL");
+                        CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
 
 // Make sure 'video' subdirectory exists and is writable
@@ -991,7 +991,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
-                            `value` ENUM('false','true') NOT NULL DEFAULT 'false' )
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false'),
+                            PRIMARY KEY (wiki_id, flag) )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
