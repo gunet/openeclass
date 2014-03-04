@@ -30,6 +30,10 @@ $require_help = TRUE;
 $helpTopic = 'bbb';
 
 require_once '../../include/baseTheme.php';
+// For using with the pop-up calendar
+require_once 'jscalendar.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
+ModalBoxHelper::loadModalBox();
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -42,22 +46,147 @@ $nameTools = $langBBB;
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<p class='caution'>$langNoGuest</p>";
-    draw($tool_content, 2, 'conference');
+    draw($tool_content, 2, 'bbb');
 }
 
 $head_content = '';
+
 
 if ($is_editor) {
     $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
-            <li><a href='messageList.php?course=$course_code&amp;reset=true' target='messageList' class=small_tools>$langWash</a></li>
-            <li><a href='messageList.php?course=$course_code&amp;store=true' target='messageList' class=small_tools>$langSave</a></li>
+            <li><a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&add=1\">$langNewBBBSession</a></li>
           </ul>
         </div>";
+    
+    if (isset($_GET['add'])) {
+        $nameTools = $langNewAssign;
+        #$navigation[] = $works_url;
+        new_bbb_session();
+    }
+    else
+    {
+        bbb_session_details();   
+    }
+
+}
+else
+{
+    bbb_session_details();
 }
 
-$tool_content .= "";
+function new_bbb_session() {
+    global $tool_content, $m, $langAdd, $course_code;
+    global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate;
+    global $desc;
+    global $end_cal_Work;
+    global $langBack;
+    
+    $day = date("d");
+    $month = date("m");
+    $year = date("Y");
+
+    $textarea = rich_text_editor('desc', 4, 20, '');
+
+    $tool_content .= "
+        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
+        <fieldset>
+        <legend>$langNewBBBSessionInfo</legend>
+        <table class='tbl' width='100%'>
+        <tr>
+          <th>$m[title]:</th>
+          <td><input type='text' name='title' size='55' /></td>
+        </tr>
+        <tr>
+          <th>$langNewBBBSessionDesc:</th>
+          <td>$textarea</td>
+        </tr>
+        <tr>
+          <th>$langNewBBBSessionStart:</th>
+          <td>$end_cal_Work</td>
+        </tr>
+        <th valign='top'>$langNewBBBSessionType:</th>
+            <td><input type='radio' id='user_button' name='group_submissions' value='0' />
+            <label for='user_button'>$langNewBBBSessionPublic</label><br />
+            <input type='radio' id='group_button' name='group_submissions' value='1' />
+            <label for='group_button'>$langNewBBBSessionPrivate</label></td>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <td class='right'><input type='submit' name='new_assign' value='$langAdd' /></td>
+        </tr>
+        </table>
+        </fieldset>
+        </form>
+        <br />";
+    $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
+}
+
+// Print a box with the details of a bbb session
+function bbb_session_details() {
+    global $course_id, $tool_content, $m, $is_editor, $langActions, $langNewBBBSessionStart, $langNewBBBSessionType;
+    global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin;
+    global $course_code;
+    global $themeimg;
+
+    $result = db_query("SELECT * 
+                        FROM bbb_session
+                        WHERE course_id = $course_id
+                        ORDER BY start_date");
+
+    if (mysql_num_rows($result)) {
+                $tool_content .= "<table class='tbl_alt' width='100%'>
+                                  <tr>
+                                      <th colspan='2'>$m[title]</th>
+                                      <td class='center'>$langNewBBBSessionStart</td>
+                                      <td class='center'>$langNewBBBSessionType</td>
+                                      <th class='center' colspan='3'>$langActions</th>
+                                  </tr>";
+        $k = 0;
+        while ($row = mysql_fetch_array($result)) {
+                $id = $row['id'];
+                $title = $row['title'];
+                $start_date = $row['start_date'];
+                $row['public'] == '1' ? $type = $langNewBBBSessionPublic: $type = $langNewBBBSessionPrivate;
+
+                if ($is_editor) {
+                    $tool_content .= "
+                        <th colspan='2'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$id'>$title</a></th>
+                        <td align='center'>$start_date</tdh>
+                        <td align='center'>$type</td>
+                        <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=edit'>
+                        <img src='$themeimg/edit.png' alt='$m[edit]' />
+                        </a> <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row[id]&amp;choice=do_delete' onClick='return confirmation(\"" . $langConfirmDelete . "\");'>
+                        <img src='$themeimg/delete.png' alt='$m[delete]' /></a>";
+                        if ($row['active']=='1') {
+                            $deactivate_temp = htmlspecialchars($m['deactivate']);
+                            $activate_temp = htmlspecialchars($m['activate']);
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row[id]'><img src='$themeimg/visible.png' title='$deactivate_temp' /></a>";
+                        } else {
+                            $activate_temp = htmlspecialchars($m['activate']);
+                            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
+                        }
+                } else
+                {
+                    $tool_content .= "
+                    <th colspan='2'>$title</th>
+                    <td align='center'>$start_date</tdh>
+                    <td align='center'>$type</td>
+                    <td class='center'>";
+                    if ($row['active']=='1') {
+                        $tool_content .= "<a href=''>$langBBBSessionJoin</a>";
+                    } else {
+                        $tool_content .= $langBBBSessionJoin;
+                    }
+                }
+            }
+        }
+
+    $tool_content .= "
+        </table>
+        </fieldset>";
+}
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

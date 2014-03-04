@@ -3697,3 +3697,12 @@ $langBBBConnectedUsers = 'Συνδεδεμένοι χρήστες';
 $langBBBRemoveServer = 'Κατάργηση';
 
 $langBBB = "Τηλεδιάσκεψη";
+$langNewBBBSession = "Προγραμματισμός νέας τηλεδιάσκεψης";
+$langNewBBBSessionInfo = "Στοιχεία νέας τηλεδιάσκεψης";
+$langNewBBBSessionStart = "Έναρξη τηλεδιάσκεψης";
+$langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεδιάσκεψης";
+$langNewBBBSessionType = "Είδος τηλεδιάσκεψης";
+$langNewBBBSessionPublic = "Δημόσια προς τρίτους";
+$langNewBBBSessionPrivate = "Ιδιωτική";
+$langBBBSessionJoin = "Συμμετοχή στην τηλεδιάσκεψη";
+
