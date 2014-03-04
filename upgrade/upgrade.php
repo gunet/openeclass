@@ -1076,7 +1076,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
-                            `assignment_id` int(11) NOT NULL
+                            `assignment_id` int(11) NOT NULL,
+                            PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
 
                     db_query("DROP TABLE IF EXISTS agenda");
