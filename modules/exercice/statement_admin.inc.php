@@ -1,10 +1,9 @@
 <?php
-// $Id$
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,19 +18,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+load_js('tools.js');
+$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
+			 $langGiveQuestion . '";</script>';
 
 // the question form has been submitted
 if(isset($_POST['submitQuestion'])) {
-
-	$questionName = trim($questionName);	
-	// no name given
-	if(empty($questionName))
-	{
-		$msgErr = $langGiveQuestion;
-	}
+	$questionName = trim($questionName);		
 	// checks if the question is used in several exercises	
-	elseif($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1)
-	{
+	if($exerciseId && !isset($_POST['modifyIn']) && $objQuestion->selectNbrExercises() > 1) {
 		// duplicates the question
 		$questionId=$objQuestion->duplicate();
 		// deletes the old question
@@ -96,17 +91,12 @@ else
 		$answerType=$objQuestion->selectType();
 	}
 }
-if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
+if(isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {    
 	$questionId = $objQuestion->selectId();
 	// is picture set ?
-	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;
-        // if there is an error message
-        if(!empty($msgErr)) {
-                $tool_content .= "<p class='caution'>$msgErr</p>\n";
-        }
-
+	$okPicture = file_exists($picturePath.'/quiz-'.$questionId)?true:false;        
 	@$tool_content .= "
-	<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]'>
+	<form enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;modifyQuestion=$_GET[modifyQuestion]&amp;newQuestion=$_GET[newQuestion]' onsubmit=\"return checkrequired(this, 'questionName');\">
 	<fieldset>
 	  <legend>$langInfoQuestion</legend>
 	  <table class='tbl'>

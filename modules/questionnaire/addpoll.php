@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,7 +29,7 @@ $local_style = '
     .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
      padding-left: 15px; padding-right : 15px; }
     .content {position: relative; left: 25px; }';
-
+        
 // -------------- jscalendar -----------------
 include('../../include/jscalendar/calendar.php');
 
@@ -37,7 +37,33 @@ $lang = langname_to_code($language);
 
 $jscalendar = new DHTML_Calendar($urlServer.'include/jscalendar/', $lang, 'calendar-blue2', false);
 $local_head = $jscalendar->get_load_files_code();
+        
+$local_head .= "<script type = 'text/javascript'>
+    function checkrequired(which, entry) {
+    var pass=true;
+    if (document.images) {
+        for (i=0;i<which.length;i++) {
+            var tempobj = which.elements[i];
+            if (tempobj.name == entry) {
+                if (tempobj.type == 'text' && tempobj.value == '') {
+                    pass=false;
+                    break;
+                }
+            }
+        }
+    }
+    if (!pass) {
+        alert(langEmptyGroupName);
+        return false;
+    } else {
+        return true;
+    }
+}
+</script>";
 
+$local_head .= '<script type="text/javascript">var langEmptyGroupName = "' .
+         $langEmptyPollTitle . '";</script>';
+        
 $navigation[] = array("url"=>"questionnaire.php?course=$code_cours", "name"=> $langQuestionnaire);
 $nameTools = $langCreatePoll;
 
@@ -129,7 +155,7 @@ function jscal_html($name, $u_date = FALSE) {
 function printPollCreationForm() {
 	global $tool_content, $langTitle, $langPollStart, $langPollAddMultiple, $langPollAddFill,
 		$langPollEnd, $langPollMC, $langPollFillText, $langPollContinue, $langCreatePoll,
-		$nameTools, $pid, $langSurvey, $langSelection, $code_cours;
+		$nameTools, $pid, $langSurvey, $langSelection, $code_cours;                
 
 	if(isset($_POST['PollName'])) {
 		$PollName = htmlspecialchars($_POST['PollName']);
@@ -151,7 +177,7 @@ function printPollCreationForm() {
 	} else {
 		$pidvar = '';
 	}
-	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post'>";
+	$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$code_cours' id='poll' method='post' onsubmit=\"return checkrequired(this, 'PollName');\">";
 	$tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
