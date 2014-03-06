@@ -1243,7 +1243,7 @@ $langAddPicture="Προσθήκη εικόνας";
 $langReplacePicture="Αντικατάσταση της εικόνας";
 $langDeletePicture="Διαγραφή της εικόνας";
 $langQuestionDescription="Προαιρετικό σχόλιο";
-$langGiveQuestion="Δώστε την ερώτηση";
+$langGiveQuestion="Παρακαλώ πληκτρολογήστε την ερώτηση";
 $langInvalidPicture = "Μη υποστηριζόμενος τύπος εικόνας";
 
 // answer_admin.php

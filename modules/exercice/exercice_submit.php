@@ -111,17 +111,15 @@ if (isset($_POST['formSent'])) {
 		$exerciseResult = array();
 	}
 	// checking if user's time is more than exercise's time constrain
-	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) {
-		$exerciseTimeConstrain = $exerciseTimeConstrain*60 + 10;
+	if (isset($exerciseTimeConstrain) and $exerciseTimeConstrain != 0) {            		
+                $exerciseTimeConstrain = $exerciseTimeConstrain*60;
 		$exerciseTimeConstrainSecs = time() - $exerciseTimeConstrain;
-		$_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstrainSecs;
+		$_SESSION['exercise_end_time'][$exerciseId] = $exerciseTimeConstrainSecs;                
+                                
 		if (!$is_editor) {
-			if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstrain) {                            
-				unset($_SESSION['exercise_begin_time']);
-				unset($_SESSION['exercise_end_time']);
+                        if ($_SESSION['exercise_end_time'][$exerciseId] > $_SESSION['exercise_begin_time'][$exerciseId]) {
 				$error = 'langExerciseExpiredTime';
 				header('Location: exercise_redirect.php?course='.$code_cours.'&exerciseId='.$exerciseId.'&error='.$error);
-				exit();
 			}
 			unset($_SESSION['exercise_begin_time']);
 			unset($_SESSION['exercise_end_time']);
@@ -147,7 +145,8 @@ if (isset($_POST['formSent'])) {
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
 	$_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
 	// if it is the last question (only for a sequential exercise)
-	if($exerciseType == 1 || $questionNum >= $nbrQuestions) {
+	if($exerciseType == 1 or $questionNum >= $nbrQuestions 
+                or ($exerciseType == 2 and (isset($error) and $error == 'langExerciseExpiredTime'))) {
 		// goes to the script that will show the result of the exercise
 		header('Location: exercise_result.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 		exit();
@@ -231,8 +230,10 @@ if (!$is_editor) {
     	$error = 'langExerciseMaxAttemptsReached';
     }
     // Remaining Time
-    if ($RecordStartDate + ($exerciseTimeConstrain*60) < $temp_CurrentDate) {
-    	$error = 'langExerciseExpiredTime';
+    if ($exerciseTimeConstrain > 0) {
+        if ($RecordStartDate + ($exerciseTimeConstrain*60) < $temp_CurrentDate) {
+            $error = 'langExerciseExpiredTime';
+        }
     }
     // Exercise's Expiration
     if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise_EndDate)) { 
@@ -316,7 +317,7 @@ foreach($questionList as $questionId) {
 				$questionName=$objQuestionTmp->selectTitle();
 				// destruction of the Question object
 				unset($objQuestionTmp);
-				$tool_content .= '<div class\"alert1\" '.$langAlreadyAnswered.' &quot;'. q($questionName) .'&quot;</div>';
+				$tool_content .= "<div class='alert1'>".$langAlreadyAnswered." &quot;". q($questionName) ."&quot;</div>";
 				break;
 			}
 		}
@@ -334,20 +335,17 @@ foreach($questionList as $questionId) {
 	} 
 	$tool_content .= "<table width='100%' class='tbl'>
                 <tr class='sub_title1'>
-                <td colspan='2'>".$langQuestion.": ".$i."&nbsp;($questionWeight $message)"; 
+                <td colspan='2'>".$langQuestion.": ".$i.""; 
 	
 	if($exerciseType == 2) { 
 		$tool_content .= "/".$nbrQuestions;
 	}
+        $tool_content .= "&nbsp;&nbsp;($questionWeight $message)";
 	$tool_content .= "</td></tr>";
         unset($question);        	
 	showQuestion($questionId);
         
-	$tool_content .= "
-	<tr>
-	  <td colspan='2'>&nbsp;</td>
-	</tr>
-	</table>";
+	$tool_content .= "<tr><td colspan='2'>&nbsp;</td></tr></table>";
 	// for sequential exercises
 	if($exerciseType == 2) {
 		// quits the loop
@@ -370,18 +368,18 @@ if (!$questionList) {
           <table width='100%' class='tbl'>
           <tr>
             <td><div class='right'><input type='submit' value='";
-		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-			$tool_content .= "".q($langCont)."' />&nbsp;";
-		} else {
-			$tool_content .= "".q($langNext)." &gt;"."' />";
-		}
+        if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+                $tool_content .= "".q($langCont)."' />&nbsp;";
+        } else {
+                $tool_content .= "".q($langNext)." &gt;"."' />&nbsp;";
+        }
 	$tool_content .= "<input type='submit' name='buttonCancel' value='".q($langCancel)."' /></div>
-    </td>
-  </tr>
-  <tr>
-    <td colspan=\"2\">&nbsp;</td>
-  </tr>
-  </table>";
+            </td>
+          </tr>
+          <tr>
+            <td colspan='2'>&nbsp;</td>
+          </tr>
+          </table>";
 }
 $tool_content .= "</form>";
 draw($tool_content, 2, null, $head_content);
