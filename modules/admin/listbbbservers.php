@@ -25,11 +25,32 @@
 // Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'bbb-api.php';
+
+function get_connected_users($salt,$bbb_url)
+{
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $meetings = $bbb->getMeetingsWithXmlResponseArray();
+
+    $sum = 0;
+    foreach($meetings as $meeting){
+            $mid = $meeting['meetingId'];
+            $pass = $meeting['moderatorPw'];
+            if($mid != null){
+                    $info = $bbb->getMeetingInfoWithXmlResponseArray(array('meetingId' => $mid, 'password' => $pass));
+                    $sum += $info['participantCount'];
+            }
+    }
+    return $sum;
+
+}
 
 /* Array of database columns which should be read and sent back to DataTables. Use a space where
 * you want to insert a non-database field (for example a counter or static image)
 */
-$aColumns = array( 'id','hostname', 'ip', 'enabled' );
+$aColumns = array( 'id','hostname', 'ip', 'enabled','server_key','api_url','max_users' );
 	
 /* Indexed column (used for fast and accurate table cardinality) */
 $sIndexColumn = "hostname";
@@ -164,12 +185,20 @@ while ( $aRow = mysql_fetch_array( $rResult ) )
 		$row[] = $aRow[ $aColumns[$i] ];
             }
 	}
-	array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
-        array_push($row,"CONNECTED_USERS_GOES_HERE");
+        $connected_users = get_connected_users($row[4],$row[5]) . "/" . $row[6];
+
+        //Remove elements from array to complete json data
+        unset($row[4]);
+        unset($row[5]);
+        unset($row[6]);
+        
+        array_push($row,"<a href='bbbmoduleconf.php?edit_server=".$row[0]."'>Edit server</a>");
+        array_push($row, "$connected_users");
         array_push($row,"<a href='bbbmoduleconf.php?delete_server=".$row[0]."' onClick='return confirmation();'>Remove server</a>");
         array_shift($row);
         $output['aaData'][] = $row;
         
 }
+
 echo json_encode( $output );
 ?>
