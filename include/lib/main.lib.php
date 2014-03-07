@@ -1300,6 +1300,8 @@ $native_language_names_init = array (
 	'ru' => 'Русский',
 	'tr' => 'Türkçe',
 	'pt' => 'Português',
+    'sk' => 'Slovenčina',
+    'sl' => 'Slovaščina',
 );
 
 $language_codes = array(
@@ -1322,6 +1324,8 @@ $language_codes = array(
 	'ru' => 'russian',
 	'tr' => 'turkish',
 	'pt' => 'portuguese',
+    'sk' => 'slovak',
+    'sl' => 'slovene',
 );
 
 // Convert language code to language name in English lowercase (for message files etc.)
