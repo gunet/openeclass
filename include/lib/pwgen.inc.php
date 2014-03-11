@@ -27,7 +27,7 @@
  * @return string
  */
 function genPass() {
-    $rand = genPassRandom(crypto_rand_secure(2, 3));
+    $rand = genPassRandom(crypto_rand_secure(2, 3), true);
     $flag = crypto_rand_secure(0, 1);
 
     if ($flag) {
