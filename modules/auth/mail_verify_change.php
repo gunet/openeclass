@@ -49,6 +49,7 @@ if (!get_config('email_verification_required') or
 		unset($_SESSION['mail_verification_required']);
 	}
 	header("Location:" . $urlServer);
+        exit;
 }
 
 if (!empty($_POST['submit'])) {

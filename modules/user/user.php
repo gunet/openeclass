@@ -29,7 +29,7 @@ include '../admin/admin.inc.php';
 
 define ('COURSE_USERS_PER_PAGE', 15);
 
-$limit = isset($_REQUEST['limit'])? $_REQUEST['limit']: 0;
+$limit = isset($_REQUEST['limit'])? intval($_REQUEST['limit']): 0;
 
 $nameTools = $langAdminUsers;
 
