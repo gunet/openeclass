@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+header('Content-Type: application/xml; charset=utf-8');
 
 if (isset($_POST['token'])) {
     $require_mlogin = true;

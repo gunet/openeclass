@@ -27,10 +27,10 @@
  * @return string
  */
 function genPass() {
-
     $rand = genPassRandom(crypto_rand_secure(2, 3));
+    $flag = crypto_rand_secure(0, 1);
 
-    if ($flag = crypto_rand_secure(0, 1)) {
+    if ($flag) {
         return genPassPronouncable() . $rand;
     } else {
         return $rand . genPassPronouncable();
@@ -44,21 +44,20 @@ function genPass() {
  * @return string
  */
 function genPassPronouncable() {
-
     $makepass = "";
     $syllables = "er,in,tia,wol,fe,pre,vet,jo,nes,al,len,son,cha,ir,ler,bo,ok,tio,nar,sim,ple,bla,ten,toe,cho,co,lat,spe,ak,er,po,co,lor,pen,cil,li,ght,wh,at,the,he,ck,is,mam,bo,no,fi,ve,any,way,pol,iti,cs,ra,dio,sou,rce,sea,rch,pa,per,com,bo,sp,eak,st,fi,rst,gr,oup,boy,ea,gle,tr,ail,bi,ble,brb,pri,dee,kay,en,be,se";
-
     $syllable_array = explode(",", $syllables);
+    $pass_length = 10;
 
-    while (strlen($makepass) < 8) {
+    while (strlen($makepass) < $pass_length) {
         if (crypto_rand_secure() % 10 == 1) {
             $makepass .= sprintf("%0.0f", (crypto_rand_secure() % 50) + 1);
         } else {
-            $makepass .= sprintf("%s", $syllable_array[crypto_rand_secure() % 62]);
+            $makepass .= sprintf("%s", $syllable_array[crypto_rand_secure() % count($syllable_array)]);
         }
     }
 
-    return(substr(str_replace("\n", '', $makepass), 0, 8));
+    return(substr(str_replace("\n", '', $makepass), 0, $pass_length));
 }
 
 /**
@@ -66,14 +65,21 @@ function genPassPronouncable() {
  *
  * @return string
  */
-function genPassRandom($length = 8) {
-
+function genPassRandom($length = 8, $requireNum = false) {
     $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-
     $pass = "";
+    $hasNum = false;
 
     for ($i = 0; $i < $length; $i++) {
-        $pass .= $allowable_characters[crypto_rand_secure(0, strlen($allowable_characters) - 1)];
+        $nextChar = $allowable_characters[crypto_rand_secure(0, strlen($allowable_characters) - 1)];
+        $pass .= $nextChar;
+        if (is_numeric($nextChar)) {
+            $hasNum = true;
+        }
+    }
+    
+    if ($requireNum && !$hasNum) {
+        return genPassRandom($length, $requireNum);
     }
 
     return $pass;
