@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.8
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,13 +18,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 /*
 ===========================================================================
-    admin/platformStats.php
-    @last update: 23-09-2006
+    @file platformStats.php    
     @authors list: ophelia neofytou
-==============================================================================
     @Description:  Shows statistics conserning the number of visits on the platform in a time period.
         Statistics can be shown for a specific user or for all users.
 
@@ -41,8 +38,8 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats.": ".$langVisitsStats;
 
 $tool_content .= "
-  <div id=\"operations_container\">
-    <ul id=\"opslist\">
+  <div id='operations_container'>
+    <ul id='opslist'>
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='visitsCourseStats.php?first='>".$langVisitsCourseStats."</a></li>
       <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>".$langOldStats."</a></li>

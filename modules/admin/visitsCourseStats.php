@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.8
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,14 +20,10 @@
 
 /*
 ===========================================================================
-    admin/visitsCourseStats.php
-    @last update: 23-09-2006
+    @file admin/visitsCourseStats.php    
     @authors list: ophelia neofytou
-==============================================================================
     @Description:  Shows statistics conserning the number of visits on courses for a time period.
         Statistics can be shown for a specific course or for all courses.
-
-==============================================================================
 */
 
 // Check if user is administrator and if yes continue
@@ -41,7 +37,7 @@ $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= "
   <div id='operations_container'>
-    <ul id='opslist\">
+    <ul id='opslist'>
       <li><a href='stateclass.php'>".$langPlatformGenStats."</a></li>
       <li><a href='platformStats.php?first='>".$langVisitsStats."</a></li>
       <li><a href='oldStats.php' onClick='return confirmation(\"$langOldStatsExpireConfirm\");'>".$langOldStats."</a></li>
@@ -188,8 +184,7 @@ if (!extension_loaded('gd')) {
         $dataSet = new XYDataSet();
         //add points to chart
         while ($newp = current($point)){
-                $dataSet->addPoint(new Point(key($point), $newp));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point(key($point), $newp));                
                 $chart->setDataSet($dataSet);
                 next($point);
                 $chart_content=1;

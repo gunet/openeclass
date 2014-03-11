@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -89,40 +89,35 @@ switch ($u_stats_type) {
     switch ($u_interval) {
         case "summary":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($langSummary, $row['cnt']));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point($langSummary, $row['cnt']));                
                 $chart->setDataSet($dataSet);
                 $chart_content = 1;
             }
         break;
         case "daily":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['date'], $row['cnt']));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point($row['date'], $row['cnt']));                
                 $chart->setDataSet($dataSet);
                 $chart_content = 1;
             }
         break;
         case "weekly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point($row['week_start'].' - '.$row['week_end'], $row['cnt']));                
                 $chart->setDataSet($dataSet);
                 $chart_content = 1;
             }
         break;
         case "monthly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point($langMonths[$row['month']], $row['cnt']));                
                 $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
         break;
         case "yearly":
             while ($row = mysql_fetch_assoc($result)) {
-                $dataSet->addPoint(new Point($row['year'], $row['cnt']));
-                $chart->width += 25;
+                $dataSet->addPoint(new Point($row['year'], $row['cnt']));                
                 $chart->setDataSet($dataSet);
                 $chart_content=1;
             }
@@ -162,4 +157,3 @@ if ($chart_content) {
       </tbody>
       </table>';
 }
-?>
