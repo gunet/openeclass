@@ -66,6 +66,10 @@ if ($is_editor) {
     if (isset($_GET['add'])) {
         new_bbb_session();
     }
+    elseif(isset($_GET['edit']))
+    {
+        update_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['$SessionStart'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers']);
+    }
     elseif(isset($_GET['choice']))
     {
         switch($_GET['choice'])
@@ -92,8 +96,8 @@ if ($is_editor) {
         }
     }elseif(isset($_POST['new_bbb_session']))
     {
-        print_r($_POST['notifyUsers']);
-        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['$end_cal_Work'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers']);
+        //print_r($_POST['notifyUsers']);
+        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers']);
     }
     else
     {
@@ -110,11 +114,11 @@ function new_bbb_session() {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive, $langNewBBBSessionStatus ;
     global $desc;
-    global $end_cal_Work;
+    global $start_session;
     global $langBack;
     global $langBBBNotifyUsers;
 
-    $end_cal_Work = jscal_html('PollStart');
+    $start_session = jscal_html('SessionStart');
 
     $textarea = rich_text_editor('desc', 4, 20, '');
 
@@ -133,11 +137,11 @@ function new_bbb_session() {
         </tr>
         <tr>
           <th>$langNewBBBSessionStart:</th>
-          <td>$end_cal_Work</td>
+          <td>$start_session</td>
         </tr>
         <tr>
         <th valign='top'>$langNewBBBSessionType:</th>
-            <td><input type='radio' id='user_button' name='type' value='0' />
+            <td><input type='radio' id='user_button' name='type' checked='true' value='0' />
             <label for='user_button'>$langNewBBBSessionPublic</label><br />
             <input type='radio' id='group_button' name='type' value='1' />
             <label for='group_button'>$langNewBBBSessionPrivate</label></td>
@@ -147,7 +151,7 @@ function new_bbb_session() {
         <th valign='top'>$langNewBBBSessionStatus:</th>
             <td><input type='radio' id='user_button' name='status' value='1' />
             <label for='user_button'>$langNewBBBSessionActive</label><br />
-            <input type='radio' id='group_button' name='status' value='0' />
+            <input type='radio' id='group_button' name='status' checked='true' value='0' />
             <label for='group_button'>$langNewBBBSessionInActive</label></td>
         </th>
         </tr>
@@ -168,12 +172,12 @@ function new_bbb_session() {
 }
 
 // insert scheduled session data into database
-function add_bbb_session($course_id,$title,$desc,$end_cal_Work,$type,$status,$notifyUsers)
+function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers)
 {
     global $tool_content, $langBBBAddSuccessful;
     
     $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw)"
-            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$end_cal_Work','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."')");
+            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."')");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -210,7 +214,7 @@ function edit_bbb_session($session_id) {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive;
     global $desc;
-    global $end_cal_Work;
+    global $start_session;
     global $langBack;
     global $langBBBNotifyUsers;
 
@@ -221,7 +225,7 @@ function edit_bbb_session($session_id) {
     $type = ($row['5'] == 1 ? 1 : 0);
     $status = ($row['6'] == 1 ? 1 : 0);
 
-    $end_cal_Work = jscal_html('PollStart');
+    $start_session = jscal_html('SessionStart',$row['start_date']);
 
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 
@@ -240,7 +244,7 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                       <th>$langNewBBBSessionStart:</th>
-                      <td>$end_cal_Work</td>
+                      <td>$start_session</td>
                     </tr>
                     <tr>
                     <th valign='top'>$langNewBBBSessionType:</th>
