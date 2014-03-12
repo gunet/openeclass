@@ -25,10 +25,14 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'bbb';
-
 require_once '../../include/baseTheme.php';
+
 // For using with the pop-up calendar
-require_once 'modules/work/jscalendar.inc.php';
+require_once 'include/jscalendar/calendar.php';
+
+$jscalendar = new DHTML_Calendar($urlServer . 'include/jscalendar/', $language, 'calendar-blue2', false);
+$head_content = $jscalendar->get_load_files_code();
+
 require_once 'include/sendMail.inc.php';
 
 // For creating bbb urls & params
@@ -51,10 +55,7 @@ if (check_guest()) {
     draw($tool_content, 2, 'bbb');
 }
 
-$head_content = '';
-
 if ($is_editor) {
-    load_js('tools.js');
     $tool_content .= "
         <div id='operations_container'>
           <ul id='opslist'>
@@ -113,9 +114,7 @@ function new_bbb_session() {
     global $langBack;
     global $langBBBNotifyUsers;
 
-    $day = date("d");
-    $month = date("m");
-    $year = date("Y");
+    $end_cal_Work = jscal_html('PollStart');
 
     $textarea = rich_text_editor('desc', 4, 20, '');
 
@@ -222,9 +221,7 @@ function edit_bbb_session($session_id) {
     $type = ($row['5'] == 1 ? 1 : 0);
     $status = ($row['6'] == 1 ? 1 : 0);
 
-    $day = date("d");
-    $month = date("m");
-    $year = date("Y");
+    $end_cal_Work = jscal_html('PollStart');
 
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 
@@ -570,6 +567,25 @@ function bbb_session_running($meeting_id)
         return $itsAllGood;
     }
     return $result['running'];
+}
+
+/* * ***************************************************************************
+  Create the HTML for a jscalendar field
+ * **************************************************************************** */
+
+function jscal_html($name, $u_date = FALSE) {
+    global $jscalendar;
+    if (!$u_date) {
+        $u_date = strftime('%Y-%m-%d %H:%M', strtotime('now -0 day'));
+    }
+
+    $cal = $jscalendar->make_input_field(
+            array('showsTime' => true,
+        'showOthers' => true,
+        'ifFormat' => '%Y-%m-%d %H:%M'), array('style' => '',
+        'name' => $name,
+        'value' => $u_date));
+    return $cal;
 }
 
 add_units_navigation(TRUE);
