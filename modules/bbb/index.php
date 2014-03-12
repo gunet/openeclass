@@ -104,6 +104,7 @@ else
     bbb_session_details();
 }
 
+// create form for new session scheduling
 function new_bbb_session() {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive, $langNewBBBSessionStatus ;
@@ -167,6 +168,7 @@ function new_bbb_session() {
     $tool_content .= "<p align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
 }
 
+// insert scheduled session data into database
 function add_bbb_session($course_id,$title,$desc,$end_cal_Work,$type,$status,$notifyUsers)
 {
     global $tool_content, $langBBBAddSuccessful;
@@ -176,6 +178,7 @@ function add_bbb_session($course_id,$title,$desc,$end_cal_Work,$type,$status,$no
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
+    // if we have to notify users for new session
     if($notifyUsers=="1")
     {
         $sql = "SELECT user_id, email FROM course_user, user
@@ -186,9 +189,9 @@ function add_bbb_session($course_id,$title,$desc,$end_cal_Work,$type,$status,$no
         while ($row = mysql_fetch_array($result_users)) {
             $emailTo = $row["email"];
             $user_id = $row["user_id"];
-            //print $emailTo;
+            // we check if email notification are enabled for each user
             if (get_user_email_notification($user_id)) {
-                // checks if user is notified by email
+                //and add user to recipients
                 array_push($recipients, $emailTo);
             }
         }
@@ -203,6 +206,7 @@ function add_bbb_session($course_id,$title,$desc,$end_cal_Work,$type,$status,$no
         }
     }
 }
+//form to edit session data
 function edit_bbb_session($session_id) {
     global $tool_content, $m, $langAdd, $course_code;
     global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive;
@@ -321,7 +325,7 @@ function bbb_session_details() {
 
                 if ($is_editor) {
                     $tool_content .= "
-                        <th colspan='2'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>$title</a></th>
+                        <th colspan='2'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></th>
                         <td align='center'>$start_date</tdh>
                         <td align='center'>$type</td>
                         <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
@@ -336,7 +340,7 @@ function bbb_session_details() {
                             $activate_temp = htmlspecialchars($m['activate']);
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
                         }
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'><img src='$themeimg/bbb.png' title='$langBBBSessionJoin' /></a>";
+                        //$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'><img src='$themeimg/bbb.png' title='$langBBBSessionJoin' /></a>";
                 } else
                 {
                     $tool_content .= "
@@ -391,6 +395,7 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
     //Algorithm to select BBB server GOES HERE ...
     
     global $course_code;
+    //we find the bbb server that will serv the session
     $query = db_query("SELECT *
                         FROM bbb_servers
                         WHERE id=1");
@@ -432,7 +437,7 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
         // If it's all good, then we've interfaced with our BBB php api OK:
         if ($result == null) {
             // If we get a null response, then we're not getting any XML back from BBB.
-            echo "Failed to get any response. Maybe we can't contact the BBB server.";
+            // echo "Failed to get any response. Maybe we can't contact the BBB server.";
         }
         else {
             // We got an XML response, so let's see what it says:
@@ -442,12 +447,13 @@ function create_meeting($title,$meeting_id,$mod_pw,$att_pw)
                 //echo "<p>Meeting succesfullly created.</p>";
             }
             else {
-                echo "<p>Meeting creation failed.</p>";
+                //echo "<p>Meeting creation failed.</p>";
             }
         }
     }
 }
 
+//create join as moderator link
 function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
     
     $query = db_query("SELECT *
@@ -464,10 +470,6 @@ function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
-    /* ___________ JOIN MEETING w/ OPTIONS ______ */
-    /* Determine the meeting to join via meetingId and join it.
-    */
-
     $joinParams = array(
         'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
         'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
@@ -481,7 +483,7 @@ function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
     $itsAllGood = true;
     try {$result = $bbb->getJoinMeetingURL($joinParams);}
         catch (Exception $e) {
-            echo 'Caught exception: ', $e->getMessage(), "\n";
+            // echo 'Caught exception: ', $e->getMessage(), "\n";
             $itsAllGood = false;
     }
 
@@ -493,6 +495,7 @@ function bbb_join_moderator($meeting_id,$mod_pw,$att_pw,$surname,$name){
     return $result;
 }
 
+// create join as simple user link
 function bbb_join_user($meeting_id,$att_pw,$surname,$name){
     $query = db_query("SELECT *
                         FROM bbb_servers
@@ -508,10 +511,6 @@ function bbb_join_user($meeting_id,$att_pw,$surname,$name){
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
 
-    /* ___________ JOIN MEETING w/ OPTIONS ______ */
-    /* Determine the meeting to join via meetingId and join it.
-    */
-
     $joinParams = array(
         'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
         'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
@@ -525,7 +524,7 @@ function bbb_join_user($meeting_id,$att_pw,$surname,$name){
     $itsAllGood = true;
     try {$result = $bbb->getJoinMeetingURL($joinParams);}
         catch (Exception $e) {
-            echo 'Caught exception: ', $e->getMessage(), "\n";
+            //echo 'Caught exception: ', $e->getMessage(), "\n";
             $itsAllGood = false;
     }
 
@@ -561,10 +560,6 @@ function bbb_session_running($meeting_id)
     }
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
-
-    /* ___________ IS MEETING RUNNING? ______ */
-    /* Pass a meetingId to see if the meeting is currently running.
-    */
 
     // Get the URL to join meeting:
     $itsAllGood = true;

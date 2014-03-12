@@ -24,6 +24,7 @@
 // Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+
 $nameTools = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -168,6 +169,7 @@ else {
 	</tbody>
 	<tfoot>
 </table></fieldset></legend>';
+    
 if (isset($_GET['edit_server'])) {
     $tool_content .= '<fieldset><legend>';
     $tool_content .=  $langUpdateBBBServer;
@@ -193,11 +195,6 @@ if (isset($_GET['edit_server'])) {
         }
             $tool_content .= '</fieldset></form>';    
     }
-    
-
-
-    
-    //$tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div></fieldset></form>';
     
     // Display link to index.php
     $tool_content .= "<p align='right'><a href='index.php'>$langBack</a></p>";
