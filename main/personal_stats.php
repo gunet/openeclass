@@ -54,8 +54,7 @@ if (!extension_loaded('gd')) {
 		foreach ($course_codes as $course_code) {
 			$sql = "SELECT COUNT(*) AS cnt FROM actions WHERE user_id = '$uid'";
 			$result = db_query($sql, $course_code);
-			while ($row = mysql_fetch_assoc($result)) {
-				
+			while ($row = mysql_fetch_assoc($result)) {				
 				$totalHits += $row['cnt'];
 				$hits[$course_code] = $row['cnt'];
 			}
@@ -73,8 +72,7 @@ if (!extension_loaded('gd')) {
 		foreach ($hits as $code => $count) {
 			if ($count >0 ){
 				$chart_content=5;
-				$dataSet->addPoint(new Point($course_names[$code], $count));
-				$chart->width += 7;
+				$dataSet->addPoint(new Point($course_names[$code], $count));				
 				$chart->setDataSet($dataSet);
 			}
 		}
@@ -113,73 +111,55 @@ if (!extension_loaded('gd')) {
                 $i = 0;
                 foreach ($duration as $code => $time) {
                         if ($i%2==0) {
-                                $tool_content .= "
-            <tr class='even'>";
+                                $tool_content .= "<tr class='even'>";
                         } else {
-                                $tool_content .= "
-            <tr class='odd'>";
+                                $tool_content .= "<tr class='odd'>";
                         }
                         $i++;
                         $tool_content .= "
-	      <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
-	      <td>" . q(course_code_to_title($code)) . "</td>
-	      <td width='140'>" . format_time_duration(0 + $time) . "</td>
-            </tr>";
+                        <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+                        <td>" . q(course_code_to_title($code)) . "</td>
+                        <td width='140'>" . format_time_duration(0 + $time) . "</td>
+                      </tr>";
                 }
-        $tool_content .= "
-            </table>
-	  </td>
-	</tr>";
+                $tool_content .= "</table></td></tr>";
 	}
 }
 // End of chart display; chart unlinked at end of script.
-
 
 $sql = "SELECT * FROM loginout
     WHERE id_user = '".$_SESSION["uid"]."' ORDER by idLog DESC LIMIT 10";
 
 $leResultat = db_query($sql, $mysqlMainDb);
 
-    $tool_content .= "
-	<tr>
-          <th valign=\"top\">$langLastVisits:</th>
-          <td>";
+$tool_content .= "<tr><th valign='top'>$langLastVisits:</th><td>";
+$tool_content .= "<table class='tbl_alt' width='550'>
+        <tr>
+          <th colspan='2'>$langDate</th>
+          <th width='140'>$langAction</th>
+        </tr>";
+$i = 0;
 
-    $tool_content .= "
-            <table class=\"tbl_alt\" width='550'>
-            <tr>
-              <th colspan='2'>$langDate</th>
-              <th width='140'>$langAction</th>
-            </tr>";
-    $i = 0;
+$nomAction["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
+$nomAction["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
+$i=0;
+while ($leRecord = mysql_fetch_array($leResultat)) {
+       $when = $leRecord["when"];
+       $action = $leRecord["action"];
+       if ($i%2==0) {
+            $tool_content .= "<tr class='even'>";
+       } else {
+            $tool_content .= "<tr class='odd'>";
+       }
+       $tool_content .= "
+          <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+          <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
+          <td>".$nomAction[$action]."</td>
+        </tr>";
+    $i++;
+}
 
-    $nomAction["LOGIN"] = "<font color=\"#008000\">$langLogIn</font>";
-    $nomAction["LOGOUT"] = "<font color=\"#FF0000\">$langLogout</font>";
-    $i=0;
-    while ($leRecord = mysql_fetch_array($leResultat)) {
-	   $when = $leRecord["when"];
-	   $action = $leRecord["action"];
-	   if ($i%2==0) {
-		$tool_content .= "
-            <tr class=\"even\">";
-	   } else {
-		$tool_content .= "
-            <tr class=\"odd\">";
-	   }
-	   $tool_content .= "
-              <td width=\"16\"><img src='$themeimg/arrow.png' alt=''></td>
-              <td>".strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when))."</td>
-              <td>".$nomAction[$action]."</td>
-	    </tr>";
-	$i++;
-    }
-
-$tool_content .= "
-            </table>\n";
-$tool_content .= "
-          </td>
-        </tr>
-        </table>
-        </fieldset>";
+$tool_content .= "</table>";
+$tool_content .= "</td></tr></table></fieldset>";
    
 draw($tool_content, 1);
