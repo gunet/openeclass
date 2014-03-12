@@ -63,12 +63,14 @@ if ($is_editor) {
           </ul>
         </div>";
 
+    //print_r($_GET);
     if (isset($_GET['add'])) {
         new_bbb_session();
     }
-    elseif(isset($_GET['edit']))
+    elseif(isset($_POST['update_bbb_session']))
     {
-        update_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['$SessionStart'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers']);
+        //print_r($_GET);
+        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'));
     }
     elseif(isset($_GET['choice']))
     {
@@ -209,6 +211,46 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
         }
     }
 }
+
+// insert scheduled session data into database
+function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers)
+{
+    global $tool_content, $langBBBAddSuccessful;
+    
+    $query = db_query("UPDATE bbb_session SET title='".q($title)."',description='".$desc."',"
+            . "start_date='".$start_session."',public='$type',active='$status' WHERE id='$session_id'");
+    
+    $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
+
+    // if we have to notify users for new session
+    if($notifyUsers=="1")
+    {
+        $sql = "SELECT user_id, email FROM course_user, user
+                WHERE course_user.course_id = $course_id AND course_user.user_id = user.id";
+        $result_users = db_query($sql);
+        $recipients = array();
+
+        while ($row = mysql_fetch_array($result_users)) {
+            $emailTo = $row["email"];
+            $user_id = $row["user_id"];
+            // we check if email notification are enabled for each user
+            if (get_user_email_notification($user_id)) {
+                //and add user to recipients
+                array_push($recipients, $emailTo);
+            }
+        }
+        if(count($recipients)>0)
+        {
+            $emailsubject = "Test subject";
+            $emailbody = "Test body";
+            $emailcontent = "Test content";
+            
+            //Notify course users for new bbb session
+            send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+        }
+    }
+}
+
 //form to edit session data
 function edit_bbb_session($session_id) {
     global $tool_content, $m, $langAdd, $course_code;
@@ -230,7 +272,7 @@ function edit_bbb_session($session_id) {
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 
     $tool_content .= "
-                    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' onsubmit='return checkrequired(this, \"title\");'>
+                    <form action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post' onsubmit='return checkrequired(this, \"title\");'>
                     <fieldset>
                     <legend>$langNewBBBSessionInfo</legend>
                     <table class='tbl' width='100%'>
@@ -281,7 +323,7 @@ function edit_bbb_session($session_id) {
                     </tr>
                     <tr>
                       <th>&nbsp;</th>
-                      <td class='right'><input type='submit' name='new_assign' value='$langAdd' /></td>
+                      <td class='right'><input type='submit' name='update_bbb_session' value='$langAdd' /></td>
                     </tr>
                     </table>
                     </fieldset>
