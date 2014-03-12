@@ -118,7 +118,7 @@ function new_bbb_session() {
     global $langBack;
     global $langBBBNotifyUsers;
 
-    $start_session = jscal_html('SessionStart');
+    $start_session = jscal_html('start_session');
 
     $textarea = rich_text_editor('desc', 4, 20, '');
 
@@ -149,9 +149,9 @@ function new_bbb_session() {
         </tr>
         <tr>
         <th valign='top'>$langNewBBBSessionStatus:</th>
-            <td><input type='radio' id='user_button' name='status' value='1' />
+            <td><input type='radio' id='user_button' name='status' checked='true' value='1' />
             <label for='user_button'>$langNewBBBSessionActive</label><br />
-            <input type='radio' id='group_button' name='status' checked='true' value='0' />
+            <input type='radio' id='group_button' name='status' value='0' />
             <label for='group_button'>$langNewBBBSessionInActive</label></td>
         </th>
         </tr>
@@ -225,7 +225,7 @@ function edit_bbb_session($session_id) {
     $type = ($row['5'] == 1 ? 1 : 0);
     $status = ($row['6'] == 1 ? 1 : 0);
 
-    $start_session = jscal_html('SessionStart',$row['start_date']);
+    $start_session = jscal_html('start_session',$row['start_date']);
 
     $textarea = rich_text_editor('desc', 4, 20, $row['description']);
 
