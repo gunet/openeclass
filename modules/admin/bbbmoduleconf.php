@@ -73,8 +73,8 @@ if (isset($_GET['add_server']))
     $tool_content .=  $langAddBBBServer;
     $tool_content .='</legend>
     <table width="100%" align="left" class="tbl">';
-    $tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
-    <td class="smaller"><input class="FormData_InputText" type="text" name="id_form" />&nbsp;(*)</td></tr>';
+    //$tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
+    //<td class="smaller"><input class="FormData_InputText" type="text" name="id_form" />&nbsp;(*)</td></tr>';
     $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form"  />&nbsp;(*)</td></tr>';
     $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
@@ -88,9 +88,9 @@ if (isset($_GET['add_server']))
     $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" />&nbsp;(*)</td></tr>';
     $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
-            <td><input type='radio' id='recorings_off' name='type' checked='true' value='no' />
+            <td><input type='radio' id='recorings_off' name='enable_recordings' checked='true' value='no' />
             <label for='recorings_off'>" . $m['no'] . "</label><br />
-            <input type='radio' id='recorings_on' name='type' value='yes' />
+            <input type='radio' id='recorings_on' name='enable_recordings' value='yes' />
             <label for='recorings_on'>" . $m['yes'] . "</label></td>
         </th>";
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
@@ -115,7 +115,8 @@ else if (isset($_POST['submit'])) {
     $api_url = $_POST['api_url_form'];
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
-    
+    $enable_recordings =  $_POST['enable_recordings'] ;
+
     if(isset($_POST['id_form'])) {
         $id = $_POST['id_form'] ;
         db_query("UPDATE bbb_servers SET hostname = " . quote($hostname)
@@ -124,23 +125,25 @@ else if (isset($_POST['submit'])) {
             . ", api_url = ". quote($api_url).""
             . ", max_rooms =". quote($max_rooms) .""
             . ", max_users =". quote($max_users) .""
+            . ", enable_recordings =". quote($enable_recordings) .""
             . " WHERE id =".quote($id)."");
     }
     else
     {
-        db_query("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users) VALUES"
+        db_query("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings) VALUES"
                 . "(".quote($hostname).""
                 . ",".quote($ip).""
                 . ",".quote($key).""
                 . ",".quote($api_url).""
                 . ",".quote($max_rooms).""
-                . ",".quote($max_users).")");
+                . ",".quote($max_users).""
+                . ",".quote($enable_recordings).")");
         
         
     }
     
     #register_posted_variables($config_vars, 'all', 'intval');
-    $_SESSION['theme'] = $theme = $available_themes[$theme];
+    //$_SESSION['theme'] = $theme = $available_themes[$theme];
 
     // Display result message
     $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
@@ -182,8 +185,7 @@ if (isset($_GET['edit_server'])) {
     <table width="100%" align="left" class="tbl">';
         $sql = db_query("SELECT * FROM bbb_servers WHERE id=$bbb_server");
         while ($server = mysql_fetch_array($sql)) {
-            $tool_content .= '<tr><th class="left" width="100"><b>Server id:</b></th>
-            <td class="smaller"><input class="FormData_InputText" type="text" name="id_form" value="'.$bbb_server.'" />&nbsp;(*)</td></tr>';
+            $tool_content .= '<input class="FormData_InputText" type="hidden" name="id_form" value="'.$bbb_server.'" />';
             $tool_content .= '<tr><th class="left" width="100"><b>Hostname:</b></th>
             <td class="smaller"><input class="FormData_InputText" type="text" name="hostname_form" value="'.q($server['hostname']).'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>IP:</b></th>
@@ -196,6 +198,22 @@ if (isset($_GET['edit_server'])) {
             <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form" value="'.q($server['max_rooms']).'" />&nbsp;(*)</td></tr>';
             $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
             <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" value="'.q($server['max_users']).'" />&nbsp;(*)</td></tr>';
+            $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
+                <td><input type='radio' id='recorings_off' name='enable_recordings' ";
+            if($server['enable_recordings']=="no")
+            {
+                $tool_content .= " checked='true' ";
+            }
+            $tool_content .=" value='no'/>
+                <label for='recorings_off'>" . $m['no'] . "</label><br />
+                <input type='radio' id='recorings_on' name='enable_recordings' ";
+                        if($server['enable_recordings']=="yes")
+            {
+                $tool_content .= " checked='true' ";
+            }
+            $tool_content .= " value='yes' />
+                <label for='recorings_on'>" . $m['yes'] . "</label></td>
+            </th>";
             $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
         }
             $tool_content .= '</fieldset></form>';    
