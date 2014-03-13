@@ -70,7 +70,7 @@ if ($is_editor) {
     elseif(isset($_POST['update_bbb_session']))
     {
         //print_r($_GET);
-        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'));
+        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before']);
     }
     elseif(isset($_GET['choice']))
     {
@@ -99,7 +99,7 @@ if ($is_editor) {
     }elseif(isset($_POST['new_bbb_session']))
     {
         //print_r($_POST['notifyUsers']);
-        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers']);
+        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers'],$_POST['minutes_before']);
     }
     else
     {
@@ -114,7 +114,7 @@ else
 // create form for new session scheduling
 function new_bbb_session() {
     global $tool_content, $m, $langAdd, $course_code;
-    global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive, $langNewBBBSessionStatus ;
+    global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive, $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore ;
     global $desc;
     global $start_session;
     global $langBack;
@@ -158,7 +158,17 @@ function new_bbb_session() {
         </th>
         </tr>
         <tr>
-                <th colspan='2' valign='top'>
+            <th>$langBBBSessionAvailable:</th>
+                <td>
+                    <select name='minutes_before'>
+                        <option value='15'' selected='selected'>15</option>
+                        <option value='30'>30</option>
+                        <option value='10'>10</option>
+                    </select> $langBBBMinutesBefore
+                </td>
+            </tr>
+        <tr>
+        <th colspan='2' valign='top'>
                 <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
             </td>
         </tr>        
@@ -174,12 +184,12 @@ function new_bbb_session() {
 }
 
 // insert scheduled session data into database
-function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers)
+function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before)
 {
     global $tool_content, $langBBBAddSuccessful;
     
-    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw)"
-            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."')");
+    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw,unlock_interval)"
+            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."')");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -212,13 +222,13 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     }
 }
 
-// insert scheduled session data into database
-function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers)
+// update scheduled session data into database
+function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before)
 {
     global $tool_content, $langBBBAddSuccessful;
     
     $query = db_query("UPDATE bbb_session SET title='".q($title)."',description='".$desc."',"
-            . "start_date='".$start_session."',public='$type',active='$status' WHERE id='$session_id'");
+            . "start_date='".$start_session."',public='$type',active='$status',unlock_interval='$minutes_before' WHERE id='$session_id'");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -254,7 +264,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
 //form to edit session data
 function edit_bbb_session($session_id) {
     global $tool_content, $m, $langAdd, $course_code;
-    global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive;
+    global $langNewBBBSessionInfo, $langNewBBBSessionDesc, $langNewBBBSessionStart, $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive,$langBBBSessionAvailable,$langBBBMinutesBefore;
     global $desc;
     global $start_session;
     global $langBack;
@@ -317,6 +327,19 @@ function edit_bbb_session($session_id) {
                     </td>
                     </tr>
                     <tr>
+                      <th>$langBBBSessionAvailable:</th>
+                      <td>
+                        <select name='minutes_before'>
+                            <option value='15''"; if($row['unlock_interval']=='15') { $tool_content .="selected='selected'"; }
+                            $tool_content .=">15</option>
+                            <option value='30'"; if($row['unlock_interval']=='30') { $tool_content .="selected='selected'"; }
+                            $tool_content .=">30</option>
+                            <option value='10'"; if($row['unlock_interval']=='10') { $tool_content .="selected='selected'"; }
+                            $tool_content .=">10</option>
+                        </select> $langBBBMinutesBefore
+                        </td>
+                    </tr>
+                    <tr>
                     <th colspan='2' valign='top'>
                         <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
                     </td>
@@ -325,6 +348,7 @@ function edit_bbb_session($session_id) {
                       <th>&nbsp;</th>
                       <td class='right'><input type='submit' name='update_bbb_session' value='$langAdd' /></td>
                     </tr>
+
                     </table>
                     </fieldset>
                     </form>
