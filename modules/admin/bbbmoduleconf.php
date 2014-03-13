@@ -87,6 +87,12 @@ if (isset($_GET['add_server']))
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_rooms_form"  />&nbsp;(*)</td></tr>';
     $tool_content .= '<tr><th class="left" width="100"><b>Max users:</b></th>
     <td class="smaller"><input class="FormData_InputText" type="text" name="max_users_form" />&nbsp;(*)</td></tr>';
+    $tool_content .= "<tr><th class='left' width='100'><b>$langBBBEnableRecordings</b></th>
+            <td><input type='radio' id='recorings_off' name='type' checked='true' value='no' />
+            <label for='recorings_off'>" . $m['no'] . "</label><br />
+            <input type='radio' id='recorings_on' name='type' value='yes' />
+            <label for='recorings_on'>" . $m['yes'] . "</label></td>
+        </th>";
     $tool_content .= '</table><div align="right"><input type="submit" name="submit" value="'.$langAddModify.'"></div>';
 
     $tool_content .= '</fieldset></form>';    
@@ -135,7 +141,6 @@ else if (isset($_POST['submit'])) {
     
     #register_posted_variables($config_vars, 'all', 'intval');
     $_SESSION['theme'] = $theme = $available_themes[$theme];
-
 
     // Display result message
     $tool_content .= "<p class='success'>$langFileUpdatedSuccess</p>";
