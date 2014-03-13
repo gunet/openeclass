@@ -417,7 +417,7 @@ function bbb_session_details() {
                     <td align='center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
-
+                    {
                         $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
                     } else {
                         $tool_content .= "$title";
