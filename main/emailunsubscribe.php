@@ -20,7 +20,7 @@
 
 $path2add = 2;
 $require_login = true;
-$require_valid_uid = TRUE;
+
 include '../include/baseTheme.php';
 load_js('jquery');
 load_js('tools.js');
@@ -28,7 +28,14 @@ load_js('tools.js');
 $nameTools = $langEmailUnsubscribe;
 $navigation[]= array("url"=>"profile.php", "name"=> $langModifyProfile);
 
-check_uid();
+// get user registered courses
+$q = db_query("SELECT statut, cours_id FROM cours_user                 
+                    WHERE user_id = $uid ORDER BY statut");
+while ($r = mysql_fetch_array($q)) {
+    $code = course_id_to_code($r['cours_id']);
+    $status = $r['statut'];
+    $_SESSION['course_status'][$code] = $status;
+}
 
 if (isset($_POST['submit'])) {     
         if (isset($_POST['unsub'])) {
@@ -46,7 +53,7 @@ if (isset($_POST['submit'])) {
                 $course_title = course_id_to_title($cid);        
                 $tool_content .= "<div class='success'>".q(sprintf($course_title, $langEmailUnsubSuccess))."</div>";
         } else { // change email subscription for all courses
-                foreach ($_SESSION['status'] as $course_code => $c_value) {
+                foreach ($_SESSION['course_status'] as $course_code => $c_value) {
                         if (@array_key_exists($course_code, $_POST['c_unsub'])) {                        
                                 db_query("UPDATE cours_user SET receive_mail = 1
                                 WHERE user_id = $uid AND cours_id = ". course_code_to_id($course_code));
@@ -83,7 +90,7 @@ if (isset($_POST['submit'])) {
                 $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;". q($course_title) ."<br />";
                 $tool_content .= "<input type='hidden' name='cid' value='$cid'>";
         } else { // displays all courses
-                foreach ($_SESSION['status'] as $course_code => $status) {
+                foreach ($_SESSION['course_status'] as $course_code => $status) {
                         $course_title = course_code_to_title($course_code);
                         $cid = course_code_to_id($course_code);        
                         $selected = get_user_email_notification($uid, $cid) ? 'checked': '';        

@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -348,7 +348,7 @@ if ($is_editor or (isset($_SESSION['saved_editor']) and $_SESSION['saved_editor'
 $emailnotification = '';
 if ($uid and $statut != 10 and !get_user_email_notification($uid, $cours_id)) {
         $emailnotification = "<div class='alert1'>$langNoUserEmailNotification 
-        (<a href='{$urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langModify</a>)</div>";
+        (<a href='{$urlServer}main/emailunsubscribe.php?cid=$cours_id'>$langModify</a>)</div>";
 } 
 
 $tool_content .= "
