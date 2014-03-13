@@ -267,12 +267,118 @@ if (!isset($_POST['create_course'])) {
             <input type='submit' name='create_course' value='".q($langCourseCreate)."' />
           </td>
         </tr>
-        </table>";     
-        $tool_content .= "<div class='right smaller'>$langFieldsOptionalNote</div>";
-        $tool_content .= "</fieldset>";
-        $tool_content .= "</form>";            
-    
-} else  { // create the course and the course database    
+        <tr>
+                <td>$langCourseKeywords&nbsp;<br />
+                <input type='text' name='course_keywords' size='65' value='" . q($course_keywords) . "' />
+                </td>
+        </tr>
+        <tr>
+                <td class='right'><input type='submit' name='back1' value='&laquo; $langPreviousStep ' />&nbsp;<input type='submit' name='create3' value='$langNextStep &raquo;' /></td>
+        </tr>
+        </table>
+        </fieldset>
+        <div align='right' class='smaller'>$langFieldsOptionalNote</div>
+        <br />";
+} elseif (isset($_POST['create3']) or isset($_POST['back2'])) {
+    $nameTools = $langCreateCourse . " (" . $langCreateCourseStep . " 3 " . $langCreateCourseStep2 . " 3 )";
+    $tool_content .= "<fieldset><legend>$langCreateCourseStep3Title</legend>
+                <div style='padding: 3px;'><em>$langOptPassword</em> 
+                <input id='coursepassword' type='text' name='password' value='" . q($password) . "' class='FormData_InputText' id='password' />
+                </div>
+                <table class='tbl' width='100%'>
+                <tr>
+                <td class='sub_title1'>$langAvailableTypes<br></td>
+                </tr>
+                <tr>
+                <td>
+                <table class='tbl' width='100%'>
+                <tr class='smaller'>
+                <th width='130'><img src='$themeimg/lock_open.png' title='" . $m['legopen'] . "' width='16' height='16' /> " . $m['legopen'] . "</th>
+                <td><input id='courseopen' name='formvisible' type='radio' value='2' checked='checked' /></td>
+                <td>$langPublic</td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src='$themeimg/lock_registration.png' title='" . $m['legrestricted'] . "' width='16' height='16' /> " . $m['legrestricted'] . "</th>
+                <td valign='top'><input id='coursewithregistration' name='formvisible' type='radio' value='1' /></td>
+                <td>
+                $langPrivOpen<br />                
+                </td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src='$themeimg/lock_closed.png' title='" . $m['legclosed'] . "' width=\"16\" height='16' /> " . $m['legclosed'] . "</th>
+                <td valign='top'><input id='courseclose' name='formvisible' type='radio' value='0' /></td>
+                <td>$langPrivate</td>
+                </tr>
+                <tr class='smaller'>
+                <th valign='top'><img src='$themeimg/lock_inactive.png' title='" . $m['linactive'] . "' width='16' height='16' /> " . $m['linactive'] . "</th>
+                <td valign='top'><input id='courseinactive' name='formvisible' type='radio' value='3' /></td>
+                <td>$langCourseInactive</td>
+                </tr>
+                </table>
+                <br />
+                </td>
+        </tr>        
+        <tr>
+                <td class='sub_title1'>$langSubsystems</td>
+        </tr>
+        <tr>
+        <td>
+        <table class='tbl smaller' width='100%'>
+        <tr>";
+    $tool_content .= create_td($modules[MODULE_ID_AGENDA], MODULE_ID_AGENDA, 1);
+    $tool_content .= "<th width='2' >&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_DROPBOX], MODULE_ID_DROPBOX, 0);
+    $tool_content .= "</tr><tr class='even'>";
+    $tool_content .= create_td($modules[MODULE_ID_LINKS], MODULE_ID_LINKS, 1);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_GROUPS], MODULE_ID_GROUPS, 0);
+    $tool_content .= "</tr><tr>";
+    $tool_content .= create_td($modules[MODULE_ID_DOCS], MODULE_ID_DOCS, 1);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_CHAT], MODULE_ID_CHAT, 0);
+    $tool_content .= "</tr><tr class='even'>";
+    $tool_content .= create_td($modules[MODULE_ID_VIDEO], MODULE_ID_VIDEO, 0);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_DESCRIPTION], MODULE_ID_DESCRIPTION, 1);
+    $tool_content .= "</tr><tr>";
+    $tool_content .= create_td($modules[MODULE_ID_ASSIGN], MODULE_ID_ASSIGN, 0);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_QUESTIONNAIRE], MODULE_ID_QUESTIONNAIRE, 0);
+    $tool_content .= "</tr><tr class='even'>";
+    $tool_content .= create_td($modules[MODULE_ID_ANNOUNCE], MODULE_ID_ANNOUNCE, 1);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_LP], MODULE_ID_LP, 0);
+    $tool_content .= "</tr><tr>";
+    $tool_content .= create_td($modules[MODULE_ID_FORUM], MODULE_ID_FORUM, 0);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_WIKI], MODULE_ID_WIKI, 0);
+    $tool_content .= "</tr><tr class='even'>";
+    $tool_content .= create_td($modules[MODULE_ID_EXERCISE], MODULE_ID_EXERCISE, 0);
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_GLOSSARY], MODULE_ID_GLOSSARY, 1);
+    $tool_content .= "</tr><tr>";
+    $tool_content .= create_td($modules[MODULE_ID_EBOOK], MODULE_ID_EBOOK, 0);    
+    $tool_content .= "<th>&nbsp;</th>";
+    $tool_content .= create_td($modules[MODULE_ID_BBB], MODULE_ID_BBB, 0);    
+    $tool_content .= "</tr>
+                </table>
+                <br />
+                </td>
+        </tr>
+        <tr>
+                <td class='right'>
+                <input type='submit' name='back2' value='&laquo; $langPreviousStep ' />&nbsp;
+                <input type='submit' name='create_course' value='$langFinalize' />
+                </td>
+        </tr>
+        </table>
+        </fieldset>
+        <div class='right smaller'>$langFieldsOptionalNote</div>
+        <br />";
+} // end of create3
+// create the course and the course database
+if (isset($_POST['create_course'])) {
+
     // validation in case it skipped JS validation
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
@@ -400,3 +506,54 @@ if (!isset($_POST['create_course'])) {
                                             'visible' => $_POST['formvisible']));
 } // end of submit
 draw($tool_content, 1, null, $head_content);
+
+/**
+ * @brief create entries in table `module`
+ * @param type $cid
+ * @param type $sbsystems
+ */
+function create_modules($cid, $sbsystems) {
+    
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_AGENDA . ", " . $sbsystems[MODULE_ID_AGENDA] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_LINKS . ", " . $sbsystems[MODULE_ID_LINKS] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_DOCS . ", " . $sbsystems[MODULE_ID_DOCS] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_VIDEO . ", " . $sbsystems[MODULE_ID_VIDEO] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_ASSIGN . ", " . $sbsystems[MODULE_ID_ASSIGN] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_ANNOUNCE . ", " . $sbsystems[MODULE_ID_ANNOUNCE] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_FORUM . ", " . $sbsystems[MODULE_ID_FORUM] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_EXERCISE . ", " . $sbsystems[MODULE_ID_EXERCISE] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_GROUPS . ", " . $sbsystems[MODULE_ID_GROUPS] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_DROPBOX . ", " . $sbsystems[MODULE_ID_DROPBOX] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_GLOSSARY . ", " . $sbsystems[MODULE_ID_GLOSSARY] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_EBOOK . ", " . $sbsystems[MODULE_ID_EBOOK] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_CHAT . ", " . $sbsystems[MODULE_ID_CHAT] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_DESCRIPTION . ", " . $sbsystems[MODULE_ID_DESCRIPTION] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_QUESTIONNAIRE . ", " . $sbsystems[MODULE_ID_QUESTIONNAIRE] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_LP . ", " . $sbsystems[MODULE_ID_LP] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_WIKI . ", " . $sbsystems[MODULE_ID_WIKI] . ", $cid)");
+    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES (" . MODULE_ID_BBB . ", " . $sbsystems[MODULE_ID_BBB] . ", $cid)");
+
+}
+
+/**
+ * @brief create <td>....</td> for each module
+ * @global type $themeimg
+ * @param type $m
+ * @param type $value
+ * @param type $selected
+ * @return type
+ */
+function create_td($m, $value, $selected) {
+
+    global $themeimg;
+
+    $checkbox = '';
+    if ($selected) {
+        $checkbox = "checked='checked'";
+    }
+    $td = "<td width='10' ><img src='$themeimg/$m[image]_on.png' alt='' height='16' width='16' /></td>
+        <td width='150'>$m[title]</td>
+        <td width='30' ><input name='subsystems[]' type='checkbox' value='$value' $checkbox /></td>";
+
+    return $td;
+}

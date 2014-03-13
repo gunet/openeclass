@@ -353,7 +353,8 @@ $modules = array(
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
-    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes')
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes'),
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -442,6 +443,7 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
                               course_id = ? AND
                                 module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                   " . MODULE_ID_ASSIGN . ",
+                                                  " . MODULE_ID_BBB . ",
                                                   " . MODULE_ID_DROPBOX . ",
                                                   " . MODULE_ID_QUESTIONNAIRE . ",
                                                   " . MODULE_ID_FORUM . ",

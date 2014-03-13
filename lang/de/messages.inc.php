@@ -2620,6 +2620,7 @@ $langInsertEBook = "ebook";
 $langAddToCourseHome = "Add to course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
+$langBBBConfig = 'BigBlueButton Config';
 $langGlossaryToCsv = "Terms in csv form";
 $langSections = 'Sections';
 $langJQSelectNum = 'Selected # from #';

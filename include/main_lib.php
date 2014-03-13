@@ -80,10 +80,11 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
+define('MODULE_ID_BBB', 30);
 
 // user modules
-define('MODULE_ID_NOTES', 30);
-define('MODULE_ID_PERSONALCALENDAR',31);
+define('MODULE_ID_NOTES', 31);
+define('MODULE_ID_PERSONALCALENDAR',32);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
