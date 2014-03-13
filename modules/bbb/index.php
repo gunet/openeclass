@@ -415,8 +415,9 @@ function bbb_session_details() {
                 {
                     $tool_content .= "
                     <td align='center'>";
-                    //if ($row['active']=='1' && TIME DIFF TO ALLOW JOIN <= UNLOCK_INTERVAL {
-                     if ($row['active']=='1' && bbb_session_running($meeting_id) == 'true') {
+                    // Join url will be active only X minutes before scheduled time and if session is visible for users
+                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
+
                         $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
                     } else {
                         $tool_content .= "$title";
@@ -425,8 +426,9 @@ function bbb_session_details() {
                     <td align='center'>$start_date</tdh>
                     <td align='center'>$type</td>
                     <td class='center'>";
-                    //if ($row['active']=='1' && TIME DIFF TO ALLOW JOIN <= UNLOCK_INTERVAL {
-                    if ($row['active']=='1' /* && bbb_session_running($meeting_id) == 'true' */)  {
+                    // Join url will be active only X minutes before scheduled time and if session is visible for users
+                    if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
+                        {
                         $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp' target='_blank'>$langBBBSessionJoin</a>";
 
                     } else {
@@ -670,5 +672,10 @@ function jscal_html($name, $u_date = FALSE) {
     return $cal;
 }
 
+//Function to calculate date diff in minutes in order to enable join link
+function date_diff_in_minutes($start_date,$current_date)
+{
+    return round((strtotime($start_date) - strtotime($current_date)) /60);
+}
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);
