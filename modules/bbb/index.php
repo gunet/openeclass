@@ -336,7 +336,7 @@ function edit_bbb_session($session_id) {
 // Print a box with the details of a bbb session
 function bbb_session_details() {
     global $course_id, $tool_content, $m, $is_editor, $langActions, $langNewBBBSessionStart, $langNewBBBSessionType;
-    global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin;
+    global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin, $langNewBBBSessionDesc;
     global $course_code;
     global $themeimg;
     global $langNote, $langBBBNoteEnableJoin, $langBBBNoteEnableJoinEditor;
@@ -349,7 +349,8 @@ function bbb_session_details() {
     if (mysql_num_rows($result)) {
                 $tool_content .= "<table class='tbl_alt' width='100%'>
                                   <tr>
-                                      <th colspan='2'>$m[title]</th>
+                                      <td class='center'>$m[title]</td>
+                                      <td class='center'>$langNewBBBSessionDesc</td>
                                       <td class='center'>$langNewBBBSessionStart</td>
                                       <td class='center'>$langNewBBBSessionType</td>
                                       <th class='center' colspan='3'>$langActions</th>
@@ -368,8 +369,9 @@ function bbb_session_details() {
 
                 if ($is_editor) {
                     $tool_content .= "
-                        <th colspan='2'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></th>
-                        <td align='center'>$start_date</tdh>
+                        <td align='center'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'>$title</a></td>
+                        <td align='center'>".$row['description']."</td>
+                        <td align='center'>$start_date</td>
                         <td align='center'>$type</td>
                         <td class='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
                         <img src='$themeimg/edit.png' alt='$m[edit]' />
@@ -387,7 +389,13 @@ function bbb_session_details() {
                 } else
                 {
                     $tool_content .= "
-                    <th colspan='2'>$title</th>
+                    <td align='center'>";
+                     if ($row['active']=='1' && bbb_session_running($meeting_id) == 'true') {
+                        $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
+                    } else {
+                        $tool_content .= "$title";
+                    }
+                    $tool_content .="<td align='center'>".$row['description']."</td>
                     <td align='center'>$start_date</tdh>
                     <td align='center'>$type</td>
                     <td class='center'>";
