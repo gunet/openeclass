@@ -62,7 +62,7 @@ if ($is_editor) {
             <li><a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&add=1\">$langNewBBBSession</a></li>
           </ul>
         </div>";
-
+}
     //print_r($_GET);
     if (isset($_GET['add'])) {
         new_bbb_session();
@@ -93,7 +93,13 @@ if ($is_editor) {
                 {
                     create_meeting($_GET['title'],$_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw']);
                 }
-                header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                if(isset($_GET['mod_pw']))
+                {
+                    header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                }else
+                {
+                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                }
                 break;
         }
     }elseif(isset($_POST['new_bbb_session']))
@@ -105,11 +111,7 @@ if ($is_editor) {
     {
         bbb_session_details();
     }
-}
-else
-{
-    bbb_session_details();
-}
+
 
 // create form for new session scheduling
 function new_bbb_session() {
@@ -409,11 +411,11 @@ function bbb_session_details() {
                             $activate_temp = htmlspecialchars($m['activate']);
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_enable&amp;id=$row[id]'><img src='$themeimg/invisible.png' title='$activate_temp' /></a>";
                         }
-                        //$tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp;mod_pw=$mod_pw' target='_blank'><img src='$themeimg/bbb.png' title='$langBBBSessionJoin' /></a>";
                 } else
                 {
                     $tool_content .= "
                     <td align='center'>";
+                    //if ($row['active']=='1' && TIME DIFF TO ALLOW JOIN <= UNLOCK_INTERVAL {
                      if ($row['active']=='1' && bbb_session_running($meeting_id) == 'true') {
                         $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
                     } else {
@@ -423,8 +425,10 @@ function bbb_session_details() {
                     <td align='center'>$start_date</tdh>
                     <td align='center'>$type</td>
                     <td class='center'>";
-                    if ($row['active']=='1' && bbb_session_running($meeting_id) == 'true') {
-                        $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
+                    //if ($row['active']=='1' && TIME DIFF TO ALLOW JOIN <= UNLOCK_INTERVAL {
+                    if ($row['active']=='1' /* && bbb_session_running($meeting_id) == 'true' */)  {
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp' target='_blank'>$langBBBSessionJoin</a>";
+
                     } else {
                         $tool_content .= "-";
                     }
