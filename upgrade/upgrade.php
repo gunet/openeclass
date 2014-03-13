@@ -1172,7 +1172,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
-
+                    db_query("CREATE TABLE IF NOT EXISTS `note` (
+                         `id` int(11) NOT NULL auto_increment,
+                         `user_id` int(11) NOT NULL,
+                         `title` varchar(300),
+                         `content` text NOT NULL,
+                         `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                         `order` mediumint(11) NOT NULL default 0,
+                         `reference_obj_module` mediumint(11) default NULL,
+                         `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+                         `reference_obj_id` int(11) default NULL,
+                         `reference_obj_course` int(11) default NULL,
+                        PRIMARY KEY  (`id`))");
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;
@@ -1565,6 +1576,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         db_query('CREATE INDEX `cid` ON videolink (course_id)');
                 mysql_index_exists('log', 'cmid') or
                         db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+                mysql_index_exists('note', 'user_notes') or
+                        db_query('CREATE INDEX `user_notes` ON note (user_id)');
 
                 db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,

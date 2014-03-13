@@ -3017,3 +3017,27 @@ $langEnableLoginFailCheck = "Enable check for Login Failures";
 $langLoginFailThreshold = "Allowed Login Failures";
 $langLoginFailDenyInterval = "Blockade Interval";
 $langLoginFailForgiveInterval = "Quarantine Interval";
+
+/* * ******************************************
+  Notes
+ * ***************************************** */
+$langAddNote = "New note";
+$langDocument = "Document";
+$langEmptyNoteTitle = "New note";
+$langEvent = "Event";
+$langLastUpdate = "Last update";
+$langModifNote = "Modify note";
+$langNoNote = "You haven't any notes.";
+$langNoteAdd = "Note added.";
+$langNoteBody = "Note body";
+$langNoteDel = "Note deleted.";
+$langNoteModified = "Note modified.";
+$langNoteModify = "Note modified.";
+$langNoteNoTitle = "Empty title";
+$langNotes = "Notes";
+$langNotesDeleted = "Notes deleted.";
+$langNoteTitle = "Title";
+$langPersonalEvent = "Personal event";
+$langSelectFromMenu = "Select...";
+$langSureToDelNote = "Are you sure about deleting this note?";
+$langSureToDelNoteAll = "Are you sure about deleting all your notes?";

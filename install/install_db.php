@@ -1123,6 +1123,19 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY  (`id`))");
 
+db_query("CREATE TABLE IF NOT EXISTS `note` (
+        `id` int(11) NOT NULL auto_increment,
+        `user_id` int(11) NOT NULL,
+        `title` varchar(300),
+        `content` text NOT NULL,
+        `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+        `order` mediumint(11) NOT NULL default 0,
+        `reference_obj_module` mediumint(11) default NULL,
+        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+        `reference_obj_id` int(11) default NULL,
+        `reference_obj_course` int(11) default NULL,
+        PRIMARY KEY  (`id`))");
+
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
@@ -1133,3 +1146,4 @@ db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
 db_query('CREATE INDEX `cid` ON video (course_id)');
 db_query('CREATE INDEX `cid` ON videolink (course_id)');
 db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+db_query('CREATE INDEX `user_notes` ON note (user_id)');

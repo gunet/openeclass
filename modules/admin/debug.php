@@ -34,6 +34,8 @@ class Debug {
     }
 
     public static function message($message, $level = null) {
+        if ($level >= Debug::ERROR) 
+            error_log($message);
         if (is_null($level))
             $level = Debug::$default_level;
         if ($level >= Debug::$level) {

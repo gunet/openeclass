@@ -5,3 +5,8 @@ syntax: regexp
 ^html/
 ^nbproject/private/
 ^\.htaccess
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$

@@ -81,6 +81,10 @@ define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
 
+// user modules
+define('MODULE_ID_NOTES', 30);
+define('MODULE_ID_PERSONALCALENDAR',31);
+
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
 define('MULTIPLE_ANSWER', 2);
@@ -606,6 +610,26 @@ function check_guest() {
         $g = mysql_fetch_row($res);
 
         if ($g[0] == USER_GUEST) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+// ------------------------------------------
+// function to check if user is a guest user
+// ------------------------------------------
+
+function check_teacher() {
+    global $uid;
+
+    if (isset($uid) and $uid) {
+        $res = db_query("SELECT status FROM user WHERE id = $uid");
+        $g = mysql_fetch_row($res);
+
+        if ($g[0] == USER_TEACHER) {
             return true;
         } else {
             return false;
@@ -1532,6 +1556,7 @@ function delete_course($cid) {
     db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
     db_query("DELETE FROM exercise WHERE course_id = $cid");
     db_query("DELETE FROM course_module WHERE course_id = $cid");
+    db_query("DELETE FROM note WHERE reference_obj_course = $cid");
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {
@@ -1586,6 +1611,7 @@ function deleteUser($id) {
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
             Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            Database::get()->query("DELETE FROM note WHERE user_id = ?" , $u);
             return true;
         } else {
             return false;
