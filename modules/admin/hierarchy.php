@@ -81,21 +81,21 @@ $tool_content .= "
 // Display all available nodes
 if (!isset($_GET['action'])) {
     // Count available nodes
-    $a = mysql_fetch_array(db_query("SELECT COUNT(*) FROM $TBL_HIERARCHY"));
+    $nodesCount = Database::get()->querySingle("SELECT COUNT(*) as count from hierarchy")->count;
 
-    $query = "SELECT max(depth) FROM (SELECT  COUNT(parent.id) - 1 AS depth
+    $query = "SELECT max(depth) as maxdepth FROM (SELECT  COUNT(parent.id) - 1 AS depth
                 FROM `hierarchy` AS node, `hierarchy` AS parent
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt
                     GROUP BY node.id
                     ORDER BY node.lft) AS hierarchydepth";
-    $maxdepth = mysql_fetch_array(db_query($query));
+    $maxdepth = Database::get()->querySingle($query)->maxdepth;
 
     // Construct a table
     $tool_content .= "
     <table width='100%' class='tbl_border'>
     <tr>
-    <td colspan='" . ($maxdepth[0] + 4) . "' class='right'>
-            $langManyExist: <b>$a[0]</b> $langHierarchyNodes
+    <td colspan='" . ($maxdepth + 4) . "' class='right'>
+            $langManyExist: <b>$nodesCount</b> $langHierarchyNodes
     </td>
     </tr>";
 
@@ -181,7 +181,7 @@ function customMenu(node) {
 </script>
 hContent;
 
-    $tool_content .= "<tr><td colspan='" . ($maxdepth[0] + 4) . "'><div id='js-tree'></div></td></tr>";
+    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr>";
 
     // Close table correctly
     $tool_content .= "</table>\n";
@@ -193,7 +193,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $code = $_POST['code'];
 
         $names = array();
-        foreach ($active_ui_languages as $key => $langcode) {
+        foreach ($session->active_ui_languages as $key => $langcode) {
             $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
             if (!empty($n)) {
                 $names[$langcode] = $n;
@@ -208,13 +208,12 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         // Check for empty fields
         if (empty($names)) {
             $tool_content .= "<p class='caution'>" . $langEmptyNodeName . "<br />";
-            $tool_content .= "
-            <a href=\"$_SERVER[PHP_SELF]?a=1\">" . $langReturnToAddNode . "</a></p>";
+            $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?a=1\">" . $langReturnToAddNode . "</a></p>";
         }
         // Check for greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
             $tool_content .= "<p class='caution'>" . $langGreekCode . "<br />";
-            $tool_content .= "<a href=\"$_SERVER[PHP_SELF]?a=1\">" . $langReturnToAddNode . "</a></p>";
+            $tool_content .= "<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?a=1\">" . $langReturnToAddNode . "</a></p>";
         } else {
             // OK Create the new node
             validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
@@ -224,7 +223,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     } else {
         // Display form for new node information
         $tool_content .= "
-    <form method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "?action=add\" onsubmit=\"return validateNodePickerForm();\">
+    <form method=\"post\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?action=add\" onsubmit=\"return validateNodePickerForm();\">
     <fieldset>
       <legend>$langNodeAdd</legend>
       <table width='100%' class='tbl'>
@@ -236,7 +235,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         <th class='left'>" . $langNodeName . ":</th>";
 
         $i = 0;
-        foreach ($active_ui_languages as $key => $langcode) {
+        foreach ($session->active_ui_languages as $key => $langcode) {
             $tdpre = ($i > 0) ? "<tr><td></td>" : '';
             $tool_content .= $tdpre . "<td><input type='text' name='name-" . $langcode . "' /> <i>" . $langFaculte2 . " (" . $langNameOfLang[langcode_to_name($langcode)] . ")</i></td></tr>";
             $i++;
@@ -271,7 +270,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     </fieldset>
     </form>";
     }
-    $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $tool_content .= "<p align='right'><a href='" . $_SERVER['SCRIPT_NAME'] . "'>" . $langBack . "</a></p>";
 }
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
@@ -279,18 +278,18 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
     validateNode($id, isDepartmentAdmin());
 
     // locate the lft and rgt of the node we want to delete
-    $node = mysql_fetch_assoc(db_query("SELECT lft, rgt from $TBL_HIERARCHY WHERE id = $id"));
+    $node = Database::get()->querySingle("SELECT lft, rgt from hierarchy WHERE id = ?d", $id);
 
     if ($node !== false) {
 
         // locate the subtree of the node we want to delete. the subtree contains the node itself
-        $subres = db_query("SELECT id FROM $TBL_HIERARCHY WHERE lft BETWEEN " . $node['lft'] . " AND " . $node['rgt']);
+        $subres = Database::get()->queryArray("SELECT id FROM hierarchy WHERE lft BETWEEN ?d AND ?d", intval($node->lft), intval($node->rgt));
         $c = 0;
 
         // for each subtree node, check if it has belonging children (courses, users)
-        while ($subnode = mysql_fetch_assoc($subres)) {
-            $c += mysql_num_rows(db_query("SELECT * FROM $TBL_COURSE_DEPARTMENT WHERE department = " . $subnode['id']));
-            $c += mysql_num_rows(db_query("SELECT * FROM $TBL_USER_DEPARTMENT WHERE department = " . $subnode['id']));
+        foreach ($subres as $subnode) {
+            $c += Database::get()->querySingle("select count(*) as count from course_department where department = ?d", intval($subnode->id))->count;
+            $c += Database::get()->querySingle("select count(*) as count from user_department where department = ?d", intval($subnode->id))->count;
         }
 
         if ($c > 0) {
@@ -304,7 +303,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
         }
     }
 
-    $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $tool_content .= "<p align='right'><a href='" . $_SERVER['SCRIPT_NAME'] . "'>" . $langBack . "</a></p>";
 }
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
@@ -330,7 +329,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
         if (empty($name)) {
             $tool_content .= "<p class='caution'>" . $langEmptyNodeName . "<br />";
-            $tool_content .= "<a href='$_SERVER[PHP_SELF]?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
+            $tool_content .= "<a href='" . $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=$id'>$langReturnToEditNode</a></p>";
         } else {
             // OK Update the node
             validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
@@ -340,35 +339,34 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     } else {
         // Get node information
         $id = intval($_GET['id']);
-        $sql = "SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM " . $TBL_HIERARCHY . " WHERE id = '$id'";
-        $result = db_query($sql);
-        $myrow = mysql_fetch_assoc($result);
-        $parentLft = $tree->getParent($myrow['lft'], $myrow['rgt']);
-        $check_course = ($myrow['allow_course'] == 1) ? " checked=1 " : '';
-        $check_user = ($myrow['allow_user'] == 1) ? " checked=1 " : '';
+        $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
+        $parentLft = $tree->getParent($mynode->lft, $mynode->rgt);
+        $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
+        $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
         // Display form for edit node information
         $tool_content .= "
-       <form method='post' action='$_SERVER[PHP_SELF]?action=edit' onsubmit='return validateNodePickerForm();'>
+       <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
        <fieldset>
        <legend>$langNodeEdit</legend>
        <table width='100%' class='tbl'>
        <tr>
            <th class='left' width='180'>" . $langNodeCode1 . ":</th>
-           <td><input type='text' name='code' value='" . q($myrow['code']) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i></td>
+           <td><input type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i></td>
        </tr>
        <tr>
            <th class='left'>" . $langNodeName . ":</th>";
 
         $is_serialized = false;
-        $names = @unserialize($myrow['name']);
+        $names = @unserialize($mynode->name);
         if ($names !== false)
             $is_serialized = true;
 
         $i = 0;
         foreach ($session->active_ui_languages as $key => $langcode) {
             $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
-            if (!$is_serialized && $key == 0)
-                $n = $myrow['name'];
+            if (!$is_serialized && $key == 0) {
+                $n = $mynode->name;
+            }
 
             $tdpre = ($i > 0) ? "<tr><td></td>" : '';
             $tool_content .= $tdpre . "<td><input type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' /> <i>" . $langFaculte2 . " (" . $langNameOfLang[langcode_to_name($langcode)] . ")</i></td></tr>";
@@ -396,14 +394,14 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
        </tr>
        <tr>
            <th class='left'>" . $langNodeOrderPriority . ":</th>
-           <td><input type='text' name='order_priority' value='" . q($myrow['order_priority']) . "' /> <i>" . $langNodeOrderPriority2 . "</i></td>
+           <td><input type='text' name='order_priority' value='" . q($mynode->order_priority) . "' /> <i>" . $langNodeOrderPriority2 . "</i></td>
        </tr>
        <tr>
            <th>&nbsp;</th>
            <td class='right'><input type='hidden' name='id' value='$id' />
            <input type='hidden' name='parentLft' value='" . $parentLft['lft'] . "'/>
-           <input type='hidden' name='lft' value='" . q($myrow['lft']) . "'/>
-           <input type='hidden' name='rgt' value='" . q($myrow['rgt']) . "'/>
+           <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
+           <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
            <input type='submit' name='edit' value='$langAcceptChanges' />
            </td>
        </tr>
@@ -411,7 +409,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
        </fieldset>
        </form>";
     }
-    $tool_content .= "<p align='right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $tool_content .= "<p align='right'><a href='" . $_SERVER['SCRIPT_NAME'] . "'>" . $langBack . "</a></p>";
 }
 
 draw($tool_content, 3, null, $head_content);
