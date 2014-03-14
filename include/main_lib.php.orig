@@ -80,12 +80,10 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_BBB', 30);
 
 // user modules
-define('MODULE_ID_NOTES', 31);
-define('MODULE_ID_PERSONALCALENDAR',32);
-define('MODULE_ID_SETTINGS', 33);
+define('MODULE_ID_NOTES', 30);
+define('MODULE_ID_PERSONALCALENDAR',31);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -1522,41 +1520,43 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = $cid)");
     db_query("DELETE FROM course_units WHERE course_id = $cid");
     // check if we have guest account. If yes delete him.
-    $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
-    if ($guest_user)
-        deleteUser($guest_user->user_id);
-    Database::get()->query("DELETE FROM course_user WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM course_department WHERE course = ?d", $cid);
-    Database::get()->query("DELETE FROM course WHERE id = ?d", $cid);
-    Database::get()->query("DELETE FROM video WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM videolink WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM dropbox_file WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM lp_module WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM lp_learnPath WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM wiki_properties WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM assignment WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise_question WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = ?d)", $cid);
-    Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM note WHERE reference_obj_course = ?d", $cid);
-
+    $sql = db_query("SELECT user_id FROM course_user WHERE course_id = $cid AND status = ".USER_GUEST);
+    if (mysql_affected_rows() > 0) {        
+        $r = mysql_fetch_row($sql);        
+        $guest_id = $r[0];        
+        deleteUser($guest_id);
+    }
+    db_query("DELETE FROM course_user WHERE course_id = $cid");
+    db_query("DELETE FROM course_department WHERE course = $cid");
+    db_query("DELETE FROM course WHERE id = $cid");
+    db_query("DELETE FROM video WHERE course_id = $cid");
+    db_query("DELETE FROM videolink WHERE course_id = $cid");
+    db_query("DELETE FROM dropbox_person WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+    db_query("DELETE FROM dropbox_post WHERE fileId IN (SELECT id FROM dropbox_file WHERE course_id = $cid)");
+    db_query("DELETE FROM dropbox_file WHERE course_id = $cid");
+    db_query("DELETE FROM lp_asset WHERE module_id IN (SELECT module_id FROM lp_module WHERE course_id = $cid)");
+    db_query("DELETE FROM lp_rel_learnPath_module WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+    db_query("DELETE FROM lp_user_module_progress WHERE learnPath_id IN (SELECT learnPath_id FROM lp_learnPath WHERE course_id = $cid)");
+    db_query("DELETE FROM lp_module WHERE course_id = $cid");
+    db_query("DELETE FROM lp_learnPath WHERE course_id = $cid");
+    db_query("DELETE FROM wiki_pages_content WHERE pid IN (SELECT id FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid))");
+    db_query("DELETE FROM wiki_pages WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
+    db_query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = $cid)");
+    db_query("DELETE FROM wiki_properties WHERE course_id = $cid");
+    db_query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid))");
+    db_query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+    db_query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = $cid)");
+    db_query("DELETE FROM poll WHERE course_id = $cid");
+    db_query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = $cid)");
+    db_query("DELETE FROM assignment WHERE course_id = $cid");
+    db_query("DELETE FROM exercise_with_questions WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
+    db_query("DELETE FROM exercise_with_questions WHERE exercise_id IN (SELECT id FROM exercise WHERE course_id = $cid)");
+    db_query("DELETE FROM exercise_answer WHERE question_id IN (SELECT id FROM exercise_question WHERE course_id = $cid)");
+    db_query("DELETE FROM exercise_question WHERE course_id = $cid");
+    db_query("DELETE FROM exercise_user_record WHERE eid IN (SELECT id FROM exercise WHERE course_id = $cid)");
+    db_query("DELETE FROM exercise WHERE course_id = $cid");
+    db_query("DELETE FROM course_module WHERE course_id = $cid");
+    db_query("DELETE FROM note WHERE reference_obj_course = $cid");
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {
@@ -1589,31 +1589,29 @@ function deleteUser($id) {
 
         if (mysql_num_rows($q)) {
             // delete everything
-
-
-            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
-            Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?d", $u);
-            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?d", $u);
-            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
-            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
-            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
-            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM log WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM loginout WHERE id_user = ?d", $u);
-            Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM poll WHERE creator_id = ?d", $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d", $u);
-            Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
-            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
-            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
-            Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
-            Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM admin WHERE user_id = ?", $u);
+            Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?", $u);            
+            Database::get()->query("DELETE FROM course_user WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_file WHERE uploader_id = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_person WHERE personId = ?" , $u);
+            Database::get()->query("DELETE FROM dropbox_post WHERE recipientId = ?" , $u);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?" , $u);
+            Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?" , $u);
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM log WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM loginout WHERE id_user = ?" , $u);
+            Database::get()->query("DELETE FROM logins WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll WHERE creator_id = ?" , $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?" , $u);
+            Database::get()->query("DELETE FROM user_department WHERE user = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?" , $u);
+            Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?" , $u);
+            Database::get()->query("DELETE FROM user WHERE id = ?" , $u);
+            Database::get()->query("DELETE FROM note WHERE user_id = ?" , $u);
             return true;
         } else {
             return false;

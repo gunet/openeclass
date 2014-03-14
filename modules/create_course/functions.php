@@ -109,20 +109,16 @@ function create_course_dirs($code) {
     return true;
 }
 
-
-/**
- * @brief create modules entries
- * @param type $cid
- */
-function create_modules($cid) {
-    $vis_module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
-                            MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION);
-    
-    $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
-                            MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
-                            MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
-                            MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-                            MODULE_ID_LP, MODULE_ID_WIKI);
+// ---------------------------------------------
+// create entries in table `module`
+// ---------------------------------------------
+function create_modules($cid, $sbsystems) {
+    $module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
+        MODULE_ID_VIDEO, MODULE_ID_ASSIGN, MODULE_ID_ANNOUNCE,
+        MODULE_ID_FORUM, MODULE_ID_EXERCISE, MODULE_ID_GROUPS,
+        MODULE_ID_DROPBOX, MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
+        MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE,
+        MODULE_ID_LP, MODULE_ID_WIKI,MODULE_ID_BBB);
 
     $vis_placeholders = array();
     $vis_args = array();

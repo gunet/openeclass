@@ -250,6 +250,10 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "modules/agenda/myagenda.php");
     array_push($sideMenuImg, "arrow.png");
 
+    array_push($sideMenuText, $GLOBALS['langNotes']);
+    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
+    array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langModifyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/profile.php");
     array_push($sideMenuImg, "arrow.png");
@@ -499,6 +503,9 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langBBBConfig']);
+        array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langStats']);
         array_push($sideMenuLink, "../admin/stateclass.php");
