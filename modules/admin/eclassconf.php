@@ -300,7 +300,7 @@ else {
         </tr>
         <tr>
           <th class='left'>\$mysqlPassword:</th>
-          <td><input class='FormData_InputText' type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\"></td>
+          <td><input class='FormData_InputText' type=\"password\" name=\"formmysqlPassword\" size='40' value=\"".$mysqlPassword."\" autocomplete='off'></td>
         </tr>
         <tr>
           <th class='left'>\$mysqlMainDb:</th>

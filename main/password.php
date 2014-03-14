@@ -142,15 +142,15 @@ if (!isset($_POST['changePass'])) {
 	<table class='tbl'>
 	<tr>
 	   <th>$langOldPass</th>
-	   <td><input type='password' size='40' name='old_pass' value=''></td>
+	   <td><input type='password' size='40' name='old_pass' value='' autocomplete='off'></td>
 	</tr>
 	<tr>
 	   <th>$langNewPass1</th>
-	   <td><input type='password' size='40' name='password_form' id='password' value=''/>&nbsp;<span id='result'></span></td>
+	   <td><input type='password' size='40' name='password_form' id='password' value='' autocomplete='off'/>&nbsp;<span id='result'></span></td>
 	</tr>
 	<tr>
 	   <th>$langNewPass2</th>
-	   <td><input type='password' size='40' name='password_form1' value=''></td>
+	   <td><input type='password' size='40' name='password_form1' value='' autocomplete='off'></td>
 	</tr>
 	<tr>
 	   <th>&nbsp;</th>

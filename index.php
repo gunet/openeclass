@@ -225,9 +225,9 @@ if ($uid AND !isset($_GET['logout'])) {
                  <tr>
                    <td class='LoginData'>
                    $langUsername <br />
-                   <input class='Login' name='uname' size='17' /><br />
+                   <input class='Login' name='uname' size='17' autocomplete='off' /><br />
                    $langPass <br />
-                   <input class='Login' name='pass' type = 'password' size = '17' /><br /><br />
+                   <input class='Login' name='pass' type = 'password' size = '17' autocomplete='off' /><br /><br />
                    <input class='Login' name='submit' type = 'submit' size = '17' value = '".q($langEnter)."' /><br />
                    $warning</td></tr>
                    <tr><td><p class='smaller'><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></p>

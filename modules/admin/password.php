@@ -81,11 +81,11 @@ if (!isset($_POST['changePass'])) {
           <table class='tbl' width='100%'>
           <tr>
             <th class='left' width='160'>$langNewPass1:</th>
-            <td><input type='password' size='40' name='password_form' value='' id='password' />&nbsp;<span id='result'></span></td>
+            <td><input type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span></td>
           </tr>
           <tr>
             <th class='left'>$langNewPass2:</th>
-            <td><input type='password' size='40' name='password_form1' value='' /></td>
+            <td><input type='password' size='40' name='password_form1' value='' autocomplete='off' /></td>
           </tr>
           <tr>
             <th class='left'>&nbsp;</th>

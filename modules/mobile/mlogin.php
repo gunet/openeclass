@@ -103,7 +103,7 @@ if (isset($_POST['uname']) && isset($_POST['pass']))
     if (isset($_SESSION['uid']) && $ok == 1) {
         db_query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                 VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-        
+        session_regenerate_id();
         set_session_mvars();
         echo session_id();
     } else

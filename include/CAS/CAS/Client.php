@@ -1771,7 +1771,7 @@ class CAS_Client
             // Fix possible whitspace problems
             $dom->preserveWhiteSpace = false;
             // read the response of the CAS server into a DOM object
-            if (!($dom->loadXML($text_response))) {
+            if (!($dom->loadXML($text_response, LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR))) {
                 phpCAS::trace('dom->loadXML() failed');
                 throw new CAS_AuthenticationException(
                     $this, 'SA not validated', $validate_url,
@@ -1845,7 +1845,7 @@ class CAS_Client
         $dom = new DOMDocument();
         // Fix possible whitspace problems
         $dom->preserveWhiteSpace = false;
-        if (($dom->loadXML($text_response))) {
+        if (($dom->loadXML($text_response, LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR))) {
             $xPath = new DOMXpath($dom);
             $xPath->registerNamespace('samlp', 'urn:oasis:names:tc:SAML:1.0:protocol');
             $xPath->registerNamespace('saml', 'urn:oasis:names:tc:SAML:1.0:assertion');
@@ -2320,7 +2320,7 @@ class CAS_Client
             // Fix possible whitspace problems
             $dom->preserveWhiteSpace = false;
             // read the response of the CAS server into a DOM object
-            if ( !($dom->loadXML($cas_response))) {
+            if ( !($dom->loadXML($cas_response, LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR))) {
                 phpCAS::trace('dom->loadXML() failed');
                 // read failed
                 $bad_response = true;
@@ -2775,7 +2775,7 @@ class CAS_Client
         // CAS servers should only return data in utf-8
         $dom->encoding = "utf-8";
         // read the response of the CAS server into a DOMDocument object
-        if ( !($dom->loadXML($text_response))) {
+        if ( !($dom->loadXML($text_response, LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR))) {
             // read failed
             throw new CAS_AuthenticationException(
                 $this, 'Ticket not validated', $validate_url,

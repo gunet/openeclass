@@ -59,11 +59,11 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 <table class='tbl' width='100%'>
 <tr>
 <th width='200'>$langUsername:</th>
-<td><input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20'></td>
+<td><input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20' autocomplete='off' ></td>
 </tr>
 <tr>
 <th width='200'>$langPass:</th>
-<td><input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20'></td>
+<td><input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20' autocomplete='off' ></td>
 </tr>
 
 <tr>
@@ -74,7 +74,7 @@ $tool_content .= "<p> &nbsp; </p><p>$langUpgToSee <a href='$link_changes_file'>$
 </fieldset>";
 
 if (isset($from_admin)) {
-        $tool_content .= "<input type='hidden' name='from_admin' value='$from_admin'>";
+    $tool_content .= "<input type='hidden' name='from_admin' value='" . q($from_admin) . "'>";
 }
 
 $tool_content .= "</form>";
