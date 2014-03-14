@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
 	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
 	    <td>
               $langPrivOpen<br />
-              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
+              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' class='FormData_InputText' id='password' autocomplete='off' />&nbsp;<span id='result'></span></div>
             </td>
           </tr>
 	  <tr class='smaller'>

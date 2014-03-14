@@ -61,11 +61,11 @@ $tool_content .= "
     </tr>
     <tr>
       <th class='left'>$langdbuser:</th>
-    <td><input class='FormData_InputText' name='dbuser' type='text' size='30' value='".q($dbuser)."' /></td>
+    <td><input class='FormData_InputText' name='dbuser' type='text' size='30' value='".q($dbuser)."' autocomplete='off' /></td>
     </tr>
     <tr>
       <th class='left'>$langdbpass:</th>
-      <td><input class='FormData_InputText' name='dbpass' type='password' size='30' value='".q($dbpass)."' /></td>
+      <td><input class='FormData_InputText' name='dbpass' type='password' size='30' value='".q($dbpass)."' autocomplete='off' /></td>
     </tr>
     <tr>
       <th class='left'>$langdbtable:</th>

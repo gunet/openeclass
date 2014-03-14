@@ -89,7 +89,7 @@ if (!isset($_POST['submit'])) {
 	</tr>
 	<tr>
 	<th class='left'>$langUsername:</th>
-	<td colspan='2'><input type='text' name='uname' value='".q($_GET['uname'])."' size='30' maxlength='50' class='FormData_InputText' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
+	<td colspan='2'><input type='text' name='uname' value='".q($_GET['uname'])."' size='30' maxlength='50' class='FormData_InputText' autocomplete='off' />&nbsp;&nbsp;<small>(*) $langUserNotice</small></td>
 	</tr>
 	<tr>
 	<th class='left'>$langPass:</th>

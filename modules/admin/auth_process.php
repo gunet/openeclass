@@ -293,7 +293,7 @@ else
 		<tr><th width='220' class='left'>$langUsername: </th>
 		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".q(canonicalize_whitespace($test_username))."'></td></tr>
 		<tr><th class='left'>$langPass: </th>
-		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".q($test_password)."'></td></tr>";
+		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".q($test_password)."' autocomplete='off'></td></tr>";
 	}
 	$tool_content .= "<tr><th>&nbsp;</th><td class='right'><input type='submit' name='submit' value='".q($langModify)."'></td></tr>";
 	$tool_content .= "</table></fieldset></form>";

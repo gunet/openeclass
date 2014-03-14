@@ -20,6 +20,13 @@
 // $Id$
 //
 
+$path2add = 3;
+require_once ('../../../include/init.php');
+if (!$is_admin) {
+    header("Location:" . $urlServer);
+    exit;
+}
+
 // reassign HTTP variables (incase register_globals is off)
 if (!empty($_GET)) while(list($name, $value) = each($_GET)) $$name = $value;
 if (!empty($_POST)) while(list($name, $value) = each($_POST)) $$name = $value;

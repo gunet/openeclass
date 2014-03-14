@@ -173,12 +173,12 @@ $tool_content .= "<table width=\"99%\"><tbody>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langUsername</th>
-	  <td><input type='text' class=auth_input_admin name='uname' value='".@q($pu)."'>
+	  <td><input type='text' class=auth_input_admin name='uname' value='".@q($pu)."' autocomplete='off'>
 		<small>&nbsp;(*)</small></td>
 	  </tr>
 	  <tr>
 	  <th class='left'>$langPass&nbsp;:</th>
-	  <td><input type='text' class=auth_input_admin name='password' value=".genPass()." id='password'/>&nbsp;<span id='result'></span></td>
+	  <td><input type='text' class=auth_input_admin name='password' value=".genPass()." id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
 	  </tr>
 	  <tr>
     	<th class='left'>$langEmail</th>

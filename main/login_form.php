@@ -39,8 +39,8 @@ $tool_content .= "<form action='$urlSecure' method='post'>
         $langUsername <br />
         <input class='Login' name='uname' size='20' /><br />
         $langPass <br />
-        <input class='Login' name='pass' type='password' size='20' /><br /><br />
-        <input class='Login' name='submit' type='submit' size='20' value='".q($langEnter)."' />
+        <input class='Login' name='pass' type='password' size='20' autocomplete='off' /><br /><br />
+        <input class='Login' name='submit' type='submit' size='20' autocomplete='off' value='".q($langEnter)."' />
 	$warning</td></tr>
 	   <tr><td>&nbsp;</td><td><p class='smaller'><a href='../modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br />
 	   </td>
