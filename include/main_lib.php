@@ -1953,7 +1953,7 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/') {
             $new_contents = glossary_expand($textNode->data);
             if ($new_contents != $textNode->data) {
                 $newdoc = new DOMDocument();
-                $newdoc->loadXML('<span>' . $new_contents . '</span>');
+                $newdoc->loadXML('<span>' . $new_contents . '</span>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
                 $newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
                 $textNode->parentNode->replaceChild($newnode, $textNode);
                 unset($newdoc);
@@ -2465,7 +2465,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DomDocument;
-        $this->tempDiv->loadXML('<div>' . $string . '</div>');
+        $this->tempDiv->loadXML('<div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end

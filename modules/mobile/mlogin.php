@@ -99,7 +99,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     if (isset($_SESSION['uid']) && $ok == 1) {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                               VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
-
+        session_regenerate_id();
         set_session_mvars();
         echo session_id();
     } else
