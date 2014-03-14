@@ -1182,6 +1182,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `course_id` INT(11) NOT NULL,
                           `value` INT(11) NOT NULL DEFAULT 0,
                           PRIMARY KEY (`setting_id`, `course_id`))");
+                    
+                    db_query("CREATE TABLE `personal_calendar` (
+                          `id` int(11) NOT NULL AUTO_INCREMENT,
+                          `user_id` int(11) NOT NULL,
+                          `title` varchar(200) NOT NULL,
+                          `content` text NOT NULL,
+                          `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                          `duration` time NOT NULL,
+                          `source_event_id` int(11) DEFAULT NULL,
+                          PRIMARY KEY (`id`))");
 
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
@@ -1575,6 +1585,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         db_query('CREATE INDEX `cid` ON videolink (course_id)');
                 mysql_index_exists('log', 'cmid') or
                         db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+                mysql_index_exists('log', 'cmid') or
+                        db_query('CREATE INDEX `uid` ON personal_calendar (user_id)');
 
                 db_query("CREATE TABLE IF NOT EXISTS `actions_daily` (
                         `id` int(11) NOT NULL auto_increment,

@@ -1133,6 +1133,18 @@ db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
         `value` INT(11) NOT NULL DEFAULT 0,
         PRIMARY KEY (`setting_id`, `course_id`))");
 
+db_query("CREATE TABLE `personal_calendar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `content` text NOT NULL,
+  `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `duration` time NOT NULL,
+  `source_event_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)");
+
+
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
 db_query('CREATE INDEX `course_units_index` ON course_units (course_id, `order`)');
@@ -1142,3 +1154,4 @@ db_query('CREATE INDEX `visible_cid` ON course_module (visible, course_id)');
 db_query('CREATE INDEX `cid` ON video (course_id)');
 db_query('CREATE INDEX `cid` ON videolink (course_id)');
 db_query('CREATE INDEX `cmid` ON log (course_id, module_id)');
+db_query('CREATE INDEX `uid` ON personal_calendar (user_id)');
