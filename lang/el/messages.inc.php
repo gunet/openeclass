@@ -336,7 +336,6 @@ $langdbpass = "Συνθηματικό χρήστη Βάσης Δεδομένων
 $langdbtable = "Όνομα πίνακα Βάσης Δεδομένων";
 $langdbfielduser = "Όνομα πεδίου Χρήστη στον πίνακα";
 $langdbfieldpass = "Όνομα πεδίου Συνθηματικού Χρήστη στον πίνακα";
-$langdbpassencr = "Κρυπτογράφηση πεδίου συνθηματικού";
 $langInstructionsAuth = "Οδηγίες διασύνδεσης και χρήσης";
 $langTestAccount = "Για να ενεργοποιηθεί ο τρόπος πιστοποίησης είναι απαραίτητο να κάνετε μια δοκιμαστική χρήση με ένα λογαριασμό της μεθόδου που επιλέξατε";
 $langpop3host = "Εξυπηρέτης POP3";
@@ -1190,7 +1189,6 @@ $langQuestCreate = "Δημιουργία ερωτήσεων";
 $langExRecord = "Η άσκησή σας αποθηκεύτηκε";
 $langBackModif = "Επιστροφή στη διόρθωση της άσκησης";
 $langDoEx = "Κάντε την άσκηση";
-$langRemainingTime = "Υπολειπόμενος χρόνος";
 $langDefScor = "Καθορίστε τις ρυθμίσεις βαθμών";
 $langCreateModif = "Δημιουργία / Αλλαγή των ερωτήσεων";
 $langSub = "Υπότιτλος";
@@ -1325,8 +1323,6 @@ $langExerciseMaxAttemptsReached = "Έχετε φτάσει τον μέγιστο
 $langExerciseExpiredTime = "Έχετε ξεπεράσει το επιτρεπτό χρονικό όριο εκτέλεσης της άσκησης.";
 $langExerciseExpired = "Η άσκηση έχει λήξει ή δεν έχει ενεργοποιηθεί";
 $langExerciseLis = "Λίστα ασκήσεων";
-$langExerciseEndTime = "Τέλος χρόνου";
-$langExerciseEndTimeResults = "Τέλος χρόνου. Οι απαντήσεις σας έχουν υποβληθεί";
 $langResults = "Αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langYourTotalScore2 = "Συνολική βαθμολογία";
@@ -1834,7 +1830,7 @@ $langErrorValuesInDouble = "Σφάλμα: μία ή δύο τιμές είναι
 $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί απόσπασμα από το αρχείο zip.";
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
-$langExercise = "Ασκήσεις";
+$langExercise = "Άσκηση";
 $langExerciseAsModule = "Χρήση Άσκησης";
 $langExerciseAsModuleLabel = "Άσκησης";
 $langExerciseCancelled = "Η άσκηση ακυρώθηκε. Για να συνεχίσετε, μπορείτε να επιλέξετε την επόμενη ενότητα, κάνοντας κλικ στο επόμενο βήμα.";
@@ -2443,7 +2439,7 @@ $langUserAddExplanation = "κάθε γραμμή του αρχείου που θ
 $langDownloadUserList = "Ανέβασμα καταλόγου";
 $langUserNumber = "αριθμός";
 $langGiveRightTutor = "Προσθήκη δικαιώματος υπεύθυνου ομάδας";
-$langGiveRightEditor = "Προσθήκη δικαιώματος βοηθού εκπαιδευτή";
+$langGiveRightΕditor = "Προσθήκη δικαιώματος βοηθού εκπαιδευτή";
 $langGiveRightAdmin = "Προσθήκη δικαιώματος εκπαιδευτή";
 $langGiveRightReviewer = "Προσθήκη δικαιώματος OpenCourses Reviewer";
 $langRemoveRightTutor = "Αφαίρεση δικαιώματος υπεύθυνου ομάδας";
@@ -3490,6 +3486,31 @@ $langEBookSectionsModified = "Οι αλλαγές στις ενότητες το
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
 $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
+
+/* * ******************************************
+  Notes
+ * ***************************************** */
+$langAddNote = "Νέα σημείωση";
+$langDocument = "Έγγραφο";
+$langEmptyNoteTitle = "Νέα σημείωση";
+$langEvent = "Γεγονός";
+$langLastUpdate = "Τελευταία ενημέρωση";
+$langModifNote = "Αλλαγή σημείωσης";
+$langNoNote = "Δεν έχετε σημειώσεις.";
+$langNoteAdd = "Νέα σημείωση προστέθηκε.";
+$langNoteBody = "Περιεχόμενο";
+$langNoteDel = "Η σημείωση διαγράφηκε.";
+$langNoteModified = "Η σημείωση άλλαξε.";
+$langNoteModify = "Η σημείωση ενημερώθηκε.";
+$langNoteNoTitle = "Κενός τίτλος";
+$langNotes = "Σημειώσεις";
+$langNotesDeleted = "Οι σημειώσεις σας διαγράφηκαν.";
+$langNoteTitle = "Τίτλος";
+$langPersonalEvent = "Προσωπικό γεγονός";
+$langReferencedObject = "Αφορά";
+$langSelectFromMenu = "Επιλέξτε...";
+$langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
+$langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
 
 /* * ******************************************
   Messages for jQuery tools

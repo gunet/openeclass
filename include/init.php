@@ -241,7 +241,7 @@ if (isset($require_current_course) and $require_current_course) {
                                            FROM course, course_department, hierarchy
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
-                                                 course.code=?s"
+                                                 course.code=?"
                 , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$title, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseDepartment, &$currentCourseTitular, &$currentCourseLanguage ) {
             $course_id = $course_info->cid;
             $public_code = $course_info->public_code;
@@ -284,8 +284,8 @@ if (isset($require_current_course) and $require_current_course) {
             $status = USER_TEACHER;
         } else {
             $stat = Database::get()->querySingle("SELECT status FROM course_user
-                                                           WHERE user_id = ?d AND
-                                                           course_id = ?d", $uid, $course_id);
+                                                           WHERE user_id = ? AND
+                                                           course_id = ?", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
             }
@@ -353,6 +353,7 @@ $modules = array(
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes', 'image' => 'notes')
 );
 // ----------------------------------------
 // course admin modules
@@ -434,11 +435,11 @@ if (isset($course_id) and !$is_editor and !defined('STATIC_MODULE')) {
     if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                                              WHERE visible = 1 AND
-                                             course_id = ?d", $course_id);
+                                             course_id = ?", $course_id);
     } else {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
-                              course_id = ?d AND
+                              course_id = ? AND
                                 module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                   " . MODULE_ID_ASSIGN . ",
                                                   " . MODULE_ID_DROPBOX . ",
