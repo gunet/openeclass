@@ -65,7 +65,7 @@ class Session {
             $this->user_id = 0;
         }
         if (isset($_SESSION['status'])) {
-            $this->status = $_SESSION['status'];
+            $this->status = intval($_SESSION['status']);
         } else {
             $this->status = 0;
         }

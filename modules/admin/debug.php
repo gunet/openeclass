@@ -16,7 +16,7 @@
 
 class Debug {
 
-    private static $level = Debug::CRITICAL;
+    private static $level = Debug::ERROR;
     private static $default_level = Debug::ERROR;
 
     const LOW = 0;
@@ -33,13 +33,17 @@ class Debug {
         Debug::$default_level = abs(intval($level));
     }
 
-    public static function message($message, $level = null) {
-        if ($level >= Debug::ERROR) 
-            error_log($message);
+
+    public static function message($message, $level = null, $backtrace_file = null, $backtrace_line = 0) {
+
         if (is_null($level))
             $level = Debug::$default_level;
         if ($level >= Debug::$level) {
-            echo '<br>' . $message . '<br>';
+            echo "<p><br>";
+            if (!is_null($backtrace_file)) {
+                echo "In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b>";
+            }
+            echo "<br> $message </p>";
         }
         /*
           if ($level > Debug::ERROR) {

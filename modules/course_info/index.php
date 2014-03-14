@@ -117,7 +117,7 @@ hContent;
 $nameTools = $langModifInfo;
 
 // if the course is opencourses certified, disable visibility choice in form
-$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?", $course_id)) ? $creview->is_certified : false;
+$isOpenCourseCertified = ($creview = Database::get()->querySingle("SELECT is_certified FROM course_review WHERE course_id = ?d", $course_id)) ? $creview->is_certified : false;
 $disabledVisibility = ($isOpenCourseCertified) ? " disabled='disabled' " : '';
 
 
@@ -295,7 +295,7 @@ if (isset($_POST['submit'])) {
 	    <table class='tbl' width='100%'>
             <tr>		            
 		<th width='170'>$langOptPassword</th>
-                <td colspan='2'><input id='coursepassword' type='text' name='password' value='$password' /></td>
+                <td colspan='2'><input id='coursepassword' type='text' name='password' value='$password' autocomplete='off' /></td>
 	    </tr>            
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>

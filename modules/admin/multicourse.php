@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -66,12 +66,21 @@ if (isset($_POST['submit'])) {
             if ($cid) {
                 if ($prof_uid) {
                     db_query("INSERT INTO course_user
-                                                         SET course_id = $cid,
-                                                             user_id = $prof_uid,
-                                                             status = 1,
-                                                             tutor = 1,
-                                                             reg_date = NOW()");
+                                SET course_id = $cid,
+                                    user_id = $prof_uid,
+                                    status = 1,
+                                    tutor = 1,
+                                    reg_date = NOW()");
                 }
+                db_query("INSERT INTO group_properties SET
+                            course_id = $cid,
+                            self_registration = 1,
+                            multiple_registration = 0,
+                            forum = 1,
+                            private_forum = 0,
+                            documents = 1,
+                            wiki = 0,
+                            agenda = 0");
                 create_modules($cid);
             }
             if ($code) {
@@ -141,7 +150,7 @@ if (isset($_POST['submit'])) {
 	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
 	    <td>
               $langPrivOpen<br />
-              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' class='FormData_InputText' id='password' />&nbsp;<span id='result'></span></div>
+              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' class='FormData_InputText' id='password' autocomplete='off' />&nbsp;<span id='result'></span></div>
             </td>
           </tr>
 	  <tr class='smaller'>
@@ -272,7 +281,7 @@ draw($tool_content, 3, null, $head_content);
 // Helper function
 function prof_query($sql) {
     return db_query_get_single_value("SELECT id FROM user
-                                                 WHERE status = 1 AND $sql");
+                                                 WHERE status = 1 AND ( $sql )");
 }
 
 // Find a professor by name ("Name surname") or username

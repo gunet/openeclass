@@ -30,8 +30,6 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-define('DEBUG_MYSQL', TRUE);
-
 db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
@@ -230,7 +228,7 @@ db_query("CREATE TABLE user (
       last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 db_query("CREATE TABLE admin (
-      user_id INT(11) NOT NULL UNIQUE KEY,
+      user_id INT(11) NOT NULL PRIMARY KEY,
       privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE login_failure (
@@ -451,6 +449,7 @@ db_query("CREATE TABLE IF NOT EXISTS dropbox_file (
                 `course_id` INT(11) NOT NULL,
                 `uploader_id` INT(11) NOT NULL DEFAULT 0,
                 `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                 real_filename varchar(255) NOT NULL default '',
                 `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) NOT NULL DEFAULT '',
                 `description` VARCHAR(1000) NOT NULL DEFAULT '',                
@@ -483,7 +482,7 @@ db_query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                 `name` VARCHAR(255) NOT NULL DEFAULT '',
                 `comment` TEXT NOT NULL,
                 `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4),
+                `visible` TINYINT(4) NOT NULL DEFAULT 0,
                 `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
                 //COMMENT='List of learning Paths';
 db_query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
@@ -529,7 +528,9 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
 db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                 `wiki_id` INT(11) UNSIGNED NOT NULL,
                 `flag` VARCHAR(255) NOT NULL,
-                `value` ENUM('false','true') NOT NULL DEFAULT 'false' )  $charset_spec");
+                `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+                PRIMARY KEY (wiki_id, flag) )
+                $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -584,7 +585,9 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                 `max_grade` FLOAT DEFAULT NULL,                
-                `assign_to_specific` CHAR(1) NOT NULL) $charset_spec");
+                `assign_to_specific` CHAR(1) NOT NULL,
+                `file_path` VARCHAR(200) NOT NULL,
+                `file_name` VARCHAR(200) NOT NULL') $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -605,7 +608,8 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
 db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                 `user_id` int(11) NOT NULL,
                 `group_id` int(11) NOT NULL,
-                `assignment_id` int(11) NOT NULL
+                `assignment_id` int(11) NOT NULL,
+                PRIMARY KEY (user_id, group_id, assignment_id)
               ) $charset_spec");        
         
 db_query("CREATE TABLE IF NOT EXISTS `exercise` (
@@ -628,7 +632,7 @@ db_query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eid` INT(11) NOT NULL DEFAULT 0,
                 `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `record_end_date` DATETIME DEFAULT NULL,
                 `total_score` INT(11) NOT NULL DEFAULT 0,
                 `total_weighting` INT(11) DEFAULT 0,
                 `attempt` INT(11) NOT NULL DEFAULT 0) $charset_spec");
@@ -1113,7 +1117,7 @@ db_query("CREATE TABLE IF NOT EXISTS `actions_summary` (
         `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
         `duration` int(11) NOT NULL,
         `course_id` INT(11) NOT NULL,
-        PRIMARY KEY  (`id`))");
+        PRIMARY KEY (`id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `id` int(11) NOT NULL auto_increment,
@@ -1121,7 +1125,7 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `ip` char(45) NOT NULL default '0.0.0.0',
         `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
         `course_id` INT(11) NOT NULL,
-        PRIMARY KEY  (`id`))");
+        PRIMARY KEY (`id`))");
 
 db_query("CREATE TABLE IF NOT EXISTS `note` (
         `id` int(11) NOT NULL auto_increment,
@@ -1136,6 +1140,11 @@ db_query("CREATE TABLE IF NOT EXISTS `note` (
         `reference_obj_course` int(11) default NULL,
         PRIMARY KEY  (`id`))");
 
+db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
+        `setting_id` INT(11) NOT NULL,
+        `course_id` INT(11) NOT NULL,
+        `value` INT(11) NOT NULL DEFAULT 0,
+        PRIMARY KEY (`setting_id`, `course_id`))");
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');

@@ -120,16 +120,21 @@ function create_modules($cid, $sbsystems) {
         MODULE_ID_CHAT, MODULE_ID_DESCRIPTION, MODULE_ID_QUESTIONNAIRE,
         MODULE_ID_LP, MODULE_ID_WIKI,MODULE_ID_BBB);
 
-    $values = array();
+    $vis_placeholders = array();
+    $vis_args = array();
     foreach ($vis_module_ids as $mid) {
-        $vis_values[] = "($mid, 1, $cid)";
+        $vis_placeholders[] = "(?d, 1, ?d)";
+        $vis_args[] = intval($mid);
+        $vis_args[] = intval($cid);
     }
-    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES " .
-            implode(', ', $vis_values));
-    
+    $invis_placeholders = array();
+    $invis_args = array();
     foreach ($invis_module_ids as $mid) {
-        $invis_values[] = "($mid, 0, $cid)";
-    }    
-    db_query("INSERT INTO course_module (module_id, visible, course_id) VALUES " .
-            implode(', ', $invis_values));
+        $invis_placeholders[] = "(?d, 0, ?d)";
+        $invis_args[] = intval($mid);
+        $invis_args[] = intval($cid);
+    }
+    
+    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $vis_placeholders), $vis_args);
+    Database::get()->query("INSERT INTO course_module (module_id, visible, course_id) VALUES " . implode(', ', $invis_placeholders), $invis_args);
 }

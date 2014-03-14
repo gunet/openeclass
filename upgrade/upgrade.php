@@ -32,10 +32,6 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (!defined('DEBUG_MYSQL')) {
-    define('DEBUG_MYSQL', true);
-}
-
 if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {
@@ -114,7 +110,7 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
                         CHANGE whitelist whitelist TEXT NOT NULL,
                         DROP KEY user_username");
     db_query("ALTER TABLE admin
-                        CHANGE idUser user_id INT(11) NOT NULL");
+                        CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
 
 // Make sure 'video' subdirectory exists and is writable
@@ -903,6 +899,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `uploaderId` INT(11) NOT NULL DEFAULT 0,
                             `filename` VARCHAR(250) NOT NULL DEFAULT '',
+                            `real_filename` varchar(255) NOT NULL default ''                           
                             `filesize` INT(11) UNSIGNED NOT NULL DEFAULT 0,
                             `title` VARCHAR(250) NOT NULL DEFAULT '',
                             `description` VARCHAR(1000) NOT NULL DEFAULT '',                            
@@ -937,7 +934,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `name` VARCHAR(255) NOT NULL DEFAULT '',
                             `comment` TEXT NOT NULL,
                             `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                            `visible` TINYINT(4),
+                            `visible` TINYINT(4) NOT NULL DEFAULT 0,
                             `rank` INT(11) NOT NULL DEFAULT 0)
                             $charset_spec");
                     //COMMENT='List of learning Paths';
@@ -990,7 +987,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
-                            `value` ENUM('false','true') NOT NULL DEFAULT 'false' )
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false'),
+                            PRIMARY KEY (wiki_id, flag) )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1052,7 +1050,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `secret_directory` VARCHAR(30) NOT NULL,
                             `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                             `max_grade` FLOAT DEFAULT NULL,
-                            `assign_to_specific` CHAR(1) NOT NULL)
+                            `assign_to_specific` CHAR(1) NOT NULL,
+                            file_path VARCHAR(200) NOT NULL,
+                            file_name VARCHAR(200) NOT NULL',
+                            )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1072,7 +1073,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
-                            `assignment_id` int(11) NOT NULL
+                            `assignment_id` int(11) NOT NULL,
+                            PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
 
                     db_query("DROP TABLE IF EXISTS agenda");
@@ -1107,7 +1109,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `eid` INT(11) NOT NULL DEFAULT '0',
                             `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',
                             `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                            `record_end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                            `record_end_date` DATETIME DEFAULT NULL,
                             `total_score` INT(11) NOT NULL DEFAULT '0',
                             `total_weighting` INT(11) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0' )
@@ -1172,6 +1174,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                           `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
                           `course_id` INT(11) NOT NULL,
                           PRIMARY KEY  (`id`))");
+
                     db_query("CREATE TABLE IF NOT EXISTS `note` (
                          `id` int(11) NOT NULL auto_increment,
                          `user_id` int(11) NOT NULL,
@@ -1184,6 +1187,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                          `reference_obj_id` int(11) default NULL,
                          `reference_obj_course` int(11) default NULL,
                         PRIMARY KEY  (`id`))");
+
+                    db_query("CREATE TABLE IF NOT EXISTS `course_settings` (
+                          `setting_id` INT(11) NOT NULL,
+                          `course_id` INT(11) NOT NULL,
+                          `value` INT(11) NOT NULL DEFAULT 0,
+                          PRIMARY KEY (`setting_id`, `course_id`))");
+
                     // hierarchy tables
                     $n = db_query("SHOW TABLES LIKE 'faculte'");
                     $root_node = null;

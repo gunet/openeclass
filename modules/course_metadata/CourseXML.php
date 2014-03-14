@@ -562,9 +562,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $xmlFile = self::getCourseXMLPath($courseCode);
         $data = self::getAutogenData($courseId); // preload xml with auto-generated data
         // course-based adaptation
-        $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?", intval($courseId))->count;
-        $vnum = Database::get()->querySingle("select count(id) as count from video where course_id = ?", intval($courseId))->count;
-        $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?", intval($courseId))->count;
+        $dnum = Database::get()->querySingle("select count(id) as count from document where course_id = ?d", intval($courseId))->count;
+        $vnum = Database::get()->querySingle("select count(id) as count from video where course_id = ?d", intval($courseId))->count;
+        $vlnum = Database::get()->querySingle("select count(id) as count from videolink where course_id = ?d", intval($courseId))->count;
         if ($dnum + $vnum + $vlnum < 1) {
             self::$hiddenFields[] = 'course_confirmVideolectures';
             $data['course_confirmVideolectures'] = 'false';
@@ -641,7 +641,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static function save($courseCode, $xml) {
         $doc = new DOMDocument('1.0');
-        $doc->loadXML($xml->asXML());
+        $doc->loadXML($xml->asXML(), LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         $doc->formatOutput = true;
         $doc->save(self::getCourseXMLPath($courseCode));
     }
@@ -657,7 +657,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $urlServer, $license;
         $data = array();
 
-        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?", intval($courseId));
+        $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
         if (!$course)
             return array();
 
@@ -677,11 +677,11 @@ class CourseXMLElement extends SimpleXMLElement {
         $unitsCount = 0;
         DataBase::get()->queryFunc("SELECT title, comments 
                                       FROM course_units
-                                     WHERE visible > 0 AND course_id = ?", function($unit) use (&$data, &$unitsCount, $clang) {
+                                     WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount, $clang) {
             $data['course_unit_title_' . $clang][$unitsCount] = $unit->title;
             $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($unit->comments);
             $unitsCount++; // also serves as array index, starting from 0
-        }, intval($courseId));
+        }, $courseId);
         $data['course_numberOfUnits'] = $unitsCount;
 
         return $data;
@@ -798,7 +798,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $count = Database::get()->querySingle("SELECT COUNT(course_review.id) as count
                                                      FROM course, course_department, course_review
                                                     WHERE course.id = course_department.course
-                                                      AND course.id = course_review.course_id AND course_department.department = ?
+                                                      AND course.id = course_review.course_id AND course_department.department = ?d
                                                       AND course_review.is_certified = 1", intval($subnode))->count;
             return $count;
         };
