@@ -21,7 +21,7 @@
  */
 
 /**
- * Eclass notes manipulation library as a common base for various modules
+ * Eclass personal and course events manipulation library 
  *
  * @version 1.0
  * @absract
@@ -33,35 +33,34 @@
  *  
  */
 
-require_once 'modules/search/noteindexer.class.php';
 require_once 'include/log.php';
 
-class Notes {
+class Calendar_Events {
     
     /********  Basic set of functions to be called from inside **************
      *********** notes module that manipulate note items ********************/
     
     /**
      * Get note details given the note id
-     * @param int $noteid id in table note
-     * @return array note tuple 
+     * @param int $eventid id in table personal_calendar
+     * @return array event tuple 
      */
-    public static function get_note($noteid){
+    public static function get_event($eventid){
         global $uid;
-        return Database::get()->querySingle("SELECT * FROM note WHERE id = ?d AND user_id = ?d", $noteid, $uid);
+        return Database::get()->querySingle("SELECT * FROM personal_calendar WHERE id = ?d AND user_id = ?d", $noteid, $uid);
     }
     
     /**
-     * Get notes with details for a given user
+     * Get events with details for a given user
      * @param int $user_id if empty the session user is assumed
      * @return array of user notes with details 
      */
-    public static function get_user_notes($user_id = NULL){
+    public static function get_user_events($user_id = NULL){
         global $uid;
         if(is_null($user_id)){
             $user_id = $uid;
         }
-        return Database::get()->queryArray("SELECT * FROM note WHERE user_id = ?d  ORDER BY `order` DESC", $user_id);
+        return Database::get()->queryArray("SELECT * FROM personal_calendar WHERE user_id = ?  ORDER BY `start`", $user_id);
     }
     
     /**
@@ -69,12 +68,12 @@ class Notes {
      * @param int $user_id if empty the session user is assumed
      * @return int 
      */
-    public static function count_user_notes($user_id = NULL){
+    public static function count_user_events($user_id = NULL){
         global $uid;
         if(is_null($user_id)){
             $user_id = $uid;
         }
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM note WHERE user_id = ?d", $user_id)->count;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM personal_calendar WHERE user_id = ?", $user_id)->count;
     }
     
     
@@ -89,18 +88,18 @@ class Notes {
         global $uid;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM note
-                                               WHERE user_id = ?d", $uid)->maxorder;
+                                               WHERE user_id = ?", $uid)->maxorder;
         $order = $orderMax + 1;
         // insert
         $noteid = Database::get()->query("INSERT INTO note
-                                     SET content = ?s,
-                                         title = ?s,
-                                         user_id = ?d, 
-                                         `order` = ?d,
-                                         reference_obj_module = ?d,
-                                         reference_obj_type = ?s,
-                                         reference_obj_id = ?d,
-                                         reference_obj_course = ?d", purify($content), $title, $uid, $order, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
+                                     SET content = ?,
+                                         title = ?,
+                                         user_id = ?, 
+                                         `order` = ?,
+                                         reference_obj_module = ?,
+                                         reference_obj_type = ?,
+                                         reference_obj_id = ?,
+                                         reference_obj_course = ?", purify($content), $title, $uid, $order, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
         
         Log::record(0, MODULE_ID_NOTES, LOG_INSERT, array('user_id' => $uid, 'id' => $noteid,
         'title' => $title,
@@ -118,7 +117,7 @@ class Notes {
     public static function update_note($noteid, $title, $content, $reference_obj_id = NULL){
         global $uid;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
-        Database::get()->query("UPDATE note SET title = ?s, content = ?s, reference_obj_module = ?d, reference_obj_type = ?s, reference_obj_id = ?d, reference_obj_course = ?d WHERE id = ?d", $title, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $noteid);
+        Database::get()->query("UPDATE note SET title = ?, content = ?, reference_obj_module = ?, reference_obj_type = ?, reference_obj_id = ?, reference_obj_course = ? WHERE id = ?", $title, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $noteid);
                 
         $noteidx = new NoteIndexer();
         $noteidx->store($noteid);
@@ -136,11 +135,11 @@ class Notes {
         global $uid;
         $noteidx = new NoteIndexer();
         $log_type = LOG_MODIFY;
-        $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?d", $noteid);
-        $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE user_id = ?d AND `order` > ?d ORDER BY `order` LIMIT 1", $uid, $thisorder);
+        $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?", $noteid);
+        $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE user_id = ? AND `order` > ? ORDER BY `order` LIMIT 1", $uid, $thisorder);
         if($swapnote){
-            Database::get()->query("UPDATE note SET `order` = ?d WHERE id = ?d", $swapnote->order, $noteid);
-            Database::get()->query("UPDATE note SET `order` = ?d WHERE id = ?d", $thisorder, $swapnote->id);
+            Database::get()->query("UPDATE note SET `order` = ? WHERE id = ?", $swapnote->order, $noteid);
+            Database::get()->query("UPDATE note SET `order` = ? WHERE id = ?", $thisorder, $swapnote->id);
         }
         
     }
@@ -153,11 +152,11 @@ class Notes {
         global $uid;
         $noteidx = new NoteIndexer();
         $log_type = LOG_MODIFY;
-        $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?d", $noteid);
-        $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE  user_id = ?d AND `order` < ?d ORDER BY `order` DESC LIMIT 1", $uid, $thisorder);
+        $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?", $noteid);
+        $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE  user_id = ? AND `order` < ? ORDER BY `order` DESC LIMIT 1", $uid, $thisorder);
         if($swapnote){
-            Database::get()->query("UPDATE note SET `order` = ?d WHERE id = ?d", $swapnote->order, $noteid);
-            Database::get()->query("UPDATE note SET `order` = ?d WHERE id = ?d", $thisorder, $swapnote->id);
+            Database::get()->query("UPDATE note SET `order` = ? WHERE id = ?", $swapnote->order, $noteid);
+            Database::get()->query("UPDATE note SET `order` = ? WHERE id = ?", $thisorder, $swapnote->id);
         }
     }
     
@@ -167,9 +166,9 @@ class Notes {
      */
     public static function delete_note($noteid){
         global $uid;
-        $note = Database::get()->querySingle("SELECT title, content FROM note WHERE id = ?d ", $noteid);
+        $note = Database::get()->querySingle("SELECT title, content FROM note WHERE id = ? ", $noteid);
         $content = ellipsize_html(canonicalize_whitespace(strip_tags($note->content)), 50, '+');
-        Database::get()->query("DELETE FROM note WHERE id = ?d", $noteid);
+        Database::get()->query("DELETE FROM note WHERE id = ?", $noteid);
         
         $noteidx = new NoteIndexer();
         $noteidx->remove($noteid);
@@ -185,7 +184,7 @@ class Notes {
      */
     public static function delete_all_notes($user_id = NULL){
         global $uid;
-        Database::get()->query("DELETE FROM note WHERE user_id = ?d", $uid);
+        Database::get()->query("DELETE FROM note WHERE user_id = ?", $uid);
         
         $noteidx = new NoteIndexer();
         $noteidx->removeByUser($uid);
@@ -210,7 +209,7 @@ class Notes {
        if(is_null($cid)){
            $cid = $course_id;
        }
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_type = 'course' AND reference_obj_id = ?d", $uid, $cid);
+       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ? AND reference_obj_type = 'course' AND reference_obj_id = ?", $uid, $cid);
     }
     
     /** Get notes associated with a course generally or with specific items of the course
@@ -222,7 +221,7 @@ class Notes {
        if(is_null($cid)){
            $cid = $course_id;
        }
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_course = ?d ", $uid, $cid);
+       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ? AND reference_obj_course = ? ", $uid, $cid);
     }
     
     /** 
@@ -239,7 +238,7 @@ class Notes {
        if(is_null($module_id)){
            return self::get_all_course_notes($cid);
        }
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_course = ?d ", $uid, $cid);
+       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ? AND reference_obj_course = ? ", $uid, $cid);
     }
     
     /** 
@@ -255,7 +254,7 @@ class Notes {
      */
     public static function get_item_notes($item_id, $module_id, $course_id, $item_type){
        global $uid;
-       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ?d AND reference_obj_course = ?d AND reference_obj_module = ?d AND reference_obj_type = ?s AND reference_obj_id = ?d", $uid, $course_id, $module_id, $item_type, $item_id);
+       return Database::get()->queryArray("SELECT id, title, content FROM note WHERE user_id = ? AND reference_obj_course = ? AND reference_obj_module = ? AND reference_obj_type = ? AND reference_obj_id = ?", $uid, $course_id, $module_id, $item_type, $item_id);
     }
     
      /** 
@@ -281,6 +280,6 @@ class Notes {
      */
     public static function count_item_notes($item_id, $module_id, $course_id, $item_type){
         global $uid;
-        return Database::get()->querySingle("SELECT count(*) `count` FROM note WHERE user_id = ?d AND reference_obj_course = ?d AND reference_obj_module = ?d AND reference_obj_type = ?s AND reference_obj_id = ?d", $uid, $course_id, $module_id, $item_type, $item_id);
+        return Database::get()->querySingle("SELECT count(*) `count` FROM note WHERE user_id = ? AND reference_obj_course = ?  AND reference_obj_course = ? AND reference_obj_module = ? AND reference_obj_type = ? AND reference_obj_id = ?", $uid, $course_id, $module_id, $item_type, $item_id);
     }
 }
