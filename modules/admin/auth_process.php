@@ -291,7 +291,7 @@ else
 	if ($auth != 6 && $auth != 7) { 
 		$tool_content .= "<tr><td colspan='2'><div class='info'>$langTestAccount</div></td></tr>
 		<tr><th width='220' class='left'>$langUsername: </th>
-		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".q(canonicalize_whitespace($test_username))."'></td></tr>
+		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='".q(canonicalize_whitespace($test_username))."' autocomplete='off'></td></tr>
 		<tr><th class='left'>$langPass: </th>
 		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='".q($test_password)."' autocomplete='off'></td></tr>";
 	}
