@@ -32,10 +32,6 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (!defined('DEBUG_MYSQL')) {
-    define('DEBUG_MYSQL', true);
-}
-
 if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {

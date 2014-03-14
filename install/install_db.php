@@ -30,8 +30,6 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-define('DEBUG_MYSQL', TRUE);
-
 db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
