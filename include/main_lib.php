@@ -1772,8 +1772,8 @@ function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
         file: '$url' + type,
         title: 'Resources Browser',
-        width: 700,
-        height: 500,
+        width: 800,
+        height: 600,
         resizable: 'yes',
         inline: 'yes',
         close_previous: 'no',
