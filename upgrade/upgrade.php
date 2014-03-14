@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 2.9
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -740,8 +740,8 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
                 if ($oldversion < '2.8.3') {
 			upgrade_course_2_8($code[0], $lang, "($i / $total)");
                 }
-                if ($oldversion < '2.8.5') {
-			upgrade_course_2_8_5($code[0], $lang, "($i / $total)");
+                if ($oldversion < '2.9') {
+			upgrade_course_2_9($code[0], $lang, "($i / $total)");
                 }
                 echo "</p>\n";
                 $i++;
