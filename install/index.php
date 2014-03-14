@@ -653,8 +653,11 @@ elseif (isset($_REQUEST['install1']) || isset($_REQUEST['back1']))
 	// create config, courses and video catalogs
     mkdir_or_error('config');
     mkdir_or_error('courses');
+    touch_or_error('courses/index.htm');
     mkdir_or_error('courses/temp');
+    touch_or_error('courses/temp/index.htm');
     mkdir_or_error('courses/userimg');
+    touch_or_error('courses/userimg/index.htm');
     mkdir_or_error('video');
     touch_or_error('video/index.htm');
 	

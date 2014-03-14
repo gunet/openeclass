@@ -98,7 +98,9 @@ if (!file_exists('../video')) {
 }
 
 mkdir_or_error('../courses/temp');
+touch_or_error('../courses/temp/index.htm');
 mkdir_or_error('../courses/userimg');
+touch_or_error('../courses/userimg/index.htm');
 touch_or_error('../video/index.htm');
 
 // ********************************************

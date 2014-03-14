@@ -686,6 +686,7 @@ function upgrade_course_old($code, $lang, $extramessage = '')
 
         if (!file_exists("$course_base_dir/temp")) {
                 mkdir("$course_base_dir/temp", 0777);
+                touch("$course_base_dir/temp/index.htm");
         }
 
         echo "$langUpgCourse <b>$code</b><br>";

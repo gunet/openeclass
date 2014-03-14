@@ -76,6 +76,7 @@ if (isset($_POST['submit'])) {
         // First do personalization and language changes
 	if (!file_exists($webDir."courses/userimg/")) {
 		mkdir($webDir."courses/userimg/", 0775);
+                touch($webDir."courses/userimg/index.htm");
 	}
 	$image_path = $webDir."courses/userimg/".$_SESSION['uid'];
         $perso_status = (isset($_POST['persoStatus']) and $_POST['persoStatus'] == 'yes')? 'yes': 'no';
