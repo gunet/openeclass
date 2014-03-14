@@ -636,11 +636,11 @@ function select_proper_filters($requestDocsFilter) {
                     $ors .= " OR path LIKE '%$imgfmt%'";
             }
 
-            $filterv = "AND ( $ors )";
-            $filterl = "AND false";
+            $filterv = "WHERE ( $ors )";
+            $filterl = "WHERE false";
             break;
         case 'zip':
-            $filterv = $filterl = "AND false";
+            $filterv = $filterl = "WHERE false";
             break;
         case 'media':
             $compatiblePlugin = false;

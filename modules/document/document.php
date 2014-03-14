@@ -1186,11 +1186,11 @@ draw($tool_content, $menuTypeID, null, $head_content);
 
 
 
-function select_proper_filters() {
+function select_proper_filters($requestDocsFilter) {
     $filter = '';
     $compatiblePlugin = true;
     
-    switch ($_REQUEST['docsfilter']) {
+    switch ($requestDocsFilter) {
         case 'image':
                 $ors = '';
                 foreach (MultimediaHelper::getSupportedImages() as $imgfmt)
