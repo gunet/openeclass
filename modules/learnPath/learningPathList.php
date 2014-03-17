@@ -115,6 +115,23 @@ if ( isset($_GET['cmd']) && $_GET['cmd'] == 'export12'
       }
 } // endif $cmd == export12
 
+if ( isset($_GET['cmd']) and $_GET['cmd'] == 'exportIMSCP'
+        and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor ) {
+
+    require_once "include/IMSCPExport.inc.php";
+
+    $imscp = new IMSCPExport(intval($_GET['path_id']), $language);
+    if (!$imscp->export())
+    {
+        $dialogBox = '<b>'.$langScormErrorExport.'</b><br />'."\n".'<ul>'."\n";
+        foreach( $imscp->getError() as $error)
+        {
+            $dialogBox .= '<li>' . $error . '</li>'."\n";
+        }
+        $dialogBox .= '<ul>'."\n";
+    }
+} // endif $cmd == exportIMSCP
+
 mysql_select_db($currentCourseID);
 
 if ($is_editor) {
@@ -573,6 +590,8 @@ while ($list = mysql_fetch_array($result)) // while ... learning path list
             .'<img src="'.$themeimg.'/export.png" alt="'.q($langExport2004).'" title="'.q($langExport2004).'" /></a>' .""
             .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmd=export12&amp;path_id=' . $list['learnPath_id'] . '" >'
             .'<img src="'.$themeimg.'/export.png" alt="'.q($langExport12).'" title="'.q($langExport12).'" /></a>' .""
+            .'<a href="' . $_SERVER['SCRIPT_NAME'] . '?course='.$code_cours.'&amp;cmd=exportIMSCP&amp;path_id=' . $list['learnPath_id'] . '" >'
+            .'<img src="'.$themeimg.'/export.png" alt="'.$langExportIMSCP.'" title="'.$langExportIMSCP.'" /></a>' .""
             .'</td>' . "\n";
 
         // statistics links
