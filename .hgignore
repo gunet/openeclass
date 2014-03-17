@@ -1,12 +1,11 @@
 syntax: regexp
+
 ^courses/
 ^video/
 ^config/.*\.php
+
 ^nbproject/private/
 
-syntax: regexp
 ^\.buildpath$
-syntax: regexp
 ^\.project$
-syntax: regexp
 ^\.settings$
