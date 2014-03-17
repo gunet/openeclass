@@ -173,6 +173,7 @@ function loggedInMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
+        $arrMenuType['class'] = 'admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         if ((isset($is_admin) and $is_admin) or
@@ -199,6 +200,7 @@ function loggedInMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    $arrMenuType['class'] = 'basic';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
@@ -232,7 +234,7 @@ function loggedInMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langUserOptions'];
-
+    $arrMenuType['class'] = 'user';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     $res2 = db_query("SELECT status FROM user WHERE id = $uid");
@@ -288,6 +290,7 @@ function loggedOutMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	$arrMenuType['class'] = 'basic';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
@@ -415,6 +418,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langAdminCours'];
+        $arrMenuType['class'] = 'course_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         array_push($sideMenuText, $GLOBALS['langListCours']);
@@ -557,14 +561,17 @@ function lessonToolsMenu() {
     if ($is_editor) {
         $tools_sections = array(array('type' => 'Public',
                 'title' => $GLOBALS['langActiveTools'],
-                'iconext' => '_on.png'),
+                'iconext' => '_on.png',
+                 'class' => 'active'),
             array('type' => 'PublicButHide',
                 'title' => $GLOBALS['langInactiveTools'],
-                'iconext' => '_off.png'));
+                'iconext' => '_off.png',
+                'class' => 'inactive'));
     } else {
         $tools_sections = array(array('type' => 'Public',
                 'title' => $GLOBALS['langCourseOptions'],
-                'iconext' => '_on.png'));
+                'iconext' => '_on.png',
+                'class' => 'active'));
     }
 
     foreach ($tools_sections as $section) {
@@ -577,8 +584,10 @@ function lessonToolsMenu() {
         $sideMenuID = array();
 
         $arrMenuType = array('type' => 'text',
-            'text' => $section['title']);
+            'text' => $section['title'],
+            'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
+
         while ($toolsRow = mysql_fetch_array($result)) {
             $mid = $toolsRow['module_id'];
             array_push($sideMenuText, q($modules[$mid]['title']));
@@ -661,6 +670,7 @@ function pickerMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	$arrMenuType['class'] = 'picker';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     if (isset($course_id) and $course_id >= 1) {
