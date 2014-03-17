@@ -4,3 +4,6 @@ php_value post_max_size 80M
 php_value max_execution_time 100
 php_value default_charset UTF-8
 php_value session.cookie_httponly true
+<IfModule mod_headers.c>
+    Header always append X-Frame-Options SAMEORIGIN
+</IfModule>
