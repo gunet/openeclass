@@ -1,8 +1,8 @@
 /*========================================================================
-*   Open eClass 2.8
+*   Open eClass 2.9
 *   E-learning and Course Management System
 * ========================================================================
-*  Copyright(c) 2003-2013  Greek Universities Network - GUnet
+*  Copyright(c) 2003-2014  Greek Universities Network - GUnet
 *  A full copyright notice can be read in "/info/copyright.txt".
 *
 *  Developers Group:	Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -69,6 +69,8 @@ Also Credits to:
  Evaggelos Matiatos <ematiat@noc.uoa.gr> (University of Athens)
  Apostolos Kechagias <apkech@gmail.com>
  Eirini Lagiou <eilagiou@upatras.gr> (University of Patras)
+ Yuri Kherimyan <yurissudavar@gmail.com> (University of Athens)
+ Nikos Vavoulas (nikos.va@gmail.com)
 
 Also we would like to thank:
  Aristotelis Glentis <arisg@noc.uoa.gr> (University of Athens)
@@ -82,10 +84,15 @@ Also we would like to thank:
    George Tsolkas
    Lykourgos Papaevgeniou
    Ioannis Constantinou
-   George Argyros
-   Ioannis Stais
+   George Argyros <argyros.george@gmail.com>
+   Ioannis Stais <istais@di.uoa.gr>
    Nikolaos Karvelas
 for their contribution in security issues.
+
+/***********************************************************************
+Porting to iOS by:
+	Thanos Kyritsis <atkyritsis@upnet.gr> (University of Patras) 
+ 	Panayotis Katsaloulis <panayotis@panayotis.com>
 
 /***********************************************************************
 Porting to Android OS by:
@@ -156,14 +163,16 @@ jQuery JavaScript Library v1.6 - Copyright 2010, John Resig
   Released under the MIT, BSD, and GPL Licenses.
   http://sizzlejs.com/
 
-jQuery UI 1.8.3 - Copyright (c) 2010 (http://jqueryui.com/about)
+jQuery 1.10.2 - Copyright (c) 2005, 2013 jQuery Foundation, Inc. 
+jQuery UI 1.9.2 - Copyright (c) 2005, 2013 jQuery Foundation, Inc. 
   Dual licensed under the MIT and GPL licenses.
+  http://jquery.com
 
 jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
 
-flowplayer 3.2.7 - Copyright 2009-2011 Flowplayer Oy
+flowplayer 3.2.16 - Copyright 2009-2013 Flowplayer Oy
 
 HTML Purify: (include/htmlpurifier-4.3.0-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
@@ -175,12 +184,12 @@ Tiny MCE Editor
   Copyright © 2003-2011 Moxiecode Systems AB. All rights Reserved.
   Licensed under LGPL
   http:/tinymce.moxiecode.com
-  version 3.5.8
+  version 3.5.9
 
 PHP CAS Library - Copyright 2003 - 2010, The ESUP-Portail consortium & the JA-SIG Collaborative.
   Licensed under the New BSD License, an OSI-certified ("open") and Gnu/FSF-recognized ("free") license
   https://wiki.jasig.org/display/CASC/phpCAS
-  version 1.2.2
+  version 1.3.2
 
 SecureImage - Copyright 2009 Drew Phillips
   Licenced under GPL
