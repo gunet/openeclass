@@ -359,7 +359,7 @@ function display_user($user, $print_email = false, $icon = true) {
 
     $token = token_generate($user['id'], true);
     return "$icon<a href='{$urlAppend}main/profile/display_profile.php?id=$user[id]&amp;token=$token'>" .
-            q("$user[givenname] $user[surname]") . "</a>" .
+            q($user['givenname']) . " " .  q($user['surname']) . "</a>" .
             ($print_email ? (' (' . mailto(trim($user['email']), 'e-mail address hidden') . ')') : '');
 }
 
@@ -1222,7 +1222,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本�',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1773,8 +1773,8 @@ function openDocsPicker(field_name, url, type, win) {
     tinyMCE.activeEditor.windowManager.open({
         file: '$url' + type,
         title: 'Resources Browser',
-        width: 700,
-        height: 500,
+        width: 800,
+        height: 600,
         resizable: 'yes',
         inline: 'yes',
         close_previous: 'no',
@@ -1954,7 +1954,7 @@ function standard_text_escape($text, $mathimg = '../../courses/mathimg/') {
             $new_contents = glossary_expand($textNode->data);
             if ($new_contents != $textNode->data) {
                 $newdoc = new DOMDocument();
-                $newdoc->loadXML('<span>' . $new_contents . '</span>');
+                $newdoc->loadXML('<span>' . $new_contents . '</span>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
                 $newnode = $dom->importNode($newdoc->getElementsByTagName('span')->item(0), true);
                 $textNode->parentNode->replaceChild($newnode, $textNode);
                 unset($newdoc);
@@ -2101,7 +2101,7 @@ function greek_to_latin($string) {
         'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
         'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
         'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-        'ΐ', 'ϋ', 'ΰ', '�', 'Ϋ', '–'), array(
+        'ΐ', 'ϋ', 'ΰ', '�', 'Ϋ', '–'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
@@ -2112,8 +2112,8 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
-    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
+    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
@@ -2466,7 +2466,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DomDocument;
-        $this->tempDiv->loadXML('<div>' . $string . '</div>');
+        $this->tempDiv->loadXML('<div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
@@ -2585,6 +2585,7 @@ function copyright_info($cid) {
  * @return int
  */
 function crypto_rand_secure($min = null, $max = null) {
+    require_once('lib/srand.php');
     // default values for optional min/max
     if ($min === null)
         $min = 0;
@@ -2593,23 +2594,18 @@ function crypto_rand_secure($min = null, $max = null) {
     else
         $max += 1; // for being inclusive
 
-    if (function_exists('openssl_random_pseudo_bytes')) {
-        $range = $max - $min;
-        if ($range <= 0)
-            return $min; // not so random...
-        $log = log($range, 2);
-        $bytes = (int) ($log / 8) + 1; // length in bytes
-        $bits = (int) $log + 1; // length in bits
-        $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
-        do {
-            $rnd = hexdec(bin2hex(openssl_random_pseudo_bytes($bytes)));
-            $rnd = $rnd & $filter; // discard irrelevant bits
-        } while ($rnd >= $range);
-        return $min + $rnd;
-    } else {
-        mt_srand((double) microtime() * 1000000);
-        return mt_rand($min, $max);
-    }
+    $range = $max - $min;
+    if ($range <= 0)
+        return $min; // not so random...
+    $log = log($range, 2);
+    $bytes = (int) ($log / 8) + 1; // length in bytes
+    $bits = (int) $log + 1; // length in bits
+    $filter = (int) (1 << $bits) - 1; // set all lower bits to 1
+    do {
+        $rnd = hexdec(bin2hex(secure_random_bytes($bytes)));
+        $rnd = $rnd & $filter; // discard irrelevant bits
+    } while ($rnd >= $range);
+    return $min + $rnd;
 }
 
 function forbidden($path) {

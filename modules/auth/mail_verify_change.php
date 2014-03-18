@@ -50,6 +50,7 @@ if (!get_config('email_verification_required') or
         unset($_SESSION['mail_verification_required']);
     }
     header("Location:" . $urlServer);
+    exit;
 }
 
 if (!empty($_POST['submit'])) {
@@ -58,7 +59,7 @@ if (!empty($_POST['submit'])) {
         // user put a new email address update db and session
         if ($email != $_SESSION['email']) {
             $_SESSION['email'] = $email;
-            $qry = "UPDATE `user` set email=" . autoquote($email) . " WHERE user_id=$uid";
+            $qry = "UPDATE `user` set email=" . autoquote($email) . " WHERE id=$uid";
             db_query($qry);
         }
         //send new code

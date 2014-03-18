@@ -35,7 +35,7 @@ if (isset($_GET['id'])) {
 
     if (!empty($row)) {
         $vObj = MediaResourceFactory::initFromVideo($row);
-        echo MultimediaHelper::mediaHtmlObject($vObj, '#ffffff', '#000000');
+        echo MultimediaHelper::mediaHtmlObject($vObj);
     }
 }
 

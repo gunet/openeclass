@@ -87,15 +87,24 @@ function find_backup_folders($basedir) {
 }
 
 function restore_table($basedir, $table, $options) {
-    global $url_prefix_map, $restoreHelper;
+    global $url_prefix_map, $restoreHelper, $backupData;
 
     $set = get_option($options, 'set');
-    $backup = unserialize(file_get_contents($basedir . "/" . $restoreHelper->getFile($table)));
-    $i = 0;
+    if (!file_exists($basedir . "/" . $restoreHelper->getFile($table)) 
+            && $restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
+            && isset($backupData) && is_array($backupData) 
+            && isset($backupData['query']) && is_array($backupData['query'])) {
+        // look into backupData for our data
+        $backup = get_tabledata_from_parsed($table, $set);
+    } else if (file_exists($basedir . "/" . $restoreHelper->getFile($table))) {
+        $backup = unserialize(file_get_contents($basedir . "/" . $restoreHelper->getFile($table)));
+    } else {
+        $backup = array();
+    }
     $mapping = array();
     if (isset($options['return_mapping'])) {
         $return_mapping = true;
-        $id_var = $options['return_mapping'];
+        $id_var = $restoreHelper->getField($table, $options['return_mapping']); // map needs reverse resolution
     } else {
         $return_mapping = false;
     }
@@ -115,8 +124,8 @@ function restore_table($basedir, $table, $options) {
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
-                if (isset($map[$data[$field]])) {
-                    $data[$field] = $map[$data[$field]];
+                if (isset($map[$data[$restoreHelper->getField($table, $field)]])) { // map needs reverse resolution
+                    $data[$restoreHelper->getField($table, $field)] = $map[$data[$restoreHelper->getField($table, $field)]];
                 } else {
                     continue 2;
                 }
@@ -282,8 +291,6 @@ function restore_users($users, $cours_user, $departments) {
                             '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] . " " . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
                     "</p>\n";
         } elseif (isset($_POST['create_users'])) {
-            $registered_at = (is_numeric($data['registered_at'])) ? date('Y-m-d H:i:s', $data['registered_at']) : $data['registered_at'];
-            $expires_at = (is_numeric($data['expires_at'])) ? date('Y-m-d H:i:s', $data['expires_at']) : $data['expires_at'];
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
                     . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
                     . "registered_at = ?t, expires_at = ?t", 
@@ -294,8 +301,8 @@ function restore_users($users, $cours_user, $departments) {
                     (isset($data['email'])) ? $data['email'] : '', 
                     intval($data[$restoreHelper->getField('course_user', 'status')]), 
                     (isset($data['phone'])) ? $data['phone'] : '', 
-                    (isset($registered_at)) ? $registered_at : '', 
-                    (isset($expires_at)) ? $expires_at : '')->lastInsertID;
+                    date('Y-m-d H:i:s', time()), 
+                    date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             require_once 'include/lib/user.class.php';
             $user = new User();
@@ -555,4 +562,30 @@ function offset_map_function(&$data, $maps) {
         $data[$key] += $offset;
     }
     return true;
+}
+
+function get_tabledata_from_parsed($table, $set = array()) {
+    global $restoreHelper, $backupData;
+    $backup = array();
+    foreach ($backupData['query'] as $tableData) {
+        if (is_array($tableData) && isset($tableData['table']) 
+                && $tableData['table'] === $restoreHelper->getFile($table)
+                && is_array($tableData['fields']) && is_array($tableData['values'])) {
+            $row = array();
+            foreach ($tableData['values'] as $tableValue) {
+                for ($i = 0; $i < count($tableData['fields']); $i++) {
+                    if ($restoreHelper->getField($table, $tableData['fields'][$i]) !== RestoreHelper::FIELD_DROP) {
+                        $row[$tableData['fields'][$i]] = $tableValue[$i];
+                    }
+                }
+                foreach ($set as $setKey => $setValue) {
+                    if (!isset($row[$setKey])) {
+                        $row[$setKey] = $setValue;
+                    }
+                }
+                $backup[] = $row;
+            }   
+        }
+    }
+    return $backup;
 }
