@@ -270,7 +270,7 @@ $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
     <th colspan='2'>";
-        if (!$is_editor and isset($timeleft)) {
+        if (!$is_editor && $timeleft!=0) {
             $tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
         }
         $tool_content .= q($exerciseTitle). "</th></tr>

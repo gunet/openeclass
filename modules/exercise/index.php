@@ -25,7 +25,7 @@
  $TBL_EXERCISE_QUESTION = 'exercise_with_questions';
  $TBL_EXERCISE = 'exercise';
  $TBL_QUESTION = 'exercise_question';
-$TBL_RECORDS = 'exercise_user_record';
+ $TBL_RECORDS = 'exercise_user_record';
 
 require_once 'exercise.class.php';
 require_once 'question.class.php';
@@ -123,12 +123,12 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public FROM exercise WHERE course_id = ? ORDER BY id LIMIT ?, ?", $course_id, $from, $limitExPage);
-	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?", $course_id)->count;
+    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+    $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
 	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed " .
-            "FROM exercise WHERE course_id = ? AND active = 1 ORDER BY id LIMIT ?, ?", $course_id, $from, $limitExPage);
-	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ? AND active = 1", $course_id)->count;
+            "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
@@ -211,7 +211,7 @@ if (!$nbrExercises) {
 				<img src='$themeimg/arrow.png' alt='' /></td>
 				<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
             $eid = $row->id;
-			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?", $eid)->count;
+			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 
             if ($NumOfResults) {
                 $tool_content .= "<td align='center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a> |
@@ -252,7 +252,7 @@ if (!$nbrExercises) {
                 }
             }
             if (course_status($course_id) == COURSE_OPEN) {
-                if ($row['public']) {
+                if ($row->public) {
                     $tool_content .= icon('access_public', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=limited&amp;exerciseId=" . $row->id . "");
                 } else {
                     $tool_content .= icon('access_limited', $langResourceAccess, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=public&amp;exerciseId=" . $row->id . "");
@@ -260,9 +260,9 @@ if (!$nbrExercises) {
                 $tool_content .= "&nbsp;";
             }
             $tool_content .= "</td></tr>";
-        }
+
         // student only
-        else {
+    } else {
             if (!resource_access($row->active, $row->public)) {
                 continue;
             }
@@ -288,32 +288,33 @@ if (!$nbrExercises) {
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";
             // how many attempts we have.
-			$currentAttempt = Database::get()->querySingle("SELECT COUNT(*) FROM exercise_user_record WHERE eid = ? AND uid = ?", $row->id, $uid)->count;														  
+			$currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;														  
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td align='center'>";
+                $tool_content .= "<td align='center'>
                                 $row->time_constraint $langExerciseConstrainUnit</td>";
                 // if there is an active attempt
-                $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='{$row['id']}' AND uid='$uid' AND record_end_date is NULL";
+                $sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$row->id' AND uid='$uid' AND record_end_date is NULL";
                	$tmp = mysql_fetch_row(db_query($sql));
+                //$tmp = Database::get()->querySingle("SELECT COUNT(*) as count, record_start_date FROM exercise_user_record WHERE eid = ?d AND uid = ?d AND record_end_date is NULL", $row->id, $uid)
                 if ($tmp[0] > 0) {
                     $recordStartDate = strtotime($tmp[1]);
                     $temp_CurrentDate = time();
                     // if exerciseTimeConstraint has not passed yet calculate the remaining time
-                    if ($recordStartDate + ($row['time_constraint']*60) >= $temp_CurrentDate) {
-                        $_SESSION['exercise_begin_time'][$row['id']] = $recordStartDate;
-                        $timeleft = ($row['time_constraint']*60) - ($temp_CurrentDate - $recordStartDate);
+                    if ($recordStartDate + ($row->time_constraint*60) >= $temp_CurrentDate) {
+                        $_SESSION['exercise_begin_time'][$row->id] = $recordStartDate;
+                        $timeleft = ($row->time_constraint*60) - ($temp_CurrentDate - $recordStartDate);
                         $passed = false;
                     } else {
-                        $timeleft = "{$row['time_constraint']} $langExerciseConstrainUnit";
+                        $timeleft = "{$row->time_constraint} $langExerciseConstrainUnit";
                         $passed = true;
                     }
                     $tool_content .= "<span id=\"progresstime\">$timeleft</span></td>";
-                    $xId = $row['id'];
+                    $xId = $row->id;
                     if($passed){
                         unset($timeleft);
                     }
                 } else {
-                        $tool_content .= "{$row['time_constraint']} $langExerciseConstrainUnit</td>";
+                        $tool_content .= "{$row->time_constraint} $langExerciseConstrainUnit</td>";
                 }
             } else {
                 $tool_content .= "<td align='center'> - </td>";
@@ -325,8 +326,8 @@ if (!$nbrExercises) {
             }
             // user last exercise score
             $r = Database::get()->querySingle("SELECT total_score, total_weighting
-                                        FROM exercise_user_record WHERE uid = ?
-                                        AND eid = ?
+                                        FROM exercise_user_record WHERE uid = ?d
+                                        AND eid = ?d
                                         ORDER BY eurid DESC LIMIT 1", $uid, $row->id);
             if (empty($r->total_score)) {
                 $tool_content .= "<td align='center'>&dash;</td>";

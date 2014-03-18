@@ -19,7 +19,20 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+$head_content .= " 
+<script>
+$(function() {
+    $('input[name=answerType]').click(hideGrade);
+    $('input#free_text_selector').click(showGrade);
+    function hideGrade(){
+        $('input[name=questionGrade]').prop('disabled', true).closest('tr').hide();    
+    }
+    function showGrade(){
+        $('input[name=questionGrade]').prop('disabled', false).closest('tr').show();    
+    }    
+ });
+</script>
+ ";
 // the question form has been submitted
 if (isset($_POST['submitQuestion'])) {
     $questionName = trim($questionName);
@@ -54,6 +67,11 @@ if (isset($_POST['submitQuestion'])) {
     $objQuestion->updateTitle($questionName);
     $objQuestion->updateDescription($questionDescription);
     $objQuestion->updateType($answerType);
+    
+    //If grade field set (only in Free text questions)
+    if (isset($questionGrade)) {
+        $objQuestion->updateWeighting($questionGrade);
+    }
     $objQuestion->save($exerciseId);
     $questionId = $objQuestion->selectId();
     // upload or delete picture
@@ -90,6 +108,7 @@ if (isset($_POST['submitQuestion'])) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
         $answerType = $objQuestion->selectType();
+        $questionWeight = $objQuestion->selectWeighting();
     }
 }
 if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
@@ -142,7 +161,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $tool_content .= "</td></tr>";
     }
     $tool_content .= "<tr>
-        <th valign='top'>$langAnswerType:</th>
+        <th valign='top'>$langAnswerType: </th>
 	<td><input type='radio' name='answerType' value='1' ";
     if ($answerType == 1) {
         $tool_content .= 'checked="checked"';
@@ -169,9 +188,24 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $tool_content .= "<input type='radio' name='answerType' value='5' ";
     if ($answerType == 5) {
         $tool_content .= 'checked="checked"';
+    }  
+    $tool_content .= "> " . $langTrueFalse. "<br>";
+    $tool_content .= "<input type='radio' name='answerType' id='free_text_selector' value='6' ";
+    if ($answerType == 6) {
+        $tool_content .= 'checked="checked"';
     }
-    $tool_content .= "> " . $langTrueFalse;
-    $tool_content .= "</td>
+    $tool_content .= "> " . 'Ελεύθερου Κειμένου </td></tr>';    
+    
+    $tool_content .= "
+        <tr".(($answerType != 6) ? " style='display:none'": "").">
+        <th>$m[grade]:</th>
+        <td>
+	  <input type='text' name='questionGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
+	</td>
+	</tr>
+        ";
+    
+    $tool_content .= " 
         <tr>
         <th>&nbsp;</th>
         <td>

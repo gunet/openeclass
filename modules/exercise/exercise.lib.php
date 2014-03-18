@@ -174,8 +174,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
                           </tr>";
         }
     } // end for()
-
-    if (!$nbrAnswers) {
+    if ($answerType == FREE_TEXT) {
+            $tool_content .= "
+                          <tr class='even'>
+                            <td align='center'>".  rich_text_editor('choice['.$questionId.']', 14, 90, '', '')."</td></tr>";            
+    }   
+    if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "
                   <tr>
                     <td colspan='2'><p class='caution'>$langNoAnswer</td>

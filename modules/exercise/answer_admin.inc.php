@@ -846,6 +846,8 @@ if (isset($_GET['modifyAnswers'])) {
 		</table>
 	       </fieldset>
 	       </form>";
+        } elseif($answerType == FREE_TEXT) {
+            redirect_to_home_page('modules/exercise/admin.php?course='.$course_code);//to be developed
         }
     }
 }
