@@ -96,7 +96,7 @@ if ($is_editor) {
     elseif(isset($_POST['update_bbb_session']))
     {
         //print_r($_GET);
-        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before']);
+        update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
     }
     elseif(isset($_GET['choice']))
     {
@@ -131,7 +131,7 @@ if ($is_editor) {
     }elseif(isset($_POST['new_bbb_session']))
     {
         //print_r($_POST['notifyUsers']);
-        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers'],$_POST['minutes_before']);
+        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers'],$_POST['minutes_before'],$_POST['external_users']);
     }
     else
     {
@@ -200,7 +200,7 @@ function new_bbb_session() {
                 $langBBBNotifyExternalUsers
             </th>
             <td>
-                <input id='tags_1' type='text' class='tags' value='' />
+                <input id='tags_1' name='external_users' type='text' class='tags' value='' />
                 </td>
         </tr>
         <tr>
@@ -220,13 +220,13 @@ function new_bbb_session() {
 }
 
 // insert scheduled session data into database
-function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before)
+function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users)
 {
     global $tool_content, $langBBBAddSuccessful;
     global $langBBBScheduledSession;
     
-    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw,unlock_interval)"
-            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."')");
+    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
+            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."','".q(trim($xternal_users))."'))");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -261,12 +261,12 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
 }
 
 // update scheduled session data into database
-function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before)
+function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users)
 {
     global $tool_content, $langBBBAddSuccessful;
     
     $query = db_query("UPDATE bbb_session SET title='".q($title)."',description='".$desc."',"
-            . "start_date='".$start_session."',public='$type',active='$status',unlock_interval='$minutes_before' WHERE id='$session_id'");
+            . "start_date='".$start_session."',public='$type',active='$status',unlock_interval='$minutes_before',external_users='".trim($external_users)."' WHERE id='$session_id'");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -382,7 +382,7 @@ function edit_bbb_session($session_id) {
                             $langBBBNotifyExternalUsers
                         </th>
                         <td>
-                                <input id='tags_1' type='text' class='tags' value='' />
+                            <input id='tags_1' name='external_users' type='text' class='tags' value='".trim($row['external_users'])."' />
                         </td>
                     </tr>
                     <tr>
