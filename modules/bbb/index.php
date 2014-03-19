@@ -25,6 +25,7 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'bbb';
+
 require_once '../../include/baseTheme.php';
 
 // For using with the pop-up calendar
@@ -54,6 +55,31 @@ if (check_guest()) {
     $tool_content .= "<p class='caution'>$langNoGuest</p>";
     draw($tool_content, 2, 'bbb');
 }
+
+load_js('jquery.js');
+load_js('taginput/jquery.tagsinput.js');
+load_js('taginput/jquery.tagsinput.min.js');
+
+$head_content .= "
+<script type='text/javascript'>
+		function onAddTag(tag) {
+			alert('Added a tag: ' + tag);
+		}
+		function onRemoveTag(tag) {
+			alert('Removed a tag: ' + tag);
+		}
+		
+		function onChangeTag(input,tag) {
+			alert('Changed a tag: ' + tag);
+		}
+		
+		$(function() {
+
+			$('#tags_1').tagsInput({width:'auto'});
+
+		});	
+</script>
+";
 
 if ($is_editor) {
     $tool_content .= "
@@ -120,7 +146,7 @@ function new_bbb_session() {
     global $desc;
     global $start_session;
     global $langBack;
-    global $langBBBNotifyUsers;
+    global $langBBBNotifyUsers,$langBBBNotifyExternalUsers ;
 
     $start_session = jscal_html('start_session');
 
@@ -167,8 +193,16 @@ function new_bbb_session() {
                         <option value='30'>30</option>
                         <option value='10'>10</option>
                     </select> $langBBBMinutesBefore
+            </td>
+        </tr>
+        <tr>
+            <th>
+                $langBBBNotifyExternalUsers
+            </th>
+            <td>
+                <input id='tags_1' type='text' class='tags' value='' />
                 </td>
-            </tr>
+        </tr>
         <tr>
         <th colspan='2' valign='top'>
                 <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
@@ -189,6 +223,7 @@ function new_bbb_session() {
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before)
 {
     global $tool_content, $langBBBAddSuccessful;
+    global $langBBBScheduledSession;
     
     $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw,unlock_interval)"
             . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."')");
@@ -214,9 +249,10 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
         }
         if(count($recipients)>0)
         {
-            $emailsubject = "Test subject";
-            $emailbody = "Test body";
-            $emailcontent = "Test content";
+            $emailsubject = $langBBBScheduledSession ;
+            //$emailbody = "Test body";
+            $emailcontent = $langBBBSchedulesSessionInfo . $start_session;
+            $emilcontent .= $langBBBSchedulesSessionInfoJoin;
             
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
@@ -270,7 +306,7 @@ function edit_bbb_session($session_id) {
     global $desc;
     global $start_session;
     global $langBack;
-    global $langBBBNotifyUsers;
+    global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
 
     $query = db_query(" SELECT * FROM bbb_session WHERE id='$session_id'");
     if (mysql_num_rows($query)) {
@@ -339,6 +375,14 @@ function edit_bbb_session($session_id) {
                             <option value='10'"; if($row['unlock_interval']=='10') { $tool_content .="selected='selected'"; }
                             $tool_content .=">10</option>
                         </select> $langBBBMinutesBefore
+                        </td>
+                    </tr>                    
+                    <tr>
+                        <th>
+                            $langBBBNotifyExternalUsers
+                        </th>
+                        <td>
+                                <input id='tags_1' type='text' class='tags' value='' />
                         </td>
                     </tr>
                     <tr>
