@@ -614,7 +614,8 @@ function lessonToolsMenu() {
         $sideMenuLink = array();
         $sideMenuImg = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $langExternalLinks);
+                             'text' => $langExternalLinks,
+                             'class' => 'external');
         array_push($sideMenuSubGroup, $arrMenuType);
         while ($ex_link = mysql_fetch_array($result2)) {
             array_push($sideMenuText, $ex_link['title']);
