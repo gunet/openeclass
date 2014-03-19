@@ -78,6 +78,7 @@ $nameTools = $lp['name'];
 if (!add_units_navigation(TRUE)) {
 	$navigation[] = array("url"=>"learningPathList.php?course=$code_cours", "name"=> $langLearningPaths);
 }
+mysql_select_db($currentCourseID);
 
 // permissions (only for the viewmode, there is nothing to edit here )
 if ($is_editor) {
