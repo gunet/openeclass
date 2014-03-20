@@ -1112,6 +1112,37 @@ db_query("CREATE TABLE IF NOT EXISTS `logins` (
         `course_id` INT(11) NOT NULL,
         PRIMARY KEY  (`id`))");
 
+// bbb_servers table
+db_query('CREATE TABLE `bbb_servers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `hostname` varchar(255) DEFAULT NULL,
+  `ip` varchar(255) NOT NULL,
+  `enabled` enum("true","false") DEFAULT NULL,
+  `server_key` varchar(255) DEFAULT NULL,
+  `api_url` varchar(255) DEFAULT NULL,
+  `max_rooms` int(11) DEFAULT NULL,
+  `max_users` int(11) DEFAULT NULL,
+  `enable_recordings` enum("yes","no") DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_bbb_servers` (`hostname`)');
+    
+// bbb_sessions tables
+db_query('CREATE TABLE `bbb_session` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `description` text,
+  `start_date` datetime DEFAULT NULL,
+  `public` enum("0","1") DEFAULT NULL,
+  `active` enum("0","1") DEFAULT NULL,
+  `running_at` int(11) DEFAULT NULL,
+  `meeting_id` varchar(255) DEFAULT NULL,
+  `mod_pw` varchar(255) DEFAULT NULL,
+  `att_pw` varchar(255) DEFAULT NULL,
+  `unlock_interval` int(11) DEFAULT NULL,
+  `external_users` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)');
 
 // create indexes
 db_query('CREATE INDEX `doc_path_index` ON document (course_id, subsystem, path)');
