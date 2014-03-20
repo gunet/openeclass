@@ -91,7 +91,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
         		AND M.`contentType` = \"" . CTLINK_ . "\"
         		AND M.`course_id` = $course_id";
         $query0 = db_query($sql);
-        $num = mysql_numrows($query0);
+        $num = mysql_num_rows($query0);
 
         if ($num == 0) {
             // create new module
@@ -145,7 +145,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				AND LPM.`learnPath_id` = " . (int) $_SESSION['path_id'] . "
 				AND M.`course_id` = $course_id";
             $query2 = db_query($sql);
-            $num = mysql_numrows($query2);
+            $num = mysql_num_rows($query2);
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 $thisLinkModule = mysql_fetch_array($query0);

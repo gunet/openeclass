@@ -105,8 +105,10 @@ function getToolsArray($cat) {
                                                           " . MODULE_ID_FORUM . ",
                                                           " . MODULE_ID_GROUPS . ",
                                                           " . MODULE_ID_WIKI . ",
+                                                          " . MODULE_ID_ATTENDANCE . ",
                                                           " . MODULE_ID_GRADEBOOK . ",
                                                           " . MODULE_ID_LP . ")
+
                                         ORDER BY module_id";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
@@ -174,6 +176,7 @@ function loggedInMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langAdminOptions'];
+        $arrMenuType['class'] = 'admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         if ((isset($is_admin) and $is_admin) or
@@ -200,6 +203,7 @@ function loggedInMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+    $arrMenuType['class'] = 'basic';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
@@ -233,7 +237,7 @@ function loggedInMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langUserOptions'];
-
+    $arrMenuType['class'] = 'user';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     $res2 = db_query("SELECT status FROM user WHERE id = $uid");
@@ -289,6 +293,7 @@ function loggedOutMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	$arrMenuType['class'] = 'basic';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
@@ -351,6 +356,7 @@ function adminMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langAdminUsers'];
+    $arrMenuType['class'] = 'user_admin';
 
     array_push($sideMenuSubGroup, $arrMenuType);
     array_push($sideMenuText, $GLOBALS['langSearchUser']);
@@ -416,6 +422,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langAdminCours'];
+        $arrMenuType['class'] = 'course_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         array_push($sideMenuText, $GLOBALS['langListCours']);
@@ -455,6 +462,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langState'];
+        $arrMenuType['class'] = 'server_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
@@ -496,6 +504,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
+        $arrMenuType['class'] = 'other_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
@@ -556,16 +565,21 @@ function lessonToolsMenu() {
     $arrMenuType['type'] = 'none';
 
     if ($is_editor) {
-        $tools_sections = array(array('type' => 'Public',
-                'title' => $GLOBALS['langActiveTools'],
-                'iconext' => '_on.png'),
-            array('type' => 'PublicButHide',
-                'title' => $GLOBALS['langInactiveTools'],
-                'iconext' => '_off.png'));
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langActiveTools'],
+                        'iconext' => '_on.png',
+                        'class' => 'active'),
+                  array('type' => 'PublicButHide',
+                        'title' => $GLOBALS['langInactiveTools'],
+                        'iconext' => '_off.png',
+                        'class' => 'inactive'));
     } else {
-        $tools_sections = array(array('type' => 'Public',
-                'title' => $GLOBALS['langCourseOptions'],
-                'iconext' => '_on.png'));
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langCourseOptions'],
+                        'iconext' => '_on.png',
+                        'class' => 'active'));
     }
 
     foreach ($tools_sections as $section) {
@@ -578,8 +592,10 @@ function lessonToolsMenu() {
         $sideMenuID = array();
 
         $arrMenuType = array('type' => 'text',
-            'text' => $section['title']);
+                             'text' => $section['title'],
+                             'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
+
         while ($toolsRow = mysql_fetch_array($result)) {
             $mid = $toolsRow['module_id'];
             array_push($sideMenuText, q($modules[$mid]['title']));
@@ -601,7 +617,8 @@ function lessonToolsMenu() {
         $sideMenuLink = array();
         $sideMenuImg = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $langExternalLinks);
+                             'text' => $langExternalLinks,
+                             'class' => 'external');
         array_push($sideMenuSubGroup, $arrMenuType);
         while ($ex_link = mysql_fetch_array($result2)) {
             array_push($sideMenuText, $ex_link['title']);
@@ -620,7 +637,8 @@ function lessonToolsMenu() {
         $sideMenuImg = array();
         $sideMenuID = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $langAdministrationTools);
+                             'text' => $langAdministrationTools,
+                             'class' => 'course_admin');
         array_push($sideMenuSubGroup, $arrMenuType);
         foreach ($admin_modules as $adm_mod) {
             array_push($sideMenuText, $adm_mod['title']);
@@ -662,6 +680,7 @@ function pickerMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
+	$arrMenuType['class'] = 'picker';
     array_push($sideMenuSubGroup, $arrMenuType);
 
     if (isset($course_id) and $course_id >= 1) {

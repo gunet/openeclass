@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
         </tr>
         <tr>
         <th class='left'>$langPass:</th>
-        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' id='password' /></td>
+        <td><input type='text' name='guestpassword' value='' class='FormData_InputText' id='password' autocomplete='off' /></td>
         <td class='smaller'>$langAskGuest</td>
         </tr>
         <tr>

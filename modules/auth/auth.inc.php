@@ -674,6 +674,7 @@ function process_login() {
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
                 case 1: $warning .= "";
+                    session_regenerate_id();
                     break;
                 case 2: $warning .= "<p class='alert1'>$langInvalidId</p>";
                     break;

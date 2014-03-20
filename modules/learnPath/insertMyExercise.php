@@ -91,7 +91,7 @@ while ($listex = mysql_fetch_array($resultex)) {
                   AND M.`course_id` = $course_id";
 
         $query = db_query($sql);
-        $num = mysql_numrows($query);
+        $num = mysql_num_rows($query);
 
         if ($num == 0) {
             // select infos about added exercise
@@ -149,7 +149,7 @@ while ($listex = mysql_fetch_array($resultex)) {
                        AND M.`course_id` = $course_id";
 
             $query2 = db_query($sql);
-            $num = mysql_numrows($query2);
+            $num = mysql_num_rows($query2);
 
             if ($num == 0) {     // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 $thisExerciseModule = mysql_fetch_array($query);

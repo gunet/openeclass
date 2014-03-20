@@ -35,6 +35,6 @@ if (isset($_GET['id'])) {
 
     if (!empty($row)) {
         $vObj = MediaResourceFactory::initFromVideoLink($row);
-        echo MultimediaHelper::medialinkIframeObject($vObj, '#ffffff', '#000000');
+        echo MultimediaHelper::medialinkIframeObject($vObj);
     }
 }

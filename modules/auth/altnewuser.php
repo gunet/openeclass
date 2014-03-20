@@ -96,9 +96,9 @@ if (($auth != 7) and ($auth != 6)) {
     $set_uname = isset($_GET['uname']) ? (" value='" . q(canonicalize_whitespace($_GET['uname'])) . "'") : '';
     $tool_content .= "
                 <tr><th width='180'>$langAuthUserName</th>
-                    <td><input type='text' size='30' maxlength='30' name='uname'$set_uname></td></tr>
+                    <td><input type='text' size='30' maxlength='30' name='uname' autocomplete='off' $set_uname></td></tr>
                 <tr><th>$langAuthPassword</th>
-                    <td><input type='password' size='30' maxlength='30' name='passwd'></td></tr>";
+                    <td><input type='password' size='30' maxlength='30' name='passwd' autocomplete='off'></td></tr>";
 }
 
 $tool_content .= "<tr>

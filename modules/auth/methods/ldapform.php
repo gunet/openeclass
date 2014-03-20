@@ -69,7 +69,7 @@ $tool_content .= "
     </tr>
     <tr>
       <th class='left'>$langldap_bind_pw:</th>
-      <td><input class='FormData_InputText' name='ldapbind_pw' type='password' size='30' value='" . q($ldapbind_pw) . "'></td>
+      <td><input class='FormData_InputText' name='ldapbind_pw' type='password' size='30' value='" . q($ldapbind_pw) . "' autocomplete='off'></td>
     </tr>
     <tr>
       <th class='left'>$langldap_login_attr:</th>

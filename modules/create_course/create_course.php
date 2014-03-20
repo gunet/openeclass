@@ -25,7 +25,7 @@ $helpTopic = 'CreateCourse';
 
 require_once '../../include/baseTheme.php';
 
-if (isset($_SESSION['status']) and $_SESSION['status'] != 1) { // if we are not teachers
+if ($session->status !== USER_TEACHER) { // if we are not teachers
     redirect_to_home_page();
 }
 if (get_config('betacms')) { // added support for betacms
@@ -237,7 +237,7 @@ if (!isset($_POST['create_course'])) {
         <table class='sub_title1' width='100%'>
          <tr>		            
         <th width='170'>$langOptPassword</th>    
-            <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' /></td>
+            <td colspan='2'><input id='coursepassword' type='text' name='password' 'password' value='".@q($password)."' class='FormData_InputText' autocomplete='off' /></td>
         </tr>            
         <tr>
             <th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
@@ -333,44 +333,47 @@ if (!isset($_POST['create_course'])) {
             default:
                 $course_license = 0;
                 break;
-            }
         }
-    db_query("INSERT INTO course SET
-                        code = " . quote($code) . ",
-                        lang =" . quote($language) . ",
-                        title = " . quote($title) . ",                        
-                        visible = " . quote($_POST['formvisible']) . ",
-                        course_license = '$course_license',
-                        prof_names = " . quote($prof_names) . ",
-                        public_code = " . quote($code) . ",
-                        doc_quota = $doc_quota*1024*1024,
-                        video_quota = $video_quota*1024*1024,
-                        group_quota = $group_quota*1024*1024,
-                        dropbox_quota = $dropbox_quota*1024*1024,
-                        password = " . quote($password) . ",
+    }
+    $result = Database::get()->query("INSERT INTO course SET
+                        code = ?s,
+                        lang = ?s,
+                        title = ?s,
+                        visible = ?d,
+                        course_license = ?d,
+                        prof_names = ?s,
+                        public_code = ?s,
+                        doc_quota = ?f,
+                        video_quota = ?f,
+                        group_quota = ?f,
+                        dropbox_quota = ?f,
+                        password = ?s,
                         keywords = '',
-                        created = NOW()");
-    $new_course_id = mysql_insert_id();        
-    
+                        created = NOW()", $code, $language, $title, intval($_POST['formvisible']), 
+            intval($course_license), $prof_names, $code, floatval($doc_quota * 1024 * 1024), 
+            floatval($video_quota * 1024 * 1024), floatval($group_quota * 1024 * 1024), 
+            floatval($dropbox_quota * 1024 * 1024), $password);
+    $new_course_id = $result->lastInsertID;
+
     // create course  modules              
     create_modules($new_course_id);
 
-    db_query("INSERT INTO course_user SET
-                        course_id = $new_course_id,
-                        user_id = $uid,
-                        status = 1,
-                        tutor = 1,
-                        reg_date = CURDATE()");
-    
-    db_query("INSERT INTO group_properties SET
-                        course_id = $new_course_id,
-                        self_registration = 1,
-                        multiple_registration = 0,
-                        forum = 1,
-                        private_forum = 0,
-                        documents = 1,
-                        wiki = 0,
-                        agenda = 0");
+    Database::get()->query("INSERT INTO course_user SET
+                                        course_id = ?d,
+                                        user_id = ?d,
+                                        status = 1,
+                                        tutor = 1,
+                                        reg_date = CURDATE()", intval($new_course_id), intval($uid));
+
+    Database::get()->query("INSERT INTO group_properties SET
+                                        course_id = ?d,
+                                        self_registration = 1,
+                                        multiple_registration = 0,
+                                        forum = 1,
+                                        private_forum = 0,
+                                        documents = 1,
+                                        wiki = 0,
+                                        agenda = 0", intval($new_course_id));
     $course->refresh($new_course_id, $departments);
 
     $description = purify($_POST['description']);
@@ -382,8 +385,7 @@ if (!isset($_POST['create_course'])) {
     // creation of course index.php
     course_index($code);
     
-    $status[$code] = 1;
-    $_SESSION['status'] = $status;
+    $_SESSION['courses'][$code] = USER_TEACHER;
 
     // ----------- Import from BetaCMS Bridge -----------
     if (get_config('betacms')) {
@@ -401,3 +403,4 @@ if (!isset($_POST['create_course'])) {
                                             'visible' => $_POST['formvisible']));
 } // end of submit
 draw($tool_content, 1, null, $head_content);
+

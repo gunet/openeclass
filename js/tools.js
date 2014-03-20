@@ -225,7 +225,7 @@ function course_list_handler()
                function (result) {
                        $('#ind'+cid).remove();
                        if (result == 'registered') {
-                               td.append(' <img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');
+                               td.append(' <img id="res'+cid+'" src="'+themeimg+'/tick.png" alt="">');                               
                        } else {
                                $('input[type=checkbox][value='+cid+']').prop('checked', false);
                                if ($.course_closed[cid]) {

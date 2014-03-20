@@ -30,8 +30,6 @@ if (!defined('ECLASS_VERSION')) {
         exit;
 }
 
-define('DEBUG_MYSQL', TRUE);
-
 db_query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 if (mysql_version()) db_query("SET NAMES utf8");
 
@@ -230,7 +228,7 @@ db_query("CREATE TABLE user (
       last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 db_query("CREATE TABLE admin (
-      user_id INT(11) NOT NULL UNIQUE KEY,
+      user_id INT(11) NOT NULL PRIMARY KEY,
       privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 db_query("CREATE TABLE login_failure (
@@ -336,6 +334,26 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
                `description` TEXT NOT NULL,
                `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
+ db_query("CREATE TABLE IF NOT EXISTS `attendance` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `course_id` INT(11) NOT NULL,
+               `limit` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ db_query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_id` MEDIUMINT(11) NOT NULL,
+               `title` VARCHAR(250) DEFAULT NULL,
+               `date` DATETIME DEFAULT NULL,
+               `description` TEXT NOT NULL,
+               `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+               `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+               `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+ db_query("CREATE TABLE IF NOT EXISTS `attendance_book` (
+               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+               `attendance_activity_id` MEDIUMINT(11) NOT NULL,
+               `uid` int(11) NOT NULL DEFAULT 0,
+               `attend` TINYINT(4) NOT NULL DEFAULT 0,
+               `comments` TEXT NOT NULL) $charset_spec");
+  
 db_query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
@@ -530,7 +548,9 @@ db_query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
 db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                 `wiki_id` INT(11) UNSIGNED NOT NULL,
                 `flag` VARCHAR(255) NOT NULL,
-                `value` ENUM('false','true') NOT NULL DEFAULT 'false' )  $charset_spec");
+                `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+                PRIMARY KEY (wiki_id, flag) )
+                $charset_spec");
 db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
@@ -585,7 +605,9 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                 `max_grade` FLOAT DEFAULT NULL,                
-                `assign_to_specific` CHAR(1) NOT NULL) $charset_spec");
+                `assign_to_specific` CHAR(1) NOT NULL,
+                `file_path` VARCHAR(200) NOT NULL,
+                `file_name` VARCHAR(200) NOT NULL') $charset_spec");
 
 db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -606,7 +628,8 @@ db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
 db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                 `user_id` int(11) NOT NULL,
                 `group_id` int(11) NOT NULL,
-                `assignment_id` int(11) NOT NULL
+                `assignment_id` int(11) NOT NULL,
+                PRIMARY KEY (user_id, group_id, assignment_id)
               ) $charset_spec");        
         
 db_query("CREATE TABLE IF NOT EXISTS `exercise` (
