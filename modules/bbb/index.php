@@ -131,7 +131,7 @@ if ($is_editor) {
     }elseif(isset($_POST['new_bbb_session']))
     {
         //print_r($_POST['notifyUsers']);
-        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],$_POST['notifyUsers'],$_POST['minutes_before'],$_POST['external_users']);
+        add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $_POST['start_session'], $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users']);
     }
     else
     {
@@ -225,8 +225,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     global $tool_content, $langBBBAddSuccessful;
     global $langBBBScheduledSession;
     
-    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
-            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."','".q(trim($xternal_users))."'))");
+    $query = db_query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users)"
+            . " VALUES ('".q($course_id)."','".q($title)."','".$desc."','$start_session','$type','$status','1','".generateRandomString()."','".generateRandomString()."','".generateRandomString()."','".q($minutes_before)."','".q(trim($external_users))."')");
     
     $tool_content .= "<p class='success'>$langBBBAddSuccessful</p>";
 
@@ -462,7 +462,7 @@ function bbb_session_details() {
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
                     {
-                        $tool_content .= "<a href='".bbb_join_user($meeting_id,$att_pw,$_SESSION['surname'],$_SESSION['givenname'])."' target='_blank'>$langBBBSessionJoin</a>";
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$title</a>";
                     } else {
                         $tool_content .= "$title";
                     }
@@ -473,8 +473,7 @@ function bbb_session_details() {
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($row['active']=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row['unlock_interval'] )
                         {
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=$title&amp;att_pw=$att_pw&amp' target='_blank'>$langBBBSessionJoin</a>";
-
+                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=$title&amp;meeting_id=$meeting_id&amp;att_pw=$att_pw' target='_blank'>$langBBBSessionJoin</a>";
                     } else {
                         $tool_content .= "-";
                     }
