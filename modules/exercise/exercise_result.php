@@ -327,7 +327,11 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         }
         $tool_content .= "
 		<tr class='even'>
-		  <th colspan='$colspan' class='odd'><span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span><span style='float:right;'>
+		  <th colspan='$colspan' class='odd'>";
+        if ($answerType == FREE_TEXT) {
+            $tool_content .= "<span style='color:red;'>Η απάντηση δεν έχει ακόμα βαθμολογηθεί</span>";
+        }
+        $tool_content .= "<span style='float:right;'>
 			    $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>
 		  </th>
 		</tr>";
