@@ -353,6 +353,7 @@ function adminMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langAdminUsers'];
+    $arrMenuType['class'] = 'user_admin';
 
     array_push($sideMenuSubGroup, $arrMenuType);
     array_push($sideMenuText, $GLOBALS['langSearchUser']);
@@ -458,6 +459,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langState'];
+        $arrMenuType['class'] = 'server_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
@@ -499,6 +501,7 @@ function adminMenu() {
         $arrMenuType = array();
         $arrMenuType['type'] = 'text';
         $arrMenuType['text'] = $GLOBALS['langGenAdmin'];
+        $arrMenuType['class'] = 'other_admin';
         array_push($sideMenuSubGroup, $arrMenuType);
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
@@ -559,19 +562,21 @@ function lessonToolsMenu() {
     $arrMenuType['type'] = 'none';
 
     if ($is_editor) {
-        $tools_sections = array(array('type' => 'Public',
-                'title' => $GLOBALS['langActiveTools'],
-                'iconext' => '_on.png',
-                 'class' => 'active'),
-            array('type' => 'PublicButHide',
-                'title' => $GLOBALS['langInactiveTools'],
-                'iconext' => '_off.png',
-                'class' => 'inactive'));
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langActiveTools'],
+                        'iconext' => '_on.png',
+                        'class' => 'active'),
+                  array('type' => 'PublicButHide',
+                        'title' => $GLOBALS['langInactiveTools'],
+                        'iconext' => '_off.png',
+                        'class' => 'inactive'));
     } else {
-        $tools_sections = array(array('type' => 'Public',
-                'title' => $GLOBALS['langCourseOptions'],
-                'iconext' => '_on.png',
-                'class' => 'active'));
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langCourseOptions'],
+                        'iconext' => '_on.png',
+                        'class' => 'active'));
     }
 
     foreach ($tools_sections as $section) {
@@ -584,8 +589,8 @@ function lessonToolsMenu() {
         $sideMenuID = array();
 
         $arrMenuType = array('type' => 'text',
-            'text' => $section['title'],
-            'class' => $section['class']);
+                             'text' => $section['title'],
+                             'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
 
         while ($toolsRow = mysql_fetch_array($result)) {
@@ -609,7 +614,8 @@ function lessonToolsMenu() {
         $sideMenuLink = array();
         $sideMenuImg = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $langExternalLinks);
+                             'text' => $langExternalLinks,
+                             'class' => 'external');
         array_push($sideMenuSubGroup, $arrMenuType);
         while ($ex_link = mysql_fetch_array($result2)) {
             array_push($sideMenuText, $ex_link['title']);
@@ -628,7 +634,8 @@ function lessonToolsMenu() {
         $sideMenuImg = array();
         $sideMenuID = array();
         $arrMenuType = array('type' => 'text',
-            'text' => $langAdministrationTools);
+                             'text' => $langAdministrationTools,
+                             'class' => 'course_admin');
         array_push($sideMenuSubGroup, $arrMenuType);
         foreach ($admin_modules as $adm_mod) {
             array_push($sideMenuText, $adm_mod['title']);
