@@ -112,13 +112,13 @@ if (!class_exists('Exercise')):
                         $object->q_position++;
                     }
                     $this->questionList[$object->q_position] = $object->question_id;
-                    // find the total weighting of an exercise
-                    $this->totalweight = db_query_get_single_value("SELECT SUM(exercise_question.weight)
-                                                FROM $TBL_QUESTION, $TBL_EXERCISE_QUESTION
-                                                WHERE exercise_question.course_id = $course_id 
-                                                AND exercise_question.id = exercise_with_questions.question_id
-                                                AND exercise_with_questions.exercise_id = $id");
                 }
+                // find the total weighting of an exercise
+                $this->totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
+                                                FROM exercise_question, exercise_with_questions
+                                                WHERE exercise_question.course_id = ?d 
+                                                AND exercise_question.id = exercise_with_questions.question_id
+                                                AND exercise_with_questions.exercise_id = ?d", $course_id, $id)->totalweight;               
                 return true;
             }
             // exercise not found

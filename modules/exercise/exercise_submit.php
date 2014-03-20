@@ -114,6 +114,7 @@ if (isset($_POST['formSent'])) {
 	        if ($_SESSION['exercise_end_time'][$exerciseId] - $_SESSION['exercise_begin_time'][$exerciseId] > $exerciseTimeConstraint) {
 	            unset($_SESSION['exercise_begin_time']);
 	            unset($_SESSION['exercise_end_time']);
+                    die('eimai edw');
 	            header('Location: exercise_redirect.php?course=' . $course_code . '&exerciseId=' . $exerciseId);
 	            exit();
 	        }
@@ -188,7 +189,7 @@ if (!$is_editor) {
 	// either from a previews attempt meaning that user hasn't sumbited his answers    
 	// 		and exerciseTimeConstrain hasn't yet passed,
 	// either start a new attempt and count now() as begin time.
-	$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND record_end_date is NULL";
+	$sql = "SELECT COUNT(*), record_start_date FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid' AND (record_end_date is NULL OR record_end_date = 0)";
 	$tmp = mysql_fetch_row(db_query($sql));
 	if ($tmp[0] > 0) {
 		$recordStartDate = strtotime($tmp[1]);
@@ -209,12 +210,15 @@ if (!$is_editor) {
 		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
 		$tmp = mysql_fetch_row(db_query($sql));
 		$attempt = $tmp[0] + 1;
+                
 		// count this as an attempt by saving it as an incomplete record, if there are any available attempts left
 		if (($exerciseAllowedAttempts > 0 && $attempt <= $exerciseAllowedAttempts) || $exerciseAllowedAttempts == 0) {
 			$sql = "INSERT INTO `$TBL_RECORDS` (eid, uid, record_start_date, total_score, total_weighting, attempt)
 		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
 			$result = db_query($sql);
 			$timeleft = $exerciseTimeConstraint*60;
+                        unset($_SESSION['exercise_begin_time']);
+                        unset($_SESSION['exercise_end_time']);
 		}
 	}
 	// Checking everything is between correct boundaries:
