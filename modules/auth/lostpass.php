@@ -113,11 +113,11 @@ if (isset($_REQUEST['u']) and
         <table class='tbl'>
         <tr>
            <th>$langNewPass1</th>
-           <td><input type='password' size='40' name='newpass' value='' id='password'/>&nbsp;<span id='result'></span></td>
+           <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
         </tr>
         <tr>
            <th>$langNewPass2</th>
-           <td><input type='password' size='40' name='newpass1' value=''></td>
+           <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
         </tr>
         <tr>
            <th>&nbsp;</th>
@@ -207,11 +207,11 @@ if (isset($_REQUEST['u']) and
 	  <table class='tbl' width='100%'>
 	  <tr>
             <th width='100'>$lang_username:</th>
-	    <td><input type='text' name='userName' size='40'></td>
+	    <td><input type='text' name='userName' size='40' autocomplete='off'></td>
           </tr>
 	  <tr>
 	    <th>$lang_email: </th>
-	    <td><input type='text' name='email' size='40'></td>
+	    <td><input type='text' name='email' size='40' autocomplete='off'></td>
           </tr>
           <tr>
             <td>&nbsp;</td>

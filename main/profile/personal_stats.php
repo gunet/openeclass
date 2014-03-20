@@ -30,6 +30,9 @@ check_uid();
 $nameTools = $langPersonalStats;
 check_guest();
 
+load_js('jquery');
+load_js('jquery-ui');
+
 $totalHits = 0;
 $totalDuration = 0;
 require_once 'modules/graphics/plotter.php';
@@ -107,10 +110,10 @@ if (mysql_num_rows($result) > 0) {  // found courses ?
         }
         $i++;
         $tool_content .= "
-                        <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
-                        <td>" . q(course_code_to_title($code)) . "</td>
-                        <td width='140'>" . format_time_duration(0 + $time) . "</td>
-                        </tr>";
+                <td width='16'><img src='$themeimg/arrow.png' alt=''></td>
+                <td>" . q(course_code_to_title($code)) . "</td>
+                <td width='140'>" . format_time_duration(0 + $time) . "</td>
+                </tr>";
     }
     $tool_content .= "</table></td></tr>";
 }

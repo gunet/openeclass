@@ -87,15 +87,19 @@ if (isset($_POST['modify'])) {
                         (SELECT forum_id FROM `group` WHERE id = $group_id)
                             AND course_id = $course_id");
 
-    if ($is_editor and isset($_POST['tutor'])) {
-        db_query("DELETE FROM `$mysqlMainDb`.group_members
-                                 WHERE group_id = $group_id AND is_tutor = 1");
-        foreach ($_POST['tutor'] as $tutor_id) {
-            $tutor_id = intval($tutor_id);
-            db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1, description='$description'");
+    if ($is_editor) {
+            if (isset($_POST['tutor'])) {
+                    db_query("DELETE FROM group_members
+                                     WHERE group_id = $group_id AND is_tutor = 1");                
+                    foreach ($_POST['tutor'] as $tutor_id) {
+                            $tutor_id = intval($tutor_id);
+                            db_query("REPLACE INTO group_members SET group_id = $group_id, user_id = $tutor_id, is_tutor = 1");
+                    }
+                } else {
+                        db_query("UPDATE group_members SET is_tutor = 0 WHERE group_id = $group_id");
+                }
         }
-    }
-
+            
     // Count number of members
     $numberMembers = @count($_POST['ingroup']);
 

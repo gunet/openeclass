@@ -214,9 +214,9 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
           <tr><th class='left'><b>$langSurname:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='surname_form' value='" . q($ps) . "' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langUsername:</b></th>
-              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='" . q($pu) . "' />&nbsp;(*)</td></tr>
+              <td class='smaller'><input class='FormData_InputText' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langPass:</b></th>
-              <td><input class='FormData_InputText' type='text' name='password' value='" . genPass() . "' id='password' />&nbsp;<span id='result'></span></td></tr>
+              <td><input class='FormData_InputText' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  />&nbsp;<span id='result'></span></td></tr>
           <tr><th class='left'><b>$langEmail:</b></th>
               <td class='smaller'><input class='FormData_InputText' type='text' name='email_form' value='" . q($pe) . "' />&nbsp;(*)</td></tr>
           <tr><th class='left'><b>$langEmailVerified:</b></th>

@@ -641,7 +641,7 @@ class CourseXMLElement extends SimpleXMLElement {
      */
     public static function save($courseCode, $xml) {
         $doc = new DOMDocument('1.0');
-        $doc->loadXML($xml->asXML());
+        $doc->loadXML($xml->asXML(), LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         $doc->formatOutput = true;
         $doc->save(self::getCourseXMLPath($courseCode));
     }

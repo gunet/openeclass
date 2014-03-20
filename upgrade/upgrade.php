@@ -32,10 +32,6 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (!defined('DEBUG_MYSQL')) {
-    define('DEBUG_MYSQL', true);
-}
-
 if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {
@@ -114,7 +110,7 @@ if (!mysql_field_exists($mysqlMainDb, 'user', 'id')) {
                         CHANGE whitelist whitelist TEXT NOT NULL,
                         DROP KEY user_username");
     db_query("ALTER TABLE admin
-                        CHANGE idUser user_id INT(11) NOT NULL");
+                        CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
 
 // Make sure 'video' subdirectory exists and is writable
@@ -130,7 +126,9 @@ if (!file_exists($videoDir)) {
 }
 
 mkdir_or_error('courses/temp');
+touch_or_error('../courses/temp/index.htm');
 mkdir_or_error('courses/userimg');
+touch_or_error('../courses/userimg/index.htm');
 touch_or_error($webDir . '/video/index.htm');
 
 // ********************************************
@@ -991,7 +989,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
                             `wiki_id` INT(11) UNSIGNED NOT NULL,
                             `flag` VARCHAR(255) NOT NULL,
-                            `value` ENUM('false','true') NOT NULL DEFAULT 'false' )
+                            `value` ENUM('false','true') NOT NULL DEFAULT 'false'),
+                            PRIMARY KEY (wiki_id, flag) )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
                             `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1053,7 +1052,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `secret_directory` VARCHAR(30) NOT NULL,
                             `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                             `max_grade` FLOAT DEFAULT NULL,
-                            `assign_to_specific` CHAR(1) NOT NULL)
+                            `assign_to_specific` CHAR(1) NOT NULL,
+                            file_path VARCHAR(200) NOT NULL,
+                            file_name VARCHAR(200) NOT NULL',
+                            )
                             $charset_spec");
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1073,7 +1075,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     db_query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
-                            `assignment_id` int(11) NOT NULL
+                            `assignment_id` int(11) NOT NULL,
+                            PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
 
                     db_query("DROP TABLE IF EXISTS agenda");

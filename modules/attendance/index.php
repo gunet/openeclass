@@ -249,6 +249,9 @@ if ($is_editor) {
         //View acivities for a user - (check for auto mechanism) 
         if(isset($_GET['book'])){
 
+$limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
+
+
             $userID = intval($_GET['book']); //user
             
             //check if there are booking records for the user, otherwise alert message for first input
