@@ -183,6 +183,19 @@ $exercisetotalweight = $objExercise->selectTotalWeighting();
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = strtotime($objExercise->selectStartDate());
 $exercise_EndDate = strtotime($objExercise->selectEndDate());
+
+if (isset($_SESSION['questionList'][$exerciseId])) {
+    $questionList = $_SESSION['questionList'][$exerciseId];
+}
+if (!isset($_SESSION['questionList'][$exerciseId])) {
+    // selects the list of question ID
+    $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
+    // saves the question list into the session
+    $_SESSION['questionList'][$exerciseId] = $questionList;
+}
+
+$nbrQuestions = sizeof($questionList);
+
 if (!$is_editor) {
 	$error = FALSE;
 	// determine begin time: 
@@ -203,7 +216,7 @@ if (!$is_editor) {
 		$tmp = mysql_fetch_row(db_query($sql));
 		$attempt = $tmp[0];
 	}
-	if (!isset($_SESSION['exercise_begin_time'][$exerciseId])) {
+	if (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
 		$_SESSION['exercise_begin_time'][$exerciseId] = $recordStartDate = $temp_CurrentDate;
 		// save begin time in db
 		$start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
@@ -243,18 +256,6 @@ if (!$is_editor) {
     }
 }
 
-if (isset($_SESSION['questionList'][$exerciseId])) {
-    $questionList = $_SESSION['questionList'][$exerciseId];
-}
-if (!isset($_SESSION['questionList'][$exerciseId])) {
-    // selects the list of question ID
-    $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
-    // saves the question list into the session
-    $_SESSION['questionList'][$exerciseId] = $questionList;
-}
-
-$nbrQuestions = sizeof($questionList);
-
 // if questionNum comes from POST and not from GET
 if (!isset($questionNum) || $_POST['questionNum']) {
     // only used for sequential exercises (see $exerciseType)
@@ -274,7 +275,7 @@ $tool_content .= "
  <table width='100%' class='tbl_border'>
   <tr class='odd'>
     <th colspan='2'>";
-        if (!$is_editor && $timeleft!=0) {
+        if (!$is_editor && isset($timeleft) && $timeleft>0) {
             $tool_content .= "<div id='timedisplay'>$langRemainingTime: <span id='progresstime'>".($timeleft)."</span></div>";
         }
         $tool_content .= q($exerciseTitle). "</th></tr>

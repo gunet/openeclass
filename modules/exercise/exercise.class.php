@@ -118,7 +118,7 @@ if (!class_exists('Exercise')):
                                                 FROM exercise_question, exercise_with_questions
                                                 WHERE exercise_question.course_id = ?d 
                                                 AND exercise_question.id = exercise_with_questions.question_id
-                                                AND exercise_with_questions.exercise_id = ?d", $course_id, $id)->totalweight;               
+                                                AND exercise_with_questions.exercise_id = ?d", $course_id, $id)->totalweight;
                 return true;
             }
             // exercise not found
