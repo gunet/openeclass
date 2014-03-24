@@ -337,7 +337,8 @@ db_query("CREATE TABLE IF NOT EXISTS `glossary` (
  db_query("CREATE TABLE IF NOT EXISTS `attendance` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `course_id` INT(11) NOT NULL,
-               `limit` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+               `limit` TINYINT(4) NOT NULL DEFAULT 0,
+               `students_semester` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
  db_query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
